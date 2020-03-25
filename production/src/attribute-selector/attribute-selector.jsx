@@ -79,7 +79,7 @@ export class AttributeSelectorNotConnected extends Component {
 const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
   const legacyObject = {
     reportId: chosenObject.chosenObjectId || editedObject.chosenObjectId,
-    envUrl: session.envUrl || session.envUrl,
+    envUrl: session.envUrl,
     projectId: chosenObject.chosenProjectId || editedObject.projectId,
     reportSubtype: chosenObject.chosenSubtype || editedObject.chosenObjectSubtype,
     reportType: chosenObject.chosenObjectId ? chosenObject.objectType.name : editedObject.chosenObjectType,
