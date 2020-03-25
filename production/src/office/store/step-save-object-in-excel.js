@@ -32,7 +32,7 @@ class StepSaveObjectInExcel {
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
       visualizationInfo: objectData.visualizationInfo,
       manipulationsXML: instanceDefinition.manipulationsXML,
-      tableName: objectData.newOfficeTableName,
+      tableName: objectData.tableName,
       previousTableDimensions: objectData.previousTableDimensions,
       displayAttrFormNames: objectData.displayAttrFormNames,
       oldBindId: objectData.oldBindId,

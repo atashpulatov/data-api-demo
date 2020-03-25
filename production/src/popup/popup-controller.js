@@ -209,6 +209,7 @@ class PopupController {
         type: START_REPORT_LOADING,
         data: { name: chosenObjectName },
       });
+      console.log('chosenObjectName:', chosenObjectName);
       const options = {
         dossierData,
         objectId: chosenObject,

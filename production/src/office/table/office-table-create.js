@@ -15,7 +15,7 @@ class OfficeTableCreate {
    * @param {Object} instanceDefinition
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {string} startCell  Top left corner cell
-   * @param {string} newOfficeTableName Excel Binding ID
+   * @param {string} tableName Excel Binding ID
    * @param {Object} prevOfficeTable Previous office table to refresh
    * @param {Boolean} tableColumnsChanged Specify if table columns has been changed. False by default
    *
@@ -184,7 +184,7 @@ class OfficeTableCreate {
       await excelContext.sync();
       const bindId = officeTable.id;
 
-      return { officeTable, bindId };
+      return { officeTable, bindId, tableName: newOfficeTableName };
     } catch (error) {
       await excelContext.sync();
       throw error;
