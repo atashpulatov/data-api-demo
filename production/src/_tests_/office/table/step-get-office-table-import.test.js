@@ -11,7 +11,6 @@ describe('StepGetOfficeTableImport', () => {
     // given
     console.log = jest.fn();
 
-    // given
     const mockCreateOfficeTable = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => {
       throw new Error('testError');
     });

@@ -135,9 +135,31 @@ class OfficeStoreService {
 
   restoreObjectsFromExcelStore = () => {
     const settings = this.getOfficeSettings();
-    const objects = settings.get(officeProperties.storedObjects);
+    let objects = settings.get(officeProperties.storedObjects);
+    const reportArray = this.getObjectProperties();
+    const objectsToBeAdded = [];
 
+    if (reportArray) {
+      for (let index = 0; index < reportArray.length; index++) {
+        const currentObject = JSON.parse(JSON.stringify(reportArray[index]));
+        if (!objects || !objects.find(object => object.bindId === currentObject.bindId)) {
+          currentObject.objectId = currentObject.id;
+          delete currentObject.id;
+          currentObject.mstrObjectType = currentObject.objectType;
+          delete currentObject.objectType;
+          currentObject.previousTableDimensions = currentObject.tableDimensions;
+          delete currentObject.tableDimensions;
+          currentObject.objectWorkingId = Date.now();
+          objectsToBeAdded.push(currentObject);
+        }
+      }
+    }
+    objects = [...objects, ...objectsToBeAdded];
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
+
+    // TODO uncomment after we remove connection to report array in settings
+    // settings.set(officeProperties.loadedReportProperties, []);
+    // settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
   };
 
   // TODO remove
@@ -157,6 +179,11 @@ class OfficeStoreService {
     // TODO: uncomment below
     // this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   }
+
+  getObjectFromObjectReducer = (bindId) => {
+    const { objects } = this.reduxStore.getState().objectReducer;
+    return objects.find((object) => object.bindId === bindId);
+  };
 
 
   removeObjectFromStore = (bindId, objectWorkingId) => {

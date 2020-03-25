@@ -77,11 +77,11 @@ class PopupHelper {
     index,
     isRefreshAll,
   ) => {
-    const refreshReport = officeStoreService.getObjectFromProperties(bindId);
-    if (isRefreshAll) { this.storageReportRefreshStart(refreshReport, index); }
+    const objectToRefresh = officeStoreService.getObjectFromObjectReducer(bindId);
+    if (isRefreshAll) { this.storageReportRefreshStart(objectToRefresh, index); }
     const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
 
-    this.reduxStore.dispatch(refreshRequested(refreshReport));
+    this.reduxStore.dispatch(refreshRequested(objectToRefresh));
 
     // TODO remove
     const result = {

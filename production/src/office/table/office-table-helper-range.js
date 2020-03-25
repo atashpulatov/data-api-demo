@@ -67,6 +67,12 @@ class OfficeTableHelperRange {
     return this.checkCrosstabAddedRowsAndColumns(mstrTable, addedRows, addedColumns);
   }
 
+  /**
+   * Removes table created on import during refresh/edit workflow.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Object} prevOfficeTable previous office table
+   */
   deletePrevOfficeTable = async (excelContext, prevOfficeTable) => {
     excelContext.runtime.enableEvents = false;
     await excelContext.sync();
@@ -129,12 +135,31 @@ class OfficeTableHelperRange {
     }
   }
 
+  /**
+   * Extends the Excel table range for columns added during import/refresh.
+   *
+   * @param {Office} prevOfficeTable Reference to previously imported Excel table
+   * @param {Number} addedColumns Number of added columns to the table
+   *
+   * @returns {Office} Reference to Excel range object
+   */
   prepareRangeColumns = (prevOfficeTable, addedColumns) => {
     prevOfficeTable
       .getRange()
       .getColumnsAfter(addedColumns);
   };
 
+  /**
+   * Extends the Excel range by crosstab header column dimension.
+   *
+   * For tabular report return range without changes.
+   *
+   * @param {Office} range Reference to Excel range object.
+   * @param {number} columnsY Number of rows in crosstab column headers
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   *
+   * @returns {Office} Reference to Excel range object
+   */
   prepareRangeColumnsCrosstab = (range, columnsY, isCrosstab) => {
     if (isCrosstab) {
       return range
@@ -149,7 +174,7 @@ class OfficeTableHelperRange {
    * Checks if range is valid on refresh for added rows.
    *
    * @param {Number} addedColumns shows the number of added columns to the table
-   * @param {Object} prevOfficeTable previous office table
+   * @param {Office} prevOfficeTable Reference to previously imported Excel table
    * @param {Object} mstrTable contains informations about mstr object
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {number} addedRows shows the number of added rows to the table
@@ -167,6 +192,15 @@ class OfficeTableHelperRange {
     }
   }
 
+  /**
+   * Extends the Excel table range for rows and columns added during import/refresh.
+   *
+   * @param {Office} prevOfficeTable Reference to previously imported Excel table
+   * @param {Number} addedColumns Number of added columns to the table
+   * @param {number} addedRows Number of added rows to the table
+   *
+   * @returns {Office} Reference to Excel range object
+   */
   prepareRangeRows = (prevOfficeTable, addedColumns, addedRows) => {
     prevOfficeTable
       .getRange()
@@ -174,6 +208,17 @@ class OfficeTableHelperRange {
       .getResizedRange(0, addedColumns);
   };
 
+  /**
+   * Extends the Excel range by crosstab header row dimension.
+   *
+   * For tabular report returns range without changes.
+   *
+   * @param {Office} range Reference to Excel range object.
+   * @param {number} rowsX Number of columns in crosstab row headers
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   *
+   * @returns {Office} Reference to Excel range object
+   */
   prepareRangeRowsCrosstab = (range, rowsX, isCrosstab) => {
     if (isCrosstab) {
       return range

@@ -201,7 +201,7 @@ describe('Popup actions', () => {
       body: {},
       isPrompted: false,
     };
-    officeStoreService.getObjectFromProperties = jest
+    officeStoreService.getObjectFromObjectReducer = jest
       .fn()
       .mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
@@ -235,7 +235,7 @@ describe('Popup actions', () => {
       isRefreshAll,
     );
     // then
-    expect(officeStoreService.getObjectFromProperties).toHaveBeenCalled();
+    expect(officeStoreService.getObjectFromObjectReducer).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshStart).toHaveBeenCalled();
     // expect(officeDisplayService.printObject).toHaveBeenCalledWith(expectedOptions,);
     expect(notificationService.displayNotification).not.toHaveBeenCalled();
@@ -254,7 +254,7 @@ describe('Popup actions', () => {
       name: 'report',
       request: 'reports',
     };
-    officeStoreService.getObjectFromProperties = jest
+    officeStoreService.getObjectFromObjectReducer = jest
       .fn()
       .mockImplementation(() => mockReport);
     popupHelper.storageReportRefreshStart = jest.fn();
@@ -264,7 +264,7 @@ describe('Popup actions', () => {
     // when
     await popupHelper.printRefreshedReport('testBind', objectType, 10, 3, false);
     // then
-    expect(officeStoreService.getObjectFromProperties).toHaveBeenCalled();
+    expect(officeStoreService.getObjectFromObjectReducer).toHaveBeenCalled();
     expect(popupHelper.storageReportRefreshStart).not.toHaveBeenCalled();
     // expect(officeDisplayService.printObject).toHaveBeenCalled();
     expect(notificationService.displayNotification).toHaveBeenCalled();

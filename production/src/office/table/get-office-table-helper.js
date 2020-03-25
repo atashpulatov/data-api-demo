@@ -1,8 +1,8 @@
 class GetOfficeTableHelper {
   /**
-   * Checks if the report changes to or from crosstab
+   * Checks if the report changes to or from crosstab.
    *
-   * @param {Object} mstrTable
+   * @param {Object} mstrTable contains information about mstr object
    *
    */
   checkReportTypeChange = (mstrTable) => {
@@ -12,10 +12,16 @@ class GetOfficeTableHelper {
   };
 
   /**
-   * TODO Do JSDOC in all refatored files
+   * Creates name for Excel table based on name of MSTR object and time of import.
    *
-   * @param {Object} instanceDefinition
+   * Replaces all not allowed characters in object name with "_".
    *
+   * For refresh/edit returns name created during import.
+   *
+   * @param {Object} mstrTable contains information about mstr object
+   * @param {String} [tableName] Table name created for it during import
+   *
+   * @returns {String} Name for the Excel table
    */
   createTableName = (mstrTable, tableName) => {
     if (tableName) {

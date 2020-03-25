@@ -26,7 +26,6 @@ const { createDossierInstance } = mstrObjectRestService;
 describe('Popup actions', () => {
   beforeAll(() => {
     actions.init(
-      authenticationHelper,
       errorService,
       officeApiHelper,
       officeStoreService,
@@ -41,8 +40,7 @@ describe('Popup actions', () => {
   describe('refreshReportsArray', () => {
     it('should call proper methods when isRefreshAll is true', async () => {
       // given
-      officeApiHelper.getExcelSessionStatus = jest.fn();
-      authenticationHelper.validateAuthToken = jest.fn();
+      officeApiHelper.checkStatusOfSessions = jest.fn();
       popupHelper.storagePrepareRefreshAllData = jest.fn();
       popupHelper.runRefreshAllPopup = jest.fn();
       popupHelper.printRefreshedReport = jest.fn();
@@ -67,8 +65,7 @@ describe('Popup actions', () => {
       // when
       await actions.refreshReportsArray(reportArray, isRefreshAll)(listener);
       // then
-      expect(officeApiHelper.getExcelSessionStatus).toHaveBeenCalled();
-      expect(authenticationHelper.validateAuthToken).toHaveBeenCalled();
+      expect(officeApiHelper.checkStatusOfSessions).toHaveBeenCalled();
       expect(popupHelper.storagePrepareRefreshAllData).toHaveBeenCalledWith(reportArray);
       expect(popupHelper.runRefreshAllPopup).toHaveBeenCalledWith(reportArray);
       expect(popupHelper.printRefreshedReport).toHaveBeenCalledTimes(3);
@@ -112,8 +109,7 @@ describe('Popup actions', () => {
     });
     it('should NOT call some methods when isRefreshAll is false', async () => {
       // given
-      officeApiHelper.getExcelSessionStatus = jest.fn();
-      authenticationHelper.validateAuthToken = jest.fn();
+      officeApiHelper.checkStatusOfSessions = jest.fn();
       popupHelper.storagePrepareRefreshAllData = jest.fn();
       popupHelper.runRefreshAllPopup = jest.fn();
       popupHelper.printRefreshedReport = jest.fn();
@@ -128,8 +124,7 @@ describe('Popup actions', () => {
       // when
       await actions.refreshReportsArray(reportArray, false)(listener);
       // then
-      expect(officeApiHelper.getExcelSessionStatus).toHaveBeenCalled();
-      expect(authenticationHelper.validateAuthToken).toHaveBeenCalled();
+      expect(officeApiHelper.checkStatusOfSessions).toHaveBeenCalled();
       expect(popupHelper.storagePrepareRefreshAllData).not.toHaveBeenCalled();
       expect(popupHelper.runRefreshAllPopup).not.toHaveBeenCalled();
       expect(popupHelper.printRefreshedReport).toHaveBeenCalledTimes(1);
@@ -164,7 +159,7 @@ describe('Popup actions', () => {
     it('should call redux store stoplaoding and handle error when the session fails', async () => {
       // given
       const error = new Error('test error');
-      officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
+      officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => { throw error; });
       const mockedDispatch = jest.fn();
       const reportArray = [
         {
@@ -196,7 +191,7 @@ describe('Popup actions', () => {
     const bindId = 'bindId';
     const report = { bindId, objectType: 'whatever' };
     const error = new Error('test error');
-    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
+    officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => { throw error; });
     const listener = jest.fn();
     // when
     await actions.callForEditDossier(report)(listener);
@@ -231,8 +226,7 @@ describe('Popup actions', () => {
     // when
     await actions.callForEditDossier(report)(listener);
     // then
-    expect(officeApiHelper.getExcelSessionStatus).toBeCalled();
-    expect(authenticationHelper.validateAuthToken).toBeCalled();
+    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(officeStoreService.getObjectFromProperties).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
@@ -276,7 +270,7 @@ describe('Popup actions', () => {
     const bindId = 'bindId';
     const report = { bindId, objectType: 'whatever' };
     const error = new Error('test error');
-    officeApiHelper.getExcelSessionStatus.mockImplementationOnce(() => { throw error; });
+    officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => { throw error; });
     const mockedDispatch = jest.fn();
     // when
     await actions.callForEdit(report)(mockedDispatch);

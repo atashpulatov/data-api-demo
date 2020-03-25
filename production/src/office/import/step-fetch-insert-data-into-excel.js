@@ -2,11 +2,9 @@ import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr
 import officeInsertService from './office-insert-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
-const { fetchContentGenerator } = mstrObjectRestService;
-
 class StepFetchInsertDataIntoExcel {
   /**
-§   * Fetches Data from Microstrategy and inserts it into the Excel table.
+   * Fetches Data from Microstrategy and inserts it into the Excel table.
    *
    * If needed extends the table by adding new rows, for crosstab also creates row headers.
    *
@@ -47,6 +45,7 @@ class StepFetchInsertDataIntoExcel {
         displayAttrFormNames,
         objectWorkingId,
       } = objectData;
+
       const {
         operationType,
         tableColumnsChanged,
@@ -57,8 +56,10 @@ class StepFetchInsertDataIntoExcel {
 
       const { columns, rows, mstrTable } = instanceDefinition;
       const { subtotalsInfo: { importSubtotal = true } } = mstrTable;
+
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
-      const configGenerator = {
+
+      const generatorConfig = {
         instanceDefinition,
         objectId,
         projectId,
@@ -73,7 +74,8 @@ class StepFetchInsertDataIntoExcel {
         promptsAnswers,
       };
 
-      const rowGenerator = fetchContentGenerator(configGenerator);
+      const rowGenerator = mstrObjectRestService.fetchContentGenerator(generatorConfig);
+
       let rowIndex = 0;
       const contextPromises = [];
       const subtotalsAddresses = [];
@@ -97,12 +99,15 @@ class StepFetchInsertDataIntoExcel {
           header,
           mstrTable
         );
+
         if (importSubtotal) {
           this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
         }
+
         rowIndex += row.length;
 
         await officeInsertService.syncChangesToExcel(contextPromises, false);
+
         console.groupEnd();
       }
       console.timeEnd('Fetch and insert into excel');
@@ -116,6 +121,7 @@ class StepFetchInsertDataIntoExcel {
         objectWorkingId,
         instanceDefinition,
       };
+
       const updatedObject = {
         objectWorkingId,
         subtotalsInfo: {
@@ -136,8 +142,8 @@ class StepFetchInsertDataIntoExcel {
   /**
    * Appends rows with data to Excel table only.
    *
-   * @param {Array} subtotalAddress Array containig object with coordinates of subtotals in rows currently processed.
-   * @param {Array} subtotalsAddresses Array containig object with coordinates of subtotals of object.
+   * @param {Array} subtotalAddress Array containing object with coordinates of subtotals in rows currently processed
+   * @param {Array} subtotalsAddresses Array containing object with coordinates of subtotals of object.
    */
   getSubtotalCoordinates = (subtotalAddress, subtotalsAddresses) => {
     console.time('Get subtotals coordinates');
