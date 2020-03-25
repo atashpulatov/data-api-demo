@@ -34,20 +34,9 @@ const RightSidePanelNotConnected = (props) => {
 
   const addDataAction = async () => {
     try {
-      // const excelContext = await officeApiHelper.getExcelContext();
-      // await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext);
-
-      // // Prevent navigation tree from going straight into importing previously selected item.
+      // Prevent navigation tree from going straight into importing previously selected item.
       reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
-      // // if (navigationTree.myLibrary) reduxStore.dispatch({ type: SWITCH_MY_LIBRARY });
-      // if (dossierOpenRequested) { reduxStore.dispatch({ type: CANCEL_DOSSIER_OPEN }); }
-      // reduxStore.dispatch({ type: officeProperties.actions.startLoading });
-      // if (allowAddDataClick) {
-      //   this.setState({ allowAddDataClick: false }, async () => {
       await popupController.runPopupNavigation();
-      //     if (this.ismounted) { this.setState({ allowAddDataClick: true }); }
-      //   });
-      // }
     } catch (error) {
       errorService.handleError(error);
     }

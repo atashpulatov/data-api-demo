@@ -11,6 +11,7 @@ import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
 import InternetConnectionError from '../popup/internet-connection-error';
 import { Authenticate } from '../authentication/auth-component';
+import HomeContent from './home-content';
 
 const IS_LOCALHOST = sessionHelper.isDevelopment();
 
@@ -32,8 +33,9 @@ export const HomeNotConnected = (props) => {
   }, []);
 
   React.useEffect(() => {
+    console.log('saving token');
     homeHelper.saveTokenFromCookies();
-  }, [authToken]);
+  }, [props]);
 
   return (
     <>
@@ -46,7 +48,7 @@ export const HomeNotConnected = (props) => {
         )}
       {!popupOpen && <InternetConnectionError />}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
-
+      {/* <HomeContent {...props} /> */}
     </>
   );
 };
