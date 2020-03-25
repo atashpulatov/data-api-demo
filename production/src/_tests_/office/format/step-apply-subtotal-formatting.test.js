@@ -3,7 +3,7 @@ import operationStepDispatcher from '../../../operation/operation-step-dispatche
 import officeFormatSubtotals from '../../../office/format/office-format-subtotals';
 import stepApplySubtotalFormatting from '../../../office/format/step-apply-subtotal-formatting';
 
-describe('StepGetOfficeTableImport', () => {
+describe('StepApplySubtotalFormatting', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });

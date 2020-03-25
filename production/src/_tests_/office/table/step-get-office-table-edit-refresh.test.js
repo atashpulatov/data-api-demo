@@ -5,7 +5,7 @@ import officeTableRefresh from '../../../office/table/office-table-refresh';
 import officeTableCreate from '../../../office/table/office-table-create';
 import officeTableUpdate from '../../../office/table/office-table-update';
 
-describe('StepGetOfficeTableImport', () => {
+describe('StepGetOfficeTableEditRefresh', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });

@@ -2,7 +2,7 @@ import operationStepDispatcher from '../../../operation/operation-step-dispatche
 import stepFormatTable from '../../../office/format/step-format-table';
 import officeApiDataLoader from '../../../office/api/office-api-data-loader';
 
-describe('StepGetOfficeTableImport', () => {
+describe('StepFormatTable', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });

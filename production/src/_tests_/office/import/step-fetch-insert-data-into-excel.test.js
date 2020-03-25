@@ -5,7 +5,7 @@ import stepFetchInsertDataIntoExcel from '../../../office/import/step-fetch-inse
 import { mstrObjectRestService } from '../../../mstr-object/mstr-object-rest-service';
 import officeInsertService from '../../../office/import/office-insert-service';
 
-describe('StepGetOfficeTableImport', () => {
+describe('StepFetchInsertDataIntoExcel', () => {
   const mockObjectData = {
     objectId: 'testObjectId',
     projectId: 'testProjectId',
