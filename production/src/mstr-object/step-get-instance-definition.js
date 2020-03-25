@@ -99,6 +99,7 @@ class StepGetInstanceDefinition {
        instanceDefinition,
        startCell,
        excelContext,
+       totalRows: instanceDefinition.rows,
      };
      // TODO add when error handlind added
      // Check if instance returned data

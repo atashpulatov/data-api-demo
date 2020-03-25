@@ -75,6 +75,7 @@ class StepFetchInsertDataIntoExcel {
 
         await officeInsertService.syncChangesToExcel(contextPromises, false);
 
+        operationStepDispatcher.updateOperation({ objectWorkingId, loadedRows: rowIndex, });
         console.groupEnd();
       }
       console.timeEnd('Fetch and insert into excel');

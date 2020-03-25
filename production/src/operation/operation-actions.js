@@ -90,6 +90,8 @@ function createOperation(operationRequest, objectWorkingId, objectData = {}) {
     operationType,
     objectWorkingId,
     stepsQueue: JSON.parse(JSON.stringify(operationStepsMap[operationType])),
+    loadedRows: 0,
+    totalRows: 0,
     backupObjectData,
     objectEditedData,
   };

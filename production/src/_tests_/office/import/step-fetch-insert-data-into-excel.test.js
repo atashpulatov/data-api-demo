@@ -232,11 +232,13 @@ describe('StepFetchInsertDataIntoExcel', () => {
     expect(mockSyncChangesToExcel).toHaveBeenNthCalledWith(1, [], false);
     expect(mockSyncChangesToExcel).toHaveBeenNthCalledWith(2, [], true);
 
-    expect(mockUpdateOperation).toBeCalledTimes(1);
-    expect(mockUpdateOperation).toBeCalledWith({
-      objectWorkingId: 'testObjectWorkingId',
-      instanceDefinition: resultInstanceDefinition,
-    });
+    expect(mockUpdateOperation).toBeCalledTimes(2);
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'testObjectWorkingId', });
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(2,
+      {
+        objectWorkingId: 'testObjectWorkingId',
+        instanceDefinition: resultInstanceDefinition,
+      });
 
     expect(mockUpdateObject).toBeCalledTimes(1);
     expect(mockUpdateObject).toBeCalledWith({
@@ -356,11 +358,14 @@ describe('StepFetchInsertDataIntoExcel', () => {
     expect(mockSyncChangesToExcel).toHaveBeenNthCalledWith(2, [], false);
     expect(mockSyncChangesToExcel).toHaveBeenNthCalledWith(3, [], true);
 
-    expect(mockUpdateOperation).toBeCalledTimes(1);
-    expect(mockUpdateOperation).toBeCalledWith({
-      objectWorkingId: 'testObjectWorkingId',
-      instanceDefinition: resultInstanceDefinition,
-    });
+    expect(mockUpdateOperation).toBeCalledTimes(3);
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'testObjectWorkingId', });
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(2, { loadedRows: 6, objectWorkingId: 'testObjectWorkingId', });
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(3,
+      {
+        objectWorkingId: 'testObjectWorkingId',
+        instanceDefinition: resultInstanceDefinition,
+      });
 
     expect(mockUpdateObject).toBeCalledTimes(1);
     expect(mockUpdateObject).toBeCalledWith({
