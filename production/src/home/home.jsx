@@ -27,6 +27,8 @@ export const HomeNotConnected = (props) => {
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
       sessionHelper.disableLoading();
+      sessionHelper.getUserInfo();
+      sessionHelper.getUserAttributeFormPrivilege();
     } catch (error) {
       console.error(error);
     }
