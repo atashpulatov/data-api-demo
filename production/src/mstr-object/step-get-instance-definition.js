@@ -104,6 +104,9 @@ class StepGetInstanceDefinition {
        body,
        visualizationInfo: visualizationInfo || false,
        oldBindId: bindId,
+       name: instanceDefinition.mstrTable.name,
+       crosstabHeaderDimensions,
+       isCrosstab: instanceDefinition.mstrTable.isCrosstab,
      };
 
      const updatedOperation = {
