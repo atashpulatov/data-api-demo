@@ -113,7 +113,7 @@ class PopupController {
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else {
-            const reportPreviousState = this.getReportsPreviousState(reportParams);
+            const reportPreviousState = this.getObjectPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           }
           break;
@@ -121,7 +121,7 @@ class PopupController {
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else {
-            const reportPreviousState = this.getReportsPreviousState(reportParams);
+            const reportPreviousState = this.getObjectPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           }
           break;
@@ -243,6 +243,17 @@ class PopupController {
     const currentReportArray = this.reduxStore.getState().officeReducer.reportArray;
     const indexOfOriginalValues = currentReportArray.findIndex((report) => report.bindId === reportParams.bindId);
     const originalValues = currentReportArray[indexOfOriginalValues];
+    const { displayAttrFormNames } = officeProperties;
+    if (originalValues.displayAttrFormNames) {
+      return { ...originalValues };
+    }
+    return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
+  }
+
+  getObjectPreviousState = (reportParams) => {
+    const { objects } = this.reduxStore.getState().objectReducer;
+    const indexOfOriginalValues = objects.findIndex((report) => report.bindId === reportParams.bindId);
+    const originalValues = objects[indexOfOriginalValues];
     const { displayAttrFormNames } = officeProperties;
     if (originalValues.displayAttrFormNames) {
       return { ...originalValues };

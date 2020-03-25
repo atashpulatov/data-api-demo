@@ -158,6 +158,11 @@ class OfficeStoreService {
     // this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   }
 
+  getObjectFromObjectReducer = (bindId) => {
+    const { objects } = this.reduxStore.getState().objectReducer;
+    return objects.find((object) => object.bindId === bindId);
+  };
+
 
   removeObjectFromStore = (bindId, objectWorkingId) => {
     this.reduxStore.dispatch(deleteObject(objectWorkingId));
