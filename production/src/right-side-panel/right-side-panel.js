@@ -2,61 +2,71 @@ import { SidePanel } from '@mstr/rc';
 import React from 'react';
 import { connect } from 'react-redux';
 import { fileHistoryContainerHOC } from '../file-history/file-history-container-HOC';
+import { popupController } from '../popup/popup-controller';
+import { reduxStore } from '../store';
+import { officeProperties } from '../office/store/office-properties';
+import {
+  CANCEL_REQUEST_IMPORT,
+  CANCEL_DOSSIER_OPEN
+} from '../navigation/navigation-tree-actions';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import { errorService } from '../error/error-handler';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 
 const RightSidePanelNotConnected = (props) => {
   console.log(props);
+  const { importRequested, dossierOpenRequested } = props;
+  const [allowAddDataClick, setAllowAddDataClick] = React.useState(true);
   const middleWareForAddData = () => {
     console.log('gonna add data');
-    props.addDataAction();
+    addDataAction();
   };
   const mapLoadedObjects = (objects) => objects.map((object) => ({
     bindId: object.newBindingId,
     id: object.objectId,
-    name: getName(object),
+    name: object.name,
     objectType: object.mstrObjectType,
+
   }));
-  // PropTypes.shape({
-  //   bindId: PropTypes.string,
-  //   body: PropTypes.shape({}),
-  //   crosstabHeaderDimensions: PropTypes.shape({}),
-  //   envUrl: PropTypes.string,
-  //   id: PropTypes.string,
-  //   isCrosstab: PropTypes.bool,
-  //   isPrompted: PropTypes.bool,
-  //   manipulationsXML: PropTypes.shape({}),
-  //   name: PropTypes.string,
-  //   objectType: PropTypes.shape({
-  //     name: PropTypes.string,
-  //     request: PropTypes.string,
-  //     subtypes: PropTypes.arrayOf(PropTypes.number),
-  //     type: PropTypes.number,
-  //   }),
-  //   isSelected: PropTypes.bool,
-  //   projectId: PropTypes.string,
-  //   promptsAnswers: PropTypes.shape({}),
-  //   refreshDate: PropTypes.instanceOf(Date),
-  //   subtotalInfo: PropTypes.shape({}),
-  //   visualizationInfo: PropTypes.shape({}),
-  //   loadingState: PropTypes.shape({}),
-  //   actionType: PropTypes.string,
-  //   totalRows: PropTypes.number,
-  //   loadedRows: PropTypes.number,
-  //   locale: PropTypes.string,
-  // })
+  const emptyCallback = (parameters) => {
+    console.log(parameters);
+  };
+
+  const addDataAction = async () => {
+    try {
+      // const excelContext = await officeApiHelper.getExcelContext();
+      // await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext);
+
+      // // Prevent navigation tree from going straight into importing previously selected item.
+      reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
+      // // if (navigationTree.myLibrary) reduxStore.dispatch({ type: SWITCH_MY_LIBRARY });
+      // if (dossierOpenRequested) { reduxStore.dispatch({ type: CANCEL_DOSSIER_OPEN }); }
+      // reduxStore.dispatch({ type: officeProperties.actions.startLoading });
+      // if (allowAddDataClick) {
+      //   this.setState({ allowAddDataClick: false }, async () => {
+      await popupController.runPopupNavigation();
+      //     if (this.ismounted) { this.setState({ allowAddDataClick: true }); }
+      //   });
+      // }
+    } catch (error) {
+      errorService.handleError(error);
+    }
+  };
+
   return (
     <>
       <SidePanel
         loadedObjects={mapLoadedObjects(props.loadedObjects)}
         onAddData={middleWareForAddData}
-        onToggleChecked={() => {}}
-        onCheckAll={() => {}}
-        onDuplicateClick={() => {}}
-        onEditClick={() => {}}
-        onRefreshClick={() => {}}
-        onRefreshSelected={() => {}}
-        onRemoveClick={() => {}}
-        onRemoveSelected={() => {}}
-        onRename={() => {}}
+        onToggleChecked={emptyCallback}
+        onCheckAll={emptyCallback}
+        onDuplicateClick={emptyCallback}
+        onEditClick={emptyCallback}
+        onRefreshClick={emptyCallback}
+        onRefreshSelected={emptyCallback}
+        onRemoveClick={emptyCallback}
+        onRemoveSelected={emptyCallback}
+        onRename={emptyCallback}
       />
     </>
   );
@@ -64,14 +74,14 @@ const RightSidePanelNotConnected = (props) => {
 
 const mapStateToProps = (state) => {
   console.log(state);
-  return { loadedObjects: state.objectReducer.objects, };
+  const { importRequested, dossierOpenRequested } = state.navigationTree;
+  return {
+    loadedObjects: state.objectReducer.objects,
+    importRequested,
+    dossierOpenRequested,
+  };
 };
 
 const mapDispatchToProps = {};
 
-const RightSidePanelWrapped = fileHistoryContainerHOC(RightSidePanelNotConnected);
-
-export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelWrapped);
-function getName(object) {
-  return object.instanceDefinition && object.instanceDefinition.mstrTable && object.instanceDefinition.mstrTable.name;
-}
+export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
