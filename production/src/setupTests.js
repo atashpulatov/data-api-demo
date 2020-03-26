@@ -10,6 +10,8 @@ jest.mock('@mstr/rc', () => ({
   ObjectTable: () => <div />,
   // eslint-disable-next-line react/react-in-jsx-scope,react/no-multi-comp
   TopFilterPanel: () => <div />,
+  // eslint-disable-next-line react/no-multi-comp,react/react-in-jsx-scope
+  SidePanel: () => <div />,
 }));
 
 configure({ adapter: new Adapter() });
