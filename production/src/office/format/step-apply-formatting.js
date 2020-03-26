@@ -49,8 +49,19 @@ class StepApplyFormatting {
     console.timeEnd('Apply formatting');
   };
 
+  /**
+   * Calculates the number of all attribute/consolidations columns in Excel.
+   *
+   * Number of columns is - for all elements of columnInformation - a sum of:
+   *
+   * 1 (when element is not an attribute)
+   * number of forms (when element is an attribute)
+   *
+   * @param {Array} columnInformation Columns data
+   * @returns {Number} Number of columns in Excel
+   */
   calculateAttributeColumnNumber = (columnInformation) => {
-    let attributeColumnNumber = 0; // this is number of all atrribute/consolidations columns in Excel
+    let attributeColumnNumber = 0;
 
     columnInformation.forEach(element => {
       if (element.isAttribute) {
@@ -63,6 +74,15 @@ class StepApplyFormatting {
     return attributeColumnNumber;
   };
 
+  /**
+   * Calculates number of columns to be offsetted when formatting.
+   *
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   * @param {Number} columnInformationLength Number of elements in columnInformation
+   * @param {Number} filteredColumnInformationLength Number of elements in filteredColumnInformation
+   * @param {Number} attributeColumnNumber Number of all attribute/consolidations columns in Excel
+   * @returns {number} Number of columns to be offsetted when formatting
+   */
   calculateOffset = (isCrosstab, columnInformationLength, filteredColumnInformationLength, attributeColumnNumber) => {
     let offset = 0;
 
@@ -75,6 +95,14 @@ class StepApplyFormatting {
     return offset;
   };
 
+  /**
+   * Setups formatting.
+   *
+   * @param {Array} filteredColumnInformation
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   * @param {Number} offset Number of columns to be offsetted when formatting
+   * @param {Office} officeTable Reference to Excel table
+   */
   setupFormatting = (filteredColumnInformation, isCrosstab, offset, officeTable) => {
     for (let i = filteredColumnInformation.length - 1; i >= 0; i--) {
       const object = filteredColumnInformation[i];
@@ -89,6 +117,17 @@ class StepApplyFormatting {
     }
   };
 
+  /**
+   * Gets columns range to apply formatting to.
+   *
+   * Offset is added to index for tables, for crosstabs index is subtracted by offset.
+   *
+   * @param {Number} index Index of a column.
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   * @param {Number} offset Number of columns to be offsetted when formatting
+   * @param {Office} officeTable Reference to Excel table
+   * @returns {Office} Columns range to apply formatting to
+   */
   getColumnRangeForFormatting = (index, isCrosstab, offset, officeTable) => {
     const objectIndex = isCrosstab ? index - offset : index + offset;
 
@@ -98,9 +137,12 @@ class StepApplyFormatting {
   /**
    * Returns filtered column information.
    *
-   * @param columnInformation
-   * @param isCrosstab
-   * @return {Array} filteredColumnInformation
+   * For tables returns array of elements containing own properties.
+   * For crosstabs returns array of elements that are not attributes and contains own properties.
+   *
+   * @param {Array} columnInformation Columns data
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   * @return {Array} filteredColumnInformation Filtered columnInformation
    */
   filterColumnInformation = (columnInformation, isCrosstab) => {
     if (isCrosstab) {
@@ -110,10 +152,10 @@ class StepApplyFormatting {
   };
 
   /**
-   * Returns parsed format string.
+   * Returns Excel format string based on MicroStrategy format string.
    *
-   * @param {String} format given by MicroStrategy
-   * @return {String} parsed format
+   * @param {String} Format given by MicroStrategy
+   * @return {String} Excel format
    */
   getFormat = ({ formatString, category }) => {
     if (category === 9) {
