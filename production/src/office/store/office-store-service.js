@@ -136,25 +136,9 @@ class OfficeStoreService {
   restoreObjectsFromExcelStore = () => {
     const settings = this.getOfficeSettings();
     let objects = settings.get(officeProperties.storedObjects);
-    const reportArray = this.getObjectProperties();
-    const objectsToBeAdded = [];
 
-    if (reportArray) {
-      for (let index = 0; index < reportArray.length; index++) {
-        const currentObject = JSON.parse(JSON.stringify(reportArray[index]));
-        if (!objects || !objects.find(object => object.bindId === currentObject.bindId)) {
-          currentObject.objectId = currentObject.id;
-          delete currentObject.id;
-          currentObject.mstrObjectType = currentObject.objectType;
-          delete currentObject.objectType;
-          currentObject.previousTableDimensions = currentObject.tableDimensions;
-          delete currentObject.tableDimensions;
-          currentObject.objectWorkingId = Date.now();
-          objectsToBeAdded.push(currentObject);
-        }
-      }
-    }
-    objects = [...objects, ...objectsToBeAdded];
+    objects = this.restoreLegacyObjectsFromExcelStore(objects);
+
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
 
     // TODO uncomment after we remove connection to report array in settings
@@ -197,6 +181,39 @@ class OfficeStoreService {
     this.deleteObject(bindId, objectWorkingId);
     return true;
   };
+
+  restoreLegacyObjectsFromExcelStore =(objects) => {
+    const reportArray = this.getObjectProperties();
+    const objectsToBeAdded = [];
+
+    if (reportArray) {
+      for (let index = 0; index < reportArray.length; index++) {
+        const currentObject = JSON.parse(JSON.stringify(reportArray[index]));
+        if (!objects || !objects.find(object => object.bindId === currentObject.bindId)) {
+          this.mapLegacyObjectValue(currentObject, 'objectId', 'id');
+          this.mapLegacyObjectValue(currentObject, 'mstrObjectType', 'objectType');
+          this.mapLegacyObjectValue(currentObject, 'previousTableDimensions', 'tableDimensions');
+          if (currentObject.subtotalInfo) {
+            this.mapLegacyObjectValue(currentObject, 'subtotalsInfo', 'subtotalInfo');
+          }
+          // TODO find better way for unique Id
+          currentObject.objectWorkingId = Date.now() + (index * reportArray.length);
+          objectsToBeAdded.push(currentObject);
+        }
+      }
+    }
+    objects = [...objects, ...objectsToBeAdded];
+    return objects;
+  }
+
+  mapLegacyObjectValue = async (object, newKey, oldKey) => {
+    try {
+      object[newKey] = object[oldKey];
+      delete object[oldKey];
+    } catch (error) {
+      console.log('error:', error);
+    }
+  }
 }
 
 export const officeStoreService = new OfficeStoreService();
