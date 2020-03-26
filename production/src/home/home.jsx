@@ -27,8 +27,6 @@ export const HomeNotConnected = (props) => {
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
       sessionHelper.disableLoading();
-      sessionHelper.getUserInfo();
-      sessionHelper.getUserAttributeFormPrivilege();
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +35,9 @@ export const HomeNotConnected = (props) => {
   React.useEffect(() => {
     console.log('saving token');
     homeHelper.saveTokenFromCookies();
-  }, [props]);
+    sessionHelper.getUserInfo();
+    sessionHelper.getUserAttributeFormPrivilege();
+  }, [authToken]);
 
   return (
     <>
