@@ -133,18 +133,6 @@ class OfficeStoreService {
     }
   }
 
-  restoreObjectsFromExcelStore = () => {
-    const settings = this.getOfficeSettings();
-    let objects = settings.get(officeProperties.storedObjects);
-
-    objects = this.restoreLegacyObjectsFromExcelStore(objects);
-
-    objects && this.reduxStore.dispatch(restoreAllObjects(objects));
-
-    // TODO uncomment after we remove connection to report array in settings
-    // settings.set(officeProperties.loadedReportProperties, []);
-    // settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
-  };
 
   // TODO remove
   clearObjectReducerFromSettings = async () => {
@@ -153,16 +141,6 @@ class OfficeStoreService {
     await settings.saveAsync();
   };
 
-
-  saveObjectsInExcelStore = async () => {
-    const { objects } = this.reduxStore.getState().objectReducer;
-    const settings = this.getOfficeSettings();
-    settings.set(officeProperties.storedObjects, objects);
-    // TODO: check if needed
-    await settings.saveAsync();
-    // TODO: uncomment below
-    // this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
-  }
 
   getObjectFromObjectReducer = (bindId) => {
     const { objects } = this.reduxStore.getState().objectReducer;
@@ -182,7 +160,23 @@ class OfficeStoreService {
     return true;
   };
 
-  restoreLegacyObjectsFromExcelStore =(objects) => {
+  restoreObjectsFromExcelStore = () => {
+    const settings = this.getOfficeSettings();
+    let objects = settings.get(officeProperties.storedObjects);
+
+    objects = this.restoreLegacyObjectsFromExcelStore(objects);
+
+    objects && this.reduxStore.dispatch(restoreAllObjects(objects));
+
+    // TODO uncomment after we remove connection to report array in settings
+    // settings.set(officeProperties.loadedReportProperties, []);
+    // settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
+
+    // settings.set(officeProperties.storedObjects, objects);
+    // await settings.saveAsync();
+  };
+
+  restoreLegacyObjectsFromExcelStore = (objects) => {
     const reportArray = this.getObjectProperties();
     const objectsToBeAdded = [];
 
@@ -202,8 +196,7 @@ class OfficeStoreService {
         }
       }
     }
-    objects = [...objects, ...objectsToBeAdded];
-    return objects;
+    return [...objects, ...objectsToBeAdded];
   }
 
   mapLegacyObjectValue = async (object, newKey, oldKey) => {
@@ -213,6 +206,30 @@ class OfficeStoreService {
     } catch (error) {
       console.log('error:', error);
     }
+  }
+
+  modifyObjectValue = async (bindId, key, value) => {
+    try {
+      const settings = this.getOfficeSettings();
+      const objects = settings.get(officeProperties.storedObjects);
+      const indexOfReport = objects.findIndex((object) => (object.bindId === bindId));
+      objects[indexOfReport][key] = value;
+      settings.set(officeProperties.storedObjects, objects);
+      await settings.saveAsync();
+      await this.loadExistingReportBindingsExcel();
+    } catch (error) {
+      errorService.handleError(error);
+    }
+  }
+
+  saveObjectsInExcelStore = async () => {
+    const { objects } = this.reduxStore.getState().objectReducer;
+    const settings = this.getOfficeSettings();
+    settings.set(officeProperties.storedObjects, objects);
+    // TODO: check if needed
+    await settings.saveAsync();
+    // TODO: uncomment below
+    // this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   }
 }
 
