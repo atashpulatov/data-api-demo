@@ -127,7 +127,6 @@ class StepGetInstanceDefinition {
       body,
       displayAttrFormNames
     }) => {
-
     // Status 2 = report has open prompts to be answered before data can be returned
     if (instanceDefinition.status !== 2) {
       return instanceDefinition;
