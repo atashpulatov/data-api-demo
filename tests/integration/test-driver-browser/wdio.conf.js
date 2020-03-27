@@ -17,7 +17,7 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    //   './test/specs/release-validation/deprecated/sample.spec.js',
+        //   './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
     acceptance: [
@@ -60,6 +60,7 @@ exports.config = {
     ],
     'F24751-import subtotals': [
       './test/specs/release-validation/F24751-import subtotals/TC53340-import-report-with-subtotals.spec.js',
+      './test/specs/release-validation/F24751-import subtotals/TC53745-subtotals-toggle-hidden.spec.js',
       './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
     ],
     'F25946-details-panel': [
