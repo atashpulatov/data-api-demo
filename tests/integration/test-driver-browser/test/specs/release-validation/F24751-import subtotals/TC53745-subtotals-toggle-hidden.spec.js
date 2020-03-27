@@ -1,11 +1,8 @@
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
-import { switchToExcelFrame, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
-import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
-import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import officeLogin from '../../../helpers/office/office.login';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
