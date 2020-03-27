@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { SidePanel } from '@mstr/rc/src/loaded-objects/object-tile/side-panel/side-panel';
-import { RightSidePanelNotConnected, SomeComponent } from '../../right-side-panel/right-side-panel';
+import { SidePanel } from '@mstr/rc/';
+import { RightSidePanelNotConnected } from '../../right-side-panel/right-side-panel';
 
 describe('RightSidePanelNotConnected', () => {
   it('should display SidePanel', () => {
     // given
-    const mockedProps = { loadedObjects: {}, addDataAction: jest.fn() };
+    const mockedProps = { loadedObjects: [], addDataAction: jest.fn() };
     // when
     const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
     // then
