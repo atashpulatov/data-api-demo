@@ -1,4 +1,3 @@
-
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import officeFormatSubtotals from '../../../office/format/office-format-subtotals';
 import stepApplySubtotalFormatting from '../../../office/format/step-apply-subtotal-formatting';
@@ -21,7 +20,7 @@ describe('StepApplySubtotalFormatting', () => {
 
     /* eslint-disable object-curly-newline */
     const operationData = {
-      objectWorkingId: 'testObjectWorkingId',
+      objectWorkingId: 'objectWorkingIdTest',
       instanceDefinition: {
         mstrTable: {
           subtotalsInfo: {
@@ -34,9 +33,9 @@ describe('StepApplySubtotalFormatting', () => {
     };
     /* eslint-enable object-curly-newline */
 
-    const mockApplySubtotalFormatting = jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting');
+    const applySubtotalFormattingMock = jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting');
 
-    const mockCompleteFormatSubtotals = jest.spyOn(
+    const completeFormatSubtotalsMock = jest.spyOn(
       operationStepDispatcher, 'completeFormatSubtotals'
     ).mockImplementation();
 
@@ -44,10 +43,10 @@ describe('StepApplySubtotalFormatting', () => {
     await stepApplySubtotalFormatting.applySubtotalFormattingRedux(objectData, operationData);
 
     // then
-    expect(mockApplySubtotalFormatting).not.toBeCalled();
+    expect(applySubtotalFormattingMock).not.toBeCalled();
 
-    expect(mockCompleteFormatSubtotals).toBeCalledTimes(1);
-    expect(mockCompleteFormatSubtotals).toBeCalledWith('testObjectWorkingId');
+    expect(completeFormatSubtotalsMock).toBeCalledTimes(1);
+    expect(completeFormatSubtotalsMock).toBeCalledWith('objectWorkingIdTest');
   });
 
   it('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is defined', async () => {
@@ -56,8 +55,8 @@ describe('StepApplySubtotalFormatting', () => {
 
     /* eslint-disable object-curly-newline */
     const operationData = {
-      objectWorkingId: 'testObjectWorkingId',
-      excelContext: 'testExcelContext',
+      objectWorkingId: 'objectWorkingIdTest',
+      excelContext: 'excelContextTest',
       instanceDefinition: {
         mstrTable: {
           subtotalsInfo: {
@@ -67,14 +66,14 @@ describe('StepApplySubtotalFormatting', () => {
           }
         }
       },
-      officeTable: 'testOfficeTable',
+      officeTable: 'officeTableTest',
     };
     /* eslint-enable object-curly-newline */
 
-    const mockApplySubtotalFormatting = jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting')
+    const applySubtotalFormattingMock = jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting')
       .mockImplementation();
 
-    const mockCompleteFormatSubtotals = jest.spyOn(
+    const completeFormatSubtotalsMock = jest.spyOn(
       operationStepDispatcher, 'completeFormatSubtotals'
     ).mockImplementation();
 
@@ -82,10 +81,10 @@ describe('StepApplySubtotalFormatting', () => {
     await stepApplySubtotalFormatting.applySubtotalFormattingRedux(objectData, operationData);
 
     // then
-    expect(mockApplySubtotalFormatting).toBeCalledTimes(1);
-    expect(mockApplySubtotalFormatting).toBeCalledWith({
-      excelContext: 'testExcelContext',
-      officeTable: 'testOfficeTable'
+    expect(applySubtotalFormattingMock).toBeCalledTimes(1);
+    expect(applySubtotalFormattingMock).toBeCalledWith({
+      excelContext: 'excelContextTest',
+      officeTable: 'officeTableTest'
     }, {
       /* eslint-disable object-curly-newline */
       subtotalsInfo: {
@@ -96,7 +95,7 @@ describe('StepApplySubtotalFormatting', () => {
       /* eslint-enable object-curly-newline */
     });
 
-    expect(mockCompleteFormatSubtotals).toBeCalledTimes(1);
-    expect(mockCompleteFormatSubtotals).toBeCalledWith('testObjectWorkingId');
+    expect(completeFormatSubtotalsMock).toBeCalledTimes(1);
+    expect(completeFormatSubtotalsMock).toBeCalledWith('objectWorkingIdTest');
   });
 });
