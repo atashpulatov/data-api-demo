@@ -12,6 +12,7 @@ import {
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import {sidePanelService} from './side-panel-service';
 
 const RightSidePanelNotConnected = (props) => {
   console.log(props);
@@ -51,7 +52,7 @@ const RightSidePanelNotConnected = (props) => {
         onCheckAll={emptyCallback}
         onDuplicateClick={emptyCallback}
         onEditClick={emptyCallback}
-        onRefreshClick={emptyCallback}
+        onRefreshClick={sidePanelService.refresh}
         onRefreshSelected={emptyCallback}
         onRemoveClick={emptyCallback}
         onRemoveSelected={emptyCallback}
