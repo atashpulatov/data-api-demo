@@ -15,6 +15,8 @@ import { clearCache as clearCacheImported } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 
+import './settings-menu.css';
+
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
 export const SettingsMenuNotConnected = ({
@@ -22,14 +24,17 @@ export const SettingsMenuNotConnected = ({
   userID,
   userInitials,
   isSecured,
-  reportArray,
+  objects,
   t,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
   clearCache,
+  isSettings
 }) => {
+  console.log('isSecured', isSecured);
+  console.log('objects', objects);
   const userNameDisplay = userFullName || 'MicroStrategy user';
-  const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
+  const isSecuredActive = !isSecured && objects && objects.length > 0;
   const prepareEmail = () => {
     const { Office } = window;
     if (!Office) { return '#'; } // If no Office return anchor url
@@ -58,9 +63,30 @@ export const SettingsMenuNotConnected = ({
     toggleIsSettingsFlag(false);
   };
 
+  const settingsMenuRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const closeSettingsOnEsc = ({ keyCode }) => {
+      keyCode === 27 && toggleIsSettingsFlag(false);
+    };
+    const closeSettingsOnClick = ({ target }) => {
+      settingsMenuRef.current
+          && !settingsMenuRef.current.contains(target)
+          && toggleIsSettingsFlag(false);
+    };
+    if (isSettings) {
+      document.addEventListener('keyup', closeSettingsOnEsc);
+      document.addEventListener('click', closeSettingsOnClick);
+    }
+    return () => {
+      document.removeEventListener('keyup', closeSettingsOnEsc);
+      document.removeEventListener('click', closeSettingsOnClick);
+    };
+  }, [isSettings, toggleIsSettingsFlag]);
+
 
   return (
-    <ul className="settings-list">
+    <ul className="settings-list" ref={settingsMenuRef}>
       <li id="testid" className="user-data no-trigger-close not-linked-list">
         {userInitials !== null
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
@@ -140,11 +166,12 @@ export const SettingsMenuNotConnected = ({
 
 SettingsMenuNotConnected.defaultProps = { t: (text) => text, };
 
-function mapStateToProps({ sessionReducer, officeReducer }) {
+function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
   const { userFullName, userInitials, userID } = sessionReducer;
-  const { isSecured, reportArray } = officeReducer;
+  const { isSecured, isSettings } = officeReducer;
+  const { objects } = objectReducer;
   return {
-    userFullName, userInitials, isSecured, reportArray, userID
+    userFullName, userInitials, isSecured, userID, isSettings, objects
   };
 }
 
@@ -172,9 +199,10 @@ SettingsMenuNotConnected.propTypes = {
   userFullName: PropTypes.string,
   userInitials: PropTypes.string,
   isSecured: PropTypes.bool,
-  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  objects: PropTypes.arrayOf(PropTypes.shape({})),
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
   clearCache: PropTypes.func,
-  t: PropTypes.func
+  isSettings: PropTypes.bool,
+  t: PropTypes.func,
 };

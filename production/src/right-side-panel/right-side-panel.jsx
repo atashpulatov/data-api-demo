@@ -6,9 +6,15 @@ import { popupController } from '../popup/popup-controller';
 import { reduxStore } from '../store';
 import { CANCEL_REQUEST_IMPORT, } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
+import { SettingsMenu } from '../home/settings-menu';
+import { Confirmation } from '../home/confirmation';
+import * as officeActions from '../office/store/office-actions';
+import { officeStoreService } from '../office/store/office-store-service';
 
 export const RightSidePanelNotConnected = (props) => {
-  const { loadedObjects } = props;
+  const { loadedObjects, isConfirm, isSettings } = props;
+  const { toggleIsSettingsFlag, toggleSecuredFlag } = props;
+
   const emptyCallback = (parameters) => {
     console.log(parameters);
     throw new Error('Not implemented yet');
@@ -24,6 +30,14 @@ export const RightSidePanelNotConnected = (props) => {
     }
   };
 
+  React.useEffect(() => {
+    console.log('useEffect');
+    console.log('settings isfileSecured', officeStoreService.isFileSecured());
+    if (officeStoreService.isFileSecured()) {
+      toggleSecuredFlag(true);
+    }
+  }, [toggleSecuredFlag]);
+
   return (
     <SidePanel
       loadedObjects={loadedObjects}
@@ -37,20 +51,29 @@ export const RightSidePanelNotConnected = (props) => {
       onRemoveClick={emptyCallback}
       onRemoveSelected={emptyCallback}
       onRename={emptyCallback}
+      settingsMenu={isSettings && <SettingsMenu />}
+      onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
+      confirmationWindow={isConfirm && <Confirmation />}
     />
   );
 };
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
+  const { isConfirm, isSettings } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
     importRequested,
     dossierOpenRequested,
+    isConfirm,
+    isSettings
   };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
+  toggleSecuredFlag: officeActions.toggleSecuredFlag,
+};
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
@@ -80,4 +103,8 @@ RightSidePanelNotConnected.propTypes = {
       })]),
       isSelected: PropTypes.bool,
     }).isRequired,
+  isConfirm: PropTypes.bool,
+  isSettings: PropTypes.bool,
+  toggleIsSettingsFlag: PropTypes.func,
+  toggleSecuredFlag: PropTypes.func,
 };
