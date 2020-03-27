@@ -1,15 +1,12 @@
 import { reduxStore } from '../store';
-import { popupActions } from '../popup/popup-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import { refreshRequested } from '../operation/operation-actions';
 
 class SidePanelService {
     refresh = async (objectWorkingId) => {
       const objectData = getObject(objectWorkingId);
-      const { bindId, objectType } = objectData;
-
-      await checkIfObjectProtected(bindId);
-      popupActions.refreshReportsArra([{ bindId, objectType }]);
+      reduxStore.dispatch(refreshRequested(objectData));
     }
 }
 

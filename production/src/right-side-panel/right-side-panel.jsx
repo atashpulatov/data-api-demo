@@ -6,6 +6,7 @@ import { popupController } from '../popup/popup-controller';
 import { reduxStore } from '../store';
 import { CANCEL_REQUEST_IMPORT, } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
+import { sidePanelService } from './side-panel-service';
 
 export const RightSidePanelNotConnected = (props) => {
   const { loadedObjects } = props;
@@ -32,7 +33,7 @@ export const RightSidePanelNotConnected = (props) => {
       onCheckAll={emptyCallback}
       onDuplicateClick={emptyCallback}
       onEditClick={emptyCallback}
-      onRefreshClick={emptyCallback}
+      onRefreshClick={sidePanelService.refresh}
       onRefreshSelected={emptyCallback}
       onRemoveClick={emptyCallback}
       onRemoveSelected={emptyCallback}
