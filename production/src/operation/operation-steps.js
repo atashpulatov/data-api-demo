@@ -9,10 +9,12 @@ export const FORMAT_OFFICE_TABLE = 'FORMAT_OFFICE_TABLE';
 export const FORMAT_SUBTOTALS = 'FORMAT_SUBTOTALS';
 export const BIND_OFFICE_TABLE = 'BIND_OFFICE_TABLE';
 export const SAVE_OBJECT_IN_EXCEL = 'SAVE_OBJECT_IN_EXCEL';
+export const REMOVE_OBJECT = 'REMOVE_OBJECT';
 
 export const IMPORT_OPERATION = 'IMPORT_OPERATION';
 export const EDIT_OPERATION = 'EDIT_OPERATION';
 export const REFRESH_OPERATION = 'REFRESH_OPERATION';
+export const REMOVE_OPERATION = 'REMOVE_OPERATION';
 
 export const operationStepsMap = {
   IMPORT_OPERATION: [
@@ -47,6 +49,9 @@ export const operationStepsMap = {
     FORMAT_SUBTOTALS,
     BIND_OFFICE_TABLE,
     SAVE_OBJECT_IN_EXCEL,
+  ],
+  REMOVE_OPERATION: [
+    REMOVE_OBJECT,
   ],
 };
 

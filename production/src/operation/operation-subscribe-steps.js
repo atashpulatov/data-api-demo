@@ -19,8 +19,10 @@ import {
   GET_OFFICE_TABLE_EDIT_REFRESH,
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
-  SAVE_OBJECT_IN_EXCEL
+  SAVE_OBJECT_IN_EXCEL,
+  REMOVE_OBJECT
 } from './operation-steps';
+import stepRemoveObject from '../right-side-panel/step-remove-object';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -45,6 +47,8 @@ class SubscribeSteps {
     // operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, officeStoreService.saveObjectsInExcelStore);
     // TODO: remove below after refactor
     operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, stepSaveObjectInExcel.saveObject);
+
+    operationBus.subscribe(REMOVE_OBJECT, stepRemoveObject.removeObject);
   };
 }
 

@@ -1,12 +1,16 @@
 import { reduxStore } from '../store';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { refreshRequested } from '../operation/operation-actions';
+import { refreshRequested, removeRequested } from '../operation/operation-actions';
 
 class SidePanelService {
     refresh = async (objectWorkingId) => {
       const objectData = getObject(objectWorkingId);
       reduxStore.dispatch(refreshRequested(objectData));
+    }
+
+    remove = async (objectWorkingId) => {
+      reduxStore.dispatch(removeRequested(objectWorkingId));
     }
 }
 
