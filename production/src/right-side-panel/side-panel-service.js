@@ -1,9 +1,9 @@
 import { reduxStore } from '../store';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { refreshRequested } from '../operation/operation-actions';
+import { refreshRequested, removeRequested } from '../operation/operation-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import {popupActions} from '../popup/popup-actions';
+import { popupActions } from '../popup/popup-actions';
 
 class SidePanelService {
     refresh = (objectWorkingId) => {
@@ -26,8 +26,9 @@ class SidePanelService {
       }
     }
 
-    delete = (objectWorkingId) => {
-    };
+    remove = (objectWorkingId) => {
+      reduxStore.dispatch(removeRequested(objectWorkingId));
+    }
 }
 
 const checkIfObjectProtected = async (bindId) => {

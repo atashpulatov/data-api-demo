@@ -35,7 +35,7 @@ export const RightSidePanelNotConnected = (props) => {
       onEditClick={sidePanelService.edit}
       onRefreshClick={sidePanelService.refresh}
       onRefreshSelected={emptyCallback}
-      onRemoveClick={sidePanelService.delete}
+      onRemoveClick={sidePanelService.remove}
       onRemoveSelected={emptyCallback}
       onRename={emptyCallback}
     />
