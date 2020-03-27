@@ -1,22 +1,11 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import mstrObjectEnum from './mstr-object-type-enum';
-import { incomingErrorStrings, errorTypes, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
-
 import { IMPORT_OPERATION } from '../operation/operation-steps';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-
-
-const {
-  getVisualizationInfo,
-  createInstance,
-  answerPrompts,
-  modifyInstance,
-  createDossierInstance,
-  fetchVisualizationDefinition,
-} = mstrObjectRestService;
+import dossierInstanceDefinition from './dossier-instance-definition';
 
 class StepGetInstanceDefinition {
   /**
@@ -36,175 +25,87 @@ class StepGetInstanceDefinition {
    * @param {Object} objectData.visualizationInfo Contains information about location of visualization in dossier
    * @param {Office} operationData.operationType The type of the operation that called this function
    */
+  getInstanceDefinition = async (objectData, { operationType }) => {
+    console.group('Importing data performance');
+    console.time('Total');
 
-   getInstanceDefinition = async (objectData, { operationType }) => {
-     const {
-       objectWorkingId,
-       insertNewWorksheet,
-       crosstabHeaderDimensions,
-       subtotalsInfo: { subtotalsAddresses } = false,
-       bindId,
-     } = objectData;
-     let { visualizationInfo } = objectData;
+    const {
+      objectWorkingId,
+      insertNewWorksheet,
+      crosstabHeaderDimensions,
+      subtotalsInfo: { subtotalsAddresses } = false,
+      bindId,
+      mstrObjectType,
+    } = objectData;
+    let { visualizationInfo, body } = objectData;
 
-     const excelContext = await officeApiHelper.getExcelContext();
+    const excelContext = await officeApiHelper.getExcelContext();
 
-     // Get excel context and initial cell
-     console.group('Importing data performance');
-     console.time('Total');
-     const startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
+    this.setupBodyTemplate(body);
 
-     let instanceDefinition;
-     let { body } = objectData;
-     const { mstrObjectType } = objectData;
-
-     if (body && body.requestedObjects) {
-       if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
-         delete body.requestedObjects;
-       }
-       body.template = body.requestedObjects;
-     }
-
-
-     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-       ({ body, visualizationInfo, instanceDefinition } = await this.getDossierInstanceDefinition(
-         { ...objectData, visualizationInfo }
-       ));
-     } else {
-       instanceDefinition = await createInstance(objectData);
-     }
-
-
-     // Status 2 = report has open prompts to be answered before data can be returned
-     if (instanceDefinition.status === 2) {
-       instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
-     }
-
-     this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
-
-     const { mstrTable } = instanceDefinition;
-     const updatedObject = {
-       objectWorkingId,
-       envUrl: officeApiHelper.getCurrentMstrContext(),
-       body,
-       visualizationInfo: visualizationInfo || false,
-       oldBindId: bindId,
-       name: mstrTable.name,
-       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-       isCrosstab: mstrTable.isCrosstab,
-     };
-
-     const updatedOperation = {
-       objectWorkingId,
-       instanceDefinition,
-       startCell,
-       excelContext,
-       totalRows: instanceDefinition.rows,
-     };
-     // TODO add when error handlind added
-     // Check if instance returned data
-     //  if (mstrTable.rows.length === 0) {
-     //    return {
-     //      type: 'warning',
-     //      message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
-     //    };
-     //  }
-
-     operationStepDispatcher.updateOperation(updatedOperation);
-     operationStepDispatcher.updateObject(updatedObject);
-     operationStepDispatcher.completeGetInstanceDefinition(objectWorkingId);
-   };
-
-  /**
-   * Returns an error type based on error get from visualization importing.
-   *
-   * @param {Object} error
-   * @return {String || undefined} errorType
-   */
-  getVisualizationErrorType = (error) => {
-    if (!error) {
-      return;
+    let instanceDefinition;
+    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+      ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
+        { ...objectData, visualizationInfo }
+      ));
+    } else {
+      instanceDefinition = await mstrObjectRestService.createInstance(objectData);
     }
 
-    let errorType = error.type;
-    if ((error.message && error.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
-      || (error.response
-        && error.response.body
-        && error.response.body.message
-        && error.response.body.message.includes(incomingErrorStrings.INVALID_VIZ_KEY))
-    ) {
-      errorType = errorTypes.INVALID_VIZ_KEY;
-    }
+    instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
 
-    return errorType;
+    this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
+
+    const startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
+
+    const { mstrTable } = instanceDefinition;
+    const updatedObject = {
+      objectWorkingId,
+      envUrl: officeApiHelper.getCurrentMstrContext(),
+      body,
+      visualizationInfo: visualizationInfo || false,
+      oldBindId: bindId,
+      name: mstrTable.name,
+      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
+      isCrosstab: mstrTable.isCrosstab,
+    };
+
+    const updatedOperation = {
+      objectWorkingId,
+      instanceDefinition,
+      startCell,
+      excelContext,
+      totalRows: instanceDefinition.rows,
+    };
+    // TODO add when error handlind added
+    // Check if instance returned data
+    //  if (mstrTable.rows.length === 0) {
+    //    return {
+    //      type: 'warning',
+    //      message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
+    //    };
+    //  }
+
+    operationStepDispatcher.updateOperation(updatedOperation);
+    operationStepDispatcher.updateObject(updatedObject);
+    operationStepDispatcher.completeGetInstanceDefinition(objectWorkingId);
   };
 
-  async getDossierInstanceDefinition(
-    {
-      projectId,
-      objectId,
-      body,
-      dossierData,
-      displayAttrFormNames,
-      manipulationsXML,
-      preparedInstanceId,
-      visualizationInfo,
-    },
-  ) {
-    if (manipulationsXML) {
-      if (!body) {
-        body = {};
+  /**
+   * Setups body.template to be equal body.requestedObject.
+   *
+   * Deletes body.requestedObject when no attributes and metrics defined.
+   *
+   * @param {Object} body to modify template and requestedObject
+   */
+  setupBodyTemplate = (body) => {
+    if (body && body.requestedObjects) {
+      if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
+        delete body.requestedObjects;
       }
-      body.manipulations = manipulationsXML.manipulations;
-      body.promptAnswers = manipulationsXML.promptAnswers;
+      body.template = body.requestedObjects;
     }
-
-    let instanceId;
-
-    try {
-      instanceId = preparedInstanceId || (await createDossierInstance(projectId, objectId, body));
-    } catch (error) {
-      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier;
-      throw error;
-    }
-
-    const updatedVisualizationInfo = await getVisualizationInfo(
-      projectId,
-      objectId,
-      visualizationInfo.visualizationKey,
-      instanceId
-    );
-
-    if (!updatedVisualizationInfo) {
-      throw new Error(INVALID_VIZ_KEY_MESSAGE);
-    }
-    visualizationInfo = updatedVisualizationInfo;
-
-    const config = {
-      projectId,
-      objectId,
-      instanceId,
-      mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
-      dossierData,
-      body,
-      visualizationInfo,
-      displayAttrFormNames
-    };
-
-    let temporaryInstanceDefinition;
-
-    try {
-      temporaryInstanceDefinition = await fetchVisualizationDefinition(config);
-    } catch (error) {
-      error.type = this.getVisualizationErrorType(error);
-      throw error;
-    }
-    const instanceDefinition = {
-      ...temporaryInstanceDefinition,
-      instanceId
-    };
-    return { body, visualizationInfo, instanceDefinition };
-  }
+  };
 
   /**
    * Answers prompts and modify instance of the object.
@@ -226,8 +127,15 @@ class StepGetInstanceDefinition {
       body,
       displayAttrFormNames
     }) => {
+
+    // Status 2 = report has open prompts to be answered before data can be returned
+    if (instanceDefinition.status !== 2) {
+      return instanceDefinition;
+    }
+
     try {
       let count = 0;
+
       while (instanceDefinition.status === 2 && count < promptsAnswers.length) {
         const config = {
           objectId,
@@ -236,24 +144,28 @@ class StepGetInstanceDefinition {
           promptsAnswers: promptsAnswers[count]
         };
 
-        await answerPrompts(config);
+        await mstrObjectRestService.answerPrompts(config);
+
         const configInstance = {
           ...config,
           dossierData,
           body,
           displayAttrFormNames
         };
+
         if (count === promptsAnswers.length - 1) {
-          instanceDefinition = await modifyInstance(configInstance);
+          instanceDefinition = await mstrObjectRestService.modifyInstance(configInstance);
         }
+
         count += 1;
       }
+
       return instanceDefinition;
     } catch (error) {
       console.error(error);
       throw error;
     }
-  }
+  };
 
   savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses) => {
     const { mstrTable } = instanceDefinition;
@@ -262,14 +174,15 @@ class StepGetInstanceDefinition {
       ? officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
-  }
+  };
 
   getStartCell = async (insertNewWorksheet, excelContext, operationType) => {
     if (insertNewWorksheet) {
       await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
     }
+
     return operationType !== IMPORT_OPERATION || officeApiHelper.getSelectedCell(excelContext);
-  }
+  };
 }
 
 const stepGetInstanceDefinition = new StepGetInstanceDefinition();
