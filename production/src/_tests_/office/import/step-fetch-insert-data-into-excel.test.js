@@ -160,13 +160,13 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
   `('fetchInsertDataIntoExcel should work as expected - 1 row returned by rowGenerator',
   async ({
-    importSubtotaMockl,
+    importSubtotalMock,
     resultImportSubtotal,
     suspendApiCalculationUntilNextSyncCallsNo,
     getSubtotalCoordinatesCallsNo
   }) => {
     // given
-    mstrTableMock.subtotalsInfo.importSubtotal = importSubtotaMockl;
+    mstrTableMock.subtotalsInfo.importSubtotal = importSubtotalMock;
     resultInstanceDefinition.mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
 
     const appendRowsMock = jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
@@ -262,13 +262,13 @@ describe('StepFetchInsertDataIntoExcel', () => {
   
   `('fetchInsertDataIntoExcel should work as expected - 2 rows returned by rowGenerator',
   async ({
-    importSubtotaMockl,
+    importSubtotalMock,
     resultImportSubtotal,
     suspendApiCalculationUntilNextSyncCallsNo,
     getSubtotalCoordinatesCallsNo
   }) => {
     // given
-    mstrTableMock.subtotalsInfo.importSubtotal = importSubtotaMockl;
+    mstrTableMock.subtotalsInfo.importSubtotal = importSubtotalMock;
     resultInstanceDefinition.mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
 
     const appendRowsMock = jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
