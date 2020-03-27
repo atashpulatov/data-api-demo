@@ -49,7 +49,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
     if (newName && bindId) {
       await officeStoreService.modifyObjectValue(bindId, 'name', newName);
       // TODO remove below
-      await officeStoreService.preserveObjectValue(bindId, 'name', newName);
+      // await officeStoreService.preserveObjectValue(bindId, 'name', newName);
     }
     this.setEditable(false);
   };

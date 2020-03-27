@@ -11,51 +11,51 @@ class OfficeStoreService {
     this.reduxStore = reduxStore;
   }
 
-  preserveObject = async (object) => {
-    try {
-      const settings = this.getOfficeSettings();
-      const reportProperties = this.getObjectProperties();
-      reportProperties.unshift({
-        id: object.id,
-        name: object.name,
-        bindId: object.bindId,
-        projectId: object.projectId,
-        envUrl: object.envUrl,
-        body: object.body,
-        objectType: object.objectType,
-        isCrosstab: object.isCrosstab,
-        isPrompted: object.isPrompted,
-        subtotalsInfo: object.subtotalsInfo,
-        promptsAnswers: object.promptsAnswers,
-        crosstabHeaderDimensions: object.crosstabHeaderDimensions,
-        visualizationInfo: object.visualizationInfo,
-        manipulationsXML: object.manipulationsXML,
-        tableName: object.tableName,
-        tableDimensions: object.tableDimensions,
-        displayAttrFormNames: object.displayAttrFormNames,
-        refreshDate: object.refreshDate,
-        objectWorkingId: object.objectWorkingId,
-      });
-      settings.set(officeProperties.loadedReportProperties, reportProperties);
-      settings.saveAsync();
-    } catch (error) {
-      errorService.handleError(error);
-    }
-  }
+  // preserveObject = async (object) => {
+  //   try {
+  //     const settings = this.getOfficeSettings();
+  //     const reportProperties = this.getObjectProperties();
+  //     reportProperties.unshift({
+  //       id: object.id,
+  //       name: object.name,
+  //       bindId: object.bindId,
+  //       projectId: object.projectId,
+  //       envUrl: object.envUrl,
+  //       body: object.body,
+  //       objectType: object.objectType,
+  //       isCrosstab: object.isCrosstab,
+  //       isPrompted: object.isPrompted,
+  //       subtotalsInfo: object.subtotalsInfo,
+  //       promptsAnswers: object.promptsAnswers,
+  //       crosstabHeaderDimensions: object.crosstabHeaderDimensions,
+  //       visualizationInfo: object.visualizationInfo,
+  //       manipulationsXML: object.manipulationsXML,
+  //       tableName: object.tableName,
+  //       tableDimensions: object.tableDimensions,
+  //       displayAttrFormNames: object.displayAttrFormNames,
+  //       refreshDate: object.refreshDate,
+  //       objectWorkingId: object.objectWorkingId,
+  //     });
+  //     settings.set(officeProperties.loadedReportProperties, reportProperties);
+  //     settings.saveAsync();
+  //   } catch (error) {
+  //     errorService.handleError(error);
+  //   }
+  // }
 
-  preserveObjectValue = async (bindId, key, value) => {
-    try {
-      const settings = this.getOfficeSettings();
-      const reportProperties = this.getObjectProperties();
-      const indexOfReport = reportProperties.findIndex((oldReport) => (oldReport.bindId === bindId));
-      reportProperties[indexOfReport][key] = value;
-      settings.set(officeProperties.loadedReportProperties, reportProperties);
-      await settings.saveAsync();
-      await this.loadExistingReportBindingsExcel();
-    } catch (error) {
-      errorService.handleError(error);
-    }
-  }
+  // preserveObjectValue = async (bindId, key, value) => {
+  //   try {
+  //     const settings = this.getOfficeSettings();
+  //     const reportProperties = this.getObjectProperties();
+  //     const indexOfReport = reportProperties.findIndex((oldReport) => (oldReport.bindId === bindId));
+  //     reportProperties[indexOfReport][key] = value;
+  //     settings.set(officeProperties.loadedReportProperties, reportProperties);
+  //     await settings.saveAsync();
+  //     await this.loadExistingReportBindingsExcel();
+  //   } catch (error) {
+  //     errorService.handleError(error);
+  //   }
+  // }
 
   deleteObject = (bindId, objectWorkingId) => {
     try {
@@ -69,10 +69,10 @@ class OfficeStoreService {
 
 
       // TODO remove after connecting object reducer to right panel
-      const reportProperties = this.getObjectProperties();
-      const indexOfReport2 = reportProperties.findIndex((report) => (report.bindId === bindId));
-      reportProperties.splice(indexOfReport2, 1);
-      settings.set(officeProperties.loadedReportProperties, reportProperties);
+      // const reportProperties = this.getObjectProperties();
+      // const indexOfReport2 = reportProperties.findIndex((report) => (report.bindId === bindId));
+      // reportProperties.splice(indexOfReport2, 1);
+      // settings.set(officeProperties.loadedReportProperties, reportProperties);
 
       settings.saveAsync();
     } catch (error) {
@@ -80,10 +80,10 @@ class OfficeStoreService {
     }
   }
 
-  getObjectFromProperties = (bindId) => {
-    const reportProperties = this.getObjectProperties();
-    return reportProperties.find((report) => report.bindId === bindId);
-  };
+  // getObjectFromProperties = (bindId) => {
+  //   const reportProperties = this.getObjectProperties();
+  //   return reportProperties.find((report) => report.bindId === bindId);
+  // };
 
   getObjectProperties = () => {
     try {
@@ -99,13 +99,13 @@ class OfficeStoreService {
     }
   };
 
-  loadExistingReportBindingsExcel = async () => {
-    const reportArray = await this.getObjectProperties();
-    this.reduxStore.dispatch({
-      type: officeProperties.actions.loadAllReports,
-      reportArray,
-    });
-  };
+  // loadExistingReportBindingsExcel = async () => {
+  //   const reportArray = await this.getObjectProperties();
+  //   this.reduxStore.dispatch({
+  //     type: officeProperties.actions.loadAllReports,
+  //     reportArray,
+  //   });
+  // };
 
   getOfficeSettings = () => {
     if (Office === undefined || Office.context === undefined || Office.context.document === undefined) {
@@ -152,10 +152,10 @@ class OfficeStoreService {
     this.reduxStore.dispatch(deleteObject(objectWorkingId));
 
     // TODO remove dispatch
-    this.reduxStore.dispatch({
-      type: officeProperties.actions.removeReport,
-      reportBindId: bindId,
-    });
+    // this.reduxStore.dispatch({
+    //   type: officeProperties.actions.removeReport,
+    //   reportBindId: bindId,
+    // });
     this.deleteObject(bindId, objectWorkingId);
     return true;
   };
@@ -187,9 +187,8 @@ class OfficeStoreService {
           this.mapLegacyObjectValue(currentObject, 'objectId', 'id');
           this.mapLegacyObjectValue(currentObject, 'mstrObjectType', 'objectType');
           this.mapLegacyObjectValue(currentObject, 'previousTableDimensions', 'tableDimensions');
-          if (currentObject.subtotalInfo) {
-            this.mapLegacyObjectValue(currentObject, 'subtotalsInfo', 'subtotalInfo');
-          }
+          this.mapLegacyObjectValue(currentObject, 'subtotalsInfo', 'subtotalInfo');
+
           // TODO find better way for unique Id
           currentObject.objectWorkingId = Date.now() + (index * reportArray.length);
           objectsToBeAdded.push(currentObject);
@@ -201,8 +200,10 @@ class OfficeStoreService {
 
   mapLegacyObjectValue = async (object, newKey, oldKey) => {
     try {
-      object[newKey] = object[oldKey];
-      delete object[oldKey];
+      if (object[oldKey]) {
+        object[newKey] = object[oldKey];
+        delete object[oldKey];
+      }
     } catch (error) {
       console.log('error:', error);
     }
