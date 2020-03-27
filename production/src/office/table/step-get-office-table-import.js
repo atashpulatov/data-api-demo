@@ -10,19 +10,19 @@ class StepGetOfficeTableImport {
    * This function is subscribed as one of the operation steps with the key GET_OFFICE_TABLE_IMPORT,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {String} operationData.startCell Address of the cell in Excel spreadsheet
    */
   getOfficeTableImport = async (objectData, operationData) => {
     console.time('Create or get table - import');
-
     try {
-      const { objectWorkingId, } = objectData;
-      const { excelContext, instanceDefinition, startCell, } = operationData;
+      const {
+        objectWorkingId, excelContext, instanceDefinition, startCell,
+      } = operationData;
 
-      const { officeTable, bindId, newOfficeTableName, } = await officeTableCreate.createOfficeTable(
+      const { officeTable, bindId, tableName, } = await officeTableCreate.createOfficeTable(
         { excelContext, instanceDefinition, startCell, }
       );
 
@@ -37,7 +37,7 @@ class StepGetOfficeTableImport {
 
       const updatedObject = {
         objectWorkingId,
-        newOfficeTableName,
+        tableName,
         bindId,
       };
 

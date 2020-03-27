@@ -33,10 +33,11 @@ describe('StepFormatTable', () => {
 
   it('formatTable should work as expected', async () => {
     // given
-    const objectData = { objectWorkingId: 'testObjectWorkingId' };
+    const objectData = {};
 
     const mockExcelContextSync = jest.fn();
     const operationData = {
+      objectWorkingId: 'testObjectWorkingId',
       excelContext: { sync: mockExcelContextSync, },
       instanceDefinition: {
         mstrTable: {

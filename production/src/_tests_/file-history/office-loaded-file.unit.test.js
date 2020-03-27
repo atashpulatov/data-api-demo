@@ -461,7 +461,7 @@ describe('office loaded file', () => {
     const testbindId = 'testbindId';
     const objectType = { name: 'report' };
     const target = { value: givenFileName };
-    const mockOfficeService = jest.spyOn(officeStoreService, 'preserveObjectValue');
+    const mockmodifyObjectValue = jest.spyOn(officeStoreService, 'modifyObjectValue');
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<OfficeLoadedFileNotConnected
@@ -475,7 +475,7 @@ describe('office loaded file', () => {
     />);
     wrappedComponent.instance().renameObject({ target });
     // then
-    expect(mockOfficeService).toHaveBeenCalled();
+    expect(mockmodifyObjectValue).toHaveBeenCalled();
   });
   it('should show contextual menu on right click', () => {
     // given

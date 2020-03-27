@@ -17,10 +17,11 @@ describe('StepApplySubtotalFormatting', () => {
   `('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is 0 or undefined',
   async ({ subtotalsAddressesLength }) => {
     // given
-    const objectData = { objectWorkingId: 'testObjectWorkingId' };
+    const objectData = { };
 
     /* eslint-disable object-curly-newline */
     const operationData = {
+      objectWorkingId: 'testObjectWorkingId',
       instanceDefinition: {
         mstrTable: {
           subtotalsInfo: {
@@ -51,10 +52,11 @@ describe('StepApplySubtotalFormatting', () => {
 
   it('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is defined', async () => {
     // given
-    const objectData = { objectWorkingId: 'testObjectWorkingId' };
+    const objectData = { };
 
     /* eslint-disable object-curly-newline */
     const operationData = {
+      objectWorkingId: 'testObjectWorkingId',
       excelContext: 'testExcelContext',
       instanceDefinition: {
         mstrTable: {

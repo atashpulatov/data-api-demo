@@ -105,7 +105,6 @@ describe('StepGetOfficeTableEditRefresh', () => {
     expect(mockUpdateObject).toBeCalledTimes(1);
     expect(mockUpdateObject).toBeCalledWith({
       objectWorkingId: 'testObjectWorkingId',
-      newOfficeTableName: 'testTableName',
       bindId: 'testBindId',
     });
 
@@ -191,7 +190,6 @@ describe('StepGetOfficeTableEditRefresh', () => {
     expect(mockUpdateObject).toBeCalledTimes(1);
     expect(mockUpdateObject).toBeCalledWith({
       objectWorkingId: 'testObjectWorkingId',
-      newOfficeTableName: 'testTableName',
       bindId: 'testOldBindId',
     });
 

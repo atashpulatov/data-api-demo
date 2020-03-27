@@ -40,24 +40,12 @@ class StepGetInstanceDefinition {
    getInstanceDefinition = async (objectData, { operationType }) => {
      const {
        objectWorkingId,
-       displayAttrFormNames,
        insertNewWorksheet,
        crosstabHeaderDimensions,
        subtotalsInfo: { subtotalsAddresses } = false,
        bindId,
      } = objectData;
      let { visualizationInfo } = objectData;
-
-     const connectionData = {
-       objectId: objectData.objectId,
-       projectId: objectData.projectId,
-       dossierData: objectData.dossierData,
-       mstrObjectType: objectData.mstrObjectType,
-       body: objectData.body,
-       preparedInstanceId: objectData.preparedInstanceId,
-       manipulationsXML: objectData.manipulationsXML,
-       promptsAnswers: objectData.promptsAnswers,
-     };
 
      const excelContext = await officeApiHelper.getExcelContext();
 
@@ -67,8 +55,8 @@ class StepGetInstanceDefinition {
      const startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
 
      let instanceDefinition;
-     let { body } = connectionData;
-     const { mstrObjectType } = connectionData;
+     let { body } = objectData;
+     const { mstrObjectType } = objectData;
 
      if (body && body.requestedObjects) {
        if (body.requestedObjects.attributes.length === 0 && body.requestedObjects.metrics.length === 0) {
@@ -77,36 +65,33 @@ class StepGetInstanceDefinition {
        body.template = body.requestedObjects;
      }
 
-     const config = {
-       ...connectionData,
-       displayAttrFormNames,
-     };
 
      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
        ({ body, visualizationInfo, instanceDefinition } = await this.getDossierInstanceDefinition(
-         { ...config, visualizationInfo }
+         { ...objectData, visualizationInfo }
        ));
      } else {
-       instanceDefinition = await createInstance(config);
+       instanceDefinition = await createInstance(objectData);
      }
 
 
      // Status 2 = report has open prompts to be answered before data can be returned
      if (instanceDefinition.status === 2) {
-       instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...config });
+       instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
      }
 
      this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
 
+     const { mstrTable } = instanceDefinition;
      const updatedObject = {
        objectWorkingId,
        envUrl: officeApiHelper.getCurrentMstrContext(),
        body,
        visualizationInfo: visualizationInfo || false,
        oldBindId: bindId,
-       name: instanceDefinition.mstrTable.name,
-       crosstabHeaderDimensions,
-       isCrosstab: instanceDefinition.mstrTable.isCrosstab,
+       name: mstrTable.name,
+       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
+       isCrosstab: mstrTable.isCrosstab,
      };
 
      const updatedOperation = {
@@ -114,6 +99,7 @@ class StepGetInstanceDefinition {
        instanceDefinition,
        startCell,
        excelContext,
+       totalRows: instanceDefinition.rows,
      };
      // TODO add when error handlind added
      // Check if instance returned data

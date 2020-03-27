@@ -27,9 +27,10 @@ describe('StepGetOfficeTableImport', () => {
 
   it('getOfficeTableImport should work as expected', async () => {
     // given
-    const objectData = { objectWorkingId: 'testObjectWorkingId' };
+    const objectData = {};
 
     const operationData = {
+      objectWorkingId: 'testObjectWorkingId',
       excelContext: 'testExcelContext',
       instanceDefinition: 'testInstanceDefinition',
       startCell: 'testStartCell',
@@ -38,7 +39,7 @@ describe('StepGetOfficeTableImport', () => {
     const mockCreateOfficeTable = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => ({
       officeTable: 'testOfficeTable',
       bindId: 'testBindId',
-      newOfficeTableName: 'testNewOfficeTableName',
+      tableName: 'testNewOfficeTableName',
     }));
 
     const mockUpdateOperation = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
@@ -73,7 +74,7 @@ describe('StepGetOfficeTableImport', () => {
     expect(mockUpdateObject).toBeCalledTimes(1);
     expect(mockUpdateObject).toBeCalledWith({
       objectWorkingId: 'testObjectWorkingId',
-      newOfficeTableName: 'testNewOfficeTableName',
+      tableName: 'testNewOfficeTableName',
       bindId: 'testBindId',
     });
 

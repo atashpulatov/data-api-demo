@@ -41,6 +41,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
   /* eslint-enable object-curly-newline */
 
   const mockOperationData = {
+    objectWorkingId: 'testObjectWorkingId',
     operationType: 'testOperationType',
     tableColumnsChanged: 'testTableColumnsChanged',
     officeTable: 'testOfficeTable',
@@ -63,20 +64,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
     },
   };
 
-  const generatorConfig = {
-    instanceDefinition: resultInstanceDefinition,
-    objectId: 'testObjectId',
-    projectId: 'testProjectId',
-    mstrObjectType: 'testMstrObjectType',
-    dossierData: 'testDossierData',
-    body: 'testBody',
-    limit: 4761,
-    visualizationInfo: 'testVisualizationInfo',
-    displayAttrFormNames: 'testDisplayAttrFormNames',
-    preparedInstanceId: 'testPreparedInstanceId',
-    manipulationsXML: 'testManipulationsXML',
-    promptsAnswers: 'testPromptsAnswers',
-  };
+  const limit = 4761;
+
 
   afterEach(() => {
     mockSuspendApiCalculationUntilNextSync.mockClear();
@@ -129,7 +118,11 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     // then
     expect(mockFetchContentGenerator).toBeCalledTimes(1);
-    expect(mockFetchContentGenerator).toBeCalledWith(generatorConfig);
+    expect(mockFetchContentGenerator).toBeCalledWith({
+      ...mockObjectData,
+      limit,
+      instanceDefinition: resultInstanceDefinition
+    });
 
     expect(mockAppendRows).not.toBeCalled();
 
@@ -204,7 +197,11 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     // then
     expect(mockFetchContentGenerator).toBeCalledTimes(1);
-    expect(mockFetchContentGenerator).toBeCalledWith(generatorConfig);
+    expect(mockFetchContentGenerator).toBeCalledWith({
+      ...mockObjectData,
+      limit,
+      instanceDefinition: resultInstanceDefinition
+    });
 
     expect(mockSuspendApiCalculationUntilNextSync).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
@@ -235,11 +232,13 @@ describe('StepFetchInsertDataIntoExcel', () => {
     expect(mockSyncChangesToExcel).toHaveBeenNthCalledWith(1, [], false);
     expect(mockSyncChangesToExcel).toHaveBeenNthCalledWith(2, [], true);
 
-    expect(mockUpdateOperation).toBeCalledTimes(1);
-    expect(mockUpdateOperation).toBeCalledWith({
-      objectWorkingId: 'testObjectWorkingId',
-      instanceDefinition: resultInstanceDefinition,
-    });
+    expect(mockUpdateOperation).toBeCalledTimes(2);
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'testObjectWorkingId', });
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(2,
+      {
+        objectWorkingId: 'testObjectWorkingId',
+        instanceDefinition: resultInstanceDefinition,
+      });
 
     expect(mockUpdateObject).toBeCalledTimes(1);
     expect(mockUpdateObject).toBeCalledWith({
@@ -305,7 +304,11 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     // then
     expect(mockFetchContentGenerator).toBeCalledTimes(1);
-    expect(mockFetchContentGenerator).toBeCalledWith(generatorConfig);
+    expect(mockFetchContentGenerator).toBeCalledWith({
+      ...mockObjectData,
+      limit,
+      instanceDefinition: resultInstanceDefinition
+    });
 
     expect(mockSuspendApiCalculationUntilNextSync).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
@@ -355,11 +358,14 @@ describe('StepFetchInsertDataIntoExcel', () => {
     expect(mockSyncChangesToExcel).toHaveBeenNthCalledWith(2, [], false);
     expect(mockSyncChangesToExcel).toHaveBeenNthCalledWith(3, [], true);
 
-    expect(mockUpdateOperation).toBeCalledTimes(1);
-    expect(mockUpdateOperation).toBeCalledWith({
-      objectWorkingId: 'testObjectWorkingId',
-      instanceDefinition: resultInstanceDefinition,
-    });
+    expect(mockUpdateOperation).toBeCalledTimes(3);
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'testObjectWorkingId', });
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(2, { loadedRows: 6, objectWorkingId: 'testObjectWorkingId', });
+    expect(mockUpdateOperation).toHaveBeenNthCalledWith(3,
+      {
+        objectWorkingId: 'testObjectWorkingId',
+        instanceDefinition: resultInstanceDefinition,
+      });
 
     expect(mockUpdateObject).toBeCalledTimes(1);
     expect(mockUpdateObject).toBeCalledWith({

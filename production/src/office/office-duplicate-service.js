@@ -43,6 +43,7 @@ class OfficeDuplicateService {
     const splitedName = nameCandidate.split(' ');
     let finalNameCandidate = nameCandidate;
 
+    // TODO change to object reducer
     const reportsArray = [...officeStoreService.getObjectProperties()];
     const reportsArrayNames = [];
     for (const report of reportsArray) {
