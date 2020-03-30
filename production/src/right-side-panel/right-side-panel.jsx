@@ -15,20 +15,19 @@ export const RightSidePanelNotConnected = (props) => {
     throw new Error('Not implemented yet');
   };
 
-  const addDataAction = async () => {
+
+  React.useEffect(() => {
     try {
-      // Prevent navigation tree from going straight into importing previously selected item.
-      reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
-      await popupController.runPopupNavigation();
+      sidePanelService.addRemoveObjectListener();
     } catch (error) {
-      errorService.handleError(error);
+      console.error(error);
     }
-  };
+  }, []);
 
   return (
     <SidePanel
       loadedObjects={loadedObjects}
-      onAddData={addDataAction}
+      onAddData={sidePanelService.addData}
       onToggleChecked={emptyCallback}
       onCheckAll={emptyCallback}
       onDuplicateClick={emptyCallback}

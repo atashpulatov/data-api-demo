@@ -61,6 +61,7 @@ function getObjectIndex(objects, objectWorkingId) {
   const objectToUpdateIndex = objects
     .findIndex(object => object.objectWorkingId === objectWorkingId);
   if (objectToUpdateIndex === -1) {
+    // TODO error handling
     throw new Error();
   }
   return objectToUpdateIndex;
