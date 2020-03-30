@@ -19,11 +19,10 @@ export class DevelopmentImportList extends Component {
     const { removeAllAction, reportArray } = this.props;
     const menu = (
       <Menu>
-        <Menu.Item key="SeasonalReport" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SeasonalReport'); }}>SeasonalReport</Menu.Item>
-        <Menu.Item key="SubtotalsAllTypes" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SubtotalsAllTypes'); }}>SubtotalsAllTypes</Menu.Item>
-        <Menu.Item key="StoreGaugesPrompted" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('StoreGaugesPrompted'); }}>StoreGaugesPrompted</Menu.Item>
-        <Menu.Item key="Crosstab123" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('Crosstab123'); }}>Crosstab123</Menu.Item>
-        <Menu.Item key="CrosstabSubtotal" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('CrosstabSubtotal'); }}>CrosstabSubtotal</Menu.Item>
+        <Menu.Item key="SeasonalReport" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SeasonalReport'); }}>{objectList.SeasonalReport.name}</Menu.Item>
+        <Menu.Item key="SubtotalsAllTypes" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SubtotalsAllTypes'); }}>{objectList.SubtotalsAllTypes.name}</Menu.Item>
+        <Menu.Item key="Crosstab123" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('Crosstab123'); }}>{objectList.Crosstab123.name}</Menu.Item>
+        <Menu.Item key="CrosstabSubtotal" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('CrosstabSubtotal'); }}>{objectList.CrosstabSubtotal.name}</Menu.Item>
       </Menu>
     );
     const { selectedObject } = this.state;
@@ -31,29 +30,12 @@ export class DevelopmentImportList extends Component {
       <div className="refresh-button-container">
         <Dropdown overlay={menu} trigger={['contextMenu']}>
           <Button
-            title={selectedObject}
+            title={objectList[selectedObject].name}
             className="add-data-btn floating-button"
             onClick={() => sessionHelper.importObjectWithouPopup(objectList[selectedObject])}>
           Quick Import
           </Button>
         </Dropdown>
-        {reportArray
-          ? (
-            <Button
-              style={{ width: '50px' }}
-              className="add-data-btn floating-button"
-              onClick={() => removeAllAction(reportArray)}>
-          Kill All
-            </Button>
-          )
-          : (
-            <Button
-              className="add-data-btn floating-button"
-              onClick={() => officeStoreService.clearObjectReducerFromSettings()}
-            >
-            Clear Reducer
-            </Button>
-          )}
       </div>
     );
   }
@@ -67,16 +49,19 @@ DevelopmentImportList.propTypes = {
 
 const objectList = {
   SeasonalReport: {
+    name: 'Seasonal Report',
     mstrObjectType: mstrObjectType.mstrObjectType.report,
     objectId: 'F3DA2FE611E75A9600000080EFC5B53B',
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
   },
   SubtotalsAllTypes: {
+    name: 'Subtotals - display all types',
     mstrObjectType: mstrObjectType.mstrObjectType.report,
     objectId: '075E66184A788958195710920F81B7D9',
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
   },
   Crosstab123: {
+    name: 'Report with crosstab 123',
     mstrObjectType: mstrObjectType.mstrObjectType.report,
     objectId: 'A6E8885611E99CC31A6E0080EFF50C15',
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
@@ -117,6 +102,7 @@ const objectList = {
     }
   },
   CrosstabSubtotal: {
+    name: 'Report with crosstab & subtotal',
     mstrObjectType: mstrObjectType.mstrObjectType.report,
     objectId: '86DADEE211E99CC328DA0080EF750B14',
     projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
