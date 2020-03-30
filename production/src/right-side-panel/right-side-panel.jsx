@@ -12,9 +12,13 @@ import { officeStoreService } from '../office/store/office-store-service';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
-    loadedObjects, isConfirm, isSettings, cancelCurrentImportRequest
+    loadedObjects,
+    isConfirm,
+    isSettings,
+    cancelCurrentImportRequest,
+    toggleIsSettingsFlag,
+    toggleSecuredFlag,
   } = props;
-  const { toggleIsSettingsFlag, toggleSecuredFlag } = props;
 
   const emptyCallback = (parameters) => {
     console.log(parameters);
