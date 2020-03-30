@@ -1,7 +1,7 @@
-import { SidePanel } from '@mstr/rc';
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { SidePanel } from '@mstr/rc';
 import { popupController } from '../popup/popup-controller';
 import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
@@ -36,8 +36,6 @@ export const RightSidePanelNotConnected = (props) => {
   };
 
   React.useEffect(() => {
-    console.log('useEffect');
-    console.log('settings isfileSecured', officeStoreService.isFileSecured());
     if (officeStoreService.isFileSecured()) {
       toggleSecuredFlag(true);
     }

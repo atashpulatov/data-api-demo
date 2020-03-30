@@ -1,12 +1,30 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import { SidePanel } from '@mstr/rc/';
 import { RightSidePanelNotConnected } from '../../right-side-panel/right-side-panel';
+import { SettingsMenu } from '../../home/settings-menu';
 import { popupController } from '../../popup/popup-controller';
 import { errorService } from '../../error/error-handler';
+import { officeStoreService } from '../../office/store/office-store-service';
 
 describe('RightSidePanelNotConnected', () => {
   const mockedProps = { loadedObjects: [], cancelCurrentImportRequest: jest.fn() };
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should call toggleSecureFlag if file is secured', () => {
+    // given
+    const toggleSecuredFlagMock = jest.fn();
+    const mockToggleStoreFlag = jest.spyOn(officeStoreService, 'isFileSecured').mockImplementation(() => true);
+    // when
+    const shallowedComponent = mount(
+      <RightSidePanelNotConnected {...mockedProps} toggleSecuredFlag={toggleSecuredFlagMock} />
+    );
+    // then
+    expect(toggleSecuredFlagMock).toBeCalledWith(true);
+  });
   it('should display SidePanel', () => {
     // given
     // when
@@ -56,5 +74,13 @@ describe('RightSidePanelNotConnected', () => {
     // then
     expect(handleErrorSpy).toBeCalled();
     expect(handleErrorSpy).toBeCalledWith(errorToThrow);
+  });
+  it('should provide settingsMenu to SidePanel when isSettings is true', () => {
+    // given
+    // when
+    const wrappedComponent = mount(<RightSidePanelNotConnected {...mockedProps} isSettings />);
+    // then
+    const wrappedSidePanel = wrappedComponent.find(SidePanel).at(0);
+    expect(wrappedSidePanel.props()).toBe('aaa');
   });
 });
