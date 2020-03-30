@@ -1,6 +1,4 @@
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
-import stepRemoveObjectStore from '../../../office/remove/step-remove-object-store';
-import { officeStoreService } from '../../../office/store/office-store-service';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import { officeRemoveHelper } from '../../../office/remove/office-remove-helper';
 import stepRemoveObjectTable from '../../../office/remove/step-remove-object-table';
