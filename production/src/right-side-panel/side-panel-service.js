@@ -19,9 +19,9 @@ class SidePanelService {
 
       if (await officeApiHelper.onBindingObjectClick(bindId, false, this.deleteObject, objectName)) {
         if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-          reduxStore.dispatch(popupActions.callForEditDossier({ bindId, objectType: mstrObjectType }));
+          reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
         } else {
-          reduxStore.dispatch(popupActions.callForEdit({ bindId, objectType: mstrObjectType }));
+          reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
         }
       }
     }

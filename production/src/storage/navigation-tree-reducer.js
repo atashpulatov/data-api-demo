@@ -34,7 +34,7 @@ export const initialState = {
   importRequested: false,
   dossierData: null,
   promptsAnswers: null,
-  objectType: null,
+  mstrObjectType: null,
   chosenChapterKey: null,
   chosenVisualizationKey: null,
   dossierOpenRequested: false,
@@ -67,7 +67,7 @@ function makeSelection(newState, data) {
   newState.chosenSubtype = data.chosenSubtype || null;
   newState.chosenObjectName = data.chosenObjectName || DEFAULT_PROJECT_NAME;
   newState.chosenType = (mstrObjectType.getMstrTypeBySubtype(data.chosenSubtype) || DEFAULT_TYPE);
-  newState.objectType = data.objectType;
+  newState.mstrObjectType = data.mstrObjectType;
   newState.chosenChapterKey = data.chosenChapterKey || null;
   newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
   newState.preparedInstanceId = data.preparedInstanceId || null;

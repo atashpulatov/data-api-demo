@@ -82,7 +82,7 @@ const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
     envUrl: session.envUrl,
     projectId: chosenObject.chosenProjectId || editedObject.projectId,
     reportSubtype: chosenObject.chosenSubtype || editedObject.chosenObjectSubtype,
-    reportType: chosenObject.chosenObjectId ? chosenObject.objectType.name : editedObject.chosenObjectType,
+    reportType: chosenObject.chosenObjectId ? chosenObject.mstrObjectType.name : editedObject.chosenObjectType,
     reportName: chosenObject.chosenObjectName || editedObject.chosenObjectName,
     token: session.authToken,
     authToken: session.authToken,
@@ -148,7 +148,7 @@ const mapStateToProps = (state) => {
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = editedObject && editedObject.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,

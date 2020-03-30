@@ -72,14 +72,14 @@ class PopupHelper {
 
   printRefreshedReport = async (
     bindId,
-    objectType,
+    objectTypeName,
     length,
     index,
     isRefreshAll,
   ) => {
     const objectToRefresh = officeStoreService.getObjectFromObjectReducer(bindId);
     if (isRefreshAll) { this.storageReportRefreshStart(objectToRefresh, index); }
-    const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
+    const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectTypeName);
 
     this.reduxStore.dispatch(refreshRequested(objectToRefresh));
 
@@ -149,8 +149,8 @@ class PopupHelper {
       instanceId: popupState.instanceId,
       projectId: popupState.projectId,
       chosenObjectName: popupState.name,
-      chosenObjectType: popupState.objectType,
-      chosenObjectSubtype: popupState.objectType === 'report' ? 768 : 779,
+      chosenObjectType: popupState.mstrObjectType,
+      chosenObjectSubtype: popupState.mstrObjectType === 'report' ? 768 : 779,
       promptsAnswers: promptsAnswers || popupState.promptsAnswers,
       subtotalsInfo: popupState.subtotalsInfo,
       isEdit: popupState.isEdit,
