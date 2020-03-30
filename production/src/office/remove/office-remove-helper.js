@@ -3,10 +3,10 @@ import { officeStoreService } from '../store/office-store-service';
 import { notificationService } from '../../notification/notification-service';
 import { errorService } from '../../error/error-handler';
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
-import { officeApiHelper } from './office-api-helper';
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 
-class OfficeApiRemoveHelper {
+class OfficeRemoveHelper {
   /**
    * Get object from store based on bindId and remove it from workbook
    *
@@ -19,31 +19,6 @@ class OfficeApiRemoveHelper {
     const officeTable = excelContext.workbook.tables.getItem(object.bindId);
     await this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions, isClear);
   }
-
-  /**
-   * Remove object from the redux store, Excel settings, Excel bindings and then display message
-   *
-   * @param {Office} object
-   * @param {Office} officeContext office context
-   * @param {Object} t i18n translating function
-   */
-  removeReportFromExcel = async (bindId, isCrosstab, crosstabHeaderDimensions, objectWorkingId) => {
-    try {
-      await authenticationHelper.validateAuthToken();
-      const officeContext = await officeApiHelper.getOfficeContext();
-      await officeContext.document.bindings.releaseByIdAsync(bindId, () => { console.log('released binding'); });
-      const excelContext = await officeApiHelper.getExcelContext();
-      const officeTable = excelContext.workbook.tables.getItem(bindId);
-      this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
-      await excelContext.sync();
-      return officeStoreService.removeObjectFromStore(bindId, objectWorkingId);
-    } catch (error) {
-      if (error && error.code === 'ItemNotFound') {
-        return officeStoreService.removeObjectFromStore(bindId, objectWorkingId);
-      }
-      return errorService.handleError(error);
-    }
-  };
 
   /**
   * Remove Excel table object from workbook. For crosstab reports will also clear the headers
@@ -131,4 +106,4 @@ class OfficeApiRemoveHelper {
   }
 }
 
-export const officeApiRemoveHelper = new OfficeApiRemoveHelper();
+export const officeRemoveHelper = new OfficeRemoveHelper();

@@ -20,9 +20,13 @@ import {
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
   SAVE_OBJECT_IN_EXCEL,
-  REMOVE_OBJECT
+  REMOVE_OBJECT_BINDING,
+  REMOVE_OBJECT_TABLE,
+  REMOVE_OBJECT_STORE
 } from './operation-steps';
-import stepRemoveObject from '../right-side-panel/step-remove-object';
+import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
+import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
+import stepRemoveObjectStore from '../office/remove/step-remove-object-store';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -48,7 +52,9 @@ class SubscribeSteps {
     // TODO: remove below after refactor
     operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, stepSaveObjectInExcel.saveObject);
 
-    operationBus.subscribe(REMOVE_OBJECT, stepRemoveObject.removeObject);
+    operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
+    operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
+    operationBus.subscribe(REMOVE_OBJECT_STORE, stepRemoveObjectStore.removeObjectStore);
   };
 }
 
