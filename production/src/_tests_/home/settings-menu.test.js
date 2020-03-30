@@ -28,7 +28,6 @@ describe('Settings Menu', () => {
     await expect(indexedDBSpy).toBeCalled();
     await expect(clearDB).toBeCalled();
   });
-
   it('should handle error on logout', () => {
     // given
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
@@ -42,6 +41,94 @@ describe('Settings Menu', () => {
     expect(logOutRestSpy).toThrowError();
   });
 
+  it('component should be wrapped with settings-list classname', () => {
+    // given
+    window.Office = {
+      context: {
+        ui: { messageParent: () => { }, },
+        diagnostics: { host: 'host', platform: 'platform', version: 'version' },
+        requirements: { isSetSupported: jest.fn() }
+      }
+    };
+    // when"
+    const menuWrapper = shallow(<SettingsMenuNotConnected userFullName="userFullName" userInitials={null} userID={1} />);
+    // then
+    expect(menuWrapper.props().className).toBe('settings-list');
+  });
+  it('should attach event listeners for outside of settings menu click and esc button', () => {
+    // given
+    const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
+    // when
+    mount(<SettingsMenuNotConnected isSettings />);
+    // then
+    const spyCalls = addEventListenerSpy.mock.calls;
+    expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
+    expect(spyCalls[spyCalls.length - 1][1].name).toEqual('closeSettingsOnClick');
+    expect(spyCalls[spyCalls.length - 2][0]).toEqual('keyup');
+    expect(spyCalls[spyCalls.length - 2][1].name).toEqual('closeSettingsOnEsc');
+  });
+  it('should remove event listeners for outside of settings menu click and esc button', () => {
+    // given
+    const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
+    const wrappedComponent = mount(<SettingsMenuNotConnected isSettings />);
+    // when
+    wrappedComponent.setProps({ isSettings: false });
+    wrappedComponent.update();
+    // then
+    const spyCalls = removeEventListenerSpy.mock.calls;
+    expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
+    expect(spyCalls[spyCalls.length - 1][1].name).toEqual('closeSettingsOnClick');
+    expect(spyCalls[spyCalls.length - 2][0]).toEqual('keyup');
+    expect(spyCalls[spyCalls.length - 2][1].name).toEqual('closeSettingsOnEsc');
+  });
+  it('should hide settings menu when clicking outside of it', () => {
+    // given
+    const toggleIsSettingsFlagMock = jest.fn();
+    const map = {};
+    document.addEventListener = jest.fn((event, cb) => {
+      map[event] = cb;
+    });
+    const wrappedComponent = mount(
+      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+    );
+    // when
+    map.click({ target: null });
+    wrappedComponent.update();
+    // then
+    expect(toggleIsSettingsFlagMock).toHaveBeenCalledWith(false);
+  });
+  it('should hide settings menu when pressing ESC', () => {
+    // given
+    const toggleIsSettingsFlagMock = jest.fn();
+    const map = {};
+    document.addEventListener = jest.fn((event, cb) => {
+      map[event] = cb;
+    });
+    const wrappedComponent = mount(
+      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+    );
+    // when
+    map.keyup({ keyCode: 27 });
+    wrappedComponent.update();
+    // then
+    expect(toggleIsSettingsFlagMock).toHaveBeenCalledWith(false);
+  });
+  it('should not hide settings menu when pressing key other than ESC', () => {
+    // given
+    const toggleIsSettingsFlagMock = jest.fn();
+    const map = {};
+    document.addEventListener = jest.fn((event, cb) => {
+      map[event] = cb;
+    });
+    const wrappedComponent = mount(
+      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+    );
+    // when
+    map.keyup({ keyCode: 26 });
+    wrappedComponent.update();
+    // then
+    expect(toggleIsSettingsFlagMock).toHaveBeenCalledTimes(0);
+  });
   it('should return true on throw error', () => {
     // given
     Object.defineProperty(global, 'document', {
@@ -65,21 +152,5 @@ describe('Settings Menu', () => {
     const returnValue = overflowHelper.isOverflown();
     // then
     expect(returnValue).toBe(true);
-  });
-
-
-  it('component should be wrapped with settings-list classname', () => {
-    // given
-    window.Office = {
-      context: {
-        ui: { messageParent: () => { }, },
-        diagnostics: { host: 'host', platform: 'platform', version: 'version' },
-        requirements: { isSetSupported: jest.fn() }
-      }
-    };
-    // when"
-    const menuWrapper = shallow(<SettingsMenuNotConnected userFullName="userFullName" userInitials={null} userID={1} />);
-    // then
-    expect(menuWrapper.props().className).toBe('settings-list');
   });
 });
