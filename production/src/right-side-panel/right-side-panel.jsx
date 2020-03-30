@@ -2,14 +2,11 @@ import { SidePanel } from '@mstr/rc';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { popupController } from '../popup/popup-controller';
-import { reduxStore } from '../store';
-import { CANCEL_REQUEST_IMPORT, } from '../navigation/navigation-tree-actions';
-import { errorService } from '../error/error-handler';
+import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
 import { sidePanelService } from './side-panel-service';
 
 export const RightSidePanelNotConnected = (props) => {
-  const { loadedObjects } = props;
+  const { loadedObjects, cancelCurrentImportRequest } = props;
   const emptyCallback = (parameters) => {
     console.log(parameters);
     throw new Error('Not implemented yet');
@@ -50,7 +47,7 @@ export const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { cancelCurrentImportRequest: cancelImportRequest, };
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
@@ -80,4 +77,5 @@ RightSidePanelNotConnected.propTypes = {
       })]),
       isSelected: PropTypes.bool,
     }).isRequired,
+  cancelCurrentImportRequest: PropTypes.func,
 };
