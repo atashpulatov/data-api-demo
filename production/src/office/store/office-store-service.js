@@ -150,14 +150,7 @@ class OfficeStoreService {
 
   removeObjectFromStore = (bindId, objectWorkingId) => {
     this.reduxStore.dispatch(deleteObject(objectWorkingId));
-
-    // TODO remove dispatch
-    // this.reduxStore.dispatch({
-    //   type: officeProperties.actions.removeReport,
-    //   reportBindId: bindId,
-    // });
     this.deleteObject(bindId, objectWorkingId);
-    return true;
   };
 
   restoreObjectsFromExcelStore = () => {
@@ -168,12 +161,9 @@ class OfficeStoreService {
 
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
 
-    // TODO uncomment after we remove connection to report array in settings
-    // settings.set(officeProperties.loadedReportProperties, []);
-    // settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
-
-    // settings.set(officeProperties.storedObjects, objects);
-    // await settings.saveAsync();
+    settings.set(officeProperties.loadedReportProperties, []);
+    settings.set(officeProperties.storedObjects, objects);
+    settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
   };
 
   restoreLegacyObjectsFromExcelStore = (objects) => {

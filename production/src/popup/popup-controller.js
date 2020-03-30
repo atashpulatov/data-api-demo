@@ -153,77 +153,40 @@ class PopupController {
     refreshCache()(dispatch, getState);
   }
 
-  handleUpdateCommand = async ({
-    dossierData,
-    chosenObjectId,
-    projectId,
-    chosenObjectSubtype,
-    body,
-    chosenObjectName,
-    promptsAnswers,
-    isPrompted,
-    instanceId,
-    subtotalsInfo,
-    displayAttrFormNames
-  }) => {
-    if (chosenObjectId && projectId && chosenObjectSubtype && body && chosenObjectName) {
-      this.reduxStore.dispatch({
-        type: START_REPORT_LOADING,
-        data: { name: chosenObjectName },
-      });
-      const options = {
-        isPrompted,
-        promptsAnswers,
-        dossierData,
-        objectId: chosenObjectId,
-        projectId,
-        instanceId,
-        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(chosenObjectSubtype),
-        body,
-        subtotalsInfo,
-        displayAttrFormNames
+  handleUpdateCommand = async (response) => {
+    if (response.chosenObject) {
+      const objectData = {
+        name: response.chosenObjectName,
+        objectId: response.chosenObjectId,
+        projectId: response.projectId,
+        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
+        body: response.body,
+        dossierData: response.dossierData,
+        promptsAnswers: response.promptsAnswers,
+        isPrompted: response.isPrompted,
+        instanceId: response.instanceId,
+        subtotalsInfo: response.subtotalsInfo,
+        displayAttrFormNames: response.displayAttrFormNames,
       };
-
-      this.reduxStore.dispatch(importRequested(options));
-      this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
+      this.reduxStore.dispatch(importRequested(objectData));
     }
   };
 
-  handleOkCommand = async (
-    {
-      chosenObject,
-      dossierData,
-      chosenProject,
-      chosenSubtype,
-      isPrompted,
-      promptsAnswers,
-      chosenObjectName,
-      visualizationInfo,
-      preparedInstanceId,
-    },
-    bindId,
-  ) => {
-    if (chosenObject) {
-      this.reduxStore.dispatch({ type: officeProperties.actions.startLoading });
-      this.reduxStore.dispatch({
-        type: START_REPORT_LOADING,
-        data: { name: chosenObjectName },
-      });
-      console.log('chosenObjectName:', chosenObjectName);
-      const options = {
-        dossierData,
-        objectId: chosenObject,
-        projectId: chosenProject,
-        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype),
+  handleOkCommand = async (response, bindId) => {
+    if (response.chosenObject) {
+      const objectData = {
+        name: response.chosenObjectName,
+        dossierData: response.dossierData,
+        objectId: response.chosenObject,
+        projectId: response.chosenProject,
+        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
         bindId,
-        isPrompted,
-        promptsAnswers,
-        visualizationInfo,
-        preparedInstanceId,
+        isPrompted: response.isPrompted,
+        promptsAnswers: response.promptsAnswers,
+        visualizationInfo: response.visualizationInfo,
+        preparedInstanceId: response.preparedInstanceId,
       };
-
-      this.reduxStore.dispatch(importRequested(options));
-      this.reduxStore.dispatch({ type: STOP_REPORT_LOADING });
+      this.reduxStore.dispatch(importRequested(objectData));
     }
   };
 
