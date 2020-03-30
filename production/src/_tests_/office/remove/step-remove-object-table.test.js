@@ -9,19 +9,19 @@ describe('StepRemoveObjectStore', () => {
   });
 
   it.each`
-  expectedIsCrosstab | expectedCrosstabHeaderDimensions  | isCrosstabParam   | crosstabHeaderDimensionsParam
+  expectedIsCrosstab | expectedCrosstabHeaderDimensions  | isCrosstabParam | crosstabHeaderDimensionsParam
 
-  ${true}            | ${{}}                             | ${true}           | ${undefined}
-  ${false}           | ${{}}                             | ${false}          | ${undefined}
-  ${false}           | ${{}}                             | ${undefined}      | ${undefined}
+  ${true}            | ${{}}                             | ${true}         | ${undefined}
+  ${false}           | ${{}}                             | ${false}        | ${undefined}
+  ${false}           | ${{}}                             | ${undefined}    | ${undefined}
 
-  ${true}            | ${{}}                             | ${true}           | ${{}}
-  ${false}           | ${{}}                             | ${false}          | ${{}}
-  ${false}           | ${{}}                             | ${undefined}      | ${{}}
+  ${true}            | ${{}}                             | ${true}         | ${{}}
+  ${false}           | ${{}}                             | ${false}        | ${{}}
+  ${false}           | ${{}}                             | ${undefined}    | ${{}}
 
-  ${true}            | ${'crosstabHeaderDimensionsTest'} | ${true}           | ${'crosstabHeaderDimensionsTest'}
-  ${false}           | ${'crosstabHeaderDimensionsTest'} | ${false}          | ${'crosstabHeaderDimensionsTest'}
-  ${false}           | ${'crosstabHeaderDimensionsTest'} | ${undefined}      | ${'crosstabHeaderDimensionsTest'}
+  ${true}            | ${'crosstabHeaderDimensionsTest'} | ${true}         | ${'crosstabHeaderDimensionsTest'}
+  ${false}           | ${'crosstabHeaderDimensionsTest'} | ${false}        | ${'crosstabHeaderDimensionsTest'}
+  ${false}           | ${'crosstabHeaderDimensionsTest'} | ${undefined}    | ${'crosstabHeaderDimensionsTest'}
 
   `('stepRemoveObjectStore should work as expected',
   async ({
