@@ -1,4 +1,3 @@
-
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeRemoveHelper } from './office-remove-helper';
 import { officeApiHelper } from '../api/office-api-helper';
@@ -27,11 +26,13 @@ class StepRemoveObjectTable {
 
     const excelContext = await officeApiHelper.getExcelContext();
     const officeTable = excelContext.workbook.tables.getItem(bindId);
+
     officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
+
     await excelContext.sync();
 
     operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
-  }
+  };
 }
 
 const stepRemoveObjectTable = new StepRemoveObjectTable();
