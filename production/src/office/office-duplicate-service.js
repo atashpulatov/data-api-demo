@@ -44,7 +44,7 @@ class OfficeDuplicateService {
     let finalNameCandidate = nameCandidate;
 
     // TODO change to object reducer
-    const reportsArray = [...officeStoreService.getObjectProperties()];
+    const reportsArray = [...officeStoreService.getLegacyObjectsList()];
     const reportsArrayNames = [];
     for (const report of reportsArray) {
       reportsArrayNames.push(report.name);

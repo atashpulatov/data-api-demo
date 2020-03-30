@@ -2,9 +2,7 @@ import { SidePanel } from '@mstr/rc';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { popupController } from '../popup/popup-controller';
 import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
-import { errorService } from '../error/error-handler';
 import { sidePanelService } from './side-panel-service';
 
 export const RightSidePanelNotConnected = (props) => {
@@ -14,20 +12,19 @@ export const RightSidePanelNotConnected = (props) => {
     throw new Error('Not implemented yet');
   };
 
-  const addDataAction = async () => {
+
+  React.useEffect(() => {
     try {
-      // Prevent navigation tree from going straight into importing previously selected item.
-      cancelCurrentImportRequest();
-      await popupController.runPopupNavigation();
+      sidePanelService.addRemoveObjectListener();
     } catch (error) {
-      errorService.handleError(error);
+      console.error(error);
     }
-  };
+  }, []);
 
   return (
     <SidePanel
       loadedObjects={loadedObjects}
-      onAddData={addDataAction}
+      onAddData={sidePanelService.addData}
       onToggleChecked={emptyCallback}
       onCheckAll={emptyCallback}
       onDuplicateClick={emptyCallback}

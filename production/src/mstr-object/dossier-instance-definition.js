@@ -24,7 +24,6 @@ class DossierInstanceDefinition {
     }
 
     let instanceId;
-
     try {
       instanceId = preparedInstanceId || (await mstrObjectRestService.createDossierInstance(projectId, objectId, body));
     } catch (error) {
@@ -42,6 +41,7 @@ class DossierInstanceDefinition {
     if (!updatedVisualizationInfo) {
       throw new Error(INVALID_VIZ_KEY_MESSAGE);
     }
+
     visualizationInfo = updatedVisualizationInfo;
 
     const config = {
@@ -56,17 +56,18 @@ class DossierInstanceDefinition {
     };
 
     let temporaryInstanceDefinition;
-
     try {
       temporaryInstanceDefinition = await mstrObjectRestService.fetchVisualizationDefinition(config);
     } catch (error) {
       error.type = this.getVisualizationErrorType(error);
       throw error;
     }
+
     const instanceDefinition = {
       ...temporaryInstanceDefinition,
       instanceId
     };
+
     return {
       body,
       visualizationInfo,

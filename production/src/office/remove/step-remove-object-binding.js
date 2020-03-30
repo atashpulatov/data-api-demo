@@ -1,4 +1,3 @@
-
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../api/office-api-helper';
 
@@ -14,14 +13,13 @@ class StepRemoveObjectBinding {
    */
   removeObjectBinding = async (objectData, operationData) => {
     const { bindId, objectWorkingId } = objectData;
-    console.log('bindId:', bindId);
 
     const officeContext = await officeApiHelper.getOfficeContext();
+
     await officeContext.document.bindings.releaseByIdAsync(bindId);
 
-
     operationStepDispatcher.completeRemoveObjectBinding(objectWorkingId);
-  }
+  };
 }
 
 const stepRemoveObjectBinding = new StepRemoveObjectBinding();

@@ -87,8 +87,9 @@ class OfficeRemoveHelper {
   removeObjectAndDisplaytNotification = (object, officeContext, t) => {
     const { name } = object;
     this.removeObjectNotExistingInExcel(object, officeContext);
-    const message = t('{{name}} has been removed from the workbook.', { name });
-    notificationService.displayTranslatedNotification({ type: 'success', content: message });
+    // TODO check after new notifications
+    // const message = t('{{name}} has been removed from the workbook.', { name });
+    // notificationService.displayTranslatedNotification({ type: 'success', content: message });
   }
 
   /**
@@ -99,7 +100,7 @@ class OfficeRemoveHelper {
    * @param {Office} officeContext Excel context
    */
   removeObjectNotExistingInExcel = async (object, officeContext) => {
-    officeStoreService.removeObjectFromStore(object.bindId);
+    officeStoreService.removeObjectFromStore(object.bindId, object.objectWorkingId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
   }
 }
