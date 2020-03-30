@@ -11,41 +11,42 @@ describe('StepGetOfficeTableImport', () => {
     // given
     console.log = jest.fn();
 
-    const mockCreateOfficeTable = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => {
-      throw new Error('testError');
+    const createOfficeTableMock = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => {
+      throw new Error('errorTest');
     });
 
     // when
     await stepGetOfficeTableImport.getOfficeTableImport({}, {});
 
     // then
-    expect(mockCreateOfficeTable).toBeCalledTimes(1);
-    expect(mockCreateOfficeTable).toThrowError(Error);
+    expect(createOfficeTableMock).toBeCalledTimes(1);
+    expect(createOfficeTableMock).toThrowError(Error);
     expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('error:', new Error('testError'));
+    expect(console.log).toBeCalledWith('error:', new Error('errorTest'));
   });
 
   it('getOfficeTableImport should work as expected', async () => {
     // given
-    const objectData = { objectWorkingId: 'testObjectWorkingId' };
+    const objectData = {};
 
     const operationData = {
-      excelContext: 'testExcelContext',
-      instanceDefinition: 'testInstanceDefinition',
-      startCell: 'testStartCell',
+      objectWorkingId: 'objectWorkingIdTest',
+      excelContext: 'excelContextTest',
+      instanceDefinition: 'instanceDefinitionTest',
+      startCell: 'startCellTest',
     };
 
-    const mockCreateOfficeTable = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => ({
-      officeTable: 'testOfficeTable',
-      bindId: 'testBindId',
-      newOfficeTableName: 'testNewOfficeTableName',
+    const createOfficeTableMock = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => ({
+      officeTable: 'officeTableTest',
+      bindId: 'bindIdTest',
+      tableName: 'newOfficeTableNameTest',
     }));
 
-    const mockUpdateOperation = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-    const mockUpdateObject = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    const mockCompleteGetOfficeTableImport = jest.spyOn(
+    const completeGetOfficeTableImportMock = jest.spyOn(
       operationStepDispatcher, 'completeGetOfficeTableImport'
     ).mockImplementation();
 
@@ -53,31 +54,31 @@ describe('StepGetOfficeTableImport', () => {
     await stepGetOfficeTableImport.getOfficeTableImport(objectData, operationData);
 
     // then
-    expect(mockCreateOfficeTable).toBeCalledTimes(1);
-    expect(mockCreateOfficeTable).toBeCalledWith({
-      excelContext: 'testExcelContext',
-      instanceDefinition: 'testInstanceDefinition',
-      startCell: 'testStartCell',
+    expect(createOfficeTableMock).toBeCalledTimes(1);
+    expect(createOfficeTableMock).toBeCalledWith({
+      excelContext: 'excelContextTest',
+      instanceDefinition: 'instanceDefinitionTest',
+      startCell: 'startCellTest',
     });
 
-    expect(mockUpdateOperation).toBeCalledTimes(1);
-    expect(mockUpdateOperation).toBeCalledWith({
-      objectWorkingId: 'testObjectWorkingId',
-      officeTable: 'testOfficeTable',
+    expect(updateOperationMock).toBeCalledTimes(1);
+    expect(updateOperationMock).toBeCalledWith({
+      objectWorkingId: 'objectWorkingIdTest',
+      officeTable: 'officeTableTest',
       shouldFormat: true,
       tableColumnsChanged: false,
-      instanceDefinition: 'testInstanceDefinition',
-      startCell: 'testStartCell',
+      instanceDefinition: 'instanceDefinitionTest',
+      startCell: 'startCellTest',
     });
 
-    expect(mockUpdateObject).toBeCalledTimes(1);
-    expect(mockUpdateObject).toBeCalledWith({
-      objectWorkingId: 'testObjectWorkingId',
-      newOfficeTableName: 'testNewOfficeTableName',
-      bindId: 'testBindId',
+    expect(updateObjectMock).toBeCalledTimes(1);
+    expect(updateObjectMock).toBeCalledWith({
+      objectWorkingId: 'objectWorkingIdTest',
+      tableName: 'newOfficeTableNameTest',
+      bindId: 'bindIdTest',
     });
 
-    expect(mockCompleteGetOfficeTableImport).toBeCalledTimes(1);
-    expect(mockCompleteGetOfficeTableImport).toBeCalledWith('testObjectWorkingId');
+    expect(completeGetOfficeTableImportMock).toBeCalledTimes(1);
+    expect(completeGetOfficeTableImportMock).toBeCalledWith('objectWorkingIdTest');
   });
 });

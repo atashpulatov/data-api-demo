@@ -112,7 +112,7 @@ export function fetchObjectsFallback() {
       getMyLibraryObjectList((objects) => {
         dispatch(saveMyLibraryOwners(objects));
         objects = { data: addNestedPropertiesToObjects(objects, projects, i18next.language) };
-        dispatch(addMyLibraryObjects(objects, true));
+        dispatch(addMyLibraryObjects(objects));
       })
         .catch(console.error)
         .finally(() => dispatch(myLibraryLoading(false)));
@@ -121,7 +121,7 @@ export function fetchObjectsFallback() {
       dispatch(objectListLoading(true));
       getObjectList((objects) => {
         objects = { data: addNestedPropertiesToObjects(objects, projects, i18next.language) };
-        dispatch(addEnvObjects(objects, true));
+        dispatch(addEnvObjects(objects));
       })
         .catch(console.error)
         .finally(() => dispatch(objectListLoading(false)));

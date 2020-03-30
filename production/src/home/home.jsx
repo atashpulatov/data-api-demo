@@ -12,6 +12,7 @@ import { HomeDialog } from './home-dialog';
 import InternetConnectionError from '../popup/internet-connection-error';
 import { Authenticate } from '../authentication/auth-component';
 import HomeContent from './home-content';
+import { DevelopmentImportList } from '../development-import-list';
 
 const IS_LOCALHOST = sessionHelper.isDevelopment();
 
@@ -41,6 +42,7 @@ export const HomeNotConnected = (props) => {
 
   return (
     <>
+      {sessionHelper.isDevelopment && authToken && <DevelopmentImportList />}
       {authToken
         ? <RightSidePanel />
         : (

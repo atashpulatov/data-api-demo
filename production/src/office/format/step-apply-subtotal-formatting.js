@@ -8,14 +8,15 @@ class StepApplySubtotalFormatting {
    * This function is subscribed as one of the operation steps with the key FORMAT_SUBTOTALS,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   applySubtotalFormattingRedux = async (objectData, operationData) => {
-    const { objectWorkingId, } = objectData;
-    const { excelContext, instanceDefinition, officeTable, } = operationData;
+    const {
+      objectWorkingId, excelContext, instanceDefinition, officeTable,
+    } = operationData;
     const { mstrTable } = instanceDefinition;
 
     if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {

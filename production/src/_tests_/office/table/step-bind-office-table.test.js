@@ -11,21 +11,21 @@ describe('StepBindOfficeTable', () => {
   it('bindOfficeTable should work as expected', async () => {
     // given
     const objectData = {
-      bindId: 'testBindId',
-      objectWorkingId: 'testObjectWorkingId',
+      bindId: 'bindIdTest',
+      objectWorkingId: 'objectWorkingIdTest',
     };
     const operationData = {
-      excelContext: 'testExcelContext',
-      officeTable: 'testOfficeTable',
+      excelContext: 'excelContextTest',
+      officeTable: 'officeTableTest',
     };
 
-    const mockLoadExcelDataSingle = jest.spyOn(officeApiDataLoader, 'loadExcelDataSingle').mockImplementation(
-      () => 'testTableName'
+    const loadExcelDataSingleMock = jest.spyOn(officeApiDataLoader, 'loadExcelDataSingle').mockImplementation(
+      () => 'tableNameTest'
     );
 
-    const mockOfficeApiHelper = jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
+    const officeApiHelperMock = jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
 
-    const mockCompleteBindOfficeTable = jest.spyOn(
+    const completeBindOfficeTableMock = jest.spyOn(
       operationStepDispatcher, 'completeBindOfficeTable'
     ).mockImplementation();
 
@@ -33,13 +33,13 @@ describe('StepBindOfficeTable', () => {
     await stepBindOfficeTable.bindOfficeTable(objectData, operationData);
 
     // then
-    expect(mockLoadExcelDataSingle).toBeCalledTimes(1);
-    expect(mockLoadExcelDataSingle).toBeCalledWith('testExcelContext', 'testOfficeTable', 'name');
+    expect(loadExcelDataSingleMock).toBeCalledTimes(1);
+    expect(loadExcelDataSingleMock).toBeCalledWith('excelContextTest', 'officeTableTest', 'name');
 
-    expect(mockOfficeApiHelper).toBeCalledTimes(1);
-    expect(mockOfficeApiHelper).toBeCalledWith('testTableName', 'testBindId');
+    expect(officeApiHelperMock).toBeCalledTimes(1);
+    expect(officeApiHelperMock).toBeCalledWith('tableNameTest', 'bindIdTest');
 
-    expect(mockCompleteBindOfficeTable).toBeCalledTimes(1);
-    expect(mockCompleteBindOfficeTable).toBeCalledWith('testObjectWorkingId');
+    expect(completeBindOfficeTableMock).toBeCalledTimes(1);
+    expect(completeBindOfficeTableMock).toBeCalledWith('objectWorkingIdTest');
   });
 });

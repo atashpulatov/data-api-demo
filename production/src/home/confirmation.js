@@ -14,7 +14,7 @@ import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
+import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 
 export const ConfirmationNotConnected = ({
   reportArray,
@@ -44,7 +44,7 @@ export const ConfirmationNotConnected = ({
       const excelContext = await officeApiHelper.getExcelContext();
       await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, reportArray);
       for (const report of reportArray) {
-        if (await officeApiRemoveHelper.checkIfObjectExist(report, excelContext)) {
+        if (await officeRemoveHelper.checkIfObjectExist(report, excelContext)) {
           try {
             reportName = report.name;
             if (report.isCrosstab) {
@@ -57,7 +57,7 @@ export const ConfirmationNotConnected = ({
               headers.format.font.color = 'white';
               await excelContext.sync();
             }
-            await officeApiRemoveHelper.removeOfficeTableBody(excelContext, report, true);
+            await officeRemoveHelper.removeOfficeTableBody(excelContext, report, true);
           } catch (error) {
             const officeError = errorService.handleError(error);
             clearErrors.push({ reportName, officeError });

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { popupController } from '../popup/popup-controller';
 import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
+import { sidePanelService } from './side-panel-service';
 
 export const RightSidePanelNotConnected = (props) => {
   const { loadedObjects, cancelCurrentImportRequest } = props;
@@ -31,9 +32,9 @@ export const RightSidePanelNotConnected = (props) => {
       onCheckAll={emptyCallback}
       onDuplicateClick={emptyCallback}
       onEditClick={emptyCallback}
-      onRefreshClick={emptyCallback}
+      onRefreshClick={sidePanelService.refresh}
       onRefreshSelected={emptyCallback}
-      onRemoveClick={emptyCallback}
+      onRemoveClick={sidePanelService.remove}
       onRemoveSelected={emptyCallback}
       onRename={emptyCallback}
     />

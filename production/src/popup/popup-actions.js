@@ -29,7 +29,7 @@ class PopupActions {
   callForEdit = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject = this.officeStoreService.getObjectFromProperties(reportParams.bindId);
+      const editedObject = this.officeStoreService.getObjectFromObjectReducer(reportParams.bindId);
 
       dispatch({
         type: SET_REPORT_N_FILTERS,
@@ -110,7 +110,7 @@ class PopupActions {
   callForEditDossier = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedDossier = this.officeStoreService.getObjectFromProperties(reportParams.bindId);
+      const editedDossier = this.officeStoreService.getObjectFromObjectReducer(reportParams.bindId);
 
       const {
         projectId, id, manipulationsXML, visualizationInfo
