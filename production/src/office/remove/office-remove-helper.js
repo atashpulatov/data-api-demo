@@ -1,8 +1,6 @@
 
 import { officeStoreService } from '../store/office-store-service';
 import { notificationService } from '../../notification/notification-service';
-import { errorService } from '../../error/error-handler';
-import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 

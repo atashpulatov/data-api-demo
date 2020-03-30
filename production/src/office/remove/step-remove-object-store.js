@@ -4,11 +4,16 @@ import { officeStoreService } from '../store/office-store-service';
 
 class StepRemoveObjectStore {
   /**
-   * Remove object from the redux store, Excel settings, Excel bindings and then display message
+   * Removes an imported object from Object reducer in Redux Store and Excel settings.
    *
-   * @param {Office} object
-   * @param {Office} officeContext office context
-   * @param {Object} t i18n translating function
+   * Communicates with object reducer and calls officeStoreService.removeObjectFromStore.
+   *
+   *
+   * This function is subscribed as one of the operation steps with the key REMOVE_OBJECT_STORE,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {String} objectData.bindId Id of the Office table created on import used for referencing the Excel table
    */
   removeObjectStore = async (objectData, operationData) => {
     const { bindId, objectWorkingId, } = objectData;

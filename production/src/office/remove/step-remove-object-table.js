@@ -5,18 +5,24 @@ import { officeApiHelper } from '../api/office-api-helper';
 
 class StepRemoveObjectTable {
   /**
-   * Remove object from the redux store, Excel settings, Excel bindings and then display message
+   * Removes an imported object from Object reducer in Redux Store and Excel settings.
    *
-   * @param {Office} object
-   * @param {Office} officeContext office context
-   * @param {Object} t i18n translating function
+   * Communicates with object reducer and calls officeRemoveHelper.removeExcelTable.
+   *
+   * This function is subscribed as one of the operation steps with the key REMOVE_OBJECT_STORE,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {String} objectData.bindId Id of the Office table created on import used for referencing the Excel table
+   * @param {Boolean} objectData.isCrosstab Specify if object is a crosstab
+   * @param {Object} objectData.crosstabHeaderDimensions Contains information about crosstab headers dimensions
    */
   removeObjectTable = async (objectData, operationData) => {
     const {
+      objectWorkingId,
       bindId,
       isCrosstab = false,
       crosstabHeaderDimensions = {},
-      objectWorkingId,
     } = objectData;
 
     const excelContext = await officeApiHelper.getExcelContext();
