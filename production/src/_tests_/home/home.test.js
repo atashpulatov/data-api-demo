@@ -30,36 +30,6 @@ describe('Home', () => {
     expect(componentWrapper.children().length).toBeGreaterThan(0);
   });
 
-  it('should have header component with proper text', async () => {
-    // given
-    const props = {
-      loading: false,
-      authToken: true,
-      reportArray: false,
-      t: (text) => text,
-    };
-    const tempPromise = Promise.resolve();
-    const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
-    const officeHelperSpy = jest
-      .spyOn(officeStoreService, 'loadExistingReportBindingsExcel')
-      .mockImplementation(async () => null);
-    sessionHelperSpy.mockClear();
-    officeHelperSpy.mockClear();
-    // when
-    const componentWrapper = mount(
-      <Provider store={reduxStore}>
-        <HomeNotConnected {...props} />
-      </Provider>,
-    );
-    // then
-    setImmediate(() => tempPromise);
-    await (tempPromise);
-    const headerWrapper = componentWrapper.find('#app-header');
-    expect(componentWrapper.contains(headerWrapper.get(0))).toBe(true);
-    expect(officeHelperSpy).toHaveBeenCalled();
-    expect(sessionHelperSpy).toHaveBeenCalled();
-  });
-
   it('should trigger saveLoginValues and saveTokenFromCookies on mount', async () => {
     // given
     const props = {

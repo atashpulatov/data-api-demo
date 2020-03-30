@@ -41,6 +41,8 @@ export const RightSidePanelNotConnected = (props) => {
     }
   }, [toggleSecuredFlag]);
 
+  const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
+
   return (
     <SidePanel
       loadedObjects={loadedObjects}
@@ -55,7 +57,7 @@ export const RightSidePanelNotConnected = (props) => {
       onRemoveSelected={emptyCallback}
       onRename={emptyCallback}
       settingsMenu={isSettings && <SettingsMenu />}
-      onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
+      onSettingsClick={handleSettingsClick}
       confirmationWindow={isConfirm && <Confirmation />}
     />
   );

@@ -8,7 +8,18 @@ import { errorService } from '../../error/error-handler';
 import { officeStoreService } from '../../office/store/office-store-service';
 
 describe('RightSidePanelNotConnected', () => {
-  const mockedProps = { loadedObjects: [], cancelCurrentImportRequest: jest.fn() };
+  let mockedProps;
+
+  beforeEach(() => {
+    mockedProps = {
+      loadedObjects: [],
+      isConfirm: false,
+      isSettings: false,
+      cancelCurrentImportRequest: jest.fn(),
+      toggleIsSettingsFlag: jest.fn(),
+      toggleSecuredFlag: jest.fn(),
+    };
+  });
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -16,14 +27,13 @@ describe('RightSidePanelNotConnected', () => {
 
   it('should call toggleSecureFlag if file is secured', () => {
     // given
-    const toggleSecuredFlagMock = jest.fn();
-    const mockToggleStoreFlag = jest.spyOn(officeStoreService, 'isFileSecured').mockImplementation(() => true);
+    jest.spyOn(officeStoreService, 'isFileSecured').mockImplementation(() => true);
     // when
-    const shallowedComponent = mount(
-      <RightSidePanelNotConnected {...mockedProps} toggleSecuredFlag={toggleSecuredFlagMock} />
+    mount(
+      <RightSidePanelNotConnected {...mockedProps} />
     );
     // then
-    expect(toggleSecuredFlagMock).toBeCalledWith(true);
+    expect(mockedProps.toggleSecuredFlag).toBeCalledWith(true);
   });
   it('should display SidePanel', () => {
     // given
@@ -81,6 +91,23 @@ describe('RightSidePanelNotConnected', () => {
     const wrappedComponent = mount(<RightSidePanelNotConnected {...mockedProps} isSettings />);
     // then
     const wrappedSidePanel = wrappedComponent.find(SidePanel).at(0);
-    expect(wrappedSidePanel.props()).toBe('aaa');
+    expect(wrappedSidePanel.prop('settingsMenu')).toBeTruthy();
+  });
+  it('should provide confirmationWindow to SidePanel when isConfirm is true', () => {
+    // given
+    // when
+    const wrappedComponent = mount(<RightSidePanelNotConnected {...mockedProps} isConfirm />);
+    // then
+    const wrappedSidePanel = wrappedComponent.find(SidePanel).at(0);
+    expect(wrappedSidePanel.prop('confirmationWindow')).toBeTruthy();
+  });
+  it('should call toggleIsSettingsFlag with inverse value of isSettings prop', () => {
+    // given
+    mockedProps.isSettings = true;
+    const wrappedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
+    // when
+    wrappedComponent.find(SidePanel).prop('onSettingsClick')();
+    // then
+    expect(mockedProps.toggleIsSettingsFlag).toHaveBeenCalled();
   });
 });
