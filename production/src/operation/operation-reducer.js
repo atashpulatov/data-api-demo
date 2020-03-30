@@ -2,6 +2,7 @@ import {
   IMPORT_REQUESTED,
   EDIT_REQUESTED,
   REFRESH_REQUESTED,
+  REMOVE_REQUESTED,
   MARK_STEP_COMPLETED,
   CANCEL_OPERATION,
   BACKUP_OBJECT,
@@ -13,13 +14,10 @@ const initialState = { operations: [] };
 export const operationReducer = (state = initialState, action) => {
   switch (action.type) {
     case IMPORT_REQUESTED:
-      return importRequested(state, action.payload);
-
     case REFRESH_REQUESTED:
-      return refreshRequested(state, action.payload);
-
     case EDIT_REQUESTED:
-      return editRequested(state, action.payload);
+    case REMOVE_REQUESTED:
+      return operationRequested(state, action.payload);
 
     case MARK_STEP_COMPLETED:
       return markStepCompleted(state, action.payload);
@@ -39,7 +37,7 @@ export const operationReducer = (state = initialState, action) => {
   }
 };
 
-function importRequested(state, payload) {
+function operationRequested(state, payload) {
   return {
     operations: [
       ...state.operations,
@@ -48,23 +46,6 @@ function importRequested(state, payload) {
   };
 }
 
-function refreshRequested(state, payload) {
-  return {
-    operations: [
-      ...state.operations,
-      payload.operation,
-    ]
-  };
-}
-
-function editRequested(state, payload) {
-  return {
-    operations: [
-      ...state.operations,
-      payload.operation,
-    ]
-  };
-}
 
 function markStepCompleted(state, { objectWorkingId, completedStep }) {
   const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);

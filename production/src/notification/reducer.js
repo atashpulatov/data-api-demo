@@ -7,7 +7,7 @@ export const notificationReducer = (state = {}, action) => {
   }
   switch (action.type) {
     case reduxNotificationProperties.actions.showMessage:
-      return onShowMessage(action, state);
+      return onShowMessage(action);
     case reduxNotificationProperties.actions.showNotification:
       return onShowNotification(action);
     case reduxNotificationProperties.actions.showTranslatedNotification:

@@ -20,7 +20,7 @@ import {
   startLoading as startLoadingImported,
   stopLoading as stopLoadingImported
 } from '../navigation/navigation-tree-actions';
-import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
+import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { DevelopmentImportList } from '../development-import-list';
 
@@ -55,7 +55,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
           const reportToDelete = reportArray.find((report) => report.bindId === e.tableId);
-          officeApiRemoveHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
+          officeRemoveHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
           stopLoading();
         });
       } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
@@ -72,7 +72,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           );
 
           for (const report of reportsToBeDeleted) {
-            officeApiRemoveHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
+            officeRemoveHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
           }
           stopLoading();
         });
@@ -113,7 +113,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
       for (let index = 0; index < reportArray.length; index++) {
         const object = reportArray[index];
         this.setState({ allowRefreshAllClick: false }, async () => {
-          await officeApiRemoveHelper.removeReportFromExcel(
+          await officeRemoveHelper.removeReportFromExcel(
             object.bindId,
             object.isCrosstab,
             object.crosstabHeaderDimensions,
@@ -208,7 +208,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
               fileName={report.name}
               bindId={report.bindId}
               onClick={officeApiHelper.onBindingObjectClick}
-              onDelete={officeApiRemoveHelper.removeReportFromExcel}
+              onDelete={officeRemoveHelper.removeReportFromExcel}
               isLoading={report.isLoading}
               isCrosstab={report.isCrosstab}
               crosstabHeaderDimensions={report.crosstabHeaderDimensions}

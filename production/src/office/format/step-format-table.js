@@ -11,16 +11,16 @@ class StepFormatTable {
    * This function is subscribed as one of the operation steps with key the FORMAT_OFFICE_TABLE,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   formatTable = async (objectData, operationData) => {
     console.time('Column auto size');
-
-    const { objectWorkingId, } = objectData;
-    const { excelContext, instanceDefinition, officeTable, } = operationData;
+    const {
+      objectWorkingId, excelContext, instanceDefinition, officeTable,
+    } = operationData;
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
 
     try {

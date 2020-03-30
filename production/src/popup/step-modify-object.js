@@ -26,7 +26,7 @@ class StepModifyObject {
       && subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
       const subtotalsInformation = { ...subtotalsInfo };
       subtotalsInformation.importSubtotal = objectEditedData.subtotalsInfo.importSubtotal;
-      updatedObject.instanceDefinition.mstrTable.subtotalsInfo = subtotalsInformation;
+      updatedObject.subtotalsInfo = subtotalsInformation;
     }
 
     if (objectData.displayAttrFormNames !== objectEditedData.displayAttrFormNames) {

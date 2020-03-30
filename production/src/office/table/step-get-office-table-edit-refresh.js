@@ -37,7 +37,6 @@ class StepGetOfficeTableEditRefresh {
       const { excelContext, instanceDefinition, } = operationData;
       const { mstrTable } = instanceDefinition;
 
-      const newOfficeTableName = tableName;
       let shouldFormat;
       let bindId = oldBindId;
       let officeTable;
@@ -85,7 +84,6 @@ class StepGetOfficeTableEditRefresh {
 
       const updatedObject = {
         objectWorkingId,
-        newOfficeTableName,
         bindId,
       };
 

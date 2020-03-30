@@ -9,6 +9,7 @@ import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
 import * as officeActions from '../office/store/office-actions';
 import { officeStoreService } from '../office/store/office-store-service';
+import { sidePanelService } from './side-panel-service';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -25,15 +26,13 @@ export const RightSidePanelNotConnected = (props) => {
     throw new Error('Not implemented yet');
   };
 
-  const addDataAction = async () => {
+  React.useEffect(() => {
     try {
-      // Prevent navigation tree from going straight into importing previously selected item.
-      cancelCurrentImportRequest();
-      await popupController.runPopupNavigation();
+      sidePanelService.addRemoveObjectListener();
     } catch (error) {
-      errorService.handleError(error);
+      console.error(error);
     }
-  };
+  }, []);
 
   React.useEffect(() => {
     if (officeStoreService.isFileSecured()) {
@@ -46,14 +45,14 @@ export const RightSidePanelNotConnected = (props) => {
   return (
     <SidePanel
       loadedObjects={loadedObjects}
-      onAddData={addDataAction}
+      onAddData={sidePanelService.addData}
       onToggleChecked={emptyCallback}
       onCheckAll={emptyCallback}
       onDuplicateClick={emptyCallback}
       onEditClick={emptyCallback}
-      onRefreshClick={emptyCallback}
+      onRefreshClick={sidePanelService.refresh}
       onRefreshSelected={emptyCallback}
-      onRemoveClick={emptyCallback}
+      onRemoveClick={sidePanelService.remove}
       onRemoveSelected={emptyCallback}
       onRename={emptyCallback}
       settingsMenu={isSettings && <SettingsMenu />}

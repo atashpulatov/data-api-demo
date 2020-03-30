@@ -8,10 +8,12 @@ import {
 export const IMPORT_REQUESTED = 'IMPORT_REQUESTED';
 export const EDIT_REQUESTED = 'EDIT_REQUESTED';
 export const REFRESH_REQUESTED = 'REFRESH_REQUESTED';
+export const REMOVE_REQUESTED = 'REMOVE_REQUESTED';
 
 export const MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED';
 export const UPDATE_OPERATION = 'UPDATE_OPERATION';
 export const CANCEL_OPERATION = 'CANCEL_OPERATION';
+export const REMOVE_OPERATION = 'REMOVE_OPERATION';
 export const BACKUP_OBJECT = 'BACKUP_OBJECT';
 export const SET_TOTAL_ROWS = 'SET_TOTAL_ROWS';
 export const SET_LOADED_ROWS = 'SET_LOADED_ROWS';
@@ -21,6 +23,7 @@ const operationTypes = {
   IMPORT_REQUESTED: IMPORT_OPERATION,
   EDIT_REQUESTED: EDIT_OPERATION,
   REFRESH_REQUESTED: REFRESH_OPERATION,
+  REMOVE_REQUESTED: REMOVE_OPERATION,
 };
 
 export const importRequested = (object) => {
@@ -60,6 +63,14 @@ export const editRequested = (objectData, objectEditedData) => {
   };
 };
 
+export const removeRequested = (objectWorkingId) => ({
+  type: REMOVE_REQUESTED,
+  payload: {
+    operation: createOperation(REMOVE_REQUESTED, objectWorkingId),
+    objectWorkingId,
+  },
+});
+
 export const markStepCompleted = (objectWorkingId, completedStep) => ({
   type: MARK_STEP_COMPLETED,
   payload: {
@@ -90,6 +101,8 @@ function createOperation(operationRequest, objectWorkingId, objectData = {}) {
     operationType,
     objectWorkingId,
     stepsQueue: JSON.parse(JSON.stringify(operationStepsMap[operationType])),
+    loadedRows: 0,
+    totalRows: 0,
     backupObjectData,
     objectEditedData,
   };

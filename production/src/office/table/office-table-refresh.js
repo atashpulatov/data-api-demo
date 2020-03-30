@@ -119,7 +119,8 @@ class OfficeTableRefresh {
   checkColumnsChange = async (prevOfficeTable, excelContext, instanceDefinition, previousTableDimensions) => {
     const { columns } = instanceDefinition;
     const tableColumns = prevOfficeTable.columns;
-    const prevTableColumns = previousTableDimensions.columns;
+    // for backward compatibility we assume that if no previousTableDimensions were stored columns didn not changed
+    const prevTableColumns = previousTableDimensions ? previousTableDimensions.columns : columns;
 
     tableColumns.load('count');
     await excelContext.sync();

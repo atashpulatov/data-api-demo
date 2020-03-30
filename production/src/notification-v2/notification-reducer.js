@@ -7,14 +7,14 @@ const initialState = { notifications: [], };
 export const notificationReducer = (state = initialState, action) => {
   const { payload } = action;
   switch (action.type) {
-  case CREATE_NOTIFICATION:
-    return createNotification(state, payload);
-  case UPDATE_NOTIFICATION:
-    return updateNotification(state, payload);
-  case DELETE_NOTIFICATION:
-    return deleteNotification(state, payload);
-  default:
-    return state;
+    case CREATE_NOTIFICATION:
+      return createNotification(state, payload);
+    case UPDATE_NOTIFICATION:
+      return updateNotification(state, payload);
+    case DELETE_NOTIFICATION:
+      return deleteNotification(state, payload);
+    default:
+      return state;
   }
 };
 
@@ -38,6 +38,8 @@ const deleteNotification = (state, payload) => {
 function getNotificationIndex(state, payload) {
   const notificationToUpdateIndex = state.notifications
     .findIndex((notification) => notification.objectWorkingId === payload.objectWorkingId);
-  if (notificationToUpdateIndex === -1) { throw new Error(); }
+  if (notificationToUpdateIndex === -1) {
+    throw new Error();
+  }
   return notificationToUpdateIndex;
 }

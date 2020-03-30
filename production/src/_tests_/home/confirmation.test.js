@@ -5,7 +5,7 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import { errorService } from '../../error/error-handler';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
-import { officeApiRemoveHelper } from '../../office/api/office-api-remove-helper';
+import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 
 describe('Confirmation', () => {
   afterEach(() => {
@@ -16,10 +16,10 @@ describe('Confirmation', () => {
     // given
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockDeleteTableBody = jest.spyOn(officeApiRemoveHelper, 'removeOfficeTableBody').mockImplementation(() => { });
+    const mockDeleteTableBody = jest.spyOn(officeRemoveHelper, 'removeOfficeTableBody').mockImplementation(() => { });
     const mockClearEmptyRow = jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
     const mockIfAnyProtected = jest.spyOn(officeApiWorksheetHelper, 'checkIfAnySheetProtected').mockImplementation(() => false);
-    const mockCheckObject = jest.spyOn(officeApiRemoveHelper, 'checkIfObjectExist').mockImplementation(() => true);
+    const mockCheckObject = jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockImplementation(() => true);
     const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
       showHeaders: null,
       showFilterButton: null,
@@ -57,7 +57,7 @@ describe('Confirmation', () => {
     const mockSync = jest.fn();
     const error = new Error('test error');
     jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementationOnce(() => ({ sync: mockSync, }));
-    jest.spyOn(officeApiRemoveHelper, 'checkIfObjectExist').mockImplementationOnce(() => true);
+    jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockImplementationOnce(() => true);
     jest.spyOn(officeApiHelper, 'getTable').mockImplementationOnce(() => { throw error; });
     jest.spyOn(errorService, 'handleError').mockImplementationOnce(() => { });
     const clearErrors = [];
@@ -87,10 +87,10 @@ describe('Confirmation', () => {
     // given
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockDeleteTableBody = jest.spyOn(officeApiRemoveHelper, 'removeOfficeTableBody').mockImplementation(() => { });
+    const mockDeleteTableBody = jest.spyOn(officeRemoveHelper, 'removeOfficeTableBody').mockImplementation(() => { });
     const mockClearEmptyRow = jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
     const mockIfAnyProtected = jest.spyOn(officeApiWorksheetHelper, 'checkIfAnySheetProtected').mockImplementation(() => false);
-    const mockCheckObject = jest.spyOn(officeApiRemoveHelper, 'checkIfObjectExist').mockImplementation(() => false);
+    const mockCheckObject = jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockImplementation(() => false);
     const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
       showHeaders: null,
       showFilterButton: null,

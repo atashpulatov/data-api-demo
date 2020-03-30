@@ -10,6 +10,9 @@ import {
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
   SAVE_OBJECT_IN_EXCEL,
+  REMOVE_OBJECT_STORE,
+  REMOVE_OBJECT_TABLE,
+  REMOVE_OBJECT_BINDING,
 } from './operation-steps';
 import { updateObject } from './object-actions';
 
@@ -56,6 +59,18 @@ class OperationStepDispatcher {
 
   completeModifyObject = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MODIFY_OBJECT));
+  };
+
+  completeRemoveObjectBinding = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_OBJECT_BINDING));
+  };
+
+  completeRemoveObjectTable = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_OBJECT_TABLE));
+  };
+
+  completeRemoveObjectStore = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_OBJECT_STORE));
   };
 
   updateOperation = (updatedOperation) => {
