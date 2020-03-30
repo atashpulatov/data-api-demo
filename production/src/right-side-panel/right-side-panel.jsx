@@ -3,8 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { popupController } from '../popup/popup-controller';
-import { reduxStore } from '../store';
-import { CANCEL_REQUEST_IMPORT, } from '../navigation/navigation-tree-actions';
+import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
@@ -12,7 +11,9 @@ import * as officeActions from '../office/store/office-actions';
 import { officeStoreService } from '../office/store/office-store-service';
 
 export const RightSidePanelNotConnected = (props) => {
-  const { loadedObjects, isConfirm, isSettings } = props;
+  const {
+    loadedObjects, isConfirm, isSettings, cancelCurrentImportRequest
+  } = props;
   const { toggleIsSettingsFlag, toggleSecuredFlag } = props;
 
   const emptyCallback = (parameters) => {
@@ -23,7 +24,7 @@ export const RightSidePanelNotConnected = (props) => {
   const addDataAction = async () => {
     try {
       // Prevent navigation tree from going straight into importing previously selected item.
-      reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
+      cancelCurrentImportRequest();
       await popupController.runPopupNavigation();
     } catch (error) {
       errorService.handleError(error);
@@ -71,6 +72,7 @@ export const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
+  cancelCurrentImportRequest: cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
 };
@@ -107,4 +109,5 @@ RightSidePanelNotConnected.propTypes = {
   isSettings: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
+  cancelCurrentImportRequest: PropTypes.func,
 };
