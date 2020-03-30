@@ -84,7 +84,7 @@ describe('objectReducer', () => {
       const resultState = objectReducer(initialState.singleObject, action);
 
       // then
-      expect(resultState).toEqual({ objects: [...initialState.singleObject.objects, initialObject] });
+      expect(resultState).toEqual({ objects: [initialObject, ...initialState.singleObject.objects] });
     });
   });
 

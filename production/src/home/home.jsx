@@ -23,8 +23,6 @@ export const HomeNotConnected = (props) => {
   React.useEffect(() => {
     try {
       officeStoreService.restoreObjectsFromExcelStore();
-      // // TODO: remove below
-      // await officeStoreService.loadExistingReportBindingsExcel();
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
       sessionHelper.disableLoading();

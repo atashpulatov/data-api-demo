@@ -41,7 +41,7 @@ describe('Home', () => {
     const tempPromise = Promise.resolve();
     const sessionHelperSpy = jest.spyOn(sessionHelper, 'disableLoading');
     const officeHelperSpy = jest
-      .spyOn(officeStoreService, 'loadExistingReportBindingsExcel')
+      .spyOn(officeStoreService, 'restoreObjectsFromExcelStore')
       .mockImplementation(async () => null);
     sessionHelperSpy.mockClear();
     officeHelperSpy.mockClear();
