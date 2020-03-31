@@ -21,13 +21,14 @@ class SidePanelService {
     }
   };
 
-  objectClick = async (objectWorkingId) => {
+  highlightObject = async (objectWorkingId) => {
     const objectData = getObject(objectWorkingId);
     await officeApiHelper.onBindingObjectClick(objectData);
   }
 
   rename = async (objectWorkingId, newName) => {
     const renamedObject = { objectWorkingId, name: newName };
+    // TODo check for changing viz whiel editing dossier
     reduxStore.dispatch(updateObject(renamedObject));
     await officeStoreService.saveObjectsInExcelStore();
   }

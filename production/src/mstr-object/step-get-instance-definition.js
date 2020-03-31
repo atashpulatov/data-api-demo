@@ -36,6 +36,7 @@ class StepGetInstanceDefinition {
       subtotalsInfo: { subtotalsAddresses } = false,
       bindId,
       mstrObjectType,
+      name,
     } = objectData;
     let { visualizationInfo, body } = objectData;
 
@@ -65,7 +66,7 @@ class StepGetInstanceDefinition {
       body,
       visualizationInfo: visualizationInfo || false,
       oldBindId: bindId,
-      name: mstrTable.name,
+      name: name || mstrTable.name,
       crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
       isCrosstab: mstrTable.isCrosstab,
     };

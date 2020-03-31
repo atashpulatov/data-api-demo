@@ -1,6 +1,3 @@
-import { officeProperties } from './office-properties';
-import { errorService } from '../../error/error-handler';
-import { IMPORT_OPERATION } from '../../operation/operation-steps';
 import { officeStoreService } from './office-store-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
