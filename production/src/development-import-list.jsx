@@ -33,7 +33,7 @@ export class DevelopmentImportList extends Component {
             title={objectList[selectedObject].name}
             className="add-data-btn floating-button"
             onClick={() => sessionHelper.importObjectWithouPopup(objectList[selectedObject])}>
-          Quick Import
+            Quick Import
           </Button>
         </Dropdown>
       </div>
@@ -45,7 +45,6 @@ DevelopmentImportList.propTypes = {
   reportArray: PropTypes.arrayOf(PropTypes.shape({})),
   removeAllAction: PropTypes.func,
 };
-
 
 const objectList = {
   SeasonalReport: {

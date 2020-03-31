@@ -4,7 +4,9 @@ import { mockReportProperties } from './__mock__object__/office-settings-report-
 import { officeProperties } from '../../office/store/office-properties';
 
 describe('OfficeStoreService', () => {
-  // TODO new tests for officestore service when refactor is finished
+  it('TODO new tests for officestore service when refactor is finished', () => {
+    // TODO new tests for officestore service when refactor is finished
+  });
   // beforeAll(() => {
   //   jest.spyOn(officeStoreService, 'getOfficeSettings')
   //     .mockReturnValue({

@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { SidePanel } from '@mstr/rc/';
 import { RightSidePanelNotConnected } from '../../right-side-panel/right-side-panel';
-import { SettingsMenu } from '../../home/settings-menu';
 import { popupController } from '../../popup/popup-controller';
 import { errorService } from '../../error/error-handler';
 import { officeStoreService } from '../../office/store/office-store-service';
@@ -35,6 +34,7 @@ describe('RightSidePanelNotConnected', () => {
     // then
     expect(mockedProps.toggleSecuredFlag).toBeCalledWith(true);
   });
+
   it('should display SidePanel', () => {
     // given
     // when
@@ -42,6 +42,7 @@ describe('RightSidePanelNotConnected', () => {
     // then
     expect(shallowedComponent.find(SidePanel)).toHaveLength(1);
   });
+
   it('should provide loadedObjects to SidePanel', () => {
     // given
     // when
@@ -50,16 +51,7 @@ describe('RightSidePanelNotConnected', () => {
     const shallowedSidePanel = shallowedComponent.find(SidePanel).at(0);
     expect(shallowedSidePanel.prop('loadedObjects')).toBe(mockedProps.loadedObjects);
   });
-  it('should cancel current import on add data', () => {
-    // given
-    const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
-    const shallowedSidePanel = shallowedComponent.find(SidePanel).at(0);
-    const methodToTest = shallowedSidePanel.prop('onAddData');
-    // when
-    methodToTest();
-    // then
-    expect(mockedProps.cancelCurrentImportRequest).toBeCalled();
-  });
+
   it('should call runPopupNavigation on add data', () => {
     // given
     const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
@@ -71,6 +63,7 @@ describe('RightSidePanelNotConnected', () => {
     // then
     expect(runPopupNavigationSpy).toBeCalled();
   });
+
   it('should errorService if error is thrown', () => {
     // given
     const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
@@ -85,6 +78,7 @@ describe('RightSidePanelNotConnected', () => {
     expect(handleErrorSpy).toBeCalled();
     expect(handleErrorSpy).toBeCalledWith(errorToThrow);
   });
+
   it('should provide settingsMenu to SidePanel when isSettings is true', () => {
     // given
     // when
@@ -93,6 +87,7 @@ describe('RightSidePanelNotConnected', () => {
     const wrappedSidePanel = wrappedComponent.find(SidePanel).at(0);
     expect(wrappedSidePanel.prop('settingsMenu')).toBeTruthy();
   });
+
   it('should provide confirmationWindow to SidePanel when isConfirm is true', () => {
     // given
     // when
@@ -101,6 +96,7 @@ describe('RightSidePanelNotConnected', () => {
     const wrappedSidePanel = wrappedComponent.find(SidePanel).at(0);
     expect(wrappedSidePanel.prop('confirmationWindow')).toBeTruthy();
   });
+
   it('should call toggleIsSettingsFlag with inverse value of isSettings prop', () => {
     // given
     mockedProps.isSettings = true;
