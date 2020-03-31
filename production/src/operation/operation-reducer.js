@@ -7,6 +7,7 @@ import {
   CANCEL_OPERATION,
   BACKUP_OBJECT,
   UPDATE_OPERATION,
+  CLEAR_DATA_REQUESTED,
 } from './operation-actions';
 
 const initialState = { operations: [] };
@@ -17,6 +18,7 @@ export const operationReducer = (state = initialState, action) => {
     case REFRESH_REQUESTED:
     case EDIT_REQUESTED:
     case REMOVE_REQUESTED:
+    case CLEAR_DATA_REQUESTED:
       return operationRequested(state, action.payload);
 
     case MARK_STEP_COMPLETED:

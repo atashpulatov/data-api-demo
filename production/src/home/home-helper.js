@@ -1,3 +1,11 @@
+
+import { officeApiHelper } from '../office/api/office-api-helper';
+import { errorService } from '../error/error-handler';
+import { notificationService } from '../notification/notification-service';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import { clearDataRequested } from '../operation/operation-actions';
+
+
 export class HomeHelper {
   init = (reduxStore, sessionHelper) => {
     this.reduxStore = reduxStore;
@@ -46,6 +54,35 @@ export class HomeHelper {
   getWindowLocation = () => window.location
 
   getDocumentCookie = () => document.cookie
+
+  secureData = async (
+    objects,
+    toggleSecuredFlag,
+    toggleIsConfirmFlag,
+    toggleIsClearingFlag,
+  ) => {
+    try {
+      toggleIsClearingFlag(true);
+      toggleIsConfirmFlag(); // Switch off isConfirm popup
+      const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
+      for (const object of objects) {
+        this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId));
+      }
+    } catch (error) {
+      errorService.handleError(error);
+    } finally {
+      toggleIsClearingFlag(false);
+      toggleSecuredFlag(true);
+    }
+  };
+
+   displayClearDataError = (clearErrors, t) => {
+     // TODO check if needed
+     const reportNames = clearErrors.map((report) => report.reportName).join(', ');
+     const errorMessage = clearErrors.map((report) => report.errorMessage).join(', ');
+     notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', { reportNames }), errorMessage);
+   }
 }
 
 export const homeHelper = new HomeHelper();

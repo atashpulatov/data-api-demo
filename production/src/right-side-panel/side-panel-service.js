@@ -1,4 +1,3 @@
-import { reduxStore } from '../store';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { officeStoreService } from '../office/store/office-store-service';
@@ -11,10 +10,14 @@ import { CANCEL_REQUEST_IMPORT } from '../navigation/navigation-tree-actions';
 
 
 class SidePanelService {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  }
+
   addData = async () => {
     try {
       // Prevent navigation tree from going straight into importing previously selected item.
-      reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
+      this.reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
       await popupController.runPopupNavigation();
     } catch (error) {
       errorService.handleError(error);
@@ -22,25 +25,25 @@ class SidePanelService {
   };
 
   highlightObject = async (objectWorkingId) => {
-    const objectData = getObject(objectWorkingId);
+    const objectData = this.getObject(objectWorkingId);
     await officeApiHelper.onBindingObjectClick(objectData);
   }
 
   rename = async (objectWorkingId, newName) => {
     const renamedObject = { objectWorkingId, name: newName };
-    // TODo check for changing viz whiel editing dossier
-    reduxStore.dispatch(updateObject(renamedObject));
+    // TODO check for changing viz whiel editing dossier
+    this.reduxStore.dispatch(updateObject(renamedObject));
     await officeStoreService.saveObjectsInExcelStore();
   }
 
   refresh = async (objectWorkingId) => {
-    // remove not needed functions for old refresh
-    const objectData = getObject(objectWorkingId);
-    reduxStore.dispatch(refreshRequested(objectData));
+    // TODO maybe combine with refreshSelected?
+    const objectData = this.getObject(objectWorkingId);
+    this.reduxStore.dispatch(refreshRequested(objectData));
   }
 
   remove = async (objectWorkingId) => {
-    reduxStore.dispatch(removeRequested(objectWorkingId));
+    this.reduxStore.dispatch(removeRequested(objectWorkingId));
   }
 
   refreshSelected = (objectsList) => {
@@ -48,7 +51,7 @@ class SidePanelService {
     // TODO remove above, remove not needed functions for old refresh all
     for (let index = 0; index < objectsList.length; index++) {
       const object = objectsList[index];
-      reduxStore.dispatch(refreshRequested(object));
+      this.reduxStore.dispatch(refreshRequested(object));
     }
   };
 
@@ -57,7 +60,7 @@ class SidePanelService {
     // TODO remove above
     for (let index = 0; index < objectsList.length; index++) {
       const object = objectsList[index];
-      reduxStore.dispatch(removeRequested(object.objectWorkingId));
+      this.reduxStore.dispatch(removeRequested(object.objectWorkingId));
     }
   }
 
@@ -94,6 +97,11 @@ class SidePanelService {
       console.log('Cannot add onDeleted event listener');
     }
   };
+
+  getObject = (objectWorkingId) => {
+    const { objects } = this.reduxStore.getState().objectReducer;
+    return objects.find(object => object.objectWorkingId === objectWorkingId);
+  };
 }
 
 const checkIfObjectProtected = async (bindId) => {
@@ -101,9 +109,5 @@ const checkIfObjectProtected = async (bindId) => {
   await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 };
 
-const getObject = (objectWorkingId) => {
-  const { objects } = reduxStore.getState().objectReducer;
-  return objects.find(object => object.objectWorkingId === objectWorkingId);
-};
 
 export const sidePanelService = new SidePanelService();

@@ -14,6 +14,7 @@ import { popupActions } from './popup/popup-actions';
 import { actionCreator } from './notification/action-creator';
 import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
+import { sidePanelService } from './right-side-panel/side-panel-service';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
@@ -26,8 +27,6 @@ class DIContainer {
   }
 
   initializeAll = () => {
-    console.log('________INITIALIZING________');
-    console.log('________DI CONTAINER________');
     this.operationBus = operationBus;
     this.operationBus.init(reduxStore);
     this.officeApiHelper = officeApiHelper;
@@ -48,6 +47,8 @@ class DIContainer {
     this.mstrObjectRestService.init(reduxStore);
     this.popupController = popupController;
     this.popupController.init(reduxStore, sessionHelper, popupActions);
+    this.sidePanelService = sidePanelService;
+    this.sidePanelService.init(reduxStore);
 
     this.initializeOperationSteps();
 

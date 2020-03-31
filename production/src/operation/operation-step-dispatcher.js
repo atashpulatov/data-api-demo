@@ -13,6 +13,9 @@ import {
   REMOVE_OBJECT_STORE,
   REMOVE_OBJECT_TABLE,
   REMOVE_OBJECT_BINDING,
+  CHECK_OBJECT_STATUS,
+  CLEAR_CROSSTAB_HEADERS,
+  CLEAR_TABLE_DATA,
 } from './operation-steps';
 import { updateObject } from './object-actions';
 
@@ -71,6 +74,18 @@ class OperationStepDispatcher {
 
   completeRemoveObjectStore = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_OBJECT_STORE));
+  };
+
+  completeCheckObjectStatus = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CHECK_OBJECT_STATUS));
+  };
+
+  completeClearCrosstabHeaders = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_CROSSTAB_HEADERS));
+  };
+
+  completeClearTableData = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA));
   };
 
   updateOperation = (updatedOperation) => {

@@ -35,6 +35,7 @@ export const RightSidePanelNotConnected = (props) => {
   }, []);
 
   React.useEffect(() => {
+    // toggleSecuredFlag(false);
     if (officeStoreService.isFileSecured()) {
       toggleSecuredFlag(true);
     }

@@ -9,11 +9,13 @@ export const IMPORT_REQUESTED = 'IMPORT_REQUESTED';
 export const EDIT_REQUESTED = 'EDIT_REQUESTED';
 export const REFRESH_REQUESTED = 'REFRESH_REQUESTED';
 export const REMOVE_REQUESTED = 'REMOVE_REQUESTED';
+export const CLEAR_DATA_REQUESTED = 'CLEAR_DATA_REQUESTED';
 
 export const MARK_STEP_COMPLETED = 'MARK_STEP_COMPLETED';
 export const UPDATE_OPERATION = 'UPDATE_OPERATION';
 export const CANCEL_OPERATION = 'CANCEL_OPERATION';
 export const REMOVE_OPERATION = 'REMOVE_OPERATION';
+export const CLEAR_DATA_OPERATION = 'CLEAR_DATA_OPERATION';
 export const BACKUP_OBJECT = 'BACKUP_OBJECT';
 export const SET_TOTAL_ROWS = 'SET_TOTAL_ROWS';
 export const SET_LOADED_ROWS = 'SET_LOADED_ROWS';
@@ -24,6 +26,7 @@ const operationTypes = {
   EDIT_REQUESTED: EDIT_OPERATION,
   REFRESH_REQUESTED: REFRESH_OPERATION,
   REMOVE_REQUESTED: REMOVE_OPERATION,
+  CLEAR_DATA_REQUESTED: CLEAR_DATA_OPERATION,
 };
 
 export const importRequested = (object) => {
@@ -71,6 +74,14 @@ export const removeRequested = (objectWorkingId) => ({
   },
 });
 
+export const clearDataRequested = (objectWorkingId) => ({
+  type: CLEAR_DATA_REQUESTED,
+  payload: {
+    operation: createOperation(CLEAR_DATA_REQUESTED, objectWorkingId),
+    objectWorkingId,
+  },
+});
+
 export const markStepCompleted = (objectWorkingId, completedStep) => ({
   type: MARK_STEP_COMPLETED,
   payload: {
@@ -97,6 +108,7 @@ export const backupObject = (objectWorkingId, objectToBackup) => ({
 function createOperation(operationRequest, objectWorkingId, objectData = {}) {
   const { backupObjectData, objectEditedData } = objectData;
   const operationType = operationTypes[operationRequest];
+  console.log('operationType:', operationType);
   return {
     operationType,
     objectWorkingId,

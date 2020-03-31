@@ -8,6 +8,12 @@ import stepGetOfficeTableImport from '../office/table/step-get-office-table-impo
 import stepModifyObject from '../popup/step-modify-object';
 import stepApplySubtotalFormatting from '../office/format/step-apply-subtotal-formatting';
 import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
+import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
+import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
+import stepRemoveObjectStore from '../office/remove/step-remove-object-store';
+import stepCheckObjectStatus from '../office/clear-data/step-check-object-status';
+import stepClearCrosstabHeaders from '../office/clear-data/step-clear-crosstab-headers';
+import stepClearTableData from '../office/clear-data/step-clear-table-data';
 
 import {
   BIND_OFFICE_TABLE,
@@ -22,11 +28,11 @@ import {
   SAVE_OBJECT_IN_EXCEL,
   REMOVE_OBJECT_BINDING,
   REMOVE_OBJECT_TABLE,
-  REMOVE_OBJECT_STORE
+  REMOVE_OBJECT_STORE,
+  CHECK_OBJECT_STATUS,
+  CLEAR_CROSSTAB_HEADERS,
+  CLEAR_TABLE_DATA
 } from './operation-steps';
-import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
-import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
-import stepRemoveObjectStore from '../office/remove/step-remove-object-store';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -55,6 +61,10 @@ class SubscribeSteps {
     operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
     operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
     operationBus.subscribe(REMOVE_OBJECT_STORE, stepRemoveObjectStore.removeObjectStore);
+
+    operationBus.subscribe(CHECK_OBJECT_STATUS, stepCheckObjectStatus.checkObjectStatus);
+    operationBus.subscribe(CLEAR_CROSSTAB_HEADERS, stepClearCrosstabHeaders.clearCrosstabHeaders);
+    operationBus.subscribe(CLEAR_TABLE_DATA, stepClearTableData.clearTableData);
   };
 }
 

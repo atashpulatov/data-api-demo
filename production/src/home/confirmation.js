@@ -4,17 +4,13 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import warningIcon from '../loading/assets/icon_conflict.svg';
-import { officeApiHelper } from '../office/api/office-api-helper';
 import {
   toggleSecuredFlag as toggleSecuredFlagImported,
   toggleIsConfirmFlag as toggleIsConfirmFlagImported,
   toggleIsClearingFlag as toggleIsClearingFlagImported
 } from '../office/store/office-actions';
-import { errorService } from '../error/error-handler';
-import { notificationService } from '../notification/notification-service';
-import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { officeRemoveHelper } from '../office/remove/office-remove-helper';
+
+import { homeHelper } from './home-helper';
 
 export const ConfirmationNotConnected = ({
   objects,
@@ -35,53 +31,7 @@ export const ConfirmationNotConnected = ({
       }, 100);
     }
   });
-  const secureData = async () => {
-    let counter = 0;
-    let reportName = '';
-    const clearErrors = [];
-    try {
-      toggleIsClearingFlag(true);
-      toggleIsConfirmFlag(); // Switch off isConfirm popup
-      const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
-      for (const report of objects) {
-        if (await officeRemoveHelper.checkIfObjectExist(report, excelContext)) {
-          try {
-            reportName = report.name;
-            if (report.isCrosstab) {
-              const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-              officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
-              officeTable.showHeaders = true;
-              officeTable.showFilterButton = false;
 
-              const headers = officeTable.getHeaderRowRange();
-              headers.format.font.color = 'white';
-              await excelContext.sync();
-            }
-            await officeRemoveHelper.removeOfficeTableBody(excelContext, report, true);
-          } catch (error) {
-            const officeError = errorService.handleError(error);
-            clearErrors.push({ reportName, officeError });
-          }
-        } else {
-          counter++;
-        }
-      }
-      if (clearErrors.length > 0) {
-        displayClearDataError(clearErrors);
-      } else if (counter !== objects.length) { toggleSecuredFlag(true); }
-    } catch (error) {
-      errorService.handleError(error);
-    } finally {
-      toggleIsClearingFlag(false);
-    }
-  };
-
-  function displayClearDataError(clearErrors) {
-    const reportNames = clearErrors.map((report) => report.reportName).join(', ');
-    const errorMessage = clearErrors.map((report) => report.errorMessage).join(', ');
-    notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', { reportNames }), errorMessage);
-  }
 
   const confirmationRef = React.useRef(null);
 
@@ -123,7 +73,16 @@ export const ConfirmationNotConnected = ({
           </div>
         </div>
         <div className="confirm-buttons">
-          <button className="ant-btn" id="confirm-btn" type="button" onClick={secureData}>{t('OK')}</button>
+          <button
+            className="ant-btn"
+            id="confirm-btn"
+            type="button"
+            onClick={() => homeHelper.secureData(
+              objects,
+              toggleSecuredFlag,
+              toggleIsConfirmFlag,
+              toggleIsClearingFlag
+            )}>{t('OK')}</button>
           <button className="ant-btn" id="cancel-btn" type="button" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
