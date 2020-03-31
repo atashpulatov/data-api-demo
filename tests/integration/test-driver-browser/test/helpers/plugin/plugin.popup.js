@@ -866,6 +866,16 @@ class PluginPopup {
   }
 
   /**
+   * Returns background color hex number for the given element (object on Table of Objects)
+   * @param {String} selector a css selector for which we get the background color
+   * @return {String}
+   */
+  getBackgroundColor(selector) {
+    const backgroundColour = $(selector).getCSSProperty('background-color');
+    return backgroundColour["parsed"]["hex"];
+  }
+
+  /**
    * Asserts the date modified of the first object is between passed dates
    *
    * @param {Date} dateFrom
