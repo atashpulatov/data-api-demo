@@ -17,7 +17,8 @@ import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-hel
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 
 export const ConfirmationNotConnected = ({
-  reportArray,
+  objects,
+  isConfirm,
   toggleSecuredFlag,
   toggleIsConfirmFlag,
   toggleIsClearingFlag,
@@ -42,8 +43,8 @@ export const ConfirmationNotConnected = ({
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, reportArray);
-      for (const report of reportArray) {
+      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
+      for (const report of objects) {
         if (await officeRemoveHelper.checkIfObjectExist(report, excelContext)) {
           try {
             reportName = report.name;
@@ -68,7 +69,7 @@ export const ConfirmationNotConnected = ({
       }
       if (clearErrors.length > 0) {
         displayClearDataError(clearErrors);
-      } else if (counter !== reportArray.length) { toggleSecuredFlag(true); }
+      } else if (counter !== objects.length) { toggleSecuredFlag(true); }
     } catch (error) {
       errorService.handleError(error);
     } finally {
@@ -82,11 +83,32 @@ export const ConfirmationNotConnected = ({
     notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', { reportNames }), errorMessage);
   }
 
+  const confirmationRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const closeSettingsOnEsc = ({ keyCode }) => {
+      keyCode === 27 && toggleIsConfirmFlag();
+    };
+    const closeSettingsOnClick = ({ target }) => {
+      confirmationRef.current
+          && !confirmationRef.current.contains(target)
+          && toggleIsConfirmFlag();
+    };
+    if (isConfirm) {
+      document.addEventListener('keyup', closeSettingsOnEsc);
+      document.addEventListener('click', closeSettingsOnClick);
+    }
+    return () => {
+      document.removeEventListener('keyup', closeSettingsOnEsc);
+      document.removeEventListener('click', closeSettingsOnClick);
+    };
+  }, [isConfirm, toggleIsConfirmFlag]);
+
   return (
     <>
       <div
         className="block-ui" />
-      <div className="confirm-container">
+      <div className="confirm-container" ref={confirmationRef}>
         <div className="confirm-header">
           <span className="confirm-header-icon"><img width="19px" height="18px" src={warningIcon} alt={t('Refresh failed icon')} /></span>
         </div>
@@ -110,7 +132,8 @@ export const ConfirmationNotConnected = ({
 };
 
 ConfirmationNotConnected.propTypes = {
-  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
+  objects: PropTypes.arrayOf(PropTypes.shape({})),
+  isConfirm: PropTypes.bool,
   toggleSecuredFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
   toggleIsClearingFlag: PropTypes.func,
@@ -119,8 +142,10 @@ ConfirmationNotConnected.propTypes = {
 
 ConfirmationNotConnected.defaultProps = { t: (text) => text, };
 
-function mapStateToProps({ officeReducer }) {
-  return { reportArray: officeReducer.reportArray };
+function mapStateToProps({ officeReducer, objectReducer }) {
+  const { objects } = objectReducer;
+  const { isConfirm } = officeReducer;
+  return { objects, isConfirm };
 }
 
 const mapDispatchToProps = {

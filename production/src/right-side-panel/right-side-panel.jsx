@@ -1,17 +1,30 @@
-import { SidePanel } from '@mstr/rc';
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { SidePanel } from '@mstr/rc';
+import { popupController } from '../popup/popup-controller';
 import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
+import { errorService } from '../error/error-handler';
+import { SettingsMenu } from '../home/settings-menu';
+import { Confirmation } from '../home/confirmation';
+import * as officeActions from '../office/store/office-actions';
+import { officeStoreService } from '../office/store/office-store-service';
 import { sidePanelService } from './side-panel-service';
 
 export const RightSidePanelNotConnected = (props) => {
-  const { loadedObjects, cancelCurrentImportRequest } = props;
+  const {
+    loadedObjects,
+    isConfirm,
+    isSettings,
+    cancelCurrentImportRequest,
+    toggleIsSettingsFlag,
+    toggleSecuredFlag,
+  } = props;
+
   const emptyCallback = (parameters) => {
     console.log(parameters);
     throw new Error('Not implemented yet');
   };
-
 
   React.useEffect(() => {
     try {
@@ -20,6 +33,14 @@ export const RightSidePanelNotConnected = (props) => {
       console.error(error);
     }
   }, []);
+
+  React.useEffect(() => {
+    if (officeStoreService.isFileSecured()) {
+      toggleSecuredFlag(true);
+    }
+  }, [toggleSecuredFlag]);
+
+  const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
   return (
     <SidePanel
@@ -34,20 +55,30 @@ export const RightSidePanelNotConnected = (props) => {
       onRemoveClick={sidePanelService.remove}
       onRemoveSelected={emptyCallback}
       onRename={emptyCallback}
+      settingsMenu={isSettings && <SettingsMenu />}
+      onSettingsClick={handleSettingsClick}
+      confirmationWindow={isConfirm && <Confirmation />}
     />
   );
 };
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
+  const { isConfirm, isSettings } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
     importRequested,
     dossierOpenRequested,
+    isConfirm,
+    isSettings
   };
 };
 
-const mapDispatchToProps = { cancelCurrentImportRequest: cancelImportRequest, };
+const mapDispatchToProps = {
+  cancelCurrentImportRequest: cancelImportRequest,
+  toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
+  toggleSecuredFlag: officeActions.toggleSecuredFlag,
+};
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
@@ -77,5 +108,9 @@ RightSidePanelNotConnected.propTypes = {
       })]),
       isSelected: PropTypes.bool,
     }).isRequired,
+  isConfirm: PropTypes.bool,
+  isSettings: PropTypes.bool,
+  toggleIsSettingsFlag: PropTypes.func,
+  toggleSecuredFlag: PropTypes.func,
   cancelCurrentImportRequest: PropTypes.func,
 };
