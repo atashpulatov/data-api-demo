@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
 import { Spin } from 'antd';
+import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
 import { toggleRenderSettingsFlag } from '../office/store/office-actions';
@@ -11,7 +12,6 @@ import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
 import InternetConnectionError from '../popup/internet-connection-error';
 import { Authenticate } from '../authentication/auth-component';
-import HomeContent from './home-content';
 import { DevelopmentImportList } from '../development-import-list';
 
 const IS_LOCALHOST = sessionHelper.isDevelopment();
@@ -65,6 +65,14 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = { toggleRenderSettingsFlag, };
+
+HomeNotConnected.propTypes = {
+  loading: PropTypes.bool,
+  popupOpen: PropTypes.bool,
+  authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  shouldRenderSettings: PropTypes.bool,
+  t: PropTypes.func,
+};
 
 HomeNotConnected.defaultProps = { t: (text) => text, };
 
