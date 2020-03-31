@@ -216,15 +216,11 @@ class OfficeApiHelper {
    * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
    */
-  onBindingObjectClick = async (
-    bindId,
-    shouldSelect = true,
-    deleteObject,
-    chosenObjectName,
-    isCrosstab,
-    crosstabHeaderDimensions) => {
+  onBindingObjectClick = async (ObjectData) => {
     let crosstabRange;
     try {
+      const { bindId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
+
       const excelContext = await this.getExcelContext();
       const officeTable = excelContext.workbook.tables.getItem(bindId);
 
@@ -238,31 +234,23 @@ class OfficeApiHelper {
           tmpXtabDimensions,
           excelContext
         );
-
-        if (shouldSelect) {
-          crosstabRange.select();
-        }
+        crosstabRange.select();
       } else {
         const tableRange = this.getBindingRange(excelContext, bindId);
-        if (shouldSelect) {
-          tableRange.select();
-        }
+        tableRange.select();
       }
-
       await excelContext.sync();
-      return true;
     } catch (error) {
-      if (error && error.code === 'ItemNotFound') {
-        return notificationService.displayTranslatedNotification({
-          type: 'info',
-          content: OBJ_REMOVED_FROM_EXCEL
-        });
-      }
-      errorService.handleError(error, {
-        chosenObjectName,
-        onConfirm: deleteObject
-      });
-      return false;
+      // if (error && error.code === 'ItemNotFound') {
+      //   return notificationService.displayTranslatedNotification({
+      //     type: 'info',
+      //     content: OBJ_REMOVED_FROM_EXCEL
+      //   });
+      // }
+      // errorService.handleError(error, {
+      //   chosenObjectName,
+      //   onConfirm: deleteObject
+      // });
     }
   };
 

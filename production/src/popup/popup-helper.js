@@ -78,26 +78,25 @@ class PopupHelper {
     isRefreshAll,
   ) => {
     const objectToRefresh = officeStoreService.getObjectFromObjectReducer(bindId);
-    if (isRefreshAll) { this.storageReportRefreshStart(objectToRefresh, index); }
-    const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
+    // const mstrObjectType = objectTypeEnum.getMstrTypeByName(objectType);
 
     this.reduxStore.dispatch(refreshRequested(objectToRefresh));
 
     // TODO remove
-    const result = {
-      type: 'success',
-      message: 'Data loaded successfully'
-    };
+    // const result = {
+    //   type: 'success',
+    //   message: 'Data loaded successfully'
+    // };
 
-    if (result && result.type === 'warning') {
-      throw new Error(result.message);
-    }
-    if (!isRefreshAll) {
-      notificationService.displayNotification({ type: 'success', content: `${this.capitalize(mstrObjectType.name)} refreshed` });
-      return false;
-    }
-    this.storageReportRefreshFinish('ok', false, index, length);
-    return false;
+    // if (result && result.type === 'warning') {
+    //   throw new Error(result.message);
+    // }
+    // if (!isRefreshAll) {
+    //   notificationService.displayNotification({ type: 'success', content: `${this.capitalize(mstrObjectType.name)} refreshed` });
+    //   return false;
+    // }
+    // this.storageReportRefreshFinish('ok', false, index, length);
+    // return false;
   };
 
 
