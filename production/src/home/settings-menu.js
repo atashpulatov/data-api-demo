@@ -15,7 +15,7 @@ import { clearCache as clearCacheImported } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 
-import './settings-menu.css';
+import './settings-menu.scss';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
 
@@ -31,8 +31,6 @@ export const SettingsMenuNotConnected = ({
   clearCache,
   isSettings
 }) => {
-  console.log('isSecured', isSecured);
-  console.log('objects', objects);
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && objects && objects.length > 0;
   const prepareEmail = () => {
