@@ -52,61 +52,6 @@ class PopupActions {
     chosenObjectData,
   })
 
-  refreshReportsArray = (reportArray, isRefreshAll) => async (dispatch) => {
-    const { popupHelper, officeApiHelper } = this;
-    try {
-      await this.officeApiHelper.checkStatusOfSessions();
-    } catch (error) {
-      dispatch({ type: officeProperties.actions.stopLoading });
-      return this.errorService.handleError(error);
-    }
-
-    if (isRefreshAll) {
-      popupHelper.storagePrepareRefreshAllData(reportArray);
-      await popupHelper.runRefreshAllPopup(reportArray);
-    }
-
-    for (const [index, report] of reportArray.entries()) {
-      let isError = true;
-      const reportsNumber = reportArray.length;
-      try {
-        const excelContext = await officeApiHelper.getExcelContext();
-        await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
-        // TODO: these two actions should be merged into one in the future
-
-        dispatch({
-          type: officeProperties.actions.startLoadingReport,
-          reportBindId: report.bindId,
-          isRefreshAll,
-        });
-
-        const { bindId, objectType } = report;
-        isError = await popupHelper.printRefreshedReport(
-          bindId,
-          objectType,
-          reportsNumber,
-          index,
-          isRefreshAll,
-        );
-      } catch (error) {
-        popupHelper.handleRefreshError(
-          error,
-          reportsNumber,
-          index,
-          isRefreshAll
-        );
-        if (!isRefreshAll) { return true; }
-      } finally {
-        isRefreshAll && dispatch({
-          type: officeProperties.actions.finishLoadingReport,
-          reportBindId: report.bindId,
-          isRefreshAll: false,
-          isError,
-        });
-      }
-    }
-  }
-
   callForEditDossier = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
