@@ -866,6 +866,14 @@ class PluginPopup {
   }
 
   /**
+   * Returns the date for the Date modified of the first object in the table
+   * @return {String}
+   */
+  getFirstRowDate() {
+    return $(popupSelectors.columnModified).getAttribute('Title');
+  }
+
+  /**
    * Asserts the date modified of the first object is between passed dates
    *
    * @param {Date} dateFrom

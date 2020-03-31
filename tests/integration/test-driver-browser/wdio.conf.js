@@ -44,6 +44,7 @@ exports.config = {
     ],
     'F24087-improve-scrolling-performance': [
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
     ],
     'F24398-import-and-refresh-visualization': [
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
@@ -244,6 +245,11 @@ exports.config = {
   * @param {Array.<Object>} capabilities list of capabilities details
   * @param {Array.<String>} specs List of spec file paths that are to be run
   */
+  // Creating property to store Language and Region for Excel logged in user.
+  // Plugin GUI langauge is based on this value.
+  // Required to provide Internationalization support in the automation framework.
+  languageRegion : 'lg-rg',
+  
   beforeSession (config, capabilities, specs) {
     require('@babel/register');
   },
