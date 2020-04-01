@@ -10,7 +10,7 @@ public class BigDecimalPromptPage extends BasePromptPage {
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         WebElement runBtn = machine.getBigDecimalPromptPage().getRunBtnElem();
 
         WebElement inputElem = machine.getBigDecimalPromptPage().getAnswerInputElem();

@@ -1,11 +1,10 @@
 package desktop.automation.elementWrappers;
 
 import desktop.automation.driver.wrappers.Machine;
-import desktop.automation.elementWrappers.mac.WebElementWithBooleanAXValue;
-import desktop.automation.selectors.helper.ImportedObjectInListSelectors;
+import desktop.automation.elementWrappers.driver.implementations.mac.WebElementWithBooleanAXValue;
+import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
+import desktop.automation.selectors.helpers.ImportedObjectInListSelectors;
 import org.openqa.selenium.WebElement;
-
-import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -46,18 +45,11 @@ public abstract class ImportedObjectInList extends ImportedObjectInListSelectors
     }
 
     public WebDriverElemWrapper getEditNameElem(){
-//        try {
-//            Thread.sleep(2_000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        mainElem.getDriverElement().click();
         return machine.waitAndFindInElement(mainElem.getDriverElement(), IMPORTED_OBJECT_EDIT_NAME_ELEM);
     }
 
     public WebElement getDateElem() {
-        List<WebElement> texts = mainElem.getDriverElement().findElements(IMPORTED_OBJECT_TEXT_ELEMS);
-        return texts.get(0);
+        throw new NotImplementedForDriverWrapperException();
     }
 
     public abstract WebElement getEditBtnElem();
@@ -77,10 +69,19 @@ public abstract class ImportedObjectInList extends ImportedObjectInListSelectors
 
     public void rename(String newName){
         WebElement name = getNameElem();
-        machine.actions
-                .pause(machine.isBrowser() ? 1_000 : 0)
-                .doubleClick(name)
-                .perform();
+
+        if (machine.isWindowsMachine())
+            machine.actions
+                    .moveToElement(name)
+                    .click()
+                    .pause(200)
+                    .doubleClick()
+                    .perform();
+        else
+            machine.actions
+                    .pause(machine.isBrowser() ? 1_000 : 0)
+                    .doubleClick(name)
+                    .perform();
 
         renameHelper(newName);
     }

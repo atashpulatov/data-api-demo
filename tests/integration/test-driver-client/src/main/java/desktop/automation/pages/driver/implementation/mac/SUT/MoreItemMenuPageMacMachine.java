@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import static org.junit.Assert.assertEquals;
 
 public class MoreItemMenuPageMacMachine extends MoreItemMenuPage {
+    By EMAIL_CLIENT_IN_DOCK = By.xpath("/AXApplication[@AXTitle='Dock']/AXList[0]/AXDockItem[@AXTitle='Mail' and @AXSubrole='AXApplicationDockItem']");
 
     public MoreItemMenuPageMacMachine(MacMachine machine) {
         super(machine);
@@ -26,7 +27,7 @@ public class MoreItemMenuPageMacMachine extends MoreItemMenuPage {
 
     @Override
     public void assertEmailClientCalled() {
-        WebDriverElemWrapper webDriverElemWrapper = machine.waitAndFindElemWrapper(By.xpath("/AXApplication[@AXTitle='Dock']/AXList[0]/AXDockItem[@AXTitle='Mail' and @AXSubrole='AXApplicationDockItem']"));
+        WebDriverElemWrapper webDriverElemWrapper = machine.waitAndFindElemWrapper(EMAIL_CLIENT_IN_DOCK);
         machine.contextClickElem(webDriverElemWrapper.getDriverElement());
         ((PreSUTPageMacMachine)machine.getPreSUTPage()).getContextMenuQuitBtnElem().click();
         try {

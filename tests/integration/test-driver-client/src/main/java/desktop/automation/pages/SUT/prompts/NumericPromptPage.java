@@ -5,8 +5,6 @@ import desktop.automation.elementWrappers.WebDriverElemWrapper;
 import desktop.automation.pages.SUT.prompts.bases.BasePromptPage;
 import org.openqa.selenium.WebElement;
 
-import static junit.framework.TestCase.assertEquals;
-
 public class NumericPromptPage extends BasePromptPage {
 
     public NumericPromptPage(Machine machine) {
@@ -14,10 +12,8 @@ public class NumericPromptPage extends BasePromptPage {
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         WebDriverElemWrapper inputElem = machine.getNumericPromptPage().getNumberInputElem();
-        assertEquals("2014", inputElem.getText().trim());
-
         WebElement runBtn = machine.getNumericPromptPage().getRunBtnElem();
 
         inputElem.getDriverElement().clear();

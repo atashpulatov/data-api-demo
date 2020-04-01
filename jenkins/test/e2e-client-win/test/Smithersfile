@@ -40,7 +40,7 @@ rake e2e_test_client
     html do
        report_name 'Client e2e Test Report'
        report_directory_path "tests\\integration\\test-driver-client\\target\\surefire-reports"
-       index_file_name 'desktop.automation.functional.all.mvp.LogInLogOutTests.txt'
+       index_file_name 'desktop.automation.functional.maintained.mvp.LogInLogOutTests.txt'
     end
 
     ext_mailer do

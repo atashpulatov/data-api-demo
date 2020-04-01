@@ -4,5 +4,5 @@ cd ../..
 
 for (( c=1; c<=3; c++ ))
 do  
-   mvn clean -Dtest="desktop.automation.functional.all.mac.and.browser.**" test 
+   mvn clean -Dtest="desktop.automation.functional.maintained.secondary.**" test
 done

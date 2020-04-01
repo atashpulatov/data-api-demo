@@ -101,6 +101,19 @@ class PluginPopup {
     waitAndClick($(popupSelectors.allFilters));
   }
 
+  /**
+   * Waits for element to show up and dissapear
+   * useful to validate that action has been started and finished
+   *
+   * @param {String} selector a css selector to validate
+   * @memberof PluginPopup
+   */
+
+  waitUntilActionIsFinished(selector) {
+    browser.waitUntil(() => ($(selector).isExisting()));
+    browser.waitUntil(() => !($(selector).isExisting()));
+  }
+
   selectObjectElementsInPrepareData(elements) {
     $('#search-toolbar > div > span > input').waitForExist(7777);
     for (let i = 0; i < elements.length; i++) {
@@ -855,6 +868,14 @@ class PluginPopup {
   }
 
   /**
+   * Returns the date for the Date modified of the first object in the table
+   * @return {String}
+   */
+  getFirstRowDate() {
+    return $(popupSelectors.columnModified).getAttribute('Title');
+  }
+
+  /**
    * Asserts the date modified of the first object is between passed dates
    *
    * @param {Date} dateFrom
@@ -867,6 +888,85 @@ class PluginPopup {
 
     const rowTimestamp = this.getFirstRowTimestamp();
     return rowTimestamp >= dateFrom && rowTimestamp <= dateTo;
+  }
+
+  /**
+   * Returns true if checkbox is checked, false if not
+   * @param {String} category Category in which checkbox is located, f.e. "Type"
+   * @param {String} item Name of an item we want to check, f.e. "MicroStrategy Tutorial"
+   * @return {Boolean}
+   */
+  getCheckboxState(category, item) {
+    return $(popupSelectors.filterCheckboxState(category, item)).isSelected();
+  }
+
+  /**
+   * Returns true if checkbox in All Panel is checked, false if not
+   * @param {String} item Name of an item we want to check, f.e. "MicroStrategy Tutorial"
+   * @return {Boolean}
+   */
+  getAllPanelCheckboxState(item) {
+    return $(popupSelectors.filterPanel.getAllPanelCheckboxState(item)).isSelected();
+  }
+
+  /**
+     * Finds the Details Table element with the given index from expanded Detail Tables
+   *
+   * @param {Number} index index of the Detail Table to find
+   * @returns {Element} Details Table element
+   */
+  getDetailsTableByIndex(index) {
+    return $$(popupSelectors.detailsTable)[index];
+  }
+
+  /**
+    * Hovers over the location element in the given details table
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @returns {String} tooltip text for the location element
+    * @memberof PluginPopup
+    */
+  getLocationTooltipText(detailsTable) {
+    detailsTable.$(popupSelectors.locationDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return detailsTable.$(popupSelectors.locationDetailTooltip).getText();
+  }
+
+  /**
+    * Gets the text for the location element in the given details table
+    *
+    * @param {Element} detailsTable Details Table to extract the location from
+    * @returns {String} text for the location element
+    * @memberof PluginPopup
+    */
+  getLocationText(detailsTable) {
+    return detailsTable.$(popupSelectors.locationDetail).getText();
+  }
+
+  /**
+    * Hovers over the description element in the given details table
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @returns {String} tooltip text for the description element
+    * @memberof PluginPopup
+    */
+  getDescriptionTooltipText(detailsTable) {
+    detailsTable.$(popupSelectors.descriptionDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.descriptionDetailTooltip).getText();
+  }
+
+  /**
+    * Gets the text for the description element in the given details table
+    *
+    * @param {Element} detailsTable Details Table to extract the description from
+    * @returns {String} text for the description element
+    * @memberof PluginPopup
+    */
+  getDescriptionText(detailsTable) {
+    return detailsTable.$(popupSelectors.descriptionDetail).getText();
   }
 }
 

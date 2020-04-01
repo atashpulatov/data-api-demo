@@ -5,7 +5,6 @@ import desktop.automation.elementWrappers.WebDriverElemWrapper;
 import desktop.automation.exceptions.NotImplementedForDriverWrapperException;
 import desktop.automation.pages.nonSUT.PreSUTPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class PreSUTPageBrowser extends PreSUTPage {
@@ -50,15 +49,9 @@ public class PreSUTPageBrowser extends PreSUTPage {
     }
 
     @Override
-    public WebElement getAddInStartElem() {
-        machine.focusOnExcelFrameForBrowser();
-        return machine.waitAndFind(ADDIN, machine.FOUR_UNITS);
-    }
-
-    @Override
     public WebDriverElemWrapper getSheetTabElemByIndex(int index) {
         machine.focusOnExcelFrameForBrowser();
-        By selector = By.cssSelector(String.format("span[sheet-title=\"Sheet%d\"]", index));
+        By selector = By.cssSelector(String.format(SHEET_BTN_BASE_BY_INDEX, index));
         machine.ONE_UNIT.until(ExpectedConditions.elementToBeClickable(selector));
         return machine.waitAndFindElemWrapper(selector);
     }

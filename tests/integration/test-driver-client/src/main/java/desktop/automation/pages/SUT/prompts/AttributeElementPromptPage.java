@@ -12,7 +12,7 @@ public class AttributeElementPromptPage extends BasePromptWithSingleSelectionLis
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         WebElement runBtn = machine.getAttributeElementPromptPage().getRunBtnElem();
 
         WebElement searchElem = machine.getAttributeElementPromptPage().getSearchElem();

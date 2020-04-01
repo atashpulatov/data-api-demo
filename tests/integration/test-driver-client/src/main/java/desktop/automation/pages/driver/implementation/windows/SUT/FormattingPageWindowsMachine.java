@@ -6,6 +6,7 @@ import desktop.automation.pages.SUT.FormattingPage;
 import org.openqa.selenium.By;
 
 public class FormattingPageWindowsMachine extends FormattingPage {
+    private static final By ORANGE_STYLE_ELEM = By.xpath(".//*[contains(@Name,'Orange')]");
 
     public FormattingPageWindowsMachine(Machine machine) {
         super(machine);
@@ -13,7 +14,7 @@ public class FormattingPageWindowsMachine extends FormattingPage {
 
     @Override
     public WebDriverElemWrapper getFirstTableStyleElem() {
-        return machine.waitAndFindElemWrapper(TABLE_STYLE_CONTAINER_ELEM).getDriverElement().findElement(By.xpath(".//*[contains(@Name,'Orange')]"));
+        return machine.waitAndFindElemWrapper(TABLE_STYLE_CONTAINER_ELEM).getDriverElement().findElement(ORANGE_STYLE_ELEM);
     }
 
     @Override

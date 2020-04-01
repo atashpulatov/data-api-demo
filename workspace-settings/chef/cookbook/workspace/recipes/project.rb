@@ -34,12 +34,12 @@ when 'redhat', 'centos', 'fedora', 'amazon'
   end
 
 when 'mac_os_x'
-  include_recipe 'java-osx'
   include_recipe 'docker'
+  include_recipe 'maven'
+  include_recipe 'java_ecosystem'
 when 'windows'
   include_recipe 'java_ecosystem'
   include_recipe 'workspace::tomcat_windows'
-  
 else
   
 end

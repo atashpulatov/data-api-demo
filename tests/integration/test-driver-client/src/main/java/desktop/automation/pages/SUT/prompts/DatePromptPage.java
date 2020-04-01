@@ -17,7 +17,7 @@ public abstract class DatePromptPage extends BasePromptPage {
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         WebElement runBtn = machine.getDatePromptPage().getRunBtnElem();
 
         machine.getDatePromptPage().getDateInputElemAndInputDate(2015, 1, 1);
@@ -43,7 +43,6 @@ public abstract class DatePromptPage extends BasePromptPage {
 
     public void inputTime(int hour, int minute, int second){
         machine.focusOnPromptPopUpFrameForBrowser();
-        //TODO clicking implemented for Mac automation focus, check if Windows desktop works after refactor
         List<WebElement> timeEditElems = getTimeEditElems();
 
         timeEditElems.get(0).click();

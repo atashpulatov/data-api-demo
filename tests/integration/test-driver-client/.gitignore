@@ -9,3 +9,7 @@ src/test/resources/images/windows/debugging
 
 src/test/resources/images/mac/tmp.png
 src/test/resources/images/windows/tmp.png
+.classpath
+.factorypath
+.project
+.settings/

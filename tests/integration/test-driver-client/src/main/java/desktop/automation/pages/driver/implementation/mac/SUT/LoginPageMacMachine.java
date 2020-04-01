@@ -2,9 +2,9 @@ package desktop.automation.pages.driver.implementation.mac.SUT;
 
 import desktop.automation.driver.wrappers.Machine;
 import desktop.automation.elementWrappers.AnyInterfaceElement;
+import desktop.automation.elementWrappers.WebDriverElemWrapper;
 import desktop.automation.pages.SUT.LoginPage;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import static junit.framework.TestCase.assertEquals;
@@ -15,18 +15,14 @@ public class LoginPageMacMachine extends LoginPage {
     }
 
     @Override
-    public AnyInterfaceElement getLoginBtnElem() throws IOException {
-        return getLoginBtnElemWebdriverElem();
-    }
-
-    @Override
     public AnyInterfaceElement getStartLoginBtnElem() {
-        return getStartLoginBtnWebDriverElem();
+        return machine.waitAndFindElemWrapper(OPEN_LOGIN_PROMPT_BTN_ELEM, machine.TWO_UNITS);
     }
 
     @Override
     public boolean isLoginBtnEnabled() {
-        String raw = getLoginBtnElemWebdriverElem().getDriverElement().getAttribute("AXFocusableAncestor");
+        String raw = ((WebDriverElemWrapper)getLoginBtnElem()).getDriverElement().getAttribute("AXFocusableAncestor");
+
         try (Scanner scanner = new Scanner(raw)) {
             String actualValue = null;
             while (scanner.hasNextLine()) {
@@ -43,6 +39,6 @@ public class LoginPageMacMachine extends LoginPage {
 
     @Override
     public void assertUserNameValueAsExpected(String expected) {
-        assertEquals("wrong", getUserNameInputElem().getText());
+        assertEquals(expected, getUserNameInputElemWebElement().getText());
     }
 }

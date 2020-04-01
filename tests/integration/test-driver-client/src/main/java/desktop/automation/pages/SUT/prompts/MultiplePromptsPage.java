@@ -19,7 +19,7 @@ public class MultiplePromptsPage extends DatePromptPage{
     }
 
     @Override
-    public void answerPromptCorretly() {
+    public void answerPromptCorrectly() {
         machine.getMultiplePromptsPage().getDateInputElemAndInputDate(2014, 12, 1);
 
         machine.getDatePromptPage().getRunBtnElem().click();

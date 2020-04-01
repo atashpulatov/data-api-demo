@@ -58,7 +58,7 @@ public class ImportPrepareDataHelperBrowser {
 
         argumments.getMachine().getMainPage().getImportOrAddDataBtnElem(argumments.getFirstImport()).click();
 
-        MyLibrarySwitch myLibSwitch = argumments.getMachine().getImportPromptPage().getMyLibrarySwitchElem();
+        MyLibrarySwitch myLibSwitch = argumments.getMachine().getImportPromptPage().getMyLibrarySwitch();
         if (argumments.isMyLibrarySwitchOn() != myLibSwitch.isOn())
             myLibSwitch.clickExplicitlyByActionClass();
 

@@ -31,8 +31,26 @@ public class Draft1 extends BaseLoggedInTests {
     }
 
     @Test
-    public void test2() {
-        String report = "Report with crosstab 123";
+    public void testDataset() {
+        String object = "5k Sales Records.csv";
+
+        FilterAndValuesIndexBased filterAndValues1 = new FilterAndValuesIndexBased(0, new int[]{-1, 0});
+        FilterAndValuesIndexBased filterAndValues2 = new FilterAndValuesIndexBased(1, new int[]{-1, 0});
+        ImportPrepareDataHelperArgumments argumments = new ImportPrepareDataHelperArgumments.Builder(machine, true)
+                .withObjectName(object)
+                .withAttributes(new int[]{-1, 0})
+                .withMetrics(new int[]{-1, 0})
+                .withFiltersAndValues(new FilterAndValuesIndexBased[]{filterAndValues1, filterAndValues2})
+                .isFirstImport(true)
+                .build();
+        ImportPrepareDataHelper.importWithPrepareDataSimple(argumments);
+
+        machine.getMainPage().getImportedObjectsInList().get(0).assertNameIsAsExpected(object);
+    }
+
+    @Test
+    public void testReportWithoutCrosstab() {
+        String report = "1k report";
 
         FilterAndValuesIndexBased filterAndValues1 = new FilterAndValuesIndexBased(0, new int[]{-1, 0});
         FilterAndValuesIndexBased filterAndValues2 = new FilterAndValuesIndexBased(1, new int[]{-1, 0});
@@ -49,8 +67,8 @@ public class Draft1 extends BaseLoggedInTests {
     }
 
     @Test
-    public void test21() {
-        String report = "1k report";
+    public void testReportWithCrosstab() {
+        String report = "Report with crosstab 123";
 
         FilterAndValuesIndexBased filterAndValues1 = new FilterAndValuesIndexBased(0, new int[]{-1, 0});
         FilterAndValuesIndexBased filterAndValues2 = new FilterAndValuesIndexBased(1, new int[]{-1, 0});
@@ -61,10 +79,13 @@ public class Draft1 extends BaseLoggedInTests {
                 .withFiltersAndValues(new FilterAndValuesIndexBased[]{filterAndValues1, filterAndValues2})
                 .isFirstImport(true)
                 .build();
-        ImportPrepareDataHelper.prepareDataSimple(argumments);
+        ImportPrepareDataHelper.importWithPrepareDataSimple(argumments);
 
         machine.getMainPage().getImportedObjectsInList().get(0).assertNameIsAsExpected(report);
     }
+
+
+
 
     @Test
     public void test3() throws InterruptedException {
@@ -267,5 +288,11 @@ public class Draft1 extends BaseLoggedInTests {
         for (WebElement filter : filters) {
             machine.clickObjectWithOffset(filter, 50, 20);
         }
+    }
+
+    @Test
+    public void test123(){
+        By selector = By.xpath("//Text[@Name='To preserve this crosstab report, select all objects without changing their forms.']");
+        WebElement target = machine.driver.findElement(selector);
     }
 }

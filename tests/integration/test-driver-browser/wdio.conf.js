@@ -20,6 +20,15 @@ exports.config = {
     //   './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
+    acceptance: [
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
+      // './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
+      // './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
+      './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
+    ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
@@ -35,6 +44,7 @@ exports.config = {
     ],
     'F24087-improve-scrolling-performance': [
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
     ],
     'F24398-import-and-refresh-visualization': [
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
@@ -55,7 +65,9 @@ exports.config = {
     ],
     'F25946-details-panel': [
       './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-within-details-panel.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
     ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
@@ -79,8 +91,9 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
     ],
     'F24086-improved-browsing-by-adding-filters': [
-      './test/specs/release-validation/F24086-filter-panel/TC54856-filtering-with-type-owner-certified-date.spec.js',
-    ],
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54856-filtering-with-type-owner-certified-date.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC53430-refreshing-and-filtering-during-refresh.spec.js',
+    ]
   },
   // Patterns to exclude.
   exclude: [
@@ -232,6 +245,11 @@ exports.config = {
   * @param {Array.<Object>} capabilities list of capabilities details
   * @param {Array.<String>} specs List of spec file paths that are to be run
   */
+  // Creating property to store Language and Region for Excel logged in user.
+  // Plugin GUI langauge is based on this value.
+  // Required to provide Internationalization support in the automation framework.
+  languageRegion : 'lg-rg',
+
   beforeSession (config, capabilities, specs) {
     require('@babel/register');
   },

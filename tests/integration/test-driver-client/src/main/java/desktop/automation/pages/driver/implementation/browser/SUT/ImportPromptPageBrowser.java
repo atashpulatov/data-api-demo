@@ -13,6 +13,11 @@ public class ImportPromptPageBrowser extends ImportPromptPage {
     }
 
     @Override
+    protected WebDriverElemWrapper getMyLibrarySwitchElement() {
+        return machine.waitAndFindElemWrapper(MY_LIBRARY_SWITCH_ELEM);
+    }
+
+    @Override
     public AnyInterfaceElement getSearchBarElem() {
         machine.focusOnImportDataPopUpFrameForBrowser();
         return machine.waitAndFindElemWrapper(SEARCH_BAR_ELEM);

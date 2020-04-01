@@ -4,17 +4,14 @@ import desktop.automation.driver.wrappers.MacMachine;
 import desktop.automation.elementWrappers.AnyInterfaceElement;
 import desktop.automation.elementWrappers.ImageComparisonElem;
 import desktop.automation.elementWrappers.WebDriverElemWrapper;
-import desktop.automation.elementWrappers.mac.FontControls.FontInput;
-import desktop.automation.elementWrappers.mac.enums.FontValue;
+import desktop.automation.elementWrappers.enums.FontValue;
 import desktop.automation.pages.SUT.MainPage;
-import desktop.automation.pages.driver.implementation.mac.nonSUT.PreSUTPageMacMachine;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
 
 public class MainPageMacMachine extends MainPage {
     private static final By FORMAT_TAB = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXMenuBar[0]/AXMenuBarItem[@AXTitle='Format']");
@@ -34,6 +31,8 @@ public class MainPageMacMachine extends MainPage {
 
     private static final By FONT_INPUT = By.xpath("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole='AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[1]/AXComboBox");
 
+    private static final String REFRESH_ALL_BTN_ELEM = "mainPage/refreshAllBtn";
+
     public MainPageMacMachine(MacMachine machine) {
         super(machine);
     }
@@ -44,72 +43,18 @@ public class MainPageMacMachine extends MainPage {
     }
 
     @Override
-    public AnyInterfaceElement getOfficeAddInLogoElem() {
-        return getOfficeAddInLogoWebDriverElem();
-    }
-
-    @Override
     public WebDriverElemWrapper getImportDataBtnElem(){
         return machine.waitAndFindElemWrapper(IMPORT_DATA_BTN_ELEM);
     }
 
     @Override
     public AnyInterfaceElement getRefreshAllBtnElem() {
-        return new ImageComparisonElem("mainPage/refreshAllBtn", 2820, 3000, 780, 880);
+        return new ImageComparisonElem(REFRESH_ALL_BTN_ELEM, 2820, 3000, 780, 880);
     }
 
     @Override
     public WebDriverElemWrapper getImportedObjectInListNameElem(String objectName, WebDriverWait wait) {
-        //wait is ignored
         return getImportObjectInListElemHelper(objectName, wait);
-    }
-
-    @Override
-    public AnyInterfaceElement getSessionExpiredNotificationElem() {
-        return machine.waitAndFindElemWrapper(SESSION_EXPIRED_NOTIFICATION);
-    }
-
-    public void waitForDialogOpenNotificationToAppearAndDisappears(){
-        //if the imported object is small enough the dialog disappears too fast
-        try {
-            System.out.println("locating dialog open notification");
-            getDialogOpenNotificationElem();
-            System.out.println("dialog open notification found");
-        } catch (Exception ignored) {
-            System.out.println("did not find dialog open notification");
-        }
-
-        waitUntilDialogOpenNotificationDisappears();
-    }
-
-//    public WebDriverElemWrapper getDialogOpenNotificationElem(){
-//        return machine.waitAndFindElemWrapper(DIALOG_OPEN_NOTIFICATION);
-//    }
-
-    public void waitUntilDialogOpenNotificationDisappears(){
-        //TODO when importing a larger object Excel starts to slightly lag and the driver can no longer discover the dialog open notification.
-        // therefor right now in order to break the loop need to locate other supporting elems that should be present past dialog end
-        System.out.println("waiting for dialog open notification to disappear");
-
-        long start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < 180_000) {
-            try {
-                machine.getDriver().findElement(DIALOG_OPEN_NOTIFICATION);
-                try {
-                    Thread.sleep(2_000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            } catch (Exception e){
-                try {
-                    getMoreItemsMenuElem();
-                    ((PreSUTPageMacMachine)machine.getPreSUTPage()).getEditMenuElem();
-                    break;
-                } catch (Exception ignored) {}
-            }
-        }
-
-        System.out.println("dialog open notification no longer detected");
     }
 
     @Override
@@ -129,8 +74,6 @@ public class MainPageMacMachine extends MainPage {
 
         cellInput.sendKeys(Keys.ENTER);
     }
-
-
 
     public WebElement getEditMenuElem() {
         return machine.waitAndFind(EDIT_MENU);
@@ -163,23 +106,6 @@ public class MainPageMacMachine extends MainPage {
     }
 
     @Override
-    public void assertHeaderPresent(String header) {
-        if (Character.isAlphabetic(header.toCharArray()[0])){
-            //col
-            assertHeaderPresentByCellPresence(header);
-        }
-        else {
-            //row
-            getFormatTabElem().click();
-            getFormatTabRowElem().click();
-            getFormatTabRowHeightElem().click();
-            WebDriverElemWrapper rowHeightInputElem = getRowHeightInputElem();
-            assertTrue(Integer.parseInt(rowHeightInputElem.getText().trim()) != 0);
-            rowHeightInputElem.sendKeys(Keys.ENTER);
-        }
-    }
-
-    @Override
     protected By getHeaderSelector(String header) {
         String selector = String.format(COLUMN_HEADER_ELEM_BASE, header.toUpperCase(), header.toUpperCase());
         return By.xpath(selector);
@@ -187,15 +113,15 @@ public class MainPageMacMachine extends MainPage {
 
     @Override
     public void hideHeader(String header) {
-        try {
-            //use below flow for row headers, analogical approach could be utilized for column header hiding, but utilizing same logic as Windows flow for columns
-            Integer.parseInt(header);
+        if (isRowHeader(header)) {
+            //use below flow for row headers. Analogical approach could be utilized for column header hiding, but utilizing same logic as Windows flow for columns
 
             goToCell("A" + header);
             getFormatTabElem().click();
             getFormatTabRowElem().click();
             getFormatTabRowHideElem().click();
-        } catch (NumberFormatException e) {
+        }
+        else {
             //for columns use same flow as Windows
             hideHeaderByCellContextMenu(header);
         }
@@ -233,10 +159,10 @@ public class MainPageMacMachine extends MainPage {
             machine.getFormattingPage().getManageRulesPromptStopIfTrueCheckboxElem().getDriverElement();
             res = true;
         } catch (org.openqa.selenium.TimeoutException ignored){
-        } finally {
-            machine.getFormattingPage().getManageRulesPropmtOKBtnElem().click();
-            return res;
         }
+
+        machine.getFormattingPage().getManageRulesPropmtOKBtnElem().click();
+        return res;
     }
 
     public WebElement getFormatTabElem(){
@@ -283,16 +209,11 @@ public class MainPageMacMachine extends MainPage {
         return machine.waitAndFindElemWrapper(COLUMN_WIDTH_INPUT);
     }
 
-    public FontInput getFontInput(){
-        return new FontInput(machine.waitAndFind(FONT_INPUT));
+    public WebDriverElemWrapper getFontInput(){
+        return machine.waitAndFindElemWrapper(FONT_INPUT);
     }
 
     public void inputFontValue(FontValue fontValue){
-        //old implementations
-//        FontInput res = getFontInput();
-//        machine.doubleClickElem(res.getElement());
-//        res.inputFont(fontValue);
-//        machine.actions.click(machine.mainPage.getMSTRLogoElem()).perform();
         getFormatTabElem().click();
         getFormatTabCellsElem().click();
         machine.getFormatCellsPromptPage().getFormatCellsFontTabElem().click();
@@ -300,7 +221,7 @@ public class MainPageMacMachine extends MainPage {
     }
 
     public void assertExpectedFontValueSelected(FontValue fontValue) {
-        FontInput formatCellsFontInputElem = getFontInput();
-        assertEquals(fontValue.getInputValue(), formatCellsFontInputElem.getElement().getText().trim());
+        WebDriverElemWrapper formatCellsFontInputElem = getFontInput();
+        assertEquals(fontValue.getInputValue(), formatCellsFontInputElem.getDriverElement().getText().trim());
     }
 }
