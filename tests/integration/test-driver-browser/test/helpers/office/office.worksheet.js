@@ -60,7 +60,7 @@ const OfficeWorksheet = function() {
     if (!envNumber.includes('env-')) {
       envNumber = 'yi_local_ip';
     }
-    waitAndClick($(`div[aria-label^="${envNumber}"]`));
+    waitAndClick($(excelSelectors.ribbonPlugin(envNumber)));
     waitAndClick($(excelSelectors.addBtn));
     browser.pause(2222);
   };
