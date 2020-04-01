@@ -69,7 +69,7 @@ class PopupController {
     try {
       await officeApiHelper.getExcelSessionStatus();
       console.time('Popup load time');
-      Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}&envUrl=${session.url}`,
+      Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}`,
         { height, width, displayInIframe: true },
         (asyncResult) => {
           const dialog = asyncResult.value;

@@ -7,7 +7,8 @@ import { errorService } from '../error/error-handler';
 import { refreshRequested, removeRequested, duplicateRequested } from '../operation/operation-actions';
 import { updateObject } from '../operation/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../navigation/navigation-tree-actions';
-
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { popupActions } from '../popup/popup-actions';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -45,6 +46,19 @@ class SidePanelService {
     // TODO maybe combine with refreshSelected?
     const objectData = this.getObject(objectWorkingId);
     this.reduxStore.dispatch(refreshRequested(objectData));
+  }
+
+  edit = async (objectWorkingId) => {
+    const objectData = this.getObject(objectWorkingId);
+    const { bindId, objectName, mstrObjectType } = objectData;
+    const excelContext = await officeApiHelper.getExcelContext();
+    await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+
+    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+      this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+    } else {
+      this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+    }
   }
 
   remove = async (objectWorkingId) => {
