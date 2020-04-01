@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('F24087 - Improve performance of scrolling through the object list', () => {
@@ -20,7 +20,7 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
 
-    switchToPluginFrame();
+    switchToDialogFrame();
     //Switching to non My Libray view as there is more objects available
     PluginPopup.switchLibrary(false);
     browser.pause(500); //wait before next action
