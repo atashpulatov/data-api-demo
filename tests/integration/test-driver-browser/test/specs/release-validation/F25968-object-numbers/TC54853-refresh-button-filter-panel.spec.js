@@ -3,7 +3,7 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { switchToRightPanelFrame, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToRightPanelFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
@@ -14,15 +14,14 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('TC54853 refresh button and filter panel', () => {
     // open import data popup
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    switchToPluginFrame();
+    switchToDialogFrame();
 
     // apply filters and import the last visualization from the list
     PluginPopup.clickFilterButton();
@@ -35,7 +34,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     PluginPopup.importVisualization();
     waitForNotification();
 
-    // delete data from excel range and refresh 
+    // delete data from excel range and refresh
     OfficeWorksheet.clearExcelRange('A2:F15');
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
@@ -44,7 +43,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     // apply date filtering and import a basic report
     OfficeWorksheet.selectCell('Z1');
     PluginRightPanel.clickAddDataButton();
-    switchToPluginFrame();
+    switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Modified');

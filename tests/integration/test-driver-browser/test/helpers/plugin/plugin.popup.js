@@ -8,7 +8,8 @@ import {
   switchToExcelFrame,
   switchToPromptFrameForEditDossier,
   switchToPromptFrameForEditReport,
-  switchToRefreshAllFrame
+  switchToRefreshAllFrame,
+  switchToDialogFrame,
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 
@@ -153,7 +154,7 @@ class PluginPopup {
   }
 
   switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
-    switchToPluginFrame();
+    switchToDialogFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
     browser.pause(1000);
@@ -164,7 +165,7 @@ class PluginPopup {
   }
 
   importObject(objectName) {
-    switchToPluginFrame();
+    switchToDialogFrame();
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
@@ -172,7 +173,7 @@ class PluginPopup {
   }
 
   importAnyObject(objectName, index) {
-    switchToPluginFrame();
+    switchToDialogFrame();
     browser.pause(500);
     this.switchLibrary(false);
     this.searchForObject(objectName);
@@ -375,6 +376,7 @@ class PluginPopup {
   }
 
   switchLibrary(newState) {
+    switchToDialogFrame();
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
@@ -601,7 +603,7 @@ class PluginPopup {
   }
 
   openPrepareData(objectName, isObjectFromLibrary = false) {
-    switchToPluginFrame();
+    switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
@@ -873,6 +875,14 @@ class PluginPopup {
   getBackgroundColor(selector) {
     const backgroundColour = $(selector).getCSSProperty('background-color');
     return backgroundColour["parsed"]["hex"];
+  }
+  
+  /**
+   * Returns the date for the Date modified of the first object in the table
+   * @return {String}
+   */
+  getFirstRowDate() {
+    return $(popupSelectors.columnModified).getAttribute('Title');
   }
 
   /**

@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 
 describe('TC54788 - Import subtotals', () => {
@@ -12,12 +12,12 @@ describe('TC54788 - Import subtotals', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
   it('Enable and disable subtotals', () => {
     const objectName = 'Subtotals - display all types';
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.openPrepareData(objectName);
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();

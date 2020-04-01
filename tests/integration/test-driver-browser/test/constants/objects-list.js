@@ -28,6 +28,14 @@ export const objectsList = {
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
     basicSubtotalsReport: 'Report Totals Subtotals 1',
+    withoutSubtotals: {
+      basicReport: 'Report without subtotals',
+      reportBasedOnIntelligentCube: 'Report based on cube without subtotals',
+      promptedReport: 'Prompted report without subtotals',
+      reportWithCrosstabs: 'Report with crosstab and without subtotals',
+      promptedReportWithCrosstabs: 'Prompted report with crosstab and without subtotals',
+      dataset: '100 Sales Records.csv'
+    },
     longReportWithInvalidCharacters: {
       sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
       excelTableNameStart:'_01___________________________________Report_for_testing_binding_and_special_characters',

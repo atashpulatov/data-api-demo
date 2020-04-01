@@ -4,7 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { switchToPromptFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPromptFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('F24398 - import and refresh visualization', () => {
@@ -13,8 +13,7 @@ describe('F24398 - import and refresh visualization', () => {
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC53627] Dossier top menu buttons', () => {

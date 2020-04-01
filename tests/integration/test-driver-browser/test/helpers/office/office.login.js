@@ -8,13 +8,14 @@ const OfficeLogin = function () {
   const nextBtn = '#idSIButton9';
   const passwordInput = '#i0118';
 
-  this.login = function (username, password) {
+  this.login = (username, password) => {
+    $(usernameInput).waitForDisplayed(3000);
     $(usernameInput).setValue(username);
     waitAndClick($(nextBtn));
-    browser.pause(1666);
+    $(passwordInput).waitForDisplayed(3000);
     $(passwordInput).setValue(password);
-    $(nextBtn).click();
-    $(nextBtn).click();
+    waitAndClick($(nextBtn));
+    waitAndClick($(nextBtn));
   };
 
   /**
@@ -35,6 +36,10 @@ const OfficeLogin = function () {
       this.login(settings.officeOnline.username, settings.officeOnline.password);
     }
     OfficeWorksheet.createNewWorkbook();
+
+    //Getting Language and Region for Excel logged in user
+    browser.config.languageRegion = $('html').getAttribute('lang');
+
     OfficeWorksheet.openPlugin();
     pluginRightPanel.loginToPlugin(username, password, isValidCredentials);
   }

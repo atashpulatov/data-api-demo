@@ -3,13 +3,10 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
-import { popupSelectors } from '../../../constants/selectors/popup-selectors';
-import { waitAndClick } from '../../../helpers/utils/click-helper';
-
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
 describe('TS41441 - E2E Sanity checks', () => {
   beforeEach(() => {
@@ -18,8 +15,7 @@ describe('TS41441 - E2E Sanity checks', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC49134] Part I - Error handling', () => {

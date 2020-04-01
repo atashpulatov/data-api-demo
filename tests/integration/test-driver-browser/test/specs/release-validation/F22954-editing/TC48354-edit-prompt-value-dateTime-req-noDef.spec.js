@@ -3,10 +3,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import {
-  switchToPluginFrame,
-  switchToPromptFrameForEdit
-} from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { objectsList } from '../../../constants/objects-list';
@@ -18,13 +15,13 @@ describe('F22954 Ability to edit data already imported to the workbook', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC48354] [Edit data] Editing a prompted report (with prompt - Value|Date &Time|Required|No default answer)', () => {
     // sholud import prompted report
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.openPrompt(objectsList.reports.valueDayPromptReport);
     PluginPopup.writeValueText('07/07/2015\uE004\uE004');
     waitForNotification();
@@ -33,7 +30,7 @@ describe('F22954 Ability to edit data already imported to the workbook', () => {
       $(rightPanelSelectors.notificationPopUp).getAttribute('textContent')
     ).toContain(dictionary.en.importSuccess);
 
-    //should edit report
+    //  should edit report
     switchToPluginFrame();
     PluginRightPanel.edit();
     browser.pause(3000);

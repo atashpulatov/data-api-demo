@@ -4,10 +4,9 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { objectsList } from '../../../constants/objects-list';
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import settings from '../../../config';
-
 
 describe('F12909 - Ability to import a report from MicroStrategy report', () => {
   beforeEach(() => {
@@ -15,8 +14,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
 
@@ -25,6 +23,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     browser.pause(3000);
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.over100k);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.projectLimits);

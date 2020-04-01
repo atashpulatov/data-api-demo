@@ -2,10 +2,10 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
-import settings from '../../../config';
 
 describe('F12909 - Ability to import a report from MicroStrategy report', () => {
   beforeEach(() => {
@@ -13,14 +13,14 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('Number Formatting', () => {
     // should import Number Formatting object
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.importAnyObject(objectsList.reports.numberFormating, 2);
     waitForNotification();
     browser.pause(2000);
