@@ -19,11 +19,11 @@ describe('F12909 - Ability to import a report from MicroStrategy', () => {
 
 
   it('[Tc35090] - Importing the report right under Exel limits', () => {
-    // // should import report which is exactly at the excel limit
-    // OfficeWorksheet.selectCell('A1');
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.importAnyObject(objectsList.reports.marginReport, 2);
-    // waitForNotification();
-    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    // should import report which is exactly at the excel limit
+    OfficeWorksheet.selectCell('A1');
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.importAnyObject(objectsList.reports.marginReport, 2);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });
