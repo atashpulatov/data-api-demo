@@ -1,12 +1,11 @@
 import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { switchToPluginFrame, switchToPromptFrame, switchToRightPanelFrame, switchToPopupFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToRightPanelFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 
@@ -18,8 +17,7 @@ describe('TS41441 - E2E Sanity checks', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC49134] Part III - Formatting | Secure Data - Additional Checks', () => {
@@ -57,13 +55,12 @@ describe('TS41441 - E2E Sanity checks', () => {
 
     // should log in with Tim user
     browser.pause(1000);
-    const handles = browser.getWindowHandles();
     switchToRightPanelFrame();
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
     PluginRightPanel.clickLoginRightPanelBtn();
-    browser.switchToWindow(browser.getWindowHandles()[2]);
+    changeBrowserTab(2);
     PluginRightPanel.enterCredentialsAndPressLoginBtn(user2.username, user2.password);
-    browser.switchToWindow(handles[1]);
+    changeBrowserTab(1);
 
     // should click "View Data" and close the "Refresh All Data" pop-up
     browser.pause(1000);

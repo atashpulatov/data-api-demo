@@ -289,7 +289,7 @@ exports.config = {
   // Plugin GUI langauge is based on this value.
   // Required to provide Internationalization support in the automation framework.
   languageRegion : 'lg-rg',
-  
+
   beforeSession (config, capabilities, specs) {
     require('@babel/register');
   },

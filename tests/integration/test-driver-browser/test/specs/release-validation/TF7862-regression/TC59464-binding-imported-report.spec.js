@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
@@ -14,8 +14,7 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC59464] - Checking binding for newly imported report', () => {
@@ -25,7 +24,7 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     PluginRightPanel.clickImportDataButton();
     browser.pause(4000);
 
-    switchToPluginFrame();
+    switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(longReportWithInvalidCharacters.sourceName);
     browser.pause(4000);

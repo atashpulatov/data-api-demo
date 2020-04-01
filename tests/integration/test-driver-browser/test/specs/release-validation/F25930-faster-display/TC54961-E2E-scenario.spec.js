@@ -1,6 +1,6 @@
 
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import pluginPopup from '../../../helpers/plugin/plugin.popup';
 import officeLogin from '../../../helpers/office/office.login';
 import { objectsList } from '../../../constants/objects-list';
@@ -15,8 +15,7 @@ describe('F25930 - Faster display of data sources by caching object list', () =>
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC54961] [Display objects quick] E2E scenario for typical Object Browsing', () => {
@@ -25,7 +24,7 @@ describe('F25930 - Faster display of data sources by caching object list', () =>
     pluginRightPanel.clickImportDataButton();
     browser.pause(1000);
 
-    switchToPluginFrame();
+    switchToDialogFrame();
     pluginPopup.switchLibrary(false);
     browser.pause(1000);
     browser.keys('\uE00c'); // Press Escape to close the Smart Data window

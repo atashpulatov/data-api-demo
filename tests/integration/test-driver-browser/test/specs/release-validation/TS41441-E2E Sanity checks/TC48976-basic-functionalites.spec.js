@@ -1,7 +1,7 @@
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { objectsList } from '../../../constants/objects-list';
@@ -19,25 +19,23 @@ describe('TC48976 - perform-basic-functionalities', () => {
 
     // Credentials without office privileges
     PluginRightPanel.enterCredentialsAndPressLoginBtn('b', '');
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[1]);
+    changeBrowserTab(1);
     switchToRightPanelFrame();
     $(acceptBtn).waitForDisplayed(3000, false);
     waitAndClick($(acceptBtn));
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
     PluginRightPanel.clickLoginRightPanelBtn();
-    browser.switchToWindow(browser.getWindowHandles()[2]);
+    changeBrowserTab(2);
 
     // Valid credentials
     PluginRightPanel.enterCredentialsAndPressLoginBtn('a', '');
-    browser.switchToWindow(handles[1]);
+    changeBrowserTab(1);
   });
 
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC48976] - perform-basic-functionalities', () => {
@@ -51,8 +49,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     $(rightPanelSelectors.importDataBtn).waitForDisplayed(3000, false);
     PluginRightPanel.clickImportDataButton();
 
-    switchToPluginFrame();
-    $(popupSelectors.myLibrary).waitForDisplayed(3000, false);
+    switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectsList.reports.filtered);
     PluginPopup.searchForObject('Invalid report');
@@ -83,9 +80,8 @@ describe('TC48976 - perform-basic-functionalities', () => {
     OfficeWorksheet.selectCell('M1');
     browser.pause(1000);
     PluginRightPanel.clickAddDataButton();
-    switchToPluginFrame();
+    switchToDialogFrame();
 
-    $(popupSelectors.myLibrary).waitForDisplayed(3000, false);
     PluginPopup.switchLibrary(false);
     waitAndClick($('#Filter'));
     $(datasetFilter).waitForDisplayed(1000, false)

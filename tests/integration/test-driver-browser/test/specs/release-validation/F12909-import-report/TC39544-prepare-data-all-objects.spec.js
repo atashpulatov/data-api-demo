@@ -2,14 +2,12 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
-import settings from '../../../config';
-
 
 describe('F12909 - Ability to import a report from MicroStrategy report', () => {
   beforeEach(() => {
@@ -17,8 +15,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
 
@@ -27,6 +24,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     switchToExcelFrame();
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.seasonalReport);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
@@ -65,11 +63,11 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (0/2)');
 
     // should select one attribute from many listed
-    PluginPopup.selectAttributeIndex(1);
+    PluginPopup.selectAttributeIndex([1]);
     expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (1/2)');
 
     // should select one more attribute from many listed
-    PluginPopup.selectAttributeIndex(2);
+    PluginPopup.selectAttributeIndex([2]);
     expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (2/2)');
 
     // should click on one of the filters and select (All) object in the last column

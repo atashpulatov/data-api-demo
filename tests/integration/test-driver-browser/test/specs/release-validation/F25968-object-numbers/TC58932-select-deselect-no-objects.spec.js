@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 
@@ -13,15 +13,14 @@ describe('[F25968] - Dynamically update numbers of objects displayed next to cat
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC58932] - Deselecting/selecting filters with no objects', () => {
     // open import data popup
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    switchToPluginFrame();
+    switchToDialogFrame();
 
     // apply filters
     PluginPopup.switchLibrary(false);

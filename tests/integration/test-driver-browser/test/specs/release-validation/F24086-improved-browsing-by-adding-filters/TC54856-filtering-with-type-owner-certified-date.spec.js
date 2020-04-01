@@ -2,8 +2,8 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
-import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import popupSelectors from '../../../constants/selectors/popup-selectors';
+import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('F24086 - Improved browsing by adding filters', () => {
   beforeEach(() => {
@@ -12,15 +12,14 @@ describe('F24086 - Improved browsing by adding filters', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC54856][Object filtering] Filtering object list with faceted search for Type, Owner, Certified, and Date Modified', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
 
-    switchToPluginFrame();
+    switchToDialogFrame();
     PluginPopup.clickFilterButton();
 
     /* Select some filters from the owner category */
