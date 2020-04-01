@@ -3,11 +3,13 @@ import {
   IMPORT_OPERATION,
   EDIT_OPERATION,
   REFRESH_OPERATION,
+  DUPLICATE_OPERATION,
 } from './operation-steps';
 
 export const IMPORT_REQUESTED = 'IMPORT_REQUESTED';
 export const EDIT_REQUESTED = 'EDIT_REQUESTED';
 export const REFRESH_REQUESTED = 'REFRESH_REQUESTED';
+export const DUPLICATE_REQUESTED = 'DUPLICATE_REQUESTED';
 export const REMOVE_REQUESTED = 'REMOVE_REQUESTED';
 export const CLEAR_DATA_REQUESTED = 'CLEAR_DATA_REQUESTED';
 
@@ -27,6 +29,7 @@ const operationTypes = {
   REFRESH_REQUESTED: REFRESH_OPERATION,
   REMOVE_REQUESTED: REMOVE_OPERATION,
   CLEAR_DATA_REQUESTED: CLEAR_DATA_OPERATION,
+  DUPLICATE_REQUESTED: DUPLICATE_OPERATION,
 };
 
 export const importRequested = (object) => {
@@ -62,6 +65,19 @@ export const editRequested = (objectData, objectEditedData) => {
     payload: {
       operation: createOperation(EDIT_REQUESTED, objectWorkingId, { backupObjectData, objectEditedData }),
       objectWorkingId,
+    },
+  };
+};
+
+export const duplicateRequested = (objectData) => {
+  const newObjectData = JSON.parse(JSON.stringify(objectData));
+  const objectWorkingId = Date.now();
+  newObjectData.objectWorkingId = objectWorkingId;
+  return {
+    type: DUPLICATE_REQUESTED,
+    payload: {
+      operation: createOperation(DUPLICATE_REQUESTED, objectWorkingId),
+      object: newObjectData,
     },
   };
 };
@@ -108,7 +124,6 @@ export const backupObject = (objectWorkingId, objectToBackup) => ({
 function createOperation(operationRequest, objectWorkingId, objectData = {}) {
   const { backupObjectData, objectEditedData } = objectData;
   const operationType = operationTypes[operationRequest];
-  console.log('operationType:', operationType);
   return {
     operationType,
     objectWorkingId,

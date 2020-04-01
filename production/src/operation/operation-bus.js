@@ -12,17 +12,19 @@ class OperationBus {
     this.store = store;
     this.subscribedCallbacksMap = {};
 
-    const currentOperation = this.store.getState().operationReducer
-      && this.store.getState().operationReducer.operations
-      && this.store.getState().operationReducer.operations[0];
+    const { operationReducer } = this.store.getState();
+    const currentOperation = operationReducer
+      && operationReducer.operations
+      && operationReducer.operations[0];
     this.previousOperationCopy = copyOperationInfo(currentOperation);
     this.store.subscribe(this.listener);
   }
 
   listener = () => {
-    const currentOperation = this.store.getState().operationReducer
-      && this.store.getState().operationReducer.operations
-      && this.store.getState().operationReducer.operations[0];
+    const { operationReducer } = this.store.getState();
+    const currentOperation = operationReducer
+      && operationReducer.operations
+      && operationReducer.operations[0];
 
     if (!currentOperation) {
       this.previousOperationCopy = null;

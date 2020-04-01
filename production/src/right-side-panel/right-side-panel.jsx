@@ -49,7 +49,7 @@ export const RightSidePanelNotConnected = (props) => {
       onAddData={sidePanelService.addData}
       onToggleChecked={emptyCallback}
       onCheckAll={sidePanelService.refreshSelected}
-      onDuplicateClick={sidePanelService.highlightObject}
+      onDuplicateClick={sidePanelService.duplicate}
       onEditClick={emptyCallback}
       onRefreshClick={sidePanelService.refresh}
       onRefreshSelected={sidePanelService.refreshSelected}

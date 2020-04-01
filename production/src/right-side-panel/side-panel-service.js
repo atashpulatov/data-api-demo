@@ -4,7 +4,7 @@ import { officeStoreService } from '../office/store/office-store-service';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
 import { errorService } from '../error/error-handler';
-import { refreshRequested, removeRequested } from '../operation/operation-actions';
+import { refreshRequested, removeRequested, duplicateRequested } from '../operation/operation-actions';
 import { updateObject } from '../operation/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../navigation/navigation-tree-actions';
 
@@ -34,6 +34,11 @@ class SidePanelService {
     // TODO check for changing viz whiel editing dossier
     this.reduxStore.dispatch(updateObject(renamedObject));
     await officeStoreService.saveObjectsInExcelStore();
+  }
+
+  duplicate = async (objectWorkingId) => {
+    const objectData = this.getObject(objectWorkingId);
+    this.reduxStore.dispatch(duplicateRequested(objectData));
   }
 
   refresh = async (objectWorkingId) => {
