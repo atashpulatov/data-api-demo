@@ -1,24 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel } from '@mstr/rc';
-import { popupController } from '../popup/popup-controller';
+import { SidePanel, globalNotificationTypes } from '@mstr/rc';
 import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
-import { errorService } from '../error/error-handler';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
 import * as officeActions from '../office/store/office-actions';
 import { officeStoreService } from '../office/store/office-store-service';
 import { sidePanelService } from './side-panel-service';
+import { notificationService } from '../notification-v2/notification-service';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
     loadedObjects,
     isConfirm,
     isSettings,
-    cancelCurrentImportRequest,
     toggleIsSettingsFlag,
     toggleSecuredFlag,
+    globalNotification,
   } = props;
 
   const emptyCallback = (parameters) => {
@@ -43,35 +42,56 @@ export const RightSidePanelNotConnected = (props) => {
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
+  const simulateConnectionLost = async () => {
+    notificationService.connectionLost();
+    setTimeout(() => {
+      notificationService.connectionRestored();
+    }, 2000);
+  };
+
+  const simulateSessionExpired = async () => {
+    notificationService.sessionExpired();
+    setTimeout(() => {
+      notificationService.sessionRestored();
+    }, 2000);
+  };
+
   return (
-    <SidePanel
-      loadedObjects={loadedObjects}
-      onAddData={sidePanelService.addData}
-      onToggleChecked={emptyCallback}
-      onCheckAll={sidePanelService.refreshSelected}
-      onDuplicateClick={sidePanelService.highlightObject}
-      onEditClick={emptyCallback}
-      onRefreshClick={sidePanelService.refresh}
-      onRefreshSelected={sidePanelService.refreshSelected}
-      onRemoveClick={sidePanelService.remove}
-      onRemoveSelected={sidePanelService.removeSelected}
-      onRename={sidePanelService.rename}
-      settingsMenu={isSettings && <SettingsMenu />}
-      onSettingsClick={handleSettingsClick}
-      confirmationWindow={isConfirm && <Confirmation />}
-    />
+    <>
+      <button type="button" onClick={simulateConnectionLost}>Test connection lost</button>
+      <button type="button" onClick={simulateSessionExpired}>Test session expired</button>
+      <SidePanel
+        loadedObjects={loadedObjects}
+        onAddData={sidePanelService.addData}
+        onToggleChecked={emptyCallback}
+        onCheckAll={sidePanelService.refreshSelected}
+        onDuplicateClick={sidePanelService.highlightObject}
+        onEditClick={emptyCallback}
+        onRefreshClick={sidePanelService.refresh}
+        onRefreshSelected={sidePanelService.refreshSelected}
+        onRemoveClick={sidePanelService.remove}
+        onRemoveSelected={sidePanelService.removeSelected}
+        onRename={sidePanelService.rename}
+        settingsMenu={isSettings && <SettingsMenu />}
+        onSettingsClick={handleSettingsClick}
+        confirmationWindow={isConfirm && <Confirmation />}
+        globalNotificationType={globalNotification}
+      />
+    </>
   );
 };
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { isConfirm, isSettings } = state.officeReducer;
+  const { globalNotification } = state.notificationReducer;
   return {
     loadedObjects: state.objectReducer.objects,
     importRequested,
     dossierOpenRequested,
     isConfirm,
-    isSettings
+    isSettings,
+    globalNotification,
   };
 };
 
@@ -84,6 +104,7 @@ const mapDispatchToProps = {
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
+  globalNotification: PropTypes.string,
   loadedObjects:
     PropTypes.shape({
       body: PropTypes.shape({}),
@@ -113,5 +134,4 @@ RightSidePanelNotConnected.propTypes = {
   isSettings: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
-  cancelCurrentImportRequest: PropTypes.func,
 };

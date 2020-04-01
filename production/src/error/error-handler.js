@@ -5,6 +5,7 @@ import {
   errorMessageFactory,
   incomingErrorStrings,
 } from './constants';
+import {notificationService} from '../notification-v2/notification-service';
 
 const TIMEOUT = 2000;
 
@@ -17,6 +18,7 @@ class ErrorService {
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
+    console.log(errorType);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
@@ -30,7 +32,8 @@ class ErrorService {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = message !== errorDetails ? errorDetails : '';
     if (type === errorTypes.UNAUTHORIZED_ERR) {
-      return this.notificationService.displayNotification({ type: 'info', content: message });
+      // return this.notificationService.displayNotification({ type: 'info', content: message });
+      notificationService.sessionExpired();
     }
     return this.notificationService.displayNotification({
       type: 'warning', content: message, details, onConfirm,
