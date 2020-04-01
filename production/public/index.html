@@ -81,7 +81,7 @@
       try {
         var locale = Office.context.displayLanguage;
         if (!!loadingTranslations[locale]) {
-          loadingSpan.innerHTML = loadingTranslations[locale];
+          loadingSpan.innerText = loadingTranslations[locale];
         }
       } catch (e) { }
     });
