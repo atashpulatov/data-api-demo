@@ -56,14 +56,11 @@ export const RightSidePanelNotConnected = (props) => {
     <SidePanel
       loadedObjects={loadedObjects}
       onAddData={sidePanelService.addData}
-      onToggleChecked={emptyCallback}
-      onCheckAll={sidePanelService.refreshSelected}
+      onTileClick={sidePanelService.highlightObject}
       onDuplicateClick={sidePanelService.duplicate}
       onEditClick={sidePanelService.edit}
       onRefreshClick={sidePanelService.refresh}
-      onRefreshSelected={sidePanelService.refresh}
       onRemoveClick={sidePanelService.remove}
-      onRemoveSelected={sidePanelService.remove}
       onRename={sidePanelService.rename}
       popup={sidePanelPopup}
       settingsMenu={isSettings && <SettingsMenu />}
