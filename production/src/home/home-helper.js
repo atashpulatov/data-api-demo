@@ -4,7 +4,7 @@ import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { clearDataRequested } from '../operation/operation-actions';
-
+import { toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/store/office-actions';
 
 export class HomeHelper {
   init = (reduxStore, sessionHelper) => {
@@ -55,25 +55,20 @@ export class HomeHelper {
 
   getDocumentCookie = () => document.cookie
 
-  secureData = async (
-    objects,
-    toggleSecuredFlag,
-    toggleIsConfirmFlag,
-    toggleIsClearingFlag,
-  ) => {
+  secureData = async (objects) => {
     try {
-      toggleIsClearingFlag(true);
-      toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
       await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
+
+      const { dispatch } = this.reduxStore;
+      toggleIsClearingFlag(true)(dispatch);
+      toggleIsConfirmFlag(false)(dispatch);
+
       for (const object of objects) {
         this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId));
       }
     } catch (error) {
       errorService.handleError(error);
-    } finally {
-      toggleIsClearingFlag(false);
-      toggleSecuredFlag(true);
     }
   };
 
