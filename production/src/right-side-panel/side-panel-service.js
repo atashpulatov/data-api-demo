@@ -120,7 +120,6 @@ class SidePanelService {
     let popup = null;
 
     const handleViewData = () => {
-      console.log('testing');
       this.reduxStore.dispatch(toggleSecuredFlag(false));
       this.refresh(officeStoreService.getObjectsListFromObjectReducer()
         .map(({ objectWorkingId }) => objectWorkingId));
