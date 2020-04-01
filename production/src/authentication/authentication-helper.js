@@ -1,4 +1,4 @@
-export class AuthenticationHelper {
+class AuthenticationHelper {
   init = (reduxStore, sessionHelper, authenticationService, errorService) => {
     this.reduxStore = reduxStore;
     this.sessionHelper = sessionHelper;

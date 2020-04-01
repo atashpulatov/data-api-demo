@@ -4,7 +4,7 @@ import { popupController } from '../../popup/popup-controller';
 import { officeDisplayService } from '../../office/office-display-service';
 import { errorService } from '../../error/error-handler';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { notificationService } from '../../notification/notification-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
@@ -254,7 +254,9 @@ describe('PopupController', () => {
     // then
     expect(handleErrorSpy).toBeCalledWith(error);
     expect(spyValidateAuthToken).toBeCalled();
-    expect(notifySpy).toBeCalledWith({ type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null, });
+    expect(notifySpy).toBeCalledWith({
+      type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null,
+    });
     expect(dialog.close).toBeCalled();
   });
 });

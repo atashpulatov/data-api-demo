@@ -5,15 +5,15 @@ import {
   SET_PREPARED_REPORT
 } from '../../popup/popup-actions';
 import { popupHelper } from '../../popup/popup-helper';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import { officeProperties } from '../../office/office-properties';
+import { officeProperties } from '../../office/store/office-properties';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 
-jest.mock('../../office/office-api-helper');
+jest.mock('../../office/api/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
 jest.mock('../../office/store/office-store-service');
 jest.mock('../../popup/popup-controller');
@@ -223,7 +223,9 @@ describe('Popup actions', () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = { id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: false };
+    const returnedValue = {
+      id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: false
+    };
     officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
@@ -238,7 +240,9 @@ describe('Popup actions', () => {
     // given
     const bindingId = 'bindingId';
     const report = { bindId: bindingId, objectType: 'whatever' };
-    const returnedValue = { id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true };
+    const returnedValue = {
+      id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true
+    };
     officeStoreService.getReportFromProperties.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when

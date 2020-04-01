@@ -4,8 +4,11 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
-import { switchImportSubtotals, updateDisplayAttrForm } from '../navigation/navigation-tree-actions';
-import { officeProperties } from '../office/office-properties';
+import {
+  switchImportSubtotals as switchImportSubtotalsImported,
+  updateDisplayAttrForm as updateDisplayAttrFormImported
+} from '../navigation/navigation-tree-actions';
+import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export class AttributeSelectorNotConnected extends Component {
@@ -108,10 +111,7 @@ AttributeSelectorNotConnected.propTypes = {
   triggerUpdate: PropTypes.bool,
   openModal: PropTypes.bool,
   session: PropTypes.shape({}),
-  mstrData: PropTypes.shape({
-    chosenObjectId: PropTypes.string,
-    // subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool })
-  }),
+  mstrData: PropTypes.shape({ chosenObjectId: PropTypes.string, }),
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,
   closeModal: PropTypes.func,
@@ -119,17 +119,36 @@ AttributeSelectorNotConnected.propTypes = {
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func,
-  isEdit: PropTypes.bool
+  isEdit: PropTypes.bool,
+  importSubtotal: PropTypes.bool,
+  switchImportSubtotals: PropTypes.func,
+  displayAttrFormNames: PropTypes.string,
+  chosenObject: PropTypes.shape({ id: PropTypes.string, }),
+  editedObject: PropTypes.shape({
+    displayAttrFormNames: PropTypes.string,
+    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
+  supportForms: PropTypes.bool,
 };
+
 AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
-  const { navigationTree: { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject }, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
+  const {
+    navigationTree: {
+      promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject
+    },
+    popupStateReducer,
+    popupReducer,
+    sessionReducer,
+    officeReducer
+  } = state;
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = editedObject && editedObject.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,
@@ -142,6 +161,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = { switchImportSubtotals, updateDisplayAttrForm };
+const mapDispatchToProps = {
+  switchImportSubtotals: switchImportSubtotalsImported,
+  updateDisplayAttrForm: updateDisplayAttrFormImported
+};
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));

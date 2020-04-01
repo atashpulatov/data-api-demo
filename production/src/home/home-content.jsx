@@ -1,5 +1,6 @@
 import React from 'react';
 import { Spin } from 'antd';
+import PropTypes from 'prop-types';
 import Header from './header';
 import { FileHistoryContainer } from '../file-history/file-history-container';
 import { Notifications } from '../notification/notifications';
@@ -9,9 +10,9 @@ import { HomeDialog } from './home-dialog';
 import { Tabs } from './tabs';
 import SettingsComponent from '../settings/settings-component';
 import InternetConnectionError from '../popup/internet-connection-error';
+import { sessionHelper } from '../storage/session-helper';
 
-const URL = `${window.location.href}`;
-const IS_LOCALHOST = URL.includes('localhost');
+const IS_LOCALHOST = sessionHelper.isDevelopment();
 
 export default function HomeContent({
   loading, loadingReport, authToken, reportArray, popupOpen, shouldRenderSettings,
@@ -46,3 +47,14 @@ export default function HomeContent({
     </div>
   );
 }
+
+HomeContent.propTypes = {
+  loading: PropTypes.bool,
+  popupOpen: PropTypes.bool,
+  loadingReport: PropTypes.bool,
+  t: PropTypes.func,
+  toggleRenderSettingsFlag: PropTypes.func,
+  authToken: PropTypes.string,
+  shouldRenderSettings: PropTypes.bool,
+  reportArray: PropTypes.arrayOf(PropTypes.shape({ length: PropTypes.number, })),
+};

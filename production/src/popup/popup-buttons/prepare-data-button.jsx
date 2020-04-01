@@ -2,7 +2,9 @@ import React from 'react';
 import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 
-export const PrepareDataButton = ({ disableReason, loading, handleSecondary, t }) => {
+export const PrepareDataButton = ({
+  disableReason, loading, handleSecondary, t
+}) => {
   const internalButton = (
     <Button
           id="prepare"

@@ -1,5 +1,6 @@
-import { officeProperties } from '../office/office-properties';
+import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -8,9 +9,14 @@ export const RESET_STATE = 'RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
 // export const PRELOAD = 'PRELOAD';
-
-export class PopupActions {
-  init = (authenticationHelper, errorService, officeApiHelper, officeStoreService, popupHelper, mstrObjectRestService, popupController) => {
+class PopupActions {
+  init = (authenticationHelper,
+    errorService,
+    officeApiHelper,
+    officeStoreService,
+    popupHelper,
+    mstrObjectRestService,
+    popupController) => {
     this.authenticationHelper = authenticationHelper;
     this.errorService = errorService;
     this.officeApiHelper = officeApiHelper;
@@ -50,6 +56,7 @@ export class PopupActions {
   })
 
   refreshReportsArray = (reportArray, isRefreshAll) => async (dispatch) => {
+    const { popupHelper, officeApiHelper } = this;
     try {
       await Promise.all([
         this.officeApiHelper.getExcelSessionStatus(),
@@ -59,33 +66,43 @@ export class PopupActions {
       dispatch({ type: officeProperties.actions.stopLoading });
       return this.errorService.handleError(error);
     }
+
     if (isRefreshAll) {
-      this.popupHelper.storagePrepareRefreshAllData(reportArray);
-      await this.popupHelper.runRefreshAllPopup(reportArray);
+      popupHelper.storagePrepareRefreshAllData(reportArray);
+      await popupHelper.runRefreshAllPopup(reportArray);
     }
+
     for (const [index, report] of reportArray.entries()) {
       let isError = true;
+      const reportsNumber = reportArray.length;
       try {
-        const excelContext = await this.officeApiHelper.getExcelContext();
-        await this.officeApiHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
+        const excelContext = await officeApiHelper.getExcelContext();
+        await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, report.bindId);
         // TODO: these two actions should be merged into one in the future
+
         dispatch({
           type: officeProperties.actions.startLoadingReport,
           reportBindId: report.bindId,
           isRefreshAll,
         });
-        isError = await this.popupHelper.printRefreshedReport(report.bindId,
-          report.objectType,
-          reportArray.length,
+
+        const { bindId, objectType, promptsAnswers } = report;
+        isError = await popupHelper.printRefreshedReport(
+          bindId,
+          objectType,
+          reportsNumber,
           index,
           isRefreshAll,
-          report.promptsAnswers);
+          promptsAnswers
+        );
       } catch (error) {
-        this.popupHelper.handleRefreshError(error,
-          reportArray.length,
+        popupHelper.handleRefreshError(
+          error,
+          reportsNumber,
           index,
-          isRefreshAll);
-        if (!isRefreshAll) return true;
+          isRefreshAll
+        );
+        if (!isRefreshAll) { return true; }
       } finally {
         isRefreshAll && dispatch({
           type: officeProperties.actions.finishLoadingReport,
@@ -103,15 +120,33 @@ export class PopupActions {
         this.officeApiHelper.getExcelSessionStatus(),
         this.authenticationHelper.validateAuthToken(),
       ]);
+
       const editedDossier = this.officeStoreService.getReportFromProperties(reportParams.bindId);
-      const { projectId, id, manipulationsXML, visualizationInfo } = editedDossier;
-      const instanceId = await this.mstrObjectRestService.createDossierInstance(projectId, id, { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true });
-      const updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(projectId, id, visualizationInfo.visualizationKey, instanceId);
+
+      const {
+        projectId, id, manipulationsXML, visualizationInfo
+      } = editedDossier;
+
+      const instanceId = await this.mstrObjectRestService.createDossierInstance(
+        projectId,
+        id,
+        { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
+      );
+
+      const updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(
+        projectId,
+        id,
+        visualizationInfo.visualizationKey,
+        instanceId
+      );
+
       editedDossier.instanceId = instanceId;
       editedDossier.isEdit = true;
+
       if (updatedVisualizationInfo) {
         editedDossier.visualizationInfo = updatedVisualizationInfo;
       }
+
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedObject: editedDossier,

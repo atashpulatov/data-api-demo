@@ -1,19 +1,20 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { Popover } from 'antd';
-import { _OfficeLoadedFile } from '../../file-history/office-loaded-file';
+import { OfficeLoadedFileNotConnected } from '../../file-history/office-loaded-file';
 import { reduxStore } from '../../store';
 import { fileHistoryHelper } from '../../file-history/file-history-helper';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeStoreService } from '../../office/store/office-store-service';
 import { errorService } from '../../error/error-handler';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 
 describe('office loaded file', () => {
   it('should display provided file name', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       fileName="test"
       refreshDate={new Date()}
       objectType={{ name: 'report' }}
@@ -27,7 +28,7 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       fileName="test"
       refreshDate={new Date()}
       objectType={{ name: 'report' }}
@@ -41,7 +42,7 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile objectType={{ name: 'dataset' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected objectType={{ name: 'dataset' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
     const wrappedCol = wrappedComponent.find('.object-title-row');
     const wrappedIcons = wrappedCol.find('img');
     // then
@@ -51,7 +52,7 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile objectType={{ name: 'report' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected objectType={{ name: 'report' }} refreshDate={new Date()} visualizationInfo={visualizationInfoMock} />);
     const wrappedCol = wrappedComponent.find('.object-title-row');
     const wrappedIcons = wrappedCol.find('img');
     // then
@@ -65,7 +66,7 @@ describe('office loaded file', () => {
     const testName = 'testName';
     const isCrosstab = false;
     const crosstabHeaderDimensions = false;
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       onClick={onClickMocked}
@@ -87,7 +88,7 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       fileName="test"
       refreshDate={new Date()}
       objectType={{ name: 'report' }}
@@ -108,7 +109,7 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId=""
       fileName="test"
@@ -131,11 +132,11 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId=""
       fileName="test"
@@ -161,11 +162,11 @@ describe('office loaded file', () => {
     const startLoadingMocked = jest.fn();
     const stopLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
     const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId=""
       fileName="test"
@@ -191,14 +192,14 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       fileName="test"
@@ -230,7 +231,7 @@ describe('office loaded file', () => {
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
@@ -252,7 +253,7 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       isLoading
       objectType={{ name: 'report' }}
@@ -271,10 +272,10 @@ describe('office loaded file', () => {
     const mockEvent = { stopPropagation: jest.fn() };
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       isCrosstab
@@ -303,11 +304,11 @@ describe('office loaded file', () => {
     const stopLoadingMocked = jest.fn();
     const testBindingId = 'testBindingId';
     const mockEvent = { stopPropagation: jest.fn() };
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => { throw new Error(); });
     const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       isCrosstab
@@ -335,7 +336,7 @@ describe('office loaded file', () => {
     const objectType = 'report';
     jest.spyOn(reduxStore, 'dispatch').mockImplementation(() => { });
     const visualizationInfoMock = { dossierStructure: 'test' };
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
@@ -364,7 +365,7 @@ describe('office loaded file', () => {
     const isCrosstab = false;
     const crosstabHeaderDimensions = false;
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       onClick={onClickMocked}
@@ -389,7 +390,7 @@ describe('office loaded file', () => {
     // given
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile fileName="test" objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected fileName="test" objectType={{ name: 'report' }} visualizationInfo={visualizationInfoMock} />);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(6);
   });
@@ -397,7 +398,7 @@ describe('office loaded file', () => {
     // given
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const onEditMocked = jest.fn();
     const startLoadingMocked = jest.fn();
     const mockEvent = { stopPropagation: jest.fn() };
@@ -408,7 +409,7 @@ describe('office loaded file', () => {
     const objectClickMock = jest.spyOn(officeApiHelper, 'onBindingObjectClick').mockImplementation(() => true);
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       fileName="test"
@@ -438,7 +439,7 @@ describe('office loaded file', () => {
     const mockOfficeService = jest.spyOn(officeStoreService, 'preserveReportValue');
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
@@ -458,7 +459,7 @@ describe('office loaded file', () => {
     const objectType = { name: 'report' };
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
@@ -478,7 +479,7 @@ describe('office loaded file', () => {
     const objectType = { name: 'report' };
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
@@ -501,7 +502,7 @@ describe('office loaded file', () => {
     const objectType = { name: 'report' };
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
@@ -523,7 +524,7 @@ describe('office loaded file', () => {
     const objectType = { name: 'report' };
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}
@@ -544,7 +545,7 @@ describe('office loaded file', () => {
     const testBindingId = 'testBindingId';
     const objectType = { name: 'report' };
     const visualizationInfoMock = { dossierStructure: 'test' };
-    const wrappedComponent = mount(<_OfficeLoadedFile
+    const wrappedComponent = mount(<OfficeLoadedFileNotConnected
       refreshDate={new Date()}
       bindingId={testBindingId}
       objectType={objectType}

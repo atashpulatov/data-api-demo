@@ -5,10 +5,10 @@ import { withTranslation } from 'react-i18next';
 import { sessionHelper } from '../storage/session-helper';
 import HomeContent from './home-content';
 import { homeHelper } from './home-helper';
-import { toggleRenderSettingsFlag } from '../office/office-actions';
+import { toggleRenderSettingsFlag } from '../office/store/office-actions';
 import { officeStoreService } from '../office/store/office-store-service';
 
-export class _Home extends Component {
+export class HomeNotConnected extends Component {
   componentDidMount = async () => {
     try {
       await officeStoreService.loadExistingReportBindingsExcel();
@@ -42,6 +42,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = { toggleRenderSettingsFlag, };
 
-_Home.defaultProps = { t: (text) => text, };
+HomeNotConnected.defaultProps = { t: (text) => text, };
 
-export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Home));
+export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(HomeNotConnected));

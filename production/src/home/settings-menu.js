@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Popover } from 'antd';
 import PropTypes from 'prop-types';
-import { toggleIsConfirmFlag, toggleRenderSettingsFlag, toggleIsSettingsFlag } from '../office/office-actions';
+import {
+  toggleIsConfirmFlag as toggleIsConfirmFlagImported,
+  toggleIsSettingsFlag as toggleIsSettingsFlagImported
+} from '../office/store/office-actions';
 import logo from './assets/mstr_logo.png';
-import { helper } from '../helpers/helpers';
+import overflowHelper from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
-import { clearCache } from '../cache/cache-actions';
+import { clearCache as clearCacheImported } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 
@@ -23,14 +26,13 @@ export const SettingsMenuNotConnected = ({
   t,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
-  toggleRenderSettingsFlag,
   clearCache,
 }) => {
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && reportArray && reportArray.length > 0;
   const prepareEmail = () => {
     const { Office } = window;
-    if (!Office) return '#'; // If no Office return anchor url
+    if (!Office) { return '#'; } // If no Office return anchor url
     const { host, platform, version } = Office.context.diagnostics;
     const excelAPI = officeContext.getRequirementSet();
     const { userAgent } = navigator;
@@ -62,9 +64,8 @@ export const SettingsMenuNotConnected = ({
       <li id="testid" className="user-data no-trigger-close not-linked-list">
         {userInitials !== null
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
-          : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />
-          /* TODO: When rest api returns profileImage use it as source */}
-        {helper.isOverflown(userNameDisplay, 130)
+          : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />}
+        {overflowHelper.isOverflown(userNameDisplay, 130)
           ? (
             <Popover placement="bottom" content={userNameDisplay} mouseEnterDelay={1}>
               <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
@@ -72,8 +73,13 @@ export const SettingsMenuNotConnected = ({
           )
           : <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>}
       </li>
-      <li tabIndex="0" className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`} onClick={isSecuredActive ? showConfirmationPopup : null}>
-        <span className="no-trigger-close">
+      <li className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}>
+        <span
+        className="no-trigger-close"
+        tabIndex="0"
+        role="button"
+        onClick={isSecuredActive ? showConfirmationPopup : null}
+        onKeyUp={isSecuredActive ? showConfirmationPopup : null}>
           {t('Clear Data')}
         </span>
       </li>
@@ -116,8 +122,13 @@ export const SettingsMenuNotConnected = ({
           {t('Contact Us')}
         </a>
       </li>
-      <li className="not-linked-list" onClick={() => logout(() => clearCache(userID))}>
-        <span tabIndex="0" id="logOut" size="small">
+      <li className="not-linked-list">
+        <span tabIndex="0"
+              id="logOut"
+              size="small"
+              role="button"
+              onClick={() => logout(() => clearCache(userID))}
+              onKeyUp={() => logout(() => clearCache(userID))}>
           {t('Log Out')}
         </span>
       </li>
@@ -131,14 +142,15 @@ SettingsMenuNotConnected.defaultProps = { t: (text) => text, };
 function mapStateToProps({ sessionReducer, officeReducer }) {
   const { userFullName, userInitials, userID } = sessionReducer;
   const { isSecured, reportArray } = officeReducer;
-  return { userFullName, userInitials, isSecured, reportArray, userID };
+  return {
+    userFullName, userInitials, isSecured, reportArray, userID
+  };
 }
 
 const mapDispatchToProps = {
-  toggleIsSettingsFlag,
-  toggleIsConfirmFlag,
-  toggleRenderSettingsFlag,
-  clearCache,
+  toggleIsSettingsFlag : toggleIsSettingsFlagImported,
+  toggleIsConfirmFlag: toggleIsConfirmFlagImported,
+  clearCache: clearCacheImported,
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuNotConnected));
 
@@ -146,23 +158,22 @@ async function logout(preLogout) {
   try {
     await sessionHelper.logOutRest();
     sessionHelper.logOut();
-    if (DB.getIndexedDBSupport()) await preLogout();
+    if (DB.getIndexedDBSupport()) { await preLogout(); }
   } catch (error) {
     errorService.handleError(error);
   } finally {
-    sessionHelper.logOutRedirect();
+    sessionHelper.logOutRedirect(true);
   }
 }
 
 SettingsMenuNotConnected.propTypes = {
-  userID: PropTypes.number,
+  userID: PropTypes.string,
   userFullName: PropTypes.string,
   userInitials: PropTypes.string,
   isSecured: PropTypes.bool,
   reportArray: PropTypes.arrayOf(PropTypes.shape({})),
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
-  toggleRenderSettingsFlag: PropTypes.func,
   clearCache: PropTypes.func,
   t: PropTypes.func
 };

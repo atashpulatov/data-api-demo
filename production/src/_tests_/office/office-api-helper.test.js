@@ -1,8 +1,6 @@
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
-import { OfficeError, OfficeBindingError } from '../../office/office-error';
-import { reduxStore } from '../../store';
-import { officeProperties } from '../../office/office-properties';
+import { officeProperties } from '../../office/store/office-properties';
 
 // FIXME: these were disabled anyway. Needs to be redone.
 describe('OfficeApiHelper', () => {
@@ -143,7 +141,6 @@ describe('OfficeApiHelper', () => {
   });
 
 
-
   describe('getSelectedCell', () => {
     it('should return starting cell from range address(single cell)', async () => {
       // given
@@ -190,12 +187,12 @@ describe('OfficeApiHelper', () => {
       expect(mockSync).toBeCalled();
     });
   });
-  describe('getStartCell', () => {
+  describe('getStartCellOfRange', () => {
     it('should return starting cell from range address(single cell)', () => {
       // given
       const range = 'Sheet1!A12';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('A12');
     });
@@ -203,7 +200,7 @@ describe('OfficeApiHelper', () => {
       // given
       const range = 'Sheet1!ABC12:BDE15';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('ABC12');
     });
@@ -211,7 +208,7 @@ describe('OfficeApiHelper', () => {
       // given
       const range = 'No!Sheet1!ABC12:BDE15';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('ABC12');
     });
