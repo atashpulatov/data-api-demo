@@ -83,6 +83,7 @@ exports.config = {
     ],
     'F24087-improve-scrolling-performance': [
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC59877-Highlighting-the-row-on-hover_selection.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
     ],
     'F24398-import-and-refresh-visualization': [
