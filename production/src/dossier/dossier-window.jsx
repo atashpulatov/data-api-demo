@@ -164,7 +164,7 @@ export default class DossierWindowNotConnected extends React.Component {
     const { isVisualizationSelected, isVisualizationSupported } = this.state;
     return (
       <div>
-        <h1 title={chosenObjectName} className="ant-col folder-browser-title">
+        <h1 title={chosenObjectName} className="ant-col folder-browser-title dossier-title-margin-top">
           {`${t('Import Dossier')} > ${chosenObjectName}`}
         </h1>
         <span className="dossier-window-information-frame">
