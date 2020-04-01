@@ -145,7 +145,7 @@ class PopupHelper {
       }
     }
     const chosenObjectData = {
-      chosenObjectId: popupState.id,
+      chosenObjectId: popupState.id || popupState.objectId,
       instanceId: popupState.instanceId,
       projectId: popupState.projectId,
       chosenObjectName: popupState.name,
