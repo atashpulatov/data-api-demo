@@ -28,7 +28,6 @@ class StepRemoveObjectTable {
     const officeTable = excelContext.workbook.tables.getItem(bindId);
 
     officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
-
     await excelContext.sync();
 
     operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);

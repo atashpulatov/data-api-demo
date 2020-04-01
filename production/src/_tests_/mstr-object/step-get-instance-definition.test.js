@@ -7,6 +7,7 @@ import dossierInstanceDefinition from '../../mstr-object/dossier-instance-defini
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -117,7 +118,10 @@ describe('StepGetInstanceDefinition', () => {
     ).mockImplementation();
 
     // when
-    await stepGetInstanceDefinition.getInstanceDefinition(objectData, { operationType: 'operationTypeTest' });
+    await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
+      operationType: 'operationTypeTest',
+      stepsQueue: ['step_0', GET_OFFICE_TABLE_IMPORT],
+    });
 
     // then
     expect(getExcelContextMock).toBeCalledTimes(1);
@@ -184,7 +188,6 @@ describe('StepGetInstanceDefinition', () => {
     expect(getStartCellMock).toBeCalledWith(
       'insertNewWorksheetTest',
       'excelContextTest',
-      'operationTypeTest',
     );
 
     expect(getCurrentMstrContextMock).toBeCalledTimes(1);
@@ -300,7 +303,10 @@ describe('StepGetInstanceDefinition', () => {
     ).mockImplementation();
 
     // when
-    await stepGetInstanceDefinition.getInstanceDefinition(objectData, { operationType: 'operationTypeTest' });
+    await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
+      operationType: 'operationTypeTest',
+      stepsQueue: ['step_0', GET_OFFICE_TABLE_IMPORT],
+    });
 
     // then
     expect(getExcelContextMock).toBeCalledTimes(1);
@@ -357,7 +363,6 @@ describe('StepGetInstanceDefinition', () => {
     expect(getStartCellMock).toBeCalledWith(
       'insertNewWorksheetTest',
       'excelContextTest',
-      'operationTypeTest',
     );
 
     expect(getCurrentMstrContextMock).toBeCalledTimes(1);
@@ -613,21 +618,16 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  expectedStartCell | createAndActivateNewWorksheetCallNo | getSelectedCellCallNo | insertNewWorksheet | operationType
+  expectedStartCell | createAndActivateNewWorksheetCallNo | insertNewWorksheet
   
-  ${42}             | ${0}                                | ${1}                  | ${false}           | ${'IMPORT_OPERATION'}
-  ${true}           | ${0}                                | ${0}                  | ${false}           | ${'NO IMPORT_OPERATION'}
-  
-  ${42}             | ${1}                                | ${1}                  | ${true}            | ${'IMPORT_OPERATION'}
-  ${true}           | ${1}                                | ${0}                  | ${true}            | ${'NO IMPORT_OPERATION'}
+  ${42}             | ${0}                                | ${false}
+  ${42}             | ${1}                                | ${true}
   
   `('getStartCell should work as expected',
   async ({
     expectedStartCell,
     createAndActivateNewWorksheetCallNo,
-    getSelectedCellCallNo,
     insertNewWorksheet,
-    operationType
   }) => {
     // given
     const createAndActivateNewWorksheetMock = jest.spyOn(officeApiWorksheetHelper, 'createAndActivateNewWorksheet')
@@ -639,7 +639,6 @@ describe('StepGetInstanceDefinition', () => {
     const result = await stepGetInstanceDefinition.getStartCell(
       insertNewWorksheet,
       'excelContextTest',
-      operationType
     );
 
     // then
@@ -650,9 +649,7 @@ describe('StepGetInstanceDefinition', () => {
       expect(createAndActivateNewWorksheetMock).toBeCalledWith('excelContextTest');
     }
 
-    expect(getSelectedCellMock).toBeCalledTimes(getSelectedCellCallNo);
-    if (getSelectedCellCallNo === 1) {
-      expect(getSelectedCellMock).toBeCalledWith('excelContextTest');
-    }
+    expect(getSelectedCellMock).toBeCalledTimes(1);
+    expect(getSelectedCellMock).toBeCalledWith('excelContextTest');
   });
 });

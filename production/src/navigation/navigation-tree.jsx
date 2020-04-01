@@ -47,11 +47,11 @@ export class NavigationTreeNotConnected extends Component {
 
   componentDidUpdate() {
     const {
-      sorter, objectType, myLibrary, myLibraryFilter, envFilter
+      sorter, mstrObjectType, myLibrary, myLibraryFilter, envFilter
     } = this.props;
     const propsToSave = {
       sorter,
-      objectType,
+      mstrObjectType,
       myLibrary,
       envFilter,
       myLibraryFilter,
@@ -108,12 +108,12 @@ export class NavigationTreeNotConnected extends Component {
     let isPromptedResponse = false;
     try {
       // If myLibrary is on, then selected object is a dossier.
-      const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
-      if ((objectType === mstrObjectEnum.mstrObjectType.report)
-      || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+      const mstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
+      if ((mstrObjectType === mstrObjectEnum.mstrObjectType.report)
+      || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, mstrObjectType.name);
       }
-      if (objectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
         requestDossierOpen();
       } else {
         requestImport(isPromptedResponse);
@@ -136,11 +136,11 @@ export class NavigationTreeNotConnected extends Component {
       chosenProjectId, chosenObjectId, chosenSubtype, handlePrepare, setObjectData
     } = this.props;
     try {
-      const objectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
+      const mstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
 
-      if ((objectType === mstrObjectEnum.mstrObjectType.report)
-      || (objectType === mstrObjectEnum.mstrObjectType.dossier)) {
-        const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, objectType.name);
+      if ((mstrObjectType === mstrObjectEnum.mstrObjectType.report)
+      || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, mstrObjectType.name);
         setObjectData({ isPrompted: isPromptedResponse });
       }
       handlePrepare();
@@ -162,7 +162,7 @@ export class NavigationTreeNotConnected extends Component {
   }) => {
     const { selectObject } = this.props;
     // If myLibrary is on, then selected object is a dossier.
-    const objectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
+    const mstrObjectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
     let chosenLibraryDossier;
     if (myLibrary) {
       chosenLibraryDossier = objectId;
@@ -170,7 +170,7 @@ export class NavigationTreeNotConnected extends Component {
     }
 
     let cubeStatus = true;
-    if (objectType === mstrObjectEnum.mstrObjectType.dataset) {
+    if (mstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
       try {
         cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
       } catch (error) {
@@ -184,7 +184,7 @@ export class NavigationTreeNotConnected extends Component {
       chosenObjectName: objectName,
       chosenProjectId: projectId,
       chosenSubtype: subtype,
-      objectType,
+      mstrObjectType,
       chosenLibraryDossier,
     });
   };
@@ -192,7 +192,7 @@ export class NavigationTreeNotConnected extends Component {
   render() {
     const {
       chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
-      changeSearching, objectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
+      changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
     } = this.props;
     const { previewDisplay, isPublished } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
@@ -237,7 +237,7 @@ export class NavigationTreeNotConnected extends Component {
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
-          disableSecondary={objectType && objectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
+          disableSecondary={mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
           isPublished={isPublished}
         />
       </div>
@@ -263,7 +263,7 @@ NavigationTreeNotConnected.propTypes = {
   resetDBState: PropTypes.func,
   fetchObjectsFromNetwork: PropTypes.func,
   sorter: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})]),
-  objectType: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})]),
+  mstrObjectType: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})]),
   myLibrary: PropTypes.bool,
   myLibraryFilter: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})]),
   envFilter: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.shape({})]),

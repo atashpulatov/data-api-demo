@@ -1,10 +1,11 @@
 import { UPDATE_OBJECT, DELETE_OBJECT, RESTORE_ALL_OBJECTS } from './object-actions';
-import { IMPORT_REQUESTED, EDIT_REQUESTED } from './operation-actions';
+import { IMPORT_REQUESTED, EDIT_REQUESTED, DUPLICATE_REQUESTED } from './operation-actions';
 
 const initialState = { objects: [] };
 export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
     case IMPORT_REQUESTED:
+    case DUPLICATE_REQUESTED:
       return importRequested(state, action.payload);
 
     case EDIT_REQUESTED:

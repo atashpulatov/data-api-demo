@@ -5,16 +5,18 @@ import { officeStoreService } from '../office/store/office-store-service';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
 import { errorService } from '../error/error-handler';
-import { refreshRequested, removeRequested } from '../operation/operation-actions';
+import { refreshRequested, removeRequested, duplicateRequested } from '../operation/operation-actions';
 import { updateObject } from '../operation/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../navigation/navigation-tree-actions';
 import { toggleSecuredFlag } from '../office/store/office-actions';
 
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { popupActions } from '../popup/popup-actions';
 
 class SidePanelService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-  }
+  };
 
   addData = async () => {
     try {
@@ -29,14 +31,14 @@ class SidePanelService {
   highlightObject = async (objectWorkingId) => {
     const objectData = this.getObject(objectWorkingId);
     await officeApiHelper.onBindingObjectClick(objectData);
-  }
+  };
 
   rename = async (objectWorkingId, newName) => {
     const renamedObject = { objectWorkingId, name: newName };
     // TODO check for changing viz whiel editing dossier
     this.reduxStore.dispatch(updateObject(renamedObject));
     await officeStoreService.saveObjectsInExcelStore();
-  }
+  };
 
   refresh = (...objectWorkingIds) => {
     objectWorkingIds = officeStoreService.getObjectsListFromObjectReducer()
@@ -55,7 +57,25 @@ class SidePanelService {
     for (let index = 0; index < objectWorkingIds.length; index++) {
       this.reduxStore.dispatch(removeRequested(objectWorkingIds[index]));
     }
-  }
+  };
+
+  duplicate = async (objectWorkingId) => {
+    const objectData = this.getObject(objectWorkingId);
+    this.reduxStore.dispatch(duplicateRequested(objectData));
+  };
+
+  edit = async (objectWorkingId) => {
+    const objectData = this.getObject(objectWorkingId);
+    const { bindId, objectName, mstrObjectType } = objectData;
+    const excelContext = await officeApiHelper.getExcelContext();
+    await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+
+    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+      this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+    } else {
+      this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+    }
+  };
 
   addRemoveObjectListener = async () => {
     try {

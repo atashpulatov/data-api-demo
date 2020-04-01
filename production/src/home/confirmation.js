@@ -4,20 +4,14 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import warningIcon from '../loading/assets/icon_conflict.svg';
-import {
-  toggleSecuredFlag as toggleSecuredFlagImported,
-  toggleIsConfirmFlag as toggleIsConfirmFlagImported,
-  toggleIsClearingFlag as toggleIsClearingFlagImported
-} from '../office/store/office-actions';
+import { toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../office/store/office-actions';
 
 import { homeHelper } from './home-helper';
 
 export const ConfirmationNotConnected = ({
   objects,
   isConfirm,
-  toggleSecuredFlag,
   toggleIsConfirmFlag,
-  toggleIsClearingFlag,
   t
 }) => {
   useEffect(() => {
@@ -73,16 +67,7 @@ export const ConfirmationNotConnected = ({
           </div>
         </div>
         <div className="confirm-buttons">
-          <button
-            className="ant-btn"
-            id="confirm-btn"
-            type="button"
-            onClick={() => homeHelper.secureData(
-              objects,
-              toggleSecuredFlag,
-              toggleIsConfirmFlag,
-              toggleIsClearingFlag
-            )}>{t('OK')}</button>
+          <button className="ant-btn" id="confirm-btn" type="button" onClick={() => homeHelper.secureData(objects)}>{t('OK')}</button>
           <button className="ant-btn" id="cancel-btn" type="button" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
@@ -93,9 +78,7 @@ export const ConfirmationNotConnected = ({
 ConfirmationNotConnected.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   isConfirm: PropTypes.bool,
-  toggleSecuredFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
-  toggleIsClearingFlag: PropTypes.func,
   t: PropTypes.func
 };
 
@@ -107,10 +90,6 @@ function mapStateToProps({ officeReducer, objectReducer }) {
   return { objects, isConfirm };
 }
 
-const mapDispatchToProps = {
-  toggleSecuredFlag: toggleSecuredFlagImported,
-  toggleIsConfirmFlag: toggleIsConfirmFlagImported,
-  toggleIsClearingFlag: toggleIsClearingFlagImported,
-};
+const mapDispatchToProps = { toggleIsConfirmFlag: toggleIsConfirmFlagImported };
 
 export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationNotConnected));

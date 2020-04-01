@@ -30,6 +30,7 @@ class PopupActions {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
       const editedObject = this.officeStoreService.getObjectFromObjectReducer(reportParams.bindId);
+      editedObject.objectType = editedObject.mstrObjectType;
 
       dispatch({
         type: SET_REPORT_N_FILTERS,
@@ -81,6 +82,7 @@ class PopupActions {
         editedDossier.visualizationInfo = updatedVisualizationInfo;
       }
 
+      editedDossier.objectType = editedDossier.mstrObjectType;
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedObject: editedDossier,

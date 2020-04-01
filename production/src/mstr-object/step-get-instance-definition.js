@@ -1,6 +1,6 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import mstrObjectEnum from './mstr-object-type-enum';
-import { IMPORT_OPERATION } from '../operation/operation-steps';
+import { GET_OFFICE_TABLE_IMPORT } from '../operation/operation-steps';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
@@ -23,11 +23,12 @@ class StepGetInstanceDefinition {
    * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
    * @param {String} objectData.bindId Unique Id of the Office table used for referencing the table in Excel
    * @param {Object} objectData.visualizationInfo Contains information about location of visualization in dossier
-   * @param {Office} operationData.operationType The type of the operation that called this function
+   * @param {Array} operationData.stepsQueue Queue of steps in current operation
    */
-  getInstanceDefinition = async (objectData, { operationType }) => {
+  getInstanceDefinition = async (objectData, operationData) => {
     console.group('Importing data performance');
     console.time('Total');
+    const nextStep = operationData.stepsQueue[1];
 
     const {
       objectWorkingId,
@@ -44,6 +45,7 @@ class StepGetInstanceDefinition {
 
     this.setupBodyTemplate(body);
 
+    let startCell;
     let instanceDefinition;
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
@@ -57,7 +59,9 @@ class StepGetInstanceDefinition {
 
     this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
 
-    const startCell = await this.getStartCell(insertNewWorksheet, excelContext, operationType);
+    if (nextStep === GET_OFFICE_TABLE_IMPORT) {
+      startCell = await this.getStartCell(insertNewWorksheet, excelContext);
+    }
 
     const { mstrTable } = instanceDefinition;
     const updatedObject = {
@@ -176,12 +180,12 @@ class StepGetInstanceDefinition {
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
   };
 
-  getStartCell = async (insertNewWorksheet, excelContext, operationType) => {
+  getStartCell = async (insertNewWorksheet, excelContext) => {
     if (insertNewWorksheet) {
       await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
     }
 
-    return operationType !== IMPORT_OPERATION || officeApiHelper.getSelectedCell(excelContext);
+    return officeApiHelper.getSelectedCell(excelContext);
   };
 }
 
