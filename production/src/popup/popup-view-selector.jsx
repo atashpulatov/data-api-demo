@@ -47,8 +47,6 @@ export const PopupViewSelectorNotConnected = (props) => {
 };
 
 function mapStateToProps(state) {
-  console.log({ state });
-
   const {
     navigationTree,
     popupReducer: { editedObject, preparedInstance },

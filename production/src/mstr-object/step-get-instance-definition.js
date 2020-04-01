@@ -45,6 +45,7 @@ class StepGetInstanceDefinition {
 
     this.setupBodyTemplate(body);
 
+    let startCell;
     let instanceDefinition;
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
       ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
@@ -58,7 +59,9 @@ class StepGetInstanceDefinition {
 
     this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
 
-    const startCell = await this.getStartCell(insertNewWorksheet, excelContext, nextStep);
+    if (nextStep === GET_OFFICE_TABLE_IMPORT) {
+      startCell = await this.getStartCell(insertNewWorksheet, excelContext);
+    }
 
     const { mstrTable } = instanceDefinition;
     const updatedObject = {
@@ -177,12 +180,12 @@ class StepGetInstanceDefinition {
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
   };
 
-  getStartCell = async (insertNewWorksheet, excelContext, nextStep) => {
+  getStartCell = async (insertNewWorksheet, excelContext) => {
     if (insertNewWorksheet) {
       await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
     }
 
-    return nextStep !== GET_OFFICE_TABLE_IMPORT || officeApiHelper.getSelectedCell(excelContext);
+    return officeApiHelper.getSelectedCell(excelContext);
   };
 }
 
