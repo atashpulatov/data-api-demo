@@ -74,7 +74,7 @@ describe('PopupViewSelectorNotConnected', () => {
 
     // then
     expect(setPopupType).toBeCalled();
-    expect(componentWrapper.html()).toBe('<div></div>');
+    expect(componentWrapper.html()).toEqual('<div></div>');
   });
 });
 
@@ -82,11 +82,18 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
   const mockStore = configureMockStore([thunk]);
   let store;
   let componentWrapper;
+  let parsePopupStateMock;
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   beforeEach(() => {
+    parsePopupStateMock = jest.spyOn(popupHelper, 'parsePopupState').mockReturnValue({ sth: 42 });
+
     const initialState = {
       popupReducer: {
-        editedObject: { objectType: { name: 'report' } },
+        editedObject: { mstrObjectType: { name: 'report' } },
         preparedInstance: 'testPreparedInstance'
       },
       popupStateReducer: {
@@ -114,17 +121,17 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
 
   it('should use mapStateToProps', () => {
     // given
-    const parsePopupState = jest.spyOn(popupHelper, 'parsePopupState');
-
     // when
+    const componentWrapperProps = componentWrapper.props();
+
     // then
-    expect(componentWrapper.props().authToken).toBe('testAuthToken');
-    expect(componentWrapper.props().otherNavigationTreeProperty).toBe('testOtherNavigationTreeProperty');
-    expect(parsePopupState).toBeCalledWith({ objectType: { name: 'report' } }, 'testPromptsAnswers', true);
-    // editedObject not fully tested, only that popupHelper.parsePopupState is executed (mocking not working)
-    expect(componentWrapper.props().preparedInstance).toBe('testPreparedInstance');
-    expect(componentWrapper.props().propsToPass).toHaveProperty('otherPopupStateReducerProperty', 'testOtherValue');
-    expect(componentWrapper.props().popupType).toBe('testPopupType');
+    expect(componentWrapperProps.authToken).toEqual('testAuthToken');
+    expect(componentWrapperProps.otherNavigationTreeProperty).toEqual('testOtherNavigationTreeProperty');
+    expect(parsePopupStateMock).toBeCalledWith({ mstrObjectType: { name: 'report' } }, 'testPromptsAnswers', true);
+    expect(componentWrapperProps.editedObject).toEqual({ sth: 42 });
+    expect(componentWrapperProps.preparedInstance).toEqual('testPreparedInstance');
+    expect(componentWrapperProps.propsToPass).toHaveProperty('otherPopupStateReducerProperty', 'testOtherValue');
+    expect(componentWrapperProps.popupType).toEqual('testPopupType');
   });
 
   it('should use mapDispatchToProps', () => {
