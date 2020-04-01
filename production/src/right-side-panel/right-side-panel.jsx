@@ -11,15 +11,20 @@ import * as officeActions from '../office/store/office-actions';
 import { officeStoreService } from '../office/store/office-store-service';
 import { sidePanelService } from './side-panel-service';
 
+import './right-side-panel.scss';
+
 export const RightSidePanelNotConnected = (props) => {
   const {
     loadedObjects,
     isConfirm,
     isSettings,
+    isSecured,
     cancelCurrentImportRequest,
     toggleIsSettingsFlag,
     toggleSecuredFlag,
   } = props;
+
+  const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
 
   const emptyCallback = (parameters) => {
     console.log(parameters);
@@ -41,6 +46,10 @@ export const RightSidePanelNotConnected = (props) => {
     }
   }, [toggleSecuredFlag]);
 
+  React.useEffect(() => {
+    setSidePanelPopup(sidePanelService.getSidePanelPopup());
+  }, [isSecured]);
+
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
   return (
@@ -48,14 +57,15 @@ export const RightSidePanelNotConnected = (props) => {
       loadedObjects={loadedObjects}
       onAddData={sidePanelService.addData}
       onToggleChecked={emptyCallback}
-      onCheckAll={sidePanelService.refreshSelected}
+      onCheckAll={sidePanelService.refresh}
       onDuplicateClick={sidePanelService.highlightObject}
       onEditClick={emptyCallback}
       onRefreshClick={sidePanelService.refresh}
-      onRefreshSelected={sidePanelService.refreshSelected}
+      onRefreshSelected={sidePanelService.refresh}
       onRemoveClick={sidePanelService.remove}
-      onRemoveSelected={sidePanelService.removeSelected}
+      onRemoveSelected={sidePanelService.remove}
       onRename={sidePanelService.rename}
+      popup={sidePanelPopup}
       settingsMenu={isSettings && <SettingsMenu />}
       onSettingsClick={handleSettingsClick}
       confirmationWindow={isConfirm && <Confirmation />}
@@ -65,13 +75,14 @@ export const RightSidePanelNotConnected = (props) => {
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { isConfirm, isSettings } = state.officeReducer;
+  const { isConfirm, isSettings, isSecured } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
     importRequested,
     dossierOpenRequested,
     isConfirm,
-    isSettings
+    isSettings,
+    isSecured,
   };
 };
 
@@ -111,6 +122,7 @@ RightSidePanelNotConnected.propTypes = {
     }).isRequired,
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
+  isSecured: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
   cancelCurrentImportRequest: PropTypes.func,
