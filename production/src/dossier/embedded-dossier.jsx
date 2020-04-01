@@ -260,7 +260,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       */
       <div ref={this.container}
            style={{
- position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)'
+ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 145px)'
 }} />
     );
   }
