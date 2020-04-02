@@ -1,16 +1,18 @@
 import {
   importRequested,
-  IMPORT_REQUESTED,
   markStepCompleted,
-  MARK_STEP_COMPLETED,
-  CANCEL_OPERATION,
   cancelOperation,
   backupObject,
-  BACKUP_OBJECT
 } from '../../operation/operation-actions';
+import {
+  IMPORT_OPERATION,
+  MARK_STEP_COMPLETED,
+  BACKUP_OBJECT,
+  CANCEL_OPERATION,
+} from '../../operation/operation-type-names';
 
 describe('OperationActions', () => {
-  it('returns IMPORT_REQUESTED action on importRequested call', () => {
+  it('returns IMPORT_OPERATION action on importRequested call', () => {
     // given
     const exampleObject = {};
 
@@ -18,7 +20,7 @@ describe('OperationActions', () => {
     const importAction = importRequested(exampleObject);
 
     // then
-    expect(importAction.type).toEqual(IMPORT_REQUESTED);
+    expect(importAction.type).toEqual(IMPORT_OPERATION);
     expect(importAction.payload.object).toBe(exampleObject);
     expect(importAction.payload.operation.objectWorkingId).toEqual(exampleObject.objectWorkingId,);
     expect(importAction.payload.operation.operationType).toEqual('IMPORT_OPERATION',);

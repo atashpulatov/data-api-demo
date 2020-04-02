@@ -1,8 +1,6 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
 import { officeStoreService } from '../store/office-store-service';
-import { CLEAR_DATA_OPERATION } from '../../operation/operation-actions';
-
 
 class StepClearTableData {
   clearTableData = async (objectData, operationData) => {

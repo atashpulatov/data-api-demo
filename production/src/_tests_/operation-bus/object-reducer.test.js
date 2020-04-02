@@ -1,4 +1,4 @@
-import { IMPORT_REQUESTED } from '../../operation/operation-actions';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
 import { objectReducer } from '../../operation/object-reducer';
 import { UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS } from '../../operation/object-actions';
 
@@ -62,7 +62,7 @@ describe('objectReducer', () => {
     it('should add first object to array and return new array', () => {
       // given
       const action = {
-        type: IMPORT_REQUESTED,
+        type: IMPORT_OPERATION,
         payload: { object: initialObject, }
       };
 
@@ -76,7 +76,7 @@ describe('objectReducer', () => {
     it('should add object to array and return new array', () => {
       // given
       const action = {
-        type: IMPORT_REQUESTED,
+        type: IMPORT_OPERATION,
         payload: { object: initialObject, }
       };
 

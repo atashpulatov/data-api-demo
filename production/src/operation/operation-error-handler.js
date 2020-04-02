@@ -1,6 +1,5 @@
-import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
-import { IMPORT_OPERATION, DUPLICATE_OPERATION } from './operation-steps';
+import { IMPORT_OPERATION, DUPLICATE_OPERATION } from './operation-type-names';
 import { cancelOperation } from './operation-actions';
 import { removeObject, restoreObjectBackup } from './object-actions';
 
