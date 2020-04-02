@@ -6,6 +6,8 @@ import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-hel
 import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import dossierInstanceDefinition from './dossier-instance-definition';
+import operationErrorHandler from '../operation/operation-error-handler';
+import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../error/constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -26,74 +28,76 @@ class StepGetInstanceDefinition {
    * @param {Array} operationData.stepsQueue Queue of steps in current operation
    */
   getInstanceDefinition = async (objectData, operationData) => {
-    console.group('Importing data performance');
-    console.time('Total');
-    const nextStep = operationData.stepsQueue[1];
+    try {
+      console.group('Importing data performance');
+      console.time('Total');
+      const nextStep = operationData.stepsQueue[1];
 
-    const {
-      objectWorkingId,
-      insertNewWorksheet,
-      crosstabHeaderDimensions,
-      subtotalsInfo: { subtotalsAddresses } = false,
-      bindId,
-      mstrObjectType,
-      name,
-    } = objectData;
-    let { visualizationInfo, body } = objectData;
+      const {
+        objectWorkingId,
+        insertNewWorksheet,
+        crosstabHeaderDimensions,
+        subtotalsInfo: { subtotalsAddresses } = false,
+        bindId,
+        mstrObjectType,
+        name,
+        isPrompted
+      } = objectData;
+      let { visualizationInfo, body } = objectData;
 
-    const excelContext = await officeApiHelper.getExcelContext();
+      const excelContext = await officeApiHelper.getExcelContext();
 
-    this.setupBodyTemplate(body);
+      this.setupBodyTemplate(body);
 
-    let startCell;
-    let instanceDefinition;
-    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-      ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
-        { ...objectData, visualizationInfo }
-      ));
-    } else {
-      instanceDefinition = await mstrObjectRestService.createInstance(objectData);
+      let startCell;
+      let instanceDefinition;
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
+          { ...objectData, visualizationInfo }
+        ));
+      } else {
+        instanceDefinition = await mstrObjectRestService.createInstance(objectData);
+      }
+
+      instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
+
+      this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
+
+      if (nextStep === GET_OFFICE_TABLE_IMPORT) {
+        startCell = await this.getStartCell(insertNewWorksheet, excelContext);
+      }
+
+      const { mstrTable } = instanceDefinition;
+      const updatedObject = {
+        objectWorkingId,
+        envUrl: officeApiHelper.getCurrentMstrContext(),
+        body,
+        visualizationInfo: visualizationInfo || false,
+        name: name || mstrTable.name,
+        crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
+        isCrosstab: mstrTable.isCrosstab,
+      };
+
+      const updatedOperation = {
+        objectWorkingId,
+        instanceDefinition,
+        startCell,
+        excelContext,
+        oldBindId: bindId,
+        totalRows: instanceDefinition.rows,
+      };
+
+      if (mstrTable.rows.length === 0) {
+        throw new Error(isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED);
+      }
+
+      operationStepDispatcher.updateOperation(updatedOperation);
+      operationStepDispatcher.updateObject(updatedObject);
+      operationStepDispatcher.completeGetInstanceDefinition(objectWorkingId);
+    } catch (error) {
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
     }
-
-    instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
-
-    this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
-
-    if (nextStep === GET_OFFICE_TABLE_IMPORT) {
-      startCell = await this.getStartCell(insertNewWorksheet, excelContext);
-    }
-
-    const { mstrTable } = instanceDefinition;
-    const updatedObject = {
-      objectWorkingId,
-      envUrl: officeApiHelper.getCurrentMstrContext(),
-      body,
-      visualizationInfo: visualizationInfo || false,
-      oldBindId: bindId,
-      name: name || mstrTable.name,
-      crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-      isCrosstab: mstrTable.isCrosstab,
-    };
-
-    const updatedOperation = {
-      objectWorkingId,
-      instanceDefinition,
-      startCell,
-      excelContext,
-      totalRows: instanceDefinition.rows,
-    };
-    // TODO add when error handlind added
-    // Check if instance returned data
-    //  if (mstrTable.rows.length === 0) {
-    //    return {
-    //      type: 'warning',
-    //      message: isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED,
-    //    };
-    //  }
-
-    operationStepDispatcher.updateOperation(updatedOperation);
-    operationStepDispatcher.updateObject(updatedObject);
-    operationStepDispatcher.completeGetInstanceDefinition(objectWorkingId);
   };
 
   /**

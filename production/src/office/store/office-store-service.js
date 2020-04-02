@@ -1,7 +1,7 @@
 import { officeProperties } from './office-properties';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { errorService } from '../../error/error-handler';
-import { restoreAllObjects, deleteObject } from '../../operation/object-actions';
+import { restoreAllObjects, removeObject } from '../../operation/object-actions';
 
 /* global Office */
 
@@ -120,7 +120,7 @@ class OfficeStoreService {
   }
 
   removeObjectFromStore = (bindId, objectWorkingId) => {
-    this.reduxStore.dispatch(deleteObject(objectWorkingId));
+    this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.deleteObject(bindId, objectWorkingId);
   };
 

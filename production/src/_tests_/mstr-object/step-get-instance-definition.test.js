@@ -217,6 +217,7 @@ describe('StepGetInstanceDefinition', () => {
         },
         rows: 'rowsModifyInstanceWithPromptTest',
       },
+      oldBindId: 'bindIdTest',
       objectWorkingId: 'objectWorkingIdTest',
       startCell: expectedStartCell,
       totalRows: 'rowsModifyInstanceWithPromptTest',
@@ -233,7 +234,6 @@ describe('StepGetInstanceDefinition', () => {
       isCrosstab: 'isCrossTabTest',
       name: 'nameModifyInstanceWithPromptTest',
       objectWorkingId: 'objectWorkingIdTest',
-      oldBindId: 'bindIdTest',
       visualizationInfo: expectedVisualizationInfo,
     });
 
@@ -404,6 +404,7 @@ describe('StepGetInstanceDefinition', () => {
         },
         rows: 'rowsModifyInstanceWithPromptTest',
       },
+      oldBindId: 'bindIdTest',
       objectWorkingId: 'objectWorkingIdTest',
       startCell: expectedStartCell,
       totalRows: 'rowsModifyInstanceWithPromptTest',
@@ -420,7 +421,6 @@ describe('StepGetInstanceDefinition', () => {
       isCrosstab: 'isCrossTabTest',
       name: 'nameModifyInstanceWithPromptTest',
       objectWorkingId: 'objectWorkingIdTest',
-      oldBindId: 'bindIdTest',
       visualizationInfo: expectedVisualizationInfo,
     });
 

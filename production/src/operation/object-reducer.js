@@ -1,5 +1,7 @@
-import { UPDATE_OBJECT, DELETE_OBJECT, RESTORE_ALL_OBJECTS } from './object-actions';
 import { IMPORT_REQUESTED, EDIT_REQUESTED, DUPLICATE_REQUESTED } from './operation-actions';
+import {
+  UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS, RESTORE_OBJECT_BACKUP
+} from './object-actions';
 
 const initialState = { objects: [] };
 export const objectReducer = (state = initialState, action) => {
@@ -14,11 +16,14 @@ export const objectReducer = (state = initialState, action) => {
     case UPDATE_OBJECT:
       return updateObject(state, action.payload);
 
-    case DELETE_OBJECT:
-      return deleteObject(state, action.payload);
+    case REMOVE_OBJECT:
+      return removeObject(state, action.payload);
 
     case RESTORE_ALL_OBJECTS:
       return restoreAllObjects(action.payload);
+
+    case RESTORE_OBJECT_BACKUP:
+      return restoreObjectBackup(state, action.payload);
 
     default:
       return state;
@@ -47,7 +52,7 @@ function updateObject(state, updatedObjectProps) {
   return { objects: newObjects };
 }
 
-function deleteObject(state, objectWorkingId) {
+function removeObject(state, objectWorkingId) {
   const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
   const newObjects = [...state.objects];
   newObjects.splice(objectToRemoveIndex, 1);
@@ -56,6 +61,13 @@ function deleteObject(state, objectWorkingId) {
 
 function restoreAllObjects(payload) {
   return { objects: [...payload] };
+}
+
+function restoreObjectBackup(state, backupObjectData) {
+  const objectToUpdateIndex = getObjectIndex(state.objects, backupObjectData.objectWorkingId);
+  const newObjects = [...state.objects];
+  newObjects.splice(objectToUpdateIndex, 1, backupObjectData);
+  return { objects: newObjects };
 }
 
 function getObjectIndex(objects, objectWorkingId) {

@@ -19,7 +19,6 @@ class StepModifyObject {
     const updatedObject = {
       objectWorkingId,
       body: objectEditedData.body,
-      oldBindId: objectData.bindId,
     };
 
     if (!objectEditedData.visualizationInfo
@@ -50,16 +49,6 @@ class StepModifyObject {
 
     operationStepDispatcher.updateObject(updatedObject);
     operationStepDispatcher.completeModifyObject(objectWorkingId);
-
-    // TODO add apllying bockup on erorr
-    // if (isErrorOnRefresh) {
-    //   if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-    //     await preserveReportValue(reportParams.bindId, 'manipulationsXML', reportPreviousState.manipulationsXML);
-    //     await preserveReportValue(reportParams.bindId, 'visualizationInfo', reportPreviousState.visualizationInfo);
-    //   } else {
-    //     await preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
-    //   }
-    // }
   }
 }
 

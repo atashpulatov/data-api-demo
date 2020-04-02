@@ -1,5 +1,6 @@
 import officeTableCreate from './office-table-create';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepGetOfficeTableImport {
   /**
@@ -16,8 +17,8 @@ class StepGetOfficeTableImport {
    * @param {String} operationData.startCell Address of the cell in Excel spreadsheet
    */
   getOfficeTableImport = async (objectData, operationData) => {
-    console.time('Create or get table - import');
     try {
+      console.time('Create or get table - import');
       const {
         objectWorkingId, excelContext, instanceDefinition, startCell,
       } = operationData;
@@ -45,10 +46,11 @@ class StepGetOfficeTableImport {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetOfficeTableImport(objectWorkingId);
     } catch (error) {
-      console.log('error:', error);
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
+    } finally {
+      console.timeEnd('Create or get table - import');
     }
-
-    console.timeEnd('Create or get table - import');
   };
 }
 

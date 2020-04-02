@@ -18,6 +18,7 @@ import { sidePanelService } from './right-side-panel/side-panel-service';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
+import operationErrorHandler from './operation/operation-error-handler';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -85,6 +86,9 @@ class DIContainer {
 
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
+
+    this.operationErrorHandler = operationErrorHandler;
+    this.operationErrorHandler.init(reduxStore);
   }
 }
 

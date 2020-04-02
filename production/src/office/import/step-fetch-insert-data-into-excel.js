@@ -1,6 +1,7 @@
 import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr-object/mstr-object-rest-service';
 import officeInsertService from './office-insert-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepFetchInsertDataIntoExcel {
   /**
@@ -102,8 +103,8 @@ class StepFetchInsertDataIntoExcel {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeFetchInsertData(objectWorkingId);
     } catch (error) {
-      console.log(error);
-      throw error;
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
     }
   };
 

@@ -3,6 +3,7 @@ import getOfficeTableHelper from './get-office-table-helper';
 import officeTableCreate from './office-table-create';
 import officeTableUpdate from './office-table-update';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepGetOfficeTableEditRefresh {
   /**
@@ -15,26 +16,24 @@ class StepGetOfficeTableEditRefresh {
    * This function is subscribed as one of the operation steps with the key GET_OFFICE_TABLE_EDIT_REFRESH,
    * therefore should be called only via operation bus.
    *
-   * @param {Number} objectData.oldBindId Id of the Office table created on import used for referencing the Excel table
    * @param {Number} objectData.tableName Name of Excel table created on import
    * @param {Object} objectData.previousTableDimensions Contains dimensions of Excel table created on import
    * @param {Object} [objectData.visualizationInfo] Contains information about location of visualization in dossier
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {String} operationData.instanceDefinition Object containing information about MSTR object
+   * @param {Number} operationData.oldBindId Id of the Office table created on import
    */
   getOfficeTableEditRefresh = async (objectData, operationData) => {
-    console.time('Create or get table - edit or refresh');
-
     try {
+      console.time('Create or get table - edit or refresh');
       const {
-        oldBindId,
         tableName,
         previousTableDimensions,
         visualizationInfo,
         objectWorkingId,
       } = objectData;
-      const { excelContext, instanceDefinition, } = operationData;
+      const { excelContext, instanceDefinition, oldBindId } = operationData;
       const { mstrTable } = instanceDefinition;
 
       let shouldFormat;
@@ -91,10 +90,11 @@ class StepGetOfficeTableEditRefresh {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetOfficeTableEditRefresh(objectWorkingId);
     } catch (error) {
-      console.log('error:', error);
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
+    } finally {
+      console.timeEnd('Create or get table - edit or refresh');
     }
-
-    console.timeEnd('Create or get table - edit or refresh');
   };
 }
 

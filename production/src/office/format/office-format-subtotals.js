@@ -12,21 +12,25 @@ class OfficeFormatSubtotals {
    * @param {Boolean} [shouldBold=true] Specify if the function should add or remove bold formatting
    */
   applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldBold = true) => {
-    const { isCrosstab } = mstrTable;
-    let { subtotalsInfo: { subtotalsAddresses } } = mstrTable;
-    let reportStartCell;
-
     console.time('Subtotal Formatting');
-    if (isCrosstab) {
-      subtotalsAddresses = new Set(subtotalsAddresses);
-      reportStartCell = officeTable.getDataBodyRange().getCell(0, 0);
-    } else {
-      reportStartCell = officeTable.getRange().getCell(0, 0);
-    }
+    try {
+      const { isCrosstab } = mstrTable;
+      let { subtotalsInfo: { subtotalsAddresses } } = mstrTable;
+      let reportStartCell;
+      if (isCrosstab) {
+        subtotalsAddresses = new Set(subtotalsAddresses);
+        reportStartCell = officeTable.getDataBodyRange().getCell(0, 0);
+      } else {
+        reportStartCell = officeTable.getRange().getCell(0, 0);
+      }
 
-    excelContext.trackedObjects.add(reportStartCell);
-    await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldBold);
-    excelContext.trackedObjects.remove(reportStartCell);
+      excelContext.trackedObjects.add(reportStartCell);
+      await this.formatSubtotals(reportStartCell, subtotalsAddresses, mstrTable, excelContext, shouldBold);
+      excelContext.trackedObjects.remove(reportStartCell);
+    } catch (error) {
+      console.error(error);
+      console.log('Cannot apply subtotal formatting, skipping');
+    }
     console.timeEnd('Subtotal Formatting');
   };
 

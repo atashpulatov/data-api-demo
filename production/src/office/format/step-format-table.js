@@ -30,6 +30,7 @@ class StepFormatTable {
 
       await excelContext.sync();
     } catch (error) {
+      console.error(error);
       console.log('Error when formatting - no columns autofit applied', error);
     }
 
