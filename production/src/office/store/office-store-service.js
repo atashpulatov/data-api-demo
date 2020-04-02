@@ -20,8 +20,7 @@ class OfficeStoreService {
 
   restoreObjectsFromExcelStore = () => {
     const settings = this.getOfficeSettings();
-    let objects = settings.get(officeProperties.storedObjects);
-
+    let objects = settings.get(officeProperties.storedObjects) || [];
     objects = this.restoreLegacyObjectsFromExcelStore(objects);
 
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
@@ -31,7 +30,7 @@ class OfficeStoreService {
     settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
   };
 
-  restoreLegacyObjectsFromExcelStore = (objects) => {
+  restoreLegacyObjectsFromExcelStore = (objects = []) => {
     const reportArray = this.getLegacyObjectsList();
     const objectsToBeAdded = [];
 
