@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel } from '@mstr/rc';
-import { popupController } from '../popup/popup-controller';
+import { SidePanel, globalNotificationTypes } from '@mstr/rc';
 import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
-import { errorService } from '../error/error-handler';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
 import * as officeActions from '../office/store/office-actions';
 import { officeStoreService } from '../office/store/office-store-service';
 import { sidePanelService } from './side-panel-service';
+import { notificationService } from '../notification-v2/notification-service';
 
 import './right-side-panel.scss';
 
@@ -19,17 +18,12 @@ export const RightSidePanelNotConnected = (props) => {
     isConfirm,
     isSettings,
     isSecured,
-    cancelCurrentImportRequest,
     toggleIsSettingsFlag,
     toggleSecuredFlag,
+    globalNotification,
   } = props;
 
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
-
-  const emptyCallback = (parameters) => {
-    console.log(parameters);
-    throw new Error('Not implemented yet');
-  };
 
   React.useEffect(() => {
     try {
@@ -66,12 +60,14 @@ export const RightSidePanelNotConnected = (props) => {
       settingsMenu={isSettings && <SettingsMenu />}
       onSettingsClick={handleSettingsClick}
       confirmationWindow={isConfirm && <Confirmation />}
+      globalNotificationType={globalNotification}
     />
   );
 };
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
+  const { globalNotification } = state.notificationReducer;
   const { isConfirm, isSettings, isSecured } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -79,6 +75,7 @@ export const mapStateToProps = (state) => {
     dossierOpenRequested,
     isConfirm,
     isSettings,
+    globalNotification,
     isSecured,
   };
 };
@@ -92,6 +89,7 @@ const mapDispatchToProps = {
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
+  globalNotification: PropTypes.string,
   loadedObjects:
     PropTypes.shape({
       body: PropTypes.shape({}),
@@ -122,5 +120,4 @@ RightSidePanelNotConnected.propTypes = {
   isSecured: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
-  cancelCurrentImportRequest: PropTypes.func,
 };

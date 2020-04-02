@@ -13,6 +13,7 @@ import { HomeDialog } from './home-dialog';
 import InternetConnectionError from '../popup/internet-connection-error';
 import { Authenticate } from '../authentication/auth-component';
 import { DevelopmentImportList } from '../development-import-list';
+import { notificationService } from '../notification-v2/notification-service';
 
 const IS_LOCALHOST = sessionHelper.isDevelopment();
 
@@ -20,6 +21,18 @@ export const HomeNotConnected = (props) => {
   const {
     loading, popupOpen, authToken, shouldRenderSettings, t
   } = props;
+
+  React.useEffect(() => {
+    const handleConnectionChange = () => (window.navigator.onLine
+      ? notificationService.connectionRestored()
+      : !popupOpen && notificationService.connectionLost());
+    handleConnectionChange();
+    window.addEventListener('online', handleConnectionChange);
+    window.addEventListener('offline', handleConnectionChange);
+    return (() => window.removeEventListener('online', handleConnectionChange),
+    () => window.removeEventListener('offline', handleConnectionChange));
+  },);
+
   React.useEffect(() => {
     try {
       officeStoreService.restoreObjectsFromExcelStore();
@@ -48,9 +61,7 @@ export const HomeNotConnected = (props) => {
             {IS_LOCALHOST && <Authenticate />}
           </Spin>
         )}
-      {!popupOpen && <InternetConnectionError />}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
-      {/* <HomeContent {...props} /> */}
     </>
   );
 };
