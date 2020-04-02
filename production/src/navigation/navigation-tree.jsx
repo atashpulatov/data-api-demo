@@ -161,8 +161,11 @@ export class NavigationTreeNotConnected extends Component {
     id: objectId, projectId, subtype, name: objectName, targetId, myLibrary
   }) => {
     const { selectObject } = this.props;
+
     // If myLibrary is on, then selected object is a dossier.
-    const mstrObjectType = myLibrary ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
+    const mstrObjectType = myLibrary
+      ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
+
     let chosenLibraryDossier;
     if (myLibrary) {
       chosenLibraryDossier = objectId;
@@ -192,7 +195,8 @@ export class NavigationTreeNotConnected extends Component {
   render() {
     const {
       chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
-      changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t, i18n,
+      changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t,
+      i18n,
     } = this.props;
     const { previewDisplay, isPublished } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
