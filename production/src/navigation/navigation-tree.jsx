@@ -158,10 +158,9 @@ export class NavigationTreeNotConnected extends Component {
   };
 
   onObjectChosen = async ({
-    id: objectId, projectId, subtype, name: objectName, targetId, myLibrary
+    id: objectId, projectId, subtype, name: objectName, targetId
   }) => {
-    const { selectObject } = this.props;
-
+    const { selectObject, myLibrary } = this.props;
     // If myLibrary is on, then selected object is a dossier.
     const mstrObjectType = myLibrary
       ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.getMstrTypeBySubtype(subtype);
