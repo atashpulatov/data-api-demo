@@ -7,6 +7,7 @@ import dossierInstanceDefinition from '../../mstr-object/dossier-instance-defini
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -44,14 +45,24 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  expectedVisualizationInfo         | visualizationInfoParam
+  expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
 
-  ${false}                          | ${undefined}
-  ${false}                          | ${false}
-  ${'visualizationInfoDossierTest'} | ${'visualizationInfoDossierTest'}
+  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${'not GET_OFFICE_TABLE_IMPORT'}
+  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${'not GET_OFFICE_TABLE_IMPORT'}
+  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${'not GET_OFFICE_TABLE_IMPORT'}
+
+  ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}
+  ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}
+  ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}
 
   `('getInstanceDefinition should work as expected for visualization',
-  async ({ expectedVisualizationInfo, visualizationInfoParam }) => {
+  async ({
+    expectedVisualizationInfo,
+    expectedStartCell,
+    expectedGetStartCellCallsNo,
+    visualizationInfoParam,
+    nextStepParam
+  }) => {
     // given
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
@@ -117,7 +128,10 @@ describe('StepGetInstanceDefinition', () => {
     ).mockImplementation();
 
     // when
-    await stepGetInstanceDefinition.getInstanceDefinition(objectData, { operationType: 'operationTypeTest' });
+    await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
+      operationType: 'operationTypeTest',
+      stepsQueue: ['step_0', nextStepParam],
+    });
 
     // then
     expect(getExcelContextMock).toBeCalledTimes(1);
@@ -180,12 +194,13 @@ describe('StepGetInstanceDefinition', () => {
       'subtotalsAddressesTest',
     );
 
-    expect(getStartCellMock).toBeCalledTimes(1);
-    expect(getStartCellMock).toBeCalledWith(
-      'insertNewWorksheetTest',
-      'excelContextTest',
-      'operationTypeTest',
-    );
+    expect(getStartCellMock).toBeCalledTimes(expectedGetStartCellCallsNo);
+    if (expectedGetStartCellCallsNo === 1) {
+      expect(getStartCellMock).toBeCalledWith(
+        'insertNewWorksheetTest',
+        'excelContextTest',
+      );
+    }
 
     expect(getCurrentMstrContextMock).toBeCalledTimes(1);
 
@@ -203,7 +218,7 @@ describe('StepGetInstanceDefinition', () => {
         rows: 'rowsModifyInstanceWithPromptTest',
       },
       objectWorkingId: 'objectWorkingIdTest',
-      startCell: 'startCellTest',
+      startCell: expectedStartCell,
       totalRows: 'rowsModifyInstanceWithPromptTest',
     });
 
@@ -227,14 +242,24 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  expectedVisualizationInfo           | visualizationInfoParam
+  expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
 
-  ${false}                            | ${undefined}
-  ${false}                            | ${false}
-  ${'visualizationInfoNoDossierTest'} | ${'visualizationInfoNoDossierTest'}
+  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${'not GET_OFFICE_TABLE_IMPORT'}
+  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${'not GET_OFFICE_TABLE_IMPORT'}
+  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${'not GET_OFFICE_TABLE_IMPORT'}
+
+  ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}
+  ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}
+  ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}
 
   `('getInstanceDefinition should work as expected for NO visualization',
-  async ({ expectedVisualizationInfo, visualizationInfoParam }) => {
+  async ({
+    expectedVisualizationInfo,
+    expectedStartCell,
+    expectedGetStartCellCallsNo,
+    visualizationInfoParam,
+    nextStepParam
+  }) => {
     // given
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
@@ -300,7 +325,10 @@ describe('StepGetInstanceDefinition', () => {
     ).mockImplementation();
 
     // when
-    await stepGetInstanceDefinition.getInstanceDefinition(objectData, { operationType: 'operationTypeTest' });
+    await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
+      operationType: 'operationTypeTest',
+      stepsQueue: ['step_0', nextStepParam],
+    });
 
     // then
     expect(getExcelContextMock).toBeCalledTimes(1);
@@ -353,12 +381,13 @@ describe('StepGetInstanceDefinition', () => {
       'subtotalsAddressesTest',
     );
 
-    expect(getStartCellMock).toBeCalledTimes(1);
-    expect(getStartCellMock).toBeCalledWith(
-      'insertNewWorksheetTest',
-      'excelContextTest',
-      'operationTypeTest',
-    );
+    expect(getStartCellMock).toBeCalledTimes(expectedGetStartCellCallsNo);
+    if (expectedGetStartCellCallsNo === 1) {
+      expect(getStartCellMock).toBeCalledWith(
+        'insertNewWorksheetTest',
+        'excelContextTest',
+      );
+    }
 
     expect(getCurrentMstrContextMock).toBeCalledTimes(1);
 
@@ -376,7 +405,7 @@ describe('StepGetInstanceDefinition', () => {
         rows: 'rowsModifyInstanceWithPromptTest',
       },
       objectWorkingId: 'objectWorkingIdTest',
-      startCell: 'startCellTest',
+      startCell: expectedStartCell,
       totalRows: 'rowsModifyInstanceWithPromptTest',
     });
 
@@ -613,21 +642,16 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  expectedStartCell | createAndActivateNewWorksheetCallNo | getSelectedCellCallNo | insertNewWorksheet | operationType
+  expectedStartCell | createAndActivateNewWorksheetCallNo | insertNewWorksheet
   
-  ${42}             | ${0}                                | ${1}                  | ${false}           | ${'IMPORT_OPERATION'}
-  ${true}           | ${0}                                | ${0}                  | ${false}           | ${'NO IMPORT_OPERATION'}
-  
-  ${42}             | ${1}                                | ${1}                  | ${true}            | ${'IMPORT_OPERATION'}
-  ${true}           | ${1}                                | ${0}                  | ${true}            | ${'NO IMPORT_OPERATION'}
+  ${42}             | ${0}                                | ${false}
+  ${42}             | ${1}                                | ${true}
   
   `('getStartCell should work as expected',
   async ({
     expectedStartCell,
     createAndActivateNewWorksheetCallNo,
-    getSelectedCellCallNo,
     insertNewWorksheet,
-    operationType
   }) => {
     // given
     const createAndActivateNewWorksheetMock = jest.spyOn(officeApiWorksheetHelper, 'createAndActivateNewWorksheet')
@@ -639,7 +663,6 @@ describe('StepGetInstanceDefinition', () => {
     const result = await stepGetInstanceDefinition.getStartCell(
       insertNewWorksheet,
       'excelContextTest',
-      operationType
     );
 
     // then
@@ -650,9 +673,7 @@ describe('StepGetInstanceDefinition', () => {
       expect(createAndActivateNewWorksheetMock).toBeCalledWith('excelContextTest');
     }
 
-    expect(getSelectedCellMock).toBeCalledTimes(getSelectedCellCallNo);
-    if (getSelectedCellCallNo === 1) {
-      expect(getSelectedCellMock).toBeCalledWith('excelContextTest');
-    }
+    expect(getSelectedCellMock).toBeCalledTimes(1);
+    expect(getSelectedCellMock).toBeCalledWith('excelContextTest');
   });
 });

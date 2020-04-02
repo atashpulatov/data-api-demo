@@ -8,6 +8,7 @@ import {
   BACKUP_OBJECT,
   UPDATE_OPERATION,
   CLEAR_DATA_REQUESTED,
+  DUPLICATE_REQUESTED,
 } from './operation-actions';
 
 const initialState = { operations: [] };
@@ -17,6 +18,7 @@ export const operationReducer = (state = initialState, action) => {
     case IMPORT_REQUESTED:
     case REFRESH_REQUESTED:
     case EDIT_REQUESTED:
+    case DUPLICATE_REQUESTED:
     case REMOVE_REQUESTED:
     case CLEAR_DATA_REQUESTED:
       return operationRequested(state, action.payload);

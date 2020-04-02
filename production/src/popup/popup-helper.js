@@ -41,12 +41,12 @@ class PopupHelper {
       }
     }
     const chosenObjectData = {
-      chosenObjectId: popupState.id,
+      chosenObjectId: popupState.id || popupState.objectId,
       instanceId: popupState.instanceId,
       projectId: popupState.projectId,
       chosenObjectName: popupState.name,
-      chosenObjectType: popupState.objectType,
-      chosenObjectSubtype: popupState.objectType === 'report' ? 768 : 779,
+      chosenObjectType: popupState.mstrObjectType,
+      chosenObjectSubtype: popupState.mstrObjectType === 'report' ? 768 : 779,
       promptsAnswers: promptsAnswers || popupState.promptsAnswers,
       subtotalsInfo: popupState.subtotalsInfo,
       isEdit: popupState.isEdit,

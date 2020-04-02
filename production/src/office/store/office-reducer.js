@@ -203,7 +203,7 @@ function toggleIsSettingsFlag(action, state) {
 function toggleIsConfirmFlag(action, state) {
   return {
     ...state,
-    isConfirm: !state.isConfirm,
+    isConfirm: action.isConfirm,
     isSettings: false,
   };
 }

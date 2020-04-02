@@ -348,7 +348,7 @@ export const mapStateToProps = (state) => {
   const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = popupState && popupState.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
 
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {

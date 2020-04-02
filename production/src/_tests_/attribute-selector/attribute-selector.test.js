@@ -12,7 +12,7 @@ describe('AttributeSelectorNotConnected', () => {
     // given
     const chosenObject = {
       chosenObjectId: 'id',
-      objectType: { name: 'dossier' },
+      mstrObjectType: { name: 'dossier' },
       chosenSubtype: 'chosenSubtype',
       chosenObjectName: 'chosenObjectName',
       projectId: 'projectId',
@@ -37,7 +37,7 @@ describe('AttributeSelectorNotConnected', () => {
       envUrl: session.envUrl,
       projectId: chosenObject.chosenProjectId,
       reportSubtype: chosenObject.chosenSubtype,
-      reportType: chosenObject.objectType.name,
+      reportType: chosenObject.mstrObjectType.name,
       reportName: chosenObject.chosenObjectName,
       token: session.authToken,
       authToken: session.authToken,
@@ -67,7 +67,7 @@ describe('AttributeSelectorNotConnected', () => {
     // const mstrData = { content: 'content' };
     const chosenObject = {
       chosenObjectId: 'id',
-      objectType: { name: 'dossier' }
+      mstrObjectType: { name: 'dossier' }
     };
     const session = { envUrl: 'envUrl' };
     const editedObject = { projectId: 'projectId' };

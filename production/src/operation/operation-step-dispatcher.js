@@ -1,4 +1,5 @@
-import { markStepCompleted, updateOperation } from './operation-actions';
+import { toggleSecuredFlag, toggleIsClearingFlag } from '../office/store/office-actions';
+import { markStepCompleted, updateOperation, CLEAR_DATA_OPERATION } from './operation-actions';
 import {
   BIND_OFFICE_TABLE,
   FETCH_INSERT_DATA,
@@ -84,7 +85,12 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_CROSSTAB_HEADERS));
   };
 
-  completeClearTableData = (objectWorkingId) => {
+  completeClearTableData = (objectWorkingId, nextOperation) => {
+    if (!(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION)) {
+      const { dispatch } = this.reduxStore;
+      toggleIsClearingFlag(false)(dispatch);
+      toggleSecuredFlag(true)(dispatch);
+    }
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA));
   };
 

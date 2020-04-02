@@ -10,15 +10,20 @@ import { officeStoreService } from '../office/store/office-store-service';
 import { sidePanelService } from './side-panel-service';
 import { notificationService } from '../notification-v2/notification-service';
 
+import './right-side-panel.scss';
+
 export const RightSidePanelNotConnected = (props) => {
   const {
     loadedObjects,
     isConfirm,
     isSettings,
+    isSecured,
     toggleIsSettingsFlag,
     toggleSecuredFlag,
     globalNotification,
   } = props;
+
+  const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
 
   const emptyCallback = (parameters) => {
     console.log(parameters);
@@ -40,6 +45,10 @@ export const RightSidePanelNotConnected = (props) => {
     }
   }, [toggleSecuredFlag]);
 
+  React.useEffect(() => {
+    setSidePanelPopup(sidePanelService.getSidePanelPopup());
+  }, [isSecured]);
+
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
   const simulateConnectionLost = async () => {
@@ -58,20 +67,18 @@ export const RightSidePanelNotConnected = (props) => {
 
   return (
     <>
-      <button type="button" onClick={simulateConnectionLost}>Test connection lost</button>
-      <button type="button" onClick={simulateSessionExpired}>Test session expired</button>
+      <button type="button" onClick={simulateConnectionLost}>Connection lost test</button>
+      <button type="button" onClick={simulateSessionExpired}>Session expired test</button>
       <SidePanel
         loadedObjects={loadedObjects}
         onAddData={sidePanelService.addData}
-        onToggleChecked={emptyCallback}
-        onCheckAll={sidePanelService.refreshSelected}
-        onDuplicateClick={sidePanelService.highlightObject}
-        onEditClick={emptyCallback}
+        onTileClick={sidePanelService.highlightObject}
+        onDuplicateClick={sidePanelService.duplicate}
+        onEditClick={sidePanelService.edit}
         onRefreshClick={sidePanelService.refresh}
-        onRefreshSelected={sidePanelService.refreshSelected}
         onRemoveClick={sidePanelService.remove}
-        onRemoveSelected={sidePanelService.removeSelected}
         onRename={sidePanelService.rename}
+        popup={sidePanelPopup}
         settingsMenu={isSettings && <SettingsMenu />}
         onSettingsClick={handleSettingsClick}
         confirmationWindow={isConfirm && <Confirmation />}
@@ -83,8 +90,8 @@ export const RightSidePanelNotConnected = (props) => {
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { isConfirm, isSettings } = state.officeReducer;
   const { globalNotification } = state.notificationReducer;
+  const { isConfirm, isSettings, isSecured } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
     importRequested,
@@ -92,6 +99,7 @@ export const mapStateToProps = (state) => {
     isConfirm,
     isSettings,
     globalNotification,
+    isSecured,
   };
 };
 
@@ -132,6 +140,7 @@ RightSidePanelNotConnected.propTypes = {
     }).isRequired,
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
+  isSecured: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
 };

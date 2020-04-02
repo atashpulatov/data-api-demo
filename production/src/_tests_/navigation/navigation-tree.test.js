@@ -214,7 +214,7 @@ describe('NavigationTree', () => {
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
-      objectType: mstrObjectEnum.mstrObjectType.report,
+      mstrObjectType: mstrObjectEnum.mstrObjectType.report,
       chosenLibraryDossier: undefined
     };
     expect(mockSelectObject).toBeCalledWith(expectedObject);
@@ -251,7 +251,7 @@ describe('NavigationTree', () => {
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
-      objectType: mstrObjectEnum.mstrObjectType.dossier,
+      mstrObjectType: mstrObjectEnum.mstrObjectType.dossier,
       chosenLibraryDossier: givenObjectId
     };
     expect(mockSelectObject).toBeCalledWith(expectedObject);

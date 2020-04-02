@@ -164,7 +164,7 @@ export default class DossierWindowNotConnected extends React.Component {
     const { isVisualizationSelected, isVisualizationSupported } = this.state;
     return (
       <div>
-        <h1 title={chosenObjectName} className="ant-col folder-browser-title">
+        <h1 title={chosenObjectName} className="ant-col folder-browser-title dossier-title-margin-top">
           {`${t('Import Dossier')} > ${chosenObjectName}`}
         </h1>
         <span className="dossier-window-information-frame">
@@ -247,7 +247,7 @@ function mapStateToProps(state) {
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = editedObject && editedObject.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) };
   return {

@@ -265,7 +265,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       <div
         ref={this.container}
         style={{
-          position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)'
+          position: 'relative',
+          top: '0',
+          left: '0',
+          height: 'calc(100vh - 145px)'
         }} />
     );
   }
@@ -316,7 +319,7 @@ const mapStateToProps = (state) => {
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const isReport = popupState && popupState.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
