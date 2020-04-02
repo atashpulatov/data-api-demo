@@ -1,6 +1,5 @@
 import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
