@@ -10,6 +10,7 @@ class StepSaveObjectInExcel {
   saveObject = async (objectData, operationData) => {
     const { instanceDefinition } = operationData;
     objectData.previousTableDimensions = { columns: instanceDefinition.columns };
+    objectData.refreshDate = Date.now();
     await officeStoreService.saveObjectsInExcelStore();
     operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
 
