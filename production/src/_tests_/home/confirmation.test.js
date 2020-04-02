@@ -6,6 +6,7 @@ import { errorService } from '../../error/error-handler';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
+import { homeHelper } from '../../home/home-helper';
 
 describe('Confirmation', () => {
   afterEach(() => {
@@ -15,41 +16,18 @@ describe('Confirmation', () => {
   it('should call proper methods from secureData when Ok button is clicked', async () => {
     // given
     const mockSync = jest.fn();
-    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockDeleteTableBody = jest.spyOn(officeRemoveHelper, 'removeOfficeTableBody').mockImplementation(() => { });
-    const mockClearEmptyRow = jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
-    const mockIfAnyProtected = jest.spyOn(officeApiWorksheetHelper, 'checkIfAnySheetProtected').mockImplementation(() => false);
-    const mockCheckObject = jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockImplementation(() => true);
-    const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
-      showHeaders: null,
-      showFilterButton: null,
-      getHeaderRowRange: () => ({ format: { font: { color: null, }, }, }),
-    }));
+    const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => ({ sync: mockSync, }));
     const mockToggleIsConfirmFlag = jest.fn();
-    const mockToggleIsClearingFlag = jest.fn();
-    const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
     const confirmationWrapper = mount(<ConfirmationNotConnected
       objects={mockReportArray}
       isSecured={false}
-      toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-      toggleIsClearingFlag={mockToggleIsClearingFlag}
-      toggleSecuredFlag={mockToggleSecuredFlag} />);
+      toggleIsConfirmFlag={mockToggleIsConfirmFlag} />);
     const okWrapper = confirmationWrapper.find('#confirm-btn');
     // when
     okWrapper.simulate('click');
     // then
-    await expect(mockGetContext).toBeCalled();
-    expect(mockToggleIsClearingFlag).toBeCalled();
-    expect(mockToggleIsConfirmFlag).toBeCalled();
-    await expect(mockIfAnyProtected).toBeCalled();
-    await expect(mockCheckObject).toBeCalled();
-    await expect(mockGetTable).toBeCalled();
-    expect(mockClearEmptyRow).toBeCalled();
-    await expect(mockSync).toBeCalled();
-    await expect(mockDeleteTableBody).toBeCalled();
-    expect(mockToggleIsClearingFlag).toBeCalled();
-    expect(mockToggleSecuredFlag).toBeCalledWith(true);
+    await expect(mockSecureData).toBeCalled();
   });
 
   it('should fill clearErrors when secureData fails in ok button click', () => {
@@ -81,74 +59,6 @@ describe('Confirmation', () => {
     okWrapper.simulate('click');
     // then
     expect(clearErrors).not.toBe(null);
-  });
-
-  it('should not call functions if failed to get table in clear data', async () => {
-    // given
-    const mockSync = jest.fn();
-    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockDeleteTableBody = jest.spyOn(officeRemoveHelper, 'removeOfficeTableBody').mockImplementation(() => { });
-    const mockClearEmptyRow = jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockImplementation(() => { });
-    const mockIfAnyProtected = jest.spyOn(officeApiWorksheetHelper, 'checkIfAnySheetProtected').mockImplementation(() => false);
-    const mockCheckObject = jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockImplementation(() => false);
-    const mockGetTable = jest.spyOn(officeApiHelper, 'getTable').mockImplementation(() => ({
-      showHeaders: null,
-      showFilterButton: null,
-      getHeaderRowRange: () => ({ format: { font: { color: null, }, }, }),
-    }));
-    const mockToggleIsConfirmFlag = jest.fn();
-    const mockToggleIsClearingFlag = jest.fn();
-    const mockToggleSecuredFlag = jest.fn();
-    const mockReportArray = createMockFilesArray();
-    const confirmationWrapper = mount(<ConfirmationNotConnected
-      objects={mockReportArray}
-      isSecured={false}
-      toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-      toggleIsClearingFlag={mockToggleIsClearingFlag}
-      toggleSecuredFlag={mockToggleSecuredFlag} />);
-    const okWrapper = confirmationWrapper.find('#confirm-btn');
-    // when
-    okWrapper.simulate('click');
-    // then
-    await expect(mockGetContext).toBeCalled();
-    expect(mockToggleIsClearingFlag).toBeCalled();
-    expect(mockToggleIsConfirmFlag).toBeCalled();
-    await expect(mockIfAnyProtected).toBeCalled();
-    await expect(mockCheckObject).toBeCalled();
-    await expect(mockGetTable).not.toBeCalled();
-    expect(mockClearEmptyRow).not.toBeCalled();
-    await expect(mockSync).not.toBeCalled();
-    await expect(mockDeleteTableBody).not.toBeCalled();
-    expect(mockToggleIsClearingFlag).toBeCalled();
-    expect(mockToggleSecuredFlag).not.toBeCalled();
-  });
-
-  it('should throw error if checkIfAnySheetProtected fails', async () => {
-    // given
-    const mockSync = jest.fn();
-    const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIfAnyProtected = jest.spyOn(officeApiWorksheetHelper, 'checkIfAnySheetProtected').mockImplementationOnce(() => { throw new Error(); });
-    const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation(() => { });
-
-    const mockToggleIsConfirmFlag = jest.fn();
-    const mockToggleIsClearingFlag = jest.fn();
-    const mockToggleSecuredFlag = jest.fn();
-    const mockReportArray = createMockFilesArray();
-    const confirmationWrapper = mount(<ConfirmationNotConnected
-      objects={mockReportArray}
-      isSecured={false}
-      toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-      toggleIsClearingFlag={mockToggleIsClearingFlag}
-      toggleSecuredFlag={mockToggleSecuredFlag} />);
-    const okWrapper = confirmationWrapper.find('#confirm-btn');
-    // when
-    okWrapper.simulate('click');
-    // then
-    await expect(mockGetContext).toBeCalled();
-    expect(mockToggleIsClearingFlag).toBeCalled();
-    expect(mockToggleIsConfirmFlag).toBeCalled();
-    await expect(mockIfAnyProtected).toBeCalled();
-    expect(mockHandleError).toBeCalled();
   });
 
   it('should set isConfirm flag to false when Cancel is clicked', async () => {
