@@ -41,9 +41,6 @@ class SidePanelService {
   };
 
   refresh = (...objectWorkingIds) => {
-    objectWorkingIds = officeStoreService.getObjectsListFromObjectReducer()
-      .map(({ objectWorkingId }) => objectWorkingId);
-    // TODO remove above, remove not needed functions for old refresh all
     for (let index = 0; index < objectWorkingIds.length; index++) {
       const object = this.getObject(objectWorkingIds[index]);
       this.reduxStore.dispatch(refreshRequested(object));
@@ -51,9 +48,6 @@ class SidePanelService {
   };
 
   remove = async (...objectWorkingIds) => {
-    objectWorkingIds = officeStoreService.getObjectsListFromObjectReducer()
-      .map(({ objectWorkingId }) => objectWorkingId);
-    // TODO remove above
     for (let index = 0; index < objectWorkingIds.length; index++) {
       this.reduxStore.dispatch(removeRequested(objectWorkingIds[index]));
     }
@@ -66,7 +60,7 @@ class SidePanelService {
 
   edit = async (objectWorkingId) => {
     const objectData = this.getObject(objectWorkingId);
-    const { bindId, objectName, mstrObjectType } = objectData;
+    const { bindId, mstrObjectType } = objectData;
     const excelContext = await officeApiHelper.getExcelContext();
     await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
