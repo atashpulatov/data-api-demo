@@ -183,7 +183,7 @@ class PopupController {
         bindId,
         isPrompted: response.isPrompted,
         promptsAnswers: response.promptsAnswers,
-        visualizationInfo: response.visualizationInfo,
+        visualizationInfo: { ...response.visualizationInfo, dossierStructure: false },
         preparedInstanceId: response.preparedInstanceId,
       };
       this.reduxStore.dispatch(importRequested(objectData));

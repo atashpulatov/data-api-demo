@@ -37,7 +37,7 @@ class StepGetInstanceDefinition {
         objectWorkingId,
         insertNewWorksheet,
         crosstabHeaderDimensions,
-        subtotalsInfo: { subtotalsAddresses } = false,
+        subtotalsInfo = false,
         bindId,
         mstrObjectType,
         name,
@@ -61,7 +61,7 @@ class StepGetInstanceDefinition {
 
       instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
 
-      this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses);
+      this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsInfo.subtotalsAddresses);
 
       if (nextStep === GET_OFFICE_TABLE_IMPORT) {
         startCell = await this.getStartCell(insertNewWorksheet, excelContext);
@@ -76,6 +76,7 @@ class StepGetInstanceDefinition {
         name: name || mstrTable.name,
         crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
         isCrosstab: mstrTable.isCrosstab,
+        subtotalsInfo,
       };
 
       const updatedOperation = {
