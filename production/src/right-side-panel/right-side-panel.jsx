@@ -25,11 +25,6 @@ export const RightSidePanelNotConnected = (props) => {
 
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
 
-  const emptyCallback = (parameters) => {
-    console.log(parameters);
-    throw new Error('Not implemented yet');
-  };
-
   React.useEffect(() => {
     try {
       sidePanelService.addRemoveObjectListener();
@@ -51,40 +46,22 @@ export const RightSidePanelNotConnected = (props) => {
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
-  const simulateConnectionLost = async () => {
-    notificationService.connectionLost();
-    setTimeout(() => {
-      notificationService.connectionRestored();
-    }, 2000);
-  };
-
-  const simulateSessionExpired = async () => {
-    notificationService.sessionExpired();
-    setTimeout(() => {
-      notificationService.sessionRestored();
-    }, 2000);
-  };
-
   return (
-    <>
-      <button type="button" onClick={simulateConnectionLost}>Connection lost test</button>
-      <button type="button" onClick={simulateSessionExpired}>Session expired test</button>
-      <SidePanel
-        loadedObjects={loadedObjects}
-        onAddData={sidePanelService.addData}
-        onTileClick={sidePanelService.highlightObject}
-        onDuplicateClick={sidePanelService.duplicate}
-        onEditClick={sidePanelService.edit}
-        onRefreshClick={sidePanelService.refresh}
-        onRemoveClick={sidePanelService.remove}
-        onRename={sidePanelService.rename}
-        popup={sidePanelPopup}
-        settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
-        confirmationWindow={isConfirm && <Confirmation />}
-        globalNotificationType={globalNotification}
-      />
-    </>
+    <SidePanel
+      loadedObjects={loadedObjects}
+      onAddData={sidePanelService.addData}
+      onTileClick={sidePanelService.highlightObject}
+      onDuplicateClick={sidePanelService.duplicate}
+      onEditClick={sidePanelService.edit}
+      onRefreshClick={sidePanelService.refresh}
+      onRemoveClick={sidePanelService.remove}
+      onRename={sidePanelService.rename}
+      popup={sidePanelPopup}
+      settingsMenu={isSettings && <SettingsMenu />}
+      onSettingsClick={handleSettingsClick}
+      confirmationWindow={isConfirm && <Confirmation />}
+      globalNotificationType={globalNotification}
+    />
   );
 };
 
