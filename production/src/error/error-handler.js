@@ -35,6 +35,7 @@ class ErrorService {
       // return this.notificationService.displayNotification({ type: 'info', content: message });
       this.notificationService.sessionExpired();
     }
+    // this.notificationService.globalWarningAppeared();
     // return this.notificationService.displayNotification({
     //   type: 'warning', content: message, details, onConfirm,
     // });

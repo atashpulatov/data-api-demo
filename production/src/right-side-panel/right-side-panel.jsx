@@ -60,7 +60,7 @@ export const RightSidePanelNotConnected = (props) => {
       settingsMenu={isSettings && <SettingsMenu />}
       onSettingsClick={handleSettingsClick}
       confirmationWindow={isConfirm && <Confirmation />}
-      globalNotificationType={globalNotification}
+      globalNotification={globalNotification}
     />
   );
 };
