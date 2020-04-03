@@ -1,26 +1,26 @@
 import {
-  IMPORT_REQUESTED,
-  EDIT_REQUESTED,
-  REFRESH_REQUESTED,
-  REMOVE_REQUESTED,
+  IMPORT_OPERATION,
+  EDIT_OPERATION,
+  REFRESH_OPERATION,
+  REMOVE_OPERATION,
+  CLEAR_DATA_OPERATION,
+  DUPLICATE_OPERATION,
   MARK_STEP_COMPLETED,
-  CANCEL_OPERATION,
   BACKUP_OBJECT,
   UPDATE_OPERATION,
-  CLEAR_DATA_REQUESTED,
-  DUPLICATE_REQUESTED,
-} from './operation-actions';
+  CANCEL_OPERATION,
+} from './operation-type-names';
 
 const initialState = { operations: [] };
 
 export const operationReducer = (state = initialState, action) => {
   switch (action.type) {
-    case IMPORT_REQUESTED:
-    case REFRESH_REQUESTED:
-    case EDIT_REQUESTED:
-    case DUPLICATE_REQUESTED:
-    case REMOVE_REQUESTED:
-    case CLEAR_DATA_REQUESTED:
+    case IMPORT_OPERATION:
+    case REFRESH_OPERATION:
+    case EDIT_OPERATION:
+    case DUPLICATE_OPERATION:
+    case REMOVE_OPERATION:
+    case CLEAR_DATA_OPERATION:
       return operationRequested(state, action.payload);
 
     case MARK_STEP_COMPLETED:

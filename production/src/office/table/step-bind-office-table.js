@@ -1,6 +1,7 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import officeApiDataLoader from '../api/office-api-data-loader';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepBindOfficeTable {
   /**
@@ -17,14 +18,19 @@ class StepBindOfficeTable {
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   bindOfficeTable = async (objectData, operationData) => {
-    const { bindId, objectWorkingId } = objectData;
-    const { excelContext, officeTable } = operationData;
+    try {
+      const { bindId, objectWorkingId } = objectData;
+      const { excelContext, officeTable } = operationData;
 
-    const tableName = await officeApiDataLoader.loadExcelDataSingle(excelContext, officeTable, 'name');
+      const tableName = await officeApiDataLoader.loadExcelDataSingle(excelContext, officeTable, 'name');
 
-    await officeApiHelper.bindNamedItem(tableName, bindId);
+      await officeApiHelper.bindNamedItem(tableName, bindId);
 
-    operationStepDispatcher.completeBindOfficeTable(objectWorkingId);
+      operationStepDispatcher.completeBindOfficeTable(objectWorkingId);
+    } catch (error) {
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
+    }
   };
 }
 

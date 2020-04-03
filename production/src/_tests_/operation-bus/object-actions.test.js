@@ -1,5 +1,5 @@
 import {
-  UPDATE_OBJECT, updateObject, DELETE_OBJECT, deleteObject, RESTORE_ALL_OBJECTS, restoreAllObjects
+  UPDATE_OBJECT, updateObject, REMOVE_OBJECT, removeObject, RESTORE_ALL_OBJECTS, restoreAllObjects
 } from '../../operation/object-actions';
 
 describe('updateObject', () => {
@@ -19,17 +19,17 @@ describe('updateObject', () => {
   });
 });
 
-describe('deleteObject', () => {
+describe('removeObject', () => {
   it('should populate action with proper fields', () => {
     // given
     const exampleObjectWorkingId = 'someId';
     const expectedAction = {
-      type: DELETE_OBJECT,
+      type: REMOVE_OBJECT,
       payload: exampleObjectWorkingId,
     };
 
     // when
-    const resultAction = deleteObject(exampleObjectWorkingId);
+    const resultAction = removeObject(exampleObjectWorkingId);
 
     // then
     expect(resultAction).toEqual(expectedAction);

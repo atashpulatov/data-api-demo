@@ -1,6 +1,7 @@
 import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr-object/mstr-object-rest-service';
 import officeInsertService from './office-insert-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepFetchInsertDataIntoExcel {
   /**
@@ -13,13 +14,14 @@ class StepFetchInsertDataIntoExcel {
    * This function is subscribed as one of the operation steps with the key FETCH_INSERT_DATA,
    * therefore should be called only via operation bus.
    *
+   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Object} objectData.subtotalsInfo Determines if subtotals will be displayed and stores subtotal addresses
    * @param {Number} objectData.objectId Id of the MSTR object being currently processed
    * @param {Number} objectData.projectId Id of the MSTR project from which we fetch data
    * @param {Object} objectData.dossierData Data of dossier used for answering prompts
    * @param {Object} objectData.mstrObjectType Information about MSTR object type
    * @param {Object} [objectData.visualizationInfo] Information about location of visualization in dossier
    * @param {Object} objectData.displayAttrFormNames The style in which attribute form will be displayed
-   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.operationType The type of the operation that called this function
    * @param {Boolean} [operationData.tableColumnsChanged] Determines if columns number in Excel table has been changed
    * @param {Office} operationData.officeTable Reference to Table created by Excel
@@ -28,8 +30,8 @@ class StepFetchInsertDataIntoExcel {
    */
   fetchInsertDataIntoExcel = async (objectData, operationData) => {
     try {
+      const { objectWorkingId, subtotalsInfo, subtotalsInfo: { importSubtotal = true } } = objectData;
       const {
-        objectWorkingId,
         operationType,
         tableColumnsChanged,
         officeTable,
@@ -38,7 +40,6 @@ class StepFetchInsertDataIntoExcel {
       } = operationData;
 
       const { columns, rows, mstrTable } = instanceDefinition;
-      const { subtotalsInfo: { importSubtotal = true } } = mstrTable;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
 
       const rowGenerator = mstrObjectRestService.fetchContentGenerator({ ...objectData, limit, instanceDefinition });
@@ -80,11 +81,11 @@ class StepFetchInsertDataIntoExcel {
       }
       console.timeEnd('Fetch and insert into excel');
 
-      mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
-      mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
 
       await officeInsertService.syncChangesToExcel(contextPromises, true);
 
+      mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
+      mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
       const updatedOperation = {
         objectWorkingId,
         instanceDefinition,
@@ -92,18 +93,15 @@ class StepFetchInsertDataIntoExcel {
 
       const updatedObject = {
         objectWorkingId,
-        subtotalsInfo: {
-          subtotalsAddresses,
-          importSubtotal
-        },
+        subtotalsInfo: { ...subtotalsInfo, subtotalsAddresses, },
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeFetchInsertData(objectWorkingId);
     } catch (error) {
-      console.log(error);
-      throw error;
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
     }
   };
 

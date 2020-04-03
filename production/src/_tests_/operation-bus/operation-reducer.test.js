@@ -1,6 +1,9 @@
 import {
-  IMPORT_REQUESTED, MARK_STEP_COMPLETED, CANCEL_OPERATION, BACKUP_OBJECT
-} from '../../operation/operation-actions';
+  IMPORT_OPERATION,
+  MARK_STEP_COMPLETED,
+  BACKUP_OBJECT,
+  CANCEL_OPERATION,
+} from '../../operation/operation-type-names';
 import { operationReducer } from '../../operation/operation-reducer';
 
 describe('operation reducer', () => {
@@ -73,7 +76,7 @@ describe('operation reducer', () => {
       // given
       const someOperation = {};
       const action = {
-        type: IMPORT_REQUESTED,
+        type: IMPORT_OPERATION,
         payload: { operation: someOperation, },
       };
       const expectedState = { operations: [someOperation] };
@@ -89,7 +92,7 @@ describe('operation reducer', () => {
       // given
       const someOperation = {};
       const action = {
-        type: IMPORT_REQUESTED,
+        type: IMPORT_OPERATION,
         payload: { operation: someOperation, },
       };
       const expectedState = { operations: [...initialState.singleOperation.operations, someOperation] };

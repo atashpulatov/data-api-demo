@@ -1,5 +1,6 @@
 import { toggleSecuredFlag, toggleIsClearingFlag } from '../office/store/office-actions';
-import { markStepCompleted, updateOperation, CLEAR_DATA_OPERATION } from './operation-actions';
+import { markStepCompleted, updateOperation } from './operation-actions';
+import { CLEAR_DATA_OPERATION } from './operation-type-names';
 import {
   BIND_OFFICE_TABLE,
   FETCH_INSERT_DATA,

@@ -32,7 +32,6 @@ describe('StepGetOfficeTableEditRefresh', () => {
   it('getOfficeTableEditRefresh should work as expected when tableColumnsChanged true', async () => {
     // given
     const objectData = {
-      oldBindId: 'oldBindIdTest',
       tableName: 'tableNameTest',
       previousTableDimensions: 'previousTableDimensionsTest',
       visualizationInfo: 'visualizationInfoTest',
@@ -42,6 +41,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     const operationData = {
       excelContext: 'excelContextTest',
       instanceDefinition: { mstrTable: 'mstrTableTest' },
+      oldBindId: 'oldBindIdTest',
     };
 
     const checkReportTypeChangeMock = jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
@@ -122,7 +122,6 @@ describe('StepGetOfficeTableEditRefresh', () => {
   async ({ inputFormatShouldUpdate, resultShouldFormat }) => {
     // given
     const objectData = {
-      oldBindId: 'oldBindIdTest',
       tableName: 'tableNameTest',
       previousTableDimensions: 'previousTableDimensionsTest',
       visualizationInfo: { formatShouldUpdate: inputFormatShouldUpdate },
@@ -132,6 +131,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     const operationData = {
       excelContext: 'excelContextTest',
       instanceDefinition: { mstrTable: 'mstrTableTest' },
+      oldBindId: 'oldBindIdTest',
     };
 
     const checkReportTypeChangeMock = jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
@@ -188,10 +188,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     });
 
     expect(updateObjectMock).toBeCalledTimes(1);
-    expect(updateObjectMock).toBeCalledWith({
-      objectWorkingId: 'objectWorkingIdTest',
-      bindId: 'oldBindIdTest',
-    });
+    expect(updateObjectMock).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: 'oldBindIdTest', });
 
     expect(completeGetOfficeTableEditRefreshMock).toBeCalledTimes(1);
     expect(completeGetOfficeTableEditRefreshMock).toBeCalledWith('objectWorkingIdTest');

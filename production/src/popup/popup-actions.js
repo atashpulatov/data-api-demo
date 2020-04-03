@@ -1,6 +1,5 @@
 import { officeProperties } from '../office/store/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -59,18 +58,18 @@ class PopupActions {
       const editedDossier = this.officeStoreService.getObjectFromObjectReducer(reportParams.bindId);
 
       const {
-        projectId, id, manipulationsXML, visualizationInfo
+        projectId, objectId, manipulationsXML, visualizationInfo
       } = editedDossier;
 
       const instanceId = await this.mstrObjectRestService.createDossierInstance(
         projectId,
-        id,
+        objectId,
         { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
       );
 
       const updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(
         projectId,
-        id,
+        objectId,
         visualizationInfo.visualizationKey,
         instanceId
       );
@@ -87,6 +86,7 @@ class PopupActions {
         type: SET_REPORT_N_FILTERS,
         editedObject: editedDossier,
       });
+      console.log('instanceId:', instanceId);
       this.popupController.runEditDossierPopup(reportParams);
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;

@@ -1,24 +1,29 @@
-import { UPDATE_OBJECT, DELETE_OBJECT, RESTORE_ALL_OBJECTS } from './object-actions';
-import { IMPORT_REQUESTED, EDIT_REQUESTED, DUPLICATE_REQUESTED } from './operation-actions';
+import { IMPORT_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION } from './operation-type-names';
+import {
+  UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS, RESTORE_OBJECT_BACKUP
+} from './object-actions';
 
 const initialState = { objects: [] };
 export const objectReducer = (state = initialState, action) => {
   switch (action.type) {
-    case IMPORT_REQUESTED:
-    case DUPLICATE_REQUESTED:
+    case IMPORT_OPERATION:
+    case DUPLICATE_OPERATION:
       return importRequested(state, action.payload);
 
-    case EDIT_REQUESTED:
+    case EDIT_OPERATION:
       return editRequested(state, action.payload);
 
     case UPDATE_OBJECT:
       return updateObject(state, action.payload);
 
-    case DELETE_OBJECT:
-      return deleteObject(state, action.payload);
+    case REMOVE_OBJECT:
+      return removeObject(state, action.payload);
 
     case RESTORE_ALL_OBJECTS:
       return restoreAllObjects(action.payload);
+
+    case RESTORE_OBJECT_BACKUP:
+      return restoreObjectBackup(state, action.payload);
 
     default:
       return state;
@@ -47,7 +52,7 @@ function updateObject(state, updatedObjectProps) {
   return { objects: newObjects };
 }
 
-function deleteObject(state, objectWorkingId) {
+function removeObject(state, objectWorkingId) {
   const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
   const newObjects = [...state.objects];
   newObjects.splice(objectToRemoveIndex, 1);
@@ -56,6 +61,13 @@ function deleteObject(state, objectWorkingId) {
 
 function restoreAllObjects(payload) {
   return { objects: [...payload] };
+}
+
+function restoreObjectBackup(state, backupObjectData) {
+  const objectToUpdateIndex = getObjectIndex(state.objects, backupObjectData.objectWorkingId);
+  const newObjects = [...state.objects];
+  newObjects.splice(objectToUpdateIndex, 1, backupObjectData);
+  return { objects: newObjects };
 }
 
 function getObjectIndex(objects, objectWorkingId) {

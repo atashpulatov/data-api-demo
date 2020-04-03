@@ -1,22 +1,24 @@
-
-import { reduxStore } from '../store';
 import { createConnectionLostNotification, createSessionExpiredNotification, clearGlobalNotification } from './notification-action-creators';
 
 class NotificationService {
+  init = (reduxStore) => {
+    this.reduxStore = reduxStore;
+  };
+
   connectionLost = () => {
-    reduxStore.dispatch(createConnectionLostNotification());
+    this.reduxStore.dispatch(createConnectionLostNotification());
   };
 
   sessionExpired = () => {
-    reduxStore.dispatch(createSessionExpiredNotification());
+    this.reduxStore.dispatch(createSessionExpiredNotification());
   }
 
   connectionRestored = () => {
-    reduxStore.dispatch(clearGlobalNotification());
+    this.reduxStore.dispatch(clearGlobalNotification());
   }
 
   sessionRestored = () => {
-    reduxStore.dispatch(clearGlobalNotification());
+    this.reduxStore.dispatch(clearGlobalNotification());
   }
 }
 

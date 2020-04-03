@@ -9,9 +9,9 @@ class StepCheckObjectStatus {
 
     const excelContext = await officeApiHelper.getExcelContext();
 
-    await officeRemoveHelper.checkIfObjectExist(objectData, excelContext);
+    const objectExist = await officeRemoveHelper.checkIfObjectExist(objectData, excelContext);
 
-    const updatedOperation = { objectWorkingId, excelContext };
+    const updatedOperation = { objectWorkingId, excelContext, objectExist };
 
     operationStepDispatcher.updateOperation(updatedOperation);
     operationStepDispatcher.completeCheckObjectStatus(objectWorkingId);

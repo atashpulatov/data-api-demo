@@ -1,5 +1,6 @@
 import { officeStoreService } from './office-store-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepSaveObjectInExcel {
   init = (reduxStore) => {
@@ -8,13 +9,19 @@ class StepSaveObjectInExcel {
 
   // TODO add jsdoc after integration
   saveObject = async (objectData, operationData) => {
-    const { instanceDefinition } = operationData;
-    objectData.previousTableDimensions = { columns: instanceDefinition.columns };
-    await officeStoreService.saveObjectsInExcelStore();
-    operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
-
-    console.timeEnd('Total');
-    console.groupEnd();
+    try {
+      const { instanceDefinition } = operationData;
+      objectData.previousTableDimensions = { columns: instanceDefinition.columns };
+      objectData.refreshDate = Date.now();
+      await officeStoreService.saveObjectsInExcelStore();
+      operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
+    } catch (error) {
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
+    } finally {
+      console.timeEnd('Total');
+      console.groupEnd();
+    }
   };
 }
 

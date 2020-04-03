@@ -1,6 +1,6 @@
-import { IMPORT_REQUESTED } from '../../operation/operation-actions';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
 import { objectReducer } from '../../operation/object-reducer';
-import { UPDATE_OBJECT, DELETE_OBJECT, RESTORE_ALL_OBJECTS } from '../../operation/object-actions';
+import { UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS } from '../../operation/object-actions';
 
 describe('objectReducer', () => {
   const initialObject = {
@@ -62,7 +62,7 @@ describe('objectReducer', () => {
     it('should add first object to array and return new array', () => {
       // given
       const action = {
-        type: IMPORT_REQUESTED,
+        type: IMPORT_OPERATION,
         payload: { object: initialObject, }
       };
 
@@ -76,7 +76,7 @@ describe('objectReducer', () => {
     it('should add object to array and return new array', () => {
       // given
       const action = {
-        type: IMPORT_REQUESTED,
+        type: IMPORT_OPERATION,
         payload: { object: initialObject, }
       };
 
@@ -172,7 +172,7 @@ describe('objectReducer', () => {
       // given
       const someId = 'some id';
       const action = {
-        type: DELETE_OBJECT,
+        type: REMOVE_OBJECT,
         payload: someId,
       };
 
@@ -187,7 +187,7 @@ describe('objectReducer', () => {
       // given
       const someId = 'someOtherString23';
       const action = {
-        type: DELETE_OBJECT,
+        type: REMOVE_OBJECT,
         payload: someId,
       };
 
@@ -202,7 +202,7 @@ describe('objectReducer', () => {
       // given
       const someId = 'someOtherString234';
       const action = {
-        type: DELETE_OBJECT,
+        type: REMOVE_OBJECT,
         payload: someId,
       };
 

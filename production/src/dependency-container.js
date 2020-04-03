@@ -3,7 +3,7 @@ import { officeApiHelper } from './office/api/office-api-helper';
 import { officeStoreService } from './office/store/office-store-service';
 import { errorService } from './error/error-handler';
 import { sessionHelper } from './storage/session-helper';
-import { notificationService } from './notification/notification-service';
+import { notificationService } from './notification-v2/notification-service';
 import { authenticationHelper } from './authentication/authentication-helper';
 import { homeHelper } from './home/home-helper';
 import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
@@ -11,13 +11,13 @@ import { popupController } from './popup/popup-controller';
 import { mstrListRestService } from './mstr-object/mstr-list-rest-service';
 import { popupHelper } from './popup/popup-helper';
 import { popupActions } from './popup/popup-actions';
-import { actionCreator } from './notification/action-creator';
 import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
 import { sidePanelService } from './right-side-panel/side-panel-service';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
+import operationErrorHandler from './operation/operation-error-handler';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -34,7 +34,7 @@ class DIContainer {
     this.officeStoreService = officeStoreService;
     this.officeStoreService.init(reduxStore);
     this.notificationService = notificationService;
-    this.notificationService.init(reduxStore, actionCreator);
+    this.notificationService.init(reduxStore);
     this.sessionHelper = sessionHelper;
     this.sessionHelper.init(reduxStore);
     this.errorService = errorService;
@@ -85,6 +85,9 @@ class DIContainer {
 
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
+
+    this.operationErrorHandler = operationErrorHandler;
+    this.operationErrorHandler.init(reduxStore);
   }
 }
 
