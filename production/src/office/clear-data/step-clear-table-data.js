@@ -8,15 +8,16 @@ class StepClearTableData {
     const { excelContext, objectWorkingId, objectExist } = operationData;
     try {
       const operationsList = officeStoreService.getOperationsListFromOperationReducer();
+      const objectList = officeStoreService.getObjectsListFromObjectReducer();
       const nextOperation = operationsList[1];
       if (objectExist) {
         await officeRemoveHelper.removeOfficeTableBody(excelContext, objectData, true);
       }
 
-      operationStepDispatcher.completeClearTableData(objectWorkingId, nextOperation);
+      operationStepDispatcher.completeClearTableData(objectWorkingId, nextOperation, objectList);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData);
+      operationErrorHandler.handleOperationError(objectData, operationData);
     }
   }
 }

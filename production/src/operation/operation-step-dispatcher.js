@@ -86,8 +86,8 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_CROSSTAB_HEADERS));
   };
 
-  completeClearTableData = (objectWorkingId, nextOperation) => {
-    if (!(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION)) {
+  completeClearTableData = (objectWorkingId, nextOperation, objectList) => {
+    if (!(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION) && objectList.length !== 0) {
       const { dispatch } = this.reduxStore;
       toggleIsClearingFlag(false)(dispatch);
       toggleSecuredFlag(true)(dispatch);
