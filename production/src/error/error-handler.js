@@ -6,7 +6,6 @@ import {
   incomingErrorStrings,
 } from './constants';
 
-
 const TIMEOUT = 2000;
 
 class ErrorService {
@@ -35,10 +34,8 @@ class ErrorService {
       // return this.notificationService.displayNotification({ type: 'info', content: message });
       this.notificationService.sessionExpired();
     }
-    // this.notificationService.globalWarningAppeared();
-    // return this.notificationService.displayNotification({
-    //   type: 'warning', content: message, details, onConfirm,
-    // });
+    const payload = this.createNotificationPayload(message, details);
+    this.notificationService.globalWarningAppeared(payload);
   }
 
   checkForLogout = (isLogout = false, errorType) => {
@@ -77,6 +74,23 @@ class ErrorService {
     this.sessionHelper.logOutRest();
     this.sessionHelper.logOut();
     this.sessionHelper.logOutRedirect();
+  }
+
+  createNotificationPayload(message, details) {
+    const buttons = [
+      {
+        title: 'Ok',
+        type: 'basic',
+        label: 'Ok',
+        onClick: () => {this.notificationService.globalNotificationDissapear();},
+      },
+    ];
+    const payload = {
+      title: message,
+      details,
+      buttons,
+    };
+    return payload;
   }
 }
 

@@ -42,7 +42,7 @@ const deleteNotification = (state, payload) => {
 };
 
 const createGlobalNotification = (state, payload) => (
-  { notifications: [...state.notifications], globalNotification: { type: payload } }
+  { notifications: [...state.notifications], globalNotification: payload }
 );
 
 const removeGlobalNotification = (state, paylaod) => ({ notifications: [...state.notifications], globalNotification: { type: '' } });

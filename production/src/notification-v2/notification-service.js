@@ -26,6 +26,10 @@ class NotificationService {
   globalWarningAppeared = (payload) => {
     this.reduxStore.dispatch(displayGlobalNotification(payload));
   }
+
+  globalNotificationDissapear = () => {
+    this.reduxStore.dispatch(clearGlobalNotification());
+  }
 }
 
 export const notificationService = new NotificationService();
