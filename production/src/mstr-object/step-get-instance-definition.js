@@ -77,6 +77,7 @@ class StepGetInstanceDefinition {
         crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
         isCrosstab: mstrTable.isCrosstab,
         subtotalsInfo,
+        manipulationsXML: instanceDefinition.manipulationsXML || false,
       };
 
       const updatedOperation = {
