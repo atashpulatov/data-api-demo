@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel, globalNotificationTypes } from '@mstr/rc';
+import { SidePanel, objectNotificationTypes } from '@mstr/rc';
 import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
 import * as officeActions from '../office/store/office-actions';
 import { officeStoreService } from '../office/store/office-store-service';
 import { sidePanelService } from './side-panel-service';
-import { notificationService } from '../notification-v2/notification-service';
 
 import './right-side-panel.scss';
+import { calculateLoadingProgress } from '../operation/operation-steps';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -21,9 +21,12 @@ export const RightSidePanelNotConnected = (props) => {
     toggleIsSettingsFlag,
     toggleSecuredFlag,
     globalNotification,
+    notifications,
+    operationReducer,
   } = props;
 
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
+  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
 
   React.useEffect(() => {
     try {
@@ -46,9 +49,30 @@ export const RightSidePanelNotConnected = (props) => {
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
+  React.useEffect(() => {
+    console.log({ loadedObjects, operationReducer, notifications });
+    setLoadedObjectsWrapped(loadedObjects.map((object) => {
+      const operation = operationReducer.operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
+      const notification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
+      console.log(operation);
+      const obj = operation ? {
+        ...object,
+        notification: {
+          ...notification,
+          percentageComplete: operation.totalRows !== 0 ? calculateLoadingProgress(operation.operationType, operation.stepsQueue[0], operation.loadedRows, operation.totalRows) : 0,
+          itemsTotal: operation.totalRows,
+          itemsComplete: operation.loadedRows,
+        }
+      }
+        : object;
+      console.log(obj);
+      return obj;
+    }));
+  }, [loadedObjects, notifications, operationReducer]);
+
   return (
     <SidePanel
-      loadedObjects={loadedObjects}
+      loadedObjects={loadedObjectsWrapped}
       onAddData={sidePanelService.addData}
       onTileClick={sidePanelService.highlightObject}
       onDuplicateClick={sidePanelService.duplicate}
@@ -67,15 +91,18 @@ export const RightSidePanelNotConnected = (props) => {
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { globalNotification } = state.notificationReducer;
+  const { operationReducer } = state;
+  const { globalNotification, notifications } = state.notificationReducer;
   const { isConfirm, isSettings, isSecured } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
+    operationReducer,
     importRequested,
     dossierOpenRequested,
     isConfirm,
     isSettings,
     globalNotification,
+    notifications,
     isSecured,
   };
 };

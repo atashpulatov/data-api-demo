@@ -1,14 +1,24 @@
+import { objectNotificationTypes } from '@mstr/rc';
+import { IMPORT_REQUESTED, REFRESH_REQUESTED, EDIT_REQUESTED, MARK_STEP_COMPLETED } from '../operation/operation-actions';
+
 export const CREATE_NOTIFICATION = 'CREATE_NOTIFICATION';
 export const UPDATE_NOTIFICATION = 'UPDATE_NOTIFICATION';
 export const DELETE_NOTIFICATION = 'DELETE_NOTIFICATION';
 export const CREATE_GLOBAL_NOTIFICATION = 'CREATE_GLOBAL_NOTIFICATION';
 export const REMOVE_GLOBAL_NOTIFICATION = 'REMOVE_GLOBAL_NOTIFICATION';
 
-const initialState = { notifications: [], };
+const initialState = { notifications: [], globalNotification: '' };
 
 export const notificationReducer = (state = initialState, action) => {
   const { payload } = action;
+  console.log(action);
   switch (action.type) {
+    case IMPORT_REQUESTED:
+    case REFRESH_REQUESTED:
+    case EDIT_REQUESTED:
+      return createProgressNotification(state, payload);
+    case MARK_STEP_COMPLETED:
+      return updateNotification(state, payload);
     case CREATE_NOTIFICATION:
       return createNotification(state, payload);
     case UPDATE_NOTIFICATION:
@@ -24,28 +34,46 @@ export const notificationReducer = (state = initialState, action) => {
   }
 };
 
-const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
+const createProgressNotification = (state, payload) => {
+  const newNotification = {
+    objectWorkingId: payload.operation.objectWorkingId,
+    type: objectNotificationTypes.PROGRESS,
+    title: 'Pending',
+  };
+  return { ...state, notifications: [...state.notifications, newNotification] };
+};
 
 const updateNotification = (state, payload) => {
+  console.log({ state, payload });
   const notificationToUpdateIndex = getNotificationIndex(state, payload);
-  const updatedNotification = { ...state.notifications[notificationToUpdateIndex], ...payload };
-  const newState = { notifications: [...state.notifications] };
+  const updatedNotification = { ...state.notifications[notificationToUpdateIndex], title: 'Import' };
+  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
   return newState;
 };
 
+const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
+
+// const updateNotification = (state, payload) => {
+//   const notificationToUpdateIndex = getNotificationIndex(state, payload);
+//   const updatedNotification = { ...state.notifications[notificationToUpdateIndex], ...payload };
+//   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
+//   newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
+//   return newState;
+// };
+
 const deleteNotification = (state, payload) => {
   const notificationToDelete = getNotificationIndex(state, payload);
-  const newState = { notifications: [...state.notifications] };
+  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications.splice(notificationToDelete, 1);
   return newState;
 };
 
 const createGlobalNotification = (state, payload) => (
-  { notifications: [...state.notifications], globalNotification: payload }
+  { ...state, globalNotification: payload }
 );
 
-const removeGlobalNotification = (state, paylaod) => ({ notifications: [...state.notifications], globalNotification: '' });
+const removeGlobalNotification = (state, paylaod) => ({ ...state, globalNotification: '', });
 
 function getNotificationIndex(state, payload) {
   const notificationToUpdateIndex = state.notifications
