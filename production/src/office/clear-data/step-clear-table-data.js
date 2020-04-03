@@ -4,13 +4,12 @@ import { officeStoreService } from '../store/office-store-service';
 
 class StepClearTableData {
   clearTableData = async (objectData, operationData) => {
-    const { objectWorkingId } = objectData;
-    const { excelContext } = operationData;
+    const { excelContext, objectWorkingId, objectExist } = operationData;
     const operationsList = officeStoreService.getOperationsListFromOperationReducer();
     const nextOperation = operationsList[1];
-
-
-    await officeRemoveHelper.removeOfficeTableBody(excelContext, objectData, true);
+    if (objectExist) {
+      await officeRemoveHelper.removeOfficeTableBody(excelContext, objectData, true);
+    }
 
 
     operationStepDispatcher.completeClearTableData(objectWorkingId, nextOperation);

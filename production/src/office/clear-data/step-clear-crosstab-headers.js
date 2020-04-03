@@ -5,17 +5,20 @@ import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 class StepClearCrosstabHeaders {
   clearCrosstabHeaders = async (objectData, operationData) => {
-    const { isCrosstab, bindId, objectWorkingId } = objectData;
-    const { excelContext } = operationData;
-    if (isCrosstab) {
-      const officeTable = await officeApiHelper.getTable(excelContext, bindId);
-      officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
-      officeTable.showHeaders = true;
-      officeTable.showFilterButton = false;
+    const { excelContext, objectExist, objectWorkingId } = operationData;
 
-      const headers = officeTable.getHeaderRowRange();
-      headers.format.font.color = 'white';
-      await excelContext.sync();
+    if (objectExist) {
+      const { isCrosstab, bindId } = objectData;
+      if (isCrosstab) {
+        const officeTable = await officeApiHelper.getTable(excelContext, bindId);
+        officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
+        officeTable.showHeaders = true;
+        officeTable.showFilterButton = false;
+
+        const headers = officeTable.getHeaderRowRange();
+        headers.format.font.color = 'white';
+        await excelContext.sync();
+      }
     }
 
     operationStepDispatcher.completeClearCrosstabHeaders(objectWorkingId);
