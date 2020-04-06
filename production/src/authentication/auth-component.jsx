@@ -7,7 +7,7 @@ import {
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { authenticationHelper } from './authentication-helper';
-import { popupActions } from '../popup/popup-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 const FormItem = Form.Item;
 

@@ -2,14 +2,14 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { errorService } from '../error/error-handler';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { officeProperties } from '../office/store/office-properties';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../navigation/navigation-tree-actions';
-import { REFRESH_CACHE_COMMAND, refreshCache } from '../cache/cache-actions';
-import { START_REPORT_LOADING, STOP_REPORT_LOADING, RESET_STATE } from './popup-actions';
-import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from './popup-state-actions';
-import { importRequested, editRequested } from '../operation/operation-actions';
+import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
+import { START_REPORT_LOADING, STOP_REPORT_LOADING, RESET_STATE } from '../redux-reducer/popup-reducer/popup-actions';
+import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { importRequested, editRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
 
 const URL = `${window.location.href}`;

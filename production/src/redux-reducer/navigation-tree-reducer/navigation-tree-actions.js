@@ -1,4 +1,4 @@
-import { officeProperties } from '../office/store/office-properties';
+import { officeProperties } from '../office-reducer/office-properties';
 
 export const SELECT_OBJECT = 'NAV_TREE_SELECT_OBJECT';
 export const SET_DATA_SOURCE = 'NAV_TREE_SET_DATA_SOURCE';

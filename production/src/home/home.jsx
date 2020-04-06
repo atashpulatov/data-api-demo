@@ -6,7 +6,7 @@ import { Spin } from 'antd';
 import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
-import { toggleRenderSettingsFlag } from '../office/store/office-actions';
+import { toggleRenderSettingsFlag } from '../redux-reducer/office-reducer/office-actions';
 import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
 import { Authenticate } from '../authentication/auth-component';

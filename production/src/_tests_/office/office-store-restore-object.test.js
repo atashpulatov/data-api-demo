@@ -1,7 +1,7 @@
 import officeStoreRestoreObject from '../../office/store/office-store-restore-object';
 import { reduxStore } from '../../store';
-import * as objectActions from '../../operation/object-actions';
-import { officeProperties } from '../../office/store/office-properties';
+import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { errorService } from '../../error/error-handler';
 import officeStoreHelper from '../../office/store/office-store-helper';
 

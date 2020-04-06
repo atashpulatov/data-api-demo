@@ -7,8 +7,8 @@ import { popupHelper } from '../popup/popup-helper';
 import {
   switchImportSubtotals as switchImportSubtotalsImported,
   updateDisplayAttrForm as updateDisplayAttrFormImported
-} from '../navigation/navigation-tree-actions';
-import { officeProperties } from '../office/store/office-properties';
+} from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 export class AttributeSelectorNotConnected extends Component {

@@ -1,6 +1,6 @@
 import {
   createConnectionLostNotification, createSessionExpiredNotification, clearGlobalNotification, displayGlobalNotification
-} from './notification-action-creators';
+} from '../redux-reducer/notification-reducer/notification-action-creators';
 
 class NotificationService {
   init = (reduxStore) => {

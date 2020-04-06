@@ -1,5 +1,5 @@
-import { CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN } from '../navigation/navigation-tree-actions';
-import { PopupTypeEnum } from '../home/popup-type-enum';
+import { CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN } from '../navigation-tree-reducer/navigation-tree-actions';
+import { PopupTypeEnum } from '../../home/popup-type-enum';
 
 export const SET_POPUP_TYPE = 'SET_POPUP_TYPE';
 export const SET_MSTR_DATA = 'SET_MSTR_DATA';

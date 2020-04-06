@@ -19,7 +19,7 @@ import {
   refreshCacheState,
   fetchObjectsFallback,
   resetLoading,
-} from '../../cache/cache-actions';
+} from '../../redux-reducer/cache-reducer/cache-actions';
 
 describe('Cache actions', () => {
   it('should return object list loading dispatch action', () => {

@@ -1,4 +1,4 @@
-import { officeProperties } from './office-properties';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 import { errorService } from '../../error/error-handler';
 

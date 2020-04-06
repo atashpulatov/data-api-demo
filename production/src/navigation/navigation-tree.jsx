@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { actions } from './navigation-tree-actions';
+import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
@@ -14,10 +14,10 @@ import {
   REFRESH_CACHE_COMMAND,
   refreshCacheState,
   fetchObjectsFallback
-} from '../cache/cache-actions';
+} from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { popupStateActions } from '../popup/popup-state-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network

@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 import { OfficeLoadedFile } from './office-loaded-file';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import { popupActions } from '../popup/popup-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { fileHistoryContainerHOC } from './file-history-container-HOC';
 import officeStoreHelper from '../office/store/office-store-helper';
-import { toggleSecuredFlag as toggleSecuredFlagImported } from '../office/store/office-actions';
+import { toggleSecuredFlag as toggleSecuredFlagImported } from '../redux-reducer/office-reducer/office-actions';
 import { errorService } from '../error/error-handler';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 import './file-history.scss';
@@ -19,7 +19,7 @@ import { ButtonPopover } from './button-popover';
 import {
   startLoading as startLoadingImported,
   stopLoading as stopLoadingImported
-} from '../navigation/navigation-tree-actions';
+} from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { sessionHelper } from '../storage/session-helper';
 import { DevelopmentImportList } from '../development-import-list';

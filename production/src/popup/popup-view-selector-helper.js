@@ -3,7 +3,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from './popup-helper';
-import { officeProperties } from '../office/store/office-properties';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 

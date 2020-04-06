@@ -6,7 +6,7 @@ import { selectorProperties } from '../../attribute-selector/selector-properties
 import { Office } from '../mockOffice';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { DEFAULT_STATE as CACHE_STATE } from '../../cache/cache-reducer';
+import { DEFAULT_STATE as CACHE_STATE } from '../../redux-reducer/cache-reducer/cache-reducer';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { popupHelper } from '../../popup/popup-helper';
 import DB from '../../cache/cache-db';
