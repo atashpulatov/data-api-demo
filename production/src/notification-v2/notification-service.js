@@ -1,4 +1,6 @@
-import { createConnectionLostNotification, createSessionExpiredNotification, clearGlobalNotification } from './notification-action-creators';
+import {
+  createConnectionLostNotification, createSessionExpiredNotification, clearGlobalNotification, displayGlobalNotification
+} from '../redux-reducer/notification-reducer/notification-action-creators';
 
 class NotificationService {
   init = (reduxStore) => {
@@ -18,6 +20,14 @@ class NotificationService {
   }
 
   sessionRestored = () => {
+    this.reduxStore.dispatch(clearGlobalNotification());
+  }
+
+  globalWarningAppeared = (payload) => {
+    this.reduxStore.dispatch(displayGlobalNotification(payload));
+  }
+
+  globalNotificationDissapear = () => {
     this.reduxStore.dispatch(clearGlobalNotification());
   }
 }

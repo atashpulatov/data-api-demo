@@ -1,6 +1,6 @@
 import { IMPORT_OPERATION } from '../../operation/operation-type-names';
-import { objectReducer } from '../../operation/object-reducer';
-import { UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS } from '../../operation/object-actions';
+import { objectReducer } from '../../redux-reducer/object-reducer/object-reducer';
+import { UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS } from '../../redux-reducer/object-reducer/object-actions';
 
 describe('objectReducer', () => {
   const initialObject = {

@@ -12,7 +12,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
 
   it('getOfficeTableEditRefresh should log exceptions', async () => {
     // given
-    console.log = jest.fn();
+    console.error = jest.fn();
 
     const checkReportTypeChangeMock = jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange')
       .mockImplementation(() => {
@@ -25,8 +25,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
     // then
     expect(checkReportTypeChangeMock).toBeCalledTimes(1);
     expect(checkReportTypeChangeMock).toThrowError(Error);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('error:', new Error('errorTest'));
+    expect(console.error).toBeCalledTimes(1);
+    expect(console.error).toBeCalledWith(new Error('errorTest'));
   });
 
   it('getOfficeTableEditRefresh should work as expected when tableColumnsChanged true', async () => {

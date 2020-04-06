@@ -3,11 +3,9 @@ import { Provider } from 'react-redux';
 import { mount, shallow } from 'enzyme';
 import { Home, HomeNotConnected } from '../../home/home';
 import { HeaderNotConnected } from '../../home/header';
-import { sessionHelper } from '../../storage/session-helper';
 import { reduxStore } from '../../store';
 import { homeHelper } from '../../home/home-helper';
 import { SettingsMenu } from '../../home/settings-menu';
-import { officeStoreService } from '../../office/store/office-store-service';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../office/store/office-store-service');

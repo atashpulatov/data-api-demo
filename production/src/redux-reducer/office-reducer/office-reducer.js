@@ -1,5 +1,5 @@
 import { officeProperties } from './office-properties';
-import { OfficeError } from '../office-error';
+import { OfficeError } from '../../office/office-error';
 
 const initialState = {
   loading: false,

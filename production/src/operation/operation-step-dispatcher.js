@@ -1,5 +1,5 @@
-import { toggleSecuredFlag, toggleIsClearingFlag } from '../office/store/office-actions';
-import { markStepCompleted, updateOperation } from './operation-actions';
+import { toggleSecuredFlag, toggleIsClearingFlag } from '../redux-reducer/office-reducer/office-actions';
+import { markStepCompleted, updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { CLEAR_DATA_OPERATION } from './operation-type-names';
 import {
   BIND_OFFICE_TABLE,
@@ -19,7 +19,7 @@ import {
   CLEAR_CROSSTAB_HEADERS,
   CLEAR_TABLE_DATA,
 } from './operation-steps';
-import { updateObject } from './object-actions';
+import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 
 class OperationStepDispatcher {
   init = (reduxStore) => {
@@ -86,8 +86,8 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_CROSSTAB_HEADERS));
   };
 
-  completeClearTableData = (objectWorkingId, nextOperation) => {
-    if (!(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION)) {
+  completeClearTableData = (objectWorkingId, nextOperation, objectList) => {
+    if (!(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION) && objectList.length !== 0) {
       const { dispatch } = this.reduxStore;
       toggleIsClearingFlag(false)(dispatch);
       toggleSecuredFlag(true)(dispatch);

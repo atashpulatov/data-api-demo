@@ -4,7 +4,7 @@ import {
   BACKUP_OBJECT,
   CANCEL_OPERATION,
 } from '../../operation/operation-type-names';
-import { operationReducer } from '../../operation/operation-reducer';
+import { operationReducer } from '../../redux-reducer/operation-reducer/operation-reducer';
 
 describe('operation reducer', () => {
   let initialState;

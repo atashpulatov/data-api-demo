@@ -1,5 +1,5 @@
-import * as actions from '../../navigation/navigation-tree-actions';
-import { officeProperties } from '../../office/store/office-properties';
+import * as actions from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {

@@ -19,12 +19,12 @@ class StepApplyFormatting {
   applyFormatting = async (objectData, operationData) => {
     console.time('Apply formatting');
 
-    try {
-      const {
-        objectWorkingId, excelContext, instanceDefinition, officeTable,
-      } = operationData;
-      const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
+    const {
+      objectWorkingId, excelContext, instanceDefinition, officeTable,
+    } = operationData;
+    const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
 
+    try {
       const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
 
       const attributeColumnNumber = this.calculateAttributeColumnNumber(columnInformation);
@@ -39,12 +39,12 @@ class StepApplyFormatting {
       this.setupFormatting(filteredColumnInformation, isCrosstab, offset, officeTable);
 
       await excelContext.sync();
-
-      operationStepDispatcher.completeFormatData(objectWorkingId);
     } catch (error) {
       console.error(error);
       console.log('Cannot apply formatting, skipping');
     }
+
+    operationStepDispatcher.completeFormatData(objectWorkingId);
 
     console.timeEnd('Apply formatting');
   };

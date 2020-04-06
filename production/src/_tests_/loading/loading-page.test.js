@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { mount } from 'enzyme';
 import { reduxStore } from '../../store';
 import { LoadingPage } from '../../loading/loading-page';
-import { START_REPORT_LOADING } from '../../popup/popup-actions';
+import { START_REPORT_LOADING } from '../../redux-reducer/popup-reducer/popup-actions';
 
 
 describe('Loading page', () => {

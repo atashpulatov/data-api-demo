@@ -1,4 +1,4 @@
-import { IMPORT_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION } from './operation-type-names';
+import { IMPORT_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
 import {
   UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS, RESTORE_OBJECT_BACKUP
 } from './object-actions';

@@ -105,7 +105,6 @@
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/CompileStrings.js",
       "!src/cache/cache-db.js",
-      "!src/cache/cache-actions.js",
       "!src/dossier/embedded-dossier.jsx",
       "!src/prompts/prompts-window.jsx",
       "!src/office/office-display-service.js",
@@ -114,7 +113,8 @@
       "!src/office/format/*.*",
       "!src/office/api/*.*",
       "!src/office/table/*.*",
-      "!src/office/import/*.*"
+      "!src/office/import/*.*",
+      "!src/redux-reducer/*.*"
     ]
   }
 }

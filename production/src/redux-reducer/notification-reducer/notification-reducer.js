@@ -10,7 +10,7 @@ export const DELETE_NOTIFICATION = 'DELETE_NOTIFICATION';
 export const CREATE_GLOBAL_NOTIFICATION = 'CREATE_GLOBAL_NOTIFICATION';
 export const REMOVE_GLOBAL_NOTIFICATION = 'REMOVE_GLOBAL_NOTIFICATION';
 
-const initialState = { notifications: [], globalNotification: '' };
+const initialState = { notifications: [], globalNotification: { type: '' } };
 
 export const notificationReducer = (state = initialState, action) => {
   const { payload } = action;
@@ -100,7 +100,7 @@ const createGlobalNotification = (state, payload) => (
   { ...state, globalNotification: payload }
 );
 
-const removeGlobalNotification = (state, paylaod) => ({ ...state, globalNotification: '', });
+const removeGlobalNotification = (state, paylaod) => ({ notifications: [...state.notifications], globalNotification: { type: '' } });
 
 function getNotificationIndex(state, payload) {
   const notificationToUpdateIndex = state.notifications

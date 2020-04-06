@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel, objectNotificationTypes } from '@mstr/rc';
-import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
+import { SidePanel, } from '@mstr/rc';
+import { cancelImportRequest, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
-import * as officeActions from '../office/store/office-actions';
-import { officeStoreService } from '../office/store/office-store-service';
+import * as officeActions from '../redux-reducer/office-reducer/office-actions';
+import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
-
 import './right-side-panel.scss';
 import { calculateLoadingProgress, operationStepsMap } from '../operation/operation-steps';
+import { notificationService } from '../notification-v2/notification-service';
+import { getNotificationButtons } from '../notification-v2/notification-buttons';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -38,7 +39,7 @@ export const RightSidePanelNotConnected = (props) => {
 
   React.useEffect(() => {
     // toggleSecuredFlag(false);
-    if (officeStoreService.isFileSecured()) {
+    if (officeStoreHelper.isFileSecured()) {
       toggleSecuredFlag(true);
     }
   }, [toggleSecuredFlag]);
@@ -74,22 +75,57 @@ export const RightSidePanelNotConnected = (props) => {
     }));
   }, [loadedObjects, notifications, operations]);
 
+  const mockConnectionLost = () => {
+    notificationService.connectionLost();
+    setTimeout(() => { notificationService.connectionRestored(); }, 3000);
+  };
+
+  const mockSessionExpired = () => {
+    notificationService.sessionExpired();
+    setTimeout(() => { notificationService.sessionRestored(); }, 3000);
+  };
+
+  const mockGlobalNotification = () => {
+    const buttons = [
+      {
+        title: 'Ok',
+        type: 'basic',
+        label: 'Ok',
+        onClick: () => { notificationService.globalNotificationDissapear(); },
+      },
+    ];
+    const payload = {
+      title: 'sum title',
+      details: 'sum details',
+      children: getNotificationButtons(buttons),
+    };
+
+    notificationService.globalWarningAppeared(payload);
+  };
+
+  console.log(globalNotification);
+
   return (
-    <SidePanel
-      loadedObjects={loadedObjectsWrapped}
-      onAddData={sidePanelService.addData}
-      onTileClick={sidePanelService.highlightObject}
-      onDuplicateClick={sidePanelService.duplicate}
-      onEditClick={sidePanelService.edit}
-      onRefreshClick={sidePanelService.refresh}
-      onRemoveClick={sidePanelService.remove}
-      onRename={sidePanelService.rename}
-      popup={sidePanelPopup}
-      settingsMenu={isSettings && <SettingsMenu />}
-      onSettingsClick={handleSettingsClick}
-      confirmationWindow={isConfirm && <Confirmation />}
-      globalNotificationType={globalNotification}
-    />
+    <>
+      <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
+      <button type="button" onClick={mockSessionExpired}>Mock Session expired</button>
+      <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button>
+      <SidePanel
+        loadedObjects={loadedObjects}
+        onAddData={sidePanelService.addData}
+        onTileClick={sidePanelService.highlightObject}
+        onDuplicateClick={sidePanelService.duplicate}
+        onEditClick={sidePanelService.edit}
+        onRefreshClick={sidePanelService.refresh}
+        onRemoveClick={sidePanelService.remove}
+        onRename={sidePanelService.rename}
+        popup={sidePanelPopup}
+        settingsMenu={isSettings && <SettingsMenu />}
+        onSettingsClick={handleSettingsClick}
+        confirmationWindow={isConfirm && <Confirmation />}
+        globalNotification={globalNotification}
+      />
+    </>
   );
 };
 

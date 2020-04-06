@@ -3,12 +3,11 @@ import {
   RESET_STATE,
   SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT
-} from '../../popup/popup-actions';
+} from '../../redux-reducer/popup-reducer/popup-actions';
 import { popupHelper } from '../../popup/popup-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { authenticationHelper } from '../../authentication/authentication-helper';
-import { officeProperties } from '../../office/store/office-properties';
-import { officeStoreService } from '../../office/store/office-store-service';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
@@ -16,6 +15,7 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 jest.mock('../../office/api/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
 jest.mock('../../office/store/office-store-service');
+jest.mock('../../office/store/office-reducer-helper');
 jest.mock('../../popup/popup-controller');
 jest.mock('../../error/error-handler');
 jest.mock('../../store');
@@ -28,7 +28,7 @@ describe('Popup actions', () => {
     actions.init(
       errorService,
       officeApiHelper,
-      officeStoreService,
+      officeReducerHelper,
       popupHelper,
       mstrObjectRestService,
       popupController,
@@ -83,14 +83,14 @@ describe('Popup actions', () => {
     };
     const instanceDefinitionMocked = { instanceId: 'instanceId' };
     const listener = jest.fn();
-    officeStoreService.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
+    officeReducerHelper.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
     mstrObjectRestService.getVisualizationInfo.mockReturnValueOnce(visInfo);
     createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
     await actions.callForEditDossier(report)(listener);
     // then
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
-    expect(officeStoreService.getObjectFromObjectReducer).toBeCalledWith(bindId);
+    expect(officeReducerHelper.getObjectFromObjectReducer).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
 
@@ -101,12 +101,12 @@ describe('Popup actions', () => {
     const returnedValue = {
       id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: false
     };
-    officeStoreService.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
+    officeReducerHelper.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(officeStoreService.getObjectFromObjectReducer).toBeCalledWith(bindId);
+    expect(officeReducerHelper.getObjectFromObjectReducer).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
@@ -118,12 +118,12 @@ describe('Popup actions', () => {
     const returnedValue = {
       id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true
     };
-    officeStoreService.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
+    officeReducerHelper.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(officeStoreService.getObjectFromObjectReducer).toBeCalledWith(bindId);
+    expect(officeReducerHelper.getObjectFromObjectReducer).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runRepromptPopup).toBeCalledWith(report);
   });

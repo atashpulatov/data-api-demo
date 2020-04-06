@@ -3,7 +3,7 @@ import {
   markStepCompleted,
   cancelOperation,
   backupObject,
-} from '../../operation/operation-actions';
+} from '../../redux-reducer/operation-reducer/operation-actions';
 import {
   IMPORT_OPERATION,
   MARK_STEP_COMPLETED,

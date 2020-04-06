@@ -3,8 +3,8 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { clearDataRequested } from '../operation/operation-actions';
-import { toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/store/office-actions';
+import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { toggleIsConfirmFlag, toggleIsClearingFlag } from '../redux-reducer/office-reducer/office-actions';
 
 export class HomeHelper {
   init = (reduxStore, sessionHelper) => {

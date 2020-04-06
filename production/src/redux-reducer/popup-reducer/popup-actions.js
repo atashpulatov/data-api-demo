@@ -1,5 +1,5 @@
-import { officeProperties } from '../office/store/office-properties';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeProperties } from '../office-reducer/office-properties';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';
@@ -12,23 +12,23 @@ class PopupActions {
   init = (
     errorService,
     officeApiHelper,
-    officeStoreService,
+    officeReducerHelper,
     popupHelper,
     mstrObjectRestService,
     popupController
   ) => {
     this.errorService = errorService;
     this.officeApiHelper = officeApiHelper;
-    this.officeStoreService = officeStoreService;
+    this.officeReducerHelper = officeReducerHelper;
     this.popupHelper = popupHelper;
     this.mstrObjectRestService = mstrObjectRestService;
     this.popupController = popupController;
-  }
+  };
 
   callForEdit = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject = this.officeStoreService.getObjectFromObjectReducer(reportParams.bindId);
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducer(reportParams.bindId);
       editedObject.objectType = editedObject.mstrObjectType;
 
       dispatch({
@@ -44,18 +44,18 @@ class PopupActions {
       dispatch({ type: officeProperties.actions.stopLoading });
       return this.errorService.handleError(error);
     }
-  }
+  };
 
   preparePromptedReport = (instanceId, chosenObjectData) => (dispatch) => dispatch({
     type: SET_PREPARED_REPORT,
     instanceId,
     chosenObjectData,
-  })
+  });
 
   callForEditDossier = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedDossier = this.officeStoreService.getObjectFromObjectReducer(reportParams.bindId);
+      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducer(reportParams.bindId);
 
       const {
         projectId, objectId, manipulationsXML, visualizationInfo
@@ -92,9 +92,9 @@ class PopupActions {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       return this.errorService.handleError(error);
     }
-  }
+  };
 
-  resetState = () => (dispatch) => dispatch({ type: RESET_STATE, })
+  resetState = () => (dispatch) => dispatch({ type: RESET_STATE, });
 }
 
 export const popupActions = new PopupActions();

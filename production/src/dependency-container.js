@@ -1,6 +1,8 @@
 import { reduxStore } from './store';
 import { officeApiHelper } from './office/api/office-api-helper';
-import { officeStoreService } from './office/store/office-store-service';
+import officeReducerHelper from './office/store/office-reducer-helper';
+import officeStoreObject from './office/store/office-store-object';
+import officeStoreRestoreObject from './office/store/office-store-restore-object';
 import { errorService } from './error/error-handler';
 import { sessionHelper } from './storage/session-helper';
 import { notificationService } from './notification-v2/notification-service';
@@ -10,7 +12,7 @@ import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
 import { popupController } from './popup/popup-controller';
 import { mstrListRestService } from './mstr-object/mstr-list-rest-service';
 import { popupHelper } from './popup/popup-helper';
-import { popupActions } from './popup/popup-actions';
+import { popupActions } from './redux-reducer/popup-reducer/popup-actions';
 import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
 import { sidePanelService } from './right-side-panel/side-panel-service';
@@ -31,8 +33,12 @@ class DIContainer {
     this.operationBus.init(reduxStore);
     this.officeApiHelper = officeApiHelper;
     this.officeApiHelper.init(reduxStore);
-    this.officeStoreService = officeStoreService;
-    this.officeStoreService.init(reduxStore);
+    this.officeReducerHelper = officeReducerHelper;
+    this.officeReducerHelper.init(reduxStore);
+    this.officeStoreObject = officeStoreObject;
+    this.officeStoreObject.init(reduxStore);
+    this.officeStoreRestoreObject = officeStoreRestoreObject;
+    this.officeStoreRestoreObject.init(reduxStore);
     this.notificationService = notificationService;
     this.notificationService.init(reduxStore);
     this.sessionHelper = sessionHelper;
@@ -56,7 +62,7 @@ class DIContainer {
     this.popupActions.init(
       errorService,
       officeApiHelper,
-      officeStoreService,
+      officeReducerHelper,
       popupHelper,
       mstrObjectRestService,
       popupController

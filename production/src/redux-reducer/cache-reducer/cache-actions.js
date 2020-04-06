@@ -1,7 +1,7 @@
 import { addNestedPropertiesToObjects } from '@mstr/rc';
-import DB from './cache-db';
-import i18next from '../i18n';
-import { mstrListRestService } from '../mstr-object/mstr-list-rest-service';
+import DB from '../../cache/cache-db';
+import i18next from '../../i18n';
+import { mstrListRestService } from '../../mstr-object/mstr-list-rest-service';
 
 export const CREATE_CACHE = 'CREATE_CACHE';
 export const CLEAR_CACHE = 'CLEAR_CACHE';
