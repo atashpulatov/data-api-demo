@@ -12,7 +12,7 @@ import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
 import { popupController } from './popup/popup-controller';
 import { mstrListRestService } from './mstr-object/mstr-list-rest-service';
 import { popupHelper } from './popup/popup-helper';
-import { popupActions } from './popup/popup-actions';
+import { popupActions } from './redux-reducer/popup-reducer/popup-actions';
 import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
 import { sidePanelService } from './right-side-panel/side-panel-service';

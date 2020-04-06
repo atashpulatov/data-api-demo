@@ -1,7 +1,7 @@
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
-import { toggleIsClearingFlag } from '../office/store/office-actions';
-import { cancelOperation } from './operation-actions';
-import { removeObject, restoreObjectBackup } from './object-actions';
+import { toggleIsClearingFlag } from '../redux-reducer/office-reducer/office-actions';
+import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
+import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
   IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION

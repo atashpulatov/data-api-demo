@@ -19,7 +19,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import {
   startLoading as startLoadingImported,
   stopLoading as stopLoadingImported
-} from '../navigation/navigation-tree-actions';
+} from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 

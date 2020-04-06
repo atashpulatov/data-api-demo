@@ -1,4 +1,4 @@
-import cacheReducer, { DEFAULT_STATE, REFRESH_STATE } from '../../cache/cache-reducer';
+import cacheReducer, { DEFAULT_STATE, REFRESH_STATE } from '../../redux-reducer/cache-reducer/cache-reducer';
 import {
   SET_OBJECT_LIST_LOADING,
   SET_MY_LIBRARY_LOADING,
@@ -7,7 +7,7 @@ import {
   ADD_PROJECTS,
   CLEAR_CACHE,
   REFRESH_CACHE
-} from '../../cache/cache-actions';
+} from '../../redux-reducer/cache-reducer/cache-actions';
 
 describe('Cache reducer', () => {
   it('should return default state', () => {

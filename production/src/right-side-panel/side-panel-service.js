@@ -6,13 +6,13 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
 import { errorService } from '../error/error-handler';
-import { refreshRequested, removeRequested, duplicateRequested } from '../operation/operation-actions';
-import { updateObject } from '../operation/object-actions';
-import { CANCEL_REQUEST_IMPORT } from '../navigation/navigation-tree-actions';
-import { toggleSecuredFlag } from '../office/store/office-actions';
+import { refreshRequested, removeRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { updateObject } from '../redux-reducer/object-reducer/object-actions';
+import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { toggleSecuredFlag } from '../redux-reducer/office-reducer/office-actions';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { popupActions } from '../popup/popup-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -42,7 +42,6 @@ class SidePanelService {
   };
 
   refresh = (...objectWorkingIds) => {
-    console.log('objectWorkingIds:', objectWorkingIds);
     for (let index = 0; index < objectWorkingIds.length; index++) {
       const object = this.getObject(objectWorkingIds[index]);
       this.reduxStore.dispatch(refreshRequested(object));
@@ -50,7 +49,6 @@ class SidePanelService {
   };
 
   remove = async (...objectWorkingIds) => {
-    console.log('objectWorkingIds:', objectWorkingIds);
     for (let index = 0; index < objectWorkingIds.length; index++) {
       this.reduxStore.dispatch(removeRequested(objectWorkingIds[index]));
     }

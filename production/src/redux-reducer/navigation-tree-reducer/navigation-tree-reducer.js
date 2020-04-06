@@ -2,16 +2,15 @@ import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
   UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
   CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED,
-  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM,
-  SWITCH_IMPORT_SUBTOTALS
-} from '../navigation/navigation-tree-actions';
-import { CLEAR_WINDOW } from '../popup/popup-actions';
+  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM, SWITCH_IMPORT_SUBTOTALS
+} from './navigation-tree-actions';
+import { CLEAR_WINDOW } from '../popup-reducer/popup-actions';
 import {
   CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE, SAVE_MY_LIBRARY_OWNERS
-} from '../cache/cache-actions';
-import { sessionProperties } from './session-properties';
-import { CLEAR_POPUP_STATE } from '../popup/popup-state-actions';
-import mstrObjectType from '../mstr-object/mstr-object-type-enum';
+} from '../cache-reducer/cache-actions';
+import { sessionProperties } from '../session-reducer/session-properties';
+import { CLEAR_POPUP_STATE } from '../popup-state-reducer/popup-state-actions';
+import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';

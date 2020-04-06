@@ -1,5 +1,5 @@
-import { officeProperties } from '../office/store/office-properties';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeProperties } from '../office-reducer/office-properties';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
 export const START_REPORT_LOADING = 'START_REPORT_LOADING';

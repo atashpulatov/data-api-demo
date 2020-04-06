@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
-import { actions } from '../navigation/navigation-tree-actions';
+import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
 import { Notifications } from '../notification/notifications';

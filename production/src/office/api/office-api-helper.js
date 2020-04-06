@@ -1,6 +1,6 @@
 import { IncorrectInputTypeError } from '../incorrect-input-type';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
-import { officeProperties } from '../store/office-properties';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { notificationService } from '../../notification/notification-service';
 import { errorService } from '../../error/error-handler';
 import { authenticationHelper } from '../../authentication/authentication-helper';

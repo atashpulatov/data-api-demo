@@ -1,5 +1,6 @@
-import { officeProperties } from '../../office/store/office-properties';
-import * as actions from '../../office/store/office-actions';
+
+import * as actions from '../../redux-reducer/office-reducer/office-actions';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 describe('Office Actions', () => {
   it('should dispatch proper toggleStoreSecuredFlag action', () => {
