@@ -5,7 +5,7 @@ import { OfficeLoadedFileNotConnected } from '../../file-history/office-loaded-f
 import { reduxStore } from '../../store';
 import { fileHistoryHelper } from '../../file-history/file-history-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { officeStoreService } from '../../office/store/office-store-service';
+import officeStoreObject from '../../office/store/office-store-object';
 import { errorService } from '../../error/error-handler';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 
@@ -455,13 +455,13 @@ describe('office loaded file', () => {
     expect(onEditMocked).toBeCalled();
     expect(onEditMocked).toBeCalledWith({ bindId: testbindId, objectType }, loading);
   });
-  it('rename report should call officeStoreService.renameObject method when filename is given', () => {
+  it('rename report should call officeStoreObject.renameObject method when filename is given', () => {
     // given
     const givenFileName = 'name';
     const testbindId = 'testbindId';
     const objectType = { name: 'report' };
     const target = { value: givenFileName };
-    const mockmodifyObjectValue = jest.spyOn(officeStoreService, 'modifyObjectValue');
+    const mockmodifyObjectValue = jest.spyOn(officeStoreObject, 'modifyObjectValue');
     const visualizationInfoMock = { dossierStructure: 'test' };
     // when
     const wrappedComponent = mount(<OfficeLoadedFileNotConnected

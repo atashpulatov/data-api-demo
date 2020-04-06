@@ -1,7 +1,8 @@
 import { popupTypes } from '@mstr/rc';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { officeStoreService } from '../office/store/office-store-service';
+import officeStoreObject from '../office/store/office-store-object';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
 import { errorService } from '../error/error-handler';
@@ -37,7 +38,7 @@ class SidePanelService {
     const renamedObject = { objectWorkingId, name: newName };
     // TODO check for changing viz whiel editing dossier
     this.reduxStore.dispatch(updateObject(renamedObject));
-    await officeStoreService.saveObjectsInExcelStore();
+    await officeStoreObject.saveObjectsInExcelStore();
   };
 
   refresh = (...objectWorkingIds) => {
@@ -81,7 +82,7 @@ class SidePanelService {
       if (officeContext.requirements.isSetSupported('ExcelApi', 1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           await officeApiHelper.checkStatusOfSessions();
-          const ObjectToDelete = officeStoreService.getObjectFromObjectReducer(e.tableId);
+          const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducer(e.tableId);
           officeRemoveHelper.removeObjectAndDisplaytNotification(ObjectToDelete, officeContext);
         });
       } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
@@ -91,7 +92,7 @@ class SidePanelService {
           await excelContext.sync();
 
           const objectsOfSheets = excelContext.workbook.tables.items;
-          const objectsList = officeStoreService.getObjectsListFromObjectReducer();
+          const objectsList = officeReducerHelper.getObjectsListFromObjectReducer();
 
           const objectsToDelete = objectsList.filter(
             (object) => !objectsOfSheets.find((officeTable) => officeTable.name === object.bindId)
@@ -117,7 +118,7 @@ class SidePanelService {
 
     const handleViewData = () => {
       this.reduxStore.dispatch(toggleSecuredFlag(false));
-      this.refresh(officeStoreService.getObjectsListFromObjectReducer()
+      this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
         .map(({ objectWorkingId }) => objectWorkingId));
     };
 

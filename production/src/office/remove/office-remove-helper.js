@@ -1,6 +1,5 @@
 
-import { officeStoreService } from '../store/office-store-service';
-import { notificationService } from '../../notification/notification-service';
+import officeStoreObject from '../store/office-store-object';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 
@@ -100,7 +99,7 @@ class OfficeRemoveHelper {
    * @param {Office} officeContext Excel context
    */
   removeObjectNotExistingInExcel = async (object, officeContext) => {
-    officeStoreService.removeObjectFromStore(object.objectWorkingId);
+    officeStoreObject.removeObjectFromStore(object.objectWorkingId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
   }
 }

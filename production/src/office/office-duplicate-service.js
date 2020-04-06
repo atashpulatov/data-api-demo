@@ -1,4 +1,4 @@
-import { officeStoreService } from './store/office-store-service';
+import officeStoreRestoreObject from './store/office-store-restore-object';
 
 // TODO jsdoc
 class OfficeDuplicateService {
@@ -44,7 +44,7 @@ class OfficeDuplicateService {
     let finalNameCandidate = nameCandidate;
 
     // TODO change to object reducer
-    const reportsArray = [...officeStoreService.getLegacyObjectsList()];
+    const reportsArray = [...officeStoreRestoreObject.getLegacyObjectsList()];
     const reportsArrayNames = [];
     for (const report of reportsArray) {
       reportsArrayNames.push(report.name);

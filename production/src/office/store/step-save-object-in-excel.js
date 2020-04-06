@@ -1,4 +1,4 @@
-import { officeStoreService } from './office-store-service';
+import officeStoreObject from './office-store-object';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
 
@@ -13,7 +13,7 @@ class StepSaveObjectInExcel {
       const { instanceDefinition } = operationData;
       objectData.previousTableDimensions = { columns: instanceDefinition.columns };
       objectData.refreshDate = Date.now();
-      await officeStoreService.saveObjectsInExcelStore();
+      await officeStoreObject.saveObjectsInExcelStore();
       operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
