@@ -102,7 +102,7 @@ class OfficeStoreService {
     }
   }
 
-  deleteObject = (bindId, objectWorkingId) => {
+  removeObjectInExcelStore = (objectWorkingId) => {
     try {
       const settings = this.getOfficeSettings();
       if (objectWorkingId) {
@@ -118,9 +118,9 @@ class OfficeStoreService {
     }
   }
 
-  removeObjectFromStore = (bindId, objectWorkingId) => {
+  removeObjectFromStore = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
-    this.deleteObject(bindId, objectWorkingId);
+    this.removeObjectInExcelStore(objectWorkingId);
   };
 
   saveObjectsInExcelStore = async () => {

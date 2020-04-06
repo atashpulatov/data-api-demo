@@ -100,7 +100,7 @@ class OfficeRemoveHelper {
    * @param {Office} officeContext Excel context
    */
   removeObjectNotExistingInExcel = async (object, officeContext) => {
-    officeStoreService.removeObjectFromStore(object.bindId, object.objectWorkingId);
+    officeStoreService.removeObjectFromStore(object.objectWorkingId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
   }
 }

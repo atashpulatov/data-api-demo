@@ -24,12 +24,15 @@ class StepRemoveObjectTable {
       crosstabHeaderDimensions = {},
     } = objectData;
 
-    const excelContext = await officeApiHelper.getExcelContext();
-    const officeTable = excelContext.workbook.tables.getItem(bindId);
+    try {
+      const excelContext = await officeApiHelper.getExcelContext();
+      const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-    officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
-    await excelContext.sync();
-
+      officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
+      await excelContext.sync();
+    } catch (error) {
+      console.error(error);
+    }
     operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
   };
 }

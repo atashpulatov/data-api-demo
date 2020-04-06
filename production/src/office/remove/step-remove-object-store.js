@@ -1,5 +1,6 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeStoreService } from '../store/office-store-service';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepRemoveObjectStore {
   /**
@@ -15,11 +16,15 @@ class StepRemoveObjectStore {
    * @param {String} objectData.bindId Id of the Office table created on import used for referencing the Excel table
    */
   removeObjectStore = async (objectData, operationData) => {
-    const { bindId, objectWorkingId, } = objectData;
+    const { objectWorkingId } = objectData;
 
-    officeStoreService.removeObjectFromStore(bindId, objectWorkingId);
-
-    operationStepDispatcher.completeRemoveObjectStore(objectWorkingId);
+    try {
+      officeStoreService.removeObjectFromStore(objectWorkingId);
+      operationStepDispatcher.completeRemoveObjectStore(objectWorkingId);
+    } catch (error) {
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
+    }
   };
 }
 

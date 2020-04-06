@@ -1,5 +1,6 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../api/office-api-helper';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepRemoveObjectBinding {
   /**
@@ -16,8 +17,11 @@ class StepRemoveObjectBinding {
 
     const officeContext = await officeApiHelper.getOfficeContext();
 
-    await officeContext.document.bindings.releaseByIdAsync(bindId);
-
+    try {
+      await officeContext.document.bindings.releaseByIdAsync(bindId);
+    } catch (error) {
+      console.error(error);
+    }
     operationStepDispatcher.completeRemoveObjectBinding(objectWorkingId);
   };
 }
