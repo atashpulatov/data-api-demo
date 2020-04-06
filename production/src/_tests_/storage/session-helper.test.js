@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
-import { sessionReducer } from '../../storage/session-reducer';
-import { sessionProperties } from '../../storage/session-properties';
+import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
+import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
 import { sessionHelper } from '../../storage/session-helper';
 import { errorService } from '../../error/error-handler';
 import { authenticationService } from '../../authentication/auth-rest-service';
