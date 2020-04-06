@@ -9,7 +9,7 @@ import {
   BACKUP_OBJECT,
   UPDATE_OPERATION,
   CANCEL_OPERATION,
-} from './operation-type-names';
+} from '../../operation/operation-type-names';
 
 const initialState = { operations: [] };
 

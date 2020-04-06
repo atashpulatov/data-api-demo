@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import {
   SidePanel, globalNotificationTypes, Button, buttonTypes
 } from '@mstr/rc';
-import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
+import { cancelImportRequest, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
-import * as officeActions from '../office/store/office-actions';
+import * as officeActions from '../redux-reducer/office-reducer/office-actions';
 import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import { notificationService } from '../notification-v2/notification-service';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { actions } from '../navigation/navigation-tree-actions';
+import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
@@ -10,7 +10,7 @@ import { RefreshAllPage } from '../loading/refresh-all-page';
 import { NavigationTree } from '../navigation/navigation-tree';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
-import { popupActions } from './popup-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 const renderProperComponent = (popupType) => {

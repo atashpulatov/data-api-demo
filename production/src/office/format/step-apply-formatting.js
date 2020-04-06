@@ -43,6 +43,7 @@ class StepApplyFormatting {
       console.error(error);
       console.log('Cannot apply formatting, skipping');
     }
+
     operationStepDispatcher.completeFormatData(objectWorkingId);
 
     console.timeEnd('Apply formatting');

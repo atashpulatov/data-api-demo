@@ -49,6 +49,7 @@ class StepRemoveObjectTable {
     } catch (error) {
       console.error(error);
     }
+
     operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
   };
 }

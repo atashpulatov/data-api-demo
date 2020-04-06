@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import '../popup/popup-buttons/popup-buttons.css';
 import { withTranslation } from 'react-i18next';
-import { cancelImportRequest } from '../navigation/navigation-tree-actions';
-import { popupStateActions } from '../popup/popup-state-actions';
+import { cancelImportRequest } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
 export const PromptWindowButtonsNotConnected = ({
   handleRun,

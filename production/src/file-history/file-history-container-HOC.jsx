@@ -5,7 +5,7 @@ import { officeProperties } from '../office/store/office-properties';
 import {
   CANCEL_REQUEST_IMPORT,
   CANCEL_DOSSIER_OPEN
-} from '../navigation/navigation-tree-actions';
+} from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';

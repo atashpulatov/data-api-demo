@@ -1,4 +1,4 @@
-import { operationStepsMap } from './operation-steps';
+import { operationStepsMap } from '../../operation/operation-steps';
 import {
   IMPORT_OPERATION,
   EDIT_OPERATION,
@@ -10,7 +10,7 @@ import {
   BACKUP_OBJECT,
   UPDATE_OPERATION,
   CANCEL_OPERATION,
-} from './operation-type-names';
+} from '../../operation/operation-type-names';
 
 export const importRequested = (object) => {
   const objectWorkingId = Date.now();

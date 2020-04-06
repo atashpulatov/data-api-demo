@@ -2,7 +2,7 @@ import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, UPDATE_SCROLL, UPDATE_SIZE,
   CHANGE_SEARCHING, CHANGE_SORTING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   REQUEST_DOSSIER_OPEN, CHANGE_IS_PROMPTED, SWITCH_MY_LIBRARY, CHANGE_FILTER
-} from '../../navigation/navigation-tree-actions';
+} from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import {
   navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME,
 } from '../../storage/navigation-tree-reducer';

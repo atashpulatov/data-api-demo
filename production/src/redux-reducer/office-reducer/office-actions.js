@@ -1,5 +1,5 @@
 import { officeProperties } from './office-properties';
-import officeStoreHelper from './office-store-helper';
+import officeStoreHelper from '../../office/store/office-store-helper';
 
 export function toggleSecuredFlag(isSecured) {
   officeStoreHelper.setFileSecuredFlag(isSecured);

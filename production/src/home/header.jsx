@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { MSTRIcon, LoadingText } from '@mstr/mstr-react-library';
 import PropTypes from 'prop-types';
-import { toggleIsSettingsFlag as toggleIsSettingsFlagImported, toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../office/store/office-actions';
+import { toggleIsSettingsFlag as toggleIsSettingsFlagImported, toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../redux-reducer/office-reducer/office-actions';
 import { sessionHelper } from '../storage/session-helper';
 import mstrLogo from './assets/mstr_logo.png';
 import { SettingsMenu } from './settings-menu';

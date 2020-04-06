@@ -4,15 +4,15 @@ import {
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
-import { sessionReducer } from './storage/session-reducer';
-import { navigationTree } from './storage/navigation-tree-reducer';
-import { officeReducer } from './office/store/office-reducer';
-import { notificationReducer } from './notification-v2/notification-reducer';
-import { popupReducer } from './popup/popup-reducer';
-import cacheReducer from './cache/cache-reducer';
-import { popupStateReducer } from './popup/popup-state-reducer';
-import { operationReducer } from './operation/operation-reducer';
-import { objectReducer } from './operation/object-reducer';
+import { sessionReducer } from './redux-reducer/session-reducer/session-reducer'; 
+import { navigationTree } from './redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { officeReducer } from './redux-reducer/office-reducer/office-reducer';
+import { notificationReducer } from './redux-reducer/notification-reducer/notification-reducer';
+import { popupReducer } from './redux-reducer/popup-reducer/popup-reducer';
+import cacheReducer from './redux-reducer/cache-reducer/cache-reducer';
+import { popupStateReducer } from './redux-reducer/popup-state-reducer/popup-state-reducer';
+import { operationReducer } from './redux-reducer/operation-reducer/operation-reducer';
+import { objectReducer } from './redux-reducer/object-reducer/object-reducer'
 
 const rootReducer = combineReducers({
   sessionReducer,

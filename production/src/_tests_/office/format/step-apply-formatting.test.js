@@ -16,8 +16,14 @@ describe('StepApplyFormatting', () => {
         throw new Error('errorTest');
       });
 
+    const completeFormatDataMock = jest.spyOn(
+      operationStepDispatcher, 'completeFormatData'
+    ).mockImplementation();
+
+    const operationData = { objectWorkingId: 'objectWorkingIdTest', instanceDefinition: { mstrTable: {} }, };
+
     // when
-    await stepApplyFormatting.applyFormatting({}, { instanceDefinition: { mstrTable: {} }, });
+    await stepApplyFormatting.applyFormatting({}, operationData);
 
     // then
     expect(filterColumnInformationMock).toBeCalledTimes(1);
@@ -26,6 +32,9 @@ describe('StepApplyFormatting', () => {
     expect(console.log).toBeCalledWith('Cannot apply formatting, skipping');
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
+
+    expect(completeFormatDataMock).toBeCalledTimes(1);
+    expect(completeFormatDataMock).toBeCalledWith('objectWorkingIdTest');
   });
 
   it('applyFormatting should work as expected', async () => {
