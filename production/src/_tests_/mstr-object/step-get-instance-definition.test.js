@@ -8,6 +8,8 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import operationErrorHandler from '../../operation/operation-error-handler';
+import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -45,15 +47,86 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
+  handleOperationErrorCallNo | expectedErrorMsg | rowsParam | isPromptedParam
+  
+  ${1} | ${ALL_DATA_FILTERED_OUT} | ${[]}   | ${true}
+  ${0} | ${ALL_DATA_FILTERED_OUT} | ${[42]} | ${true}
+                                            
+  ${1} | ${NO_DATA_RETURNED}      | ${[]}   | ${false}
+  ${0} | ${NO_DATA_RETURNED}      | ${[42]} | ${false}
+  
+  `('getInstanceDefinition works as expected when mstrTable.rows.length is 0',
+  async ({
+    handleOperationErrorCallNo,
+    expectedErrorMsg,
+    rowsParam,
+    isPromptedParam,
+  }) => {
+    // given
+    console.error = jest.fn();
 
-  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${'not GET_OFFICE_TABLE_IMPORT'}
-  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${'not GET_OFFICE_TABLE_IMPORT'}
-  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${'not GET_OFFICE_TABLE_IMPORT'}
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
+    jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
+    jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue(
+      { mstrTable: { rows: rowsParam } }
+    );
+    jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-  ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}
-  ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}
-  ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}
+    const handleOperationErrorMock = jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
+
+    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    const completeGetInstanceDefinitionMock = jest.spyOn(
+      operationStepDispatcher, 'completeGetInstanceDefinition'
+    ).mockImplementation();
+
+    const expectedDispatchCallNo = handleOperationErrorCallNo === 1 ? 0 : 1;
+
+    // when
+    await stepGetInstanceDefinition.getInstanceDefinition({
+      mstrObjectType: {},
+      isPrompted: isPromptedParam,
+    }, {
+      stepsQueue: ['step_0', undefined],
+    });
+
+    // then
+    expect(handleOperationErrorMock).toBeCalledTimes(handleOperationErrorCallNo);
+    if (handleOperationErrorCallNo === 1) {
+      expect(console.error).toBeCalledTimes(1);
+      expect(console.error).toBeCalledWith(new Error(expectedErrorMsg));
+
+      expect(handleOperationErrorMock).toBeCalledWith({
+        mstrObjectType: {},
+        isPrompted: isPromptedParam,
+      }, {
+        stepsQueue: ['step_0', undefined],
+      });
+    }
+
+    expect(updateOperationMock).toBeCalledTimes(expectedDispatchCallNo);
+    expect(updateObjectMock).toBeCalledTimes(expectedDispatchCallNo);
+    expect(completeGetInstanceDefinitionMock).toBeCalledTimes(expectedDispatchCallNo);
+  });
+
+  it.each`
+  expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                    | manipulationsXMLParam
+
+  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${'not GET_OFFICE_TABLE_IMPORT'} | ${undefined}
+  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${'not GET_OFFICE_TABLE_IMPORT'} | ${undefined}
+  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${'not GET_OFFICE_TABLE_IMPORT'} | ${undefined}
+
+  ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+  ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+  ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
+
+  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${'not GET_OFFICE_TABLE_IMPORT'} | ${'manipulationsXMLTest'}
+  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${'not GET_OFFICE_TABLE_IMPORT'} | ${'manipulationsXMLTest'}
+  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${'not GET_OFFICE_TABLE_IMPORT'} | ${'manipulationsXMLTest'}
+
+  ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+  ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
+  ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
 
   `('getInstanceDefinition should work as expected for visualization',
   async ({
@@ -61,7 +134,8 @@ describe('StepGetInstanceDefinition', () => {
     expectedStartCell,
     expectedGetStartCellCallsNo,
     visualizationInfoParam,
-    nextStepParam
+    nextStepParam,
+    manipulationsXMLParam,
   }) => {
     // given
     const objectData = {
@@ -110,9 +184,22 @@ describe('StepGetInstanceDefinition', () => {
           insertNewWorksheet: 'insertNewWorksheetTest',
           crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
           isCrosstab: 'isCrossTabTest',
+          manipulationsXML: manipulationsXMLParam,
         },
         rows: 'rowsModifyInstanceWithPromptTest',
       });
+
+    const expectedMstrTable = {
+      name: 'nameModifyInstanceWithPromptTest',
+      rows: 'rowsModifyInstanceWithPromptTest',
+      insertNewWorksheet: 'insertNewWorksheetTest',
+      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+      isCrosstab: 'isCrossTabTest',
+    };
+
+    if (manipulationsXMLParam) {
+      expectedMstrTable.manipulationsXML = manipulationsXMLParam;
+    }
 
     const savePreviousObjectDataMock = jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData')
       .mockImplementation();
@@ -181,13 +268,7 @@ describe('StepGetInstanceDefinition', () => {
     expect(savePreviousObjectDataMock).toBeCalledTimes(1);
     expect(savePreviousObjectDataMock).toBeCalledWith(
       {
-        mstrTable: {
-          name: 'nameModifyInstanceWithPromptTest',
-          rows: 'rowsModifyInstanceWithPromptTest',
-          insertNewWorksheet: 'insertNewWorksheetTest',
-          crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-          isCrosstab: 'isCrossTabTest',
-        },
+        mstrTable: expectedMstrTable,
         rows: 'rowsModifyInstanceWithPromptTest',
       },
       'crosstabHeaderDimensionsTest',
@@ -208,13 +289,7 @@ describe('StepGetInstanceDefinition', () => {
     expect(updateOperationMock).toBeCalledWith({
       excelContext: 'excelContextTest',
       instanceDefinition: {
-        mstrTable: {
-          name: 'nameModifyInstanceWithPromptTest',
-          rows: 'rowsModifyInstanceWithPromptTest',
-          insertNewWorksheet: 'insertNewWorksheetTest',
-          crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-          isCrosstab: 'isCrossTabTest',
-        },
+        mstrTable: expectedMstrTable,
         rows: 'rowsModifyInstanceWithPromptTest',
       },
       oldBindId: 'bindIdTest',
@@ -235,6 +310,10 @@ describe('StepGetInstanceDefinition', () => {
       name: 'nameModifyInstanceWithPromptTest',
       objectWorkingId: 'objectWorkingIdTest',
       visualizationInfo: expectedVisualizationInfo,
+      subtotalsInfo: {
+        subtotalsAddresses: 'subtotalsAddressesTest',
+      },
+      manipulationsXML: false,
     });
 
     expect(completeGetInstanceDefinitionMock).toBeCalledTimes(1);
@@ -422,6 +501,10 @@ describe('StepGetInstanceDefinition', () => {
       name: 'nameModifyInstanceWithPromptTest',
       objectWorkingId: 'objectWorkingIdTest',
       visualizationInfo: expectedVisualizationInfo,
+      subtotalsInfo: {
+        subtotalsAddresses: 'subtotalsAddressesTest',
+      },
+      manipulationsXML: false,
     });
 
     expect(completeGetInstanceDefinitionMock).toBeCalledTimes(1);
