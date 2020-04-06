@@ -12,7 +12,7 @@ import { LoadingPage } from '../../loading/loading-page';
 import { RefreshAllPage } from '../../loading/refresh-all-page';
 import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { popupHelper } from '../../popup/popup-helper';
-import { popupActions, SET_PREPARED_REPORT } from '../../popup/popup-actions';
+import { popupActions, SET_PREPARED_REPORT } from '../../redux-reducer/popup-reducer/popup-actions';
 
 jest.mock('../../popup/popup-helper');
 jest.mock('../../popup/popup-view-selector-helper');

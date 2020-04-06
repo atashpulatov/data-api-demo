@@ -5,9 +5,9 @@ import {
 } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import {
   navigationTree, initialState, DEFAULT_TYPE, DEFAULT_PROJECT_NAME,
-} from '../../storage/navigation-tree-reducer';
-import { CLEAR_WINDOW } from '../../popup/popup-actions';
-import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../../cache/cache-actions';
+} from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { CLEAR_WINDOW } from '../../redux-reducer/popup-reducer/popup-actions';
+import { CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE } from '../../redux-reducer/cache-reducer/cache-actions';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action for myLibrary', () => {

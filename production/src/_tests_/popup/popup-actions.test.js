@@ -3,10 +3,10 @@ import {
   RESET_STATE,
   SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT
-} from '../../popup/popup-actions';
+} from '../../redux-reducer/popup-reducer/popup-actions';
 import { popupHelper } from '../../popup/popup-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { officeProperties } from '../../office/store/office-properties';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';

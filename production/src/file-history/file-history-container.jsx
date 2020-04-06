@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import { OfficeLoadedFile } from './office-loaded-file';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import { popupActions } from '../popup/popup-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { fileHistoryContainerHOC } from './file-history-container-HOC';
 import officeStoreHelper from '../office/store/office-store-helper';
 import { toggleSecuredFlag as toggleSecuredFlagImported } from '../redux-reducer/office-reducer/office-actions';

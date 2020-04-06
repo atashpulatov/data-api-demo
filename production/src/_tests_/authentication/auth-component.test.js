@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { AuthenticateNotConnected } from '../../authentication/auth-component';
 import { reduxStore } from '../../store';
-import { sessionProperties } from '../../storage/session-properties';
+import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
 
 jest.mock('../../authentication/auth-rest-service');
 
