@@ -9,7 +9,7 @@ describe('StepGetOfficeTableImport', () => {
 
   it('getOfficeTableImport should log exceptions', async () => {
     // given
-    console.log = jest.fn();
+    console.error = jest.fn();
 
     const createOfficeTableMock = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => {
       throw new Error('errorTest');
@@ -21,8 +21,8 @@ describe('StepGetOfficeTableImport', () => {
     // then
     expect(createOfficeTableMock).toBeCalledTimes(1);
     expect(createOfficeTableMock).toThrowError(Error);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('error:', new Error('errorTest'));
+    expect(console.error).toBeCalledTimes(1);
+    expect(console.error).toBeCalledWith(new Error('errorTest'));
   });
 
   it('getOfficeTableImport should work as expected', async () => {
