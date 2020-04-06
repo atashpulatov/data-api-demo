@@ -42,16 +42,18 @@ class SidePanelService {
   };
 
   refresh = (...objectWorkingIds) => {
-    for (let index = 0; index < objectWorkingIds.length; index++) {
-      const object = this.getObject(objectWorkingIds[index]);
+    console.log('objectWorkingIds:', objectWorkingIds);
+    objectWorkingIds.forEach(id => {
+      const object = this.getObject(id);
       this.reduxStore.dispatch(refreshRequested(object));
-    }
+    });
   };
 
   remove = async (...objectWorkingIds) => {
-    for (let index = 0; index < objectWorkingIds.length; index++) {
-      this.reduxStore.dispatch(removeRequested(objectWorkingIds[index]));
-    }
+    console.log('objectWorkingIds:', objectWorkingIds);
+    objectWorkingIds.forEach(id => {
+      this.reduxStore.dispatch(removeRequested(id));
+    });
   };
 
   duplicate = async (objectWorkingId) => {
