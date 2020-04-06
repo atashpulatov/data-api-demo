@@ -1,6 +1,7 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeRemoveHelper } from './office-remove-helper';
 import { officeApiHelper } from '../api/office-api-helper';
+import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
 class StepRemoveObjectTable {
   /**
@@ -28,7 +29,22 @@ class StepRemoveObjectTable {
       const excelContext = await officeApiHelper.getExcelContext();
       const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-      officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions);
+      officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
+      officeTable.showHeaders = true;
+
+      const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
+        crosstabHeaderDimensions,
+        officeTable,
+        excelContext
+      );
+
+      const validCrosstabHeaderDimnesions = {
+        ...crosstabHeaderDimensions,
+        columnsY: validColumnsY,
+        rowsX: validRowsX
+      };
+
+      officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, validCrosstabHeaderDimnesions);
       await excelContext.sync();
     } catch (error) {
       console.error(error);

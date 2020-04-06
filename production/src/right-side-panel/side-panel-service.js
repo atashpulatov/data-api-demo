@@ -40,14 +40,14 @@ class SidePanelService {
     await officeStoreService.saveObjectsInExcelStore();
   };
 
-  refresh = (...objectWorkingIds) => {
+  refresh = (objectWorkingIds) => {
     for (let index = 0; index < objectWorkingIds.length; index++) {
       const object = this.getObject(objectWorkingIds[index]);
       this.reduxStore.dispatch(refreshRequested(object));
     }
   };
 
-  remove = async (...objectWorkingIds) => {
+  remove = async (objectWorkingIds) => {
     for (let index = 0; index < objectWorkingIds.length; index++) {
       this.reduxStore.dispatch(removeRequested(objectWorkingIds[index]));
     }

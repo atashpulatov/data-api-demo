@@ -4,7 +4,7 @@ import { cancelOperation } from './operation-actions';
 import { removeObject, restoreObjectBackup } from './object-actions';
 import { officeStoreService } from '../office/store/office-store-service';
 import {
-  IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION
+  IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION
 } from './operation-type-names';
 
 class OperationErrorHandler {
@@ -31,6 +31,7 @@ class OperationErrorHandler {
         break;
 
       default:
+        this.handleGenericOperationError(ObjectData, OperationData);
         break;
     }
   }
@@ -79,6 +80,12 @@ class OperationErrorHandler {
     }
 
     toggleIsClearingFlag(false)(this.reduxStore.dispatch);
+  }
+
+  handleGenericOperationError = async (ObjectData, OperationData) => {
+    const { objectWorkingId } = ObjectData;
+
+    this.reduxStore.dispatch(cancelOperation(objectWorkingId));
   }
 }
 

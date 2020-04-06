@@ -25,7 +25,7 @@ describe('StepRemoveObjectStore', () => {
 
     // then
     expect(removeObjectFromStoreMock).toBeCalledTimes(1);
-    expect(removeObjectFromStoreMock).toBeCalledWith('bindIdTest', 'objectWorkingIdTest');
+    expect(removeObjectFromStoreMock).toBeCalledWith('objectWorkingIdTest');
 
     expect(completeRemoveObjectStoreMock).toBeCalledTimes(1);
     expect(completeRemoveObjectStoreMock).toBeCalledWith('objectWorkingIdTest');

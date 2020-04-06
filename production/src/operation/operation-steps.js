@@ -74,8 +74,8 @@ export const operationStepsMap = {
   ],
 
   [REMOVE_OPERATION]: [
-    REMOVE_OBJECT_BINDING,
     REMOVE_OBJECT_TABLE,
+    REMOVE_OBJECT_BINDING,
     REMOVE_OBJECT_STORE,
   ],
 

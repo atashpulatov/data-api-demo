@@ -219,14 +219,15 @@ class OfficeApiCrosstabHelper {
   /**
   * Returns the number of rows and columns headers that are valid for crosstab
   *
-  * @param {Object} headerDimensions Contains information about crosstab header dimensions
-  * @param {Office} table Excel Object containig information about Excel Table
+  * @param {Object} crosstabHeaderDimensions Contains information about crosstab header dimensions
+  * @param {Office} officeTable Excel Object containig information about Excel Table
   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
   */
-  async getCrosstabHeadersSafely(headerDimensions, table, excelContext) {
-    const { columnsY, rowsX } = headerDimensions;
-    const validColumnsY = await this.getValidOffset(table, columnsY, 'getRowsAbove', excelContext);
-    const validRowsX = await this.getValidOffset(table, rowsX, 'getColumnsBefore', excelContext);
+  async getCrosstabHeadersSafely(crosstabHeaderDimensions, officeTable, excelContext) {
+    const { columnsY, rowsX } = crosstabHeaderDimensions;
+    const validColumnsY = await this.getValidOffset(officeTable, columnsY, 'getRowsAbove', excelContext);
+    const validRowsX = await this.getValidOffset(officeTable, rowsX, 'getColumnsBefore', excelContext);
+
     return { validColumnsY, validRowsX };
   }
 
