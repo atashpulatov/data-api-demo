@@ -1,8 +1,8 @@
 import { objectNotificationTypes } from '@mstr/rc';
 import {
   MARK_STEP_COMPLETED, IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
-} from '../operation/operation-type-names';
-import { operationStepsMap } from '../operation/operation-steps';
+} from '../../operation/operation-type-names';
+import { operationStepsMap } from '../../operation/operation-steps';
 
 export const CREATE_NOTIFICATION = 'CREATE_NOTIFICATION';
 export const UPDATE_NOTIFICATION = 'UPDATE_NOTIFICATION';
