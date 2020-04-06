@@ -6,7 +6,6 @@ import {
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
   MARK_STEP_COMPLETED,
-  BACKUP_OBJECT,
   UPDATE_OPERATION,
   CANCEL_OPERATION,
 } from '../../operation/operation-type-names';
@@ -28,9 +27,6 @@ export const operationReducer = (state = initialState, action) => {
 
     case UPDATE_OPERATION:
       return updateOperation(state, action.payload);
-
-    case BACKUP_OBJECT:
-      return backupObject(state, action.payload);
 
     case CANCEL_OPERATION:
       return cancelOperation(state, action.payload);
@@ -73,13 +69,6 @@ function updateOperation(state, updatedOperationProps) {
   const updatedOperation = { ...state.operations[processedOperationIndex], ...updatedOperationProps };
   newOperations.splice(processedOperationIndex, 1, updatedOperation);
   return { operations: newOperations };
-}
-
-function backupObject(state, { objectWorkingId, objectToBackup }) {
-  const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
-  const processedOperation = state.operations[processedOperationIndex];
-  processedOperation.objectBackup = objectToBackup;
-  return { ...state };
 }
 
 function cancelOperation(state, { objectWorkingId }) {

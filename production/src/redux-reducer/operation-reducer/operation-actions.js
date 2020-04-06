@@ -7,7 +7,6 @@ import {
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
   MARK_STEP_COMPLETED,
-  BACKUP_OBJECT,
   UPDATE_OPERATION,
   CANCEL_OPERATION,
 } from '../../operation/operation-type-names';
@@ -86,19 +85,14 @@ export const markStepCompleted = (objectWorkingId, completedStep) => ({
   }
 });
 
-export const updateOperation = (updatedObject) => ({
+export const updateOperation = (updatedProps) => ({
   type: UPDATE_OPERATION,
-  payload: updatedObject
+  payload: updatedProps
 });
 
 export const cancelOperation = (objectWorkingId) => ({
   type: CANCEL_OPERATION,
   payload: { objectWorkingId }
-});
-
-export const backupObject = (objectWorkingId, objectToBackup) => ({
-  type: BACKUP_OBJECT,
-  payload: { objectWorkingId, objectToBackup }
 });
 
 function createOperation(operationType, objectWorkingId, objectData = {}) {
