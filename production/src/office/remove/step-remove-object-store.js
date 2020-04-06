@@ -1,12 +1,12 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { officeStoreService } from '../store/office-store-service';
+import officeStoreObject from '../store/office-store-object';
 import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepRemoveObjectStore {
   /**
    * Removes an imported object from Object reducer in Redux Store and Excel settings.
    *
-   * Communicates with object reducer and calls officeStoreService.removeObjectFromStore.
+   * Communicates with object reducer and calls officeStoreObject.removeObjectFromStore.
    *
    *
    * This function is subscribed as one of the operation steps with the key REMOVE_OBJECT_STORE,
@@ -19,7 +19,7 @@ class StepRemoveObjectStore {
     const { objectWorkingId } = objectData;
 
     try {
-      officeStoreService.removeObjectFromStore(objectWorkingId);
+      officeStoreObject.removeObjectFromStore(objectWorkingId);
       operationStepDispatcher.completeRemoveObjectStore(objectWorkingId);
     } catch (error) {
       console.error(error);

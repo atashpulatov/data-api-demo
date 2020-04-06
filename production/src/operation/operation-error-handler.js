@@ -2,7 +2,7 @@ import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { toggleIsClearingFlag } from '../office/store/office-actions';
 import { cancelOperation } from './operation-actions';
 import { removeObject, restoreObjectBackup } from './object-actions';
-import { officeStoreService } from '../office/store/office-store-service';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
   IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION
 } from './operation-type-names';
@@ -71,7 +71,7 @@ class OperationErrorHandler {
   }
 
   handleClearDataOperationError = async () => {
-    const operationsList = officeStoreService.getOperationsListFromOperationReducer();
+    const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();
     const clearDataOperations = operationsList.filter((operation) => operation.operationType === CLEAR_DATA_OPERATION);
 
     for (let index = clearDataOperations.length - 1; index >= 0; index--) {

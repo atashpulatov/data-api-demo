@@ -1,14 +1,14 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
-import { officeStoreService } from '../store/office-store-service';
+import officeReducerHelper from '../store/office-reducer-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepClearTableData {
   clearTableData = async (objectData, operationData) => {
     const { excelContext, objectWorkingId, objectExist } = operationData;
     try {
-      const operationsList = officeStoreService.getOperationsListFromOperationReducer();
-      const objectList = officeStoreService.getObjectsListFromObjectReducer();
+      const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();
+      const objectList = officeReducerHelper.getObjectsListFromObjectReducer();
       const nextOperation = operationsList[1];
       if (objectExist) {
         await officeRemoveHelper.removeOfficeTableBody(excelContext, objectData, true);

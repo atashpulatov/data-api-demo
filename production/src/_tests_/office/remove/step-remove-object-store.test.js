@@ -1,6 +1,6 @@
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import stepRemoveObjectStore from '../../../office/remove/step-remove-object-store';
-import { officeStoreService } from '../../../office/store/office-store-service';
+import officeStoreObject from '../../../office/store/office-store-object';
 
 describe('StepRemoveObjectStore', () => {
   afterEach(() => {
@@ -9,7 +9,7 @@ describe('StepRemoveObjectStore', () => {
 
   it('stepRemoveObjectStore should work as expected', async () => {
     // given
-    const removeObjectFromStoreMock = jest.spyOn(officeStoreService, 'removeObjectFromStore').mockImplementation();
+    const removeObjectFromStoreMock = jest.spyOn(officeStoreObject, 'removeObjectFromStore').mockImplementation();
 
     const completeRemoveObjectStoreMock = jest.spyOn(
       operationStepDispatcher, 'completeRemoveObjectStore'

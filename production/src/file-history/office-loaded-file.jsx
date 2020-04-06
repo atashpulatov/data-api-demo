@@ -14,7 +14,7 @@ import datasetIcon from './assets/icon_Dataset_32.png';
 import dossierIcon from './assets/icon_Dossier_32.png';
 import reportIcon from './assets/icon_Report_blue_32.png';
 import { ReactComponent as ClockIcon } from './assets/icon_clock.svg';
-import { officeStoreService } from '../office/store/office-store-service';
+import officeStoreObject from '../office/store/office-store-object';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import {
   startLoading as startLoadingImported,
@@ -47,9 +47,7 @@ export class OfficeLoadedFileNotConnected extends React.Component {
     const newName = target.value || fileName;
     this.setState({ value: newName });
     if (newName && bindId) {
-      await officeStoreService.modifyObjectValue(bindId, 'name', newName);
-      // TODO remove below
-      // await officeStoreService.preserveObjectValue(bindId, 'name', newName);
+      await officeStoreObject.modifyObjectValue(bindId, 'name', newName);
     }
     this.setEditable(false);
   };

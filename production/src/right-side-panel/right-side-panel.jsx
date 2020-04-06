@@ -8,11 +8,9 @@ import { cancelImportRequest, } from '../navigation/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
 import * as officeActions from '../office/store/office-actions';
-import { officeStoreService } from '../office/store/office-store-service';
+import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import { notificationService } from '../notification-v2/notification-service';
-
-
 import './right-side-panel.scss';
 import { getNotificationButtons } from '../notification-v2/notification-buttons';
 
@@ -39,7 +37,7 @@ export const RightSidePanelNotConnected = (props) => {
 
   React.useEffect(() => {
     // toggleSecuredFlag(false);
-    if (officeStoreService.isFileSecured()) {
+    if (officeStoreHelper.isFileSecured()) {
       toggleSecuredFlag(true);
     }
   }, [toggleSecuredFlag]);

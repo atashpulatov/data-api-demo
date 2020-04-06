@@ -7,7 +7,7 @@ import { FileHistoryContainerNotConnected, FileHistoryContainer } from '../../fi
 import { sessionHelper } from '../../storage/session-helper';
 import { popupController } from '../../popup/popup-controller';
 import * as LoadedFilesConstans from '../../file-history/office-loaded-file';
-import { officeStoreService } from '../../office/store/office-store-service';
+import officeStoreHelper from '../../office/store/office-store-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 
@@ -280,7 +280,7 @@ describe('FileHistoryContainer', () => {
   });
   it('should call toggle store secure flag in constructor if office flag is set to true', () => {
     // given
-    const mockToggleStoreFlag = jest.spyOn(officeStoreService, 'isFileSecured').mockImplementation(() => true);
+    const mockToggleStoreFlag = jest.spyOn(officeStoreHelper, 'isFileSecured').mockImplementation(() => true);
     const refreshAllmock = jest.fn();
     const mockReportArray = createMockFilesArray();
     const mockRefreshReportArray = jest.fn();

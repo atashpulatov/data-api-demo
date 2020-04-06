@@ -4,7 +4,7 @@ import { SidePanel } from '@mstr/rc/';
 import { RightSidePanelNotConnected } from '../../right-side-panel/right-side-panel';
 import { popupController } from '../../popup/popup-controller';
 import { errorService } from '../../error/error-handler';
-import { officeStoreService } from '../../office/store/office-store-service';
+import officeStoreHelper from '../../office/store/office-store-helper';
 
 describe('RightSidePanelNotConnected', () => {
   let mockedProps;
@@ -26,7 +26,7 @@ describe('RightSidePanelNotConnected', () => {
 
   it('should call toggleSecureFlag if file is secured', () => {
     // given
-    jest.spyOn(officeStoreService, 'isFileSecured').mockImplementation(() => true);
+    jest.spyOn(officeStoreHelper, 'isFileSecured').mockImplementation(() => true);
     // when
     mount(
       <RightSidePanelNotConnected {...mockedProps} />

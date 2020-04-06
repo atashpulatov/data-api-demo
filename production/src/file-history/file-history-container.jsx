@@ -9,7 +9,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import { popupActions } from '../popup/popup-actions';
 import { fileHistoryContainerHOC } from './file-history-container-HOC';
-import { officeStoreService } from '../office/store/office-store-service';
+import officeStoreHelper from '../office/store/office-store-helper';
 import { toggleSecuredFlag as toggleSecuredFlagImported } from '../office/store/office-actions';
 import { errorService } from '../error/error-handler';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
@@ -27,7 +27,7 @@ import { DevelopmentImportList } from '../development-import-list';
 export class FileHistoryContainerNotConnected extends React.Component {
   constructor(props) {
     super(props);
-    if (officeStoreService.isFileSecured()) {
+    if (officeStoreHelper.isFileSecured()) {
       props.toggleSecuredFlag(true);
     }
     this.state = { allowRefreshAllClick: true, };

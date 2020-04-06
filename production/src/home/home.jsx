@@ -7,13 +7,12 @@ import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
 import { toggleRenderSettingsFlag } from '../office/store/office-actions';
-import { officeStoreService } from '../office/store/office-store-service';
 import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
-import InternetConnectionError from '../popup/internet-connection-error';
 import { Authenticate } from '../authentication/auth-component';
 import { DevelopmentImportList } from '../development-import-list';
 import { notificationService } from '../notification-v2/notification-service';
+import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 
 const IS_LOCALHOST = sessionHelper.isDevelopment();
 
@@ -35,7 +34,7 @@ export const HomeNotConnected = (props) => {
 
   React.useEffect(() => {
     try {
-      officeStoreService.restoreObjectsFromExcelStore();
+      officeStoreRestoreObject.restoreObjectsFromExcelStore();
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
       sessionHelper.disableLoading();

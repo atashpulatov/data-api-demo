@@ -1,8 +1,8 @@
 import { officeProperties } from './office-properties';
-import { officeStoreService } from './office-store-service';
+import officeStoreHelper from './office-store-helper';
 
 export function toggleSecuredFlag(isSecured) {
-  officeStoreService.toggleFileSecuredFlag(isSecured);
+  officeStoreHelper.setFileSecuredFlag(isSecured);
   return (dispatch) => {
     dispatch({
       type: officeProperties.actions.toggleSecuredFlag,
