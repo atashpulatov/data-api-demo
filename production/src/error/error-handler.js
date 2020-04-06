@@ -82,7 +82,7 @@ class ErrorService {
         title: 'Ok',
         type: 'basic',
         label: 'Ok',
-        onClick: () => {this.notificationService.globalNotificationDissapear();},
+        onClick: () => { this.notificationService.globalNotificationDissapear(); },
       },
     ];
     const payload = {

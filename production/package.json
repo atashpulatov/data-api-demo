@@ -8,8 +8,7 @@
     "start": "HTTPS=true react-scripts start",
     "start:windows": "set HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --silent",
-    "coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit",
+    "test": "react-scripts test --silent --noStackTrace",
     "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eject": "react-scripts eject",
@@ -94,7 +93,28 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
-      "!src/_tests_/**/*.{js,jsx}"
+      "!src/_tests_/**/*.{js,jsx}",
+      "!src/**/*rest-service.js",
+      "!src/error.jsx",
+      "!src/index.js",
+      "!src/entry-point/*.*",
+      "!src/serviceWorker.js",
+      "!src/office/office-context.js",
+      "!src/office/store/office-store-service.js",
+      "!src/storage/session-helper.js",
+      "!src/breadcrumbs/breadcrumbs.jsx",
+      "!src/CompileStrings.js",
+      "!src/cache/cache-db.js",
+      "!src/cache/cache-actions.js",
+      "!src/dossier/embedded-dossier.jsx",
+      "!src/prompts/prompts-window.jsx",
+      "!src/office/office-display-service.js",
+      "!src/office/office-duplicate-service.js",
+      "!src/navigation/**/*.*",
+      "!src/office/format/*.*",
+      "!src/office/api/*.*",
+      "!src/office/table/*.*",
+      "!src/office/import/*.*"
     ]
   }
 }
