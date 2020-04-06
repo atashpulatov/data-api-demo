@@ -10,7 +10,7 @@ import { officeStoreService } from '../office/store/office-store-service';
 import { sidePanelService } from './side-panel-service';
 
 import './right-side-panel.scss';
-import { calculateLoadingProgress } from '../operation/operation-steps';
+import { calculateLoadingProgress, operationStepsMap } from '../operation/operation-steps';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -22,7 +22,7 @@ export const RightSidePanelNotConnected = (props) => {
     toggleSecuredFlag,
     globalNotification,
     notifications,
-    operationReducer,
+    operations,
   } = props;
 
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
@@ -48,13 +48,14 @@ export const RightSidePanelNotConnected = (props) => {
   }, [isSecured]);
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
+  console.log(operationStepsMap.IMPORT_OPERATION);
 
   React.useEffect(() => {
-    console.log({ loadedObjects, operationReducer, notifications });
+    // console.log({ loadedObjects, operationReducer: operations, notifications });
     setLoadedObjectsWrapped(loadedObjects.map((object) => {
-      const operation = operationReducer.operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
+      const operation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
       const notification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
-      console.log(operation);
+      // console.log(operation);
       const obj = operation ? {
         ...object,
         notification: {
@@ -65,10 +66,9 @@ export const RightSidePanelNotConnected = (props) => {
         }
       }
         : object;
-      console.log(obj);
       return obj;
     }));
-  }, [loadedObjects, notifications, operationReducer]);
+  }, [loadedObjects, notifications, operations]);
 
   return (
     <SidePanel
@@ -91,12 +91,12 @@ export const RightSidePanelNotConnected = (props) => {
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { operationReducer } = state;
+  const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const { isConfirm, isSettings, isSecured } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
-    operationReducer,
+    operations,
     importRequested,
     dossierOpenRequested,
     isConfirm,

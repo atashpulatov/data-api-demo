@@ -1,5 +1,7 @@
 import { objectNotificationTypes } from '@mstr/rc';
-import { IMPORT_REQUESTED, REFRESH_REQUESTED, EDIT_REQUESTED, MARK_STEP_COMPLETED } from '../operation/operation-actions';
+import {
+  MARK_STEP_COMPLETED, IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION
+} from '../operation/operation-type-names';
 
 export const CREATE_NOTIFICATION = 'CREATE_NOTIFICATION';
 export const UPDATE_NOTIFICATION = 'UPDATE_NOTIFICATION';
@@ -13,9 +15,9 @@ export const notificationReducer = (state = initialState, action) => {
   const { payload } = action;
   console.log(action);
   switch (action.type) {
-    case IMPORT_REQUESTED:
-    case REFRESH_REQUESTED:
-    case EDIT_REQUESTED:
+    case IMPORT_OPERATION:
+    case REFRESH_OPERATION:
+    case EDIT_OPERATION:
       return createProgressNotification(state, payload);
     case MARK_STEP_COMPLETED:
       return updateNotification(state, payload);
@@ -39,7 +41,9 @@ const createProgressNotification = (state, payload) => {
     objectWorkingId: payload.operation.objectWorkingId,
     type: objectNotificationTypes.PROGRESS,
     title: 'Pending',
+    operationType: payload.operation.operationType,
   };
+  console.log(newNotification);
   return { ...state, notifications: [...state.notifications, newNotification] };
 };
 
