@@ -56,13 +56,16 @@ export const RightSidePanelNotConnected = (props) => {
       const operation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
       const notification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
       // console.log(operation);
-      const obj = operation ? {
+      const operationBasedNotificationData = operation ? {
+        percentageComplete: operation.totalRows !== 0 ? calculateLoadingProgress(operation.operationType, operation.stepsQueue[0], operation.loadedRows, operation.totalRows) : 0,
+        itemsTotal: operation.totalRows,
+        itemsComplete: operation.loadedRows,
+      } : {};
+      const obj = notification ? {
         ...object,
         notification: {
           ...notification,
-          percentageComplete: operation.totalRows !== 0 ? calculateLoadingProgress(operation.operationType, operation.stepsQueue[0], operation.loadedRows, operation.totalRows) : 0,
-          itemsTotal: operation.totalRows,
-          itemsComplete: operation.loadedRows,
+          ...operationBasedNotificationData,
         }
       }
         : object;

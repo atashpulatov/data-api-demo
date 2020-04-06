@@ -1,7 +1,8 @@
 import { objectNotificationTypes } from '@mstr/rc';
 import {
-  MARK_STEP_COMPLETED, IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION
+  MARK_STEP_COMPLETED, IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
 } from '../operation/operation-type-names';
+import { operationStepsMap } from '../operation/operation-steps';
 
 export const CREATE_NOTIFICATION = 'CREATE_NOTIFICATION';
 export const UPDATE_NOTIFICATION = 'UPDATE_NOTIFICATION';
@@ -17,6 +18,7 @@ export const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case IMPORT_OPERATION:
     case REFRESH_OPERATION:
+    case REMOVE_OPERATION:
     case EDIT_OPERATION:
       return createProgressNotification(state, payload);
     case MARK_STEP_COMPLETED:
@@ -48,11 +50,32 @@ const createProgressNotification = (state, payload) => {
 };
 
 const updateNotification = (state, payload) => {
-  console.log({ state, payload });
+  // console.log({ state, payload });
+  const { notifications } = state;
   const notificationToUpdateIndex = getNotificationIndex(state, payload);
-  const updatedNotification = { ...state.notifications[notificationToUpdateIndex], title: 'Import' };
+  const notificationToUpdate = notifications[notificationToUpdateIndex];
+  const operationSteps = operationStepsMap[notificationToUpdate.operationType];
+  const operationFirstStep = operationSteps[0];
+  const operationLastStep = operationSteps[operationSteps.length - 1];
+  console.log({ operationFirstStep, operationLastStep });
+  if (payload.completedStep !== operationFirstStep && payload.completedStep !== operationLastStep) {
+    console.log('here');
+    return state;
+  }
+  let updatedNotification;
+  if (payload.completedStep === operationFirstStep) {
+    updatedNotification = { ...notificationToUpdate, title: 'Import' };
+  }
+  if (payload.completedStep === operationLastStep) {
+    updatedNotification = {
+      objectWorkingId: notificationToUpdate.objectWorkingId,
+      type: objectNotificationTypes.SUCCESS,
+      title: 'Import'
+    };
+  }
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
+  console.log(newState);
   return newState;
 };
 
