@@ -66,6 +66,7 @@ export const RightSidePanelNotConnected = (props) => {
         notification: {
           ...notification,
           ...operationBasedNotificationData,
+          // onHover: () => dispatch,
         }
       }
         : object;

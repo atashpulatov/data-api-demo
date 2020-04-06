@@ -25,7 +25,7 @@ class OperationErrorHandler {
           false
         );
       }
-      this.reduxStore.dispatch(removeObject(objectWorkingId));
+      this.reduxStore.dispatch(removeObject(objectWorkingId)); // TODO: Notification for error handling
     } else {
       if (officeTable) {
         if (isCrosstab) {

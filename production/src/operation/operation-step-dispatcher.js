@@ -58,7 +58,7 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_SUBTOTALS));
   };
 
-  completeSaveObjectInExcel = (objectWorkingId) => {
+  completeSaveObjectInExcel = (objectWorkingId) => { // for success
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   };
 
