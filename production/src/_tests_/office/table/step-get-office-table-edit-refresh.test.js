@@ -124,7 +124,6 @@ describe('StepGetOfficeTableEditRefresh', () => {
     const objectData = {
       tableName: 'tableNameTest',
       previousTableDimensions: 'previousTableDimensionsTest',
-      visualizationInfo: { formatShouldUpdate: inputFormatShouldUpdate },
       objectWorkingId: 'objectWorkingIdTest',
     };
 
@@ -132,6 +131,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       excelContext: 'excelContextTest',
       instanceDefinition: { mstrTable: 'mstrTableTest' },
       oldBindId: 'oldBindIdTest',
+      objectEditedData: { visualizationInfo: { formatShouldUpdate: inputFormatShouldUpdate } },
     };
 
     const checkReportTypeChangeMock = jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
