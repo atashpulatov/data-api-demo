@@ -12,6 +12,13 @@ class OperationErrorHandler {
     this.reduxStore = reduxStore;
   };
 
+  /**
+   * Main function responsible for error handling in operations.
+   * Based on operation type further function will called to handle error that could occur during operation.
+   *
+   * @param {Object} objectData Unique Id of the object allowing to reference specific object
+   * @param {Object} operationData Contains informatons about current operation
+   */
   handleOperationError = async (ObjectData, OperationData) => {
     const { operationType } = OperationData;
 
@@ -36,6 +43,14 @@ class OperationErrorHandler {
     }
   }
 
+  /**
+   * Function handling erros that occured during Import and Duplicate operation.
+   * Error will be displayed and the operation will be canceled
+   * If the Excel table was already created it will be removed.
+   *
+   * @param {Object} objectData Unique Id of the object allowing to reference specific object
+   * @param {Object} operationData Contains informatons about current operation
+   */
   handleImportOperationError = async (ObjectData, OperationData) => {
     const { objectWorkingId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
     const { officeTable, excelContext, operationType } = OperationData;
@@ -56,6 +71,14 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
   }
 
+  /**
+   * Function handling erros that occured during Refresh and Edit operation.
+   * Error will be displayed and the operation will be canceled
+   * In case of error in operation previous object data will be restored to objects list.
+   *
+   * @param {Object} objectData Unique Id of the object allowing to reference specific object
+   * @param {Object} operationData Contains informatons about current operation
+   */
   handleRefreshOperationError = async (ObjectData, OperationData) => {
     const { objectWorkingId, isCrosstab } = ObjectData;
     const { officeTable, backupObjectData } = OperationData;
@@ -70,6 +93,11 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
   }
 
+  /**
+   * Function handling erros that occured during Clear Data operation.
+   * Error will be displayed and the operation will be canceled
+   * Additionaly all other Clear Data operation will also be canceled and the isClearing flag will be changed to false.
+   */
   handleClearDataOperationError = async () => {
     const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();
     const clearDataOperations = operationsList.filter((operation) => operation.operationType === CLEAR_DATA_OPERATION);
@@ -82,6 +110,13 @@ class OperationErrorHandler {
     toggleIsClearingFlag(false)(this.reduxStore.dispatch);
   }
 
+  /**
+   * Function handling erros that occurs in other types of operations.
+   * Error will be displayed and the operation will be canceled.
+   *
+   * @param {Object} objectData Unique Id of the object allowing to reference specific object
+   * @param {Object} operationData Contains informatons about current operation
+   */
   handleGenericOperationError = async (ObjectData, OperationData) => {
     const { objectWorkingId } = ObjectData;
 
