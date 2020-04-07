@@ -9,6 +9,7 @@ class OfficeStoreHelper {
     if (Office === undefined || Office.context === undefined || Office.context.document === undefined) {
       throw new RunOutsideOfficeError();
     }
+
     return Office.context.document.settings;
   };
 
