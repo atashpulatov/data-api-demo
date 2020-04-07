@@ -7,7 +7,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
-import { START_REPORT_LOADING, STOP_REPORT_LOADING, RESET_STATE } from '../redux-reducer/popup-reducer/popup-actions';
+import { RESET_STATE } from '../redux-reducer/popup-reducer/popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { importRequested, editRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
@@ -48,7 +48,6 @@ class PopupController {
   };
 
   runPopup = async (popupType, height, width, reportParams = null) => {
-    const session = this.sessionHelper.getSession();
     this.reduxStore.dispatch({ type: SET_MSTR_DATA, payload: { popupType } });
     try {
       await authenticationHelper.validateAuthToken();

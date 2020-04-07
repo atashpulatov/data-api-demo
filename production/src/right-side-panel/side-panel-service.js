@@ -42,7 +42,6 @@ class SidePanelService {
   };
 
   refresh = (...objectWorkingIds) => {
-    console.log('objectWorkingIds:', objectWorkingIds);
     objectWorkingIds.forEach(id => {
       const object = this.getObject(id);
       this.reduxStore.dispatch(refreshRequested(object));
@@ -50,7 +49,6 @@ class SidePanelService {
   };
 
   remove = async (...objectWorkingIds) => {
-    console.log('objectWorkingIds:', objectWorkingIds);
     objectWorkingIds.forEach(id => {
       this.reduxStore.dispatch(removeRequested(id));
     });

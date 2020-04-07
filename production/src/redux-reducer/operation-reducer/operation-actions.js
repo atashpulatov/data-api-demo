@@ -32,7 +32,7 @@ export const refreshRequested = (objectData) => {
     payload: {
       operation: createOperation(REFRESH_OPERATION, objectWorkingId),
       objectWorkingId,
-      backupObjectData: objectData
+      backupObjectData,
     },
   };
 };

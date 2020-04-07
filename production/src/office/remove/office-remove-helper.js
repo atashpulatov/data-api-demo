@@ -84,7 +84,7 @@ class OfficeRemoveHelper {
    * @param {Object} t i18n translating function
    */
   removeObjectAndDisplaytNotification = (object, officeContext, t) => {
-    const { name } = object;
+    // const { name } = object;
     this.removeObjectNotExistingInExcel(object, officeContext);
     // TODO check after new notifications
     // const message = t('{{name}} has been removed from the workbook.', { name });

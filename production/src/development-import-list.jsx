@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Button, Dropdown, Menu } from 'antd';
 import { sessionHelper } from './storage/session-helper';
 import mstrObjectType from './mstr-object/mstr-object-type-enum';
@@ -15,7 +14,6 @@ export class DevelopmentImportList extends Component {
   }
 
   render() {
-    const { removeAllAction, reportArray } = this.props;
     const menu = (
       <Menu>
         <Menu.Item key="SeasonalReport" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SeasonalReport'); }}>{objectList.SeasonalReport.name}</Menu.Item>
@@ -39,11 +37,6 @@ export class DevelopmentImportList extends Component {
     );
   }
 }
-
-DevelopmentImportList.propTypes = {
-  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
-  removeAllAction: PropTypes.func,
-};
 
 const objectList = {
   SeasonalReport: {
