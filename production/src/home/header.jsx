@@ -80,11 +80,11 @@ export class HeaderNotConnected extends Component {
 
   render() {
     const {
-      loading, t, isSettings, isConfirm, isClearing
+      loading, t, isSettings, isConfirm, isClearDataFailed
     } = this.props;
     return (
       <>
-        {isClearing
+        {isClearDataFailed
           && (
             <div className="block-all-ui">
               <LoadingText text={t('Clearing data')} />
@@ -119,8 +119,8 @@ export class HeaderNotConnected extends Component {
 HeaderNotConnected.defaultProps = { t: (text) => text };
 
 function mapStateToProps({ officeReducer }) {
-  const { isSettings, isConfirm, isClearing } = officeReducer;
-  return { isSettings, isConfirm, isClearing };
+  const { isSettings, isConfirm, isClearDataFailed } = officeReducer;
+  return { isSettings, isConfirm, isClearDataFailed };
 }
 
 const mapDispatchToProps = {
@@ -132,7 +132,7 @@ HeaderNotConnected.propTypes = {
   loading: PropTypes.bool,
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
-  isClearing: PropTypes.bool,
+  isClearDataFailed: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
   t: PropTypes.func

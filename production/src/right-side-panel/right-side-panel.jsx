@@ -20,8 +20,10 @@ export const RightSidePanelNotConnected = (props) => {
     isConfirm,
     isSettings,
     isSecured,
+    isClearDataFailed,
     toggleIsSettingsFlag,
     toggleSecuredFlag,
+    toggleIsClearDataFailedFlag,
     globalNotification,
   } = props;
 
@@ -36,15 +38,13 @@ export const RightSidePanelNotConnected = (props) => {
   }, []);
 
   React.useEffect(() => {
-    // toggleSecuredFlag(false);
-    if (officeStoreHelper.isFileSecured()) {
-      toggleSecuredFlag(true);
-    }
-  }, [toggleSecuredFlag]);
+    officeStoreHelper.isFileSecured() && toggleSecuredFlag(true);
+    officeStoreHelper.isClearDataFailed() && toggleIsClearDataFailedFlag(true);
+  }, [toggleSecuredFlag, toggleIsClearDataFailedFlag]);
 
   React.useEffect(() => {
     setSidePanelPopup(sidePanelService.getSidePanelPopup());
-  }, [isSecured]);
+  }, [isSecured, isClearDataFailed]);
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
@@ -105,7 +105,9 @@ export const RightSidePanelNotConnected = (props) => {
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { globalNotification } = state.notificationReducer;
-  const { isConfirm, isSettings, isSecured } = state.officeReducer;
+  const {
+    isConfirm, isSettings, isSecured, isClearDataFailed
+  } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
     importRequested,
@@ -114,6 +116,7 @@ export const mapStateToProps = (state) => {
     isSettings,
     globalNotification,
     isSecured,
+    isClearDataFailed
   };
 };
 
@@ -121,6 +124,7 @@ const mapDispatchToProps = {
   cancelCurrentImportRequest: cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
+  toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag
 };
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
@@ -155,6 +159,8 @@ RightSidePanelNotConnected.propTypes = {
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
   isSecured: PropTypes.bool,
+  isClearDataFailed: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
+  toggleIsClearDataFailedFlag: PropTypes.func
 };

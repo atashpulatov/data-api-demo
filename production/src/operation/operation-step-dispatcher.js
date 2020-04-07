@@ -1,4 +1,4 @@
-import { toggleSecuredFlag, toggleIsClearingFlag } from '../redux-reducer/office-reducer/office-actions';
+import { toggleSecuredFlag } from '../redux-reducer/office-reducer/office-actions';
 import { markStepCompleted, updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { CLEAR_DATA_OPERATION } from './operation-type-names';
 import {
@@ -89,7 +89,6 @@ class OperationStepDispatcher {
   completeClearTableData = (objectWorkingId, nextOperation, objectList) => {
     if (!(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION) && objectList.length !== 0) {
       const { dispatch } = this.reduxStore;
-      toggleIsClearingFlag(false)(dispatch);
       toggleSecuredFlag(true)(dispatch);
     }
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA));

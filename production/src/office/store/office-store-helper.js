@@ -30,6 +30,25 @@ class OfficeStoreHelper {
       errorService.handleError(error);
     }
   };
+
+  setIsClearDataFailed = (value) => {
+    try {
+      const settings = this.getOfficeSettings();
+      settings.set(officeProperties.isClearDataFailed, value);
+      settings.saveAsync();
+    } catch (error) {
+      errorService.handleError(error);
+    }
+  };
+
+  isClearDataFailed = () => {
+    try {
+      const settings = this.getOfficeSettings();
+      return settings.get(officeProperties.isClearDataFailed);
+    } catch (error) {
+      errorService.handleError(error);
+    }
+  };
 }
 
 const officeStoreHelper = new OfficeStoreHelper();

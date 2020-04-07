@@ -56,8 +56,8 @@ export const officeReducer = (state = initialState, action) => {
     case officeProperties.actions.toggleRenderSettingsFlag:
       return toggleRenderSettingsFlag(action, state);
 
-    case officeProperties.actions.toggleIsClearingFlag:
-      return toggleIsClearingFlag(action, state);
+    case officeProperties.actions.toggleIsClearDataFailedFlag:
+      return toggleIsClearDataFailedFlag(action, state);
 
     default:
       break;
@@ -216,9 +216,9 @@ function toggleRenderSettingsFlag(action, state) {
   };
 }
 
-function toggleIsClearingFlag(action, state) {
+function toggleIsClearDataFailedFlag(action, state) {
   return {
     ...state,
-    isClearing: action.isClearing,
+    isClearDataFailed: action.isClearDataFailed,
   };
 }
