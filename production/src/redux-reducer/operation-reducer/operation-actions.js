@@ -85,9 +85,9 @@ export const markStepCompleted = (objectWorkingId, completedStep) => ({
   }
 });
 
-export const updateOperation = (updatedProps) => ({
+export const updateOperation = (updatedOperationProps) => ({
   type: UPDATE_OPERATION,
-  payload: updatedProps
+  payload: updatedOperationProps
 });
 
 export const cancelOperation = (objectWorkingId) => ({

@@ -2,12 +2,10 @@ import {
   importRequested,
   markStepCompleted,
   cancelOperation,
-  backupObject,
-} from '../../operation/operation-actions';
+} from '../../redux-reducer/operation-reducer/operation-actions';
 import {
   IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
-  BACKUP_OBJECT,
   CANCEL_OPERATION,
 } from '../../operation/operation-type-names';
 
@@ -48,18 +46,5 @@ describe('OperationActions', () => {
     // then
     expect(cancelAction.type).toEqual(CANCEL_OPERATION);
     expect(cancelAction.payload.objectWorkingId).toBe(exampleId);
-  });
-
-  it('returns BACKUP_OBJECT action on backupObject call', () => {
-    // given
-    const objectWorkingId = 'exampleId';
-    const objectToBkp = { objectWorkingId };
-
-    // when
-    const backupAction = backupObject(objectWorkingId, objectToBkp);
-    // then
-    expect(backupAction.type).toEqual(BACKUP_OBJECT);
-    expect(backupAction.payload.objectWorkingId).toBe(objectWorkingId);
-    expect(backupAction.payload.objectToBackup).toBe(objectToBkp);
   });
 });

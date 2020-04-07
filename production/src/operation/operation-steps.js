@@ -8,6 +8,7 @@ import {
 } from './operation-type-names';
 
 export const MODIFY_OBJECT = 'MODIFY_OBJECT';
+export const PREPARE_REFRESH = 'PREPARE_REFRESH';
 export const REFRESH_STORED_OBJECT = 'REFRESH_STORED_OBJECT';
 export const GET_INSTANCE_DEFINITION = 'GET_INSTANCE_DEFINITION';
 export const GET_OFFICE_TABLE_IMPORT = 'GET_OFFICE_TABLE_IMPORT';
@@ -40,6 +41,7 @@ export const operationStepsMap = {
   ],
 
   [REFRESH_OPERATION]: [
+    PREPARE_REFRESH,
     GET_INSTANCE_DEFINITION,
     GET_OFFICE_TABLE_EDIT_REFRESH,
     FORMAT_DATA,

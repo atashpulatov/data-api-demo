@@ -1,3 +1,4 @@
+import stepPrepareRefresh from '../office/prepare/step-prepare-refresh';
 import stepGetInstanceDefinition from '../mstr-object/step-get-instance-definition';
 import stepApplyFormatting from '../office/format/step-apply-formatting';
 import stepFormatTable from '../office/format/step-format-table';
@@ -31,7 +32,8 @@ import {
   REMOVE_OBJECT_STORE,
   CHECK_OBJECT_STATUS,
   CLEAR_CROSSTAB_HEADERS,
-  CLEAR_TABLE_DATA
+  CLEAR_TABLE_DATA,
+  PREPARE_REFRESH
 } from './operation-steps';
 
 class SubscribeSteps {
@@ -39,6 +41,8 @@ class SubscribeSteps {
     this.reduxStore = reduxStore;
 
     operationBus.subscribe(MODIFY_OBJECT, stepModifyObject.modifyObject);
+
+    operationBus.subscribe(PREPARE_REFRESH, stepPrepareRefresh.prepareRefresh);
 
     operationBus.subscribe(GET_INSTANCE_DEFINITION, stepGetInstanceDefinition.getInstanceDefinition);
 
