@@ -13,39 +13,28 @@ class OfficeStoreHelper {
     return Office.context.document.settings;
   };
 
-  setFileSecuredFlag = (value) => {
+  setFileSecuredFlag = (value) => this.setPropertyValue(officeProperties.isSecured, value);
+
+  isFileSecured = () => this.getPropertyValue(officeProperties.isSecured);
+
+  setIsClearDataFailed = (value) => this.setPropertyValue(officeProperties.isClearDataFailed, value);
+
+  isClearDataFailed = () => this.getPropertyValue(officeProperties.isClearDataFailed);
+
+  setPropertyValue = (propertyName, value) => {
     try {
       const settings = this.getOfficeSettings();
-      settings.set(officeProperties.isSecured, value);
+      settings.set(propertyName, value);
       settings.saveAsync();
     } catch (error) {
       errorService.handleError(error);
     }
   };
 
-  isFileSecured = () => {
+  getPropertyValue = (propertyName) => {
     try {
       const settings = this.getOfficeSettings();
-      return settings.get(officeProperties.isSecured);
-    } catch (error) {
-      errorService.handleError(error);
-    }
-  };
-
-  setIsClearDataFailed = (value) => {
-    try {
-      const settings = this.getOfficeSettings();
-      settings.set(officeProperties.isClearDataFailed, value);
-      settings.saveAsync();
-    } catch (error) {
-      errorService.handleError(error);
-    }
-  };
-
-  isClearDataFailed = () => {
-    try {
-      const settings = this.getOfficeSettings();
-      return settings.get(officeProperties.isClearDataFailed);
+      return settings.get(propertyName);
     } catch (error) {
       errorService.handleError(error);
     }
