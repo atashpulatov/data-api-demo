@@ -18,6 +18,8 @@ import {
   CHECK_OBJECT_STATUS,
   CLEAR_CROSSTAB_HEADERS,
   CLEAR_TABLE_DATA,
+  MOVE_NOTIFICATION_TO_IN_PROGRESS,
+  DISPLAY_NOTIFICATION_COMPLETED,
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 
@@ -102,6 +104,22 @@ class OperationStepDispatcher {
   updateObject = (updatedObject) => {
     this.reduxStore.dispatch(updateObject(updatedObject));
   };
+
+  moveNotificationToInProgress = (objectWorkingId) => {
+    this.reduxStore.dispatch({ type: MOVE_NOTIFICATION_TO_IN_PROGRESS, payload: { objectWorkingId } });
+  }
+
+  completeMoveNotificationToInProgress = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MOVE_NOTIFICATION_TO_IN_PROGRESS));
+  }
+
+  displaySuccessNotification = (objectWorkingId) => {
+    this.reduxStore.dispatch({ type: DISPLAY_NOTIFICATION_COMPLETED, payload: { objectWorkingId } });
+  }
+
+  completeDisplaySuccessNotification = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, DISPLAY_NOTIFICATION_COMPLETED));
+  }
 }
 
 const operationStepDispatcher = new OperationStepDispatcher();

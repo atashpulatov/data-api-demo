@@ -49,14 +49,13 @@ export const RightSidePanelNotConnected = (props) => {
   }, [isSecured]);
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
-  console.log(operationStepsMap.IMPORT_OPERATION);
 
   React.useEffect(() => {
-    // console.log({ loadedObjects, operationReducer: operations, notifications });
     setLoadedObjectsWrapped(loadedObjects.map((object) => {
       const operation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
       const notification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
-      // console.log(operation);
+      console.log(notification);
+      console.log({ loadedObjects, notifications });
       const operationBasedNotificationData = operation ? {
         percentageComplete: operation.totalRows !== 0 ? calculateLoadingProgress(operation.operationType, operation.stepsQueue[0], operation.loadedRows, operation.totalRows) : 0,
         itemsTotal: operation.totalRows,
@@ -67,13 +66,14 @@ export const RightSidePanelNotConnected = (props) => {
         notification: {
           ...notification,
           ...operationBasedNotificationData,
-          // onHover: () => dispatch,
         }
       }
         : object;
       return obj;
     }));
   }, [loadedObjects, notifications, operations]);
+
+  console.log(loadedObjectsWrapped);
 
   const mockConnectionLost = () => {
     notificationService.connectionLost();
@@ -111,7 +111,7 @@ export const RightSidePanelNotConnected = (props) => {
       <button type="button" onClick={mockSessionExpired}>Mock Session expired</button>
       <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button>
       <SidePanel
-        loadedObjects={loadedObjects}
+        loadedObjects={loadedObjectsWrapped}
         onAddData={sidePanelService.addData}
         onTileClick={sidePanelService.highlightObject}
         onDuplicateClick={sidePanelService.duplicate}
