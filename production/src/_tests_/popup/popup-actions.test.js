@@ -14,7 +14,6 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 
 jest.mock('../../office/api/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
-jest.mock('../../office/store/office-store-service');
 jest.mock('../../office/store/office-reducer-helper');
 jest.mock('../../popup/popup-controller');
 jest.mock('../../error/error-handler');
