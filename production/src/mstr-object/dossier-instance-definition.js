@@ -75,6 +75,14 @@ class DossierInstanceDefinition {
     };
   }
 
+  getVisualizationName = (operationData, name, instanceDefinition) => {
+    const { objectEditedData } = operationData;
+    if (objectEditedData && objectEditedData.visualizationInfo.formatShouldUpdate) {
+      name = instanceDefinition.mstrTable.name;
+    }
+    return name;
+  }
+
   /**
    * Returns an error type based on error get from visualization importing.
    *

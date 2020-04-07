@@ -6,7 +6,7 @@ import { Dropdown, Menu } from 'antd';
 import PropTypes from 'prop-types';
 import { fileHistoryHelper } from './file-history-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
-import { popupActions } from '../popup/popup-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import RenameInput from './file-history-rename-input';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { ButtonPopover } from './button-popover';

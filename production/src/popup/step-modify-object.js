@@ -40,6 +40,7 @@ class StepModifyObject {
       if (objectData.visualizationInfo.visualizationKey !== objectEditedData.visualizationInfo.visualizationKey) {
         objectEditedData.visualizationInfo.nameShouldUpdate = true;
         objectEditedData.visualizationInfo.formatShouldUpdate = true;
+        updatedObject.visualizationInfo = objectEditedData.visualizationInfo;
         updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
       }
 
