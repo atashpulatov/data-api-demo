@@ -129,10 +129,4 @@ class SidePanelService {
   };
 }
 
-const checkIfObjectProtected = async (bindId) => {
-  const excelContext = await officeApiHelper.getExcelContext();
-  await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
-};
-
-
 export const sidePanelService = new SidePanelService();
