@@ -1,7 +1,6 @@
 import {
   IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
-  BACKUP_OBJECT,
   CANCEL_OPERATION,
 } from '../../operation/operation-type-names';
 import { operationReducer } from '../../redux-reducer/operation-reducer/operation-reducer';
@@ -230,41 +229,6 @@ describe('operation reducer', () => {
 
       // then
       expect(resultState.operations).toHaveLength(2);
-    });
-  });
-
-  describe('backupOperation', () => {
-    it('throws error if there is no operation with given ID', () => {
-      // given
-      const action = {
-        type: BACKUP_OBJECT,
-        payload: { objectWorkingId: 'wrongId', },
-      };
-
-      // when
-      const throwingCall = () => operationReducer(initialState.multipleOperations, action);
-
-      // then
-      expect(throwingCall).toThrow();
-    });
-
-    it('backups object when BACKUP_OBJECT called', () => {
-      // given
-      const objectWorkingId = 'someOtherString2';
-      const action = {
-        type: BACKUP_OBJECT,
-        payload: {
-          objectWorkingId,
-          objectToBackup: { objectWorkingId }
-        },
-      };
-
-      // when
-      const resultState = operationReducer(initialState.multipleOperations, action);
-
-      // then
-      expect(resultState.operations[0].objectBackup)
-        .toEqual(action.payload.objectToBackup);
     });
   });
 });
