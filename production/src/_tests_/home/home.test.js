@@ -8,7 +8,7 @@ import { homeHelper } from '../../home/home-helper';
 import { SettingsMenu } from '../../home/settings-menu';
 
 jest.mock('../../storage/session-helper');
-jest.mock('../../office/store/office-store-service');
+jest.mock('../../office/store/office-store-restore-object');
 jest.mock('../../home/home-helper');
 
 describe('Home', () => {

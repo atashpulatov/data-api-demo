@@ -1,4 +1,4 @@
-import { toggleSecuredFlag, toggleIsClearingFlag } from '../redux-reducer/office-reducer/office-actions';
+import { toggleSecuredFlag } from '../redux-reducer/office-reducer/office-actions';
 import { markStepCompleted, updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { CLEAR_DATA_OPERATION } from './operation-type-names';
 import {
@@ -20,6 +20,7 @@ import {
   CLEAR_TABLE_DATA,
   MOVE_NOTIFICATION_TO_IN_PROGRESS,
   DISPLAY_NOTIFICATION_COMPLETED,
+  BACKUP_OBJECT_DATA,
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 
@@ -34,6 +35,10 @@ class OperationStepDispatcher {
 
   completeFormatData = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_DATA));
+  };
+
+  completeBackupObjectData = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, BACKUP_OBJECT_DATA));
   };
 
   completeGetInstanceDefinition = (objectWorkingId) => {
@@ -91,14 +96,13 @@ class OperationStepDispatcher {
   completeClearTableData = (objectWorkingId, nextOperation, objectList) => {
     if (!(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION) && objectList.length !== 0) {
       const { dispatch } = this.reduxStore;
-      toggleIsClearingFlag(false)(dispatch);
       toggleSecuredFlag(true)(dispatch);
     }
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA));
   };
 
-  updateOperation = (updatedOperation) => {
-    this.reduxStore.dispatch(updateOperation(updatedOperation));
+  updateOperation = (updatedOperationProps) => {
+    this.reduxStore.dispatch(updateOperation(updatedOperationProps));
   };
 
   updateObject = (updatedObject) => {

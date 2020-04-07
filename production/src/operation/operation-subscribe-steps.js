@@ -1,3 +1,4 @@
+import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
 import stepGetInstanceDefinition from '../mstr-object/step-get-instance-definition';
 import stepApplyFormatting from '../office/format/step-apply-formatting';
 import stepFormatTable from '../office/format/step-format-table';
@@ -33,7 +34,8 @@ import {
   CLEAR_CROSSTAB_HEADERS,
   CLEAR_TABLE_DATA,
   MOVE_NOTIFICATION_TO_IN_PROGRESS,
-  DISPLAY_NOTIFICATION_COMPLETED
+  DISPLAY_NOTIFICATION_COMPLETED,
+  BACKUP_OBJECT_DATA,
 } from './operation-steps';
 import stepNoficicationInProgress from '../notification-v2/step-notification-in-progress';
 import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
@@ -43,6 +45,8 @@ class SubscribeSteps {
     this.reduxStore = reduxStore;
 
     operationBus.subscribe(MODIFY_OBJECT, stepModifyObject.modifyObject);
+
+    operationBus.subscribe(BACKUP_OBJECT_DATA, stepBackupObjectData.backupObjectData);
 
     operationBus.subscribe(GET_INSTANCE_DEFINITION, stepGetInstanceDefinition.getInstanceDefinition);
 

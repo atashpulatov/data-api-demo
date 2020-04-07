@@ -9,7 +9,7 @@ import { errorService } from '../error/error-handler';
 import { refreshRequested, removeRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { toggleSecuredFlag } from '../redux-reducer/office-reducer/office-actions';
+import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
@@ -42,17 +42,14 @@ class SidePanelService {
   };
 
   refresh = (...objectWorkingIds) => {
-    console.log('objectWorkingIds:', objectWorkingIds);
-    objectWorkingIds.forEach(id => {
-      const object = this.getObject(id);
-      this.reduxStore.dispatch(refreshRequested(object));
+    objectWorkingIds.forEach(objectWorkingId => {
+      this.reduxStore.dispatch(refreshRequested(objectWorkingId));
     });
   };
 
   remove = async (...objectWorkingIds) => {
-    console.log('objectWorkingIds:', objectWorkingIds);
-    objectWorkingIds.forEach(id => {
-      this.reduxStore.dispatch(removeRequested(id));
+    objectWorkingIds.forEach(objectWorkingId => {
+      this.reduxStore.dispatch(removeRequested(objectWorkingId));
     });
   };
 
@@ -118,23 +115,22 @@ class SidePanelService {
 
     const handleViewData = () => {
       this.reduxStore.dispatch(toggleSecuredFlag(false));
-      this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
+      this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
+      this.refresh(...officeReducerHelper.getObjectsListFromObjectReducer()
         .map(({ objectWorkingId }) => objectWorkingId));
     };
 
-    const { isSecured } = this.reduxStore.getState().officeReducer;
+    const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
     isSecured && (popup = {
       type: popupTypes.DATA_CLEARED,
+      onViewData: handleViewData,
+    });
+    isClearDataFailed && (popup = {
+      type: popupTypes.DATA_CLEARED_FAILED,
       onViewData: handleViewData,
     });
     return popup;
   };
 }
-
-const checkIfObjectProtected = async (bindId) => {
-  const excelContext = await officeApiHelper.getExcelContext();
-  await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
-};
-
 
 export const sidePanelService = new SidePanelService();

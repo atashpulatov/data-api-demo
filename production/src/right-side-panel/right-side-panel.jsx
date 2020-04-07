@@ -12,6 +12,8 @@ import './right-side-panel.scss';
 import { calculateLoadingProgress, operationStepsMap } from '../operation/operation-steps';
 import { notificationService } from '../notification-v2/notification-service';
 import { getNotificationButtons } from '../notification-v2/notification-buttons';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -19,8 +21,10 @@ export const RightSidePanelNotConnected = (props) => {
     isConfirm,
     isSettings,
     isSecured,
+    isClearDataFailed,
     toggleIsSettingsFlag,
     toggleSecuredFlag,
+    toggleIsClearDataFailedFlag,
     globalNotification,
     notifications,
     operations,
@@ -38,15 +42,13 @@ export const RightSidePanelNotConnected = (props) => {
   }, []);
 
   React.useEffect(() => {
-    // toggleSecuredFlag(false);
-    if (officeStoreHelper.isFileSecured()) {
-      toggleSecuredFlag(true);
-    }
-  }, [toggleSecuredFlag]);
+    officeStoreHelper.isFileSecured() && toggleSecuredFlag(true);
+    officeStoreHelper.isClearDataFailed() && toggleIsClearDataFailedFlag(true);
+  }, [toggleSecuredFlag, toggleIsClearDataFailedFlag]);
 
   React.useEffect(() => {
     setSidePanelPopup(sidePanelService.getSidePanelPopup());
-  }, [isSecured]);
+  }, [isSecured, isClearDataFailed]);
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
@@ -103,6 +105,33 @@ export const RightSidePanelNotConnected = (props) => {
     notificationService.globalWarningAppeared(payload);
   };
 
+  /**
+   * Wraps a function to be called when user clicks an action icon.
+   *
+   * Function will be called when:
+   *
+   * - session is valid,
+   * - operation is not in progress.
+   *
+   * @param {Function} func Function to be wrapped
+   * @param {*} params Parameters to wrapped function
+   */
+  const wrapper = async (func, params) => {
+    await officeApiHelper.checkStatusOfSessions();
+
+    if (officeReducerHelper.noOperationInProgress()) {
+      await func(params);
+    }
+  };
+
+  const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params) };
+  const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params) };
+  const duplicateWrapper = async (params) => { await wrapper(sidePanelService.duplicate, params) };
+  const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params) };
+  const refreshWrapper = async (params) => { await wrapper(sidePanelService.refresh, params) };
+  const removeWrapper = async (params) => { await wrapper(sidePanelService.remove, params) };
+  const renameWrapper = async (params) => { await wrapper(sidePanelService.rename, params) };
+
   console.log(globalNotification);
 
   return (
@@ -111,14 +140,14 @@ export const RightSidePanelNotConnected = (props) => {
       <button type="button" onClick={mockSessionExpired}>Mock Session expired</button>
       <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button>
       <SidePanel
-        loadedObjects={loadedObjectsWrapped}
-        onAddData={sidePanelService.addData}
-        onTileClick={sidePanelService.highlightObject}
-        onDuplicateClick={sidePanelService.duplicate}
-        onEditClick={sidePanelService.edit}
-        onRefreshClick={sidePanelService.refresh}
-        onRemoveClick={sidePanelService.remove}
-        onRename={sidePanelService.rename}
+        loadedObjects={loadedObjects}
+        onAddData={addDataWrapper}
+        onTileClick={highlightObjectWrapper}
+        onDuplicateClick={duplicateWrapper}
+        onEditClick={editWrapper}
+        onRefreshClick={refreshWrapper}
+        onRemoveClick={removeWrapper}
+        onRename={renameWrapper}
         popup={sidePanelPopup}
         settingsMenu={isSettings && <SettingsMenu />}
         onSettingsClick={handleSettingsClick}
@@ -133,7 +162,9 @@ export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
-  const { isConfirm, isSettings, isSecured } = state.officeReducer;
+  const {
+    isConfirm, isSettings, isSecured, isClearDataFailed
+  } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
     operations,
@@ -144,6 +175,7 @@ export const mapStateToProps = (state) => {
     globalNotification,
     notifications,
     isSecured,
+    isClearDataFailed
   };
 };
 
@@ -151,6 +183,7 @@ const mapDispatchToProps = {
   cancelCurrentImportRequest: cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
+  toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag
 };
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
@@ -185,6 +218,8 @@ RightSidePanelNotConnected.propTypes = {
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
   isSecured: PropTypes.bool,
+  isClearDataFailed: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
+  toggleIsClearDataFailedFlag: PropTypes.func
 };

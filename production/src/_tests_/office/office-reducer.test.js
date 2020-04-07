@@ -324,16 +324,16 @@ describe('officeReducer', () => {
     // then
     expect(newState.preLoadReport).toBe(true);
   });
-  it('should set isClearing to given value on toggleIsClearingFlag', () => {
+  it('should set IsClearDataFailed to given value on toggleIsClearDataFailedFlag', () => {
     // given
-    const oldState = { isClearing: false };
+    const oldState = { IsClearDataFailed: false };
     const action = {
-      type: officeProperties.actions.toggleIsClearingFlag,
-      isClearing: true,
+      type: officeProperties.actions.toggleIsClearDataFailedFlag,
+      IsClearDataFailed: true,
     };
     // when
     const newState = officeReducer(oldState, action);
     // then
-    expect(newState.isClearing).toBe(true);
+    expect(newState.IsClearDataFailed).toBe(true);
   });
 });

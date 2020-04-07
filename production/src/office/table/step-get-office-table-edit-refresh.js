@@ -18,11 +18,11 @@ class StepGetOfficeTableEditRefresh {
    *
    * @param {Number} objectData.tableName Name of Excel table created on import
    * @param {Object} objectData.previousTableDimensions Contains dimensions of Excel table created on import
-   * @param {Object} [objectData.visualizationInfo] Contains information about location of visualization in dossier
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {String} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Number} operationData.oldBindId Id of the Office table created on import
+   * @param {Object} [operationData.objectEditedData] Contains information modifications to object data
    */
   getOfficeTableEditRefresh = async (objectData, operationData) => {
     try {
@@ -30,10 +30,11 @@ class StepGetOfficeTableEditRefresh {
       const {
         tableName,
         previousTableDimensions,
-        visualizationInfo,
         objectWorkingId,
       } = objectData;
-      const { excelContext, instanceDefinition, oldBindId } = operationData;
+      const {
+        excelContext, instanceDefinition, oldBindId, objectEditedData
+      } = operationData;
       const { mstrTable } = instanceDefinition;
 
       let shouldFormat;
@@ -62,7 +63,7 @@ class StepGetOfficeTableEditRefresh {
           }
         ));
       } else {
-        shouldFormat = visualizationInfo.formatShouldUpdate || false;
+        shouldFormat = (objectEditedData && objectEditedData.visualizationInfo.formatShouldUpdate) || false;
 
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,

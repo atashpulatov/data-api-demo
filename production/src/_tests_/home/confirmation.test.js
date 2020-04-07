@@ -45,14 +45,14 @@ describe('Confirmation', () => {
     clearErrors.push({ chosenObjectName, returnValue });
 
     const mockToggleIsConfirmFlag = jest.fn();
-    const mockToggleIsClearingFlag = jest.fn();
+    const mockToggleIsClearDataFailedFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
     const confirmationWrapper = mount(<ConfirmationNotConnected
       objects={mockReportArray}
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
-      toggleIsClearingFlag={mockToggleIsClearingFlag}
+      toggleIsClearDataFailedFlag={mockToggleIsClearDataFailedFlag}
       toggleSecuredFlag={mockToggleSecuredFlag} />);
     const okWrapper = confirmationWrapper.find('#confirm-btn');
     // when

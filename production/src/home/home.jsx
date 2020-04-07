@@ -18,7 +18,7 @@ const IS_LOCALHOST = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
-    loading, popupOpen, authToken, shouldRenderSettings, t
+    loading, popupOpen, authToken, t
   } = props;
 
   React.useEffect(() => {
@@ -44,10 +44,7 @@ export const HomeNotConnected = (props) => {
   }, []);
 
   React.useEffect(() => {
-    console.log('saving token');
-    homeHelper.saveTokenFromCookies();
-    sessionHelper.getUserInfo();
-    sessionHelper.getUserAttributeFormPrivilege();
+    getUserData();
   }, [authToken]);
 
   return (
@@ -65,6 +62,13 @@ export const HomeNotConnected = (props) => {
   );
 };
 
+async function getUserData() {
+  console.log('saving token');
+  homeHelper.saveTokenFromCookies();
+  await sessionHelper.getUserInfo();
+  await sessionHelper.getUserAttributeFormPrivilege();
+}
+
 function mapStateToProps(state) {
   return {
     loading: state.sessionReducer.loading,
@@ -80,7 +84,6 @@ HomeNotConnected.propTypes = {
   loading: PropTypes.bool,
   popupOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  shouldRenderSettings: PropTypes.bool,
   t: PropTypes.func,
 };
 
