@@ -7,6 +7,8 @@ class OfficeReducerHelper {
 
   getOperationsListFromOperationReducer = () => this.reduxStore.getState().operationReducer.operations;
 
+  noOperationInProgress = () => this.getOperationsListFromOperationReducer().length === 0;
+
   getObjectFromObjectReducer = (bindId) => {
     const { objects } = this.reduxStore.getState().objectReducer;
     return objects.find((object) => object.bindId === bindId);
