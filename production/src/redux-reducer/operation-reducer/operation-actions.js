@@ -23,18 +23,13 @@ export const importRequested = (object) => {
   };
 };
 
-export const refreshRequested = (objectData) => {
-  const backupObjectData = JSON.parse(JSON.stringify(objectData));
-  const { objectWorkingId } = backupObjectData;
-  return {
-    type: REFRESH_OPERATION,
-    payload: {
-      operation: createOperation(REFRESH_OPERATION, objectWorkingId),
-      objectWorkingId,
-      backupObjectData,
-    },
-  };
-};
+export const refreshRequested = (objectWorkingId) => ({
+  type: REFRESH_OPERATION,
+  payload: {
+    operation: createOperation(REFRESH_OPERATION, objectWorkingId),
+    objectWorkingId,
+  },
+});
 
 export const editRequested = (objectData, objectEditedData) => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
