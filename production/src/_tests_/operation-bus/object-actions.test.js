@@ -1,6 +1,6 @@
 import {
   UPDATE_OBJECT, updateObject, REMOVE_OBJECT, removeObject, RESTORE_ALL_OBJECTS, restoreAllObjects
-} from '../../operation/object-actions';
+} from '../../redux-reducer/object-reducer/object-actions';
 
 describe('updateObject', () => {
   it('should populate action with proper fields', () => {

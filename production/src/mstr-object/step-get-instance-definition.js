@@ -40,10 +40,9 @@ class StepGetInstanceDefinition {
         subtotalsInfo = false,
         bindId,
         mstrObjectType,
-        name,
         isPrompted
       } = objectData;
-      let { visualizationInfo, body } = objectData;
+      let { visualizationInfo, body, name } = objectData;
 
       const excelContext = await officeApiHelper.getExcelContext();
 
@@ -55,6 +54,8 @@ class StepGetInstanceDefinition {
         ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
           { ...objectData, visualizationInfo }
         ));
+
+        name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition);
       } else {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }

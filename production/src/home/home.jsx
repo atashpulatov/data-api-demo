@@ -18,7 +18,7 @@ const IS_LOCALHOST = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
-    loading, popupOpen, authToken, shouldRenderSettings, t
+    loading, popupOpen, authToken, t
   } = props;
 
   React.useEffect(() => {
@@ -80,7 +80,6 @@ HomeNotConnected.propTypes = {
   loading: PropTypes.bool,
   popupOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  shouldRenderSettings: PropTypes.bool,
   t: PropTypes.func,
 };
 

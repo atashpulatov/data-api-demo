@@ -1,4 +1,4 @@
-import * as actions from '../../redux-reducer/navigation-tree-reducer';
+import * as actions from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 describe('NavigationTree Actions', () => {

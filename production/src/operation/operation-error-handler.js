@@ -4,7 +4,7 @@ import { cancelOperation } from '../redux-reducer/operation-reducer/operation-ac
 import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
-  IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION
+  IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION,
 } from './operation-type-names';
 
 class OperationErrorHandler {
