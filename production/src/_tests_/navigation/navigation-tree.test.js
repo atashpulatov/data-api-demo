@@ -236,12 +236,12 @@ describe('NavigationTree', () => {
       subtype: givenSubtype,
       name: givenObjectName,
       targetId: givenTargetId,
-      myLibrary: givenMyLibrary,
     };
 
     const wrappedComponent = shallow(<NavigationTreeNotConnected
       {...mockFunctionsAndProps}
       selectObject={mockSelectObject}
+      myLibrary={givenMyLibrary}
     />);
     // when
     wrappedComponent.instance().onObjectChosen(givenObject);

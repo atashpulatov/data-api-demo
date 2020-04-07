@@ -18,6 +18,7 @@ import {
   CHECK_OBJECT_STATUS,
   CLEAR_CROSSTAB_HEADERS,
   CLEAR_TABLE_DATA,
+  BACKUP_OBJECT_DATA,
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 
@@ -32,6 +33,10 @@ class OperationStepDispatcher {
 
   completeFormatData = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_DATA));
+  };
+
+  completeBackupObjectData = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, BACKUP_OBJECT_DATA));
   };
 
   completeGetInstanceDefinition = (objectWorkingId) => {
@@ -94,8 +99,8 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA));
   };
 
-  updateOperation = (updatedOperation) => {
-    this.reduxStore.dispatch(updateOperation(updatedOperation));
+  updateOperation = (updatedOperationProps) => {
+    this.reduxStore.dispatch(updateOperation(updatedOperationProps));
   };
 
   updateObject = (updatedObject) => {

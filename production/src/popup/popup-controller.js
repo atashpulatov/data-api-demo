@@ -95,8 +95,10 @@ class PopupController {
   };
 
   onMessageFromPopup = async (dialog, reportParams, arg) => {
+    console.log('reportParams:', reportParams);
     const { message } = arg;
     const response = JSON.parse(message);
+    console.log('response:', response);
     if (response.command === selectorProperties.commandBrowseUpdate) {
       this.reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
       return;
@@ -153,22 +155,20 @@ class PopupController {
   }
 
   handleUpdateCommand = async (response) => {
-    if (response.chosenObject) {
-      const objectData = {
-        name: response.chosenObjectName,
-        objectId: response.chosenObjectId,
-        projectId: response.projectId,
-        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
-        body: response.body,
-        dossierData: response.dossierData,
-        promptsAnswers: response.promptsAnswers,
-        isPrompted: response.isPrompted,
-        instanceId: response.instanceId,
-        subtotalsInfo: response.subtotalsInfo,
-        displayAttrFormNames: response.displayAttrFormNames,
-      };
-      this.reduxStore.dispatch(importRequested(objectData));
-    }
+    const objectData = {
+      name: response.chosenObjectName,
+      objectId: response.chosenObjectId,
+      projectId: response.projectId,
+      mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
+      body: response.body,
+      dossierData: response.dossierData,
+      promptsAnswers: response.promptsAnswers,
+      isPrompted: response.isPrompted,
+      instanceId: response.instanceId,
+      subtotalsInfo: response.subtotalsInfo,
+      displayAttrFormNames: response.displayAttrFormNames,
+    };
+    this.reduxStore.dispatch(importRequested(objectData));
   };
 
   handleOkCommand = async (response, bindId) => {
