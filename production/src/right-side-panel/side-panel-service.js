@@ -43,8 +43,7 @@ class SidePanelService {
 
   refresh = (...objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-      const object = this.getObject(objectWorkingId);
-      this.reduxStore.dispatch(refreshRequested(object));
+      this.reduxStore.dispatch(refreshRequested(objectWorkingId));
     });
   };
 
