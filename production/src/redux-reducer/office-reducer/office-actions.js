@@ -26,11 +26,12 @@ export function toggleIsConfirmFlag(isConfirm) {
   };
 }
 
-export function toggleIsClearingFlag(isClearing) {
+export function toggleIsClearDataFailedFlag(isClearDataFailed) {
+  officeStoreHelper.setIsClearDataFailed(isClearDataFailed);
   return (dispatch) => {
     dispatch({
-      type: officeProperties.actions.toggleIsClearingFlag,
-      isClearing,
+      type: officeProperties.actions.toggleIsClearDataFailedFlag,
+      isClearDataFailed,
     });
   };
 }

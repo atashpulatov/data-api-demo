@@ -9,7 +9,7 @@ import { errorService } from '../error/error-handler';
 import { refreshRequested, removeRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { toggleSecuredFlag } from '../redux-reducer/office-reducer/office-actions';
+import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
@@ -139,13 +139,18 @@ class SidePanelService {
 
     const handleViewData = () => {
       this.reduxStore.dispatch(toggleSecuredFlag(false));
-      this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
+      this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
+      this.refresh(...officeReducerHelper.getObjectsListFromObjectReducer()
         .map(({ objectWorkingId }) => objectWorkingId));
     };
 
-    const { isSecured } = this.reduxStore.getState().officeReducer;
+    const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
     isSecured && (popup = {
       type: popupTypes.DATA_CLEARED,
+      onViewData: handleViewData,
+    });
+    isClearDataFailed && (popup = {
+      type: popupTypes.DATA_CLEARED_FAILED,
       onViewData: handleViewData,
     });
     return popup;

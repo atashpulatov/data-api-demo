@@ -1,5 +1,5 @@
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
-import { toggleIsClearingFlag } from '../redux-reducer/office-reducer/office-actions';
+import { toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -96,7 +96,7 @@ class OperationErrorHandler {
   /**
    * Function handling erros that occured during Clear Data operation.
    * Error will be displayed and the operation will be canceled
-   * Additionaly all other Clear Data operation will also be canceled and the isClearing flag will be changed to false.
+   * Additionaly all other Clear Data operation will also be canceled and the isClearDataFailed flag will be changed to false.
    */
   handleClearDataOperationError = async () => {
     const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();
@@ -107,7 +107,7 @@ class OperationErrorHandler {
       this.reduxStore.dispatch(cancelOperation(operation.objectWorkingId));
     }
 
-    toggleIsClearingFlag(false)(this.reduxStore.dispatch);
+    toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
   }
 
   /**
