@@ -53,10 +53,34 @@ class SidePanelService {
     });
   };
 
-  duplicate = async (objectWorkingId) => {
-    const objectData = this.getObject(objectWorkingId);
-    this.reduxStore.dispatch(duplicateRequested(objectData));
-  };
+  /**
+   * Handle the user interaction with duplicate popup UI.
+   * Open edit popup for duplicate with edit.
+   * Dispatch duplicate operation for duplicate with import.
+   *
+   * Copy data of source object to new object.
+   * Delete references to old object in new object.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object for duplication.
+   * @param {Boolean} insertNewWorksheet  Flag which shows whether the duplication should happen to new excel worksheet.
+   * @param {Boolean} withEdit Flag which shows whether the duplication should happen with additional edit popup.
+   */
+  duplicate = async (objectWorkingId, insertNewWorksheet, withEdit) => {
+    const sourceObject = this.getObject(objectWorkingId);
+    const object = JSON.parse(JSON.stringify(sourceObject));
+    object.insertNewWorksheet = insertNewWorksheet;
+    object.objectWorkingId = Date.now();
+    if (object.bindId) { delete object.bindId; }
+    if (object.tableName) { delete object.tableName; }
+    if (object.refreshDate) { delete object.refreshDate; }
+    if (object.preparedInstanceId) { delete object.preparedInstanceId; }
+
+    if (withEdit) {
+      this.reduxStore.dispatch(popupActions.callForDuplicate(object));
+    } else {
+      this.reduxStore.dispatch(duplicateRequested(object));
+    }
+  }
 
   edit = async (objectWorkingId) => {
     const objectData = this.getObject(objectWorkingId);
@@ -126,6 +150,36 @@ class SidePanelService {
     });
     return popup;
   };
+
+  /**
+   * Returns active cell adrress from excel context.
+   *
+   * @returns {String} Adrress of cell which is active in excel
+   */
+  getActiveCellAddress = async () => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    const activeCell = excelContext.workbook.getActiveCell();
+    activeCell.load('address');
+    await excelContext.sync();
+    return activeCell.address;
+  }
+
+  /**
+   * Attaches a event handler to onSelectionChanged on workbook.
+   * As event handler, resets the active cell value in parent component
+   * and then updates it with new value.
+   *
+   * @param {Function} setActiveCellAddress Callback to store the active cell value.
+   */
+  addOnSelectionChangedListener = async (setActiveCellAddress) => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    excelContext.workbook.onSelectionChanged.add(async () => {
+      setActiveCellAddress('...');
+      const activeCellAddress = await this.getActiveCellAddress();
+      setActiveCellAddress(activeCellAddress);
+    });
+    await excelContext.sync();
+  }
 }
 
 export const sidePanelService = new SidePanelService();

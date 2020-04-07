@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  SidePanel, globalNotificationTypes, Button, buttonTypes
+  SidePanel, globalNotificationTypes, Button, buttonTypes, popupTypes
 } from '@mstr/rc';
 import { cancelImportRequest, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
@@ -26,10 +26,14 @@ export const RightSidePanelNotConnected = (props) => {
   } = props;
 
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
+  const [activeCellAddress, setActiveCellAddress] = React.useState('...');
+  const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
 
   React.useEffect(() => {
     try {
       sidePanelService.addRemoveObjectListener();
+      getInitialCellAdrress();
+      addActiveCellAdrressChangedListener();
     } catch (error) {
       console.error(error);
     }
@@ -45,6 +49,16 @@ export const RightSidePanelNotConnected = (props) => {
   React.useEffect(() => {
     setSidePanelPopup(sidePanelService.getSidePanelPopup());
   }, [isSecured]);
+
+  // Updates the activeCellAddress in duplicate popup if this popup is opened.
+  React.useEffect(() => {
+    if (sidePanelPopup !== null && sidePanelPopup.type === popupTypes.DUPLICATE && duplicatedObjectId !== null) {
+      setDuplicatePopup(duplicatedObjectId);
+    }
+    // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
+    // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCellAddress]);
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
@@ -78,6 +92,64 @@ export const RightSidePanelNotConnected = (props) => {
 
   console.log(globalNotification);
 
+  /**
+   * Handles user click on duplicate icon.
+   * Stores objectWorkingId in state of component as duplicatedObjectId.
+   * Calls function responsible for displaying the duplicate popup.
+   *
+   * @param {Number} objectWorkingId - Uniqe id of source object for duplication.
+   */
+  const openDuplicatePopup = (objectWorkingId) => {
+    setDuplicatedObjectId(objectWorkingId);
+    setDuplicatePopup(objectWorkingId);
+  };
+
+  /**
+   * Prepares the props and displays the side panel popup as duplicate popup.
+   *
+   * @param {*} objectWorkingId - Uniqe id of source object for duplication.
+   */
+  const setDuplicatePopup = (objectWorkingId) => {
+    setSidePanelPopup({
+      type: popupTypes.DUPLICATE,
+      activeCell: activeCellAddress,
+      onImport: (isActiveCellOptionSelected) => {
+        sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
+        setSidePanelPopup(null);
+        setDuplicatedObjectId(null);
+      },
+      onEdit: (isActiveCellOptionSelected) => {
+        sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, true);
+        setSidePanelPopup(null);
+        setDuplicatedObjectId(null);
+      },
+      onClose: () => {
+        setSidePanelPopup(null);
+        setDuplicatedObjectId(null);
+      }
+    });
+  };
+
+  /**
+   * Get initial excel active cell adrres value and store result in state of component.
+   * Called once - after component mounts.
+   *
+   */
+  const getInitialCellAdrress = async () => {
+    const initialCellAdrress = await sidePanelService.getActiveCellAddress();
+    setActiveCellAddress(initialCellAdrress);
+  };
+
+  /**
+   * Attach event listener for selection changed and pass a state setter callback to event handler.
+   * Callback is modyfying the activeCellAddress in state of component.
+   * Called once - after component mounts.
+   *
+   */
+  const addActiveCellAdrressChangedListener = async () => {
+    await sidePanelService.addOnSelectionChangedListener(setActiveCellAddress);
+  };
+
   return (
     <>
       <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
@@ -87,7 +159,7 @@ export const RightSidePanelNotConnected = (props) => {
         loadedObjects={loadedObjects}
         onAddData={sidePanelService.addData}
         onTileClick={sidePanelService.highlightObject}
-        onDuplicateClick={sidePanelService.duplicate}
+        onDuplicateClick={openDuplicatePopup}
         onEditClick={sidePanelService.edit}
         onRefreshClick={sidePanelService.refresh}
         onRemoveClick={sidePanelService.remove}

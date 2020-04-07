@@ -43,15 +43,13 @@ export const editRequested = (objectData, objectEditedData) => {
   };
 };
 
-export const duplicateRequested = (objectData) => {
-  const newObjectData = JSON.parse(JSON.stringify(objectData));
-  const objectWorkingId = Date.now();
-  newObjectData.objectWorkingId = objectWorkingId;
+export const duplicateRequested = (object) => {
+  const { objectWorkingId } = object;
   return {
     type: DUPLICATE_OPERATION,
     payload: {
       operation: createOperation(DUPLICATE_OPERATION, objectWorkingId),
-      object: newObjectData,
+      object,
     },
   };
 };

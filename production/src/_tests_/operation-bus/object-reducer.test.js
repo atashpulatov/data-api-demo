@@ -1,4 +1,4 @@
-import { IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { IMPORT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
 import { objectReducer } from '../../redux-reducer/object-reducer/object-reducer';
 import { UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS } from '../../redux-reducer/object-reducer/object-actions';
 
@@ -58,7 +58,7 @@ describe('objectReducer', () => {
     expect(resultState).toBe(initialState.multipleObjects);
   });
 
-  describe('importRequested', () => {
+  describe('importRequested and duplicateRequested', () => {
     it('should add first object to array and return new array', () => {
       // given
       const action = {
@@ -73,10 +73,14 @@ describe('objectReducer', () => {
       expect(resultState).toEqual({ objects: [initialObject] });
     });
 
-    it('should add object to array and return new array', () => {
+    it.each`
+      actionType
+      ${IMPORT_OPERATION}
+      ${DUPLICATE_OPERATION}
+    `('should add object to array and return new array', ({ actionType }) => {
       // given
       const action = {
-        type: IMPORT_OPERATION,
+        type: actionType,
         payload: { object: initialObject, }
       };
 

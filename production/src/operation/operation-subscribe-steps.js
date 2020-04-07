@@ -9,6 +9,7 @@ import stepGetOfficeTableImport from '../office/table/step-get-office-table-impo
 import stepModifyObject from '../popup/step-modify-object';
 import stepApplySubtotalFormatting from '../office/format/step-apply-subtotal-formatting';
 import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
+import stepGetDuplicateName from '../office/step-get-duplicate-name';
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
 import stepRemoveObjectStore from '../office/remove/step-remove-object-store';
@@ -27,6 +28,7 @@ import {
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
   SAVE_OBJECT_IN_EXCEL,
+  GET_DUPLICATE_NAME,
   REMOVE_OBJECT_BINDING,
   REMOVE_OBJECT_TABLE,
   REMOVE_OBJECT_STORE,
@@ -60,6 +62,8 @@ class SubscribeSteps {
     operationBus.subscribe(BIND_OFFICE_TABLE, stepBindOfficeTable.bindOfficeTable);
 
     operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, stepSaveObjectInExcel.saveObject);
+
+    operationBus.subscribe(GET_DUPLICATE_NAME, stepGetDuplicateName.getDuplicateName);
 
     operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
     operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);

@@ -9,7 +9,7 @@ import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../redux-reducer/navig
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
 import { RESET_STATE } from '../redux-reducer/popup-reducer/popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { importRequested, editRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
 
 const URL = `${window.location.href}`;
@@ -113,6 +113,8 @@ class PopupController {
         case selectorProperties.commandOk:
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
+          } else if (reportParams.duplicateMode) {
+            await this.handleDuplicate(response, reportParams);
           } else {
             const reportPreviousState = this.getObjectPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
@@ -121,6 +123,8 @@ class PopupController {
         case selectorProperties.commandOnUpdate:
           if (!reportParams) {
             await this.handleUpdateCommand(response);
+          } else if (reportParams.duplicateMode) {
+            await this.handleDuplicate(response, reportParams);
           } else {
             const reportPreviousState = this.getObjectPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
@@ -187,6 +191,28 @@ class PopupController {
         preparedInstanceId: response.preparedInstanceId,
       };
       this.reduxStore.dispatch(importRequested(objectData));
+    }
+  };
+
+  handleDuplicate = async (response, reportParams) => {
+    if (response.chosenObject || response.chosenObjectId) {
+      const objectData = {
+        name: response.chosenObjectName,
+        dossierData: response.dossierData,
+        objectId: response.chosenObject || response.chosenObjectId,
+        projectId: response.chosenProject || response.projectId,
+        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype) || mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
+        isPrompted: response.isPrompted,
+        promptsAnswers: response.promptsAnswers,
+        visualizationInfo: response.visualizationInfo,
+        preparedInstanceId: response.preparedInstanceId,
+        instanceId: response.instanceId,
+        body: response.body,
+        subtotalsInfo: response.subtotalsInfo,
+        displayAttrFormNames: response.displayAttrFormNames,
+        insertNewWorksheet: reportParams.insertNewWorksheet,
+      };
+      this.reduxStore.dispatch(duplicateRequested(objectData));
     }
   };
 

@@ -95,6 +95,64 @@ class PopupActions {
   };
 
   resetState = () => (dispatch) => dispatch({ type: RESET_STATE, });
+
+  callForDuplicate = (object) => async (dispatch) => {
+    const isDossier = object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+    try {
+      await this.officeApiHelper.checkStatusOfSessions();
+      object.objectType = object.mstrObjectType;
+
+      if (isDossier) {
+        const {
+          projectId, objectId, manipulationsXML, visualizationInfo
+        } = object;
+
+        const instanceId = await this.mstrObjectRestService.createDossierInstance(
+          projectId,
+          objectId,
+          { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
+        );
+
+        const updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(
+          projectId,
+          objectId,
+          visualizationInfo.visualizationKey,
+          instanceId
+        );
+
+        object.isEdit = true;
+        object.instanceId = instanceId;
+
+        if (updatedVisualizationInfo) {
+          object.visualizationInfo = updatedVisualizationInfo;
+        }
+      }
+
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedObject: object,
+      });
+
+      const reportParams = {
+        duplicateMode: true,
+        insertNewWorksheet: object.insertNewWorksheet,
+      };
+
+      if (isDossier) {
+        this.popupController.runEditDossierPopup(reportParams);
+      } else if (object.isPrompted) {
+        this.popupController.runRepromptPopup(reportParams);
+      } else {
+        this.popupController.runEditFiltersPopup(reportParams);
+      }
+    } catch (error) {
+      dispatch({ type: officeProperties.actions.stopLoading });
+      if (isDossier) {
+        error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+      }
+      return this.errorService.handleError(error);
+    }
+  }
 }
 
 export const popupActions = new PopupActions();

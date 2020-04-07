@@ -12,6 +12,7 @@ import {
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
   SAVE_OBJECT_IN_EXCEL,
+  GET_DUPLICATE_NAME,
   REMOVE_OBJECT_STORE,
   REMOVE_OBJECT_TABLE,
   REMOVE_OBJECT_BINDING,
@@ -69,6 +70,10 @@ class OperationStepDispatcher {
 
   completeModifyObject = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MODIFY_OBJECT));
+  };
+
+  completeGetDuplicateName = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_DUPLICATE_NAME));
   };
 
   completeRemoveObjectBinding = (objectWorkingId) => {

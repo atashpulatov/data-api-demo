@@ -7,6 +7,7 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import { notificationService } from '../../notification/notification-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
+import * as operationActions from '../../operation/operation-actions';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -257,5 +258,114 @@ describe('PopupController', () => {
       type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null,
     });
     expect(dialog.close).toBeCalled();
+  });
+
+  it('should handleDuplicate for commandOnUpdate', async () => {
+    // given
+    officeApiHelper.getExcelSessionStatus = jest.fn();
+    officeApiHelper.getOfficeSessionStatus = jest.fn();
+    const actionObject = {
+      command: selectorProperties.commandOnUpdate,
+      chosenObjectName: 'testName',
+      chosenObjectId: 'chosenObjectId',
+      projectId: 'projectId',
+      chosenObjectSubtype: objectTypes.getTypeValues('Report').subtype,
+      body: {},
+      dossierData: {},
+      promptsAnswers: [],
+      isPrompted: 0,
+      instanceId: 'ABCD',
+      subtotalsInfo: {},
+      displayAttrFormNames: {},
+      duplicateOptions: {}
+    };
+    const reportParams = {};
+    const arg = { message: JSON.stringify(actionObject), };
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
+    const spyHandleDuplicate = jest.spyOn(popupController, 'handleDuplicate');
+    const spyDuplicateRequested = jest.spyOn(operationActions, 'duplicateRequested');
+    const expectedObjectData = {
+      body: {},
+      displayAttrFormNames: {},
+      dossierData: {},
+      instanceId: 'ABCD',
+      isPrompted: 0,
+      mstrObjectType: {
+        name: 'report',
+        request: 'reports',
+        subtypes: [768, 769, 774],
+        type: 3,
+      },
+      name: 'testName',
+      objectId: 'chosenObjectId',
+      preparedInstanceId: undefined,
+      projectId: 'projectId',
+      promptsAnswers: [],
+      subtotalsInfo: {},
+      visualizationInfo: undefined,
+    };
+    // when
+    await popupController.onMessageFromPopup(dialog, reportParams, arg);
+    // then
+    expect(spyValidateAuthToken).toBeCalled();
+    expect(spyHandleDuplicate).toBeCalled();
+    expect(spyDuplicateRequested).toBeCalledWith(expectedObjectData);
+  });
+
+  it('should handleDuplicate for commandOk', async () => {
+    // given
+    officeApiHelper.getExcelSessionStatus = jest.fn();
+    officeApiHelper.getOfficeSessionStatus = jest.fn();
+    const actionObject = {
+      command: selectorProperties.commandOk,
+      chosenObject: 'chosenObject',
+      chosenObjectName: 'testName',
+      chosenProject: 'projectId',
+      chosenSubtype: objectTypes.getTypeValues('Report').subtype,
+      body: {},
+      dossierData: {},
+      promptsAnswers: [],
+      isPrompted: 0,
+      visualizationInfo: {},
+      preparedInstanceId: 'ABCD',
+      subtotalsInfo: {},
+      displayAttrFormNames: {},
+      duplicateOptions: {}
+    };
+    const reportParams = {};
+    const arg = { message: JSON.stringify(actionObject), };
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
+    const spyHandleDuplicate = jest.spyOn(popupController, 'handleDuplicate');
+    const spyDuplicateRequested = jest.spyOn(operationActions, 'duplicateRequested');
+    const expectedObjectData = {
+      body: {},
+      displayAttrFormNames: {},
+      dossierData: {},
+      instanceId: undefined,
+      isPrompted: 0,
+      mstrObjectType: {
+        name: 'report',
+        request: 'reports',
+        subtypes: [768, 769, 774],
+        type: 3,
+      },
+      name: 'testName',
+      objectId: 'chosenObject',
+      preparedInstanceId: 'ABCD',
+      projectId: 'projectId',
+      promptsAnswers: [],
+      subtotalsInfo: {},
+      visualizationInfo: {},
+    };
+    // when
+    await popupController.onMessageFromPopup(dialog, reportParams, arg);
+    // thenq
+    expect(spyValidateAuthToken).toBeCalled();
+    expect(spyHandleDuplicate).toBeCalled();
+    expect(spyDuplicateRequested).toBeCalledWith(expectedObjectData);
   });
 });
