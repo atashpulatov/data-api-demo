@@ -1,0 +1,39 @@
+job 'stage-0-dev-guard' do
+  description 'a guard job that blocks commits from tests folder to trigger dev job'
+
+  configure_common_items{}
+
+  assigned_node_string 'creator_destroyer'
+
+  scm do
+    git do
+      excluded_regions 'tests/.*'
+      credentials_id '448a8313-a9ab-4093-8b8e-c42bfea4491c'
+    end
+  end
+
+  triggers do
+    github_push do
+    end
+  end
+
+  builders do
+    bash do
+      script '#!/usr/bin/env bash
+set +xe
+
+export APPLICATION_VERSION=none-test-checkin
+'
+    end
+  end
+
+  publishers do
+   
+    parameterized_trigger do
+      job_short_names %w{
+        stage-1-dev
+      }
+    end
+  end
+
+end
