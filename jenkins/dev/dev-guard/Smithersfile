@@ -22,7 +22,7 @@ job 'stage-0-dev-guard' do
       script '#!/usr/bin/env bash
 set +xe
 
-export APPLICATION_VERSION=none-test-checkin
+echo APPLICATION_VERSION=none-test-checkin
 '
     end
   end
@@ -33,6 +33,9 @@ export APPLICATION_VERSION=none-test-checkin
       job_short_names %w{
         stage-1-dev
       }
+      failTriggerOnMissing 'false'
+      triggerWithNoParameters 'true'
+
     end
   end
 
