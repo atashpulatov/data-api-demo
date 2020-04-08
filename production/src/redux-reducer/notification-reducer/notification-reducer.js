@@ -4,12 +4,9 @@ import {
 } from '../../operation/operation-type-names';
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
-
-export const CREATE_NOTIFICATION = 'CREATE_NOTIFICATION';
-export const UPDATE_NOTIFICATION = 'UPDATE_NOTIFICATION';
-export const DELETE_NOTIFICATION = 'DELETE_NOTIFICATION';
-export const CREATE_GLOBAL_NOTIFICATION = 'CREATE_GLOBAL_NOTIFICATION';
-export const REMOVE_GLOBAL_NOTIFICATION = 'REMOVE_GLOBAL_NOTIFICATION';
+import {
+  CREATE_NOTIFICATION, DELETE_NOTIFICATION, CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION
+} from './notification-actions';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 

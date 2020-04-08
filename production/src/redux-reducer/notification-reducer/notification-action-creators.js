@@ -1,5 +1,5 @@
 import { globalNotificationTypes } from '@mstr/rc';
-import { CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, DELETE_NOTIFICATION } from './notification-reducer';
+import { CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, DELETE_NOTIFICATION } from './notification-actions';
 
 export const createConnectionLostNotification = () => ({
   type: CREATE_GLOBAL_NOTIFICATION,

@@ -5,7 +5,6 @@ import {
   displayGlobalNotification,
   deleteObjectNotification
 } from '../redux-reducer/notification-reducer/notification-action-creators';
-import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import officeStoreObject from '../office/store/office-store-object';
 
 class NotificationService {
@@ -42,8 +41,8 @@ class NotificationService {
   }
 
   onRemoveSuccessfulNotificationHover = (objectWorkingId) => {
-    console.log('onRemoveSuccessfulNotificationHover');
     officeStoreObject.removeObjectFromStore(objectWorkingId);
+    this.onSuccessfullNotificationHover(objectWorkingId);
   }
 }
 
