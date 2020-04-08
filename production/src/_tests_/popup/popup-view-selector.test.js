@@ -8,8 +8,6 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../../dossier/dossier-window';
-import { LoadingPage } from '../../loading/loading-page';
-import { RefreshAllPage } from '../../loading/refresh-all-page';
 import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { popupHelper } from '../../popup/popup-helper';
 import { popupActions, SET_PREPARED_REPORT } from '../../redux-reducer/popup-reducer/popup-actions';
@@ -47,8 +45,6 @@ describe('PopupViewSelectorNotConnected', () => {
   ${PopupTypeEnum.dataPreparation}   | ${AttributeSelectorWindow}
   ${PopupTypeEnum.editFilters}       | ${AttributeSelectorWindow}
   ${PopupTypeEnum.navigationTree}    | ${NavigationTree}
-  ${PopupTypeEnum.loadingPage}       | ${LoadingPage}
-  ${PopupTypeEnum.refreshAllPage}    | ${RefreshAllPage}
   ${PopupTypeEnum.promptsWindow}     | ${PromptsWindow}
   ${PopupTypeEnum.repromptingWindow} | ${PromptsWindow}
   ${PopupTypeEnum.dossierWindow}     | ${DossierWindow}
