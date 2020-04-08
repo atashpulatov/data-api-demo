@@ -1,6 +1,7 @@
 import mstrObjectEnum from './mstr-object-type-enum';
 import { errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
 import { mstrObjectRestService } from './mstr-object-rest-service';
+import { GET_OFFICE_TABLE_IMPORT } from '../operation/operation-steps';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition(
@@ -75,9 +76,11 @@ class DossierInstanceDefinition {
     };
   }
 
-  getVisualizationName = (operationData, name, instanceDefinition) => {
+  getVisualizationName = (operationData, name, instanceDefinition, nextStep) => {
     const { objectEditedData } = operationData;
-    if (objectEditedData && objectEditedData.visualizationInfo.formatShouldUpdate) {
+
+    if (nextStep === GET_OFFICE_TABLE_IMPORT
+      || (objectEditedData && objectEditedData.visualizationInfo.formatShouldUpdate)) {
       name = instanceDefinition.mstrTable.name;
     }
     return name;
