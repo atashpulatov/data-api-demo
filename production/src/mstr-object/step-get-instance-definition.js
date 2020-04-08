@@ -55,7 +55,7 @@ class StepGetInstanceDefinition {
           { ...objectData, visualizationInfo }
         ));
 
-        name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition);
+        name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition, nextStep);
       } else {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }

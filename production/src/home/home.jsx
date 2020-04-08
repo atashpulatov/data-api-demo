@@ -44,7 +44,7 @@ export const HomeNotConnected = (props) => {
   }, []);
 
   React.useEffect(() => {
-    getUserData();
+    getUserData(authToken);
   }, [authToken]);
 
   return (
@@ -62,11 +62,13 @@ export const HomeNotConnected = (props) => {
   );
 };
 
-async function getUserData() {
-  console.log('saving token');
-  homeHelper.saveTokenFromCookies();
-  await sessionHelper.getUserInfo();
-  await sessionHelper.getUserAttributeFormPrivilege();
+async function getUserData(authToken) {
+  if (authToken) {
+    console.log('saving token');
+    homeHelper.saveTokenFromCookies();
+    await sessionHelper.getUserInfo();
+    await sessionHelper.getUserAttributeFormPrivilege();
+  }
 }
 
 function mapStateToProps(state) {
