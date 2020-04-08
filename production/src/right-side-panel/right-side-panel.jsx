@@ -101,8 +101,8 @@ export const RightSidePanelNotConnected = (props) => {
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
   const duplicateWrapper = async (params) => { await wrapper(sidePanelService.duplicate, params); };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
-  const refreshWrapper = async (params) => { await wrapper(sidePanelService.refresh, params); };
-  const removeWrapper = async (params) => { await wrapper(sidePanelService.remove, params); };
+  const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
+  const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
 
   console.log(globalNotification);
