@@ -63,7 +63,9 @@ class StepGetOfficeTableEditRefresh {
           }
         ));
       } else {
-        shouldFormat = (objectEditedData && objectEditedData.visualizationInfo.formatShouldUpdate) || false;
+        shouldFormat = (objectEditedData
+          && objectEditedData.visualizationInfo
+          && objectEditedData.visualizationInfo.formatShouldUpdate) || false;
 
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,

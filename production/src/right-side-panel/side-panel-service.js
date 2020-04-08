@@ -36,7 +36,6 @@ class SidePanelService {
 
   rename = async (objectWorkingId, newName) => {
     const renamedObject = { objectWorkingId, name: newName };
-    // TODO check for changing viz whiel editing dossier
     this.reduxStore.dispatch(updateObject(renamedObject));
     await officeStoreObject.saveObjectsInExcelStore();
   };
