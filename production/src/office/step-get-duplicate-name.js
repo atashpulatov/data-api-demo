@@ -1,10 +1,9 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import i18n from '../i18n';
 
 class StepGetDuplicateName {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-    // TODO: connect t with translations
-    this.t = text => String(text);
   }
 
   /**
@@ -18,8 +17,10 @@ class StepGetDuplicateName {
   */
   getDuplicateName = (objectData) => {
     const { objectWorkingId, name } = objectData;
-    const nameCandidate = this.prepareNewNameForDuplicatedObject(name);
-    const newName = this.checkAndSolveNameConflicts(nameCandidate);
+    const lang = i18n.language;
+    const translatedCopy = i18n.store.data[lang].common.Copy;
+    const nameCandidate = this.prepareNewNameForDuplicatedObject(name, translatedCopy);
+    const newName = this.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
     const updatedObject = {
       objectWorkingId,
       name: newName
@@ -35,10 +36,10 @@ class StepGetDuplicateName {
    * 'Copy' can be expanded by counting number, starting from 2.
    *
    * @param {String} originalObjectName Name of the original object.
+   * @param {String} translatedCopy 'Copy' translated to active language.
    * @returns {String} Proposed name for new duplicated object.
    */
-  prepareNewNameForDuplicatedObject = (originalObjectName) => {
-    const translatedCopy = this.t('copy');
+  prepareNewNameForDuplicatedObject = (originalObjectName, translatedCopy) => {
     const splitedName = String(originalObjectName).split(' ');
     const nrOfWords = splitedName.length;
 
@@ -76,10 +77,10 @@ class StepGetDuplicateName {
    * 2. Increment number which is at the end of nameCandidate.
    *
    * @param {String} nameCandidate Prepared name for duplicated object
+   * @param {String} translatedCopy 'Copy' translated to active language.
    * @returns {String} Final name for new duplicated object
    */
-  checkAndSolveNameConflicts = (nameCandidate) => {
-    const translatedCopy = this.t('copy');
+  checkAndSolveNameConflicts = (nameCandidate, translatedCopy) => {
     const splitedName = nameCandidate.split(' ');
     let finalNameCandidate = nameCandidate;
 
