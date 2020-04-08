@@ -95,10 +95,8 @@ class PopupController {
   };
 
   onMessageFromPopup = async (dialog, reportParams, arg) => {
-    console.log('reportParams:', reportParams);
     const { message } = arg;
     const response = JSON.parse(message);
-    console.log('response:', response);
     if (response.command === selectorProperties.commandBrowseUpdate) {
       this.reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
       return;
