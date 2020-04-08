@@ -180,8 +180,7 @@ class PopupController {
         bindId,
         isPrompted: response.isPrompted,
         promptsAnswers: response.promptsAnswers,
-        // TODO remove dossier structure below when it will be fixed on RC side
-        visualizationInfo: { ...response.visualizationInfo, dossierStructure: false },
+        visualizationInfo: response.visualizationInfo,
         preparedInstanceId: response.preparedInstanceId,
       };
       this.reduxStore.dispatch(importRequested(objectData));
