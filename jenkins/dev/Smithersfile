@@ -7,12 +7,6 @@ produces and publishes a versioned deployment package'
 
   assigned_node_string 'amazon_linux'
 
-  triggers do
-    scm_polling do
-      set_to_every_minute
-    end
-  end
-
   builders do
     bash do
       script '#!/usr/bin/env bash
