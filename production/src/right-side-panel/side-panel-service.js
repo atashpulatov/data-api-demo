@@ -139,7 +139,7 @@ class SidePanelService {
     const handleViewData = () => {
       this.reduxStore.dispatch(toggleSecuredFlag(false));
       this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
-      this.refresh(...officeReducerHelper.getObjectsListFromObjectReducer()
+      this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
         .map(({ objectWorkingId }) => objectWorkingId));
     };
 

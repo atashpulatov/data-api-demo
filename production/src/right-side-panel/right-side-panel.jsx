@@ -119,7 +119,6 @@ export const RightSidePanelNotConnected = (props) => {
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
 
-  console.log(globalNotification);
 
   /**
    * Handles user click on duplicate icon.
