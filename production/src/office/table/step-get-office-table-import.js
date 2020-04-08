@@ -1,6 +1,7 @@
 import officeTableCreate from './office-table-create';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
+import { errorService } from '../../error/error-handler';
 
 class StepGetOfficeTableImport {
   /**
@@ -46,8 +47,9 @@ class StepGetOfficeTableImport {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetOfficeTableImport(objectWorkingId);
     } catch (error) {
-      console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      // console.error(error);
+      const callback = () => { operationErrorHandler.handleOperationError(objectData, operationData); };
+      errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback);
     } finally {
       console.timeEnd('Create or get table - import');
     }

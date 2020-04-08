@@ -4,6 +4,7 @@ import officeTableCreate from './office-table-create';
 import officeTableUpdate from './office-table-update';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
+import {errorService} from '../../error/error-handler';
 
 class StepGetOfficeTableEditRefresh {
   /**
@@ -92,7 +93,9 @@ class StepGetOfficeTableEditRefresh {
       operationStepDispatcher.completeGetOfficeTableEditRefresh(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      const callback = () => { operationErrorHandler.handleOperationError(objectData, operationData); };
+      errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback);
+      // operationErrorHandler.handleOperationError(objectData, operationData);
     } finally {
       console.timeEnd('Create or get table - edit or refresh');
     }

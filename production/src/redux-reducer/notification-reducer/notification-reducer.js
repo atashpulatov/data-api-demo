@@ -5,8 +5,9 @@ import {
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
 import {
-  CREATE_NOTIFICATION, DELETE_NOTIFICATION, CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION
+  CREATE_NOTIFICATION, DELETE_NOTIFICATION, CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, CREATE_OBJECT_WARNING
 } from './notification-actions';
+import { getNotificationButtons } from '../../notification-v2/notification-buttons';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -25,6 +26,8 @@ export const notificationReducer = (state = initialState, action) => {
       return displayNotificationCompleted(state, payload);
     case CREATE_NOTIFICATION:
       return createNotification(state, payload);
+    case CREATE_OBJECT_WARNING:
+      return createObjectWarning(state, payload);
     case DELETE_NOTIFICATION:
       return deleteNotification(state, payload);
     case CREATE_GLOBAL_NOTIFICATION:
@@ -100,6 +103,42 @@ const deleteNotification = (state, payload) => {
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications.splice(notificationToDelete, 1);
   return newState;
+};
+
+const createObjectWarning = (state, payload) => {
+  const { notifications } = state;
+  const notificationToUpdateIndex = getNotificationIndex(state, payload);
+  const notificationToUpdate = notifications[notificationToUpdateIndex];
+
+  const buttons = [
+    {
+      title: 'Ok',
+      type: 'basic',
+      label: 'Ok',
+      onClick: payload.notification.callback,
+    },
+  ];
+
+  const updatedNotification = {
+    objectWorkingId: payload.objectWorkingId,
+    type: objectNotificationTypes.WARNING,
+    title: titleOperationFailedMap[notificationToUpdate.operationType],
+    details: payload.notification.message,
+    onHover: payload.notification.callback,
+    children: getNotificationButtons(buttons),
+  };
+
+  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
+  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
+  return newState;
+};
+
+const titleOperationFailedMap = {
+  IMPORT_OPERATION: 'Import failed',
+  REFRESH_OPERATION: 'Refresh failed',
+  EDIT_OPERATION: 'Import failed',
+  REMOVE_OPERATION: 'Remove object failed',
+  CLEAR_DATA_OPERATION: 'Clear object failed',
 };
 
 const createGlobalNotification = (state, payload) => (

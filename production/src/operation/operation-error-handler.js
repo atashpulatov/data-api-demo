@@ -55,19 +55,18 @@ class OperationErrorHandler {
     const { objectWorkingId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
     const { officeTable, excelContext, operationType } = OperationData;
 
-    if (operationType === IMPORT_OPERATION || operationType === DUPLICATE_OPERATION) {
-      if (officeTable) {
-        officeTable.showHeaders = true;
-        await officeRemoveHelper.removeExcelTable(
-          officeTable,
-          excelContext,
-          isCrosstab,
-          crosstabHeaderDimensions,
-          false
-        );
-      }
-      this.reduxStore.dispatch(removeObject(objectWorkingId));
+    if (officeTable) {
+      officeTable.showHeaders = true;
+      await officeRemoveHelper.removeExcelTable(
+        officeTable,
+        excelContext,
+        isCrosstab,
+        crosstabHeaderDimensions,
+        false
+      );
     }
+    this.reduxStore.dispatch(removeObject(objectWorkingId));
+
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
   }
 
@@ -82,7 +81,8 @@ class OperationErrorHandler {
   handleRefreshOperationError = async (ObjectData, OperationData) => {
     const { objectWorkingId, isCrosstab } = ObjectData;
     const { officeTable, backupObjectData } = OperationData;
-
+    console.log('handleRefreshOperationError');
+    console.log(backupObjectData);
     if (officeTable) {
       if (isCrosstab) {
         officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh

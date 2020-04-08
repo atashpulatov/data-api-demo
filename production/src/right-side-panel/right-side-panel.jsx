@@ -136,11 +136,11 @@ export const RightSidePanelNotConnected = (props) => {
 
   return (
     <>
-      <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
+      {/* <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
       <button type="button" onClick={mockSessionExpired}>Mock Session expired</button>
-      <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button>
+      <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button> */}
       <SidePanel
-        loadedObjects={loadedObjects}
+        loadedObjects={loadedObjectsWrapped}
         onAddData={addDataWrapper}
         onTileClick={highlightObjectWrapper}
         onDuplicateClick={duplicateWrapper}
