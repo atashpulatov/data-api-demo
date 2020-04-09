@@ -7,6 +7,7 @@ import { notificationService } from '../../notification-v2/notification-service'
 import {
   CREATE_NOTIFICATION, DELETE_NOTIFICATION, CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION
 } from './notification-actions';
+import { officeProperties } from '../office-reducer/office-properties';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -31,6 +32,8 @@ export const notificationReducer = (state = initialState, action) => {
       return createGlobalNotification(state, payload);
     case REMOVE_GLOBAL_NOTIFICATION:
       return removeGlobalNotification(state, payload);
+    case officeProperties.actions.toggleSecuredFlag:
+      return deleteAllNotifications(action, state);
     default:
       return state;
   }
@@ -55,7 +58,6 @@ const moveNotificationToInProgress = (state, payload) => {
     title: titleOperationMap[notificationToUpdate.operationType],
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
-  console.log(updatedNotification);
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
   return newState;
@@ -96,9 +98,11 @@ const titleOperationCompletedMap = {
 const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
 
 const deleteNotification = (state, payload) => {
-  const notificationToDelete = getNotificationIndex(state, payload);
+  // TODO: do we need this?
+  getNotificationIndex(state, payload);
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToDelete, 1);
+  newState.notifications = newState.notifications
+    .filter((notification) => notification.objectWorkingId !== payload.objectWorkingId);
   return newState;
 };
 
@@ -108,15 +112,19 @@ const createGlobalNotification = (state, payload) => (
 
 const removeGlobalNotification = (state, paylaod) => ({ notifications: [...state.notifications], globalNotification: { type: '' } });
 
+const deleteAllNotifications = (action, state) => (action.isSecured
+  ? { notifications: [], globalNotification: state.globalNotification }
+  : state);
+
 function getIsIndeterminate(notificationToUpdate) {
-  return !!(notificationToUpdate.operationType === REMOVE_OPERATION || notificationToUpdate.operationType === CLEAR_DATA_OPERATION);
+  return !!(notificationToUpdate.operationType === REMOVE_OPERATION
+    || notificationToUpdate.operationType === CLEAR_DATA_OPERATION);
 }
 
 function getNotificationIndex(state, payload) {
   const notificationToUpdateIndex = state.notifications
     .findIndex((notification) => notification.objectWorkingId === payload.objectWorkingId);
   if (notificationToUpdateIndex === -1) {
-    console.log({ state, payload });
     throw new Error();
   }
   return notificationToUpdateIndex;

@@ -53,29 +53,8 @@ export const RightSidePanelNotConnected = (props) => {
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
   React.useEffect(() => {
-    setLoadedObjectsWrapped(loadedObjects.map((object) => {
-      const operation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
-      const notification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
-      console.log(notification);
-      console.log({ loadedObjects, notifications });
-      const operationBasedNotificationData = operation ? {
-        percentageComplete: operation.totalRows !== 0 ? calculateLoadingProgress(operation.operationType, operation.stepsQueue[0], operation.loadedRows, operation.totalRows) : 0,
-        itemsTotal: operation.totalRows,
-        itemsComplete: operation.loadedRows,
-      } : {};
-      const obj = notification ? {
-        ...object,
-        notification: {
-          ...notification,
-          ...operationBasedNotificationData,
-        }
-      }
-        : object;
-      return obj;
-    }));
+    setLoadedObjectsWrapped(() => wrapLoadedObjects(loadedObjects, operations, notifications));
   }, [loadedObjects, notifications, operations]);
-
-  console.log(loadedObjectsWrapped);
 
   const mockConnectionLost = () => {
     notificationService.connectionLost();
@@ -124,36 +103,36 @@ export const RightSidePanelNotConnected = (props) => {
     }
   };
 
-  const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params) };
-  const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params) };
-  const duplicateWrapper = async (params) => { await wrapper(sidePanelService.duplicate, params) };
-  const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params) };
-  const refreshWrapper = async (params) => { await wrapper(sidePanelService.refresh, params) };
-  const removeWrapper = async (params) => { await wrapper(sidePanelService.remove, params) };
-  const renameWrapper = async (params) => { await wrapper(sidePanelService.rename, params) };
-
-  console.log(globalNotification);
+  const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
+  const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
+  const duplicateWrapper = async (params) => { await wrapper(sidePanelService.duplicate, params); };
+  const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
+  const refreshWrapper = async (params) => { await wrapper(sidePanelService.refresh, params); };
+  const removeWrapper = async (params) => { await wrapper(sidePanelService.remove, params); };
+  const renameWrapper = async (params) => { await wrapper(sidePanelService.rename, params); };
 
   return (
     <>
       <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
       <button type="button" onClick={mockSessionExpired}>Mock Session expired</button>
       <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button>
-      <SidePanel
-        loadedObjects={loadedObjects}
-        onAddData={addDataWrapper}
-        onTileClick={highlightObjectWrapper}
-        onDuplicateClick={duplicateWrapper}
-        onEditClick={editWrapper}
-        onRefreshClick={refreshWrapper}
-        onRemoveClick={removeWrapper}
-        onRename={renameWrapper}
-        popup={sidePanelPopup}
-        settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
-        confirmationWindow={isConfirm && <Confirmation />}
-        globalNotification={globalNotification}
-      />
+      {loadedObjectsWrapped && (
+        <SidePanel
+          loadedObjects={loadedObjectsWrapped}
+          onAddData={addDataWrapper}
+          onTileClick={highlightObjectWrapper}
+          onDuplicateClick={duplicateWrapper}
+          onEditClick={editWrapper}
+          onRefreshClick={refreshWrapper}
+          onRemoveClick={removeWrapper}
+          onRename={renameWrapper}
+          popup={sidePanelPopup}
+          settingsMenu={isSettings && <SettingsMenu />}
+          onSettingsClick={handleSettingsClick}
+          confirmationWindow={isConfirm && <Confirmation />}
+          globalNotification={globalNotification}
+        />
+      )}
     </>
   );
 };
@@ -223,3 +202,32 @@ RightSidePanelNotConnected.propTypes = {
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func
 };
+
+function wrapLoadedObjects(loadedObjects, operations, notifications) {
+  const test = loadedObjects.map((object) => {
+    const operation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
+    const notification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
+    // console.log(notification);
+    // console.log({ loadedObjects, notifications });
+    const operationBasedNotificationData = operation ? {
+      percentageComplete: operation.totalRows !== 0 ? calculateLoadingProgress(operation.operationType, operation.stepsQueue[0], operation.loadedRows, operation.totalRows) : 0,
+      itemsTotal: operation.totalRows,
+      itemsComplete: operation.loadedRows,
+    } : {};
+    const obj = notification ? {
+      ...object,
+      notification: {
+        ...notification,
+        ...operationBasedNotificationData,
+      }
+    }
+      : object;
+    return obj;
+  });
+
+  console.log({
+    test, loadedObjects, operations, notifications
+  });
+
+  return test;
+}

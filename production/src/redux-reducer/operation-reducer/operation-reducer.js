@@ -68,8 +68,6 @@ function updateOperation(state, updatedOperationProps) {
   const newOperations = [...state.operations];
   const updatedOperation = { ...state.operations[processedOperationIndex], ...updatedOperationProps };
   newOperations.splice(processedOperationIndex, 1, updatedOperation);
-  console.warn({ updatedOperation });
-
   return { operations: newOperations };
 }
 
