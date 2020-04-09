@@ -75,7 +75,7 @@ export const operationStepsMap = {
   ],
 
   [DUPLICATE_OPERATION]: [
-    // MOVE_NOTIFICATION_TO_PROGRESS,
+    MOVE_NOTIFICATION_TO_IN_PROGRESS,
     GET_DUPLICATE_NAME,
     GET_INSTANCE_DEFINITION,
     GET_OFFICE_TABLE_IMPORT,
@@ -85,7 +85,7 @@ export const operationStepsMap = {
     FORMAT_SUBTOTALS,
     BIND_OFFICE_TABLE,
     SAVE_OBJECT_IN_EXCEL,
-    // DISPLAY_NOTIFICATION_COMPLETED,
+    DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
   [REMOVE_OPERATION]: [
@@ -149,7 +149,7 @@ const loadingStateEnumWeights = {
     FORMAT_SUBTOTALS: 30,
     BIND_OFFICE_TABLE: 35,
     SAVE_OBJECT_IN_EXCEL: 40,
-  }
+  },
 };
 
 export const calculateLoadingProgress = (operationType, step, loadedRows, totalRows) => {

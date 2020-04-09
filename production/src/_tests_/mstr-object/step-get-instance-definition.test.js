@@ -47,13 +47,13 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  handleOperationErrorCallNo | expectedErrorMsg | rowsParam | isPromptedParam
+  handleOperationErrorCallNo      | expectedErrorMsg         | rowsParam | isPromptedParam
   
-  ${1} | ${ALL_DATA_FILTERED_OUT} | ${[]}   | ${true}
-  ${0} | ${ALL_DATA_FILTERED_OUT} | ${[42]} | ${true}
+  ${1}                            | ${ALL_DATA_FILTERED_OUT} | ${[]}     | ${true}
+  ${0}                            | ${ALL_DATA_FILTERED_OUT} | ${[42]}   | ${true}
                                             
-  ${1} | ${NO_DATA_RETURNED}      | ${[]}   | ${false}
-  ${0} | ${NO_DATA_RETURNED}      | ${[42]} | ${false}
+  ${1}                            | ${NO_DATA_RETURNED}      | ${[]}     | ${false}
+  ${0}                            | ${NO_DATA_RETURNED}      | ${[42]}   | ${false}
   
   `('getInstanceDefinition works as expected when mstrTable.rows.length is 0',
   async ({
@@ -101,7 +101,7 @@ describe('StepGetInstanceDefinition', () => {
         isPrompted: isPromptedParam,
       }, {
         stepsQueue: ['step_0', undefined],
-      });
+      }, new Error(expectedErrorMsg));
     }
 
     expect(updateOperationMock).toBeCalledTimes(expectedDispatchCallNo);
@@ -147,10 +147,11 @@ describe('StepGetInstanceDefinition', () => {
       },
       bindId: 'bindIdTest',
       mstrObjectType: {
-        name: mstrObjectEnum.mstrObjectType.visualization.name
+        name: mstrObjectEnum.mstrObjectType.visualization.name,
       },
       visualizationInfo: 'visualizationInfoTest',
       body: 'bodyTest',
+      name: 'nameTest',
     };
 
     const getExcelContextMock = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
@@ -173,6 +174,9 @@ describe('StepGetInstanceDefinition', () => {
           }
         },
       });
+
+    const getVisualizationNameMock = jest.spyOn(dossierInstanceDefinition, 'getVisualizationName')
+      .mockReturnValue('getVisualizationNameTest');
 
     const createInstanceMock = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
 
@@ -240,7 +244,16 @@ describe('StepGetInstanceDefinition', () => {
       },
       body: 'bodyTest',
       visualizationInfo: 'visualizationInfoTest',
+      name: 'nameTest',
     });
+
+    expect(getVisualizationNameMock).toBeCalledTimes(1);
+    expect(getVisualizationNameMock).toBeCalledWith(
+      { operationType: 'operationTypeTest', stepsQueue: ['step_0', nextStepParam] },
+      'nameTest',
+      { mstrTable: { name: 'mstrTableNameDossierTest' } },
+      nextStepParam,
+    );
 
     expect(createInstanceMock).not.toBeCalled();
 
@@ -263,6 +276,7 @@ describe('StepGetInstanceDefinition', () => {
       body: 'bodyTest',
       insertNewWorksheet: 'insertNewWorksheetTest',
       crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+      name: 'nameTest',
     });
 
     expect(savePreviousObjectDataMock).toBeCalledTimes(1);
@@ -307,7 +321,7 @@ describe('StepGetInstanceDefinition', () => {
         username: 'usernameTest',
       },
       isCrosstab: 'isCrossTabTest',
-      name: 'nameModifyInstanceWithPromptTest',
+      name: 'getVisualizationNameTest',
       objectWorkingId: 'objectWorkingIdTest',
       visualizationInfo: expectedVisualizationInfo,
       subtotalsInfo: {

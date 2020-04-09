@@ -1,6 +1,6 @@
 import { objectNotificationTypes } from '@mstr/rc';
 import {
-  IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION, CLEAR_DATA_OPERATION
+  IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION, CLEAR_DATA_OPERATION, DUPLICATE_OPERATION
 } from '../../operation/operation-type-names';
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
@@ -17,6 +17,7 @@ export const notificationReducer = (state = initialState, action) => {
     case IMPORT_OPERATION:
     case REFRESH_OPERATION:
     case REMOVE_OPERATION:
+    case DUPLICATE_OPERATION:
     case CLEAR_DATA_OPERATION:
     case EDIT_OPERATION:
       return createProgressNotification(state, payload);
@@ -50,24 +51,18 @@ const createProgressNotification = (state, payload) => {
 };
 
 const moveNotificationToInProgress = (state, payload) => {
-  const { notifications } = state;
-  const notificationToUpdateIndex = getNotificationIndex(state, payload);
-  const notificationToUpdate = notifications[notificationToUpdateIndex];
+  const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
   const updatedNotification = {
     ...notificationToUpdate,
     title: titleOperationMap[notificationToUpdate.operationType],
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
   console.log(updatedNotification);
-  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
-  return newState;
+  return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
 const displayNotificationCompleted = (state, payload) => {
-  const { notifications } = state;
-  const notificationToUpdateIndex = getNotificationIndex(state, payload);
-  const notificationToUpdate = notifications[notificationToUpdateIndex];
+  const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
   const updatedNotification = {
     ...notificationToUpdate,
     type: objectNotificationTypes.SUCCESS,
@@ -76,24 +71,7 @@ const displayNotificationCompleted = (state, payload) => {
       ? () => notificationService.onRemoveSuccessfulNotificationHover(notificationToUpdate.objectWorkingId)
       : () => notificationService.onSuccessfullNotificationHover(notificationToUpdate.objectWorkingId)),
   };
-  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
-  return newState;
-};
-
-const titleOperationMap = {
-  IMPORT_OPERATION: 'Importing',
-  REFRESH_OPERATION: 'Refreshing',
-  EDIT_OPERATION: 'Importing',
-  REMOVE_OPERATION: 'Removing',
-  CLEAR_DATA_OPERATION: 'Clearing',
-};
-const titleOperationCompletedMap = {
-  IMPORT_OPERATION: 'Import successful',
-  REFRESH_OPERATION: 'Refresh complete',
-  EDIT_OPERATION: 'Import successful',
-  REMOVE_OPERATION: 'Object removed',
-  CLEAR_DATA_OPERATION: 'Object cleared',
+  return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
 const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
@@ -106,18 +84,9 @@ const deleteNotification = (state, payload) => {
 };
 
 const createObjectWarning = (state, payload) => {
-  const { notifications } = state;
-  const notificationToUpdateIndex = getNotificationIndex(state, payload);
-  const notificationToUpdate = notifications[notificationToUpdateIndex];
+  const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
 
-  const buttons = [
-    {
-      title: 'Ok',
-      type: 'basic',
-      label: 'Ok',
-      onClick: payload.notification.callback,
-    },
-  ];
+  const buttons = getOkButton(payload);
 
   const updatedNotification = {
     objectWorkingId: payload.objectWorkingId,
@@ -128,17 +97,7 @@ const createObjectWarning = (state, payload) => {
     children: getNotificationButtons(buttons),
   };
 
-  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
-  return newState;
-};
-
-const titleOperationFailedMap = {
-  IMPORT_OPERATION: 'Import failed',
-  REFRESH_OPERATION: 'Refresh failed',
-  EDIT_OPERATION: 'Import failed',
-  REMOVE_OPERATION: 'Remove object failed',
-  CLEAR_DATA_OPERATION: 'Clear object failed',
+  return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
 const createGlobalNotification = (state, payload) => (
@@ -146,6 +105,28 @@ const createGlobalNotification = (state, payload) => (
 );
 
 const removeGlobalNotification = (state, paylaod) => ({ notifications: [...state.notifications], globalNotification: { type: '' } });
+
+const getOkButton = (payload) => [
+  {
+    title: 'Ok',
+    type: 'basic',
+    label: 'Ok',
+    onClick: payload.notification.callback,
+  },
+];
+
+function createNewState(state, notificationToUpdateIndex, updatedNotification) {
+  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
+  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
+  return newState;
+}
+
+function getNotificationToUpdate(state, payload) {
+  const { notifications } = state;
+  const notificationToUpdateIndex = getNotificationIndex(state, payload);
+  const notificationToUpdate = notifications[notificationToUpdateIndex];
+  return { notificationToUpdate, notificationToUpdateIndex };
+}
 
 function getIsIndeterminate(notificationToUpdate) {
   return !!(notificationToUpdate.operationType === REMOVE_OPERATION || notificationToUpdate.operationType === CLEAR_DATA_OPERATION);
@@ -160,3 +141,28 @@ function getNotificationIndex(state, payload) {
   }
   return notificationToUpdateIndex;
 }
+
+const titleOperationMap = {
+  IMPORT_OPERATION: 'Importing',
+  REFRESH_OPERATION: 'Refreshing',
+  EDIT_OPERATION: 'Importing',
+  REMOVE_OPERATION: 'Removing',
+  DUPLICATE_OPERATION: 'Duplicating',
+  CLEAR_DATA_OPERATION: 'Clearing',
+};
+const titleOperationCompletedMap = {
+  IMPORT_OPERATION: 'Import successful',
+  REFRESH_OPERATION: 'Refresh complete',
+  EDIT_OPERATION: 'Import successful',
+  REMOVE_OPERATION: 'Object removed',
+  DUPLICATE_OPERATION: 'Duplicate created',
+  CLEAR_DATA_OPERATION: 'Object cleared',
+};
+const titleOperationFailedMap = {
+  IMPORT_OPERATION: 'Import failed',
+  REFRESH_OPERATION: 'Refresh failed',
+  EDIT_OPERATION: 'Import failed',
+  REMOVE_OPERATION: 'Remove object failed',
+  DUPLICATE_OPERATION: 'Duplicating object failed',
+  CLEAR_DATA_OPERATION: 'Clear object failed',
+};
