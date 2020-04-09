@@ -1,9 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { Popover } from 'antd';
-import { _RenameInput } from '../../file-history/file-history-rename-input';
-import { officeStoreService } from '../../office/store/office-store-service';
-import { _OfficeLoadedFile } from '../../file-history/office-loaded-file';
+import { RenameInputNotConnected } from '../../file-history/file-history-rename-input';
+import { OfficeLoadedFileNotConnected } from '../../file-history/office-loaded-file';
 
 
 describe('File history rename input', () => {
@@ -15,7 +14,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const bindingId = 'id123';
     // when
-    const wrappedComponent = shallow(<_RenameInput fileName={givenFileName} bindingId={bindingId} />);
+    const wrappedComponent = shallow(<RenameInputNotConnected fileName={givenFileName} bindingId={bindingId} />);
 
     // then
     expect(wrappedComponent).toBeDefined();
@@ -30,7 +29,8 @@ describe('File history rename input', () => {
     const testBindingId = 'testBindingId';
     const testName = 'testName';
     const visualizationInfoMock = { dossierStructure: 'test', };
-    const wrap = mount(<_OfficeLoadedFile
+    const wrap = mount(<OfficeLoadedFileNotConnected
+
       refreshDate={new Date()}
       bindingId={testBindingId}
       onClick={onClickMocked}
@@ -41,7 +41,7 @@ describe('File history rename input', () => {
     // when
     const enableEdit = jest.spyOn(wrap.instance(), 'enableEdit');
     // when
-    const wrappedComponent = mount(<_RenameInput fileName={givenFileName} bindingId={givenId} enableEdit={enableEdit} />);
+    const wrappedComponent = mount(<RenameInputNotConnected fileName={givenFileName} bindingId={givenId} enableEdit={enableEdit} />);
     wrappedComponent.find('.rename-container').simulate('dblclick', {});
     // then
     expect(enableEdit).toBeCalled();
@@ -52,7 +52,7 @@ describe('File history rename input', () => {
     const givenFileName = 'name';
     const givenId = 'id123';
     // when
-    const wrappedComponent = mount(<_RenameInput fileName={givenFileName} bindingId={givenId} />);
+    const wrappedComponent = mount(<RenameInputNotConnected fileName={givenFileName} bindingId={givenId} />);
     // then
     expect(wrappedComponent.find(Popover)).toHaveLength(1);
   });

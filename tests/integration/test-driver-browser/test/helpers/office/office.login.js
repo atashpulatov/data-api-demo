@@ -21,7 +21,6 @@ const OfficeLogin = function () {
   /**
    * Login to Office, open Excel workbook, starts plugin and log in to plugin based on the users data from config file
    *
-   * @memberof OfficeLogin
    */
   this.openExcelAndLoginToPlugin = (
     username = settings.env.username,

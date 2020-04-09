@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -30,7 +29,7 @@ export function watchForIframeAddition(container, callback) {
   observer.observe(container, config);
 }
 
-export default class _EmbeddedDossier extends React.Component {
+export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
@@ -38,6 +37,7 @@ export default class _EmbeddedDossier extends React.Component {
     this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
     this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
+    this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
   }
 
@@ -50,6 +50,7 @@ export default class _EmbeddedDossier extends React.Component {
     if (this.msgRouter) {
       this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
       this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
+      this.msgRouter.removeEventhandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
     }
   }
 
@@ -109,7 +110,10 @@ export default class _EmbeddedDossier extends React.Component {
 
   loadEmbeddedDossier = async (container) => {
     const { mstrData } = this.props;
-    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz, visualizationInfo } = mstrData;
+    const {
+      envUrl, authToken, dossierId, projectId, promptsAnswers,
+      instanceId, selectedViz, visualizationInfo
+    } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -140,20 +144,23 @@ export default class _EmbeddedDossier extends React.Component {
       preparedInstanceId: instance.mid,
     };
 
-    const libraryUrl = envUrl.replace('api', 'app');
-    let url = `${libraryUrl}/${projectId}/${dossierId}`;
+    const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
+    // delete last occurence of '/api' from the enviroment url
     let selectedVizChecked = selectedViz;
-
+    let activePage;
     if (selectedViz && visualizationInfo) {
       const { chapterKey, pageKey, visualizationKey } = visualizationInfo;
       selectedVizChecked = `${chapterKey}:${visualizationKey}`;
-      url = `${libraryUrl}/${projectId}/${dossierId}/${pageKey}`;
+      activePage = pageKey;
     }
     const { CustomAuthenticationType } = microstrategy.dossier;
 
     const props = {
       instance,
-      url,
+      serverURL,
+      applicationID: projectId,
+      objectID: dossierId,
+      pageKey: activePage,
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
@@ -208,21 +215,43 @@ export default class _EmbeddedDossier extends React.Component {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler('onPromptAnswered', this.promptsAnsweredHandler);
+        this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
       },
     };
     this.embeddedDossier = await microstrategy.dossier.create(props);
   }
 
-  promptsAnsweredHandler(promptsAnswers) {
+  /**
+  * Update the promptsAnswers in dossierData and also in parent component.
+  * Update the selectedViz in parent component in case of simple reprompt
+  * to keep the import button enabled.
+  *
+  * @param {Array} promptsAnswers
+  */
+  async promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
+    this.dossierData.promptsAnswers = promptsAnswers;
+    handlePromptAnswer(promptsAnswers);
+
     if (this.embeddedDossier) {
-      this.embeddedDossier.getDossierInstanceId().then((newInstanceId) => {
-        this.dossierData.preparedInstanceId = newInstanceId;
-        handlePromptAnswer(promptsAnswers, newInstanceId);
-      });
-    } else {
-      handlePromptAnswer(promptsAnswers);
+      const payload = await this.embeddedDossier.getSelectedVizKeys();
+      if (Object.keys(payload).length > 0) {
+        this.onVizSelectionHandler(payload);
+      }
     }
+  }
+
+  /**
+  * Update the instanceId in dossierData and also in parent component.
+  * InstanceId is changing as result of reset button click, switch to
+  * bookmark or new prompts answers given.
+  *
+  * @param {String} newInstanceId
+  */
+  instanceIdChangeHandler(newInstanceId) {
+    const { handleInstanceIdChange } = this.props;
+    this.dossierData.preparedInstanceId = newInstanceId;
+    handleInstanceIdChange(newInstanceId);
   }
 
   render() {
@@ -232,12 +261,15 @@ export default class _EmbeddedDossier extends React.Component {
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 9px for header margin and 68px for buttons
       */
-      <div ref={this.container} style={{ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)' }} />
+      <div ref={this.container}
+           style={{
+ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 145px)'
+}} />
     );
   }
 }
 
-_EmbeddedDossier.propTypes = {
+EmbeddedDossierNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
@@ -246,18 +278,19 @@ _EmbeddedDossier.propTypes = {
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
-    visualizationInfo: {
+    visualizationInfo: PropTypes.shape({
       chapterKey: PropTypes.string,
       pageKey: PropTypes.string,
       visualizationKey: PropTypes.string,
-    }
+    })
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
+  handleInstanceIdChange: PropTypes.func,
   handleLoadEvent: PropTypes.func
 };
 
-_EmbeddedDossier.defaultProps = {
+EmbeddedDossierNotConnected.defaultProps = {
   mstrData: {
     envUrl: 'no env url',
     authToken: null,
@@ -271,13 +304,17 @@ _EmbeddedDossier.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { navigationTree, popupReducer, sessionReducer: { attrFormPrivilege, envUrl, authToken }, officeReducer } = state;
+  const {
+    navigationTree,
+    popupReducer,
+    sessionReducer: { attrFormPrivilege, envUrl, authToken },
+    officeReducer
+  } = state;
   const { chosenObjectName, chosenObjectId, chosenProjectId } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const objectType = popupState && popupState.objectType ? popupState.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = popupState && popupState.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
@@ -294,4 +331,4 @@ const mapStateToProps = (state) => {
   return { mstrData };
 };
 
-export const EmbeddedDossier = connect(mapStateToProps)(_EmbeddedDossier);
+export const EmbeddedDossier = connect(mapStateToProps)(EmbeddedDossierNotConnected);

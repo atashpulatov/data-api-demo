@@ -211,8 +211,8 @@
   "Show attribute name once": "애트리뷰트 이름 한 번 표시",
   "On": "켜기",
   "Off": "끄기",
-  "To preserve this crosstab report, select all objects without changing their forms.": "*To preserve this crosstab report, select all objects without changing their forms.*",
-  "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "*You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.*",
-  "Seems like the dossier has been removed.": "*Seems like the dossier has been removed.*",
-  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "*You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.*"
+  "To preserve this crosstab report, select all objects without changing their forms.": "이 크로스탭 리포트를 유지하려면 해당 폼을 변경하지 말고 모든 개체를 선택하십시오.",
+  "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "지원되지 않거나 다른 장/페이지로 이동되었거나 Dossier에서 삭제된 시각화에 대해 작업을 수행하려고 합니다.",
+  "Seems like the dossier has been removed.": "Dossier가 제거된 것 같습니다.",
+  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "지원되지 않거나 Dossier에서 삭제된 시각화에 대해 작업을 수행하려고 합니다."
 }

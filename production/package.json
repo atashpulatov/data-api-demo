@@ -12,7 +12,9 @@
     "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eject": "react-scripts eject",
-    "eslint": "eslint ./src --ext .js,.jsx --ignore-pattern *.test*",
+    "eslint": "eslint ./src --ext .js,.jsx --ignore-pattern *.test* --max-warnings=0",
+    "eslint:json": "eslint ./src --ext .js,.jsx --ignore-pattern *.test* --max-warnings=0 --format json --output-file ./coverage/eslint.json",
+    "eslint:html": "eslint ./src --ext .js,.jsx --ignore-pattern *.test* --max-warnings=0 --format html --output-file ./coverage/eslint.html",
     "start:desktop": "office-addin-debugging start manifest.xml desktop",
     "start:web": "office-addin-debugging start manifest.xml web",
     "stop": "office-addin-debugging stop manifest.xml",
@@ -22,8 +24,8 @@
     "validate": "office-toolbox validate -m manifest.xml"
   },
   "dependencies": {
-    "@mstr/mstr-react-library": "^1.6.6",
-    "@mstr/rc": "^0.24.29",
+    "@mstr/mstr-react-library": "^1.6.7",
+    "@mstr/rc": "^0.28.0",
     "antd": "^3.26.2",
     "core-js": "^3.5.0",
     "dexie": "^2.0.4",
@@ -96,12 +98,8 @@
       "!src/index.js",
       "!src/entry-point/*.*",
       "!src/serviceWorker.js",
-      "!src/office/office-api-helper.js",
       "!src/office/office-context.js",
-      "!src/office/office-display-service.js",
       "!src/office/store/office-store-service.js",
-      "!src/office/office-table-helper.js",
-      "!src/office/office-formatting-helper.js",
       "!src/storage/session-helper.js",
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/CompileStrings.js",
@@ -109,7 +107,13 @@
       "!src/cache/cache-actions.js",
       "!src/dossier/embedded-dossier.jsx",
       "!src/prompts/prompts-window.jsx",
-      "!src/navigation/**/*.*"
+      "!src/office/office-display-service.js",
+      "!src/office/office-duplicate-service.js",
+      "!src/navigation/**/*.*",
+      "!src/office/format/*.*",
+      "!src/office/api/*.*",
+      "!src/office/table/*.*",
+      "!src/office/import/*.*"
     ]
   }
 }

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { notification, message, Icon, Button, } from 'antd';
+import PropTypes from 'prop-types';
+import {
+  notification, message, Icon, Button,
+} from 'antd';
 import { connect } from 'react-redux';
 import './Notifications.css';
 import { withTranslation } from 'react-i18next';
 import CustomNotification from './custom-notification';
 
-export class NotificationsWithoutRedux extends Component {
+export class NotificationsNotConnected extends Component {
   constructor(props) {
     super(props);
     message.config({
@@ -16,18 +19,22 @@ export class NotificationsWithoutRedux extends Component {
   }
 
   componentDidUpdate = () => {
-    if (this.props.currentObject === 'message') {
+    const { currentObject } = this.props;
+    if (currentObject === 'message') {
       this.displayMessage();
     }
-    if (this.props.currentObject === 'notification') {
+    if (currentObject === 'notification') {
       this.displayNotification();
     }
   };
 
   displayNotification = () => {
-    const { notificationType, title, content, t, details, translated, onConfirm, } = this.props;
+    const {
+      notificationType, title, content, t, details, translated, onConfirm,
+    } = this.props;
     let icon;
     const key = `open${Date.now()}`;
+
     let btn = (
       <Button
         type="primary"
@@ -40,7 +47,9 @@ export class NotificationsWithoutRedux extends Component {
         {t('OK')}
       </Button>
     );
+
     notification.config({ duration: 0, });
+
     switch (notificationType) {
     case 'warning':
       icon = <Icon type="warning" theme="filled" style={{ color: '#faad14' }} />;
@@ -61,9 +70,11 @@ export class NotificationsWithoutRedux extends Component {
     default:
       break;
     }
+
+    const translatedContent = !translated ? this.translateContent(content, t) : content;
     notification.open({
       message: t(title),
-      description: <CustomNotification details={details} t={t} translatedContent={!translated ? this.translateContent(content, t) : content} />,
+      description: <CustomNotification details={details} t={t} translatedContent={translatedContent} />,
       icon,
       btn,
       key,
@@ -85,6 +96,19 @@ export class NotificationsWithoutRedux extends Component {
   }
 }
 
+NotificationsNotConnected.propTypes = {
+  notificationType: PropTypes.string,
+  title: PropTypes.string,
+  content: PropTypes.string,
+  t: PropTypes.func,
+  details: PropTypes.string,
+  translated : PropTypes.bool,
+  messageType : PropTypes.string,
+  currentObject : PropTypes.string,
+  onConfirm:PropTypes.func,
+};
+
+
 const mapStateToProps = (state) => ({
   timeStamp: state.notificationReducer.timeStamp,
   title: state.notificationReducer.title,
@@ -97,6 +121,6 @@ const mapStateToProps = (state) => ({
   onConfirm: state.notificationReducer.onConfirm,
 });
 
-NotificationsWithoutRedux.defaultProps = { t: (text) => text, };
+NotificationsNotConnected.defaultProps = { t: (text) => text, };
 
-export const Notifications = connect(mapStateToProps)(withTranslation('common')(NotificationsWithoutRedux));
+export const Notifications = connect(mapStateToProps)(withTranslation('common')(NotificationsNotConnected));

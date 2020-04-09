@@ -1,4 +1,4 @@
-import { officeProperties } from '../office/office-properties';
+import { officeProperties } from '../office/store/office-properties';
 
 export const SELECT_OBJECT = 'NAV_TREE_SELECT_OBJECT';
 export const SET_DATA_SOURCE = 'NAV_TREE_SET_DATA_SOURCE';
@@ -108,4 +108,20 @@ export function changeFilter(data) {
   return (dispatch) => dispatch({ type: CHANGE_FILTER, data });
 }
 
-export const actions = { selectFolder, selectObject, setDataSource, requestImport, promptsAnswered, startImport, startLoading, stopLoading, changeSearching, changeSorting, updateScroll, updateSize, requestDossierOpen, switchMyLibrary, changeFilter };
+export const actions = {
+  selectFolder,
+  selectObject,
+  setDataSource,
+  requestImport,
+  promptsAnswered,
+  startImport,
+  startLoading,
+  stopLoading,
+  changeSearching,
+  changeSorting,
+  updateScroll,
+  updateSize,
+  requestDossierOpen,
+  switchMyLibrary,
+  changeFilter
+};

@@ -1,6 +1,6 @@
 import { officeProperties } from './office-properties';
-import { OfficeError } from './office-error';
-import { officeStoreService } from './store/office-store-service';
+import { OfficeError } from '../office-error';
+import { officeStoreService } from './office-store-service';
 
 function checkReportData(report) {
   if (!report) {
@@ -94,7 +94,7 @@ function onLoadAllReports(action, state) {
   }
   action.reportArray.forEach((report) => {
     checkReportData(report);
-    report.displayAttrFormNames = report.displayAttrFormNames ? report.displayAttrFormNames : officeProperties.displayAttrFormNames.automatic;
+    report.displayAttrFormNames = report.displayAttrFormNames || officeProperties.displayAttrFormNames.automatic;
   });
   return {
     ...state,

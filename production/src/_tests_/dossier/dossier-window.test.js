@@ -68,16 +68,27 @@ describe('Dossierwindow', () => {
     expect(validateTokenSpy).toHaveBeenCalled();
   });
 
-  it('handlePromptAnswer newInstanceId setup correct state', async () => {
+  it('handleInstanceIdChange set new instanceId and clear viz data in state', async () => {
     // given
-    const newAnswers = 'newAnswers';
     const newInstanceId = 'newInstanceId';
     const componentWrapper = shallow(<DossierWindowNotConnected />);
     // when
-    componentWrapper.instance().handlePromptAnswer(newAnswers, newInstanceId);
+    componentWrapper.instance().handleInstanceIdChange(newInstanceId);
+    // then
+    expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
+    expect(componentWrapper.instance().state.isVisualizationSelected).toBe(false);
+    expect(componentWrapper.instance().state.chapterKey).toBe('');
+    expect(componentWrapper.instance().state.visualizationKey).toBe('');
+  });
+
+  it('handlePromptAnswer setup correct state', async () => {
+    // given
+    const newAnswers = 'newAnswers';
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    // when
+    componentWrapper.instance().handlePromptAnswer(newAnswers);
     // then
     expect(componentWrapper.instance().state.promptsAnswers).toBe(newAnswers);
-    expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
   });
 
   it('should use handleOk and run messageParent with given parameters', () => {

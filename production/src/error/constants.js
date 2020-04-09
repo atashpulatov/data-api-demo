@@ -117,7 +117,7 @@ export const errorMessageFactory = withDefaultValue({
     return SESSION_EXPIRED;
   },
   [errorTypes.BAD_REQUEST_ERR]: () => PROBLEM_WITH_REQUEST,
-  [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages(!error.response ? '-1' : error.response.body ? error.response.body.iServerCode : '-1'),
+  [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages((error.response && error.response.body && error.response.body.iServerCode) || '-1'),
   [errorTypes.PROMPTED_REPORT_ERR]: () => NOT_SUPPORTED_PROMPTS_REFRESH,
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { LoadingText, MSTRIcon } from '@mstr/mstr-react-library';
 import { Popover } from 'antd';
-
+import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { ReactComponent as WarningIcon } from './assets/icon_conflict.svg';
-import { helper } from '../helpers/helpers';
+import overflowHelper from '../helpers/helpers';
 
 import './refresh-all-page.css';
 
-export class _RefreshAllPage extends Component {
+export class RefreshAllPageNotConnected extends Component {
   constructor() {
     super();
     const fromStorage = JSON.parse(localStorage.getItem('refreshData'));
@@ -48,8 +48,8 @@ export class _RefreshAllPage extends Component {
           results: [...fromStorage.data],
           finished: fromStorage.finished,
         });
-      } catch (e) {
-
+      } catch (error) {
+        console.error(error);
       }
     });
   }
@@ -87,7 +87,7 @@ export class _RefreshAllPage extends Component {
             <WarningIcon width="17px" height="17px" />
           </div>
           <div className="tooltip-message">
-            <div className="tooltip-message-title">{this.props.t('{{report}} could not be refreshed', { report: refreshData.name })}</div>
+            <div className="tooltip-message-title">{t('{{report}} could not be refreshed', { report: refreshData.name })}</div>
             <div className="tooltip-message-text">{refreshData.result.includes(excel) ? `${t(excel)}: ${refreshData.result.split(':')[1]}` : t(refreshData.result)}</div>
           </div>
         </div>
@@ -98,27 +98,30 @@ export class _RefreshAllPage extends Component {
 
   render() {
     const { t } = this.props;
-    const displayName = this.state.name || 'data';
+    const {
+      name, finished, currentNumber, allNumber, results
+    } = this.state;
+    const displayName = name || 'data';
     return (
       <div role="dialog" aria-labelledby="refresh-title" aria-describedby="refresh-report" className="refreshing-page dialog-style">
         <div id="refresh-title" className="refresh-title">{t('Refresh All Data')}</div>
         <div className="refresh-header">
-          {!this.state.finished
+          {!finished
             ? (
               <div className="refresh-progress">
                 <h1 id="refresh-report" title={displayName} className="titleStyle">{`${displayName}`}</h1>
-                <h1 className="progressStyle">{` (${this.state.currentNumber}/${this.state.allNumber})`}</h1>
+                <h1 className="progressStyle">{` (${currentNumber}/${allNumber})`}</h1>
                 <LoadingText text={t('Loading data...')} />
               </div>
             )
             : <span className="finished-header">{t('Refreshing complete!')}</span>}
         </div>
         <div className="results-container">
-          {this.state.results
-          && this.state.results.map((res) => (
+          {results
+          && results.map((res) => (
             <div className="result-container" key={res.key}>
               {this.getIcon(res)}
-              {(res.isError || helper.isOverflown(res.name, window.innerWidth - 90))
+              {(res.isError || overflowHelper.isOverflown(res.name, window.innerWidth - 90))
                 ? (
                   <Popover placement="topLeft" overlayClassName={res.isError === true ? 'tooltip-card' : 'rename-popover-width'} content={this.getTooltipContent(res)}>
                     <span className="report-name">{res.name}</span>
@@ -128,17 +131,13 @@ export class _RefreshAllPage extends Component {
             </div>
           ))}
         </div>
-        { // TODO: Find a way to make button ok work properly
-        /* <Button id="prepare" type="primary"
-        className={ !this.state.finished ? 'hidden' : ''}
-        onClick={this.finished}>
-          Ok
-      </Button> */}
       </div>
     );
   }
 }
 
-_RefreshAllPage.defaultProps = { t: (text) => text, };
+RefreshAllPageNotConnected.propTypes = { t: PropTypes.func, };
 
-export const RefreshAllPage = withTranslation('common')(_RefreshAllPage);
+RefreshAllPageNotConnected.defaultProps = { t: (text) => text, };
+
+export const RefreshAllPage = withTranslation('common')(RefreshAllPageNotConnected);

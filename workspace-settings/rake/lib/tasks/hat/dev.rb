@@ -153,6 +153,8 @@ task :stage_0_test do
   if ENV["ghprbTargetBranch"].nil?
     raise "ghprbTargetBranch environment should not be nil"
   end
+  install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  generate_eslint_report
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_test_coverage_metrics
@@ -163,11 +165,11 @@ task :stage_0_test do
     message = nil
     #checkout the code in base branch
     init_base_branch_repo(ENV["ghprbTargetBranch"])
+    install_dependencies(base_repo_path)
     #run test with base branch
     run_test(base_repo_path)
     generate_comparison_report_html
     generate_comparison_report_markdown
-    generate_eslint_report
   rescue Exception => e
     message = "Waring: Failed to run test with base branch and generate report, caught exception #{e}!"
     warn(message)
@@ -179,6 +181,7 @@ end
 
 desc "run the unit test and collect code coverage in stage_1 dev job"
 task :stage_1_test do
+  install_dependencies("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   run_test("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_unit_test_metrics("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
   get_test_coverage_metrics
@@ -193,7 +196,6 @@ task :debug do
 end
 
 def run_test(working_dir)
-  install_dependencies(working_dir)
   shell_command! "npm run test:coverage", cwd: "#{working_dir}/production"
 end
 
@@ -252,8 +254,7 @@ def generate_comparison_report_html
 end
 
 def generate_eslint_report
-  eslint_report_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/.eslint/index.html"
-  shell_command "npm run eslint \"src/**\" -f html -o #{eslint_report_path}", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
+  shell_command! "npm run eslint:html", cwd: $WORKSPACE_SETTINGS[:paths][:project][:production][:home]
 end
 
 
@@ -455,8 +456,8 @@ def get_test_coverage_metrics
   coverage_file = "#{base_coverage_dir}/clover.xml"
   cov_doc = Hash.from_xml(File.read(coverage_file))
 
-  total_line = cov_doc['coverage']['project']['metrics']['loc'].to_i
-  total_line_covered = cov_doc['coverage']['project']['metrics']['ncloc'].to_i
+  total_line = cov_doc['coverage']['project']['metrics']['statements'].to_i
+  total_line_covered = cov_doc['coverage']['project']['metrics']['coveredstatements'].to_i
 
   total_method = cov_doc['coverage']['project']['metrics']['methods'].to_i
   total_method_covered = cov_doc['coverage']['project']['metrics']['coveredmethods'].to_i

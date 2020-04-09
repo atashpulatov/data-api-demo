@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class CustomNotification extends Component {
-  state = { isExpanded: false, }
+  constructor(props) {
+    super(props);
+    this.state = { isExpanded: false };
+  }
 
   handleCollapse = () => {
     this.setState(({ isExpanded }) => ({ isExpanded: !isExpanded, }));
@@ -27,13 +31,16 @@ export default class CustomNotification extends Component {
           details && (
           <div>
             <nav className="error__nav">
-              <p
+              <div
                 onClick={this.handleCollapse}
+                onKeyUp={(e) => e.key === 'Enter' && this.handleCollapse}
                 className={config.actionClass}
+                role="button"
+                tabIndex="0"
               >
                 {t(config.message)}
                 <span className="error__arrow" />
-              </p>
+              </div>
             </nav>
             <div
               className={`${config.messageClass} error__text`}
@@ -47,3 +54,9 @@ export default class CustomNotification extends Component {
     );
   }
 }
+
+CustomNotification.propTypes = {
+  details: PropTypes.string,
+  translatedContent: PropTypes.string,
+  t: PropTypes.func
+};

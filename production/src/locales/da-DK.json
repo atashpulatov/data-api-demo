@@ -211,8 +211,8 @@
   "Show attribute name once": "Vis attributnavn én gang",
   "On": "Til",
   "Off": "Fra",
-  "To preserve this crosstab report, select all objects without changing their forms.": "*To preserve this crosstab report, select all objects without changing their forms.*",
-  "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "*You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.*",
-  "Seems like the dossier has been removed.": "*Seems like the dossier has been removed.*",
-  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "*You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.*"
+  "To preserve this crosstab report, select all objects without changing their forms.": "Hvis du vil gemme denne krydstabuleringsrapport, skal du vælge alle objekter uden at ændre deres former.",
+  "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "Du forsøger at udføre en handling på en visualisering, som enten ikke understøttes, som er flyttet til et andet kapitel/en anden side, eller som er slettet fra sagsmappen.",
+  "Seems like the dossier has been removed.": "Det ser ud til, at sagsmappen er blevet fjernet.",
+  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "Du forsøger at udføre en handling på en visualisering, som enten ikke understøttes eller som er slettet fra sagsmappen."
 }

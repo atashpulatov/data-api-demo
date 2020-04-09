@@ -3,7 +3,8 @@ import { mount } from 'enzyme';
 import { Placeholder } from '../../home/placeholder';
 import { sessionHelper } from '../../storage/session-helper';
 import { popupController } from '../../popup/popup-controller';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 
 
 jest.mock('../../storage/session-helper');
@@ -27,7 +28,7 @@ describe('Placeholder', () => {
     sessionHelperSpy.mockClear();
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const clickSpy = jest.spyOn(popupController, 'runPopupNavigation');
     const wrappedComponent = mount(<Placeholder />);
     const wrappedButton = wrappedComponent.find('button');

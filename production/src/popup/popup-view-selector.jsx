@@ -47,12 +47,17 @@ export const PopupViewSelectorNotConnected = (props) => {
 };
 
 function mapStateToProps(state) {
-  const { navigationTree, popupReducer: { editedObject, preparedInstance }, sessionReducer: { attrFormPrivilege, authToken }, officeReducer, popupStateReducer } = state;
+  const {
+    navigationTree,
+    popupReducer: { editedObject, preparedInstance },
+    sessionReducer: { attrFormPrivilege, authToken },
+    officeReducer,
+    popupStateReducer
+  } = state;
   const { promptsAnswers } = navigationTree;
   const { supportForms } = officeReducer;
   const { popupType } = popupStateReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = editedObject && editedObject.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     ...navigationTree,
