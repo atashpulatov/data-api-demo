@@ -8,7 +8,7 @@
     "start": "HTTPS=true react-scripts start",
     "start:windows": "set HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --silent --noStackTrace",
+    "test": "react-scripts test --silent ",
     "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eject": "react-scripts eject",
