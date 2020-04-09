@@ -36,8 +36,7 @@ export const RightSidePanelNotConnected = (props) => {
   React.useEffect(() => {
     try {
       sidePanelService.addRemoveObjectListener();
-      getInitialCellAdrress();
-      addActiveCellAdrressChangedListener();
+      sidePanelService.initializeActiveCellChangedListener(setActiveCellAddress);
     } catch (error) {
       console.error(error);
     }
@@ -156,26 +155,6 @@ export const RightSidePanelNotConnected = (props) => {
         setDuplicatedObjectId(null);
       }
     });
-  };
-
-  /**
-   * Get initial excel active cell adrres value and store result in state of component.
-   * Called once - after component mounts.
-   *
-   */
-  const getInitialCellAdrress = async () => {
-    const initialCellAdrress = await sidePanelService.getActiveCellAddress();
-    setActiveCellAddress(initialCellAdrress);
-  };
-
-  /**
-   * Attach event listener for selection changed and pass a state setter callback to event handler.
-   * Callback is modyfying the activeCellAddress in state of component.
-   * Called once - after component mounts.
-   *
-   */
-  const addActiveCellAdrressChangedListener = async () => {
-    await sidePanelService.addOnSelectionChangedListener(setActiveCellAddress);
   };
 
   return (

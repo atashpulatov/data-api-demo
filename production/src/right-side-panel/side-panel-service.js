@@ -156,34 +156,17 @@ class SidePanelService {
   };
 
   /**
-   * Returns active cell adrress from excel context.
+   * Gets initial active cell address and stores it state of RightSidePanel via callback.
+   * Creates event listener for cell selection change and passes a state setter callback to event handler.
    *
-   * @returns {String} Adrress of cell which is active in excel
+   * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
    */
-  getActiveCellAddress = async () => {
+  initializeActiveCellChangedListener = async (setActiveCellAddress) => {
     const excelContext = await officeApiHelper.getExcelContext();
-    const activeCell = excelContext.workbook.getActiveCell();
-    activeCell.load('address');
-    await excelContext.sync();
-    return activeCell.address;
-  }
-
-  /**
-   * Attaches a event handler to onSelectionChanged on workbook.
-   * As event handler, resets the active cell value in parent component
-   * and then updates it with new value.
-   *
-   * @param {Function} setActiveCellAddress Callback to store the active cell value.
-   */
-  addOnSelectionChangedListener = async (setActiveCellAddress) => {
-    const excelContext = await officeApiHelper.getExcelContext();
-    excelContext.workbook.onSelectionChanged.add(async () => {
-      setActiveCellAddress('...');
-      const activeCellAddress = await this.getActiveCellAddress();
-      setActiveCellAddress(activeCellAddress);
-    });
-    await excelContext.sync();
-  }
+    const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
+    setActiveCellAddress(initialCellAddress);
+    await officeApiHelper.addOnSelectionChangedListener(excelContext, setActiveCellAddress);
+  };
 }
 
 export const sidePanelService = new SidePanelService();
