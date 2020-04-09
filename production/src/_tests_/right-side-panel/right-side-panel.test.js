@@ -17,6 +17,7 @@ describe('RightSidePanelNotConnected', () => {
       cancelCurrentImportRequest: jest.fn(),
       toggleIsSettingsFlag: jest.fn(),
       toggleSecuredFlag: jest.fn(),
+      toggleIsClearDataFailedFlag: jest.fn(),
     };
   });
 
@@ -26,19 +27,24 @@ describe('RightSidePanelNotConnected', () => {
 
   it('should call toggleSecureFlag if file is secured', () => {
     // given
-    jest.spyOn(officeStoreHelper, 'isFileSecured').mockImplementation(() => true);
+    jest.spyOn(officeStoreHelper, 'isFileSecured').mockReturnValue(true);
+    jest.spyOn(officeStoreHelper, 'isClearDataFailed').mockReturnValue(true);
+
     // when
     mount(
       <RightSidePanelNotConnected {...mockedProps} />
     );
+
     // then
     expect(mockedProps.toggleSecuredFlag).toBeCalledWith(true);
+    expect(mockedProps.toggleIsClearDataFailedFlag).toBeCalledWith(true);
   });
 
   it('should display SidePanel', () => {
     // given
     // when
     const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
+
     // then
     expect(shallowedComponent.find(SidePanel)).toHaveLength(1);
   });
@@ -47,42 +53,20 @@ describe('RightSidePanelNotConnected', () => {
     // given
     // when
     const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
+
     // then
     const shallowedSidePanel = shallowedComponent.find(SidePanel).at(0);
     expect(shallowedSidePanel.prop('loadedObjects')).toBe(mockedProps.loadedObjects);
   });
 
-  it('should call runPopupNavigation on add data', () => {
-    // given
-    const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
-    const shallowedSidePanel = shallowedComponent.find(SidePanel).at(0);
-    const methodToTest = shallowedSidePanel.prop('onAddData');
-    const runPopupNavigationSpy = jest.spyOn(popupController, 'runPopupNavigation');
-    // when
-    methodToTest();
-    // then
-    expect(runPopupNavigationSpy).toBeCalled();
-  });
-
-  it('should errorService if error is thrown', () => {
-    // given
-    const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
-    const errorToThrow = new Error('Something wrong');
-    const shallowedSidePanel = shallowedComponent.find(SidePanel).at(0);
-    const methodToTest = shallowedSidePanel.prop('onAddData');
-    jest.spyOn(popupController, 'runPopupNavigation').mockImplementationOnce(() => { throw errorToThrow; });
-    const handleErrorSpy = jest.spyOn(errorService, 'handleError');
-    // when
-    methodToTest();
-    // then
-    expect(handleErrorSpy).toBeCalled();
-    expect(handleErrorSpy).toBeCalledWith(errorToThrow);
-  });
-
   it('should provide settingsMenu to SidePanel when isSettings is true', () => {
     // given
+    jest.spyOn(officeStoreHelper, 'isFileSecured').mockReturnValue(true);
+    jest.spyOn(officeStoreHelper, 'isClearDataFailed').mockReturnValue(true);
+
     // when
     const wrappedComponent = mount(<RightSidePanelNotConnected {...mockedProps} isSettings />);
+
     // then
     const wrappedSidePanel = wrappedComponent.find(SidePanel).at(0);
     expect(wrappedSidePanel.prop('settingsMenu')).toBeTruthy();
@@ -90,8 +74,12 @@ describe('RightSidePanelNotConnected', () => {
 
   it('should provide confirmationWindow to SidePanel when isConfirm is true', () => {
     // given
+    jest.spyOn(officeStoreHelper, 'isFileSecured').mockReturnValue(true);
+    jest.spyOn(officeStoreHelper, 'isClearDataFailed').mockReturnValue(true);
+
     // when
     const wrappedComponent = mount(<RightSidePanelNotConnected {...mockedProps} isConfirm />);
+
     // then
     const wrappedSidePanel = wrappedComponent.find(SidePanel).at(0);
     expect(wrappedSidePanel.prop('confirmationWindow')).toBeTruthy();
