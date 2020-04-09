@@ -1,5 +1,6 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import i18n from '../i18n';
+import operationErrorHandler from '../operation/operation-error-handler';
 
 class StepGetDuplicateName {
   init = (reduxStore) => {
@@ -20,22 +21,27 @@ class StepGetDuplicateName {
   * @param {Boolean} objectData.vizKeyChanged Indicator that the different vizualization was selected
   * during duplication with edit.
   */
-  getDuplicateName = (objectData) => {
-    const { objectWorkingId, name, vizKeyChanged } = objectData;
+  getDuplicateName = (objectData, operationData) => {
+    try {
+      const { objectWorkingId, name, vizKeyChanged } = objectData;
 
-    if (!vizKeyChanged) {
-      const lang = i18n.language;
-      const translatedCopy = i18n.store.data[lang].common.Copy;
+      if (!vizKeyChanged) {
+        const lang = i18n.language;
+        const translatedCopy = i18n.store.data[lang].common.Copy;
 
-      const nameCandidate = this.prepareNewNameForDuplicatedObject(name, translatedCopy);
-      const newName = this.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
-      const updatedObject = {
-        objectWorkingId,
-        name: newName
-      };
-      operationStepDispatcher.updateObject(updatedObject);
+        const nameCandidate = this.prepareNewNameForDuplicatedObject(name, translatedCopy);
+        const newName = this.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
+        const updatedObject = {
+          objectWorkingId,
+          name: newName
+        };
+        operationStepDispatcher.updateObject(updatedObject);
+      }
+      operationStepDispatcher.completeGetDuplicateName(objectWorkingId);
+    } catch (error) {
+      console.error(error);
+      operationErrorHandler.handleOperationError(objectData, operationData);
     }
-    operationStepDispatcher.completeGetDuplicateName(objectWorkingId);
   }
 
   /**
