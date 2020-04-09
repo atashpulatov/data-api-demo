@@ -34,9 +34,13 @@ export class AttributeSelectorWindowNotConnected extends Component {
     projectId,
     chosenObjectSubtype,
     body,
+    chosenObjectName,
   ) => {
+    const { chosenObject: { chosenObjectName: objectName } } = this.props;
+    chosenObjectName = chosenObjectName || objectName;
+
     const {
-      chosenObject, editedObject, importSubtotal, displayAttrFormNames, objectName
+      chosenObject, editedObject, importSubtotal, displayAttrFormNames
     } = this.props;
 
     const subtotalsInfo = {
@@ -52,7 +56,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
       projectId,
       chosenObjectSubtype,
       body,
-      objectName,
+      chosenObjectName,
       chosenObject.preparedInstanceId,
       chosenObject.promptsAnswers,
       subtotalsInfo,
