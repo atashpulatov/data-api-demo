@@ -18,7 +18,7 @@ class StepCheckObjectStatus {
       operationStepDispatcher.completeCheckObjectStatus(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   };
 }

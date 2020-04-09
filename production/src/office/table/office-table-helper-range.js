@@ -32,7 +32,7 @@ class OfficeTableHelperRange {
   async checkObjectRangeValidityOnRefresh(prevOfficeTable, excelContext, instanceDefinition) {
     const { rows, columns, mstrTable } = instanceDefinition;
 
-    const { addedRows, addedColumns } = this.calculateRowsAndColumnsSize(
+    const { addedRows, addedColumns } = await this.calculateRowsAndColumnsSize(
       excelContext,
       mstrTable,
       prevOfficeTable,
@@ -143,11 +143,8 @@ class OfficeTableHelperRange {
    *
    * @returns {Office} Reference to Excel range object
    */
-  prepareRangeColumns = (prevOfficeTable, addedColumns) => {
-    prevOfficeTable
-      .getRange()
-      .getColumnsAfter(addedColumns);
-  };
+  prepareRangeColumns = (prevOfficeTable, addedColumns) => prevOfficeTable.getRange().getColumnsAfter(addedColumns);
+
 
   /**
    * Extends the Excel range by crosstab header column dimension.

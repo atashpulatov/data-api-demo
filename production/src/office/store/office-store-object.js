@@ -46,10 +46,7 @@ class OfficeStoreObject {
     const { objects } = this.reduxStore.getState().objectReducer;
     const settings = officeStoreHelper.getOfficeSettings();
     settings.set(officeProperties.storedObjects, objects);
-    // TODO: check if needed
     await settings.saveAsync();
-    // TODO: uncomment below
-    // this.reduxStore.dispatch(markStepCompleted(objectData.objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   };
 }
 

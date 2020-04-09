@@ -3,7 +3,8 @@ import {
   createSessionExpiredNotification,
   clearGlobalNotification,
   displayGlobalNotification,
-  deleteObjectNotification
+  deleteObjectNotification,
+  displayObjectWarning
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import officeStoreObject from '../office/store/office-store-object';
 
@@ -34,6 +35,10 @@ class NotificationService {
 
   globalNotificationDissapear = () => {
     this.reduxStore.dispatch(clearGlobalNotification());
+  }
+
+  showObjectWarning = (objectWorkingId, notification) => {
+    this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
   }
 
   onSuccessfullNotificationHover = (objectWorkingId) => {

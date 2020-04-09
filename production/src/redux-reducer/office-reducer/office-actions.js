@@ -27,6 +27,7 @@ export function toggleIsConfirmFlag(isConfirm) {
 }
 
 export function toggleIsClearDataFailedFlag(isClearDataFailed) {
+  officeStoreHelper.setIsClearDataFailed(isClearDataFailed);
   return (dispatch) => {
     dispatch({
       type: officeProperties.actions.toggleIsClearDataFailedFlag,

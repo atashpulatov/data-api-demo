@@ -88,7 +88,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
     expect(fetchContentGeneratorMock).toBeCalledTimes(1);
 
     expect(handleOperationErrorMock).toBeCalledTimes(1);
-    expect(handleOperationErrorMock).toBeCalledWith({ subtotalsInfo: {} }, operationDataMock);
+    expect(handleOperationErrorMock).toBeCalledWith({ subtotalsInfo: {} }, operationDataMock, new Error('errorTest'));
 
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
