@@ -1,6 +1,6 @@
 import { objectNotificationTypes } from '@mstr/rc';
 import {
-  IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION, CLEAR_DATA_OPERATION
+  IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION, CLEAR_DATA_OPERATION, DUPLICATE_OPERATION
 } from '../../operation/operation-type-names';
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
@@ -17,6 +17,7 @@ export const notificationReducer = (state = initialState, action) => {
     case IMPORT_OPERATION:
     case REFRESH_OPERATION:
     case REMOVE_OPERATION:
+    case DUPLICATE_OPERATION:
     case CLEAR_DATA_OPERATION:
     case EDIT_OPERATION:
       return createProgressNotification(state, payload);
@@ -115,7 +116,7 @@ const getOkButton = (payload) => [
 ];
 
 function createNewState(state, notificationToUpdateIndex, updatedNotification) {
-  const newState = {notifications: [...state.notifications], globalNotification: state.globalNotification};
+  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
   return newState;
 }
@@ -146,6 +147,7 @@ const titleOperationMap = {
   REFRESH_OPERATION: 'Refreshing',
   EDIT_OPERATION: 'Importing',
   REMOVE_OPERATION: 'Removing',
+  DUPLICATE_OPERATION: 'Duplicating',
   CLEAR_DATA_OPERATION: 'Clearing',
 };
 const titleOperationCompletedMap = {
@@ -153,6 +155,7 @@ const titleOperationCompletedMap = {
   REFRESH_OPERATION: 'Refresh complete',
   EDIT_OPERATION: 'Import successful',
   REMOVE_OPERATION: 'Object removed',
+  DUPLICATE_OPERATION: 'Duplicate created',
   CLEAR_DATA_OPERATION: 'Object cleared',
 };
 const titleOperationFailedMap = {
@@ -160,5 +163,6 @@ const titleOperationFailedMap = {
   REFRESH_OPERATION: 'Refresh failed',
   EDIT_OPERATION: 'Import failed',
   REMOVE_OPERATION: 'Remove object failed',
+  DUPLICATE_OPERATION: 'Duplicating object failed',
   CLEAR_DATA_OPERATION: 'Clear object failed',
 };
