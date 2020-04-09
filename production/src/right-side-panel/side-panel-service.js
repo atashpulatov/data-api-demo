@@ -36,18 +36,17 @@ class SidePanelService {
 
   rename = async (objectWorkingId, newName) => {
     const renamedObject = { objectWorkingId, name: newName };
-    // TODO check for changing viz whiel editing dossier
     this.reduxStore.dispatch(updateObject(renamedObject));
     await officeStoreObject.saveObjectsInExcelStore();
   };
 
-  refresh = (...objectWorkingIds) => {
+  refresh = (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
       this.reduxStore.dispatch(refreshRequested(objectWorkingId));
     });
   };
 
-  remove = async (...objectWorkingIds) => {
+  remove = async (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
       this.reduxStore.dispatch(removeRequested(objectWorkingId));
     });
@@ -116,7 +115,7 @@ class SidePanelService {
     const handleViewData = () => {
       this.reduxStore.dispatch(toggleSecuredFlag(false));
       this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
-      this.refresh(...officeReducerHelper.getObjectsListFromObjectReducer()
+      this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
         .map(({ objectWorkingId }) => objectWorkingId));
     };
 

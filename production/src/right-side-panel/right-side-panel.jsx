@@ -112,11 +112,11 @@ export const RightSidePanelNotConnected = (props) => {
    * @param {Function} func Function to be wrapped
    * @param {*} params Parameters to wrapped function
    */
-  const wrapper = async (func, params) => {
+  const wrapper = async (func, params, name) => {
     await officeApiHelper.checkStatusOfSessions();
 
     if (officeReducerHelper.noOperationInProgress()) {
-      await func(params);
+      await func(params, name);
     }
   };
 
@@ -124,9 +124,10 @@ export const RightSidePanelNotConnected = (props) => {
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
   const duplicateWrapper = async (params) => { await wrapper(sidePanelService.duplicate, params); };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
-  const refreshWrapper = async (params) => { await wrapper(sidePanelService.refresh, params); };
-  const removeWrapper = async (params) => { await wrapper(sidePanelService.remove, params); };
-  const renameWrapper = async (params) => { await wrapper(sidePanelService.rename, params); };
+  const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
+  const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
+  const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
+
 
   return (
     <>

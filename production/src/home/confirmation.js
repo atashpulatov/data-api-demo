@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import warningIcon from '../loading/assets/icon_conflict.svg';
+import warningIcon from './assets/icon_conflict.svg';
 import { toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../redux-reducer/office-reducer/office-actions';
 
 import { homeHelper } from './home-helper';

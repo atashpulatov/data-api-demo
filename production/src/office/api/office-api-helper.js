@@ -63,7 +63,7 @@ class OfficeApiHelper {
    *
    * @return {Boolean} Returns true if the Excel session is active, false otherwise
    */
-  getExcelSessionStatus = async () => !!await this.getExcelContext(); // ToDo find better way to check session status
+  getExcelSessionStatus = async () => !!await this.getExcelContext();
 
   /**
    * Gets username and environment URL from Redux store.

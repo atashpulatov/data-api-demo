@@ -95,10 +95,8 @@ class PopupController {
   };
 
   onMessageFromPopup = async (dialog, reportParams, arg) => {
-    console.log('reportParams:', reportParams);
     const { message } = arg;
     const response = JSON.parse(message);
-    console.log('response:', response);
     if (response.command === selectorProperties.commandBrowseUpdate) {
       this.reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
       return;
@@ -182,8 +180,7 @@ class PopupController {
         bindId,
         isPrompted: response.isPrompted,
         promptsAnswers: response.promptsAnswers,
-        // TODO remove dossier structure below when it will be fixed on RC side
-        visualizationInfo: { ...response.visualizationInfo, dossierStructure: false },
+        visualizationInfo: response.visualizationInfo,
         preparedInstanceId: response.preparedInstanceId,
       };
       this.reduxStore.dispatch(importRequested(objectData));
