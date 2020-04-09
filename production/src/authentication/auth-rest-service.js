@@ -42,7 +42,8 @@ class AuthenticationService {
 
   async getOfficePrivilege(envUrl, iSession) {
     try {
-      const response = await this.fetchPrivilegeById(OFFICE_PRIVILEGE_ID, envUrl, iSession);
+      let response;
+      if (iSession) { response = await this.fetchPrivilegeById(OFFICE_PRIVILEGE_ID, envUrl, iSession); }
       // Only return false if isUserLevelAllowed exists and is false
       if (!response) { return true; }
       const { isUserLevelAllowed, projects } = response;
