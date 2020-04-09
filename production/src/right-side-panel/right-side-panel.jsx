@@ -84,10 +84,12 @@ export const RightSidePanelNotConnected = (props) => {
    * Function will be called when:
    *
    * - session is valid,
-   * - operation is not in progress.
+   * - operation is not in progress,
+   * - optional new name, used by rename.
    *
    * @param {Function} func Function to be wrapped
    * @param {*} params Parameters to wrapped function
+   * @param {String} name Optional new name of an object
    */
   const wrapper = async (func, params, name) => {
     await officeApiHelper.checkStatusOfSessions();
@@ -104,7 +106,6 @@ export const RightSidePanelNotConnected = (props) => {
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
-
 
   return (
     <>
