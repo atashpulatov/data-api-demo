@@ -6,7 +6,8 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
   IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION,
 } from './operation-type-names';
-import {errorService} from '../error/error-handler';
+import { errorService } from '../error/error-handler';
+import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
 
 class OperationErrorHandler {
   init = (reduxStore) => {
@@ -52,6 +53,8 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+
+    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   /**
@@ -75,6 +78,8 @@ class OperationErrorHandler {
     if (backupObjectData) { this.reduxStore.dispatch(restoreObjectBackup(backupObjectData)); }
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+
+    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   /**
@@ -89,6 +94,7 @@ class OperationErrorHandler {
     for (let index = clearDataOperations.length - 1; index >= 0; index--) {
       const operation = clearDataOperations[index];
       this.reduxStore.dispatch(cancelOperation(operation.objectWorkingId));
+      this.reduxStore.dispatch(deleteObjectNotification(operation.objectWorkingId));
     }
 
     toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
@@ -105,6 +111,8 @@ class OperationErrorHandler {
     const { objectWorkingId } = objectData;
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+
+    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   getCallback(operationType, objectData, operationData) {
