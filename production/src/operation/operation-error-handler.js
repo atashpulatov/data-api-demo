@@ -20,6 +20,7 @@ class OperationErrorHandler {
    *
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
+   * @param {Error} error Error thrown during the operation execution
    */
   handleOperationError = async (objectData, operationData, error) => {
     const { operationType } = operationData;

@@ -50,24 +50,18 @@ const createProgressNotification = (state, payload) => {
 };
 
 const moveNotificationToInProgress = (state, payload) => {
-  const { notifications } = state;
-  const notificationToUpdateIndex = getNotificationIndex(state, payload);
-  const notificationToUpdate = notifications[notificationToUpdateIndex];
+  const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
   const updatedNotification = {
     ...notificationToUpdate,
     title: titleOperationMap[notificationToUpdate.operationType],
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
   console.log(updatedNotification);
-  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
-  return newState;
+  return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
 const displayNotificationCompleted = (state, payload) => {
-  const { notifications } = state;
-  const notificationToUpdateIndex = getNotificationIndex(state, payload);
-  const notificationToUpdate = notifications[notificationToUpdateIndex];
+  const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
   const updatedNotification = {
     ...notificationToUpdate,
     type: objectNotificationTypes.SUCCESS,
@@ -76,10 +70,76 @@ const displayNotificationCompleted = (state, payload) => {
       ? () => notificationService.onRemoveSuccessfulNotificationHover(notificationToUpdate.objectWorkingId)
       : () => notificationService.onSuccessfullNotificationHover(notificationToUpdate.objectWorkingId)),
   };
+  return createNewState(state, notificationToUpdateIndex, updatedNotification);
+};
+
+const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
+
+const deleteNotification = (state, payload) => {
+  const notificationToDelete = getNotificationIndex(state, payload);
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
+  newState.notifications.splice(notificationToDelete, 1);
   return newState;
 };
+
+const createObjectWarning = (state, payload) => {
+  const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
+
+  const buttons = getOkButton(payload);
+
+  const updatedNotification = {
+    objectWorkingId: payload.objectWorkingId,
+    type: objectNotificationTypes.WARNING,
+    title: titleOperationFailedMap[notificationToUpdate.operationType],
+    details: payload.notification.message,
+    onHover: payload.notification.callback,
+    children: getNotificationButtons(buttons),
+  };
+
+  return createNewState(state, notificationToUpdateIndex, updatedNotification);
+};
+
+const createGlobalNotification = (state, payload) => (
+  { ...state, globalNotification: payload }
+);
+
+const removeGlobalNotification = (state, paylaod) => ({ notifications: [...state.notifications], globalNotification: { type: '' } });
+
+const getOkButton = (payload) => [
+  {
+    title: 'Ok',
+    type: 'basic',
+    label: 'Ok',
+    onClick: payload.notification.callback,
+  },
+];
+
+function createNewState(state, notificationToUpdateIndex, updatedNotification) {
+  const newState = {notifications: [...state.notifications], globalNotification: state.globalNotification};
+  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
+  return newState;
+}
+
+function getNotificationToUpdate(state, payload) {
+  const { notifications } = state;
+  const notificationToUpdateIndex = getNotificationIndex(state, payload);
+  const notificationToUpdate = notifications[notificationToUpdateIndex];
+  return { notificationToUpdate, notificationToUpdateIndex };
+}
+
+function getIsIndeterminate(notificationToUpdate) {
+  return !!(notificationToUpdate.operationType === REMOVE_OPERATION || notificationToUpdate.operationType === CLEAR_DATA_OPERATION);
+}
+
+function getNotificationIndex(state, payload) {
+  const notificationToUpdateIndex = state.notifications
+    .findIndex((notification) => notification.objectWorkingId === payload.objectWorkingId);
+  if (notificationToUpdateIndex === -1) {
+    console.log({ state, payload });
+    throw new Error();
+  }
+  return notificationToUpdateIndex;
+}
 
 const titleOperationMap = {
   IMPORT_OPERATION: 'Importing',
@@ -95,44 +155,6 @@ const titleOperationCompletedMap = {
   REMOVE_OPERATION: 'Object removed',
   CLEAR_DATA_OPERATION: 'Object cleared',
 };
-
-const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
-
-const deleteNotification = (state, payload) => {
-  const notificationToDelete = getNotificationIndex(state, payload);
-  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToDelete, 1);
-  return newState;
-};
-
-const createObjectWarning = (state, payload) => {
-  const { notifications } = state;
-  const notificationToUpdateIndex = getNotificationIndex(state, payload);
-  const notificationToUpdate = notifications[notificationToUpdateIndex];
-
-  const buttons = [
-    {
-      title: 'Ok',
-      type: 'basic',
-      label: 'Ok',
-      onClick: payload.notification.callback,
-    },
-  ];
-
-  const updatedNotification = {
-    objectWorkingId: payload.objectWorkingId,
-    type: objectNotificationTypes.WARNING,
-    title: titleOperationFailedMap[notificationToUpdate.operationType],
-    details: payload.notification.message,
-    onHover: payload.notification.callback,
-    children: getNotificationButtons(buttons),
-  };
-
-  const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
-  return newState;
-};
-
 const titleOperationFailedMap = {
   IMPORT_OPERATION: 'Import failed',
   REFRESH_OPERATION: 'Refresh failed',
@@ -140,23 +162,3 @@ const titleOperationFailedMap = {
   REMOVE_OPERATION: 'Remove object failed',
   CLEAR_DATA_OPERATION: 'Clear object failed',
 };
-
-const createGlobalNotification = (state, payload) => (
-  { ...state, globalNotification: payload }
-);
-
-const removeGlobalNotification = (state, paylaod) => ({ notifications: [...state.notifications], globalNotification: { type: '' } });
-
-function getIsIndeterminate(notificationToUpdate) {
-  return !!(notificationToUpdate.operationType === REMOVE_OPERATION || notificationToUpdate.operationType === CLEAR_DATA_OPERATION);
-}
-
-function getNotificationIndex(state, payload) {
-  const notificationToUpdateIndex = state.notifications
-    .findIndex((notification) => notification.objectWorkingId === payload.objectWorkingId);
-  if (notificationToUpdateIndex === -1) {
-    console.log({ state, payload });
-    throw new Error();
-  }
-  return notificationToUpdateIndex;
-}
