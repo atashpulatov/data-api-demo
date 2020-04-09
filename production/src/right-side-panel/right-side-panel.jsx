@@ -1,17 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  SidePanel, globalNotificationTypes, Button, buttonTypes
-} from '@mstr/rc';
+import { SidePanel, } from '@mstr/rc';
 import { cancelImportRequest, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
 import * as officeActions from '../redux-reducer/office-reducer/office-actions';
 import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
-import { notificationService } from '../notification-v2/notification-service';
 import './right-side-panel.scss';
+import { notificationService } from '../notification-v2/notification-service';
 import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -27,9 +25,12 @@ export const RightSidePanelNotConnected = (props) => {
     toggleSecuredFlag,
     toggleIsClearDataFailedFlag,
     globalNotification,
+    notifications,
+    operations,
   } = props;
 
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
+  const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
 
   React.useEffect(() => {
     try {
@@ -49,6 +50,10 @@ export const RightSidePanelNotConnected = (props) => {
   }, [isSecured, isClearDataFailed]);
 
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
+
+  React.useEffect(() => {
+    setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(loadedObjects, operations, notifications));
+  }, [loadedObjects, notifications, operations]);
 
   const mockConnectionLost = () => {
     notificationService.connectionLost();
@@ -109,11 +114,11 @@ export const RightSidePanelNotConnected = (props) => {
 
   return (
     <>
-      <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
+      {/* <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
       <button type="button" onClick={mockSessionExpired}>Mock Session expired</button>
-      <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button>
+      <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button> */}
       <SidePanel
-        loadedObjects={loadedObjects}
+        loadedObjects={loadedObjectsWrapped}
         onAddData={addDataWrapper}
         onTileClick={highlightObjectWrapper}
         onDuplicateClick={duplicateWrapper}
@@ -133,17 +138,20 @@ export const RightSidePanelNotConnected = (props) => {
 
 export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
-  const { globalNotification } = state.notificationReducer;
+  const { operations } = state.operationReducer;
+  const { globalNotification, notifications } = state.notificationReducer;
   const {
     isConfirm, isSettings, isSecured, isClearDataFailed
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
+    operations,
     importRequested,
     dossierOpenRequested,
     isConfirm,
     isSettings,
     globalNotification,
+    notifications,
     isSecured,
     isClearDataFailed
   };

@@ -47,7 +47,7 @@ class StepGetOfficeTableImport {
       operationStepDispatcher.completeGetOfficeTableImport(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
       console.timeEnd('Create or get table - import');
     }

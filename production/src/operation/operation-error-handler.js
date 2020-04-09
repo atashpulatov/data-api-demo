@@ -6,6 +6,8 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
   IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION,
 } from './operation-type-names';
+import { errorService } from '../error/error-handler';
+import { deleteObjectNotification } from '../redux-reducer/notification-reducer/notification-action-creators';
 
 class OperationErrorHandler {
   init = (reduxStore) => {
@@ -19,28 +21,11 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleOperationError = async (ObjectData, OperationData) => {
-    const { operationType } = OperationData;
-
-    switch (operationType) {
-      case IMPORT_OPERATION:
-      case DUPLICATE_OPERATION:
-        this.handleImportOperationError(ObjectData, OperationData);
-        break;
-
-      case REFRESH_OPERATION:
-      case EDIT_OPERATION:
-        this.handleRefreshOperationError(ObjectData, OperationData);
-        break;
-
-      case CLEAR_DATA_OPERATION:
-        this.handleClearDataOperationError();
-        break;
-
-      default:
-        this.handleGenericOperationError(ObjectData, OperationData);
-        break;
-    }
+  handleOperationError = async (objectData, operationData, error) => {
+    const { operationType } = operationData;
+    console.log(error);
+    const callback = this.getCallback(operationType, objectData, operationData);
+    errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback);
   }
 
   /**
@@ -51,24 +36,25 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleImportOperationError = async (ObjectData, OperationData) => {
-    const { objectWorkingId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
-    const { officeTable, excelContext, operationType } = OperationData;
+  handleImportOperationError = async (objectData, operationData) => {
+    const { objectWorkingId, isCrosstab, crosstabHeaderDimensions } = objectData;
+    const { officeTable, excelContext } = operationData;
 
-    if (operationType === IMPORT_OPERATION || operationType === DUPLICATE_OPERATION) {
-      if (officeTable) {
-        officeTable.showHeaders = true;
-        await officeRemoveHelper.removeExcelTable(
-          officeTable,
-          excelContext,
-          isCrosstab,
-          crosstabHeaderDimensions,
-          false
-        );
-      }
-      this.reduxStore.dispatch(removeObject(objectWorkingId));
+    if (officeTable) {
+      officeTable.showHeaders = true;
+      await officeRemoveHelper.removeExcelTable(
+        officeTable,
+        excelContext,
+        isCrosstab,
+        crosstabHeaderDimensions,
+        false
+      );
     }
+    this.reduxStore.dispatch(removeObject(objectWorkingId));
+
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+
+    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   /**
@@ -79,10 +65,11 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleRefreshOperationError = async (ObjectData, OperationData) => {
-    const { objectWorkingId, isCrosstab } = ObjectData;
-    const { officeTable, backupObjectData } = OperationData;
-
+  handleRefreshOperationError = async (objectData, operationData) => {
+    const { objectWorkingId, isCrosstab } = objectData;
+    const { officeTable, backupObjectData } = operationData;
+    console.log('handleRefreshOperationError');
+    console.log(backupObjectData);
     if (officeTable) {
       if (isCrosstab) {
         officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
@@ -91,6 +78,8 @@ class OperationErrorHandler {
     if (backupObjectData) { this.reduxStore.dispatch(restoreObjectBackup(backupObjectData)); }
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+
+    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   /**
@@ -105,6 +94,7 @@ class OperationErrorHandler {
     for (let index = clearDataOperations.length - 1; index >= 0; index--) {
       const operation = clearDataOperations[index];
       this.reduxStore.dispatch(cancelOperation(operation.objectWorkingId));
+      this.reduxStore.dispatch(deleteObjectNotification(operation.objectWorkingId));
     }
 
     toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
@@ -117,10 +107,33 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleGenericOperationError = async (ObjectData, OperationData) => {
-    const { objectWorkingId } = ObjectData;
+  handleGenericOperationError = async (objectData, operationData) => {
+    const { objectWorkingId } = objectData;
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+
+    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
+  }
+
+  getCallback(operationType, objectData, operationData) {
+    let callback;
+    switch (operationType) {
+      case IMPORT_OPERATION:
+      case DUPLICATE_OPERATION:
+        callback = () => this.handleImportOperationError(objectData, operationData);
+        break;
+      case REFRESH_OPERATION:
+      case EDIT_OPERATION:
+        callback = () => this.handleRefreshOperationError(objectData, operationData);
+        break;
+      case CLEAR_DATA_OPERATION:
+        callback = () => this.handleClearDataOperationError();
+        break;
+      default:
+        callback = () => this.handleGenericOperationError(objectData, operationData);
+        break;
+    }
+    return callback;
   }
 }
 

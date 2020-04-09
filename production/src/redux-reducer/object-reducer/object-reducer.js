@@ -53,6 +53,7 @@ function updateObject(state, updatedObjectProps) {
 }
 
 function removeObject(state, objectWorkingId) {
+  console.log('removeObject');
   const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
   const newObjects = [...state.objects];
   newObjects.splice(objectToRemoveIndex, 1);

@@ -94,7 +94,7 @@ class StepGetOfficeTableEditRefresh {
       operationStepDispatcher.completeGetOfficeTableEditRefresh(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
       console.timeEnd('Create or get table - edit or refresh');
     }
