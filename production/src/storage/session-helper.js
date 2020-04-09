@@ -2,11 +2,11 @@ import { sessionProperties } from './session-properties';
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
-import { homeHelper } from '../home/home-helper';
+import { HomeHelper } from '../home/home-helper';
 import { createCache } from '../cache/cache-actions';
 import DB from '../cache/cache-db';
 
-export class SessionHelper {
+class SessionHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -39,17 +39,25 @@ export class SessionHelper {
     }
   }
 
-  logOutRedirect = () => {
-    const { origin } = homeHelper.getWindowLocation();
-    if (!origin.includes('localhost')) {
+  /**
+   * Redirect to user to the login page. If it's development mode
+   * we can optionally refresh to avoid stale cache issues when
+   * changing users.
+   *
+   * @param {Boolean} shouldReload Reload on logout when in development
+   */
+  logOutRedirect = (shouldReload = false) => {
+    const isDevelopment = this.isDevelopment();
+    if (!isDevelopment) {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
       this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
       this.disableLoading();
-      // Reload to avoid stale cache issues on localhost when changing users
-      window.location.reload();
+      if (shouldReload) {
+        window.location.reload();
+      }
     }
   };
 
@@ -83,23 +91,25 @@ export class SessionHelper {
 
   getUserInfo = async () => {
     let userData = {};
-    const IS_LOCALHOST = this.isLocalhost();
-    const envUrl = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    const isDevelopment = this.isDevelopment();
+    const { getState } = this.reduxStore;
+    const envUrl = isDevelopment ? getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
+    const authToken = isDevelopment ? getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionHelper.saveUserInfo(userData);
-      if (DB.getIndexedDBSupport()) createCache(userData.id)(this.reduxStore.dispatch, this.reduxStore.getState);
+      if (DB.getIndexedDBSupport()) { createCache(userData.id)(this.reduxStore.dispatch, this.reduxStore.getState); }
     } catch (error) {
-      errorService.handleError(error, { isLogout: !IS_LOCALHOST });
+      errorService.handleError(error, { isLogout: !isDevelopment });
     }
   }
 
   getUserAttributeFormPrivilege = async () => {
     let canChooseAttrForm = false;
     const IS_LOCALHOST = this.isLocalhost();
-    const envUrl = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? this.reduxStore.getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    const { reduxStore } = this;
+    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
+    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
     try {
       canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
       sessionHelper.setAttrFormPrivilege(canChooseAttrForm);
@@ -134,6 +144,15 @@ export class SessionHelper {
   getUrl = () => window.location.href
 
   isLocalhost = () => this.getUrl().includes('localhost')
+
+  isDevelopment = () => {
+    try {
+      const isDevelopment = ['development', 'test'].includes(process.env.NODE_ENV);
+      return isDevelopment;
+    } catch (error) {
+      return false;
+    }
+  }
 }
 
 export const sessionHelper = new SessionHelper();

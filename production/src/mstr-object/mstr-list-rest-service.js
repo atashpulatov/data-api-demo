@@ -9,7 +9,7 @@ const LIMIT = 7000;
 const DOSSIER_SUBTYPE = 14081;
 const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 
-export class MstrListRestService {
+class MstrListRestService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
@@ -56,7 +56,9 @@ export class MstrListRestService {
     const { envUrl, authToken } = sessionReducer;
     const typeQuery = SUBTYPES.join('&type=');
     const getAncestors = true;
-    return { envUrl, authToken, typeQuery, getAncestors };
+    return {
+      envUrl, authToken, typeQuery, getAncestors
+    };
   }
 
   /**
@@ -80,9 +82,13 @@ export class MstrListRestService {
    * @param {Array} resultArray - Array of objects that is passed during reccurent function call for projects > 7000
    * @returns {Array} of MSTR objects
    */
-  fetchObjectListByProject({ requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT },
-    projectId, queue) {
-    const { envUrl, authToken, typeQuery, getAncestors } = requestParams;
+  fetchObjectListByProject({
+    requestParams, callback = this.filterDossier, offset = 0, limit = LIMIT
+  },
+  projectId, queue) {
+    const {
+      envUrl, authToken, typeQuery, getAncestors
+    } = requestParams;
     const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}&getAncestors=${getAncestors}`;
     return request
       .get(url)
@@ -93,7 +99,9 @@ export class MstrListRestService {
         if (res.body.result.length === 7000) {
           offset += limit;
           queue.enqueue(callback(res.body));
-          return this.fetchObjectListByProject({ requestParams, callback, offset, limit }, projectId, queue);
+          return this.fetchObjectListByProject({
+            requestParams, callback, offset, limit
+          }, projectId, queue);
         }
         return callback(res.body);
       });

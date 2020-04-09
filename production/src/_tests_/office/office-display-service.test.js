@@ -1,4 +1,4 @@
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeContextMock } from './__mock__object__/OfficeContext';
 import { officeDisplayService } from '../../office/office-display-service';
 import { reduxStore } from '../../store';

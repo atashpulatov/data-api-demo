@@ -38,8 +38,8 @@ rake stage_0_test
     end
     html do
       report_name 'eslint report'
-      report_directory_path ".eslint"
-      index_file_name 'index.html'
+      report_directory_path "production/coverage"
+      index_file_name 'eslint.html'
     end
 
     ext_mailer do

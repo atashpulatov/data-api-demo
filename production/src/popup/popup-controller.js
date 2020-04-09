@@ -4,8 +4,8 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import { notificationService } from '../notification/notification-service';
 import { errorService } from '../error/error-handler';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { officeProperties } from '../office/office-properties';
-import { officeApiHelper } from '../office/office-api-helper';
+import { officeProperties } from '../office/store/office-properties';
+import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeStoreService } from '../office/store/office-store-service';
 import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../navigation/navigation-tree-actions';
@@ -21,7 +21,7 @@ const URL = `${window.location.href}`;
 
 /* global Office */
 
-export class PopupController {
+class PopupController {
   constructor(excelXtabsBorderColor) {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
@@ -108,15 +108,17 @@ export class PopupController {
       return;
     }
     try {
-      if (response.command !== REFRESH_CACHE_COMMAND) await this.closeDialog(dialog);
-      if (response.command !== selectorProperties.commandError) await officeApiHelper.getExcelSessionStatus(); // checking excel session status
+      if (response.command !== REFRESH_CACHE_COMMAND) { await this.closeDialog(dialog); }
+      if (response.command !== selectorProperties.commandError) {
+        await officeApiHelper.getExcelSessionStatus(); // checking excel session status
+      }
       await authenticationHelper.validateAuthToken();
       switch (response.command) {
       case selectorProperties.commandOk:
         if (!reportParams) {
           await this.handleOkCommand(response, reportParams);
         } else {
-          const reportPreviousState = this._getReportsPreviousState(reportParams);
+          const reportPreviousState = this.getReportsPreviousState(reportParams);
           await this.saveReportWithParams(reportParams, response, reportPreviousState);
         }
         break;
@@ -124,7 +126,7 @@ export class PopupController {
         if (!reportParams) {
           await this.handleUpdateCommand(response);
         } else {
-          const reportPreviousState = this._getReportsPreviousState(reportParams);
+          const reportPreviousState = this.getReportsPreviousState(reportParams);
           await this.saveReportWithParams(reportParams, response, reportPreviousState);
         }
         break;
@@ -247,63 +249,58 @@ export class PopupController {
     }
   };
 
-  _getReportsPreviousState = (reportParams) => {
+  getReportsPreviousState = (reportParams) => {
     const currentReportArray = this.reduxStore.getState().officeReducer.reportArray;
     const indexOfOriginalValues = currentReportArray.findIndex((report) => report.bindId === reportParams.bindId);
     const originalValues = currentReportArray[indexOfOriginalValues];
     const { displayAttrFormNames } = officeProperties;
-    return originalValues.displayAttrFormNames ? { ...originalValues } : { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
+    if (originalValues.displayAttrFormNames) {
+      return { ...originalValues };
+    }
+    return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
   }
 
   saveReportWithParams = async (reportParams, response, reportPreviousState) => {
-    await officeStoreService.preserveReportValue(reportParams.bindId,
-      'body',
-      response.body);
-    if (!response.visualizationInfo && reportPreviousState.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
+    const { preserveReportValue } = officeStoreService;
+
+    await preserveReportValue(reportParams.bindId, 'body', response.body);
+
+    if (!response.visualizationInfo
+      && reportPreviousState.subtotalsInfo.importSubtotal !== response.subtotalsInfo.importSubtotal) {
       const subtotalsInformation = { ...reportPreviousState.subtotalsInfo };
       subtotalsInformation.importSubtotal = response.subtotalsInfo.importSubtotal;
-      await officeStoreService.preserveReportValue(reportParams.bindId,
-        'subtotalsInfo',
-        subtotalsInformation);
+      await preserveReportValue(reportParams.bindId, 'subtotalsInfo', subtotalsInformation);
     }
+
     if (reportPreviousState.displayAttrFormNames !== response.displayAttrFormNames) {
-      await officeStoreService.preserveReportValue(reportParams.bindId,
-        'displayAttrFormNames',
-        response.displayAttrFormNames);
+      await preserveReportValue(reportParams.bindId, 'displayAttrFormNames', response.displayAttrFormNames);
     }
+
     if (response.promptsAnswers) {
       // Include new promptsAnswers in case of Re-prompt workflow
       reportParams.promptsAnswers = response.promptsAnswers;
-      await officeStoreService.preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
+      await preserveReportValue(reportParams.bindId, 'promptsAnswers', response.promptsAnswers);
     }
+
     if (response.isEdit) {
       if (reportPreviousState.visualizationInfo.visualizationKey !== response.visualizationInfo.visualizationKey) {
         response.visualizationInfo.nameShouldUpdate = true;
         response.visualizationInfo.formatShouldUpdate = true;
-        await officeStoreService.preserveReportValue(
-          reportParams.bindId,
-          'visualizationInfo',
-          response.visualizationInfo
-        );
+        await preserveReportValue(reportParams.bindId, 'visualizationInfo', response.visualizationInfo);
       }
-      await officeStoreService.preserveReportValue(reportParams.bindId, 'preparedInstanceId', response.preparedInstanceId);
-      await officeStoreService.preserveReportValue(reportParams.bindId, 'isEdit', false);
+      await preserveReportValue(reportParams.bindId, 'preparedInstanceId', response.preparedInstanceId);
+      await preserveReportValue(reportParams.bindId, 'isEdit', false);
     }
-    const isErrorOnRefresh = await this.popupAction.refreshReportsArray([reportParams], false)(this.reduxStore.dispatch);
+
+    const { reduxStore, popupAction } = this;
+    const isErrorOnRefresh = await popupAction.refreshReportsArray([reportParams], false)(reduxStore.dispatch);
+
     if (isErrorOnRefresh) {
       if (reportPreviousState.objectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        await officeStoreService.preserveReportValue(
-          reportParams.bindId,
-          'manipulationsXML',
-          reportPreviousState.manipulationsXML
-        );
-        await officeStoreService.preserveReportValue(
-          reportParams.bindId,
-          'visualizationInfo',
-          reportPreviousState.visualizationInfo
-        );
+        await preserveReportValue(reportParams.bindId, 'manipulationsXML', reportPreviousState.manipulationsXML);
+        await preserveReportValue(reportParams.bindId, 'visualizationInfo', reportPreviousState.visualizationInfo);
       } else {
-        await officeStoreService.preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
+        await preserveReportValue(reportParams.bindId, 'body', reportPreviousState.body);
       }
     }
   }

@@ -5,18 +5,22 @@ import { MSTRIcon } from '@mstr/mstr-react-library';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { OfficeLoadedFile } from './office-loaded-file';
-import { officeApiHelper } from '../office/office-api-helper';
+import { officeApiHelper } from '../office/api/office-api-helper';
 import loadingSpinner from './assets/report_loading_spinner.gif';
 import { popupActions } from '../popup/popup-actions';
 import { fileHistoryContainerHOC } from './file-history-container-HOC';
 import { officeStoreService } from '../office/store/office-store-service';
-import { toggleSecuredFlag } from '../office/office-actions';
+import { toggleSecuredFlag as toggleSecuredFlagImported } from '../office/store/office-actions';
 import { errorService } from '../error/error-handler';
 import restrictedArt from './assets/art_restricted_access_blue.svg';
 import './file-history.scss';
 import './settings-list.scss';
 import { ButtonPopover } from './button-popover';
-import { startLoading, stopLoading } from '../navigation/navigation-tree-actions';
+import {
+  startLoading as startLoadingImported,
+  stopLoading as stopLoadingImported
+} from '../navigation/navigation-tree-actions';
+import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
 
 export class FileHistoryContainerNotConnected extends React.Component {
   constructor(props) {
@@ -49,7 +53,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
           await officeApiHelper.checkStatusOfSessions();
           const { reportArray, t } = this.props;
           const reportToDelete = reportArray.find((report) => report.bindId === e.tableId);
-          officeApiHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
+          officeApiRemoveHelper.removeObjectAndDisplaytNotification(reportToDelete, officeContext, t);
           stopLoading();
         });
       } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
@@ -60,9 +64,13 @@ export class FileHistoryContainerNotConnected extends React.Component {
           await excelContext.sync();
           const reportsOfSheets = excelContext.workbook.tables.items;
           const { reportArray, t } = this.props;
-          const reportsToBeDeleted = reportArray.filter((report) => !reportsOfSheets.find((table) => table.name === report.bindId));
+
+          const reportsToBeDeleted = reportArray.filter(
+            (report) => !reportsOfSheets.find((officeTable) => officeTable.name === report.bindId)
+          );
+
           for (const report of reportsToBeDeleted) {
-            officeApiHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
+            officeApiRemoveHelper.removeObjectAndDisplaytNotification(report, officeContext, t);
           }
           stopLoading();
         });
@@ -90,7 +98,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
     if (allowRefreshAllClick) {
       this.setState({ allowRefreshAllClick: false }, async () => {
         await refreshAll(reportArray, true);
-        if (this.ismounted) this.setState({ allowRefreshAllClick: true });
+        if (this.ismounted) { this.setState({ allowRefreshAllClick: true }); }
       });
     }
   };
@@ -107,7 +115,9 @@ export class FileHistoryContainerNotConnected extends React.Component {
   };
 
   render() {
-    const { reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t, } = this.props;
+    const {
+      reportArray = [], loading, refreshingAll, refreshReportsArray, isSecured, addDataAction, t,
+    } = this.props;
     return (
       <>
         {
@@ -170,7 +180,7 @@ export class FileHistoryContainerNotConnected extends React.Component {
               fileName={report.name}
               bindingId={report.bindId}
               onClick={officeApiHelper.onBindingObjectClick}
-              onDelete={officeApiHelper.removeReportFromExcel}
+              onDelete={officeApiRemoveHelper.removeReportFromExcel}
               isLoading={report.isLoading}
               isCrosstab={report.isCrosstab}
               crosstabHeaderDimensions={report.crosstabHeaderDimensions}
@@ -210,9 +220,9 @@ function mapStateToProps({ officeReducer }) {
 
 const mapDispatchToProps = {
   refreshReportsArray: popupActions.refreshReportsArray,
-  toggleSecuredFlag,
-  startLoading,
-  stopLoading,
+  toggleSecuredFlag: toggleSecuredFlagImported,
+  startLoading: startLoadingImported,
+  stopLoading: stopLoadingImported,
 };
 
 const WrappedFileHistoryContainer = fileHistoryContainerHOC(FileHistoryContainerNotConnected);

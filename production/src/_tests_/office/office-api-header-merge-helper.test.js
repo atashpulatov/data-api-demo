@@ -1,5 +1,5 @@
 /* eslint-disable object-curly-newline, indent */
-import { mergeHeaderColumns, mergeHeaderRows } from '../../office/office-api-header-merge-helper';
+import { mergeHeaderColumns, mergeHeaderRows } from '../../office/api/office-api-header-merge-helper';
 
 describe('OfficeApiHeaderMergeHelper', () => {
   let offsetRange;

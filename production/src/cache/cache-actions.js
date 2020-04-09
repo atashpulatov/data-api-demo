@@ -1,9 +1,7 @@
-/* eslint-disable import/no-cycle */
 import { addNestedPropertiesToObjects } from '@mstr/rc';
 import DB from './cache-db';
 import i18next from '../i18n';
 import { mstrListRestService } from '../mstr-object/mstr-list-rest-service';
-import { SAVE_MY_LIBRARY_OWNERS } from '../storage/navigation-tree-reducer';
 
 export const CREATE_CACHE = 'CREATE_CACHE';
 export const CLEAR_CACHE = 'CLEAR_CACHE';
@@ -15,6 +13,7 @@ export const ADD_MY_LIBRARY_OBJECTS = 'ADD_MY_LIBRARY_OBJECTS';
 export const ADD_PROJECTS = 'ADD_PROJECTS';
 export const ADD_ENV_OBJECTS = 'ADD_ENV_OBJECTS';
 export const REFRESH_CACHE_COMMAND = 'REFRESH_COMMAND';
+export const SAVE_MY_LIBRARY_OWNERS = 'SAVE_MY_LIBRARY_OWNERS';
 
 export const PROJECTS_DB_ID = 'projects';
 export const MY_LIBRARY_DB_ID = 'my-library';

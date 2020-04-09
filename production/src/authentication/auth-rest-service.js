@@ -44,10 +44,10 @@ class AuthenticationService {
     try {
       const response = await this.fetchPrivilegeById(OFFICE_PRIVILEGE_ID, envUrl, iSession);
       // Only return false if isUserLevelAllowed exists and is false
-      if (!response) return true;
+      if (!response) { return true; }
       const { isUserLevelAllowed, projects } = response;
       if (isUserLevelAllowed === false) {
-        if (projects.find((project) => project.isAllowed === true)) return true;
+        if (projects.find((project) => project.isAllowed === true)) { return true; }
       }
       return isUserLevelAllowed === true;
     } catch (error) {
@@ -66,7 +66,7 @@ class AuthenticationService {
       }
       const { isUserLevelAllowed, projects } = response;
       if (isUserLevelAllowed === false) {
-        if (projects.find((project) => project.isAllowed === true)) return true;
+        if (projects.find((project) => project.isAllowed === true)) { return true; }
       }
       return isUserLevelAllowed === true;
     } catch (error) {

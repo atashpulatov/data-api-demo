@@ -8,7 +8,8 @@ import { sessionHelper } from '../../storage/session-helper';
 import { popupController } from '../../popup/popup-controller';
 import * as LoadedFilesConstans from '../../file-history/office-loaded-file';
 import { officeStoreService } from '../../office/store/office-store-service';
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 
 
 describe('FileHistoryContainer', () => {
@@ -127,7 +128,7 @@ describe('FileHistoryContainer', () => {
     sessionHelperSpy.mockClear();
     const mockSync = jest.fn();
     const mockGetContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => ({ sync: mockSync, }));
-    const mockIsCurrentSheetProtected = jest.spyOn(officeApiHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
+    const mockIsCurrentSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation(() => (false));
     const clickSpy = jest.spyOn(popupController, 'runPopupNavigation');
     const wrappedComponent = mount(<Provider store={reduxStore}>
       <FileHistoryContainer

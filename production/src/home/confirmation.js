@@ -1,15 +1,28 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/no-danger */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import warningIcon from '../loading/assets/icon_conflict.svg';
-import { officeApiHelper } from '../office/office-api-helper';
-import { toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag } from '../office/office-actions';
+import { officeApiHelper } from '../office/api/office-api-helper';
+import {
+  toggleSecuredFlag as toggleSecuredFlagImported,
+  toggleIsConfirmFlag as toggleIsConfirmFlagImported,
+  toggleIsClearingFlag as toggleIsClearingFlagImported
+} from '../office/store/office-actions';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification/notification-service';
+import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
 
-export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggleIsConfirmFlag, toggleIsClearingFlag, t }) => {
+export const ConfirmationNotConnected = ({
+  reportArray,
+  toggleSecuredFlag,
+  toggleIsConfirmFlag,
+  toggleIsClearingFlag,
+  t
+}) => {
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
@@ -29,21 +42,22 @@ export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggl
       toggleIsClearingFlag(true);
       toggleIsConfirmFlag(); // Switch off isConfirm popup
       const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiHelper.checkIfAnySheetProtected(excelContext, reportArray);
+      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, reportArray);
       for (const report of reportArray) {
-        if (await officeApiHelper.checkIfObjectExist(report, excelContext)) {
+        if (await officeApiRemoveHelper.checkIfObjectExist(report, excelContext)) {
           try {
             reportName = report.name;
             if (report.isCrosstab) {
               const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-              officeApiHelper.clearEmptyCrosstabRow(officeTable); // Since showing Excel table header dont override the data but insert new row, we clear values from empty row in crosstab to prevent it
+              officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
               officeTable.showHeaders = true;
               officeTable.showFilterButton = false;
+
               const headers = officeTable.getHeaderRowRange();
               headers.format.font.color = 'white';
               await excelContext.sync();
             }
-            await officeApiHelper.deleteObjectTableBody(excelContext, report, true);
+            await officeApiRemoveHelper.removeOfficeTableBody(excelContext, report, true);
           } catch (error) {
             const officeError = errorService.handleError(error);
             clearErrors.push({ reportName, officeError });
@@ -54,7 +68,7 @@ export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggl
       }
       if (clearErrors.length > 0) {
         displayClearDataError(clearErrors);
-      } else if (counter !== reportArray.length) toggleSecuredFlag(true);
+      } else if (counter !== reportArray.length) { toggleSecuredFlag(true); }
     } catch (error) {
       errorService.handleError(error);
     } finally {
@@ -70,7 +84,8 @@ export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggl
 
   return (
     <>
-      <div className="block-ui" onClick={() => toggleIsConfirmFlag(false)} />
+      <div
+      className="block-ui" />
       <div className="confirm-container">
         <div className="confirm-header">
           <span className="confirm-header-icon"><img width="19px" height="18px" src={warningIcon} alt={t('Refresh failed icon')} /></span>
@@ -86,8 +101,8 @@ export const ConfirmationNotConnected = ({ reportArray, toggleSecuredFlag, toggl
           </div>
         </div>
         <div className="confirm-buttons">
-          <button className="ant-btn" id="confirm-btn" onClick={secureData}>{t('OK')}</button>
-          <button className="ant-btn" id="cancel-btn" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
+          <button className="ant-btn" id="confirm-btn" type="button" onClick={secureData}>{t('OK')}</button>
+          <button className="ant-btn" id="cancel-btn" type="button" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
     </>
@@ -109,9 +124,9 @@ function mapStateToProps({ officeReducer }) {
 }
 
 const mapDispatchToProps = {
-  toggleSecuredFlag,
-  toggleIsConfirmFlag,
-  toggleIsClearingFlag,
+  toggleSecuredFlag: toggleSecuredFlagImported,
+  toggleIsConfirmFlag: toggleIsConfirmFlagImported,
+  toggleIsClearingFlag: toggleIsClearingFlagImported,
 };
 
 export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationNotConnected));

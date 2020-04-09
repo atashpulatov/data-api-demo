@@ -18,10 +18,9 @@ export default class DB {
    * @param {String} dbName Name of db
    * @param {Object} stores where each key represents the name of an object
    * store and each value represents the primary and secondary indexes
-   * @memberof DB
    */
   constructor(dbName = 'cache', stores = { cache: '$$uuid,type' }) {
-    if (!dbName) return;
+    if (!dbName) { return; }
     this.db = new Dexie(window.location.host + dbName);
     this.db.version(1).stores(stores);
     this.db.on('blocked', console.error);
@@ -32,7 +31,6 @@ export default class DB {
   * Get name of the database
   *
   * @returns {String} Database name
-  * @memberof DB
   */
   get name() {
     return this.dbName;
@@ -42,7 +40,6 @@ export default class DB {
   * Get database instance
   *
   * @returns {Object} Database instance
-  * @memberof DB
   */
   get instance() {
     return this.db;
@@ -53,7 +50,6 @@ export default class DB {
   * and frees memory (event listeners) the database may be using.
   *
   * @returns {Promise} Close promise
-  * @memberof DB
   */
   close() {
     return this.db.close();
@@ -65,7 +61,6 @@ export default class DB {
   * @param {Function} callback Function called on change
   * @param {boolean} isRefresh representing whether refresh is in progress
   * @param {String} table name of the table in DB
-  * @memberof DB
   */
   onChange(callback, isRefresh = false, table = 'cache') {
     if (!isRefresh) {
@@ -87,7 +82,6 @@ export default class DB {
    * Delete the current database
    *
    * @returns {Promise} Promise containing response of deletion
-   * @memberof DB
    */
   delete() {
     return this.db.delete();
@@ -98,7 +92,6 @@ export default class DB {
    *
    * @param {String} table name of the table that should be cleared
    * @returns {Promise} Promise containing response of deletion
-   * @memberof DB
    */
   clearTable(table = 'cache') {
     return this.db[table].clear();
@@ -111,7 +104,6 @@ export default class DB {
    * @param {Object} data Object to store in the DB
    * @param {String} table name of the table where the data should be stored
    * @returns {Promise} Promise containing result of put operation
-   * @memberof DB
    */
   putData(type, data, table = 'cache') {
     return this.db[table].put({ type, data });
@@ -124,7 +116,6 @@ export default class DB {
    * @param {Object} data Object to store in the DB
    * @param {String} table name of the table where the data should be updated
    * @returns {Promise} Promise containing result of update operation
-   * @memberof DB
    */
   updateData(type, data, table = 'cache') {
     return this.db[table].get({ type })
@@ -137,11 +128,10 @@ export default class DB {
    *
    * @param {MSTR} callback Function that fetches documents
    * @param {Object} table Table to check if empty
-   * @memberof DB
    */
   callIfTableEmpty(callback, table = 'cache') {
     return this.db[table].count().then((count) => {
-      if (count === 0) callback();
+      if (count === 0) { callback(); }
     });
   }
 
@@ -152,7 +142,6 @@ export default class DB {
    * @static
    * @param {String} dbToKeep Current authenticated user
    * @returns {Promise} Promise results of deleting dbs not of the auth. user
-   * @memberof DB
    */
   static purge(dbToKeep) {
     return Dexie.getDatabaseNames((dbs) => {
@@ -167,7 +156,6 @@ export default class DB {
    *
    * @static
    * @returns {boolean} representing whether IndexedDB is supported
-   * @memberof DB
    */
   static getIndexedDBSupport() {
     return !!window.indexedDB;

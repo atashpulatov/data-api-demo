@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
-import { officeReducer } from '../../office/office-reducer';
-import { officeProperties } from '../../office/office-properties';
+import { officeReducer } from '../../office/store/office-reducer';
+import { officeProperties } from '../../office/store/office-properties';
 import { OfficeError } from '../../office/office-error';
 
 describe('officeReducer', () => {
@@ -32,7 +32,9 @@ describe('officeReducer', () => {
 
   beforeEach(() => {
     // default state should be empty
-    expect(officeStore.getState()).toEqual({ loading: false, shouldRenderSettings: false, isSettings: false, isConfirm: false, supportForms: true });
+    expect(officeStore.getState()).toEqual({
+      loading: false, shouldRenderSettings: false, isSettings: false, isConfirm: false, supportForms: true
+    });
   });
 
   afterEach(() => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { _RefreshAllPage } from '../../loading/refresh-all-page';
+import { RefreshAllPageNotConnected } from '../../loading/refresh-all-page';
 
 const refreshData = {
   data: [
@@ -30,7 +30,7 @@ describe('RefreshAllPage', () => {
   it('should render with initial state from local storage', () => {
     const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify(refreshData));
     // when
-    const wrappedComponent = mount(<_RefreshAllPage />);
+    const wrappedComponent = mount(<RefreshAllPageNotConnected />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(mockStorageGetItem).toHaveBeenCalled();
@@ -41,7 +41,7 @@ describe('RefreshAllPage', () => {
   });
   it('should render proper view from state', () => {
     // given
-    const refreshData = {
+    const refreshDataMock = {
       data: [
         {
           key: 'testBinding1',
@@ -60,16 +60,16 @@ describe('RefreshAllPage', () => {
       finished: false,
       currentNumber: 1,
     };
-    const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify(refreshData));
+    const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify(refreshDataMock));
     // when
-    const wrappedComponent = mount(<_RefreshAllPage />);
+    const wrappedComponent = mount(<RefreshAllPageNotConnected />);
     const wrappedResultsList = wrappedComponent.find('.result-container');
     const wrappedSuccessIcon = wrappedComponent.find('[type="refresh-success"]');
     const wrappedPopover = wrappedComponent.find('Popover');
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(mockStorageGetItem).toHaveBeenCalled();
-    expect(wrappedResultsList).toHaveLength(refreshData.data.length);
+    expect(wrappedResultsList).toHaveLength(refreshDataMock.data.length);
     expect(wrappedPopover.exists()).toBe(true);
     expect(wrappedSuccessIcon.exists()).toBe(true);
     // expect(wrappedResultsList[0]).toEqual(refreshData.data.length);
@@ -82,7 +82,7 @@ describe('RefreshAllPage', () => {
       map[event] = cb;
     });
     // when
-    const wrappedComponent = mount(<_RefreshAllPage />);
+    const wrappedComponent = mount(<RefreshAllPageNotConnected />);
     map.storage({ newValue: 'refreshData' });
     // then
     expect(wrappedComponent.instance()).toBeDefined();
@@ -95,7 +95,7 @@ describe('RefreshAllPage', () => {
     const mockStorageGetItem = jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify(refreshData));
     Object.defineProperty(navigator, 'userAgent', { get: jest.fn().mockImplementation(() => 'Trident.rv:11.'), });
     // when
-    const wrappedComponent = mount(<_RefreshAllPage />);
+    const wrappedComponent = mount(<RefreshAllPageNotConnected />);
     jest.advanceTimersByTime(500);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
@@ -107,7 +107,7 @@ describe('RefreshAllPage', () => {
     jest.spyOn(localStorage, 'getItem').mockImplementation(() => JSON.stringify(refreshData));
     const mockClearInterval = jest.spyOn(window, 'clearInterval');
     // when
-    const wrappedComponent = mount(<_RefreshAllPage />);
+    const wrappedComponent = mount(<RefreshAllPageNotConnected />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     wrappedComponent.unmount();
