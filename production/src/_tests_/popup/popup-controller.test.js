@@ -1,10 +1,8 @@
 import { objectTypes } from '@mstr/mstr-react-library';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { popupController } from '../../popup/popup-controller';
-import { errorService } from '../../error/error-handler';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { notificationService } from '../../notification/notification-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 
@@ -75,6 +73,7 @@ describe('PopupController', () => {
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleOkCommandSpy = jest.spyOn(popupController, 'handleOkCommand').mockImplementation();
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -82,6 +81,7 @@ describe('PopupController', () => {
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
+    expect(handleOkCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handle ok command from popup for report with dossier data', async () => {
@@ -108,6 +108,7 @@ describe('PopupController', () => {
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleOkCommandSpy = jest.spyOn(popupController, 'handleOkCommand').mockImplementation();
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -115,6 +116,7 @@ describe('PopupController', () => {
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
+    expect(handleOkCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handle update command from popup for cube', async () => {
@@ -133,6 +135,7 @@ describe('PopupController', () => {
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -140,6 +143,7 @@ describe('PopupController', () => {
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
+    expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handle update command from popup for report WITHOUT instance id', async () => {
@@ -158,6 +162,7 @@ describe('PopupController', () => {
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -165,6 +170,7 @@ describe('PopupController', () => {
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
+    expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handle update command from popup for report with dossier data', async () => {
@@ -187,6 +193,7 @@ describe('PopupController', () => {
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
 
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
@@ -194,5 +201,6 @@ describe('PopupController', () => {
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
+    expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 });
