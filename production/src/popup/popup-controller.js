@@ -191,14 +191,28 @@ class PopupController {
     }
   };
 
+  /**
+   * Creates objectData based on response and reportParams and dispatches duplicateRequested.
+   *
+   * Called after message from popup is recived and reportParams.duplicateMode === true is provided.
+   * Depending on object type, it needs to map different variables into objectData.
+   * Gets reportParams with data of source object for duplication.
+   *
+   * Cretes vizKeyChanged and stores in objectData.
+   *
+   * @param {Object} response Data about edited object and manipulations, recieved from popup.
+   * @param {String} reportParams.name Original object name.
+   * @param {Boolean} reportParams.insertNewWorksheet Flag based on user interaction with duplicate popup.
+   * @param {String} reportParams.visualizationInfo.visualizationKey Prev selected viz key, needed to calculate vizKeyChanged.
+   */
   handleDuplicate = async (response, reportParams) => {
     if (response.chosenObject || response.chosenObjectId) {
       const vizKeyChanged = response.visualizationInfo && response.visualizationInfo.visualizationKey
         && reportParams.visualizationInfo && reportParams.visualizationInfo.visualizationKey
         && response.visualizationInfo.visualizationKey !== reportParams.visualizationInfo.visualizationKey;
-      // Use reportParams.name if provided to preserve viz name on duplicate edit without changing the selected viz
+
       const objectData = {
-        name: reportParams.name || response.chosenObjectName,
+        name: reportParams.name,
         dossierData: response.dossierData,
         objectId: response.chosenObject || response.chosenObjectId,
         projectId: response.chosenProject || response.projectId,

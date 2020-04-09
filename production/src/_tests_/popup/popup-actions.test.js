@@ -151,4 +151,12 @@ describe('Popup actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: SET_PREPARED_REPORT, instanceId: reportInstance, chosenObjectData });
   });
+
+  it('should do callForDuplicate for duplication with edit for report', () => {
+    expect(true).toBeFalse();
+  });
+
+  it('should do callForDuplicate for duplication with edit for dossier visualization', () => {
+    expect(true).toBeFalse();
+  });
 });

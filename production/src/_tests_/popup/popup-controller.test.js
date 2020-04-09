@@ -7,7 +7,7 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import { notificationService } from '../../notification/notification-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
-import * as operationActions from '../../operation/operation-actions';
+import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -260,7 +260,7 @@ describe('PopupController', () => {
     expect(dialog.close).toBeCalled();
   });
 
-  it('should handleDuplicate for commandOnUpdate', async () => {
+  it('should handleDuplicate for commandOnUpdate - duplication with edit for report', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
     officeApiHelper.getOfficeSessionStatus = jest.fn();
@@ -312,9 +312,10 @@ describe('PopupController', () => {
     expect(spyValidateAuthToken).toBeCalled();
     expect(spyHandleDuplicate).toBeCalled();
     expect(spyDuplicateRequested).toBeCalledWith(expectedObjectData);
+    expect(true).toBeFalse();
   });
 
-  it('should handleDuplicate for commandOk', async () => {
+  it('should handleDuplicate for commandOk - duplication with edit for dossier visualization', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
     officeApiHelper.getOfficeSessionStatus = jest.fn();
@@ -367,5 +368,6 @@ describe('PopupController', () => {
     expect(spyValidateAuthToken).toBeCalled();
     expect(spyHandleDuplicate).toBeCalled();
     expect(spyDuplicateRequested).toBeCalledWith(expectedObjectData);
+    expect(true).toBeFalse();
   });
 });

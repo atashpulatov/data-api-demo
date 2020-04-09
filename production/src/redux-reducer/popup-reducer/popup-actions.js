@@ -96,6 +96,7 @@ class PopupActions {
 
   resetState = () => (dispatch) => dispatch({ type: RESET_STATE, });
 
+  // TODO: jsdoc
   callForDuplicate = (object) => async (dispatch) => {
     const isDossier = object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
     try {
