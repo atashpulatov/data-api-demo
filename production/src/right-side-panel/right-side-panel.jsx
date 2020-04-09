@@ -56,8 +56,6 @@ export const RightSidePanelNotConnected = (props) => {
     setLoadedObjectsWrapped(loadedObjects.map((object) => {
       const operation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
       const notification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
-      console.log(notification);
-      console.log({ loadedObjects, notifications });
       const operationBasedNotificationData = operation ? {
         percentageComplete: operation.totalRows !== 0 ? calculateLoadingProgress(operation.operationType, operation.stepsQueue[0], operation.loadedRows, operation.totalRows) : 0,
         itemsTotal: operation.totalRows,
@@ -74,8 +72,6 @@ export const RightSidePanelNotConnected = (props) => {
       return obj;
     }));
   }, [loadedObjects, notifications, operations]);
-
-  console.log(loadedObjectsWrapped);
 
   const mockConnectionLost = () => {
     notificationService.connectionLost();
@@ -124,15 +120,13 @@ export const RightSidePanelNotConnected = (props) => {
     }
   };
 
-  const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params) };
-  const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params) };
-  const duplicateWrapper = async (params) => { await wrapper(sidePanelService.duplicate, params) };
-  const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params) };
-  const refreshWrapper = async (params) => { await wrapper(sidePanelService.refresh, params) };
-  const removeWrapper = async (params) => { await wrapper(sidePanelService.remove, params) };
-  const renameWrapper = async (params) => { await wrapper(sidePanelService.rename, params) };
-
-  console.log(globalNotification);
+  const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
+  const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
+  const duplicateWrapper = async (params) => { await wrapper(sidePanelService.duplicate, params); };
+  const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
+  const refreshWrapper = async (params) => { await wrapper(sidePanelService.refresh, params); };
+  const removeWrapper = async (params) => { await wrapper(sidePanelService.remove, params); };
+  const renameWrapper = async (params) => { await wrapper(sidePanelService.rename, params); };
 
   return (
     <>

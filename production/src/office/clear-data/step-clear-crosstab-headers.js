@@ -26,7 +26,7 @@ class StepClearCrosstabHeaders {
       operationStepDispatcher.completeClearCrosstabHeaders(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   }
 }

@@ -17,7 +17,7 @@ class StepSaveObjectInExcel {
       operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
       console.timeEnd('Total');
       console.groupEnd();

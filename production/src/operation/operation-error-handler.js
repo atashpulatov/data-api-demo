@@ -6,6 +6,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
   IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION,
 } from './operation-type-names';
+import {errorService} from '../error/error-handler';
 
 class OperationErrorHandler {
   init = (reduxStore) => {
@@ -19,28 +20,11 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleOperationError = async (ObjectData, OperationData) => {
-    const { operationType } = OperationData;
-
-    switch (operationType) {
-      case IMPORT_OPERATION:
-      case DUPLICATE_OPERATION:
-        this.handleImportOperationError(ObjectData, OperationData);
-        break;
-
-      case REFRESH_OPERATION:
-      case EDIT_OPERATION:
-        this.handleRefreshOperationError(ObjectData, OperationData);
-        break;
-
-      case CLEAR_DATA_OPERATION:
-        this.handleClearDataOperationError();
-        break;
-
-      default:
-        this.handleGenericOperationError(ObjectData, OperationData);
-        break;
-    }
+  handleOperationError = async (objectData, operationData, error) => {
+    const { operationType } = operationData;
+    console.log(error);
+    const callback = this.getCallback(operationType, objectData, operationData);
+    errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback);
   }
 
   /**
@@ -51,9 +35,9 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleImportOperationError = async (ObjectData, OperationData) => {
-    const { objectWorkingId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
-    const { officeTable, excelContext, operationType } = OperationData;
+  handleImportOperationError = async (objectData, operationData) => {
+    const { objectWorkingId, isCrosstab, crosstabHeaderDimensions } = objectData;
+    const { officeTable, excelContext } = operationData;
 
     if (officeTable) {
       officeTable.showHeaders = true;
@@ -78,9 +62,9 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleRefreshOperationError = async (ObjectData, OperationData) => {
-    const { objectWorkingId, isCrosstab } = ObjectData;
-    const { officeTable, backupObjectData } = OperationData;
+  handleRefreshOperationError = async (objectData, operationData) => {
+    const { objectWorkingId, isCrosstab } = objectData;
+    const { officeTable, backupObjectData } = operationData;
     console.log('handleRefreshOperationError');
     console.log(backupObjectData);
     if (officeTable) {
@@ -117,10 +101,31 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  handleGenericOperationError = async (ObjectData, OperationData) => {
-    const { objectWorkingId } = ObjectData;
+  handleGenericOperationError = async (objectData, operationData) => {
+    const { objectWorkingId } = objectData;
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+  }
+
+  getCallback(operationType, objectData, operationData) {
+    let callback;
+    switch (operationType) {
+      case IMPORT_OPERATION:
+      case DUPLICATE_OPERATION:
+        callback = () => this.handleImportOperationError(objectData, operationData);
+        break;
+      case REFRESH_OPERATION:
+      case EDIT_OPERATION:
+        callback = () => this.handleRefreshOperationError(objectData, operationData);
+        break;
+      case CLEAR_DATA_OPERATION:
+        callback = () => this.handleClearDataOperationError();
+        break;
+      default:
+        callback = () => this.handleGenericOperationError(objectData, operationData);
+        break;
+    }
+    return callback;
   }
 }
 
