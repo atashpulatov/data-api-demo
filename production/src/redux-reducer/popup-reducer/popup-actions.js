@@ -139,6 +139,8 @@ class PopupActions {
       };
 
       if (isDossier) {
+        reportParams.visualizationInfo = object.visualizationInfo;
+        reportParams.name = object.name;
         this.popupController.runEditDossierPopup(reportParams);
       } else if (object.isPrompted) {
         this.popupController.runRepromptPopup(reportParams);

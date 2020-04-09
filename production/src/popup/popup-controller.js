@@ -193,8 +193,12 @@ class PopupController {
 
   handleDuplicate = async (response, reportParams) => {
     if (response.chosenObject || response.chosenObjectId) {
+      const vizKeyChanged = response.visualizationInfo && response.visualizationInfo.visualizationKey
+        && reportParams.visualizationInfo && reportParams.visualizationInfo.visualizationKey
+        && response.visualizationInfo.visualizationKey !== reportParams.visualizationInfo.visualizationKey;
+      // Use reportParams.name if provided to preserve viz name on duplicate edit without changing the selected viz
       const objectData = {
-        name: response.chosenObjectName,
+        name: reportParams.name || response.chosenObjectName,
         dossierData: response.dossierData,
         objectId: response.chosenObject || response.chosenObjectId,
         projectId: response.chosenProject || response.projectId,
@@ -208,6 +212,7 @@ class PopupController {
         subtotalsInfo: response.subtotalsInfo,
         displayAttrFormNames: response.displayAttrFormNames,
         insertNewWorksheet: reportParams.insertNewWorksheet,
+        vizKeyChanged,
       };
       this.reduxStore.dispatch(duplicateRequested(objectData));
     }

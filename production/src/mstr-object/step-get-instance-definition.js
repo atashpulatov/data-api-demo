@@ -40,7 +40,8 @@ class StepGetInstanceDefinition {
         subtotalsInfo = false,
         bindId,
         mstrObjectType,
-        isPrompted
+        isPrompted,
+        vizKeyChanged,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
 
@@ -55,7 +56,10 @@ class StepGetInstanceDefinition {
           { ...objectData, visualizationInfo }
         ));
 
-        name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition, nextStep);
+        name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition, vizKeyChanged);
+
+        // Delete vizKeyChanged if provided during duplication to not store it in imported object
+        if (vizKeyChanged) { delete objectData.vizKeyChanged; }
       } else {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }

@@ -12,20 +12,29 @@ class StepGetDuplicateName {
   * This function is subscribed as one of the operation steps with the key GET_DUPLICATE_NAME,
   * therefore should be called only via operation bus.
   *
+  * Assigning new name is skiped if vizualization key changed during duplication with edit for dossier.
+  * In that case, name of new visualization  will be taken from instance definition in next step.
+  *
   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
   * @param {String} objectData.name Name of the original object.
+  * @param {Boolean} objectData.vizKeyChanged Indicator that the different vizualization was selected
+  * during duplication with edit.
   */
   getDuplicateName = (objectData) => {
-    const { objectWorkingId, name } = objectData;
-    const lang = i18n.language;
-    const translatedCopy = i18n.store.data[lang].common.Copy;
-    const nameCandidate = this.prepareNewNameForDuplicatedObject(name, translatedCopy);
-    const newName = this.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
-    const updatedObject = {
-      objectWorkingId,
-      name: newName
-    };
-    operationStepDispatcher.updateObject(updatedObject);
+    const { objectWorkingId, name, vizKeyChanged } = objectData;
+
+    if (!vizKeyChanged) {
+      const lang = i18n.language;
+      const translatedCopy = i18n.store.data[lang].common.Copy;
+
+      const nameCandidate = this.prepareNewNameForDuplicatedObject(name, translatedCopy);
+      const newName = this.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
+      const updatedObject = {
+        objectWorkingId,
+        name: newName
+      };
+      operationStepDispatcher.updateObject(updatedObject);
+    }
     operationStepDispatcher.completeGetDuplicateName(objectWorkingId);
   }
 
