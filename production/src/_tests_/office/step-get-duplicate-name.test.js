@@ -10,21 +10,22 @@ describe('StepGetDuplicateName', () => {
 
   it.each`
     originalName            | expectedResult
-    ${''}                   | ${' copy'}
-    ${'name'}               | ${'name copy'}
-    ${'name 7'}             | ${'name 7 copy'}
-    ${'name 7 copy'}        | ${'name 7 copy 2'}
-    ${'some name'}          | ${'some name copy'}
-    ${'name copy'}          | ${'name copy 2'}
-    ${'name copy 1'}        | ${'name copy 2'}
-    ${'name copy 2'}        | ${'name copy 3'}
-    ${'name copy 3 copy'}   | ${'name copy 3 copy 2'} 
-    ${1234}                 | ${'1234 copy'}
+    ${''}                   | ${' Copy'}
+    ${'name'}               | ${'name Copy'}
+    ${'name 7'}             | ${'name 7 Copy'}
+    ${'name 7 Copy'}        | ${'name 7 Copy 2'}
+    ${'some name'}          | ${'some name Copy'}
+    ${'name Copy'}          | ${'name Copy 2'}
+    ${'name Copy 1'}        | ${'name Copy 2'}
+    ${'name Copy 2'}        | ${'name Copy 3'}
+    ${'name Copy 3 Copy'}   | ${'name Copy 3 Copy 2'} 
+    ${1234}                 | ${'1234 Copy'}
     
   `('prepareNewNameForDuplicatedObject should return proper prepared name', ({ originalName, expectedResult }) => {
     // given
+    const translatedCopy = 'Copy';
     // when
-    const nameCandidate = stepGetDuplicateName.prepareNewNameForDuplicatedObject(originalName);
+    const nameCandidate = stepGetDuplicateName.prepareNewNameForDuplicatedObject(originalName, translatedCopy);
     // then
     expect(nameCandidate).toEqual(expectedResult);
   });
@@ -32,28 +33,29 @@ describe('StepGetDuplicateName', () => {
 
   it.each`
     nameCandidate               | expectedResult
-    ${'name copy'}              | ${'name copy'}
-    ${'some random name copy'}  | ${'some random name copy'}
-    ${'some name copy'}         | ${'some name copy 5'}
-    ${'some name copy 3'}       | ${'some name copy 5'}
-    ${'name 7 copy'}            | ${'name 7 copy 3'}
+    ${'name Copy'}              | ${'name Copy'}
+    ${'some random name Copy'}  | ${'some random name Copy'}
+    ${'some name Copy'}         | ${'some name Copy 5'}
+    ${'some name Copy 3'}       | ${'some name Copy 5'}
+    ${'name 7 Copy'}            | ${'name 7 Copy 3'}
     
   `('checkAndSolveNameConflicts should return adjusted name', ({ nameCandidate, expectedResult }) => {
     // given
+    const translatedCopy = 'Copy';
     jest.spyOn(reduxStore, 'getState').mockImplementation(() => ({
       objectReducer: {
         objects: [
-          { name: 'some name copy' },
-          { name: 'some name copy 2' },
-          { name: 'some name copy 3' },
-          { name: 'some name copy 4' },
-          { name: 'name 7 copy' },
-          { name: 'name 7 copy 2' },
+          { name: 'some name Copy' },
+          { name: 'some name Copy 2' },
+          { name: 'some name Copy 3' },
+          { name: 'some name Copy 4' },
+          { name: 'name 7 Copy' },
+          { name: 'name 7 Copy 2' },
         ]
       },
     }));
     // when
-    const adjustedName = stepGetDuplicateName.checkAndSolveNameConflicts(nameCandidate);
+    const adjustedName = stepGetDuplicateName.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
     // then
     expect(adjustedName).toEqual(expectedResult);
   });
@@ -63,6 +65,7 @@ describe('StepGetDuplicateName', () => {
     const exampleObject = {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'nameTest',
+      vizKeyChanged: false,
     };
 
     const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -76,7 +79,25 @@ describe('StepGetDuplicateName', () => {
     expect(completeGetDuplicateNameMock).toBeCalledTimes(1);
     expect(updateObjectMock).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
-      name: 'nameTest copy',
+      name: 'nameTest Copy',
     });
+  });
+
+  it('getDuplicateName should skip updateObject when provided objectData.vizKeyChanged === true', () => {
+    // given
+    const exampleObject = {
+      objectWorkingId: 'objectWorkingIdTest',
+      name: 'nameTest',
+      vizKeyChanged: true,
+    };
+    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    const completeGetDuplicateNameMock = jest.spyOn(
+      operationStepDispatcher, 'completeGetDuplicateName'
+    ).mockImplementation();
+    // when
+    stepGetDuplicateName.getDuplicateName(exampleObject);
+    // then
+    expect(completeGetDuplicateNameMock).toBeCalledTimes(1);
+    expect(updateObjectMock).not.toBeCalled();
   });
 });
