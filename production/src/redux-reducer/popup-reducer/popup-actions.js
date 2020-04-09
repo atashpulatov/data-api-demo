@@ -138,6 +138,7 @@ class PopupActions {
         duplicateMode: true,
         insertNewWorksheet: object.insertNewWorksheet,
         name: object.name,
+        objectWorkingId: object.objectWorkingId,
       };
 
       if (isDossier) {

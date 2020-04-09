@@ -204,6 +204,7 @@ class PopupController {
    * @param {String} reportParams.name Original object name.
    * @param {Boolean} reportParams.insertNewWorksheet Flag based on user interaction with duplicate popup.
    * @param {String} reportParams.visualizationInfo.visualizationKey Prev selected viz key, needed to calculate vizKeyChanged.
+   * @param {Number} reportParams.objectWorkingId Uniqe id of new duplicated object.
    */
   handleDuplicate = async (response, reportParams) => {
     if (response.chosenObject || response.chosenObjectId) {
@@ -227,6 +228,7 @@ class PopupController {
         displayAttrFormNames: response.displayAttrFormNames,
         insertNewWorksheet: reportParams.insertNewWorksheet,
         vizKeyChanged,
+        objectWorkingId: reportParams.objectWorkingId,
       };
       this.reduxStore.dispatch(duplicateRequested(objectData));
     }
