@@ -101,7 +101,7 @@ class StepFetchInsertDataIntoExcel {
       operationStepDispatcher.completeFetchInsertData(objectWorkingId);
     } catch (error) {
       console.error(error);
-      operationErrorHandler.handleOperationError(objectData, operationData);
+      operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   };
 

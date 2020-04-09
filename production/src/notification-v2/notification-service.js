@@ -1,6 +1,12 @@
 import {
-  createConnectionLostNotification, createSessionExpiredNotification, clearGlobalNotification, displayGlobalNotification
+  createConnectionLostNotification,
+  createSessionExpiredNotification,
+  clearGlobalNotification,
+  displayGlobalNotification,
+  deleteObjectNotification,
+  displayObjectWarning
 } from '../redux-reducer/notification-reducer/notification-action-creators';
+import officeStoreObject from '../office/store/office-store-object';
 
 class NotificationService {
   init = (reduxStore) => {
@@ -29,6 +35,19 @@ class NotificationService {
 
   globalNotificationDissapear = () => {
     this.reduxStore.dispatch(clearGlobalNotification());
+  }
+
+  showObjectWarning = (objectWorkingId, notification) => {
+    this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
+  }
+
+  onSuccessfullNotificationHover = (objectWorkingId) => {
+    this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
+  }
+
+  onRemoveSuccessfulNotificationHover = (objectWorkingId) => {
+    officeStoreObject.removeObjectFromStore(objectWorkingId);
+    this.onSuccessfullNotificationHover(objectWorkingId);
   }
 }
 

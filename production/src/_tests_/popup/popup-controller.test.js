@@ -1,10 +1,8 @@
 import { objectTypes } from '@mstr/mstr-react-library';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { popupController } from '../../popup/popup-controller';
-import { errorService } from '../../error/error-handler';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { notificationService } from '../../notification/notification-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
@@ -31,9 +29,11 @@ describe('PopupController', () => {
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
       .mockImplementationOnce(() => { });
+
     // when
     popupController.runPopupNavigation();
     // then
+
     expect(runPopupSpy).toBeCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size);
   });
@@ -46,8 +46,10 @@ describe('PopupController', () => {
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')
       .mockImplementationOnce(() => { });
+
     // when
     popupController.runEditFiltersPopup(reportParams);
+
     // then
     expect(runPopupSpy).toBeCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
@@ -56,7 +58,6 @@ describe('PopupController', () => {
   it('should handle ok command from popup for report WITHOUT instance id', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
-    // popupController._getReportsPreviousState = jest.fn();
     const chosenObjectData = {
       objectId: 'objectId',
       projectId: 'projectId',
@@ -70,24 +71,18 @@ describe('PopupController', () => {
     };
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
-    // const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
-    const expectedOptions = {
-      objectId: chosenObjectData.objectId,
-      projectId: chosenObjectData.projectId,
-      bindId: null,
-      isRefresh: false,
-      mstrObjectType: mstrObjectEnum.mstrObjectType.report,
-    };
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleOkCommandSpy = jest.spyOn(popupController, 'handleOkCommand').mockImplementation();
+
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
+
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
-    // expect(mockPrint).toBeCalled();
-    // expect(mockPrint).toBeCalledWith(expectedOptions);
+    expect(handleOkCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handle ok command from popup for report with dossier data', async () => {
@@ -111,25 +106,18 @@ describe('PopupController', () => {
     };
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
-    // const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
-    const expectedOptions = {
-      bindId: null,
-      dossierData: chosenObjectData.dossierData,
-      objectId: chosenObjectData.objectId,
-      projectId: chosenObjectData.projectId,
-      mstrObjectType: chosenObjectData.mstrObjectType,
-      isRefresh: false,
-    };
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleOkCommandSpy = jest.spyOn(popupController, 'handleOkCommand').mockImplementation();
+
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
+
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
-    // expect(mockPrint).toBeCalled();
-    // expect(mockPrint).toBeCalledWith(expectedOptions);
+    expect(handleOkCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handle update command from popup for cube', async () => {
@@ -145,24 +133,18 @@ describe('PopupController', () => {
     };
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
-    // const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
-    const expectedOptions = {
-      dossierData: undefined,
-      objectId: actionObject.chosenObjectId,
-      projectId: actionObject.projectId,
-      mstrObjectType: mstrObjectEnum.mstrObjectType.dataset,
-      body: actionObject.body,
-    };
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
+
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
+
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
-    // expect(mockPrint).toBeCalled();
-    // expect(mockPrint).toBeCalledWith(expectedOptions);
+    expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handle update command from popup for report WITHOUT instance id', async () => {
@@ -178,26 +160,18 @@ describe('PopupController', () => {
     };
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
-    // const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
+
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
+
     // then
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
-    // expect(mockPrint).toBeCalled();
-
-    const expectedOptions = {
-      dossierData: undefined,
-      mstrObjectType: mstrObjectEnum.mstrObjectType.report,
-      objectId: actionObject.chosenObjectId,
-      projectId: actionObject.projectId,
-      body: actionObject.body,
-    };
-
-    // expect(mockPrint).toBeCalledWith(expectedOptions);
+    expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handle update command from popup for report with dossier data', async () => {
@@ -217,47 +191,18 @@ describe('PopupController', () => {
     };
     const arg = { message: JSON.stringify(actionObject), };
     officeApiHelper.getOfficeSessionStatus = jest.fn();
-    // const mockPrint = jest.spyOn(officeDisplayService, 'printObject');
     const spyValidateAuthToken = jest
       .spyOn(authenticationHelper, 'validateAuthToken')
       .mockImplementationOnce(() => { });
+    const handleUpdateCommandSpy = jest.spyOn(popupController, 'handleUpdateCommand').mockImplementation();
+
     // when
     await popupController.onMessageFromPopup(dialog, null, arg);
-    // then
-    expect(dialog.close).toBeCalled();
-    expect(spyValidateAuthToken).toBeCalled();
-    // expect(mockPrint).toBeCalled();
-    // expect(mockPrint).toBeCalledWith({
-    //   dossierData: actionObject.dossierData,
-    //   objectId: actionObject.chosenObjectId,
-    //   projectId: actionObject.projectId,
-    //   mstrObjectType: mstrObjectEnum.mstrObjectType.report,
-    //   body: actionObject.body,
-    // });
-  });
 
-  it('should handle error command from popup', async () => {
-    // given
-    officeApiHelper.getExcelSessionStatus = jest.fn();
-    const command = selectorProperties.commandError;
-    const error = { response: { status: 404, }, };
-    const expectedMessage = JSON.stringify({ command, error });
-    const givenArg = { message: expectedMessage, };
-    officeApiHelper.getOfficeSessionStatus = jest.fn();
-    const handleErrorSpy = jest.spyOn(errorService, 'handleError');
-    const notifySpy = jest.spyOn(notificationService, 'displayNotification');
-    const spyValidateAuthToken = jest
-      .spyOn(authenticationHelper, 'validateAuthToken')
-      .mockImplementationOnce(() => { });
-    // when
-    await popupController.onMessageFromPopup(dialog, null, givenArg);
     // then
-    expect(handleErrorSpy).toBeCalledWith(error);
-    expect(spyValidateAuthToken).toBeCalled();
-    expect(notifySpy).toBeCalledWith({
-      type: 'warning', content: 'The endpoint cannot be reached', details: '', onConfirm: null,
-    });
     expect(dialog.close).toBeCalled();
+    expect(spyValidateAuthToken).toBeCalled();
+    expect(handleUpdateCommandSpy).toBeCalledTimes(1);
   });
 
   it('should handleDuplicate for commandOnUpdate - duplication with edit for report', async () => {

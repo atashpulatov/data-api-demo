@@ -10,6 +10,7 @@ import { refreshRequested, removeRequested, duplicateRequested } from '../redux-
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
+import { calculateLoadingProgress } from '../operation/operation-steps';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
@@ -167,6 +168,25 @@ class SidePanelService {
     setActiveCellAddress(initialCellAddress);
     await officeApiHelper.addOnSelectionChangedListener(excelContext, setActiveCellAddress);
   };
+
+  injectNotificationsToObjects = (loadedObjects, operations, notifications) => loadedObjects.map((object) => {
+    const objectOperation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
+    const objectNotification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
+    const operationBasedNotificationData = objectOperation ? {
+      percentageComplete: objectOperation.totalRows !== 0 ? calculateLoadingProgress(objectOperation.operationType, objectOperation.stepsQueue[0], objectOperation.loadedRows, objectOperation.totalRows) : 0,
+      itemsTotal: objectOperation.totalRows,
+      itemsComplete: objectOperation.loadedRows,
+    } : {};
+    const obj = objectNotification ? {
+      ...object,
+      notification: {
+        ...objectNotification,
+        ...operationBasedNotificationData,
+      }
+    }
+      : object;
+    return obj;
+  });
 }
 
 export const sidePanelService = new SidePanelService();

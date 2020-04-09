@@ -29,8 +29,12 @@ export const CHECK_OBJECT_STATUS = 'CHECK_OBJECT_STATUS';
 export const CLEAR_CROSSTAB_HEADERS = 'CLEAR_CROSSTAB_HEADERS';
 export const CLEAR_TABLE_DATA = 'CLEAR_TABLE_DATA';
 
+export const MOVE_NOTIFICATION_TO_IN_PROGRESS = 'MOVE_NOTIFICATION_TO_IN_PROGRESS';
+export const DISPLAY_NOTIFICATION_COMPLETED = 'DISPLAY_NOTIFICATION_COMPLETED';
+
 export const operationStepsMap = {
   [IMPORT_OPERATION]: [
+    MOVE_NOTIFICATION_TO_IN_PROGRESS,
     GET_INSTANCE_DEFINITION,
     GET_OFFICE_TABLE_IMPORT,
     FORMAT_DATA,
@@ -39,9 +43,11 @@ export const operationStepsMap = {
     FORMAT_SUBTOTALS,
     BIND_OFFICE_TABLE,
     SAVE_OBJECT_IN_EXCEL,
+    DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
   [REFRESH_OPERATION]: [
+    MOVE_NOTIFICATION_TO_IN_PROGRESS,
     BACKUP_OBJECT_DATA,
     GET_INSTANCE_DEFINITION,
     GET_OFFICE_TABLE_EDIT_REFRESH,
@@ -51,9 +57,11 @@ export const operationStepsMap = {
     FORMAT_SUBTOTALS,
     BIND_OFFICE_TABLE,
     SAVE_OBJECT_IN_EXCEL,
+    DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
   [EDIT_OPERATION]: [
+    MOVE_NOTIFICATION_TO_IN_PROGRESS,
     MODIFY_OBJECT,
     GET_INSTANCE_DEFINITION,
     GET_OFFICE_TABLE_EDIT_REFRESH,
@@ -63,9 +71,11 @@ export const operationStepsMap = {
     FORMAT_SUBTOTALS,
     BIND_OFFICE_TABLE,
     SAVE_OBJECT_IN_EXCEL,
+    DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
   [DUPLICATE_OPERATION]: [
+    // MOVE_NOTIFICATION_TO_PROGRESS,
     GET_DUPLICATE_NAME,
     GET_INSTANCE_DEFINITION,
     GET_OFFICE_TABLE_IMPORT,
@@ -75,18 +85,24 @@ export const operationStepsMap = {
     FORMAT_SUBTOTALS,
     BIND_OFFICE_TABLE,
     SAVE_OBJECT_IN_EXCEL,
+    // DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
   [REMOVE_OPERATION]: [
+    MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    REMOVE_OBJECT_BINDING,
     REMOVE_OBJECT_TABLE,
     REMOVE_OBJECT_BINDING,
-    REMOVE_OBJECT_STORE,
+    // REMOVE_OBJECT_STORE,
+    DISPLAY_NOTIFICATION_COMPLETED,
   ],
 
   [CLEAR_DATA_OPERATION]: [
+    MOVE_NOTIFICATION_TO_IN_PROGRESS,
     CHECK_OBJECT_STATUS,
     CLEAR_CROSSTAB_HEADERS,
     CLEAR_TABLE_DATA,
+    DISPLAY_NOTIFICATION_COMPLETED,
   ],
 };
 
@@ -137,7 +153,7 @@ const loadingStateEnumWeights = {
 };
 
 export const calculateLoadingProgress = (operationType, step, loadedRows, totalRows) => {
-  const baseProgress = loadingStateEnumWeights[step][operationType];
+  const baseProgress = loadingStateEnumWeights[operationType][step];
   const fetchProgress = Math.round((6 / 10) * (loadedRows / totalRows) * 100);
   const loadingProgress = fetchProgress + baseProgress;
   return loadingProgress > 100 ? 100 : loadingProgress;

@@ -19,6 +19,8 @@ import {
   CHECK_OBJECT_STATUS,
   CLEAR_CROSSTAB_HEADERS,
   CLEAR_TABLE_DATA,
+  MOVE_NOTIFICATION_TO_IN_PROGRESS,
+  DISPLAY_NOTIFICATION_COMPLETED,
   BACKUP_OBJECT_DATA,
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
@@ -64,7 +66,7 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, FORMAT_SUBTOTALS));
   };
 
-  completeSaveObjectInExcel = (objectWorkingId) => {
+  completeSaveObjectInExcel = (objectWorkingId) => { // for success
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, SAVE_OBJECT_IN_EXCEL));
   };
 
@@ -111,6 +113,22 @@ class OperationStepDispatcher {
   updateObject = (updatedObject) => {
     this.reduxStore.dispatch(updateObject(updatedObject));
   };
+
+  moveNotificationToInProgress = (objectWorkingId) => {
+    this.reduxStore.dispatch({ type: MOVE_NOTIFICATION_TO_IN_PROGRESS, payload: { objectWorkingId } });
+  }
+
+  completeMoveNotificationToInProgress = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MOVE_NOTIFICATION_TO_IN_PROGRESS));
+  }
+
+  displaySuccessNotification = (objectWorkingId) => {
+    this.reduxStore.dispatch({ type: DISPLAY_NOTIFICATION_COMPLETED, payload: { objectWorkingId } });
+  }
+
+  completeDisplaySuccessNotification = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, DISPLAY_NOTIFICATION_COMPLETED));
+  }
 }
 
 const operationStepDispatcher = new OperationStepDispatcher();
