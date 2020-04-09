@@ -9,7 +9,6 @@ import * as officeActions from '../redux-reducer/office-reducer/office-actions';
 import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
-import { calculateLoadingProgress, operationStepsMap } from '../operation/operation-steps';
 import { notificationService } from '../notification-v2/notification-service';
 import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import { officeApiHelper } from '../office/api/office-api-helper';
@@ -53,24 +52,7 @@ export const RightSidePanelNotConnected = (props) => {
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
   React.useEffect(() => {
-    setLoadedObjectsWrapped(loadedObjects.map((object) => {
-      const operation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
-      const notification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
-      const operationBasedNotificationData = operation ? {
-        percentageComplete: operation.totalRows !== 0 ? calculateLoadingProgress(operation.operationType, operation.stepsQueue[0], operation.loadedRows, operation.totalRows) : 0,
-        itemsTotal: operation.totalRows,
-        itemsComplete: operation.loadedRows,
-      } : {};
-      const obj = notification ? {
-        ...object,
-        notification: {
-          ...notification,
-          ...operationBasedNotificationData,
-        }
-      }
-        : object;
-      return obj;
-    }));
+    setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(loadedObjects, operations, notifications));
   }, [loadedObjects, notifications, operations]);
 
   const mockConnectionLost = () => {

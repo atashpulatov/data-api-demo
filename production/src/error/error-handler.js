@@ -18,6 +18,9 @@ class ErrorService {
     const errorType = this.getErrorType(error);
     console.log(error);
     console.log(errorType);
+    if (error.Code === 5012) {
+      this.handleError(error);
+    }
     this.notificationService.showObjectWarning(objectWorkingId, { message: error.message, callback });
     // this.notificationService
   }
@@ -39,7 +42,6 @@ class ErrorService {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = message !== errorDetails ? errorDetails : '';
     if (type === errorTypes.UNAUTHORIZED_ERR) {
-      // return this.notificationService.displayNotification({ type: 'info', content: message });
       this.notificationService.sessionExpired();
     }
     const payload = this.createNotificationPayload(message, details);
