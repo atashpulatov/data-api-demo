@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { oneOf } from 'prop-types';
 import { connect } from 'react-redux';
 import { SidePanel, } from '@mstr/rc';
 import { cancelImportRequest, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
@@ -9,10 +9,11 @@ import * as officeActions from '../redux-reducer/office-reducer/office-actions';
 import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
-import { notificationService } from '../notification-v2/notification-service';
-import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import {
+  IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION
+} from '../operation/operation-type-names';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -59,34 +60,6 @@ export const RightSidePanelNotConnected = (props) => {
     ));
   }, [loadedObjects, notifications, operations]);
 
-  const mockConnectionLost = () => {
-    notificationService.connectionLost();
-    setTimeout(() => { notificationService.connectionRestored(); }, 3000);
-  };
-
-  const mockSessionExpired = () => {
-    notificationService.sessionExpired();
-    setTimeout(() => { notificationService.sessionRestored(); }, 3000);
-  };
-
-  const mockGlobalNotification = () => {
-    const buttons = [
-      {
-        title: 'Ok',
-        type: 'basic',
-        label: 'Ok',
-        onClick: () => { notificationService.globalNotificationDissapear(); },
-      },
-    ];
-    const payload = {
-      title: 'sum title',
-      details: 'sum details',
-      children: getNotificationButtons(buttons),
-    };
-
-    notificationService.globalWarningAppeared(payload);
-  };
-
   /**
    * Wraps a function to be called when user clicks an action icon.
    *
@@ -117,26 +90,21 @@ export const RightSidePanelNotConnected = (props) => {
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
 
   return (
-    <>
-      {/* <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
-      <button type="button" onClick={mockSessionExpired}>Mock Session expired</button>
-      <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button> */}
-      <SidePanel
-        loadedObjects={loadedObjectsWrapped}
-        onAddData={addDataWrapper}
-        onTileClick={highlightObjectWrapper}
-        onDuplicateClick={duplicateWrapper}
-        onEditClick={editWrapper}
-        onRefreshClick={refreshWrapper}
-        onRemoveClick={removeWrapper}
-        onRename={renameWrapper}
-        popup={sidePanelPopup}
-        settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
-        confirmationWindow={isConfirm && <Confirmation />}
-        globalNotification={globalNotification}
-      />
-    </>
+    <SidePanel
+      loadedObjects={loadedObjectsWrapped}
+      onAddData={addDataWrapper}
+      onTileClick={highlightObjectWrapper}
+      onDuplicateClick={duplicateWrapper}
+      onEditClick={editWrapper}
+      onRefreshClick={refreshWrapper}
+      onRemoveClick={removeWrapper}
+      onRename={renameWrapper}
+      popup={sidePanelPopup}
+      settingsMenu={isSettings && <SettingsMenu />}
+      onSettingsClick={handleSettingsClick}
+      confirmationWindow={isConfirm && <Confirmation />}
+      globalNotification={globalNotification}
+    />
   );
 };
 
@@ -197,6 +165,39 @@ RightSidePanelNotConnected.propTypes = {
       })]),
       isSelected: PropTypes.bool,
     }).isRequired,
+  notifications: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+      title: PropTypes.string,
+      details: PropTypes.string,
+      percentage: PropTypes.number,
+      onHover: PropTypes.func
+    }),
+  ),
+  operations: PropTypes.arrayOf(
+    PropTypes.shape({
+      operationType: PropTypes.oneOf([
+        IMPORT_OPERATION,
+        REFRESH_OPERATION,
+        EDIT_OPERATION,
+        DUPLICATE_OPERATION,
+        CLEAR_DATA_OPERATION,
+        REMOVE_OPERATION,
+      ]),
+      objectWorkingId: PropTypes.number,
+      stepsQueue: PropTypes.oneOf([{}]),
+      backupObjectData: PropTypes.shape({}),
+      objectEditedData: PropTypes.shape({}),
+      instanceDefinition: PropTypes.shape({}),
+      startCell: PropTypes.string,
+      excelContext: PropTypes.shape({}),
+      officeTable: PropTypes.shape({}),
+      tableColumnsChanged: PropTypes.shape({}),
+      totalRows: PropTypes.number,
+      loadedRows: PropTypes.number,
+      shouldFormat: PropTypes.bool,
+    })
+  ),
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
   isSecured: PropTypes.bool,

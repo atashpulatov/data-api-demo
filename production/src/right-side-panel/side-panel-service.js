@@ -10,10 +10,10 @@ import { refreshRequested, removeRequested, duplicateRequested } from '../redux-
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
-import { calculateLoadingProgress } from '../operation/operation-steps';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { calculateLoadingProgress } from '../operation/operation-loading-progress';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -137,9 +137,8 @@ class SidePanelService {
     const objectNotification = notifications.find(
       (notification) => notification.objectWorkingId === object.objectWorkingId
     );
-
     const operationBasedNotificationData = objectOperation ? {
-      percentageComplete: objectOperation.totalRows !== 0 ? calculateLoadingProgress(objectOperation.operationType, objectOperation.stepsQueue[0], objectOperation.loadedRows, objectOperation.totalRows) : 0,
+      percentageComplete: objectOperation.totalRows !== 0 ? calculateLoadingProgress(objectOperation) : 0,
       itemsTotal: objectOperation.totalRows,
       itemsComplete: objectOperation.loadedRows,
     } : {};
