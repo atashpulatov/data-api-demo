@@ -9,8 +9,9 @@
     "report": "allure generate allure-results --clean",
     "report-and-open": "allure generate allure-results --clean && allure open",
     "test-suite": "rimraf ./allure-results && wdio wdio.conf.js --suite",
-    "test-UB": "rimraf ./allure-results && ./node_modules/.bin/wdio wdio.conf.js --suite UB --USERENV",
-    "rally": "node -r dotenv/config ./rally/updateRallyTCResult.js -c"
+    "test-UB": "rimraf ./allure-results && wdio wdio.conf.js --suite UB --ENVIRONMENT --USERNAME --PASSWORD",
+    "rally": "node -r dotenv/config ./rally/updateRallyTCResult.js",
+    "rally-man": "node -r dotenv/config ./rally/manual/updateManualResults.js"
   },
   "author": "",
   "license": "MIT",

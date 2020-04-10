@@ -2,101 +2,95 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('Prepare Data - ', () => {
-  beforeAll(async () => {
-    await OfficeWorksheet.openExcelHome();
-    const url = await browser.getCurrentUrl();
-    if (url.includes('login.microsoftonline')) {
-      await OfficeLogin.login(officeCredentials.username, officeCredentials.password);
-    }
-    await OfficeWorksheet.createNewWorkbook();
-    await OfficeWorksheet.openPlugin();
-    await PluginRightPanel.loginToPlugin('a', '');
+describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+  beforeEach(() => {
+    OfficeLogin.openExcelAndLoginToPlugin();
+  });
+  afterEach(() => {
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
-  });
 
-  it('[TC39544] Preparing data with "All" objects', async () => {
+  it('[TC39544] Preparing data with "All" objects', () => {
     // should import a report from preconditions
-    await switchToExcelFrame();
-    await OfficeWorksheet.selectCell('A1');
-    await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(objectsList.reports.seasonalReport);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    switchToExcelFrame();
+    OfficeWorksheet.selectCell('A1');
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
+    PluginPopup.importObject(objectsList.reports.seasonalReport);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
 
     // should select a supported report
-    await switchToExcelFrame();
-    await OfficeWorksheet.selectCell('Y1');
-    await PluginRightPanel.clickAddDataButton();
-    await switchToPluginFrame();
-    await PluginPopup.searchForObject(objectsList.reports.seasonalReport);
-    await PluginPopup.selectFirstObject();
-    await PluginPopup.clickPrepareData();
+    switchToExcelFrame();
+    OfficeWorksheet.selectCell('Y1');
+    PluginRightPanel.clickAddDataButton();
+    switchToPluginFrame();
+    PluginPopup.searchForObject(objectsList.reports.seasonalReport);
+    PluginPopup.selectFirstObject();
+    PluginPopup.clickPrepareData();
 
     // should select one metric from many listed
-    await PluginPopup.selectObjectElements(['Month Index']);
-    await expect(element(by.cssContainingText('.selector-title', 'Metrics (1/2)')).isPresent()).toBe(true);
+    PluginPopup.selectObjectElements(['Month Index']);
+    expect($(popupSelectors.selectorTitle(2)).getText()).toEqual('METRICS (1/2)');
 
     // should select one more metric from many listed
-    await PluginPopup.selectObjectElements(['Revenue']);
-    await expect(element(by.cssContainingText('.selector-title', 'Metrics (2/2)')).isPresent()).toBe(true);
+    PluginPopup.selectObjectElements(['Revenue']);
+    expect($(popupSelectors.selectorTitle(2)).getText()).toEqual('METRICS (2/2)');
 
     // should click on "All" object in metrics column
-    await PluginPopup.selectAllMetrics();
-    await expect(element(by.cssContainingText('.selector-title', 'Metrics (0/2)')).isPresent()).toBe(true);
+    PluginPopup.selectAllMetrics();
+    expect($(popupSelectors.selectorTitle(2)).getText()).toEqual('METRICS (0/2)');
 
     // should click on "All" object in metrics column again
-    await PluginPopup.selectAllMetrics();
-    await expect(element(by.cssContainingText('.selector-title', 'Metrics (2/2)')).isPresent()).toBe(true);
+    PluginPopup.selectAllMetrics();
+    expect($(popupSelectors.selectorTitle(2)).getText()).toEqual('METRICS (2/2)');
 
     // should click on "All" object in attributes column
-    await PluginPopup.selectAllAttributes();
-    await expect(element(by.cssContainingText('.selector-title', 'Attributes (2/2)')).isPresent()).toBe(true);
+    PluginPopup.selectAllAttributes();
+    expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (2/2)');
 
     // should click on "All" object in attributes column again
-    await PluginPopup.selectAllAttributes();
-    await expect(element(by.cssContainingText('.selector-title', 'Attributes (0/2)')).isPresent()).toBe(true);
+    PluginPopup.selectAllAttributes();
+    expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (0/2)');
 
     // should select one attribute from many listed
-    await PluginPopup.selectObjectElements(['Month']);
-    await expect(element(by.cssContainingText('.selector-title', 'Attributes (1/2)')).isPresent()).toBe(true);
+    PluginPopup.selectAttributeIndex([1]);
+    expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (1/2)');
 
     // should select one more attribute from many listed
-    await PluginPopup.selectObjectElements(['Month of Year']);
-    await expect(element(by.cssContainingText('.selector-title', 'Attributes (2/2)')).isPresent()).toBe(true);
+    PluginPopup.selectAttributeIndex([2]);
+    expect($(popupSelectors.selectorTitle(1)).getText()).toEqual('ATTRIBUTES (2/2)');
 
     // should click on one of the filters and select (All) object in the last column
-    await PluginPopup.selectFilters([['Month', []]]);
-    await PluginPopup.selectAllFilters();
-    await expect(element(by.cssContainingText('.selector-title', 'Filters (1/2)')).isPresent()).toBe(true);
+    PluginPopup.selectFilters([['Month', []]]);
+    PluginPopup.selectAllFilters();
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
 
     // should select (All) object in the last column once again
-    await PluginPopup.selectAllFilters();
-    await expect(element(by.cssContainingText('.selector-title', 'Filters (0/2)')).isPresent()).toBe(true);
+    PluginPopup.selectAllFilters();
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (0/2)');
 
     // should select one of attribute filter values in the last columnn
-    await PluginPopup.selectObjectElements(['Jan 2014']);
-    await expect(element(by.cssContainingText('.selector-title', 'Filters (1/2)')).isPresent()).toBe(true);
+    PluginPopup.selectObjectElements(['Jan 2014']);
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
 
     // should select one more of attribute filter values in the last columnn
-    await PluginPopup.selectObjectElements(['Feb 2014']);
-    await expect(element(by.cssContainingText('.selector-title', 'Filters (1/2)')).isPresent()).toBe(true);
+    PluginPopup.selectObjectElements(['Feb 2014']);
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (1/2)');
 
-    // should click on a different filter and select (All) object in the last column
-    await PluginPopup.selectFilters([['Month of Year', []]]);
-    await browser.sleep(2000);
-    await PluginPopup.selectAllFilters();
-    await expect(element(by.cssContainingText('.selector-title', 'Filters (2/2)')).isPresent()).toBe(true);
+    // // should click on a different filter and select (All) object in the last column
+    PluginPopup.selectFilters([['Month of Year', []]]);
+    browser.pause(2000);
+    PluginPopup.selectAllFilters();
+    expect($(popupSelectors.selectorFilter).getText()).toEqual('FILTERS (2/2)');
   });
 });

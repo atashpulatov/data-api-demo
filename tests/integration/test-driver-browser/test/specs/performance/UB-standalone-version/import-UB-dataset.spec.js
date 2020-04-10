@@ -2,9 +2,10 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
-import { writeDataIntoFile, getJsonData } from '../../../helpers/utils/benchmark-helper';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
+import { switchToExcelFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 const fs = require('fs');
 
@@ -21,7 +22,9 @@ describe('Smart Folder - IMPORT -', () => {
   const testCaseLink = 'https://rally1.rallydev.com/#/53987408409d/detail/testcase/362684441788';
   let startTimestamp = 0;
   let endTimestamp = 0;
-  const webServerEnvironmentID = process.argv[process.argv.length - 1];
+  const webServerEnvironmentID = process.argv[process.argv.length - 3];
+  const username = process.argv[process.argv.length - 2];
+  const password = process.argv[process.argv.length - 1];
 
   function createManifestFile(newEnv) {
     let xmlContent;
@@ -35,7 +38,8 @@ describe('Smart Folder - IMPORT -', () => {
   }
 
   function importUBObjectAndGetTotalTime() {
-    switchToPluginFrame();
+    switchToDialogFrame();
+    PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectName);
     browser.pause(500);
     PluginPopup.selectFirstObject();
@@ -58,10 +62,15 @@ describe('Smart Folder - IMPORT -', () => {
       }
     }
     const end = Date.now();
-    const timeSpent = ((end - begin) / 1000);
-    console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
+    const notificationText = $(rightPanelSelectors.notificationPopUp).getAttribute('textContent');
+    expect(notificationText).toContain(dictionary.en.importSuccess);
+    if (notificationText === dictionary.en.importSuccess) {
+      const timeSpent = ((end - begin) / 1000);
+      console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
 
-    return timeSpent;
+      return timeSpent;
+    }
+    return 'ERROR';
   }
 
   function getFormattedDate() {
@@ -79,9 +88,15 @@ describe('Smart Folder - IMPORT -', () => {
     return false;
   }
 
-  beforeAll(() => {
+  function checkIfInputFormatIsCorrect() {
+    if (process.argv[process.argv.length - 4] !== '--PASSWORD') {
+      throw new Error('Incorrect command line arguments. Please introduce arguments for: --ENVIRONMENT --USERNAME --PASSWORD \n For example: npm run test-UB env-180792 user1 password1');
+    }
+  }
+
+  beforeEach(() => {
     browser.setWindowSize(1500, 900);
-    console.log(webServerEnvironmentID);
+    checkIfInputFormatIsCorrect();
     startTimestamp = getFormattedDate();
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
@@ -92,13 +107,13 @@ describe('Smart Folder - IMPORT -', () => {
     createManifestFile(webServerEnvironmentID);
     const pathToManifest = isMac() ? `${__dirname}/manifest.xml` : `${__dirname}\\manifest.xml`;
     OfficeWorksheet.uploadAndOpenPlugin(pathToManifest, webServerEnvironmentID);
-    PluginRightPanel.loginToPlugin('administrator', '');
+    PluginRightPanel.loginToPlugin(username, password);
   });
 
-  afterAll(() => {
+  afterEach(() => {
     endTimestamp = getFormattedDate();
     if (numberOfExecutions === 1) {
-      const averageImportingTime = totalAddedImportingTime / 1;
+      const averageImportingTime = (typeof totalAddedImportingTime === 'number') ? (totalAddedImportingTime / 1) : 'ERROR';
       console.log('Preparing performance data');
       const stringOfData = `\n${testCaseID},${testCaseName},${testCaseLink},${startTimestamp},${endTimestamp},${numberOfClicks},${averageImportingTime}`;
 
@@ -112,8 +127,7 @@ describe('Smart Folder - IMPORT -', () => {
       console.log(averageImportingTime);
     }
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('Import object selecting attributes and metrics', () => {
