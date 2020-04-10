@@ -187,6 +187,10 @@ class SidePanelService {
       : object;
     return obj;
   });
+
+  createDuplicatePopup = (params) => {
+
+  };
 }
 
 export const sidePanelService = new SidePanelService();

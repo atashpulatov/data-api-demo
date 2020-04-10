@@ -90,6 +90,14 @@ export const RightSidePanelNotConnected = (props) => {
   const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
   const duplicateWrapper = async (params) => { await wrapper(openDuplicatePopup, params); };
+  // const duplicateWrapper = async (params) => {
+  //   await wrapper(sidePanelService.createDuplicatePopup, {
+  //     objectWorkingId: params,
+  //     activeCellAddress,
+  //     setDuplicatedObjectId,
+  //     setSidePanelPopup
+  //   });
+  // };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
