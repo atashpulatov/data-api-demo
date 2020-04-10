@@ -22,6 +22,7 @@ class StepSaveObjectInExcel {
       const { instanceDefinition } = operationData;
       objectData.previousTableDimensions = { columns: instanceDefinition.columns };
       objectData.refreshDate = Date.now();
+      delete objectData.preparedInstanceId;
       await officeStoreObject.saveObjectsInExcelStore();
       operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
     } catch (error) {
