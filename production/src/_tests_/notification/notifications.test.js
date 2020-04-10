@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-disabled-tests */
 import React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';

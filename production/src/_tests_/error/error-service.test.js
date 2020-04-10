@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-disabled-tests */
 import { errorService } from '../../error/error-handler';
 import { notificationService } from '../../notification-v2/notification-service';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
