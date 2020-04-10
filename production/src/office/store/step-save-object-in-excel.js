@@ -5,11 +5,14 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 class StepSaveObjectInExcel {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-  }
+  };
 
   /**
-   * Saves information about object in Exel settings
-   * Add refreshDate and previousTable dimensions field to object.
+   * Saves information about object in Excel settings and modifies object.
+   *
+   * Adds refreshDate field to object.
+   * Adds previousTableDimensions field to object.
+   * Removes preparedInstanceId field from object.
    *
    * This function is subscribed as one of the operation steps with the key SAVE_OBJECT_IN_EXCEL,
    * therefore should be called only via operation bus.
@@ -20,10 +23,14 @@ class StepSaveObjectInExcel {
   saveObject = async (objectData, operationData) => {
     try {
       const { instanceDefinition } = operationData;
+
       objectData.previousTableDimensions = { columns: instanceDefinition.columns };
       objectData.refreshDate = Date.now();
+
       delete objectData.preparedInstanceId;
+
       await officeStoreObject.saveObjectsInExcelStore();
+
       operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
