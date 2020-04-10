@@ -52,7 +52,11 @@ export const RightSidePanelNotConnected = (props) => {
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
   React.useEffect(() => {
-    setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(loadedObjects, operations, notifications));
+    setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(
+      loadedObjects,
+      notifications,
+      operations
+    ));
   }, [loadedObjects, notifications, operations]);
 
   const mockConnectionLost = () => {
@@ -201,4 +205,3 @@ RightSidePanelNotConnected.propTypes = {
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func
 };
-

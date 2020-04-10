@@ -77,7 +77,10 @@ class SubscribeSteps {
     operationBus.subscribe(COMPLETE_CLEAR_DATA, stepCompleteClearData.completeClearData);
 
     operationBus.subscribe(MOVE_NOTIFICATION_TO_IN_PROGRESS, stepNoficicationInProgress.moveNotificationToInProgress);
-    operationBus.subscribe(DISPLAY_NOTIFICATION_COMPLETED, stepDisplayNotificationCompleted.displayNotificationCompleted);
+    operationBus.subscribe(
+      DISPLAY_NOTIFICATION_COMPLETED,
+      stepDisplayNotificationCompleted.displayNotificationCompleted
+    );
   };
 }
 

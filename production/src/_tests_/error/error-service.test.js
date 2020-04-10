@@ -201,7 +201,7 @@ describe('ErrorService', () => {
   //     expect(spyMethod).toBeCalled();
   //     expect(spyMethod).toBeCalledWith({ content: SESSION_EXPIRED, type: 'info' });
   //   });
-  //   it('should display notification about wrong username on UNAUTHORIZED_ERR with ERR003 code and iServerCode', () => {
+  //   it('should display  wrong username notification on UNAUTHORIZED_ERR with ERR003 code and iServerCode', () => {
   //     // given
   //     const error = {
   //       status: 401,
@@ -230,7 +230,9 @@ describe('ErrorService', () => {
   //     // then
   //     expect(spyMethod).toBeCalled();
   //     expect(spyMethod).toBeCalledWith({
-  //       content: 'Environment is unreachable. Please check your internet connection.', details: 'Possible causes: the network is offline,', onConfirm: null, type: 'warning',
+  //       content: 'Environment is unreachable. Please check your internet connection.',
+  //       details: 'Possible causes: the network is offline,',
+  //       onConfirm: null, type: 'warning',
   //     });
   //     expect(spyLogOut).toBeCalled();
   //   });
@@ -256,7 +258,8 @@ describe('ErrorService', () => {
   //     // then
   //     expect(spyMethod).toBeCalled();
   //     expect(spyMethod).toBeCalledWith({
-  //       type: 'warning', content: 'Environment is unreachable. Please check your internet connection.', details: error.message, onConfirm: null,
+  //       type: 'warning', content: 'Environment is unreachable. Please check your internet connection.',
+  //       details: error.message, onConfirm: null,
   //     });
   //     expect(spyLogOut).not.toBeCalled();
   //   });
@@ -489,7 +492,9 @@ describe('ErrorService', () => {
   //     // then
   //     expect(notificationSpy).toBeCalled();
   //     expect(notificationSpy).toBeCalledWith({
-  //       content: 'Please run plugin inside Office', details: 'Excel is not defined', onConfirm: null, type: 'warning',
+  //       content: 'Please run plugin inside Office',
+  //       details: 'Excel is not defined',
+  //       onConfirm: null, type: 'warning',
   //     });
   //   });
   //   it('should display notification on OVERLAPPING_TABLES_ERR', () => {
@@ -519,7 +524,10 @@ describe('ErrorService', () => {
   //     // then
   //     expect(notificationSpy).toBeCalled();
   //     expect(notificationSpy).toBeCalledWith({
-  //       content: `Excel returned error: ${error.message}`, details: 'Generic error message', onConfirm: null, type: 'warning',
+  //       content: `Excel returned error: ${error.message}`,
+  //       details: 'Generic error message',
+  //       onConfirm: null,
+  //       type: 'warning',
   //     });
   //   });
   //   it('should display notification on OutsideOfRangeError', () => {
@@ -531,7 +539,10 @@ describe('ErrorService', () => {
   //     // then
   //     expect(notificationSpy).toBeCalled();
   //     expect(notificationSpy).toBeCalledWith({
-  //       content: 'The table you try to import exceeds the worksheet limits.', details: '', onConfirm: null, type: 'warning',
+  //       content: 'The table you try to import exceeds the worksheet limits.',
+  //       details: '',
+  //       onConfirm: null,
+  //       type: 'warning',
   //     });
   //   });
   // });

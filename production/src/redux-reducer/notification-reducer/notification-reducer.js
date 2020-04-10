@@ -1,14 +1,23 @@
 import { objectNotificationTypes } from '@mstr/rc';
-import {
-  IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION, CLEAR_DATA_OPERATION, DUPLICATE_OPERATION
-} from '../../operation/operation-type-names';
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
-import {
-  CREATE_NOTIFICATION, DELETE_NOTIFICATION, CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, CREATE_OBJECT_WARNING
-} from './notification-actions';
 import { officeProperties } from '../office-reducer/office-properties';
 import { getNotificationButtons } from '../../notification-v2/notification-buttons';
+import {
+  IMPORT_OPERATION,
+  EDIT_OPERATION,
+  REFRESH_OPERATION,
+  REMOVE_OPERATION,
+  CLEAR_DATA_OPERATION,
+  DUPLICATE_OPERATION
+} from '../../operation/operation-type-names';
+import {
+  CREATE_NOTIFICATION,
+  DELETE_NOTIFICATION,
+  CREATE_GLOBAL_NOTIFICATION,
+  REMOVE_GLOBAL_NOTIFICATION,
+  CREATE_OBJECT_WARNING
+} from './notification-actions';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
