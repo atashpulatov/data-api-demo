@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes, { oneOf } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { SidePanel, } from '@mstr/rc';
 import { cancelImportRequest, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';

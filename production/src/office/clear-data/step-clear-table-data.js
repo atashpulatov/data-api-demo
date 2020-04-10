@@ -1,6 +1,5 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
-import officeReducerHelper from '../store/office-reducer-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepClearTableData {
