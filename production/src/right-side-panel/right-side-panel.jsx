@@ -9,8 +9,6 @@ import * as officeActions from '../redux-reducer/office-reducer/office-actions';
 import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
-import { notificationService } from '../notification-v2/notification-service';
-import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 
@@ -55,34 +53,6 @@ export const RightSidePanelNotConnected = (props) => {
     setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(loadedObjects, operations, notifications));
   }, [loadedObjects, notifications, operations]);
 
-  const mockConnectionLost = () => {
-    notificationService.connectionLost();
-    setTimeout(() => { notificationService.connectionRestored(); }, 3000);
-  };
-
-  const mockSessionExpired = () => {
-    notificationService.sessionExpired();
-    setTimeout(() => { notificationService.sessionRestored(); }, 3000);
-  };
-
-  const mockGlobalNotification = () => {
-    const buttons = [
-      {
-        title: 'Ok',
-        type: 'basic',
-        label: 'Ok',
-        onClick: () => { notificationService.globalNotificationDissapear(); },
-      },
-    ];
-    const payload = {
-      title: 'sum title',
-      details: 'sum details',
-      children: getNotificationButtons(buttons),
-    };
-
-    notificationService.globalWarningAppeared(payload);
-  };
-
   /**
    * Wraps a function to be called when user clicks an action icon.
    *
@@ -110,28 +80,22 @@ export const RightSidePanelNotConnected = (props) => {
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
 
-
   return (
-    <>
-      {/* <button type="button" onClick={mockConnectionLost}>Mock Connection lost</button>
-      <button type="button" onClick={mockSessionExpired}>Mock Session expired</button>
-      <button type="button" onClick={mockGlobalNotification}>Mock Global Notification</button> */}
-      <SidePanel
-        loadedObjects={loadedObjectsWrapped}
-        onAddData={addDataWrapper}
-        onTileClick={highlightObjectWrapper}
-        onDuplicateClick={duplicateWrapper}
-        onEditClick={editWrapper}
-        onRefreshClick={refreshWrapper}
-        onRemoveClick={removeWrapper}
-        onRename={renameWrapper}
-        popup={sidePanelPopup}
-        settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
-        confirmationWindow={isConfirm && <Confirmation />}
-        globalNotification={globalNotification}
-      />
-    </>
+    <SidePanel
+      loadedObjects={loadedObjectsWrapped}
+      onAddData={addDataWrapper}
+      onTileClick={highlightObjectWrapper}
+      onDuplicateClick={duplicateWrapper}
+      onEditClick={editWrapper}
+      onRefreshClick={refreshWrapper}
+      onRemoveClick={removeWrapper}
+      onRename={renameWrapper}
+      popup={sidePanelPopup}
+      settingsMenu={isSettings && <SettingsMenu />}
+      onSettingsClick={handleSettingsClick}
+      confirmationWindow={isConfirm && <Confirmation />}
+      globalNotification={globalNotification}
+    />
   );
 };
 

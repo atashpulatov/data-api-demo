@@ -1,6 +1,5 @@
-import {
-  CREATE_NOTIFICATION, notificationReducer, UPDATE_NOTIFICATION, DELETE_NOTIFICATION
-} from '../../redux-reducer/notification-reducer/notification-reducer';
+import { CREATE_NOTIFICATION, UPDATE_NOTIFICATION, DELETE_NOTIFICATION } from '../../redux-reducer/notification-reducer/notification-actions';
+import { notificationReducer } from '../../redux-reducer/notification-reducer/notification-reducer';
 
 describe('Notification reducer', () => {
   const initialState = {
@@ -49,7 +48,7 @@ describe('Notification reducer', () => {
     // when
     const resultState = notificationReducer(undefined, action);
     // then
-    expect(resultState).toEqual({ notifications: [] });
+    expect(resultState).toEqual({ notifications: [], globalNotification: { type: '' } });
   });
 
   describe('create', () => {

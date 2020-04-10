@@ -8,6 +8,7 @@ import {
   CREATE_NOTIFICATION, DELETE_NOTIFICATION, CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, CREATE_OBJECT_WARNING
 } from './notification-actions';
 import { getNotificationButtons } from '../../notification-v2/notification-buttons';
+import { titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap } from './notification-title-maps';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -54,7 +55,7 @@ const moveNotificationToInProgress = (state, payload) => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
   const updatedNotification = {
     ...notificationToUpdate,
-    title: titleOperationMap[notificationToUpdate.operationType],
+    title: titleOperationInProgressMap[notificationToUpdate.operationType],
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
   console.log(updatedNotification);
@@ -141,28 +142,3 @@ function getNotificationIndex(state, payload) {
   }
   return notificationToUpdateIndex;
 }
-
-const titleOperationMap = {
-  IMPORT_OPERATION: 'Importing',
-  REFRESH_OPERATION: 'Refreshing',
-  EDIT_OPERATION: 'Importing',
-  REMOVE_OPERATION: 'Removing',
-  DUPLICATE_OPERATION: 'Duplicating',
-  CLEAR_DATA_OPERATION: 'Clearing',
-};
-const titleOperationCompletedMap = {
-  IMPORT_OPERATION: 'Import successful',
-  REFRESH_OPERATION: 'Refresh complete',
-  EDIT_OPERATION: 'Import successful',
-  REMOVE_OPERATION: 'Object removed',
-  DUPLICATE_OPERATION: 'Duplicate created',
-  CLEAR_DATA_OPERATION: 'Object cleared',
-};
-const titleOperationFailedMap = {
-  IMPORT_OPERATION: 'Import failed',
-  REFRESH_OPERATION: 'Refresh failed',
-  EDIT_OPERATION: 'Import failed',
-  REMOVE_OPERATION: 'Remove object failed',
-  DUPLICATE_OPERATION: 'Duplicating object failed',
-  CLEAR_DATA_OPERATION: 'Clear object failed',
-};
