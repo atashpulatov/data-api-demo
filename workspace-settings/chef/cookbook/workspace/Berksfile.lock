@@ -44,7 +44,7 @@ GRAPH
   extras (0.1.61)
     dmg (>= 0.0.0)
   homebrew (5.0.8)
-  java (7.0.0)
+  java (4.3.0)
     homebrew (>= 0.0.0)
     windows (>= 0.0.0)
   java-osx (0.1.1)
