@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
-import { officeReducer } from '../../redux-reducer/office-reducer/office-reducer';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { OfficeError } from '../../office/office-error';
+import { officeReducer } from '../../../redux-reducer/office-reducer/office-reducer';
+import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+import { OfficeError } from '../../../office/office-error';
 
 describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);
@@ -167,6 +167,7 @@ describe('officeReducer', () => {
     expect(officeStoreState[0]).toEqual(reportArrayNew[0]);
     expect(officeStoreState[1]).toEqual(reportArrayNew[1]);
   });
+
   it('should throw an error on missing reportArray', () => {
     // given
     // when
@@ -177,6 +178,7 @@ describe('officeReducer', () => {
     expect(wrongDispatch).toThrowError(OfficeError);
     expect(wrongDispatch).toThrowError('Missing reportArray');
   });
+
   it('should throw an error on missing property in one of items in reportArray', () => {
     // given
     const originalId = reportArrayMock[1];
@@ -193,6 +195,7 @@ describe('officeReducer', () => {
     expect(wrongDispatch).toThrowError('Missing report.id');
     reportArrayMock[1].id = originalId;
   });
+
   it('should set popupOpen to true onPopupShown', () => {
     // given
     const prevState = { popupOpen: false };
@@ -202,6 +205,7 @@ describe('officeReducer', () => {
     // then
     expect(newState.popupOpen).toBe(true);
   });
+
   it('should set popupOpen to false onPopupHidden', () => {
     // given
     const prevState = { popupOpen: true };
@@ -211,6 +215,7 @@ describe('officeReducer', () => {
     // then
     expect(newState.popupOpen).toBe(false);
   });
+
   it('should dispatch proper action when startLoading', () => {
     // given
     const prevState = { loading: false };
@@ -220,6 +225,7 @@ describe('officeReducer', () => {
     // then
     expect(newState.loading).toBe(true);
   });
+
   it('should dispatch proper action when onStartLoadingReport', () => {
     // given
     const prevState = { reportArray: [...reportArrayMock], loading: false };
@@ -230,6 +236,7 @@ describe('officeReducer', () => {
     expect(newState.loading).toBe(true);
     expect(newState.reportArray[1].isLoading).toBe(true);
   });
+
   it('should throw when onStartLoadingReport for empty reportBindId', () => {
     // given
     const prevState = { reportArray: [...reportArrayMock], loading: false };
@@ -241,6 +248,7 @@ describe('officeReducer', () => {
     // then
     expect(newState).toThrowError('Missing reportBindId');
   });
+
   it('should dispatch proper action when onFinishLoadingReport', () => {
     // given
     const prevState = { reportArray: [...reportArrayMock], loading: true };
@@ -251,6 +259,7 @@ describe('officeReducer', () => {
     expect(newState.loading).toBe(false);
     expect(newState.reportArray[1].isLoading).toBe(false);
   });
+
   it('should throw when onFinishLoadingReport for empty reportBindId', () => {
     // given
     const prevState = { reportArray: [...reportArrayMock], loading: true };
@@ -262,6 +271,7 @@ describe('officeReducer', () => {
     // then
     expect(newState).toThrowError('Missing reportBindId');
   });
+
   it('should return new proper state in case of toggleSecuredFlag action', () => {
     // given
     const oldState = { isSecured: false };
@@ -274,6 +284,7 @@ describe('officeReducer', () => {
     // then
     expect(newState).toEqual({ isSecured: true });
   });
+
   it('should return new proper state in case of toggleIsSettingsFlag action', () => {
     // given
     const oldState = { isSettings: false };
@@ -286,6 +297,7 @@ describe('officeReducer', () => {
     // then
     expect(newState).toEqual({ isSettings: true });
   });
+
   it('should return new proper state in case of toggleIsConfirmFlag action', () => {
     // given
     const oldState = { isConfirm: false, isSettings: false };
@@ -299,6 +311,7 @@ describe('officeReducer', () => {
     // then
     expect(newState).toEqual({ isConfirm: true, isSettings: false });
   });
+
   it('should return new proper state in case of toggleRenderSettingsFlag action', () => {
     // given
     const oldState = { isSettings: false, shouldRenderSettings: false };
@@ -312,6 +325,7 @@ describe('officeReducer', () => {
     // then
     expect(newState).toEqual({ isSettings: false, shouldRenderSettings: true });
   });
+
   it('should set preLoadReport to given value on preLoadReport', () => {
     // given
     const oldState = { preLoadReport: false };
@@ -324,16 +338,17 @@ describe('officeReducer', () => {
     // then
     expect(newState.preLoadReport).toBe(true);
   });
+
   it('should set IsClearDataFailed to given value on toggleIsClearDataFailedFlag', () => {
     // given
-    const oldState = { IsClearDataFailed: false };
+    const oldState = { isClearDataFailed: false };
     const action = {
       type: officeProperties.actions.toggleIsClearDataFailedFlag,
-      IsClearDataFailed: true,
+      isClearDataFailed: true,
     };
     // when
     const newState = officeReducer(oldState, action);
     // then
-    expect(newState.IsClearDataFailed).toBe(true);
+    expect(newState.isClearDataFailed).toBe(true);
   });
 });

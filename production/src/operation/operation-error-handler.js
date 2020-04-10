@@ -86,7 +86,8 @@ class OperationErrorHandler {
   /**
    * Function handling erros that occured during Clear Data operation.
    * Error will be displayed and the operation will be canceled
-   * Additionaly all other Clear Data operation will also be canceled and the isClearDataFailed flag will be changed to false.
+   * Additionaly all other Clear Data operation will also be canceled and
+   * the isClearDataFailed flag will be changed to false.
    */
   handleClearDataOperationError = async () => {
     const operationsList = officeReducerHelper.getOperationsListFromOperationReducer();

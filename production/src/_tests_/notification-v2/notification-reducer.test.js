@@ -1,10 +1,9 @@
-import {
-  CREATE_NOTIFICATION, notificationReducer, UPDATE_NOTIFICATION, DELETE_NOTIFICATION
-} from '../../redux-reducer/notification-reducer/notification-reducer';
+import { CREATE_NOTIFICATION, DELETE_NOTIFICATION } from '../../redux-reducer/notification-reducer/notification-actions';
+import { notificationReducer } from '../../redux-reducer/notification-reducer/notification-reducer';
 
 describe('Notification reducer', () => {
   const initialState = {
-    empty: { notifications: [] },
+    empty: { notifications: [], globalNotification: { type: '' } },
     singleWarning: {
       notifications: [
         {
@@ -46,10 +45,11 @@ describe('Notification reducer', () => {
   it('should get default state if one is not provided', () => {
     // given
     const action = {};
+
     // when
     const resultState = notificationReducer(undefined, action);
     // then
-    expect(resultState).toEqual({ notifications: [] });
+    expect(resultState).toEqual({ notifications: [], globalNotification: { type: '' } });
   });
 
   describe('create', () => {
@@ -108,75 +108,6 @@ describe('Notification reducer', () => {
     });
   });
 
-  describe('update', () => {
-    it('should throw an error if objectWorkingId does not exist', () => {
-      // given
-      const wrongAction = {
-        type: UPDATE_NOTIFICATION,
-        payload: {
-          objectWorkingId: 'someNonExistingId',
-          percentageComplete: 90,
-        },
-      };
-
-      // when
-      const throwingCall = () => notificationReducer(initialState.multiple, wrongAction);
-
-      // then
-      expect(throwingCall).toThrow();
-    });
-
-    it('should update a notification when there is single one', () => {
-      // given
-      const updatedNotificationProps = {
-        objectWorkingId: 'someId1',
-        percentageComplete: 40,
-      };
-      const action = {
-        type: UPDATE_NOTIFICATION,
-        payload: updatedNotificationProps
-      };
-      const expectedState = {
-        notifications: [{
-          ...initialState.singleImport.notifications[0],
-          ...updatedNotificationProps
-        }]
-      };
-
-      // when
-      const resultState = notificationReducer(initialState.singleImport, action);
-
-      // then
-      expect(resultState).toEqual(expectedState);
-    });
-
-    it('should update a notification when there are multiple ones', () => {
-      // given
-      const updatedNotificationProps = {
-        objectWorkingId: 'someId3',
-        percentageComplete: 40,
-      };
-      const action = {
-        type: UPDATE_NOTIFICATION,
-        payload: updatedNotificationProps
-      };
-      const expectedState = {
-        notifications: [initialState.multiple.notifications[0],
-          initialState.multiple.notifications[1],
-          {
-            ...initialState.multiple.notifications[2],
-            ...updatedNotificationProps
-          }]
-      };
-
-      // when
-      const resultState = notificationReducer(initialState.multiple, action);
-
-      // then
-      expect(resultState).toEqual(expectedState);
-    });
-  });
-
   describe('delete', () => {
     it('should throw an error if objectWorkingId does not exist', () => {
       // given
@@ -206,6 +137,7 @@ describe('Notification reducer', () => {
       // then
       expect(resultState).toEqual({ notifications: [] });
     });
+
     it('should delete one action on multiple array', () => {
       // given
       const action = {

@@ -22,6 +22,7 @@ import {
   MOVE_NOTIFICATION_TO_IN_PROGRESS,
   DISPLAY_NOTIFICATION_COMPLETED,
   BACKUP_OBJECT_DATA,
+  COMPLETE_CLEAR_DATA,
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 
@@ -98,12 +99,16 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_CROSSTAB_HEADERS));
   };
 
-  completeClearTableData = (objectWorkingId, nextOperation, objectList) => {
+  completeClearTableData = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA));
+  };
+
+  completeClearData = (objectWorkingId, nextOperation, objectList) => {
     if (!(nextOperation && nextOperation.operationType === CLEAR_DATA_OPERATION) && objectList.length !== 0) {
       const { dispatch } = this.reduxStore;
       toggleSecuredFlag(true)(dispatch);
     }
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, CLEAR_TABLE_DATA));
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, COMPLETE_CLEAR_DATA));
   };
 
   updateOperation = (updatedOperationProps) => {

@@ -11,6 +11,9 @@ import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import {
+  IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION
+} from '../operation/operation-type-names';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -63,7 +66,11 @@ export const RightSidePanelNotConnected = (props) => {
   const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
 
   React.useEffect(() => {
-    setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(loadedObjects, operations, notifications));
+    setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(
+      loadedObjects,
+      notifications,
+      operations
+    ));
   }, [loadedObjects, notifications, operations]);
 
   /**
@@ -142,23 +149,21 @@ export const RightSidePanelNotConnected = (props) => {
   };
 
   return (
-    <>
-      <SidePanel
-        loadedObjects={loadedObjectsWrapped}
-        onAddData={addDataWrapper}
-        onTileClick={highlightObjectWrapper}
-        onDuplicateClick={duplicateWrapper}
-        onEditClick={editWrapper}
-        onRefreshClick={refreshWrapper}
-        onRemoveClick={removeWrapper}
-        onRename={renameWrapper}
-        popup={sidePanelPopup}
-        settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
-        confirmationWindow={isConfirm && <Confirmation />}
-        globalNotification={globalNotification}
-      />
-    </>
+    <SidePanel
+      loadedObjects={loadedObjectsWrapped}
+      onAddData={addDataWrapper}
+      onTileClick={highlightObjectWrapper}
+      onDuplicateClick={duplicateWrapper}
+      onEditClick={editWrapper}
+      onRefreshClick={refreshWrapper}
+      onRemoveClick={removeWrapper}
+      onRename={renameWrapper}
+      popup={sidePanelPopup}
+      settingsMenu={isSettings && <SettingsMenu />}
+      onSettingsClick={handleSettingsClick}
+      confirmationWindow={isConfirm && <Confirmation />}
+      globalNotification={globalNotification}
+    />
   );
 };
 
@@ -219,6 +224,39 @@ RightSidePanelNotConnected.propTypes = {
       })]),
       isSelected: PropTypes.bool,
     }).isRequired,
+  notifications: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string,
+      title: PropTypes.string,
+      details: PropTypes.string,
+      percentage: PropTypes.number,
+      onHover: PropTypes.func
+    }),
+  ),
+  operations: PropTypes.arrayOf(
+    PropTypes.shape({
+      operationType: PropTypes.oneOf([
+        IMPORT_OPERATION,
+        REFRESH_OPERATION,
+        EDIT_OPERATION,
+        DUPLICATE_OPERATION,
+        CLEAR_DATA_OPERATION,
+        REMOVE_OPERATION,
+      ]),
+      objectWorkingId: PropTypes.number,
+      stepsQueue: PropTypes.oneOf([{}]),
+      backupObjectData: PropTypes.shape({}),
+      objectEditedData: PropTypes.shape({}),
+      instanceDefinition: PropTypes.shape({}),
+      startCell: PropTypes.string,
+      excelContext: PropTypes.shape({}),
+      officeTable: PropTypes.shape({}),
+      tableColumnsChanged: PropTypes.shape({}),
+      totalRows: PropTypes.number,
+      loadedRows: PropTypes.number,
+      shouldFormat: PropTypes.bool,
+    })
+  ),
   isConfirm: PropTypes.bool,
   isSettings: PropTypes.bool,
   isSecured: PropTypes.bool,

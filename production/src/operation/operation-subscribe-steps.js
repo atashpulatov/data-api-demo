@@ -38,9 +38,11 @@ import {
   MOVE_NOTIFICATION_TO_IN_PROGRESS,
   DISPLAY_NOTIFICATION_COMPLETED,
   BACKUP_OBJECT_DATA,
+  COMPLETE_CLEAR_DATA,
 } from './operation-steps';
 import stepNoficicationInProgress from '../notification-v2/step-notification-in-progress';
 import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
+import stepCompleteClearData from '../office/clear-data/step-complete-clear-data';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -76,9 +78,13 @@ class SubscribeSteps {
     operationBus.subscribe(CHECK_OBJECT_STATUS, stepCheckObjectStatus.checkObjectStatus);
     operationBus.subscribe(CLEAR_CROSSTAB_HEADERS, stepClearCrosstabHeaders.clearCrosstabHeaders);
     operationBus.subscribe(CLEAR_TABLE_DATA, stepClearTableData.clearTableData);
+    operationBus.subscribe(COMPLETE_CLEAR_DATA, stepCompleteClearData.completeClearData);
 
     operationBus.subscribe(MOVE_NOTIFICATION_TO_IN_PROGRESS, stepNoficicationInProgress.moveNotificationToInProgress);
-    operationBus.subscribe(DISPLAY_NOTIFICATION_COMPLETED, stepDisplayNotificationCompleted.displayNotificationCompleted);
+    operationBus.subscribe(
+      DISPLAY_NOTIFICATION_COMPLETED,
+      stepDisplayNotificationCompleted.displayNotificationCompleted
+    );
   };
 }
 
