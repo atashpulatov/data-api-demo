@@ -41,13 +41,13 @@ class NotificationService {
     this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
   }
 
-  onSuccessfullNotificationHover = (objectWorkingId) => {
+  dismissSuccessfullNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
-  onRemoveSuccessfulNotificationHover = (objectWorkingId) => {
+  dismissSuccessfulRemoveNotification = (objectWorkingId) => {
     officeStoreObject.removeObjectFromStore(objectWorkingId);
-    this.onSuccessfullNotificationHover(objectWorkingId);
+    this.dismissSuccessfullNotification(objectWorkingId);
   }
 }
 

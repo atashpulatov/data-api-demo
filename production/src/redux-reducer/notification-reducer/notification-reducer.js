@@ -94,8 +94,8 @@ const displayNotificationCompleted = (state, payload) => {
     type: objectNotificationTypes.SUCCESS,
     title: titleOperationCompletedMap[notificationToUpdate.operationType],
     onHover: (notificationToUpdate.operationType === REMOVE_OPERATION
-      ? () => notificationService.onRemoveSuccessfulNotificationHover(notificationToUpdate.objectWorkingId)
-      : () => notificationService.onSuccessfullNotificationHover(notificationToUpdate.objectWorkingId)),
+      ? () => notificationService.dismissSuccessfulRemoveNotification(notificationToUpdate.objectWorkingId)
+      : () => notificationService.dismissSuccessfullNotification(notificationToUpdate.objectWorkingId)),
   };
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
