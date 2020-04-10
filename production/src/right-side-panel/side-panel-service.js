@@ -132,14 +132,18 @@ class SidePanelService {
     return popup;
   };
 
-  injectNotificationsToObjects = (loadedObjects, operations, notifications) => loadedObjects.map((object) => {
+  injectNotificationsToObjects = (loadedObjects, notifications, operations) => loadedObjects.map((object) => {
     const objectOperation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
-    const objectNotification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
+    const objectNotification = notifications.find(
+      (notification) => notification.objectWorkingId === object.objectWorkingId
+    );
+
     const operationBasedNotificationData = objectOperation ? {
       percentageComplete: objectOperation.totalRows !== 0 ? calculateLoadingProgress(objectOperation.operationType, objectOperation.stepsQueue[0], objectOperation.loadedRows, objectOperation.totalRows) : 0,
       itemsTotal: objectOperation.totalRows,
       itemsComplete: objectOperation.loadedRows,
     } : {};
+
     const obj = objectNotification ? {
       ...object,
       notification: {

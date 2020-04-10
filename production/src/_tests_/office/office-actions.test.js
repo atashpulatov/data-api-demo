@@ -45,6 +45,11 @@ describe('Office Actions', () => {
     // when
     actions.toggleIsClearDataFailedFlag(true)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsClearDataFailedFlag, IsClearDataFailed: true });
+    expect(listener).toHaveBeenCalledWith(
+      {
+        type: officeProperties.actions.toggleIsClearDataFailedFlag,
+        IsClearDataFailed: true
+      }
+    );
   });
 });
