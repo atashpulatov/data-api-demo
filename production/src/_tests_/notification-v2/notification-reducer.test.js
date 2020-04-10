@@ -1,5 +1,9 @@
-import { CREATE_NOTIFICATION, DELETE_NOTIFICATION } from '../../redux-reducer/notification-reducer/notification-actions';
+import { DELETE_NOTIFICATION } from '../../redux-reducer/notification-reducer/notification-actions';
 import { notificationReducer } from '../../redux-reducer/notification-reducer/notification-reducer';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
+// import i18n from '../../i18n';
+
+// jest.mock(i18n)
 
 describe('Notification reducer', () => {
   const initialState = {
@@ -18,7 +22,6 @@ describe('Notification reducer', () => {
         {
           objectWorkingId: 'someId1',
           type: 'import',
-          percentageComplete: 30,
         }
       ]
     },
@@ -36,7 +39,6 @@ describe('Notification reducer', () => {
         {
           objectWorkingId: 'someId3',
           type: 'import',
-          percentageComplete: 30,
         },
       ]
     }
@@ -52,80 +54,56 @@ describe('Notification reducer', () => {
     expect(resultState).toEqual({ notifications: [], globalNotification: { type: '' } });
   });
 
-  describe('create', () => {
-    it('should return the same state if type is not matched', () => {
-      // given
-      const notHandledAction = {
-        type: 'some type',
-        payload: 'some payload',
-      };
-
-      // when
-      const resultState = notificationReducer(initialState.multiple, notHandledAction);
-
-      // then
-      expect(resultState).toBe(initialState.multiple);
-    });
-
-    it('should add new notification to empty reducer', () => {
-      // given
-      const exampleNotification = {
-        objectWorkingId: 'someId23',
-        type: 'import'
-      };
+  describe('createProgressNotification', () => {
+    it('should add new pending notification to empty array', () => {
+    // given
       const action = {
-        type: CREATE_NOTIFICATION,
-        payload: exampleNotification
+        type: IMPORT_OPERATION,
+        payload: {
+          operation: {
+            objectWorkingId: 123,
+            operationType: IMPORT_OPERATION,
+          }
+        }
       };
 
       // when
       const resultState = notificationReducer(initialState.empty, action);
 
       // then
-      expect(resultState).toEqual({ notifications: [exampleNotification] });
+      expect(resultState.notifications[0]).toEqual({
+        objectWorkingId: 123,
+        operationType: IMPORT_OPERATION,
+        title: 'Pending',
+        type: 'PROGRESS',
+      },);
     });
-
-    it('should add new notification to existing ones', () => {
+    it('should add new pending notification to existing ones', () => {
       // given
-      const exampleNotification = {
-        objectWorkingId: 'someId23',
-        type: 'import'
-      };
       const action = {
-        type: CREATE_NOTIFICATION,
-        payload: exampleNotification
+        type: IMPORT_OPERATION,
+        payload: {
+          operation: {
+            objectWorkingId: 123,
+            operationType: IMPORT_OPERATION,
+          }
+        }
       };
 
       // when
-      const resultState = notificationReducer(initialState.multiple, action);
+      const resultState = notificationReducer(initialState.singleImport, action);
 
       // then
-      expect(resultState).toEqual({
-        notifications: [
-          ...initialState.multiple.notifications,
-          exampleNotification]
-      });
+      expect(resultState.notifications[1]).toEqual({
+        objectWorkingId: 123,
+        operationType: IMPORT_OPERATION,
+        title: 'Pending',
+        type: 'PROGRESS',
+      },);
     });
   });
 
-  describe('delete', () => {
-    it('should throw an error if objectWorkingId does not exist', () => {
-      // given
-      const wrongAction = {
-        type: DELETE_NOTIFICATION,
-        payload: {
-          objectWorkingId: 'someNonExistingId',
-          percentageComplete: 90,
-        },
-      };
-
-      // when
-      const throwingCall = () => notificationReducer(initialState.multiple, wrongAction);
-
-      // then
-      expect(throwingCall).toThrow();
-    });
-
+  describe('deleteNotification', () => {
     it('should delete one action on single array', () => {
       // given
       const action = {

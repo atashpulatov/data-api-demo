@@ -12,7 +12,6 @@ import {
   DUPLICATE_OPERATION
 } from '../../operation/operation-type-names';
 import {
-  CREATE_NOTIFICATION,
   DELETE_NOTIFICATION,
   CREATE_GLOBAL_NOTIFICATION,
   REMOVE_GLOBAL_NOTIFICATION,
@@ -41,9 +40,6 @@ export const notificationReducer = (state = initialState, action) => {
     case DISPLAY_NOTIFICATION_COMPLETED:
       return displayNotificationCompleted(state, payload);
 
-    case CREATE_NOTIFICATION:
-      return createNotification(state, payload);
-
     case CREATE_OBJECT_WARNING:
       return createObjectWarning(state, payload);
 
@@ -65,15 +61,12 @@ export const notificationReducer = (state = initialState, action) => {
 };
 
 const createProgressNotification = (state, payload) => {
-  console.log({ ...titleOperationInProgressMap });
-  console.log(titleOperationInProgressMap.PENDING_OPERATION);
   const newNotification = {
     objectWorkingId: payload.operation.objectWorkingId,
     type: objectNotificationTypes.PROGRESS,
     title: titleOperationInProgressMap.PENDING_OPERATION,
     operationType: payload.operation.operationType,
   };
-  console.log({ ...newNotification });
   return { ...state, notifications: [...state.notifications, newNotification] };
 };
 
@@ -100,11 +93,7 @@ const displayNotificationCompleted = (state, payload) => {
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
-const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
-
 const deleteNotification = (state, payload) => {
-  // TODO: do we need this?
-  getNotificationIndex(state, payload);
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications = newState.notifications
     .filter((notification) => notification.objectWorkingId !== payload.objectWorkingId);
