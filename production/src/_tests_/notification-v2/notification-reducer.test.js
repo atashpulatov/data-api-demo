@@ -1,6 +1,5 @@
-import {
-  CREATE_NOTIFICATION, notificationReducer, UPDATE_NOTIFICATION, DELETE_NOTIFICATION
-} from '../../redux-reducer/notification-reducer/notification-reducer';
+import { notificationReducer } from '../../redux-reducer/notification-reducer/notification-reducer';
+import { CREATE_NOTIFICATION, UPDATE_NOTIFICATION, DELETE_NOTIFICATION } from '../../redux-reducer/notification-reducer/notification-actions';
 
 describe('Notification reducer', () => {
   const initialState = {
