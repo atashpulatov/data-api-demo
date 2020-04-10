@@ -1,6 +1,6 @@
-import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
-import officeStoreHelper from '../../office/store/office-store-helper';
-import { errorService } from '../../error/error-handler';
+import { RunOutsideOfficeError } from '../../../error/run-outside-office-error';
+import officeStoreHelper from '../../../office/store/office-store-helper';
+import { errorService } from '../../../error/error-handler';
 
 describe.each`
 officeParam
