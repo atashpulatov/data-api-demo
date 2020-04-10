@@ -16,6 +16,7 @@ export const objectsList = {
     hierarchyPromptedReport: 'Report with prompt - Hierarchy prompt | Not required | Default',
     multiplePromptsReport: 'Report with multiple prompts.',
     report1k: '1k report',
+    detailsReport: '0 -- Response Predictor Dataset',
     report1_5M: '1,5M Sales Records',
     filtered: 'All data filtered',
     secureDataFiltering: 'Revenue by Region and Category - secure data',
@@ -27,6 +28,14 @@ export const objectsList = {
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
     basicSubtotalsReport: 'Report Totals Subtotals 1',
+    withoutSubtotals: {
+      basicReport: 'Report without subtotals',
+      reportBasedOnIntelligentCube: 'Report based on cube without subtotals',
+      promptedReport: 'Prompted report without subtotals',
+      reportWithCrosstabs: 'Report with crosstab and without subtotals',
+      promptedReportWithCrosstabs: 'Prompted report with crosstab and without subtotals',
+      dataset: '100 Sales Records.csv'
+    },
     longReportWithInvalidCharacters: {
       sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
       excelTableNameStart:'_01___________________________________Report_for_testing_binding_and_special_characters',
@@ -43,8 +52,9 @@ export const objectsList = {
     datasetSQL: 'DATA_IMPORT_SQL_STATEMENT',
     basicDataset: '100_dataset',
     notPublished: 'not published dataset',
-    cubeLimitProject: '1,5M Sales Records.csv',
-    notSupportedCube: 'multi table cube'
+    cubeLimitProject: 'Limit Project 1,5M Sales Records.csv',
+    notSupportedCube: 'multi table cube',
+    salesRecords1k: '1k Sales Records.csv',
   },
 
   dossiers: {
@@ -76,11 +86,11 @@ export const objectsList = {
         visualization1 : {
           name: '#mstr106',
           gridTableId:'#mstr121',
-          getTableItemAt: (firstIndex, secondIndex) => `#mstr121 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
+          getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
       },
     },
-    interactiveDossier: { name: 'Dossier for interactive components', },
+    interactiveDossier: { name: 'Automation Dossier for interactive components', },
     customVisualizations: {
       name: 'Custom Visualizations',
       visualizations: { GoogleTimeline: '#mstr114', }
@@ -92,7 +102,10 @@ export const objectsList = {
         accounts:'#mstr162',
         dailyActiveAccounts:'#mstr131',
       }
+    },
+    promptedDossier: {
+      name:'Prompted dossier - don\'t add to Library',
+      visualizations: { vis1: '#mstr106' }
     }
-
   }
 };

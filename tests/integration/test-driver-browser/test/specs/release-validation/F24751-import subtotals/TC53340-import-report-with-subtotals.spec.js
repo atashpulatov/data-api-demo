@@ -13,17 +13,23 @@ describe('F24751 Import report with or without subtotals', () => {
   it('[TC53340] - Set subtotals toggle ON during import report with subtotals', () => {
     // step0 - open plugin
     OfficeLogin.openExcelAndLoginToPlugin();
+
     // step1 - press import data button
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
+
     // step2 + step3 + step4 - turn my library toggle off, select a report with subtotals press prepare data
-    PluginPopup.openPrepareData(objectsList.basicSubtotalsReport, false);
+    PluginPopup.openPrepareData(objectsList.reports.basicSubtotalsReport, false);
+
     // step5 - select all metrics and all attributes
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
     expect($(popupSelectors.subtotalToggler).getAttribute('aria-checked')).toEqual('true');
+
     // step6 - click import
     PluginPopup.clickImport();
+
     // step7 - data imported
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);

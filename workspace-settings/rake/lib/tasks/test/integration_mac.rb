@@ -4,8 +4,7 @@ require_relative 'test_common'
 desc "package test docker"
 task :deploy_tester_server,[:build_no] do | t, args|
   
-  group_id = "#{$WORKSPACE_SETTINGS[:nexus][:base_coordinates][:group_id]}.#{Common::Version.application_branch}"
-  # group_id = Common::Version.dependency_group_id
+  group_id = Common::Version.dependency_group_id #use dependency_group_id as the  group id to download the test binary. 
   artifact_id = "office-loader"
   version = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
   download_mstr_office(group_id, version,mac_env_dir)
@@ -14,24 +13,17 @@ task :deploy_tester_server,[:build_no] do | t, args|
   do_stop_local_web_dossier
   do_package_test_docker
   do_start_local_web_dossier
-
-  # cmd = "docker build -t mstr-dossier ."
-  # shell_command! cmd, cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/e2e-webserver"
 end
 
 desc "package test docker"
 task :p do
-  # stop_test_web_service
-  # download_latest_web_dossier
-  # download_mstr_office
   do_package_test_docker
-  # cmd = "docker build -t mstr-dossier ."
-  # shell_command! cmd, cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/e2e-webserver"
-  
 end
+
 def mac_env_dir
   "e2e-webserver-mac"
 end
+
 def do_package_test_docker()
   cmd = "docker build -t mstr-dossier ."
   shell_command! cmd, cwd: "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/#{mac_env_dir}"

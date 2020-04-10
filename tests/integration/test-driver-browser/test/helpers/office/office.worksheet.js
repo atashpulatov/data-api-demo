@@ -1,4 +1,4 @@
-import { switchToExcelFrame } from '../utils/iframe-helper';
+import { switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
 import { waitAndClick } from '../utils/click-helper';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import settings from '../../config';
@@ -38,14 +38,14 @@ const OfficeWorksheet = function() {
       // $('img[src^="https://127.0.0.1"]').click();173736
       $(pluginIcon).waitForDisplayed(7777);
       $(pluginIcon).click();
-      browser.pause(5555);
+      $(excelSelectors.addInFrame).waitForDisplayed(7000);
     } catch (error) {
       this.addAdminManagedPlugin();
       switchToExcelFrame();
       $(excelSelectors.uploadPluginNotification).click();
       // $('img[src^="https://127.0.0.1"]').click(); // this is an alternative selector to start the plugin
       $(pluginIcon).click(); // this is an alternative selector to start the plugin
-      browser.pause(5555);
+      $(excelSelectors.addInFrame).waitForDisplayed(7000);
     }
   };
 
@@ -53,11 +53,14 @@ const OfficeWorksheet = function() {
     $(excelSelectors.insertBtn).click();
     $(excelSelectors.addInBtn).click();
     $(excelSelectors.officeAddInsFrame).waitForExist(9999);
-    $(excelSelectors.officeAddInsFrame).waitForExist(9999);
     browser.switchToFrame($(excelSelectors.officeAddInsFrame));
     browser.pause(1111);
     waitAndClick($(excelSelectors.adminManagedBtn));
-    waitAndClick($(excelSelectors.adminManagedPlugin));
+    let envNumber = process.argv[process.argv.length - 1];
+    if (!envNumber.includes('env-')) {
+      envNumber = 'yi_local_ip';
+    }
+    waitAndClick($(excelSelectors.ribbonPlugin(envNumber)));
     waitAndClick($(excelSelectors.addBtn));
     browser.pause(2222);
   };
@@ -66,9 +69,7 @@ const OfficeWorksheet = function() {
     waitAndClick($(excelSelectors.mainMenuBtn));
     waitAndClick($(excelSelectors.newDocumentBtn));
     waitAndClick($(excelSelectors.excelWorkbookBtn));
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[1]); // TODO: create help function to switch tabs
-    browser.pause(5000); // TODO: replace with waiting for the excelsheet to be loaded
+    changeBrowserTab(1);
   };
 
   this.openNewSheet = function() {
@@ -120,6 +121,12 @@ const OfficeWorksheet = function() {
     browser.keys('\uE003'); // Press Backspace
     $(excelSelectors.excelFormulaBar).setValue(text);
     browser.keys('\uE007'); // Press Enter
+  };
+
+  this.clearExcelRange = (cellRange) => {
+    this.selectCell(cellRange);
+    browser.pause(1999);
+    browser.keys(['Backspace']);
   };
 };
 

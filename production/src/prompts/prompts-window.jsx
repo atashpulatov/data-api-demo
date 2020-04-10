@@ -129,13 +129,15 @@ export class PromptsWindowNotConnected extends Component {
           promptsAnswersLocal = [_promptsAnswers];
         }
       };
-      const libraryUrl = envUrl.replace('api', 'app');
-      const url = `${libraryUrl}/${projectId}/${chosenObjectIdLocal}`;
+      const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
+      // delete last occurence of '/api' from the enviroment url
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
 
       const props = {
-        url,
+        serverURL,
+        applicationID: projectId,
+        objectID: chosenObjectIdLocal,
         enableCustomAuthentication: true,
         customAuthenticationType:
           CustomAuthenticationType.AUTH_TOKEN,
