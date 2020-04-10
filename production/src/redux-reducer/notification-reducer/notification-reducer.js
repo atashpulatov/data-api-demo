@@ -5,7 +5,11 @@ import {
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
 import {
-  CREATE_NOTIFICATION, DELETE_NOTIFICATION, CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, CREATE_OBJECT_WARNING
+  CREATE_NOTIFICATION,
+  DELETE_NOTIFICATION,
+  CREATE_GLOBAL_NOTIFICATION,
+  REMOVE_GLOBAL_NOTIFICATION,
+  CREATE_OBJECT_WARNING
 } from './notification-actions';
 import { getNotificationButtons } from '../../notification-v2/notification-buttons';
 import { titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap } from './notification-title-maps';
@@ -42,12 +46,15 @@ export const notificationReducer = (state = initialState, action) => {
 };
 
 const createProgressNotification = (state, payload) => {
+  console.log({ ...titleOperationInProgressMap });
+  console.log(titleOperationInProgressMap.PENDING_OPERATION);
   const newNotification = {
     objectWorkingId: payload.operation.objectWorkingId,
     type: objectNotificationTypes.PROGRESS,
-    title: 'Pending',
+    title: titleOperationInProgressMap.PENDING_OPERATION,
     operationType: payload.operation.operationType,
   };
+  console.log({ ...newNotification });
   return { ...state, notifications: [...state.notifications, newNotification] };
 };
 
@@ -130,7 +137,8 @@ function getNotificationToUpdate(state, payload) {
 }
 
 function getIsIndeterminate(notificationToUpdate) {
-  return !!(notificationToUpdate.operationType === REMOVE_OPERATION || notificationToUpdate.operationType === CLEAR_DATA_OPERATION);
+  return !!(notificationToUpdate.operationType === REMOVE_OPERATION
+    || notificationToUpdate.operationType === CLEAR_DATA_OPERATION);
 }
 
 function getNotificationIndex(state, payload) {

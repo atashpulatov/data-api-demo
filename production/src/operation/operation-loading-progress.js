@@ -46,7 +46,11 @@ const loadingStateEnumWeights = {
   },
 };
 
-export const calculateLoadingProgress = (operationType, step, loadedRows, totalRows) => {
+export const calculateLoadingProgress = (objectOperation) => {
+  const {
+    operationType, stepsQueue, loadedRows, totalRows
+  } = objectOperation;
+  const step = stepsQueue[0];
   const baseProgress = loadingStateEnumWeights[operationType][step];
   const fetchProgress = Math.round((6 / 10) * (loadedRows / totalRows) * 100);
   const loadingProgress = fetchProgress + baseProgress;
