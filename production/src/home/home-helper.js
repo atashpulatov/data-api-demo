@@ -57,26 +57,28 @@ export class HomeHelper {
 
   secureData = async (objects) => {
     try {
-      const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
-
       const { dispatch } = this.reduxStore;
       toggleIsConfirmFlag(false)(dispatch);
 
-      for (const object of objects) {
-        this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId));
-      }
+      setTimeout(async () => {
+        const excelContext = await officeApiHelper.getExcelContext();
+        await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
+
+        for (const object of objects) {
+          this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId));
+        }
+      }, 0);
     } catch (error) {
       errorService.handleError(error);
     }
   };
 
-   displayClearDataError = (clearErrors, t) => {
-     // TODO check if needed
-     const reportNames = clearErrors.map((report) => report.reportName).join(', ');
-     const errorMessage = clearErrors.map((report) => report.errorMessage).join(', ');
-     notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', { reportNames }), errorMessage);
-   }
+  displayClearDataError = (clearErrors, t) => {
+    // TODO check if needed
+    const reportNames = clearErrors.map((report) => report.reportName).join(', ');
+    const errorMessage = clearErrors.map((report) => report.errorMessage).join(', ');
+    notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', { reportNames }), errorMessage);
+  }
 }
 
 export const homeHelper = new HomeHelper();

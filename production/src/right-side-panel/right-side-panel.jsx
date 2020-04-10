@@ -201,3 +201,4 @@ RightSidePanelNotConnected.propTypes = {
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func
 };
+

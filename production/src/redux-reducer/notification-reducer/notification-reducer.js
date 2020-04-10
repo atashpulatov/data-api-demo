@@ -1,21 +1,13 @@
 import { objectNotificationTypes } from '@mstr/rc';
 import {
-  IMPORT_OPERATION,
-  EDIT_OPERATION,
-  REFRESH_OPERATION,
-  REMOVE_OPERATION,
-  CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION,
+  IMPORT_OPERATION, EDIT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION, CLEAR_DATA_OPERATION, DUPLICATE_OPERATION
 } from '../../operation/operation-type-names';
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
 import {
-  CREATE_NOTIFICATION,
-  DELETE_NOTIFICATION,
-  CREATE_GLOBAL_NOTIFICATION,
-  REMOVE_GLOBAL_NOTIFICATION,
-  CREATE_OBJECT_WARNING,
+  CREATE_NOTIFICATION, DELETE_NOTIFICATION, CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, CREATE_OBJECT_WARNING
 } from './notification-actions';
+import { officeProperties } from '../office-reducer/office-properties';
 import { getNotificationButtons } from '../../notification-v2/notification-buttons';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
@@ -30,28 +22,22 @@ export const notificationReducer = (state = initialState, action) => {
     case CLEAR_DATA_OPERATION:
     case EDIT_OPERATION:
       return createProgressNotification(state, payload);
-
     case MOVE_NOTIFICATION_TO_IN_PROGRESS:
       return moveNotificationToInProgress(state, payload);
-
     case DISPLAY_NOTIFICATION_COMPLETED:
       return displayNotificationCompleted(state, payload);
-
     case CREATE_NOTIFICATION:
       return createNotification(state, payload);
-
     case CREATE_OBJECT_WARNING:
       return createObjectWarning(state, payload);
-
     case DELETE_NOTIFICATION:
       return deleteNotification(state, payload);
-
     case CREATE_GLOBAL_NOTIFICATION:
       return createGlobalNotification(state, payload);
-
     case REMOVE_GLOBAL_NOTIFICATION:
       return removeGlobalNotification(state, payload);
-
+    case officeProperties.actions.toggleSecuredFlag:
+      return deleteAllNotifications(action, state);
     default:
       return state;
   }
@@ -74,7 +60,6 @@ const moveNotificationToInProgress = (state, payload) => {
     title: titleOperationMap[notificationToUpdate.operationType],
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
-  console.log(updatedNotification);
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
@@ -94,9 +79,11 @@ const displayNotificationCompleted = (state, payload) => {
 const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
 
 const deleteNotification = (state, payload) => {
-  const notificationToDelete = getNotificationIndex(state, payload);
+  // TODO: do we need this?
+  getNotificationIndex(state, payload);
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
-  newState.notifications.splice(notificationToDelete, 1);
+  newState.notifications = newState.notifications
+    .filter((notification) => notification.objectWorkingId !== payload.objectWorkingId);
   return newState;
 };
 
@@ -121,10 +108,11 @@ const createGlobalNotification = (state, payload) => (
   { ...state, globalNotification: payload }
 );
 
-const removeGlobalNotification = (state, paylaod) => (
-  { notifications: [...state.notifications], globalNotification: { type: '' } }
-);
+const removeGlobalNotification = (state, paylaod) => ({ notifications: [...state.notifications], globalNotification: { type: '' } });
 
+const deleteAllNotifications = (action, state) => (action.isSecured
+  ? { notifications: [], globalNotification: state.globalNotification }
+  : state);
 const getOkButton = (payload) => [
   {
     title: 'Ok',
@@ -156,7 +144,6 @@ function getNotificationIndex(state, payload) {
   const notificationToUpdateIndex = state.notifications
     .findIndex((notification) => notification.objectWorkingId === payload.objectWorkingId);
   if (notificationToUpdateIndex === -1) {
-    console.log({ state, payload });
     throw new Error();
   }
   return notificationToUpdateIndex;
@@ -170,7 +157,6 @@ const titleOperationMap = {
   DUPLICATE_OPERATION: 'Duplicating',
   CLEAR_DATA_OPERATION: 'Clearing',
 };
-
 const titleOperationCompletedMap = {
   IMPORT_OPERATION: 'Import successful',
   REFRESH_OPERATION: 'Refresh complete',
@@ -179,7 +165,6 @@ const titleOperationCompletedMap = {
   DUPLICATE_OPERATION: 'Duplicate created',
   CLEAR_DATA_OPERATION: 'Object cleared',
 };
-
 const titleOperationFailedMap = {
   IMPORT_OPERATION: 'Import failed',
   REFRESH_OPERATION: 'Refresh failed',
