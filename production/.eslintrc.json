@@ -18,6 +18,8 @@
     "OfficeExtension": true
   },
   "rules": {
+    "key-spacing": ["error", { "afterColon": true }],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "jsx-quotes": ["warn", "prefer-double"],
     "semi": ["error", "always"],
     "no-console": "off",

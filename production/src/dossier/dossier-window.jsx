@@ -8,9 +8,9 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
-import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
+import { DEFAULT_PROJECT_NAME, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { popupHelper } from '../popup/popup-helper';
-import { popupStateActions } from '../popup/popup-state-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { officeContext } from '../office/office-context';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
@@ -59,10 +59,10 @@ export default class DossierWindowNotConnected extends React.Component {
     let isVisualizationSupported = true;
     try {
       await mstrObjectRestService.fetchVisualizationDefinition({
-        projectId:chosenProjectId,
-        objectId:chosenObjectId,
-        instanceId:preparedInstanceId,
-        visualizationInfo:{ chapterKey, visualizationKey }
+        projectId: chosenProjectId,
+        objectId: chosenObjectId,
+        instanceId: preparedInstanceId,
+        visualizationInfo: { chapterKey, visualizationKey }
       });
     } catch (error) {
       if (error.response && error.response.body.code === 'ERR009') {
@@ -247,7 +247,7 @@ function mapStateToProps(state) {
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = editedObject && editedObject.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) };
   return {

@@ -87,7 +87,7 @@ const exportToResourceFile = async (outputFileFolder) => {
         [webPostfix] = colPostfixList;
       }
       for (const row of webRows) {
-        const obj = getObjectFromRow(row, webPostfix, 'Web');
+        const obj = getObjectFromRow(row, webPostfix);
         if (obj) {
           descriptors[obj.key] = obj.v;
         }

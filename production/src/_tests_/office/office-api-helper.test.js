@@ -1,6 +1,6 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
-import { officeProperties } from '../../office/store/office-properties';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 // FIXME: these were disabled anyway. Needs to be redone.
 describe('OfficeApiHelper', () => {
@@ -129,17 +129,6 @@ describe('OfficeApiHelper', () => {
     }
     expect(result).toBeUndefined();
   });
-  it('should forward error different than OfficeExtension.Error', () => {
-    // given
-    const error = new Error();
-    // when
-    const callThatThrows = () => {
-      officeApiHelper.handleOfficeApiException(error);
-    };
-    // then
-    expect(callThatThrows).toThrowError();
-  });
-
 
   describe('getSelectedCell', () => {
     it('should return starting cell from range address(single cell)', async () => {

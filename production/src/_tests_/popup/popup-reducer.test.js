@@ -4,10 +4,10 @@ import {
   RESET_STATE,
   SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT,
-} from '../../popup/popup-actions';
+} from '../../redux-reducer/popup-reducer/popup-actions';
 
-import { initialState, popupReducer } from '../../popup/popup-reducer';
-import { SWITCH_IMPORT_SUBTOTALS } from '../../navigation/navigation-tree-actions';
+import { initialState, popupReducer } from '../../redux-reducer/popup-reducer/popup-reducer';
+import { SWITCH_IMPORT_SUBTOTALS } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
 describe('Popup Reducer', () => {
   it('should return proper state in case of START_REPORT_LOADING action', () => {

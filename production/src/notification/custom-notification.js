@@ -29,25 +29,25 @@ export default class CustomNotification extends Component {
         <header className="error__header">{translatedContent}</header>
         {
           details && (
-          <div>
-            <nav className="error__nav">
+            <div>
+              <nav className="error__nav">
+                <div
+                  onClick={this.handleCollapse}
+                  onKeyUp={(e) => e.key === 'Enter' && this.handleCollapse}
+                  className={config.actionClass}
+                  role="button"
+                  tabIndex="0"
+                >
+                  {t(config.message)}
+                  <span className="error__arrow" />
+                </div>
+              </nav>
               <div
-                onClick={this.handleCollapse}
-                onKeyUp={(e) => e.key === 'Enter' && this.handleCollapse}
-                className={config.actionClass}
-                role="button"
-                tabIndex="0"
+                className={`${config.messageClass} error__text`}
               >
-                {t(config.message)}
-                <span className="error__arrow" />
+                <p className="error__message">{details}</p>
               </div>
-            </nav>
-            <div
-              className={`${config.messageClass} error__text`}
-            >
-              <p className="error__message">{details}</p>
             </div>
-          </div>
           )
         }
       </section>

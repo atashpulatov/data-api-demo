@@ -58,71 +58,6 @@ function getFullPath({
   return path;
 }
 
-async function* fetchContentGenerator({
-  instanceDefinition,
-  objectId,
-  projectId,
-  mstrObjectType,
-  dossierData,
-  limit,
-  visualizationInfo,
-  reduxStore,
-  displayAttrFormNames
-}) {
-  const totalRows = instanceDefinition.rows;
-  const { instanceId, mstrTable } = instanceDefinition;
-  const { isCrosstab } = mstrTable;
-  const storeState = reduxStore.getState();
-  const { envUrl, authToken } = storeState.sessionReducer;
-  const { supportForms } = storeState.officeReducer;
-  const attrforms = { supportForms, displayAttrFormNames };
-
-  let fetchedRows = 0;
-  let offset = 0;
-  const fullPath = getFullPath({
-    dossierData,
-    envUrl,
-    mstrObjectType,
-    objectId,
-    instanceId,
-    version: API_VERSION,
-    visualizationInfo,
-  });
-
-
-  const offsetSubtotal = (e) => {
-    if (e) { (e.rowIndex += offset); }
-  };
-  const offsetCrosstabSubtotal = (e) => {
-    if (e && e.axis === 'rows') { (e.colIndex += offset); }
-  };
-
-
-  while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
-    let header;
-    let crosstabSubtotal;
-    const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
-    const { current } = response.body.data.paging;
-    fetchedRows = current + offset;
-    response.body.attrforms = attrforms;
-    const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
-    if (isCrosstab) {
-      header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
-      crosstabSubtotal = header.subtotalAddress;
-      if (offset !== 0) { crosstabSubtotal.map(offsetCrosstabSubtotal); }
-    } else if (offset !== 0) {
-      rowTotals.map(offsetSubtotal);
-    }
-    offset += current;
-    yield {
-      row,
-      header,
-      subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
-    };
-  }
-}
-
-
 function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
   return request
     .get(`${fullPath}?offset=${offset}&limit=${limit}`)
@@ -133,8 +68,75 @@ function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = 
 
 
 class MstrObjectRestService {
+  constructor() {
+    this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
+  }
+
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async* fetchContentGenerator({
+    instanceDefinition,
+    objectId,
+    projectId,
+    mstrObjectType,
+    dossierData,
+    limit = IMPORT_ROW_LIMIT,
+    visualizationInfo,
+    displayAttrFormNames
+  }) {
+    const totalRows = instanceDefinition.rows;
+    const { instanceId, mstrTable: { isCrosstab } } = instanceDefinition;
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
+
+    let fetchedRows = 0;
+    let offset = 0;
+    const fullPath = getFullPath({
+      dossierData,
+      envUrl,
+      mstrObjectType,
+      objectId,
+      instanceId,
+      version: API_VERSION,
+      visualizationInfo,
+    });
+
+
+    const offsetSubtotal = (e) => {
+      if (e) { (e.rowIndex += offset); }
+    };
+    const offsetCrosstabSubtotal = (e) => {
+      if (e && e.axis === 'rows') { (e.colIndex += offset); }
+    };
+
+
+    while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
+      let header;
+      let crosstabSubtotal;
+      const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
+      const { current } = response.body.data.paging;
+      fetchedRows = current + offset;
+      response.body.attrforms = attrforms;
+      const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
+      if (isCrosstab) {
+        header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
+        crosstabSubtotal = header.subtotalAddress;
+        if (offset !== 0) { crosstabSubtotal.map(offsetCrosstabSubtotal); }
+      } else if (offset !== 0) {
+        rowTotals.map(offsetSubtotal);
+      }
+      offset += current;
+      yield {
+        row,
+        header,
+        subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
+      };
+    }
   }
 
   /**
@@ -394,26 +396,6 @@ class MstrObjectRestService {
       .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
-  getObjectContentGenerator = ({
-    instanceDefinition,
-    objectId,
-    projectId,
-    mstrObjectType,
-    dossierData,
-    limit = IMPORT_ROW_LIMIT,
-    visualizationInfo,
-    displayAttrFormNames
-  }) => fetchContentGenerator({
-    instanceDefinition,
-    objectId,
-    projectId,
-    mstrObjectType,
-    dossierData,
-    limit,
-    visualizationInfo,
-    reduxStore: this.reduxStore,
-    displayAttrFormNames
-  })
 
   getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();

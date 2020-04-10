@@ -96,7 +96,9 @@ describe('Dossierwindow', () => {
     const messageParentMock = jest.fn();
     const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementation(() => ({ context: { ui: { messageParent: messageParentMock, }, }, }));
 
-    const componentState = { isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: [] };
+    const componentState = {
+      isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: []
+    };
     const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456' };
 
     const mockupOkObject = {
@@ -167,42 +169,43 @@ describe('Dossierwindow', () => {
       expect(childrenProps.handleBack).toBeDefined();
     });
   });
-  describe.skip('DossierWindow.js mapStateToProps with edited object test', () => {
-    // TODO: unskip when we find out why jenkinf is failling to run test
-    const mockStore = configureMockStore([thunk]);
-    let store;
-    let componentWrapper;
-    beforeEach(() => {
-      const initialState = {
-        popupReducer:{
-          editedObject:{
-            chosenObjectName: 'editedObjectName',
-            chosenObjectId: 'editedObjectId',
-            projectId: 'editedProjectId',
-          }
-        },
-        navigationTree:{
-          chosenObjectName: 'objectName',
-          chosenObjectId: 'objectId',
-          chosenProjectId: 'projectId',
-        },
-        popupStateReducer: {
-          popupType: 'testPopupType',
-          otherDefinedProperty: 'testOtherProperty'
-        }
-      };
-      store = mockStore(initialState);
-      componentWrapper = shallow(<DossierWindow store={store} />);
-    });
+  // TODO check if needed
+  // describe.skip('DossierWindow.js mapStateToProps with edited object test', () => {
+  //   // TODO: unskip when we find out why jenkinf is failling to run test
+  //   const mockStore = configureMockStore([thunk]);
+  //   let store;
+  //   let componentWrapper;
+  //   beforeEach(() => {
+  //     const initialState = {
+  //       popupReducer: {
+  //         editedObject: {
+  //           chosenObjectName: 'editedObjectName',
+  //           chosenObjectId: 'editedObjectId',
+  //           projectId: 'editedProjectId',
+  //         }
+  //       },
+  //       navigationTree: {
+  //         chosenObjectName: 'objectName',
+  //         chosenObjectId: 'objectId',
+  //         chosenProjectId: 'projectId',
+  //       },
+  //       popupStateReducer: {
+  //         popupType: 'testPopupType',
+  //         otherDefinedProperty: 'testOtherProperty'
+  //       }
+  //     };
+  //     store = mockStore(initialState);
+  //     componentWrapper = shallow(<DossierWindow store={store} />);
+  //   });
 
-    it('should use mapStateToProps with editedObject', () => {
-      // given
-      const childrenProps = componentWrapper.props().children.props;
-      // when
-      // then
-      expect(childrenProps.chosenObjectName).toBe('editedObjectName');
-      expect(childrenProps.chosenObjectId).toBe('editedObjectId');
-      expect(childrenProps.chosenProjectId).toBe('editedProjectId');
-    });
-  });
+  //   it('should use mapStateToProps with editedObject', () => {
+  //     // given
+  //     const childrenProps = componentWrapper.props().children.props;
+  //     // when
+  //     // then
+  //     expect(childrenProps.chosenObjectName).toBe('editedObjectName');
+  //     expect(childrenProps.chosenObjectId).toBe('editedObjectId');
+  //     expect(childrenProps.chosenProjectId).toBe('editedProjectId');
+  //   });
+  // });
 });

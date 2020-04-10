@@ -14,9 +14,21 @@ class ErrorService {
     this.notificationService = notificationService;
   }
 
+  handleObjectBasedError = (objectWorkingId, error, callback) => {
+    const errorType = this.getErrorType(error);
+    console.log(error);
+    console.log(errorType);
+    if (error.Code === 5012) {
+      this.handleError(error);
+    }
+    this.notificationService.showObjectWarning(objectWorkingId, { message: error.message, callback });
+    // this.notificationService
+  }
+
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
+    console.log(errorType);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
@@ -30,11 +42,10 @@ class ErrorService {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     const details = message !== errorDetails ? errorDetails : '';
     if (type === errorTypes.UNAUTHORIZED_ERR) {
-      return this.notificationService.displayNotification({ type: 'info', content: message });
+      this.notificationService.sessionExpired();
     }
-    return this.notificationService.displayNotification({
-      type: 'warning', content: message, details, onConfirm,
-    });
+    const payload = this.createNotificationPayload(message, details);
+    this.notificationService.globalWarningAppeared(payload);
   }
 
   checkForLogout = (isLogout = false, errorType) => {
@@ -73,6 +84,23 @@ class ErrorService {
     this.sessionHelper.logOutRest();
     this.sessionHelper.logOut();
     this.sessionHelper.logOutRedirect();
+  }
+
+  createNotificationPayload(message, details) {
+    const buttons = [
+      {
+        title: 'Ok',
+        type: 'basic',
+        label: 'Ok',
+        onClick: () => { this.notificationService.globalNotificationDissapear(); },
+      },
+    ];
+    const payload = {
+      title: message,
+      details,
+      buttons,
+    };
+    return payload;
   }
 }
 

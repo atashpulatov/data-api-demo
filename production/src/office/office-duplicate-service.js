@@ -1,6 +1,17 @@
-import { officeStoreService } from './store/office-store-service';
+import officeStoreRestoreObject from './store/office-store-restore-object';
 
+// TODO jsdoc
 class OfficeDuplicateService {
+  assignNewName = (originalObjectName, mstrTable) => {
+    if (originalObjectName) {
+      console.time('Duplicate renaming');
+      const nameCandidate = this.prepareNewNameForDuplicatedObject(originalObjectName);
+      const finalNewName = this.checkAndSolveNameConflicts(nameCandidate);
+      mstrTable.name = finalNewName;
+      console.timeEnd('Duplicate renaming');
+    }
+  }
+
   prepareNewNameForDuplicatedObject = (originalObjectName) => {
     const splitedName = originalObjectName.split(' ');
     const nrOfWords = splitedName.length;
@@ -32,7 +43,8 @@ class OfficeDuplicateService {
     const splitedName = nameCandidate.split(' ');
     let finalNameCandidate = nameCandidate;
 
-    const reportsArray = [...officeStoreService.getReportProperties()];
+    // TODO change to object reducer
+    const reportsArray = [...officeStoreRestoreObject.getLegacyObjectsList()];
     const reportsArrayNames = [];
     for (const report of reportsArray) {
       reportsArrayNames.push(report.name);

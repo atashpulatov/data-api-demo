@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { AuthenticateNotConnected } from '../../authentication/auth-component';
 import { reduxStore } from '../../store';
-import { sessionProperties } from '../../storage/session-properties';
+import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
 
 jest.mock('../../authentication/auth-rest-service');
 
@@ -43,7 +43,13 @@ describe('AuthComponent', () => {
       validateFields: () => jest.fn(),
     };
     const mockMapping = jest.fn();
-    const wrappedComponent = mount(<AuthenticateNotConnected history={history} session={mockSession} form={mockForm} resetState={mockMapping} />);
+    const wrappedComponent = mount(
+      <AuthenticateNotConnected
+        history={history}
+        session={mockSession}
+        form={mockForm}
+        resetState={mockMapping} />
+    );
     const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser');
     const form = wrappedComponent.find('Form').at(0);
     // when

@@ -3,24 +3,15 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import warningIcon from '../loading/assets/icon_conflict.svg';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import {
-  toggleSecuredFlag as toggleSecuredFlagImported,
-  toggleIsConfirmFlag as toggleIsConfirmFlagImported,
-  toggleIsClearingFlag as toggleIsClearingFlagImported
-} from '../office/store/office-actions';
-import { errorService } from '../error/error-handler';
-import { notificationService } from '../notification/notification-service';
-import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { officeApiRemoveHelper } from '../office/api/office-api-remove-helper';
+import warningIcon from './assets/icon_conflict.svg';
+import { toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../redux-reducer/office-reducer/office-actions';
+
+import { homeHelper } from './home-helper';
 
 export const ConfirmationNotConnected = ({
-  reportArray,
-  toggleSecuredFlag,
+  objects,
+  isConfirm,
   toggleIsConfirmFlag,
-  toggleIsClearingFlag,
   t
 }) => {
   useEffect(() => {
@@ -34,59 +25,34 @@ export const ConfirmationNotConnected = ({
       }, 100);
     }
   });
-  const secureData = async () => {
-    let counter = 0;
-    let reportName = '';
-    const clearErrors = [];
-    try {
-      toggleIsClearingFlag(true);
-      toggleIsConfirmFlag(); // Switch off isConfirm popup
-      const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, reportArray);
-      for (const report of reportArray) {
-        if (await officeApiRemoveHelper.checkIfObjectExist(report, excelContext)) {
-          try {
-            reportName = report.name;
-            if (report.isCrosstab) {
-              const officeTable = await officeApiHelper.getTable(excelContext, report.bindId);
-              officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
-              officeTable.showHeaders = true;
-              officeTable.showFilterButton = false;
 
-              const headers = officeTable.getHeaderRowRange();
-              headers.format.font.color = 'white';
-              await excelContext.sync();
-            }
-            await officeApiRemoveHelper.removeOfficeTableBody(excelContext, report, true);
-          } catch (error) {
-            const officeError = errorService.handleError(error);
-            clearErrors.push({ reportName, officeError });
-          }
-        } else {
-          counter++;
-        }
-      }
-      if (clearErrors.length > 0) {
-        displayClearDataError(clearErrors);
-      } else if (counter !== reportArray.length) { toggleSecuredFlag(true); }
-    } catch (error) {
-      errorService.handleError(error);
-    } finally {
-      toggleIsClearingFlag(false);
+
+  const confirmationRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const closeSettingsOnEsc = ({ keyCode }) => {
+      keyCode === 27 && toggleIsConfirmFlag();
+    };
+    const closeSettingsOnClick = ({ target }) => {
+      confirmationRef.current
+          && !confirmationRef.current.contains(target)
+          && toggleIsConfirmFlag();
+    };
+    if (isConfirm) {
+      document.addEventListener('keyup', closeSettingsOnEsc);
+      document.addEventListener('click', closeSettingsOnClick);
     }
-  };
-
-  function displayClearDataError(clearErrors) {
-    const reportNames = clearErrors.map((report) => report.reportName).join(', ');
-    const errorMessage = clearErrors.map((report) => report.errorMessage).join(', ');
-    notificationService.displayTranslatedNotification('warning', t('{{reportNames}} could not be cleared.', { reportNames }), errorMessage);
-  }
+    return () => {
+      document.removeEventListener('keyup', closeSettingsOnEsc);
+      document.removeEventListener('click', closeSettingsOnClick);
+    };
+  }, [isConfirm, toggleIsConfirmFlag]);
 
   return (
     <>
       <div
-      className="block-ui" />
-      <div className="confirm-container">
+        className="block-ui" />
+      <div className="confirm-container" ref={confirmationRef}>
         <div className="confirm-header">
           <span className="confirm-header-icon"><img width="19px" height="18px" src={warningIcon} alt={t('Refresh failed icon')} /></span>
         </div>
@@ -101,7 +67,7 @@ export const ConfirmationNotConnected = ({
           </div>
         </div>
         <div className="confirm-buttons">
-          <button className="ant-btn" id="confirm-btn" type="button" onClick={secureData}>{t('OK')}</button>
+          <button className="ant-btn" id="confirm-btn" type="button" onClick={() => homeHelper.secureData(objects)}>{t('OK')}</button>
           <button className="ant-btn" id="cancel-btn" type="button" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
@@ -110,23 +76,20 @@ export const ConfirmationNotConnected = ({
 };
 
 ConfirmationNotConnected.propTypes = {
-  reportArray: PropTypes.arrayOf(PropTypes.shape({})),
-  toggleSecuredFlag: PropTypes.func,
+  objects: PropTypes.arrayOf(PropTypes.shape({})),
+  isConfirm: PropTypes.bool,
   toggleIsConfirmFlag: PropTypes.func,
-  toggleIsClearingFlag: PropTypes.func,
   t: PropTypes.func
 };
 
 ConfirmationNotConnected.defaultProps = { t: (text) => text, };
 
-function mapStateToProps({ officeReducer }) {
-  return { reportArray: officeReducer.reportArray };
+function mapStateToProps({ officeReducer, objectReducer }) {
+  const { objects } = objectReducer;
+  const { isConfirm } = officeReducer;
+  return { objects, isConfirm };
 }
 
-const mapDispatchToProps = {
-  toggleSecuredFlag: toggleSecuredFlagImported,
-  toggleIsConfirmFlag: toggleIsConfirmFlagImported,
-  toggleIsClearingFlag: toggleIsClearingFlagImported,
-};
+const mapDispatchToProps = { toggleIsConfirmFlag: toggleIsConfirmFlagImported };
 
 export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationNotConnected));

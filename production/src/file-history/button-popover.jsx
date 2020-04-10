@@ -27,12 +27,12 @@ export class ButtonPopover extends React.Component {
     const { popoverVisible } = this.state;
     return (
       <Popover
-      visible={popoverVisible}
-      placement={placement}
-      content={content}
-      onMouseEnter={this.showPopover}
-      onMouseLeave={this.hidePopover}
-      onClick={this.hidePopover}>
+        visible={popoverVisible}
+        placement={placement}
+        content={content}
+        onMouseEnter={this.showPopover}
+        onMouseLeave={this.hidePopover}
+        onClick={this.hidePopover}>
         {children}
       </Popover>
     );

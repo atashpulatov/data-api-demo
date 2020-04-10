@@ -1,11 +1,8 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import { libraryErrorController } from '@mstr/mstr-react-library';
 import { Popup } from '../../popup/popup';
-import { popupStateActions, SET_MSTR_DATA } from '../../popup/popup-state-actions';
 import { popupHelper } from '../../popup/popup-helper';
 import { PopupViewSelector } from '../../popup/popup-view-selector';
 import { Office } from '../mockOffice';

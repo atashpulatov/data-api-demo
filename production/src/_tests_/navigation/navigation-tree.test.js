@@ -6,7 +6,7 @@ import { selectorProperties } from '../../attribute-selector/selector-properties
 import { Office } from '../mockOffice';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { DEFAULT_STATE as CACHE_STATE } from '../../cache/cache-reducer';
+import { DEFAULT_STATE as CACHE_STATE } from '../../redux-reducer/cache-reducer/cache-reducer';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { popupHelper } from '../../popup/popup-helper';
 import DB from '../../cache/cache-db';
@@ -214,7 +214,7 @@ describe('NavigationTree', () => {
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
-      objectType: mstrObjectEnum.mstrObjectType.report,
+      mstrObjectType: mstrObjectEnum.mstrObjectType.report,
       chosenLibraryDossier: undefined
     };
     expect(mockSelectObject).toBeCalledWith(expectedObject);
@@ -236,12 +236,12 @@ describe('NavigationTree', () => {
       subtype: givenSubtype,
       name: givenObjectName,
       targetId: givenTargetId,
-      myLibrary: givenMyLibrary,
     };
 
     const wrappedComponent = shallow(<NavigationTreeNotConnected
       {...mockFunctionsAndProps}
       selectObject={mockSelectObject}
+      myLibrary={givenMyLibrary}
     />);
     // when
     wrappedComponent.instance().onObjectChosen(givenObject);
@@ -251,7 +251,7 @@ describe('NavigationTree', () => {
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
-      objectType: mstrObjectEnum.mstrObjectType.dossier,
+      mstrObjectType: mstrObjectEnum.mstrObjectType.dossier,
       chosenLibraryDossier: givenObjectId
     };
     expect(mockSelectObject).toBeCalledWith(expectedObject);
@@ -392,7 +392,11 @@ describe('NavigationTree', () => {
     // given
     const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<NavigationTreeNotConnected {...mockFunctionsAndProps} connectToDB={connectToDB} />);
+    const wrappedComponent = shallow(
+      <NavigationTreeNotConnected
+        {...mockFunctionsAndProps}
+        connectToDB={connectToDB} />
+    );
     // when
     await wrappedComponent.instance().refresh();
     // then
@@ -406,7 +410,11 @@ describe('NavigationTree', () => {
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
     popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<NavigationTreeNotConnected {...mockFunctionsAndProps} connectToDB={connectToDB} />);
+    const wrappedComponent = shallow(
+      <NavigationTreeNotConnected
+        {...mockFunctionsAndProps}
+        connectToDB={connectToDB} />
+    );
     // when
     await wrappedComponent.instance().refresh();
     // then

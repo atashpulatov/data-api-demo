@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
-import { DEFAULT_PROJECT_NAME } from '../storage/navigation-tree-reducer';
+import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 
 const { microstrategy, Office } = window;
@@ -218,7 +218,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
       },
     };
-    this.embeddedDossier = await microstrategy.dossier.create(props);
+    if (microstrategy && microstrategy.dossier) {
+      this.embeddedDossier = await microstrategy.dossier.create(props);
+    } else {
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+    }
   }
 
   /**
@@ -261,10 +265,14 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 9px for header margin and 68px for buttons
       */
-      <div ref={this.container}
-           style={{
- position: 'relative', top: '0', left: '0', height: 'calc(100vh - 145px)'
-}} />
+      <div
+        ref={this.container}
+        style={{
+          position: 'relative',
+          top: '0',
+          left: '0',
+          height: 'calc(100vh - 145px)'
+        }} />
     );
   }
 }
@@ -314,7 +322,7 @@ const mapStateToProps = (state) => {
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const isReport = popupState && popupState.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };

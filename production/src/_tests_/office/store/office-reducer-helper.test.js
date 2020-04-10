@@ -1,0 +1,111 @@
+import officeReducerHelper from '../../../office/store/office-reducer-helper';
+
+describe('OfficeReducerHelper init', () => {
+  it('init work as expected', () => {
+    // given
+    // when
+    officeReducerHelper.init('initTest');
+
+    // then
+    expect(officeReducerHelper.reduxStore).toEqual('initTest');
+  });
+});
+
+describe('OfficeReducerHelper', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  const reduxStoreMock = {
+    /* eslint-disable object-curly-newline */
+    getState: () => ({
+      objectReducer: {
+        objects: 'objectsTest',
+      },
+      operationReducer: {
+        operations: 'operationsTest',
+      },
+    })
+    /* eslint-enable object-curly-newline */
+  };
+
+  it('getObjectsListFromObjectReducer works as expected', () => {
+    // given
+    officeReducerHelper.init(reduxStoreMock);
+
+    // when
+    const result = officeReducerHelper.getObjectsListFromObjectReducer();
+
+    // then
+    expect(result).toEqual('objectsTest');
+  });
+
+  it('getOperationsListFromOperationReducer works as expected', () => {
+    // given
+    officeReducerHelper.init(reduxStoreMock);
+
+    // when
+    const result = officeReducerHelper.getOperationsListFromOperationReducer();
+
+    // then
+    expect(result).toEqual('operationsTest');
+  });
+
+  it.each`
+  expectedNoOperationInProgress | operationsListParam
+  
+  ${true}                       | ${[]}
+  ${false}                      | ${[42]}
+  ${false}                      | ${[42, 42]}
+  
+  `('noOperationInProgress works as expected',
+  ({ expectedNoOperationInProgress, operationsListParam }) => {
+    // given
+    const getOperationsListFromOperationReducerMock = jest.spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer')
+      .mockReturnValue(operationsListParam);
+
+    // when
+    const result = officeReducerHelper.noOperationInProgress();
+
+    // then
+    expect(getOperationsListFromOperationReducerMock).toBeCalledTimes(1);
+
+    expect(result).toEqual(expectedNoOperationInProgress);
+  });
+});
+
+describe('OfficeReducerHelper getObjectFromObjectReducer', () => {
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it.each`
+  expectedObject      | bindIdParam | objectsParam
+  
+  ${undefined}        | ${42}       | ${[]}
+  ${undefined}        | ${42}       | ${[{ bindId: 4242 }]}
+  ${{ bindId: 42 }}   | ${42}       | ${[{ bindId: 42 }]}
+  ${{ bindId: 42 }}   | ${42}       | ${[{ bindId: 4242 }, { bindId: 42 }]}
+
+  `('getObjectFromObjectReducer works as expected',
+  ({ expectedObject, bindIdParam, objectsParam }) => {
+    // given
+    const reduxStoreMock = {
+      /* eslint-disable object-curly-newline */
+      getState: () => ({
+        objectReducer: {
+          objects: objectsParam,
+        },
+      })
+      /* eslint-disable object-curly-newline */
+    };
+
+    officeReducerHelper.init(reduxStoreMock);
+
+    // when
+    const result = officeReducerHelper.getObjectFromObjectReducer(bindIdParam);
+
+    // then
+    expect(result).toEqual(expectedObject);
+  });
+});

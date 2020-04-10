@@ -6,10 +6,11 @@ export const DataPreviewButton = ({
   disableReason, loading, onPreviewClick, t
 }) => {
   const internalButton = (
-    <Button id="data-preview"
-            onMouseDown={(e) => { e.preventDefault(); }}
-            onClick={onPreviewClick}
-            disabled={!!disableReason || loading}>
+    <Button
+      id="data-preview"
+      onMouseDown={(e) => { e.preventDefault(); }}
+      onClick={onPreviewClick}
+      disabled={!!disableReason || loading}>
       {t('Data Preview')}
     </Button>
   );

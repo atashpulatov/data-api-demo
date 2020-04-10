@@ -7,7 +7,7 @@ class OfficeApiWorksheetHelper {
   /**
     * Returns true if specific worksheet is protected
     *
-    * @param {Office} excelContext Excel context
+    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
     * @param {Office} sheet Excel Sheet
   */
   isSheetProtected = async (excelContext, sheet) => {
@@ -19,7 +19,7 @@ class OfficeApiWorksheetHelper {
   /**
     * Returns true if specific worksheet is protected
     *
-    * @param {Office} excelContext Excel context
+    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
     * @param {Array} reportArray array of Mstr Tables
   */
   checkIfAnySheetProtected = async (excelContext, reportArray) => {
@@ -34,12 +34,12 @@ class OfficeApiWorksheetHelper {
   }
 
   /**
-      * Get sheet of the table. Return isSheetProtected
-      *
-      * @param {Office} excelContext Excel context
-      * @param {String} report Report object
-      * @param {Office} sheet Excel Sheet
-      */
+  * Get sheet of the table. Return isSheetProtected
+  *
+  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+  * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
+  * @param {Office} sheet Excel Sheet
+  */
   isCurrentReportSheetProtected = async (excelContext, bindId, sheet) => {
     let isProtected = false;
     if (bindId) {
@@ -60,6 +60,11 @@ class OfficeApiWorksheetHelper {
     }
   }
 
+  /**
+  * Creates Excel worksheet and set it as a active one.
+  *
+  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+  */
   createAndActivateNewWorksheet = async (excelContext) => {
     const sheets = excelContext.workbook.worksheets;
     const sheet = sheets.add();
