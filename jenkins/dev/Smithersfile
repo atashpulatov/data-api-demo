@@ -47,6 +47,8 @@ rake update_ready_for_pr
       job_short_names %w{
         stage-2-e2e-browser-test-mac
         stage-2-e2e-browser-test-win
+        stage-2-e2e-client-test-win-pre
+        stage-2-e2e-client-test-mac
       }
     end
   end
