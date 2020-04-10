@@ -1,9 +1,9 @@
-import officeStoreRestoreObject from '../../office/store/office-store-restore-object';
-import { reduxStore } from '../../store';
-import * as objectActions from '../../redux-reducer/object-reducer/object-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { errorService } from '../../error/error-handler';
-import officeStoreHelper from '../../office/store/office-store-helper';
+import officeStoreRestoreObject from '../../../office/store/office-store-restore-object';
+import { reduxStore } from '../../../store';
+import * as objectActions from '../../../redux-reducer/object-reducer/object-actions';
+import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+import { errorService } from '../../../error/error-handler';
+import officeStoreHelper from '../../../office/store/office-store-helper';
 
 const internalData = {};
 

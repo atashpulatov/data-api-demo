@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
-import { officeReducer } from '../../redux-reducer/office-reducer/office-reducer';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { OfficeError } from '../../office/office-error';
+import { officeReducer } from '../../../redux-reducer/office-reducer/office-reducer';
+import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+import { OfficeError } from '../../../office/office-error';
 
 describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);
