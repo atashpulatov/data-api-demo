@@ -134,7 +134,9 @@ class SidePanelService {
 
   injectNotificationsToObjects = (loadedObjects, operations, notifications) => loadedObjects.map((object) => {
     const objectOperation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
-    const objectNotification = notifications.find((notification) => notification.objectWorkingId === object.objectWorkingId);
+    const objectNotification = notifications.find(
+      (notification) => notification.objectWorkingId === object.objectWorkingId
+    );
     const operationBasedNotificationData = objectOperation ? {
       percentageComplete: objectOperation.totalRows !== 0 ? calculateLoadingProgress(objectOperation) : 0,
       itemsTotal: objectOperation.totalRows,

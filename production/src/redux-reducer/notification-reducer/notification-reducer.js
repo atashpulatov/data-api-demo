@@ -12,7 +12,9 @@ import {
   CREATE_OBJECT_WARNING
 } from './notification-actions';
 import { getNotificationButtons } from '../../notification-v2/notification-buttons';
-import { titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap } from './notification-title-maps';
+import {
+  titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap, customT
+} from './notification-title-maps';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -100,7 +102,7 @@ const createObjectWarning = (state, payload) => {
     objectWorkingId: payload.objectWorkingId,
     type: objectNotificationTypes.WARNING,
     title: titleOperationFailedMap[notificationToUpdate.operationType],
-    details: payload.notification.message,
+    details: customT(payload.notification.message),
     onHover: payload.notification.callback,
     children: getNotificationButtons(buttons),
   };
