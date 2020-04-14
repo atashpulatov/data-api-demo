@@ -1,80 +1,120 @@
-import {
-  switchToPluginFrame, switchToPromptFrame, switchToPopupFrame, switchToExcelFrame, switchToPromptFrameForEditDossier
-} from '../utils/iframe-helper';
+/* eslint-disable class-methods-use-this */
 import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { popupSelectors } from '../../constants/selectors/popup-selectors';
-import { waitForNotification } from '../utils/wait-helper';
+import {
+  switchToPluginFrame,
+  switchToPromptFrame,
+  switchToPopupFrame,
+  switchToExcelFrame,
+  switchToPromptFrameForEditDossier,
+  switchToPromptFrameForEditReport,
+  switchToRefreshAllFrame,
+  switchToDialogFrame,
+} from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
-import { excelSelectors } from '../../constants/selectors/office-selectors';
 
-const PluginPopup = function () {
-  this.closeRefreshAll = function () {
-    switchToPluginFrame();
-    $(excelSelectors.refreshAllfinished).waitForDisplayed(5000, false);
-    browser.pause(3000);
+class PluginPopup {
+  /**
+   * Waits for the 'Refreshing complete!' message and only then closes refreshAll popup
+   * @param {number} timeout increase/decrease timeout depending on the amount of refreshed objects
+   */
+  closeRefreshAll(timeout = 9999) {
+    switchToRefreshAllFrame();
+    $('.finished-header').waitForExist(timeout);
     switchToExcelFrame();
     waitAndClick($(popupSelectors.closeRefreshAll));
   };
 
-  this.searchForObject = function (objectName) {
+  searchForObject(objectName) {
     $(popupSelectors.searchInput).clearValue();
     $(popupSelectors.searchInput).setValue(objectName);
-  };
+  }
 
-  this.clickImport = function () {
-    waitAndClick($(popupSelectors.importBtn), 10000);
-  };
+  /**
+   * Searches for attribute or metric inside the popup report preparation
+   *
+   * @param {String} elementName indicates the attribute or metric name that will be searched
+   *
+   * @memberof PluginPopup
+   */
+  searchForElements(elementName) {
+    $(popupSelectors.searchInputPrepareDataPopup).clearValue();
+    $(popupSelectors.searchInputPrepareDataPopup).setValue(elementName);
+  }
 
-  this.clickPrepareData = function () {
+  clickImport() {
+    waitAndClick($(popupSelectors.importBtn));
+  }
+
+  clickPrepareData() {
     waitAndClick($(popupSelectors.prepareBtn));
-  };
+  }
 
-  this.clickCancel = function () {
+  clickCancel() {
     waitAndClick($(popupSelectors.cancelBtn));
-  };
+  }
 
-  this.clickBack = function () {
+  clickBack() {
     waitAndClick($(popupSelectors.backBtn));
-  };
+  }
 
-  this.clickDataPreview = function () {
+  clickDataPreview() {
     waitAndClick($(popupSelectors.dataPreviewBtn));
-  };
+  }
 
-  this.clickViewSelected = function () {
+  clickViewSelected() {
     waitAndClick($(popupSelectors.viewSelected));
-  };
+  }
 
-  this.clickSubtotalToggler = function () {
+  clickSubtotalToggler() {
     waitAndClick($(popupSelectors.subtotalToggler));
   };
 
-  this.closePreview = function () {
+  closePreview() {
     waitAndClick($(popupSelectors.closePreviewBtn));
-  };
+  }
 
-  this.clickRun = function () {
-    switchToPopupFrame();
+  clickRunForPromptedDossier() {
+    switchToPromptFrameForEditDossier();
+    waitAndClick($(popupSelectors.runBtnForPromptedDossier));
+  }
+
+  clickRun() {
+    switchToPluginFrame();
+    $(popupSelectors.runBtn).waitForExist(3333);
     waitAndClick($(popupSelectors.runBtn));
-  };
+  }
 
-  this.clickPromptArrow = function () {
+  clickPromptArrow() {
     waitAndClick($(popupSelectors.promptArrow));
-  };
+  }
 
-  this.selectAllAttributes = function () {
+  selectAllAttributes() {
     waitAndClick($(popupSelectors.allAttributes));
-  };
+  }
 
-  this.selectAllMetrics = function () {
+  selectAllMetrics() {
     waitAndClick($(popupSelectors.allMetrics));
-  };
+  }
 
-  this.selectAllFilters = function () {
+  selectAllFilters() {
     waitAndClick($(popupSelectors.allFilters));
-  };
+  }
 
-  this.selectObjectElementsInPrepareData = function (elements) {
+  /**
+   * Waits for element to show up and dissapear
+   * useful to validate that action has been started and finished
+   *
+   * @param {String} selector a css selector to validate
+   * @memberof PluginPopup
+   */
+
+  waitUntilActionIsFinished(selector) {
+    browser.waitUntil(() => ($(selector).isExisting()));
+    browser.waitUntil(() => !($(selector).isExisting()));
+  }
+
+  selectObjectElementsInPrepareData(elements) {
     $('#search-toolbar > div > span > input').waitForExist(7777);
     for (let i = 0; i < elements.length; i++) {
       $('#search-toolbar > div > span > input').clearValue();
@@ -82,37 +122,39 @@ const PluginPopup = function () {
       waitAndClick($(`input[name="${elements[i]}"]`));
       $('#search-toolbar > div > span > input').clearValue();
     }
-  };
-  this.selectObjectElements = function (elements) {
+  }
+
+  selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`input[name="${elements[i]}"]`));
     }
-  };
+  }
 
-  this.changePromptQualificationItem = (value) => {
+  changePromptQualificationItem(value) {
     switchToPopupFrame();
     waitAndClick($('div[title="- none -"]'));
     waitAndClick($(`div[title=${value}"]`));
-  };
+  }
 
-  this.selectFilters = function (names) {
+  selectFilters(names) {
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
       this.selectObjectElements(filterInstances);
     }
-  };
-  this.clickHeader = function (headerName) {
-    waitAndClick($(`.data-tip*=${headerName}`));
-  };
+  }
 
-  this.selectFirstObject = function () {
+  clickHeader(headerName) {
+    waitAndClick($(`.data-tip*=${headerName}`));
+  }
+
+  selectFirstObject() {
     browser.pause(2222);
     waitAndClick($(popupSelectors.firstObject));
-  };
+  }
 
-  this.importObject = function (objectName, myLibrarySwitch) {
-    switchToPluginFrame();
+  switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
+    switchToDialogFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
     browser.pause(1000);
@@ -120,9 +162,32 @@ const PluginPopup = function () {
     browser.pause(500);
     this.selectFirstObject();
     this.clickImport();
-  };
+  }
 
-  this.preparePrompt = function (objectName) {
+  importObject(objectName) {
+    switchToDialogFrame();
+    this.searchForObject(objectName);
+    browser.pause(500);
+    this.selectFirstObject();
+    this.clickImport();
+  }
+
+  importAnyObject(objectName, index) {
+    switchToDialogFrame();
+    browser.pause(500);
+    this.switchLibrary(false);
+    this.searchForObject(objectName);
+    browser.pause(500);
+    waitAndClick($(popupSelectors.anyObject(index)));
+    this.clickImport();
+  }
+
+  selectAnyObject(index) {
+    browser.pause(2222);
+    waitAndClick($(popupSelectors.anyObject(index)));
+  }
+
+  preparePrompt(objectName) {
     switchToPluginFrame();
     this.searchForObject(objectName);
     browser.pause(500);
@@ -133,130 +198,154 @@ const PluginPopup = function () {
     $('#mstrdossierPromptEditor').waitForExist(7777);
   };
 
+  selectAttributeIndex(index) {
+    for (let i = 0; i < index.length; i++) {
+      waitAndClick($(popupSelectors.attributeSelector(index[i])));
+    }
+  }
 
-  this.importPromptDefault = (objectName) => {
+  importPromptDefault(objectName) {
     this.importObject(objectName);
     browser.pause(5555); // temp solution
     $(popupSelectors.runBtn).waitForExist(3333);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     this.clickRun();
-  };
+  }
 
-  this.importPromptDefaultNested = (objectName) => {
-    this.importObject(objectName);
-    browser.pause(5555); // temp solution
-    for (; $(popupSelectors.runBtn).isExisting();) {
-      switchToPromptFrame();
-      $('#mstrdossierPromptEditor').waitForExist(7777);
-      this.clickRun();
-      browser.pause(3333);
+  importPromptDefaultNested(objectName) {
+    this.switchLibraryAndImportObject(objectName, false);
+    browser.pause(5555);
+    while (true) {
+      browser.pause(3000);
+      switchToPluginFrame();
+      if ($(popupSelectors.runBtn).isExisting()) {
+        this.clickRun();
+      } else {
+        break;
+      }
     }
-    switchToPluginFrame();
-  };
+  }
 
-  this.isViewSelected = () => ($(popupSelectors.viewSelected).getAttribute('class') === 'ant-switch ant-switch-checked');
+  isViewSelected() {
+    return $(popupSelectors.viewSelected).getAttribute('class') === 'ant-switch ant-switch-checked';
+  }
 
-  this.openPrompt = (objectName) => {
-    this.importObject(objectName);
+  openPrompt(objectName) {
+    this.switchLibraryAndImportObject(objectName, false);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
-  };
+  }
 
-
-  this.writeValueText = (value) => {
+  writeValueText(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(popupSelectors.valueInput), 5555);
     $(popupSelectors.valueInput).clearValue();
     $(popupSelectors.valueInput).setValue(`${value}\uE004\uE006`);
-  };
+  }
 
-  this.writeAttrQualificationValue = (value) => {
+  writeAttrQualificationValue(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.attrQualificationInput).click();
     $(popupSelectors.attrQualificationInput).clearValue();
     $(popupSelectors.attrQualificationInput).setValue(`${value}\uE004\uE004\uE006`);
-  };
+  }
 
-  this.writeMultiPrompt = (value) => {
+  writeMultiPrompt(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.calendarInput).click();
     $(popupSelectors.calendarInput).clearValue();
     $(popupSelectors.calendarInput).setValue(`${value}\uE004\uE004\uE006`);
-  };
+  }
 
-  this.removeAllSelected = () => {
+  removeAllSelected() {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.promptRemoveAllSelected).click();
-  };
+  }
 
-  this.changeExpressionQualificationAndRun = (value) => {
+  changeExpressionQualificationAndRun(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.expressionInList).click();
     waitAndClick($(`.mstrListBlockItemName*=${value}`));
     this.clickRun();
-  };
+  }
 
-  this.promptSelectObject = (objectName) => {
+  promptSelectObject(objectName) {
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(3333);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
     waitAndClick($('.mstrToolButtonRounded'));
-  };
+  }
 
-  this.prepareObject = function (objectName, elements, filters) {
+  promptSelectObjectForEdit(objectName) {
+    switchToPromptFrameForEditReport();
+    browser.pause(10000);
+    $('#mstrdossierPromptEditor').waitForExist(7777);
+    waitAndClick($(`.mstrListBlockItem*=${objectName}`));
+    browser.pause(2222);
+    waitAndClick($('.mstrToolButtonRounded'));
+  }
+
+  prepareObject(objectName, elements, filters) {
     this.openPrepareData(objectName);
     this.selectObjectElements(elements);
     this.selectFilters(filters);
     browser.pause(1111);
     this.clickImport();
-  };
+  }
+
+  searchForPreparedObject(objectName) {
+    $(popupSelectors.prepareSearchInput).clearValue();
+    $(popupSelectors.prepareSearchInput).setValue(objectName);
+  }
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39453
-  this.checkSorting = async function (order, headerName) {
-    const columnHeaders = element.all(by.css(popupSelectors.columnHeaders));
-    const columnTitles = columnHeaders.all(by.css());
-    for (let i = 0; i < columnTitles.length; i++) {
-      if (columnTitles.get(i) === headerName) {
-        switch (order) {
-        case 'up':
-          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
-          break;
-        case 'down':
-          await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
-          break;
-        default:
-          break;
-        }
-      }
-    }
-  };
+  // async checkSorting (order, headerName) {
+  //   const columnHeaders = element.all(by.css(popupSelectors.columnHeaders));
+  //   const columnTitles = columnHeaders.all(by.css());
+  //   for (let i = 0; i < columnTitles.length; i++) {
+  //     if (columnTitles.get(i) === headerName) {
+  //       switch (order) {
+  //       case 'up':
+  //         await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedUp)).isPresent()).toBe(true);
+  //         break;
+  //       case 'down':
+  //         await expect(columnHeaders.get(i).element(by.css(popupSelectors.sortedDown)).isPresent()).toBe(true);
+  //         break;
+  //       default:
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39454
-  this.checkDisplayedObjectNames = async function (searchedString) {
+  async checkDisplayedObjectNames(searchedString) {
     for (let i = 0; i < popupSelectors.displayedObjects.length; i++) {
       await expect(popupSelectors.displayedObjects.get(i).getText().toContain(searchedString));
     }
-  };
+  }
+
   // Currently this method is not used
-  this.checkIfFilterIsClicked = function (filterName) {
+  checkIfFilterIsClicked(filterName) {
     expect($(`.filter-title*=${filterName}`).getCSSProperty('background-color').value).toEqual('#1890FF');
-  };
-  this.deleteFromSearch = function () {
+  }
+
+  deleteFromSearch() {
     const searchedValue = $(popupSelectors.searchInput).getAttribute('value');
     for (let i = 0; i < searchedValue.length; i++) {
       $(popupSelectors.searchInput).setValue('\uE003');
     }
-  };
+  }
 
-  this.importObjectAndGetTotalTime = function (objectName) {
+  importObjectAndGetTotalTime(objectName) {
     this.importObject(objectName);
     const begin = Date.now();
     browser.pause(2000);
@@ -271,24 +360,35 @@ const PluginPopup = function () {
       }
     }
     const end = Date.now();
-    const timeSpent = ((end - begin) / 1000);
+    const timeSpent = (end - begin) / 1000;
     console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
     return timeSpent;
-  };
+  }
 
-  this.switchLibrary = function (newState) {
+  /**
+   * Returns a boolean based on the myLibrary switch state
+   * @returns {boolean} true if myLibrary is on, false if myLibrary is off
+   */
+  getMyLibraryState() {
+    const myLibrarySwitch = $(popupSelectors.myLibrary);
+    myLibrarySwitch.waitForExist(5000);
+    return myLibrarySwitch.getAttribute('aria-checked') === 'true';
+  }
+
+  switchLibrary(newState) {
+    switchToDialogFrame();
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
   };
 
-  this.openDossier = function (dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
-    this.importObject(dossierName, myLibrarySwitch);
+  openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
+    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
   };
 
-  this.selectAndImportVizualiation = function (visContainerId) {
+  selectAndImportVizualiation(visContainerId) {
     switchToPromptFrame();
     browser.pause(10000);
     const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
@@ -298,10 +398,11 @@ const PluginPopup = function () {
     // TODO: wait untli import button is enabled and click it
     browser.pause(2500);
     switchToPluginFrame();
+    $(popupSelectors.importBtn).waitForExist(5000);
     this.clickImport();
   };
 
-  this.editAndImportVizualization = function (visContainerId) {
+  editAndImportVizualization(visContainerId) {
     switchToPromptFrameForEditDossier();
     browser.pause(10000);
     const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
@@ -314,7 +415,7 @@ const PluginPopup = function () {
     this.clickImport();
   };
 
-  this.showTotals = (objectId) => {
+  showTotals(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -325,7 +426,7 @@ const PluginPopup = function () {
     browser.pause(4000);
   };
 
-  this.sortAscending = (objectId) => {
+  sortAscending(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -336,7 +437,7 @@ const PluginPopup = function () {
   // TODO:
   // method is used to select attributes(to check checkboxes) and attribute forms.
   // parameters: JSON object, containing attributes as keys and attribute forms as values
-  this.selectAttributesAndAttributeForms = (elements) => {
+  selectAttributesAndAttributeForms(elements) {
     for (const [attribute, attributeForm] of Object.entries(elements)) {
       waitAndClick($(`${popupSelectors.attributeCheckBox}=${attribute}`));
       if (attributeForm && attributeForm.length > 0) {
@@ -350,15 +451,14 @@ const PluginPopup = function () {
     }
   };
 
-  this.selectAttributeFormVisualisation = (type) => {
+  selectAttributeFormVisualisation(type) {
     waitAndClick($(popupSelectors.attributeFormDropdown));
     browser.pause(500);
     waitAndClick($(`${popupSelectors.attributeFormDropDownItem}=${type}`));
     browser.pause(500);
   };
 
-
-  this.sortDescending = (objectId) => {
+  sortDescending(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -366,7 +466,7 @@ const PluginPopup = function () {
     browser.pause(4000);
   };
 
-  this.drillByCategory = (objectId) => {
+  drillByCategory(objectId) {
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -382,7 +482,7 @@ const PluginPopup = function () {
    * @param {Number} filterIndex Index of the filter on dossier filter panel (starts from 1)
    * @param {Array} valuesIndexes Indexes of elements to toggle (starts from 1)
    */
-  this.selectValuesFromDossierListFilter = (filterIndex, valuesIndexes) => {
+  selectValuesFromDossierListFilter(filterIndex, valuesIndexes) {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.filtersMenu.getFilterAt(filterIndex)), 1000);
     valuesIndexes.forEach(valueIndex => {
@@ -398,7 +498,7 @@ const PluginPopup = function () {
    * @param {String} position 'left' for min value in slider, 'right' for max value in slider
    * @param {String} value value that will be inserted to input
    */
-  this.setValueOnDossierSliderFilter = (filterIndex, position, value) => {
+  setValueOnDossierSliderFilter(filterIndex, position, value) {
     const { dossierWindow } = popupSelectors;
     const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(filterIndex)} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`);
     maxValueInput.doubleClick();
@@ -410,7 +510,7 @@ const PluginPopup = function () {
    * Refresh Dossier to default state
    *
    */
-  this.refreshDossier = () => {
+  refreshDossier() {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonRefreshDossier), 1000);
     waitAndClick($(dossierWindow.buttonConfirmRefresh), 1000);
@@ -421,7 +521,7 @@ const PluginPopup = function () {
    *
    * @param {Number} index Index of the bookmark in dossier (starts from 1)
    */
-  this.applyDossierBookmark = (index) => {
+  applyDossierBookmark(index) {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonBookmarks), 1000);
     waitAndClick($(dossierWindow.getBookmarkItemAt(index)), 1000);
@@ -432,20 +532,447 @@ const PluginPopup = function () {
    *
    * @param {Number} index Index of the page/chapter item in dossier (starts from 1)
    */
-  this.goToDossierPageOrChapter = (index) => {
+  goToDossierPageOrChapter(index) {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonToC), 1000);
     waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
-  };
+  }
 
-  this.openPrepareData = function (objectName, isObjectFromLibrary = false) {
-    switchToPluginFrame();
+  /**
+   * Gets rows from Table of Objects
+   * @returns {Array} array of rows
+   */
+  getTableRows() {
+    return $$(popupSelectors.tableRows);
+  }
+
+  /**
+   * copies IDs of rows in table of objects by expanding Details panel and copying IDs
+   * @returns {String[]} array of IDs
+   */
+  copyObjectsID() {
+    const rows = this.getTableRows();
+    const idsArray = [];
+    for (const row of rows) {
+      const expandButton = row.$(popupSelectors.expandButton);
+      expandButton.click();
+      const idField = row.$(popupSelectors.idDetail);
+      idField.click();
+      idsArray.push(idField.getText());
+    }
+    return idsArray;
+  }
+
+  /**
+   * Clicks Filter button, that opens Filter Panel
+   */
+  clickFilterButton() {
+    waitAndClick($(popupSelectors.filterButton));
+  }
+
+  /**
+   * Sets checkbox to checked
+   * @param {String} category category in which the checbox is, like 'Application'
+   * @param {String} item name of the chosen checkBox, like 'MicroStrategy Tutorial'
+   */
+  tickFilterCheckBox(category, item) {
+    $(popupSelectors.filterCheckbox(category, item)).click();
+  }
+
+  /**
+   * Pastes clipboard's content to Search box, using 'Shift' + 'Insert' key combination
+   */
+  pasteToSearchBox() {
+    const searchBox = $(popupSelectors.searchInput);
+    searchBox.setValue(['Shift', 'Insert']);
+  }
+
+  /**
+   * Compares value of Search box to a given string
+   * @param {String} stringToCompare
+   */
+  compareSearchBoxToString(stringToCompare) {
+    const searchBox = $(popupSelectors.searchInput);
+    browser.pause(1111);
+    return searchBox.getValue() === stringToCompare;
+  }
+
+  openPrepareData(objectName, isObjectFromLibrary = false) {
+    switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
     this.selectFirstObject();
     this.clickPrepareData();
-  };
-};
+  }
+
+  importDefaultPromptedVisualisation(visContainerId) {
+    // reprompt
+    switchToPromptFrameForEditDossier();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    this.clickRunForPromptedDossier();
+    browser.pause(6000);
+    // select vis
+    switchToPromptFrameForEditDossier();
+    // for dossiers containing one vis: if no visContainerId, select the only existing vis
+    let visSelector;
+    if (typeof visContainerId === 'undefined') {
+      visSelector = $('.mstrmojo-VizBox-selector');
+    } else {
+      visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
+    }
+    visSelector.waitForExist(6000);
+    browser.pause(3000);
+    visSelector.click();
+    browser.pause(2500);
+    switchToPluginFrame();
+    $(popupSelectors.importBtn).waitForExist(5000);
+    this.clickImport();
+  }
+
+  repromptDefaultVisualisation(visContainerId) {
+    // edit
+    pluginRightPanel.edit();
+    browser.pause(5000);
+    switchToPromptFrameForEditDossier();
+    // click reprompt icon
+    $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
+    $(popupSelectors.dossierWindow.repromptDossier).click();
+    browser.pause(3000);
+    // reprompt and import
+    this.importDefaultPromptedVisualisation(visContainerId);
+  }
+
+  /**
+   * Scrolls the table by passing key strings ('End', 'Page Down' etc.)
+   * @param {String[]} keyNames array of key strings e.g. ['End']
+   */
+  scrollTable(keyNames) {
+    waitAndClick($(popupSelectors.objectTable.scrollContainer));
+    browser.keys(keyNames);
+    browser.pause(1999); // time to scroll to the bottom of the list
+  }
+
+  /**
+   * Selects the last visible object from the tableOfObjects
+   */
+  selectLastObject() {
+    const renderedObjects = $$('[role="option"]');
+    const lastObject = renderedObjects[renderedObjects.length - 1];
+    waitAndClick(lastObject);
+  }
+
+  /**
+   * Imports the first available visualization from a selected dossier
+   */
+  importVisualization() {
+    switchToPromptFrame();
+    browser.pause(13000); // temp solution, time for dossier to load
+    $('.mstrmojo-VizBox-selector').click();
+
+    browser.pause(2500);
+    switchToPluginFrame();
+    this.clickImport();
+  }
+
+  /**
+   * Opens all panel for the given section
+   * @param {String} section name of the section to open all panel for, e.g 'Application'
+   */
+  clickAllButton(section) {
+    switch (section) {
+    case 'Application':
+      waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
+      break;
+    case 'Owner':
+      if (this.getMyLibraryState()) {
+        waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
+      } else {
+        waitAndClick($$(popupSelectors.filterPanel.expandButton)[1]);
+      }
+      break;
+    case 'Modified':
+      waitAndClick($('.mstr-date-range-selector-container .expand-btn'));
+      break;
+    default:
+      break;
+    }
+  }
+
+  /**
+   * Clicks a checkbox on all panel by given checkboxTitle
+   * @param {String} checkboxTitle title of the checkbox on the allPanel
+   */
+  clickAllPanelElement(checkboxTitle) {
+    waitAndClick($(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)));
+  }
+
+  /**
+   * Clicks selectAll button for open allPanel
+   */
+  clickSelectAll() {
+    waitAndClick($(popupSelectors.filterPanel.selectAllButton));
+  }
+
+  /**
+   * Clicks a disabled checkbox on all panel by given checkboxTitle
+   * @param {String} checkboxTitle title of the checkbox on the allPanel
+   */
+  clickDisabledElement(checkboxTitle) {
+    waitAndClick($(popupSelectors.filterPanel.getAllPanelDisabledCheckbox(checkboxTitle)));
+  }
+
+  /**
+   * Scrolls down ObjectTable by the given number of pages
+   *
+   * @param {Number} count Number of pages to scroll down
+   * @memberof PluginPopup
+   */
+  scrollTableDownByPages(count) {
+    const scrollContainer = $(popupSelectors.objectTable.scrollContainer);
+    waitAndClick(scrollContainer);
+    for (let page = 0; page < count; page++) {
+      browser.keys(['PageDown']);
+    }
+  }
+
+  /**
+   * Expands given number of rows starting at the beginning of visible rows in Table of Objects
+   *
+   * @param {Number} amount Number of rows to expand
+   */
+  expandFirstRows(amount) {
+    $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(popupSelectors.expandButton);
+    for (let i = 0; i < amount; i++) {
+      expandButtons[i].waitForExist({ timeout: 3000 });
+      expandButtons[i].click()
+    }
+  }
+
+  /**
+   * Expands given number of rows starting from the end of visible rows in Table of Objects
+   *
+   * @param {Number} amount Number of rows to expand
+   */
+  expandLastRows(amount) {
+    $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(popupSelectors.expandButton);
+    for (let i = expandButtons.length - 1; i > expandButtons.length - 1 - amount; i--) {
+      expandButtons[i].waitForExist({ timeout: 3000 });
+      expandButtons[i].click()
+    }
+  }
+
+  /**
+   * Expands given number of rows at the beginning and end of Table of Objects
+   *
+   * @param {Number} amount Number of rows to expand
+   */
+  expandFirstAndLastRows(amount) {
+    const filterResults = this.getFilterResults();
+    amount = filterResults < amount ? filterResults : amount;
+    this.expandFirstRows(amount);
+    this.scrollTable(['End']);
+    this.expandLastRows(amount);
+  }
+
+  /**
+   * Clicks the Refresh button located at the top bar of Table of Objects
+   */
+  clickRefreshButton() {
+    waitAndClick($(popupSelectors.refreshButton));
+  }
+
+  /**
+   *  Waits for the Refresh to finish by checking if spinner animation of Refresh button ended
+   */
+  waitForRefresh() {
+    $(popupSelectors.refreshButton).waitForExist({ timeout: 5000 });
+    browser.pause(500);
+  }
+
+  /**
+   * Checks how many rows are expanded to display Details Panel, and returns the number
+   *
+   * @return {Number} Number of expanded rows
+   */
+  findAmountOfOpenRows() {
+    const openRows = $$(popupSelectors.expandButtonOpen);
+    return openRows.length;
+  }
+
+  /**
+   * Returns true if rows at the beginning and the end of Table of Objects are collapsed. Otherwise returns false
+   * @return {Boolean}
+   */
+  areAllRowsCollapsed() {
+    let openedRows = this.findAmountOfOpenRows();
+    if (openedRows > 0) return false;
+    this.scrollTable(['End']);
+    openedRows = this.findAmountOfOpenRows();
+    return !(openedRows > 0);
+  }
+
+  /**
+   * Returns number of objects displayed in Table of Objects as text
+   * @return {String}
+   */
+  getFilterResults() {
+    return $(popupSelectors.filterResults).getText();
+  }
+
+  /**
+   * Sets Date modified in the filter panel
+   *
+   * @param {String} dateFrom
+   * @param {String} dateTo
+   */
+  filterByDate(dateFrom, dateTo) {
+    const dateFromInput = $$(popupSelectors.filterPanel.dates)[0];
+    const dateToInput = $$(popupSelectors.filterPanel.dates)[1];
+    dateFromInput.click();
+    for (let i = 0; i < 10; i++) {
+      browser.keys(['Backspace']);
+    }
+    browser.keys(dateFrom);
+
+    dateToInput.click();
+    for (let i = 0; i < 10; i++) {
+      browser.keys(['Backspace']);
+    }
+    browser.keys(dateTo);
+  }
+
+  /**
+   * Clicks the 'Clear all' button in the filter panel
+   */
+  clearAll() {
+    const clearAllButton = $(popupSelectors.filterPanel.clearAll);
+    waitAndClick(clearAllButton);
+  }
+
+  /**
+   * Returns the timestamp for the Date modified of the first object in the table
+   * @return {Number}
+   */
+  getFirstRowTimestamp() {
+    const date = $(popupSelectors.columnModified).getAttribute('Title').split(' ')[0].split('/');
+    const preparedDate = new Date(date[2], date[0], date[1]);
+    return Date.parse(preparedDate);
+  }
+
+  /**
+   * Returns background color hex number for the given element (object on Table of Objects)
+   * @param {String} selector a css selector for which we get the background color
+   * @return {String}
+   */
+  getBackgroundColor(selector) {
+    const backgroundColour = $(selector).getCSSProperty('background-color');
+    return backgroundColour["parsed"]["hex"];
+  }
+
+  /**
+   * Returns the date for the Date modified of the first object in the table
+   * @return {String}
+   */
+  getFirstRowDate() {
+    return $(popupSelectors.columnModified).getAttribute('Title');
+  }
+
+  /**
+   * Asserts the date modified of the first object is between passed dates
+   *
+   * @param {Date} dateFrom
+   * @param {Date} dateTo
+   * @return {Boolean}
+   */
+  assertFirstObjectDateIsInTheRange(dateFrom, dateTo) {
+    dateFrom = Date.parse(dateFrom);
+    dateTo = Date.parse(dateTo);
+
+    const rowTimestamp = this.getFirstRowTimestamp();
+    return rowTimestamp >= dateFrom && rowTimestamp <= dateTo;
+  }
+
+  /**
+   * Returns true if checkbox is checked, false if not
+   * @param {String} category Category in which checkbox is located, f.e. "Type"
+   * @param {String} item Name of an item we want to check, f.e. "MicroStrategy Tutorial"
+   * @return {Boolean}
+   */
+  getCheckboxState(category, item) {
+    return $(popupSelectors.filterCheckboxState(category, item)).isSelected();
+  }
+
+  /**
+   * Returns true if checkbox in All Panel is checked, false if not
+   * @param {String} item Name of an item we want to check, f.e. "MicroStrategy Tutorial"
+   * @return {Boolean}
+   */
+  getAllPanelCheckboxState(item) {
+    return $(popupSelectors.filterPanel.getAllPanelCheckboxState(item)).isSelected();
+  }
+
+  /**
+     * Finds the Details Table element with the given index from expanded Detail Tables
+   *
+   * @param {Number} index index of the Detail Table to find
+   * @returns {Element} Details Table element
+   */
+  getDetailsTableByIndex(index) {
+    return $$(popupSelectors.detailsTable)[index];
+  }
+
+  /**
+    * Hovers over the location element in the given details table
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @returns {String} tooltip text for the location element
+    * @memberof PluginPopup
+    */
+  getLocationTooltipText(detailsTable) {
+    detailsTable.$(popupSelectors.locationDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return detailsTable.$(popupSelectors.locationDetailTooltip).getText();
+  }
+
+  /**
+    * Gets the text for the location element in the given details table
+    *
+    * @param {Element} detailsTable Details Table to extract the location from
+    * @returns {String} text for the location element
+    * @memberof PluginPopup
+    */
+  getLocationText(detailsTable) {
+    return detailsTable.$(popupSelectors.locationDetail).getText();
+  }
+
+  /**
+    * Hovers over the description element in the given details table
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @returns {String} tooltip text for the description element
+    * @memberof PluginPopup
+    */
+  getDescriptionTooltipText(detailsTable) {
+    detailsTable.$(popupSelectors.descriptionDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.descriptionDetailTooltip).getText();
+  }
+
+  /**
+    * Gets the text for the description element in the given details table
+    *
+    * @param {Element} detailsTable Details Table to extract the description from
+    * @returns {String} text for the description element
+    * @memberof PluginPopup
+    */
+  getDescriptionText(detailsTable) {
+    return detailsTable.$(popupSelectors.descriptionDetail).getText();
+  }
+}
 
 export default new PluginPopup();

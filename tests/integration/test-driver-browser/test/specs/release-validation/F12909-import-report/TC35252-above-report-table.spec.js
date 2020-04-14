@@ -4,51 +4,44 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { objectsList } from '../../../constants/objects-list';
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
-describe('Error Handling - IMPORT', () => {
-  beforeAll(async () => {
-    await browser.driver.manage().window().maximize();
-    await OfficeWorksheet.openExcelHome();
-    const url = await browser.getCurrentUrl();
-    if (url.includes('login.microsoftonline')) {
-      await OfficeLogin.login(officeCredentials.username, officeCredentials.password);
-    }
-    await OfficeWorksheet.createNewWorkbook();
-    await OfficeWorksheet.openPlugin();
-    await PluginRightPanel.loginToPlugin('a', '');
+describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+  beforeEach(() => {
+    OfficeLogin.openExcelAndLoginToPlugin();
+  });
+  afterEach(() => {
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
-  });
 
-  it('[TC35252] - report above/nex to table', async () => {
+  it('[TC35252] - report above/next to table', () => {
     // should display proper error message for importing report above cells covering currently imported one
-    await OfficeWorksheet.selectCell('A3');
-    await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(objectsList.reports.basicReport);
-    await waitForNotification();
-    await OfficeWorksheet.selectCell('A1');
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.reports.basicReport);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
-    await PluginRightPanel.closeNotification();
+    OfficeWorksheet.selectCell('A3');
+    PluginRightPanel.clickImportDataButton();
+    PluginPopup.switchLibrary(false);
+    PluginPopup.importObject(objectsList.reports.basicReport);
+    waitForNotification();
+    OfficeWorksheet.selectCell('A1');
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject(objectsList.reports.basicReport);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
+    PluginRightPanel.closeNotification();
 
     // should display proper error message for importing report next to cells covering currently imported one
-    await OfficeWorksheet.selectCell('R1');
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.reports.basicReport);
-    await waitForNotification();
-    await OfficeWorksheet.selectCell('P1');
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.reports.basicReport);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
-    await PluginRightPanel.closeNotification();
+    OfficeWorksheet.selectCell('R1');
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject(objectsList.reports.basicReport);
+    waitForNotification();
+    OfficeWorksheet.selectCell('P1');
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importObject(objectsList.reports.basicReport);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
+    PluginRightPanel.closeNotification();
   });
 })

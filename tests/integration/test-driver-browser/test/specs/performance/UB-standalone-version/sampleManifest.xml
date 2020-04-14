@@ -14,12 +14,12 @@
     <ProviderName>MicroStrategy Inc.</ProviderName>
     <DefaultLocale>en-US</DefaultLocale>
     <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
-    <DisplayName DefaultValue="env-173736" />
+    <DisplayName DefaultValue="UB Manifest" />
     <Description DefaultValue="New plugin to insert data from MicroStrategy into Microsoft Office products."/>
 
     <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
-    <IconUrl DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_32.png" />
-    <HighResolutionIconUrl DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_512.png"/>
+    <IconUrl DefaultValue="https://env-180792.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_32.png" />
+    <HighResolutionIconUrl DefaultValue="https://env-180792.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_512.png"/>
 
     <!--If you plan to submit this add-in to the Office Store, uncomment the SupportUrl element below-->
     <SupportUrl DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/index.html" />
@@ -37,7 +37,7 @@
         <Host Name="Workbook" />
     </Hosts>
     <DefaultSettings>
-        <SourceLocation DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/index.html" />
+        <SourceLocation DefaultValue="https://env-180792.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/index.html" />
     </DefaultSettings>
     <!-- End TaskPane Mode integration.  -->
 
@@ -117,18 +117,18 @@
         <!-- You can use resources across hosts and form factors. -->
         <Resources>
             <bt:Images>
-                <bt:Image id="MSTR.tpicon_16x16" DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_16.png" />
-                <bt:Image id="MSTR.tpicon_32x32" DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_32.png" />
-                <bt:Image id="MSTR.tpicon_80x80" DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_80.png" />
+                <bt:Image id="MSTR.tpicon_16x16" DefaultValue="https://env-180792.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_16.png" />
+                <bt:Image id="MSTR.tpicon_32x32" DefaultValue="https://env-180792.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_32.png" />
+                <bt:Image id="MSTR.tpicon_80x80" DefaultValue="https://env-180792.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/assets/mstr_logo_80.png" />
             </bt:Images>
             <bt:Urls>
-                <bt:Url id="MSTR.Taskpane.Url" DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/index.html" />
+                <bt:Url id="MSTR.Taskpane.Url" DefaultValue="https://env-180792.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/index.html" />
                 <bt:Url id="MSTR.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
-                <bt:Url id="MSTR.DesktopFunctionFile.Url" DefaultValue="https://env-173736.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/function-file/function-file.html" />
+                <bt:Url id="MSTR.DesktopFunctionFile.Url" DefaultValue="https://env-180792.customer.cloud.microstrategy.com/MicroStrategyLibrary/static/loader-mstr-office/function-file/function-file.html" />
             </bt:Urls>
             <!-- ShortStrings max characters==125. -->
             <bt:ShortStrings>
-                <bt:String id="MSTR.TaskpaneButton.Label" DefaultValue="env-173736" />
+                <bt:String id="MSTR.TaskpaneButton.Label" DefaultValue="UB Manifest" />
                 <bt:String id="MSTR.GroupMicroStrategy.Label" DefaultValue="MicroStrategy" />
                 <bt:String id="MSTR.GetStarted.Title" DefaultValue="MicroStrategy Office Client loaded" />
                 <bt:String id="MSTR.OfficeTab.Label" DefaultValue="MicroStrategy" />

@@ -6,8 +6,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import settings from '../../../config';
-import { switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
@@ -16,8 +15,7 @@ describe('F24398 - Import and refresh visualization', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC60974] - Importing custom visualization', () => {
@@ -27,7 +25,7 @@ describe('F24398 - Import and refresh visualization', () => {
     // It should import grid visualization
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(dossierObject.name);
+    PluginPopup.switchLibraryAndImportObject(dossierObject.name, null, false);
     browser.pause(5555);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.GoogleTimeline);
 
@@ -36,6 +34,6 @@ describe('F24398 - Import and refresh visualization', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     switchToExcelFrame();
     OfficeWorksheet.selectCell('D18');
-    expect(D18.getText()).toEqual('1/1/2013');
+    expect(D18.getText()).toEqual('01/01/2013');
   });
 });
