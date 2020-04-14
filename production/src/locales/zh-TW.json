@@ -214,5 +214,20 @@
   "To preserve this crosstab report, select all objects without changing their forms.": "為保留此交叉分析報告，請選取所有物件，並且不要變更其格式。",
   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "您正在視覺效果上嘗試執行操作，該視覺效果尚不受支援，或已移動到其他章節/頁面，或已從 Dossier 中刪除。",
   "Seems like the dossier has been removed.": "該 Dossier 似乎已移除。",
-  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "您正在視覺效果上嘗試執行操作，該視覺效果尚不受支援，或已從 Dossier 中刪除。"
+  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "您正在視覺效果上嘗試執行操作，該視覺效果尚不受支援，或已從 Dossier 中刪除。",
+  "Removal failed": "*Removal failed*",
+  "Duplication failed": "*Duplication failed*",
+  "Pending": "*Pending*",
+  "Duplicating": "*Duplicating*",
+  "Refreshing": "*Refreshing*",
+  "Import failed": "*Import failed*",
+  "Clearing": "*Clearing*",
+  "Object cleared": "*Object cleared*",
+  "Refresh complete": "*Refresh complete*",
+  "Clearing failed": "*Clearing failed*",
+  "Import successful": "*Import successful*",
+  "Refresh failed": "*Refresh failed*",
+  "Removing": "*Removing*",
+  "Object removed": "*Object removed*",
+  "Object duplicated": "*Object duplicated*"
 }
