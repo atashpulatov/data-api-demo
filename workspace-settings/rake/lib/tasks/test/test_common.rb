@@ -63,7 +63,7 @@ task :e2e_test_browser,[:build_no] do | t, args|
     Rake::Task["browser_e2e_push_results"].invoke(build_no)
   end
   ci_metrics_system_test
-  raise "test failed" if test_fail 
+  raise "test failed" if test_fail
 end
 
 desc "run client based e2e test"
