@@ -76,12 +76,11 @@ class DossierInstanceDefinition {
     };
   }
 
-  getVisualizationName = (operationData, name, instanceDefinition, vizKeyChanged) => {
+  getVisualizationName = (operationData, name, instanceDefinition) => {
     const { objectEditedData, operationType } = operationData;
 
     if (operationType === IMPORT_OPERATION
-      || (objectEditedData && objectEditedData.visualizationInfo.formatShouldUpdate)
-      || (operationType === DUPLICATE_OPERATION && vizKeyChanged)) {
+      || (objectEditedData && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)) {
       name = instanceDefinition.mstrTable.name;
     }
     return name;

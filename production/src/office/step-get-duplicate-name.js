@@ -18,14 +18,14 @@ class StepGetDuplicateName {
   *
   * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
   * @param {String} objectData.name Name of the original object.
-  * @param {Boolean} objectData.vizKeyChanged Indicator that the different vizualization was selected
   * during duplication with edit.
   */
   getDuplicateName = (objectData, operationData) => {
     try {
-      const { objectWorkingId, name, vizKeyChanged } = objectData;
+      const { objectWorkingId, name } = objectData;
+      const { objectEditedData } = operationData;
 
-      if (!vizKeyChanged) {
+      if (!(objectEditedData && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)) {
         const lang = i18n.language;
         const translatedCopy = i18n.store.data[lang].common.Copy;
 
