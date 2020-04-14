@@ -14,6 +14,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
   IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION
 } from '../operation/operation-type-names';
+import { errorService } from '../error/error-handler';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -74,10 +75,13 @@ export const RightSidePanelNotConnected = (props) => {
    * @param {String} name Optional new name of an object
    */
   const wrapper = async (func, params, name) => {
-    await officeApiHelper.checkStatusOfSessions();
-
-    if (officeReducerHelper.noOperationInProgress()) {
-      await func(params, name);
+    try {
+      await officeApiHelper.checkStatusOfSessions();
+      if (officeReducerHelper.noOperationInProgress()) {
+        await func(params, name);
+      }
+    } catch (error) {
+      errorService.handleError(error);
     }
   };
 
