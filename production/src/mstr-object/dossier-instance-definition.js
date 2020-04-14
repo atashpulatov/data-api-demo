@@ -78,11 +78,10 @@ class DossierInstanceDefinition {
 
   getVisualizationName = (operationData, name, instanceDefinition) => {
     const { objectEditedData, operationType } = operationData;
-    const { visualizationInfo } = objectEditedData;
-    const { nameAndFormatShouldUpdate } = visualizationInfo;
 
     if (operationType === IMPORT_OPERATION
-      || (objectEditedData && visualizationInfo && nameAndFormatShouldUpdate)) {
+      || (objectEditedData && objectEditedData.visualizationInfo
+        && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)) {
       name = instanceDefinition.mstrTable.name;
     }
     return name;
