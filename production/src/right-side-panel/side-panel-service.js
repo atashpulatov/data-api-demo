@@ -67,24 +67,23 @@ class SidePanelService {
   setDuplicatePopup = ({
     objectWorkingId, activeCellAddress, setSidePanelPopup, setDuplicatedObjectId
   }) => {
+    const closePopup = () => {
+      setSidePanelPopup(null);
+      setDuplicatedObjectId(null);
+    };
     setDuplicatedObjectId(objectWorkingId);
     setSidePanelPopup({
       type: popupTypes.DUPLICATE,
       activeCell: activeCellAddress,
       onImport: (isActiveCellOptionSelected) => {
         this.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
-        setSidePanelPopup(null);
-        setDuplicatedObjectId(null);
+        closePopup();
       },
       onEdit: (isActiveCellOptionSelected) => {
         this.duplicate(objectWorkingId, !isActiveCellOptionSelected, true);
-        setSidePanelPopup(null);
-        setDuplicatedObjectId(null);
+        closePopup();
       },
-      onClose: () => {
-        setSidePanelPopup(null);
-        setDuplicatedObjectId(null);
-      }
+      onClose: closePopup
     });
   };
 

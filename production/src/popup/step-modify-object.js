@@ -16,39 +16,41 @@ class StepModifyObject {
   modifyObject = (objectData, { objectEditedData }) => {
     const { objectWorkingId, subtotalsInfo } = objectData;
 
-    const updatedObject = {
-      objectWorkingId,
-      body: objectEditedData.body,
-    };
+    if (objectEditedData) {
+      const updatedObject = {
+        objectWorkingId,
+        body: objectEditedData.body,
+      };
 
-    if (!objectEditedData.visualizationInfo
-      && subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
-      const subtotalsInformation = { ...subtotalsInfo };
-      subtotalsInformation.importSubtotal = objectEditedData.subtotalsInfo.importSubtotal;
-      updatedObject.subtotalsInfo = subtotalsInformation;
-    }
+      if (!objectEditedData.visualizationInfo
+        && subtotalsInfo.importSubtotal !== objectEditedData.subtotalsInfo.importSubtotal) {
+        const subtotalsInformation = { ...subtotalsInfo };
+        subtotalsInformation.importSubtotal = objectEditedData.subtotalsInfo.importSubtotal;
+        updatedObject.subtotalsInfo = subtotalsInformation;
+      }
 
-    if (objectData.displayAttrFormNames !== objectEditedData.displayAttrFormNames) {
-      updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
-    }
-
-    if (objectEditedData.promptsAnswers) {
-      updatedObject.promptsAnswers = objectEditedData.promptsAnswers;
-    }
-
-    if (objectEditedData.isEdit) {
-      if (objectData.visualizationInfo.visualizationKey !== objectEditedData.visualizationInfo.visualizationKey) {
-        objectEditedData.visualizationInfo.nameShouldUpdate = true;
-        objectEditedData.visualizationInfo.formatShouldUpdate = true;
-        updatedObject.visualizationInfo = objectEditedData.visualizationInfo;
+      if (objectData.displayAttrFormNames !== objectEditedData.displayAttrFormNames) {
         updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
       }
 
-      updatedObject.preparedInstanceId = objectEditedData.preparedInstanceId;
-      updatedObject.isEdit = false;
-    }
+      if (objectEditedData.promptsAnswers) {
+        updatedObject.promptsAnswers = objectEditedData.promptsAnswers;
+      }
 
-    operationStepDispatcher.updateObject(updatedObject);
+      if (objectEditedData.isEdit) {
+        if (objectData.visualizationInfo.visualizationKey !== objectEditedData.visualizationInfo.visualizationKey) {
+          objectEditedData.visualizationInfo.nameShouldUpdate = true;
+          objectEditedData.visualizationInfo.formatShouldUpdate = true;
+          updatedObject.visualizationInfo = objectEditedData.visualizationInfo;
+          updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
+        }
+
+        updatedObject.preparedInstanceId = objectEditedData.preparedInstanceId;
+        updatedObject.isEdit = false;
+      }
+
+      operationStepDispatcher.updateObject(updatedObject);
+    }
     operationStepDispatcher.completeModifyObject(objectWorkingId);
   }
 }

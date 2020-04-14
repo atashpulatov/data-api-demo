@@ -112,7 +112,7 @@ class PopupController {
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else if (reportParams.duplicateMode) {
-            await this.handleDuplicate(response, reportParams);
+            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
           } else {
             const reportPreviousState = this.getObjectPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
@@ -122,7 +122,7 @@ class PopupController {
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else if (reportParams.duplicateMode) {
-            await this.handleDuplicate(response, reportParams);
+            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
           } else {
             const reportPreviousState = this.getObjectPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
@@ -188,49 +188,6 @@ class PopupController {
         preparedInstanceId: response.preparedInstanceId,
       };
       this.reduxStore.dispatch(importRequested(objectData));
-    }
-  };
-
-  /**
-   * Creates objectData based on response and reportParams and dispatches duplicateRequested.
-   *
-   * Called after message from popup is recived and reportParams.duplicateMode === true is provided.
-   * Depending on object type, it needs to map different variables into objectData.
-   * Gets reportParams with data of source object for duplication.
-   *
-   * Cretes vizKeyChanged and stores in objectData.
-   *
-   * @param {Object} response Data about edited object and manipulations, recieved from popup.
-   * @param {String} reportParams.name Original object name.
-   * @param {Boolean} reportParams.insertNewWorksheet Flag based on user interaction with duplicate popup.
-   * @param {String} reportParams.visualizationInfo.visualizationKey Prev selected viz key, needed to calculate vizKeyChanged.
-   * @param {Number} reportParams.objectWorkingId Uniqe id of new duplicated object.
-   */
-  handleDuplicate = async (response, reportParams) => {
-    if (response.chosenObject || response.chosenObjectId) {
-      const vizKeyChanged = response.visualizationInfo && response.visualizationInfo.visualizationKey
-        && reportParams.visualizationInfo && reportParams.visualizationInfo.visualizationKey
-        && response.visualizationInfo.visualizationKey !== reportParams.visualizationInfo.visualizationKey;
-
-      const objectData = {
-        name: reportParams.name,
-        dossierData: response.dossierData,
-        objectId: response.chosenObject || response.chosenObjectId,
-        projectId: response.chosenProject || response.projectId,
-        mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype) || mstrObjectEnum.getMstrTypeBySubtype(response.chosenObjectSubtype),
-        isPrompted: response.isPrompted,
-        promptsAnswers: response.promptsAnswers,
-        visualizationInfo: response.visualizationInfo,
-        preparedInstanceId: response.preparedInstanceId,
-        instanceId: response.instanceId,
-        body: response.body,
-        subtotalsInfo: response.subtotalsInfo,
-        displayAttrFormNames: response.displayAttrFormNames,
-        insertNewWorksheet: reportParams.insertNewWorksheet,
-        vizKeyChanged,
-        objectWorkingId: reportParams.objectWorkingId,
-      };
-      this.reduxStore.dispatch(duplicateRequested(objectData));
     }
   };
 

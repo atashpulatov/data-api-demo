@@ -43,12 +43,12 @@ export const editRequested = (objectData, objectEditedData) => {
   };
 };
 
-export const duplicateRequested = (object) => {
+export const duplicateRequested = (object, objectEditedData) => {
   const { objectWorkingId } = object;
   return {
     type: DUPLICATE_OPERATION,
     payload: {
-      operation: createOperation(DUPLICATE_OPERATION, objectWorkingId),
+      operation: createOperation(DUPLICATE_OPERATION, objectWorkingId, { objectEditedData }),
       object,
     },
   };

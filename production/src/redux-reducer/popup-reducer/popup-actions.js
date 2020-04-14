@@ -136,13 +136,10 @@ class PopupActions {
 
       const reportParams = {
         duplicateMode: true,
-        insertNewWorksheet: object.insertNewWorksheet,
-        name: object.name,
-        objectWorkingId: object.objectWorkingId,
+        object
       };
 
       if (isDossier) {
-        reportParams.visualizationInfo = object.visualizationInfo;
         this.popupController.runEditDossierPopup(reportParams);
       } else if (object.isPrompted) {
         this.popupController.runRepromptPopup(reportParams);
