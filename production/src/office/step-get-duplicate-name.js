@@ -24,8 +24,10 @@ class StepGetDuplicateName {
     try {
       const { objectWorkingId, name } = objectData;
       const { objectEditedData } = operationData;
+      const { visualizationInfo } = objectEditedData;
+      const { nameAndFormatShouldUpdate } = visualizationInfo;
 
-      if (!(objectEditedData && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)) {
+      if (!(objectEditedData && visualizationInfo && nameAndFormatShouldUpdate)) {
         const lang = i18n.language;
         const translatedCopy = i18n.store.data[lang].common.Copy;
 
