@@ -67,8 +67,7 @@ export const RightSidePanelNotConnected = (props) => {
    * Function will be called when:
    *
    * - session is valid,
-   * - operation is not in progress,
-   * - optional new name, used by rename.
+   * - no operation is in progress.
    *
    * @param {Function} func Function to be wrapped
    * @param {*} params Parameters to wrapped function
