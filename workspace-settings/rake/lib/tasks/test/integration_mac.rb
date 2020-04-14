@@ -9,7 +9,7 @@ task :deploy_tester_server,[:build_no] do | t, args|
   version = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
   download_mstr_office(group_id, version,mac_env_dir)
   download_latest_web_dossier(mac_env_dir)
-  
+  clean_docker_space
   do_stop_local_web_dossier
   do_package_test_docker
   do_start_local_web_dossier
@@ -22,6 +22,11 @@ end
 
 def mac_env_dir
   "e2e-webserver-mac"
+end
+
+def clean_docker_space()
+  cmd = "docker system prune -a -f"
+  shell_command! cmd
 end
 
 def do_package_test_docker()
