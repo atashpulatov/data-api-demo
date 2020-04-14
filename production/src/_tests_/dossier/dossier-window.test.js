@@ -10,6 +10,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../../office/office-context';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../../authentication/authentication-helper';
+import { sessionHelper } from '../../storage/session-helper';
 
 describe('Dossierwindow', () => {
   afterEach(() => {
@@ -126,6 +127,29 @@ describe('Dossierwindow', () => {
     expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify(mockupOkObject));
   });
 
+  it('should call installSessionProlongingHandler on mount', async () => {
+    // given
+    sessionHelper.installSessionProlongingHandler = jest.fn();
+    // when componentDidMount
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    // then
+    expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
+  });
+
+
+  it('addEventListener and removeEventListener should be called on mount and on unmount', () => {
+    // given
+    const addEventListener = jest.spyOn(window, 'addEventListener');
+    const removeEventListener = jest.spyOn(window, 'removeEventListener');
+    // when
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    // then
+    expect(addEventListener).toHaveBeenCalled();
+    // when componentWillUnmount
+    componentWrapper.unmount();
+    // then
+    expect(removeEventListener).toHaveBeenCalled();
+  });
 
   describe('DossierWindow.js mapStateToProps and mapActionsToProps test', () => {
     const mockStore = configureMockStore([thunk]);

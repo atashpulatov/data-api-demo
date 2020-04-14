@@ -5,6 +5,7 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { applyFile } from './script-injection-helper';
 
 const { microstrategy, Office } = window;
 
@@ -68,10 +69,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
       const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
       if (!isOfficeOnline && isIE) {
-        const fileLocation = window.location.origin
-          + window.location.pathname.replace('index.html', 'javascript/mshtmllib.js');
-        this.applyFile(contentDocument, fileLocation);
+        applyFile(contentDocument, 'javascript/mshtmllib.js');
       }
+      applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
     });
   };
 
@@ -92,20 +92,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       visualizationKey: payloadVisKey
     };
     handleSelection(this.dossierData);
-  }
-
-  /**
-   * This function applies an external script file to a embedded document
-   * @param {*} _document
-   * @param {*} fileLocation
-   */
-  applyFile = (_document, fileLocation) => {
-    const script = _document.createElement('script');
-    script.src = fileLocation;
-    if (_document) {
-      const title = _document.head.getElementsByTagName('title')[0];
-      _document.head.insertBefore(script, title);
-    }
   }
 
   loadEmbeddedDossier = async (container) => {

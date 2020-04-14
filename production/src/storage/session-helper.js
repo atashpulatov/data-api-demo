@@ -1,3 +1,4 @@
+import throttle from 'lodash.throttle';
 import { sessionProperties } from '../redux-reducer/session-reducer/session-properties';
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
@@ -7,6 +8,7 @@ import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
+const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
@@ -90,6 +92,36 @@ class SessionHelper {
     return session;
   }
 
+  /**
+   * before calling keepSessionAlive, installSessionProlongingHandler method shold be invoked
+   * keepSessionAlive sends lightweight request to prolong the session
+   * in case of session is already expired, process will be terminated if parameter onSessionExpire
+   * is truthy and user will be logged out getting notification.
+   *
+   * @param {func} onSessionExpire is callback function e.g closePopup()
+   */
+  keepSessionAlive = async (onSessionExpire = null) => {
+    const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
+    try {
+      await authenticationService.putSessions(envUrl, authToken);
+    } catch (error) {
+      if (onSessionExpire) {
+        onSessionExpire();
+      }
+      errorService.handleError(error);
+    }
+  };
+
+ /**
+  * installSessionProlongingHandler installs throttle on keepSessionAlive method
+  * that only invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
+  *
+  * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null]
+  */
+ installSessionProlongingHandler = (onSessionExpire = null) => throttle(() => {
+   this.keepSessionAlive(onSessionExpire);
+ }, DEFAULT_SESSION_REFRESH_TIME, { trailing: false })
+
   getUserInfo = async () => {
     let userData = {};
     const isDevelopment = this.isDevelopment();
@@ -160,4 +192,5 @@ class SessionHelper {
   };
 }
 
+export const EXTEND_SESSION = 'EXTEND_SESSION';
 export const sessionHelper = new SessionHelper();

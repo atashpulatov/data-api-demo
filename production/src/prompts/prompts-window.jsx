@@ -12,6 +12,8 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { applyFile, applyStyle } from '../dossier/script-injection-helper';
+import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 
 const { microstrategy } = window;
 const {
@@ -34,7 +36,8 @@ export class PromptsWindowNotConnected extends Component {
       isReprompt: popupState.isReprompt,
       promptsAnswers: mstrData.promptsAnswers,
     };
-
+    const { installSessionProlongingHandler } = sessionHelper;
+    this.prolongSession = installSessionProlongingHandler(this.closePopup);
     this.container = React.createRef();
     this.outerCont = React.createRef();
   }
@@ -218,19 +221,6 @@ export class PromptsWindowNotConnected extends Component {
   };
 
   /**
-   * This function applies an external css file to a document
-   */
-  applyStyle = (_document, styleSheetLocation) => {
-    const cssLink = document.createElement('link');
-    cssLink.href = styleSheetLocation;
-    cssLink.rel = 'stylesheet';
-    cssLink.type = 'text/css';
-    if (_document) {
-      _document.head.appendChild(cssLink);
-    }
-  }
-
-  /**
    * This function returns false if a document is login page and true otherwise
    */
   isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
@@ -240,13 +230,12 @@ export class PromptsWindowNotConnected extends Component {
    */
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
-      const embeddedDocument = iframe.contentDocument;
-      this.embeddedDocument = embeddedDocument;
-      if (!this.isLoginPage(embeddedDocument)) {
-        const cssLocation = window.location.origin
-          + window.location.pathname.replace('index.html', 'promptsWindow.css');
-        this.applyStyle(embeddedDocument, cssLocation);
+      const { contentDocument } = iframe;
+      this.embeddedDocument = contentDocument;
+      if (!this.isLoginPage(contentDocument)) {
+        applyStyle(contentDocument, 'promptsWindow.css');
       }
+      applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
     });
   };
 
@@ -268,6 +257,11 @@ export class PromptsWindowNotConnected extends Component {
         }
       };
       popupHelper.handlePopupErrors(newErrorObject);
+    }
+    const { data: postMessage, origin } = message;
+    const { origin: targetOrigin } = window;
+    if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
+      this.prolongSession();
     }
   };
 

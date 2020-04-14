@@ -13,10 +13,6 @@ hr {
   flex-direction: column;
 }
 
-#overlay {
-  animation: fadein 1.5s;
-}
-
 #app-header {
   display: flex;
   justify-content: space-between;
@@ -29,6 +25,7 @@ hr {
 }
 
 #overlay {
+  min-height: 100%;
   animation: fadein 1.5s;
 }
 

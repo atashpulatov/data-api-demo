@@ -8,6 +8,7 @@ import { PopupViewSelector } from '../../popup/popup-view-selector';
 import { Office } from '../mockOffice';
 import i18next from '../../i18n';
 import { reduxStore } from '../../store';
+import { sessionHelper } from '../../storage/session-helper';
 
 describe('Popup.js', () => {
   it('should render PopupViewSelector', () => {
@@ -18,6 +19,30 @@ describe('Popup.js', () => {
     // then
     const popupButtonsWrapped = componentWrapper.find(PopupViewSelector);
     expect(popupButtonsWrapped.get(0)).toBeDefined();
+  });
+
+  it('should exist and have two children nodes', () => {
+    // when
+    const componentWrapper = shallow(<Popup />);
+    // then
+    expect(componentWrapper.exists('SessionExtendingWrapper')).toBeTruthy();
+    expect(componentWrapper.find('SessionExtendingWrapper').children()).toHaveLength(2); //  <PopupViewSelector /> and <InternetConnectionError />
+  });
+
+  it('should contain all assigned props and return true', () => {
+    // given
+    const mstrSetDataFunction = jest.fn();
+    // when
+    const wrappedComponent = mount(<Provider store={reduxStore}>
+      <Popup setMstrData={mstrSetDataFunction} />
+    </Provider>);
+    const popupWrapperId = '#popup-wrapper';
+    // then
+    const popupWrapper = wrappedComponent.find(popupWrapperId).at(1);
+    expect(popupWrapper.props().onClick).toBeDefined();
+    expect(popupWrapper.props().onKeyDown).toBeDefined();
+    expect(popupWrapper.props().role).toEqual('button');
+    expect(popupWrapper.props().tabIndex).toEqual('0');
   });
 
   it('should call libraryErrorController.initializeHttpErrorsHandling', () => {

@@ -68,4 +68,45 @@ describe('Home', () => {
     await (tempPromise);
     expect(homeHelper.saveTokenFromCookies).toBeCalled();
   });
+
+  it('should contain 2 child nodes and shold be child of content', () => {
+    // given
+    const props = {
+      loading: false,
+      loadingReport: false,
+      authToken: false,
+      reportArray: false,
+    };
+    // when
+    const wrappedComponent = mount(
+      <Provider store={reduxStore}>
+        <HomeNotConnected {...props} />
+      </Provider>,
+    );
+    const overlayId = '#overlay';
+    // then
+    expect(wrappedComponent.exists('SessionExtendingWrapper')).toBeTruthy();
+    expect(wrappedComponent.find(overlayId).children()).toHaveLength(3); // <Header/> and <Tabs/> components
+  });
+
+  it('should contain all assigned props and return true on toBeDefined', () => {
+    // given
+    const props = {
+      loading: false,
+      loadingReport: false,
+      authToken: false,
+      reportArray: false,
+    };
+      // when
+    const wrappedComponent = mount(
+      <Provider store={reduxStore}>
+        <HomeNotConnected {...props} />
+      </Provider>,
+    );
+    const overlayId = '#overlay';
+    // then
+    const overlayWrapper = wrappedComponent.find(overlayId).at(1);
+    expect(overlayWrapper.props().role).toEqual('button');
+    expect(overlayWrapper.props().tabIndex).toEqual('0');
+  });
 });

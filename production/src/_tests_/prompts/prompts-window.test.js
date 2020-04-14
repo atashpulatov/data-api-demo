@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { PromptsWindowNotConnected } from '../../prompts/prompts-window';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { popupHelper } from '../../popup/popup-helper';
+import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 
 jest.mock('../../popup/popup-helper');
 
@@ -12,6 +13,7 @@ describe('PromptsWindowNotConnected', () => {
     token: 'token',
     projectId: 'projectId',
     chosenObjectId: 'chosenObjectId',
+    promptsAnswers: 'promptsAnswers'
   };
 
   const popupState = { isReprompt: false };
@@ -88,7 +90,7 @@ describe('PromptsWindowNotConnected', () => {
     expect(popupHelper.handlePopupErrors).toBeCalledWith(expectedObject);
   });
 
-  it('handlePopupErrors should not be called on diffrent messageReceived', () => {
+  it('handlePopupErrors should not be called on different messageReceived', () => {
     // given
     popupHelper.handlePopupErrors = jest.fn();
     // when
@@ -97,6 +99,47 @@ describe('PromptsWindowNotConnected', () => {
     // then
     expect(popupHelper.handlePopupErrors).not.toBeCalled();
   });
+
+  it('prolongSession should be called on EXTEND_SESSION message', () => {
+    // given
+    const message = { data: EXTEND_SESSION };
+    const stopLoading = jest.fn();
+    window.Office = {
+      context: {
+        ui: { messageParent: () => { }, },
+        diagnostics: { host: 'host', platform: 'platform', version: 'version' },
+        requirements: { isSetSupported: jest.fn() }
+      }
+    };
+    // when
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} stopLoading={stopLoading} />);
+    const prolongSession = jest.spyOn(wrappedComponent.instance(), 'prolongSession');
+    wrappedComponent.instance().messageReceived(message);
+    // then
+    expect(prolongSession).toHaveBeenCalled();
+  });
+
+  it('prolongSession should not be called on different messages', () => {
+    // given
+    const message = {};
+    const stopLoading = jest.fn();
+    // when
+    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} stopLoading={stopLoading} />);
+    const prolongSession = jest.spyOn(wrappedComponent.instance(), 'prolongSession');
+    wrappedComponent.instance().messageReceived(message);
+    // then
+    expect(prolongSession).not.toBeCalled();
+  });
+
+  it('should call installSessionProlongingHandler on mount', () => {
+    // given
+    sessionHelper.installSessionProlongingHandler = jest.fn();
+    // when
+    shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
+    // then
+    expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
+  });
+
 
   it('handleRun should call handlePopupErrors on not valid auth token ', async () => {
     // given
