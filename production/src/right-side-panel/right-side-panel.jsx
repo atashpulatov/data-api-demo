@@ -56,7 +56,9 @@ export const RightSidePanelNotConnected = (props) => {
   // Updates the activeCellAddress in duplicate popup if this popup is opened.
   React.useEffect(() => {
     if (sidePanelPopup !== null && sidePanelPopup.type === popupTypes.DUPLICATE && duplicatedObjectId !== null) {
-      setDuplicatePopup(duplicatedObjectId);
+      sidePanelService.setDuplicatePopup({
+        objectWorkingId: duplicatedObjectId, activeCellAddress, setDuplicatedObjectId, setSidePanelPopup
+      });
     }
     // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
     // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
@@ -96,57 +98,15 @@ export const RightSidePanelNotConnected = (props) => {
 
   const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
-  const duplicateWrapper = async (params) => { await wrapper(openDuplicatePopup, params); };
-  // const duplicateWrapper = async (params) => {
-  //   await wrapper(sidePanelService.createDuplicatePopup, {
-  //     objectWorkingId: params,
-  //     activeCellAddress,
-  //     setDuplicatedObjectId,
-  //     setSidePanelPopup
-  //   });
-  // };
+  const duplicateWrapper = async (objectWorkingId) => {
+    await wrapper(sidePanelService.setDuplicatePopup, {
+      objectWorkingId, activeCellAddress, setDuplicatedObjectId, setSidePanelPopup
+    });
+  };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
-
-  /**
-   * Handles user click on duplicate icon.
-   * Stores objectWorkingId in state of component as duplicatedObjectId.
-   * Calls function responsible for displaying the duplicate popup.
-   *
-   * @param {Number} objectWorkingId - Uniqe id of source object for duplication.
-   */
-  const openDuplicatePopup = (objectWorkingId) => {
-    setDuplicatedObjectId(objectWorkingId);
-    setDuplicatePopup(objectWorkingId);
-  };
-
-  /**
-   * Prepares the props and displays the side panel popup as duplicate popup.
-   *
-   * @param {*} objectWorkingId - Uniqe id of source object for duplication.
-   */
-  const setDuplicatePopup = (objectWorkingId) => {
-    setSidePanelPopup({
-      type: popupTypes.DUPLICATE,
-      activeCell: activeCellAddress,
-      onImport: (isActiveCellOptionSelected) => {
-        sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
-        setSidePanelPopup(null);
-        setDuplicatedObjectId(null);
-      },
-      onEdit: (isActiveCellOptionSelected) => {
-        sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, true);
-        setSidePanelPopup(null);
-        setDuplicatedObjectId(null);
-      },
-      onClose: () => {
-        setSidePanelPopup(null);
-        setDuplicatedObjectId(null);
-      }
-    });
-  };
 
   return (
     <SidePanel

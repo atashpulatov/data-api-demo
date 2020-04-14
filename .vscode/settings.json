@@ -14,7 +14,7 @@
     "source.fixAll": true
   },
   "editor.codeActionsOnSaveTimeout": 1000,
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
   "editor.insertSpaces": true,

@@ -54,6 +54,41 @@ class SidePanelService {
   };
 
   /**
+   * Creates or updates duplicate popup.
+   * Saves the popup and the objectWorkingId in state of RightSidePanel.
+   * Called after user click on duplicate icon or after the activeCellAddress changed, while popup was opened.
+   *
+   * @param {Object} data - Data required to create and update duplicate popup.
+   * @param {Number} data.objectWorkingId - Uniqe id of source object for duplication.
+   * @param {String} data.activeCellAddress - Adress of selected cell in excel.
+   * @param {Function} data.setSidePanelPopup - Callback to save popup in state of RightSidePanel.
+   * @param {Function} data.setDuplicatedObjectId - Callback to save objectWorkingId in state of RightSidePanel.
+   */
+  setDuplicatePopup = ({
+    objectWorkingId, activeCellAddress, setSidePanelPopup, setDuplicatedObjectId
+  }) => {
+    setDuplicatedObjectId(objectWorkingId);
+    setSidePanelPopup({
+      type: popupTypes.DUPLICATE,
+      activeCell: activeCellAddress,
+      onImport: (isActiveCellOptionSelected) => {
+        this.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
+        setSidePanelPopup(null);
+        setDuplicatedObjectId(null);
+      },
+      onEdit: (isActiveCellOptionSelected) => {
+        this.duplicate(objectWorkingId, !isActiveCellOptionSelected, true);
+        setSidePanelPopup(null);
+        setDuplicatedObjectId(null);
+      },
+      onClose: () => {
+        setSidePanelPopup(null);
+        setDuplicatedObjectId(null);
+      }
+    });
+  };
+
+  /**
    * Handle the user interaction with duplicate popup UI.
    * Open edit popup for duplicate with edit.
    * Dispatch duplicate operation for duplicate with import.
@@ -190,10 +225,6 @@ class SidePanelService {
       : object;
     return obj;
   });
-
-  createDuplicatePopup = (params) => {
-
-  };
 }
 
 export const sidePanelService = new SidePanelService();
