@@ -38,7 +38,7 @@ import {
   BACKUP_OBJECT_DATA,
   COMPLETE_CLEAR_DATA,
 } from './operation-steps';
-import stepNoficicationInProgress from '../notification-v2/step-notification-in-progress';
+import stepNotificationInProgress from '../notification-v2/step-notification-in-progress';
 import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
 import stepCompleteClearData from '../office/clear-data/step-complete-clear-data';
 
@@ -76,7 +76,7 @@ class SubscribeSteps {
     operationBus.subscribe(CLEAR_TABLE_DATA, stepClearTableData.clearTableData);
     operationBus.subscribe(COMPLETE_CLEAR_DATA, stepCompleteClearData.completeClearData);
 
-    operationBus.subscribe(MOVE_NOTIFICATION_TO_IN_PROGRESS, stepNoficicationInProgress.moveNotificationToInProgress);
+    operationBus.subscribe(MOVE_NOTIFICATION_TO_IN_PROGRESS, stepNotificationInProgress.moveNotificationToInProgress);
     operationBus.subscribe(
       DISPLAY_NOTIFICATION_COMPLETED,
       stepDisplayNotificationCompleted.displayNotificationCompleted
