@@ -102,6 +102,10 @@ describe('Notification reducer', () => {
       },);
     });
   });
+  describe('moveNotificationToInProgress', () => {
+    it.todo('should update notification to in progress for single notification');
+    it.todo('should update notification to in progress for multiple notifications');
+  });
 
   describe('deleteNotification', () => {
     it('should delete one action on single array', () => {
