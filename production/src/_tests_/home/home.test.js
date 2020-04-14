@@ -49,7 +49,7 @@ describe('Home', () => {
       loading: false,
       loadingReport: false,
       authToken: false,
-      reportArray: false,
+      reportArray: false
 
     };
 
