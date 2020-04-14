@@ -15,7 +15,7 @@ import {
   DELETE_NOTIFICATION,
   CREATE_GLOBAL_NOTIFICATION,
   REMOVE_GLOBAL_NOTIFICATION,
-  CREATE_OBJECT_WARNING
+  DISPLAY_NOTIFICATION_WARNING
 } from './notification-actions';
 import {
   titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap, customT
@@ -40,8 +40,8 @@ export const notificationReducer = (state = initialState, action) => {
     case DISPLAY_NOTIFICATION_COMPLETED:
       return displayNotificationCompleted(state, payload);
 
-    case CREATE_OBJECT_WARNING:
-      return createObjectWarning(state, payload);
+    case DISPLAY_NOTIFICATION_WARNING:
+      return displayNotificationWarning(state, payload);
 
     case DELETE_NOTIFICATION:
       return deleteNotification(state, payload);
@@ -100,7 +100,7 @@ const deleteNotification = (state, payload) => {
   return newState;
 };
 
-const createObjectWarning = (state, payload) => {
+const displayNotificationWarning = (state, payload) => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
 
   const buttons = getOkButton(payload);
@@ -110,7 +110,6 @@ const createObjectWarning = (state, payload) => {
     type: objectNotificationTypes.WARNING,
     title: titleOperationFailedMap[notificationToUpdate.operationType],
     details: customT(payload.notification.message),
-    onHover: payload.notification.callback,
     children: getNotificationButtons(buttons),
   };
 
@@ -128,14 +127,13 @@ const removeGlobalNotification = (state, paylaod) => (
 const deleteAllNotifications = (action, state) => (action.isSecured
   ? { notifications: [], globalNotification: state.globalNotification }
   : state);
-const getOkButton = (payload) => [
-  {
-    title: 'Ok',
-    type: 'basic',
-    label: 'Ok',
-    onClick: payload.notification.callback,
-  },
-];
+
+const getOkButton = (payload) => [{
+  title: 'Ok',
+  type: 'basic',
+  label: 'Ok',
+  onClick: payload.notification.callback,
+}];
 
 function createNewState(state, notificationToUpdateIndex, updatedNotification) {
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };

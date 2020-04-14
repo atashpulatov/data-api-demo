@@ -1,6 +1,6 @@
 import { globalNotificationTypes } from '@mstr/rc';
 import {
-  CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, DELETE_NOTIFICATION, CREATE_OBJECT_WARNING
+  CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION, DELETE_NOTIFICATION, DISPLAY_NOTIFICATION_WARNING
 } from './notification-actions';
 
 export const createConnectionLostNotification = () => ({
@@ -27,7 +27,7 @@ export const deleteObjectNotification = (objectWorkingId) => ({
 });
 
 export const displayObjectWarning = (objectWorkingId, notification) => ({
-  type: CREATE_OBJECT_WARNING,
+  type: DISPLAY_NOTIFICATION_WARNING,
   payload: { objectWorkingId, notification }
 });
 
