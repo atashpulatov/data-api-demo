@@ -101,7 +101,7 @@ export const SettingsMenuNotConnected = ({
         className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}
         tabIndex="0"
         role="menuitem"
-        onClick={isSecuredActive ? showConfirmationPopup() : null}
+        onClick={isSecuredActive ? showConfirmationPopup : null}
         onKeyUp={isSecuredActive ? (e) => (e.keyCode === 13 && showConfirmationPopup()) : null}>
         {t('Clear Data')}
       </li>
