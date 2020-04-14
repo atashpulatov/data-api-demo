@@ -20,6 +20,7 @@ describe('StepGetDuplicateName', () => {
     ${'name Copy 2'}        | ${'name Copy 3'}
     ${'name Copy 3 Copy'}   | ${'name Copy 3 Copy 2'} 
     ${1234}                 | ${'1234 Copy'}
+    ${'name Copy test'}     | ${'name Copy test Copy'}
     
   `('prepareNewNameForDuplicatedObject should return proper prepared name', ({ originalName, expectedResult }) => {
     // given

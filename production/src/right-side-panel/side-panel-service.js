@@ -115,7 +115,7 @@ class SidePanelService {
     } else {
       this.reduxStore.dispatch(duplicateRequested(object));
     }
-  }
+  };
 
   edit = async (objectWorkingId) => {
     const objectData = this.getObject(objectWorkingId);

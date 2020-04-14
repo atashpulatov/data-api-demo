@@ -65,12 +65,10 @@ class StepGetDuplicateName {
     const secondLastWordIndex = nrOfWords - 2;
     const secondLastWord = splitedName[secondLastWordIndex];
 
-
-    if ((Number.isNaN(lastWordAsNumber)) && (lastWord !== translatedCopy)) {
-      splitedName.push(translatedCopy);
-    } else if (lastWord === translatedCopy) {
+    if (lastWord === translatedCopy) {
       splitedName.push('2');
-    } else if (secondLastWord === translatedCopy) {
+    } else if ((secondLastWord === translatedCopy) && (!(Number.isNaN(lastWordAsNumber)))) {
+      // if last word is number and second to last word is copy
       splitedName.pop();
       splitedName.push(`${lastWordAsNumber + 1}`);
     } else {
@@ -101,18 +99,15 @@ class StepGetDuplicateName {
 
     const { objects } = this.reduxStore.getState().objectReducer;
 
-    const objectsNames = [];
-    for (const object of objects) {
-      objectsNames.push(object.name);
-    }
+    const objectsNames = objects.map((object) => object.name);
 
     while (objectsNames.includes(finalNameCandidate)) {
       if (splitedName[splitedName.length - 1] === translatedCopy) {
         splitedName.push(2);
       } else {
-        const last = splitedName.pop();
-        const last2Number = Number(last);
-        splitedName.push(`${last2Number + 1}`);
+        const lastWord = splitedName.pop();
+        const lastWordAsNumber = Number(lastWord);
+        splitedName.push(`${lastWordAsNumber + 1}`);
       }
       finalNameCandidate = splitedName.join(' ');
     }
