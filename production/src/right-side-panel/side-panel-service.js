@@ -21,17 +21,13 @@ class SidePanelService {
   };
 
   addData = async () => {
-    try {
-      // Prevent navigation tree from going straight into importing previously selected item.
-      this.reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
-      await popupController.runPopupNavigation();
-    } catch (error) {
-      errorService.handleError(error);
-    }
+    // Prevent navigation tree from going straight into importing previously selected item.
+    this.reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
+    await popupController.runPopupNavigation();
   };
 
   highlightObject = async (objectWorkingId) => {
-    const objectData = this.getObject(objectWorkingId);
+    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     await officeApiHelper.onBindingObjectClick(objectData);
   };
 
@@ -54,12 +50,12 @@ class SidePanelService {
   };
 
   duplicate = async (objectWorkingId) => {
-    const objectData = this.getObject(objectWorkingId);
+    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     this.reduxStore.dispatch(duplicateRequested(objectData));
   };
 
   edit = async (objectWorkingId) => {
-    const objectData = this.getObject(objectWorkingId);
+    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     const { bindId, mstrObjectType } = objectData;
     const excelContext = await officeApiHelper.getExcelContext();
     await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
@@ -79,7 +75,7 @@ class SidePanelService {
       if (officeContext.requirements.isSetSupported('ExcelApi', 1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           await officeApiHelper.checkStatusOfSessions();
-          const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducer(e.tableId);
+          const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
           officeRemoveHelper.removeObjectAndDisplaytNotification(ObjectToDelete, officeContext);
         });
       } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
@@ -105,10 +101,6 @@ class SidePanelService {
     }
   };
 
-  getObject = (objectWorkingId) => {
-    const { objects } = this.reduxStore.getState().objectReducer;
-    return objects.find(object => object.objectWorkingId === objectWorkingId);
-  };
 
   getSidePanelPopup = () => {
     let popup = null;

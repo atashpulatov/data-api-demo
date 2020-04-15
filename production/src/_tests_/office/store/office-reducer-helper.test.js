@@ -74,7 +74,7 @@ describe('OfficeReducerHelper', () => {
   });
 });
 
-describe('OfficeReducerHelper getObjectFromObjectReducer', () => {
+describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -103,7 +103,7 @@ describe('OfficeReducerHelper getObjectFromObjectReducer', () => {
     officeReducerHelper.init(reduxStoreMock);
 
     // when
-    const result = officeReducerHelper.getObjectFromObjectReducer(bindIdParam);
+    const result = officeReducerHelper.getObjectFromObjectReducerByBindId(bindIdParam);
 
     // then
     expect(result).toEqual(expectedObject);
