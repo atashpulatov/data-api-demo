@@ -13,7 +13,7 @@ class OfficeApiDataLoader {
    *
    * @throws Error when excelContext, any item, any item.object or item.key is empty.
    */
-  loadExcelDataSingle = async (excelContext, object, key) => {
+  loadSingleExcelData = async (excelContext, object, key) => {
     const valueMap = await this.loadExcelData(excelContext, [{ object, key }]);
 
     return valueMap[key];

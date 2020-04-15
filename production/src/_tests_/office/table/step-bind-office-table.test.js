@@ -13,7 +13,7 @@ describe('StepBindOfficeTable', () => {
     // given
     console.error = jest.fn();
 
-    jest.spyOn(officeApiDataLoader, 'loadExcelDataSingle').mockImplementation(() => {
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => {
       throw new Error('errorTest');
     });
 
@@ -41,7 +41,7 @@ describe('StepBindOfficeTable', () => {
       officeTable: 'officeTableTest',
     };
 
-    jest.spyOn(officeApiDataLoader, 'loadExcelDataSingle').mockReturnValue('tableNameTest');
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue('tableNameTest');
 
     jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
 
@@ -51,8 +51,8 @@ describe('StepBindOfficeTable', () => {
     await stepBindOfficeTable.bindOfficeTable(objectData, operationData);
 
     // then
-    expect(officeApiDataLoader.loadExcelDataSingle).toBeCalledTimes(1);
-    expect(officeApiDataLoader.loadExcelDataSingle).toBeCalledWith('excelContextTest', 'officeTableTest', 'name');
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', 'officeTableTest', 'name');
 
     expect(officeApiHelper.bindNamedItem).toBeCalledTimes(1);
     expect(officeApiHelper.bindNamedItem).toBeCalledWith('tableNameTest', 'bindIdTest');

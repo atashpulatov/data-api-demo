@@ -13,11 +13,11 @@ describe('OfficeApiDataLoader', () => {
   ${{}}        | ${undefined} | ${undefined} | ${'Cannot load data from Excel, item.object is [undefined]'}
   ${{}}        | ${{}}        | ${undefined} | ${'Cannot load data from Excel, item.key is [undefined]'}
   
-  `('should throw an Error on invalid data - loadExcelDataSingle', async ({ excelContext, object, key, msg }) => {
+  `('should throw an Error on invalid data - loadSingleExcelData', async ({ excelContext, object, key, msg }) => {
     // when
     let result;
     try {
-      result = await officeApiDataLoader.loadExcelDataSingle(excelContext, object, key);
+      result = await officeApiDataLoader.loadSingleExcelData(excelContext, object, key);
     } catch (error) {
       // then
       expect(error).toBeInstanceOf(Error);
@@ -33,7 +33,7 @@ describe('OfficeApiDataLoader', () => {
     );
 
     // when
-    const result = await officeApiDataLoader.loadExcelDataSingle(undefined, undefined, 'testKey');
+    const result = await officeApiDataLoader.loadSingleExcelData(undefined, undefined, 'testKey');
 
     // then
     expect(mockLoadExcelData).toBeCalledTimes(1);

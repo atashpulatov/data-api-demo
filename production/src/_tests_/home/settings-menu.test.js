@@ -4,6 +4,7 @@ import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuNotConnected } from '../../home/settings-menu';
 import DB from '../../cache/cache-db';
 import overflowHelper from '../../helpers/helpers';
+import { errorService } from '../../error/error-handler';
 
 describe('Settings Menu', () => {
   afterEach(() => {
@@ -28,17 +29,23 @@ describe('Settings Menu', () => {
     await expect(indexedDBSpy).toBeCalled();
     await expect(clearDB).toBeCalled();
   });
+
   it('should handle error on logout', () => {
     // given
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
       throw new Error();
     });
+    const handleErrorSpy = jest.spyOn(errorService, 'handleError').mockImplementation();
     const menuWrapper = mount(<SettingsMenuNotConnected />);
     const buttonWrapper = menuWrapper.find('#logOut');
+
     // when
     buttonWrapper.simulate('click');
+
     // then
     expect(logOutRestSpy).toThrowError();
+    expect(handleErrorSpy).toBeCalledTimes(1);
+    expect(handleErrorSpy).toBeCalledWith(new Error());
   });
 
   it('component should be wrapped with settings-list classname', () => {
