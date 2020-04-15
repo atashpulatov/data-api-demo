@@ -569,6 +569,34 @@ class PluginPopup {
   }
 
   /**
+   * expanding Details panel for an object in table of objects
+   * @param {Number} index row number to expand Details panel for
+   */
+  expandObjectDetails(index) {
+    $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(popupSelectors.expandButton);
+    expandButtons[index-1].click();
+  }
+
+  /**
+   * copies Object Details from Details panel to clipboard and return the detail value
+   * @param {Number} index index of the Detail Table to copy from
+   * @returns {String} the detail value
+   */
+  copyToClipboardObjectDetails(index) {
+    const INDEX_TO_DETAIL = {
+      '1': popupSelectors.typeDetail, //Type
+      '2': popupSelectors.idDetail, //ID
+      '3': popupSelectors.createdDetail, //Created
+      '4': popupSelectors.detailsTable + ' > table ' + popupSelectors.locationDetail, //Location
+      '5': popupSelectors.detailsTable + ' > table ' + popupSelectors.descriptionDetail, //Description
+    };
+    const objectDetail = $(INDEX_TO_DETAIL[index]);
+    objectDetail.click();
+    return objectDetail.getText();
+  }
+
+  /**
    * Clicks Filter button, that opens Filter Panel
    */
   clickFilterButton() {
