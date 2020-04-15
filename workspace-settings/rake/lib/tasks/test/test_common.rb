@@ -31,6 +31,9 @@ task :browser_e2e_push_results,[:build_no] do | t, args|
   test_dir = get_browser_test_dir()
   build_no = args['build_no']
   unless build_no.nil?
+    if is_windows_jenkins_env? #if it is windows jenkins envrionment, we need to use another path
+      test_dir = "c:/test-driver-browser" 
+    end
     info "publish e2e test result to Rally"
     shell_command! "npm run rally pass #{build_no}", cwd: test_dir
   else
@@ -41,6 +44,9 @@ end
 desc "run browser based test"
 task :e2e_test_browser,[:build_no] do | t, args|
   test_dir = get_browser_test_dir()
+  #always clean the report dir. 
+  report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser/allure-report"
+  FileUtils.rm_rf report_dir if Dir.exist? report_dir
   npm_install_dir= test_dir
   build_no = args['build_no']
   if is_windows_jenkins_env?# we need to copy the test driver to the root dir of c because of there is a path length limitation of windows
@@ -58,8 +64,6 @@ task :e2e_test_browser,[:build_no] do | t, args|
   end
   shell_command! "npm run report", cwd: test_dir
   if is_windows_jenkins_env?# copy the test result back
-    report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser/allure-report"
-    FileUtils.rm_rf report_dir if Dir.exist? report_dir
     shell_command! "cp -r #{test_dir}/allure-report #{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   end
   if is_jenkins_env? 
