@@ -3,13 +3,16 @@ import { Button, Popover } from 'antd';
 
 import PropTypes from 'prop-types';
 
-export const ImportButton = ({ disableReason, handleSecondary, handleOk, loading, t }) => {
+export const ImportButton = ({
+  disableReason, handleSecondary, handleOk, loading, t
+}) => {
   const internalButton = (
-    <Button id="import"
-            type={!handleSecondary ? 'primary' : ''}
-            onClick={handleOk}
-            loading={loading}
-            disabled={!!disableReason || loading}>
+    <Button
+      id="import"
+      type={!handleSecondary ? 'primary' : ''}
+      onClick={handleOk}
+      loading={loading}
+      disabled={!!disableReason || loading}>
       {t('Import')}
     </Button>
   );

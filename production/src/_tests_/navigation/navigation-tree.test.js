@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import i18n from '../../i18n';
-import { _NavigationTree, mapStateToProps } from '../../navigation/navigation-tree';
+import { NavigationTreeNotConnected, mapStateToProps } from '../../navigation/navigation-tree';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { Office } from '../mockOffice';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { DEFAULT_STATE as CACHE_STATE } from '../../cache/cache-reducer';
+import { DEFAULT_STATE as CACHE_STATE } from '../../redux-reducer/cache-reducer/cache-reducer';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { popupHelper } from '../../popup/popup-helper';
 import DB from '../../cache/cache-db';
@@ -40,7 +40,7 @@ describe('NavigationTree', () => {
     };
     // when
 
-    const wrappedComponent = shallow(<_NavigationTree
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       {...mockFunctionsAndProps} />);
     // then
@@ -70,7 +70,7 @@ describe('NavigationTree', () => {
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(async () => givenIsPrompted);
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         handlePrepare={mockHandlePrepare}
         {...actionObject}
@@ -98,7 +98,7 @@ describe('NavigationTree', () => {
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         chosenObjectId={givenObjectId}
         chosenProjectId={givenProjectId}
@@ -122,7 +122,7 @@ describe('NavigationTree', () => {
     };
     const resultAction = { command: selectorProperties.commandCancel, };
     const office = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       stopLoading={stopLoadingMocked}
       cache={CACHE_STATE}
@@ -147,7 +147,7 @@ describe('NavigationTree', () => {
       body,
     };
     const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<_NavigationTree
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       {...mockFunctionsAndProps}
     />);
@@ -193,19 +193,28 @@ describe('NavigationTree', () => {
     const givenMyLibrary = false;
     const mockSelectObject = jest.fn();
 
-    const wrappedComponent = shallow(<_NavigationTree
+    const givenObject = {
+      id: givenObjectId,
+      projectId: givenProjectId,
+      subtype: givenSubtype,
+      name: givenObjectName,
+      targetId: givenTargetId,
+      myLibrary: givenMyLibrary,
+    };
+
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       {...mockFunctionsAndProps}
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObject);
     // then
     const expectedObject = {
       chosenObjectId: givenObjectId,
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
-      objectType: mstrObjectEnum.mstrObjectType.report,
+      mstrObjectType: mstrObjectEnum.mstrObjectType.report,
       chosenLibraryDossier: undefined
     };
     expect(mockSelectObject).toBeCalledWith(expectedObject);
@@ -221,19 +230,28 @@ describe('NavigationTree', () => {
     const givenMyLibrary = true;
     const mockSelectObject = jest.fn();
 
-    const wrappedComponent = shallow(<_NavigationTree
+    const givenObject = {
+      id: givenObjectId,
+      projectId: givenProjectId,
+      subtype: givenSubtype,
+      name: givenObjectName,
+      targetId: givenTargetId,
+    };
+
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
       {...mockFunctionsAndProps}
       selectObject={mockSelectObject}
+      myLibrary={givenMyLibrary}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObjectId, givenProjectId, givenSubtype, givenObjectName, givenTargetId, givenMyLibrary);
+    wrappedComponent.instance().onObjectChosen(givenObject);
     // then
     const expectedObject = {
       chosenObjectId: givenTargetId,
       chosenObjectName: givenObjectName,
       chosenProjectId: givenProjectId,
       chosenSubtype: givenSubtype,
-      objectType: mstrObjectEnum.mstrObjectType.dossier,
+      mstrObjectType: mstrObjectEnum.mstrObjectType.dossier,
       chosenLibraryDossier: givenObjectId
     };
     expect(mockSelectObject).toBeCalledWith(expectedObject);
@@ -255,7 +273,7 @@ describe('NavigationTree', () => {
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(async () => givenIsPrompted);
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         chosenObjectId={givenObjectId}
         chosenProjectId={givenProjectId}
@@ -285,7 +303,7 @@ describe('NavigationTree', () => {
     const mockRequestImport = jest.fn();
     const mockRequestDossierOpen = jest.fn();
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         chosenObjectId={givenObjectId}
         chosenProjectId={givenProjectId}
@@ -316,7 +334,7 @@ describe('NavigationTree', () => {
     jest.spyOn(mstrObjectRestService, 'isPrompted')
       .mockImplementationOnce(() => { throw new Error(); });
     const wrappedComponent = shallow(
-      <_NavigationTree
+      <NavigationTreeNotConnected
         mstrData={mstrData}
         chosenObjectId={givenObjectId}
         chosenProjectId={givenProjectId}
@@ -341,7 +359,7 @@ describe('NavigationTree', () => {
     DB.getIndexedDBSupport = jest.fn();
     DB.getIndexedDBSupport.mockReturnValue(true);
     // when
-    shallow(<_NavigationTree
+    shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       {...mockFunctionsAndProps}
       connectToDB={connectToDB}
@@ -361,7 +379,7 @@ describe('NavigationTree', () => {
     DB.getIndexedDBSupport = jest.fn();
     DB.getIndexedDBSupport.mockReturnValue(false);
     // when
-    shallow(<_NavigationTree
+    shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       {...mockFunctionsAndProps}
       connectToDB={connectToDB}
@@ -374,7 +392,11 @@ describe('NavigationTree', () => {
     // given
     const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} connectToDB={connectToDB} />);
+    const wrappedComponent = shallow(
+      <NavigationTreeNotConnected
+        {...mockFunctionsAndProps}
+        connectToDB={connectToDB} />
+    );
     // when
     await wrappedComponent.instance().refresh();
     // then
@@ -388,7 +410,11 @@ describe('NavigationTree', () => {
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
     popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(<_NavigationTree {...mockFunctionsAndProps} connectToDB={connectToDB} />);
+    const wrappedComponent = shallow(
+      <NavigationTreeNotConnected
+        {...mockFunctionsAndProps}
+        connectToDB={connectToDB} />
+    );
     // when
     await wrappedComponent.instance().refresh();
     // then

@@ -20,7 +20,7 @@ const getDisableReason = (isPublished, disableSecondary, disableActiveActions) =
 
 const getDisableReasonImport = (isPublished, disableActiveActions, disableSecondary) => {
   if (!isPublished && isPublished !== undefined) {
-    if (disableSecondary) return NOT_SUPPORTED_VIZ;
+    if (disableSecondary) { return NOT_SUPPORTED_VIZ; }
     return NOT_PUBLISHED_CUBE;
   }
   if (disableActiveActions) {
@@ -47,11 +47,11 @@ export const PopupButtonsNotConnected = ({
     <div className="popup-buttons popup-footer">
       {handleBack && <BackButton handleBack={handleBack} t={t} />}
       {(!hideSecondary && !handleSecondary) && (
-      <DataPreviewButton
-        loading={loading}
-        onPreviewClick={onPreviewClick}
-        disableReason={disableReason}
-        t={t} />
+        <DataPreviewButton
+          loading={loading}
+          onPreviewClick={onPreviewClick}
+          disableReason={disableReason}
+          t={t} />
       )}
       <ImportButton
         loading={loading}
@@ -60,11 +60,11 @@ export const PopupButtonsNotConnected = ({
         disableReason={disableReasonForImport}
         t={t} />
       {!hideSecondary && handleSecondary && (
-      <PrepareDataButton
-        loading={loading}
-        handleSecondary={handleSecondary}
-        disableReason={disableReason}
-        t={t} />
+        <PrepareDataButton
+          loading={loading}
+          handleSecondary={handleSecondary}
+          disableReason={disableReason}
+          t={t} />
       )}
       <CancelButton handleCancel={handleCancel} t={t} />
     </div>
@@ -75,9 +75,12 @@ PopupButtonsNotConnected.propTypes = {
   handleOk: PropTypes.func,
   handleSecondary: PropTypes.func,
   handleCancel: PropTypes.func,
-  handleBack: PropTypes.func,
   t: PropTypes.func,
   loading: PropTypes.bool,
+  handleBack: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.func
+  ]),
   disableActiveActions: PropTypes.bool,
   onPreviewClick: PropTypes.func,
   hideSecondary: PropTypes.bool,

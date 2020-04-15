@@ -1,4 +1,25 @@
-import { SET_OBJECT_LIST_LOADING, objectListLoading, SET_MY_LIBRARY_LOADING, myLibraryLoading, createCache, clearCache, ADD_MY_LIBRARY_OBJECTS, addMyLibraryObjects, ADD_ENV_OBJECTS, addEnvObjects, connectToCache, refreshCache, ADD_PROJECTS, addProjects, CLEAR_CACHE, clearStateCache, refreshCacheAction, REFRESH_CACHE, refreshCacheState, fetchObjectsFallback, initCache, resetLoading, } from '../../cache/cache-actions';
+import {
+  SET_OBJECT_LIST_LOADING,
+  objectListLoading,
+  SET_MY_LIBRARY_LOADING,
+  myLibraryLoading,
+  createCache,
+  clearCache,
+  ADD_MY_LIBRARY_OBJECTS,
+  addMyLibraryObjects,
+  ADD_ENV_OBJECTS,
+  addEnvObjects,
+  connectToCache,
+  ADD_PROJECTS,
+  addProjects,
+  CLEAR_CACHE,
+  clearStateCache,
+  refreshCacheAction,
+  REFRESH_CACHE,
+  refreshCacheState,
+  fetchObjectsFallback,
+  resetLoading,
+} from '../../redux-reducer/cache-reducer/cache-actions';
 
 describe('Cache actions', () => {
   it('should return object list loading dispatch action', () => {

@@ -1,0 +1,109 @@
+@mixin bottom-line {
+  border-bottom: solid 1px #e4e4e4;
+}
+
+$text-color: #3F4042;
+
+.settings-list {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 3;
+  min-width: 200px;
+  max-width: 220px;
+  width: max-content;
+  padding: 6px 0 0 0;
+  list-style: none;
+  background: #fff;
+  color: $text-color;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.20);
+  border-radius: 2px;
+  li {
+    a {
+      padding: 8px 16px;
+      font-size: 12px;
+      cursor: default;
+      line-height: 15px;
+      user-select: none; 
+      display: block;
+      color: $text-color;
+      cursor: default;
+    }
+    &:focus {
+      outline: none;
+    }
+    &:not(:first-child):not(:last-child):not(.clear-data-inactive) {
+      &:hover {
+        background: #F7F7F7;
+      }
+      &:active {
+        background:  #F0F7FE ;
+      }
+    }
+  } 
+  .not-linked-list{
+    padding: 8px 16px;
+    font-size: 12px;
+    cursor: default;
+    line-height: 15px;
+    user-select: none;
+  }
+  .privacy-policy {
+    margin-top: 8px;
+  }
+  .user-data {
+    padding-bottom: 14px;
+    font-weight: 500;
+    @include bottom-line;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .separate-line {
+    @include bottom-line;
+  }
+  .clear-data {
+    margin: 8px 0;
+
+    &-inactive {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+  .settings {
+    margin: 8px 0;
+  }
+  .settings-version {
+    padding: 0 17px 12px 17px;
+    line-height: 31px;
+    color: #1c91dc;
+    font-weight: 300;
+    font-size: 10px;
+    text-align: center;
+    user-select: text;
+  }
+
+  #initials,
+  #profile-image {
+    height: 28px;
+    width: 28px;
+    line-height: 28px;
+    border-radius: 50%;
+    font-size: 13px;
+    background: #e4e4e4;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .user-name {
+    padding-left: 13px;
+    padding-right: 13px;
+    line-height: 32px;
+  }
+}

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
-import { actions } from '../navigation/navigation-tree-actions';
+import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
-import { notificationService } from '../notification/notification-service';
 import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
@@ -24,7 +24,7 @@ const {
 } = mstrObjectRestService;
 const postAnswerDossierPrompts = answerDossierPrompts;
 
-export class _PromptsWindow extends Component {
+export class PromptsWindowNotConnected extends Component {
   constructor(props) {
     super(props);
     const { mstrData, popupState } = props;
@@ -49,12 +49,18 @@ export class _PromptsWindow extends Component {
 
   sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds))
 
-  preparePromptedReportInstance = async (chosenObjectId, projectId, promptsAnswers) => {
+  preparePromptedReport = async (chosenObjectId, projectId, promptsAnswers) => {
     const config = { objectId: chosenObjectId, projectId };
     const instanceDefinition = await createInstance(config);
-    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectId, instanceDefinition.instanceId, projectId);
+    const { instanceId } = instanceDefinition;
+    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectId, instanceId, projectId);
     if (dossierInstanceDefinition.status === 2) {
-      dossierInstanceDefinition = await this.answerDossierPrompts(dossierInstanceDefinition, chosenObjectId, projectId, promptsAnswers);
+      dossierInstanceDefinition = await this.answerDossierPrompts(
+        dossierInstanceDefinition,
+        chosenObjectId,
+        projectId,
+        promptsAnswers
+      );
     }
 
     dossierInstanceDefinition = await rePromptDossier(chosenObjectId, dossierInstanceDefinition, projectId);
@@ -68,7 +74,12 @@ export class _PromptsWindow extends Component {
     let currentInstanceDefinition = instanceDefinition;
     let count = 0;
     while (currentInstanceDefinition.status === 2 && count < promptsAnswers.length) {
-      const config = { objectId, projectId, instanceId: currentInstanceDefinition.mid, promptsAnswers: promptsAnswers[count] };
+      const config = {
+        objectId,
+        projectId,
+        instanceId: currentInstanceDefinition.mid,
+        promptsAnswers: promptsAnswers[count]
+      };
       await postAnswerDossierPrompts(config);
       if (count === promptsAnswers.length - 1) {
         let dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
@@ -89,7 +100,9 @@ export class _PromptsWindow extends Component {
       return;
     }
     let { promptsAnswers: promptsAnswersLocal } = this.state;
-    const { promptsAnswered, mstrData, session, editedObject } = this.props;
+    const {
+      promptsAnswered, mstrData, session, editedObject
+    } = this.props;
     promptsAnswersLocal = promptsAnswersLocal || editedObject.promptsAnswers;
     const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
     const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
@@ -99,7 +112,7 @@ export class _PromptsWindow extends Component {
     const instance = {};
     try {
       if (promptsAnswersLocal) {
-        instanceDefinition = await this.preparePromptedReportInstance(chosenObjectIdLocal, projectId, promptsAnswersLocal);
+        instanceDefinition = await this.preparePromptedReport(chosenObjectIdLocal, projectId, promptsAnswersLocal);
         instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
         instance.mid = instanceDefinition && instanceDefinition.mid;
       }
@@ -116,13 +129,15 @@ export class _PromptsWindow extends Component {
           promptsAnswersLocal = [_promptsAnswers];
         }
       };
-      const libraryUrl = envUrl.replace('api', 'app');
-      const url = `${libraryUrl}/${projectId}/${chosenObjectIdLocal}`;
+      const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
+      // delete last occurence of '/api' from the enviroment url
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
 
       const props = {
-        url,
+        serverURL,
+        applicationID: projectId,
+        objectID: chosenObjectIdLocal,
         enableCustomAuthentication: true,
         customAuthenticationType:
           CustomAuthenticationType.AUTH_TOKEN,
@@ -141,6 +156,11 @@ export class _PromptsWindow extends Component {
 
       if (isReprompt) {
         props.instance = instance;
+      }
+
+      if (!microstrategy || !microstrategy.dossier) {
+        console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+        return;
       }
 
       microstrategy.dossier
@@ -163,7 +183,8 @@ export class _PromptsWindow extends Component {
           deleteDossierInstance(projectId, objectId, instanceId);
 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
-          promptsAnswered({ dossierData, promptsAnswers: promptsAnswersLocal });// TEMP - dossierData should eventually be removed as data should be gathered via REST from report instance, not dossier
+          // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
+          promptsAnswered({ dossierData, promptsAnswers: promptsAnswersLocal });
         });
     } catch (error) {
       console.error({ error });
@@ -260,7 +281,7 @@ export class _PromptsWindow extends Component {
    * @param {*} container
    * @param {*} callback
    */
-  watchForIframeAddition(container, callback) {
+  watchForIframeAddition = (container, callback) => {
     const config = { childList: true };
     const onMutation = (mutationList) => {
       for (const mutation of mutationList) {
@@ -298,14 +319,39 @@ export class _PromptsWindow extends Component {
   }
 }
 
+PromptsWindowNotConnected.propTypes = {
+  stopLoading: PropTypes.func,
+  promptsAnswered: PropTypes.func,
+  mstrData: PropTypes.shape({
+    chosenObjectId: PropTypes.string,
+    chosenProjectId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
+  popupState: PropTypes.shape({
+    chosenObjectId: PropTypes.string,
+    isReprompt: PropTypes.bool,
+  }),
+  session: PropTypes.shape({
+    envUrl: PropTypes.string,
+    authToken: PropTypes.string,
+  }),
+  editedObject: PropTypes.shape({
+    chosenObjectId: PropTypes.string,
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
+};
+
 export const mapStateToProps = (state) => {
-  const { navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
+  const {
+    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer
+  } = state;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = popupState && popupState.objectType ? popupState.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
+
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     ...state.promptsPopup,
@@ -319,4 +365,4 @@ export const mapStateToProps = (state) => {
 
 const mapDispatchToProps = { ...actions, };
 
-export const PromptsWindow = connect(mapStateToProps, mapDispatchToProps)(_PromptsWindow);
+export const PromptsWindow = connect(mapStateToProps, mapDispatchToProps)(PromptsWindowNotConnected);

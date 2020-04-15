@@ -1,4 +1,3 @@
-/* eslint-disable no-await-in-loop */
 import request from 'superagent';
 import { NO_DATA_RETURNED } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
@@ -13,7 +12,7 @@ const EXCEL_ROW_LIMIT = 1048576;
 export const CONTEXT_LIMIT = 500; // Maximum number of Excel operations before context syncing.
 export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
 export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during data import.
-export const PROMISE_LIMIT = 10; // Number of concurrent context.sync() promises during data import.
+export const PROMISE_LIMIT = 10; // Number of concurrent excelContext.sync() promises during data import.
 
 
 function checkTableDimensions({ rows, columns }) {
@@ -31,7 +30,7 @@ function parseInstanceDefinition(res, attrforms) {
   }
   const { instanceId, data, internal } = body;
   body.attrforms = attrforms;
-  if (data.paging.total === 0) throw new Error(NO_DATA_RETURNED);
+  if (data.paging.total === 0) { throw new Error(NO_DATA_RETURNED); }
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
   return {
@@ -43,7 +42,9 @@ function parseInstanceDefinition(res, attrforms) {
   };
 }
 
-function getFullPath({ envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false, }) {
+function getFullPath({
+  envUrl, limit, mstrObjectType, objectId, instanceId, version = 1, visualizationInfo = false,
+}) {
   let path;
   if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
     const { chapterKey, visualizationKey } = visualizationInfo;
@@ -57,81 +58,85 @@ function getFullPath({ envUrl, limit, mstrObjectType, objectId, instanceId, vers
   return path;
 }
 
-async function* fetchContentGenerator({
-  instanceDefinition,
-  objectId,
-  projectId,
-  mstrObjectType,
-  dossierData,
-  limit,
-  visualizationInfo,
-  reduxStore,
-  displayAttrFormNames
-}) {
-  const totalRows = instanceDefinition.rows;
-  const { instanceId, mstrTable } = instanceDefinition;
-  const { isCrosstab } = mstrTable;
-  const storeState = reduxStore.getState();
-  const { envUrl, authToken } = storeState.sessionReducer;
-  const { supportForms } = storeState.officeReducer;
-  const attrforms = { supportForms, displayAttrFormNames };
-
-  let fetchedRows = 0;
-  let offset = 0;
-  const fullPath = getFullPath({
-    dossierData,
-    envUrl,
-    mstrObjectType,
-    objectId,
-    instanceId,
-    version: API_VERSION,
-    visualizationInfo,
-  });
-
-
-  const offsetSubtotal = (e) => {
-    if (e) (e.rowIndex += offset);
-  };
-  const offsetCrosstabSubtotal = (e) => {
-    if (e && e.axis === 'rows') (e.colIndex += offset);
-  };
-
-  function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
-    return request
-      .get(`${fullPath}?offset=${offset}&limit=${limit}`)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
-      .withCredentials();
-  }
-
-  while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
-    let header;
-    let crosstabSubtotal;
-    const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
-    const { current } = response.body.data.paging;
-    fetchedRows = current + offset;
-    response.body.attrforms = attrforms;
-    const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
-    if (isCrosstab) {
-      header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
-      crosstabSubtotal = header.subtotalAddress;
-      if (offset !== 0) crosstabSubtotal.map(offsetCrosstabSubtotal);
-    } else if (offset !== 0) {
-      rowTotals.map(offsetSubtotal);
-    }
-    offset += current;
-    yield {
-      row,
-      header,
-      subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
-    };
-  }
+function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
+  return request
+    .get(`${fullPath}?offset=${offset}&limit=${limit}`)
+    .set('x-mstr-authtoken', authToken)
+    .set('x-mstr-projectid', projectId)
+    .withCredentials();
 }
 
 
-export class MstrObjectRestService {
+class MstrObjectRestService {
+  constructor() {
+    this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
+  }
+
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async* fetchContentGenerator({
+    instanceDefinition,
+    objectId,
+    projectId,
+    mstrObjectType,
+    dossierData,
+    limit = IMPORT_ROW_LIMIT,
+    visualizationInfo,
+    displayAttrFormNames
+  }) {
+    const totalRows = instanceDefinition.rows;
+    const { instanceId, mstrTable: { isCrosstab } } = instanceDefinition;
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const { supportForms } = storeState.officeReducer;
+    const attrforms = { supportForms, displayAttrFormNames };
+
+    let fetchedRows = 0;
+    let offset = 0;
+    const fullPath = getFullPath({
+      dossierData,
+      envUrl,
+      mstrObjectType,
+      objectId,
+      instanceId,
+      version: API_VERSION,
+      visualizationInfo,
+    });
+
+
+    const offsetSubtotal = (e) => {
+      if (e) { (e.rowIndex += offset); }
+    };
+    const offsetCrosstabSubtotal = (e) => {
+      if (e && e.axis === 'rows') { (e.colIndex += offset); }
+    };
+
+
+    while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
+      let header;
+      let crosstabSubtotal;
+      const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
+      const { current } = response.body.data.paging;
+      fetchedRows = current + offset;
+      response.body.attrforms = attrforms;
+      const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
+      if (isCrosstab) {
+        header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
+        crosstabSubtotal = header.subtotalAddress;
+        if (offset !== 0) { crosstabSubtotal.map(offsetCrosstabSubtotal); }
+      } else if (offset !== 0) {
+        rowTotals.map(offsetSubtotal);
+      }
+      offset += current;
+      yield {
+        row,
+        header,
+        subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
+      };
+    }
   }
 
   /**
@@ -143,7 +148,6 @@ export class MstrObjectRestService {
    * @param {String} visualizationKey visualization id.
    * @param {Object} dossierInstance
    * @returns {Object} Contains info for visualization.
-   * @memberof MstrObjectRestService
    */
   getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
     try {
@@ -172,7 +176,9 @@ export class MstrObjectRestService {
     }
   };
 
-  answerDossierPrompts = ({ objectId, projectId, instanceId, promptsAnswers }) => {
+  answerDossierPrompts = ({
+    objectId, projectId, instanceId, promptsAnswers
+  }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
@@ -185,7 +191,9 @@ export class MstrObjectRestService {
       .then((res) => res.status);
   }
 
-  answerPrompts = ({ objectId, projectId, instanceId, promptsAnswers }) => {
+  answerPrompts = ({
+    objectId, projectId, instanceId, promptsAnswers
+  }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
@@ -239,7 +247,9 @@ export class MstrObjectRestService {
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
-    const fullPath = getFullPath({ dossierData, envUrl, limit, mstrObjectType, objectId, version: API_VERSION });
+    const fullPath = getFullPath({
+      dossierData, envUrl, limit, mstrObjectType, objectId, version: API_VERSION
+    });
 
     return request
       .post(fullPath)
@@ -250,7 +260,14 @@ export class MstrObjectRestService {
       .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
-  fetchVisualizationDefinition = ({ projectId, objectId, instanceId, visualizationInfo, body, displayAttrFormNames }) => {
+  fetchVisualizationDefinition = ({
+    projectId,
+    objectId,
+    instanceId,
+    visualizationInfo,
+    body,
+    displayAttrFormNames
+  }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
@@ -379,26 +396,6 @@ export class MstrObjectRestService {
       .then((res) => parseInstanceDefinition(res, attrforms));
   }
 
-  getObjectContentGenerator = ({
-    instanceDefinition,
-    objectId,
-    projectId,
-    mstrObjectType,
-    dossierData,
-    limit = IMPORT_ROW_LIMIT,
-    visualizationInfo,
-    displayAttrFormNames
-  }) => fetchContentGenerator({
-    instanceDefinition,
-    objectId,
-    projectId,
-    mstrObjectType,
-    dossierData,
-    limit,
-    visualizationInfo,
-    reduxStore: this.reduxStore,
-    displayAttrFormNames
-  })
 
   getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();

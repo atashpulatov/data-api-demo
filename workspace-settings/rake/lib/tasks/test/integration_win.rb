@@ -5,8 +5,7 @@ require_relative 'test_common'
 desc "deploy test envrionment, on windows"
 task :deploy_tester_server,[:build_no] do | t, args|
   
-  group_id = "#{$WORKSPACE_SETTINGS[:nexus][:base_coordinates][:group_id]}.#{Common::Version.application_branch}"
-  group_id = Common::Version.dependency_group_id #hard code the group id for test binary on m2020, don't merge this change back 
+  group_id = Common::Version.dependency_group_id #use dependency_group_id as the  group id to download the test binary. 
   artifact_id = "office-loader"
   version = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
   download_mstr_office(group_id, version,"e2e-webserver-windows")

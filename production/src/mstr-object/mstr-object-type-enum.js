@@ -1,6 +1,4 @@
 class MstrObjectType {
-  // TODO: Add support for documents
-
   mstrObjectType = {
     folder: {
       type: 8,
@@ -27,7 +25,6 @@ class MstrObjectType {
       request: 'dossiers',
     },
     visualization: {
-      // TODO: Change string to proper type and subtype of visualization
       type: 'undefined',
       subtypes: 'undefined',
       name: 'visualization',
@@ -35,9 +32,9 @@ class MstrObjectType {
     },
   };
 
-  getMstrTypeBySubtype = (objectSubtype) => Object.values(this.mstrObjectType).find(
-    (type) => type.subtypes.indexOf(objectSubtype) !== -1,
-  );
+  getMstrTypeBySubtype = (objectSubtype = null) => Object.values(this.mstrObjectType).find(
+    (type) => type.subtypes.indexOf(objectSubtype) !== -1
+  )
 
   getMstrTypeByName = (typeName) => {
     let checkedType;

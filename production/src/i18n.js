@@ -1,20 +1,21 @@
+/* eslint-disable camelcase */
 import i18n from 'i18next';
 import XHR from 'i18next-xhr-backend';
 import { initReactI18next } from 'react-i18next';
 import moment from 'moment';
-import enCommon from './locales/en-US';
-import deCommon from './locales/de-DE';
-import zhCNCommon from './locales/zh-CN';
-import frCommon from './locales/fr-FR';
-import itCommon from './locales/it-IT';
-import esCommon from './locales/es-ES';
-import zhTWCommon from './locales/zh-TW';
-import koCommon from './locales/ko-KR';
-import ptCommon from './locales/pt-BR';
-import nlCommon from './locales/nl-NL';
-import svCommon from './locales/sv-SE';
-import jaCommon from './locales/ja-JP';
-import daCommon from './locales/da-DK';
+import enCommon from './locales/en-US.json';
+import deCommon from './locales/de-DE.json';
+import zhCNCommon from './locales/zh-CN.json';
+import frCommon from './locales/fr-FR.json';
+import itCommon from './locales/it-IT.json';
+import esCommon from './locales/es-ES.json';
+import zhTWCommon from './locales/zh-TW.json';
+import koCommon from './locales/ko-KR.json';
+import ptCommon from './locales/pt-BR.json';
+import nlCommon from './locales/nl-NL.json';
+import svCommon from './locales/sv-SE.json';
+import jaCommon from './locales/ja-JP.json';
+import daCommon from './locales/da-DK.json';
 
 enCommon.refreshed_date = '{{date, YYYY-MM-DD H:mm}}';
 deCommon.refreshed_date = '{{date, DD.MM.YYYY HH:mm:ss}}';
@@ -88,7 +89,7 @@ const config = {
   interpolation: {
     escapeValue: false, // react already safes from xss
     format(value, format, lng) {
-      if (value instanceof Date) return moment(value).format(format);
+      if (value instanceof Date) { return moment(value).format(format); }
       return value;
     },
   },

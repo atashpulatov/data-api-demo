@@ -8,11 +8,9 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../../dossier/dossier-window';
-import { LoadingPage } from '../../loading/loading-page';
-import { RefreshAllPage } from '../../loading/refresh-all-page';
 import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { popupHelper } from '../../popup/popup-helper';
-import { popupActions, SET_PREPARED_REPORT } from '../../popup/popup-actions';
+import { popupActions, SET_PREPARED_REPORT } from '../../redux-reducer/popup-reducer/popup-actions';
 
 jest.mock('../../popup/popup-helper');
 jest.mock('../../popup/popup-view-selector-helper');
@@ -47,22 +45,20 @@ describe('PopupViewSelectorNotConnected', () => {
   ${PopupTypeEnum.dataPreparation}   | ${AttributeSelectorWindow}
   ${PopupTypeEnum.editFilters}       | ${AttributeSelectorWindow}
   ${PopupTypeEnum.navigationTree}    | ${NavigationTree}
-  ${PopupTypeEnum.loadingPage}       | ${LoadingPage}
-  ${PopupTypeEnum.refreshAllPage}    | ${RefreshAllPage}
   ${PopupTypeEnum.promptsWindow}     | ${PromptsWindow}
   ${PopupTypeEnum.repromptingWindow} | ${PromptsWindow}
   ${PopupTypeEnum.dossierWindow}     | ${DossierWindow}
   `('should render $expectedComponent when setPopupType returns $popupType', ({ popupType, expectedComponent }) => {
-    // given
-    const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType').mockImplementation(() => popupType);
+  // given
+  const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType').mockImplementation(() => popupType);
 
-    // when
-    const componentWrapper = shallow(<PopupViewSelectorNotConnected authToken="testAuthToken" />);
+  // when
+  const componentWrapper = shallow(<PopupViewSelectorNotConnected authToken="testAuthToken" />);
 
-    // then
-    expect(setPopupType).toBeCalled();
-    expect(componentWrapper.find(expectedComponent).get(0)).toBeDefined();
-  });
+  // then
+  expect(setPopupType).toBeCalled();
+  expect(componentWrapper.find(expectedComponent).get(0)).toBeDefined();
+});
 
   it('should render empty <div /> when authToken provided and popupType equals PopupTypeEnum.emptyDiv', () => {
     // given
@@ -74,7 +70,7 @@ describe('PopupViewSelectorNotConnected', () => {
 
     // then
     expect(setPopupType).toBeCalled();
-    expect(componentWrapper.html()).toBe('<div></div>');
+    expect(componentWrapper.html()).toEqual('<div></div>');
   });
 });
 
@@ -82,11 +78,18 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
   const mockStore = configureMockStore([thunk]);
   let store;
   let componentWrapper;
+  let parsePopupStateMock;
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   beforeEach(() => {
+    parsePopupStateMock = jest.spyOn(popupHelper, 'parsePopupState').mockReturnValue({ sth: 42 });
+
     const initialState = {
       popupReducer: {
-        editedObject : { objectType: 'report' },
+        editedObject: { mstrObjectType: { name: 'report' } },
         preparedInstance: 'testPreparedInstance'
       },
       popupStateReducer: {
@@ -114,17 +117,17 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
 
   it('should use mapStateToProps', () => {
     // given
-    const parsePopupState = jest.spyOn(popupHelper, 'parsePopupState');
-
     // when
+    const componentWrapperProps = componentWrapper.props();
+
     // then
-    expect(componentWrapper.props().authToken).toBe('testAuthToken');
-    expect(componentWrapper.props().otherNavigationTreeProperty).toBe('testOtherNavigationTreeProperty');
-    expect(parsePopupState).toBeCalledWith({ objectType: 'report' }, 'testPromptsAnswers', true);
-    // editedObject not fully tested, only that popupHelper.parsePopupState is executed (mocking not working)
-    expect(componentWrapper.props().preparedInstance).toBe('testPreparedInstance');
-    expect(componentWrapper.props().propsToPass).toHaveProperty('otherPopupStateReducerProperty', 'testOtherValue');
-    expect(componentWrapper.props().popupType).toBe('testPopupType');
+    expect(componentWrapperProps.authToken).toEqual('testAuthToken');
+    expect(componentWrapperProps.otherNavigationTreeProperty).toEqual('testOtherNavigationTreeProperty');
+    expect(parsePopupStateMock).toBeCalledWith({ mstrObjectType: { name: 'report' } }, 'testPromptsAnswers', true);
+    expect(componentWrapperProps.editedObject).toEqual({ sth: 42 });
+    expect(componentWrapperProps.preparedInstance).toEqual('testPreparedInstance');
+    expect(componentWrapperProps.propsToPass).toHaveProperty('otherPopupStateReducerProperty', 'testOtherValue');
+    expect(componentWrapperProps.popupType).toEqual('testPopupType');
   });
 
   it('should use mapDispatchToProps', () => {

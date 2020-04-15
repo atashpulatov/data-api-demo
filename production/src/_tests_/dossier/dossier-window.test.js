@@ -68,16 +68,27 @@ describe('Dossierwindow', () => {
     expect(validateTokenSpy).toHaveBeenCalled();
   });
 
-  it('handlePromptAnswer newInstanceId setup correct state', async () => {
+  it('handleInstanceIdChange set new instanceId and clear viz data in state', async () => {
     // given
-    const newAnswers = 'newAnswers';
     const newInstanceId = 'newInstanceId';
     const componentWrapper = shallow(<DossierWindowNotConnected />);
     // when
-    componentWrapper.instance().handlePromptAnswer(newAnswers, newInstanceId);
+    componentWrapper.instance().handleInstanceIdChange(newInstanceId);
+    // then
+    expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
+    expect(componentWrapper.instance().state.isVisualizationSelected).toBe(false);
+    expect(componentWrapper.instance().state.chapterKey).toBe('');
+    expect(componentWrapper.instance().state.visualizationKey).toBe('');
+  });
+
+  it('handlePromptAnswer setup correct state', async () => {
+    // given
+    const newAnswers = 'newAnswers';
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    // when
+    componentWrapper.instance().handlePromptAnswer(newAnswers);
     // then
     expect(componentWrapper.instance().state.promptsAnswers).toBe(newAnswers);
-    expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
   });
 
   it('should use handleOk and run messageParent with given parameters', () => {
@@ -85,7 +96,9 @@ describe('Dossierwindow', () => {
     const messageParentMock = jest.fn();
     const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementation(() => ({ context: { ui: { messageParent: messageParentMock, }, }, }));
 
-    const componentState = { isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: [] };
+    const componentState = {
+      isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: []
+    };
     const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456' };
 
     const mockupOkObject = {
@@ -156,42 +169,43 @@ describe('Dossierwindow', () => {
       expect(childrenProps.handleBack).toBeDefined();
     });
   });
-  describe.skip('DossierWindow.js mapStateToProps with edited object test', () => {
-    // TODO: unskip when we find out why jenkinf is failling to run test
-    const mockStore = configureMockStore([thunk]);
-    let store;
-    let componentWrapper;
-    beforeEach(() => {
-      const initialState = {
-        popupReducer:{
-          editedObject:{
-            chosenObjectName: 'editedObjectName',
-            chosenObjectId: 'editedObjectId',
-            projectId: 'editedProjectId',
-          }
-        },
-        navigationTree:{
-          chosenObjectName: 'objectName',
-          chosenObjectId: 'objectId',
-          chosenProjectId: 'projectId',
-        },
-        popupStateReducer: {
-          popupType: 'testPopupType',
-          otherDefinedProperty: 'testOtherProperty'
-        }
-      };
-      store = mockStore(initialState);
-      componentWrapper = shallow(<DossierWindow store={store} />);
-    });
+  // TODO check if needed
+  // describe.skip('DossierWindow.js mapStateToProps with edited object test', () => {
+  //   // TODO: unskip when we find out why jenkinf is failling to run test
+  //   const mockStore = configureMockStore([thunk]);
+  //   let store;
+  //   let componentWrapper;
+  //   beforeEach(() => {
+  //     const initialState = {
+  //       popupReducer: {
+  //         editedObject: {
+  //           chosenObjectName: 'editedObjectName',
+  //           chosenObjectId: 'editedObjectId',
+  //           projectId: 'editedProjectId',
+  //         }
+  //       },
+  //       navigationTree: {
+  //         chosenObjectName: 'objectName',
+  //         chosenObjectId: 'objectId',
+  //         chosenProjectId: 'projectId',
+  //       },
+  //       popupStateReducer: {
+  //         popupType: 'testPopupType',
+  //         otherDefinedProperty: 'testOtherProperty'
+  //       }
+  //     };
+  //     store = mockStore(initialState);
+  //     componentWrapper = shallow(<DossierWindow store={store} />);
+  //   });
 
-    it('should use mapStateToProps with editedObject', () => {
-      // given
-      const childrenProps = componentWrapper.props().children.props;
-      // when
-      // then
-      expect(childrenProps.chosenObjectName).toBe('editedObjectName');
-      expect(childrenProps.chosenObjectId).toBe('editedObjectId');
-      expect(childrenProps.chosenProjectId).toBe('editedProjectId');
-    });
-  });
+  //   it('should use mapStateToProps with editedObject', () => {
+  //     // given
+  //     const childrenProps = componentWrapper.props().children.props;
+  //     // when
+  //     // then
+  //     expect(childrenProps.chosenObjectName).toBe('editedObjectName');
+  //     expect(childrenProps.chosenObjectId).toBe('editedObjectId');
+  //     expect(childrenProps.chosenProjectId).toBe('editedProjectId');
+  //   });
+  // });
 });
