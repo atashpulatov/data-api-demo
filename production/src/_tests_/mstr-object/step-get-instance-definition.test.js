@@ -251,8 +251,7 @@ describe('StepGetInstanceDefinition', () => {
     expect(getVisualizationNameMock).toBeCalledWith(
       { operationType: 'operationTypeTest', stepsQueue: ['step_0', nextStepParam] },
       'nameTest',
-      { mstrTable: { name: 'mstrTableNameDossierTest' } },
-      nextStepParam,
+      { mstrTable: { name: 'mstrTableNameDossierTest' } }
     );
 
     expect(createInstanceMock).not.toBeCalled();

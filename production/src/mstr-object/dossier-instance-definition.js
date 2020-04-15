@@ -1,7 +1,7 @@
 import mstrObjectEnum from './mstr-object-type-enum';
 import { errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import { IMPORT_OPERATION, DUPLICATE_OPERATION } from '../operation/operation-type-names';
+import { IMPORT_OPERATION } from '../operation/operation-type-names';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition(

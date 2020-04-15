@@ -63,11 +63,11 @@ describe('StepGetDuplicateName', () => {
 
   it('getDuplicateName should call updateObject with object with new name', () => {
     // given
-    const exampleObject = {
+    const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'nameTest',
-      vizKeyChanged: false,
     };
+    const operationData = {};
 
     const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
     const completeGetDuplicateNameMock = jest.spyOn(
@@ -75,7 +75,7 @@ describe('StepGetDuplicateName', () => {
     ).mockImplementation();
 
     // when
-    stepGetDuplicateName.getDuplicateName(exampleObject);
+    stepGetDuplicateName.getDuplicateName(objectData, operationData);
     // then
     expect(completeGetDuplicateNameMock).toBeCalledTimes(1);
     expect(updateObjectMock).toBeCalledWith({
@@ -84,19 +84,26 @@ describe('StepGetDuplicateName', () => {
     });
   });
 
-  it('getDuplicateName should skip updateObject when provided objectData.vizKeyChanged === true', () => {
+  it('getDuplicateName should skip updateObject when provided nameAndFormatShouldUpdate === true', () => {
     // given
-    const exampleObject = {
+    const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'nameTest',
-      vizKeyChanged: true,
     };
+    const operationData = {
+      objectEditedData: {
+        visualizationInfo: {
+          nameAndFormatShouldUpdate: true
+        }
+      }
+    };
+
     const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
     const completeGetDuplicateNameMock = jest.spyOn(
       operationStepDispatcher, 'completeGetDuplicateName'
     ).mockImplementation();
     // when
-    stepGetDuplicateName.getDuplicateName(exampleObject);
+    stepGetDuplicateName.getDuplicateName(objectData, operationData);
     // then
     expect(completeGetDuplicateNameMock).toBeCalledTimes(1);
     expect(updateObjectMock).not.toBeCalled();
