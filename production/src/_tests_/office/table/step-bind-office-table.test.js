@@ -11,7 +11,7 @@ describe('StepBindOfficeTable', () => {
 
   it('bindOfficeTable should handle exception', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => {
       throw new Error('errorTest');

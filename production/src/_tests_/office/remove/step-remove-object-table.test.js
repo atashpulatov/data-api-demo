@@ -11,7 +11,7 @@ describe('StepRemoveObjectStore', () => {
 
   it('removeObjectTable should log exceptions', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     const getExcelContextMock = jest.spyOn(officeApiHelper, 'getExcelContext')
       .mockImplementation(() => {

@@ -69,7 +69,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
   it('getOfficeTableImport should handle an error', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     const fetchContentGeneratorMock = jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockImplementation(() => {
       throw new Error('errorTest');

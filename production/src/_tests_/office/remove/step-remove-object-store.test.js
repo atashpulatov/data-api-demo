@@ -10,7 +10,7 @@ describe('StepRemoveObjectStore', () => {
 
   it('stepRemoveObjectStore should handle exception', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     jest.spyOn(officeStoreObject, 'removeObjectFromStore').mockImplementation(() => {
       throw new Error('errorTest');

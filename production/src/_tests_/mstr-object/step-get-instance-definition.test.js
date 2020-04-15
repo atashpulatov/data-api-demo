@@ -17,7 +17,7 @@ describe('StepGetInstanceDefinition', () => {
 
   it('applyFormatting should log exceptions', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     const answerPromptsMock = jest.spyOn(mstrObjectRestService, 'answerPrompts')
       .mockImplementation(() => {
@@ -62,7 +62,7 @@ describe('StepGetInstanceDefinition', () => {
     isPromptedParam,
   }) => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
     jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();

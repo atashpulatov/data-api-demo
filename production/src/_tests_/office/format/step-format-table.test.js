@@ -9,7 +9,7 @@ describe('StepFormatTable', () => {
 
   it('formatTable should log exceptions', async () => {
     // given
-    console.log = jest.fn();
+    jest.spyOn(console, 'log');
 
     jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation(() => {
       throw new Error('errorTest');

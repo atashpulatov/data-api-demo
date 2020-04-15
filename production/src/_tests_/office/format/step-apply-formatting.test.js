@@ -8,8 +8,8 @@ describe('StepApplyFormatting', () => {
 
   it('applyFormatting should log exceptions', async () => {
     // given
-    console.log = jest.fn();
-    console.error = jest.fn();
+    jest.spyOn(console, 'log');
+    jest.spyOn(console, 'error');
 
     const filterColumnInformationMock = jest.spyOn(stepApplyFormatting, 'filterColumnInformation')
       .mockImplementation(() => {

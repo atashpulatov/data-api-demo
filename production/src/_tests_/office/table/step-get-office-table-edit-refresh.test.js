@@ -13,7 +13,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
 
   it('getOfficeTableEditRefresh should handle error', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation(() => {
       throw new Error('errorTest');

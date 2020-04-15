@@ -10,7 +10,7 @@ describe('StepGetOfficeTableImport', () => {
 
   it('getOfficeTableImport should log exceptions', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => {
       throw new Error('errorTest');

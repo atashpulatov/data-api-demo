@@ -17,7 +17,7 @@ describe('StepRemoveObjectBinding', () => {
 
   it('removeObjectBinding should handle exception', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue(officeContextMock);
 
