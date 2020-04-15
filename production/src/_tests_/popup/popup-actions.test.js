@@ -210,7 +210,6 @@ describe('Popup actions', () => {
     const instanceId = 'instanceId';
     const manipulationsXML = { data: 'data' };
     const oldVisKey = 'oldVisualizationKey';
-    const newVisKey = 'newVisualizationKey';
 
     const editedDossier = {
       projectId,
@@ -287,12 +286,13 @@ describe('Popup actions', () => {
     // object
     const object = { mstrObjectType: { name: 'visualization' } };
     const listener = jest.fn();
-    const spyPrepareDossierForEdit = jest.spyOn(actions, 'prepareDossierForEdit');
-    actions.prepareDossierForEdit.mockImplementationOnce((paramObject) => {
-      paramObject.test = 'test';
-      delete paramObject.mstrObjectType;
-      delete paramObject.objectType;
-    });
+    const spyPrepareDossierForEdit = jest
+      .spyOn(actions, 'prepareDossierForEdit')
+      .mockImplementationOnce((paramObject) => {
+        paramObject.test = 'test';
+        delete paramObject.mstrObjectType;
+        delete paramObject.objectType;
+      });
     const newObject = { test: 'test' };
     const reportParams = {
       duplicateMode: true,
