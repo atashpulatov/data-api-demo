@@ -3,6 +3,7 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 import { reduxStore } from '../../store';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
 
 describe('SidePanelService', () => {
   afterEach(() => {
@@ -17,8 +18,8 @@ describe('SidePanelService', () => {
     const mockObject = {
       data: 'data', bindId: 'test', tableName: 'name', refreshDate: 'date', preparedInstanceId: 'instance id',
     };
-    const spyGetObject = jest
-      .spyOn(sidePanelService, 'getObject')
+    const getObjectFromObjectReducerByObjectWorkingId = jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
       .mockImplementationOnce(() => mockObject);
 
     const expectedObject = {
@@ -33,7 +34,7 @@ describe('SidePanelService', () => {
     // when
     sidePanelService.duplicate(objectWorkingId, insertNewWorksheet, withEdit);
     // then
-    expect(spyGetObject).toBeCalledWith(objectWorkingId);
+    expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalledWith(objectWorkingId);
     expect(operationActions.duplicateRequested).toBeCalledTimes(1);
     expect(operationActions.duplicateRequested).toBeCalledWith(expectedObject);
   });
@@ -46,8 +47,8 @@ describe('SidePanelService', () => {
     const mockObject = {
       data: 'data', bindId: 'test', tableName: 'name', refreshDate: 'date', preparedInstanceId: 'instance id',
     };
-    const spyGetObject = jest
-      .spyOn(sidePanelService, 'getObject')
+    const getObjectFromObjectReducerByObjectWorkingId = jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
       .mockImplementationOnce(() => mockObject);
 
     const expectedObject = {
@@ -62,7 +63,7 @@ describe('SidePanelService', () => {
     // when
     sidePanelService.duplicate(objectWorkingId, insertNewWorksheet, withEdit);
     // then
-    expect(spyGetObject).toBeCalledWith(objectWorkingId);
+    expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalledWith(objectWorkingId);
     expect(popupActions.callForDuplicate).toBeCalledTimes(1);
     expect(popupActions.callForDuplicate).toBeCalledWith(expectedObject);
   });

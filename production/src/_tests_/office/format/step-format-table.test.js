@@ -9,12 +9,11 @@ describe('StepFormatTable', () => {
 
   it('formatTable should log exceptions', async () => {
     // given
-    console.log = jest.fn();
+    jest.spyOn(console, 'log');
 
-    const formatCrosstabHeadersMock = jest.spyOn(stepFormatTable, 'formatCrosstabHeaders')
-      .mockImplementation(() => {
-        throw new Error('errorTest');
-      });
+    jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
 
     jest.spyOn(operationStepDispatcher, 'completeFormatOfficeTable').mockImplementation();
 
@@ -25,8 +24,8 @@ describe('StepFormatTable', () => {
     });
 
     // then
-    expect(formatCrosstabHeadersMock).toBeCalledTimes(1);
-    expect(formatCrosstabHeadersMock).toThrowError(Error);
+    expect(stepFormatTable.formatCrosstabHeaders).toBeCalledTimes(1);
+    expect(stepFormatTable.formatCrosstabHeaders).toThrowError(Error);
     expect(console.log).toBeCalledTimes(1);
     expect(console.log).toBeCalledWith('Error when formatting - no columns autofit applied', new Error('errorTest'));
   });
@@ -48,35 +47,33 @@ describe('StepFormatTable', () => {
       officeTable: { columns: 'columnsTest' },
     };
 
-    const formatCrosstabHeadersMock = jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation();
+    jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation();
 
-    const formatColumnsMock = jest.spyOn(stepFormatTable, 'formatColumns').mockImplementation();
+    jest.spyOn(stepFormatTable, 'formatColumns').mockImplementation();
 
-    const completeFormatOfficeTableMock = jest.spyOn(
-      operationStepDispatcher, 'completeFormatOfficeTable'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeFormatOfficeTable').mockImplementation();
 
     // when
     await stepFormatTable.formatTable(objectData, operationData);
 
     // then
-    expect(formatCrosstabHeadersMock).toBeCalledTimes(1);
-    expect(formatCrosstabHeadersMock).toBeCalledWith(
+    expect(stepFormatTable.formatCrosstabHeaders).toBeCalledTimes(1);
+    expect(stepFormatTable.formatCrosstabHeaders).toBeCalledWith(
       { columns: 'columnsTest' },
       'isCrosstabTest',
       'rowsXTest',
     );
 
-    expect(formatColumnsMock).toBeCalledTimes(1);
-    expect(formatColumnsMock).toBeCalledWith(
+    expect(stepFormatTable.formatColumns).toBeCalledTimes(1);
+    expect(stepFormatTable.formatColumns).toBeCalledWith(
       { sync: excelContextSyncMock },
       'columnsTest',
     );
 
     expect(excelContextSyncMock).toBeCalledTimes(1);
 
-    expect(completeFormatOfficeTableMock).toBeCalledTimes(1);
-    expect(completeFormatOfficeTableMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledWith('objectWorkingIdTest');
   });
 
   it.each`
@@ -90,13 +87,11 @@ describe('StepFormatTable', () => {
     // given
     const autofitColumnsMock = jest.fn();
 
-    const getColumnsBeforeMock = jest.fn().mockImplementation(() => (
-      { format: { autofitColumns: autofitColumnsMock } }
-    ));
+    const getColumnsBeforeMock = jest.fn().mockReturnValue({ format: { autofitColumns: autofitColumnsMock } });
 
     const officeTableMock = {
       showHeaders: true,
-      getDataBodyRange: jest.fn().mockImplementation(() => ({ getColumnsBefore: getColumnsBeforeMock })),
+      getDataBodyRange: jest.fn().mockReturnValue({ getColumnsBefore: getColumnsBeforeMock }),
     };
 
     // when
@@ -129,22 +124,20 @@ describe('StepFormatTable', () => {
 
     const columnsMock = { getItemAt: getItemAtMock };
 
-    const loadExcelDataSingleMock = jest.spyOn(officeApiDataLoader, 'loadExcelDataSingle').mockImplementation(
-      () => columnsCount
-    );
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue(columnsCount);
 
-    const formatSingleColumnMock = jest.spyOn(stepFormatTable, 'formatSingleColumn').mockImplementation();
+    jest.spyOn(stepFormatTable, 'formatSingleColumn').mockImplementation();
 
     // when
     await stepFormatTable.formatColumns('excelContextTest', columnsMock);
 
     // then
-    expect(loadExcelDataSingleMock).toBeCalledTimes(1);
-    expect(loadExcelDataSingleMock).toBeCalledWith('excelContextTest', columnsMock, 'count');
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', columnsMock, 'count');
 
-    expect(formatSingleColumnMock).toBeCalledTimes(columnsCount);
+    expect(stepFormatTable.formatSingleColumn).toBeCalledTimes(columnsCount);
     if (columnsCount > 0) {
-      expect(formatSingleColumnMock).toBeCalledWith('excelContextTest', getItemAtValueMock);
+      expect(stepFormatTable.formatSingleColumn).toBeCalledWith('excelContextTest', getItemAtValueMock);
     }
 
     expect(getItemAtMock).toBeCalledTimes(columnsCount);
@@ -157,12 +150,7 @@ describe('StepFormatTable', () => {
 
     const autofitColumnsMock = jest.fn();
 
-    const columnMock = {
-      getRange: jest.fn().mockImplementation(() => (
-        { format: { autofitColumns: autofitColumnsMock } }
-      ))
-    };
-
+    const columnMock = { getRange: jest.fn().mockReturnValue({ format: { autofitColumns: autofitColumnsMock } }) };
 
     // when
     await stepFormatTable.formatSingleColumn(excelContextMock, columnMock);

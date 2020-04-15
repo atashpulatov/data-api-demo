@@ -77,12 +77,12 @@ describe('Popup actions', () => {
     };
     const listener = jest.fn();
     const spyPrepareDossierForEdit = jest.spyOn(actions, 'prepareDossierForEdit');
-    officeReducerHelper.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
+    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     // when
     await actions.callForEditDossier(report)(listener);
     // then
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
-    expect(officeReducerHelper.getObjectFromObjectReducer).toBeCalledWith(bindId);
+    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(spyPrepareDossierForEdit).toBeCalledWith(returnedValue);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
@@ -94,12 +94,12 @@ describe('Popup actions', () => {
     const returnedValue = {
       id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: false
     };
-    officeReducerHelper.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
+    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(officeReducerHelper.getObjectFromObjectReducer).toBeCalledWith(bindId);
+    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runEditFiltersPopup).toBeCalledWith(report);
   });
@@ -111,12 +111,12 @@ describe('Popup actions', () => {
     const returnedValue = {
       id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true
     };
-    officeReducerHelper.getObjectFromObjectReducer.mockReturnValueOnce(returnedValue);
+    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
     const listener = jest.fn();
     // when
     await actions.callForEdit(report)(listener);
     // then
-    expect(officeReducerHelper.getObjectFromObjectReducer).toBeCalledWith(bindId);
+    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
     expect(popupController.runRepromptPopup).toBeCalledWith(report);
   });

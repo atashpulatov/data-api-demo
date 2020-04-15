@@ -28,7 +28,7 @@ class PopupActions {
   callForEdit = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject = this.officeReducerHelper.getObjectFromObjectReducer(reportParams.bindId);
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
       editedObject.objectType = editedObject.mstrObjectType;
 
       dispatch({
@@ -55,7 +55,7 @@ class PopupActions {
   callForEditDossier = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducer(reportParams.bindId);
+      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
 
       await this.prepareDossierForEdit(editedDossier);
 

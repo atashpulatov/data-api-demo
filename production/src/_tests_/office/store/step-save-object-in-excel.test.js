@@ -29,7 +29,7 @@ describe('StepSaveObjectInExcel', () => {
 
   it('saveObject should handle an error', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation(() => {
       throw new Error('errorTest');

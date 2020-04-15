@@ -16,19 +16,15 @@ class ErrorService {
 
   handleObjectBasedError = (objectWorkingId, error, callback) => {
     const errorType = this.getErrorType(error);
-    console.log(error);
-    console.log(errorType);
     if (error.Code === 5012) {
       this.handleError(error);
     }
     this.notificationService.showObjectWarning(objectWorkingId, { message: error.message, callback });
-    // this.notificationService
   }
 
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
-    console.log(errorType);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);

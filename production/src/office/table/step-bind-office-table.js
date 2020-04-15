@@ -22,7 +22,7 @@ class StepBindOfficeTable {
       const { bindId, objectWorkingId } = objectData;
       const { excelContext, officeTable } = operationData;
 
-      const tableName = await officeApiDataLoader.loadExcelDataSingle(excelContext, officeTable, 'name');
+      const tableName = await officeApiDataLoader.loadSingleExcelData(excelContext, officeTable, 'name');
 
       await officeApiHelper.bindNamedItem(tableName, bindId);
 

@@ -65,7 +65,7 @@ class StepFormatTable {
    * @param {Office} columns Reference to Excel columns collection
    */
   formatColumns = async (excelContext, columns) => {
-    const columnsCount = await officeApiDataLoader.loadExcelDataSingle(excelContext, columns, 'count');
+    const columnsCount = await officeApiDataLoader.loadSingleExcelData(excelContext, columns, 'count');
 
     for (let i = 0; i < columnsCount; i++) {
       await this.formatSingleColumn(excelContext, columns.getItemAt(i));

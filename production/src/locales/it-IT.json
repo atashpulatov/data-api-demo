@@ -214,5 +214,20 @@
   "To preserve this crosstab report, select all objects without changing their forms.": "Per conservare il report a campi incrociati, selezionare tutti gli oggetti senza modificarne i moduli.",
   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "Si sta tentando di eseguire un'operazione su una visualizzazione non supportata o che è stata spostata in un altro capitolo/pagina o eliminata dal dossier.",
   "Seems like the dossier has been removed.": "Sembra che il dossier sia stato rimosso.",
-  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "La visualizzazione su cui si sta tentando di eseguire l'operazione non è supportata o è stata eliminata dal dossier."
+  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "La visualizzazione su cui si sta tentando di eseguire l'operazione non è supportata o è stata eliminata dal dossier.",
+  "Removal failed": "*Removal failed*",
+  "Duplication failed": "*Duplication failed*",
+  "Pending": "*Pending*",
+  "Duplicating": "*Duplicating*",
+  "Refreshing": "*Refreshing*",
+  "Import failed": "*Import failed*",
+  "Clearing": "*Clearing*",
+  "Object cleared": "*Object cleared*",
+  "Refresh complete": "*Refresh complete*",
+  "Clearing failed": "*Clearing failed*",
+  "Import successful": "*Import successful*",
+  "Refresh failed": "*Refresh failed*",
+  "Removing": "*Removing*",
+  "Object removed": "*Object removed*",
+  "Object duplicated": "*Object duplicated*"
 }

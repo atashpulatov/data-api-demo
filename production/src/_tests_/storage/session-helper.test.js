@@ -25,9 +25,11 @@ describe('sessionHelper', () => {
     authenticationService.logout = jest.fn().mockImplementationOnce(() => {
       throw new Error();
     });
-    const logOutErrorSpy = jest.spyOn(errorService, 'handleError');
+    const logOutErrorSpy = jest.spyOn(errorService, 'handleError').mockImplementation();
+
     // when
     sessionHelper.logOutRest();
+
     // then
     expect(logOutErrorSpy).toHaveBeenCalled();
   });
