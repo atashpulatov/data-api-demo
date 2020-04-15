@@ -25,7 +25,7 @@ export default class DossierWindowNotConnected extends React.Component {
       visualizationKey: '',
       promptsAnswers: [],
       preparedInstanceId: '',
-      isVisualizationSupported: true,
+      isVisualizationSupported: true
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
