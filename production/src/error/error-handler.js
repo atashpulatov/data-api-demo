@@ -25,7 +25,6 @@ class ErrorService {
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
-    console.log(errorType);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);

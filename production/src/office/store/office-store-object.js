@@ -8,6 +8,10 @@ class OfficeStoreObject {
     this.reduxStore = reduxStore;
   };
 
+  /**
+  * Removes object from office settings based on passed objectWorkingId
+  *
+  */
   removeObjectInExcelStore = (objectWorkingId) => {
     try {
       const settings = officeStoreHelper.getOfficeSettings();
@@ -26,11 +30,19 @@ class OfficeStoreObject {
     }
   };
 
+  /**
+  * Removes object from redux and office settings based on passed objectWorkingId
+  *
+  */
   removeObjectFromStore = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.removeObjectInExcelStore(objectWorkingId);
   };
 
+  /**
+  * Saves current objects list from Object Reducer in Office Settings
+  *
+  */
   saveObjectsInExcelStore = async () => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const settings = officeStoreHelper.getOfficeSettings();

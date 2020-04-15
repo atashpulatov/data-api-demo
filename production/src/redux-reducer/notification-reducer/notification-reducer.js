@@ -65,15 +65,12 @@ export const notificationReducer = (state = initialState, action) => {
 };
 
 const createProgressNotification = (state, payload) => {
-  console.log({ ...titleOperationInProgressMap });
-  console.log(titleOperationInProgressMap.PENDING_OPERATION);
   const newNotification = {
     objectWorkingId: payload.operation.objectWorkingId,
     type: objectNotificationTypes.PROGRESS,
     title: titleOperationInProgressMap.PENDING_OPERATION,
     operationType: payload.operation.operationType,
   };
-  console.log({ ...newNotification });
   return { ...state, notifications: [...state.notifications, newNotification] };
 };
 
