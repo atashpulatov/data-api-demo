@@ -23,7 +23,8 @@ class ErrorService {
     }
     const errorMessage = errorMessageFactory(errorType)({ error });
     const errorDetails = (error.response && error.response.text) || error.message || '';
-    this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: errorDetails, callback });
+    const details = errorMessage !== errorDetails ? errorDetails : '';
+    this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
   }
 
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {

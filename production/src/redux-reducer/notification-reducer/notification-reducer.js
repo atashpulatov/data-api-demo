@@ -20,6 +20,7 @@ import {
 import {
   titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap, customT
 } from './notification-title-maps';
+import { GENERIC_SERVER_ERR } from '../../error/constants';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -104,12 +105,12 @@ const displayNotificationWarning = (state, payload) => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
 
   const buttons = getOkButton(payload);
+  const title = getTitle(payload, notificationToUpdate);
 
   const updatedNotification = {
     objectWorkingId: payload.objectWorkingId,
     type: objectNotificationTypes.WARNING,
-    title: customT(payload.notification.title),
-    // title: titleOperationFailedMap[notificationToUpdate.operationType],
+    title: customT(title),
     details: customT(payload.notification.message),
     children: getNotificationButtons(buttons),
   };
@@ -135,6 +136,12 @@ const getOkButton = (payload) => [{
   label: 'Ok',
   onClick: payload.notification.callback,
 }];
+
+function getTitle(payload, notificationToUpdate) {
+  return payload.notification.title === GENERIC_SERVER_ERR
+    ? titleOperationFailedMap[notificationToUpdate.operationType]
+    : payload.notification.title;
+}
 
 function createNewState(state, notificationToUpdateIndex, updatedNotification) {
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
