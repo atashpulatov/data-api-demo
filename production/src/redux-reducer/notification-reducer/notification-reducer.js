@@ -108,7 +108,8 @@ const displayNotificationWarning = (state, payload) => {
   const updatedNotification = {
     objectWorkingId: payload.objectWorkingId,
     type: objectNotificationTypes.WARNING,
-    title: titleOperationFailedMap[notificationToUpdate.operationType],
+    title: customT(payload.notification.title),
+    // title: titleOperationFailedMap[notificationToUpdate.operationType],
     details: customT(payload.notification.message),
     children: getNotificationButtons(buttons),
   };
