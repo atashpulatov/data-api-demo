@@ -241,7 +241,7 @@ DossierWindowNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
-    promptsAnswers: PropTypes.array || null,
+    promptsAnswers: PropTypes.array || null
   }),
   handleBack: PropTypes.func,
   editedObject: PropTypes.shape({
