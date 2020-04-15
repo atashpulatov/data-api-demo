@@ -49,7 +49,7 @@ export const HomeNotConnected = (props) => {
 
   return (
     <>
-      {sessionHelper.isDevelopment && authToken && <DevelopmentImportList />}
+      {sessionHelper.isDevelopment() && authToken && <DevelopmentImportList />}
       {authToken
         ? <RightSidePanel />
         : (
