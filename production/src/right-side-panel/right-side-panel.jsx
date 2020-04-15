@@ -51,7 +51,9 @@ export const RightSidePanelNotConnected = (props) => {
     setSidePanelPopup(sidePanelService.getSidePanelPopup());
   }, [isSecured, isClearDataFailed]);
 
-  const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
+  const handleSettingsClick = () => {
+    officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
+  };
 
   React.useEffect(() => {
     setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(
