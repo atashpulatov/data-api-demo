@@ -121,7 +121,6 @@ const createObjectWarning = (state, payload) => {
     type: objectNotificationTypes.WARNING,
     title: titleOperationFailedMap[notificationToUpdate.operationType],
     details: customT(payload.notification.message),
-    onHover: payload.notification.callback,
     children: getNotificationButtons(buttons),
   };
 
