@@ -100,7 +100,7 @@ class StepGetDuplicateName {
 
     const { objects } = this.reduxStore.getState().objectReducer;
 
-    const objectsNames = objects.map((object) => object.name);
+    const objectsNames = objects.map(({ name }) => name);
 
     while (objectsNames.includes(finalNameCandidate)) {
       if (splitedName[splitedName.length - 1] === translatedCopy) {

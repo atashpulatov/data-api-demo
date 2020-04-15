@@ -35,6 +35,8 @@ export const RightSidePanelNotConnected = (props) => {
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
 
+  const duplicatePopupParams = { activeCellAddress, setDuplicatedObjectId, setSidePanelPopup };
+
   React.useEffect(() => {
     try {
       sidePanelService.addRemoveObjectListener();
@@ -56,9 +58,7 @@ export const RightSidePanelNotConnected = (props) => {
   // Updates the activeCellAddress in duplicate popup if this popup is opened.
   React.useEffect(() => {
     if (sidePanelPopup !== null && sidePanelPopup.type === popupTypes.DUPLICATE && duplicatedObjectId !== null) {
-      sidePanelService.setDuplicatePopup({
-        objectWorkingId: duplicatedObjectId, activeCellAddress, setDuplicatedObjectId, setSidePanelPopup
-      });
+      sidePanelService.setDuplicatePopup({ objectWorkingId: duplicatedObjectId, ...duplicatePopupParams });
     }
     // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
     // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
@@ -99,9 +99,7 @@ export const RightSidePanelNotConnected = (props) => {
   const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
   const duplicateWrapper = async (objectWorkingId) => {
-    await wrapper(sidePanelService.setDuplicatePopup, {
-      objectWorkingId, activeCellAddress, setDuplicatedObjectId, setSidePanelPopup
-    });
+    await wrapper(sidePanelService.setDuplicatePopup, { objectWorkingId, ...duplicatePopupParams });
   };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };

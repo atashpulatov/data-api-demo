@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline, indent */
 import { IMPORT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
 import { objectReducer } from '../../redux-reducer/object-reducer/object-reducer';
 import { UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS } from '../../redux-reducer/object-reducer/object-actions';
