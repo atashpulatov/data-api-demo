@@ -47,6 +47,7 @@ task :e2e_test_browser,[:build_no] do | t, args|
   #always clean the report dir. 
   report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser/allure-report"
   FileUtils.rm_rf report_dir if Dir.exist? report_dir
+  good "clean up #{report_dir}, #{Dir.exist?(report_dir)}"
   npm_install_dir= test_dir
   build_no = args['build_no']
   if is_windows_jenkins_env?# we need to copy the test driver to the root dir of c because of there is a path length limitation of windows
