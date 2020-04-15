@@ -94,4 +94,14 @@ describe('RightSidePanelNotConnected', () => {
     // then
     expect(mockedProps.toggleIsSettingsFlag).toHaveBeenCalled();
   });
+
+  it.skip('should call wrapped sidePanelService.setDuplicatePopup on onDuplicateClick', () => {
+    // TODO: AZ
+    expect(true).toBeFalse();
+  });
+
+  it.skip('should call sidePanelService.setDuplicatePopup when duplicate popup is opened and active cell changes', () => {
+    // TODO: AZ
+    expect(true).toBeFalse();
+  });
 });
