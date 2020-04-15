@@ -4,14 +4,12 @@ class OfficeFormatSubtotals {
   /**
    * Applies Excel number formatting to imported object based on MSTR data type.
    *
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Array} subtotalsAddresses Array containing object with cell coordinates
-   * @param {Office} officeTable
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions ExcelContext
+   * @param {Office} officeTable
    * @param {Object} mstrTable contains information about mstr object
    * @param {Boolean} [shouldBold=true] Specify if the function should add or remove bold formatting
    */
-  applySubtotalFormatting = async ({ excelContext, officeTable }, mstrTable, shouldBold = true) => {
+  applySubtotalFormatting = async (excelContext, officeTable, mstrTable, shouldBold = true) => {
     console.time('Subtotal Formatting');
     try {
       const { isCrosstab } = mstrTable;

@@ -10,7 +10,7 @@ import {
   CANCEL_OPERATION,
   CLEAR_DATA_OPERATION,
 } from '../../operation/operation-type-names';
-import {operationStepsMap} from '../../operation/operation-steps';
+import { operationStepsMap } from '../../operation/operation-steps';
 
 describe('OperationActions', () => {
   it('returns IMPORT_OPERATION action on importRequested call', () => {
