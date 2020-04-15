@@ -50,19 +50,19 @@ export default class DossierWindowNotConnected extends React.Component {
     if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
       this.prolongSession();
     }
-  };
+  }
 
   validateSession = () => {
     authenticationHelper.validateAuthToken().catch((error) => {
       popupHelper.handlePopupErrors(error);
     });
-  };
+  }
 
   handleCancel = () => {
     const { Office } = window;
     const cancelObject = { command: selectorProperties.commandCancel };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
-  };
+  }
 
   async handleSelection(dossierData) {
     const { chosenObjectId, chosenProjectId } = this.props;
@@ -107,7 +107,7 @@ export default class DossierWindowNotConnected extends React.Component {
       chosenObjectName,
       chosenObjectId,
       chosenProjectId,
-      editedObject
+      editedObject,
     } = this.props;
     const { isEdit } = editedObject;
     const {

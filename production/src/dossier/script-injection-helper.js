@@ -1,7 +1,7 @@
 /**
  * This function creates location of the file
  *
- * @param {*} relativePath
+ * @param {String} relativePath
  */
 export const createFileLocation = relativePath => window.location.origin
   + window.location.pathname.replace('index.html', relativePath);
@@ -9,8 +9,8 @@ export const createFileLocation = relativePath => window.location.origin
 /**
  * This function applies an external script file to a embedded document
  *
- * @param {*} contentDocument
- * @param {*} fileLocationRelativePath
+ * @param {Document} contentDocument
+ * @param {String} fileLocationRelativePath
  */
 export const applyFile = (contentDocument, fileLocationRelativePath) => {
   const fileLocation = createFileLocation(fileLocationRelativePath);
@@ -25,8 +25,8 @@ export const applyFile = (contentDocument, fileLocationRelativePath) => {
 /**
  * This function applies an external css file to a document
  *
- * @param {*} contentDocument
- * @param {*} styleSheetRelativePath
+ * @param {Document} contentDocument
+ * @param {String} styleSheetRelativePath
  */
 export const applyStyle = (contentDocument, styleSheetRelativePath) => {
   const styleSheetLocation = createFileLocation(styleSheetRelativePath);
