@@ -11,7 +11,7 @@ describe('StepRemoveObjectStore', () => {
 
   it('removeObjectTable should log exceptions', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     const getExcelContextMock = jest.spyOn(officeApiHelper, 'getExcelContext')
       .mockImplementation(() => {
@@ -56,7 +56,6 @@ describe('StepRemoveObjectStore', () => {
     const getItemMock = jest.fn().mockReturnValue({ sth: 42 });
     const syncMock = jest.fn();
 
-    /* eslint-disable object-curly-newline */
     const excelContextMock = {
       workbook: {
         tables: {
@@ -65,7 +64,6 @@ describe('StepRemoveObjectStore', () => {
       },
       sync: syncMock,
     };
-    /* eslint-enable object-curly-newline */
 
     const getExcelContextMock = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
 

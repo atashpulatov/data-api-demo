@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import stepGetInstanceDefinition from '../../mstr-object/step-get-instance-definition';
@@ -18,7 +17,7 @@ describe('StepGetInstanceDefinition', () => {
 
   it('applyFormatting should log exceptions', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     const answerPromptsMock = jest.spyOn(mstrObjectRestService, 'answerPrompts')
       .mockImplementation(() => {
@@ -63,7 +62,7 @@ describe('StepGetInstanceDefinition', () => {
     isPromptedParam,
   }) => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
     jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();

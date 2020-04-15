@@ -1,6 +1,7 @@
 import officeTableCreate from '../../../office/table/office-table-create';
 import stepGetOfficeTableImport from '../../../office/table/step-get-office-table-import';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../../operation/operation-error-handler';
 
 describe('StepGetOfficeTableImport', () => {
   afterEach(() => {
@@ -9,20 +10,25 @@ describe('StepGetOfficeTableImport', () => {
 
   it('getOfficeTableImport should log exceptions', async () => {
     // given
-    console.error = jest.fn();
+    jest.spyOn(console, 'error');
 
-    const createOfficeTableMock = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => {
+    jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => {
       throw new Error('errorTest');
     });
+
+    jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
     await stepGetOfficeTableImport.getOfficeTableImport({}, {});
 
     // then
-    expect(createOfficeTableMock).toBeCalledTimes(1);
-    expect(createOfficeTableMock).toThrowError(Error);
+    expect(officeTableCreate.createOfficeTable).toBeCalledTimes(1);
+    expect(officeTableCreate.createOfficeTable).toThrowError(Error);
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
+
+    expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
+    expect(operationErrorHandler.handleOperationError).toBeCalledWith({}, {}, new Error('errorTest'));
   });
 
   it('getOfficeTableImport should work as expected', async () => {
@@ -36,33 +42,31 @@ describe('StepGetOfficeTableImport', () => {
       startCell: 'startCellTest',
     };
 
-    const createOfficeTableMock = jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => ({
+    jest.spyOn(officeTableCreate, 'createOfficeTable').mockImplementation(() => ({
       officeTable: 'officeTableTest',
       bindId: 'bindIdTest',
       tableName: 'newOfficeTableNameTest',
     }));
 
-    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    const completeGetOfficeTableImportMock = jest.spyOn(
-      operationStepDispatcher, 'completeGetOfficeTableImport'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableImport').mockImplementation();
 
     // when
     await stepGetOfficeTableImport.getOfficeTableImport(objectData, operationData);
 
     // then
-    expect(createOfficeTableMock).toBeCalledTimes(1);
-    expect(createOfficeTableMock).toBeCalledWith({
+    expect(officeTableCreate.createOfficeTable).toBeCalledTimes(1);
+    expect(officeTableCreate.createOfficeTable).toBeCalledWith({
       excelContext: 'excelContextTest',
       instanceDefinition: 'instanceDefinitionTest',
       startCell: 'startCellTest',
     });
 
-    expect(updateOperationMock).toBeCalledTimes(1);
-    expect(updateOperationMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       officeTable: 'officeTableTest',
       shouldFormat: true,
@@ -71,14 +75,14 @@ describe('StepGetOfficeTableImport', () => {
       startCell: 'startCellTest',
     });
 
-    expect(updateObjectMock).toBeCalledTimes(1);
-    expect(updateObjectMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       tableName: 'newOfficeTableNameTest',
       bindId: 'bindIdTest',
     });
 
-    expect(completeGetOfficeTableImportMock).toBeCalledTimes(1);
-    expect(completeGetOfficeTableImportMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeGetOfficeTableImport).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeGetOfficeTableImport).toBeCalledWith('objectWorkingIdTest');
   });
 });

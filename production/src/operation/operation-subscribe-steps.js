@@ -15,6 +15,9 @@ import stepRemoveObjectStore from '../office/remove/step-remove-object-store';
 import stepCheckObjectStatus from '../office/clear-data/step-check-object-status';
 import stepClearCrosstabHeaders from '../office/clear-data/step-clear-crosstab-headers';
 import stepClearTableData from '../office/clear-data/step-clear-table-data';
+import stepNotificationInProgress from '../notification-v2/step-notification-in-progress';
+import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
+import stepCompleteClearData from '../office/clear-data/step-complete-clear-data';
 
 import {
   BIND_OFFICE_TABLE,
@@ -38,9 +41,6 @@ import {
   BACKUP_OBJECT_DATA,
   COMPLETE_CLEAR_DATA,
 } from './operation-steps';
-import stepNoficicationInProgress from '../notification-v2/step-notification-in-progress';
-import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
-import stepCompleteClearData from '../office/clear-data/step-complete-clear-data';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -76,7 +76,7 @@ class SubscribeSteps {
     operationBus.subscribe(CLEAR_TABLE_DATA, stepClearTableData.clearTableData);
     operationBus.subscribe(COMPLETE_CLEAR_DATA, stepCompleteClearData.completeClearData);
 
-    operationBus.subscribe(MOVE_NOTIFICATION_TO_IN_PROGRESS, stepNoficicationInProgress.moveNotificationToInProgress);
+    operationBus.subscribe(MOVE_NOTIFICATION_TO_IN_PROGRESS, stepNotificationInProgress.moveNotificationToInProgress);
     operationBus.subscribe(
       DISPLAY_NOTIFICATION_COMPLETED,
       stepDisplayNotificationCompleted.displayNotificationCompleted

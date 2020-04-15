@@ -8,8 +8,8 @@ describe('StepApplyFormatting', () => {
 
   it('applyFormatting should log exceptions', async () => {
     // given
-    console.log = jest.fn();
-    console.error = jest.fn();
+    jest.spyOn(console, 'log');
+    jest.spyOn(console, 'error');
 
     const filterColumnInformationMock = jest.spyOn(stepApplyFormatting, 'filterColumnInformation')
       .mockImplementation(() => {
@@ -342,13 +342,11 @@ describe('StepApplyFormatting', () => {
     // given
     const getItemAtMock = jest.fn().mockReturnValue({ getDataBodyRange: jest.fn() });
 
-    /* eslint-disable object-curly-newline */
     const officeTableMock = {
       columns: {
         getItemAt: getItemAtMock
       }
     };
-    /* eslint-enable object-curly-newline */
 
     // when
     stepApplyFormatting.getColumnRangeForFormatting(index, isCrosstab, offset, officeTableMock);
