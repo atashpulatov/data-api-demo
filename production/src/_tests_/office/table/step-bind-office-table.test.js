@@ -2,10 +2,32 @@ import stepBindOfficeTable from '../../../office/table/step-bind-office-table';
 import officeApiDataLoader from '../../../office/api/office-api-data-loader';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+import operationErrorHandler from '../../../operation/operation-error-handler';
 
 describe('StepBindOfficeTable', () => {
   afterEach(() => {
     jest.restoreAllMocks();
+  });
+
+  it('bindOfficeTable should handle exception', async () => {
+    // given
+    jest.spyOn(console, 'error');
+
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
+
+    jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
+
+    // when
+    await stepBindOfficeTable.bindOfficeTable({}, {});
+
+    // then
+    expect(console.error).toBeCalledTimes(1);
+    expect(console.error).toBeCalledWith(new Error('errorTest'));
+
+    expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
+    expect(operationErrorHandler.handleOperationError).toBeCalledWith({}, {}, new Error('errorTest'));
   });
 
   it('bindOfficeTable should work as expected', async () => {
@@ -19,27 +41,23 @@ describe('StepBindOfficeTable', () => {
       officeTable: 'officeTableTest',
     };
 
-    const loadExcelDataSingleMock = jest.spyOn(officeApiDataLoader, 'loadExcelDataSingle').mockImplementation(
-      () => 'tableNameTest'
-    );
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue('tableNameTest');
 
-    const officeApiHelperMock = jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
+    jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
 
-    const completeBindOfficeTableMock = jest.spyOn(
-      operationStepDispatcher, 'completeBindOfficeTable'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeBindOfficeTable').mockImplementation();
 
     // when
     await stepBindOfficeTable.bindOfficeTable(objectData, operationData);
 
     // then
-    expect(loadExcelDataSingleMock).toBeCalledTimes(1);
-    expect(loadExcelDataSingleMock).toBeCalledWith('excelContextTest', 'officeTableTest', 'name');
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', 'officeTableTest', 'name');
 
-    expect(officeApiHelperMock).toBeCalledTimes(1);
-    expect(officeApiHelperMock).toBeCalledWith('tableNameTest', 'bindIdTest');
+    expect(officeApiHelper.bindNamedItem).toBeCalledTimes(1);
+    expect(officeApiHelper.bindNamedItem).toBeCalledWith('tableNameTest', 'bindIdTest');
 
-    expect(completeBindOfficeTableMock).toBeCalledTimes(1);
-    expect(completeBindOfficeTableMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith('objectWorkingIdTest');
   });
 });

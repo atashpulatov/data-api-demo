@@ -2,6 +2,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { AttributeMetricFilter } from '@mstr/mstr-react-library';
 import { AttributeSelectorNotConnected } from '../../attribute-selector/attribute-selector';
+import { officeContext } from '../../office/office-context';
+
+jest.mock('../../office/office-context');
 
 describe('AttributeSelectorNotConnected', () => {
   afterEach(() => {
@@ -48,6 +51,8 @@ describe('AttributeSelectorNotConnected', () => {
       selectedMetrics: editedObject.selectedMetrics,
       selectedFilters: editedObject.selectedFilters,
     };
+    const displayLanguageMock = 'en-US';
+    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const selectorWrapped = shallow(
       <AttributeSelectorNotConnected
@@ -57,6 +62,7 @@ describe('AttributeSelectorNotConnected', () => {
         supportForms={supportForms} />
     );
     // then
+    expect(getOfficeSpy).toHaveBeenCalled();
     const attributeMetricFilterWrapped = selectorWrapped.find(AttributeMetricFilter).at(0);
     expect(attributeMetricFilterWrapped.prop('mstrData')).toEqual(mstrData);
     // expect(attributeMetricFilterWrapped.key()).toEqual(mstrData.chosenObjectId);
@@ -84,6 +90,8 @@ describe('AttributeSelectorNotConnected', () => {
         text: '{"code":"ERR009","message":"The user\'s session has expired, please reauthenticate"}',
       },
     };
+    const displayLanguageMock = 'en-US';
+    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const wrappedComponent = shallow(
       <AttributeSelectorNotConnected
@@ -94,6 +102,7 @@ describe('AttributeSelectorNotConnected', () => {
     );
     wrappedComponent.instance().handleUnauthorized(libraryError);
     // then
+    expect(getOfficeSpy).toHaveBeenCalled();
     expect(mockHandlePopupErrors).toBeCalledWith(pupupExpectedError);
   });
 });

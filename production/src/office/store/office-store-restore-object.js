@@ -8,6 +8,12 @@ class OfficeStoreRestoreObject {
     this.reduxStore = reduxStore;
   };
 
+  /**
+  * Retrieves information about object imported in previous versions,
+  * maps them to new format of data and stores them in Redux and Office Settings,
+  * and then remove the previosuly stored informations from Office settings
+  *
+  */
   restoreObjectsFromExcelStore = () => {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(officeProperties.storedObjects) || [];
@@ -20,6 +26,13 @@ class OfficeStoreRestoreObject {
     settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
   };
 
+
+  /**
+  * Maps previously stored objects information to new format of data
+  *
+  * @param {Array} [objects] Objects imported in previous version of plugin
+  * @return {Array} New objects and old objects converted to new format of data
+  */
   restoreLegacyObjectsFromExcelStore = (objects = []) => {
     const reportArray = this.getLegacyObjectsList();
     const objectsToBeAdded = [];
@@ -42,6 +55,13 @@ class OfficeStoreRestoreObject {
     return [...objects, ...objectsToBeAdded];
   };
 
+  /**
+  * Maps values from legacy object to new key used in new data format
+  *
+  * @param {Object} object Object imported in previous version of plugin
+  * @param {String} newKey New name of the field
+  * @param {String} oldKey Old name of the field
+  */
   mapLegacyObjectValue = (object, newKey, oldKey) => {
     if (object[oldKey]) {
       object[newKey] = object[oldKey];
@@ -49,6 +69,12 @@ class OfficeStoreRestoreObject {
     }
   };
 
+  /**
+  * Retrieves list of objects imported in previous versions,
+  *
+  * @return {Array} Contains legacy objects data
+  * @throws Error on failed execution of Office api function
+  */
   getLegacyObjectsList = () => {
     try {
       const settings = officeStoreHelper.getOfficeSettings();

@@ -8,27 +8,20 @@ class OfficeStoreObject {
     this.reduxStore = reduxStore;
   };
 
-  modifyObjectValue = async (bindId, key, value) => {
-    try {
-      const settings = officeStoreHelper.getOfficeSettings();
-      const objects = settings.get(officeProperties.storedObjects);
-      const indexOfReport = objects.findIndex((object) => (object.bindId === bindId));
-      objects[indexOfReport][key] = value;
-      settings.set(officeProperties.storedObjects, objects);
-      await settings.saveAsync();
-    } catch (error) {
-      errorService.handleError(error);
-    }
-  };
-
+  /**
+  * Removes object from office settings based on passed objectWorkingId
+  *
+  */
   removeObjectInExcelStore = (objectWorkingId) => {
     try {
       const settings = officeStoreHelper.getOfficeSettings();
       if (objectWorkingId) {
         const storedObjects = settings.get(officeProperties.storedObjects);
         const indexOfReport = storedObjects.findIndex((report) => (report.objectWorkingId === objectWorkingId));
-        storedObjects.splice(indexOfReport, 1);
-        settings.set(officeProperties.storedObjects, storedObjects);
+        if (indexOfReport !== -1) {
+          storedObjects.splice(indexOfReport, 1);
+          settings.set(officeProperties.storedObjects, storedObjects);
+        }
       }
 
       settings.saveAsync();
@@ -37,11 +30,19 @@ class OfficeStoreObject {
     }
   };
 
+  /**
+  * Removes object from redux and office settings based on passed objectWorkingId
+  *
+  */
   removeObjectFromStore = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.removeObjectInExcelStore(objectWorkingId);
   };
 
+  /**
+  * Saves current objects list from Object Reducer in Office Settings
+  *
+  */
   saveObjectsInExcelStore = async () => {
     const { objects } = this.reduxStore.getState().objectReducer;
     const settings = officeStoreHelper.getOfficeSettings();

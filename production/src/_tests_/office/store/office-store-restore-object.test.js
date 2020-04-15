@@ -43,12 +43,10 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
   storedObjectParam,
   restoredFromExcelObject
 }) => {
-  let consoleLogOriginal;
   beforeAll(() => {
     objectActions.restoreAllObjects = jest.fn().mockReturnValue('restoreAllObjectsTest');
 
-    consoleLogOriginal = console.log;
-    console.log = jest.fn();
+    jest.spyOn(console, 'log');
   });
 
   beforeEach(() => {
@@ -64,11 +62,11 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
     officeStoreRestoreObject.init(reduxStore);
   });
 
-  afterAll(() => {
-    console.log = consoleLogOriginal;
-
+  afterEach(() => {
     jest.restoreAllMocks();
+  });
 
+  afterAll(() => {
     delete internalData[officeProperties.storedObjects];
     delete settingsMock.saveAsync;
   });

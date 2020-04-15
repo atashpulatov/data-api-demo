@@ -43,7 +43,6 @@ describe('OfficeStoreHelper getOfficeSettings positive path', () => {
   const globalOfficeOriginal = global.Office;
 
   beforeAll(() => {
-    /* eslint-disable object-curly-newline */
     global.Office = {
       context: {
         document: {
@@ -51,7 +50,6 @@ describe('OfficeStoreHelper getOfficeSettings positive path', () => {
         }
       }
     };
-    /* eslint-enable object-curly-newline */
   });
 
   afterAll(() => {
@@ -131,11 +129,9 @@ describe('OfficeStoreHelper setters', () => {
 
   it('getPropertyValue should work as expected', () => {
     // given
-    /* eslint-disable object-curly-newline */
     const settingsMock = {
       get: jest.fn().mockReturnValue('isFileSecuredTest'),
     };
-    /* eslint-enable object-curly-newline */
 
     const getOfficeSettingsMock = jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
