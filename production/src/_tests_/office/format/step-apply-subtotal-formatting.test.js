@@ -18,7 +18,6 @@ describe('StepApplySubtotalFormatting', () => {
     // given
     const objectData = { };
 
-    /* eslint-disable object-curly-newline */
     const operationData = {
       objectWorkingId: 'objectWorkingIdTest',
       instanceDefinition: {
@@ -31,7 +30,6 @@ describe('StepApplySubtotalFormatting', () => {
         }
       },
     };
-    /* eslint-enable object-curly-newline */
 
     jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting').mockImplementation();
 
@@ -51,7 +49,6 @@ describe('StepApplySubtotalFormatting', () => {
     // given
     const objectData = { };
 
-    /* eslint-disable object-curly-newline */
     const operationData = {
       objectWorkingId: 'objectWorkingIdTest',
       excelContext: 'excelContextTest',
@@ -66,7 +63,6 @@ describe('StepApplySubtotalFormatting', () => {
       },
       officeTable: 'officeTableTest',
     };
-    /* eslint-enable object-curly-newline */
 
     jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting').mockImplementation();
 
@@ -81,13 +77,11 @@ describe('StepApplySubtotalFormatting', () => {
       'excelContextTest',
       'officeTableTest',
       {
-        /* eslint-disable object-curly-newline */
         subtotalsInfo: {
           subtotalsAddresses: {
             length: 42
           }
         }
-        /* eslint-enable object-curly-newline */
       }
     );
 

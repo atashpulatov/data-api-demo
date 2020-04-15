@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import officeApiDataLoader from '../../../office/api/office-api-data-loader';
 import officeTableUpdate from '../../../office/table/office-table-update';
 import * as mstrObjectRestService from '../../../mstr-object/mstr-object-rest-service';

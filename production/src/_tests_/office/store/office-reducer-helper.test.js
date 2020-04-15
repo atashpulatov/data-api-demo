@@ -17,7 +17,6 @@ describe('OfficeReducerHelper', () => {
   });
 
   const reduxStoreMock = {
-    /* eslint-disable object-curly-newline */
     getState: () => ({
       objectReducer: {
         objects: 'objectsTest',
@@ -26,7 +25,6 @@ describe('OfficeReducerHelper', () => {
         operations: 'operationsTest',
       },
     })
-    /* eslint-enable object-curly-newline */
   };
 
   it('getObjectsListFromObjectReducer works as expected', () => {
@@ -91,13 +89,11 @@ describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {
   ({ expectedObject, bindIdParam, objectsParam }) => {
     // given
     const reduxStoreMock = {
-      /* eslint-disable object-curly-newline */
       getState: () => ({
         objectReducer: {
           objects: objectsParam,
         },
       })
-      /* eslint-disable object-curly-newline */
     };
 
     officeReducerHelper.init(reduxStoreMock);

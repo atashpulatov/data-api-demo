@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import stepGetInstanceDefinition from '../../mstr-object/step-get-instance-definition';

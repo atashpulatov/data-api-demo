@@ -342,13 +342,11 @@ describe('StepApplyFormatting', () => {
     // given
     const getItemAtMock = jest.fn().mockReturnValue({ getDataBodyRange: jest.fn() });
 
-    /* eslint-disable object-curly-newline */
     const officeTableMock = {
       columns: {
         getItemAt: getItemAtMock
       }
     };
-    /* eslint-enable object-curly-newline */
 
     // when
     stepApplyFormatting.getColumnRangeForFormatting(index, isCrosstab, offset, officeTableMock);

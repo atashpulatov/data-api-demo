@@ -2,7 +2,6 @@ import stepRemoveObjectBinding from '../../../office/remove/step-remove-object-b
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
-/* eslint-disable object-curly-newline */
 const officeContextMock = {
   document: {
     bindings: {
@@ -10,7 +9,6 @@ const officeContextMock = {
     }
   }
 };
-/* eslint-enable object-curly-newline */
 
 describe('StepRemoveObjectBinding', () => {
   afterEach(() => {

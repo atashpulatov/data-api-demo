@@ -20,17 +20,14 @@ describe('StepFetchInsertDataIntoExcel', () => {
     subtotalsInfo: {}
   };
 
-  /* eslint-disable object-curly-newline */
   const mstrTableMock = {
     subtotalsInfo: {
       importSubtotal: false
     },
   };
-  /* eslint-enable object-curly-newline */
 
   const suspendApiCalculationUntilNextSyncMock = jest.fn();
 
-  /* eslint-disable object-curly-newline */
   const excelContextMock = {
     workbook: {
       application: {
@@ -38,7 +35,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
       },
     },
   };
-  /* eslint-enable object-curly-newline */
 
   const operationDataMock = {
     objectWorkingId: 'objectWorkingIdTest',

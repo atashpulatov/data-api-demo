@@ -32,5 +32,13 @@
     "curly" :["error", "all"],
     "object-curly-newline": ["error", {"multiline": true, "minProperties":4}],
     "no-redeclare": ["error", { "builtinGlobals": false }]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.test.js"],
+      "rules": {
+        "object-curly-newline": "off"
+      }
+    }
+  ]
 }
