@@ -107,7 +107,7 @@ export default class DossierWindowNotConnected extends React.Component {
       chosenObjectName,
       chosenObjectId,
       chosenProjectId,
-      editedObject,
+      editedObject
     } = this.props;
     const { isEdit } = editedObject;
     const {
