@@ -81,7 +81,7 @@ describe('Home', () => {
     const wrappedComponent = mount(
       <Provider store={reduxStore}>
         <HomeNotConnected {...props} />
-      </Provider>,
+      </Provider>
     );
     const overlayId = '#overlay';
     // then
