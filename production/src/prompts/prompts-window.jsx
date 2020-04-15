@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
-import { actions } from '../navigation/navigation-tree-actions';
+import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
 import { Notifications } from '../notification/notifications';
@@ -156,6 +156,11 @@ export class PromptsWindowNotConnected extends Component {
 
       if (isReprompt) {
         props.instance = instance;
+      }
+
+      if (!microstrategy || !microstrategy.dossier) {
+        console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+        return;
       }
 
       microstrategy.dossier
@@ -345,7 +350,7 @@ export const mapStateToProps = (state) => {
   const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = popupState && popupState.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
 
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {

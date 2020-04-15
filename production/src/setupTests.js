@@ -1,4 +1,5 @@
 // setup file
+import React from 'react';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import 'jest-localstorage-mock';
@@ -10,6 +11,8 @@ jest.mock('@mstr/rc', () => ({
   ObjectTable: () => <div />,
   // eslint-disable-next-line react/react-in-jsx-scope,react/no-multi-comp
   TopFilterPanel: () => <div />,
+  // eslint-disable-next-line react/no-multi-comp,react/react-in-jsx-scope
+  SidePanel: () => <div />,
 }));
 
 configure({ adapter: new Adapter() });

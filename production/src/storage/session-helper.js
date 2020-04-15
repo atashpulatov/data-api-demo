@@ -1,10 +1,11 @@
-import { sessionProperties } from './session-properties';
+import { sessionProperties } from '../redux-reducer/session-reducer/session-properties';
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { HomeHelper } from '../home/home-helper';
-import { createCache } from '../cache/cache-actions';
+import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
+import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
 class SessionHelper {
   init = (reduxStore) => {
@@ -153,6 +154,10 @@ class SessionHelper {
       return false;
     }
   }
+
+  importObjectWithouPopup = async (object) => {
+    this.reduxStore.dispatch(importRequested(object));
+  };
 }
 
 export const sessionHelper = new SessionHelper();

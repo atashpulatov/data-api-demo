@@ -7,8 +7,8 @@ import { popupHelper } from '../popup/popup-helper';
 import {
   switchImportSubtotals as switchImportSubtotalsImported,
   updateDisplayAttrForm as updateDisplayAttrFormImported
-} from '../navigation/navigation-tree-actions';
-import { officeProperties } from '../office/store/office-properties';
+} from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 
@@ -81,10 +81,10 @@ export class AttributeSelectorNotConnected extends Component {
 const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
   const legacyObject = {
     reportId: chosenObject.chosenObjectId || editedObject.chosenObjectId,
-    envUrl: session.envUrl || session.envUrl,
+    envUrl: session.envUrl,
     projectId: chosenObject.chosenProjectId || editedObject.projectId,
     reportSubtype: chosenObject.chosenSubtype || editedObject.chosenObjectSubtype,
-    reportType: chosenObject.chosenObjectId ? chosenObject.objectType.name : editedObject.chosenObjectType,
+    reportType: chosenObject.chosenObjectId ? chosenObject.mstrObjectType.name : editedObject.chosenObjectType,
     reportName: chosenObject.chosenObjectName || editedObject.chosenObjectName,
     token: session.authToken,
     authToken: session.authToken,
@@ -150,7 +150,7 @@ const mapStateToProps = (state) => {
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const isReport = editedObject && editedObject.objectType.name === mstrObjectEnum.mstrObjectType.report.name;
+  const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,

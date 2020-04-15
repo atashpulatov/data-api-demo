@@ -1,0 +1,158 @@
+import { CREATE_NOTIFICATION, DELETE_NOTIFICATION } from '../../redux-reducer/notification-reducer/notification-actions';
+import { notificationReducer } from '../../redux-reducer/notification-reducer/notification-reducer';
+
+describe('Notification reducer', () => {
+  const initialState = {
+    empty: { notifications: [], globalNotification: { type: '' } },
+    singleWarning: {
+      notifications: [
+        {
+          objectWorkingId: 'someId1',
+          type: 'warning',
+          details: 'some details'
+        }
+      ]
+    },
+    singleImport: {
+      notifications: [
+        {
+          objectWorkingId: 'someId1',
+          type: 'import',
+          percentageComplete: 30,
+        }
+      ]
+    },
+    multiple: {
+      notifications: [
+        {
+          objectWorkingId: 'someId1',
+          type: 'cleared',
+        },
+        {
+          objectWorkingId: 'someId2',
+          type: 'import',
+          details: 'some details'
+        },
+        {
+          objectWorkingId: 'someId3',
+          type: 'import',
+          percentageComplete: 30,
+        },
+      ]
+    }
+  };
+
+  it('should get default state if one is not provided', () => {
+    // given
+    const action = {};
+
+    // when
+    const resultState = notificationReducer(undefined, action);
+    // then
+    expect(resultState).toEqual({ notifications: [], globalNotification: { type: '' } });
+  });
+
+  describe('create', () => {
+    it('should return the same state if type is not matched', () => {
+      // given
+      const notHandledAction = {
+        type: 'some type',
+        payload: 'some payload',
+      };
+
+      // when
+      const resultState = notificationReducer(initialState.multiple, notHandledAction);
+
+      // then
+      expect(resultState).toBe(initialState.multiple);
+    });
+
+    it('should add new notification to empty reducer', () => {
+      // given
+      const exampleNotification = {
+        objectWorkingId: 'someId23',
+        type: 'import'
+      };
+      const action = {
+        type: CREATE_NOTIFICATION,
+        payload: exampleNotification
+      };
+
+      // when
+      const resultState = notificationReducer(initialState.empty, action);
+
+      // then
+      expect(resultState).toEqual({ notifications: [exampleNotification] });
+    });
+
+    it('should add new notification to existing ones', () => {
+      // given
+      const exampleNotification = {
+        objectWorkingId: 'someId23',
+        type: 'import'
+      };
+      const action = {
+        type: CREATE_NOTIFICATION,
+        payload: exampleNotification
+      };
+
+      // when
+      const resultState = notificationReducer(initialState.multiple, action);
+
+      // then
+      expect(resultState).toEqual({
+        notifications: [
+          ...initialState.multiple.notifications,
+          exampleNotification]
+      });
+    });
+  });
+
+  describe('delete', () => {
+    it('should throw an error if objectWorkingId does not exist', () => {
+      // given
+      const wrongAction = {
+        type: DELETE_NOTIFICATION,
+        payload: {
+          objectWorkingId: 'someNonExistingId',
+          percentageComplete: 90,
+        },
+      };
+
+      // when
+      const throwingCall = () => notificationReducer(initialState.multiple, wrongAction);
+
+      // then
+      expect(throwingCall).toThrow();
+    });
+
+    it('should delete one action on single array', () => {
+      // given
+      const action = {
+        type: DELETE_NOTIFICATION,
+        payload: { objectWorkingId: 'someId1', },
+      };
+      // when
+      const resultState = notificationReducer(initialState.singleImport, action);
+      // then
+      expect(resultState).toEqual({ notifications: [] });
+    });
+
+    it('should delete one action on multiple array', () => {
+      // given
+      const action = {
+        type: DELETE_NOTIFICATION,
+        payload: { objectWorkingId: 'someId2', },
+      };
+      // when
+      const resultState = notificationReducer(initialState.multiple, action);
+      // then
+      expect(resultState).toEqual({
+        notifications: [
+          initialState.multiple.notifications[0],
+          initialState.multiple.notifications[2]
+        ]
+      });
+    });
+  });
+});

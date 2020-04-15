@@ -1,5 +1,5 @@
 import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import { officeProperties } from './store/office-properties';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 
 /**
  * Service to parse JSON response from REST API v2
@@ -81,27 +81,27 @@ class OfficeConverterServiceV2 {
         const formName = e.forms[index].name;
         let title;
         switch (nameSet) {
-        case displayAttrFormNames.automatic:
-          title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
-          titles.push(title);
-          break;
-        case displayAttrFormNames.on:
-          titles.push(`'${e.name} ${formName}`);
-          break;
-        case displayAttrFormNames.off:
-          titles.push(`'${e.name}`);
-          break;
-        case displayAttrFormNames.formNameOnly:
-          titles.push(`'${formName}`);
-          break;
-        case displayAttrFormNames.showAttrNameOnce:
-          title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
-          titles.push(title);
-          break;
-        default:
-          title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
-          titles.push(title);
-          break;
+          case displayAttrFormNames.automatic:
+            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+            titles.push(title);
+            break;
+          case displayAttrFormNames.on:
+            titles.push(`'${e.name} ${formName}`);
+            break;
+          case displayAttrFormNames.off:
+            titles.push(`'${e.name}`);
+            break;
+          case displayAttrFormNames.formNameOnly:
+            titles.push(`'${formName}`);
+            break;
+          case displayAttrFormNames.showAttrNameOnce:
+            title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
+            titles.push(title);
+            break;
+          default:
+            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+            titles.push(title);
+            break;
         }
       }
       return titles;
@@ -135,7 +135,7 @@ class OfficeConverterServiceV2 {
    * Gets raw table rows
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @return {number[]}
    */
   getRows=(response, isCrosstab) => {
@@ -159,7 +159,7 @@ class OfficeConverterServiceV2 {
    * Gets object with crosstab rows and column headers
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
    * @return {Object}
 
@@ -195,7 +195,7 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} response
    * @param {Object} columnInformation - Array with indexed column definition for metrics and attributes
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @return {Number}
    */
   getTableSize = (response, columnInformation, isCrosstab) => {
@@ -246,26 +246,26 @@ class OfficeConverterServiceV2 {
     return columns.map((element, index) => {
       const type = element.type ? element.type.toLowerCase() : null;
       switch (type) {
-      case 'metric':
-        return {
-          category: element.numberFormatting.category,
-          formatString: element.numberFormatting.formatString,
-          id: element.id,
-          index,
-          isAttribute: false,
-          name: element.name,
-        };
-      case 'attribute':
-      case 'consolidation':
-        return {
-          attributeId: element.id,
-          attributeName: element.name,
-          forms: element.forms ? element.forms : [],
-          index,
-          isAttribute: true,
-        };
-      default:
-        return {};
+        case 'metric':
+          return {
+            category: element.numberFormatting.category,
+            formatString: element.numberFormatting.formatString,
+            id: element.id,
+            index,
+            isAttribute: false,
+            name: element.name,
+          };
+        case 'attribute':
+        case 'consolidation':
+          return {
+            attributeId: element.id,
+            attributeName: element.name,
+            forms: element.forms ? element.forms : [],
+            index,
+            isAttribute: true,
+          };
+        default:
+          return {};
       }
     });
   }

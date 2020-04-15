@@ -1,6 +1,6 @@
 class FakeStore {
   constructor() {
-    this.state = { operationReducer: { operations: [], } };
+    this.resetState();
   }
 
   getState = () => this.state
@@ -9,9 +9,24 @@ class FakeStore {
     this.listener = listener;
   }
 
-  simulateActionChange = (actionName) => {
-    const subscribedOperation = { actionsQueue: [actionName], };
-    this.state.operationReducer.operations = [subscribedOperation];
+  resetState = () => {
+    this.state = {
+      operationReducer: { operations: [{ stepsQueue: [], }], },
+      objectReducer: { objects: [] }
+    };
+    this.listener && this.listener();
+  }
+
+  addStep = (stepName) => {
+    const operation = this.state.operationReducer.operations[0];
+    operation.stepsQueue = [...operation.stepsQueue, stepName];
+
+    this.listener();
+  }
+
+  removeFirstStep = () => {
+    const operation = this.state.operationReducer.operations[0];
+    operation.stepsQueue.shift();
     this.listener();
   }
 }

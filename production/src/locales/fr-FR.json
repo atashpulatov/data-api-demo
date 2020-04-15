@@ -214,5 +214,20 @@
   "To preserve this crosstab report, select all objects without changing their forms.": "Pour conserver ce rapport d’analyse croisée, sélectionnez tous les objets sans modifier leurs formes.",
   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "Vous essayez d'effectuer une opération sur une visualisation qui n'est pas prise en charge ou qui a été déplacée vers un autre chapitre/page ou supprimée du portfolio.",
   "Seems like the dossier has been removed.": "Il sembre que le portfolio a été supprimé.",
-  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "Vous essayez d'effectuer une opération sur une visualisation qui n'est pas prise en charge ou supprimée du portfolio."
+  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "Vous essayez d'effectuer une opération sur une visualisation qui n'est pas prise en charge ou supprimée du portfolio.",
+  "Removal failed": "*Removal failed*",
+  "Duplication failed": "*Duplication failed*",
+  "Pending": "*Pending*",
+  "Duplicating": "*Duplicating*",
+  "Refreshing": "*Refreshing*",
+  "Import failed": "*Import failed*",
+  "Clearing": "*Clearing*",
+  "Object cleared": "*Object cleared*",
+  "Refresh complete": "*Refresh complete*",
+  "Clearing failed": "*Clearing failed*",
+  "Import successful": "*Import successful*",
+  "Refresh failed": "*Refresh failed*",
+  "Removing": "*Removing*",
+  "Object removed": "*Object removed*",
+  "Object duplicated": "*Object duplicated*"
 }

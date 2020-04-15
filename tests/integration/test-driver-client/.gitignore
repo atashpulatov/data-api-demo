@@ -1,0 +1,15 @@
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+.DS_Store
+WinAppDriver.iml
+target/
+src/test/resources/images/browser/debugging
+src/test/resources/images/mac/debugging
+src/test/resources/images/windows/debugging
+
+src/test/resources/images/mac/tmp.png
+src/test/resources/images/windows/tmp.png
+.classpath
+.factorypath
+.project
+.settings/

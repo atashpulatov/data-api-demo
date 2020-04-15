@@ -1,0 +1,9 @@
+.side-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .object-tile-container {
+    height: 100%;
+  }
+}

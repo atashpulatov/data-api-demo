@@ -110,7 +110,9 @@ describe('Office converter service v2', () => {
     const expectedFirstColumn = {
       attributeId: '9BC4691C11E97721AF570080EF55306C',
       attributeName: 'Year',
-      forms: [{ baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID', }],
+      forms: [{
+        baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID',
+      }],
       index: 0,
       isAttribute: true,
     };
@@ -130,7 +132,7 @@ describe('Office converter service v2', () => {
   it('should run handler for tabular data', () => {
     // given
     const renderTabularSpy = jest.spyOn(jsonHandler, 'renderTabular');
-    const mockResponse = { definition: { attrforms : { supportForms: false, displayAttrFormNames: 'Automatic' } }, data: { headers: { rows: {} } } };
+    const mockResponse = { definition: { attrforms: { supportForms: false, displayAttrFormNames: 'Automatic' } }, data: { headers: { rows: {} } } };
     // when
     const returnedValue = officeConverter.getRows(mockResponse);
     // then

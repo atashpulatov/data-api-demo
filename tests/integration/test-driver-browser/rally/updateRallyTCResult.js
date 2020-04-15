@@ -3,10 +3,14 @@ const rallyConfig = require('./rallyconfig');
 const getResultsFromAllure = require('./getResultsFromAllureFunctions');
 const createBatchArray = require('./createBatchArray')
 
-// Update Rally Test Case Result using the retrieved Test Case URL and the corresponding test result
 async function updateRallyTCResult() {
-  const allureArray = getResultsFromAllure.getReportData();
-  const batch = await createBatchArray(allureArray)
+  const allTests = getResultsFromAllure.getReportData();
+
+  const cmd = process.argv;
+  const passed = !cmd.includes('fail');
+
+  const testsToUpdate = getResultsFromAllure.getTestsWithVerdict(allTests, passed);
+  const batch = await createBatchArray(testsToUpdate);
 
   const options = {
     url: 'https://rally1.rallydev.com/slm/webservice/v2.0/batch',

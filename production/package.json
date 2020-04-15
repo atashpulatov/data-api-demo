@@ -12,9 +12,9 @@
     "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eject": "react-scripts eject",
-    "eslint": "eslint ./src --ext .js,.jsx --ignore-pattern *.test* --max-warnings=0",
-    "eslint:json": "eslint ./src --ext .js,.jsx --ignore-pattern *.test* --max-warnings=0 --format json --output-file ./coverage/eslint.json",
-    "eslint:html": "eslint ./src --ext .js,.jsx --ignore-pattern *.test* --max-warnings=0 --format html --output-file ./coverage/eslint.html",
+    "eslint": "eslint ./src --ext .js,.jsx --max-warnings=0",
+    "eslint:json": "eslint ./src --ext .js,.jsx --max-warnings=0 --format json --output-file ./coverage/eslint.json",
+    "eslint:html": "eslint ./src --ext .js,.jsx --max-warnings=0 --format html --output-file ./coverage/eslint.html",
     "start:desktop": "office-addin-debugging start manifest.xml desktop",
     "start:web": "office-addin-debugging start manifest.xml web",
     "stop": "office-addin-debugging stop manifest.xml",
@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "@mstr/mstr-react-library": "^1.7.4",
-    "@mstr/rc": "^0.28.0",
+    "@mstr/rc": "^0.31.1",
+    "@types/jest": "^25.1.3",
     "antd": "^3.26.2",
     "core-js": "^3.5.0",
     "dexie": "^2.0.4",
@@ -41,7 +42,7 @@
     "react-dom": "^16.12.0",
     "react-i18next": "^10.13.2",
     "react-redux": "^7.1.3",
-    "react-scripts": "^3.3.0",
+    "react-scripts": "^3.4.1",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
@@ -104,7 +105,6 @@
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/CompileStrings.js",
       "!src/cache/cache-db.js",
-      "!src/cache/cache-actions.js",
       "!src/dossier/embedded-dossier.jsx",
       "!src/prompts/prompts-window.jsx",
       "!src/office/office-display-service.js",
@@ -113,7 +113,8 @@
       "!src/office/format/*.*",
       "!src/office/api/*.*",
       "!src/office/table/*.*",
-      "!src/office/import/*.*"
+      "!src/office/import/*.*",
+      "!src/redux-reducer/*.*"
     ]
   }
 }

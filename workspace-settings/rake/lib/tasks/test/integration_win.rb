@@ -5,8 +5,7 @@ require_relative 'test_common'
 desc "deploy test envrionment, on windows"
 task :deploy_tester_server,[:build_no] do | t, args|
   
-  group_id = "#{$WORKSPACE_SETTINGS[:nexus][:base_coordinates][:group_id]}.#{Common::Version.application_branch}"
-  # group_id = Common::Version.dependency_group_id
+  group_id = Common::Version.dependency_group_id #use dependency_group_id as the  group id to download the test binary. 
   artifact_id = "office-loader"
   version = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
   download_mstr_office(group_id, version,"e2e-webserver-windows")
@@ -44,6 +43,21 @@ end
 def tomcat_dir()
   "C:\\apache\\apache-tomcat-9.0.30"
 end
+
+desc "start web application driver on widnows"
+task :start_web_application_driver do
+  start_web_application_dirver
+end
+
+def start_web_application_dirver()
+  
+  system("taskkill /F /IM WinAppDriver.exe")
+  sleep(3)
+  Dir.chdir("C:\\Program Files (x86)\\Windows Application Driver"){
+    system("start WinAppDriver.exe localhost 6007/wd/hub")
+  }
+end
+
 
 def start_tomcat()
   # cmd = "cmd /c catalina.bat start"

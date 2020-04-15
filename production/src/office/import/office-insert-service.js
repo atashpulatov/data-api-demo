@@ -1,6 +1,7 @@
 import { PROMISE_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import officeInsertSplitHelper from './office-insert-split-helper';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
 
 class OfficeInsertService {
   /**
@@ -29,22 +30,22 @@ class OfficeInsertService {
    * @param {Array} excelRows Array of table data
    * @param {Number} rowIndex Specify from row we should append rows
    * @param {Boolean} isRefresh
-   * @param {Boolean} tableColumnsChanged
+   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
    * @param {Array} contextPromises Array excel context sync promises.
    * @param {Object} header Contains data for crosstab headers.
    * @param {Object} mstrTable Contains informations about mstr object
    */
   appendRows = async (
-    officeData,
+    officeTable,
+    excelContext,
     excelRows,
     rowIndex,
-    isRefresh = false,
+    operationType,
     tableColumnsChanged,
     contextPromises,
     header,
     mstrTable) => {
-    const { excelContext, officeTable } = officeData;
-    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh);
+    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, operationType);
 
     if (mstrTable.isCrosstab) { this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex); }
     contextPromises.push(excelContext.sync());
@@ -54,13 +55,13 @@ class OfficeInsertService {
    * Appends rows with data to Excel table only.
    *
    * @param {Array} excelRows Array of table data
-   * @param {Office} excelContext
-   * @param {Office} officeTable reference to Excel table
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Office} officeTable Reference to Excel table
    * @param {Number} rowIndex Specify from row we should append rows
-   * @param {Boolean} tableColumnsChanged
+   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
    * @param {Boolean} isRefresh
    */
-  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, isRefresh) => {
+  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, operationType) => {
     console.group('Append rows');
     const isOverLimit = officeInsertSplitHelper.checkIfSizeOverLimit(excelRows);
     const splitExcelRows = officeInsertSplitHelper.getExcelRows(excelRows, isOverLimit);
@@ -73,7 +74,7 @@ class OfficeInsertService {
         .getRow(rowIndex)
         .getResizedRange(splitExcelRows[i].length - 1, 0);
       rowIndex += splitExcelRows[i].length;
-      if (!tableColumnsChanged && isRefresh) { rowRange.clear('Contents'); }
+      if (!tableColumnsChanged && operationType !== IMPORT_OPERATION) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
       if (isOverLimit) {
         console.time(`Sync for ${splitExcelRows[i].length} rows`);

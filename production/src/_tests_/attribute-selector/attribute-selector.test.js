@@ -15,7 +15,7 @@ describe('AttributeSelectorNotConnected', () => {
     // given
     const chosenObject = {
       chosenObjectId: 'id',
-      objectType: { name: 'dossier' },
+      mstrObjectType: { name: 'dossier' },
       chosenSubtype: 'chosenSubtype',
       chosenObjectName: 'chosenObjectName',
       projectId: 'projectId',
@@ -40,7 +40,7 @@ describe('AttributeSelectorNotConnected', () => {
       envUrl: session.envUrl,
       projectId: chosenObject.chosenProjectId,
       reportSubtype: chosenObject.chosenSubtype,
-      reportType: chosenObject.objectType.name,
+      reportType: chosenObject.mstrObjectType.name,
       reportName: chosenObject.chosenObjectName,
       token: session.authToken,
       authToken: session.authToken,
@@ -54,7 +54,13 @@ describe('AttributeSelectorNotConnected', () => {
     const displayLanguageMock = 'en-US';
     const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
-    const selectorWrapped = shallow(<AttributeSelectorNotConnected chosenObject={chosenObject} session={session} editedObject={editedObject} supportForms={supportForms} />);
+    const selectorWrapped = shallow(
+      <AttributeSelectorNotConnected
+        chosenObject={chosenObject}
+        session={session}
+        editedObject={editedObject}
+        supportForms={supportForms} />
+    );
     // then
     expect(getOfficeSpy).toHaveBeenCalled();
     const attributeMetricFilterWrapped = selectorWrapped.find(AttributeMetricFilter).at(0);
@@ -67,7 +73,7 @@ describe('AttributeSelectorNotConnected', () => {
     // const mstrData = { content: 'content' };
     const chosenObject = {
       chosenObjectId: 'id',
-      objectType: { name: 'dossier' }
+      mstrObjectType: { name: 'dossier' }
     };
     const session = { envUrl: 'envUrl' };
     const editedObject = { projectId: 'projectId' };
@@ -87,7 +93,13 @@ describe('AttributeSelectorNotConnected', () => {
     const displayLanguageMock = 'en-US';
     const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
-    const wrappedComponent = shallow(<AttributeSelectorNotConnected chosenObject={chosenObject} session={session} editedObject={editedObject} handlePopupErrors={mockHandlePopupErrors} />);
+    const wrappedComponent = shallow(
+      <AttributeSelectorNotConnected
+        chosenObject={chosenObject}
+        session={session}
+        editedObject={editedObject}
+        handlePopupErrors={mockHandlePopupErrors} />
+    );
     wrappedComponent.instance().handleUnauthorized(libraryError);
     // then
     expect(getOfficeSpy).toHaveBeenCalled();

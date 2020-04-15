@@ -214,5 +214,20 @@
   "To preserve this crosstab report, select all objects without changing their forms.": "Om dit rapport met kruisgewijze tabbladen te behouden, selecteert u alle objecten zonder hun vormen te wijzigen.",
   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "U probeert een bewerking van een visualisatie uit te voeren die ofwel niet wordt ondersteund of is verplaatst naar een ander(e) hoofdstuk/pagina of is verwijderd uit het dossier.",
   "Seems like the dossier has been removed.": "Het lijkt erop dat het dossier is verwijderd.",
-  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "U probeert een bewerking van een visualisatie uit te voeren die ofwel niet wordt ondersteund of is verwijderd uit het dossier."
+  "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "U probeert een bewerking van een visualisatie uit te voeren die ofwel niet wordt ondersteund of is verwijderd uit het dossier.",
+  "Removal failed": "*Removal failed*",
+  "Duplication failed": "*Duplication failed*",
+  "Pending": "*Pending*",
+  "Duplicating": "*Duplicating*",
+  "Refreshing": "*Refreshing*",
+  "Import failed": "*Import failed*",
+  "Clearing": "*Clearing*",
+  "Object cleared": "*Object cleared*",
+  "Refresh complete": "*Refresh complete*",
+  "Clearing failed": "*Clearing failed*",
+  "Import successful": "*Import successful*",
+  "Refresh failed": "*Refresh failed*",
+  "Removing": "*Removing*",
+  "Object removed": "*Object removed*",
+  "Object duplicated": "*Object duplicated*"
 }

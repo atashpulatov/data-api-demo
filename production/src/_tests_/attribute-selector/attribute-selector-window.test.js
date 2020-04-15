@@ -73,8 +73,8 @@ describe('AttributeSelectorWindow', () => {
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+        mstrData={mstrData}
+        chosenObject={chosenObject}
       />
     );
     const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
@@ -96,8 +96,8 @@ describe('AttributeSelectorWindow', () => {
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+        mstrData={mstrData}
+        chosenObject={chosenObject}
       />
     );
     const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
@@ -119,8 +119,8 @@ describe('AttributeSelectorWindow', () => {
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+        mstrData={mstrData}
+        chosenObject={chosenObject}
       />
     );
     const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
@@ -150,16 +150,25 @@ describe('AttributeSelectorWindow', () => {
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-       mstrData={mstrData}
-       chosenObject={chosenObject}
-       editedObject={editedObject}
+        mstrData={mstrData}
+        chosenObject={chosenObject}
+        editedObject={editedObject}
       />
     );
     const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4);
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, chosenObject.chosenObjectName, chosenObject.preparedInstanceId, chosenObject.promptsAnswers, { importSubtotal }, displayAttrFormNames
+      selectorProperties.commandOnUpdate,
+      1,
+      2,
+      3,
+      4,
+      chosenObject.chosenObjectName,
+      chosenObject.preparedInstanceId,
+      chosenObject.promptsAnswers,
+      { importSubtotal },
+      displayAttrFormNames
     );
   });
 
@@ -194,7 +203,16 @@ describe('AttributeSelectorWindow', () => {
 
     // then
     expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, chosenObject.preparedInstanceId, chosenObject.promptsAnswers, { importSubtotal }, displayAttrFormNames
+      selectorProperties.commandOnUpdate,
+      1,
+      2,
+      3,
+      4,
+      5,
+      chosenObject.preparedInstanceId,
+      chosenObject.promptsAnswers,
+      { importSubtotal },
+      displayAttrFormNames
     );
   });
 
