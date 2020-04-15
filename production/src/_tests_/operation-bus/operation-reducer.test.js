@@ -1,7 +1,13 @@
+/* eslint-disable object-curly-newline, indent */
 import {
   IMPORT_OPERATION,
   MARK_STEP_COMPLETED,
   CANCEL_OPERATION,
+  DUPLICATE_OPERATION,
+  REFRESH_OPERATION,
+  EDIT_OPERATION,
+  REMOVE_OPERATION,
+  CLEAR_DATA_OPERATION,
 } from '../../operation/operation-type-names';
 import { operationReducer } from '../../redux-reducer/operation-reducer/operation-reducer';
 
@@ -70,12 +76,20 @@ describe('operation reducer', () => {
     expect(resultState).toBe(initialState.multipleOperations);
   });
 
-  describe('importRequested', () => {
-    it('should add operation when operations are empty', () => {
+  describe('importRequested and other types of actions', () => {
+    it.each`
+      actionType
+      ${IMPORT_OPERATION}
+      ${REFRESH_OPERATION}
+      ${EDIT_OPERATION}
+      ${DUPLICATE_OPERATION}
+      ${REMOVE_OPERATION} 
+      ${CLEAR_DATA_OPERATION} 
+    `('should add operation when operations are empty', ({ actionType }) => {
       // given
       const someOperation = {};
       const action = {
-        type: IMPORT_OPERATION,
+        type: actionType,
         payload: { operation: someOperation, },
       };
       const expectedState = { operations: [someOperation] };
@@ -87,11 +101,19 @@ describe('operation reducer', () => {
       expect(resultState).toEqual(expectedState);
     });
 
-    it('should add operation to existing operations', () => {
+    it.each`
+      actionType
+      ${IMPORT_OPERATION}
+      ${REFRESH_OPERATION}
+      ${EDIT_OPERATION}
+      ${DUPLICATE_OPERATION}
+      ${REMOVE_OPERATION} 
+      ${CLEAR_DATA_OPERATION} 
+    `('should add operation to existing operations', ({ actionType }) => {
       // given
       const someOperation = {};
       const action = {
-        type: IMPORT_OPERATION,
+        type: actionType,
         payload: { operation: someOperation, },
       };
       const expectedState = { operations: [...initialState.singleOperation.operations, someOperation] };

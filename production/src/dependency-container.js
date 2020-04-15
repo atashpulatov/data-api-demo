@@ -19,6 +19,7 @@ import { sidePanelService } from './right-side-panel/side-panel-service';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
+import stepGetDuplicateName from './office/step-get-duplicate-name';
 import operationErrorHandler from './operation/operation-error-handler';
 
 class DIContainer {
@@ -91,6 +92,9 @@ class DIContainer {
 
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
+
+    this.stepGetDuplicateName = stepGetDuplicateName;
+    this.stepGetDuplicateName.init(reduxStore);
 
     this.operationErrorHandler = operationErrorHandler;
     this.operationErrorHandler.init(reduxStore);

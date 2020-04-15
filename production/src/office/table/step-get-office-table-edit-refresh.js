@@ -65,7 +65,7 @@ class StepGetOfficeTableEditRefresh {
       } else {
         shouldFormat = (objectEditedData
           && objectEditedData.visualizationInfo
-          && objectEditedData.visualizationInfo.formatShouldUpdate) || false;
+          && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate) || false;
 
         officeTable = await officeTableUpdate.updateOfficeTable(
           instanceDefinition,

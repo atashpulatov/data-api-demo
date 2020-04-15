@@ -108,7 +108,6 @@
       "!src/dossier/embedded-dossier.jsx",
       "!src/prompts/prompts-window.jsx",
       "!src/office/office-display-service.js",
-      "!src/office/office-duplicate-service.js",
       "!src/navigation/**/*.*",
       "!src/office/format/*.*",
       "!src/office/api/*.*",
