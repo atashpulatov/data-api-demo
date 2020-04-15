@@ -10,6 +10,7 @@ import {
 } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeContext } from '../office/office-context';
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
@@ -45,13 +46,14 @@ export class AttributeSelectorNotConnected extends Component {
       triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, switchImportSubtotals,
     } = this.props;
+    const locale = officeContext.getOffice().context.displayLanguage;
     const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
     const displayAttrFormSet = editedObject.displayAttrFormNames || displayAttrFormNames || defaultAttrFormNames;
-
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
           t={t}
+          locale={locale}
           attributesSelectedChange={attributesSelectedChange}
           key={chosenObject.id}
           title={title}
