@@ -280,9 +280,10 @@ describe('Notification reducer', () => {
       // given
         const mockedCallback = jest.fn();
         const expectedDetails = 'some message';
+        const someTitle = 'some title';
         const actionForImport = {
           type: DISPLAY_NOTIFICATION_WARNING,
-          payload: { objectWorkingId: 12, notification: { callback: mockedCallback, message: expectedDetails } }
+          payload: { objectWorkingId: 12, notification: { callback: mockedCallback, title: someTitle, message: expectedDetails } }
         };
 
         // when
@@ -290,7 +291,7 @@ describe('Notification reducer', () => {
 
         // then
         expect(resultState.notifications[0].type).toEqual('WARNING');
-        expect(resultState.notifications[0].title).toEqual('Import failed');
+        expect(resultState.notifications[0].title).toEqual(someTitle);
         expect(resultState.notifications[0].details).toEqual(expectedDetails);
       });
 
@@ -321,9 +322,10 @@ describe('Notification reducer', () => {
         const mockedCustomT = jest.fn();
         jest.spyOn(notificationTitleMapsModule, 'customT').mockImplementationOnce((params) => mockedCustomT(params));
         const expectedDetails = 'some message';
+        const someTitle = 'some title';
         const actionForImport = {
           type: DISPLAY_NOTIFICATION_WARNING,
-          payload: { objectWorkingId: 12, notification: { callback: mockedCallback, message: expectedDetails } }
+          payload: { objectWorkingId: 12, notification: { callback: mockedCallback, title: someTitle, message: expectedDetails } }
         };
 
         // when
@@ -331,7 +333,7 @@ describe('Notification reducer', () => {
 
         // then
         expect(mockedCustomT).toBeCalled();
-        expect(mockedCustomT).toBeCalledWith(expectedDetails);
+        expect(mockedCustomT).toBeCalledWith(someTitle);
       });
     });
 
