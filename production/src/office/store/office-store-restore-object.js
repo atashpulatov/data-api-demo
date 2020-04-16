@@ -17,13 +17,11 @@ class OfficeStoreRestoreObject {
   restoreObjectsFromExcelStore = () => {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(officeProperties.storedObjects) || [];
-    objects = this.restoreLegacyObjectsFromExcelStore(objects);
+    objects = this.restoreLegacyObjectsFromExcelStore(objects, settings);
 
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
 
-    settings.set(officeProperties.loadedReportProperties, []);
     settings.set(officeProperties.storedObjects, objects);
-    settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
   };
 
 
@@ -33,7 +31,7 @@ class OfficeStoreRestoreObject {
   * @param {Array} [objects] Objects imported in previous version of plugin
   * @return {Array} New objects and old objects converted to new format of data
   */
-  restoreLegacyObjectsFromExcelStore = (objects = []) => {
+  restoreLegacyObjectsFromExcelStore = (objects = [], settings) => {
     const reportArray = this.getLegacyObjectsList();
     const objectsToBeAdded = [];
 
@@ -51,6 +49,8 @@ class OfficeStoreRestoreObject {
           objectsToBeAdded.push(currentObject);
         }
       }
+      settings.set(officeProperties.loadedReportProperties, []);
+      settings.saveAsync((saveAsync) => console.log(`Clearing report Array in settings ${saveAsync.status}`));
     }
     return [...objects, ...objectsToBeAdded];
   };
