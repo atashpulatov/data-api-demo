@@ -20,7 +20,7 @@ describe('Home', () => {
     const componentWrapper = mount(
       <Provider store={reduxStore}>
         <Home />
-      </Provider>,
+      </Provider>
     );
     // then
     expect(componentWrapper.children().length).toBeGreaterThan(0);
@@ -32,7 +32,7 @@ describe('Home', () => {
       loading: false,
       loadingReport: false,
       authToken: false,
-      reportArray: false
+      reportArray: false,
     };
     const tempPromise = Promise.resolve();
     // when
@@ -49,7 +49,7 @@ describe('Home', () => {
       loading: false,
       loadingReport: false,
       authToken: false,
-      reportArray: false
+      reportArray: false,
 
     };
 
@@ -75,7 +75,7 @@ describe('Home', () => {
       loading: false,
       loadingReport: false,
       authToken: false,
-      reportArray: false
+      reportArray: false,
     };
     // when
     const wrappedComponent = mount(
