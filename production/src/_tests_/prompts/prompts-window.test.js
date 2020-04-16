@@ -13,7 +13,7 @@ describe('PromptsWindowNotConnected', () => {
     token: 'token',
     projectId: 'projectId',
     chosenObjectId: 'chosenObjectId',
-    promptsAnswers: 'promptsAnswers'
+    promptsAnswers: 'promptsAnswers',
   };
 
   const popupState = { isReprompt: false };
