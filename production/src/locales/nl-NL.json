@@ -215,6 +215,7 @@
   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "U probeert een bewerking van een visualisatie uit te voeren die ofwel niet wordt ondersteund of is verplaatst naar een ander(e) hoofdstuk/pagina of is verwijderd uit het dossier.",
   "Seems like the dossier has been removed.": "Het lijkt erop dat het dossier is verwijderd.",
   "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "U probeert een bewerking van een visualisatie uit te voeren die ofwel niet wordt ondersteund of is verwijderd uit het dossier.",
+  "Search...": "*Search...*",
   "Include Subtotals and Totals": "*Include Subtotals and Totals*",
   "Removal failed": "*Removal failed*",
   "Duplication failed": "*Duplication failed*",
