@@ -215,6 +215,7 @@
   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "Vous essayez d'effectuer une opération sur une visualisation qui n'est pas prise en charge ou qui a été déplacée vers un autre chapitre/page ou supprimée du portfolio.",
   "Seems like the dossier has been removed.": "Il sembre que le portfolio a été supprimé.",
   "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "Vous essayez d'effectuer une opération sur une visualisation qui n'est pas prise en charge ou supprimée du portfolio.",
+  "Include Subtotals and Totals": "*Include Subtotals and Totals*",
   "Removal failed": "*Removal failed*",
   "Duplication failed": "*Duplication failed*",
   "Pending": "*Pending*",
