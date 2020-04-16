@@ -6,8 +6,18 @@ import { reduxStore } from '../../store';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 
 describe('SidePanelService', () => {
+  let duplicateRequestedOriginal;
+  beforeAll(() => {
+    duplicateRequestedOriginal = operationActions.duplicateRequested;
+    operationActions.duplicateRequested = jest.fn().mockReturnValue('duplicateRequestedTest');
+  });
+
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
+
+  afterAll(() => {
+    operationActions.duplicateRequested = duplicateRequestedOriginal;
   });
 
   it('should dispatch duplicateRequested for duplicate with import', () => {
@@ -28,7 +38,6 @@ describe('SidePanelService', () => {
       objectWorkingId: 789
     };
 
-    operationActions.duplicateRequested = jest.fn().mockReturnValue('duplicateRequestedTest');
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     Date.now = jest.fn().mockImplementationOnce(() => 789);
     // when

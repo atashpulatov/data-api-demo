@@ -11,16 +11,19 @@ import { reduxStore } from '../../store';
 describe('PopupController', () => {
   const dialog = {};
 
+  let duplicateRequestedOriginal;
   beforeAll(() => {
     dialog.close = jest.fn();
+
+    duplicateRequestedOriginal = operationActions.duplicateRequested;
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   afterAll(() => {
-    jest.restoreAllMocks();
+    operationActions.duplicateRequested = duplicateRequestedOriginal;
   });
 
   it('should run popup with proper settings when called for navigation', () => {

@@ -5,7 +5,7 @@ import officeStoreHelper from '../../office/store/office-store-helper';
 describe('Office Actions', () => {
   it('should dispatch proper toggleStoreSecuredFlag action', () => {
     // given
-    const setFileSecuredFlagMock = jest.spyOn(officeStoreHelper, 'setFileSecuredFlag').mockImplementation();
+    jest.spyOn(officeStoreHelper, 'setFileSecuredFlag').mockImplementation();
     const listener = jest.fn();
 
     // when
@@ -14,8 +14,8 @@ describe('Office Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleSecuredFlag, isSecured: true });
 
-    expect(setFileSecuredFlagMock).toBeCalledTimes(1);
-    expect(setFileSecuredFlagMock).toBeCalledWith(true);
+    expect(officeStoreHelper.setFileSecuredFlag).toBeCalledTimes(1);
+    expect(officeStoreHelper.setFileSecuredFlag).toBeCalledWith(true);
   });
 
   it('should dispatch proper toggleIsSettingsFlag action', () => {
@@ -53,7 +53,7 @@ describe('Office Actions', () => {
 
   it('should dispatch proper toggleIsClearDataFailedFlag action', () => {
     // given
-    const setIsClearDataFailedMock = jest.spyOn(officeStoreHelper, 'setIsClearDataFailed').mockImplementation();
+    jest.spyOn(officeStoreHelper, 'setIsClearDataFailed').mockImplementation();
     const listener = jest.fn();
 
     // when
@@ -67,7 +67,7 @@ describe('Office Actions', () => {
       }
     );
 
-    expect(setIsClearDataFailedMock).toBeCalledTimes(1);
-    expect(setIsClearDataFailedMock).toBeCalledWith(true);
+    expect(officeStoreHelper.setIsClearDataFailed).toBeCalledTimes(1);
+    expect(officeStoreHelper.setIsClearDataFailed).toBeCalledWith(true);
   });
 });
