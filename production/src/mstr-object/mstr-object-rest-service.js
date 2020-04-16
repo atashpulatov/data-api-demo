@@ -1,8 +1,9 @@
 import request from 'superagent';
-import { NO_DATA_RETURNED } from '../error/constants';
+import { NO_DATA_RETURNED, DOSSIER_HAS_CHANGED } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
+import { errorService } from '../error/error-handler';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -149,7 +150,7 @@ class MstrObjectRestService {
    * @param {Object} dossierInstance
    * @returns {Object} Contains info for visualization.
    */
-  getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
+  getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance, isEdit = false) => {
     try {
       const dossierDefinition = await this.getDossierInstanceDefinition(projectId, objectId, dossierInstance);
       for (const chapter of dossierDefinition.chapters) {
@@ -172,6 +173,9 @@ class MstrObjectRestService {
       }
     } catch (error) {
       console.log('Cannot fetch dossier structure, skipping');
+      if (!isEdit && errorService.getErrorMessage(error) === DOSSIER_HAS_CHANGED) {
+        throw new Error(DOSSIER_HAS_CHANGED);
+      }
       return undefined;
     }
   };
