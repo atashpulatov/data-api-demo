@@ -29,7 +29,7 @@ describe('SessionExtendingWrapper.js', () => {
       children: <div />,
       id: 'popup-wrapper',
       onSessionExpire: 'onSessionExpire',
-      t: (t) => t
+      t: (t) => t,
     };
     // when
     const componentWrapper = mount(<SessionExtendingWrapper {...givenProps} />);
@@ -45,7 +45,7 @@ describe('SessionExtendingWrapper.js', () => {
       children: <div />,
       id: 'popup-wrapper',
       onSessionExpire: jest.fn(),
-      t: (t) => t
+      t: (t) => t,
     };
     // when
     const wrappedComponent = mount(<SessionExtendingWrapper {...givenProps} />);
