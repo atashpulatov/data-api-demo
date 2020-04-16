@@ -231,5 +231,6 @@
   "Refresh failed": "Refresh failed",
   "Removing": "Removing",
   "Object removed": "Object removed",
-  "Object duplicated": "Object duplicated"
+  "Object duplicated": "Object duplicated",
+  "The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.": "The object cannot be refreshed because the dossier has changed. You can edit the object or remove it."
 }
