@@ -57,7 +57,7 @@ describe('Home', () => {
     const wrappedComponent = mount(
       <Provider store={reduxStore}>
         <HomeNotConnected {...props} />
-      </Provider>,
+      </Provider>
     );
     // when
     wrappedComponent.setProps({
