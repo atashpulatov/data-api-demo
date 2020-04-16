@@ -50,7 +50,7 @@ export const HomeNotConnected = (props) => {
 
   return (
     <SessionExtendingWrapper id="overlay">
-      {sessionHelper.isDevelopment && authToken && <DevelopmentImportList />
+      {sessionHelper.isDevelopment && authToken && <DevelopmentImportList />}
       {authToken
         ? <RightSidePanel />
         : (
