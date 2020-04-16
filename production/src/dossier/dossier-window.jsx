@@ -70,7 +70,7 @@ export default class DossierWindowNotConnected extends React.Component {
       chapterKey,
       visualizationKey,
       promptsAnswers,
-      preparedInstanceId,
+      preparedInstanceId
     } = dossierData;
     let newValue = false;
     if (chapterKey !== '' && visualizationKey !== '') {
