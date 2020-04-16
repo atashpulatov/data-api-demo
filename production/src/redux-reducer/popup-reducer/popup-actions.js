@@ -134,7 +134,8 @@ class PopupActions {
       projectId,
       objectId,
       visualizationInfo.visualizationKey,
-      instanceId
+      instanceId,
+      true
     );
 
     editedDossier.instanceId = instanceId;
