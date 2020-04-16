@@ -134,6 +134,8 @@ class SidePanelService {
     delete object.tableName;
     delete object.refreshDate;
     delete object.preparedInstanceId;
+    delete object.previousTableDimensions;
+    if (object.subtotalsInfo) { delete object.subtotalsInfo.subtotalsAddresses; }
 
     if (withEdit) {
       this.reduxStore.dispatch(popupActions.callForDuplicate(object));

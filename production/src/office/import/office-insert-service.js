@@ -1,7 +1,7 @@
 import { PROMISE_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import officeInsertSplitHelper from './office-insert-split-helper';
-import { IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { IMPORT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
 
 class OfficeInsertService {
   /**
@@ -74,7 +74,7 @@ class OfficeInsertService {
         .getRow(rowIndex)
         .getResizedRange(splitExcelRows[i].length - 1, 0);
       rowIndex += splitExcelRows[i].length;
-      if (!tableColumnsChanged && operationType !== IMPORT_OPERATION) { rowRange.clear('Contents'); }
+      if (!tableColumnsChanged && operationType !== IMPORT_OPERATION && operationType !== DUPLICATE_OPERATION) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
       if (isOverLimit) {
         console.time(`Sync for ${splitExcelRows[i].length} rows`);
