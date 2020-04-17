@@ -18,6 +18,12 @@ const settingsMock = {
 };
 
 describe('OfficeStoreObject', () => {
+  let removeObjectObject;
+  beforeAll(() => {
+    removeObjectObject = objectActions.removeObject;
+    objectActions.removeObject = jest.fn().mockReturnValue('removeObjectTest');
+  });
+
   beforeEach(() => {
     officeStoreObject.init(reduxStore);
   });
@@ -27,6 +33,10 @@ describe('OfficeStoreObject', () => {
 
     settingsMock.remove('storedObjects');
     settingsMock.saveAsync.mockReset();
+  });
+
+  afterAll(() => {
+    objectActions.removeObject = removeObjectObject;
   });
 
   it('init work as expected', () => {
@@ -103,8 +113,6 @@ describe('OfficeStoreObject', () => {
 
   it('removeObjectFromStore should work as expected', () => {
     // given
-    objectActions.removeObject = jest.fn().mockReturnValue('removeObjectTest');
-
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     jest.spyOn(officeStoreObject, 'removeObjectInExcelStore').mockImplementation();

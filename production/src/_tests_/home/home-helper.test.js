@@ -1,31 +1,33 @@
 import { sessionHelper } from '../../storage/session-helper';
 import { homeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
+import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 jest.mock('../../storage/session-helper');
+jest.mock('../../redux-reducer/session-reducer/session-actions');
 
 describe('HomeHelper', () => {
   beforeAll(() => {
-    homeHelper.init(reduxStore, sessionHelper);
+    homeHelper.init(reduxStore, sessionActions, sessionHelper);
   });
   describe('saveLoginValues', () => {
     it('should trigger logout because of missing authToken and running on localhost', () => {
       // given
       jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(true);
-      sessionHelper.logOut = jest.fn();
+      sessionActions.logOut = jest.fn();
       // when
       homeHelper.saveLoginValues();
       // then
-      expect(sessionHelper.logOut).toBeCalled();
+      expect(sessionActions.logOut).toBeCalled();
     });
     it('should return', () => {
       // given
-      sessionHelper.logOut = jest.fn();
+      sessionActions.logOut = jest.fn();
       jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'someToken', }, });
       // when
       homeHelper.saveLoginValues();
       // then
-      expect(sessionHelper.logOut).not.toBeCalled();
+      expect(sessionActions.logOut).not.toBeCalled();
     });
     it('prepare envUrl and save it to store', () => {
       // given
@@ -33,15 +35,15 @@ describe('HomeHelper', () => {
         origin: 'https://some-env.microstrategy.com/',
         pathname: 'MicroStrategyLibrary/apps/addin-mstr-office/index.html?source=addin-mstr-office',
       });
-      sessionHelper.logOut = jest.fn();
+      sessionActions.logOut = jest.fn();
       jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'someToken', }, });
       const expectedCalledUrl = { envUrl: 'https://some-env.microstrategy.com/MicroStrategyLibrary/api', };
       // when
       homeHelper.saveLoginValues();
       // then
-      expect(sessionHelper.logOut).not.toBeCalled();
-      expect(sessionHelper.saveLoginValues).toBeCalled();
-      expect(sessionHelper.saveLoginValues).toBeCalledWith(expectedCalledUrl);
+      expect(sessionActions.logOut).not.toBeCalled();
+      expect(sessionActions.saveLoginValues).toBeCalled();
+      expect(sessionActions.saveLoginValues).toBeCalledWith(expectedCalledUrl);
     });
   });
   describe('getParsedCookies', () => {
@@ -73,7 +75,7 @@ describe('HomeHelper', () => {
       // when
       homeHelper.saveTokenFromCookies();
       // then
-      expect(sessionHelper.logIn).not.toBeCalled();
+      expect(sessionActions.logIn).not.toBeCalled();
     });
     it('should save authToken when there is iSession cookie', () => {
       // given
@@ -87,8 +89,8 @@ describe('HomeHelper', () => {
       // when
       homeHelper.saveTokenFromCookies();
       // then
-      expect(sessionHelper.logIn).toBeCalled();
-      expect(sessionHelper.logIn).toBeCalledWith(cookieJarWithoutToken.iSession);
+      expect(sessionActions.logIn).toBeCalled();
+      expect(sessionActions.logIn).toBeCalledWith(cookieJarWithoutToken.iSession);
     });
     it('should return window location', () => {
       // given

@@ -78,14 +78,13 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
   const mockStore = configureMockStore([thunk]);
   let store;
   let componentWrapper;
-  let parsePopupStateMock;
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   beforeEach(() => {
-    parsePopupStateMock = jest.spyOn(popupHelper, 'parsePopupState').mockReturnValue({ sth: 42 });
+    jest.spyOn(popupHelper, 'parsePopupState').mockReturnValue({ sth: 42 });
 
     const initialState = {
       popupReducer: {
@@ -123,7 +122,7 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
     // then
     expect(componentWrapperProps.authToken).toEqual('testAuthToken');
     expect(componentWrapperProps.otherNavigationTreeProperty).toEqual('testOtherNavigationTreeProperty');
-    expect(parsePopupStateMock).toBeCalledWith({ mstrObjectType: { name: 'report' } }, 'testPromptsAnswers', true);
+    expect(popupHelper.parsePopupState).toBeCalledWith({ mstrObjectType: { name: 'report' } }, 'testPromptsAnswers', true);
     expect(componentWrapperProps.editedObject).toEqual({ sth: 42 });
     expect(componentWrapperProps.preparedInstance).toEqual('testPreparedInstance');
     expect(componentWrapperProps.propsToPass).toHaveProperty('otherPopupStateReducerProperty', 'testOtherValue');

@@ -73,20 +73,19 @@ describe('OfficeStoreHelper setters', () => {
 
   it('setPropertyValue should handle exception', () => {
     // given
-    const getOfficeSettingsMock = jest.spyOn(officeStoreHelper, 'getOfficeSettings')
-      .mockImplementation(() => { throw new Error('errorTest'); });
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockImplementation(() => { throw new Error('errorTest'); });
 
-    const handleErrorMock = jest.spyOn(errorService, 'handleError').mockImplementation();
+    jest.spyOn(errorService, 'handleError').mockImplementation();
 
     // when
     officeStoreHelper.setPropertyValue(undefined, undefined);
 
     // then
-    expect(getOfficeSettingsMock).toThrowError(Error);
-    expect(getOfficeSettingsMock).toThrowError('errorTest');
+    expect(officeStoreHelper.getOfficeSettings).toThrowError(Error);
+    expect(officeStoreHelper.getOfficeSettings).toThrowError('errorTest');
 
-    expect(handleErrorMock).toBeCalledTimes(1);
-    expect(handleErrorMock).toBeCalledWith(new Error('errorTest'));
+    expect(errorService.handleError).toBeCalledTimes(1);
+    expect(errorService.handleError).toBeCalledWith(new Error('errorTest'));
   });
 
   it('setPropertyValue should work as expected', () => {
@@ -95,13 +94,13 @@ describe('OfficeStoreHelper setters', () => {
       set: jest.fn(),
       saveAsync: jest.fn(),
     };
-    const getOfficeSettingsMock = jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
     // when
     officeStoreHelper.setPropertyValue('propertyNameTest', 'valueTest');
 
     // then
-    expect(getOfficeSettingsMock).toBeCalledTimes(1);
+    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
 
     expect(settingsMock.set).toBeCalledTimes(1);
     expect(settingsMock.set).toBeCalledWith('propertyNameTest', 'valueTest');
@@ -111,20 +110,19 @@ describe('OfficeStoreHelper setters', () => {
 
   it('getPropertyValue should handle exception', () => {
     // given
-    const getOfficeSettingsMock = jest.spyOn(officeStoreHelper, 'getOfficeSettings')
-      .mockImplementation(() => { throw new Error('errorTest'); });
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockImplementation(() => { throw new Error('errorTest'); });
 
-    const handleErrorMock = jest.spyOn(errorService, 'handleError').mockImplementation();
+    jest.spyOn(errorService, 'handleError').mockImplementation();
 
     // when
     officeStoreHelper.getPropertyValue();
 
     // then
-    expect(getOfficeSettingsMock).toThrowError(Error);
-    expect(getOfficeSettingsMock).toThrowError('errorTest');
+    expect(officeStoreHelper.getOfficeSettings).toThrowError(Error);
+    expect(officeStoreHelper.getOfficeSettings).toThrowError('errorTest');
 
-    expect(handleErrorMock).toBeCalledTimes(1);
-    expect(handleErrorMock).toBeCalledWith(new Error('errorTest'));
+    expect(errorService.handleError).toBeCalledTimes(1);
+    expect(errorService.handleError).toBeCalledWith(new Error('errorTest'));
   });
 
   it('getPropertyValue should work as expected', () => {
@@ -133,13 +131,13 @@ describe('OfficeStoreHelper setters', () => {
       get: jest.fn().mockReturnValue('isFileSecuredTest'),
     };
 
-    const getOfficeSettingsMock = jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
     // when
     const result = officeStoreHelper.getPropertyValue('propertyNameTest');
 
     // then
-    expect(getOfficeSettingsMock).toBeCalledTimes(1);
+    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
 
     expect(settingsMock.get).toBeCalledTimes(1);
     expect(settingsMock.get).toBeCalledWith('propertyNameTest');
@@ -162,14 +160,14 @@ describe('OfficeStoreHelper getters', () => {
   `('setters should work as expected',
   ({ expectedPropertyName, setterNameParam }) => {
     // given
-    const setPropertyValueMock = jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
+    jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
 
     // when
     officeStoreHelper[setterNameParam]('valueTest');
 
     // then
-    expect(setPropertyValueMock).toBeCalledTimes(1);
-    expect(setPropertyValueMock).toBeCalledWith(expectedPropertyName, 'valueTest');
+    expect(officeStoreHelper.setPropertyValue).toBeCalledTimes(1);
+    expect(officeStoreHelper.setPropertyValue).toBeCalledWith(expectedPropertyName, 'valueTest');
   });
 
   it.each`
@@ -181,14 +179,14 @@ describe('OfficeStoreHelper getters', () => {
   `('getters should work as expected',
   ({ propertyNameParam, getterNameParam }) => {
     // given
-    const getPropertyValueMock = jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue('valueTest');
+    jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue('valueTest');
 
     // when
     const result = officeStoreHelper[getterNameParam](propertyNameParam);
 
     // then
-    expect(getPropertyValueMock).toBeCalledTimes(1);
-    expect(getPropertyValueMock).toBeCalledWith(propertyNameParam);
+    expect(officeStoreHelper.getPropertyValue).toBeCalledTimes(1);
+    expect(officeStoreHelper.getPropertyValue).toBeCalledWith(propertyNameParam);
 
     expect(result).toEqual('valueTest');
   });
