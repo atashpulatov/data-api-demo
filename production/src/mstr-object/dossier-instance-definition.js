@@ -1,7 +1,10 @@
 import mstrObjectEnum from './mstr-object-type-enum';
-import { errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
+import {
+  errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE, DOSSIER_HAS_CHANGED
+} from '../error/constants';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import { IMPORT_OPERATION } from '../operation/operation-type-names';
+import { errorService } from '../error/error-handler';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition(
@@ -32,18 +35,12 @@ class DossierInstanceDefinition {
       throw error;
     }
 
-    const updatedVisualizationInfo = await mstrObjectRestService.getVisualizationInfo(
+    const updatedVisualizationInfo = await this.getUpdatedVisualizationInfo(
       projectId,
       objectId,
       visualizationInfo.visualizationKey,
       instanceId
     );
-
-    if (!updatedVisualizationInfo) {
-      throw new Error(INVALID_VIZ_KEY_MESSAGE);
-    }
-
-    visualizationInfo = updatedVisualizationInfo;
 
     const config = {
       projectId,
@@ -52,7 +49,7 @@ class DossierInstanceDefinition {
       mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
       dossierData,
       body,
-      visualizationInfo,
+      updatedVisualizationInfo,
       displayAttrFormNames
     };
 
@@ -71,9 +68,38 @@ class DossierInstanceDefinition {
 
     return {
       body,
-      visualizationInfo,
+      updatedVisualizationInfo,
       instanceDefinition
     };
+  }
+
+  /**
+   * Returns new visualization info object.
+   * If creating the visualization info fails and if the error is due to changed dossier structure, throws the error that dossier is removed has changed.
+   * Or throws error that dossier structure
+   *
+   * @param {String} projectId
+   * @param {String} objectId
+   * @param {String} visualizationKey visualization id.
+   * @param {Object} instanceId
+   * @returns {Object} Contains info for visualization.
+   * @throws {Error} Dossier has changed.
+   * @throws {Error} Dossier is not supported
+   */
+  getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
+    try {
+      return await mstrObjectRestService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationKey,
+        instanceId
+      );
+    } catch (error) {
+      if (errorService.getErrorMessage(error) === DOSSIER_HAS_CHANGED) {
+        throw new Error(DOSSIER_HAS_CHANGED);
+      }
+    }
+    throw new Error(INVALID_VIZ_KEY_MESSAGE);
   }
 
   getVisualizationName = (operationData, name, instanceDefinition) => {

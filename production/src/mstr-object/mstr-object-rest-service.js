@@ -1,9 +1,8 @@
 import request from 'superagent';
-import { NO_DATA_RETURNED, DOSSIER_HAS_CHANGED } from '../error/constants';
+import { NO_DATA_RETURNED } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
-import { errorService } from '../error/error-handler';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -149,35 +148,29 @@ class MstrObjectRestService {
    * @param {String} visualizationKey visualization id.
    * @param {Object} dossierInstance
    * @returns {Object} Contains info for visualization.
+   * @returns {undefined} If visualization key is not found.
    */
-  getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance, isEdit = false) => {
-    try {
-      const dossierDefinition = await this.getDossierInstanceDefinition(projectId, objectId, dossierInstance);
-      for (const chapter of dossierDefinition.chapters) {
-        for (const page of chapter.pages) {
-          for (const visualization of page.visualizations) {
-            if (visualization.key === visualizationKey) {
-              return {
-                chapterKey: chapter.key,
-                pageKey: page.key,
-                visualizationKey,
-                dossierStructure: {
-                  chapterName: chapter.name,
-                  dossierName: dossierDefinition.name,
-                  pageName: page.name
-                }
-              };
-            }
+  getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
+    const dossierDefinition = await this.getDossierInstanceDefinition(projectId, objectId, dossierInstance);
+    for (const chapter of dossierDefinition.chapters) {
+      for (const page of chapter.pages) {
+        for (const visualization of page.visualizations) {
+          if (visualization.key === visualizationKey) {
+            return {
+              chapterKey: chapter.key,
+              pageKey: page.key,
+              visualizationKey,
+              dossierStructure: {
+                chapterName: chapter.name,
+                dossierName: dossierDefinition.name,
+                pageName: page.name
+              }
+            };
           }
         }
       }
-    } catch (error) {
-      console.log('Cannot fetch dossier structure, skipping');
-      if (!isEdit && errorService.getErrorMessage(error) === DOSSIER_HAS_CHANGED) {
-        throw new Error(DOSSIER_HAS_CHANGED);
-      }
-      return undefined;
     }
+    return undefined;
   };
 
   answerDossierPrompts = ({

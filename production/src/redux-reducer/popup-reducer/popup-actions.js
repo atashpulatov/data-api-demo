@@ -130,13 +130,17 @@ class PopupActions {
       { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
     );
 
-    const updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(
-      projectId,
-      objectId,
-      visualizationInfo.visualizationKey,
-      instanceId,
-      true
-    );
+    let updatedVisualizationInfo;
+    try {
+      updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationInfo.visualizationKey,
+        instanceId,
+      );
+    } catch (ignoreError) {
+      // Ignored
+    }
 
     editedDossier.instanceId = instanceId;
     editedDossier.isEdit = true;
