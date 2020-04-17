@@ -1,4 +1,4 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react'; // eslint-disable-line no-unused-vars
 import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
@@ -49,7 +49,7 @@ export const HomeNotConnected = (props) => {
 
   return (
     <>
-      {sessionHelper.isDevelopment && authToken && <DevelopmentImportList />}
+      {sessionHelper.isDevelopment() && authToken && <DevelopmentImportList />}
       {authToken
         ? <RightSidePanel />
         : (

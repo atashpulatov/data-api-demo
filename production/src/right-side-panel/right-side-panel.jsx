@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel, } from '@mstr/rc';
+import { SidePanel, popupTypes } from '@mstr/rc';
 import { cancelImportRequest, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
@@ -14,6 +14,7 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
   IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION
 } from '../operation/operation-type-names';
+import { errorService } from '../error/error-handler';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -31,11 +32,16 @@ export const RightSidePanelNotConnected = (props) => {
   } = props;
 
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
+  const [activeCellAddress, setActiveCellAddress] = React.useState('...');
+  const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
+
+  const duplicatePopupParams = { activeCellAddress, setDuplicatedObjectId, setSidePanelPopup };
 
   React.useEffect(() => {
     try {
       sidePanelService.addRemoveObjectListener();
+      sidePanelService.initializeActiveCellChangedListener(setActiveCellAddress);
     } catch (error) {
       console.error(error);
     }
@@ -50,7 +56,19 @@ export const RightSidePanelNotConnected = (props) => {
     setSidePanelPopup(sidePanelService.getSidePanelPopup());
   }, [isSecured, isClearDataFailed]);
 
-  const handleSettingsClick = () => toggleIsSettingsFlag(!isSettings);
+  // Updates the activeCellAddress in duplicate popup if this popup is opened.
+  React.useEffect(() => {
+    if (sidePanelPopup !== null && sidePanelPopup.type === popupTypes.DUPLICATE && duplicatedObjectId !== null) {
+      sidePanelService.setDuplicatePopup({ objectWorkingId: duplicatedObjectId, ...duplicatePopupParams });
+    }
+    // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
+    // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCellAddress]);
+
+  const handleSettingsClick = () => {
+    officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
+  };
 
   React.useEffect(() => {
     setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(
@@ -66,18 +84,20 @@ export const RightSidePanelNotConnected = (props) => {
    * Function will be called when:
    *
    * - session is valid,
-   * - operation is not in progress,
-   * - optional new name, used by rename.
+   * - no operation is in progress.
    *
    * @param {Function} func Function to be wrapped
    * @param {*} params Parameters to wrapped function
    * @param {String} name Optional new name of an object
    */
   const wrapper = async (func, params, name) => {
-    await officeApiHelper.checkStatusOfSessions();
-
-    if (officeReducerHelper.noOperationInProgress()) {
-      await func(params, name);
+    try {
+      await officeApiHelper.checkStatusOfSessions();
+      if (officeReducerHelper.noOperationInProgress()) {
+        await func(params, name);
+      }
+    } catch (error) {
+      errorService.handleError(error);
     }
   };
 
@@ -90,7 +110,9 @@ export const RightSidePanelNotConnected = (props) => {
 
   const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
-  const duplicateWrapper = async (params) => { await wrapper(sidePanelService.duplicate, params); };
+  const duplicateWrapper = async (objectWorkingId) => {
+    await wrapper(sidePanelService.setDuplicatePopup, { objectWorkingId, ...duplicatePopupParams });
+  };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };

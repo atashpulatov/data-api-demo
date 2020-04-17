@@ -2,30 +2,53 @@ import stepRemoveObjectBinding from '../../../office/remove/step-remove-object-b
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
+const officeContextMock = {
+  document: {
+    bindings: {
+      releaseByIdAsync: undefined,
+    }
+  }
+};
+
 describe('StepRemoveObjectBinding', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
+  it('removeObjectBinding should handle exception', async () => {
+    // given
+    jest.spyOn(console, 'error');
+
+    jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue(officeContextMock);
+
+    jest.spyOn(operationStepDispatcher, 'completeRemoveObjectBinding').mockImplementation();
+
+    officeContextMock.document.bindings.releaseByIdAsync = jest.fn().mockImplementation(() => {
+      throw new Error('errorTest');
+    });
+
+    // when
+    await stepRemoveObjectBinding.removeObjectBinding({ objectWorkingId: 'objectWorkingIdTest' }, {});
+
+    // then
+    expect(officeApiHelper.getOfficeContext).toBeCalledTimes(1);
+    expect(officeApiHelper.getOfficeContext).toBeCalledWith();
+
+    expect(console.error).toBeCalledTimes(1);
+    expect(console.error).toBeCalledWith(new Error('errorTest'));
+
+    expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith('objectWorkingIdTest');
+  });
+
   it('removeObjectBinding should work as expected', async () => {
     // given
     const releaseByIdAsyncMock = jest.fn();
+    officeContextMock.document.bindings.releaseByIdAsync = releaseByIdAsyncMock;
 
-    /* eslint-disable object-curly-newline */
-    const officeContextMock = {
-      document: {
-        bindings: {
-          releaseByIdAsync: releaseByIdAsyncMock,
-        }
-      }
-    };
-    /* eslint-enable object-curly-newline */
+    jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue(officeContextMock);
 
-    const getOfficeContextMock = jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue(officeContextMock);
-
-    const completeRemoveObjectBindingMock = jest.spyOn(
-      operationStepDispatcher, 'completeRemoveObjectBinding'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeRemoveObjectBinding').mockImplementation();
 
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
@@ -36,13 +59,13 @@ describe('StepRemoveObjectBinding', () => {
     await stepRemoveObjectBinding.removeObjectBinding(objectData, {});
 
     // then
-    expect(getOfficeContextMock).toBeCalledTimes(1);
-    expect(getOfficeContextMock).toBeCalledWith();
+    expect(officeApiHelper.getOfficeContext).toBeCalledTimes(1);
+    expect(officeApiHelper.getOfficeContext).toBeCalledWith();
 
     expect(releaseByIdAsyncMock).toBeCalledTimes(1);
     expect(releaseByIdAsyncMock).toBeCalledWith('bindIdTest');
 
-    expect(completeRemoveObjectBindingMock).toBeCalledTimes(1);
-    expect(completeRemoveObjectBindingMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith('objectWorkingIdTest');
   });
 });

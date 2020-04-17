@@ -7,5 +7,5 @@ class StepNotificationInProgress {
   }
 }
 
-const stepNoficicationInProgress = new StepNotificationInProgress();
-export default stepNoficicationInProgress;
+const stepNotificationInProgress = new StepNotificationInProgress();
+export default stepNotificationInProgress;

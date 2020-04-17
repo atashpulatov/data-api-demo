@@ -9,12 +9,16 @@ import stepGetOfficeTableImport from '../office/table/step-get-office-table-impo
 import stepModifyObject from '../popup/step-modify-object';
 import stepApplySubtotalFormatting from '../office/format/step-apply-subtotal-formatting';
 import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
+import stepGetDuplicateName from '../office/step-get-duplicate-name';
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
 import stepRemoveObjectStore from '../office/remove/step-remove-object-store';
 import stepCheckObjectStatus from '../office/clear-data/step-check-object-status';
 import stepClearCrosstabHeaders from '../office/clear-data/step-clear-crosstab-headers';
 import stepClearTableData from '../office/clear-data/step-clear-table-data';
+import stepNotificationInProgress from '../notification-v2/step-notification-in-progress';
+import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
+import stepCompleteClearData from '../office/clear-data/step-complete-clear-data';
 
 import {
   BIND_OFFICE_TABLE,
@@ -27,6 +31,7 @@ import {
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
   SAVE_OBJECT_IN_EXCEL,
+  GET_DUPLICATE_NAME,
   REMOVE_OBJECT_BINDING,
   REMOVE_OBJECT_TABLE,
   REMOVE_OBJECT_STORE,
@@ -38,9 +43,6 @@ import {
   BACKUP_OBJECT_DATA,
   COMPLETE_CLEAR_DATA,
 } from './operation-steps';
-import stepNoficicationInProgress from '../notification-v2/step-notification-in-progress';
-import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
-import stepCompleteClearData from '../office/clear-data/step-complete-clear-data';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -67,6 +69,8 @@ class SubscribeSteps {
 
     operationBus.subscribe(SAVE_OBJECT_IN_EXCEL, stepSaveObjectInExcel.saveObject);
 
+    operationBus.subscribe(GET_DUPLICATE_NAME, stepGetDuplicateName.getDuplicateName);
+
     operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
     operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
     operationBus.subscribe(REMOVE_OBJECT_STORE, stepRemoveObjectStore.removeObjectStore);
@@ -76,7 +80,7 @@ class SubscribeSteps {
     operationBus.subscribe(CLEAR_TABLE_DATA, stepClearTableData.clearTableData);
     operationBus.subscribe(COMPLETE_CLEAR_DATA, stepCompleteClearData.completeClearData);
 
-    operationBus.subscribe(MOVE_NOTIFICATION_TO_IN_PROGRESS, stepNoficicationInProgress.moveNotificationToInProgress);
+    operationBus.subscribe(MOVE_NOTIFICATION_TO_IN_PROGRESS, stepNotificationInProgress.moveNotificationToInProgress);
     operationBus.subscribe(
       DISPLAY_NOTIFICATION_COMPLETED,
       stepDisplayNotificationCompleted.displayNotificationCompleted

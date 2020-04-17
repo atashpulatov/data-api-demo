@@ -5,8 +5,18 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 
 
 class StepCheckObjectStatus {
+  /**
+   * Check if the Excel table of imported object exists in worksheet.
+   * If the Excel Table no longer exist the object will be removed from reducer.
+   *
+   * This function is subscribed as one of the operation steps with the key CHECK_OBJECT_STATUS,
+   * therefore should be called only via operation bus.
+   *
+   * @param {Object} objectData Contaisn data about object on which operation was called
+   * @param {Number} operationData.objectWorkingId Unique Id of the object allowing to reference specific object
+   */
   checkObjectStatus = async (objectData, operationData) => {
-    const { objectWorkingId } = objectData;
+    const { objectWorkingId } = operationData;
     try {
       const excelContext = await officeApiHelper.getExcelContext();
 

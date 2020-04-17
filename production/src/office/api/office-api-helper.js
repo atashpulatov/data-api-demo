@@ -302,6 +302,22 @@ class OfficeApiHelper {
     const colOffset = crosstabHeaderDimensions.rowsX;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
   };
+
+  /**
+   * Attaches a event listener to onSelectionChanged on workbook.
+   * As event handler, resets the active cell value via callback and then updates it with new value.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Function} setActiveCellAddress Callback to save the active cell address value.
+   */
+  addOnSelectionChangedListener = async (excelContext, setActiveCellAddress) => {
+    excelContext.workbook.onSelectionChanged.add(async () => {
+      setActiveCellAddress('...');
+      const activeCellAddress = await this.getSelectedCell(excelContext);
+      setActiveCellAddress(activeCellAddress);
+    });
+    await excelContext.sync();
+  }
 }
 
 export const officeApiHelper = new OfficeApiHelper();

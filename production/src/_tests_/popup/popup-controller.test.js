@@ -5,6 +5,8 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
+import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
+import { reduxStore } from '../../store';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -202,5 +204,77 @@ describe('PopupController', () => {
     expect(dialog.close).toBeCalled();
     expect(spyValidateAuthToken).toBeCalled();
     expect(handleUpdateCommandSpy).toBeCalledTimes(1);
+  });
+
+  it('should dispatch duplicateRequested for commandOnUpdate - duplication with edit for report', async () => {
+    // given
+    const originalObject = {
+      chosenObjectName: 'name 1',
+      chosenObjectId: 'id 1',
+      projectId: 'projectId',
+    };
+    const actionObject = {
+      command: selectorProperties.commandOnUpdate,
+      chosenObjectName: 'name 2',
+      chosenObjectId: 'id 2',
+      projectId: 'projectId',
+    };
+    const reportParams = {
+      duplicateMode: true,
+      object: originalObject
+    };
+    const arg = { message: JSON.stringify(actionObject), };
+
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
+
+    operationActions.duplicateRequested = jest.fn().mockReturnValue('duplicateRequestedTest');
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    await popupController.onMessageFromPopup(dialog, reportParams, arg);
+
+    // then
+    expect(spyValidateAuthToken).toBeCalled();
+
+    expect(operationActions.duplicateRequested).toBeCalledTimes(1);
+    expect(operationActions.duplicateRequested).toBeCalledWith(reportParams.object, actionObject);
+  });
+
+  it('should dispatch duplicateRequested for commandOk - duplication with edit for dossier visualization', async () => {
+    // given
+    const originalObject = {
+      chosenObjectName: 'name 1',
+      chosenObject: 'id 1',
+      chosenProject: 'projectId',
+    };
+    const actionObject = {
+      command: selectorProperties.commandOk,
+      chosenObject: 'id 2',
+      chosenObjectName: 'name 2',
+      chosenProject: 'projectId',
+    };
+    const reportParams = {
+      duplicateMode: true,
+      object: originalObject
+    };
+    const arg = { message: JSON.stringify(actionObject), };
+
+    const spyValidateAuthToken = jest
+      .spyOn(authenticationHelper, 'validateAuthToken')
+      .mockImplementationOnce(() => { });
+
+    operationActions.duplicateRequested = jest.fn().mockReturnValue('duplicateRequestedTest');
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    await popupController.onMessageFromPopup(dialog, reportParams, arg);
+
+    // then
+    expect(spyValidateAuthToken).toBeCalled();
+
+    expect(operationActions.duplicateRequested).toBeCalledTimes(1);
+    expect(operationActions.duplicateRequested).toBeCalledWith(reportParams.object, actionObject);
   });
 });

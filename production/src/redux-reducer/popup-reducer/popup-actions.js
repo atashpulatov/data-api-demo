@@ -28,7 +28,7 @@ class PopupActions {
   callForEdit = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedObject = this.officeReducerHelper.getObjectFromObjectReducer(reportParams.bindId);
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
       editedObject.objectType = editedObject.mstrObjectType;
 
       dispatch({
@@ -55,38 +55,14 @@ class PopupActions {
   callForEditDossier = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
-      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducer(reportParams.bindId);
+      const editedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
 
-      const {
-        projectId, objectId, manipulationsXML, visualizationInfo
-      } = editedDossier;
+      await this.prepareDossierForEdit(editedDossier);
 
-      const instanceId = await this.mstrObjectRestService.createDossierInstance(
-        projectId,
-        objectId,
-        { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
-      );
-
-      const updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(
-        projectId,
-        objectId,
-        visualizationInfo.visualizationKey,
-        instanceId
-      );
-
-      editedDossier.instanceId = instanceId;
-      editedDossier.isEdit = true;
-
-      if (updatedVisualizationInfo) {
-        editedDossier.visualizationInfo = updatedVisualizationInfo;
-      }
-
-      editedDossier.objectType = editedDossier.mstrObjectType;
       dispatch({
         type: SET_REPORT_N_FILTERS,
         editedObject: editedDossier,
       });
-      console.log('instanceId:', instanceId);
       this.popupController.runEditDossierPopup(reportParams);
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
@@ -95,6 +71,80 @@ class PopupActions {
   };
 
   resetState = () => (dispatch) => dispatch({ type: RESET_STATE, });
+
+  /**
+   * Prepares object and passes it to excel popup in duplicate edit workflow and
+   * passes reportParams (duplicateFlag, objectDataBeforeEdit) to PopupController.
+   *
+   * @param {Object} object - Data of duplicated object.
+   */
+  callForDuplicate = (object) => async (dispatch) => {
+    const isDossier = object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+    try {
+      await this.officeApiHelper.checkStatusOfSessions();
+      object.objectType = object.mstrObjectType;
+
+      if (isDossier) {
+        await this.prepareDossierForEdit(object);
+      }
+
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedObject: object,
+      });
+
+      const reportParams = {
+        duplicateMode: true,
+        object
+      };
+
+      if (isDossier) {
+        this.popupController.runEditDossierPopup(reportParams);
+      } else if (object.isPrompted) {
+        this.popupController.runRepromptPopup(reportParams);
+      } else {
+        this.popupController.runEditFiltersPopup(reportParams);
+      }
+    } catch (error) {
+      dispatch({ type: officeProperties.actions.stopLoading });
+      if (isDossier) {
+        error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+      }
+      return this.errorService.handleError(error);
+    }
+  }
+
+  /**
+   * Creates instance of dossier which is used during edit workflow.
+   *
+   * @param {Object} editedDossier - Contains data of edited dossier.
+   */
+  prepareDossierForEdit = async (editedDossier) => {
+    const {
+      projectId, objectId, manipulationsXML, visualizationInfo
+    } = editedDossier;
+
+    const instanceId = await this.mstrObjectRestService.createDossierInstance(
+      projectId,
+      objectId,
+      { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
+    );
+
+    const updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(
+      projectId,
+      objectId,
+      visualizationInfo.visualizationKey,
+      instanceId
+    );
+
+    editedDossier.instanceId = instanceId;
+    editedDossier.isEdit = true;
+
+    if (updatedVisualizationInfo) {
+      editedDossier.visualizationInfo = updatedVisualizationInfo;
+    }
+    editedDossier.objectType = editedDossier.mstrObjectType;
+  }
 }
 
 export const popupActions = new PopupActions();

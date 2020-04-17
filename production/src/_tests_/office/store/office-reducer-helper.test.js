@@ -17,7 +17,6 @@ describe('OfficeReducerHelper', () => {
   });
 
   const reduxStoreMock = {
-    /* eslint-disable object-curly-newline */
     getState: () => ({
       objectReducer: {
         objects: 'objectsTest',
@@ -26,7 +25,6 @@ describe('OfficeReducerHelper', () => {
         operations: 'operationsTest',
       },
     })
-    /* eslint-enable object-curly-newline */
   };
 
   it('getObjectsListFromObjectReducer works as expected', () => {
@@ -74,7 +72,7 @@ describe('OfficeReducerHelper', () => {
   });
 });
 
-describe('OfficeReducerHelper getObjectFromObjectReducer', () => {
+describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -91,19 +89,17 @@ describe('OfficeReducerHelper getObjectFromObjectReducer', () => {
   ({ expectedObject, bindIdParam, objectsParam }) => {
     // given
     const reduxStoreMock = {
-      /* eslint-disable object-curly-newline */
       getState: () => ({
         objectReducer: {
           objects: objectsParam,
         },
       })
-      /* eslint-disable object-curly-newline */
     };
 
     officeReducerHelper.init(reduxStoreMock);
 
     // when
-    const result = officeReducerHelper.getObjectFromObjectReducer(bindIdParam);
+    const result = officeReducerHelper.getObjectFromObjectReducerByBindId(bindIdParam);
 
     // then
     expect(result).toEqual(expectedObject);
