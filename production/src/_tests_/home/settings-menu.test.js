@@ -5,6 +5,7 @@ import { SettingsMenuNotConnected } from '../../home/settings-menu';
 import DB from '../../cache/cache-db';
 import overflowHelper from '../../helpers/helpers';
 import { errorService } from '../../error/error-handler';
+import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 describe('Settings Menu', () => {
   afterEach(() => {
@@ -16,7 +17,8 @@ describe('Settings Menu', () => {
     const clearDB = jest.fn();
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => { });
     const indexedDBSpy = jest.spyOn(DB, 'getIndexedDBSupport').mockImplementation(() => true);
-    const logOutSpy = jest.spyOn(sessionHelper, 'logOut');
+    const logOutSpy = jest.spyOn(sessionActions, 'logOut');
+    console.log('logOutSpy:', logOutSpy);
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
     const menuWrapper = mount(<SettingsMenuNotConnected clearCache={clearDB} />);
     const buttonWrapper = menuWrapper.find('#logOut');

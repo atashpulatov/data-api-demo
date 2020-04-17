@@ -3,6 +3,7 @@ import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
+import { errorService } from '../../error/error-handler';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -238,16 +239,15 @@ class OfficeApiHelper {
       }
       await excelContext.sync();
     } catch (error) {
-      // if (error && error.code === 'ItemNotFound') {
-      //   return notificationService.displayTranslatedNotification({
-      //     type: 'info',
-      //     content: OBJ_REMOVED_FROM_EXCEL
-      //   });
-      // }
-      // errorService.handleError(error, {
-      //   chosenObjectName,
-      //   onConfirm: deleteObject
-      // });
+      if (error) {
+        if (error.code === 'ItemNotFound') {
+          console.log('error:', error.message, error.code, error.response);
+        }
+        if (error.code === 'InvalidSelection') {
+          console.log('error:', error.message, error.code);
+        }
+      }
+      errorService.handleObjectBasedError(ObjectData.objectWorkingId, error, () => (console.log('cos')));
     }
   };
 
