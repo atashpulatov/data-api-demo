@@ -113,6 +113,7 @@ const displayNotificationWarning = (state, payload) => {
     title: customT(title),
     details: customT(payload.notification.message),
     children: getNotificationButtons(buttons),
+    callback: payload.notification.callback,
   };
 
   return createNewState(state, notificationToUpdateIndex, updatedNotification);

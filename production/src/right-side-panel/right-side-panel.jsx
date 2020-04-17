@@ -84,6 +84,7 @@ export const RightSidePanelNotConnected = (props) => {
   const onSelectAll = () => {
     notifications.forEach((notification) => {
       notification.onHover && notification.onHover();
+      notification.callback && notification.callback();
     });
   };
 
