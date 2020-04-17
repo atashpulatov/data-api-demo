@@ -234,7 +234,8 @@ class SidePanelService {
   initializeActiveCellChangedListener = async (setActiveCellAddress) => {
     const excelContext = await officeApiHelper.getExcelContext();
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
-    setActiveCellAddress(initialCellAddress);
+    const initialCellAddressWithDollars = officeApiHelper.getCellAddressWithDollars(initialCellAddress);
+    setActiveCellAddress(initialCellAddressWithDollars);
     await officeApiHelper.addOnSelectionChangedListener(excelContext, setActiveCellAddress);
   };
 
