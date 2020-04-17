@@ -247,7 +247,7 @@ class OfficeApiHelper {
           console.log('error:', error.message, error.code);
         }
       }
-      errorService.handleObjectBasedError(ObjectData.objectWorkingId, error, () => (console.log('cos')));
+      // errorService.handleObjectBasedError(ObjectData.objectWorkingId, error));
     }
   };
 
