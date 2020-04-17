@@ -283,7 +283,10 @@ describe('Notification reducer', () => {
         const someTitle = 'some title';
         const actionForImport = {
           type: DISPLAY_NOTIFICATION_WARNING,
-          payload: { objectWorkingId: 12, notification: { callback: mockedCallback, title: someTitle, message: expectedDetails } }
+          payload: {
+            objectWorkingId: 12,
+            notification: { callback: mockedCallback, title: someTitle, message: expectedDetails }
+          }
         };
 
         // when
@@ -325,7 +328,10 @@ describe('Notification reducer', () => {
         const someTitle = 'some title';
         const actionForImport = {
           type: DISPLAY_NOTIFICATION_WARNING,
-          payload: { objectWorkingId: 12, notification: { callback: mockedCallback, title: someTitle, message: expectedDetails } }
+          payload: {
+            objectWorkingId: 12,
+            notification: { callback: mockedCallback, title: someTitle, message: expectedDetails }
+          }
         };
 
         // when

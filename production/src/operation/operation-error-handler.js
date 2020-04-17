@@ -25,11 +25,6 @@ class OperationErrorHandler {
   handleOperationError = async (objectData, operationData, error) => {
     const { operationType } = operationData;
     console.log(error);
-    // if(error.iServerCode === -2147213377){
-    //   const callback1 = this.getCallback(operationType, objectData, operationData);
-    //   const callback2 = [...];
-    //   errorService.handleObjectBasedError(objectData.objectWorkingId, error, callbacks: {callback1, callback2});  
-    // }
     const callback = this.getCallback(operationType, objectData, operationData);
     errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback);
   }
