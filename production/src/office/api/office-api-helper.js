@@ -329,12 +329,16 @@ class OfficeApiHelper {
    * @returns {String} cellAddres with $ at the begginig and beetwen row and column indicator, e.g. '$AB$21'
    */
   getCellAddressWithDollars = (cellAddress) => {
-    const splitAt = (string, index) => [string.slice(0, index), string.slice(index)];
-    const [cell] = cellAddress.split('!').reverse();
-    const indexOfRowAddress = cell.search(/\d+/);
-    const [column, row] = splitAt(cell, indexOfRowAddress);
-    const addressWithDollars = `$${column}$${row}`;
-    return addressWithDollars;
+    try {
+      const splitAt = (string, index) => [string.slice(0, index), string.slice(index)];
+      const [cell] = cellAddress.split('!').reverse();
+      const indexOfRowAddress = cell.search(/\d+/);
+      const [column, row] = splitAt(cell, indexOfRowAddress);
+      return `$${column}$${row}`;
+    } catch (error) {
+      console.error(error);
+      return '';
+    }
   }
 }
 
