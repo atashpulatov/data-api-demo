@@ -21,9 +21,9 @@ class PopupController {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
 
-  init = (reduxStore, sessionHelper, popupAction) => {
+  init = (reduxStore, sessionActions, popupAction) => {
     this.reduxStore = reduxStore;
-    this.sessionHelper = sessionHelper;
+    this.sessionActions = sessionActions;
     this.popupAction = popupAction;
   }
 
@@ -72,7 +72,7 @@ class PopupController {
         { height, width, displayInIframe: true },
         (asyncResult) => {
           const dialog = asyncResult.value;
-          this.sessionHelper.setDialog(dialog);
+          this.sessionActions.setDialog(dialog);
           console.timeEnd('Popup load time');
           dialog.addEventHandler(Office.EventType.DialogMessageReceived,
             this.onMessageFromPopup.bind(null, dialog, reportParams));

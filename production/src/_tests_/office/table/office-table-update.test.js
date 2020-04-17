@@ -6,8 +6,17 @@ import officeTableHelperRange from '../../../office/table/office-table-helper-ra
 import officeFormatSubtotals from '../../../office/format/office-format-subtotals';
 
 describe('OfficeTableUpdate', () => {
+  let contextLimitOriginal;
+  beforeAll(() => {
+    contextLimitOriginal = mstrObjectRestService.CONTEXT_LIMIT;
+  });
+
   afterEach(() => {
     jest.restoreAllMocks();
+  });
+
+  afterAll(() => {
+    mstrObjectRestService.CONTEXT_LIMIT = contextLimitOriginal;
   });
 
   it('updateOfficeTable should handle an error', async () => {

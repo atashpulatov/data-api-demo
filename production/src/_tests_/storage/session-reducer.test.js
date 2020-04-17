@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
 import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
 import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
-import { SessionError } from '../../storage/session-error';
+import { SessionError } from '../../error/session-error';
 
 describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);
