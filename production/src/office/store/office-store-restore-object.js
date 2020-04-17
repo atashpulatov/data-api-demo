@@ -11,8 +11,7 @@ class OfficeStoreRestoreObject {
   /**
   * Retrieves information about object imported in previous versions,
   * maps them to new format of data and stores them in Redux and Office Settings,
-  * and then remove the previosuly stored informations from Office settings
-  *
+  * and then remove the previously stored information from Office settings
   */
   restoreObjectsFromExcelStore = () => {
     const settings = officeStoreHelper.getOfficeSettings();
@@ -29,6 +28,7 @@ class OfficeStoreRestoreObject {
   * Maps previously stored objects information to new format of data
   *
   * @param {Array} [objects] Objects imported in previous version of plugin
+  * @param {Office} settings Office settings that is required in order to use Office Api
   * @return {Array} New objects and old objects converted to new format of data
   */
   restoreLegacyObjectsFromExcelStore = (objects = [], settings) => {
