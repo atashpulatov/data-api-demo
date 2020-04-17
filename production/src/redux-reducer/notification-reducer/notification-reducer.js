@@ -167,7 +167,7 @@ function getNotificationIndex(state, payload) {
   const notificationToUpdateIndex = state.notifications
     .findIndex((notification) => notification.objectWorkingId === payload.objectWorkingId);
   if (notificationToUpdateIndex === -1) {
-    return;
+    throw new Error();
   }
   return notificationToUpdateIndex;
 }
