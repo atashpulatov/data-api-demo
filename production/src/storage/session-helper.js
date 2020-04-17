@@ -48,11 +48,19 @@ class SessionHelper {
     }
   };
 
+  /**
+   * Sets Window location for redirect during logout
+   *
+   */
   replaceWindowLocation = (pathBeginning, loginParams) => {
     window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
   }
 
-
+  /**
+   * Return Information about envUrl, authToken and USE_PROXY from redux store
+   *
+   * @return {Object} Information about current session
+   */
   getSession = () => {
     const currentStore = this.reduxStore.getState();
     const session = {
@@ -63,6 +71,10 @@ class SessionHelper {
     return session;
   }
 
+  /**
+   * Get userData about currently logged user from Api and stores the information in redux store
+   *
+   */
   getUserInfo = async () => {
     let userData = {};
     const isDevelopment = this.isDevelopment();
@@ -78,6 +90,10 @@ class SessionHelper {
     }
   }
 
+  /**
+   * Get information whether currently logged user can set attribute forms and store it in redux store
+   *
+   */
   getUserAttributeFormPrivilege = async () => {
     let canChooseAttrForm = false;
     const isDevelopment = this.isDevelopment();
@@ -98,7 +114,7 @@ class SessionHelper {
   * Return Url of the current page
   *
   * @param {String} propertyName Key used by Office Api to determine value from settings
-  * @return {*} value from Office
+  * @return {String} Page Url
   */
   getUrl = () => window.location.href
 
