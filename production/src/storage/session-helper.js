@@ -1,7 +1,7 @@
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
-import { HomeHelper } from '../home/home-helper';
+import { homeHelper } from '../home/home-helper';
 import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
@@ -79,8 +79,8 @@ class SessionHelper {
     let userData = {};
     const isDevelopment = this.isDevelopment();
     const { getState } = this.reduxStore;
-    const envUrl = isDevelopment ? getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
-    const authToken = isDevelopment ? getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
+    const envUrl = isDevelopment ? getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
+    const authToken = isDevelopment ? getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionActions.saveUserInfo(userData);
@@ -98,10 +98,10 @@ class SessionHelper {
     let canChooseAttrForm = false;
     const isDevelopment = this.isDevelopment();
     const { reduxStore } = this;
-    const envUrl = isDevelopment ? reduxStore.getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
+    const envUrl = isDevelopment ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
-      : HomeHelper.saveTokenFromCookies();
+      : homeHelper.saveTokenFromCookies();
     try {
       canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
       sessionActions.setAttrFormPrivilege(canChooseAttrForm);
