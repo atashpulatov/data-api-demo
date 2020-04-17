@@ -83,6 +83,7 @@ const moveNotificationToInProgress = (state, payload) => {
 
 const displayNotificationCompleted = (state, payload) => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
+  console.log('displayNotificationCompleted');
   const updatedNotification = {
     ...notificationToUpdate,
     type: objectNotificationTypes.SUCCESS,
@@ -166,7 +167,7 @@ function getNotificationIndex(state, payload) {
   const notificationToUpdateIndex = state.notifications
     .findIndex((notification) => notification.objectWorkingId === payload.objectWorkingId);
   if (notificationToUpdateIndex === -1) {
-    throw new Error();
+    return;
   }
   return notificationToUpdateIndex;
 }

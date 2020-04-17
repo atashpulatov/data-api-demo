@@ -14,6 +14,7 @@ import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
+import { REMOVE_OPERATION, CLEAR_DATA_OPERATION } from '../operation/operation-type-names';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -201,12 +202,13 @@ class SidePanelService {
     const objectNotification = notifications.find(
       (notification) => notification.objectWorkingId === object.objectWorkingId
     );
-    const operationBasedNotificationData = objectOperation ? {
-      percentageComplete: objectOperation.totalRows !== 0 ? calculateLoadingProgress(objectOperation) : 0,
+
+    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation) ? {
+      percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
       itemsTotal: objectOperation.totalRows,
       itemsComplete: objectOperation.loadedRows,
     } : {};
-
+    console.log(operationBasedNotificationData);
     const obj = objectNotification ? {
       ...object,
       notification: {
@@ -215,8 +217,13 @@ class SidePanelService {
       }
     }
       : object;
+
     return obj;
   });
+
+  shouldGenerateProgressPercentage = (objectOperation) => objectOperation
+  && objectOperation.operationType !== REMOVE_OPERATION
+  && objectOperation.operationType !== CLEAR_DATA_OPERATION
 }
 
 export const sidePanelService = new SidePanelService();
