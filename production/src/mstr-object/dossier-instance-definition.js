@@ -75,17 +75,20 @@ class DossierInstanceDefinition {
 
   /**
    * Returns new visualization info object.
+   *
    * If creating the visualization info fails and if the error is due to changed dossier structure,
-   * throws the error that dossier is removed has changed.
-   * Or throws error that dossier structure
+   * throws the error that dossier removed has changed (DOSSIER_HAS_CHANGED).
+   *
+   * If there is no visualization for a given key, throws error that dossier doesn't exist (INVALID_VIZ_KEY_MESSAGE).
    *
    * @param {String} projectId
    * @param {String} objectId
    * @param {String} visualizationKey visualization id.
    * @param {Object} instanceId
    * @returns {Object} Contains info for visualization.
-   * @throws {Error} Dossier has changed.
-   * @throws {Error} Dossier is not supported
+   *
+   * @throws {Error} DOSSIER_HAS_CHANGED when dossier has changed.
+   * @throws {Error} INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
    */
   getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
     try {
@@ -100,8 +103,9 @@ class DossierInstanceDefinition {
         throw new Error(DOSSIER_HAS_CHANGED);
       }
     }
+
     throw new Error(INVALID_VIZ_KEY_MESSAGE);
-  }
+  };
 
   getVisualizationName = (operationData, name, instanceDefinition) => {
     const { objectEditedData, operationType } = operationData;

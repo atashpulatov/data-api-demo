@@ -140,15 +140,17 @@ class MstrObjectRestService {
   }
 
   /**
-   * Get Visualization key, page key, chapter key, and dossier structure with names from dossier hierarchy
-   * In case if visualization Key is not found in dossier it returns undefined
+   * Get visualization key, page key, chapter key, and dossier structure with names from dossier hierarchy.
+   *
+   * In case if visualization key is not found in dossier, it returns undefined.
+   *
+   * Exceptions are handled by callers.
    *
    * @param {String} projectId
    * @param {String} objectId
-   * @param {String} visualizationKey visualization id.
+   * @param {String} visualizationKey visualization id
    * @param {Object} dossierInstance
-   * @returns {Object} Contains info for visualization.
-   * @returns {undefined} If visualization key is not found.
+   * @returns {Object} Contains info for visualization or undefined if visualization key is not found
    */
   getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
     const dossierDefinition = await this.getDossierInstanceDefinition(projectId, objectId, dossierInstance);
