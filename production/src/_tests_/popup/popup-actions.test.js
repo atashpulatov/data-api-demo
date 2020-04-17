@@ -198,7 +198,7 @@ describe('Popup actions', () => {
     // then
     expect(createDossierInstance).toBeCalledWith(projectId, objectId, body);
     expect(getVisualizationInfo).toBeCalledWith(
-      projectId, objectId, oldVisKey, instanceId, true
+      projectId, objectId, oldVisKey, instanceId
     );
     expect(editedDossier).toStrictEqual(newEditedDossier);
   });
@@ -245,7 +245,7 @@ describe('Popup actions', () => {
     // then
     expect(createDossierInstance).toBeCalledWith(projectId, objectId, body);
     expect(getVisualizationInfo).toBeCalledWith(
-      projectId, objectId, oldVisKey, instanceId, true
+      projectId, objectId, oldVisKey, instanceId
     );
     expect(editedDossier).toStrictEqual(newEditedDossier);
   });

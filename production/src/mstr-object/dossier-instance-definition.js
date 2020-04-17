@@ -49,8 +49,8 @@ class DossierInstanceDefinition {
       mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
       dossierData,
       body,
-      updatedVisualizationInfo,
-      displayAttrFormNames
+      visualizationInfo: updatedVisualizationInfo,
+      displayAttrFormNames,
     };
 
     let temporaryInstanceDefinition;
@@ -68,8 +68,8 @@ class DossierInstanceDefinition {
 
     return {
       body,
-      updatedVisualizationInfo,
-      instanceDefinition
+      visualizationInfo: updatedVisualizationInfo,
+      instanceDefinition,
     };
   }
 
