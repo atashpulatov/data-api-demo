@@ -4,6 +4,7 @@ import {
   EDIT_OPERATION,
   REFRESH_OPERATION,
   REMOVE_OPERATION,
+  HIGHLIGHT_OPERATION,
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
   MARK_STEP_COMPLETED,
@@ -58,6 +59,14 @@ export const removeRequested = (objectWorkingId) => ({
   type: REMOVE_OPERATION,
   payload: {
     operation: createOperation(REMOVE_OPERATION, objectWorkingId),
+    objectWorkingId,
+  },
+});
+
+export const highlightRequested = (objectWorkingId) => ({
+  type: HIGHLIGHT_OPERATION,
+  payload: {
+    operation: createOperation(HIGHLIGHT_OPERATION, objectWorkingId),
     objectWorkingId,
   },
 });

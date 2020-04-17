@@ -9,7 +9,7 @@ import {
   REFRESH_OPERATION,
   REMOVE_OPERATION,
   CLEAR_DATA_OPERATION,
-  DUPLICATE_OPERATION
+  DUPLICATE_OPERATION,
 } from '../../operation/operation-type-names';
 import {
   CREATE_NOTIFICATION,
@@ -109,7 +109,7 @@ const deleteNotification = (state, payload) => {
 };
 
 const createObjectWarning = (state, payload) => {
-  const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
+  const { notificationToUpdate, notificationToUpdateIndex } = getNotificationOrCreateEmpty(state, payload);
 
   const buttons = getOkButton(payload);
 
@@ -148,6 +148,14 @@ function createNewState(state, notificationToUpdateIndex, updatedNotification) {
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications.splice(notificationToUpdateIndex, 1, updatedNotification);
   return newState;
+}
+
+function getNotificationOrCreateEmpty(state, payload) {
+  try {
+    return getNotificationToUpdate(state, payload);
+  } catch (error) {
+    return {};
+  }
 }
 
 function getNotificationToUpdate(state, payload) {

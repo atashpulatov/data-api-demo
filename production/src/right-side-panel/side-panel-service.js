@@ -5,7 +5,7 @@ import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
-import { refreshRequested, removeRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { refreshRequested, removeRequested, duplicateRequested, highlightRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
@@ -36,8 +36,9 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   highlightObject = async (objectWorkingId) => {
-    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    await officeApiHelper.onBindingObjectClick(objectData);
+    console.warn('1');
+    
+    this.reduxStore.dispatch(highlightRequested(objectWorkingId));
   };
 
   /**

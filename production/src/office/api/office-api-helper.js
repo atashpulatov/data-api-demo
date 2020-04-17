@@ -216,7 +216,7 @@ class OfficeApiHelper {
    */
   onBindingObjectClick = async (ObjectData) => {
     let crosstabRange;
-    try {
+    // try {
       const { bindId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
 
       const excelContext = await this.getExcelContext();
@@ -238,17 +238,17 @@ class OfficeApiHelper {
         tableRange.select();
       }
       await excelContext.sync();
-    } catch (error) {
-      if (error) {
-        if (error.code === 'ItemNotFound') {
-          console.log('error:', error.message, error.code, error.response);
-        }
-        if (error.code === 'InvalidSelection') {
-          console.log('error:', error.message, error.code);
-        }
-      }
-      // errorService.handleObjectBasedError(ObjectData.objectWorkingId, error));
-    }
+    // } catch (error) {
+    //   if (error) {
+    //     if (error.code === 'ItemNotFound') {
+    //       console.log('error:', error.message, error.code, error.response);
+    //     }
+    //     if (error.code === 'InvalidSelection') {
+    //       console.log('error:', error.message, error.code);
+    //     }
+    //   }
+    //   errorService.handleObjectBasedError(ObjectData.objectWorkingId, error);
+    // }
   };
 
   /**

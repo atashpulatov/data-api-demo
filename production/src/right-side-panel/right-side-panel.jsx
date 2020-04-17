@@ -12,7 +12,7 @@ import './right-side-panel.scss';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import {
-  IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION
+  IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION, HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
 
@@ -204,6 +204,7 @@ RightSidePanelNotConnected.propTypes = {
         EDIT_OPERATION,
         DUPLICATE_OPERATION,
         CLEAR_DATA_OPERATION,
+        HIGHLIGHT_OPERATION,
         REMOVE_OPERATION,
       ]),
       objectWorkingId: PropTypes.number,
