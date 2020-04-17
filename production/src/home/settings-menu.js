@@ -14,7 +14,7 @@ import { errorService } from '../error/error-handler';
 import { clearCache as clearCacheImported } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
-
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import './settings-menu.scss';
 
 const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
@@ -180,7 +180,7 @@ export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTra
 async function logout(preLogout) {
   try {
     await sessionHelper.logOutRest();
-    sessionHelper.logOut();
+    sessionActions.logOut();
     if (DB.getIndexedDBSupport()) { await preLogout(); }
   } catch (error) {
     errorService.handleError(error);

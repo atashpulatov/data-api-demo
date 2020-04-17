@@ -1,18 +1,19 @@
-import { sessionHelper } from '../../storage/session-helper';
 import { authenticationService } from '../../authentication/auth-rest-service';
 import { notificationService } from '../../notification/notification-service';
 import { errorService } from '../../error/error-handler';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { reduxStore } from '../../store';
+import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 jest.mock('../../error/error-handler');
 jest.mock('../../notification/notification-service');
 jest.mock('../../authentication/auth-rest-service');
 jest.mock('../../storage/session-helper');
+jest.mock('../../redux-reducer/session-reducer/session-actions');
 
 describe('loginUser', () => {
   beforeAll(() => {
-    authenticationHelper.init(reduxStore, sessionHelper, authenticationService, errorService);
+    authenticationHelper.init(reduxStore, sessionActions, authenticationService, errorService);
   });
   it('should return if error occured', () => {
     // given
@@ -20,13 +21,13 @@ describe('loginUser', () => {
     // when
     authenticationHelper.loginUser(givenError, {});
     // then
-    expect(sessionHelper.enableLoading).not.toBeCalled();
-    expect(sessionHelper.saveLoginValues).not.toBeCalled();
+    expect(sessionActions.enableLoading).not.toBeCalled();
+    expect(sessionActions.saveLoginValues).not.toBeCalled();
     expect(authenticationService.authenticate).not.toBeCalled();
     expect(notificationService.displayNotification).not.toBeCalled();
-    expect(sessionHelper.logIn).not.toBeCalled();
+    expect(sessionActions.logIn).not.toBeCalled();
     expect(errorService.handleError).not.toBeCalled();
-    expect(sessionHelper.disableLoading).not.toBeCalled();
+    expect(sessionActions.disableLoading).not.toBeCalled();
   });
   it('should save login values', () => {
     // given
@@ -39,8 +40,8 @@ describe('loginUser', () => {
     // when
     authenticationHelper.loginUser(givenError, givenValues);
     // then
-    expect(sessionHelper.saveLoginValues).toBeCalled();
-    expect(sessionHelper.saveLoginValues).toBeCalledWith(givenValues);
+    expect(sessionActions.saveLoginValues).toBeCalled();
+    expect(sessionActions.saveLoginValues).toBeCalledWith(givenValues);
   });
   it('should call authentication with proper values', () => {
     // given
@@ -76,9 +77,9 @@ describe('loginUser', () => {
     await authenticationHelper.loginUser(givenError, givenValues);
     // then
     expect(authenticateMock).toBeCalled();
-    expect(sessionHelper.logIn).toBeCalled();
-    expect(sessionHelper.logIn).toBeCalledWith(givenAuthToken);
-    expect(sessionHelper.disableLoading).toBeCalled();
+    expect(sessionActions.logIn).toBeCalled();
+    expect(sessionActions.logIn).toBeCalledWith(givenAuthToken);
+    expect(sessionActions.disableLoading).toBeCalled();
   });
   it('should handle error from authenticate', async () => {
     // given
@@ -99,7 +100,7 @@ describe('loginUser', () => {
     expect(authenticateMock).toBeCalled();
     expect(errorService.handleError).toBeCalled();
     expect(errorService.handleError).toBeCalledWith(testError, { isLogout: true });
-    expect(sessionHelper.disableLoading).toBeCalled();
+    expect(sessionActions.disableLoading).toBeCalled();
   });
   it('should call putSessions on validating authToken', () => {
     // given

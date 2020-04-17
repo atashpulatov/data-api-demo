@@ -11,14 +11,11 @@ describe('StepApplyFormatting', () => {
     jest.spyOn(console, 'log');
     jest.spyOn(console, 'error');
 
-    const filterColumnInformationMock = jest.spyOn(stepApplyFormatting, 'filterColumnInformation')
-      .mockImplementation(() => {
-        throw new Error('errorTest');
-      });
+    jest.spyOn(stepApplyFormatting, 'filterColumnInformation').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
 
-    const completeFormatDataMock = jest.spyOn(
-      operationStepDispatcher, 'completeFormatData'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeFormatData').mockImplementation();
 
     const operationData = { objectWorkingId: 'objectWorkingIdTest', instanceDefinition: { mstrTable: {} }, };
 
@@ -26,15 +23,15 @@ describe('StepApplyFormatting', () => {
     await stepApplyFormatting.applyFormatting({}, operationData);
 
     // then
-    expect(filterColumnInformationMock).toBeCalledTimes(1);
-    expect(filterColumnInformationMock).toThrowError(Error);
+    expect(stepApplyFormatting.filterColumnInformation).toBeCalledTimes(1);
+    expect(stepApplyFormatting.filterColumnInformation).toThrowError(Error);
     expect(console.log).toBeCalledTimes(1);
     expect(console.log).toBeCalledWith('Cannot apply formatting, skipping');
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
 
-    expect(completeFormatDataMock).toBeCalledTimes(1);
-    expect(completeFormatDataMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeFormatData).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeFormatData).toBeCalledWith('objectWorkingIdTest');
   });
 
   it('applyFormatting should work as expected', async () => {
@@ -52,41 +49,36 @@ describe('StepApplyFormatting', () => {
       officeTable: { columns: 'columnsTest' },
     };
 
-    const filterColumnInformationMock = jest.spyOn(stepApplyFormatting, 'filterColumnInformation')
-      .mockReturnValue('filteredColumnInformationTest');
+    jest.spyOn(stepApplyFormatting, 'filterColumnInformation').mockReturnValue('filteredColumnInformationTest');
 
-    const calculateAttributeColumnNumberMock = jest.spyOn(stepApplyFormatting, 'calculateAttributeColumnNumber')
-      .mockReturnValue('attributeColumnNumberTest');
+    jest.spyOn(stepApplyFormatting, 'calculateAttributeColumnNumber').mockReturnValue('attributeColumnNumberTest');
 
-    const calculateOffsetMock = jest.spyOn(stepApplyFormatting, 'calculateOffset')
-      .mockReturnValue('calculateOffsetTest');
+    jest.spyOn(stepApplyFormatting, 'calculateOffset').mockReturnValue('calculateOffsetTest');
 
-    const setupFormattingMock = jest.spyOn(stepApplyFormatting, 'setupFormatting').mockImplementation();
+    jest.spyOn(stepApplyFormatting, 'setupFormatting').mockImplementation();
 
-    const completeFormatDataMock = jest.spyOn(
-      operationStepDispatcher, 'completeFormatData'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeFormatData').mockImplementation();
 
     // when
     await stepApplyFormatting.applyFormatting({}, operationData);
 
     // then
-    expect(filterColumnInformationMock).toBeCalledTimes(1);
-    expect(filterColumnInformationMock).toBeCalledWith('columnInformationTest', 'isCrosstabTest');
+    expect(stepApplyFormatting.filterColumnInformation).toBeCalledTimes(1);
+    expect(stepApplyFormatting.filterColumnInformation).toBeCalledWith('columnInformationTest', 'isCrosstabTest');
 
-    expect(calculateAttributeColumnNumberMock).toBeCalledTimes(1);
-    expect(calculateAttributeColumnNumberMock).toBeCalledWith('columnInformationTest');
+    expect(stepApplyFormatting.calculateAttributeColumnNumber).toBeCalledTimes(1);
+    expect(stepApplyFormatting.calculateAttributeColumnNumber).toBeCalledWith('columnInformationTest');
 
-    expect(calculateOffsetMock).toBeCalledTimes(1);
-    expect(calculateOffsetMock).toBeCalledWith(
+    expect(stepApplyFormatting.calculateOffset).toBeCalledTimes(1);
+    expect(stepApplyFormatting.calculateOffset).toBeCalledWith(
       'isCrosstabTest',
       'columnInformationTest'.length,
       'filteredColumnInformationTest'.length,
       'attributeColumnNumberTest',
     );
 
-    expect(setupFormattingMock).toBeCalledTimes(1);
-    expect(setupFormattingMock).toBeCalledWith(
+    expect(stepApplyFormatting.setupFormatting).toBeCalledTimes(1);
+    expect(stepApplyFormatting.setupFormatting).toBeCalledWith(
       'filteredColumnInformationTest',
       'isCrosstabTest',
       'calculateOffsetTest',
@@ -95,8 +87,8 @@ describe('StepApplyFormatting', () => {
 
     expect(excelContextSyncMock).toBeCalledTimes(1);
 
-    expect(completeFormatDataMock).toBeCalledTimes(1);
-    expect(completeFormatDataMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeFormatData).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeFormatData).toBeCalledWith('objectWorkingIdTest');
   });
 
   it.each`
@@ -213,23 +205,21 @@ describe('StepApplyFormatting', () => {
 
   it('setupFormatting should do nothing when filteredColumnInformation is empty', () => {
     // given
-    const getColumnRangeForFormattingMock = jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting')
-      .mockImplementation();
+    jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockImplementation();
 
     // when
     stepApplyFormatting.setupFormatting([], undefined, undefined, undefined);
 
     // then
-    expect(getColumnRangeForFormattingMock).not.toBeCalled();
+    expect(stepApplyFormatting.getColumnRangeForFormatting).not.toBeCalled();
   });
 
   it('setupFormatting should work as expected for 1 filteredColumnInformation attribute element', () => {
     // given
     const columnRangeMock = {};
-    const getColumnRangeForFormattingMock = jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting')
-      .mockReturnValue(columnRangeMock);
+    jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockReturnValue(columnRangeMock);
 
-    const getFormatMock = jest.spyOn(stepApplyFormatting, 'getFormat').mockImplementation();
+    jest.spyOn(stepApplyFormatting, 'getFormat').mockImplementation();
 
     const filteredColumnInformation = [{ isAttribute: true, index: 'only' }];
 
@@ -237,15 +227,15 @@ describe('StepApplyFormatting', () => {
     stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
 
     // then
-    expect(getColumnRangeForFormattingMock).toBeCalledTimes(1);
-    expect(getColumnRangeForFormattingMock).toBeCalledWith(
+    expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(1);
+    expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledWith(
       'only',
       'isCrosstabTest',
       'offsetTest',
       'officeTableTest',
     );
 
-    expect(getFormatMock).not.toBeCalled();
+    expect(stepApplyFormatting.getFormat).not.toBeCalled();
 
     expect(columnRangeMock.numberFormat).toEqual('');
   });
@@ -253,10 +243,9 @@ describe('StepApplyFormatting', () => {
   it('setupFormatting should work as expected for 1 filteredColumnInformation not attribute element', () => {
     // given
     const columnRangeMock = {};
-    const getColumnRangeForFormattingMock = jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting')
-      .mockReturnValue(columnRangeMock);
+    jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockReturnValue(columnRangeMock);
 
-    const getFormatMock = jest.spyOn(stepApplyFormatting, 'getFormat').mockReturnValue('getFormatTest');
+    jest.spyOn(stepApplyFormatting, 'getFormat').mockReturnValue('getFormatTest');
 
     const filteredColumnInformation = [{ isAttribute: false, index: 'only' }];
 
@@ -264,15 +253,15 @@ describe('StepApplyFormatting', () => {
     stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
 
     // then
-    expect(getColumnRangeForFormattingMock).toBeCalledTimes(1);
-    expect(getColumnRangeForFormattingMock).toBeCalledWith(
+    expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(1);
+    expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledWith(
       'only',
       'isCrosstabTest',
       'offsetTest',
       'officeTableTest',
     );
 
-    expect(getFormatMock).toBeCalledTimes(1);
+    expect(stepApplyFormatting.getFormat).toBeCalledTimes(1);
 
     expect(columnRangeMock.numberFormat).toEqual('getFormatTest');
   });
@@ -290,10 +279,9 @@ describe('StepApplyFormatting', () => {
     // given
     const columnRangeMock = [{}, {}];
     let callNo = 0;
-    const getColumnRangeForFormattingMock = jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting')
-      .mockImplementation(() => columnRangeMock[callNo++]);
+    jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockImplementation(() => columnRangeMock[callNo++]);
 
-    const getFormatMock = jest.spyOn(stepApplyFormatting, 'getFormat').mockImplementation(() => {
+    jest.spyOn(stepApplyFormatting, 'getFormat').mockImplementation(() => {
       if (filteredColumnInformation[filteredColumnInformation.length - callNo].isAttribute === false) {
         return `fmt ${filteredColumnInformation.length - callNo}`;
       }
@@ -304,15 +292,15 @@ describe('StepApplyFormatting', () => {
     stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
 
     // then
-    expect(getColumnRangeForFormattingMock).toBeCalledTimes(2);
-    expect(getColumnRangeForFormattingMock).toHaveBeenNthCalledWith(
+    expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(2);
+    expect(stepApplyFormatting.getColumnRangeForFormatting).toHaveBeenNthCalledWith(
       1,
       'last',
       'isCrosstabTest',
       'offsetTest',
       'officeTableTest',
     );
-    expect(getColumnRangeForFormattingMock).toHaveBeenNthCalledWith(
+    expect(stepApplyFormatting.getColumnRangeForFormatting).toHaveBeenNthCalledWith(
       2,
       'first',
       'isCrosstabTest',
@@ -320,7 +308,7 @@ describe('StepApplyFormatting', () => {
       'officeTableTest',
     );
 
-    expect(getFormatMock).toBeCalledTimes(getFormatCallNo);
+    expect(stepApplyFormatting.getFormat).toBeCalledTimes(getFormatCallNo);
 
     expect(columnRangeMock[0].numberFormat).toEqual(expectedNumberFormat[0]);
     expect(columnRangeMock[1].numberFormat).toEqual(expectedNumberFormat[1]);

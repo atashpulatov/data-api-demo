@@ -1,4 +1,3 @@
-import { sessionProperties } from '../redux-reducer/session-reducer/session-properties';
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
@@ -6,30 +5,17 @@ import { HomeHelper } from '../home/home-helper';
 import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 
 class SessionHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
   }
 
-  enableLoading = () => {
-    this.reduxStore.dispatch({
-      type: sessionProperties.actions.setLoading,
-      loading: true,
-    });
-  }
-
-  disableLoading = () => {
-    this.reduxStore.dispatch({
-      type: sessionProperties.actions.setLoading,
-      loading: false,
-    });
-  }
-
-  logOut = () => {
-    this.reduxStore.dispatch({ type: sessionProperties.actions.logOut, });
-  }
-
+  /**
+   * Handles terminating Rest session and logging out the user from plugin
+   *
+   */
   logOutRest = async () => {
     const { authToken } = this.reduxStore.getState().sessionReducer;
     const { envUrl } = this.reduxStore.getState().sessionReducer;
@@ -55,31 +41,26 @@ class SessionHelper {
       const loginParams = 'source=addin-mstr-office';
       this.replaceWindowLocation(pathBeginning, loginParams);
     } else {
-      this.disableLoading();
+      sessionActions.disableLoading();
       if (shouldReload) {
         window.location.reload();
       }
     }
   };
 
+  /**
+   * Sets Window location for redirect during logout
+   *
+   */
   replaceWindowLocation = (pathBeginning, loginParams) => {
     window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
   }
 
-  saveLoginValues = (values) => {
-    this.reduxStore.dispatch({
-      type: sessionProperties.actions.logIn,
-      values,
-    });
-  }
-
-  logIn = (authToken) => {
-    this.reduxStore.dispatch({
-      type: sessionProperties.actions.loggedIn,
-      authToken,
-    });
-  }
-
+  /**
+   * Return Information about envUrl, authToken and USE_PROXY from redux store
+   *
+   * @return {Object} Information about current session
+   */
   getSession = () => {
     const currentStore = this.reduxStore.getState();
     const session = {
@@ -90,6 +71,10 @@ class SessionHelper {
     return session;
   }
 
+  /**
+   * Get userData about currently logged user from Api and stores the information in redux store
+   *
+   */
   getUserInfo = async () => {
     let userData = {};
     const isDevelopment = this.isDevelopment();
@@ -98,54 +83,46 @@ class SessionHelper {
     const authToken = isDevelopment ? getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
-      !userData.userInitials && sessionHelper.saveUserInfo(userData);
+      !userData.userInitials && sessionActions.saveUserInfo(userData);
       if (DB.getIndexedDBSupport()) { createCache(userData.id)(this.reduxStore.dispatch, this.reduxStore.getState); }
     } catch (error) {
       errorService.handleError(error, { isLogout: !isDevelopment });
     }
   }
 
+  /**
+   * Get information whether currently logged user can set attribute forms and store it in redux store
+   *
+   */
   getUserAttributeFormPrivilege = async () => {
     let canChooseAttrForm = false;
-    const IS_LOCALHOST = this.isLocalhost();
+    const isDevelopment = this.isDevelopment();
     const { reduxStore } = this;
-    const envUrl = IS_LOCALHOST ? reduxStore.getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
-    const authToken = IS_LOCALHOST ? reduxStore.getState().sessionReducer.authToken : HomeHelper.saveTokenFromCookies();
+    const envUrl = isDevelopment ? reduxStore.getState().sessionReducer.envUrl : HomeHelper.saveLoginValues();
+    const authToken = isDevelopment
+      ? reduxStore.getState().sessionReducer.authToken
+      : HomeHelper.saveTokenFromCookies();
     try {
       canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
-      sessionHelper.setAttrFormPrivilege(canChooseAttrForm);
+      sessionActions.setAttrFormPrivilege(canChooseAttrForm);
     } catch (error) {
       console.error(error);
     }
   }
 
-  saveUserInfo = (values) => {
-    this.reduxStore.dispatch({
-      type: sessionProperties.actions.getUserInfo,
-      userFullName: values.fullName,
-      userInitials: values.initials,
-      userID: values.id,
-    });
-  }
-
-  setAttrFormPrivilege = (value) => {
-    this.reduxStore.dispatch({
-      type: sessionProperties.actions.setAttrFormPrivilege,
-      attrFormPrivilege: value,
-    });
-  }
-
-  setDialog = (dialog) => {
-    this.reduxStore.dispatch({
-      type: sessionProperties.actions.setDialog,
-      dialog,
-    });
-  }
-
+  /**
+  * Return Url of the current page
+  *
+  * @param {String} propertyName Key used by Office Api to determine value from settings
+  * @return {String} Page Url
+  */
   getUrl = () => window.location.href
 
-  isLocalhost = () => this.getUrl().includes('localhost')
-
+  /**
+   * Checks what type of build is currently used
+   *
+   * @return {Boolean} Determines if used build is development or test build
+   */
   isDevelopment = () => {
     try {
       const isDevelopment = ['development', 'test'].includes(process.env.NODE_ENV);
@@ -155,6 +132,12 @@ class SessionHelper {
     }
   }
 
+  /**
+   * Allows to import objects from MSTR without the use of popup
+   * DEVELOPMENT ONLY
+   *
+   * @param {Objects} object ObjectData needed for import
+   */
   importObjectWithouPopup = async (object) => {
     this.reduxStore.dispatch(importRequested(object));
   };
