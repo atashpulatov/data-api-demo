@@ -13,8 +13,10 @@ describe('SessionExtendingWrapper.js', () => {
       onSessionExpire: jest.fn(),
       t: (t) => t,
     };
+
     // when
     const wrappedComponent = mount(<SessionExtendingWrapper {...givenProps} />);
+
     // then
     const overlayWrapper = wrappedComponent.find(`#${popupWrapperId}`).at(1);
     expect(overlayWrapper.props().id).toEqual(popupWrapperId);
@@ -31,8 +33,10 @@ describe('SessionExtendingWrapper.js', () => {
       onSessionExpire: 'onSessionExpire',
       t: (t) => t,
     };
+
     // when
     const componentWrapper = mount(<SessionExtendingWrapper {...givenProps} />);
+
     // then
     expect(componentWrapper.find('#popup-wrapper').exists()).toEqual(true);
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
@@ -47,8 +51,10 @@ describe('SessionExtendingWrapper.js', () => {
       onSessionExpire: jest.fn(),
       t: (t) => t,
     };
+
     // when
     const wrappedComponent = mount(<SessionExtendingWrapper {...givenProps} />);
+
     // then
     expect(wrappedComponent.exists(`#${givenProps.id}`)).toBeTruthy();
     expect(wrappedComponent.props().onSessionExpire).toEqual(givenProps.onSessionExpire);

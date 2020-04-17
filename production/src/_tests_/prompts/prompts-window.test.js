@@ -111,10 +111,15 @@ describe('PromptsWindowNotConnected', () => {
         requirements: { isSetSupported: jest.fn() }
       }
     };
+
     // when
-    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} stopLoading={stopLoading} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected
+      mstrData={mstrData}
+      popupState={popupState}
+      stopLoading={stopLoading} />);
     const prolongSession = jest.spyOn(wrappedComponent.instance(), 'prolongSession');
     wrappedComponent.instance().messageReceived(message);
+
     // then
     expect(prolongSession).toHaveBeenCalled();
   });
@@ -123,10 +128,15 @@ describe('PromptsWindowNotConnected', () => {
     // given
     const message = {};
     const stopLoading = jest.fn();
+
     // when
-    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} stopLoading={stopLoading} />);
+    const wrappedComponent = shallow(<PromptsWindowNotConnected
+      mstrData={mstrData}
+      popupState={popupState}
+      stopLoading={stopLoading} />);
     const prolongSession = jest.spyOn(wrappedComponent.instance(), 'prolongSession');
     wrappedComponent.instance().messageReceived(message);
+
     // then
     expect(prolongSession).not.toBeCalled();
   });
@@ -134,8 +144,10 @@ describe('PromptsWindowNotConnected', () => {
   it('should call installSessionProlongingHandler on mount', () => {
     // given
     sessionHelper.installSessionProlongingHandler = jest.fn();
+
     // when
     shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
+
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
   });

@@ -1,11 +1,13 @@
 import { createStore } from 'redux';
 import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
 import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
-import { sessionHelper } from '../../storage/session-helper';
+import { sessionHelper, errorCode } from '../../storage/session-helper';
 import { errorService } from '../../error/error-handler';
 import { authenticationService } from '../../authentication/auth-rest-service';
 import { HomeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
+import { SESSION_EXTENSION_FAILURE_MESSAGE } from '../../error/constants';
+
 
 describe('sessionHelper', () => {
   const sessionStore = createStore(sessionReducer);
@@ -85,46 +87,75 @@ describe('sessionHelper', () => {
     // given
     const onSessionExpire = jest.fn();
     const putSessionsSpy = jest.spyOn(authenticationService, 'putSessions');
+
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
+
     // then
     expect(putSessionsSpy).toHaveBeenCalled();
   });
 
   it('should call handleError in case of session expired', () => {
     // given
+    const sessionFailureError = {
+      status: 401,
+      response: {
+        key: 'value',
+        body: {
+          code: errorCode,
+          message: SESSION_EXTENSION_FAILURE_MESSAGE,
+        },
+        text: `{code: ${errorCode}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+      },
+    };
     const onSessionExpire = jest.fn();
     authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
-      throw new Error();
+      throw new Error(sessionFailureError);
     });
     const logOutErrorSpy = jest.spyOn(errorService, 'handleError');
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
+
     // then
-    expect(logOutErrorSpy).toHaveBeenCalled();
+    expect(logOutErrorSpy).toBeCalled();
   });
 
-  it('should call onSessionExpire callback function if passed to parameters of method in case of session expired', () => {
+  it('should not call onSessionExpire in case of error message and error code correpond', () => {
     // given
+    const sessionFailureError = {
+      status: 401,
+      response: {
+        key: 'value',
+        body: {
+          code: 'ERR009',
+          message: 'WRONG_ERROR_MESSAGE',
+        },
+        text: `{code: ${errorCode}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+      },
+    };
     const onSessionExpire = jest.fn();
     authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
       throw new Error();
     });
+
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
+
     // then
-    expect(onSessionExpire).toHaveBeenCalled();
+    expect(onSessionExpire).toHaveBeenCalledTimes(0);
   });
 
   it('should call keepSessionAlive with default callback parameter', () => {
     // given
     const keepSessionAliveHelper = jest.spyOn(sessionHelper, 'keepSessionAlive');
+
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler();
     prolongSession();
+
     // then
     expect(keepSessionAliveHelper).toHaveBeenCalledWith(null);
   });
@@ -133,9 +164,11 @@ describe('sessionHelper', () => {
     // given
     const onSessionExpire = jest.fn();
     const keepSessionAliveHelper = jest.spyOn(sessionHelper, 'keepSessionAlive');
+
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
+
     // then
     expect(keepSessionAliveHelper).toHaveBeenCalledWith(onSessionExpire);
   });

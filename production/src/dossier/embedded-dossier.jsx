@@ -5,7 +5,7 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { applyFile } from './script-injection-helper';
+import { scriptInjectionHelper } from './script-injection-helper';
 
 const { microstrategy, Office } = window;
 
@@ -69,9 +69,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
       const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
       if (!isOfficeOnline && isIE) {
-        applyFile(contentDocument, 'javascript/mshtmllib.js');
+        scriptInjectionHelper.applyFile(contentDocument, 'javascript/mshtmllib.js');
       }
-      applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
+      scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
     });
   };
 

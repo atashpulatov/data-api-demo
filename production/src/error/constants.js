@@ -76,7 +76,7 @@ export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workboo
 export const PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
 export const NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in current version of the Add-in';
 export const INVALID_VIZ_KEY_MESSAGE = 'You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.';
-
+export const SESSION_EXTENSION_FAILURE_MESSAGE = 'The user\'s session has expired, please reauthenticate';
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
   '-2147171501': NOT_SUPPORTED_SERVER_ERR,

@@ -12,7 +12,7 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { applyFile, applyStyle } from '../dossier/script-injection-helper';
+import { scriptInjectionHelper } from '../dossier/script-injection-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 
 const { microstrategy } = window;
@@ -233,11 +233,11 @@ export class PromptsWindowNotConnected extends Component {
       const { contentDocument } = iframe;
       this.embeddedDocument = contentDocument;
       if (!this.isLoginPage(contentDocument)) {
-        applyStyle(contentDocument, 'promptsWindow.css');
+        scriptInjectionHelper.applyStyle(contentDocument, 'promptsWindow.css');
       }
-      applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
+      scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
     });
-  };
+  }
 
   messageReceived = (message = {}) => {
     if (message.data && message.data.value && message.data.value.iServerErrorCode) {
@@ -263,12 +263,12 @@ export class PromptsWindowNotConnected extends Component {
     if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
       this.prolongSession();
     }
-  };
+  }
 
   onPromptsContainerMount = (container) => {
     this.watchForIframeAddition(container, this.onIframeLoad);
     this.loadEmbeddedDossier(container);
-  };
+  }
 
   /**
    * Watches container for child addition and runs callback in case an iframe was added

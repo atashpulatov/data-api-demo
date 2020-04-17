@@ -57,7 +57,7 @@ describe('Home', () => {
     const wrappedComponent = mount(
       <Provider store={reduxStore}>
         <HomeNotConnected {...props} />
-      </Provider>
+      </Provider>,
     );
     // when
     wrappedComponent.setProps({
@@ -77,6 +77,7 @@ describe('Home', () => {
       authToken: false,
       reportArray: false,
     };
+
     // when
     const wrappedComponent = mount(
       <Provider store={reduxStore}>
@@ -84,9 +85,10 @@ describe('Home', () => {
       </Provider>
     );
     const overlayId = '#overlay';
+
     // then
     expect(wrappedComponent.exists('SessionExtendingWrapper')).toBeTruthy();
-    expect(wrappedComponent.find(overlayId).children()).toHaveLength(3); // <Header/> and <Tabs/> components
+    expect(wrappedComponent.find(overlayId).children()).toHaveLength(3);
   });
 
   it('should contain all assigned props and return true on toBeDefined', () => {
@@ -97,13 +99,15 @@ describe('Home', () => {
       authToken: false,
       reportArray: false,
     };
-      // when
+
+    // when
     const wrappedComponent = mount(
       <Provider store={reduxStore}>
         <HomeNotConnected {...props} />
       </Provider>,
     );
     const overlayId = '#overlay';
+
     // then
     const overlayWrapper = wrappedComponent.find(overlayId).at(1);
     expect(overlayWrapper.props().role).toEqual('button');

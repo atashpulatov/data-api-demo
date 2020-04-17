@@ -130,23 +130,24 @@ describe('Dossierwindow', () => {
   it('should call installSessionProlongingHandler on mount', async () => {
     // given
     sessionHelper.installSessionProlongingHandler = jest.fn();
-    // when componentDidMount
-    const componentWrapper = shallow(<DossierWindowNotConnected />);
+
+    // when
+    shallow(<DossierWindowNotConnected />);
+
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
   });
 
-
-  it('addEventListener and removeEventListener should be called on mount and on unmount', () => {
+  it('add/remove eventListeners should be called on mount/unmount', () => {
     // given
     const addEventListener = jest.spyOn(window, 'addEventListener');
     const removeEventListener = jest.spyOn(window, 'removeEventListener');
+
     // when
     const componentWrapper = shallow(<DossierWindowNotConnected />);
-    // then
     expect(addEventListener).toHaveBeenCalled();
-    // when componentWillUnmount
     componentWrapper.unmount();
+
     // then
     expect(removeEventListener).toHaveBeenCalled();
   });

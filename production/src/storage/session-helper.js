@@ -7,7 +7,10 @@ import { HomeHelper } from '../home/home-helper';
 import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { SESSION_EXTENSION_FAILURE_MESSAGE } from '../error/constants';
 
+export const errorCode = 'ERR009';
+export const EXTEND_SESSION = 'EXTEND_SESSION';
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
   init = (reduxStore) => {
@@ -93,10 +96,14 @@ class SessionHelper {
   }
 
   /**
-   * before calling keepSessionAlive, installSessionProlongingHandler method shold be invoked
-   * keepSessionAlive sends lightweight request to prolong the session
-   * in case of session is already expired, process will be terminated if parameter onSessionExpire
-   * is truthy and user will be logged out getting notification.
+   * sends lightweight request to prolong the session
+   *
+   * IMPORTANT: before calling keepSessionAlive, installSessionProlongingHandler
+   * method shold be invoked
+   *
+   * in case of session is already expired, then user will be logged out
+   * getting notification.
+   * process will be terminated if parameter onSessionExpire is truthy,
    *
    * @param {func} onSessionExpire is callback function e.g closePopup()
    */
@@ -105,16 +112,22 @@ class SessionHelper {
     try {
       await authenticationService.putSessions(envUrl, authToken);
     } catch (error) {
-      if (onSessionExpire) {
-        onSessionExpire();
+      if (error.response && error.response.body) {
+        const { body: { code, message } } = error.response;
+        if (onSessionExpire
+        && code === errorCode
+        && message === SESSION_EXTENSION_FAILURE_MESSAGE) {
+          onSessionExpire();
+        }
       }
       errorService.handleError(error);
     }
   };
 
  /**
-  * installSessionProlongingHandler installs throttle on keepSessionAlive method
-  * that only invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
+  * installs throttle on keepSessionAlive method
+  *
+  * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
   *
   * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null]
   */
@@ -192,5 +205,4 @@ class SessionHelper {
   };
 }
 
-export const EXTEND_SESSION = 'EXTEND_SESSION';
 export const sessionHelper = new SessionHelper();

@@ -14,7 +14,7 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { officeContext } from '../office/office-context';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
-import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
+import { sessionHelper, EXTEND_SESSION, errorCode } from '../storage/session-helper';
 
 export default class DossierWindowNotConnected extends React.Component {
   constructor(props) {
@@ -60,7 +60,7 @@ export default class DossierWindowNotConnected extends React.Component {
 
   handleCancel = () => {
     const { Office } = window;
-    const cancelObject = { command: selectorProperties.commandCancel };
+    const cancelObject = { command: selectorProperties.commandCancel, };
     Office.context.ui.messageParent(JSON.stringify(cancelObject));
   }
 
@@ -85,7 +85,7 @@ export default class DossierWindowNotConnected extends React.Component {
         visualizationInfo: { chapterKey, visualizationKey },
       });
     } catch (error) {
-      if (error.response && error.response.body.code === 'ERR009') {
+      if (error.response && error.response.body.code === errorCode) {
         // Close popup if session expired
         popupHelper.handlePopupErrors(error);
       } else {
