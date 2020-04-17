@@ -75,7 +75,8 @@ class DossierInstanceDefinition {
 
   /**
    * Returns new visualization info object.
-   * If creating the visualization info fails and if the error is due to changed dossier structure, throws the error that dossier is removed has changed.
+   * If creating the visualization info fails and if the error is due to changed dossier structure,
+   * throws the error that dossier is removed has changed.
    * Or throws error that dossier structure
    *
    * @param {String} projectId
