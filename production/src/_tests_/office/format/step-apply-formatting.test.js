@@ -1,5 +1,6 @@
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import stepApplyFormatting from '../../../office/format/step-apply-formatting';
+import officeFormatHyperlinks from '../../../office/format/office-format-hyperlinks';
 
 describe('StepApplyFormatting', () => {
   afterEach(() => {
@@ -83,9 +84,10 @@ describe('StepApplyFormatting', () => {
       'isCrosstabTest',
       'calculateOffsetTest',
       { columns: 'columnsTest' },
+      { sync: excelContextSyncMock }
     );
 
-    expect(excelContextSyncMock).toBeCalledTimes(1);
+    expect(excelContextSyncMock).toBeCalledTimes(2);
 
     expect(operationStepDispatcher.completeFormatData).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeFormatData).toBeCalledWith('objectWorkingIdTest');
@@ -266,6 +268,24 @@ describe('StepApplyFormatting', () => {
     expect(columnRangeMock.numberFormat).toEqual('getFormatTest');
   });
 
+  it('setupFormatting should call format hyperlinks', () => {
+    // given
+    const columnRangeMock = {};
+    jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockReturnValue(columnRangeMock);
+
+    jest.spyOn(stepApplyFormatting, 'getFormat').mockReturnValue('getFormatTest');
+    jest.spyOn(officeFormatHyperlinks, 'formatColumnAsHyperlinks').mockImplementation(jest.fn);
+
+
+    const filteredColumnInformation = [{ isAttribute: true, index: 'only' }];
+
+    // when
+    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+
+    // then
+    expect(officeFormatHyperlinks.formatColumnAsHyperlinks).toBeCalledTimes(1);
+  });
+
   it.each`
   expectedNumberFormat  | getFormatCallNo | filteredColumnInformation
   
@@ -275,7 +295,7 @@ describe('StepApplyFormatting', () => {
   ${['fmt 1', 'fmt 0']} | ${2} | ${[{ isAttribute: false, index: 'first' }, { isAttribute: false, index: 'last' }]}
   
   `('setupFormatting should work as expected for 2 filteredColumnInformation elements',
-  ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
+  async ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
     // given
     const columnRangeMock = [{}, {}];
     let callNo = 0;
@@ -289,7 +309,7 @@ describe('StepApplyFormatting', () => {
     });
 
     // when
-    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+    await stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(2);

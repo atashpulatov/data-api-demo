@@ -25,7 +25,7 @@ class OfficeFormatHyperlinks {
    * @param {String} baseFormType MSTR Base form HTMLTag or URL
    * @returns {Object} Object { address, textToDisplay } or null if not a valid HTMLTag
    */
-  parseHTMLTag = (string, baseFormType) => {
+  parseHTMLTag = (string, baseFormType = FORM_TYPE_HTML) => {
     // url
     if (baseFormType === FORM_TYPE_URL) {
       if (this.isValidUrl(string)) {
