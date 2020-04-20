@@ -132,9 +132,9 @@ const deleteAllNotifications = (action, state) => (action.isSecured
   : state);
 
 const getOkButton = (payload) => [{
-  title: 'Ok',
+  title: customT('OK'),
   type: 'basic',
-  label: 'Ok',
+  label: customT('OK'),
   onClick: payload.notification.callback,
 }];
 
