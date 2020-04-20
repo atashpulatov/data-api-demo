@@ -33,8 +33,7 @@ class SidePanelService {
 
   /**
    * Handles the highlighting of object.
-   * Gets object from reducer based on objectWorkingId and
-   * calls officeApiHelper.onBindingObjectClick to highlight object on Excel worksheet
+   * Creates highlight operation for specific objectWorkingId.
    *
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
