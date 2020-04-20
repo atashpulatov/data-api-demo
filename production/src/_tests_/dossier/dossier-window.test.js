@@ -126,6 +126,16 @@ describe('Dossierwindow', () => {
     expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify(mockupOkObject));
   });
 
+  it('handleEmbeddedDossierLoad setup correct state', () => {
+    // given
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    // then
+    expect(componentWrapper.instance().state.isEmbeddedDossierLoaded).toBe(false);
+    // when
+    componentWrapper.instance().handleEmbeddedDossierLoad();
+    // then
+    expect(componentWrapper.instance().state.isEmbeddedDossierLoaded).toBe(true);
+  });
 
   describe('DossierWindow.js mapStateToProps and mapActionsToProps test', () => {
     const mockStore = configureMockStore([thunk]);

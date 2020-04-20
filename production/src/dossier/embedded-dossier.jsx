@@ -61,9 +61,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
-      const { handleLoadEvent } = this.props;
+      const { handleIframeLoadEvent } = this.props;
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
-      handleLoadEvent();
+      handleIframeLoadEvent();
       // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
       const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
       const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
@@ -109,7 +109,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   loadEmbeddedDossier = async (container) => {
-    const { mstrData } = this.props;
+    const { mstrData, handleEmbeddedDossierLoad } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
       instanceId, selectedViz, visualizationInfo
@@ -220,6 +220,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     };
     if (microstrategy && microstrategy.dossier) {
       this.embeddedDossier = await microstrategy.dossier.create(props);
+      handleEmbeddedDossierLoad();
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
     }
@@ -295,7 +296,8 @@ EmbeddedDossierNotConnected.propTypes = {
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
   handleInstanceIdChange: PropTypes.func,
-  handleLoadEvent: PropTypes.func
+  handleIframeLoadEvent: PropTypes.func,
+  handleEmbeddedDossierLoad: PropTypes.func,
 };
 
 EmbeddedDossierNotConnected.defaultProps = {
