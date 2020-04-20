@@ -101,10 +101,9 @@ class DossierInstanceDefinition {
     } catch (error) {
       if (errorService.getErrorMessage(error) === DOSSIER_HAS_CHANGED) {
         throw new Error(DOSSIER_HAS_CHANGED);
-      }
+      },
+      throw new Error(INVALID_VIZ_KEY_MESSAGE);
     }
-
-    throw new Error(INVALID_VIZ_KEY_MESSAGE);
   };
 
   getVisualizationName = (operationData, name, instanceDefinition) => {
