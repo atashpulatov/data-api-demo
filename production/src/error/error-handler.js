@@ -9,7 +9,8 @@ import {
 const TIMEOUT = 2000;
 
 class ErrorService {
-  init = (sessionHelper, notificationService) => {
+  init = (sessionActions, sessionHelper, notificationService) => {
+    this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
   }
@@ -81,7 +82,7 @@ class ErrorService {
 
   fullLogOut = () => {
     this.sessionHelper.logOutRest();
-    this.sessionHelper.logOut();
+    this.sessionActions.logOut();
     this.sessionHelper.logOutRedirect();
   }
 

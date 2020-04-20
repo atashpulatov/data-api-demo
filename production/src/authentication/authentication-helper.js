@@ -1,7 +1,7 @@
 class AuthenticationHelper {
-  init = (reduxStore, sessionHelper, authenticationService, errorService) => {
+  init = (reduxStore, sessionActions, authenticationService, errorService) => {
     this.reduxStore = reduxStore;
-    this.sessionHelper = sessionHelper;
+    this.sessionActions = sessionActions;
     this.authenticationService = authenticationService;
     this.errorService = errorService;
   }
@@ -11,15 +11,15 @@ class AuthenticationHelper {
       return;
     }
     try {
-      this.sessionHelper.enableLoading();
-      this.sessionHelper.saveLoginValues(values);
+      this.sessionActions.enableLoading();
+      this.sessionActions.saveLoginValues(values);
       const authToken = await this.authenticationService
         .authenticate(values.username, values.password, values.envUrl, values.loginMode || 1);
-      this.sessionHelper.logIn(authToken);
+      this.sessionActions.logIn(authToken);
     } catch (error) {
       this.errorService.handleError(error, { isLogout: true });
     } finally {
-      this.sessionHelper.disableLoading();
+      this.sessionActions.disableLoading();
     }
   }
 

@@ -198,12 +198,8 @@ class OfficeTableHelperRange {
    *
    * @returns {Office} Reference to Excel range object
    */
-  prepareRangeRows = (prevOfficeTable, addedColumns, addedRows) => {
-    prevOfficeTable
-      .getRange()
-      .getRowsBelow(addedRows)
-      .getResizedRange(0, addedColumns);
-  };
+  prepareRangeRows = (prevOfficeTable, addedColumns, addedRows) => prevOfficeTable
+    .getRange().getRowsBelow(addedRows).getResizedRange(0, addedColumns);
 
   /**
    * Extends the Excel range by crosstab header row dimension.

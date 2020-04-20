@@ -7,8 +7,9 @@ import { clearDataRequested } from '../redux-reducer/operation-reducer/operation
 import { toggleIsConfirmFlag } from '../redux-reducer/office-reducer/office-actions';
 
 export class HomeHelper {
-  init = (reduxStore, sessionHelper) => {
+  init = (reduxStore, sessionActions, sessionHelper) => {
     this.reduxStore = reduxStore;
+    this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
   }
 
@@ -17,14 +18,14 @@ export class HomeHelper {
     const location = this.getWindowLocation();
     if (this.sessionHelper.isDevelopment()) {
       if (!authToken) {
-        this.sessionHelper.logOut();
+        this.sessionActions.logOut();
       }
     } else {
       const currentPath = location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const envUrl = `${location.origin}${pathBeginning}/api`;
       const values = { envUrl, };
-      this.sessionHelper.saveLoginValues(values);
+      this.sessionActions.saveLoginValues(values);
       return values.envUrl;
     }
   };
@@ -46,7 +47,7 @@ export class HomeHelper {
   saveTokenFromCookies = () => {
     const splittedCookiesJar = this.getParsedCookies();
     if (splittedCookiesJar.iSession) {
-      this.sessionHelper.logIn(splittedCookiesJar.iSession);
+      this.sessionActions.logIn(splittedCookiesJar.iSession);
       return splittedCookiesJar.iSession;
     }
   };

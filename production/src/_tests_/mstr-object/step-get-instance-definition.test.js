@@ -19,10 +19,9 @@ describe('StepGetInstanceDefinition', () => {
     // given
     jest.spyOn(console, 'error');
 
-    const answerPromptsMock = jest.spyOn(mstrObjectRestService, 'answerPrompts')
-      .mockImplementation(() => {
-        throw new Error('errorTest');
-      });
+    jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
 
     // when
     try {
@@ -39,8 +38,8 @@ describe('StepGetInstanceDefinition', () => {
     }
 
     // then
-    expect(answerPromptsMock).toBeCalledTimes(1);
-    expect(answerPromptsMock).toThrowError(Error);
+    expect(mstrObjectRestService.answerPrompts).toBeCalledTimes(1);
+    expect(mstrObjectRestService.answerPrompts).toThrowError(Error);
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
   });
@@ -71,13 +70,11 @@ describe('StepGetInstanceDefinition', () => {
     );
     jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-    const handleOperationErrorMock = jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
+    jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
-    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
-    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-    const completeGetInstanceDefinitionMock = jest.spyOn(
-      operationStepDispatcher, 'completeGetInstanceDefinition'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
 
     const expectedDispatchCallNo = handleOperationErrorCallNo === 1 ? 0 : 1;
 
@@ -90,12 +87,12 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // then
-    expect(handleOperationErrorMock).toBeCalledTimes(handleOperationErrorCallNo);
+    expect(operationErrorHandler.handleOperationError).toBeCalledTimes(handleOperationErrorCallNo);
     if (handleOperationErrorCallNo === 1) {
       expect(console.error).toBeCalledTimes(1);
       expect(console.error).toBeCalledWith(new Error(expectedErrorMsg));
 
-      expect(handleOperationErrorMock).toBeCalledWith({
+      expect(operationErrorHandler.handleOperationError).toBeCalledWith({
         mstrObjectType: {},
         isPrompted: isPromptedParam,
       }, {
@@ -103,9 +100,9 @@ describe('StepGetInstanceDefinition', () => {
       }, new Error(expectedErrorMsg));
     }
 
-    expect(updateOperationMock).toBeCalledTimes(expectedDispatchCallNo);
-    expect(updateObjectMock).toBeCalledTimes(expectedDispatchCallNo);
-    expect(completeGetInstanceDefinitionMock).toBeCalledTimes(expectedDispatchCallNo);
+    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(expectedDispatchCallNo);
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(expectedDispatchCallNo);
+    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(expectedDispatchCallNo);
   });
 
   it.each`
@@ -153,17 +150,17 @@ describe('StepGetInstanceDefinition', () => {
       name: 'nameTest',
     };
 
-    const getExcelContextMock = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-    const getCurrentMstrContextMock = jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
+    jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
       .mockReturnValue({
         envUrl: 'envUrlTest',
         username: 'usernameTest',
       });
 
-    const setupBodyTemplateMock = jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
+    jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
 
-    const getDossierInstanceDefinitionMock = jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition')
+    jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition')
       .mockReturnValue({
         body: 'bodyDossierTest',
         visualizationInfo: visualizationInfoParam,
@@ -174,12 +171,11 @@ describe('StepGetInstanceDefinition', () => {
         },
       });
 
-    const getVisualizationNameMock = jest.spyOn(dossierInstanceDefinition, 'getVisualizationName')
-      .mockReturnValue('getVisualizationNameTest');
+    jest.spyOn(dossierInstanceDefinition, 'getVisualizationName').mockReturnValue('getVisualizationNameTest');
 
-    const createInstanceMock = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
+    jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
 
-    const modifyInstanceWithPromptMock = jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
+    jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
       .mockReturnValue({
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
@@ -204,18 +200,13 @@ describe('StepGetInstanceDefinition', () => {
       expectedMstrTable.manipulationsXML = manipulationsXMLParam;
     }
 
-    const savePreviousObjectDataMock = jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData')
-      .mockImplementation();
+    jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-    const getStartCellMock = jest.spyOn(stepGetInstanceDefinition, 'getStartCell').mockReturnValue('startCellTest');
+    jest.spyOn(stepGetInstanceDefinition, 'getStartCell').mockReturnValue('startCellTest');
 
-    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
-
-    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-
-    const completeGetInstanceDefinitionMock = jest.spyOn(
-      operationStepDispatcher, 'completeGetInstanceDefinition'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
 
     // when
     await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
@@ -224,13 +215,13 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // then
-    expect(getExcelContextMock).toBeCalledTimes(1);
+    expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
 
-    expect(setupBodyTemplateMock).toBeCalledTimes(1);
-    expect(setupBodyTemplateMock).toBeCalledWith('bodyTest');
+    expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledTimes(1);
+    expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledWith('bodyTest');
 
-    expect(getDossierInstanceDefinitionMock).toBeCalledTimes(1);
-    expect(getDossierInstanceDefinitionMock).toBeCalledWith({
+    expect(dossierInstanceDefinition.getDossierInstanceDefinition).toBeCalledTimes(1);
+    expect(dossierInstanceDefinition.getDossierInstanceDefinition).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       insertNewWorksheet: 'insertNewWorksheetTest',
       crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
@@ -246,17 +237,17 @@ describe('StepGetInstanceDefinition', () => {
       name: 'nameTest',
     });
 
-    expect(getVisualizationNameMock).toBeCalledTimes(1);
-    expect(getVisualizationNameMock).toBeCalledWith(
+    expect(dossierInstanceDefinition.getVisualizationName).toBeCalledTimes(1);
+    expect(dossierInstanceDefinition.getVisualizationName).toBeCalledWith(
       { operationType: 'operationTypeTest', stepsQueue: ['step_0', nextStepParam] },
       'nameTest',
       { mstrTable: { name: 'mstrTableNameDossierTest' } }
     );
 
-    expect(createInstanceMock).not.toBeCalled();
+    expect(mstrObjectRestService.createInstance).not.toBeCalled();
 
-    expect(modifyInstanceWithPromptMock).toBeCalledTimes(1);
-    expect(modifyInstanceWithPromptMock).toBeCalledWith({
+    expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
+    expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
       instanceDefinition: {
         mstrTable: {
           name: 'mstrTableNameDossierTest',
@@ -277,8 +268,8 @@ describe('StepGetInstanceDefinition', () => {
       name: 'nameTest',
     });
 
-    expect(savePreviousObjectDataMock).toBeCalledTimes(1);
-    expect(savePreviousObjectDataMock).toBeCalledWith(
+    expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
+    expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
       {
         mstrTable: expectedMstrTable,
         rows: 'rowsModifyInstanceWithPromptTest',
@@ -287,18 +278,18 @@ describe('StepGetInstanceDefinition', () => {
       'subtotalsAddressesTest',
     );
 
-    expect(getStartCellMock).toBeCalledTimes(expectedGetStartCellCallsNo);
+    expect(stepGetInstanceDefinition.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
     if (expectedGetStartCellCallsNo === 1) {
-      expect(getStartCellMock).toBeCalledWith(
+      expect(stepGetInstanceDefinition.getStartCell).toBeCalledWith(
         'insertNewWorksheetTest',
         'excelContextTest',
       );
     }
 
-    expect(getCurrentMstrContextMock).toBeCalledTimes(1);
+    expect(officeApiHelper.getCurrentMstrContext).toBeCalledTimes(1);
 
-    expect(updateOperationMock).toBeCalledTimes(1);
-    expect(updateOperationMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       excelContext: 'excelContextTest',
       instanceDefinition: {
         mstrTable: expectedMstrTable,
@@ -310,8 +301,8 @@ describe('StepGetInstanceDefinition', () => {
       totalRows: 'rowsModifyInstanceWithPromptTest',
     });
 
-    expect(updateObjectMock).toBeCalledTimes(1);
-    expect(updateObjectMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
       body: 'bodyDossierTest',
       crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
       envUrl: {
@@ -328,8 +319,8 @@ describe('StepGetInstanceDefinition', () => {
       manipulationsXML: false,
     });
 
-    expect(completeGetInstanceDefinitionMock).toBeCalledTimes(1);
-    expect(completeGetInstanceDefinitionMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith('objectWorkingIdTest');
   });
 
   it.each`
@@ -367,20 +358,19 @@ describe('StepGetInstanceDefinition', () => {
       body: 'bodyTest',
     };
 
-    const getExcelContextMock = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-    const getCurrentMstrContextMock = jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
+    jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
       .mockReturnValue({
         envUrl: 'envUrlTest',
         username: 'usernameTest',
       });
 
-    const setupBodyTemplateMock = jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
+    jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
 
-    const getDossierInstanceDefinitionMock = jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition')
-      .mockImplementation();
+    jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockImplementation();
 
-    const createInstanceMock = jest.spyOn(mstrObjectRestService, 'createInstance').mockReturnValue({
+    jest.spyOn(mstrObjectRestService, 'createInstance').mockReturnValue({
       body: 'bodyNoDossierTest',
       visualizationInfo: visualizationInfoParam,
       instanceDefinition: {
@@ -390,30 +380,24 @@ describe('StepGetInstanceDefinition', () => {
       },
     });
 
-    const modifyInstanceWithPromptMock = jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
-      .mockReturnValue({
-        mstrTable: {
-          name: 'nameModifyInstanceWithPromptTest',
-          rows: 'rowsModifyInstanceWithPromptTest',
-          insertNewWorksheet: 'insertNewWorksheetTest',
-          crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-          isCrosstab: 'isCrossTabTest',
-        },
+    jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue({
+      mstrTable: {
+        name: 'nameModifyInstanceWithPromptTest',
         rows: 'rowsModifyInstanceWithPromptTest',
-      });
+        insertNewWorksheet: 'insertNewWorksheetTest',
+        crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        isCrosstab: 'isCrossTabTest',
+      },
+      rows: 'rowsModifyInstanceWithPromptTest',
+    });
 
-    const savePreviousObjectDataMock = jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData')
-      .mockImplementation();
+    jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-    const getStartCellMock = jest.spyOn(stepGetInstanceDefinition, 'getStartCell').mockReturnValue('startCellTest');
+    jest.spyOn(stepGetInstanceDefinition, 'getStartCell').mockReturnValue('startCellTest');
 
-    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
-
-    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-
-    const completeGetInstanceDefinitionMock = jest.spyOn(
-      operationStepDispatcher, 'completeGetInstanceDefinition'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
 
     // when
     await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
@@ -422,17 +406,17 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // then
-    expect(getExcelContextMock).toBeCalledTimes(1);
+    expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
 
-    expect(setupBodyTemplateMock).toBeCalledTimes(1);
-    expect(setupBodyTemplateMock).toBeCalledWith('bodyTest');
+    expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledTimes(1);
+    expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledWith('bodyTest');
 
-    expect(getDossierInstanceDefinitionMock).not.toBeCalled();
+    expect(dossierInstanceDefinition.getDossierInstanceDefinition).not.toBeCalled();
 
-    expect(createInstanceMock).toBeCalledTimes(1);
+    expect(mstrObjectRestService.createInstance).toBeCalledTimes(1);
 
-    expect(modifyInstanceWithPromptMock).toBeCalledTimes(1);
-    expect(modifyInstanceWithPromptMock).toBeCalledWith({
+    expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
+    expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
       bindId: 'bindIdTest',
       body: 'bodyTest',
       crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
@@ -456,8 +440,8 @@ describe('StepGetInstanceDefinition', () => {
       visualizationInfo: visualizationInfoParam,
     });
 
-    expect(savePreviousObjectDataMock).toBeCalledTimes(1);
-    expect(savePreviousObjectDataMock).toBeCalledWith(
+    expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
+    expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
       {
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
@@ -472,18 +456,18 @@ describe('StepGetInstanceDefinition', () => {
       'subtotalsAddressesTest',
     );
 
-    expect(getStartCellMock).toBeCalledTimes(expectedGetStartCellCallsNo);
+    expect(stepGetInstanceDefinition.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
     if (expectedGetStartCellCallsNo === 1) {
-      expect(getStartCellMock).toBeCalledWith(
+      expect(stepGetInstanceDefinition.getStartCell).toBeCalledWith(
         'insertNewWorksheetTest',
         'excelContextTest',
       );
     }
 
-    expect(getCurrentMstrContextMock).toBeCalledTimes(1);
+    expect(officeApiHelper.getCurrentMstrContext).toBeCalledTimes(1);
 
-    expect(updateOperationMock).toBeCalledTimes(1);
-    expect(updateOperationMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       excelContext: 'excelContextTest',
       instanceDefinition: {
         mstrTable: {
@@ -501,8 +485,8 @@ describe('StepGetInstanceDefinition', () => {
       totalRows: 'rowsModifyInstanceWithPromptTest',
     });
 
-    expect(updateObjectMock).toBeCalledTimes(1);
-    expect(updateObjectMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
       body: 'bodyTest',
       crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
       envUrl: {
@@ -519,8 +503,8 @@ describe('StepGetInstanceDefinition', () => {
       manipulationsXML: false,
     });
 
-    expect(completeGetInstanceDefinitionMock).toBeCalledTimes(1);
-    expect(completeGetInstanceDefinitionMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith('objectWorkingIdTest');
   });
 
   it.each`
@@ -548,7 +532,7 @@ describe('StepGetInstanceDefinition', () => {
     // given
     const instanceDefinitionMock = { status: 1 };
 
-    const answerPromptsMock = jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
+    jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
     // when
     const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt(
@@ -556,7 +540,7 @@ describe('StepGetInstanceDefinition', () => {
     );
 
     // then
-    expect(answerPromptsMock).not.toBeCalled();
+    expect(mstrObjectRestService.answerPrompts).not.toBeCalled();
 
     expect(result).toEqual(instanceDefinitionMock);
   });
@@ -565,7 +549,7 @@ describe('StepGetInstanceDefinition', () => {
     // given
     const instanceDefinitionMock = { status: 2 };
 
-    const answerPromptsMock = jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
+    jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
     // when
     const result = await stepGetInstanceDefinition.modifyInstanceWithPrompt({
@@ -579,16 +563,16 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // then
-    expect(answerPromptsMock).not.toBeCalled();
+    expect(mstrObjectRestService.answerPrompts).not.toBeCalled();
 
     expect(result).toEqual(instanceDefinitionMock);
   });
 
   it('modifyInstanceWithPrompt should work as expected - status 2, with 1 prompt answer', async () => {
     // given
-    const answerPromptsMock = jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
+    jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
-    const modifyInstanceMock = jest.spyOn(mstrObjectRestService, 'modifyInstance').mockReturnValue({
+    jest.spyOn(mstrObjectRestService, 'modifyInstance').mockReturnValue({
       status: 1,
       instanceId: 'instanceIdTest',
     });
@@ -608,16 +592,16 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // then
-    expect(answerPromptsMock).toBeCalledTimes(1);
-    expect(answerPromptsMock).toBeCalledWith({
+    expect(mstrObjectRestService.answerPrompts).toBeCalledTimes(1);
+    expect(mstrObjectRestService.answerPrompts).toBeCalledWith({
       instanceId: 'instanceIdTest',
       objectId: 'objectIdTest',
       projectId: 'projectIdTest',
       promptsAnswers: 'answer1',
     });
 
-    expect(modifyInstanceMock).toBeCalledTimes(1);
-    expect(modifyInstanceMock).toHaveBeenNthCalledWith(1, {
+    expect(mstrObjectRestService.modifyInstance).toBeCalledTimes(1);
+    expect(mstrObjectRestService.modifyInstance).toHaveBeenNthCalledWith(1, {
       body: 'bodyTest',
       displayAttrFormNames: 'displayAttrFormNamesTest',
       dossierData: 'dossierDataTest',
@@ -635,9 +619,9 @@ describe('StepGetInstanceDefinition', () => {
 
   it('modifyInstanceWithPrompt should work as expected - status 2, with many prompt answers', async () => {
     // given
-    const answerPromptsMock = jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
+    jest.spyOn(mstrObjectRestService, 'answerPrompts').mockImplementation();
 
-    const modifyInstanceMock = jest.spyOn(mstrObjectRestService, 'modifyInstance').mockReturnValue({
+    jest.spyOn(mstrObjectRestService, 'modifyInstance').mockReturnValue({
       status: 1,
       instanceId: 'instanceIdTest',
     });
@@ -657,22 +641,22 @@ describe('StepGetInstanceDefinition', () => {
     });
 
     // then
-    expect(answerPromptsMock).toBeCalledTimes(2);
-    expect(answerPromptsMock).toHaveBeenNthCalledWith(1, {
+    expect(mstrObjectRestService.answerPrompts).toBeCalledTimes(2);
+    expect(mstrObjectRestService.answerPrompts).toHaveBeenNthCalledWith(1, {
       instanceId: 'instanceIdTest',
       objectId: 'objectIdTest',
       projectId: 'projectIdTest',
       promptsAnswers: 'answer1',
     });
-    expect(answerPromptsMock).toHaveBeenNthCalledWith(2, {
+    expect(mstrObjectRestService.answerPrompts).toHaveBeenNthCalledWith(2, {
       instanceId: 'instanceIdTest',
       objectId: 'objectIdTest',
       projectId: 'projectIdTest',
       promptsAnswers: 'answer2',
     });
 
-    expect(modifyInstanceMock).toBeCalledTimes(1);
-    expect(modifyInstanceMock).toHaveBeenNthCalledWith(1, {
+    expect(mstrObjectRestService.modifyInstance).toBeCalledTimes(1);
+    expect(mstrObjectRestService.modifyInstance).toHaveBeenNthCalledWith(1, {
       body: 'bodyTest',
       displayAttrFormNames: 'displayAttrFormNamesTest',
       dossierData: 'dossierDataTest',
@@ -715,7 +699,7 @@ describe('StepGetInstanceDefinition', () => {
 
     const instanceDefinition = { mstrTable: mstrTableMock };
 
-    const getCrosstabHeaderDimensionsMock = jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeaderDimensions')
+    jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeaderDimensions')
       .mockReturnValue('crosstabHeaderDimensionsTest');
 
     // when
@@ -726,9 +710,9 @@ describe('StepGetInstanceDefinition', () => {
     );
 
     // then
-    expect(getCrosstabHeaderDimensionsMock).toBeCalledTimes(callNo);
+    expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledTimes(callNo);
     if (callNo === 1) {
-      expect(getCrosstabHeaderDimensionsMock).toBeCalledWith(instanceDefinition);
+      expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledWith(instanceDefinition);
     }
 
     expect(mstrTableMock.prevCrosstabDimensions).toEqual(expectedPrevCrosstabDimensions);
@@ -749,10 +733,9 @@ describe('StepGetInstanceDefinition', () => {
     insertNewWorksheet,
   }) => {
     // given
-    const createAndActivateNewWorksheetMock = jest.spyOn(officeApiWorksheetHelper, 'createAndActivateNewWorksheet')
-      .mockImplementation();
+    jest.spyOn(officeApiWorksheetHelper, 'createAndActivateNewWorksheet').mockImplementation();
 
-    const getSelectedCellMock = jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValue(42);
+    jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValue(42);
 
     // when
     const result = await stepGetInstanceDefinition.getStartCell(
@@ -763,12 +746,12 @@ describe('StepGetInstanceDefinition', () => {
     // then
     expect(result).toEqual(expectedStartCell);
 
-    expect(createAndActivateNewWorksheetMock).toBeCalledTimes(createAndActivateNewWorksheetCallNo);
+    expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledTimes(createAndActivateNewWorksheetCallNo);
     if (createAndActivateNewWorksheetCallNo === 1) {
-      expect(createAndActivateNewWorksheetMock).toBeCalledWith('excelContextTest');
+      expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledWith('excelContextTest');
     }
 
-    expect(getSelectedCellMock).toBeCalledTimes(1);
-    expect(getSelectedCellMock).toBeCalledWith('excelContextTest');
+    expect(officeApiHelper.getSelectedCell).toBeCalledTimes(1);
+    expect(officeApiHelper.getSelectedCell).toBeCalledWith('excelContextTest');
   });
 });
