@@ -81,10 +81,10 @@ class DossierInstanceDefinition {
    *
    * If there is no visualization for a given key, throws error that dossier doesn't exist (INVALID_VIZ_KEY_MESSAGE).
    *
-   * @param {String} projectId
-   * @param {String} objectId
+   * @param {String} projectId Id of the project that object belongs
+   * @param {String} objectId Id of the object itself
    * @param {String} visualizationKey visualization id.
-   * @param {Object} instanceId
+   * @param {Object} instanceId Id of the created instance
    * @returns {Object} Contains info for visualization.
    *
    * @throws {Error} DOSSIER_HAS_CHANGED when dossier has changed.
@@ -101,7 +101,7 @@ class DossierInstanceDefinition {
     } catch (error) {
       if (errorService.getErrorMessage(error) === DOSSIER_HAS_CHANGED) {
         throw new Error(DOSSIER_HAS_CHANGED);
-      },
+      }
       throw new Error(INVALID_VIZ_KEY_MESSAGE);
     }
   };
