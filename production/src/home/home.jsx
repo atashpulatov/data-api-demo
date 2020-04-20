@@ -13,6 +13,7 @@ import { Authenticate } from '../authentication/auth-component';
 import { DevelopmentImportList } from '../development-import-list';
 import { notificationService } from '../notification-v2/notification-service';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
+import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 
 const IS_LOCALHOST = sessionHelper.isDevelopment();
@@ -49,8 +50,8 @@ export const HomeNotConnected = (props) => {
   }, [authToken]);
 
   return (
-    <>
-      {sessionHelper.isDevelopment() && authToken && <DevelopmentImportList />}
+    <SessionExtendingWrapper id="overlay">
+      {sessionHelper.isDevelopment && authToken && <DevelopmentImportList />}
       {authToken
         ? <RightSidePanel />
         : (
@@ -59,7 +60,7 @@ export const HomeNotConnected = (props) => {
           </Spin>
         )}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
-    </>
+    </SessionExtendingWrapper>
   );
 };
 

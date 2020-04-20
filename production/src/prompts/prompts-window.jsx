@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import scriptInjectionHelper from '../dossier/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
@@ -11,7 +13,7 @@ import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 
 const { microstrategy } = window;
 const {
@@ -34,7 +36,8 @@ export class PromptsWindowNotConnected extends Component {
       isReprompt: popupState.isReprompt,
       promptsAnswers: mstrData.promptsAnswers,
     };
-
+    const { installSessionProlongingHandler } = sessionHelper;
+    this.prolongSession = installSessionProlongingHandler(this.closePopup);
     this.container = React.createRef();
     this.outerCont = React.createRef();
   }
@@ -218,19 +221,6 @@ export class PromptsWindowNotConnected extends Component {
   };
 
   /**
-   * This function applies an external css file to a document
-   */
-  applyStyle = (_document, styleSheetLocation) => {
-    const cssLink = document.createElement('link');
-    cssLink.href = styleSheetLocation;
-    cssLink.rel = 'stylesheet';
-    cssLink.type = 'text/css';
-    if (_document) {
-      _document.head.appendChild(cssLink);
-    }
-  }
-
-  /**
    * This function returns false if a document is login page and true otherwise
    */
   isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
@@ -240,15 +230,14 @@ export class PromptsWindowNotConnected extends Component {
    */
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
-      const embeddedDocument = iframe.contentDocument;
-      this.embeddedDocument = embeddedDocument;
-      if (!this.isLoginPage(embeddedDocument)) {
-        const cssLocation = window.location.origin
-          + window.location.pathname.replace('index.html', 'promptsWindow.css');
-        this.applyStyle(embeddedDocument, cssLocation);
+      const { contentDocument } = iframe;
+      this.embeddedDocument = contentDocument;
+      if (!this.isLoginPage(contentDocument)) {
+        scriptInjectionHelper.applyStyle(contentDocument, 'promptsWindow.css');
       }
+      scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
     });
-  };
+  }
 
   messageReceived = (message = {}) => {
     if (message.data && message.data.value && message.data.value.iServerErrorCode) {
@@ -269,12 +258,17 @@ export class PromptsWindowNotConnected extends Component {
       };
       popupHelper.handlePopupErrors(newErrorObject);
     }
-  };
+    const { data: postMessage, origin } = message;
+    const { origin: targetOrigin } = window;
+    if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
+      this.prolongSession();
+    }
+  }
 
   onPromptsContainerMount = (container) => {
     this.watchForIframeAddition(container, this.onIframeLoad);
     this.loadEmbeddedDossier(container);
-  };
+  }
 
   /**
    * Watches container for child addition and runs callback in case an iframe was added
