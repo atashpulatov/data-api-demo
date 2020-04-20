@@ -25,11 +25,13 @@ export default class DossierWindowNotConnected extends React.Component {
       promptsAnswers: [],
       preparedInstanceId: '',
       isVisualizationSupported: true,
+      isEmbeddedDossierLoaded: false,
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
     this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
     this.handleInstanceIdChange = this.handleInstanceIdChange.bind(this);
+    this.handleEmbeddedDossierLoad = this.handleEmbeddedDossierLoad.bind(this);
 
     this.previousSelectionBackup = [];
   }
@@ -48,6 +50,7 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   async handleSelection(dossierData) {
+    this.setState({ isVisualizationSelected: false });
     const { chosenObjectId, chosenProjectId } = this.props;
     const {
       chapterKey, visualizationKey, promptsAnswers, preparedInstanceId
@@ -156,28 +159,42 @@ export default class DossierWindowNotConnected extends React.Component {
     this.setState({ promptsAnswers: newAnswers });
   }
 
+  /**
+  * Change state of component so that informative message is showed only after embedded dossier is loaded.
+  *
+  */
+  handleEmbeddedDossierLoad() {
+    this.setState({ isEmbeddedDossierLoaded: true });
+  }
+
   render() {
     const {
       chosenObjectName, t, handleBack, editedObject
     } = this.props;
     const { isEdit } = editedObject;
-    const { isVisualizationSelected, isVisualizationSupported } = this.state;
+    const { isVisualizationSelected, isVisualizationSupported, isEmbeddedDossierLoaded } = this.state;
     return (
       <div>
         <h1 title={chosenObjectName} className="ant-col folder-browser-title dossier-title-margin-top">
           {`${t('Import Dossier')} > ${chosenObjectName}`}
         </h1>
-        <span className="dossier-window-information-frame">
-          <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />
-          <span className="dossier-window-information-text">
-            {`${t('This view supports the regular dossier manipulations. To import data, select a visualization.')}`}
+
+        { isEmbeddedDossierLoaded
+        && (
+          <span className="dossier-window-information-frame">
+            <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />
+            <span className="dossier-window-information-text">
+              {`${t('This view supports the regular dossier manipulations. To import data, select a visualization.')}`}
+            </span>
           </span>
-        </span>
+        )}
+
         <EmbeddedDossier
           handleSelection={this.handleSelection}
           handlePromptAnswer={this.handlePromptAnswer}
           handleInstanceIdChange={this.handleInstanceIdChange}
-          handleLoadEvent={this.validateSession}
+          handleIframeLoadEvent={this.validateSession}
+          handleEmbeddedDossierLoad={this.handleEmbeddedDossierLoad}
         />
         <PopupButtons
           handleOk={this.handleOk}
