@@ -315,7 +315,7 @@ describe('Notification reducer', () => {
         // then
         expect(mockedGetNotificationButtons).toBeCalled();
         expect(mockedGetNotificationButtons).toBeCalledWith([{
-          label: 'Ok', onClick: mockedCallback, title: 'Ok', type: 'basic'
+          label: 'OK', onClick: mockedCallback, title: 'OK', type: 'basic'
         }]);
       });
 
@@ -323,7 +323,7 @@ describe('Notification reducer', () => {
       // given
         const mockedCallback = jest.fn();
         const mockedCustomT = jest.fn();
-        jest.spyOn(notificationTitleMapsModule, 'customT').mockImplementationOnce((params) => mockedCustomT(params));
+        jest.spyOn(notificationTitleMapsModule, 'customT').mockImplementation((params) => mockedCustomT(params));
         const expectedDetails = 'some message';
         const someTitle = 'some title';
         const actionForImport = {
