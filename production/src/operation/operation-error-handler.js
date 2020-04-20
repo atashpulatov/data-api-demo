@@ -69,8 +69,6 @@ class OperationErrorHandler {
   handleRefreshOperationError = async (objectData, operationData) => {
     const { objectWorkingId, isCrosstab } = objectData;
     const { officeTable, backupObjectData } = operationData;
-    console.log('handleRefreshOperationError');
-    console.log(backupObjectData);
     if (officeTable) {
       if (isCrosstab) {
         officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh

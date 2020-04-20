@@ -83,7 +83,6 @@ const moveNotificationToInProgress = (state, payload) => {
 
 const displayNotificationCompleted = (state, payload) => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
-  console.log('displayNotificationCompleted');
   const updatedNotification = {
     ...notificationToUpdate,
     type: objectNotificationTypes.SUCCESS,

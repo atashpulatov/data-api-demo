@@ -251,7 +251,6 @@ class SidePanelService {
       itemsTotal: objectOperation.totalRows,
       itemsComplete: objectOperation.loadedRows,
     } : {};
-    console.log(operationBasedNotificationData);
     const obj = objectNotification ? {
       ...object,
       notification: {
