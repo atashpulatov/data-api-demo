@@ -71,7 +71,7 @@ export default class DossierWindowNotConnected extends React.Component {
       chapterKey,
       visualizationKey,
       promptsAnswers,
-      preparedInstanceId
+      preparedInstanceId,
     } = dossierData;
     let newValue = false;
     if (chapterKey !== '' && visualizationKey !== '') {
@@ -243,7 +243,7 @@ DossierWindowNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
-    promptsAnswers: PropTypes.array || null
+    promptsAnswers: PropTypes.array || null,
   }),
   handleBack: PropTypes.func,
   editedObject: PropTypes.shape({
@@ -293,7 +293,7 @@ function mapStateToProps(state) {
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport = editedObject
-    && editedObject.mstrObjectType.name
+&& editedObject.mstrObjectType.name
       === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = {
