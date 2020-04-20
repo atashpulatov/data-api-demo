@@ -1,5 +1,5 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import { officeContext } from '../office-context';
+import officeFormatHyperlinks from './office-format-hyperlinks';
 
 class StepApplyFormatting {
   /**
@@ -112,102 +112,12 @@ class StepApplyFormatting {
       const columnRange = this.getColumnRangeForFormatting(object.index, isCrosstab, offset, officeTable);
       if (object.isAttribute) {
         columnRange.numberFormat = '';
-        // https://docs.microsoft.com/en-us/javascript/api/excel/excel.rangehyperlink
-        if (officeContext.isSetSupported(1.7)) {
-          try {
-            excelContext.trackedObjects.add(columnRange);
-            // TODO: Investigate other types that contain hyperlinks
-            const isHTMLTag = object.forms.findIndex(e => e.baseFormType === 'HTMLTag');
-            if (isHTMLTag !== -1) {
-              console.time('Creating hyperlinks');
-              await this.convertToHyperlink(columnRange, excelContext);
-              console.timeEnd('Creating hyperlinks');
-            }
-            excelContext.trackedObjects.remove(columnRange);
-          } catch (error) {
-            console.warn('Error while creating hyperlinks, skipping...');
-          }
-        }
+        await officeFormatHyperlinks.formatColumnAsHyperlinks(object, columnRange, excelContext);
       } else {
         columnRange.numberFormat = this.getFormat(object);
       }
     }
   };
-
-  /**
-   * Checks if a string is a valid url including ip addresses.
-   *
-   * @param {String} str a url string
-   * @returns {Boolean} is valid url
-   */
-  isValidUrl = (str) => {
-    const urlRegExp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-    return urlRegExp.test(str);
-  }
-
-  /**
-   * Extracts href and data from HTMLTag attribute forms
-   * <a data="textToDisplay" href="address">textToDisplay</a>
-   *
-   * @param {String} string HTMLTag attribute form
-   * @returns {(Object|Boolean)} Object { address, textToDisplay } or false if not a valid HTMLTag
-   */
-  parseHTMLTag = (string) => {
-    const hrefRegExp = /'?<a\s+(?:[^>]*?\s+)?href=["']([^"']*)["']/;
-    const textRegExp = /'?<a\s+(?:[^>]*?\s+)?data=["']([^"']*)["']/;
-    const hrefMatch = string.match(hrefRegExp);
-    let textMatch = string.match(textRegExp);
-
-    // If there is no href or is not valid we cannot make a hyperlink
-    if (!hrefMatch || hrefMatch[0] === '' || !this.isValidUrl(hrefMatch[1])) {
-      return false;
-    }
-
-    // If there is no text use hyperlink
-    if (!textMatch || textMatch[0] === '' || textMatch[1] === '') {
-      textMatch = hrefMatch;
-    }
-
-    return { address: hrefMatch[1], textToDisplay: textMatch[1] };
-  }
-
-  /**
-   * Iterates through a range of cells with hyperlinks and
-   * replaces the content with a valid ExcelAPI hyperlink object
-   *
-   * @param {Office} range Reference to Excel range
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @returns {Promise} contextSync
-   */
-  convertToHyperlink = async (range, excelContext) => {
-    try {
-      range.load('values');
-      await excelContext.sync();
-    } catch (error) {
-      console.log('Excel API cannot load hyperlink values, skipping column');
-      throw error;
-    }
-
-    for (let i = 0; i < range.values.length; i++) {
-      const cellRange = range.getCell(i, 0);
-      const cellText = range.values[i][0];
-      const hyperlink = this.parseHTMLTag(cellText);
-      if (hyperlink) {
-        cellRange.hyperlink = hyperlink;
-        cellRange.untrack();
-      }
-      // Sync after a batch of 5000 to avoid errors and performance issues
-      if (i % 5000 === 0) {
-        try {
-          await excelContext.sync();
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-
-    return excelContext.sync();
-  }
 
   /**
    * Gets columns range to apply formatting to.
