@@ -1,5 +1,4 @@
-import officeReducerHelper from '../store/office-reducer-helper';
-import {officeApiHelper} from '../api/office-api-helper';
+import { officeApiHelper } from '../api/office-api-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepHighlightObject {
