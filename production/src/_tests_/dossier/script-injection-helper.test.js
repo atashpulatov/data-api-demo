@@ -38,6 +38,7 @@ describe('ScriptInjectionHelper', () => {
     };
     jest.spyOn(scriptInjectionHelper, 'createFileLocation');
     jest.spyOn(document, 'createElement');
+
     // when
     scriptInjectionHelper.applyStyle(mockContentDocument, 'relativePath');
 

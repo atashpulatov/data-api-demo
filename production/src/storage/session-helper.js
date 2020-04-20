@@ -1,5 +1,4 @@
 import throttle from 'lodash.throttle';
-import { sessionProperties } from '../redux-reducer/session-reducer/session-properties';
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
