@@ -20,7 +20,10 @@ class ErrorService {
     if (error.Code === 5012) {
       this.handleError(error);
     }
-    this.notificationService.showObjectWarning(objectWorkingId, { message: error.message, callback });
+    const errorMessage = errorMessageFactory(errorType)({ error });
+    const errorDetails = (error.response && error.response.text) || error.message || '';
+    const details = errorMessage !== errorDetails ? errorDetails : '';
+    this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
   }
 
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
