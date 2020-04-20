@@ -150,7 +150,7 @@ class MstrObjectRestService {
    * @param {String} objectId
    * @param {String} visualizationKey visualization id
    * @param {Object} dossierInstance
-   * @returns {Object} Contains info for visualization or undefined if visualization key is not found
+   * @returns {Object} Contains info for visualization or null if visualization key is not found
    */
   getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
     const dossierDefinition = await this.getDossierInstanceDefinition(projectId, objectId, dossierInstance);
@@ -172,7 +172,7 @@ class MstrObjectRestService {
         }
       }
     }
-    return undefined;
+    return null;
   };
 
   answerDossierPrompts = ({
