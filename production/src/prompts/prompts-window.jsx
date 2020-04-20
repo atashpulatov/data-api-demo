@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import scriptInjectionHelper from '../dossier/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
@@ -11,8 +13,6 @@ import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { scriptInjectionHelper } from '../dossier/script-injection-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 
 const { microstrategy } = window;

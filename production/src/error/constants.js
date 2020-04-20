@@ -107,8 +107,9 @@ export const errorMessageFactory = withDefaultValue({
   },
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
   [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
+    const { ERR003 } = errorCodes;
     if (
-      (error.response.body && error.response.body.code === 'ERR003')
+      (error.response.body && error.response.body.code === ERR003)
       && (error.response.body.iServerCode)
       && (iServerErrorMessages(error.response.body.iServerCode) === LOGIN_FAILURE)
     ) {
@@ -128,3 +129,8 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.INVALID_VIZ_KEY]: () => INVALID_VIZ_KEY_MESSAGE,
 },
 ({ error }) => error.message || UNKNOWN_ERROR);
+
+export const errorCodes = {
+  ERR003: 'ERR003',
+  ERR009: 'ERR009',
+};

@@ -7,11 +7,9 @@ import { HomeHelper } from '../home/home-helper';
 import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
-import { SESSION_EXTENSION_FAILURE_MESSAGE } from '../error/constants';
 
-export const errorCode = 'ERR009';
 export const EXTEND_SESSION = 'EXTEND_SESSION';
-const DEFAULT_SESSION_REFRESH_TIME = 60000;
+const DEFAULT_SESSION_REFRESH_TIME = 1000;
 class SessionHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
@@ -65,7 +63,7 @@ class SessionHelper {
         window.location.reload();
       }
     }
-  };
+  }
 
   replaceWindowLocation = (pathBeginning, loginParams) => {
     window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
@@ -96,14 +94,14 @@ class SessionHelper {
   }
 
   /**
-   * sends lightweight request to prolong the session
+   * Sends lightweight request to prolong the session
    *
    * IMPORTANT: before calling keepSessionAlive, installSessionProlongingHandler
    * method shold be invoked
    *
    * in case of session is already expired, then user will be logged out
    * getting notification.
-   * process will be terminated if parameter onSessionExpire is truthy,
+   * process will be terminated if parameter onSessionExpire is truthy.
    *
    * @param {func} onSessionExpire is callback function e.g closePopup()
    */
@@ -112,11 +110,9 @@ class SessionHelper {
     try {
       await authenticationService.putSessions(envUrl, authToken);
     } catch (error) {
-      if (error.response && error.response.body) {
-        const { body: { code, message } } = error.response;
-        if (onSessionExpire
-        && code === errorCode
-        && message === SESSION_EXTENSION_FAILURE_MESSAGE) {
+      if (onSessionExpire && error.response && error.response.statusCode) {
+        const { statusCode } = error.response;
+        if (statusCode === 401 || statusCode === 403) {
           onSessionExpire();
         }
       }
@@ -125,11 +121,11 @@ class SessionHelper {
   };
 
  /**
-  * installs throttle on keepSessionAlive method
+  * Installs throttle on keepSessionAlive method
   *
   * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
   *
-  * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null]
+  * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null].
   */
  installSessionProlongingHandler = (onSessionExpire = null) => throttle(() => {
    this.keepSessionAlive(onSessionExpire);

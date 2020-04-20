@@ -11,8 +11,8 @@ import {
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
-import { SESSION_EXTENSION_FAILURE_MESSAGE } from '../error/constants';
-import { errorCode } from '../storage/session-helper';
+import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../error/constants';
+
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
@@ -27,16 +27,17 @@ export class AttributeSelectorNotConnected extends Component {
    * @param {Error} e -  Error thrown by mstrReactLibrary
    */
   handleUnauthorized(e) {
+    const { ERR009 } = errorCodes;
     const { handlePopupErrors } = this.props;
     const newErrorObject = {
       status: e.status,
       response: {
         ...e.response,
         body: {
-          code: errorCode,
+          code: ERR009,
           message: SESSION_EXTENSION_FAILURE_MESSAGE,
         },
-        text: `{code: ${errorCode}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+        text: `{code: ${ERR009}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       }
     };
     handlePopupErrors(newErrorObject);

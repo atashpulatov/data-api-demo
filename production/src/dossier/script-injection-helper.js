@@ -1,20 +1,11 @@
 
 class ScriptInjectionHelper {
   /**
-   * creates location of the file
-   *
-   * @param {String} relativePath is a path to file,
-   * that will be injected to iframe
-   */
-  createFileLocation = relativePath => window.location.origin
-    + window.location.pathname.replace('index.html', relativePath);
-
-  /**
-   * applies an external script file to a embedded document
+   * Applies an external script file to a embedded document
    *
    * @param {Document} contentDocument is a document of iframe
    * @param {String} fileLocationRelativePath is a path to file,
-   * that will be injected to iframe
+   * that will be injected to iframe.
    */
   applyFile = (contentDocument, fileLocationRelativePath) => {
     const fileLocation = this.createFileLocation(fileLocationRelativePath);
@@ -27,11 +18,11 @@ class ScriptInjectionHelper {
   }
 
   /**
-   * applies an external css file to a document
+   * Applies an external css file to a document
    *
    * @param {Document} contentDocument is a document of iframe
    * @param {String} styleSheetRelativePath is a path to file,
-   * that will be injected to iframe
+   * that will be injected to iframe.
    */
   applyStyle = (contentDocument, styleSheetRelativePath) => {
     const styleSheetLocation = this.createFileLocation(styleSheetRelativePath);
@@ -43,6 +34,16 @@ class ScriptInjectionHelper {
       contentDocument.head.appendChild(cssLink);
     }
   }
+
+  /**
+   * Creates location of the file
+   *
+   * @param {String} relativePath is a path to file,
+   * that will be injected to iframe.
+   */
+  createFileLocation = relativePath => window.location.origin
+    + window.location.pathname.replace('index.html', relativePath);
 }
 
-export const scriptInjectionHelper = new ScriptInjectionHelper();
+const scriptInjectionHelper = new ScriptInjectionHelper();
+export default scriptInjectionHelper;

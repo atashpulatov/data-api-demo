@@ -26,6 +26,8 @@ describe('Popup.js', () => {
 
     // then
     expect(componentWrapper.exists('SessionExtendingWrapper')).toBeTruthy();
+    expect(componentWrapper.find('PopupViewSelector')).toBeTruthy();
+    expect(componentWrapper.find('InternetConnectionError')).toBeTruthy();
     expect(componentWrapper.find('SessionExtendingWrapper').children()).toHaveLength(2);
   });
 

@@ -3,8 +3,7 @@ import { shallow } from 'enzyme';
 import { AttributeMetricFilter } from '@mstr/mstr-react-library';
 import { AttributeSelectorNotConnected } from '../../attribute-selector/attribute-selector';
 import { officeContext } from '../../office/office-context';
-import { SESSION_EXTENSION_FAILURE_MESSAGE } from '../../error/constants';
-import { errorCode } from '../../storage/session-helper';
+import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../../error/constants';
 
 jest.mock('../../office/office-context');
 
@@ -81,15 +80,16 @@ describe('AttributeSelectorNotConnected', () => {
     const editedObject = { projectId: 'projectId' };
     const libraryError = { status: 400, response: { key: 'value' } };
     const mockHandlePopupErrors = jest.fn();
+    const { ERR009 } = errorCodes;
     const pupupExpectedError = {
       status: 400,
       response: {
         key: 'value',
         body: {
-          code: errorCode,
+          code: ERR009,
           message: SESSION_EXTENSION_FAILURE_MESSAGE,
         },
-        text: `{code: ${errorCode}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+        text: `{code: ${ERR009}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       },
     };
     const displayLanguageMock = 'en-US';

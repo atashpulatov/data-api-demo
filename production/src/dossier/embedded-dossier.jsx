@@ -5,7 +5,7 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { scriptInjectionHelper } from './script-injection-helper';
+import scriptInjectionHelper from './script-injection-helper';
 
 const { microstrategy, Office } = window;
 
