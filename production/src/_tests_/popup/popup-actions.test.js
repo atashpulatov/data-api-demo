@@ -20,7 +20,7 @@ jest.mock('../../error/error-handler');
 jest.mock('../../store');
 jest.mock('../../mstr-object/mstr-object-rest-service');
 
-const { createDossierInstance } = mstrObjectRestService;
+const { createDossierInstance, getVisualizationInfo } = mstrObjectRestService;
 
 describe('Popup actions', () => {
   beforeAll(() => {
@@ -75,21 +75,15 @@ describe('Popup actions', () => {
         visualizationKey: 'visKey',
       }
     };
-    const visInfo = {
-      pageKey: 'page',
-      chapterKey: 'chapterKey',
-      visualizationKey: 'visKey'
-    };
-    const instanceDefinitionMocked = { instanceId: 'instanceId' };
     const listener = jest.fn();
+    const spyPrepareDossierForEdit = jest.spyOn(actions, 'prepareDossierForEdit');
     officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
-    mstrObjectRestService.getVisualizationInfo.mockReturnValueOnce(visInfo);
-    createDossierInstance.mockReturnValueOnce(instanceDefinitionMocked);
     // when
     await actions.callForEditDossier(report)(listener);
     // then
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
+    expect(spyPrepareDossierForEdit).toBeCalledWith(returnedValue);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
   });
 
@@ -150,5 +144,166 @@ describe('Popup actions', () => {
     actions.preparePromptedReport(reportInstance, chosenObjectData)(listener);
     // then
     expect(listener).toHaveBeenCalledWith({ type: SET_PREPARED_REPORT, instanceId: reportInstance, chosenObjectData });
+  });
+
+  it('should update dossier data in prepareDossierForEdit with visualizationInfo update', async () => {
+    // given
+    const projectId = 'projectId';
+    const objectId = 'objectId';
+    const instanceId = 'instanceId';
+    const manipulationsXML = { data: 'data' };
+    const oldVisKey = 'oldVisualizationKey';
+    const newVisKey = 'newVisualizationKey';
+
+    const editedDossier = {
+      projectId,
+      objectId,
+      manipulationsXML,
+      visualizationInfo: { visualizationKey: oldVisKey },
+      mstrObjectType: 'mstrObjectType',
+    };
+    const body = {
+      ...manipulationsXML,
+      disableManipulationsAutoSaving: true,
+      persistViewState: true
+    };
+    const newVizInfo = {
+      chapterKey: 'chapterKey',
+      pageKey: 'pageKey',
+      visualizationKey: newVisKey,
+      dossierStructure: {
+        chapterName: 'chapterName',
+        dossierName: 'dossierName',
+        pageName: 'pageName',
+      }
+    };
+
+    const newEditedDossier = {
+      instanceId,
+      isEdit: true,
+      manipulationsXML,
+      mstrObjectType: 'mstrObjectType',
+      objectType: 'mstrObjectType',
+      objectId,
+      projectId,
+      visualizationInfo: newVizInfo
+    };
+
+    createDossierInstance.mockReturnValueOnce(instanceId);
+    getVisualizationInfo.mockReturnValueOnce(newVizInfo);
+
+    // when
+    await actions.prepareDossierForEdit(editedDossier);
+
+    // then
+    expect(createDossierInstance).toBeCalledWith(projectId, objectId, body);
+    expect(getVisualizationInfo).toBeCalledWith(
+      projectId, objectId, oldVisKey, instanceId
+    );
+    expect(editedDossier).toStrictEqual(newEditedDossier);
+  });
+
+  it('should update dossier data in prepareDossierForEdit without visualizationInfo update', async () => {
+    // given
+    const projectId = 'projectId';
+    const objectId = 'objectId';
+    const instanceId = 'instanceId';
+    const manipulationsXML = { data: 'data' };
+    const oldVisKey = 'oldVisualizationKey';
+
+    const editedDossier = {
+      projectId,
+      objectId,
+      manipulationsXML,
+      visualizationInfo: { visualizationKey: oldVisKey },
+      mstrObjectType: 'mstrObjectType',
+    };
+    const body = {
+      ...manipulationsXML,
+      disableManipulationsAutoSaving: true,
+      persistViewState: true
+    };
+    const newVizInfo = undefined;
+
+    const newEditedDossier = {
+      instanceId,
+      isEdit: true,
+      manipulationsXML,
+      mstrObjectType: 'mstrObjectType',
+      objectType: 'mstrObjectType',
+      objectId,
+      projectId,
+      visualizationInfo: { visualizationKey: oldVisKey },
+    };
+
+    createDossierInstance.mockReturnValueOnce(instanceId);
+    getVisualizationInfo.mockReturnValueOnce(newVizInfo);
+
+    // when
+    await actions.prepareDossierForEdit(editedDossier);
+
+    // then
+    expect(createDossierInstance).toBeCalledWith(projectId, objectId, body);
+    expect(getVisualizationInfo).toBeCalledWith(
+      projectId, objectId, oldVisKey, instanceId
+    );
+    expect(editedDossier).toStrictEqual(newEditedDossier);
+  });
+
+  it('should do callForDuplicate for duplication with edit for report', async () => {
+    // object
+    const object = { mstrObjectType: { name: 'report' } };
+    const listener = jest.fn();
+    const reportParams = {
+      duplicateMode: true,
+      object
+    };
+    // when
+    await actions.callForDuplicate(object)(listener);
+    // then
+    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: object });
+    expect(popupController.runEditFiltersPopup).toBeCalledWith(reportParams);
+  });
+
+  it('should do callForDuplicate for duplication with edit for prompted report', async () => {
+    // object
+    const object = { mstrObjectType: { name: 'report' }, isPrompted: 2 };
+    const listener = jest.fn();
+    const reportParams = {
+      duplicateMode: true,
+      object
+    };
+    // when
+    await actions.callForDuplicate(object)(listener);
+    // then
+    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: object });
+    expect(popupController.runRepromptPopup).toBeCalledWith(reportParams);
+  });
+
+  it('should do callForDuplicate for duplication with edit for dossier visualization', async () => {
+    // object
+    const object = { mstrObjectType: { name: 'visualization' } };
+    const listener = jest.fn();
+    const spyPrepareDossierForEdit = jest
+      .spyOn(actions, 'prepareDossierForEdit')
+      .mockImplementationOnce((paramObject) => {
+        paramObject.test = 'test';
+        delete paramObject.mstrObjectType;
+        delete paramObject.objectType;
+      });
+    const newObject = { test: 'test' };
+    const reportParams = {
+      duplicateMode: true,
+      object: newObject
+    };
+    // when
+    await actions.callForDuplicate(object)(listener);
+    // then
+    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
+    expect(spyPrepareDossierForEdit).toBeCalledWith(object);
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: newObject });
+    expect(popupController.runEditDossierPopup).toBeCalledWith(reportParams);
   });
 });

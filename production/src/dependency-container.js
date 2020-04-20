@@ -5,6 +5,7 @@ import officeStoreObject from './office/store/office-store-object';
 import officeStoreRestoreObject from './office/store/office-store-restore-object';
 import { errorService } from './error/error-handler';
 import { sessionHelper } from './storage/session-helper';
+import { sessionActions } from './redux-reducer/session-reducer/session-actions';
 import { notificationService } from './notification-v2/notification-service';
 import { authenticationHelper } from './authentication/authentication-helper';
 import { homeHelper } from './home/home-helper';
@@ -19,6 +20,7 @@ import { sidePanelService } from './right-side-panel/side-panel-service';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
+import stepGetDuplicateName from './office/step-get-duplicate-name';
 import operationErrorHandler from './operation/operation-error-handler';
 
 class DIContainer {
@@ -43,16 +45,18 @@ class DIContainer {
     this.notificationService.init(reduxStore);
     this.sessionHelper = sessionHelper;
     this.sessionHelper.init(reduxStore);
+    this.sessionActions = sessionActions;
+    this.sessionActions.init(reduxStore);
     this.errorService = errorService;
-    this.errorService.init(sessionHelper, notificationService);
+    this.errorService.init(sessionActions, sessionHelper, notificationService);
     this.authenticationHelper = authenticationHelper;
-    this.authenticationHelper.init(reduxStore, sessionHelper, authenticationService, errorService);
+    this.authenticationHelper.init(reduxStore, sessionActions, authenticationService, errorService);
     this.homeHelper = homeHelper;
-    this.homeHelper.init(reduxStore, sessionHelper);
+    this.homeHelper.init(reduxStore, sessionActions, sessionHelper);
     this.mstrObjectRestService = mstrObjectRestService;
     this.mstrObjectRestService.init(reduxStore);
     this.popupController = popupController;
-    this.popupController.init(reduxStore, sessionHelper, popupActions);
+    this.popupController.init(reduxStore, sessionActions, popupActions);
     this.sidePanelService = sidePanelService;
     this.sidePanelService.init(reduxStore);
 
@@ -91,6 +95,9 @@ class DIContainer {
 
     this.mstrListRestService = mstrListRestService;
     this.mstrListRestService.init(reduxStore);
+
+    this.stepGetDuplicateName = stepGetDuplicateName;
+    this.stepGetDuplicateName.init(reduxStore);
 
     this.operationErrorHandler = operationErrorHandler;
     this.operationErrorHandler.init(reduxStore);

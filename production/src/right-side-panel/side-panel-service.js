@@ -5,7 +5,6 @@ import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
-import { errorService } from '../error/error-handler';
 import { refreshRequested, removeRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
@@ -20,40 +19,137 @@ class SidePanelService {
     this.reduxStore = reduxStore;
   };
 
+  /**
+   * Opens popup with table of objects
+   * Prevent navigation tree from going straight into importing previously selected item.
+   */
   addData = async () => {
-    // Prevent navigation tree from going straight into importing previously selected item.
     this.reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
     await popupController.runPopupNavigation();
   };
 
+  /**
+   * Handles the highlighting of object.
+   * Gets object from reducer based on objectWorkingId and
+   * calls officeApiHelper.onBindingObjectClick to highlight object on Excel worksheet
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   */
   highlightObject = async (objectWorkingId) => {
     const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     await officeApiHelper.onBindingObjectClick(objectData);
   };
 
+  /**
+   * Handles the renaming of object.
+   * Calls officeStoreObject.saveObjectsInExcelStore to modify name field in Object Data
+   * for object corresponding to passed objectWorkingID
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   * @param {String} newName New name for object
+   */
   rename = async (objectWorkingId, newName) => {
     const renamedObject = { objectWorkingId, name: newName };
     this.reduxStore.dispatch(updateObject(renamedObject));
     await officeStoreObject.saveObjectsInExcelStore();
   };
 
+  /**
+   * Handles the refresh object and refresh selected.
+   * Creates refresh operation per each passed objectWorkingId
+   *
+   * @param {Array} objectWorkingIds Contains unique Id of the objects, allowing to reference source object.
+   */
   refresh = (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
       this.reduxStore.dispatch(refreshRequested(objectWorkingId));
     });
   };
 
+  /**
+   * Handles the remove object and remove selected.
+   * Creates remove operation per each passed objectWorkingId
+   *
+   * @param {Array} objectWorkingIds Contains unique Id of the objects, allowing to reference source object.
+   */
   remove = async (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
       this.reduxStore.dispatch(removeRequested(objectWorkingId));
     });
   };
 
-  duplicate = async (objectWorkingId) => {
-    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    this.reduxStore.dispatch(duplicateRequested(objectData));
+  /**
+   * Creates or updates duplicate popup.
+   * Saves the popup and the objectWorkingId in state of RightSidePanel.
+   * Called after user click on duplicate icon or after the activeCellAddress changed, while popup was opened.
+   *
+   * @param {Object} data - Data required to create and update duplicate popup.
+   * @param {Number} data.objectWorkingId - Uniqe id of source object for duplication.
+   * @param {String} data.activeCellAddress - Adress of selected cell in excel.
+   * @param {Function} data.setSidePanelPopup - Callback to save popup in state of RightSidePanel.
+   * @param {Function} data.setDuplicatedObjectId - Callback to save objectWorkingId in state of RightSidePanel.
+   */
+  setDuplicatePopup = ({
+    objectWorkingId, activeCellAddress, setSidePanelPopup, setDuplicatedObjectId
+  }) => {
+    const closePopup = () => {
+      setSidePanelPopup(null);
+      setDuplicatedObjectId(null);
+    };
+    setDuplicatedObjectId(objectWorkingId);
+    setSidePanelPopup({
+      type: popupTypes.DUPLICATE,
+      activeCell: activeCellAddress,
+      onImport: (isActiveCellOptionSelected) => {
+        this.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
+        closePopup();
+      },
+      onEdit: (isActiveCellOptionSelected) => {
+        this.duplicate(objectWorkingId, !isActiveCellOptionSelected, true);
+        closePopup();
+      },
+      onClose: closePopup
+    });
   };
 
+  /**
+   * Handle the user interaction with duplicate popup UI.
+   * Open edit popup for duplicate with edit.
+   * Dispatch duplicate operation for duplicate with import.
+   *
+   * Copy data of source object to new object.
+   * Delete references to old object in new object.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object for duplication.
+   * @param {Boolean} insertNewWorksheet  Flag which shows whether the duplication should happen to new excel worksheet.
+   * @param {Boolean} withEdit Flag which shows whether the duplication should happen with additional edit popup.
+   */
+  duplicate = async (objectWorkingId, insertNewWorksheet, withEdit) => {
+    const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+    const object = JSON.parse(JSON.stringify(sourceObject));
+    object.insertNewWorksheet = insertNewWorksheet;
+    object.objectWorkingId = Date.now();
+
+    delete object.bindId;
+    delete object.tableName;
+    delete object.refreshDate;
+    delete object.preparedInstanceId;
+    delete object.previousTableDimensions;
+    if (object.subtotalsInfo) { delete object.subtotalsInfo.subtotalsAddresses; }
+
+    if (withEdit) {
+      this.reduxStore.dispatch(popupActions.callForDuplicate(object));
+    } else {
+      this.reduxStore.dispatch(duplicateRequested(object));
+    }
+  };
+
+  /**
+   * Handles the editing of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   */
   edit = async (objectWorkingId) => {
     const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     const { bindId, mstrObjectType } = objectData;
@@ -67,6 +163,11 @@ class SidePanelService {
     }
   };
 
+  /**
+   * Depending of the version of supported Excel Api creates an event listener,
+   * allowing us to detect and handle removal of the Excel table
+   *
+   */
   addRemoveObjectListener = async () => {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
@@ -122,6 +223,20 @@ class SidePanelService {
       onViewData: handleViewData,
     });
     return popup;
+  };
+
+  /**
+   * Gets initial active cell address and stores it state of RightSidePanel via callback.
+   * Creates event listener for cell selection change and passes a state setter callback to event handler.
+   *
+   * @param {Function} setActiveCellAddress Callback to modify the activeCellAddress in state of RightSidePanel
+   */
+  initializeActiveCellChangedListener = async (setActiveCellAddress) => {
+    const excelContext = await officeApiHelper.getExcelContext();
+    const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
+    const initialCellAddressWithDollars = officeApiHelper.getCellAddressWithDollars(initialCellAddress);
+    setActiveCellAddress(initialCellAddressWithDollars);
+    await officeApiHelper.addOnSelectionChangedListener(excelContext, setActiveCellAddress);
   };
 
   injectNotificationsToObjects = (loadedObjects, notifications, operations) => loadedObjects.map((object) => {

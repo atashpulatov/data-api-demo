@@ -9,7 +9,7 @@ import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../redux-reducer/navig
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
 import { RESET_STATE } from '../redux-reducer/popup-reducer/popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { importRequested, editRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
 
 const URL = `${window.location.href}`;
@@ -21,9 +21,9 @@ class PopupController {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
 
-  init = (reduxStore, sessionHelper, popupAction) => {
+  init = (reduxStore, sessionActions, popupAction) => {
     this.reduxStore = reduxStore;
-    this.sessionHelper = sessionHelper;
+    this.sessionActions = sessionActions;
     this.popupAction = popupAction;
   }
 
@@ -72,7 +72,7 @@ class PopupController {
         { height, width, displayInIframe: true },
         (asyncResult) => {
           const dialog = asyncResult.value;
-          this.sessionHelper.setDialog(dialog);
+          this.sessionActions.setDialog(dialog);
           console.timeEnd('Popup load time');
           dialog.addEventHandler(Office.EventType.DialogMessageReceived,
             this.onMessageFromPopup.bind(null, dialog, reportParams));
@@ -111,6 +111,8 @@ class PopupController {
         case selectorProperties.commandOk:
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
+          } else if (reportParams.duplicateMode) {
+            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
           } else {
             const reportPreviousState = this.getObjectPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
@@ -119,6 +121,8 @@ class PopupController {
         case selectorProperties.commandOnUpdate:
           if (!reportParams) {
             await this.handleUpdateCommand(response);
+          } else if (reportParams.duplicateMode) {
+            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
           } else {
             const reportPreviousState = this.getObjectPreviousState(reportParams);
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));

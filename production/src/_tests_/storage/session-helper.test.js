@@ -7,7 +7,7 @@ import { authenticationService } from '../../authentication/auth-rest-service';
 import { HomeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
 import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../../error/constants';
-
+import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 describe('sessionHelper', () => {
   const sessionStore = createStore(sessionReducer);
@@ -48,13 +48,13 @@ describe('sessionHelper', () => {
   it('should disable loading for localhost in logOutRedirect', () => {
     // given
     jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(true);
-    jest.spyOn(sessionHelper, 'disableLoading');
+    const loadingHelper = jest.spyOn(sessionActions, 'disableLoading');
     HomeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
 
     // when
     sessionHelper.logOutRedirect();
     // then
-    expect(sessionHelper.disableLoading).toBeCalled();
+    expect(loadingHelper).toBeCalled();
   });
   it('should save authToken in redux on login', () => {
     // given
@@ -64,7 +64,7 @@ describe('sessionHelper', () => {
     const authToken = 'token';
 
     // when
-    sessionHelper.logIn(authToken);
+    sessionActions.logIn(authToken);
     // then
     expect(dispatchSpy).toHaveBeenCalledWith({ type: sessionProperties.actions.loggedIn, authToken });
   });
@@ -74,7 +74,7 @@ describe('sessionHelper', () => {
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch');
     const givenValues = { envUrl: 'envUrl' };
     // when
-    sessionHelper.saveLoginValues(givenValues);
+    sessionActions.saveLoginValues(givenValues);
 
     // then
     expect(dispatchSpy).toHaveBeenCalledWith({

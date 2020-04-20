@@ -13,26 +13,22 @@ describe('StepRemoveObjectStore', () => {
     // given
     jest.spyOn(console, 'error');
 
-    const getExcelContextMock = jest.spyOn(officeApiHelper, 'getExcelContext')
-      .mockImplementation(() => {
-        throw new Error('errorTest');
-      });
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => { throw new Error('errorTest'); });
 
-    const completeRemoveObjectTableMock = jest.spyOn(operationStepDispatcher, 'completeRemoveObjectTable')
-      .mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeRemoveObjectTable').mockImplementation();
 
     // when
     await stepRemoveObjectTable.removeObjectTable({ objectWorkingId: 'objectWorkingIdTest' }, {});
 
     // then
-    expect(getExcelContextMock).toBeCalledTimes(1);
-    expect(getExcelContextMock).toThrowError(Error);
+    expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
+    expect(officeApiHelper.getExcelContext).toThrowError(Error);
 
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
 
-    expect(completeRemoveObjectTableMock).toBeCalledTimes(1);
-    expect(completeRemoveObjectTableMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith('objectWorkingIdTest');
   });
 
   it.each`
@@ -65,11 +61,11 @@ describe('StepRemoveObjectStore', () => {
       sync: syncMock,
     };
 
-    const getExcelContextMock = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
 
-    const clearEmptyCrosstabRowMock = jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockImplementation();
+    jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockImplementation();
 
-    const getCrosstabHeadersSafelyMock = jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeadersSafely')
+    jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeadersSafely')
       .mockReturnValue({ validColumnsY: 'validColumnsYTest', validRowsX: 'validRowsXTest' });
 
     const expectedCrosstabHeaderDimensions = {
@@ -79,11 +75,9 @@ describe('StepRemoveObjectStore', () => {
     };
 
 
-    const removeExcelTableMock = jest.spyOn(officeRemoveHelper, 'removeExcelTable').mockImplementation();
+    jest.spyOn(officeRemoveHelper, 'removeExcelTable').mockImplementation();
 
-    const completeRemoveObjectTableMock = jest.spyOn(
-      operationStepDispatcher, 'completeRemoveObjectTable'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeRemoveObjectTable').mockImplementation();
 
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
@@ -96,24 +90,24 @@ describe('StepRemoveObjectStore', () => {
     await stepRemoveObjectTable.removeObjectTable(objectData, {});
 
     // then
-    expect(getExcelContextMock).toBeCalledTimes(1);
-    expect(getExcelContextMock).toBeCalledWith();
+    expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
+    expect(officeApiHelper.getExcelContext).toBeCalledWith();
 
     expect(getItemMock).toBeCalledTimes(1);
     expect(getItemMock).toBeCalledWith('bindIdTest');
 
-    expect(clearEmptyCrosstabRowMock).toBeCalledTimes(1);
-    expect(clearEmptyCrosstabRowMock).toBeCalledWith({ sth: 42, showHeaders: true });
+    expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledTimes(1);
+    expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledWith({ sth: 42, showHeaders: true });
 
-    expect(getCrosstabHeadersSafelyMock).toBeCalledTimes(1);
-    expect(getCrosstabHeadersSafelyMock).toBeCalledWith(
+    expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledTimes(1);
+    expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledWith(
       crosstabHeaderDimensionsParam,
       { sth: 42, showHeaders: true },
       excelContextMock,
     );
 
-    expect(removeExcelTableMock).toBeCalledTimes(1);
-    expect(removeExcelTableMock).toBeCalledWith(
+    expect(officeRemoveHelper.removeExcelTable).toBeCalledTimes(1);
+    expect(officeRemoveHelper.removeExcelTable).toBeCalledWith(
       { sth: 42, showHeaders: true },
       excelContextMock,
       expectedIsCrosstab,
@@ -123,7 +117,7 @@ describe('StepRemoveObjectStore', () => {
     expect(syncMock).toBeCalledTimes(1);
     expect(syncMock).toBeCalledWith();
 
-    expect(completeRemoveObjectTableMock).toBeCalledTimes(1);
-    expect(completeRemoveObjectTableMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith('objectWorkingIdTest');
   });
 });

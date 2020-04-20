@@ -59,14 +59,13 @@ describe('OfficeReducerHelper', () => {
   `('noOperationInProgress works as expected',
   ({ expectedNoOperationInProgress, operationsListParam }) => {
     // given
-    const getOperationsListFromOperationReducerMock = jest.spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer')
-      .mockReturnValue(operationsListParam);
+    jest.spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer').mockReturnValue(operationsListParam);
 
     // when
     const result = officeReducerHelper.noOperationInProgress();
 
     // then
-    expect(getOperationsListFromOperationReducerMock).toBeCalledTimes(1);
+    expect(officeReducerHelper.getOperationsListFromOperationReducer).toBeCalledTimes(1);
 
     expect(result).toEqual(expectedNoOperationInProgress);
   });

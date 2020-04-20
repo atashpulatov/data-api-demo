@@ -34,7 +34,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
     projectId,
     chosenObjectSubtype,
     body,
-    chosenObjectName
+    chosenObjectName,
   ) => {
     const { chosenObject: { chosenObjectName: objectName } } = this.props;
     chosenObjectName = chosenObjectName || objectName;
@@ -96,7 +96,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
     const typeName = chosenObject.objectType
       && chosenObject.objectType.name
       && chosenObject.objectType.name.charAt(0).toUpperCase()
-        + chosenObject.objectType.name.substring(1);
+      + chosenObject.objectType.name.substring(1);
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     return (
       <div>

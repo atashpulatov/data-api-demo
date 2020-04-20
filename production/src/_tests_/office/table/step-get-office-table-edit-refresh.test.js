@@ -114,13 +114,13 @@ describe('StepGetOfficeTableEditRefresh', () => {
   });
 
   it.each`
-  inputFormatShouldUpdate | resultShouldFormat
+  inputNameAndFormatShouldUpdate | resultShouldFormat
   
-  ${true}                 | ${true}
-  ${false}                | ${false}
+  ${true}                        | ${true}
+  ${false}                       | ${false}
   
   `('getOfficeTableEditRefresh should work as expected when tableColumnsChanged',
-  async ({ inputFormatShouldUpdate, resultShouldFormat }) => {
+  async ({ inputNameAndFormatShouldUpdate, resultShouldFormat }) => {
     // given
     const objectData = {
       tableName: 'tableNameTest',
@@ -132,7 +132,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       excelContext: 'excelContextTest',
       instanceDefinition: { mstrTable: 'mstrTableTest' },
       oldBindId: 'oldBindIdTest',
-      objectEditedData: { visualizationInfo: { formatShouldUpdate: inputFormatShouldUpdate } },
+      objectEditedData: { visualizationInfo: { nameAndFormatShouldUpdate: inputNameAndFormatShouldUpdate } },
     };
 
     jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();

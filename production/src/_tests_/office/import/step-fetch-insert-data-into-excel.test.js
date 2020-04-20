@@ -71,20 +71,20 @@ describe('StepFetchInsertDataIntoExcel', () => {
     // given
     jest.spyOn(console, 'error');
 
-    const fetchContentGeneratorMock = jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockImplementation(() => {
+    jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockImplementation(() => {
       throw new Error('errorTest');
     });
 
-    const handleOperationErrorMock = jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
+    jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
     await stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel({ subtotalsInfo: {} }, operationDataMock);
 
     // then
-    expect(fetchContentGeneratorMock).toBeCalledTimes(1);
+    expect(mstrObjectRestService.fetchContentGenerator).toBeCalledTimes(1);
 
-    expect(handleOperationErrorMock).toBeCalledTimes(1);
-    expect(handleOperationErrorMock).toBeCalledWith({ subtotalsInfo: {} }, operationDataMock, new Error('errorTest'));
+    expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
+    expect(operationErrorHandler.handleOperationError).toBeCalledWith({ subtotalsInfo: {} }, operationDataMock, new Error('errorTest'));
 
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
@@ -92,20 +92,19 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
   it('fetchInsertDataIntoExcel should work as expected - empty rowGenerator', async () => {
     // given
-    const appendRowsMock = jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
+    jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
 
-    const syncChangesToExcelMock = jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
+    jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
 
-    const fetchContentGeneratorMock = jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue([]);
+    jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue([]);
 
-    const getSubtotalCoordinatesMock = jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates')
-      .mockImplementation();
+    jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates').mockImplementation();
 
-    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    const completeFetchInsertDataMock = jest.spyOn(
+    jest.spyOn(
       operationStepDispatcher, 'completeFetchInsertData'
     ).mockImplementation();
 
@@ -113,37 +112,37 @@ describe('StepFetchInsertDataIntoExcel', () => {
     await stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel(objectDataMock, operationDataMock);
 
     // then
-    expect(fetchContentGeneratorMock).toBeCalledTimes(1);
-    expect(fetchContentGeneratorMock).toBeCalledWith({
+    expect(mstrObjectRestService.fetchContentGenerator).toBeCalledTimes(1);
+    expect(mstrObjectRestService.fetchContentGenerator).toBeCalledWith({
       ...objectDataMock,
       limit,
       instanceDefinition: resultInstanceDefinition
     });
 
-    expect(appendRowsMock).not.toBeCalled();
+    expect(officeInsertService.appendRows).not.toBeCalled();
 
     expect(mstrTableMock.subtotalsInfo.subtotalsAddresses).toEqual([]);
     expect(mstrTableMock.subtotalsInfo.importSubtotal).toEqual(true);
 
-    expect(getSubtotalCoordinatesMock).not.toBeCalled();
+    expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).not.toBeCalled();
 
-    expect(syncChangesToExcelMock).toBeCalledTimes(1);
-    expect(syncChangesToExcelMock).toBeCalledWith([], true);
+    expect(officeInsertService.syncChangesToExcel).toBeCalledTimes(1);
+    expect(officeInsertService.syncChangesToExcel).toBeCalledWith([], true);
 
-    expect(updateOperationMock).toBeCalledTimes(1);
-    expect(updateOperationMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       instanceDefinition: resultInstanceDefinition,
     });
 
-    expect(updateObjectMock).toBeCalledTimes(1);
-    expect(updateObjectMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       subtotalsInfo: { subtotalsAddresses: [] },
     });
 
-    expect(completeFetchInsertDataMock).toBeCalledTimes(1);
-    expect(completeFetchInsertDataMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeFetchInsertData).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeFetchInsertData).toBeCalledWith('objectWorkingIdTest');
   });
 
   it.each`
@@ -164,11 +163,11 @@ describe('StepFetchInsertDataIntoExcel', () => {
     objectDataMock.subtotalsInfo.importSubtotal = paramImportSubtotal;
     resultInstanceDefinition.mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
 
-    const appendRowsMock = jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
+    jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
 
-    const syncChangesToExcelMock = jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
+    jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
 
-    const fetchContentGeneratorMock = jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue(
+    jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue(
       [{
         row: [42, 42],
         header: 'headerTest',
@@ -176,23 +175,20 @@ describe('StepFetchInsertDataIntoExcel', () => {
       }]
     );
 
-    const getSubtotalCoordinatesMock = jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates')
-      .mockImplementation();
+    jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates').mockImplementation();
 
-    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    const completeFetchInsertDataMock = jest.spyOn(
-      operationStepDispatcher, 'completeFetchInsertData'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeFetchInsertData').mockImplementation();
 
     // when
     await stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel(objectDataMock, operationDataMock);
 
     // then
-    expect(fetchContentGeneratorMock).toBeCalledTimes(1);
-    expect(fetchContentGeneratorMock).toBeCalledWith({
+    expect(mstrObjectRestService.fetchContentGenerator).toBeCalledTimes(1);
+    expect(mstrObjectRestService.fetchContentGenerator).toBeCalledWith({
       ...objectDataMock,
       limit,
       instanceDefinition: resultInstanceDefinition
@@ -200,8 +196,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     expect(suspendApiCalculationUntilNextSyncMock).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
-    expect(appendRowsMock).toBeCalledTimes(1);
-    expect(appendRowsMock).toBeCalledWith(
+    expect(officeInsertService.appendRows).toBeCalledTimes(1);
+    expect(officeInsertService.appendRows).toBeCalledWith(
       'officeTableTest',
       excelContextMock,
       [42, 42],
@@ -218,25 +214,25 @@ describe('StepFetchInsertDataIntoExcel', () => {
       },
     );
 
-    expect(getSubtotalCoordinatesMock).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
+    expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
 
     expect(mstrTableMock.subtotalsInfo.subtotalsAddresses).toEqual([]);
     expect(mstrTableMock.subtotalsInfo.importSubtotal).toEqual(resultImportSubtotal);
 
-    expect(syncChangesToExcelMock).toBeCalledTimes(2);
-    expect(syncChangesToExcelMock).toHaveBeenNthCalledWith(1, [], false);
-    expect(syncChangesToExcelMock).toHaveBeenNthCalledWith(2, [], true);
+    expect(officeInsertService.syncChangesToExcel).toBeCalledTimes(2);
+    expect(officeInsertService.syncChangesToExcel).toHaveBeenNthCalledWith(1, [], false);
+    expect(officeInsertService.syncChangesToExcel).toHaveBeenNthCalledWith(2, [], true);
 
-    expect(updateOperationMock).toBeCalledTimes(2);
-    expect(updateOperationMock).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'objectWorkingIdTest', });
-    expect(updateOperationMock).toHaveBeenNthCalledWith(2,
+    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(2);
+    expect(operationStepDispatcher.updateOperation).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'objectWorkingIdTest', });
+    expect(operationStepDispatcher.updateOperation).toHaveBeenNthCalledWith(2,
       {
         objectWorkingId: 'objectWorkingIdTest',
         instanceDefinition: resultInstanceDefinition,
       });
 
-    expect(updateObjectMock).toBeCalledTimes(1);
-    expect(updateObjectMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       subtotalsInfo: {
         subtotalsAddresses: [],
@@ -244,8 +240,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
       },
     });
 
-    expect(completeFetchInsertDataMock).toBeCalledTimes(1);
-    expect(completeFetchInsertDataMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeFetchInsertData).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeFetchInsertData).toBeCalledWith('objectWorkingIdTest');
   });
 
   it.each`
@@ -266,11 +262,11 @@ describe('StepFetchInsertDataIntoExcel', () => {
     objectDataMock.subtotalsInfo.importSubtotal = paramImportSubtotal;
     resultInstanceDefinition.mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
 
-    const appendRowsMock = jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
+    jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
 
-    const syncChangesToExcelMock = jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
+    jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
 
-    const fetchContentGeneratorMock = jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue(
+    jest.spyOn(mstrObjectRestService, 'fetchContentGenerator').mockReturnValue(
       [{
         row: [42, 42],
         header: 'headerOneTest',
@@ -283,23 +279,20 @@ describe('StepFetchInsertDataIntoExcel', () => {
       }]
     );
 
-    const getSubtotalCoordinatesMock = jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates')
-      .mockImplementation();
+    jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates').mockImplementation();
 
-    const updateOperationMock = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-    const updateObjectMock = jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    const completeFetchInsertDataMock = jest.spyOn(
-      operationStepDispatcher, 'completeFetchInsertData'
-    ).mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeFetchInsertData').mockImplementation();
 
     // when
     await stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel(objectDataMock, operationDataMock);
 
     // then
-    expect(fetchContentGeneratorMock).toBeCalledTimes(1);
-    expect(fetchContentGeneratorMock).toBeCalledWith({
+    expect(mstrObjectRestService.fetchContentGenerator).toBeCalledTimes(1);
+    expect(mstrObjectRestService.fetchContentGenerator).toBeCalledWith({
       ...objectDataMock,
       limit,
       instanceDefinition: {
@@ -316,8 +309,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
     expect(suspendApiCalculationUntilNextSyncMock).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
-    expect(appendRowsMock).toBeCalledTimes(2);
-    expect(appendRowsMock).toHaveBeenNthCalledWith(
+    expect(officeInsertService.appendRows).toBeCalledTimes(2);
+    expect(officeInsertService.appendRows).toHaveBeenNthCalledWith(
       1,
       'officeTableTest',
       excelContextMock,
@@ -334,7 +327,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
         }
       },
     );
-    expect(appendRowsMock).toHaveBeenNthCalledWith(
+    expect(officeInsertService.appendRows).toHaveBeenNthCalledWith(
       2,
       'officeTableTest',
       excelContextMock,
@@ -352,27 +345,27 @@ describe('StepFetchInsertDataIntoExcel', () => {
       },
     );
 
-    expect(getSubtotalCoordinatesMock).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
+    expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
 
     expect(mstrTableMock.subtotalsInfo.subtotalsAddresses).toEqual([]);
     expect(mstrTableMock.subtotalsInfo.importSubtotal).toEqual(resultImportSubtotal);
 
-    expect(syncChangesToExcelMock).toBeCalledTimes(3);
-    expect(syncChangesToExcelMock).toHaveBeenNthCalledWith(1, [], false);
-    expect(syncChangesToExcelMock).toHaveBeenNthCalledWith(2, [], false);
-    expect(syncChangesToExcelMock).toHaveBeenNthCalledWith(3, [], true);
+    expect(officeInsertService.syncChangesToExcel).toBeCalledTimes(3);
+    expect(officeInsertService.syncChangesToExcel).toHaveBeenNthCalledWith(1, [], false);
+    expect(officeInsertService.syncChangesToExcel).toHaveBeenNthCalledWith(2, [], false);
+    expect(officeInsertService.syncChangesToExcel).toHaveBeenNthCalledWith(3, [], true);
 
-    expect(updateOperationMock).toBeCalledTimes(3);
-    expect(updateOperationMock).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'objectWorkingIdTest', });
-    expect(updateOperationMock).toHaveBeenNthCalledWith(2, { loadedRows: 6, objectWorkingId: 'objectWorkingIdTest', });
-    expect(updateOperationMock).toHaveBeenNthCalledWith(3,
+    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(3);
+    expect(operationStepDispatcher.updateOperation).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'objectWorkingIdTest', });
+    expect(operationStepDispatcher.updateOperation).toHaveBeenNthCalledWith(2, { loadedRows: 6, objectWorkingId: 'objectWorkingIdTest', });
+    expect(operationStepDispatcher.updateOperation).toHaveBeenNthCalledWith(3,
       {
         objectWorkingId: 'objectWorkingIdTest',
         instanceDefinition: resultInstanceDefinition,
       });
 
-    expect(updateObjectMock).toBeCalledTimes(1);
-    expect(updateObjectMock).toBeCalledWith({
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       subtotalsInfo: {
         subtotalsAddresses: [],
@@ -380,8 +373,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
       },
     });
 
-    expect(completeFetchInsertDataMock).toBeCalledTimes(1);
-    expect(completeFetchInsertDataMock).toBeCalledWith('objectWorkingIdTest');
+    expect(operationStepDispatcher.completeFetchInsertData).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeFetchInsertData).toBeCalledWith('objectWorkingIdTest');
   });
 
   it.each`

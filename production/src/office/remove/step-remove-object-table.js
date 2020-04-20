@@ -44,7 +44,7 @@ class StepRemoveObjectTable {
         rowsX: validRowsX
       };
 
-      officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, validCrosstabHeaderDimnesions);
+      await officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, validCrosstabHeaderDimnesions);
       await excelContext.sync();
     } catch (error) {
       console.error(error);

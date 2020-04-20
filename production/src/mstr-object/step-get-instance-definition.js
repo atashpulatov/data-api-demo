@@ -40,7 +40,7 @@ class StepGetInstanceDefinition {
         subtotalsInfo = false,
         bindId,
         mstrObjectType,
-        isPrompted
+        isPrompted,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
 
@@ -55,7 +55,7 @@ class StepGetInstanceDefinition {
           { ...objectData, visualizationInfo }
         ));
 
-        name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition, nextStep);
+        name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition);
       } else {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }

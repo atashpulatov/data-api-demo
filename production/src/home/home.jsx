@@ -14,6 +14,7 @@ import { DevelopmentImportList } from '../development-import-list';
 import { notificationService } from '../notification-v2/notification-service';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 
 const IS_LOCALHOST = sessionHelper.isDevelopment();
 
@@ -38,7 +39,7 @@ export const HomeNotConnected = (props) => {
       officeStoreRestoreObject.restoreObjectsFromExcelStore();
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
-      sessionHelper.disableLoading();
+      sessionActions.disableLoading();
     } catch (error) {
       console.error(error);
     }

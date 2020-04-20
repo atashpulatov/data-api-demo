@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@mstr/mstr-react-library": "^1.7.4",
-    "@mstr/rc": "^0.31.1",
+    "@mstr/rc": "^0.33.4",
     "@types/jest": "^25.1.3",
     "antd": "^3.26.2",
     "core-js": "^3.5.0",
@@ -109,7 +109,6 @@
       "!src/dossier/embedded-dossier.jsx",
       "!src/prompts/prompts-window.jsx",
       "!src/office/office-display-service.js",
-      "!src/office/office-duplicate-service.js",
       "!src/navigation/**/*.*",
       "!src/office/format/*.*",
       "!src/office/api/*.*",

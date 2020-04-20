@@ -3,6 +3,7 @@ import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
+import { errorService } from '../../error/error-handler';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -238,16 +239,15 @@ class OfficeApiHelper {
       }
       await excelContext.sync();
     } catch (error) {
-      // if (error && error.code === 'ItemNotFound') {
-      //   return notificationService.displayTranslatedNotification({
-      //     type: 'info',
-      //     content: OBJ_REMOVED_FROM_EXCEL
-      //   });
-      // }
-      // errorService.handleError(error, {
-      //   chosenObjectName,
-      //   onConfirm: deleteObject
-      // });
+      if (error) {
+        if (error.code === 'ItemNotFound') {
+          console.log('error:', error.message, error.code, error.response);
+        }
+        if (error.code === 'InvalidSelection') {
+          console.log('error:', error.message, error.code);
+        }
+      }
+      // errorService.handleObjectBasedError(ObjectData.objectWorkingId, error));
     }
   };
 
@@ -302,6 +302,44 @@ class OfficeApiHelper {
     const colOffset = crosstabHeaderDimensions.rowsX;
     return this.offsetCellBy(startCell, rowOffset, colOffset);
   };
+
+  /**
+   * Attaches a event listener to onSelectionChanged on workbook.
+   * As event handler, resets the active cell value via callback and then updates it with new value.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Function} setActiveCellAddress Callback to save the active cell address value.
+   */
+  addOnSelectionChangedListener = async (excelContext, setActiveCellAddress) => {
+    excelContext.workbook.onSelectionChanged.add(async () => {
+      setActiveCellAddress('...');
+      const activeCellAddress = await this.getSelectedCell(excelContext);
+      const activeCellAddressWithDollars = this.getCellAddressWithDollars(activeCellAddress);
+      setActiveCellAddress(activeCellAddressWithDollars);
+    });
+    await excelContext.sync();
+  }
+
+  /**
+   * Takes cell address. Extracts and removes worksheet name.
+   * Splits rest into part with chars and part with numbers.
+   * Appends $ beetwen chars and numbers and at the begginig of address.
+   *
+   * @param {String} cellAddress Excel address of seleted cell, e.g 'Sheet1!AB21'
+   * @returns {String} cellAddres with $ at the begginig and beetwen row and column indicator, e.g. '$AB$21'
+   */
+  getCellAddressWithDollars = (cellAddress) => {
+    try {
+      const splitAt = (string, index) => [string.slice(0, index), string.slice(index)];
+      const [cell] = cellAddress.split('!').reverse();
+      const indexOfRowAddress = cell.search(/\d+/);
+      const [column, row] = splitAt(cell, indexOfRowAddress);
+      return `$${column}$${row}`;
+    } catch (error) {
+      console.error(error);
+      return '';
+    }
+  }
 }
 
 export const officeApiHelper = new OfficeApiHelper();
