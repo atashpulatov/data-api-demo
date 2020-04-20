@@ -5,7 +5,6 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 class StepHighlightObject {
     highlightObject = async (objectData, operationData) => {
       try {
-        console.warn('yoyoyo');
         await officeApiHelper.onBindingObjectClick(objectData);
       } catch (error) {
         console.error(error);

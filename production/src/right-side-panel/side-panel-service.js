@@ -36,8 +36,6 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   highlightObject = async (objectWorkingId) => {
-    console.warn('1');
-    
     this.reduxStore.dispatch(highlightRequested(objectWorkingId));
   };
 

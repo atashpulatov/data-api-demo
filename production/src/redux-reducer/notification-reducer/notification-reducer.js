@@ -154,7 +154,10 @@ function getNotificationOrCreateEmpty(state, payload) {
   try {
     return getNotificationToUpdate(state, payload);
   } catch (error) {
-    return {};
+    return {
+      notificationToUpdate: {},
+      notificationToUpdateIndex: state.notifications.length,
+    };
   }
 }
 

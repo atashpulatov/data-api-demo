@@ -217,27 +217,27 @@ class OfficeApiHelper {
   onBindingObjectClick = async (ObjectData) => {
     let crosstabRange;
     // try {
-      const { bindId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
+    const { bindId, isCrosstab, crosstabHeaderDimensions } = ObjectData;
 
-      const excelContext = await this.getExcelContext();
-      const officeTable = excelContext.workbook.tables.getItem(bindId);
+    const excelContext = await this.getExcelContext();
+    const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-      if (isCrosstab) {
-        const tmpXtabDimensions = {
-          ...crosstabHeaderDimensions,
-          columnsY: crosstabHeaderDimensions.columnsY + 1,
-        };
-        crosstabRange = await officeApiCrosstabHelper.getCrosstabRangeSafely(
-          officeTable,
-          tmpXtabDimensions,
-          excelContext
-        );
-        crosstabRange.select();
-      } else {
-        const tableRange = this.getBindingRange(excelContext, bindId);
-        tableRange.select();
-      }
-      await excelContext.sync();
+    if (isCrosstab) {
+      const tmpXtabDimensions = {
+        ...crosstabHeaderDimensions,
+        columnsY: crosstabHeaderDimensions.columnsY + 1,
+      };
+      crosstabRange = await officeApiCrosstabHelper.getCrosstabRangeSafely(
+        officeTable,
+        tmpXtabDimensions,
+        excelContext
+      );
+      crosstabRange.select();
+    } else {
+      const tableRange = this.getBindingRange(excelContext, bindId);
+      tableRange.select();
+    }
+    await excelContext.sync();
     // } catch (error) {
     //   if (error) {
     //     if (error.code === 'ItemNotFound') {
