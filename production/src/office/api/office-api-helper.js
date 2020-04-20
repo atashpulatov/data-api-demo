@@ -314,9 +314,31 @@ class OfficeApiHelper {
     excelContext.workbook.onSelectionChanged.add(async () => {
       setActiveCellAddress('...');
       const activeCellAddress = await this.getSelectedCell(excelContext);
-      setActiveCellAddress(activeCellAddress);
+      const activeCellAddressWithDollars = this.getCellAddressWithDollars(activeCellAddress);
+      setActiveCellAddress(activeCellAddressWithDollars);
     });
     await excelContext.sync();
+  }
+
+  /**
+   * Takes cell address. Extracts and removes worksheet name.
+   * Splits rest into part with chars and part with numbers.
+   * Appends $ beetwen chars and numbers and at the begginig of address.
+   *
+   * @param {String} cellAddress Excel address of seleted cell, e.g 'Sheet1!AB21'
+   * @returns {String} cellAddres with $ at the begginig and beetwen row and column indicator, e.g. '$AB$21'
+   */
+  getCellAddressWithDollars = (cellAddress) => {
+    try {
+      const splitAt = (string, index) => [string.slice(0, index), string.slice(index)];
+      const [cell] = cellAddress.split('!').reverse();
+      const indexOfRowAddress = cell.search(/\d+/);
+      const [column, row] = splitAt(cell, indexOfRowAddress);
+      return `$${column}$${row}`;
+    } catch (error) {
+      console.error(error);
+      return '';
+    }
   }
 }
 

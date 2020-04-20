@@ -28,6 +28,7 @@ export const objectsList = {
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
     basicSubtotalsReport: 'Report Totals Subtotals 1',
+    categorySubCategory: 'CategorySubCategoryQuarter',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
       reportBasedOnIntelligentCube: 'Report based on cube without subtotals',

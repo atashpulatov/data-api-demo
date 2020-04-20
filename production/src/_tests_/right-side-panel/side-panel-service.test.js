@@ -85,7 +85,9 @@ describe('SidePanelService', () => {
     // given
     const mockSync = jest.fn();
     const mockContext = { sync: mockSync };
-    const mockActiveCell = 'cell address';
+    const mockActiveCell = 'Sheet123!ABC123';
+
+    const expectedActiveCellString = '$ABC$123';
 
     const spyGetExcelContext = jest
       .spyOn(officeApiHelper, 'getExcelContext')
@@ -106,7 +108,7 @@ describe('SidePanelService', () => {
     // then
     expect(spyGetExcelContext).toBeCalled();
     expect(spyGetSelectedCell).toBeCalledWith(mockContext);
-    expect(stateSetterCallback).toBeCalledWith(mockActiveCell);
+    expect(stateSetterCallback).toBeCalledWith(expectedActiveCellString);
     expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, stateSetterCallback);
   });
 });

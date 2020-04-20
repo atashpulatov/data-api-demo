@@ -12,15 +12,15 @@ import {
   DUPLICATE_OPERATION,
 } from '../../operation/operation-type-names';
 import {
-  CREATE_NOTIFICATION,
   DELETE_NOTIFICATION,
   CREATE_GLOBAL_NOTIFICATION,
   REMOVE_GLOBAL_NOTIFICATION,
-  CREATE_OBJECT_WARNING
+  DISPLAY_NOTIFICATION_WARNING
 } from './notification-actions';
 import {
   titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap, customT
 } from './notification-title-maps';
+import { GENERIC_SERVER_ERR } from '../../error/constants';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -41,11 +41,8 @@ export const notificationReducer = (state = initialState, action) => {
     case DISPLAY_NOTIFICATION_COMPLETED:
       return displayNotificationCompleted(state, payload);
 
-    case CREATE_NOTIFICATION:
-      return createNotification(state, payload);
-
-    case CREATE_OBJECT_WARNING:
-      return createObjectWarning(state, payload);
+    case DISPLAY_NOTIFICATION_WARNING:
+      return displayNotificationWarning(state, payload);
 
     case DELETE_NOTIFICATION:
       return deleteNotification(state, payload);
@@ -97,28 +94,26 @@ const displayNotificationCompleted = (state, payload) => {
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
-const createNotification = (state, payload) => ({ notifications: [...state.notifications, payload] });
-
 const deleteNotification = (state, payload) => {
-  // TODO: do we need this?
-  getNotificationIndex(state, payload);
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
   newState.notifications = newState.notifications
     .filter((notification) => notification.objectWorkingId !== payload.objectWorkingId);
   return newState;
 };
 
-const createObjectWarning = (state, payload) => {
+const displayNotificationWarning = (state, payload) => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationOrCreateEmpty(state, payload);
 
   const buttons = getOkButton(payload);
+  const title = getTitle(payload, notificationToUpdate);
 
   const updatedNotification = {
     objectWorkingId: payload.objectWorkingId,
     type: objectNotificationTypes.WARNING,
-    title: titleOperationFailedMap[notificationToUpdate.operationType],
+    title: customT(title),
     details: customT(payload.notification.message),
     children: getNotificationButtons(buttons),
+    callback: payload.notification.callback,
   };
 
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
@@ -135,14 +130,19 @@ const removeGlobalNotification = (state, paylaod) => (
 const deleteAllNotifications = (action, state) => (action.isSecured
   ? { notifications: [], globalNotification: state.globalNotification }
   : state);
-const getOkButton = (payload) => [
-  {
-    title: 'Ok',
-    type: 'basic',
-    label: 'Ok',
-    onClick: payload.notification.callback,
-  },
-];
+
+const getOkButton = (payload) => [{
+  title: customT('OK'),
+  type: 'basic',
+  label: customT('OK'),
+  onClick: payload.notification.callback,
+}];
+
+function getTitle(payload, notificationToUpdate) {
+  return payload.notification.title === GENERIC_SERVER_ERR
+    ? titleOperationFailedMap[notificationToUpdate.operationType]
+    : payload.notification.title;
+}
 
 function createNewState(state, notificationToUpdateIndex, updatedNotification) {
   const newState = { notifications: [...state.notifications], globalNotification: state.globalNotification };
