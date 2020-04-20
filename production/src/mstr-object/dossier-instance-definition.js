@@ -1,7 +1,10 @@
 import mstrObjectEnum from './mstr-object-type-enum';
-import { errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE } from '../error/constants';
+import {
+  errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE, DOSSIER_HAS_CHANGED
+} from '../error/constants';
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import { IMPORT_OPERATION } from '../operation/operation-type-names';
+import { errorService } from '../error/error-handler';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition(
@@ -32,18 +35,12 @@ class DossierInstanceDefinition {
       throw error;
     }
 
-    const updatedVisualizationInfo = await mstrObjectRestService.getVisualizationInfo(
+    const updatedVisualizationInfo = await this.getUpdatedVisualizationInfo(
       projectId,
       objectId,
       visualizationInfo.visualizationKey,
       instanceId
     );
-
-    if (!updatedVisualizationInfo) {
-      throw new Error(INVALID_VIZ_KEY_MESSAGE);
-    }
-
-    visualizationInfo = updatedVisualizationInfo;
 
     const config = {
       projectId,
@@ -52,8 +49,8 @@ class DossierInstanceDefinition {
       mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
       dossierData,
       body,
-      visualizationInfo,
-      displayAttrFormNames
+      visualizationInfo: updatedVisualizationInfo,
+      displayAttrFormNames,
     };
 
     let temporaryInstanceDefinition;
@@ -71,10 +68,43 @@ class DossierInstanceDefinition {
 
     return {
       body,
-      visualizationInfo,
-      instanceDefinition
+      visualizationInfo: updatedVisualizationInfo,
+      instanceDefinition,
     };
   }
+
+  /**
+   * Returns new visualization info object.
+   *
+   * If creating the visualization info fails and if the error is due to changed dossier structure,
+   * throws the error that dossier removed has changed (DOSSIER_HAS_CHANGED).
+   *
+   * If there is no visualization for a given key, throws error that dossier doesn't exist (INVALID_VIZ_KEY_MESSAGE).
+   *
+   * @param {String} projectId Id of the project that object belongs
+   * @param {String} objectId Id of the object itself
+   * @param {String} visualizationKey visualization id.
+   * @param {Object} instanceId Id of the created instance
+   * @returns {Object} Contains info for visualization.
+   *
+   * @throws {Error} DOSSIER_HAS_CHANGED when dossier has changed.
+   * @throws {Error} INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
+   */
+  getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
+    try {
+      return await mstrObjectRestService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationKey,
+        instanceId
+      );
+    } catch (error) {
+      if (errorService.getErrorMessage(error) === DOSSIER_HAS_CHANGED) {
+        throw new Error(DOSSIER_HAS_CHANGED);
+      }
+      throw new Error(INVALID_VIZ_KEY_MESSAGE);
+    }
+  };
 
   getVisualizationName = (operationData, name, instanceDefinition) => {
     const { objectEditedData, operationType } = operationData;

@@ -46,47 +46,6 @@ describe('DossierInstanceDefinition', () => {
     expect(dossierInstanceDefinition.getVisualizationErrorType).not.toBeCalled();
   });
 
-  it('should throw an exception when getVisualizationInfo returns empty value', async () => {
-    // given
-    jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockImplementation();
-
-    jest.spyOn(mstrObjectRestService, 'getVisualizationInfo').mockReturnValue(undefined);
-
-    jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockImplementation();
-
-    jest.spyOn(dossierInstanceDefinition, 'getVisualizationErrorType').mockImplementation();
-
-    // when
-    let result;
-    try {
-      result = await dossierInstanceDefinition.getDossierInstanceDefinition({
-        projectId: 'projectIdTest',
-        objectId: 'objectIdTest',
-        manipulationsXML: undefined,
-        preparedInstanceId: 'preparedInstanceIdTest',
-        visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
-      });
-    } catch (error) {
-      // then
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toEqual(INVALID_VIZ_KEY_MESSAGE);
-      expect(result).toBeUndefined();
-    }
-
-    expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
-
-    expect(mstrObjectRestService.getVisualizationInfo).toBeCalledTimes(1);
-    expect(mstrObjectRestService.getVisualizationInfo).toBeCalledWith(
-      'projectIdTest',
-      'objectIdTest',
-      'visualizationKeyTest',
-      'preparedInstanceIdTest'
-    );
-
-    expect(mstrObjectRestService.fetchVisualizationDefinition).not.toBeCalled();
-    expect(dossierInstanceDefinition.getVisualizationErrorType).not.toBeCalled();
-  });
-
   it('should handle exception thrown by fetchVisualizationDefinition', async () => {
     // given
     jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockImplementation();
