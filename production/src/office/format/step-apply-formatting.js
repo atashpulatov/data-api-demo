@@ -26,14 +26,13 @@ class StepApplyFormatting {
     const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
 
     try {
-      const filteredColumnInformation = this.filterColumnInformation(columnInformation, isCrosstab);
+      const filteredColumnInformation = this.filterColumnInformation(columnInformation);
 
-      const attributeColumnNumber = this.calculateAttributeColumnNumber(columnInformation);
+      const attributeColumnNumber = this.calculateAttributeColumnNumber(columnInformation, isCrosstab);
 
       const offset = this.calculateOffset(
         isCrosstab,
         columnInformation.length,
-        filteredColumnInformation.length,
         attributeColumnNumber
       );
       await excelContext.sync();
@@ -62,12 +61,14 @@ class StepApplyFormatting {
    * @param {Array} columnInformation Columns data
    * @returns {Number} Number of columns in Excel
    */
-  calculateAttributeColumnNumber = (columnInformation) => {
+  calculateAttributeColumnNumber = (columnInformation, isCrosstab) => {
     let attributeColumnNumber = 0;
 
     columnInformation.forEach(element => {
       if (element.isAttribute) {
-        attributeColumnNumber += (element.forms && element.forms.length) ? element.forms.length : 1;
+        if (!isCrosstab) {
+          attributeColumnNumber += (element.forms && element.forms.length) ? element.forms.length : 1;
+        }
       } else {
         attributeColumnNumber++;
       }
@@ -85,11 +86,11 @@ class StepApplyFormatting {
    * @param {Number} attributeColumnNumber Number of all attribute/consolidations columns in Excel
    * @returns {number} Number of columns to be offsetted when formatting
    */
-  calculateOffset = (isCrosstab, columnInformationLength, filteredColumnInformationLength, attributeColumnNumber) => {
+  calculateOffset = (isCrosstab, columnInformationLength, attributeColumnNumber) => {
     let offset = 0;
 
     if (isCrosstab) {
-      offset = columnInformationLength - filteredColumnInformationLength;
+      offset = columnInformationLength - attributeColumnNumber;
     } else {
       offset = attributeColumnNumber - columnInformationLength;
     }
@@ -133,9 +134,14 @@ class StepApplyFormatting {
    */
   getColumnRangeForFormatting = (index, isCrosstab, offset, officeTable) => {
     const objectIndex = isCrosstab ? index - offset : index + offset;
-
+    // Crosstab
+    if (isCrosstab && index < offset) {
+      return officeTable.columns.getItemAt().getDataBodyRange().getOffsetRange(0, objectIndex);
+    }
+    // Tabular
     return officeTable.columns.getItemAt(objectIndex).getDataBodyRange();
-  };
+  }
+;
 
   /**
    * Returns filtered column information.
@@ -144,15 +150,9 @@ class StepApplyFormatting {
    * For crosstabs returns array of elements that are not attributes and contains own properties.
    *
    * @param {Array} columnInformation Columns data
-   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @return {Array} filteredColumnInformation Filtered columnInformation
    */
-  filterColumnInformation = (columnInformation, isCrosstab) => {
-    if (isCrosstab) {
-      return columnInformation.filter((e) => (!e.isAttribute) && (Object.keys(e).length !== 0));
-    }
-    return columnInformation.filter((column) => Object.keys(column).length !== 0);
-  };
+  filterColumnInformation = (columnInformation) => columnInformation.filter((col) => Object.keys(col).length !== 0);
 
   /**
    * Returns Excel format string based on MicroStrategy format string.
