@@ -9,7 +9,7 @@ import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
 export const EXTEND_SESSION = 'EXTEND_SESSION';
-const DEFAULT_SESSION_REFRESH_TIME = 1000;
+const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
