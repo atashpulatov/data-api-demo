@@ -25,32 +25,34 @@ class OfficeFormatHyperlinks {
    * @param {String} baseFormType MSTR Base form HTMLTag or URL
    * @returns {Object} Object { address, textToDisplay } or null if not a valid HTMLTag
    */
-  parseHTMLTag = (string, baseFormType = FORM_TYPE_HTML) => {
-    // url
-    if (baseFormType === FORM_TYPE_URL) {
-      if (this.isValidUrl(string)) {
-        return { address: string, textToDisplay: string };
-      }
-      return null;
+  parseHTMLTag = (string, baseFormType) => {
+    // Some users don't use properly baseFormType, check if valid URL for both url and HTMLTag
+    // if(baseFormType === FORM_TYPE_URL)
+    if (this.isValidUrl(string)) {
+      return { address: string, textToDisplay: string };
     }
 
     // HTMLTag
-    const hrefRegExp = /'?<a\s+(?:[^>]*?\s+)?href=["']([^"']*)["']/;
-    const textRegExp = /'?<a\s+(?:[^>]*?\s+)?data=["']([^"']*)["']/;
-    const hrefMatch = string.match(hrefRegExp);
-    let textMatch = string.match(textRegExp);
+    if (baseFormType === FORM_TYPE_HTML) {
+      const hrefRegExp = /'?<a\s+(?:[^>]*?\s+)?href=["']([^"']*)["']/;
+      const textRegExp = /'?<a\s+(?:[^>]*?\s+)?data=["']([^"']*)["']/;
+      const hrefMatch = string.match(hrefRegExp);
+      let textMatch = string.match(textRegExp);
 
-    // If there is no href or is not valid url we cannot make a hyperlink
-    if (!hrefMatch || hrefMatch[0] === '' || !this.isValidUrl(hrefMatch[1])) {
-      return null;
+      // If there is no href or is not valid url we cannot make a hyperlink
+      if (!hrefMatch || hrefMatch[0] === '' || !this.isValidUrl(hrefMatch[1])) {
+        return null;
+      }
+
+      // If there is no text use hyperlink
+      if (!textMatch || textMatch[0] === '' || textMatch[1] === '') {
+        textMatch = hrefMatch;
+      }
+
+      return { address: hrefMatch[1], textToDisplay: textMatch[1] };
     }
 
-    // If there is no text use hyperlink
-    if (!textMatch || textMatch[0] === '' || textMatch[1] === '') {
-      textMatch = hrefMatch;
-    }
-
-    return { address: hrefMatch[1], textToDisplay: textMatch[1] };
+    return null;
   }
 
   /**
@@ -104,7 +106,6 @@ class OfficeFormatHyperlinks {
         excelContext.trackedObjects.add(columnRange);
         const { attributeName, forms } = object;
         const hyperlinkIndex = forms.findIndex(e => [FORM_TYPE_HTML, FORM_TYPE_URL].includes(e.baseFormType));
-        console.log(object, hyperlinkIndex);
         if (hyperlinkIndex !== -1) {
           const { baseFormType } = forms[hyperlinkIndex];
           console.time(`Creating hyperlinks for ${attributeName}`);
