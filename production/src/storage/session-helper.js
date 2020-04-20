@@ -7,6 +7,7 @@ import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { httpStatusCodes } from '../error/constants';
 
 export const EXTEND_SESSION = 'EXTEND_SESSION';
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
@@ -75,7 +76,7 @@ class SessionHelper {
   }
 
   /**
-   * Sends lightweight request to prolong the session
+   * Sends lightweight request to prolong the session.
    *
    * IMPORTANT: before calling keepSessionAlive, installSessionProlongingHandler
    * method shold be invoked
@@ -92,8 +93,9 @@ class SessionHelper {
       await authenticationService.putSessions(envUrl, authToken);
     } catch (error) {
       if (onSessionExpire && error.response && error.response.statusCode) {
+        const { UNAUTHORIZED_ERROR, FORBIDDEN_ERROR } = httpStatusCodes;
         const { statusCode } = error.response;
-        if (statusCode === 401 || statusCode === 403) {
+        if (statusCode === UNAUTHORIZED_ERROR || statusCode === FORBIDDEN_ERROR) {
           onSessionExpire();
         }
       }
@@ -102,7 +104,7 @@ class SessionHelper {
   };
 
  /**
-  * Installs throttle on keepSessionAlive method
+  * Installs throttle on keepSessionAlive method.
   *
   * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
   *

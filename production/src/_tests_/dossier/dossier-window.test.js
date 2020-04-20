@@ -129,7 +129,7 @@ describe('Dossierwindow', () => {
 
   it('should call installSessionProlongingHandler on mount', async () => {
     // given
-    sessionHelper.installSessionProlongingHandler = jest.fn();
+    jest.spyOn(sessionHelper, 'installSessionProlongingHandler');
 
     // when
     shallow(<DossierWindowNotConnected />);

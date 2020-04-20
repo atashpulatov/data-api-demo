@@ -26,7 +26,7 @@ describe('SessionExtendingWrapper.js', () => {
 
   it('should call installSessionProlongingHandler on mount', () => {
     // given
-    sessionHelper.installSessionProlongingHandler = jest.fn();
+    jest.spyOn(sessionHelper, 'installSessionProlongingHandler');
     const givenProps = {
       children: <div />,
       id: 'popup-wrapper',
@@ -44,7 +44,6 @@ describe('SessionExtendingWrapper.js', () => {
 
   it('should contain id and have one child', () => {
     // given
-    sessionHelper.installSessionProlongingHandler = jest.fn();
     const givenProps = {
       children: <div />,
       id: 'popup-wrapper',

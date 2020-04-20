@@ -143,7 +143,7 @@ describe('PromptsWindowNotConnected', () => {
 
   it('should call installSessionProlongingHandler on mount', () => {
     // given
-    sessionHelper.installSessionProlongingHandler = jest.fn();
+    jest.spyOn(sessionHelper, 'installSessionProlongingHandler');
 
     // when
     shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);

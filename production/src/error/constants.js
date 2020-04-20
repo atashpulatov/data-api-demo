@@ -133,6 +133,11 @@ export const errorMessageFactory = withDefaultValue({
 },
 ({ error }) => error.message || UNKNOWN_ERROR);
 
+export const httpStatusCodes = {
+  UNAUTHORIZED_ERROR: 401,
+  FORBIDDEN_ERROR: 403,
+};
+
 export const errorCodes = {
   ERR003: 'ERR003',
   ERR009: 'ERR009',
