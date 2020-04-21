@@ -144,10 +144,7 @@ class StepApplyFormatting {
 ;
 
   /**
-   * Returns filtered column information.
-   *
-   * For tables returns array of elements containing own properties.
-   * For crosstabs returns array of elements that are not attributes and contains own properties.
+   * Returns filtered column information to ignore consolidations
    *
    * @param {Array} columnInformation Columns data
    * @return {Array} filteredColumnInformation Filtered columnInformation
