@@ -12,6 +12,8 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper } from '../../storage/session-helper';
 
+jest.mock('../../popup/popup-helper');
+
 describe('Dossierwindow', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -95,14 +97,11 @@ describe('Dossierwindow', () => {
 
   it('should use handleOk and run messageParent with given parameters', () => {
     // given
-    const messageParentMock = jest.fn();
-    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementation(() => ({ context: { ui: { messageParent: messageParentMock, }, }, }));
-
+    const officeMessageParentSpy = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
     const componentState = {
       isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: []
     };
     const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456' };
-
     const mockupOkObject = {
       command: 'command_ok',
       chosenObjectName: 'selectedObject',
@@ -121,11 +120,13 @@ describe('Dossierwindow', () => {
     const componentWrapper = shallow(<DossierWindowNotConnected />);
     componentWrapper.setProps(componentProps);
     componentWrapper.setState(componentState);
+
     // when
     componentWrapper.instance().handleOk();
+
     // then
-    expect(getOfficeSpy).toHaveBeenCalled();
-    expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify(mockupOkObject));
+    expect(officeMessageParentSpy).toHaveBeenCalled();
+    expect(officeMessageParentSpy).toHaveBeenCalledWith(mockupOkObject);
   });
 
   it('should call installSessionProlongingHandler on mount', async () => {
