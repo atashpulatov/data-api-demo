@@ -1,3 +1,4 @@
+import throttle from 'lodash.throttle';
 import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
@@ -6,7 +7,10 @@ import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { httpStatusCodes } from '../error/constants';
 
+export const EXTEND_SESSION = 'EXTEND_SESSION';
+const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
@@ -46,7 +50,7 @@ class SessionHelper {
         window.location.reload();
       }
     }
-  };
+  }
 
   /**
    * Sets Window location for redirect during logout
@@ -70,6 +74,45 @@ class SessionHelper {
     };
     return session;
   }
+
+  /**
+   * Sends lightweight request to prolong the session.
+   *
+   * IMPORTANT: before calling keepSessionAlive, installSessionProlongingHandler
+   * method shold be invoked
+   *
+   * in case of session is already expired, then user will be logged out
+   * getting notification.
+   * process will be terminated if parameter onSessionExpire is truthy.
+   *
+   * @param {func} onSessionExpire is callback function e.g closePopup()
+   */
+  keepSessionAlive = async (onSessionExpire = null) => {
+    const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
+    try {
+      await authenticationService.putSessions(envUrl, authToken);
+    } catch (error) {
+      if (onSessionExpire && error.response && error.response.statusCode) {
+        const { UNAUTHORIZED_ERROR, FORBIDDEN_ERROR } = httpStatusCodes;
+        const { statusCode } = error.response;
+        if (statusCode === UNAUTHORIZED_ERROR || statusCode === FORBIDDEN_ERROR) {
+          onSessionExpire();
+        }
+      }
+      errorService.handleError(error);
+    }
+  };
+
+ /**
+  * Installs throttle on keepSessionAlive method.
+  *
+  * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
+  *
+  * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null].
+  */
+ installSessionProlongingHandler = (onSessionExpire = null) => throttle(() => {
+   this.keepSessionAlive(onSessionExpire);
+ }, DEFAULT_SESSION_REFRESH_TIME, { trailing: false })
 
   /**
    * Get userData about currently logged user from Api and stores the information in redux store

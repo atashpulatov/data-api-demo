@@ -13,6 +13,11 @@ jest.mock('@mstr/rc', () => ({
   TopFilterPanel: () => <div />,
   // eslint-disable-next-line react/no-multi-comp,react/react-in-jsx-scope
   SidePanel: () => <div />,
+  objectNotificationTypes: {
+    PROGRESS: 'PROGRESS',
+    WARNING: 'WARNING',
+    SUCCESS: 'SUCCESS',
+  }
 }));
 
 configure({ adapter: new Adapter() });

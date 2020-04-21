@@ -8,6 +8,7 @@ import {
   MARK_STEP_COMPLETED,
   UPDATE_OPERATION,
   CANCEL_OPERATION,
+  HIGHLIGHT_OPERATION,
 } from '../../operation/operation-type-names';
 
 const initialState = { operations: [] };
@@ -19,6 +20,7 @@ export const operationReducer = (state = initialState, action) => {
     case EDIT_OPERATION:
     case DUPLICATE_OPERATION:
     case REMOVE_OPERATION:
+    case HIGHLIGHT_OPERATION:
     case CLEAR_DATA_OPERATION:
       return operationRequested(state, action.payload);
 

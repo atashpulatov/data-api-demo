@@ -5,7 +5,9 @@ import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
-import { refreshRequested, removeRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import {
+  refreshRequested, removeRequested, duplicateRequested, highlightRequested
+} from '../redux-reducer/operation-reducer/operation-actions';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
@@ -14,6 +16,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
 import { officeContext } from '../office/office-context';
+import { REMOVE_OPERATION, CLEAR_DATA_OPERATION } from '../operation/operation-type-names';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -31,14 +34,12 @@ class SidePanelService {
 
   /**
    * Handles the highlighting of object.
-   * Gets object from reducer based on objectWorkingId and
-   * calls officeApiHelper.onBindingObjectClick to highlight object on Excel worksheet
+   * Creates highlight operation for specific objectWorkingId.
    *
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   highlightObject = async (objectWorkingId) => {
-    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    await officeApiHelper.onBindingObjectClick(objectData);
+    this.reduxStore.dispatch(highlightRequested(objectWorkingId));
   };
 
   /**
@@ -245,12 +246,12 @@ class SidePanelService {
     const objectNotification = notifications.find(
       (notification) => notification.objectWorkingId === object.objectWorkingId
     );
-    const operationBasedNotificationData = objectOperation ? {
-      percentageComplete: objectOperation.totalRows !== 0 ? calculateLoadingProgress(objectOperation) : 0,
+
+    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation) ? {
+      percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
       itemsTotal: objectOperation.totalRows,
       itemsComplete: objectOperation.loadedRows,
     } : {};
-
     const obj = objectNotification ? {
       ...object,
       notification: {
@@ -259,8 +260,13 @@ class SidePanelService {
       }
     }
       : object;
+
     return obj;
   });
+
+  shouldGenerateProgressPercentage = (objectOperation) => objectOperation
+  && objectOperation.operationType !== REMOVE_OPERATION
+  && objectOperation.operationType !== CLEAR_DATA_OPERATION
 }
 
 export const sidePanelService = new SidePanelService();

@@ -42,7 +42,9 @@ import {
   DISPLAY_NOTIFICATION_COMPLETED,
   BACKUP_OBJECT_DATA,
   COMPLETE_CLEAR_DATA,
+  HIGHLIGHT_OBJECT,
 } from './operation-steps';
+import stepHighlightObject from '../office/highlight/step-highlight-object';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -74,6 +76,8 @@ class SubscribeSteps {
     operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
     operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
     operationBus.subscribe(REMOVE_OBJECT_STORE, stepRemoveObjectStore.removeObjectStore);
+
+    operationBus.subscribe(HIGHLIGHT_OBJECT, stepHighlightObject.highlightObject);
 
     operationBus.subscribe(CHECK_OBJECT_STATUS, stepCheckObjectStatus.checkObjectStatus);
     operationBus.subscribe(CLEAR_CROSSTAB_HEADERS, stepClearCrosstabHeaders.clearCrosstabHeaders);

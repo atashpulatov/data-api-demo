@@ -4,6 +4,7 @@ import { mount } from 'enzyme';
 import { Home, HomeNotConnected } from '../../home/home';
 import { reduxStore } from '../../store';
 import { homeHelper } from '../../home/home-helper';
+import { sessionHelper } from '../../storage/session-helper';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../office/store/office-store-restore-object');
@@ -67,5 +68,54 @@ describe('Home', () => {
     // then
     await (tempPromise);
     expect(homeHelper.saveTokenFromCookies).toBeCalled();
+  });
+
+  it('should contain 3 child nodes and should be child of content', () => {
+    // given
+    const props = {
+      loading: false,
+      loadingReport: false,
+      authToken: false,
+      reportArray: false,
+    };
+    sessionHelper.isDevelopment = jest.fn().mockReturnValue(false);
+
+    // when
+    const wrappedComponent = mount(
+      <Provider store={reduxStore}>
+        <HomeNotConnected {...props} />
+      </Provider>
+    );
+    const overlayId = '#overlay';
+
+    // then
+    expect(wrappedComponent.exists('SessionExtendingWrapper')).toBeTruthy();
+    expect(wrappedComponent.find(overlayId).exists('HomeDialog')).toBeTruthy();
+    expect(wrappedComponent.find(overlayId).exists('Spin')).toBeTruthy();
+    expect(wrappedComponent.find(overlayId).exists('SessionExtendingWrapper')).toBeTruthy();
+    expect(wrappedComponent.find(overlayId).children()).toHaveLength(3);
+  });
+
+  it('should contain all assigned props and return true on toBeDefined', () => {
+    // given
+    const props = {
+      loading: false,
+      loadingReport: false,
+      authToken: false,
+      reportArray: false,
+    };
+
+    // when
+    const wrappedComponent = mount(
+      <Provider store={reduxStore}>
+        <HomeNotConnected {...props} />
+      </Provider>,
+    );
+    const overlayId = '#overlay';
+
+    // then
+    const overlayWrapper = wrappedComponent.find(overlayId).at(1);
+    expect(overlayWrapper.props().role).toEqual('button');
+    expect(overlayWrapper.props().tabIndex).toEqual('0');
   });
 });

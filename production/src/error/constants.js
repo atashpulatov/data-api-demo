@@ -76,6 +76,7 @@ export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workboo
 export const PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
 export const NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in current version of the Add-in';
 export const INVALID_VIZ_KEY_MESSAGE = 'You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.';
+export const SESSION_EXTENSION_FAILURE_MESSAGE = 'The user\'s session has expired, please reauthenticate';
 export const DOSSIER_HAS_CHANGED = 'The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.';
 
 // temporarily we map all those codes to one message; may be changed in the future
@@ -109,8 +110,9 @@ export const errorMessageFactory = withDefaultValue({
   },
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
   [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
+    const { ERR003 } = errorCodes;
     if (
-      (error.response.body && error.response.body.code === 'ERR003')
+      (error.response.body && error.response.body.code === ERR003)
       && (error.response.body.iServerCode)
       && (iServerErrorMessages(error.response.body.iServerCode) === LOGIN_FAILURE)
     ) {
@@ -130,3 +132,13 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.INVALID_VIZ_KEY]: () => INVALID_VIZ_KEY_MESSAGE,
 },
 ({ error }) => error.message || UNKNOWN_ERROR);
+
+export const httpStatusCodes = {
+  UNAUTHORIZED_ERROR: 401,
+  FORBIDDEN_ERROR: 403,
+};
+
+export const errorCodes = {
+  ERR003: 'ERR003',
+  ERR009: 'ERR009',
+};
