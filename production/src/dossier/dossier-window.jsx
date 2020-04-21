@@ -73,42 +73,45 @@ export default class DossierWindowNotConnected extends React.Component {
       chapterKey, visualizationKey, promptsAnswers, instanceId
     } = dossierData;
 
-    this.setState({
-      lastSelectedViz: {
-        chapterKey,
-        visualizationKey
-      },
-      promptsAnswers,
-      instanceId,
-    });
-
-    const { vizualizationsData } = this.state;
-
-    if (!vizualizationsData.find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey))) {
-      let isSupported = true;
-      try {
-        await mstrObjectRestService.fetchVisualizationDefinition({
-          projectId: chosenProjectId,
-          objectId: chosenObjectId,
-          instanceId,
-          visualizationInfo: { chapterKey, visualizationKey }
-        });
-      } catch (error) {
-        const { ERR009 } = errorCodes;
-        if (error.response && error.response.body.code === ERR009) {
-          // Close popup if session expired
-          popupHelper.handlePopupErrors(error);
-        } else {
-          isSupported = false;
-        }
-      }
-
-      vizualizationsData.push({
-        chapterKey,
-        visualizationKey,
-        isSupported,
+    if (instanceId) {
+      this.setState({
+        lastSelectedViz: {
+          chapterKey,
+          visualizationKey
+        },
+        promptsAnswers,
+        instanceId,
       });
-      this.setState({ vizualizationsData });
+
+      const { vizualizationsData } = this.state;
+
+      if (!vizualizationsData.find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey))) {
+        let isSupported = true;
+        try {
+          await mstrObjectRestService.fetchVisualizationDefinition({
+            projectId: chosenProjectId,
+            objectId: chosenObjectId,
+            instanceId,
+            visualizationInfo: { chapterKey, visualizationKey }
+          });
+        } catch (error) {
+          const { ERR009 } = errorCodes;
+          if (error.response && error.response.body.code === ERR009) {
+          // Close popup if session expired
+            popupHelper.handlePopupErrors(error);
+          } else {
+            console.log(`${visualizationKey} is not supported `);
+            isSupported = false;
+          }
+        }
+
+        vizualizationsData.push({
+          chapterKey,
+          visualizationKey,
+          isSupported,
+        });
+        this.setState({ vizualizationsData });
+      }
     }
   }
 
