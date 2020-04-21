@@ -90,7 +90,9 @@ class SessionHelper {
   keepSessionAlive = async (onSessionExpire = null) => {
     const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
     try {
-      await authenticationService.putSessions(envUrl, authToken);
+      if (authToken) {
+        await authenticationService.putSessions(envUrl, authToken);
+      }
     } catch (error) {
       if (onSessionExpire && error.response && error.response.statusCode) {
         const { UNAUTHORIZED_ERROR, FORBIDDEN_ERROR } = httpStatusCodes;

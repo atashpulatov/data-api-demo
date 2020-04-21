@@ -23,6 +23,7 @@ import {
   DISPLAY_NOTIFICATION_COMPLETED,
   BACKUP_OBJECT_DATA,
   COMPLETE_CLEAR_DATA,
+  HIGHLIGHT_OBJECT,
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 
@@ -109,6 +110,10 @@ class OperationStepDispatcher {
       toggleSecuredFlag(true)(dispatch);
     }
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, COMPLETE_CLEAR_DATA));
+  };
+
+  completeHighlightObject = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, HIGHLIGHT_OBJECT));
   };
 
   updateOperation = (updatedOperationProps) => {

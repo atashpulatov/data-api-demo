@@ -5,12 +5,14 @@ import thunk from 'redux-thunk';
 import DossierWindowNotConnected, { DossierWindow } from '../../dossier/dossier-window';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { Office } from '../mockOffice';
+import { popupHelper } from '../../popup/popup-helper';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../../office/office-context';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper } from '../../storage/session-helper';
+
+jest.mock('../../popup/popup-helper');
 
 describe('Dossierwindow', () => {
   afterEach(() => {
@@ -29,13 +31,14 @@ describe('Dossierwindow', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const cancelObject = { command: selectorProperties.commandCancel, };
-    const office = jest.spyOn(Office.context.ui, 'messageParent');
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
     const wrappedComponent = shallow(<DossierWindowNotConnected />);
+    const office = jest.spyOn(popupHelper, 'officeMessageParent');
     // when
     wrappedComponent.instance().handleCancel();
     // then
-    expect(office).toHaveBeenCalledWith(JSON.stringify(cancelObject));
+    expect(office).toHaveBeenCalledWith(message);
   });
 
   it('should use handleSelection as unselection', () => {
@@ -94,14 +97,11 @@ describe('Dossierwindow', () => {
 
   it('should use handleOk and run messageParent with given parameters', () => {
     // given
-    const messageParentMock = jest.fn();
-    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementation(() => ({ context: { ui: { messageParent: messageParentMock, }, }, }));
-
+    const officeMessageParentSpy = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
     const componentState = {
       isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: []
     };
     const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456' };
-
     const mockupOkObject = {
       command: 'command_ok',
       chosenObjectName: 'selectedObject',
@@ -120,11 +120,13 @@ describe('Dossierwindow', () => {
     const componentWrapper = shallow(<DossierWindowNotConnected />);
     componentWrapper.setProps(componentProps);
     componentWrapper.setState(componentState);
+
     // when
     componentWrapper.instance().handleOk();
+
     // then
-    expect(getOfficeSpy).toHaveBeenCalled();
-    expect(messageParentMock).toHaveBeenCalledWith(JSON.stringify(mockupOkObject));
+    expect(officeMessageParentSpy).toHaveBeenCalled();
+    expect(officeMessageParentSpy).toHaveBeenCalledWith(mockupOkObject);
   });
 
   it('handleEmbeddedDossierLoad setup correct state', () => {

@@ -11,7 +11,6 @@ import './dossier.css';
 import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { popupHelper } from '../popup/popup-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { officeContext } from '../office/office-context';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
@@ -62,9 +61,9 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   handleCancel = () => {
-    const { Office } = window;
-    const cancelObject = { command: selectorProperties.commandCancel, };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
+    popupHelper.officeMessageParent(message);
   }
 
   async handleSelection(dossierData) {
@@ -124,7 +123,7 @@ export default class DossierWindowNotConnected extends React.Component {
     const { isEdit } = editedObject;
     const { lastSelectedViz, promptsAnswers, instanceId } = this.state;
     const { chapterKey, visualizationKey } = lastSelectedViz;
-    const okObject = {
+    const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
       chosenObject: chosenObjectId,
@@ -139,8 +138,7 @@ export default class DossierWindowNotConnected extends React.Component {
       preparedInstanceId: instanceId,
       isEdit,
     };
-    const Office = officeContext.getOffice();
-    Office.context.ui.messageParent(JSON.stringify(okObject));
+    popupHelper.officeMessageParent(message);
   }
 
   /**

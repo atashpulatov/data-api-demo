@@ -87,7 +87,7 @@ describe('sessionHelper', () => {
     // given
     const onSessionExpire = jest.fn();
     jest.spyOn(authenticationService, 'putSessions');
-
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
@@ -114,7 +114,7 @@ describe('sessionHelper', () => {
       throw sessionFailureError;
     });
     jest.spyOn(errorService, 'handleError');
-
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
@@ -135,6 +135,7 @@ describe('sessionHelper', () => {
     authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
       throw sessionFailureError;
     });
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
 
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);

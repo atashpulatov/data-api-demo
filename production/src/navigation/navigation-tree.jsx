@@ -56,10 +56,12 @@ export class NavigationTreeNotConnected extends Component {
       envFilter,
       myLibraryFilter,
     };
-    window.Office.context.ui.messageParent(JSON.stringify({
-      command: selectorProperties.commandBrowseUpdate,
+    const { commandBrowseUpdate } = selectorProperties;
+    const message = {
+      command: commandBrowseUpdate,
       body: propsToSave,
-    }));
+    };
+    popupHelper.officeMessageParent(message);
   }
 
   connectToCacheSafely = (isRefresh) => {
@@ -82,7 +84,8 @@ export class NavigationTreeNotConnected extends Component {
     const { resetDBState, fetchObjectsFromNetwork } = this.props;
     resetDBState(true);
     if (this.indexedDBSupport) {
-      window.Office.context.ui.messageParent(JSON.stringify({ command: REFRESH_CACHE_COMMAND }));
+      const message = { command: REFRESH_CACHE_COMMAND, };
+      popupHelper.officeMessageParent(message);
       this.connectToCacheSafely(true);
     } else {
       fetchObjectsFromNetwork();
@@ -124,11 +127,12 @@ export class NavigationTreeNotConnected extends Component {
   };
 
   onTriggerUpdate = (body) => {
-    const updateObject = {
-      command: selectorProperties.commandOnUpdate,
+    const { commandOnUpdate } = selectorProperties;
+    const message = {
+      command: commandOnUpdate,
       body,
     };
-    window.Office.context.ui.messageParent(JSON.stringify(updateObject));
+    popupHelper.officeMessageParent(message);
   };
 
   handleSecondary = async () => {
@@ -153,8 +157,9 @@ export class NavigationTreeNotConnected extends Component {
   handleCancel = () => {
     const { stopLoading } = this.props;
     stopLoading();
-    const cancelObject = { command: selectorProperties.commandCancel };
-    window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
+    popupHelper.officeMessageParent(message);
   };
 
   onObjectChosen = async ({
