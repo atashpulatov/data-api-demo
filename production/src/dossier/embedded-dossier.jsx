@@ -127,7 +127,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     this.dossierData = {
       ...this.dossierData,
-      preparedInstanceId: instance.mid,
+      instanceId: instance.mid,
     };
 
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
@@ -241,7 +241,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   */
   instanceIdChangeHandler(newInstanceId) {
     const { handleInstanceIdChange } = this.props;
-    this.dossierData.preparedInstanceId = newInstanceId;
+    this.dossierData.instanceId = newInstanceId;
     handleInstanceIdChange(newInstanceId);
   }
 

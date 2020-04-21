@@ -134,7 +134,7 @@ export default class DossierWindowNotConnected extends React.Component {
         chapterKey,
         visualizationKey,
       },
-      instanceId,
+      preparedInstanceId: instanceId,
       isEdit,
     };
     const Office = officeContext.getOffice();
@@ -200,8 +200,8 @@ export default class DossierWindowNotConnected extends React.Component {
       .find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey));
 
     const isSelected = !!((chapterKey && visualizationKey));
-    const isSupported = !!(vizData && vizData.isSupported);
-    const isChecking = !!((!vizData || (vizData && vizData.isSupported === undefined)));
+    const isSupported = !!(isSelected && vizData && vizData.isSupported);
+    const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
 
     return (
       <div>
@@ -240,8 +240,9 @@ export default class DossierWindowNotConnected extends React.Component {
           handleBack={!isEdit && handleBack}
           hideSecondary
           disableActiveActions={!isSelected}
+          isPublished={!(isSelected && !isSupported && !isChecking)}
           disableSecondary={isSelected && !isSupported && !isChecking}
-          checkingSelection={isSelected && isChecking}
+          checkingSelection={isChecking}
         />
       </div>
     );
