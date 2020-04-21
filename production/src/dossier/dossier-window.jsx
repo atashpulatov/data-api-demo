@@ -170,6 +170,7 @@ export default class DossierWindowNotConnected extends React.Component {
       });
     } else {
       // Restore backuped viz selection info in case of return to prev instance
+      this.setState({ vizualizationsData: [] });
       this.handleSelection({
         ...backup.lastSelectedViz,
         promptsAnswers,
