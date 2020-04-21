@@ -120,7 +120,7 @@ describe('NavigationTree', () => {
       authToken: 'authToken',
       projectId: 'projectId',
     };
-    const { commandCancel, } = selectorProperties;
+    const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}

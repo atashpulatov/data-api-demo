@@ -16,7 +16,7 @@ class PopupHelper {
        response: error.response,
        type: error.type
      };
-    const { commandError, } = selectorProperties;
+    const { commandError } = selectorProperties;
     const message = {
       command: commandError,
       error: errorObj,

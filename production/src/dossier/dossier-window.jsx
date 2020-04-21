@@ -59,7 +59,7 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   handleCancel = () => {
-    const { commandCancel, } = selectorProperties;
+    const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
   }

@@ -17,7 +17,7 @@ export const Popup = () => {
     ? Office.context.displayLanguage
     : 'en-US');
 
-  const { commandCancel, } = selectorProperties;
+  const { commandCancel } = selectorProperties;
   const message = { command: commandCancel, };
   const closePopup = () => popupHelper.officeMessageParent(message);
 

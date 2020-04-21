@@ -31,7 +31,7 @@ describe('Dossierwindow', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const { commandCancel, } = selectorProperties;
+    const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     const wrappedComponent = shallow(<DossierWindowNotConnected />);
     const office = jest.spyOn(popupHelper, 'officeMessageParent');

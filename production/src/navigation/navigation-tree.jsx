@@ -56,7 +56,7 @@ export class NavigationTreeNotConnected extends Component {
       envFilter,
       myLibraryFilter,
     };
-    const { commandBrowseUpdate, } = selectorProperties;
+    const { commandBrowseUpdate } = selectorProperties;
     const message = {
       command: commandBrowseUpdate,
       body: propsToSave,
@@ -127,7 +127,7 @@ export class NavigationTreeNotConnected extends Component {
   };
 
   onTriggerUpdate = (body) => {
-    const { commandOnUpdate, } = selectorProperties;
+    const { commandOnUpdate } = selectorProperties;
     const message = {
       command: commandOnUpdate,
       body,
@@ -157,7 +157,7 @@ export class NavigationTreeNotConnected extends Component {
   handleCancel = () => {
     const { stopLoading } = this.props;
     stopLoading();
-    const { commandCancel, } = selectorProperties;
+    const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
   };

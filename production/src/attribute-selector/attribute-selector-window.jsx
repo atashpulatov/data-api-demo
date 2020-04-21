@@ -25,7 +25,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   handleCancel = () => {
-    const { commandCancel, } = selectorProperties;
+    const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
   }
