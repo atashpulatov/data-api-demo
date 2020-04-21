@@ -120,18 +120,19 @@ describe('NavigationTree', () => {
       authToken: 'authToken',
       projectId: 'projectId',
     };
-    const resultAction = { command: selectorProperties.commandCancel, };
-    const office = jest.spyOn(Office.context.ui, 'messageParent');
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
     const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
       stopLoading={stopLoadingMocked}
       cache={CACHE_STATE}
       {...mockFunctionsAndProps}
     />);
+    const office = jest.spyOn(popupHelper, 'officeMessageParent');
     // when
     wrappedComponent.instance().handleCancel();
     // then
-    expect(office).toHaveBeenCalledWith(JSON.stringify(resultAction));
+    expect(office).toHaveBeenCalledWith(message);
   });
 
   it('should call proper method on trigger update', () => {
