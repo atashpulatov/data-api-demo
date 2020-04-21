@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import DossierWindowNotConnected, { DossierWindow } from '../../dossier/dossier-window';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { Office } from '../mockOffice';
+import { popupHelper } from '../../popup/popup-helper';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../../office/office-context';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
@@ -29,13 +29,14 @@ describe('Dossierwindow', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const cancelObject = { command: selectorProperties.commandCancel, };
-    const office = jest.spyOn(Office.context.ui, 'messageParent');
+    const { commandCancel, } = selectorProperties;
+    const message = { command: commandCancel, };
     const wrappedComponent = shallow(<DossierWindowNotConnected />);
+    const office = jest.spyOn(popupHelper, 'officeMessageParent');
     // when
     wrappedComponent.instance().handleCancel();
     // then
-    expect(office).toHaveBeenCalledWith(JSON.stringify(cancelObject));
+    expect(office).toHaveBeenCalledWith(message);
   });
 
   it('should use handleSelection as unselection', () => {

@@ -16,13 +16,17 @@ class PopupHelper {
        response: error.response,
        type: error.type
      };
-    const messageObject = {
-      command: selectorProperties.commandError,
+    const { commandError, } = selectorProperties;
+    const message = {
+      command: commandError,
       error: errorObj,
     };
-    officeContext
-      .getOffice()
-      .context.ui.messageParent(JSON.stringify(messageObject));
+    this.officeMessageParent(message);
+  };
+
+  officeMessageParent = (message) => {
+    const office = officeContext.getOffice();
+    office.context.ui.messageParent(JSON.stringify(message));
   };
 
   parsePopupState(popupState, promptsAnswers, formsPrivilege) {
