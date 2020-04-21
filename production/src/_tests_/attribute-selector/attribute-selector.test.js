@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { AttributeMetricFilter } from '@mstr/mstr-react-library';
 import { AttributeSelectorNotConnected } from '../../attribute-selector/attribute-selector';
 import { officeContext } from '../../office/office-context';
+import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../../error/constants';
 
 jest.mock('../../office/office-context');
 
@@ -79,15 +80,16 @@ describe('AttributeSelectorNotConnected', () => {
     const editedObject = { projectId: 'projectId' };
     const libraryError = { status: 400, response: { key: 'value' } };
     const mockHandlePopupErrors = jest.fn();
+    const { ERR009 } = errorCodes;
     const pupupExpectedError = {
       status: 400,
       response: {
         key: 'value',
         body: {
-          code: 'ERR009',
-          message: 'The user\'s session has expired, please reauthenticate',
+          code: ERR009,
+          message: SESSION_EXTENSION_FAILURE_MESSAGE,
         },
-        text: '{"code":"ERR009","message":"The user\'s session has expired, please reauthenticate"}',
+        text: `{code: ${ERR009}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       },
     };
     const displayLanguageMock = 'en-US';
