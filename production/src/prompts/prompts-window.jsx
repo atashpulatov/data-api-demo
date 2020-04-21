@@ -216,8 +216,9 @@ export class PromptsWindowNotConnected extends Component {
   closePopup = () => {
     const { stopLoading } = this.props;
     stopLoading();
-    const cancelObject = { command: selectorProperties.commandCancel };
-    window.Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
+    popupHelper.officeMessageParent(message);
   };
 
   /**

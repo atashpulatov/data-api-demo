@@ -177,7 +177,7 @@ class PopupViewSelectorHelper {
         visualizationKey: props.chosenVisualizationKey,
       };
     }
-    const okObject = {
+    const message = {
       command: selectorProperties.commandOk,
       chosenObject: props.chosenObjectId,
       chosenProject: props.chosenProjectId,
@@ -190,21 +190,21 @@ class PopupViewSelectorHelper {
       isEdit: props.isEdit,
     };
     if (props.dossierData) {
-      okObject.dossierData = {
+      message.dossierData = {
         ...props.dossierData,
         chosenObjectName: props.chosenObjectName,
       };
       const { isReprompt } = props.dossierData;
       // skip this part if report contains no selected attribiutes/metrics/filters
       if (isReprompt && !this.wasReportJustImported(props)) {
-        okObject.command = selectorProperties.commandOnUpdate;
+        message.command = selectorProperties.commandOnUpdate;
         const { selectedAttributes, selectedMetrics, selectedFilters } = props.editedObject;
-        okObject.body = this.createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
+        message.body = this.createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
       }
     }
     props.startLoading();
     props.startImport();
-    window.Office.context.ui.messageParent(JSON.stringify(okObject));
+    popupHelper.officeMessageParent(message);
   }
 }
 

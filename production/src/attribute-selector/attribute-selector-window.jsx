@@ -3,7 +3,6 @@ import '../home/home.css';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { selectorProperties } from './selector-properties';
-import { attributeSelectorHelpers } from './attribute-selector-helpers';
 import { AttributeSelector } from './attribute-selector';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
@@ -25,9 +24,11 @@ export class AttributeSelectorWindowNotConnected extends Component {
     this.setState({ triggerUpdate: true, loading: true });
   };
 
-  handleCancel = () => attributeSelectorHelpers.officeMessageParent(
-    selectorProperties.commandCancel
-  );
+  handleCancel = () => {
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
+    popupHelper.officeMessageParent(message);
+  }
 
   onTriggerUpdate = (
     chosenObjectId,
@@ -50,18 +51,20 @@ export class AttributeSelectorWindowNotConnected extends Component {
     };
     const displayAttrFormNamesSet = (editedObject && editedObject.displayAttrFormNames) || displayAttrFormNames;
 
-    attributeSelectorHelpers.officeMessageParent(
-      selectorProperties.commandOnUpdate,
+    const message = {
+      command: selectorProperties.commandOnUpdate,
       chosenObjectId,
       projectId,
       chosenObjectSubtype,
       body,
       chosenObjectName,
-      chosenObject.preparedInstanceId,
-      chosenObject.promptsAnswers,
+      instanceId: chosenObject.preparedInstanceId,
+      promptsAnswers: chosenObject.promptsAnswers,
+      isPrompted: !!chosenObject.promptsAnswers,
       subtotalsInfo,
-      displayAttrFormNamesSet
-    );
+      displayAttrFormNames: displayAttrFormNamesSet,
+    };
+    popupHelper.officeMessageParent(message);
   };
 
   /**
