@@ -21,12 +21,10 @@ export default class DossierWindowNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisualizationSelected: false,
-      chapterKey: '',
-      visualizationKey: '',
       promptsAnswers: [],
-      preparedInstanceId: '',
-      isVisualizationSupported: true,
+      instanceId: '',
+      vizualizationsData: [],
+      lastSelectedViz: {},
       isEmbeddedDossierLoaded: false,
     };
     this.handleSelection = this.handleSelection.bind(this);
@@ -37,6 +35,7 @@ export default class DossierWindowNotConnected extends React.Component {
 
     const { installSessionProlongingHandler } = sessionHelper;
     this.prolongSession = installSessionProlongingHandler(this.handleCancel);
+
     this.previousSelectionBackup = [];
   }
 
@@ -69,43 +68,48 @@ export default class DossierWindowNotConnected extends React.Component {
   }
 
   async handleSelection(dossierData) {
-    this.setState({ isVisualizationSelected: false });
     const { chosenObjectId, chosenProjectId } = this.props;
     const {
-      chapterKey,
-      visualizationKey,
-      promptsAnswers,
-      preparedInstanceId,
+      chapterKey, visualizationKey, promptsAnswers, instanceId
     } = dossierData;
-    let newValue = false;
-    if (chapterKey !== '' && visualizationKey !== '') {
-      newValue = true;
-    }
-    let isVisualizationSupported = true;
-    try {
-      await mstrObjectRestService.fetchVisualizationDefinition({
-        projectId: chosenProjectId,
-        objectId: chosenObjectId,
-        instanceId: preparedInstanceId,
-        visualizationInfo: { chapterKey, visualizationKey },
-      });
-    } catch (error) {
-      const { ERR009 } = errorCodes;
-      if (error.response && error.response.body.code === ERR009) {
-        // Close popup if session expired
-        popupHelper.handlePopupErrors(error);
-      } else {
-        isVisualizationSupported = false;
-      }
-    }
+
     this.setState({
-      isVisualizationSelected: newValue,
-      chapterKey,
-      visualizationKey,
+      lastSelectedViz: {
+        chapterKey,
+        visualizationKey
+      },
       promptsAnswers,
-      preparedInstanceId,
-      isVisualizationSupported,
+      instanceId,
     });
+
+    const { vizualizationsData } = this.state;
+
+    if (!vizualizationsData.find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey))) {
+      let isSupported = true;
+      try {
+        await mstrObjectRestService.fetchVisualizationDefinition({
+          projectId: chosenProjectId,
+          objectId: chosenObjectId,
+          instanceId,
+          visualizationInfo: { chapterKey, visualizationKey }
+        });
+      } catch (error) {
+        const { ERR009 } = errorCodes;
+        if (error.response && error.response.body.code === ERR009) {
+          // Close popup if session expired
+          popupHelper.handlePopupErrors(error);
+        } else {
+          isSupported = false;
+        }
+      }
+
+      vizualizationsData.push({
+        chapterKey,
+        visualizationKey,
+        isSupported,
+      });
+      this.setState({ vizualizationsData });
+    }
   }
 
   handleOk() {
@@ -116,12 +120,8 @@ export default class DossierWindowNotConnected extends React.Component {
       editedObject,
     } = this.props;
     const { isEdit } = editedObject;
-    const {
-      chapterKey,
-      visualizationKey,
-      promptsAnswers,
-      preparedInstanceId,
-    } = this.state;
+    const { lastSelectedViz, promptsAnswers, instanceId } = this.state;
+    const { chapterKey, visualizationKey } = lastSelectedViz;
     const okObject = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -134,7 +134,7 @@ export default class DossierWindowNotConnected extends React.Component {
         chapterKey,
         visualizationKey,
       },
-      preparedInstanceId,
+      instanceId,
       isEdit,
     };
     const Office = officeContext.getOffice();
@@ -150,34 +150,20 @@ export default class DossierWindowNotConnected extends React.Component {
    * @param {String} newInstanceId
    */
   handleInstanceIdChange(newInstanceId) {
-    const {
-      preparedInstanceId,
-      isVisualizationSelected,
-      chapterKey,
-      visualizationKey,
-      isVisualizationSupported,
-    } = this.state;
+    const { instanceId, lastSelectedViz } = this.state;
 
-    const backup = this.previousSelectionBackup.find(
-      (el) => el.preparedInstanceId === newInstanceId
-    );
+    const backup = this.previousSelectionBackup.find((el) => el.instanceId === newInstanceId);
 
-    if (preparedInstanceId !== newInstanceId && !backup) {
+    if (instanceId !== newInstanceId && !backup) {
       // Make a backup of last selection info.
       this.previousSelectionBackup.unshift({
-        preparedInstanceId,
-        isVisualizationSelected,
-        chapterKey,
-        visualizationKey,
-        isVisualizationSupported,
+        instanceId,
+        lastSelectedViz
       });
       // Clear selection of viz and update instance id.
       this.setState({
-        preparedInstanceId: newInstanceId,
-        isVisualizationSelected: false,
-        chapterKey: '',
-        visualizationKey: '',
-        isVisualizationSupported: true,
+        instanceId: newInstanceId,
+        lastSelectedViz: {}
       });
     } else {
       // Restore backuped viz selection info in case of return to prev instance
@@ -207,7 +193,16 @@ export default class DossierWindowNotConnected extends React.Component {
       chosenObjectName, t, handleBack, editedObject
     } = this.props;
     const { isEdit } = editedObject;
-    const { isVisualizationSelected, isVisualizationSupported, isEmbeddedDossierLoaded } = this.state;
+    const { isEmbeddedDossierLoaded, lastSelectedViz, vizualizationsData } = this.state;
+
+    const { chapterKey, visualizationKey, } = lastSelectedViz;
+    const vizData = vizualizationsData
+      .find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey));
+
+    const isSelected = !!((chapterKey && visualizationKey));
+    const isSupported = !!(vizData && vizData.isSupported);
+    const isChecking = !!((!vizData || (vizData && vizData.isSupported === undefined)));
+
     return (
       <div>
         <h1
@@ -244,9 +239,9 @@ export default class DossierWindowNotConnected extends React.Component {
           handleCancel={this.handleCancel}
           handleBack={!isEdit && handleBack}
           hideSecondary
-          disableActiveActions={!isVisualizationSelected}
-          isPublished={isVisualizationSupported}
-          disableSecondary={!isVisualizationSupported}
+          disableActiveActions={!isSelected}
+          disableSecondary={isSelected && !isSupported && !isChecking}
+          checkingSelection={isSelected && isChecking}
         />
       </div>
     );
