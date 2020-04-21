@@ -172,12 +172,13 @@ class SidePanelService {
   addRemoveObjectListener = async () => {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
+      const excelOfficeContext = await officeApiHelper.getOfficeContext();
 
       if (officeContext.isSetSupported(1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           await officeApiHelper.checkStatusOfSessions();
           const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
-          officeRemoveHelper.removeObjectAndDisplaytNotification(ObjectToDelete, officeContext);
+          officeRemoveHelper.removeObjectAndDisplaytNotification(ObjectToDelete, excelOfficeContext);
         });
       } else if (officeContext.isSetSupported(1.7)) {
         this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(async () => {
@@ -192,7 +193,7 @@ class SidePanelService {
             (object) => !objectsOfSheets.find((officeTable) => officeTable.name === object.bindId)
           );
           for (const object of objectsToDelete) {
-            officeRemoveHelper.removeObjectAndDisplaytNotification(object, officeContext);
+            officeRemoveHelper.removeObjectAndDisplaytNotification(object, excelOfficeContext);
           }
         });
       }
