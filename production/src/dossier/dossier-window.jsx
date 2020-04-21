@@ -100,7 +100,6 @@ export default class DossierWindowNotConnected extends React.Component {
           // Close popup if session expired
             popupHelper.handlePopupErrors(error);
           } else {
-            console.log(`${visualizationKey} is not supported `);
             isSupported = false;
           }
         }
@@ -153,7 +152,7 @@ export default class DossierWindowNotConnected extends React.Component {
    * @param {String} newInstanceId
    */
   handleInstanceIdChange(newInstanceId) {
-    const { instanceId, lastSelectedViz } = this.state;
+    const { instanceId, lastSelectedViz, promptsAnswers } = this.state;
 
     const backup = this.previousSelectionBackup.find((el) => el.instanceId === newInstanceId);
 
@@ -161,16 +160,21 @@ export default class DossierWindowNotConnected extends React.Component {
       // Make a backup of last selection info.
       this.previousSelectionBackup.unshift({
         instanceId,
-        lastSelectedViz
+        lastSelectedViz,
       });
       // Clear selection of viz and update instance id.
       this.setState({
         instanceId: newInstanceId,
-        lastSelectedViz: {}
+        lastSelectedViz: {},
+        vizualizationsData: [],
       });
     } else {
       // Restore backuped viz selection info in case of return to prev instance
-      this.setState({ ...backup });
+      this.handleSelection({
+        ...backup.lastSelectedViz,
+        promptsAnswers,
+        instanceId: backup.instanceId,
+      });
     }
   }
 
@@ -180,7 +184,7 @@ export default class DossierWindowNotConnected extends React.Component {
    * @param {Array} newAnswers
    */
   handlePromptAnswer(newAnswers) {
-    this.setState({ promptsAnswers: newAnswers });
+    this.setState({ promptsAnswers: newAnswers, vizualizationsData: [], });
   }
 
   /**
