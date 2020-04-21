@@ -1,5 +1,6 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 class StepHighlightObject {
   /**
@@ -13,6 +14,7 @@ class StepHighlightObject {
   highlightObject = async (objectData, operationData) => {
     try {
       await officeApiHelper.onBindingObjectClick(objectData);
+      operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);

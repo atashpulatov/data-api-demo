@@ -1,5 +1,6 @@
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import stepApplyFormatting from '../../../office/format/step-apply-formatting';
+import officeFormatHyperlinks from '../../../office/format/office-format-hyperlinks';
 
 describe('StepApplyFormatting', () => {
   afterEach(() => {
@@ -64,16 +65,15 @@ describe('StepApplyFormatting', () => {
 
     // then
     expect(stepApplyFormatting.filterColumnInformation).toBeCalledTimes(1);
-    expect(stepApplyFormatting.filterColumnInformation).toBeCalledWith('columnInformationTest', 'isCrosstabTest');
+    expect(stepApplyFormatting.filterColumnInformation).toBeCalledWith('columnInformationTest');
 
     expect(stepApplyFormatting.calculateAttributeColumnNumber).toBeCalledTimes(1);
-    expect(stepApplyFormatting.calculateAttributeColumnNumber).toBeCalledWith('columnInformationTest');
+    expect(stepApplyFormatting.calculateAttributeColumnNumber).toBeCalledWith('columnInformationTest', 'isCrosstabTest');
 
     expect(stepApplyFormatting.calculateOffset).toBeCalledTimes(1);
     expect(stepApplyFormatting.calculateOffset).toBeCalledWith(
       'isCrosstabTest',
       'columnInformationTest'.length,
-      'filteredColumnInformationTest'.length,
       'attributeColumnNumberTest',
     );
 
@@ -83,9 +83,10 @@ describe('StepApplyFormatting', () => {
       'isCrosstabTest',
       'calculateOffsetTest',
       { columns: 'columnsTest' },
+      { sync: excelContextSyncMock }
     );
 
-    expect(excelContextSyncMock).toBeCalledTimes(1);
+    expect(excelContextSyncMock).toBeCalledTimes(2);
 
     expect(operationStepDispatcher.completeFormatData).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeFormatData).toBeCalledWith('objectWorkingIdTest');
@@ -178,24 +179,22 @@ describe('StepApplyFormatting', () => {
   });
 
   it.each`
-  expectedOffset | isCrosstab | columnInformationLength | filteredColumnInformationLength | attributeColumnNumber
+  expectedOffset | isCrosstab | columnInformationLength  | attributeColumnNumber
   
-  ${9}           | ${true}    | ${10}                   | ${1}                            | ${undefined}
-  ${9}           | ${false}   | ${1}                    | ${undefined}                    | ${10}
+  ${3}           | ${true}    | ${10}                    | ${7}
+  ${9}           | ${false}   | ${1}                     | ${10}
 
   `('calculateOffset should work as expected',
   ({
     expectedOffset,
     isCrosstab,
     columnInformationLength,
-    filteredColumnInformationLength,
     attributeColumnNumber
   }) => {
     // when
     const offset = stepApplyFormatting.calculateOffset(
       isCrosstab,
       columnInformationLength,
-      filteredColumnInformationLength,
       attributeColumnNumber
     );
 
@@ -266,6 +265,24 @@ describe('StepApplyFormatting', () => {
     expect(columnRangeMock.numberFormat).toEqual('getFormatTest');
   });
 
+  it('setupFormatting should call format hyperlinks', () => {
+    // given
+    const columnRangeMock = {};
+    jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockReturnValue(columnRangeMock);
+
+    jest.spyOn(stepApplyFormatting, 'getFormat').mockReturnValue('getFormatTest');
+    jest.spyOn(officeFormatHyperlinks, 'formatColumnAsHyperlinks').mockImplementation(jest.fn);
+
+
+    const filteredColumnInformation = [{ isAttribute: true, index: 'only' }];
+
+    // when
+    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+
+    // then
+    expect(officeFormatHyperlinks.formatColumnAsHyperlinks).toBeCalledTimes(1);
+  });
+
   it.each`
   expectedNumberFormat  | getFormatCallNo | filteredColumnInformation
   
@@ -275,7 +292,7 @@ describe('StepApplyFormatting', () => {
   ${['fmt 1', 'fmt 0']} | ${2} | ${[{ isAttribute: false, index: 'first' }, { isAttribute: false, index: 'last' }]}
   
   `('setupFormatting should work as expected for 2 filteredColumnInformation elements',
-  ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
+  async ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
     // given
     const columnRangeMock = [{}, {}];
     let callNo = 0;
@@ -289,7 +306,7 @@ describe('StepApplyFormatting', () => {
     });
 
     // when
-    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+    await stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(2);
@@ -342,42 +359,6 @@ describe('StepApplyFormatting', () => {
     // then
     expect(getItemAtMock).toBeCalledTimes(1);
     expect(getItemAtMock).toBeCalledWith(expectedObjectIndex);
-  });
-
-  it.each`
-  expectedFilteredColumnInformation | columnInformation
-  
-  ${[]} | ${[]}
-  ${[]} | ${[{}]}
-  
-  ${[{ sth: 'sth' }]}                 | ${[{ sth: 'sth' }]}
-  ${[{ sth: 'sth' }, { sth: 'sth' }]} | ${[{ sth: 'sth' }, { sth: 'sth' }]}
-
-  ${[{ isAttribute: false }]} | ${[{ isAttribute: false }]}
-  ${[]}                       | ${[{ isAttribute: true }]}
-  
-  ${[{ isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }]}
-  ${[]}                                   | ${[{ isAttribute: true, sth: 'sth' }]}
-  
-  ${[{ isAttribute: false }, { isAttribute: false }]} | ${[{ isAttribute: false }, { isAttribute: false }]}
-  ${[]}                                               | ${[{ isAttribute: true }, { isAttribute: true }]}
-  
-  ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}
-  ${[]}                                                                       | ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
-  
-  ${[{ isAttribute: false }]} | ${[{ isAttribute: true }, { isAttribute: false }]}
-  ${[{ isAttribute: false }]} | ${[{ isAttribute: false }, { isAttribute: true }]}
-  
-  ${[{ isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: true, sth: 'sth' }, { isAttribute: false, sth: 'sth' }]}
-  ${[{ isAttribute: false, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
-  
-  `('filterColumnInformation should work as expected for crosstab',
-  ({ expectedFilteredColumnInformation, columnInformation }) => {
-    // when
-    const result = stepApplyFormatting.filterColumnInformation(columnInformation, true);
-
-    // then
-    expect(result).toEqual(expectedFilteredColumnInformation);
   });
 
   it.each`

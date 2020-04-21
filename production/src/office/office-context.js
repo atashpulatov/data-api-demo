@@ -18,6 +18,20 @@ class OfficeContext {
     }
     return `1.${api - 1}`;
   }
+
+  /**
+   * Check if requirement set is supported.
+   *
+   * @param {Number} version ExcelAPI version
+   * @returns {Boolean} Requirement set supported
+   */
+  isSetSupported = (version) => {
+    const { Office } = window;
+    if (Office) {
+      return Office.context.requirements.isSetSupported('ExcelAPI', `${version}`);
+    }
+    return false;
+  }
 }
 
 export const officeContext = new OfficeContext();

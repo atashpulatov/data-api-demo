@@ -15,6 +15,7 @@ import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
+import { officeContext } from '../office/office-context';
 import { REMOVE_OPERATION, CLEAR_DATA_OPERATION } from '../operation/operation-type-names';
 
 class SidePanelService {
@@ -172,15 +173,15 @@ class SidePanelService {
   addRemoveObjectListener = async () => {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
-      const officeContext = await officeApiHelper.getOfficeContext();
+      const excelOfficeContext = await officeApiHelper.getOfficeContext();
 
-      if (officeContext.requirements.isSetSupported('ExcelApi', 1.9)) {
+      if (officeContext.isSetSupported(1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           await officeApiHelper.checkStatusOfSessions();
           const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
-          officeRemoveHelper.removeObjectAndDisplaytNotification(ObjectToDelete, officeContext);
+          officeRemoveHelper.removeObjectAndDisplaytNotification(ObjectToDelete, excelOfficeContext);
         });
-      } else if (officeContext.requirements.isSetSupported('ExcelApi', 1.7)) {
+      } else if (officeContext.isSetSupported(1.7)) {
         this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(async () => {
           await officeApiHelper.checkStatusOfSessions();
           excelContext.workbook.tables.load('items');
@@ -193,7 +194,7 @@ class SidePanelService {
             (object) => !objectsOfSheets.find((officeTable) => officeTable.name === object.bindId)
           );
           for (const object of objectsToDelete) {
-            officeRemoveHelper.removeObjectAndDisplaytNotification(object, officeContext);
+            officeRemoveHelper.removeObjectAndDisplaytNotification(object, excelOfficeContext);
           }
         });
       }
