@@ -117,7 +117,11 @@ class OfficeTableRefresh {
    *
    */
   checkColumnsChange = async (prevOfficeTable, excelContext, instanceDefinition, previousTableDimensions) => {
-    const { columns } = instanceDefinition;
+    const {
+      columns, mstrTable: {
+        toCrosstabChange, fromCrosstabChange, crosstabHeaderDimensions, prevCrosstabDimensions
+      }
+    } = instanceDefinition;
     const tableColumns = prevOfficeTable.columns;
     // for backward compatibility we assume that if no previousTableDimensions were stored columns didn not changed
     const prevTableColumns = previousTableDimensions ? previousTableDimensions.columns : columns;
@@ -127,6 +131,13 @@ class OfficeTableRefresh {
 
     const tableColumnsCount = tableColumns.count;
 
+    if (toCrosstabChange) {
+      const crosstabColumns = columns + crosstabHeaderDimensions.rowsX;
+      return crosstabColumns !== tableColumnsCount || crosstabColumns !== prevTableColumns;
+    } if (fromCrosstabChange) {
+      const prevCrosstabColumns = prevCrosstabDimensions.columnsX + prevCrosstabDimensions.rowsX;
+      return columns !== tableColumnsCount || columns !== prevCrosstabColumns;
+    }
     return columns !== tableColumnsCount || columns !== prevTableColumns;
   };
 
