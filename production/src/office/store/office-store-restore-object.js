@@ -35,7 +35,7 @@ class OfficeStoreRestoreObject {
     const reportArray = this.getLegacyObjectsList();
     const objectsToBeAdded = [];
 
-    if (reportArray) {
+    if (reportArray.length > 0) {
       for (let index = 0; index < reportArray.length; index++) {
         const currentObject = JSON.parse(JSON.stringify(reportArray[index]));
         if (!objects || !objects.find(object => object.bindId === currentObject.bindId)) {
