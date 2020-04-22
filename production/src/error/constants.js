@@ -16,6 +16,7 @@ export const errorTypes = {
   OVERLAPPING_TABLES_ERR: 'overlappingTables',
   RUN_OUTSIDE_OFFICE_ERR: 'runOutsideOffice',
   TABLE_REMOVED_FROM_EXCEL_ERR: 'tableRemovedFromExcel',
+  SHEET_HIDDEN_ERR: 'sheetHidden',
   GENERIC_OFFICE_ERR: 'genericOffice',
   PROTECTED_SHEET_ERR: 'protectedSheet',
   UNKNOWN_ERR: 'unknown',
@@ -26,6 +27,8 @@ export const incomingErrorStrings = {
   EXCEL_NOT_DEFINED: 'Excel is not defined',
   TABLE_OVERLAP: 'A table can\'t overlap another table. ',
   BINDING_NOT_VALID: 'This object binding is no longer valid due to previous updates.',
+  RESOURCE_NOT_EXIST: 'The requested resource doesn\'t exist.',
+  SHEET_HIDDEN: 'The current selection is invalid for this operation.',
   CONNECTION_BROKEN: 'Possible causes: the network is offline,',
   INVALID_VIZ_KEY: 'Invalid visualization key',
 };
@@ -34,6 +37,8 @@ export const stringMessageToErrorType = withDefaultValue({
   [incomingErrorStrings.EXCEL_NOT_DEFINED]: errorTypes.RUN_OUTSIDE_OFFICE_ERR,
   [incomingErrorStrings.TABLE_OVERLAP]: errorTypes.OVERLAPPING_TABLES_ERR,
   [incomingErrorStrings.BINDING_NOT_VALID]: errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR,
+  [incomingErrorStrings.RESOURCE_NOT_EXIST]: errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR,
+  [incomingErrorStrings.SHEET_HIDDEN]: errorTypes.SHEET_HIDDEN_ERR,
   [incomingErrorStrings.CONNECTION_BROKEN]: errorTypes.CONNECTION_BROKEN_ERR,
 }, errorTypes.GENERIC_OFFICE_ERR);
 
@@ -73,6 +78,7 @@ export const PROBLEM_WITH_REQUEST = 'There has been a problem with your request'
 export const UNKNOWN_ERROR = 'Unknown error';
 export const LOGIN_FAILURE = 'Login failure';
 export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.';
+export const SHEET_HIDDEN = 'To view the data, please unhide the worksheet.';
 export const PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
 export const NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in current version of the Add-in';
 export const INVALID_VIZ_KEY_MESSAGE = 'You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.';
@@ -126,7 +132,8 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,
   [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
-  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: ({ chosenObjectName }) => `${chosenObjectName} does not exist in the workbook anymore.`,
+  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: () => OBJ_REMOVED_FROM_EXCEL,
+  [errorTypes.SHEET_HIDDEN_ERR]: () => SHEET_HIDDEN,
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
   [errorTypes.INVALID_VIZ_KEY]: () => INVALID_VIZ_KEY_MESSAGE,
