@@ -16,7 +16,7 @@ import officeStoreRestoreObject from '../office/store/office-store-restore-objec
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 
-const IS_LOCALHOST = sessionHelper.isDevelopment();
+const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
@@ -51,12 +51,12 @@ export const HomeNotConnected = (props) => {
 
   return (
     <SessionExtendingWrapper id="overlay">
-      {sessionHelper.isDevelopment && authToken && <DevelopmentImportList />}
+      {IS_DEVELOPMENT && authToken && <DevelopmentImportList />}
       {authToken
         ? <RightSidePanel />
         : (
           <Spin spinning={loading}>
-            {IS_LOCALHOST && <Authenticate />}
+            {IS_DEVELOPMENT && <Authenticate />}
           </Spin>
         )}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
