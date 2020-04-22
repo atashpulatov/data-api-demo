@@ -15,6 +15,10 @@ import { sessionHelper } from '../../storage/session-helper';
 jest.mock('../../popup/popup-helper');
 
 describe('Dossierwindow', () => {
+  beforeEach(() => {
+    jest.restoreAllMocks();
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -41,26 +45,75 @@ describe('Dossierwindow', () => {
     expect(office).toHaveBeenCalledWith(message);
   });
 
-  // it('should use handleSelection as unselection', () => {
-  //   // given
-  //   const dossierData = { chapterKey: 'C40', visualizationKey: '' };
-  //   const componentWrapper = shallow(<DossierWindowNotConnected />);
-  //   // when
-  //   componentWrapper.instance().handleSelection(dossierData);
-  //   // then
-  //   expect(componentWrapper.instance().state.isVisualizationSelected).toBeFalsy();
-  // });
+  it('should not change state on handleSelection if instance is not provided', async () => {
+    // given
+    const dossierData = { chapterKey: 'C40', visualizationKey: 'W50', promptsAnswers: [], };
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    componentWrapper.setState({
+      lastSelectedViz: {},
+    });
+    const SpyFetchVisualizationDefinition = jest
+      .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
+      .mockImplementationOnce(() => {});
+    // when
+    await componentWrapper.instance().handleSelection(dossierData);
+    // then
+    expect(componentWrapper.instance().state.lastSelectedViz).toStrictEqual({});
+    expect(SpyFetchVisualizationDefinition).not.toHaveBeenCalled();
+  });
 
-  // it('should use handleSelection as selection', async () => {
-  //   // given
-  //   const dossierData = { chapterKey: 'C40', visualizationKey: 'V78' };
-  //   const componentWrapper = shallow(<DossierWindowNotConnected />);
-  //   mstrObjectRestService.fetchVisualizationDefinition = jest.fn();
-  //   // when
-  //   await componentWrapper.instance().handleSelection(dossierData);
-  //   // then
-  //   expect(componentWrapper.instance().state.isVisualizationSelected).toBeTruthy();
-  // });
+  it('should change state on handleSelection and store viz as supported one', async () => {
+    // given
+    const dossierData = { chapterKey: 'C40', visualizationKey: 'W50', promptsAnswers: [], instanceId: 'instanceId', };
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    componentWrapper.setState({
+      lastSelectedViz: {}
+    });
+    const SpyFetchVisualizationDefinition = jest
+      .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
+      .mockImplementationOnce(() => {});
+    // when
+    await componentWrapper.instance().handleSelection(dossierData);
+    // then
+    expect(componentWrapper.instance().state.lastSelectedViz).toStrictEqual({
+      chapterKey: 'C40',
+      visualizationKey: 'W50',
+    });
+    expect(SpyFetchVisualizationDefinition).toHaveBeenCalled();
+    expect(componentWrapper.instance().state.vizualizationsData).toStrictEqual([{
+      chapterKey: 'C40',
+      visualizationKey: 'W50',
+      isSupported: true,
+    }]);
+  });
+
+  it('should change state on handleSelection and store viz as not supported one', async () => {
+    // given
+    const dossierData = { chapterKey: 'C40', visualizationKey: 'W50', promptsAnswers: [], instanceId: 'instanceId', };
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    componentWrapper.setState({
+      lastSelectedViz: {},
+      vizualizationsData: [],
+    });
+
+    const SpyFetchVisualizationDefinition = jest
+      .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
+      .mockImplementationOnce(() => { throw new Error(); });
+
+    // when
+    await componentWrapper.instance().handleSelection(dossierData);
+    // then
+    expect(componentWrapper.instance().state.lastSelectedViz).toStrictEqual({
+      chapterKey: 'C40',
+      visualizationKey: 'W50',
+    });
+    expect(SpyFetchVisualizationDefinition).toHaveBeenCalled();
+    expect(componentWrapper.instance().state.vizualizationsData).toStrictEqual([{
+      chapterKey: 'C40',
+      visualizationKey: 'W50',
+      isSupported: false,
+    }]);
+  });
 
   it('validateSession should call validateAuthToken', async () => {
     // given
