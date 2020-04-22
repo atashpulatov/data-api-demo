@@ -215,8 +215,8 @@
   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.",
   "Seems like the dossier has been removed.": "Seems like the dossier has been removed.",
   "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.",
-  "Search...": "Search...",
   "Include Subtotals and Totals": "Include Subtotals and Totals",
+  "Search...": "Search...",
   "Removal failed": "Removal failed",
   "Duplication failed": "Duplication failed",
   "Pending": "Pending",
@@ -232,5 +232,13 @@
   "Removing": "Removing",
   "Object removed": "Object removed",
   "Object duplicated": "Object duplicated",
-  "The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.": "The object cannot be refreshed because the dossier has changed. You can edit the object or remove it."
+  "The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.": "The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.",
+  "You cannot import an empty object.": "You cannot import an empty object.",
+  "Checking selection...": "Checking selection...",
+  "An error has occurred": "An error has occurred",
+  "You cannot import an unpublished cube.": "You cannot import an unpublished cube.",
+  "The object no longer exists, it has been removed from the data source.": "The object no longer exists, it has been removed from the data source.",
+  "An error has occurred in Excel.": "An error has occurred in Excel.",
+  "This operation requires the use of additional empty rows or columns.": "This operation requires the use of additional empty rows or columns.",
+  "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "This object exceeds the MicroStrategy project row limit. Please contact your administrator."
 }
