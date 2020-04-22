@@ -199,18 +199,9 @@ class OfficeConverterServiceV2 {
    * @return {Number}
    */
   getTableSize = (response, columnInformation, isCrosstab) => {
-    let columnsCount = columnInformation.length;
-    let columns;
+    const columnsCount = columnInformation.length;
     const columnHeader = response.data.headers.columns[0];
-    const { attrforms } = response;
-    const supportForms = attrforms ? attrforms.supportForms : false;
-
-    for (let index = 0; supportForms && index < columnInformation.length; index++) {
-      const element = columnInformation[index];
-      if (element.isAttribute && element.forms.length > 1) {
-        columnsCount = columnsCount + element.forms.length - 1;
-      }
-    }
+    let columns;
 
     if (isCrosstab) {
       columns = columnHeader ? columnHeader.length : 0;
@@ -231,7 +222,10 @@ class OfficeConverterServiceV2 {
    * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
    * @return {Object}
    */
-  getColumnInformation=(response, isCrosstabular) => {
+  getColumnInformation = (response, isCrosstabular) => {
+    const { attrforms } = response;
+    const supportForms = attrforms ? attrforms.supportForms : false;
+
     let columns;
     const onElement = (element) => element;
     const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
@@ -242,32 +236,57 @@ class OfficeConverterServiceV2 {
       columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1], []];
     } else {
       columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
-    } // we return only columns attributes if there is no attributes in rows
-    return columns.map((element, index) => {
-      const type = element.type ? element.type.toLowerCase() : null;
+    }
+    return this.splitAttributeForms(columns, supportForms);
+  }
+
+  /**
+   * Split attribute forms with their own column information,
+   * only if the user has privileges.
+   *
+   * @param {Array} columns column definition from MicroStrategy
+   * @param {Boolean} supportForms user's privilege to use attribute forms
+   * @returns {Array} column information including attribute forms
+   */
+  splitAttributeForms = (columns, supportForms) => {
+    const fullColumnInformation = [];
+    columns.forEach((column) => {
+      const type = column.type ? column.type.toLowerCase() : null;
       switch (type) {
         case 'metric':
-          return {
-            category: element.numberFormatting.category,
-            formatString: element.numberFormatting.formatString,
-            id: element.id,
-            index,
+          fullColumnInformation.push({
+            category: column.numberFormatting.category,
+            formatString: column.numberFormatting.formatString,
+            id: column.id,
             isAttribute: false,
-            name: element.name,
-          };
+            name: column.name,
+          });
+          break;
         case 'attribute':
         case 'consolidation':
-          return {
-            attributeId: element.id,
-            attributeName: element.name,
-            forms: element.forms ? element.forms : [],
-            index,
-            isAttribute: true,
-          };
+          if (column.forms && supportForms) {
+            for (let i = 0; i < column.forms.length; i++) {
+              fullColumnInformation.push({
+                attributeId: column.id,
+                attributeName: column.name,
+                forms: [column.forms[i]],
+                isAttribute: true,
+              });
+            }
+          } else {
+            fullColumnInformation.push({
+              attributeId: column.id,
+              attributeName: column.name,
+              forms: column.forms ? column.forms : [],
+              isAttribute: true,
+            });
+          }
+          break;
         default:
-          return {};
+          fullColumnInformation.push({});
       }
     });
+    return fullColumnInformation;
   }
 }
 
