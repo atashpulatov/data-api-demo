@@ -21,6 +21,9 @@ import {
   titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap, customT
 } from './notification-title-maps';
 import { GENERIC_SERVER_ERR } from '../../error/constants';
+import { reduxStore } from '../../store';
+import { cancelOperation } from '../operation-reducer/operation-actions';
+import { removeObject } from '../object-reducer/object-actions';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -62,11 +65,13 @@ export const notificationReducer = (state = initialState, action) => {
 };
 
 const createProgressNotification = (state, payload) => {
+  const { objectWorkingId, operationType } = payload.operation;
   const newNotification = {
-    objectWorkingId: payload.operation.objectWorkingId,
+    objectWorkingId,
     type: objectNotificationTypes.PROGRESS,
     title: titleOperationInProgressMap.PENDING_OPERATION,
-    operationType: payload.operation.operationType,
+    operationType,
+    children: getNotificationButtons(getCancelButton(objectWorkingId, operationType)),
   };
   return { ...state, notifications: [...state.notifications, newNotification] };
 };
@@ -78,6 +83,7 @@ const moveNotificationToInProgress = (state, payload) => {
     title: titleOperationInProgressMap[notificationToUpdate.operationType],
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
+  delete (updatedNotification.children);
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
@@ -89,7 +95,7 @@ const displayNotificationCompleted = (state, payload) => {
     title: titleOperationCompletedMap[notificationToUpdate.operationType],
     onHover: (notificationToUpdate.operationType === REMOVE_OPERATION
       ? () => notificationService.dismissSuccessfulRemoveNotification(notificationToUpdate.objectWorkingId)
-      : () => notificationService.dismissSuccessfullNotification(notificationToUpdate.objectWorkingId)),
+      : () => notificationService.dismissNotification(notificationToUpdate.objectWorkingId)),
   };
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
@@ -136,6 +142,17 @@ const getOkButton = (payload) => [{
   type: 'basic',
   label: customT('OK'),
   onClick: payload.notification.callback,
+}];
+
+const getCancelButton = (objectWorkingId, operationType) => [{
+  title: customT('Cancel'),
+  type: 'basic',
+  label: customT('Cancel'),
+  onClick: () => {
+    operationType === IMPORT_OPERATION && reduxStore.dispatch(removeObject(objectWorkingId));
+    reduxStore.dispatch(cancelOperation(objectWorkingId));
+    notificationService.dismissNotification(objectWorkingId);
+  },
 }];
 
 function getTitle(payload, notificationToUpdate) {

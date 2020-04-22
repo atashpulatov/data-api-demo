@@ -41,13 +41,13 @@ class NotificationService {
     this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
   }
 
-  dismissSuccessfullNotification = (objectWorkingId) => {
+  dismissNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   dismissSuccessfulRemoveNotification = (objectWorkingId) => {
     officeStoreObject.removeObjectFromStore(objectWorkingId);
-    this.dismissSuccessfullNotification(objectWorkingId);
+    this.dismissNotification(objectWorkingId);
   }
 }
 
