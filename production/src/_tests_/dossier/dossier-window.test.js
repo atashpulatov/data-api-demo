@@ -41,26 +41,26 @@ describe('Dossierwindow', () => {
     expect(office).toHaveBeenCalledWith(message);
   });
 
-  it('should use handleSelection as unselection', () => {
-    // given
-    const dossierData = { chapterKey: 'C40', visualizationKey: '' };
-    const componentWrapper = shallow(<DossierWindowNotConnected />);
-    // when
-    componentWrapper.instance().handleSelection(dossierData);
-    // then
-    expect(componentWrapper.instance().state.isVisualizationSelected).toBeFalsy();
-  });
+  // it('should use handleSelection as unselection', () => {
+  //   // given
+  //   const dossierData = { chapterKey: 'C40', visualizationKey: '' };
+  //   const componentWrapper = shallow(<DossierWindowNotConnected />);
+  //   // when
+  //   componentWrapper.instance().handleSelection(dossierData);
+  //   // then
+  //   expect(componentWrapper.instance().state.isVisualizationSelected).toBeFalsy();
+  // });
 
-  it('should use handleSelection as selection', async () => {
-    // given
-    const dossierData = { chapterKey: 'C40', visualizationKey: 'V78' };
-    const componentWrapper = shallow(<DossierWindowNotConnected />);
-    mstrObjectRestService.fetchVisualizationDefinition = jest.fn();
-    // when
-    await componentWrapper.instance().handleSelection(dossierData);
-    // then
-    expect(componentWrapper.instance().state.isVisualizationSelected).toBeTruthy();
-  });
+  // it('should use handleSelection as selection', async () => {
+  //   // given
+  //   const dossierData = { chapterKey: 'C40', visualizationKey: 'V78' };
+  //   const componentWrapper = shallow(<DossierWindowNotConnected />);
+  //   mstrObjectRestService.fetchVisualizationDefinition = jest.fn();
+  //   // when
+  //   await componentWrapper.instance().handleSelection(dossierData);
+  //   // then
+  //   expect(componentWrapper.instance().state.isVisualizationSelected).toBeTruthy();
+  // });
 
   it('validateSession should call validateAuthToken', async () => {
     // given
@@ -79,27 +79,73 @@ describe('Dossierwindow', () => {
     // when
     componentWrapper.instance().handleInstanceIdChange(newInstanceId);
     // then
-    expect(componentWrapper.instance().state.preparedInstanceId).toBe(newInstanceId);
-    expect(componentWrapper.instance().state.isVisualizationSelected).toBe(false);
-    expect(componentWrapper.instance().state.chapterKey).toBe('');
-    expect(componentWrapper.instance().state.visualizationKey).toBe('');
+    expect(componentWrapper.instance().state.instanceId).toBe(newInstanceId);
+    expect(componentWrapper.instance().state.vizualizationsData).toStrictEqual([]);
+    expect(componentWrapper.instance().state.lastSelectedViz).toStrictEqual({});
+  });
+
+  it('handleInstanceIdChange restore last selection from backup when given stored instanceId', async () => {
+    // given
+    const instanceId = 'instanceId';
+    const componentWrapper = shallow(<DossierWindowNotConnected />);
+    componentWrapper.instance().previousSelectionBackup = [{
+      instanceId,
+      lastSelectedViz: {
+        chapterKey: 'C123',
+        visualizationKey: 'W456',
+      }
+    }];
+    const spyHandleSelection = jest
+      .spyOn(componentWrapper.instance(), 'handleSelection')
+      .mockImplementationOnce(() => {});
+    // when
+    componentWrapper.instance().handleInstanceIdChange(instanceId);
+    // then
+    expect(componentWrapper.instance().state.vizualizationsData).toStrictEqual([]);
+    expect(spyHandleSelection).toBeCalledWith({
+      chapterKey: 'C123',
+      visualizationKey: 'W456',
+      instanceId,
+      promptsAnswers: []
+    });
   });
 
   it('handlePromptAnswer setup correct state', async () => {
     // given
+    const constState = {
+      instanceId: '',
+      isEmbeddedDossierLoaded: false,
+      lastSelectedViz: {},
+    };
+    const startingState = {
+      promptsAnswers: [],
+      vizualizationsData: [{ id: 'id' }, { id: 'id2' }],
+      ...constState,
+    };
     const newAnswers = 'newAnswers';
+    const expectedState = {
+      promptsAnswers: newAnswers,
+      vizualizationsData: [],
+      ...constState,
+    };
     const componentWrapper = shallow(<DossierWindowNotConnected />);
     // when
+    componentWrapper.setState(startingState);
     componentWrapper.instance().handlePromptAnswer(newAnswers);
     // then
-    expect(componentWrapper.instance().state.promptsAnswers).toBe(newAnswers);
+    expect(componentWrapper.instance().state).toStrictEqual(expectedState);
   });
 
   it('should use handleOk and run messageParent with given parameters', () => {
     // given
     const officeMessageParentSpy = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
     const componentState = {
-      isVisualizationSelected: true, chapterKey: 'C40', visualizationKey: 'V78', promptsAnswers: []
+      lastSelectedViz: {
+        chapterKey: 'C40',
+        visualizationKey: 'V78',
+      },
+      promptsAnswers: [],
+      instanceId: 'instanceId'
     };
     const componentProps = { chosenObjectName: 'selectedObject', chosenObjectId: 'ABC123', chosenProjectId: 'DEF456' };
     const mockupOkObject = {
@@ -114,7 +160,7 @@ describe('Dossierwindow', () => {
         chapterKey: 'C40',
         visualizationKey: 'V78',
       },
-      preparedInstanceId: '',
+      preparedInstanceId: 'instanceId',
       isEdit: false,
     };
     const componentWrapper = shallow(<DossierWindowNotConnected />);
