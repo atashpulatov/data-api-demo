@@ -1,5 +1,5 @@
 import { objectNotificationTypes } from '@mstr/rc';
-import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
+import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED, FETCH_INSERT_DATA } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
 import { officeProperties } from '../office-reducer/office-properties';
 import { getNotificationButtons } from '../../notification-v2/notification-buttons';
@@ -10,6 +10,7 @@ import {
   REMOVE_OPERATION,
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
+  MARK_STEP_COMPLETED,
 } from '../../operation/operation-type-names';
 import {
   DELETE_NOTIFICATION,
@@ -21,9 +22,6 @@ import {
   titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap, customT
 } from './notification-title-maps';
 import { GENERIC_SERVER_ERR } from '../../error/constants';
-import { reduxStore } from '../../store';
-import { cancelOperation } from '../operation-reducer/operation-actions';
-import { removeObject } from '../object-reducer/object-actions';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -49,6 +47,9 @@ export const notificationReducer = (state = initialState, action) => {
 
     case DELETE_NOTIFICATION:
       return deleteNotification(state, payload);
+
+    case MARK_STEP_COMPLETED:
+      return markFetchingComplete(state, payload);
 
     case CREATE_GLOBAL_NOTIFICATION:
       return createGlobalNotification(state, payload);
@@ -125,6 +126,18 @@ const displayNotificationWarning = (state, payload) => {
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
+const markFetchingComplete = (state, payload) => {
+  if (payload.completedStep === FETCH_INSERT_DATA) {
+    const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
+    const updatedNotification = {
+      ...notificationToUpdate,
+      isFetchingComplete: true,
+    };
+    return createNewState(state, notificationToUpdateIndex, updatedNotification);
+  }
+  return state;
+};
+
 const createGlobalNotification = (state, payload) => (
   { ...state, globalNotification: payload }
 );
@@ -149,8 +162,8 @@ const getCancelButton = (objectWorkingId, operationType) => [{
   type: 'basic',
   label: customT('Cancel'),
   onClick: () => {
-    operationType === IMPORT_OPERATION && reduxStore.dispatch(removeObject(objectWorkingId));
-    reduxStore.dispatch(cancelOperation(objectWorkingId));
+    operationType === IMPORT_OPERATION && notificationService.removeObjectFromNotification(objectWorkingId);
+    notificationService.cancelOperationFromNotification(objectWorkingId);
     notificationService.dismissNotification(objectWorkingId);
   },
 }];

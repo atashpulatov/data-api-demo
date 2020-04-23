@@ -16,7 +16,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
 import { officeContext } from '../office/office-context';
-import { REMOVE_OPERATION, CLEAR_DATA_OPERATION } from '../operation/operation-type-names';
+import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -249,8 +249,8 @@ class SidePanelService {
 
     const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation) ? {
       percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
-      itemsTotal: objectOperation.totalRows,
-      itemsComplete: objectOperation.loadedRows,
+      itemsTotal: !objectNotification.isFetchingComplete ? objectOperation.totalRows : 0,
+      itemsComplete: !objectNotification.isFetchingComplete ? objectOperation.loadedRows : 0,
     } : {};
     const obj = objectNotification ? {
       ...object,
@@ -267,6 +267,7 @@ class SidePanelService {
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
   && objectOperation.operationType !== REMOVE_OPERATION
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
+  && objectOperation.operationType !== HIGHLIGHT_OPERATION
 }
 
 export const sidePanelService = new SidePanelService();
