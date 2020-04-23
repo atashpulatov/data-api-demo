@@ -243,25 +243,26 @@ class SidePanelService {
 
   injectNotificationsToObjects = (loadedObjects, notifications, operations) => loadedObjects.map((object) => {
     const objectOperation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
-    const objectNotification = notifications.find(
+    const objectNotificationData = notifications.find(
       (notification) => notification.objectWorkingId === object.objectWorkingId
     );
 
-    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation) ? {
+    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation) && {
       percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
-      itemsTotal: !objectNotification.isFetchingComplete ? objectOperation.totalRows : 0,
-      itemsComplete: !objectNotification.isFetchingComplete ? objectOperation.loadedRows : 0,
-    } : {};
-    const obj = objectNotification ? {
-      ...object,
-      notification: {
-        ...objectNotification,
-        ...operationBasedNotificationData,
-      }
-    }
-      : object;
+      itemsTotal: !objectNotificationData.isFetchingComplete ? objectOperation.totalRows : 0,
+      itemsComplete: !objectNotificationData.isFetchingComplete ? objectOperation.loadedRows : 0,
+    };
 
-    return obj;
+    const notification = objectNotificationData
+    && {
+      ...objectNotificationData,
+      ...operationBasedNotificationData,
+    };
+
+    return {
+      ...object,
+      notification,
+    };
   });
 
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
