@@ -17,7 +17,7 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-        //   './test/specs/release-validation/deprecated/sample.spec.js',
+    './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
     acceptance: [
@@ -84,7 +84,7 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-within-details-panel.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
-      './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js', 
+      './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
     ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
@@ -141,7 +141,16 @@ exports.config = {
   capabilities: [{
     maxInstances: 1,
     browserName:
-  'chrome',
+      'chrome',
+    'goog:chromeOptions': {
+      // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
+      // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
+      // debuggerAddress: '127.0.0.1:9222'
+
+      // to run chrome headless the following flags are required
+      // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
+      // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],
+    }
   }],
   // {
   // maxInstances: 1,
@@ -237,7 +246,7 @@ exports.config = {
     // The Jasmine framework allows interception of each assertion in order to log the state of the application
     // or website depending on the result. For example, it is pretty handy to take a screenshot every time
     // an assertion fails.
-    expectationResultHandler (passed, assertion) {
+    expectationResultHandler(passed, assertion) {
       // do something
     }
   },
@@ -265,9 +274,9 @@ exports.config = {
   // Creating property to store Language and Region for Excel logged in user.
   // Plugin GUI langauge is based on this value.
   // Required to provide Internationalization support in the automation framework.
-  languageRegion : 'lg-rg',
+  languageRegion: 'lg-rg',
 
-  beforeSession (config, capabilities, specs) {
+  beforeSession(config, capabilities, specs) {
     require('@babel/register');
   },
   /**
@@ -311,7 +320,9 @@ exports.config = {
   /**
   * Function to be executed after a test (in Mocha/Jasmine).
   */
-  afterTest (test, context, { error, result, duration, passed, retries }) {
+  afterTest(test, context, {
+    error, result, duration, passed, retries
+  }) {
     if (!passed) {
       browser.takeScreenshot();
     }
@@ -367,4 +378,4 @@ exports.config = {
   */
   // onReload: function(oldSessionId, newSessionId) {
   // }
-}
+};
