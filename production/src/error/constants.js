@@ -78,6 +78,8 @@ export const NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in c
 export const INVALID_VIZ_KEY_MESSAGE = 'You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.';
 export const SESSION_EXTENSION_FAILURE_MESSAGE = 'The user\'s session has expired, please reauthenticate';
 export const DOSSIER_HAS_CHANGED = 'The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.';
+export const NOT_AVAILABLE_FOR_DOSSIER = 'This option is not available for dossier';
+export const CHECKING_SELECTION = 'Checking selection...';
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
