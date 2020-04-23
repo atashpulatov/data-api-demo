@@ -69,8 +69,8 @@ const createProgressNotification = (state, payload) => {
   const { objectWorkingId, operationType } = payload.operation;
   const newNotification = {
     objectWorkingId,
+    title: customT(titleOperationInProgressMap.PENDING_OPERATION),
     type: objectNotificationTypes.PROGRESS,
-    title: titleOperationInProgressMap.PENDING_OPERATION,
     operationType,
     children: getNotificationButtons(getCancelButton(objectWorkingId, operationType)),
   };
@@ -81,7 +81,7 @@ const moveNotificationToInProgress = (state, payload) => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
   const updatedNotification = {
     ...notificationToUpdate,
-    title: titleOperationInProgressMap[notificationToUpdate.operationType],
+    title: customT(titleOperationInProgressMap[notificationToUpdate.operationType]),
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
   delete (updatedNotification.children);
@@ -93,7 +93,7 @@ const displayNotificationCompleted = (state, payload) => {
   const updatedNotification = {
     ...notificationToUpdate,
     type: objectNotificationTypes.SUCCESS,
-    title: titleOperationCompletedMap[notificationToUpdate.operationType],
+    title: customT(titleOperationCompletedMap[notificationToUpdate.operationType]),
     onHover: (notificationToUpdate.operationType === REMOVE_OPERATION
       ? () => notificationService.dismissSuccessfulRemoveNotification(notificationToUpdate.objectWorkingId)
       : () => notificationService.dismissNotification(notificationToUpdate.objectWorkingId)),

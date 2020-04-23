@@ -65,36 +65,20 @@ class OfficeRemoveHelper {
    * @return {Boolean}
    */
   checkIfObjectExist = async (object, excelContext) => {
-    const officeContext = await officeApiHelper.getOfficeContext();
     try {
       await officeApiHelper.getTable(excelContext, object.bindId);
       await excelContext.sync();
       return true;
     } catch (error) {
-      await this.removeObjectNotExistingInExcel(object, officeContext);
+      // TODO check when object notification will not be connected to operations
+      // await this.removeObjectNotExistingInExcel(object, officeContext);
       return false;
     }
   }
 
   /**
-   * Remove object from the redux store, Excel settings, Excel bindings and then display message
-   *
-   * @param {Office} object
-   * @param {Office} officeContext office context
-   * @param {Object} t i18n translating function
-   */
-  removeObjectAndDisplaytNotification = (object, officeContext, t) => {
-    // const { name } = object;
-    this.removeObjectNotExistingInExcel(object, officeContext);
-    // TODO check after new notifications
-    // const message = t('{{name}} has been removed from the workbook.', { name });
-    // notificationService.displayTranslatedNotification({ type: 'success', content: message });
-  }
-
-  /**
    * Remove objects that no longer exists in the Excel workbook from the store
    *
-   * @param {Function} t i18n translating function
    * @param {Object} object Contains information obout the object
    * @param {Office} officeContext Excel context
    */
