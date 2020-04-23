@@ -40,13 +40,14 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
+    this.state = { loadingFrame: true, };
   }
 
   componentDidMount() {
     watchForIframeAddition(this.container.current, this.onIframeLoad);
     this.loadEmbeddedDossier(this.container.current);
   }
-
+  
   componentWillUnmount() {
     if (this.msgRouter) {
       this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
@@ -60,6 +61,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * @param {*} iframe
    */
   onIframeLoad = (iframe) => {
+    this.setState({ loadingFrame: false });
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleLoadEvent } = this.props;
@@ -245,20 +247,24 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   render() {
+    const { loadingFrame } = this.state;
     return (
       /*
       Height needs to be passed for container because without it, embedded api will set default height: 600px;
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 9px for header margin and 68px for buttons
       */
-      <div
-        ref={this.container}
-        style={{
-          position: 'relative',
-          top: '0',
-          left: '0',
-          height: 'calc(100vh - 145px)'
-        }} />
+      <>
+        {loadingFrame && <Empty loading />}
+        <div
+          ref={this.container}
+          style={{
+            position: 'relative',
+            top: '0',
+            left: '0',
+            height: 'calc(100vh - 145px)'
+          }} />
+      </>
     );
   }
 }
