@@ -175,11 +175,11 @@ const mapDispatchToProps = {
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
-  globalNotification: PropTypes.string,
-  loadedObjects:
+  globalNotification: PropTypes.shape({}),
+  loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({
       body: PropTypes.shape({}),
-      objectWorkingId: PropTypes.string,
+      objectWorkingId: PropTypes.number,
       bindId: PropTypes.string,
       id: PropTypes.string,
       name: PropTypes.string,
@@ -189,7 +189,7 @@ RightSidePanelNotConnected.propTypes = {
         subtypes: PropTypes.arrayOf(PropTypes.number),
         type: PropTypes.number,
       }),
-      refreshDate: PropTypes.instanceOf(Date),
+      refreshDate: PropTypes.number,
       visualizationInfo: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape({
         chapterKey: PropTypes.string,
         visualizationKey: PropTypes.string,
@@ -200,7 +200,8 @@ RightSidePanelNotConnected.propTypes = {
         }),
       })]),
       isSelected: PropTypes.bool,
-    }).isRequired,
+    })
+  ).isRequired,
   notifications: PropTypes.arrayOf(
     PropTypes.shape({
       type: PropTypes.string,
@@ -222,14 +223,14 @@ RightSidePanelNotConnected.propTypes = {
         REMOVE_OPERATION,
       ]),
       objectWorkingId: PropTypes.number,
-      stepsQueue: PropTypes.oneOf([{}]),
+      stepsQueue: PropTypes.arrayOf(PropTypes.string),
       backupObjectData: PropTypes.shape({}),
       objectEditedData: PropTypes.shape({}),
       instanceDefinition: PropTypes.shape({}),
       startCell: PropTypes.string,
       excelContext: PropTypes.shape({}),
       officeTable: PropTypes.shape({}),
-      tableColumnsChanged: PropTypes.shape({}),
+      tableColumnsChanged: PropTypes.boolean,
       totalRows: PropTypes.number,
       loadedRows: PropTypes.number,
       shouldFormat: PropTypes.bool,
