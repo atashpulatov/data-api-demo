@@ -3,7 +3,6 @@ import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
-import { errorService } from '../../error/error-handler';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
