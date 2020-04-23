@@ -1,4 +1,4 @@
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState } from 'react'; // eslint-disable-line no-unused-vars
 import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
@@ -22,17 +22,27 @@ export const HomeNotConnected = (props) => {
   const {
     loading, popupOpen, authToken, t
   } = props;
+  const [isOnline, setOnline] = useState(true);
 
   React.useEffect(() => {
-    const handleConnectionChange = () => (window.navigator.onLine
-      ? notificationService.connectionRestored()
-      : !popupOpen && notificationService.connectionLost());
+    const { connectionRestored, connectionLost } = notificationService;
+    const handleConnectionChange = () => {
+      const { onLine } = window.navigator;
+      return onLine
+        ? controlConnection(isOnline, connectionRestored)
+        : controlConnection(popupOpen, connectionLost);
+    };
+    const controlConnection = (condition, manageConnection) => {
+      const { onLine } = window.navigator;
+      setOnline(onLine);
+      return !condition && manageConnection();
+    };
     handleConnectionChange();
     window.addEventListener('online', handleConnectionChange);
     window.addEventListener('offline', handleConnectionChange);
     return (() => window.removeEventListener('online', handleConnectionChange),
     () => window.removeEventListener('offline', handleConnectionChange));
-  },);
+  }, [isOnline, popupOpen],);
 
   React.useEffect(() => {
     try {
