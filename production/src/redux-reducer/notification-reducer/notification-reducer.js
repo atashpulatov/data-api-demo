@@ -140,7 +140,7 @@ const getOkButton = (payload) => [{
 
 function getTitle(payload, notificationToUpdate) {
   return payload.notification.title === GENERIC_SERVER_ERR
-    ? customT(titleOperationFailedMap[notificationToUpdate.operationType])
+    ? titleOperationFailedMap[notificationToUpdate.operationType]
     : payload.notification.title;
 }
 

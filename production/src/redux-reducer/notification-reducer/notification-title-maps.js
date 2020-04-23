@@ -1,7 +1,9 @@
 import i18n from '../../i18n';
 
-const lang = i18n.language;
-export const customT = (str) => (i18n.store.data[lang].common[str] ? i18n.store.data[lang].common[str] : str);
+export const customT = (str) => {
+  const lang = i18n.language;
+  return i18n.store.data[lang].common[str] ? i18n.store.data[lang].common[str] : str;
+};
 
 export const titleOperationInProgressMap = {
   PENDING_OPERATION: 'Pending',
