@@ -58,6 +58,9 @@ class ErrorService {
   }
 
   getOfficeErrorType = (error) => {
+    console.warn({ error });
+    console.warn(error.message);
+
     if (error.name === 'RichApi.Error') {
       return stringMessageToErrorType(error.message);
     }
