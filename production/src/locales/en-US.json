@@ -240,5 +240,6 @@
   "The object no longer exists, it has been removed from the data source.": "The object no longer exists, it has been removed from the data source.",
   "An error has occurred in Excel.": "An error has occurred in Excel.",
   "This operation requires the use of additional empty rows or columns.": "This operation requires the use of additional empty rows or columns.",
-  "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "This object exceeds the MicroStrategy project row limit. Please contact your administrator."
+  "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "This object exceeds the MicroStrategy project row limit. Please contact your administrator.",
+  "To view the data, please unhide the worksheet.": "To view the data, please unhide the worksheet."
 }
