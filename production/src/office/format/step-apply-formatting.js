@@ -54,7 +54,7 @@ class StepApplyFormatting {
    */
   calculateMetricColumnOffset = (columnInformation, isCrosstab) => {
     if (isCrosstab) {
-      return columnInformation.findIndex(col => !col.isAttribute);
+      return Math.max(columnInformation.findIndex(col => !col.isAttribute), 0);
     }
     return 0;
   };
