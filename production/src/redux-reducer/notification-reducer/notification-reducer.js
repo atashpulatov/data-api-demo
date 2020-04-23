@@ -84,7 +84,7 @@ const moveNotificationToInProgress = (state, payload) => {
     title: customT(titleOperationInProgressMap[notificationToUpdate.operationType]),
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
-  delete (updatedNotification.children);
+  delete updatedNotification.children;
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
@@ -162,7 +162,9 @@ const getCancelButton = (objectWorkingId, operationType) => [{
   type: 'basic',
   label: customT('Cancel'),
   onClick: () => {
-    operationType === IMPORT_OPERATION && notificationService.removeObjectFromNotification(objectWorkingId);
+    if (operationType === IMPORT_OPERATION) {
+      notificationService.removeObjectFromNotification(objectWorkingId);
+    }
     notificationService.cancelOperationFromNotification(objectWorkingId);
     notificationService.dismissNotification(objectWorkingId);
   },

@@ -246,17 +246,20 @@ class SidePanelService {
       (notification) => notification.objectWorkingId === object.objectWorkingId
     );
 
-    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation) && {
-      percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
-      itemsTotal: !objectNotificationData.isFetchingComplete ? objectOperation.totalRows : 0,
-      itemsComplete: !objectNotificationData.isFetchingComplete ? objectOperation.loadedRows : 0,
-    };
+    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation)
+      ? {
+        percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
+        itemsTotal: !objectNotificationData.isFetchingComplete ? objectOperation.totalRows : 0,
+        itemsComplete: !objectNotificationData.isFetchingComplete ? objectOperation.loadedRows : 0,
+      }
+      : {};
 
     const notification = objectNotificationData
-    && {
-      ...objectNotificationData,
-      ...operationBasedNotificationData,
-    };
+      ? {
+        ...objectNotificationData,
+        ...operationBasedNotificationData,
+      }
+      : {};
 
     return {
       ...object,
