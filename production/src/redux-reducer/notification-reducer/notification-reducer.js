@@ -65,7 +65,7 @@ const createProgressNotification = (state, payload) => {
   const newNotification = {
     objectWorkingId: payload.operation.objectWorkingId,
     type: objectNotificationTypes.PROGRESS,
-    title: titleOperationInProgressMap.PENDING_OPERATION,
+    title: customT(titleOperationInProgressMap.PENDING_OPERATION),
     operationType: payload.operation.operationType,
   };
   return { ...state, notifications: [...state.notifications, newNotification] };
@@ -75,7 +75,7 @@ const moveNotificationToInProgress = (state, payload) => {
   const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
   const updatedNotification = {
     ...notificationToUpdate,
-    title: titleOperationInProgressMap[notificationToUpdate.operationType],
+    title: customT(titleOperationInProgressMap[notificationToUpdate.operationType]),
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
@@ -86,7 +86,7 @@ const displayNotificationCompleted = (state, payload) => {
   const updatedNotification = {
     ...notificationToUpdate,
     type: objectNotificationTypes.SUCCESS,
-    title: titleOperationCompletedMap[notificationToUpdate.operationType],
+    title: customT(titleOperationCompletedMap[notificationToUpdate.operationType]),
     onHover: (notificationToUpdate.operationType === REMOVE_OPERATION
       ? () => notificationService.dismissSuccessfulRemoveNotification(notificationToUpdate.objectWorkingId)
       : () => notificationService.dismissSuccessfullNotification(notificationToUpdate.objectWorkingId)),
@@ -140,7 +140,7 @@ const getOkButton = (payload) => [{
 
 function getTitle(payload, notificationToUpdate) {
   return payload.notification.title === GENERIC_SERVER_ERR
-    ? titleOperationFailedMap[notificationToUpdate.operationType]
+    ? customT(titleOperationFailedMap[notificationToUpdate.operationType])
     : payload.notification.title;
 }
 
