@@ -35,13 +35,20 @@ class OfficeFormatHyperlinks {
     // HTMLTag
     if (baseFormType === FORM_TYPE_HTML) {
       const hrefRegExp = /'?<a\s+(?:[^>]*?\s+)?href=["']([^"']*)["']/;
-      const textRegExp = /'?<a\s+(?:[^>]*?\s+)?data=["']([^"']*)["']/;
+      const dataRegExp = /'?<a\s+(?:[^>]*?\s+)?data=["']([^"']*)["']/;
+      const textRegExp = /<a [^>]+>([^<]+)<\/a>/;
       const hrefMatch = string.match(hrefRegExp);
+      let dataMatch = string.match(dataRegExp);
       let textMatch = string.match(textRegExp);
 
       // If there is no href or is not valid url we cannot make a hyperlink
       if (!hrefMatch || hrefMatch[0] === '' || !this.isValidUrl(hrefMatch[1])) {
         return null;
+      }
+
+      // If there is no data use text
+      if (!dataMatch || dataMatch[0] === '' || dataMatch[1] === '') {
+        dataMatch = textMatch;
       }
 
       // If there is no text use hyperlink

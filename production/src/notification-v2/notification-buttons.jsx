@@ -1,14 +1,14 @@
 import React from 'react';
-import { Button } from '@mstr/rc';
 
 export const NotificationButtons = ({ buttons }) => buttons.map(
   (button) => (
-    <Button
-      key={button.title}
+    <button
+      type="button"
+      onClick={button.onClick}
       title={button.title}
-      type={button.type}
-      onClick={button.onClick}>{button.label}
-    </Button>
+      key={button.title}>
+      {button.label}
+    </button>
   )
 );
 

@@ -54,9 +54,11 @@ function updateObject(state, updatedObjectProps) {
 
 function removeObject(state, objectWorkingId) {
   const objectToRemoveIndex = getObjectIndex(state.objects, objectWorkingId);
-  const newObjects = [...state.objects];
-  newObjects.splice(objectToRemoveIndex, 1);
-  return { objects: newObjects };
+  if (objectToRemoveIndex !== -1) {
+    const newObjects = [...state.objects];
+    newObjects.splice(objectToRemoveIndex, 1);
+    return { objects: newObjects };
+  }
 }
 
 function restoreAllObjects(payload) {

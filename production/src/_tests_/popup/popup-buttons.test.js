@@ -117,4 +117,33 @@ describe('PopupButtons', () => {
       // then
       expect(tooltipSpan).toHaveLength(1);
     });
+
+  it('should display primary button tooltip CHECKING_SELECTION when isChecking is provided ',
+    () => {
+      // given
+      // when
+      const buttonsWrapped = mount(<PopupButtonsNotConnected
+        hideSecondary
+        checkingSelection
+      />);
+      const tooltipSpan = buttonsWrapped.find('Popover.button-tooltip');
+      // then
+      expect(tooltipSpan).toHaveLength(1);
+      // TODO expect('text of tooltip').toBe(CHECKING_SELECTION);
+    });
+
+  it('should display primary button tooltip NOT_SUPPORTED_VIZ when isChecking is provided ',
+    () => {
+      // given
+      // when
+      const buttonsWrapped = mount(<PopupButtonsNotConnected
+        hideSecondary
+        isPublished={false}
+        disableSecondary
+      />);
+      const tooltipSpan = buttonsWrapped.find('Popover.button-tooltip');
+      // then
+      expect(tooltipSpan).toHaveLength(1);
+      // TODO expect('text of tooltip').toBe(NOT_SUPPORTED_VIZ);
+    });
 });

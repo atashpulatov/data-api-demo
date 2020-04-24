@@ -2,8 +2,10 @@ import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 class StepDisplayNotificationCompleted {
   displayNotificationCompleted = (objectData, operationData) => {
-    operationStepDispatcher.displaySuccessNotification(objectData.objectWorkingId);
-    operationStepDispatcher.completeDisplaySuccessNotification(objectData.objectWorkingId);
+    setTimeout(() => {
+      operationStepDispatcher.displaySuccessNotification(objectData.objectWorkingId);
+      operationStepDispatcher.completeDisplaySuccessNotification(objectData.objectWorkingId);
+    }, 500);
   }
 }
 

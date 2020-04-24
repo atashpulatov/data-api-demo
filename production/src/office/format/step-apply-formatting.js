@@ -27,14 +27,8 @@ class StepApplyFormatting {
 
     try {
       const filteredColumnInformation = this.filterColumnInformation(columnInformation);
+      const offset = this.calculateMetricColumnOffset(filteredColumnInformation, isCrosstab);
 
-      const attributeColumnNumber = this.calculateAttributeColumnNumber(columnInformation, isCrosstab);
-
-      const offset = this.calculateOffset(
-        isCrosstab,
-        columnInformation.length,
-        attributeColumnNumber
-      );
       await excelContext.sync();
 
       await this.setupFormatting(filteredColumnInformation, isCrosstab, offset, officeTable, excelContext);
@@ -51,51 +45,18 @@ class StepApplyFormatting {
   };
 
   /**
-   * Calculates the number of all attribute/consolidations columns in Excel.
-   *
-   * Number of columns is - for all elements of columnInformation - a sum of:
-   *
-   * 1 (when element is not an attribute)
-   * number of forms (when element is an attribute)
+   * Returns the position of the table for crosstabs (equals to index of first metric)
+   * For tabular reports there is no offset.
    *
    * @param {Array} columnInformation Columns data
-   * @returns {Number} Number of columns in Excel
-   */
-  calculateAttributeColumnNumber = (columnInformation, isCrosstab) => {
-    let attributeColumnNumber = 0;
-
-    columnInformation.forEach(element => {
-      if (element.isAttribute) {
-        if (!isCrosstab) {
-          attributeColumnNumber += (element.forms && element.forms.length) ? element.forms.length : 1;
-        }
-      } else {
-        attributeColumnNumber++;
-      }
-    });
-
-    return attributeColumnNumber;
-  };
-
-  /**
-   * Calculates number of columns to be offsetted when formatting.
-   *
    * @param {Boolean} isCrosstab Specify if object is a crosstab
-   * @param {Number} columnInformationLength Number of elements in columnInformation
-   * @param {Number} filteredColumnInformationLength Number of elements in filteredColumnInformation
-   * @param {Number} attributeColumnNumber Number of all attribute/consolidations columns in Excel
-   * @returns {number} Number of columns to be offsetted when formatting
+   * @returns {Number} Offset required
    */
-  calculateOffset = (isCrosstab, columnInformationLength, attributeColumnNumber) => {
-    let offset = 0;
-
+  calculateMetricColumnOffset = (columnInformation, isCrosstab) => {
     if (isCrosstab) {
-      offset = columnInformationLength - attributeColumnNumber;
-    } else {
-      offset = attributeColumnNumber - columnInformationLength;
+      return Math.max(columnInformation.findIndex(col => !col.isAttribute), 0);
     }
-
-    return offset;
+    return 0;
   };
 
   /**
@@ -108,9 +69,9 @@ class StepApplyFormatting {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
   setupFormatting = async (filteredColumnInformation, isCrosstab, offset, officeTable, excelContext) => {
-    for (let i = filteredColumnInformation.length - 1; i >= 0; i--) {
-      const object = filteredColumnInformation[i];
-      const columnRange = this.getColumnRangeForFormatting(object.index, isCrosstab, offset, officeTable);
+    for (let index = 0; index < filteredColumnInformation.length; index++) {
+      const object = filteredColumnInformation[index];
+      const columnRange = this.getColumnRangeForFormatting(index, isCrosstab, offset, officeTable);
       if (object.isAttribute) {
         columnRange.numberFormat = '';
 
