@@ -7,7 +7,7 @@ import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-he
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 import { homeHelper } from '../../home/home-helper';
-import {sidePanelService} from '../../right-side-panel/side-panel-service';
+import { sidePanelService } from '../../right-side-panel/side-panel-service';
 
 describe('Confirmation', () => {
   afterEach(() => {

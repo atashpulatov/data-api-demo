@@ -7,7 +7,7 @@ import warningIcon from './assets/icon_conflict.svg';
 import { toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../redux-reducer/office-reducer/office-actions';
 
 import { homeHelper } from './home-helper';
-import {sidePanelService} from '../right-side-panel/side-panel-service';
+import { sidePanelService } from '../right-side-panel/side-panel-service';
 
 export const ConfirmationNotConnected = ({
   objects,
