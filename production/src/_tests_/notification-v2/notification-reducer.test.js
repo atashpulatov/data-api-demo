@@ -198,9 +198,10 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
-        const { children, ...resultChunk } = resultState.notifications[1];
+        const { children } = resultState.notifications[1];
         expect(children).toBeDefined();
       });
+
       it('should not have cancel button on Pending for Clear data', () => {
         // given
         const action = {
@@ -217,7 +218,7 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
-        const { children, ...resultChunk } = resultState.notifications[1];
+        const { children } = resultState.notifications[1];
         expect(children).not.toBeDefined();
       });
     });
