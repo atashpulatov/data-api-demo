@@ -14,7 +14,7 @@ describe('Confirmation', () => {
     jest.resetAllMocks();
   });
 
-  it('should call proper methods from secureData when Ok button is clicked', async () => {
+  it('should call proper methods from secureData when Ok button is clicked', () => {
     // given
     const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => jest.fn);
     const mockDismissAll = jest.spyOn(sidePanelService, 'dismissAllNotifications').mockImplementation(() => jest.fn);
@@ -28,8 +28,8 @@ describe('Confirmation', () => {
     // when
     okWrapper.simulate('click');
     // then
-    await expect(mockSecureData).toBeCalled();
-    await expect(mockDismissAll).toBeCalled();
+    expect(mockSecureData).toBeCalled();
+    expect(mockDismissAll).toBeCalled();
   });
 
   it('should fill clearErrors when secureData fails in ok button click', () => {
