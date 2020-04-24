@@ -19,21 +19,41 @@ import { rightPanelSelectors as se } from '../../constants/selectors/plugin.righ
 } */
 
 export function waitForNotification() {
+  console.log('FOR A SINGLE ELEMENT');
+  const notification = $('.notification-container');
+  const progressBar = $('.notification-container > div.notification-body > div.progress');
+
+  getNotification(notification, progressBar);
+}
+
+
+export function waitForAllNotifications() {
+  switchToPluginFrame();
+  console.log('IN WAIT FOR ALL !!!!!!!');
+  const objectCount = $$('.object-tile-content').length;
+  for (let index = 1; index <= objectCount; index++) {
+    const notification = $(`#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container`);
+    const progressBar = $(`#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container > div.notification-body > div.progress`);
+    // #overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(1) > div.notification-container > div.notification-body > div.progress > div
+    getNotification(notification, progressBar);
+  }
+}
+
+function getNotification(notification, progressBar) {
   let progress = true;
-  const notification = $('.notification-container > div.notification-text > span.right-text');
   while (progress) {
     switchToPluginFrame();
-    const isExist = notification.isExisting();
-    if (isExist) {
-      if (notification.getText() === '') {
-        browser.pause(777);
-        progress = false;
-      }
+    const isNotificationExist = notification.isExisting();
+    const isProgressBarExist = progressBar.isExisting();
+    if (isNotificationExist && !isProgressBarExist) {
+      console.log('INSIDE IF BAR DOESNT EXIST');
+      browser.pause(777);
+      progress = false;
     } else {
+      console.log('BAR STILL EXIST, WAITING');
       browser.pause(777);
     }
   }
-  // notification.waitForExist(6666, false, `${notification} was not found`);
 }
 
 export function waitForPopup(timeout = 29999) {

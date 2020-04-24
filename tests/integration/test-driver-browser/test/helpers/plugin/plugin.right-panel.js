@@ -90,9 +90,17 @@ class PluginRightPanel {
     waitAndClick($(removeBtn));
   }
 
-  refreshAll() {
+  /* refreshAll() {
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
+  } */
+
+  refreshAll() {
+    switchToPluginFrame();
+    const checkBoxAll = $('#overlay > div.side-panel > div.object-tile-container > div.object-tile-container-header > span > div');
+    const refreshAllIcon = $('#overlay > div.side-panel > div.object-tile-container > div.object-tile-container-header > span > span > button:nth-child(5)');
+    waitAndClick(checkBoxAll);
+    waitAndClick(refreshAllIcon);
   }
 
   edit() {
@@ -131,13 +139,21 @@ class PluginRightPanel {
     waitAndClick($(rightPanelSelectors.loginRightPanelBtn));
   }
 
-  hoverOnOjbectToCloseNotification() {
+  closeNotificationOnHover() {
     const selector = '.notification-container';
     const selectorOther = '.object-tile-container-header';
     $(selectorOther).moveTo();
     browser.pause(1000);
     $(selector).moveTo();
     browser.pause(1000);
+  }
+
+  closeAllNotificationsOnHover() {
+    switchToPluginFrame();
+    const objectCount = $$('.object-tile-content').length;
+    for (let index = 1; index <= objectCount; index++) {
+      this.closeNotificationOnHover();
+    }
   }
 
 

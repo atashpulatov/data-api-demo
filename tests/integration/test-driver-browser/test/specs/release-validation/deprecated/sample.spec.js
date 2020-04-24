@@ -1,10 +1,10 @@
 import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
+import { changeBrowserTab, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification, waitForSuccessNotification } from '../../../helpers/utils/wait-helper';
+import { waitForNotification, waitForSuccessNotification, waitForAllNotifications } from '../../../helpers/utils/wait-helper';
 import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('Smart Folder - IMPORT -', () => {
@@ -163,22 +163,20 @@ describe('Smart Folder - IMPORT -', () => {
     // should import a report
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importAnyObject(objectsList.reports.reportXML, 1); // importObject(objectsList.reports.reportXML)
-    // waitForNotification();
-    // waitForSuccessNotification();
+    PluginPopup.importAnyObject(objectsList.reports.reportXML, 1);
     waitForNotification();
-    PluginRightPanel.hoverOnOjbectToCloseNotification();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(1000);
     OfficeWorksheet.selectCell('J1');
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.importObject(objectsList.reports.blankReport);
-    waitForNotification(); waitForNotification();
-
-
-    pluginRightPanel.closeNotification();
-    // waitForSuccessNotification();
-    // PluginRightPanel.hoverOnOjbectToCloseNotification();
-
+    PluginPopup.importObject(objectsList.reports.reportXML);
+    waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
+    browser.pause(1000);
+    switchToPluginFrame();
+    pluginRightPanel.refreshAll();
+    waitForAllNotifications();
+    pluginRightPanel.closeAllNotificationsOnHover();
 
     // // should import a dataset to the adjacent column of the first object
     // OfficeWorksheet.selectCell('A20');
