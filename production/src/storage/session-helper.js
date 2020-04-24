@@ -89,8 +89,9 @@ class SessionHelper {
    */
   keepSessionAlive = async (onSessionExpire = null) => {
     const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
+    const { onLine } = window.navigator;
     try {
-      if (authToken) {
+      if (authToken && onLine) {
         await authenticationService.putSessions(envUrl, authToken);
       }
     } catch (error) {

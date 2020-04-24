@@ -22,7 +22,7 @@ export const HomeNotConnected = (props) => {
   const {
     loading, popupOpen, authToken, t
   } = props;
-  const [isOnline, setOnline] = useState(true);
+  const [isOnline, setOnline] = useState(false);
 
   React.useEffect(() => {
     const { connectionRestored, connectionLost } = notificationService;
@@ -34,7 +34,7 @@ export const HomeNotConnected = (props) => {
     };
     const controlConnection = (condition, manageConnection) => {
       const { onLine } = window.navigator;
-      setOnline(onLine);
+      setOnline(onLine && !!authToken);
       return !condition && manageConnection();
     };
     handleConnectionChange();
@@ -42,7 +42,7 @@ export const HomeNotConnected = (props) => {
     window.addEventListener('offline', handleConnectionChange);
     return (() => window.removeEventListener('online', handleConnectionChange),
     () => window.removeEventListener('offline', handleConnectionChange));
-  }, [isOnline, popupOpen],);
+  }, [authToken, isOnline, popupOpen],);
 
   React.useEffect(() => {
     try {
