@@ -274,7 +274,9 @@ class SidePanelService {
   });
 
   /**
-   *
+   * Simulates hover and dismisses all provided notifications
+   * Works for notifications concerning finished operations.
+   * For others it doesn't bring any effect.
    *
    * @param {Object[]} notifications
    */
