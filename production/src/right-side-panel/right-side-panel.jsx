@@ -18,6 +18,7 @@ import {
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
+import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -169,7 +170,7 @@ const mapDispatchToProps = {
   cancelCurrentImportRequest: cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
-  toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag
+  toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,
 };
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);

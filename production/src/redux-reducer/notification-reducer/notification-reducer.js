@@ -1,5 +1,5 @@
 import { objectNotificationTypes } from '@mstr/rc';
-import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
+import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED, FETCH_INSERT_DATA } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
 import { officeProperties } from '../office-reducer/office-properties';
 import { getNotificationButtons } from '../../notification-v2/notification-buttons';
@@ -10,6 +10,7 @@ import {
   REMOVE_OPERATION,
   CLEAR_DATA_OPERATION,
   DUPLICATE_OPERATION,
+  MARK_STEP_COMPLETED,
 } from '../../operation/operation-type-names';
 import {
   DELETE_NOTIFICATION,
@@ -47,6 +48,9 @@ export const notificationReducer = (state = initialState, action) => {
     case DELETE_NOTIFICATION:
       return deleteNotification(state, payload);
 
+    case MARK_STEP_COMPLETED:
+      return markFetchingComplete(state, payload);
+
     case CREATE_GLOBAL_NOTIFICATION:
       return createGlobalNotification(state, payload);
 
@@ -62,11 +66,13 @@ export const notificationReducer = (state = initialState, action) => {
 };
 
 const createProgressNotification = (state, payload) => {
+  const { objectWorkingId, operationType } = payload.operation;
   const newNotification = {
-    objectWorkingId: payload.operation.objectWorkingId,
-    type: objectNotificationTypes.PROGRESS,
+    objectWorkingId,
     title: customT(titleOperationInProgressMap.PENDING_OPERATION),
-    operationType: payload.operation.operationType,
+    type: objectNotificationTypes.PROGRESS,
+    operationType,
+    children: getNotificationButtons(getCancelButton(objectWorkingId, operationType)),
   };
   return { ...state, notifications: [...state.notifications, newNotification] };
 };
@@ -78,6 +84,7 @@ const moveNotificationToInProgress = (state, payload) => {
     title: customT(titleOperationInProgressMap[notificationToUpdate.operationType]),
     isIndeterminate: getIsIndeterminate(notificationToUpdate),
   };
+  delete updatedNotification.children;
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
@@ -89,7 +96,7 @@ const displayNotificationCompleted = (state, payload) => {
     title: customT(titleOperationCompletedMap[notificationToUpdate.operationType]),
     onHover: (notificationToUpdate.operationType === REMOVE_OPERATION
       ? () => notificationService.dismissSuccessfulRemoveNotification(notificationToUpdate.objectWorkingId)
-      : () => notificationService.dismissSuccessfullNotification(notificationToUpdate.objectWorkingId)),
+      : () => notificationService.dismissNotification(notificationToUpdate.objectWorkingId)),
   };
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
@@ -119,6 +126,18 @@ const displayNotificationWarning = (state, payload) => {
   return createNewState(state, notificationToUpdateIndex, updatedNotification);
 };
 
+const markFetchingComplete = (state, payload) => {
+  if (payload.completedStep === FETCH_INSERT_DATA) {
+    const { notificationToUpdate, notificationToUpdateIndex } = getNotificationToUpdate(state, payload);
+    const updatedNotification = {
+      ...notificationToUpdate,
+      isFetchingComplete: true,
+    };
+    return createNewState(state, notificationToUpdateIndex, updatedNotification);
+  }
+  return state;
+};
+
 const createGlobalNotification = (state, payload) => (
   { ...state, globalNotification: payload }
 );
@@ -136,6 +155,19 @@ const getOkButton = (payload) => [{
   type: 'basic',
   label: customT('OK'),
   onClick: payload.notification.callback,
+}];
+
+const getCancelButton = (objectWorkingId, operationType) => [{
+  title: customT('Cancel'),
+  type: 'basic',
+  label: customT('Cancel'),
+  onClick: () => {
+    if (operationType === IMPORT_OPERATION) {
+      notificationService.removeObjectFromNotification(objectWorkingId);
+    }
+    notificationService.cancelOperationFromNotification(objectWorkingId);
+    notificationService.dismissNotification(objectWorkingId);
+  },
 }];
 
 function getTitle(payload, notificationToUpdate) {
