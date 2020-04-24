@@ -1,5 +1,6 @@
 export const objectsList = {
   reports: {
+    blankReport: 'Blank Report',
     reportXML: 'Report accessing XML file',
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
     seasonalReport: 'Seasonal Report',
@@ -39,13 +40,13 @@ export const objectsList = {
     },
     longReportWithInvalidCharacters: {
       sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
-      excelTableNameStart:'_01___________________________________Report_for_testing_binding_and_special_characters',
-      excelTableFullName:'_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP'
+      excelTableNameStart: '_01___________________________________Report_for_testing_binding_and_special_characters',
+      excelTableFullName: '_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP'
     },
-    basic01Report:{
+    basic01Report: {
       sourceName: '01 Basic Report',
-      excelTableNameStart:'_01_Basic_Report',
-      excelTableFullName:'_01_Basic_Report_TIMESTAMP'
+      excelTableNameStart: '_01_Basic_Report',
+      excelTableFullName: '_01_Basic_Report_TIMESTAMP'
     }
   },
 
@@ -81,12 +82,12 @@ export const objectsList = {
         KPI: '#mstr287',
       },
     },
-    visualizationManipulation:{
-      name:'Visualization manipulation',
+    visualizationManipulation: {
+      name: 'Visualization manipulation',
       visualizations: {
-        visualization1 : {
+        visualization1: {
           name: '#mstr106',
-          gridTableId:'#mstr121',
+          gridTableId: '#mstr121',
           getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
       },
@@ -97,15 +98,15 @@ export const objectsList = {
       visualizations: { GoogleTimeline: '#mstr114', }
     },
 
-    userActivityDossier:{
-      name:'User Activity',
-      visualizations:{
-        accounts:'#mstr162',
-        dailyActiveAccounts:'#mstr131',
+    userActivityDossier: {
+      name: 'User Activity',
+      visualizations: {
+        accounts: '#mstr162',
+        dailyActiveAccounts: '#mstr131',
       }
     },
     promptedDossier: {
-      name:'Prompted dossier - don\'t add to Library',
+      name: 'Prompted dossier - don\'t add to Library',
       visualizations: { vis1: '#mstr106' }
     }
   }

@@ -90,7 +90,7 @@ class PluginRightPanel {
     waitAndClick($(removeBtn));
   }
 
-  refreshAll () {
+  refreshAll() {
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
   }
@@ -123,12 +123,23 @@ class PluginRightPanel {
 
   closeNotification() {
     switchToPluginFrame();
-    waitAndClick($('span.ant-notification-notice-btn > button'));
+    // waitAndClick($('span.ant-notification-notice-btn > button'));
+    waitAndClick($('.warning-notification-button-container'));
   }
 
   clickLoginRightPanelBtn() {
     waitAndClick($(rightPanelSelectors.loginRightPanelBtn));
   }
+
+  hoverOnOjbectToCloseNotification() {
+    const selector = '.notification-container';
+    const selectorOther = '.object-tile-container-header';
+    $(selectorOther).moveTo();
+    browser.pause(1000);
+    $(selector).moveTo();
+    browser.pause(1000);
+  }
+
 
   loginToPlugin(username, password, isValidCredentials) {
     switchToPluginFrame();

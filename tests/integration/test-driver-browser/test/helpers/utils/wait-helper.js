@@ -1,7 +1,7 @@
 import { switchToPluginFrame, switchToExcelFrame } from './iframe-helper';
 import { rightPanelSelectors as se } from '../../constants/selectors/plugin.right-panel-selectors';
 
-export function waitForNotification() {
+/* export function waitForNotification() {
   let popupExists = true;
   while (popupExists) {
     switchToExcelFrame();
@@ -16,6 +16,24 @@ export function waitForNotification() {
     browser.pause(777);
   }
   $(se.notificationPopUp).waitForExist(6666, false, `${se.notificationPopUp} was not found`);
+} */
+
+export function waitForNotification() {
+  let progress = true;
+  const notification = $('.notification-container > div.notification-text > span.right-text');
+  while (progress) {
+    switchToPluginFrame();
+    const isExist = notification.isExisting();
+    if (isExist) {
+      if (notification.getText() === '') {
+        browser.pause(777);
+        progress = false;
+      }
+    } else {
+      browser.pause(777);
+    }
+  }
+  // notification.waitForExist(6666, false, `${notification} was not found`);
 }
 
 export function waitForPopup(timeout = 29999) {
