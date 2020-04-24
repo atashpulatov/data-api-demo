@@ -3,7 +3,6 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
 import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested
@@ -17,6 +16,7 @@ import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
 import { officeContext } from '../office/office-context';
 import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
+import { errorService } from '../error/error-handler';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -207,11 +207,16 @@ class SidePanelService {
   getSidePanelPopup = () => {
     let popup = null;
 
-    const handleViewData = () => {
-      this.reduxStore.dispatch(toggleSecuredFlag(false));
-      this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
-      this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
-        .map(({ objectWorkingId }) => objectWorkingId));
+    const handleViewData = async () => {
+      try {
+        await officeApiHelper.checkStatusOfSessions();
+        this.reduxStore.dispatch(toggleSecuredFlag(false));
+        this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
+        this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
+          .map(({ objectWorkingId }) => objectWorkingId));
+      } catch (error) {
+        errorService.handleError(error);
+      }
     };
 
     const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
