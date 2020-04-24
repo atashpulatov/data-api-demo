@@ -102,7 +102,6 @@
       "!src/serviceWorker.js",
       "!src/office/office-context.js",
       "!src/office/store/office-store-service.js",
-      "!src/storage/session-helper.js",
       "!src/breadcrumbs/breadcrumbs.jsx",
       "!src/CompileStrings.js",
       "!src/cache/cache-db.js",
