@@ -254,12 +254,13 @@ class SidePanelService {
       }
       : {};
 
-    const notification = objectNotificationData
-      ? {
+    let notification;
+    if (objectNotificationData) {
+      notification = {
         ...objectNotificationData,
         ...operationBasedNotificationData,
-      }
-      : {};
+      };
+    }
 
     return {
       ...object,
