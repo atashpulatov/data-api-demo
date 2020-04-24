@@ -7,6 +7,7 @@ import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-he
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 import { homeHelper } from '../../home/home-helper';
+import {sidePanelService} from '../../right-side-panel/side-panel-service';
 
 describe('Confirmation', () => {
   afterEach(() => {
@@ -15,8 +16,8 @@ describe('Confirmation', () => {
 
   it('should call proper methods from secureData when Ok button is clicked', async () => {
     // given
-    const mockSync = jest.fn();
-    const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => ({ sync: mockSync, }));
+    const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => jest.fn);
+    const mockDismissAll = jest.spyOn(sidePanelService, 'dismissAllNotifications').mockImplementation(() => jest.fn);
     const mockToggleIsConfirmFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
     const confirmationWrapper = mount(<ConfirmationNotConnected
@@ -28,6 +29,7 @@ describe('Confirmation', () => {
     okWrapper.simulate('click');
     // then
     await expect(mockSecureData).toBeCalled();
+    await expect(mockDismissAll).toBeCalled();
   });
 
   it('should fill clearErrors when secureData fails in ok button click', () => {

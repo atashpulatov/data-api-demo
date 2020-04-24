@@ -106,13 +106,6 @@ export const RightSidePanelNotConnected = (props) => {
     }
   };
 
-  const onSelectAll = () => {
-    notifications.forEach((notification) => {
-      notification.onHover && notification.onHover();
-      notification.callback && notification.callback();
-    });
-  };
-
   const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
   const duplicateWrapper = async (objectWorkingId) => {
@@ -139,7 +132,7 @@ export const RightSidePanelNotConnected = (props) => {
       onSettingsClick={handleSettingsClick}
       confirmationWindow={isConfirm && <Confirmation />}
       globalNotification={globalNotification}
-      onSelectAll={onSelectAll}
+      onSelectAll={() => sidePanelService.dismissAllNotifications(notifications)}
     />
   );
 };

@@ -264,6 +264,18 @@ class SidePanelService {
     return obj;
   });
 
+  /**
+   *
+   *
+   * @param {Object[]} notifications
+   */
+  dismissAllNotifications = (notifications) => {
+    notifications.forEach((notification) => {
+      notification.onHover && notification.onHover();
+      notification.callback && notification.callback();
+    });
+  }
+
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
   && objectOperation.operationType !== REMOVE_OPERATION
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
