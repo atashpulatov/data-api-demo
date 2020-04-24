@@ -174,13 +174,51 @@ describe('Notification reducer', () => {
 
         // then
         const { children, ...resultChunk } = resultState.notifications[1];
-        expect(children).toBeDefined();
         expect(resultChunk).toEqual({
           objectWorkingId: 123,
           operationType: IMPORT_OPERATION,
           title: 'Pending',
           type: 'PROGRESS',
         });
+      });
+
+      it('should have cancel button on Pending', () => {
+        // given
+        const action = {
+          type: IMPORT_OPERATION,
+          payload: {
+            operation: {
+              objectWorkingId: 123,
+              operationType: IMPORT_OPERATION,
+            }
+          }
+        };
+
+        // when
+        const resultState = notificationReducer(initialState.singleImport, action);
+
+        // then
+        const { children, ...resultChunk } = resultState.notifications[1];
+        expect(children).toBeDefined();
+      });
+      it('should not have cancel button on Pending for Clear data', () => {
+        // given
+        const action = {
+          type: IMPORT_OPERATION,
+          payload: {
+            operation: {
+              objectWorkingId: 123,
+              operationType: CLEAR_DATA_OPERATION,
+            }
+          }
+        };
+
+        // when
+        const resultState = notificationReducer(initialState.singleImport, action);
+
+        // then
+        const { children, ...resultChunk } = resultState.notifications[1];
+        expect(children).not.toBeDefined();
       });
     });
 
