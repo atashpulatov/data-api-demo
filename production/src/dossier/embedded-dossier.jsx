@@ -64,9 +64,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.setState({ loadingFrame: false });
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
-      const { handleLoadEvent } = this.props;
+      const { handleIframeLoadEvent } = this.props;
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
-      handleLoadEvent();
+      handleIframeLoadEvent();
       // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
       const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
       const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
@@ -97,7 +97,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   loadEmbeddedDossier = async (container) => {
-    const { mstrData } = this.props;
+    const { mstrData, handleEmbeddedDossierLoad } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
       instanceId, selectedViz, visualizationInfo
@@ -129,7 +129,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     this.dossierData = {
       ...this.dossierData,
-      preparedInstanceId: instance.mid,
+      instanceId: instance.mid,
     };
 
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
@@ -208,6 +208,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     };
     if (microstrategy && microstrategy.dossier) {
       this.embeddedDossier = await microstrategy.dossier.create(props);
+      handleEmbeddedDossierLoad();
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
     }
@@ -242,7 +243,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   */
   instanceIdChangeHandler(newInstanceId) {
     const { handleInstanceIdChange } = this.props;
-    this.dossierData.preparedInstanceId = newInstanceId;
+    this.dossierData.instanceId = newInstanceId;
     handleInstanceIdChange(newInstanceId);
   }
 
@@ -252,7 +253,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       /*
       Height needs to be passed for container because without it, embedded api will set default height: 600px;
       We need to calculate actual height, regarding the size of other elements:
-      58px for header, 9px for header margin and 68px for buttons
+      58px for header, 9px for header margin and 68px for buttons.
       */
       <>
         {loadingFrame && <Empty loading />}
@@ -262,7 +263,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
             position: 'relative',
             top: '0',
             left: '0',
-            height: 'calc(100vh - 145px)'
+            height: 'calc(100vh - 145px)',
+            minHeight: 'calc(100vh - 145px)',
+            maxHeight: 'calc(100vh - 145px)',
           }} />
       </>
     );
@@ -287,7 +290,8 @@ EmbeddedDossierNotConnected.propTypes = {
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
   handleInstanceIdChange: PropTypes.func,
-  handleLoadEvent: PropTypes.func
+  handleIframeLoadEvent: PropTypes.func,
+  handleEmbeddedDossierLoad: PropTypes.func,
 };
 
 EmbeddedDossierNotConnected.defaultProps = {

@@ -82,7 +82,7 @@ export class NotificationsNotConnected extends Component {
     });
   };
 
-  translateContent = (content, t) => (content.includes('Excel returned error') ? `${t('Excel returned error')}: ${content.split(': ')[1]}` : t(content));
+  translateContent = (content, t) => (content.includes('An error has occurred in Excel.') ? `${t('An error has occurred in Excel.')}: ${content.split(': ')[1]}` : t(content));
 
   displayMessage = () => {
     const { messageType, content, t } = this.props;
