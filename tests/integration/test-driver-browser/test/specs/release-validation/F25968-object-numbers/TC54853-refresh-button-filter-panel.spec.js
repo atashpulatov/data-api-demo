@@ -56,7 +56,8 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     browser.pause(1555); // wait for success notification to disappear
     PluginRightPanel.clearData();
     PluginRightPanel.viewDataBtn();
-    PluginPopup.closeRefreshAll();
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
     switchToRightPanelFrame();
 
     // logout

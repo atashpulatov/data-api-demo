@@ -45,9 +45,7 @@ class PluginRightPanel {
   }
 
   refreshFirstObjectFromTheList() {
-    switchToPluginFrame();
-    // browser.pause(4444); // to do: see if we can change to some wait method
-    waitAndClick($(rightPanelSelectors.refreshBtn));
+    this.refreshObject(1);
   }
 
 
@@ -60,12 +58,15 @@ class PluginRightPanel {
    */
   refreshObject(index) {
     switchToPluginFrame();
+    const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
     const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(index);
+    $(removeBtn).moveTo();
+    browser.pause(1000);
     waitAndClick($(refreshBtn));
   }
 
   /**
-   * Clicks to edit button for imported object. Will work when there are more than one object imported.
+   * Clicks to edit button for imported object. Will work when there is one or more objects imported.
    *
    * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
    *
@@ -73,12 +74,15 @@ class PluginRightPanel {
    */
   editObject(index) {
     switchToPluginFrame();
+    const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
     const editBtn = rightPanelSelectors.getEdithBtnForObject(index);
+    $(removeBtn).moveTo();
+    browser.pause(1000);
     waitAndClick($(editBtn));
   }
 
   /**
-   * Clicks to remove button for imported object. Will work when there are more than one object imported.
+   * Clicks to remove button for imported object. Will work when there is one or more objects imported.
    *
    * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
    *
@@ -87,51 +91,47 @@ class PluginRightPanel {
   removeObject(index) {
     switchToPluginFrame();
     const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
+    const objectSelected = rightPanelSelectors.getObjectSelector(index);
+    $(objectSelected).moveTo();
+    browser.pause(1000);
     waitAndClick($(removeBtn));
   }
 
-  /* refreshAll() {
+  /**
+   * Clicks to select the imported object in the right panel. Will work when there is one or more objects imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   * @memberof PluginRightPanel
+   */
+  clickObjectInRightPanel(index) {
     switchToPluginFrame();
-    waitAndClick($(rightPanelSelectors.refreshAllBtn));
-  } */
+    const objectSelected = rightPanelSelectors.getObjectSelector(index);
+    browser.pause(1000);
+    waitAndClick($(objectSelected));
+  }
 
   refreshAll() {
     switchToPluginFrame();
-    const checkBoxAll = $('#overlay > div.side-panel > div.object-tile-container > div.object-tile-container-header > span > div');
-    const refreshAllIcon = $('#overlay > div.side-panel > div.object-tile-container > div.object-tile-container-header > span > span > button:nth-child(5)');
-    waitAndClick(checkBoxAll);
-    waitAndClick(refreshAllIcon);
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+    waitAndClick($(rightPanelSelectors.refreshAllBtn));
   }
 
-  edit() {
-    switchToPluginFrame();
-    waitAndClick($('.edit'));
-  }
 
   removeFirstObjectFromTheList() {
-    switchToPluginFrame();
-    browser.pause(3333);
-    waitAndClick($(rightPanelSelectors.deleteBtn));
+    this.removeObject(1);
   }
 
-  repromptFirstObjectFromTheList() {
-    switchToPluginFrame();
-    browser.pause(3333);
-    waitAndClick($(rightPanelSelectors.repromptBtn));
-  }
 
   // Currently it is not used
   removeAllObjectsFromTheList() {
     switchToPluginFrame();
-    const e = $$('.trash').count();
-    for (let i = 0; i < e; i++) {
-      this.removeFirstObjectFromTheList();
-    }
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+    waitAndClick($(rightPanelSelectors.deleteAllBtn));
   }
 
   closeNotification() {
     switchToPluginFrame();
-    // waitAndClick($('span.ant-notification-notice-btn > button'));
     waitAndClick($('.warning-notification-button-container'));
   }
 
@@ -200,12 +200,11 @@ class PluginRightPanel {
   }
 
   // clicks on object in the right panel and asserts whether the object was selected in the worksheet
-  clickOnObject(object, cellValue) {
-    waitAndClick(object);
+  clickObjectInRightPanelAndAssert(index, cellValue) {
+    this.clickObjectInRightPanel(1);
     switchToExcelFrame();
+    browser.pause(1000); // TODO: Not sure if this is necessary
     expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
-    browser.pause(3000); // TODO: Not sure if this is necessary
-    switchToPluginFrame(); // TODO: Not sure if this is necessary
   }
 
   // hovers over objects in the right panel and assert whether the box shadow color is changed
@@ -224,11 +223,6 @@ class PluginRightPanel {
       browser.pause(1000);
       expect(objectNames[i].getCSSProperty('background-color').value).toEqual('rgba(235,235,235,1)');
     }
-  }
-
-  SelectNthPlaceholder(number) {
-    switchToPluginFrame();
-    return $(`${rightPanelSelectors.placeholderContainer} > div:nth-child(${number})`);
   }
 }
 

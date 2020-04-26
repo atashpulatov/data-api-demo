@@ -1,7 +1,9 @@
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import {
+  switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame, changeBrowserTab, switchToDialogFrame
+} from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { objectsList } from '../../../constants/objects-list';
@@ -14,7 +16,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     const acceptBtn = '#accept-cookies-btn';
 
     // Invalid credentials
-    officeLogin.openExcelAndLoginToPlugin('Invalid username', 'Invalid password', 1700, false)
+    officeLogin.openExcelAndLoginToPlugin('Invalid username', 'Invalid password', 1700, false);
     waitAndClick($('#ActionLinkContainer'));
 
     // Credentials without office privileges
@@ -62,14 +64,14 @@ describe('TC48976 - perform-basic-functionalities', () => {
     PluginPopup.clickPrepareData();
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
-    PluginPopup.selectFilters([['Sales Channel', ['Online']]])
+    PluginPopup.selectFilters([['Sales Channel', ['Online']]]);
     browser.pause(500);
     PluginPopup.searchForElements('Item Type');
     PluginPopup.searchForElements('Invalid metric');
     $(popupSelectors.searchInputPrepareDataPopup).clearValue();
     PluginPopup.clickViewSelected();
     PluginPopup.clickDataPreview();
-    ($(popupSelectors.closePreviewBtn)).waitForDisplayed(1000, false)
+    ($(popupSelectors.closePreviewBtn)).waitForDisplayed(1000, false);
     PluginPopup.closePreview();
     browser.pause(1000);
     PluginPopup.clickImport();
@@ -84,10 +86,10 @@ describe('TC48976 - perform-basic-functionalities', () => {
 
     PluginPopup.switchLibrary(false);
     waitAndClick($('#Filter'));
-    $(datasetFilter).waitForDisplayed(1000, false)
+    $(datasetFilter).waitForDisplayed(1000, false);
     waitAndClick($(datasetFilter));
     PluginPopup.searchForObject(objectsList.datasets.cubeLimitProject);
-    PluginPopup.searchForObject('Invalid Object')
+    PluginPopup.searchForObject('Invalid Object');
     $(popupSelectors.searchInput).clearValue();
 
     // Import dataset and select elements (attributes & metrics & filters)
@@ -96,7 +98,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     PluginPopup.clickPrepareData();
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
-    PluginPopup.selectFilters([['Region', ['Europe', 'Asia']]])
+    PluginPopup.selectFilters([['Region', ['Europe', 'Asia']]]);
     browser.pause(1000);
     $(popupSelectors.searchInputPrepareDataPopup).waitForDisplayed(3000, false);
     PluginPopup.searchForElements('Total Revenue');
@@ -104,7 +106,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     $(popupSelectors.searchInputPrepareDataPopup).clearValue();
     PluginPopup.clickViewSelected();
     PluginPopup.clickDataPreview();
-    ($(popupSelectors.closePreviewBtn)).waitForDisplayed(1000, false)
+    ($(popupSelectors.closePreviewBtn)).waitForDisplayed(1000, false);
     PluginPopup.closePreview();
     browser.pause(1000);
     PluginPopup.clickImport();
@@ -112,7 +114,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
 
     // Assertion after "Region" filter addition
     switchToExcelFrame();
-    OfficeWorksheet.selectCell('P3')
+    OfficeWorksheet.selectCell('P3');
     expect($(P3).getText()).toEqual('868214595');
     browser.pause(1000);
 
@@ -135,7 +137,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     switchToPluginFrame();
     browser.pause(1000);
     PluginPopup.selectObjectElements(['Country', 'Item Type', 'Sales Channel', 'Ship Date', 'Units Sold']);
-    PluginPopup.selectFilters([['Country', ['Angola', 'Albania', 'Bangladesh']]])
+    PluginPopup.selectFilters([['Country', ['Angola', 'Albania', 'Bangladesh']]]);
     PluginPopup.clickImport();
     waitForNotification();
 

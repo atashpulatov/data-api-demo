@@ -1,11 +1,22 @@
 import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import { changeBrowserTab, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
+import {
+  switchToPluginFrame, switchToExcelFrame, switchToRightPanelFrame, changeBrowserTab, switchToDialogFrame
+} from '../../../helpers/utils/iframe-helper';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification, waitForSuccessNotification, waitForAllNotifications } from '../../../helpers/utils/wait-helper';
-import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import {
+  waitForNotification, waitForPopup, waitForSuccessNotification, waitForAllNotifications
+} from '../../../helpers/utils/wait-helper';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { excelSelectors } from '../../../constants/selectors/office-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import { waitAndClick } from '../../../helpers/utils/click-helper';
+import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
+import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelManipulation-helper';
+
 
 describe('Smart Folder - IMPORT -', () => {
   beforeEach(() => {
@@ -18,147 +29,10 @@ describe('Smart Folder - IMPORT -', () => {
   });
 
   it('Import object (1st time)', () => {
-    // should import a report in the first sheet and log the E2E time
-    // OfficeWorksheet.selectCell('A1');
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.importObject(o.reports.reportXML);
-    // waitForNotification();
-    // expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    /**
+     * Testing refactor 11.2.2
+     */
 
-    // // should refresh all
-    // PluginRightPanel.refreshAll();
-    // waitForPopup();
-    // const refreshedObjects = $$('.report-name');
-    // expect(refreshedObjects.length).toEqual(1);
-    // browser.pause(4444);
-
-
-    // // OfficeWorksheet.selectCell('A1');
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.openPrompt(o.reports.valueDayPromptReport);
-    // PluginPopup.writeValueText('07/07/2015\uE004\uE004'); // function presses tab only once for re-prompt to work
-
-    // // should re-prompt a report
-    // waitForNotification();
-    // OfficeWorksheet.selectCell('A1');
-    // const oldCellA1 = $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
-    // PluginRightPanel.repromptFirstObjectFromTheList();
-    // browser.pause(5555);
-    // PluginPopup.writeValueText('09/09/2016\uE004');
-    // waitForNotification();
-    // expect($(se.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    // OfficeWorksheet.selectCell('A1');
-    // const newCellA1 = $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
-    // expect(oldCellA1).not.toEqual(newCellA1);
-
-    // should click prepare data on selected report
-    // OfficeWorksheet.selectCell('A1');
-    // PluginRightPanel.clickImportDataButton();
-    // switchToPluginFrame();
-    // PluginPopup.preparePrompt(o.reports.numericPromptedReport);
-    // browser.pause(2222);
-
-
-    // PluginRightPanel.clickImportDataButton();
-    // switchToPluginFrame();
-    // PluginPopup.searchForObject('Basic Report (Cat, Subcat, Item ; Profit, Revenue)');
-    // PluginPopup.selectFirstObject();
-    // PluginPopup.clickPrepareData();
-
-    // // // should select one metric from many listed
-    // PluginPopup.selectFilters([['Region', ['Central', 'South']]]);
-
-    // PluginRightPanel.clickImportDataButton();
-    // switchToPluginFrame();
-    // browser.pause(1000);
-    // PluginPopup.clickHeader('Modified');
-
-    // PluginPopup.deleteFromSearch();
-
-    // /////////
-
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.openPrompt(o.reports.metricExpPromptedReport);
-    // waitAndClick($('div[title="- none -"]'));
-    // waitAndClick($('div[title="Revenue"]'));
-    // $(s.promptTextBox).setValue('1000\uE004\uE004\uE004\uE006');
-
-    // waitForNotification();
-    // OfficeWorksheet.selectCell('D2');
-    // const oldCellD2 = $('#gridRows > div:nth-child(2) > div:nth-child(4) > div > div').getText();
-    // PluginRightPanel.repromptFirstObjectFromTheList();
-    // browser.pause(5555);
-    // PluginPopup.writeAttrQualificationValue(10000);
-
-    // //////////////
-
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.openPrompt(o.reports.multiplePromptsReport);
-    // PluginPopup.writeMultiPrompt('07/07/2015\uE004\uE004');
-
-    // //////////////
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.openPrompt(o.reports.attributePromptedReport);
-    // waitAndClick($('.mstrBGIcon_tbAdd'));
-    // PluginPopup.clickRun();
-    // waitForNotification();
-
-    // browser.pause(5555);
-    // PluginRightPanel.repromptFirstObjectFromTheList();
-    // browser.pause(5555);
-    // PluginPopup.removeAllSelected();
-    // PluginPopup.promptSelectObject('Music');
-
-
-    // /////////////////////////////////
-
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.importPromptDefault(o.reports.hierarchyExpPromptedReport);
-
-    // browser.pause(2222);
-    // waitForNotification();
-    // OfficeWorksheet.selectCell('A1');
-    // const oldCellC2 = $('#gridRows > div:nth-child(2) > div:nth-child(3) > div > div').getText();
-    // PluginRightPanel.repromptFirstObjectFromTheList();
-    // browser.pause(5555);
-    // PluginPopup.changeExpressionQualificationAndRun('Not In List');
-
-    // ///////////////////////
-
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.importPromptDefaultNested(o.reports.nestedPrompt);
-
-    // ///////////////////
-
-    // OfficeWorksheet.selectCell('A1048576');
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.importObject(o.reports.reportXML);
-    // waitForNotification();
-    // PluginRightPanel.closeNotification();
-
-    // ///////////////////////
-
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.importObject(o.reports.secureDataFiltering);
-    // waitForNotification();
-
-    // switchToPluginFrame();
-    // PluginRightPanel.clickSettings();
-    // PluginRightPanel.clearData();
-    // browser.pause(4000);
-
-    // // should log out
-    // switchToPluginFrame();
-    // PluginRightPanel.clickSettings();
-    // PluginRightPanel.clickLogout();
-
-    // // should log in with Tim user
-    // PluginRightPanel.loginToPlugin('a', '');
-
-    // // should click "View Data" and close the "Refresh All Data" pop-up
-    // switchToPluginFrame();
-    // PluginRightPanel.viewDataBtn();
-    // ///////////////////
 
     // should import a report
     OfficeWorksheet.selectCell('A1');
@@ -178,42 +52,222 @@ describe('Smart Folder - IMPORT -', () => {
     waitForAllNotifications();
     pluginRightPanel.closeAllNotificationsOnHover();
 
-    // // should import a dataset to the adjacent column of the first object
-    // OfficeWorksheet.selectCell('A20');
-    //  PluginRightPanel.clickAddDataButton();
-    //  PluginPopup.importObject(o.datasets.datasetSQL);
-    //  waitForNotification();
+    // ///////////////////
+    // waitForNotification();
+    // switchToPluginFrame();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    // expect($('.notification-text').getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    // // '.ant-notification-notice-description',
 
-    // // should import a report to the adjacent row of the second object
-    //  OfficeWorksheet.selectCell('F20');
-    //  PluginRightPanel.clickAddDataButton();
-    //  PluginPopup.importObject(o.reports.reportXML);
-    //  waitForNotification();
 
-    // // should import a dataset to a cell not adjacent to any imported objects
-    //  OfficeWorksheet.selectCell('J1');
-    //  PluginRightPanel.clickAddDataButton();
-    //  PluginPopup.importObject(o.datasets.datasetSQL);
-    //  waitForNotification();
+    // OfficeWorksheet.selectCell('A1048576');
+    // PluginRightPanel.clickAddDataButton();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.importObject(objectsList.reports.report1k);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
+    // PluginRightPanel.closeNotification();
 
-    //  switchToPluginFrame();
-    // const objects =  $$(se.importedObjectList);
-    // const objectNames =  $$(se.importedObjectNameList);
+    // // should import report which is exactly at the excel limit
+    // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.importAnyObject(objectsList.reports.marginReport, 2);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
-    // // should hover over objects in the right panel
-    // browser.pause(5000);
-    //  PluginRightPanel.hoverOverObjects(objects);
 
-    // // should hover over object names in the right panel
-    //  PluginRightPanel.hoverOverObjectNames(objectNames);
+    // // should display a correct error message when importing a report exceeding Excel row limit
+    // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.importObject(objectsList.reports.report1_5M);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
+    // PluginRightPanel.closeNotification();
 
-    // should click on objects in the right panel
-    //  PluginRightPanel.clickOnObject(objects[0], 'J1');
-    //  PluginRightPanel.clickOnObject(objects[1], 'F20');
-    //  PluginRightPanel.clickOnObject(objects[2], 'A20');
-    //  PluginRightPanel.clickOnObject(objects[3], 'A1');
+    // // should display proper error message for report exceding excel's limits
+    // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.importObject(objectsList.reports.over100k);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.projectLimits);
+    // PluginRightPanel.closeNotification();
+
+
+    // // should display proper error message for importing report above cells covering currently imported one
+    // OfficeWorksheet.selectCell('A3');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.importObject(objectsList.reports.basicReport);
+    // waitForNotification();
+    // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickAddDataButton();
+    // PluginPopup.importObject(objectsList.reports.basicReport);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
+    // PluginRightPanel.closeNotification();
+
+    // // should display proper error message for importing report next to cells covering currently imported one
+    // OfficeWorksheet.selectCell('R1');
+    // PluginRightPanel.clickAddDataButton();
+    // PluginPopup.importObject(objectsList.reports.basicReport);
+    // waitForNotification();
+    // OfficeWorksheet.selectCell('P1');
+    // PluginRightPanel.clickAddDataButton();
+    // PluginPopup.importObject(objectsList.reports.basicReport);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
+    // PluginRightPanel.closeNotification();
+
+    // // should display a correct error message for a report with all data filtered out
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.importObject(objectsList.reports.filtered);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.emptyObject);
+    // PluginRightPanel.closeNotification();
+
+    // // should import a dataset
+    // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.importObject(objectsList.datasets.datasetSQL);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+
+    // //  assert that cell D19 contain the value 44.659
+    // OfficeWorksheet.selectCell('D19');
+    // browser.pause(2000);
+    // const cellD19 = $(excelSelectors.getCell(4, 19)).getText();
+    // expect(cellD19).toBe('44.659');
+
+    // // should insert a dataset with data preparation
+    // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.prepareObject(objectsList.datasets.basicDataset, ['Order Date', 'Country', 'Region', 'Total Cost', 'Total Revenue'], [['Country', ['Angola', 'Albania', 'Bangladesh']], ['Region', ['Europe', 'Asia']]]);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+
+    // // should insert a report with data preparation
+    // OfficeWorksheet.selectCell('A5');
+    // PluginRightPanel.clickAddDataButton();
+    // PluginPopup.prepareObject(objectsList.reports.basicReport, ['Total Cost', 'Total Revenue'], [['Country', ['Angola', 'Albania', 'Bangladesh']], ['Region', ['Europe', 'Asia']]]);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+
+    // // should check proper functionality of a raport with graph
+    // // should import report with grid and graph
+    // OfficeWorksheet.selectCell('A1');
+    // PluginRightPanel.clickImportDataButton();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.importObject(objectsList.reports.gridReport);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+
+    // // should import report with graph
+    // OfficeWorksheet.selectCell('H1');
+    // PluginRightPanel.clickAddDataButton();
+    // PluginPopup.prepareObject(objectsList.reports.grpahReport, ['Profit'], [['Region', []]]);
+    // waitForNotification();
+    // switchToRightPanelFrame();
+    // browser.pause(1111);
+
+    // // should refresh first report on the right panel
+    // const firstReport = $('#overlay > div > section > div > div > div:nth-child(1)');
+    // PluginRightPanel.doubleClick(firstReport);
+    // browser.pause(1111);
+    // pluginRightPanel.closeAllNotificationsOnHover();
+
+    // // PluginRightPanel.refreshFirstObjectFromTheList();
+    // PluginRightPanel.refreshObject(2);
+    // PluginRightPanel.removeObject(1);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
+
+
+    // const { basic01Report } = objectsList.reports;
+    // OfficeWorksheet.selectCell('A2');
+    // PluginRightPanel.clickImportDataButton();
+
+
+    // switchToDialogFrame();
+    // PluginPopup.switchLibrary(false);
+    // PluginPopup.importObject(basic01Report.sourceName);
+    // browser.pause(10000);
+    // pluginRightPanel.closeAllNotificationsOnHover();
+
+    // switchToExcelFrame();
+    // waitAndClick($(excelSelectors.nameBoxDropdownButton), 4000);
+    // const importedFirstTableName = $(`[id^=${basic01Report.excelTableNameStart}]> span`).getText(); // searches for the beginning of the id's string only because of changing timestamps at the end
+    // const normalizedFirstTableName = removeTimestampFromTableName(importedFirstTableName);
+    // expect(normalizedFirstTableName).toEqual(basic01Report.excelTableFullName);
+
+    // browser.keys('\uE00C');
+    // PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'A2');
+    // OfficeWorksheet.selectCell('I2');
+
+    // switchToRightPanelFrame();
+    // PluginRightPanel.clickAddDataButton();
+    // PluginPopup.importObject(basic01Report.sourceName);
+    // browser.pause(10000);
+
+    // const importedSecondTableName = getTextOfNthObjectOnNameBoxList(2);
+    // const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
+    // expect(normalizedSecondTableName).toEqual(basic01Report.excelTableFullName);
+
+    // browser.keys('\uE00C'); // Escape key
+    // PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'I2');
+
+    // switchToRightPanelFrame();
+    // PluginRightPanel.clickObjectInRightPanel(1);
+    // browser.pause(1000);
+    // switchToExcelFrame();
+    // expect($(excelSelectors.cellInput).getValue()).toEqual('A2');
+
+
+    // // clear data then view data
+    // switchToRightPanelFrame();
+    // PluginRightPanel.clickSettings();
+    // browser.pause(1555); // wait for success notification to disappear
+    // PluginRightPanel.clearData();
+    // PluginRightPanel.viewDataBtn();
+
+    // // PluginPopup.closeRefreshAll();
+    // waitForNotification();
+    // pluginRightPanel.closeAllNotificationsOnHover();
+    // switchToRightPanelFrame();
+
+
+    // PluginRightPanel.refreshAll();
+    // // waitForPopup();
+    // // browser.pause(7000);
+    // // switchToExcelFrame();
+    // // PluginPopup.closeRefreshAll();
+    // waitForNotification();
+    // PluginRightPanel.closeAllNotificationsOnHover();
+    // browser.pause(3000);
+
+
+    // // should click "View Data" and close the "Refresh All Data" pop-up
+    // browser.pause(1000);
+    // switchToPluginFrame();
+    // PluginRightPanel.viewDataBtn();
+    // switchToExcelFrame();
+
+    // // waitForRefreshAllToFinish();
+    // // browser.pause(10000); // TODO: wait for popup to show "Refreshing complete!" message, instead of waiting
+    // // waitAndClick($(popupSelectors.closeRefreshAll));
+    // waitForNotification();
+    // PluginRightPanel.closeAllNotificationsOnHover();
+
+    // should log out
+    switchToPluginFrame();
+    PluginRightPanel.clickSettings();
+    PluginRightPanel.clickLogout();
 
     // //////////////////////
-    browser.pause(5000);
+    // browser.pause(5000);
   });
 });

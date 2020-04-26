@@ -32,7 +32,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     switchToPluginFrame();
     PluginPopup.clickRun();
     browser.pause(3000);
-    PluginPopup.selectAttributesAndAttributeForms({ Year: [], Region:[] });
+    PluginPopup.selectAttributesAndAttributeForms({ Year: [], Region: [] });
     PluginPopup.selectAllMetrics();
     PluginPopup.selectFilters([['Category', ['Books']]]);
     PluginPopup.clickDataPreview();
@@ -118,10 +118,8 @@ describe('IMPORT diferent types of vizualizations', () => {
 
     // Refresh all
     PluginRightPanel.refreshAll();
-    waitForPopup();
-    browser.pause(7000);
-    switchToExcelFrame();
-    PluginPopup.closeRefreshAll();
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
     browser.pause(3000);
 
     // Remove first imported prompted report
@@ -148,5 +146,5 @@ describe('IMPORT diferent types of vizualizations', () => {
     switchToPluginFrame();
     PluginRightPanel.logout();
     browser.pause(3000);
-  })
+  });
 });

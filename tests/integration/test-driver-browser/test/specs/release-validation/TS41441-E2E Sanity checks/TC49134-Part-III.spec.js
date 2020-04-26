@@ -5,7 +5,9 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { switchToPluginFrame, switchToRightPanelFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
+import {
+  switchToPluginFrame, switchToRightPanelFrame, switchToExcelFrame, changeBrowserTab
+} from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 
@@ -67,10 +69,8 @@ describe('TS41441 - E2E Sanity checks', () => {
     switchToPluginFrame();
     PluginRightPanel.viewDataBtn();
     switchToExcelFrame();
-
-    // waitForRefreshAllToFinish();
-    browser.pause(10000); // TODO: wait for popup to show "Refreshing complete!" message, instead of waiting
-    waitAndClick($(popupSelectors.closeRefreshAll));
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
 
     // should assert data was refreshed
     switchToExcelFrame();

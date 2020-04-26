@@ -43,10 +43,8 @@ describe('IMPORT diferent types of vizualizations', () => {
 
     // Refresh All
     PluginRightPanel.refreshAll();
-    waitForPopup();
-    browser.pause(7000);
-    switchToExcelFrame();
-    PluginPopup.closeRefreshAll();
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
     browser.pause(3000);
 
     // Edit last imported report
@@ -66,5 +64,5 @@ describe('IMPORT diferent types of vizualizations', () => {
     switchToPluginFrame();
     PluginRightPanel.logout();
     browser.pause(3000);
-  })
+  });
 });

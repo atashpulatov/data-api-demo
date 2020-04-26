@@ -24,7 +24,7 @@ export const objectsList = {
     secureDataAlwaysWorking: 'Secure data - always working',
     nestedPrompt: 'Report with nested prompt',
     over100k: '100010 rows report',
-    marginReport: '1048576 rows',
+    marginReport: 'Report 1048576 rows',
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
