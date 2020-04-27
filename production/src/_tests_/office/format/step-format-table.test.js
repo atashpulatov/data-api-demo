@@ -19,7 +19,7 @@ describe('StepFormatTable', () => {
 
     // when
     await stepFormatTable.formatTable({}, {
-      instanceDefinition: { mstrTable: { crosstabHeaderDimensions: {} } },
+      instanceDefinition: { mstrTable: { crosstabHeaderDimensions: {} }, columns: 42 },
       officeTable: {}
     });
 
@@ -28,6 +28,28 @@ describe('StepFormatTable', () => {
     expect(stepFormatTable.formatCrosstabHeaders).toThrowError(Error);
     expect(console.log).toBeCalledTimes(1);
     expect(console.log).toBeCalledWith('Error when formatting - no columns autofit applied', new Error('errorTest'));
+  });
+
+  it('formatTable should log no autofit, when columns are more than 49', async () => {
+    // given
+    jest.spyOn(console, 'log');
+
+    jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
+
+    jest.spyOn(operationStepDispatcher, 'completeFormatOfficeTable').mockImplementation();
+
+    // when
+    await stepFormatTable.formatTable({}, {
+      instanceDefinition: { mstrTable: { crosstabHeaderDimensions: {} }, columns: 50 },
+      officeTable: {}
+    });
+
+    // then
+    expect(stepFormatTable.formatCrosstabHeaders).toBeCalledTimes(0);
+    expect(console.log).toBeCalledTimes(1);
+    expect(console.log).toBeCalledWith('The column count is more than columns autofit limit - no columns autofit applied.');
   });
 
   it('formatTable should work as expected', async () => {
@@ -42,7 +64,8 @@ describe('StepFormatTable', () => {
         mstrTable: {
           crosstabHeaderDimensions: { rowsX: 'rowsXTest' },
           isCrosstab: 'isCrosstabTest',
-        }
+        },
+        columns: 42
       },
       officeTable: { columns: 'columnsTest' },
     };
