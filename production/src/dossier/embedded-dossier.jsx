@@ -7,6 +7,7 @@ import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/n
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from './script-injection-helper';
 import { Empty } from '@mstr/rc/';
+import './dossier.css';
  
 const { microstrategy, Office } = window;
 
@@ -257,7 +258,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       58px for header, 9px for header margin and 68px for buttons.
       */
       <>
-        {loadingFrame && <Empty loading />}
+        {loadingFrame && <Empty isLoading />}
         <div
           ref={this.container}
           style={{
