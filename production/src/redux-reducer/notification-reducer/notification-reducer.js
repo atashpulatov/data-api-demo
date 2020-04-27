@@ -67,12 +67,16 @@ export const notificationReducer = (state = initialState, action) => {
 
 const createProgressNotification = (state, payload) => {
   const { objectWorkingId, operationType } = payload.operation;
+  let notificationButtons;
+  if (operationType !== CLEAR_DATA_OPERATION) {
+    notificationButtons = getNotificationButtons(getCancelButton(objectWorkingId, operationType));
+  }
   const newNotification = {
     objectWorkingId,
     title: customT(titleOperationInProgressMap.PENDING_OPERATION),
     type: objectNotificationTypes.PROGRESS,
     operationType,
-    children: getNotificationButtons(getCancelButton(objectWorkingId, operationType)),
+    children: notificationButtons,
   };
   return { ...state, notifications: [...state.notifications, newNotification] };
 };
