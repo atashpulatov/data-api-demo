@@ -3,6 +3,7 @@ import stepFetchInsertDataIntoExcel from '../../../office/import/step-fetch-inse
 import { mstrObjectRestService } from '../../../mstr-object/mstr-object-rest-service';
 import officeInsertService from '../../../office/import/office-insert-service';
 import operationErrorHandler from '../../../operation/operation-error-handler';
+import { officeApiHelper } from '../../../office/api/office-api-helper';
 
 describe('StepFetchInsertDataIntoExcel', () => {
   const objectDataMock = {
@@ -92,6 +93,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
   it('fetchInsertDataIntoExcel should work as expected - empty rowGenerator', async () => {
     // given
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
+
     jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
 
     jest.spyOn(officeInsertService, 'syncChangesToExcel').mockImplementation();
@@ -162,6 +165,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
     // given
     objectDataMock.subtotalsInfo.importSubtotal = paramImportSubtotal;
     resultInstanceDefinition.mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
+
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
 
     jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
 
@@ -261,6 +266,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
     // given
     objectDataMock.subtotalsInfo.importSubtotal = paramImportSubtotal;
     resultInstanceDefinition.mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
+
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
 
     jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
 
