@@ -24,7 +24,7 @@ export const rightPanelSelectors = {
   viewDataBtn: '#overlay > div > div.object-tile-container > div.overlay-container > div > button',
   clearOkBtn: '#confirm-btn',
   importedObjectList: '.file-history-container',
-  importedObjectNameList: '.rename-container',
+  importedObjectNameList: '.rename-input',
   editBtn: '.edit',
   placeholderContainer: '#overlay > div > section > div > div.tables-container',
   getObjectSelector: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div`,
