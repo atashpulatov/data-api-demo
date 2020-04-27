@@ -15,23 +15,26 @@ class StepFormatTable {
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param {Boolean} operationData.shouldFormat Determines if the table should be format
    */
   formatTable = async (objectData, operationData) => {
     console.time('Column auto size');
     const {
-      objectWorkingId, excelContext, instanceDefinition, officeTable,
+      objectWorkingId, excelContext, instanceDefinition, officeTable, shouldFormat,
     } = operationData;
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
 
-    try {
-      this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+    if (shouldFormat) {
+      try {
+        this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
 
-      await this.formatColumns(excelContext, officeTable.columns);
+        await this.formatColumns(excelContext, officeTable.columns);
 
-      await excelContext.sync();
-    } catch (error) {
-      console.error(error);
-      console.log('Error when formatting - no columns autofit applied', error);
+        await excelContext.sync();
+      } catch (error) {
+        console.error(error);
+        console.log('Error when formatting - no columns autofit applied', error);
+      }
     }
 
     operationStepDispatcher.completeFormatOfficeTable(objectWorkingId);
