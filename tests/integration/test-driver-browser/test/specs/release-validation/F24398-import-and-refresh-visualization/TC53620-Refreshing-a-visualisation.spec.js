@@ -7,7 +7,6 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
-import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
@@ -34,7 +33,7 @@ describe('F24398 - Import and refresh visualization', () => {
     // Assert that import is successfully imported and cell D16 contains '$583,538'
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     switchToExcelFrame();
     OfficeWorksheet.selectCell('D16');
     expect(D16.getText()).toEqual('$583,538');
@@ -45,7 +44,7 @@ describe('F24398 - Import and refresh visualization', () => {
     // It should refresh the visualization
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.reportRefreshed);
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     browser.pause(1000);
     switchToExcelFrame();

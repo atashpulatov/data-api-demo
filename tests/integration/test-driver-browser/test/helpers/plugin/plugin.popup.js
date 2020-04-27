@@ -6,25 +6,13 @@ import {
   switchToPromptFrame,
   switchToPopupFrame,
   switchToExcelFrame,
-  switchToPromptFrameForEditDossier,
   switchToPromptFrameForEditReport,
-  switchToRefreshAllFrame,
   switchToDialogFrame,
+  switchToPromptFrameForImportDossier
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 
 class PluginPopup {
-  /**
-   * Waits for the 'Refreshing complete!' message and only then closes refreshAll popup
-   * @param {number} timeout increase/decrease timeout depending on the amount of refreshed objects
-   */
-  closeRefreshAll(timeout = 9999) {
-    switchToRefreshAllFrame();
-    $('.finished-header').waitForExist(timeout);
-    switchToExcelFrame();
-    waitAndClick($(popupSelectors.closeRefreshAll));
-  }
-
   searchForObject(objectName) {
     $(popupSelectors.searchInput).clearValue();
     $(popupSelectors.searchInput).setValue(objectName);
@@ -75,7 +63,6 @@ class PluginPopup {
   }
 
   clickRunForPromptedDossier() {
-    switchToPromptFrameForEditDossier();
     waitAndClick($(popupSelectors.runBtnForPromptedDossier));
   }
 
@@ -286,7 +273,9 @@ class PluginPopup {
   }
 
   promptSelectObjectForEdit(objectName) {
-    switchToPromptFrameForEditReport();
+    // switchToPromptFrameForEditReport();
+    switchToPromptFrame();
+    // TODO: check if the change is correct. i think switchToPromptFrameForEditReport() can be deleted.
     browser.pause(10000);
     $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
@@ -328,11 +317,11 @@ class PluginPopup {
   // }
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39454
-  async checkDisplayedObjectNames(searchedString) {
-    for (let i = 0; i < popupSelectors.displayedObjects.length; i++) {
-      await expect(popupSelectors.displayedObjects.get(i).getText().toContain(searchedString));
-    }
-  }
+  // async checkDisplayedObjectNames(searchedString) {
+  //   for (let i = 0; i < popupSelectors.displayedObjects.length; i++) {
+  //     await expect(popupSelectors.displayedObjects.get(i).getText().toContain(searchedString));
+  //   }
+  // }
 
   // Currently this method is not used
   checkIfFilterIsClicked(filterName) {
@@ -389,22 +378,37 @@ class PluginPopup {
     browser.pause(timeToLoadDossier);
   }
 
+  // selectAndImportVizualiation(visContainerId) {
+  //   switchToPromptFrame();
+  //   browser.pause(10000);
+  //   const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+  //   visSelector.waitForExist(15000);
+  //   browser.pause(3000);
+  //   visSelector.click();
+  //   // TODO: wait untli import button is enabled and click it
+  //   browser.pause(2500);
+  //   switchToPluginFrame();
+  //   $(popupSelectors.importBtn).waitForExist(5000);
+  //   this.clickImport();
+  // }
+
   selectAndImportVizualiation(visContainerId) {
     switchToPromptFrame();
-    browser.pause(15000);
-    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
-    visSelector.waitForExist(30000);
-    browser.pause(3000);
-    visSelector.click();
-    // TODO: wait untli import button is enabled and click it
+    let visSelector;
+    if (typeof visContainerId === 'undefined') {
+      visSelector = $(popupSelectors.visualizationSelector);
+    } else {
+      visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+    }
+    waitAndClick(visSelector, 25000);
     browser.pause(2500);
     switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForExist(5000);
+    $(popupSelectors.importBtn).waitForEnabled(5000);
     this.clickImport();
   }
 
   editAndImportVizualization(visContainerId) {
-    switchToPromptFrameForEditDossier();
+    switchToPromptFrame();
     browser.pause(10000);
     const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
     visSelector.waitForExist(15000);
@@ -637,39 +641,30 @@ class PluginPopup {
 
   importDefaultPromptedVisualisation(visContainerId) {
     // reprompt
-    switchToPromptFrameForEditDossier();
+    switchToPromptFrameForImportDossier();
     $('#mstrdossierPromptEditor').waitForExist(10000);
     this.clickRunForPromptedDossier();
+    console.log('it was clicked');
     browser.pause(6000);
-    // select vis
-    switchToPromptFrameForEditDossier();
-    // for dossiers containing one vis: if no visContainerId, select the only existing vis
-    let visSelector;
-    if (typeof visContainerId === 'undefined') {
-      visSelector = $('.mstrmojo-VizBox-selector');
-    } else {
-      visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
-    }
-    visSelector.waitForExist(6000);
-    browser.pause(3000);
-    visSelector.click();
-    browser.pause(2500);
-    switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForExist(5000);
-    this.clickImport();
+    this.selectAndImportVizualiation(visContainerId);
   }
 
   repromptDefaultVisualisation(visContainerId) {
     // edit
-    pluginRightPanel.edit();
+    pluginRightPanel.editObject(1);
     browser.pause(5000);
-    switchToPromptFrameForEditDossier();
+    switchToPromptFrame();
     // click reprompt icon
     $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
     $(popupSelectors.dossierWindow.repromptDossier).click();
     browser.pause(3000);
     // reprompt and import
-    this.importDefaultPromptedVisualisation(visContainerId);
+    switchToPromptFrame();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    this.clickRunForPromptedDossier();
+    console.log('it was clicked');
+    browser.pause(6000);
+    this.selectAndImportVizualiation(visContainerId);
   }
 
   /**

@@ -31,6 +31,7 @@ describe('F24398 - Import and refresh visualization', () => {
     // Assert that import is successfully imported and cell D16 contains '$583,538'
     waitForNotification();
     expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    PluginRightPanel.closeAllNotificationsOnHover();
     browser.pause(1000);
     switchToExcelFrame();
     browser.pause(3000);
@@ -42,12 +43,13 @@ describe('F24398 - Import and refresh visualization', () => {
     switchToRightPanelFrame();
     PluginPopup.repromptDefaultVisualisation();
     waitForNotification();
-    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.visualizationRefreshed);
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
 
     // It should delete the visualization
     browser.pause(3000);
     PluginRightPanel.removeFirstObjectFromTheList();
-    expect($(se.notificationPopUp).getAttribute('textContent')).toContain('Visualization 1 has been removed from the workbook.');
+    waitForNotification();
+    expect($(se.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.objectRemoved);
 
     // It should confirm that the visualization was deleted
     switchToExcelFrame();

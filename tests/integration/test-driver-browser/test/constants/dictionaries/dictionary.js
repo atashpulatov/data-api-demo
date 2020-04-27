@@ -3,7 +3,7 @@ export const dictionary = {
     importSuccess: 'Import successful',
     reportRemoved: 'Report removed',
     reportRefreshed: 'Refresh complete',
-    visualizationRefreshed: 'Visualization refreshed',
+    visualizationRefreshed: 'Refresh complete',
     excelLimit: 'The table you try to import exceeds the worksheet limits',
     rangeNotEmpty: 'This operation requires the use of additional empty rows or columns.',
     loginError: 'Incorrect username and/or password. Please try again',
@@ -13,6 +13,7 @@ export const dictionary = {
     worksheetLimits: 'The table you try to import exceeds the worksheet limits',
     projectLimits: 'This object exceeds the MicroStrategy project row limit. Please contact your administrator.',
     clickToCopy: 'Click to Copy',
+    objectRemoved: 'Object removed'
   },
   de: {
     importSuccess: 'Import successful',
