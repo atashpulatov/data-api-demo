@@ -235,7 +235,7 @@ class PluginPopup {
     this.switchLibraryAndImportObject(objectName, false);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(33333);
   }
 
   writeValueText(value) {
@@ -257,6 +257,7 @@ class PluginPopup {
   writeMultiPrompt(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
+    $(popupSelectors.calendarInput).waitForExist(7777);
     $(popupSelectors.calendarInput).click();
     $(popupSelectors.calendarInput).clearValue();
     $(popupSelectors.calendarInput).setValue(`${value}\uE004\uE004\uE006`);
@@ -390,9 +391,9 @@ class PluginPopup {
 
   selectAndImportVizualiation(visContainerId) {
     switchToPromptFrame();
-    browser.pause(10000);
+    browser.pause(15000);
     const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
-    visSelector.waitForExist(15000);
+    visSelector.waitForExist(30000);
     browser.pause(3000);
     visSelector.click();
     // TODO: wait untli import button is enabled and click it

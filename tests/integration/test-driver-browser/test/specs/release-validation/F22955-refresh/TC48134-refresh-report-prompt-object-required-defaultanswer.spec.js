@@ -26,10 +26,12 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
     PluginPopup.clickRun();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    PluginRightPanel.closeNotificationOnHover();
 
     // should refresh the report
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
+    PluginRightPanel.closeNotificationOnHover();
   });
 });
