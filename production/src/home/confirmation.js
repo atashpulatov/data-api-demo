@@ -88,7 +88,7 @@ ConfirmationNotConnected.propTypes = {
 ConfirmationNotConnected.defaultProps = { t: (text) => text, };
 
 function clearData(objects, notifications) {
-  sidePanelService.dismissAllNotifications(notifications);
+  sidePanelService.dismissNotifications(notifications);
   homeHelper.secureData(objects);
 }
 

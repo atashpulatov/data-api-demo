@@ -133,7 +133,7 @@ export const RightSidePanelNotConnected = (props) => {
       onSettingsClick={handleSettingsClick}
       confirmationWindow={isConfirm && <Confirmation />}
       globalNotification={globalNotification}
-      onSelectAll={() => sidePanelService.dismissAllNotifications(notifications)}
+      onSelectAll={() => sidePanelService.dismissNotifications(notifications)}
     />
   );
 };

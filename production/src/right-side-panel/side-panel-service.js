@@ -281,7 +281,7 @@ class SidePanelService {
    *
    * @param {Object[]} notifications
    */
-  dismissAllNotifications = (notifications) => {
+  dismissNotifications = (notifications) => {
     notifications.forEach((notification) => {
       notification.onHover && notification.onHover();
       notification.callback && notification.callback();
