@@ -1,6 +1,8 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeApiDataLoader from '../api/office-api-data-loader';
 
+const AUTOFIT_COLUMN_LIMIT = 50;
+
 class StepFormatTable {
   /**
    * Auto resizes the columns of the Office table passed in parameters.
@@ -22,13 +24,18 @@ class StepFormatTable {
       objectWorkingId, excelContext, instanceDefinition, officeTable,
     } = operationData;
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
+    const { columns } = instanceDefinition;
 
     try {
-      this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+      if (columns < AUTOFIT_COLUMN_LIMIT) {
+        this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
 
-      await this.formatColumns(excelContext, officeTable.columns);
+        await this.formatColumns(excelContext, officeTable.columns);
 
-      await excelContext.sync();
+        await excelContext.sync();
+      } else {
+        console.log('The column count is more than columns autofit limit - no columns autofit applied.');
+      }
     } catch (error) {
       console.error(error);
       console.log('Error when formatting - no columns autofit applied', error);
