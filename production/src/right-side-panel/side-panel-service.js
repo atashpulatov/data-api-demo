@@ -274,7 +274,8 @@ class SidePanelService {
   });
 
   /**
-   * Simulates hover and dismisses all provided notifications
+   * Manually calls onHover and callback methods from notifications.
+   * This way, it dismisses all provided notifications
    * Works for notifications concerning finished operations.
    * For others it doesn't bring any effect.
    *
