@@ -7,9 +7,11 @@ import warningIcon from './assets/icon_conflict.svg';
 import { toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../redux-reducer/office-reducer/office-actions';
 
 import { homeHelper } from './home-helper';
+import { sidePanelService } from '../right-side-panel/side-panel-service';
 
 export const ConfirmationNotConnected = ({
   objects,
+  notifications,
   isConfirm,
   toggleIsConfirmFlag,
   t
@@ -67,7 +69,7 @@ export const ConfirmationNotConnected = ({
           </div>
         </div>
         <div className="confirm-buttons">
-          <button className="ant-btn" id="confirm-btn" type="button" onClick={() => homeHelper.secureData(objects)}>{t('OK')}</button>
+          <button className="ant-btn" id="confirm-btn" type="button" onClick={() => clearData(objects, notifications)}>{t('OK')}</button>
           <button className="ant-btn" id="cancel-btn" type="button" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
@@ -77,6 +79,7 @@ export const ConfirmationNotConnected = ({
 
 ConfirmationNotConnected.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.shape({})),
+  notifications: PropTypes.arrayOf(PropTypes.shape({})),
   isConfirm: PropTypes.bool,
   toggleIsConfirmFlag: PropTypes.func,
   t: PropTypes.func
@@ -84,10 +87,16 @@ ConfirmationNotConnected.propTypes = {
 
 ConfirmationNotConnected.defaultProps = { t: (text) => text, };
 
-function mapStateToProps({ officeReducer, objectReducer }) {
+function clearData(objects, notifications) {
+  sidePanelService.dismissNotifications(notifications);
+  homeHelper.secureData(objects);
+}
+
+function mapStateToProps({ officeReducer, objectReducer, notificationReducer }) {
   const { objects } = objectReducer;
   const { isConfirm } = officeReducer;
-  return { objects, isConfirm };
+  const { notifications } = notificationReducer;
+  return { objects, notifications, isConfirm };
 }
 
 const mapDispatchToProps = { toggleIsConfirmFlag: toggleIsConfirmFlagImported };
