@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import popupSelectors from '../../../constants/selectors/popup-selectors';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('F24086 - Improved browsing by adding filters', () => {
