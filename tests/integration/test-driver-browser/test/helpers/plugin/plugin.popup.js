@@ -23,7 +23,7 @@ class PluginPopup {
     $('.finished-header').waitForExist(timeout);
     switchToExcelFrame();
     waitAndClick($(popupSelectors.closeRefreshAll));
-  };
+  }
 
   searchForObject(objectName) {
     $(popupSelectors.searchInput).clearValue();
@@ -68,7 +68,7 @@ class PluginPopup {
 
   clickSubtotalToggler() {
     waitAndClick($(popupSelectors.subtotalToggler));
-  };
+  }
 
   closePreview() {
     waitAndClick($(popupSelectors.closePreviewBtn));
@@ -196,7 +196,7 @@ class PluginPopup {
     browser.pause(9999); // temp solution
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
-  };
+  }
 
   selectAttributeIndex(index) {
     for (let i = 0; i < index.length; i++) {
@@ -235,7 +235,7 @@ class PluginPopup {
     this.switchLibraryAndImportObject(objectName, false);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(33333);
   }
 
   writeValueText(value) {
@@ -257,6 +257,7 @@ class PluginPopup {
   writeMultiPrompt(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
+    $(popupSelectors.calendarInput).waitForExist(7777);
     $(popupSelectors.calendarInput).click();
     $(popupSelectors.calendarInput).clearValue();
     $(popupSelectors.calendarInput).setValue(`${value}\uE004\uE004\uE006`);
@@ -381,18 +382,18 @@ class PluginPopup {
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
-  };
+  }
 
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
     this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
-  };
+  }
 
   selectAndImportVizualiation(visContainerId) {
     switchToPromptFrame();
-    browser.pause(10000);
+    browser.pause(15000);
     const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
-    visSelector.waitForExist(15000);
+    visSelector.waitForExist(30000);
     browser.pause(3000);
     visSelector.click();
     // TODO: wait untli import button is enabled and click it
@@ -400,7 +401,7 @@ class PluginPopup {
     switchToPluginFrame();
     $(popupSelectors.importBtn).waitForExist(5000);
     this.clickImport();
-  };
+  }
 
   editAndImportVizualization(visContainerId) {
     switchToPromptFrameForEditDossier();
@@ -413,7 +414,7 @@ class PluginPopup {
     browser.pause(2500);
     switchToPluginFrame();
     this.clickImport();
-  };
+  }
 
   showTotals(objectId) {
     switchToPromptFrame();
@@ -424,7 +425,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.totalButton));
     waitAndClick($(popupSelectors.okButton));
     browser.pause(4000);
-  };
+  }
 
   sortAscending(objectId) {
     switchToPromptFrame();
@@ -432,7 +433,7 @@ class PluginPopup {
     browser.pause(1000);
     waitAndClick($(popupSelectors.sortAscendingButton));
     browser.pause(4000);
-  };
+  }
 
   // TODO:
   // method is used to select attributes(to check checkboxes) and attribute forms.
@@ -449,14 +450,14 @@ class PluginPopup {
         }
       }
     }
-  };
+  }
 
   selectAttributeFormVisualisation(type) {
     waitAndClick($(popupSelectors.attributeFormDropdown));
     browser.pause(500);
     waitAndClick($(`${popupSelectors.attributeFormDropDownItem}=${type}`));
     browser.pause(500);
-  };
+  }
 
   sortDescending(objectId) {
     switchToPromptFrame();
@@ -464,7 +465,7 @@ class PluginPopup {
     browser.pause(1000);
     waitAndClick($(popupSelectors.sortDescendingButton));
     browser.pause(4000);
-  };
+  }
 
   drillByCategory(objectId) {
     switchToPromptFrame();
@@ -474,7 +475,7 @@ class PluginPopup {
     browser.pause(1000);
     waitAndClick($(popupSelectors.categoryButton));
     browser.pause(4000);
-  };
+  }
 
   /**
    * Toggles attribute elements for filter at dossier filter panel
@@ -489,7 +490,7 @@ class PluginPopup {
       waitAndClick($(dossierWindow.filtersMenu.selectFilterValueAt(valueIndex)), 1000);
     });
     waitAndClick($(dossierWindow.filtersMenu.getFilterAt(filterIndex)), 1000);
-  };
+  }
 
   /**
    * Sets value for one of the inputs for slider filter in dossier filters
@@ -504,7 +505,7 @@ class PluginPopup {
     maxValueInput.doubleClick();
     browser.keys('\uE003'); // Press Backspace
     maxValueInput.setValue(value);
-  };
+  }
 
   /**
    * Refresh Dossier to default state
@@ -514,7 +515,7 @@ class PluginPopup {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonRefreshDossier), 1000);
     waitAndClick($(dossierWindow.buttonConfirmRefresh), 1000);
-  };
+  }
 
   /**
    * Refresh Dossier to default state
@@ -525,7 +526,7 @@ class PluginPopup {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonBookmarks), 1000);
     waitAndClick($(dossierWindow.getBookmarkItemAt(index)), 1000);
-  };
+  }
 
   /**
    * Go to page/chapter in dossier
@@ -570,7 +571,7 @@ class PluginPopup {
   expandObjectDetails(index) {
     $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
     const expandButtons = $$(popupSelectors.expandButton);
-    expandButtons[index-1].click();
+    expandButtons[index - 1].click();
   }
 
   /**
@@ -580,11 +581,11 @@ class PluginPopup {
    */
   copyToClipboardObjectDetails(index) {
     const INDEX_TO_DETAIL = {
-      '1': popupSelectors.typeDetail, //Type
-      '2': popupSelectors.idDetail, //ID
-      '3': popupSelectors.createdDetail, //Created
-      '4': popupSelectors.detailsTable + ' > table ' + popupSelectors.locationDetail, //Location
-      '5': popupSelectors.detailsTable + ' > table ' + popupSelectors.descriptionDetail, //Description
+      1: popupSelectors.typeDetail, // Type
+      2: popupSelectors.idDetail, // ID
+      3: popupSelectors.createdDetail, // Created
+      4: `${popupSelectors.detailsTable} > table ${popupSelectors.locationDetail}`, // Location
+      5: `${popupSelectors.detailsTable} > table ${popupSelectors.descriptionDetail}`, // Description
     };
     const objectDetail = $(INDEX_TO_DETAIL[index]);
     objectDetail.click();
@@ -709,21 +710,21 @@ class PluginPopup {
    */
   clickAllButton(section) {
     switch (section) {
-    case 'Application':
-      waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
-      break;
-    case 'Owner':
-      if (this.getMyLibraryState()) {
+      case 'Application':
         waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
-      } else {
-        waitAndClick($$(popupSelectors.filterPanel.expandButton)[1]);
-      }
-      break;
-    case 'Modified':
-      waitAndClick($('.mstr-date-range-selector-container .expand-btn'));
-      break;
-    default:
-      break;
+        break;
+      case 'Owner':
+        if (this.getMyLibraryState()) {
+          waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
+        } else {
+          waitAndClick($$(popupSelectors.filterPanel.expandButton)[1]);
+        }
+        break;
+      case 'Modified':
+        waitAndClick($('.mstr-date-range-selector-container .expand-btn'));
+        break;
+      default:
+        break;
     }
   }
 
@@ -774,7 +775,7 @@ class PluginPopup {
     const expandButtons = $$(popupSelectors.expandButton);
     for (let i = 0; i < amount; i++) {
       expandButtons[i].waitForExist({ timeout: 3000 });
-      expandButtons[i].click()
+      expandButtons[i].click();
     }
   }
 
@@ -788,7 +789,7 @@ class PluginPopup {
     const expandButtons = $$(popupSelectors.expandButton);
     for (let i = expandButtons.length - 1; i > expandButtons.length - 1 - amount; i--) {
       expandButtons[i].waitForExist({ timeout: 3000 });
-      expandButtons[i].click()
+      expandButtons[i].click();
     }
   }
 
@@ -836,7 +837,7 @@ class PluginPopup {
    */
   areAllRowsCollapsed() {
     let openedRows = this.findAmountOfOpenRows();
-    if (openedRows > 0) return false;
+    if (openedRows > 0) { return false; }
     this.scrollTable(['End']);
     openedRows = this.findAmountOfOpenRows();
     return !(openedRows > 0);
@@ -897,7 +898,7 @@ class PluginPopup {
    */
   getBackgroundColor(selector) {
     const backgroundColour = $(selector).getCSSProperty('background-color');
-    return backgroundColour["parsed"]["hex"];
+    return backgroundColour.parsed.hex;
   }
 
   /**

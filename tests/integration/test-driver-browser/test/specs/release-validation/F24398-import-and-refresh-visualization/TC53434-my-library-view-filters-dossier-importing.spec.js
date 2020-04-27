@@ -20,6 +20,7 @@ describe('F24398 - Import and refresh visualization', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
+    PluginPopup.switchLibrary(false);
     waitAndClick($('#Filter'));
     $('label[title=\'Administrator\']').click();
     browser.keys('\uE00c');

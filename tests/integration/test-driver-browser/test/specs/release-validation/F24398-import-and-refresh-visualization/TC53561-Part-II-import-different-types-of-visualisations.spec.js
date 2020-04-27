@@ -7,6 +7,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import settings from '../../../config';
+import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('F24398 - Import and refresh visualization', () => {
   const { name, timeToOpen, visualizations } = objectsList.dossiers.complexDossier;
@@ -17,7 +18,7 @@ describe('F24398 - Import and refresh visualization', () => {
 
   it(`[TC53561] import different types of visualisations: bubbleChart, pieChart, comboChart, geospatialService, network`, () => {
     let isFirstReport = true;
-    const onlyFiveVisualizations = Object.keys(visualizations).slice(5, 9).map(key => ({ [key]:visualizations[key] }));
+    const onlyFiveVisualizations = Object.keys(visualizations).slice(5, 9).map(key => ({ [key]: visualizations[key] }));
 
     Object.keys(onlyFiveVisualizations).forEach(i => {
       OfficeWorksheet.selectCell('A1');
@@ -35,12 +36,12 @@ describe('F24398 - Import and refresh visualization', () => {
       PluginPopup.selectAndImportVizualiation(visSelector);
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-
+      pluginRightPanel.closeNotificationOnHover();
       // afterEach
       browser.pause(100);
       console.log(`${visType} successfully imported`);
       OfficeWorksheet.openNewSheet();
       browser.pause(1000);
     });
-  })
+  });
 });

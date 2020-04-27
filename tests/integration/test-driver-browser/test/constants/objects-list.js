@@ -68,13 +68,13 @@ export const objectsList = {
         heatMap: '#mstr191',
         grid: '#mstr227',
         barChart: '#mstr271',
-        lineChart: '#mstr459',
-        areaChart: '#mstr436',
-        bubbleChart: '#mstr505',
+        lineChart: '#mstr444',
+        areaChart: '#mstr421',
+        bubbleChart: '#mstr490',
         pieChart: '#mstr310',
-        comboChart: '#mstr572',
+        comboChart: '#mstr557',
         geospatialService: '#mstr338',
-        network: '#mstr646',
+        network: '#mstr631',
         histogram: '#mstr131',
         boxPlot: '#mstr212',
         waterfall: '#mstr248',
@@ -92,7 +92,7 @@ export const objectsList = {
         }
       },
     },
-    interactiveDossier: { name: 'Automation Dossier for interactive components', },
+    interactiveDossier: { name: 'Dossier for interactive components', },
     customVisualizations: {
       name: 'Custom Visualizations',
       visualizations: { GoogleTimeline: '#mstr114', }
@@ -106,7 +106,7 @@ export const objectsList = {
       }
     },
     promptedDossier: {
-      name: 'Prompted dossier - don\'t add to Library',
+      name: 'Prompted dossier',
       visualizations: { vis1: '#mstr106' }
     }
   }
