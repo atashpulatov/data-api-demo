@@ -17,7 +17,7 @@ describe('Confirmation', () => {
   it('should call proper methods from secureData when Ok button is clicked', () => {
     // given
     const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => jest.fn);
-    const mockDismissAll = jest.spyOn(sidePanelService, 'dismissAllNotifications').mockImplementation(() => jest.fn);
+    const mockDismissAll = jest.spyOn(sidePanelService, 'dismissNotifications').mockImplementation(() => jest.fn);
     const mockToggleIsConfirmFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
     const confirmationWrapper = mount(<ConfirmationNotConnected
