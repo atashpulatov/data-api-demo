@@ -89,17 +89,17 @@ export class AttributeSelectorWindowNotConnected extends Component {
 
   render() {
     const {
-      handleBack, chosenObject, mstrData, objectName
+      handleBack, chosenObject, mstrData, objectName, editedObject
     } = this.props;
     const {
       triggerUpdate, openModal, attributesSelected, loading,
     } = this.state;
     const { isPrompted } = mstrData;
     const { chosenObjectName } = chosenObject;
-    const typeName = chosenObject.objectType
-      && chosenObject.objectType.name
-      && chosenObject.objectType.name.charAt(0).toUpperCase()
-      + chosenObject.objectType.name.substring(1);
+    const typeOfObject = editedObject || chosenObject;
+    const typeName = typeOfObject.mstrObjectType
+      ? typeOfObject.mstrObjectType.name.charAt(0).toUpperCase() + typeOfObject.mstrObjectType.name.substring(1)
+      : 'Data';
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     return (
       <div>
@@ -157,6 +157,7 @@ AttributeSelectorWindowNotConnected.propTypes = {
 const mapStateToProps = state => {
   const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   const { editedObject } = state.popupReducer;
+
   return {
     mstrData: { ...state.popupStateReducer },
     chosenObject,
