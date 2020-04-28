@@ -400,7 +400,7 @@ class PluginPopup {
     } else {
       visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
     }
-    waitAndClick(visSelector, 25000);
+    waitAndClick(visSelector, 40000);
     browser.pause(2500);
     switchToPluginFrame();
     $(popupSelectors.importBtn).waitForEnabled(5000);

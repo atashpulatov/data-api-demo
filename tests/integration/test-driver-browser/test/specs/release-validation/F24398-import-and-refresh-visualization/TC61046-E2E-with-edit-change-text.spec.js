@@ -26,6 +26,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.openDossier(dossierObject.name, null, false);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.accounts);
     waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
 
     // Import second visualization
@@ -34,6 +35,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.openDossier(dossierObject.name, null, false);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.dailyActiveAccounts);
     waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
 
     // Change text in cell A4
@@ -48,10 +50,12 @@ describe('IMPORT diferent types of vizualizations', () => {
     browser.pause(3000);
 
     // Edit last imported report
-    PluginRightPanel.edit();
+    PluginRightPanel.editObject(1);
     browser.pause(3000);
+
     PluginPopup.editAndImportVizualization(dossierObject.visualizations.accounts);
     waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
 
 
