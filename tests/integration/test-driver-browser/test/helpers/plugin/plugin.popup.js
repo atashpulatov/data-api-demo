@@ -117,6 +117,14 @@ class PluginPopup {
     }
   }
 
+  // This method select Objects in Prepare Data for Report Objects. After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
+  selectAttributeElementsForReportObjects(elements) {
+    for (let i = 0; i < elements.length; i++) {
+      // waitAndClick($(`input[name="${elements[i]}"]`));
+      waitAndClick($(`.item-title=${elements[i]}`));
+    }
+  }
+
   changePromptQualificationItem(value) {
     switchToPopupFrame();
     waitAndClick($('div[title="- none -"]'));

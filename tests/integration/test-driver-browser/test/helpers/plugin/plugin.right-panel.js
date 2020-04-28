@@ -58,9 +58,8 @@ class PluginRightPanel {
    */
   refreshObject(index) {
     switchToPluginFrame();
-    const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
     const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(index);
-    $(removeBtn).moveTo();
+    $(refreshBtn).moveTo();
     browser.pause(1000);
     waitAndClick($(refreshBtn));
   }
@@ -74,9 +73,8 @@ class PluginRightPanel {
    */
   editObject(index) {
     switchToPluginFrame();
-    const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
     const editBtn = rightPanelSelectors.getEdithBtnForObject(index);
-    $(removeBtn).moveTo();
+    $(editBtn).moveTo();
     browser.pause(1000);
     waitAndClick($(editBtn));
   }
@@ -91,8 +89,7 @@ class PluginRightPanel {
   removeObject(index) {
     switchToPluginFrame();
     const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
-    const objectSelected = rightPanelSelectors.getObjectSelector(index);
-    $(objectSelected).moveTo();
+    $(removeBtn).moveTo();
     browser.pause(1000);
     waitAndClick($(removeBtn));
   }

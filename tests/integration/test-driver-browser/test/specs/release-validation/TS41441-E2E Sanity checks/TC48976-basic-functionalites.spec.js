@@ -54,6 +54,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectsList.reports.filtered);
+    browser.pause(500);
     PluginPopup.searchForObject('Invalid report');
     browser.pause(500);
     $(popupSelectors.searchInput).clearValue();
@@ -111,6 +112,8 @@ describe('TC48976 - perform-basic-functionalities', () => {
     browser.pause(1000);
     PluginPopup.clickImport();
     waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
+
 
     // Assertion after "Region" filter addition
     switchToExcelFrame();
@@ -118,22 +121,23 @@ describe('TC48976 - perform-basic-functionalities', () => {
     expect($(P3).getText()).toEqual('868214595');
     browser.pause(1000);
 
+    // Rename the report
     switchToRightPanelFrame();
-    waitAndClick($(firstObject));
-    $(rightPanelSelectors.importedObjectNameList).doubleClick();
+    PluginRightPanel.clickObjectInRightPanel(2);
+    $(rightPanelSelectors.importedObjectNameList).doubleClick(); // TODO: The actual renaming is missing
     $(rightPanelSelectors.importedObjectNameList).moveTo();
     browser.pause(1000);
-    firstRefreshIcon.waitForDisplayed(3000, false);
-    firstRefreshIcon.moveTo();
-    waitAndClick(firstRefreshIcon);
-    browser.pause(5000);
-    waitAndClick($(firstObject));
+
+    // Refresh the report
+    PluginRightPanel.refreshObject(2);
+    waitForNotification();
+    PluginRightPanel.clickObjectInRightPanel(1);
+
 
     // Edit dataset
-    ($(rightPanelSelectors.editBtn)).waitForDisplayed(5000, false);
-    PluginRightPanel.edit();
+    switchToRightPanelFrame();
+    PluginRightPanel.editObject(1);
     browser.pause(1000);
-
     switchToPluginFrame();
     browser.pause(1000);
     PluginPopup.selectObjectElements(['Country', 'Item Type', 'Sales Channel', 'Ship Date', 'Units Sold']);
@@ -142,9 +146,9 @@ describe('TC48976 - perform-basic-functionalities', () => {
     waitForNotification();
 
     // Remove object from object list
-    $(removeIcon).moveTo();
-    waitAndClick($(removeIcon));
-    browser.pause(2000);
+    PluginRightPanel.removeAllObjectsFromTheList();
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
 
     // Logout
     switchToPluginFrame();
