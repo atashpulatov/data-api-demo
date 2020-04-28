@@ -85,7 +85,7 @@ describe('StepFormatTable', () => {
     // then
     expect(stepFormatTable.formatCrosstabHeaders).toBeCalledTimes(0);
     expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('The column count is more than columns autofit limit - no columns autofit applied.');
+    expect(console.log).toBeCalledWith('The column count is more than columns autofit limit or should not format - no columns autofit applied.');
   });
 
   it('formatTable should work as expected', async () => {
