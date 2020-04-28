@@ -11,19 +11,15 @@ class OfficeInsertService {
    * @param {Boolean} finalsync Specify whether this will be last sync after inserting data into table.
    */
   syncChangesToExcel = async (contextPromises, finalsync) => {
-    try {
-      if (contextPromises.length % PROMISE_LIMIT === 0) {
-        console.time('Waiting for pending context syncs');
-        await Promise.all(contextPromises);
-        console.timeEnd('Waiting for pending context syncs');
-        contextPromises = [];
-      } else if (finalsync) {
-        console.time('Context sync');
-        await Promise.all(contextPromises);
-        console.timeEnd('Context sync');
-      }
-    } catch (error) {
-      console.error(error);
+    if (contextPromises.length % PROMISE_LIMIT === 0) {
+      console.time('Waiting for pending context syncs');
+      await Promise.all(contextPromises);
+      console.timeEnd('Waiting for pending context syncs');
+      contextPromises = [];
+    } else if (finalsync) {
+      console.time('Context sync');
+      await Promise.all(contextPromises);
+      console.timeEnd('Context sync');
     }
   }
 
