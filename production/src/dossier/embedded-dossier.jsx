@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Empty } from '@mstr/rc/';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from './script-injection-helper';
-import { Empty } from '@mstr/rc/';
 import './dossier.css';
- 
+
 const { microstrategy, Office } = window;
 
 const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
@@ -49,7 +49,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     watchForIframeAddition(this.container.current, this.onIframeLoad);
     this.loadEmbeddedDossier(this.container.current);
   }
-  
+
   componentWillUnmount() {
     if (this.msgRouter) {
       this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
@@ -63,7 +63,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * @param {*} iframe
    */
   onIframeLoad = (iframe) => {
-    this.setState({ loadingFrame: false });
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleIframeLoadEvent } = this.props;
@@ -210,6 +209,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     };
     if (microstrategy && microstrategy.dossier) {
       this.embeddedDossier = await microstrategy.dossier.create(props);
+      this.setState({ loadingFrame: false });
       handleEmbeddedDossierLoad();
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
