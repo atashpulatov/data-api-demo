@@ -74,8 +74,8 @@ describe('StepApplySubtotalFormatting', () => {
     // then
     expect(officeFormatSubtotals.applySubtotalFormatting).toBeCalledTimes(1);
     expect(officeFormatSubtotals.applySubtotalFormatting).toBeCalledWith(
-      'excelContextTest',
       'officeTableTest',
+      'excelContextTest',
       {
         subtotalsInfo: {
           subtotalsAddresses: {
