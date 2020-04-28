@@ -271,7 +271,7 @@ class PluginPopup {
 
   promptSelectObject(objectName) {
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(22222);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
     waitAndClick($('.mstrToolButtonRounded'));
