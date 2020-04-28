@@ -134,6 +134,7 @@ export const RightSidePanelNotConnected = (props) => {
       confirmationWindow={isConfirm && <Confirmation />}
       globalNotification={globalNotification}
       onSelectAll={() => sidePanelService.dismissNotifications(notifications)}
+      shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
     />
   );
 };
