@@ -38,7 +38,7 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     expect(normalizedFirstTableName).toEqual(basic01Report.excelTableFullName);
 
     browser.keys('\uE00C');
-    PluginRightPanel.clickOnObjectAndAssert(1, 'A2');
+    PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
 
     OfficeWorksheet.selectCell('I2');
 
@@ -52,6 +52,6 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     expect(normalizedSecondTableName).toEqual(basic01Report.excelTableFullName);
 
     browser.keys('\uE00C'); // Escape key
-    PluginRightPanel.clickOnObjectAndAssert(1, 'I2');
+    PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'I2');
   });
 });
