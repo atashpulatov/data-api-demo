@@ -140,6 +140,11 @@ class PluginPopup {
     waitAndClick($(popupSelectors.firstObject));
   }
 
+  selectFirstObjectWithoutSearch() {
+    browser.pause(2222);
+    waitAndClick($(popupSelectors.firstObjectWithoutSearch));
+  }
+
   switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
     switchToDialogFrame();
     browser.pause(4000);

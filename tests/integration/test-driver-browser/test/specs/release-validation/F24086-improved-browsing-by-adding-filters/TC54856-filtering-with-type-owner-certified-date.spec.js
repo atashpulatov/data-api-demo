@@ -39,13 +39,10 @@ describe('F24086 - Improved browsing by adding filters', () => {
     const dateFrom = new Date(2006, 5, 12);
     const dateTo = new Date(2018, 3, 7);
     PluginPopup.clickFilterButton();
-
     PluginPopup.clickHeader('Modified');
     expect(PluginPopup.assertFirstObjectDateIsInTheRange(dateFrom, dateTo)).toBe(true);
-
     PluginPopup.clickHeader('Modified');
     expect(PluginPopup.assertFirstObjectDateIsInTheRange(dateFrom, dateTo)).toBe(true);
-
     PluginPopup.selectLastObject();
     PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
@@ -53,20 +50,17 @@ describe('F24086 - Improved browsing by adding filters', () => {
     browser.pause(2222); // made to assure the table has been scrolled to the bottom
     PluginPopup.selectLastObject();
     PluginPopup.clickHeader('Owner');
-
     /* Open the filter panel and select some filters for 'Application', 'Type', 'Owner' */
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Owner', 'MSTR User');
     PluginPopup.tickFilterCheckBox('Application', 'MicroStrategy Tutorial');
     PluginPopup.tickFilterCheckBox('Type', 'Report');
-
     /* Scroll down and select any object from the list */
     PluginPopup.scrollTable(['End']);
     browser.pause(2222); // made to assure the table has been scrolled to the bottom
     PluginPopup.selectLastObject();
     PluginPopup.switchLibrary(true);
     PluginPopup.switchLibrary(false);
-
     /* Open filter panel & click 'Clear All' button in the bottom right corner */
     PluginPopup.clickFilterButton();
     PluginPopup.clearAll();

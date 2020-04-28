@@ -19,7 +19,7 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectFirstObjectWithoutSearch();
     // apply filters
     PluginPopup.clickRefreshButton();
     const filterResultBefore = PluginPopup.getFilterResults();
