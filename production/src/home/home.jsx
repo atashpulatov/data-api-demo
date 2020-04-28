@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
@@ -15,6 +15,7 @@ import { notificationService } from '../notification-v2/notification-service';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import InternetConnectionError from '../popup/internet-connection-error';
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
@@ -22,29 +23,14 @@ export const HomeNotConnected = (props) => {
   const {
     loading, popupOpen, authToken, t
   } = props;
-  const [isOnline, setOnline] = useState(false);
 
-  React.useEffect(() => {
-    const { connectionRestored, connectionLost } = notificationService;
-    const handleConnectionChange = () => {
-      const { onLine } = window.navigator;
-      return onLine
-        ? controlConnection(isOnline, connectionRestored)
-        : controlConnection(popupOpen, connectionLost);
-    };
-    const controlConnection = (condition, manageConnection) => {
-      const { onLine } = window.navigator;
-      setOnline(onLine && !!authToken);
-      return !condition && manageConnection();
-    };
-    handleConnectionChange();
-    window.addEventListener('online', handleConnectionChange);
-    window.addEventListener('offline', handleConnectionChange);
-    return (() => window.removeEventListener('online', handleConnectionChange),
-    () => window.removeEventListener('offline', handleConnectionChange));
-  }, [authToken, isOnline, popupOpen],);
+  useEffect(() => {
+    if (!authToken) {
+      notificationService.connectionRestored();
+    }
+  },);
 
-  React.useEffect(() => {
+  useEffect(() => {
     try {
       officeStoreRestoreObject.restoreObjectsFromExcelStore();
       homeHelper.saveLoginValues();
@@ -55,7 +41,7 @@ export const HomeNotConnected = (props) => {
     }
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     getUserData(authToken);
   }, [authToken]);
 
@@ -69,6 +55,7 @@ export const HomeNotConnected = (props) => {
             {IS_DEVELOPMENT && <Authenticate />}
           </Spin>
         )}
+      {!popupOpen && <InternetConnectionError />}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
     </SessionExtendingWrapper>
   );
