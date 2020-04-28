@@ -20,7 +20,8 @@ describe('StepFormatTable', () => {
     // when
     await stepFormatTable.formatTable({}, {
       instanceDefinition: { mstrTable: { crosstabHeaderDimensions: {} }, columns: 42 },
-      officeTable: {}
+      officeTable: {},
+      shouldFormat: true,
     });
 
     // then
@@ -30,6 +31,45 @@ describe('StepFormatTable', () => {
     expect(console.log).toBeCalledWith('Error when formatting - no columns autofit applied', new Error('errorTest'));
   });
 
+  it('formatTable should be skipped for shouldFormat false', async () => {
+    // given
+    const objectData = {};
+
+    const excelContextSyncMock = jest.fn();
+    const operationData = {
+      objectWorkingId: 'objectWorkingIdTest',
+      excelContext: { sync: excelContextSyncMock },
+      instanceDefinition: {
+        mstrTable: {
+          crosstabHeaderDimensions: { rowsX: 'rowsXTest' },
+          isCrosstab: 'isCrosstabTest',
+        }
+      },
+      officeTable: { columns: 'columnsTest' },
+      shouldFormat: false,
+    };
+
+    jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation();
+
+    jest.spyOn(stepFormatTable, 'formatColumns').mockImplementation();
+
+    jest.spyOn(operationStepDispatcher, 'completeFormatOfficeTable').mockImplementation();
+
+    // when
+    await stepFormatTable.formatTable(objectData, operationData);
+
+    // then
+    expect(stepFormatTable.formatCrosstabHeaders).toBeCalledTimes(0);
+
+    expect(stepFormatTable.formatColumns).toBeCalledTimes(0);
+
+
+    expect(excelContextSyncMock).toBeCalledTimes(0);
+
+    expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledWith('objectWorkingIdTest');
+  });
+
   it('formatTable should log no autofit, when columns are more than 49', async () => {
     // given
     jest.spyOn(console, 'log');
@@ -37,10 +77,6 @@ describe('StepFormatTable', () => {
     jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation(() => {
       throw new Error('errorTest');
     });
-
-    jest.spyOn(operationStepDispatcher, 'completeFormatOfficeTable').mockImplementation();
-
-    // when
     await stepFormatTable.formatTable({}, {
       instanceDefinition: { mstrTable: { crosstabHeaderDimensions: {} }, columns: 50 },
       officeTable: {}
@@ -68,6 +104,7 @@ describe('StepFormatTable', () => {
         columns: 42
       },
       officeTable: { columns: 'columnsTest' },
+      shouldFormat: true,
     };
 
     jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation();
