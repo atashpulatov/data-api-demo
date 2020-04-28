@@ -9,8 +9,6 @@ import {
   IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION,
 } from './operation-type-names';
 
-const COLUMN_EXCEL_API_LIMIT = 5000;
-
 class OperationErrorHandler {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
@@ -25,9 +23,8 @@ class OperationErrorHandler {
    * @param {Error} error Error thrown during the operation execution
    */
   handleOperationError = async (objectData, operationData, error) => {
-    const updateError = this.getError(operationData, error);
     const callback = this.getCallback(objectData, operationData);
-    errorService.handleObjectBasedError(objectData.objectWorkingId, updateError, callback);
+    errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
   }
 
   /**
@@ -143,37 +140,6 @@ class OperationErrorHandler {
         break;
     }
     return callback;
-  }
-
-  /**
-   * Function getting erros that occurs in types of operations.
-   * Transform the error that happens when import too many columns and fail in context.sync.
-   *
-   * @param {Object} operationData Contains informatons about current operation
-   * @param {Error} error Error thrown during the operation execution
-   */
-  // eslint-disable-next-line class-methods-use-this
-  getError(operationData, error) {
-    const { operationType, instanceDefinition } = operationData;
-    const { name, code, debugInfo } = error;
-    const isExcelApiError = name === 'RichApi.Error' && code === 'GeneralException'
-      && debugInfo.message === 'An internal error has occurred.';
-    let updateError;
-    switch (operationType) {
-      case IMPORT_OPERATION:
-      case DUPLICATE_OPERATION:
-      case REFRESH_OPERATION:
-        if (isExcelApiError && instanceDefinition && instanceDefinition.columns > COLUMN_EXCEL_API_LIMIT) {
-          updateError = { ...error, type: 'exceedExcelApiLimit' };
-        } else {
-          updateError = error;
-        }
-        break;
-      default:
-        updateError = error;
-        break;
-    }
-    return updateError;
   }
 }
 

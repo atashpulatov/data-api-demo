@@ -5,7 +5,14 @@ import {
   errorMessageFactory,
   incomingErrorStrings,
 } from './constants';
+import {
+  IMPORT_OPERATION,
+  DUPLICATE_OPERATION,
+  REFRESH_OPERATION,
+  EDIT_OPERATION
+} from '../operation/operation-type-names';
 
+const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 2000;
 
 class ErrorService {
@@ -15,14 +22,13 @@ class ErrorService {
     this.notificationService = notificationService;
   }
 
-  handleObjectBasedError = (objectWorkingId, error, callback) => {
-    const errorType = this.getErrorType(error);
+  handleObjectBasedError = (objectWorkingId, error, callback, operationData) => {
+    const errorType = this.getErrorType(error, operationData);
     if (error.Code === 5012) {
       this.handleError(error);
     }
     const errorMessage = errorMessageFactory(errorType)({ error });
-    const errorDetails = (error.response && error.response.text) || error.message || '';
-    const details = errorMessage !== errorDetails ? errorDetails : '';
+    const details = this.getErrorDetails(error, errorMessage, errorType);
     this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
   }
 
@@ -34,9 +40,26 @@ class ErrorService {
     this.checkForLogout(isLogout, errorType);
   }
 
-  getErrorType = (error) => error.type
-    || this.getOfficeErrorType(error)
-    || this.getRestErrorType(error)
+  getErrorType = (error, operationData) => {
+    const updateError = this.getExcelError(error, operationData);
+    return updateError.type
+    || this.getOfficeErrorType(updateError)
+    || this.getRestErrorType(updateError);
+  }
+
+  getErrorDetails = (error, errorMessage, errorType) => {
+    const errorDetails = (error.response && error.response.text) || error.message || '';
+    let details;
+    switch (errorType) {
+      case 'exceedExcelApiLimit':
+        details = '';
+        break;
+      default:
+        details = errorMessage !== errorDetails || errorType === 'exceedExcelApiLimit' ? errorDetails : '';
+        break;
+    }
+    return details;
+  }
 
   displayErrorNotification = (error, type, message = '', onConfirm = null) => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
@@ -65,6 +88,39 @@ class ErrorService {
       return stringMessageToErrorType(error.message);
     }
     return null;
+  }
+
+  /**
+   * Function getting errors that occurs in types of operations.
+   * Transform the error that happens when import too many columns and fail in context.sync.
+   *
+   * @param {Object} operationData Contains informatons about current operation
+   * @param {Error} error Error thrown during the operation execution
+   */
+  // eslint-disable-next-line class-methods-use-this
+  getExcelError(error, operationData) {
+    const { name, code, debugInfo } = error;
+    const isExcelApiError = name === 'RichApi.Error' && code === 'GeneralException'
+      && debugInfo.message === 'An internal error has occurred.';
+    const exceedLimit = operationData && operationData.instanceDefinition
+      && operationData.instanceDefinition.columns > COLUMN_EXCEL_API_LIMIT;
+    let updateError;
+    switch (operationData && operationData.operationType) {
+      case IMPORT_OPERATION:
+      case DUPLICATE_OPERATION:
+      case REFRESH_OPERATION:
+      case EDIT_OPERATION:
+        if (isExcelApiError && exceedLimit) {
+          updateError = { ...error, type: 'exceedExcelApiLimit', message: '' };
+        } else {
+          updateError = error;
+        }
+        break;
+      default:
+        updateError = error;
+        break;
+    }
+    return updateError;
   }
 
   getRestErrorType = (error) => {
