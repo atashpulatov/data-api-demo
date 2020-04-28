@@ -24,15 +24,13 @@ export const HomeNotConnected = (props) => {
   } = props;
 
   React.useEffect(() => {
-    const handleConnectionChange = () => (window.navigator.onLine
-      ? notificationService.connectionRestored()
-      : !popupOpen && notificationService.connectionLost());
-    handleConnectionChange();
-    window.addEventListener('online', handleConnectionChange);
-    window.addEventListener('offline', handleConnectionChange);
-    return (() => window.removeEventListener('online', handleConnectionChange),
-    () => window.removeEventListener('offline', handleConnectionChange));
-  },);
+    const handleConnectionRestored = () => notificationService.connectionRestored();
+    const handleConnectionLost = () => notificationService.connectionLost();
+    window.addEventListener('online', handleConnectionRestored);
+    window.addEventListener('offline', handleConnectionLost);
+    return (() => window.removeEventListener('online', handleConnectionRestored),
+    () => window.removeEventListener('offline', handleConnectionLost));
+  });
 
   React.useEffect(() => {
     try {

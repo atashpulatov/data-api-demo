@@ -5,6 +5,7 @@ import {
   errorMessageFactory,
   incomingErrorStrings,
 } from './constants';
+import { getNotificationButtons } from '../notification-v2/notification-buttons';
 
 const TIMEOUT = 3000;
 
@@ -30,6 +31,7 @@ class ErrorService {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
+    console.log({ errorType, errorMessage });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
   }
@@ -46,6 +48,13 @@ class ErrorService {
       return;
     }
     const payload = this.createNotificationPayload(message, details);
+    payload.children = getNotificationButtons([{
+      title: 'OK',
+      type: 'basic',
+      label: 'OK',
+      onClick: () => this.notificationService.globalNotificationDissapear(),
+    }]);
+    console.log({ payload });
     this.notificationService.globalWarningAppeared(payload);
   }
 

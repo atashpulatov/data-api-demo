@@ -24,10 +24,12 @@ class NotificationService {
   }
 
   connectionRestored = () => {
+    console.log('connectionRestored');
     this.reduxStore.dispatch(clearGlobalNotification());
   }
 
   sessionRestored = () => {
+    console.log('sessionRestored');
     this.reduxStore.dispatch(clearGlobalNotification());
   }
 
@@ -36,6 +38,7 @@ class NotificationService {
   }
 
   globalNotificationDissapear = () => {
+    console.log('globalNotificationDissapear');
     this.reduxStore.dispatch(clearGlobalNotification());
   }
 
