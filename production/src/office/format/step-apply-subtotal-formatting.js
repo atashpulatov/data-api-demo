@@ -21,7 +21,7 @@ class StepApplySubtotalFormatting {
 
     if (mstrTable.subtotalsInfo.subtotalsAddresses.length) {
       // Removing duplicated subtotal addresses from headers
-      await officeFormatSubtotals.applySubtotalFormatting(excelContext, officeTable, mstrTable);
+      await officeFormatSubtotals.applySubtotalFormatting(officeTable, excelContext, mstrTable);
     }
 
     operationStepDispatcher.completeFormatSubtotals(objectWorkingId);
