@@ -62,7 +62,7 @@ function markStepCompleted(state, { objectWorkingId, completedStep }) {
   } else {
     stepsQueue.shift();
   }
-  return { ...state };
+  return { ...state, operations: [...state.operations] };
 }
 
 function updateOperation(state, updatedOperationProps) {

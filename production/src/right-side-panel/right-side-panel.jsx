@@ -18,6 +18,7 @@ import {
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
+import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 
 export const RightSidePanelNotConnected = (props) => {
   const {
@@ -106,13 +107,6 @@ export const RightSidePanelNotConnected = (props) => {
     }
   };
 
-  const onSelectAll = () => {
-    notifications.forEach((notification) => {
-      notification.onHover && notification.onHover();
-      notification.callback && notification.callback();
-    });
-  };
-
   const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
   const duplicateWrapper = async (objectWorkingId) => {
@@ -139,7 +133,7 @@ export const RightSidePanelNotConnected = (props) => {
       onSettingsClick={handleSettingsClick}
       confirmationWindow={isConfirm && <Confirmation />}
       globalNotification={globalNotification}
-      onSelectAll={onSelectAll}
+      onSelectAll={() => sidePanelService.dismissNotifications(notifications)}
     />
   );
 };
@@ -169,17 +163,17 @@ const mapDispatchToProps = {
   cancelCurrentImportRequest: cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
-  toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag
+  toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,
 };
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
-  globalNotification: PropTypes.string,
-  loadedObjects:
+  globalNotification: PropTypes.shape({}),
+  loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({
       body: PropTypes.shape({}),
-      objectWorkingId: PropTypes.string,
+      objectWorkingId: PropTypes.number,
       bindId: PropTypes.string,
       id: PropTypes.string,
       name: PropTypes.string,
@@ -189,7 +183,7 @@ RightSidePanelNotConnected.propTypes = {
         subtypes: PropTypes.arrayOf(PropTypes.number),
         type: PropTypes.number,
       }),
-      refreshDate: PropTypes.instanceOf(Date),
+      refreshDate: PropTypes.number,
       visualizationInfo: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape({
         chapterKey: PropTypes.string,
         visualizationKey: PropTypes.string,
@@ -200,7 +194,8 @@ RightSidePanelNotConnected.propTypes = {
         }),
       })]),
       isSelected: PropTypes.bool,
-    }).isRequired,
+    })
+  ).isRequired,
   notifications: PropTypes.arrayOf(
     PropTypes.shape({
       type: PropTypes.string,
@@ -222,14 +217,14 @@ RightSidePanelNotConnected.propTypes = {
         REMOVE_OPERATION,
       ]),
       objectWorkingId: PropTypes.number,
-      stepsQueue: PropTypes.oneOf([{}]),
+      stepsQueue: PropTypes.arrayOf(PropTypes.string),
       backupObjectData: PropTypes.shape({}),
       objectEditedData: PropTypes.shape({}),
       instanceDefinition: PropTypes.shape({}),
       startCell: PropTypes.string,
       excelContext: PropTypes.shape({}),
       officeTable: PropTypes.shape({}),
-      tableColumnsChanged: PropTypes.shape({}),
+      tableColumnsChanged: PropTypes.boolean,
       totalRows: PropTypes.number,
       loadedRows: PropTypes.number,
       shouldFormat: PropTypes.bool,

@@ -1,6 +1,7 @@
 import officeConverter from '../../office/office-converter-service-v2';
 import response from '../../mstr-object/rest-api-v2.json';
 import jsonHandler from '../../mstr-object/mstr-normalized-json-handler';
+import { columnInformationMock, expectedColumnSplit, expectedColumnNoSplit } from './__mock__object__/column-information-mock';
 
 describe('Office converter service v2', () => {
   it('should return create a table', () => {
@@ -113,13 +114,22 @@ describe('Office converter service v2', () => {
       forms: [{
         baseFormType: 3, dataType: 33, id: '45C11FA478E745FEA08D781CEA190FE5', name: 'ID',
       }],
-      index: 0,
       isAttribute: true,
     };
     // when
     const colInformation = officeConverter.getColumnInformation(crosstabsResponse);
     // then
     expect(colInformation[0]).toEqual(expectedFirstColumn);
+  });
+  it('should split column information per attribute form for formatting', () => {
+    // given
+    const columnInformation = columnInformationMock;
+    // when
+    const colInformationSplit = officeConverter.splitAttributeForms(columnInformation, true);
+    const colInformationNoSplit = officeConverter.splitAttributeForms(columnInformation, false);
+    // then
+    expect(colInformationSplit).toEqual(expectedColumnSplit);
+    expect(colInformationNoSplit).toEqual(expectedColumnNoSplit);
   });
   it('should return isCrosstab error handler which is false', () => {
     // given

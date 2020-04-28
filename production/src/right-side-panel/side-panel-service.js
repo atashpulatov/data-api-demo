@@ -3,7 +3,6 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
-import { officeRemoveHelper } from '../office/remove/office-remove-helper';
 import { popupController } from '../popup/popup-controller';
 import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested
@@ -16,7 +15,8 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
 import { officeContext } from '../office/office-context';
-import { REMOVE_OPERATION, CLEAR_DATA_OPERATION } from '../operation/operation-type-names';
+import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
+import { errorService } from '../error/error-handler';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -173,13 +173,12 @@ class SidePanelService {
   addRemoveObjectListener = async () => {
     try {
       const excelContext = await officeApiHelper.getExcelContext();
-      const excelOfficeContext = await officeApiHelper.getOfficeContext();
 
       if (officeContext.isSetSupported(1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           await officeApiHelper.checkStatusOfSessions();
           const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
-          officeRemoveHelper.removeObjectAndDisplaytNotification(ObjectToDelete, excelOfficeContext);
+          this.remove([ObjectToDelete.objectWorkingId]);
         });
       } else if (officeContext.isSetSupported(1.7)) {
         this.eventRemove = excelContext.workbook.worksheets.onDeleted.add(async () => {
@@ -193,9 +192,9 @@ class SidePanelService {
           const objectsToDelete = objectsList.filter(
             (object) => !objectsOfSheets.find((officeTable) => officeTable.name === object.bindId)
           );
-          for (const object of objectsToDelete) {
-            officeRemoveHelper.removeObjectAndDisplaytNotification(object, excelOfficeContext);
-          }
+          const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
+
+          this.remove(objectWorkingIds);
         });
       }
       await excelContext.sync();
@@ -208,11 +207,16 @@ class SidePanelService {
   getSidePanelPopup = () => {
     let popup = null;
 
-    const handleViewData = () => {
-      this.reduxStore.dispatch(toggleSecuredFlag(false));
-      this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
-      this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
-        .map(({ objectWorkingId }) => objectWorkingId));
+    const handleViewData = async () => {
+      try {
+        await officeApiHelper.checkStatusOfSessions();
+        this.reduxStore.dispatch(toggleSecuredFlag(false));
+        this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
+        this.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
+          .map(({ objectWorkingId }) => objectWorkingId));
+      } catch (error) {
+        errorService.handleError(error);
+      }
     };
 
     const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
@@ -243,30 +247,51 @@ class SidePanelService {
 
   injectNotificationsToObjects = (loadedObjects, notifications, operations) => loadedObjects.map((object) => {
     const objectOperation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
-    const objectNotification = notifications.find(
+    const objectNotificationData = notifications.find(
       (notification) => notification.objectWorkingId === object.objectWorkingId
     );
 
-    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation) ? {
-      percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
-      itemsTotal: objectOperation.totalRows,
-      itemsComplete: objectOperation.loadedRows,
-    } : {};
-    const obj = objectNotification ? {
-      ...object,
-      notification: {
-        ...objectNotification,
-        ...operationBasedNotificationData,
+    const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation)
+      ? {
+        percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
+        itemsTotal: !objectNotificationData.isFetchingComplete ? objectOperation.totalRows : 0,
+        itemsComplete: !objectNotificationData.isFetchingComplete ? objectOperation.loadedRows : 0,
       }
-    }
-      : object;
+      : {};
 
-    return obj;
+    let notification;
+    if (objectNotificationData) {
+      notification = {
+        ...objectNotificationData,
+        ...operationBasedNotificationData,
+      };
+    }
+
+    return {
+      ...object,
+      notification,
+    };
   });
+
+  /**
+   * Manually calls onHover and callback methods from notifications.
+   * This way, it dismisses all provided notifications
+   * Works for notifications concerning finished operations.
+   * For others it doesn't bring any effect.
+   *
+   * @param {Object[]} notifications
+   */
+  dismissNotifications = (notifications) => {
+    notifications.forEach((notification) => {
+      notification.onHover && notification.onHover();
+      notification.callback && notification.callback();
+    });
+  }
 
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
   && objectOperation.operationType !== REMOVE_OPERATION
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
+  && objectOperation.operationType !== HIGHLIGHT_OPERATION
 }
 
 export const sidePanelService = new SidePanelService();

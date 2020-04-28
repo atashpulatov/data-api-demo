@@ -7,6 +7,8 @@ import {
   displayObjectWarning
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import officeStoreObject from '../office/store/office-store-object';
+import { removeObject } from '../redux-reducer/object-reducer/object-actions';
+import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 
 class NotificationService {
   init = (reduxStore) => {
@@ -41,13 +43,21 @@ class NotificationService {
     this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
   }
 
-  dismissSuccessfullNotification = (objectWorkingId) => {
+  dismissNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
   dismissSuccessfulRemoveNotification = (objectWorkingId) => {
     officeStoreObject.removeObjectFromStore(objectWorkingId);
-    this.dismissSuccessfullNotification(objectWorkingId);
+    this.dismissNotification(objectWorkingId);
+  }
+
+  removeObjectFromNotification = (objectWorkingId) => {
+    this.reduxStore.dispatch(removeObject(objectWorkingId));
+  }
+
+  cancelOperationFromNotification = (objectWorkingId) => {
+    this.reduxStore.dispatch(cancelOperation(objectWorkingId));
   }
 }
 
