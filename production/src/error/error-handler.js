@@ -6,7 +6,7 @@ import {
   incomingErrorStrings,
 } from './constants';
 
-const TIMEOUT = 2000;
+const TIMEOUT = 3000;
 
 class ErrorService {
   init = (sessionActions, sessionHelper, notificationService) => {
@@ -43,6 +43,7 @@ class ErrorService {
     const details = message !== errorDetails ? errorDetails : '';
     if (type === errorTypes.UNAUTHORIZED_ERR) {
       this.notificationService.sessionExpired();
+      return;
     }
     const payload = this.createNotificationPayload(message, details);
     this.notificationService.globalWarningAppeared(payload);
