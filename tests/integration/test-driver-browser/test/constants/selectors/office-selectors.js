@@ -17,7 +17,7 @@ export const excelSelectors = {
   adminManagedPlugin: 'div[aria-label^="yi_local_ip"]',
   addBtn: '#BtnAction',
   uploadPluginNotification: '.ModalCalloutControlOverlay',
-  excelFormulaBar: '#formulaBarTextDivId_textElement',
+  excelFormulaBar: '#formulaBarTextDivId',
   findAndSelectBtn: '#m_excelWebRenderer_ewaCtl_Editing\\2e FindAndReplace-Large',
   goToBtn: '#m_excelWebRenderer_ewaCtl_FindAndReplace\\2e Goto-Menu16',
   goToSelector: '#gotoRef',

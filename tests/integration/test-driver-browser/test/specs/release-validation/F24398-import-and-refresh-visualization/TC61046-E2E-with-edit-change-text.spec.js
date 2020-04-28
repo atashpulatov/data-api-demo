@@ -39,7 +39,6 @@ describe('IMPORT diferent types of vizualizations', () => {
     browser.pause(3000);
 
     // Change text in cell A4
-    // OfficeWorksheet.replaceAllThatMatches('Date', 'TEXT');
     OfficeWorksheet.changeTextInCell('A4', 'Text');
     browser.pause(1000);
 
@@ -53,7 +52,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginRightPanel.editObject(1);
     browser.pause(3000);
 
-    PluginPopup.editAndImportVizualization(dossierObject.visualizations.accounts);
+    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.accounts);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);

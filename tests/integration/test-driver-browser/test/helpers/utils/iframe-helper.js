@@ -16,6 +16,7 @@ export function switchToExcelFrame() {
   browser.switchToFrame($('#WebApplicationFrame'));
 }
 
+// This frame is used for report prompt window and visualizations window
 export function switchToPromptFrame() {
   switchToPluginFrame();
   $('iframe[src*="app.embedded=true"]').waitForExist(9999);
@@ -25,13 +26,6 @@ export function switchToPromptFrame() {
 export function switchToPromptFrameForImportDossier() {
   switchToPluginFrame();
   const editFrame = '#popup-wrapper > div > div:nth-child(2) > iframe';
-  $(editFrame).waitForExist(9999);
-  browser.switchToFrame($(editFrame));
-}
-
-export function switchToPromptFrameForEditReport() {
-  switchToPluginFrame();
-  const editFrame = '#root > div > div.promptsContainer > iframe';
   $(editFrame).waitForExist(9999);
   browser.switchToFrame($(editFrame));
 }

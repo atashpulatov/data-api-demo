@@ -6,6 +6,7 @@ import { switchToExcelFrame, changeBrowserTab, switchToDialogFrame } from '../..
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { waitAndClick } from '../../../helpers/utils/click-helper';
 
 const fs = require('fs');
 
@@ -29,12 +30,22 @@ describe('Smart Folder - IMPORT -', () => {
   function createManifestFile(newEnv) {
     let xmlContent;
     fs.readFile(sampleManifestFilePath, 'utf8', (err, content) => {
-      if (err) throw err;
+      if (err) { throw err; }
       xmlContent = content.replace(/env-173736/gi, newEnv); // 173736 is the number of the environment of the sample manifest file
       fs.writeFile(outputManifestFilePath, xmlContent, (err2) => {
-        if (err2) throw err;
+        if (err2) { throw err; }
       });
     });
+  }
+
+  function selectObjectElementsInPrepareData(elements) {
+    $('#search-toolbar > div > span > input').waitForExist(7777);
+    for (let i = 0; i < elements.length; i++) {
+      $('#search-toolbar > div > span > input').clearValue();
+      $('#search-toolbar > div > span > input').setValue(`${elements[i]}`);
+      waitAndClick($(`input[name="${elements[i]}"]`));
+      $('#search-toolbar > div > span > input').clearValue();
+    }
   }
 
   function importUBObjectAndGetTotalTime() {
@@ -45,22 +56,11 @@ describe('Smart Folder - IMPORT -', () => {
     PluginPopup.selectFirstObject();
     PluginPopup.clickPrepareData();
 
-    PluginPopup.selectObjectElementsInPrepareData(['Session', 'Account', 'Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);
+    selectObjectElementsInPrepareData(['Session', 'Account', 'Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);
     PluginPopup.clickImport();
 
     const begin = Date.now();
-    browser.pause(2000);
-    let popupExists = true;
-    while (popupExists) {
-      switchToExcelFrame();
-      const popupDiv = $('#WACDialogPanel').isExisting();
-      if (!popupDiv) {
-        if (!$('#WACDialogPanel').isExisting()) {
-          waitForNotification();
-          popupExists = false;
-        }
-      }
-    }
+    waitForNotification();
     const end = Date.now();
     const notificationText = $(rightPanelSelectors.notificationPopUp).getAttribute('textContent');
     expect(notificationText).toContain(dictionary.en.importSuccess);
@@ -119,7 +119,7 @@ describe('Smart Folder - IMPORT -', () => {
 
       console.log('Saving performance data');
       fs.appendFile(csvFilePath, stringOfData, (err) => {
-        if (err) throw err;
+        if (err) { throw err; }
         console.log('The data was appended to CSV file!');
       });
       console.log('Performance data saved');

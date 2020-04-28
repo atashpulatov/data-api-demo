@@ -6,7 +6,6 @@ import {
   switchToPromptFrame,
   switchToPopupFrame,
   switchToExcelFrame,
-  switchToPromptFrameForEditReport,
   switchToDialogFrame,
   switchToPromptFrameForImportDossier
 } from '../utils/iframe-helper';
@@ -95,22 +94,21 @@ class PluginPopup {
    * @param {String} selector a css selector to validate
    * @memberof PluginPopup
    */
-
   waitUntilActionIsFinished(selector) {
     browser.waitUntil(() => ($(selector).isExisting()));
     browser.waitUntil(() => !($(selector).isExisting()));
   }
 
-  selectObjectElementsInPrepareData(elements) {
-    $('#search-toolbar > div > span > input').waitForExist(7777);
-    for (let i = 0; i < elements.length; i++) {
-      $('#search-toolbar > div > span > input').clearValue();
-      $('#search-toolbar > div > span > input').setValue(`${elements[i]}`);
-      waitAndClick($(`input[name="${elements[i]}"]`));
-      $('#search-toolbar > div > span > input').clearValue();
-    }
-  }
-
+  /**
+   * This method is used in the Prepare Data window.
+   * It is used to select the desired attributes or metrics to be selected/unselected.
+   * !Important! Selecting attributes only work for datasets. Selecting metrics can be used for both reports and datasets
+   * To select attributes for reports, user have to user the selectAttributeElementsForReportObjects(elements) method
+   * After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
+   *
+   * @param {String} elements an array with the names of the attributes/metrics to be selected/unselected
+   * @memberof PluginPopup
+   */
   selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`input[name="${elements[i]}"]`));
@@ -118,10 +116,18 @@ class PluginPopup {
   }
 
   // This method select Objects in Prepare Data for Report Objects. After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
-  selectAttributeElementsForReportObjects(elements) {
-    for (let i = 0; i < elements.length; i++) {
-      // waitAndClick($(`input[name="${elements[i]}"]`));
-      waitAndClick($(`.item-title=${elements[i]}`));
+  /**
+   * This method is used in the Prepare Data window.
+   * It is used to select the desired attributes to be selected/unselected (only for reports).
+   * !Important! Selecting attributes only work for reports.
+   * After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
+   *
+   * @param {String} elements an array with the names of the attributes/metrics to be selected/unselected
+   * @memberof PluginPopup
+   */
+  selectAttributeElementsForReportObjects(attributes) {
+    for (let i = 0; i < attributes.length; i++) {
+      waitAndClick($(`.item-title=${attributes[i]}`));
     }
   }
 
@@ -286,9 +292,7 @@ class PluginPopup {
   }
 
   promptSelectObjectForEdit(objectName) {
-    // switchToPromptFrameForEditReport();
     switchToPromptFrame();
-    // TODO: check if the change is correct. i think switchToPromptFrameForEditReport() can be deleted.
     browser.pause(10000);
     $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
@@ -391,20 +395,13 @@ class PluginPopup {
     browser.pause(timeToLoadDossier);
   }
 
-  // selectAndImportVizualiation(visContainerId) {
-  //   switchToPromptFrame();
-  //   browser.pause(10000);
-  //   const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
-  //   visSelector.waitForExist(15000);
-  //   browser.pause(3000);
-  //   visSelector.click();
-  //   // TODO: wait untli import button is enabled and click it
-  //   browser.pause(2500);
-  //   switchToPluginFrame();
-  //   $(popupSelectors.importBtn).waitForExist(5000);
-  //   this.clickImport();
-  // }
-
+  /**
+   * This function is used to import the desired visualization.
+   * It has to be used inside the Dossier window.
+   *
+   * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
+   * @memberof PluginPopup
+   */
   selectAndImportVizualiation(visContainerId) {
     switchToPromptFrame();
     let visSelector;
@@ -417,19 +414,6 @@ class PluginPopup {
     browser.pause(2500);
     switchToPluginFrame();
     $(popupSelectors.importBtn).waitForEnabled(5000);
-    this.clickImport();
-  }
-
-  editAndImportVizualization(visContainerId) {
-    switchToPromptFrame();
-    browser.pause(10000);
-    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
-    visSelector.waitForExist(15000);
-    browser.pause(3000);
-    visSelector.click();
-    // TODO: wait untli import button is enabled and click it
-    browser.pause(2500);
-    switchToPluginFrame();
     this.clickImport();
   }
 
@@ -652,16 +636,30 @@ class PluginPopup {
     this.clickPrepareData();
   }
 
+  /**
+   * This function is used for prompted Dossiers. It is answering the default prompt answer and it is selecting the desired visualization and importing it
+   *
+   * @param {Number} index Id of the visualization, for ex: '#mstr114'
+   */
   importDefaultPromptedVisualisation(visContainerId) {
-    // reprompt
+    // Clicking 'Run' in the prompt window
     switchToPromptFrameForImportDossier();
     $('#mstrdossierPromptEditor').waitForExist(10000);
     this.clickRunForPromptedDossier();
     console.log('it was clicked');
     browser.pause(6000);
+    // Importing the selected visualization
     this.selectAndImportVizualiation(visContainerId);
   }
 
+  /**
+   * This function is used for prompted dossiers.
+   * It click on edit for the first object from the list.
+   * After that it is clicking on reprompt inside the Dossier window and answering the default prompt answer.
+   * After that it is selecting the desired visualization and importing it.
+   *
+   * @param {Number} index Id of the visualization, for ex: '#mstr114'
+   */
   repromptDefaultVisualisation(visContainerId) {
     // edit
     pluginRightPanel.editObject(1);

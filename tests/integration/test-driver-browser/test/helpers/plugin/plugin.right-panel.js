@@ -196,31 +196,40 @@ class PluginRightPanel {
     element.click();
   }
 
-  // clicks on object in the right panel and asserts whether the object was selected in the worksheet
+  /**
+   * Clicks on desired object in the right panel and asserts whether the object was selected in the worksheet
+   *
+   * @param {Number} index Index of the object in the right side panel to be selected. It starts from 1 (1 is the first from the top)
+   * @param {String} cellValue Value of the top-left corner of the selected object. It is used to assert that after the object is clicked in the right side panel, in Excel, the table of that object was selected.
+   *
+   * @memberof PluginPopup
+   */
   clickObjectInRightPanelAndAssert(index, cellValue) {
-    this.clickObjectInRightPanel(1);
+    this.clickObjectInRightPanel(index);
     switchToExcelFrame();
     browser.pause(1000); // TODO: Not sure if this is necessary
     expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
   }
 
-  // hovers over objects in the right panel and assert whether the box shadow color is changed
-  hoverOverObjects(objects) {
-    for (let i = 0; i < objects.length; i++) {
-      objects[i].moveTo();
-      browser.pause(1000);
-      expect(objects[i].getCSSProperty('box-shadow').value).toEqual('rgba(0,0,0,0.5)0px0px4px0px');
-    }
-  }
+  // This function was used in Protractor
+  // // hovers over objects in the right panel and assert whether the box shadow color is changed
+  // hoverOverObjects(objects) {
+  //   for (let i = 0; i < objects.length; i++) {
+  //     objects[i].moveTo();
+  //     browser.pause(1000);
+  //     expect(objects[i].getCSSProperty('box-shadow').value).toEqual('rgba(0,0,0,0.5)0px0px4px0px');
+  //   }
+  // }
 
-  // hovers over object names in the right panel and assert whether the backgroiund color changed
-  hoverOverObjectNames(objectNames) {
-    for (let i = 0; i < objectNames.length; i++) {
-      objectNames[i].moveTo();
-      browser.pause(1000);
-      expect(objectNames[i].getCSSProperty('background-color').value).toEqual('rgba(235,235,235,1)');
-    }
-  }
+  // This function was used in Protractor
+  // // hovers over object names in the right panel and assert whether the backgroiund color changed
+  // hoverOverObjectNames(objectNames) {
+  //   for (let i = 0; i < objectNames.length; i++) {
+  //     objectNames[i].moveTo();
+  //     browser.pause(1000);
+  //     expect(objectNames[i].getCSSProperty('background-color').value).toEqual('rgba(235,235,235,1)');
+  //   }
+  // }
 }
 
 export default new PluginRightPanel();
