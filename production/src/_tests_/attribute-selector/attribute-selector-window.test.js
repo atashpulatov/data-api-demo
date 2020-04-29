@@ -42,7 +42,7 @@ describe('AttributeSelectorWindow', () => {
     };
     const chosenObject = {
       promptsAnswers: 'promptsAnswers',
-      objectType: { name: 'dossier' }
+      mstrObjectType: { name: 'dossier' }
     };
     const objectName = '55';
     // when

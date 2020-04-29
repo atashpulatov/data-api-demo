@@ -23,10 +23,8 @@ class OperationErrorHandler {
    * @param {Error} error Error thrown during the operation execution
    */
   handleOperationError = async (objectData, operationData, error) => {
-    const { operationType } = operationData;
-
-    const callback = this.getCallback(operationType, objectData, operationData);
-    errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback);
+    const callback = this.getCallback(objectData, operationData);
+    errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
   }
 
   /**
@@ -105,9 +103,8 @@ class OperationErrorHandler {
    * Error will be displayed and the operation will be canceled.
    *
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
-   * @param {Object} operationData Contains informatons about current operation
    */
-  handleGenericOperationError = async (objectData, operationData) => {
+  handleGenericOperationError = async (objectData) => {
     const { objectWorkingId } = objectData;
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
@@ -115,7 +112,16 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   }
 
-  getCallback(operationType, objectData, operationData) {
+  /**
+   * Function geting callback that occurs in all types of operations.
+   * Error will be displayed and the operation will be canceled.
+   *
+   * @param {Object} objectData Unique Id of the object allowing to reference specific object
+   * @param {Object} operationData Contains informatons about current operation
+   */
+  getCallback(objectData, operationData) {
+    const { operationType } = operationData;
+
     let callback;
     switch (operationType) {
       case IMPORT_OPERATION:
@@ -130,7 +136,7 @@ class OperationErrorHandler {
         callback = () => this.handleClearDataOperationError();
         break;
       default:
-        callback = () => this.handleGenericOperationError(objectData, operationData);
+        callback = () => this.handleGenericOperationError(objectData);
         break;
     }
     return callback;
