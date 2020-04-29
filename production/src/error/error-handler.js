@@ -37,7 +37,6 @@ class ErrorService {
     const { onConfirm, isLogout, ...parameters } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
-    console.log({ errorType, errorMessage });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
   }
