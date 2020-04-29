@@ -27,7 +27,6 @@ export const HomeNotConnected = (props) => {
   const handleConnectionLost = () => !popupOpen && notificationService.connectionLost();
 
   React.useEffect(() => {
-    notificationService.clearNotifications();
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
     return (() => window.removeEventListener('online', handleConnectionRestored),
