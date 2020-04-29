@@ -29,4 +29,4 @@ export const excelSelectors = {
   nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a',
   nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul'
 
-}
+};

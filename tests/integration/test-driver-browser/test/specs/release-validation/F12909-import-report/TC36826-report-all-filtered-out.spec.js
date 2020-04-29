@@ -17,7 +17,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
   });
 
 
-  it('[TC36826] Importing not supported objects', () => {
+  it('[TC36826] Importing report with all data filtered out', () => {
     // should display a correct error message for a report with all data filtered out
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);

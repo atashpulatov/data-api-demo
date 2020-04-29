@@ -31,8 +31,10 @@ describe('F22954 Ability to edit data already imported to the workbook', () => {
     ).toContain(dictionary.en.importSuccess);
 
     //  should edit report
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
     switchToPluginFrame();
-    PluginRightPanel.edit();
+    PluginRightPanel.editObject(1);
     browser.pause(3000);
 
     switchToPluginFrame();
@@ -47,6 +49,6 @@ describe('F22954 Ability to edit data already imported to the workbook', () => {
 
     expect(
       $(rightPanelSelectors.notificationPopUp).getAttribute('textContent')
-    ).toContain(dictionary.en.reportRefreshed);
+    ).toContain(dictionary.en.importSuccess);
   });
 });
