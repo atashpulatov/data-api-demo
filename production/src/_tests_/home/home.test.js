@@ -70,7 +70,7 @@ describe('Home', () => {
     expect(homeHelper.saveTokenFromCookies).toBeCalled();
   });
 
-  it('should contain 4 child nodes and should be child of content', () => {
+  it('should contain 3 child nodes and should be child of content', () => {
     // given
     const props = {
       loading: false,
@@ -93,8 +93,7 @@ describe('Home', () => {
     expect(wrappedComponent.find(overlayId).exists('HomeDialog')).toBeTruthy();
     expect(wrappedComponent.find(overlayId).exists('Spin')).toBeTruthy();
     expect(wrappedComponent.find(overlayId).exists('SessionExtendingWrapper')).toBeTruthy();
-    expect(wrappedComponent.find(overlayId).exists('InternetConnectionError')).toBeTruthy();
-    expect(wrappedComponent.find(overlayId).children()).toHaveLength(4);
+    expect(wrappedComponent.find(overlayId).children()).toHaveLength(3);
   });
 
   it('should contain all assigned props and return true on toBeDefined', () => {
