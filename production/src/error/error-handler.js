@@ -12,6 +12,7 @@ import {
   REFRESH_OPERATION,
   EDIT_OPERATION
 } from '../operation/operation-type-names';
+import { customT } from '../redux-reducer/notification-reducer/notification-title-maps';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -75,9 +76,9 @@ class ErrorService {
   }
 
   getChildrenButtons = () => getNotificationButtons([{
-    title: 'OK',
+    title: customT('OK'),
     type: 'basic',
-    label: 'OK',
+    label: customT('OK'),
     onClick: () => this.notificationService.globalNotificationDissapear(),
   }]);
 
