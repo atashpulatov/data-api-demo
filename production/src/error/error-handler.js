@@ -71,15 +71,16 @@ class ErrorService {
       return;
     }
     const payload = this.createNotificationPayload(message, details);
-    payload.children = getNotificationButtons([{
-      title: 'OK',
-      type: 'basic',
-      label: 'OK',
-      onClick: () => this.notificationService.globalNotificationDissapear(),
-    }]);
-    console.log({ payload });
+    payload.children = this.getChildrenButtons();
     this.notificationService.globalWarningAppeared(payload);
   }
+
+  getChildrenButtons = () => getNotificationButtons([{
+    title: 'OK',
+    type: 'basic',
+    label: 'OK',
+    onClick: () => this.notificationService.globalNotificationDissapear(),
+  }]);
 
   checkForLogout = (isLogout = false, errorType) => {
     if (!isLogout
