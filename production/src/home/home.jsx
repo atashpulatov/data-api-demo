@@ -15,7 +15,6 @@ import { notificationService } from '../notification-v2/notification-service';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
-import InternetConnectionError from '../popup/internet-connection-error';
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
@@ -24,14 +23,21 @@ export const HomeNotConnected = (props) => {
     loading, popupOpen, authToken, t
   } = props;
 
+  const handleConnectionRestored = () => notificationService.connectionRestored();
+  const handleConnectionLost = () => !popupOpen && notificationService.connectionLost();
+
   React.useEffect(() => {
-    const handleConnectionRestored = () => notificationService.connectionRestored();
-    const handleConnectionLost = () => notificationService.connectionLost();
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
     return (() => window.removeEventListener('online', handleConnectionRestored),
     () => window.removeEventListener('offline', handleConnectionLost));
-  });
+  },);
+
+  React.useEffect(() => {
+    if (!popupOpen && !window.navigator.onLine) {
+      notificationService.connectionLost();
+    }
+  }, [popupOpen]);
 
   useEffect(() => {
     try {
