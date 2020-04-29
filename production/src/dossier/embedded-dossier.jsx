@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Empty } from '@mstr/rc/';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from './script-injection-helper';
+import './dossier.css';
 
 const { microstrategy, Office } = window;
 
@@ -40,6 +42,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
+    this.state = { loadingFrame: true, };
   }
 
   componentDidMount() {
@@ -206,6 +209,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     };
     if (microstrategy && microstrategy.dossier) {
       this.embeddedDossier = await microstrategy.dossier.create(props);
+      this.setState({ loadingFrame: false });
       handleEmbeddedDossierLoad();
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
@@ -246,22 +250,26 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   render() {
+    const { loadingFrame } = this.state;
     return (
       /*
       Height needs to be passed for container because without it, embedded api will set default height: 600px;
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 9px for header margin and 68px for buttons.
       */
-      <div
-        ref={this.container}
-        style={{
-          position: 'relative',
-          top: '0',
-          left: '0',
-          height: 'calc(100vh - 145px)',
-          minHeight: 'calc(100vh - 145px)',
-          maxHeight: 'calc(100vh - 145px)',
-        }} />
+      <>
+        {loadingFrame && <Empty isLoading />}
+        <div
+          ref={this.container}
+          style={{
+            position: 'relative',
+            top: '0',
+            left: '0',
+            height: 'calc(100vh - 145px)',
+            minHeight: 'calc(100vh - 145px)',
+            maxHeight: 'calc(100vh - 145px)',
+          }} />
+      </>
     );
   }
 }
