@@ -1,40 +1,19 @@
 import { switchToPluginFrame, switchToExcelFrame } from './iframe-helper';
-import { rightPanelSelectors as se } from '../../constants/selectors/plugin.right-panel-selectors';
-
-/* export function waitForNotification() {
-  let popupExists = true;
-  while (popupExists) {
-    switchToExcelFrame();
-    const popupDiv = $('#WACDialogPanel').isExisting();
-    if (!popupDiv) {
-      switchToPluginFrame();
-      const overlayDiv = $('#overlay').isExisting();
-      if (overlayDiv) {
-        popupExists = false;
-      }
-    }
-    browser.pause(777);
-  }
-  $(se.notificationPopUp).waitForExist(6666, false, `${se.notificationPopUp} was not found`);
-} */
+import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 
 export function waitForNotification() {
-  console.log('FOR A SINGLE ELEMENT');
-  const notification = $('.notification-container');
-  const progressBar = $('.notification-container > div.notification-body > div.progress');
-
+  const notification = $(rightPanelSelectors.notificationContainer);
+  const progressBar = $(rightPanelSelectors.progressBar);
   getNotification(notification, progressBar);
 }
 
 
 export function waitForAllNotifications() {
   switchToPluginFrame();
-  console.log('IN WAIT FOR ALL !!!!!!!');
-  const objectCount = $$('.object-tile-content').length;
+  const objectCount = $$(rightPanelSelectors.objectContainer).length;
   for (let index = 1; index <= objectCount; index++) {
-    const notification = $(`#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container`);
-    const progressBar = $(`#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container > div.notification-body > div.progress`);
-    // #overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(1) > div.notification-container > div.notification-body > div.progress > div
+    const notification = $(rightPanelSelectors.getNotificationAt(index));
+    const progressBar = $(rightPanelSelectors.getProgressBarAt(index));
     getNotification(notification, progressBar);
   }
 }
@@ -46,11 +25,9 @@ function getNotification(notification, progressBar) {
     const isNotificationExist = notification.isExisting();
     const isProgressBarExist = progressBar.isExisting();
     if (isNotificationExist && !isProgressBarExist) {
-      console.log('INSIDE IF BAR DOESNT EXIST');
       browser.pause(777);
       progress = false;
     } else {
-      console.log('BAR STILL EXIST, WAITING');
       browser.pause(777);
     }
   }
@@ -59,7 +36,6 @@ function getNotification(notification, progressBar) {
 export function waitForPopup(timeout = 29999) {
   switchToExcelFrame();
   $('#WACDialogPanel').waitForExist(timeout, false, `#WACDialogPanel was not found`);
-
   browser.pause(2500);
   switchToPluginFrame();
 }

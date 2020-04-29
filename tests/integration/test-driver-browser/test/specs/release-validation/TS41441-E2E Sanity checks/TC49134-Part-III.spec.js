@@ -71,14 +71,12 @@ describe('TS41441 - E2E Sanity checks', () => {
     waitAndClick($(percentageButton));
     browser.pause(500);
     const b4 = '#gridRows > div:nth-child(4) > div:nth-child(2) > div > div';
-    // let textFromCellB4 = $("#gridRows > div:nth-child(4) > div:nth-child(2) > div > div").getText();
     expect($(b4).getText()).toEqual('890700.00%');
     OfficeWorksheet.selectCell('C4');
     const numberFormatCommaButton = '#m_excelWebRenderer_ewaCtl_Number\\.NumberFormatComma-Medium';
     waitAndClick($(numberFormatCommaButton));
     browser.pause(500);
     const c4 = '#gridRows > div:nth-child(4) > div:nth-child(3) > div > div';
-    // let textFromCellC4 = $("#gridRows > div:nth-child(4) > div:nth-child(3) > div > div").getText();
     expect($(c4).getText()).toEqual('                   2.46 ');
 
     // cell content alignment and fonts

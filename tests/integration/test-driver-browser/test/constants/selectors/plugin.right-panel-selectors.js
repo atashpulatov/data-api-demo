@@ -13,7 +13,7 @@ export const rightPanelSelectors = {
   deleteAllBtn: '#overlay > div > div.object-tile-container > div.object-tile-container-header > span > span > button:nth-child(6)',
   repromptBtn: '.loading-button-container .mstr-icon.reprompt',
   deleteBtn: '.trash',
-  importDataBtn: '#overlay > div.side-panel > div.import-data > button', // #import-data-placeholder
+  importDataBtn: '#overlay > div.side-panel > div.import-data > button',
   pluginImage: $('.mstr-office-addin-logo'),
   okButton: $('#ActionLinkContainer'),
   authErrorBox: $('.mstr-MessageBox'),
@@ -32,4 +32,10 @@ export const rightPanelSelectors = {
   getEdithBtnForObject: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div > div.object-tile-header > span.icon-bar-container > span > button:nth-child(3)`,
   getRefreshBtnForObject: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div > div.object-tile-header > span.icon-bar-container > span > button:nth-child(5)`,
   getRemoveBtnForObject: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div > div.object-tile-header > span.icon-bar-container > span > button:nth-child(6)`,
+  notificationContainer: '.notification-container',
+  progressBar: '.notification-container > div.notification-body > div.progress',
+  getNotificationAt: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container`,
+  getProgressBarAt: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container > div.notification-body > div.progress`,
+  objectContainer: '.object-tile-content',
+  objectHeaderContainer: '.object-tile-container-header',
 };

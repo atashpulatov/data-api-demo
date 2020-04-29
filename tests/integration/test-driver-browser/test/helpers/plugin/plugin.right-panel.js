@@ -137,8 +137,8 @@ class PluginRightPanel {
   }
 
   closeNotificationOnHover() {
-    const selector = '.notification-container';
-    const selectorOther = '.object-tile-container-header';
+    const selector = rightPanelSelectors.notificationContainer;
+    const selectorOther = rightPanelSelectors.objectHeaderContainer;
     $(selectorOther).moveTo();
     browser.pause(1000);
     $(selector).moveTo();
@@ -147,7 +147,7 @@ class PluginRightPanel {
 
   closeAllNotificationsOnHover() {
     switchToPluginFrame();
-    const objectCount = $$('.object-tile-content').length;
+    const objectCount = $$(rightPanelSelectors.objectContainer).length;
     for (let index = 1; index <= objectCount; index++) {
       this.closeNotificationOnHover();
     }
@@ -210,26 +210,6 @@ class PluginRightPanel {
     browser.pause(1000); // TODO: Not sure if this is necessary
     expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
   }
-
-  // This function was used in Protractor
-  // // hovers over objects in the right panel and assert whether the box shadow color is changed
-  // hoverOverObjects(objects) {
-  //   for (let i = 0; i < objects.length; i++) {
-  //     objects[i].moveTo();
-  //     browser.pause(1000);
-  //     expect(objects[i].getCSSProperty('box-shadow').value).toEqual('rgba(0,0,0,0.5)0px0px4px0px');
-  //   }
-  // }
-
-  // This function was used in Protractor
-  // // hovers over object names in the right panel and assert whether the backgroiund color changed
-  // hoverOverObjectNames(objectNames) {
-  //   for (let i = 0; i < objectNames.length; i++) {
-  //     objectNames[i].moveTo();
-  //     browser.pause(1000);
-  //     expect(objectNames[i].getCSSProperty('background-color').value).toEqual('rgba(235,235,235,1)');
-  //   }
-  // }
 }
 
 export default new PluginRightPanel();

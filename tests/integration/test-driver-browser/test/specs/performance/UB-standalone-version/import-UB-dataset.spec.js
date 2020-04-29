@@ -7,6 +7,7 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 const fs = require('fs');
 
@@ -33,18 +34,18 @@ describe('Smart Folder - IMPORT -', () => {
       if (err) { throw err; }
       xmlContent = content.replace(/env-173736/gi, newEnv); // 173736 is the number of the environment of the sample manifest file
       fs.writeFile(outputManifestFilePath, xmlContent, (err2) => {
-        if (err2) { throw err; }
+        if (err2) { throw err2; }
       });
     });
   }
 
   function selectObjectElementsInPrepareData(elements) {
-    $('#search-toolbar > div > span > input').waitForExist(7777);
+    $(popupSelectors.prepareSearchInput).waitForExist(7777);
     for (let i = 0; i < elements.length; i++) {
-      $('#search-toolbar > div > span > input').clearValue();
-      $('#search-toolbar > div > span > input').setValue(`${elements[i]}`);
+      $(popupSelectors.prepareSearchInput).clearValue();
+      $(popupSelectors.prepareSearchInput).setValue(`${elements[i]}`);
       waitAndClick($(`input[name="${elements[i]}"]`));
-      $('#search-toolbar > div > span > input').clearValue();
+      $(popupSelectors.prepareSearchInput).clearValue();
     }
   }
 

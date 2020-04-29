@@ -48,9 +48,9 @@ describe('Smart Folder - IMPORT -', () => {
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(1000);
     switchToPluginFrame();
-    pluginRightPanel.refreshAll();
+    PluginRightPanel.refreshAll();
     waitForAllNotifications();
-    pluginRightPanel.closeAllNotificationsOnHover();
+    PluginRightPanel.closeAllNotificationsOnHover();
 
     // ///////////////////
     // waitForNotification();
