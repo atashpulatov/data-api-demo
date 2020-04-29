@@ -19,7 +19,7 @@ describe('StepFormatTable', () => {
 
     // when
     await stepFormatTable.formatTable({}, {
-      instanceDefinition: { mstrTable: { crosstabHeaderDimensions: {} } },
+      instanceDefinition: { mstrTable: { crosstabHeaderDimensions: {} }, columns: 42 },
       officeTable: {},
       shouldFormat: true,
     });
@@ -43,6 +43,7 @@ describe('StepFormatTable', () => {
         mstrTable: {
           crosstabHeaderDimensions: { rowsX: 'rowsXTest' },
           isCrosstab: 'isCrosstabTest',
+          columns: 42
         }
       },
       officeTable: { columns: 'columnsTest' },
@@ -63,11 +64,50 @@ describe('StepFormatTable', () => {
 
     expect(stepFormatTable.formatColumns).toBeCalledTimes(0);
 
+    expect(excelContextSyncMock).toBeCalledTimes(0);
+
+    expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledWith('objectWorkingIdTest');
+  });
+
+  it('formatTable should log no autofit, when columns are more than 49', async () => {
+    // given
+    jest.spyOn(console, 'log');
+    const objectData = {};
+    const excelContextSyncMock = jest.fn();
+    const operationData = {
+      objectWorkingId: 'objectWorkingIdTest',
+      excelContext: { sync: excelContextSyncMock },
+      instanceDefinition: {
+        mstrTable: {
+          crosstabHeaderDimensions: { rowsX: 'rowsXTest' },
+          isCrosstab: 'isCrosstabTest',
+          columns: 50
+        }
+      },
+      officeTable: { columns: 'columnsTest' },
+      shouldFormat: true,
+    };
+
+    jest.spyOn(stepFormatTable, 'formatCrosstabHeaders').mockImplementation();
+
+    jest.spyOn(stepFormatTable, 'formatColumns').mockImplementation();
+
+    jest.spyOn(operationStepDispatcher, 'completeFormatOfficeTable').mockImplementation();
+
+    // when
+    await stepFormatTable.formatTable(objectData, operationData);
+
+    // then
+    expect(stepFormatTable.formatCrosstabHeaders).toBeCalledTimes(0);
+
+    expect(stepFormatTable.formatColumns).toBeCalledTimes(0);
 
     expect(excelContextSyncMock).toBeCalledTimes(0);
 
     expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeFormatOfficeTable).toBeCalledWith('objectWorkingIdTest');
+    expect(console.log).toBeCalledWith('The column count is more than columns autofit limit or should not format - no columns autofit applied.');
   });
 
   it('formatTable should work as expected', async () => {
@@ -82,7 +122,8 @@ describe('StepFormatTable', () => {
         mstrTable: {
           crosstabHeaderDimensions: { rowsX: 'rowsXTest' },
           isCrosstab: 'isCrosstabTest',
-        }
+        },
+        columns: 42
       },
       officeTable: { columns: 'columnsTest' },
       shouldFormat: true,
