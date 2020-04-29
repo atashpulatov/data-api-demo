@@ -21,6 +21,7 @@ export const errorTypes = {
   PROTECTED_SHEET_ERR: 'protectedSheet',
   UNKNOWN_ERR: 'unknown',
   INVALID_VIZ_KEY: 'invalidVizKey',
+  EXCEEDS_EXCEL_API_LIMITS: 'exceedExcelApiLimit',
 };
 
 export const incomingErrorStrings = {
@@ -70,6 +71,7 @@ export const NOT_SUPPORTED_CUSTOM_GROUP = 'This object cannot be imported. Objec
 export const TABLE_REMOVED = 'It looks like the object was deleted from the workbook. Delete it in the sidebar or click Add Data to import it again.';
 export const ENDPOINT_NOT_REACHED = 'The endpoint cannot be reached';
 export const EXCEEDS_WORKSHEET_LIMITS = 'The table you try to import exceeds the worksheet limits.';
+export const EXCEEDS_EXCEL_API_LIMITS = 'Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.';
 export const OUTSIDE_OF_OFFICE = 'Please run plugin inside Office';
 export const CONNECTION_BROKEN = 'Environment is unreachable. Please check your internet connection.';
 export const WRONG_CREDENTIALS = 'Wrong username or password.';
@@ -140,6 +142,7 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `An error has occurred in Excel. ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
   [errorTypes.INVALID_VIZ_KEY]: () => INVALID_VIZ_KEY_MESSAGE,
+  [errorTypes.EXCEEDS_EXCEL_API_LIMITS]: () => EXCEEDS_EXCEL_API_LIMITS,
 },
 ({ error }) => error.message || UNKNOWN_ERROR);
 

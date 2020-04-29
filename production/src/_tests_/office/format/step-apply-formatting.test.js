@@ -1,16 +1,24 @@
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import stepApplyFormatting from '../../../office/format/step-apply-formatting';
 import officeFormatHyperlinks from '../../../office/format/office-format-hyperlinks';
+import { officeApiHelper } from '../../../office/api/office-api-helper';
 
 describe('StepApplyFormatting', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
+  const excelContextSyncMock = jest.fn();
+
   it('applyFormatting should log exceptions', async () => {
     // given
+
     jest.spyOn(console, 'log');
     jest.spyOn(console, 'error');
+
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValueOnce({ sync: excelContextSyncMock });
+
+    jest.spyOn(officeApiHelper, 'getTable').mockReturnValueOnce({ columns: 'columnsTest' });
 
     jest.spyOn(stepApplyFormatting, 'filterColumnInformation').mockImplementation(() => {
       throw new Error('errorTest');
@@ -37,7 +45,6 @@ describe('StepApplyFormatting', () => {
 
   it('applyFormatting should work as expected', async () => {
     // given
-    const excelContextSyncMock = jest.fn();
     const operationData = {
       objectWorkingId: 'objectWorkingIdTest',
       excelContext: { sync: excelContextSyncMock },
@@ -49,6 +56,10 @@ describe('StepApplyFormatting', () => {
       },
       officeTable: { columns: 'columnsTest' },
     };
+
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValueOnce({ sync: excelContextSyncMock });
+
+    jest.spyOn(officeApiHelper, 'getTable').mockReturnValueOnce({ columns: 'columnsTest' });
 
     jest.spyOn(stepApplyFormatting, 'filterColumnInformation').mockReturnValue('filteredColumnInformationTest');
 

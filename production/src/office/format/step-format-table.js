@@ -1,6 +1,8 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeApiDataLoader from '../api/office-api-data-loader';
 
+const AUTOFIT_COLUMN_LIMIT = 50;
+
 class StepFormatTable {
   /**
    * Auto resizes the columns of the Office table passed in parameters.
@@ -15,23 +17,29 @@ class StepFormatTable {
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
+   * @param {Boolean} operationData.shouldFormat Determines if the table should be format
    */
   formatTable = async (objectData, operationData) => {
     console.time('Column auto size');
     const {
-      objectWorkingId, excelContext, instanceDefinition, officeTable,
+      objectWorkingId, excelContext, instanceDefinition, officeTable, shouldFormat,
     } = operationData;
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
+    const { columns } = instanceDefinition;
 
-    try {
-      this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+    if (shouldFormat && columns < AUTOFIT_COLUMN_LIMIT) {
+      try {
+        this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
 
-      await this.formatColumns(excelContext, officeTable.columns);
+        await this.formatColumns(excelContext, officeTable.columns);
 
-      await excelContext.sync();
-    } catch (error) {
-      console.error(error);
-      console.log('Error when formatting - no columns autofit applied', error);
+        await excelContext.sync();
+      } catch (error) {
+        console.error(error);
+        console.log('Error when formatting - no columns autofit applied', error);
+      }
+    } else {
+      console.log('The column count is more than columns autofit limit or should not format - no columns autofit applied.');
     }
 
     operationStepDispatcher.completeFormatOfficeTable(objectWorkingId);
