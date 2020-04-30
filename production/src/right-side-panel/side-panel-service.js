@@ -195,9 +195,8 @@ class SidePanelService {
           );
           const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
 
-          for (let index = 0; index < objectsToDelete.length; index++) {
-            this.removeExistingNotification(objectsToDelete[index].objectWorkingId);
-          }
+          objectsToDelete.forEach((object) => { this.removeExistingNotification(object.objectWorkingId); });
+
           this.remove(objectWorkingIds);
         });
       }
