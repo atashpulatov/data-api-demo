@@ -30,7 +30,10 @@ describe('TC59987 - Import attribute forms', () => {
     waitForNotification();
     browser.pause(3000);
     expect($(rightPanelSelectors.importedObjectNameList).getText()).toEqual(objectName);
-    PluginRightPanel.edit();
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
+    switchToPluginFrame();
+    PluginRightPanel.editObject(1);
     browser.pause(3000);
     switchToPluginFrame();
     waitAndClick($('.item-title=Region')); // TODO: unselect the Region attribute
@@ -41,7 +44,7 @@ describe('TC59987 - Import attribute forms', () => {
     browser.pause(1500);
     switchToExcelFrame();
     const A4 = '#gridRows > div:nth-child(4) > div:nth-child(1) > div > div';
-    OfficeWorksheet.selectCell('A4')
-    expect($(A4).getText()).toEqual('Laura')
+    OfficeWorksheet.selectCell('A4');
+    expect($(A4).getText()).toEqual('Laura');
   });
 });

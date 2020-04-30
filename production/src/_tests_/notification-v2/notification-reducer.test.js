@@ -147,7 +147,9 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialState.empty, action);
 
         // then
-        expect(resultState.notifications[0]).toEqual({
+        const { children, ...resultChunk } = resultState.notifications[0];
+        expect(children).toBeDefined();
+        expect(resultChunk).toEqual({
           objectWorkingId: 123,
           operationType: IMPORT_OPERATION,
           title: 'Pending',
@@ -171,12 +173,53 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialState.singleImport, action);
 
         // then
-        expect(resultState.notifications[1]).toEqual({
+        const { children, ...resultChunk } = resultState.notifications[1];
+        expect(resultChunk).toEqual({
           objectWorkingId: 123,
           operationType: IMPORT_OPERATION,
           title: 'Pending',
           type: 'PROGRESS',
         });
+      });
+
+      it('should have cancel button on Pending', () => {
+        // given
+        const action = {
+          type: IMPORT_OPERATION,
+          payload: {
+            operation: {
+              objectWorkingId: 123,
+              operationType: IMPORT_OPERATION,
+            }
+          }
+        };
+
+        // when
+        const resultState = notificationReducer(initialState.singleImport, action);
+
+        // then
+        const { children } = resultState.notifications[1];
+        expect(children).toBeDefined();
+      });
+
+      it('should not have cancel button on Pending for Clear data', () => {
+        // given
+        const action = {
+          type: IMPORT_OPERATION,
+          payload: {
+            operation: {
+              objectWorkingId: 123,
+              operationType: CLEAR_DATA_OPERATION,
+            }
+          }
+        };
+
+        // when
+        const resultState = notificationReducer(initialState.singleImport, action);
+
+        // then
+        const { children } = resultState.notifications[1];
+        expect(children).not.toBeDefined();
       });
     });
 
@@ -220,11 +263,11 @@ describe('Notification reducer', () => {
     });
 
     describe('displayNotificationCompleted', () => {
-      const mockedDismissSuccessfullNotification = jest.fn();
+      const mockedDismissNotification = jest.fn();
       const mockedDismissSuccessfulRemoveNotification = jest.fn();
 
       beforeAll(() => {
-        jest.spyOn(notificationService, 'dismissSuccessfullNotification').mockImplementationOnce(() => mockedDismissSuccessfullNotification());
+        jest.spyOn(notificationService, 'dismissNotification').mockImplementationOnce(() => mockedDismissNotification());
         jest.spyOn(notificationService, 'dismissSuccessfulRemoveNotification').mockImplementationOnce(() => mockedDismissSuccessfulRemoveNotification());
       });
 
@@ -256,7 +299,7 @@ describe('Notification reducer', () => {
         resultState.notifications[0].onHover();
 
         // then
-        expect(mockedDismissSuccessfullNotification).toBeCalled();
+        expect(mockedDismissNotification).toBeCalled();
       });
 
       it('should assign proper method for remove operation', () => {

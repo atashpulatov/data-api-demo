@@ -26,6 +26,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.openDossier(dossierObject.name, null, false);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.accounts);
     waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
 
     // Import second visualization
@@ -34,26 +35,26 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.openDossier(dossierObject.name, null, false);
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.dailyActiveAccounts);
     waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
 
     // Change text in cell A4
-    // OfficeWorksheet.replaceAllThatMatches('Date', 'TEXT');
     OfficeWorksheet.changeTextInCell('A4', 'Text');
     browser.pause(1000);
 
     // Refresh All
     PluginRightPanel.refreshAll();
-    waitForPopup();
-    browser.pause(7000);
-    switchToExcelFrame();
-    PluginPopup.closeRefreshAll();
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
     browser.pause(3000);
 
     // Edit last imported report
-    PluginRightPanel.edit();
+    PluginRightPanel.editObject(1);
     browser.pause(3000);
-    PluginPopup.editAndImportVizualization(dossierObject.visualizations.accounts);
+
+    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.accounts);
     waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
 
 
@@ -66,5 +67,5 @@ describe('IMPORT diferent types of vizualizations', () => {
     switchToPluginFrame();
     PluginRightPanel.logout();
     browser.pause(3000);
-  })
+  });
 });

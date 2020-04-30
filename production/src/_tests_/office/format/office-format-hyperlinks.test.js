@@ -34,7 +34,8 @@ describe('OfficeFormatHyperlinks', () => {
   ${'ftp://example.com'} | ${'url'} | ${{ address: 'ftp://example.com', textToDisplay: 'ftp://example.com' }}
   ${'<a href="https://example.com">link</a>'} | ${'url'} | ${null}
   ${'invalid'} | ${'url'} | ${null}
-  ${'<a href="https://example.com">link</a>'} | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'https://example.com' }}
+  ${'<a href="https://example.com">link</a>'} | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'link' }}
+  ${'<a href="https://example.com"></a>'} | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'https://example.com' }}
   ${'<a data="text" href="https://example.com">text</a>'} | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'text' }}
   ${'invalid'} | ${'HTMLTag'} | ${null}
   

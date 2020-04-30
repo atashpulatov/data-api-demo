@@ -6,25 +6,12 @@ import {
   switchToPromptFrame,
   switchToPopupFrame,
   switchToExcelFrame,
-  switchToPromptFrameForEditDossier,
-  switchToPromptFrameForEditReport,
-  switchToRefreshAllFrame,
   switchToDialogFrame,
+  switchToPromptFrameForImportDossier
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 
 class PluginPopup {
-  /**
-   * Waits for the 'Refreshing complete!' message and only then closes refreshAll popup
-   * @param {number} timeout increase/decrease timeout depending on the amount of refreshed objects
-   */
-  closeRefreshAll(timeout = 9999) {
-    switchToRefreshAllFrame();
-    $('.finished-header').waitForExist(timeout);
-    switchToExcelFrame();
-    waitAndClick($(popupSelectors.closeRefreshAll));
-  };
-
   searchForObject(objectName) {
     $(popupSelectors.searchInput).clearValue();
     $(popupSelectors.searchInput).setValue(objectName);
@@ -68,14 +55,13 @@ class PluginPopup {
 
   clickSubtotalToggler() {
     waitAndClick($(popupSelectors.subtotalToggler));
-  };
+  }
 
   closePreview() {
     waitAndClick($(popupSelectors.closePreviewBtn));
   }
 
   clickRunForPromptedDossier() {
-    switchToPromptFrameForEditDossier();
     waitAndClick($(popupSelectors.runBtnForPromptedDossier));
   }
 
@@ -108,25 +94,40 @@ class PluginPopup {
    * @param {String} selector a css selector to validate
    * @memberof PluginPopup
    */
-
   waitUntilActionIsFinished(selector) {
     browser.waitUntil(() => ($(selector).isExisting()));
     browser.waitUntil(() => !($(selector).isExisting()));
   }
 
-  selectObjectElementsInPrepareData(elements) {
-    $('#search-toolbar > div > span > input').waitForExist(7777);
-    for (let i = 0; i < elements.length; i++) {
-      $('#search-toolbar > div > span > input').clearValue();
-      $('#search-toolbar > div > span > input').setValue(`${elements[i]}`);
-      waitAndClick($(`input[name="${elements[i]}"]`));
-      $('#search-toolbar > div > span > input').clearValue();
-    }
-  }
-
+  /**
+   * This method is used in the Prepare Data window.
+   * It is used to select the desired attributes or metrics to be selected/unselected.
+   * !Important! Selecting attributes only work for datasets. Selecting metrics can be used for both reports and datasets
+   * To select attributes for reports, user have to user the selectAttributeElementsForReportObjects(elements) method
+   * After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
+   *
+   * @param {String} elements an array with the names of the attributes/metrics to be selected/unselected
+   * @memberof PluginPopup
+   */
   selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`input[name="${elements[i]}"]`));
+    }
+  }
+
+  // This method select Objects in Prepare Data for Report Objects. After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
+  /**
+   * This method is used in the Prepare Data window.
+   * It is used to select the desired attributes to be selected/unselected (only for reports).
+   * !Important! Selecting attributes only work for reports.
+   * After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
+   *
+   * @param {String} elements an array with the names of the attributes/metrics to be selected/unselected
+   * @memberof PluginPopup
+   */
+  selectAttributeElementsForReportObjects(attributes) {
+    for (let i = 0; i < attributes.length; i++) {
+      waitAndClick($(`.item-title=${attributes[i]}`));
     }
   }
 
@@ -151,6 +152,11 @@ class PluginPopup {
   selectFirstObject() {
     browser.pause(2222);
     waitAndClick($(popupSelectors.firstObject));
+  }
+
+  selectFirstObjectWithoutSearch() {
+    browser.pause(2222);
+    waitAndClick($(popupSelectors.firstObjectWithoutSearch));
   }
 
   switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
@@ -196,7 +202,7 @@ class PluginPopup {
     browser.pause(9999); // temp solution
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
-  };
+  }
 
   selectAttributeIndex(index) {
     for (let i = 0; i < index.length; i++) {
@@ -235,7 +241,7 @@ class PluginPopup {
     this.switchLibraryAndImportObject(objectName, false);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(33333);
   }
 
   writeValueText(value) {
@@ -257,6 +263,7 @@ class PluginPopup {
   writeMultiPrompt(value) {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
+    $(popupSelectors.calendarInput).waitForExist(7777);
     $(popupSelectors.calendarInput).click();
     $(popupSelectors.calendarInput).clearValue();
     $(popupSelectors.calendarInput).setValue(`${value}\uE004\uE004\uE006`);
@@ -278,14 +285,14 @@ class PluginPopup {
 
   promptSelectObject(objectName) {
     switchToPromptFrame();
-    $('#mstrdossierPromptEditor').waitForExist(7777);
+    $('#mstrdossierPromptEditor').waitForExist(22222);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
     browser.pause(2222);
     waitAndClick($('.mstrToolButtonRounded'));
   }
 
   promptSelectObjectForEdit(objectName) {
-    switchToPromptFrameForEditReport();
+    switchToPromptFrame();
     browser.pause(10000);
     $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
@@ -327,11 +334,11 @@ class PluginPopup {
   // }
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39454
-  async checkDisplayedObjectNames(searchedString) {
-    for (let i = 0; i < popupSelectors.displayedObjects.length; i++) {
-      await expect(popupSelectors.displayedObjects.get(i).getText().toContain(searchedString));
-    }
-  }
+  // async checkDisplayedObjectNames(searchedString) {
+  //   for (let i = 0; i < popupSelectors.displayedObjects.length; i++) {
+  //     await expect(popupSelectors.displayedObjects.get(i).getText().toContain(searchedString));
+  //   }
+  // }
 
   // Currently this method is not used
   checkIfFilterIsClicked(filterName) {
@@ -381,39 +388,34 @@ class PluginPopup {
     myLibrarySwitch.waitForExist(5000);
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
-  };
+  }
 
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
     this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
-  };
+  }
 
+  /**
+   * This function is used to import the desired visualization.
+   * It has to be used inside the Dossier window.
+   *
+   * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
+   * @memberof PluginPopup
+   */
   selectAndImportVizualiation(visContainerId) {
     switchToPromptFrame();
-    browser.pause(10000);
-    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
-    visSelector.waitForExist(15000);
-    browser.pause(3000);
-    visSelector.click();
-    // TODO: wait untli import button is enabled and click it
+    let visSelector;
+    if (typeof visContainerId === 'undefined') {
+      visSelector = $(popupSelectors.visualizationSelector);
+    } else {
+      visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+    }
+    waitAndClick(visSelector, 40000);
     browser.pause(2500);
     switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForExist(5000);
+    $(popupSelectors.importBtn).waitForEnabled(5000);
     this.clickImport();
-  };
-
-  editAndImportVizualization(visContainerId) {
-    switchToPromptFrameForEditDossier();
-    browser.pause(10000);
-    const visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
-    visSelector.waitForExist(15000);
-    browser.pause(3000);
-    visSelector.click();
-    // TODO: wait untli import button is enabled and click it
-    browser.pause(2500);
-    switchToPluginFrame();
-    this.clickImport();
-  };
+  }
 
   showTotals(objectId) {
     switchToPromptFrame();
@@ -424,7 +426,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.totalButton));
     waitAndClick($(popupSelectors.okButton));
     browser.pause(4000);
-  };
+  }
 
   sortAscending(objectId) {
     switchToPromptFrame();
@@ -432,7 +434,7 @@ class PluginPopup {
     browser.pause(1000);
     waitAndClick($(popupSelectors.sortAscendingButton));
     browser.pause(4000);
-  };
+  }
 
   // TODO:
   // method is used to select attributes(to check checkboxes) and attribute forms.
@@ -449,14 +451,14 @@ class PluginPopup {
         }
       }
     }
-  };
+  }
 
   selectAttributeFormVisualisation(type) {
     waitAndClick($(popupSelectors.attributeFormDropdown));
     browser.pause(500);
     waitAndClick($(`${popupSelectors.attributeFormDropDownItem}=${type}`));
     browser.pause(500);
-  };
+  }
 
   sortDescending(objectId) {
     switchToPromptFrame();
@@ -464,7 +466,7 @@ class PluginPopup {
     browser.pause(1000);
     waitAndClick($(popupSelectors.sortDescendingButton));
     browser.pause(4000);
-  };
+  }
 
   drillByCategory(objectId) {
     switchToPromptFrame();
@@ -474,7 +476,7 @@ class PluginPopup {
     browser.pause(1000);
     waitAndClick($(popupSelectors.categoryButton));
     browser.pause(4000);
-  };
+  }
 
   /**
    * Toggles attribute elements for filter at dossier filter panel
@@ -489,7 +491,7 @@ class PluginPopup {
       waitAndClick($(dossierWindow.filtersMenu.selectFilterValueAt(valueIndex)), 1000);
     });
     waitAndClick($(dossierWindow.filtersMenu.getFilterAt(filterIndex)), 1000);
-  };
+  }
 
   /**
    * Sets value for one of the inputs for slider filter in dossier filters
@@ -504,7 +506,7 @@ class PluginPopup {
     maxValueInput.doubleClick();
     browser.keys('\uE003'); // Press Backspace
     maxValueInput.setValue(value);
-  };
+  }
 
   /**
    * Refresh Dossier to default state
@@ -514,7 +516,7 @@ class PluginPopup {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonRefreshDossier), 1000);
     waitAndClick($(dossierWindow.buttonConfirmRefresh), 1000);
-  };
+  }
 
   /**
    * Refresh Dossier to default state
@@ -525,7 +527,7 @@ class PluginPopup {
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonBookmarks), 1000);
     waitAndClick($(dossierWindow.getBookmarkItemAt(index)), 1000);
-  };
+  }
 
   /**
    * Go to page/chapter in dossier
@@ -570,7 +572,7 @@ class PluginPopup {
   expandObjectDetails(index) {
     $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
     const expandButtons = $$(popupSelectors.expandButton);
-    expandButtons[index-1].click();
+    expandButtons[index - 1].click();
   }
 
   /**
@@ -580,11 +582,11 @@ class PluginPopup {
    */
   copyToClipboardObjectDetails(index) {
     const INDEX_TO_DETAIL = {
-      '1': popupSelectors.typeDetail, //Type
-      '2': popupSelectors.idDetail, //ID
-      '3': popupSelectors.createdDetail, //Created
-      '4': popupSelectors.detailsTable + ' > table ' + popupSelectors.locationDetail, //Location
-      '5': popupSelectors.detailsTable + ' > table ' + popupSelectors.descriptionDetail, //Description
+      1: popupSelectors.typeDetail, // Type
+      2: popupSelectors.idDetail, // ID
+      3: popupSelectors.createdDetail, // Created
+      4: `${popupSelectors.detailsTable} > table ${popupSelectors.locationDetail}`, // Location
+      5: `${popupSelectors.detailsTable} > table ${popupSelectors.descriptionDetail}`, // Description
     };
     const objectDetail = $(INDEX_TO_DETAIL[index]);
     objectDetail.click();
@@ -634,41 +636,46 @@ class PluginPopup {
     this.clickPrepareData();
   }
 
+  /**
+   * This function is used for prompted Dossiers. It is answering the default prompt answer and it is selecting the desired visualization and importing it
+   *
+   * @param {Number} index Id of the visualization, for ex: '#mstr114'
+   */
   importDefaultPromptedVisualisation(visContainerId) {
-    // reprompt
-    switchToPromptFrameForEditDossier();
+    // Clicking 'Run' in the prompt window
+    switchToPromptFrameForImportDossier();
     $('#mstrdossierPromptEditor').waitForExist(10000);
     this.clickRunForPromptedDossier();
+    console.log('it was clicked');
     browser.pause(6000);
-    // select vis
-    switchToPromptFrameForEditDossier();
-    // for dossiers containing one vis: if no visContainerId, select the only existing vis
-    let visSelector;
-    if (typeof visContainerId === 'undefined') {
-      visSelector = $('.mstrmojo-VizBox-selector');
-    } else {
-      visSelector = $(visContainerId).$('.mstrmojo-VizBox-selector');
-    }
-    visSelector.waitForExist(6000);
-    browser.pause(3000);
-    visSelector.click();
-    browser.pause(2500);
-    switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForExist(5000);
-    this.clickImport();
+    // Importing the selected visualization
+    this.selectAndImportVizualiation(visContainerId);
   }
 
+  /**
+   * This function is used for prompted dossiers.
+   * It click on edit for the first object from the list.
+   * After that it is clicking on reprompt inside the Dossier window and answering the default prompt answer.
+   * After that it is selecting the desired visualization and importing it.
+   *
+   * @param {Number} index Id of the visualization, for ex: '#mstr114'
+   */
   repromptDefaultVisualisation(visContainerId) {
     // edit
-    pluginRightPanel.edit();
+    pluginRightPanel.editObject(1);
     browser.pause(5000);
-    switchToPromptFrameForEditDossier();
+    switchToPromptFrame();
     // click reprompt icon
     $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
     $(popupSelectors.dossierWindow.repromptDossier).click();
     browser.pause(3000);
     // reprompt and import
-    this.importDefaultPromptedVisualisation(visContainerId);
+    switchToPromptFrame();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    this.clickRunForPromptedDossier();
+    console.log('it was clicked');
+    browser.pause(6000);
+    this.selectAndImportVizualiation(visContainerId);
   }
 
   /**
@@ -709,21 +716,21 @@ class PluginPopup {
    */
   clickAllButton(section) {
     switch (section) {
-    case 'Application':
-      waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
-      break;
-    case 'Owner':
-      if (this.getMyLibraryState()) {
+      case 'Application':
         waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
-      } else {
-        waitAndClick($$(popupSelectors.filterPanel.expandButton)[1]);
-      }
-      break;
-    case 'Modified':
-      waitAndClick($('.mstr-date-range-selector-container .expand-btn'));
-      break;
-    default:
-      break;
+        break;
+      case 'Owner':
+        if (this.getMyLibraryState()) {
+          waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
+        } else {
+          waitAndClick($$(popupSelectors.filterPanel.expandButton)[1]);
+        }
+        break;
+      case 'Modified':
+        waitAndClick($('.mstr-date-range-selector-container .expand-btn'));
+        break;
+      default:
+        break;
     }
   }
 
@@ -774,7 +781,7 @@ class PluginPopup {
     const expandButtons = $$(popupSelectors.expandButton);
     for (let i = 0; i < amount; i++) {
       expandButtons[i].waitForExist({ timeout: 3000 });
-      expandButtons[i].click()
+      expandButtons[i].click();
     }
   }
 
@@ -788,7 +795,7 @@ class PluginPopup {
     const expandButtons = $$(popupSelectors.expandButton);
     for (let i = expandButtons.length - 1; i > expandButtons.length - 1 - amount; i--) {
       expandButtons[i].waitForExist({ timeout: 3000 });
-      expandButtons[i].click()
+      expandButtons[i].click();
     }
   }
 
@@ -836,7 +843,7 @@ class PluginPopup {
    */
   areAllRowsCollapsed() {
     let openedRows = this.findAmountOfOpenRows();
-    if (openedRows > 0) return false;
+    if (openedRows > 0) { return false; }
     this.scrollTable(['End']);
     openedRows = this.findAmountOfOpenRows();
     return !(openedRows > 0);
@@ -897,7 +904,7 @@ class PluginPopup {
    */
   getBackgroundColor(selector) {
     const backgroundColour = $(selector).getCSSProperty('background-color');
-    return backgroundColour["parsed"]["hex"];
+    return backgroundColour.parsed.hex;
   }
 
   /**

@@ -1,27 +1,41 @@
 import { switchToPluginFrame, switchToExcelFrame } from './iframe-helper';
-import { rightPanelSelectors as se } from '../../constants/selectors/plugin.right-panel-selectors';
+import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 
 export function waitForNotification() {
-  let popupExists = true;
-  while (popupExists) {
-    switchToExcelFrame();
-    const popupDiv = $('#WACDialogPanel').isExisting();
-    if (!popupDiv) {
-      switchToPluginFrame();
-      const overlayDiv = $('#overlay').isExisting();
-      if (overlayDiv) {
-        popupExists = false;
-      }
-    }
-    browser.pause(777);
+  const notification = $(rightPanelSelectors.notificationContainer);
+  const progressBar = $(rightPanelSelectors.progressBar);
+  getNotification(notification, progressBar);
+}
+
+
+export function waitForAllNotifications() {
+  switchToPluginFrame();
+  const objectCount = $$(rightPanelSelectors.objectContainer).length;
+  for (let index = 1; index <= objectCount; index++) {
+    const notification = $(rightPanelSelectors.getNotificationAt(index));
+    const progressBar = $(rightPanelSelectors.getProgressBarAt(index));
+    getNotification(notification, progressBar);
   }
-  $(se.notificationPopUp).waitForExist(6666, false, `${se.notificationPopUp} was not found`);
+}
+
+function getNotification(notification, progressBar) {
+  let progress = true;
+  while (progress) {
+    switchToPluginFrame();
+    const isNotificationExist = notification.isExisting();
+    const isProgressBarExist = progressBar.isExisting();
+    if (isNotificationExist && !isProgressBarExist) {
+      browser.pause(777);
+      progress = false;
+    } else {
+      browser.pause(777);
+    }
+  }
 }
 
 export function waitForPopup(timeout = 29999) {
   switchToExcelFrame();
   $('#WACDialogPanel').waitForExist(timeout, false, `#WACDialogPanel was not found`);
-
   browser.pause(2500);
   switchToPluginFrame();
 }

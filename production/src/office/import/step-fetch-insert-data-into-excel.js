@@ -2,6 +2,7 @@ import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr
 import officeInsertService from './office-insert-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
+import { officeApiHelper } from '../api/office-api-helper';
 
 class StepFetchInsertDataIntoExcel {
   /**
@@ -23,9 +24,8 @@ class StepFetchInsertDataIntoExcel {
    * @param {Object} [objectData.visualizationInfo] Information about location of visualization in dossier
    * @param {Object} objectData.displayAttrFormNames The style in which attribute form will be displayed
    * @param {Office} operationData.operationType The type of the operation that called this function
-   * @param {Boolean} [operationData.tableColumnsChanged] Determines if columns number in Excel table has been changed
+   * @param {Boolean} operationData.tableColumnsChanged Determines if columns number in Excel table has been changed
    * @param {Office} operationData.officeTable Reference to Table created by Excel
-   * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {String} operationData.instanceDefinition Object containing information about MSTR object
    */
   fetchInsertDataIntoExcel = async (objectData, operationData) => {
@@ -35,9 +35,10 @@ class StepFetchInsertDataIntoExcel {
         operationType,
         tableColumnsChanged,
         officeTable,
-        excelContext,
         instanceDefinition,
       } = operationData;
+
+      let { excelContext } = operationData;
 
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
@@ -47,6 +48,8 @@ class StepFetchInsertDataIntoExcel {
       let rowIndex = 0;
       const contextPromises = [];
       const subtotalsAddresses = [];
+      if (!tableColumnsChanged) { excelContext = await officeApiHelper.getExcelContext(); }
+
 
       console.time('Fetch and insert into excel');
       console.time('Fetch data');
