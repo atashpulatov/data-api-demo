@@ -41,7 +41,7 @@ class OfficeReducerHelper {
   * Return object from object Reducer corresponding to passed objectWorkingId
   *
   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-  * @return {Boolean}
+  * @return {Object}
   */
   getObjectFromObjectReducerByObjectWorkingId = (objectWorkingId) => {
     const { objects } = this.reduxStore.getState().objectReducer;
@@ -52,7 +52,7 @@ class OfficeReducerHelper {
   * Return notification from notification Reducer corresponding to passed objectWorkingId
   *
   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-  * @return {Boolean}
+  * @return {Object}
   */
   getNotificationFromNotificationReducer = (objectWorkingId) => {
     const { notifications } = this.reduxStore.getState().notificationReducer;
