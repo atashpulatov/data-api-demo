@@ -298,13 +298,15 @@ class SidePanelService {
   && objectOperation.operationType !== HIGHLIGHT_OPERATION
 
   /**
-   * Removes the existing notification on rightside panel
+   * Removes the notification on rightside panel if exist
    *
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    */
   removeExistingNotification(objectWorkingId) {
     const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
-    this.dismissNotifications([notification]);
+    if (notification) {
+      this.dismissNotifications([notification]);
+    }
   }
 }
 
