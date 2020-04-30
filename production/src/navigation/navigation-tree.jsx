@@ -19,7 +19,6 @@ import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
-import { calculateNumberOfFiltersActive } from '../helpers/numberOfFiltersActive';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 

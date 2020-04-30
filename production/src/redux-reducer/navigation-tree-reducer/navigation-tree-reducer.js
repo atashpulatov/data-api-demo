@@ -11,6 +11,7 @@ import {
 import { sessionProperties } from '../session-reducer/session-properties';
 import { CLEAR_POPUP_STATE } from '../popup-state-reducer/popup-state-actions';
 import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
+import { calculateNumberOfFiltersActive } from '../../helpers/numberOfFiltersActive';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
