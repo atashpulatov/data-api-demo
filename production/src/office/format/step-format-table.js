@@ -27,19 +27,21 @@ class StepFormatTable {
     const { crosstabHeaderDimensions, isCrosstab } = instanceDefinition.mstrTable;
     const { columns } = instanceDefinition;
 
-    if (shouldFormat && columns < AUTOFIT_COLUMN_LIMIT) {
-      try {
-        this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
+    if (shouldFormat) {
+      if (columns < AUTOFIT_COLUMN_LIMIT) {
+        try {
+          this.formatCrosstabHeaders(officeTable, isCrosstab, crosstabHeaderDimensions.rowsX);
 
-        await this.formatColumns(excelContext, officeTable.columns);
+          await this.formatColumns(excelContext, officeTable.columns);
 
-        await excelContext.sync();
-      } catch (error) {
-        console.error(error);
-        console.log('Error when formatting - no columns autofit applied', error);
+          await excelContext.sync();
+        } catch (error) {
+          console.error(error);
+          console.log('Error when formatting - no columns autofit applied', error);
+        }
+      } else {
+        console.log('The column count is more than columns autofit limit or should not format - no columns autofit applied.');
       }
-    } else {
-      console.log('The column count is more than columns autofit limit or should not format - no columns autofit applied.');
     }
 
     operationStepDispatcher.completeFormatOfficeTable(objectWorkingId);

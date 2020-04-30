@@ -1,7 +1,5 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import officeFormatHyperlinks from './office-format-hyperlinks';
-import { officeApiHelper } from '../api/office-api-helper';
-import { EDIT_OPERATION, REFRESH_OPERATION } from '../../operation/operation-type-names';
 
 class StepApplyFormatting {
   /**
@@ -23,18 +21,13 @@ class StepApplyFormatting {
   applyFormatting = async (objectData, operationData) => {
     console.time('Apply formatting');
 
-    const { bindId } = objectData;
     const {
-      objectWorkingId, instanceDefinition, operationType, tableColumnsChanged
+      objectWorkingId, officeTable, instanceDefinition, excelContext
     } = operationData;
-    let { officeTable } = operationData;
+
     const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
 
     try {
-      const excelContext = await officeApiHelper.getExcelContext();
-      if (!tableColumnsChanged && (operationType === EDIT_OPERATION || operationType === REFRESH_OPERATION)) {
-        officeTable = await officeApiHelper.getTable(excelContext, bindId);
-      }
       const filteredColumnInformation = this.filterColumnInformation(columnInformation);
       const offset = this.calculateMetricColumnOffset(filteredColumnInformation, isCrosstab);
 

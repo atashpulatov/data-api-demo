@@ -1,77 +1,7 @@
-.internet-connection-overlay{
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  background-color: rgba(255,255,255,0.3);
-}
-
-.internet-connection-dialog{
-  position: relative;
-  display: flex;
-  flex-direction: column;
+.internet-connection-container .connection-error{
   min-height: 100px;
   width: 330px;
   max-width: 330px;
   width: 90%;
-  background: #fff;
-  box-shadow: 0 0 5px grey;
-  margin: 0 auto;
   top: 50%;
-  transform: translateY(-50%);
-  padding: 16px;
-  border-radius: 1%;
-}
-
-.internet-connection-row{
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  align-content: center;
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  font-size: 12px;
-}
-
-.internet-connection-top{
-  padding-left: 4px;
-}
-
-.internet-connection-column.icon{
-  flex: 0 0 auto;
-  width: 24px;
-
-}
-
-.internet-connection-icon {
-  width: 24px;
-  height: 24px;
-}
-
-.internet-connection-column {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.internet-connection-infoText{
-  margin-left: 5px;
-}
-
-.internet-connection-loading-container {
-  margin: 6px auto 0px auto;
-  display: flex;
-  align-items: center;
-
-}
-
-.span{
-  padding-left: 3px;
-}
-
-.internet-connection-loading-container>img {
-  vertical-align: middle;
 }
