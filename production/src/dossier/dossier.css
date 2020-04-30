@@ -21,7 +21,8 @@
   margin-top: 10px;
 }
 
-#popup-wrapper .empty  {
+
+#popup-wrapper .dossier-window .empty  {
   position: fixed; 
   left: 0;
   top: 0;
