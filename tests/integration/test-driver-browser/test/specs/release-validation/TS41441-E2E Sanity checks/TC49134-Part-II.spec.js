@@ -5,7 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
 describe('TS41441 - E2E Sanity checks', () => {
   beforeEach(() => {
@@ -27,8 +27,9 @@ describe('TS41441 - E2E Sanity checks', () => {
 
     // should open a new sheet & import a report with crosstabs
     OfficeWorksheet.openNewSheet();
+    switchToPluginFrame();
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.importObject('Report with Crosstab');
+    PluginPopup.importObject('Report with Crosstab 123');
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });

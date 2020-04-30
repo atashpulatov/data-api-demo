@@ -2,7 +2,9 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToDialogFrame, switchToExcelFrame, switchToRightPanelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
+import {
+  switchToDialogFrame, switchToExcelFrame, switchToRightPanelFrame, changeBrowserTab
+} from '../../../helpers/utils/iframe-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
 import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelManipulation-helper';
@@ -36,7 +38,8 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     expect(normalizedFirstTableName).toEqual(basic01Report.excelTableFullName);
 
     browser.keys('\uE00C');
-    PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'A2');
+    PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
+
     OfficeWorksheet.selectCell('I2');
 
     switchToRightPanelFrame();
@@ -49,6 +52,6 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     expect(normalizedSecondTableName).toEqual(basic01Report.excelTableFullName);
 
     browser.keys('\uE00C'); // Escape key
-    PluginRightPanel.clickOnObject(PluginRightPanel.SelectNthPlaceholder(1), 'I2');
+    PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'I2');
   });
 });

@@ -16,22 +16,16 @@ export function switchToExcelFrame() {
   browser.switchToFrame($('#WebApplicationFrame'));
 }
 
+// This frame is used for report prompt window and visualizations window
 export function switchToPromptFrame() {
   switchToPluginFrame();
   $('iframe[src*="app.embedded=true"]').waitForExist(9999);
   browser.switchToFrame($('iframe[src*="app.embedded=true"]'));
 }
 
-export function switchToPromptFrameForEditDossier() {
+export function switchToPromptFrameForImportDossier() {
   switchToPluginFrame();
-  const editFrame = '#root > div > div:nth-child(3) > iframe';
-  $(editFrame).waitForExist(9999);
-  browser.switchToFrame($(editFrame));
-}
-
-export function switchToPromptFrameForEditReport() {
-  switchToPluginFrame();
-  const editFrame = '#root > div > div.promptsContainer > iframe';
+  const editFrame = '#popup-wrapper > div > div:nth-child(2) > iframe';
   $(editFrame).waitForExist(9999);
   browser.switchToFrame($(editFrame));
 }
@@ -46,15 +40,6 @@ export function switchToPopupFrame() {
   switchToExcelFrame();
   $('iframe[src*="api&et="]').waitForExist(9999);
   browser.switchToFrame($('iframe[src*="api&et="]'));
-}
-
-/**
- * switches to refreshAll popup frame
- */
-export function switchToRefreshAllFrame() {
-  switchToExcelFrame();
-  $('iframe[src*="refresh-all-page"]').waitForExist(9999);
-  browser.switchToFrame($('iframe[src*="refresh-all-page"]'));
 }
 
 /**

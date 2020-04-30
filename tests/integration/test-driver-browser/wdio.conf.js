@@ -17,31 +17,69 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-        //   './test/specs/release-validation/deprecated/sample.spec.js',
+    './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
     acceptance: [
-      './test/specs/release-validation/F12909-import-report/*.js',
-      './test/specs/release-validation/F12910-import-dataset/*.js',
-      './test/specs/release-validation/F17583-authentication/*.js',
-      './test/specs/release-validation/F21402-prompt/*.js',
-      './test/specs/release-validation/F21409-refresh-all/*.js',
-      './test/specs/release-validation/F21411-right-panel/*.js',
-      './test/specs/release-validation/F21526-secure-data/*.js',
-      './test/specs/release-validation/F21527-re-prompts/*.js',
-      './test/specs/release-validation/F22954-editing/*.js',
-      './test/specs/release-validation/F22955-refresh/*.js',
-      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/*.js',
-      './test/specs/release-validation/F24087-improve-scrolling-performance/*.js',
-      './test/specs/release-validation/F24398-import-and-refresh-visualization/*.js',
-      './test/specs/release-validation/F24751-import subtotals/*.js',
-      './test/specs/release-validation/F25930-faster-display/*.js',
-      './test/specs/release-validation/F25932-import-attribute-forms/*.js',
-      './test/specs/release-validation/F25946-details-panel/*.js',
-      './test/specs/release-validation/F25968-object-numbers/*.js',
-      './test/specs/release-validation/TF7862-regression/*.js',
-      './test/specs/release-validation/TS41441-E2E Sanity checks/*.js',
-
+      './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
+      './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
+      './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48131-refresh-report.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48136-refresh-report-prompt-multiple-prompts.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC59877-Highlighting-the-row-on-hover_selection.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53560-Import-a-grid-visualisation.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53561-Part-I-import-different-types-of-visualisations.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53561-Part-II-import-different-types-of-visualisations.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53561-Part-III-import-different-types-of-visualisations.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53620-Refreshing-a-visualisation.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53627-Interactive-components-at-the-popup-window.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC54783-Manipulation-of-grid-visualization.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC60974-importing-custom-visualisation.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61043-E2E-prompted-dossier.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61046-E2E-with-edit-change-text.spec.js',
+      './test/specs/release-validation/F24751-import subtotals/TC53340-import-report-with-subtotals.spec.js',
+      './test/specs/release-validation/F24751-import subtotals/TC53745-subtotals-toggle-hidden.spec.js',
+      './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-within-details-panel.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
+      './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
+      './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
+      './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
+      './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54856-filtering-with-type-owner-certified-date.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC53430-refreshing-and-filtering-during-refresh.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35090-right-under-excel-limit.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35247-excel-limits.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35248-excel-limits-size-placement.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35250-report-exceed-project-limit.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35252-above-report-table.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35279-number-formatting.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35407-import-report-with-not-supported-features.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC36826-report-all-filtered-out.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39460-import-basic-dataset.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39460-prepare-data-insert-object.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39544-prepare-data-all-objects.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39583-prepare-data-view-selected.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39600-prepare-data-data-preview.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39603-import-multiple-objects.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -84,7 +122,7 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-within-details-panel.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
-      './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js', 
+      './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
     ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
@@ -96,9 +134,9 @@ exports.config = {
       './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
     ],
-    'TF7862-regression': [
-      './test/specs/release-validation/TF7862-regression/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/TF7862-regression/TC59464-binding-imported-report.spec.js',
+    'F28550-rename-excel-table-without-losing-binding': [
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
     ],
     'TS41441-E2E Sanity checks': [
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
@@ -110,6 +148,25 @@ exports.config = {
     'F24086-improved-browsing-by-adding-filters': [
       './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54856-filtering-with-type-owner-certified-date.spec.js',
       './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC53430-refreshing-and-filtering-during-refresh.spec.js',
+    ],
+    'F12909-import-report': [
+      './test/specs/release-validation/F12909-import-report/TC35090-right-under-excel-limit.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35247-excel-limits.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35248-excel-limits-size-placement.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35250-report-exceed-project-limit.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35252-above-report-table.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35279-number-formatting.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35407-import-report-with-not-supported-features.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC36826-report-all-filtered-out.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39460-import-basic-dataset.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39460-prepare-data-insert-object.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39544-prepare-data-all-objects.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39583-prepare-data-view-selected.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39600-prepare-data-data-preview.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39603-import-multiple-objects.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
     ]
   },
   // Patterns to exclude.
@@ -141,7 +198,16 @@ exports.config = {
   capabilities: [{
     maxInstances: 1,
     browserName:
-  'chrome',
+      'chrome',
+    'goog:chromeOptions': {
+      // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
+      // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
+      // debuggerAddress: '127.0.0.1:9222'
+
+      // to run chrome headless the following flags are required
+      // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
+      // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],
+    }
   }],
   // {
   // maxInstances: 1,
@@ -237,7 +303,7 @@ exports.config = {
     // The Jasmine framework allows interception of each assertion in order to log the state of the application
     // or website depending on the result. For example, it is pretty handy to take a screenshot every time
     // an assertion fails.
-    expectationResultHandler (passed, assertion) {
+    expectationResultHandler(passed, assertion) {
       // do something
     }
   },
@@ -265,9 +331,9 @@ exports.config = {
   // Creating property to store Language and Region for Excel logged in user.
   // Plugin GUI langauge is based on this value.
   // Required to provide Internationalization support in the automation framework.
-  languageRegion : 'lg-rg',
+  languageRegion: 'lg-rg',
 
-  beforeSession (config, capabilities, specs) {
+  beforeSession(config, capabilities, specs) {
     require('@babel/register');
   },
   /**
@@ -311,7 +377,9 @@ exports.config = {
   /**
   * Function to be executed after a test (in Mocha/Jasmine).
   */
-  afterTest (test, context, { error, result, duration, passed, retries }) {
+  afterTest(test, context, {
+    error, result, duration, passed, retries
+  }) {
     if (!passed) {
       browser.takeScreenshot();
     }
@@ -367,4 +435,4 @@ exports.config = {
   */
   // onReload: function(oldSessionId, newSessionId) {
   // }
-}
+};

@@ -14,3 +14,15 @@
     return window.parent.postMessage('EXTEND_SESSION', window.origin);
   }, false);
 });
+
+/**
+ * Temporary inject global variables to embedded dossier iframe, to disable the possibilty of
+ * export data from visualiation menu. Remove when DE166960 will be solved from embedded sdk side
+ * and there will be prop parameter which results in export data funcitionality being hidden or
+ * when export functionality starts to work correctly.
+ */
+(function () {
+  window.mstrApp.features['web-export-to-excel-privilege'] = false;
+  window.mstrApp.features['web-export-to-pdf-privilege'] = false;
+  window.mstrApp.features['web-export-to-csv-privilege'] = false;
+}());

@@ -19,7 +19,7 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectFirstObjectWithoutSearch();
     // apply filters
     PluginPopup.clickRefreshButton();
     const filterResultBefore = PluginPopup.getFilterResults();
@@ -57,14 +57,12 @@ describe('F24086 Improved browsing by adding filters', () => {
     PluginPopup.clickRefreshButton();
     browser.waitUntil(() => ($(popupSelectors.buttonLoading).isExisting()));
     PluginPopup.clickFilterButton();
-    PluginPopup.waitUntilActionIsFinished(popupSelectors.filterPanel.categoryListRowDisabled);
     PluginPopup.tickFilterCheckBox('Type', 'Dossier');
     PluginPopup.clickAllButton('Owner');
     PluginPopup.clickSelectAll();
     browser.waitUntil(() => !($(popupSelectors.buttonLoading).isExisting()));
-    expect(PluginPopup.getCheckboxState('Type', 'Dossier')).toBe(true);
-    expect(PluginPopup.getCheckboxState('Owner', 'Administrator')).toBe(true);
-    expect(PluginPopup.getCheckboxState('Owner', 'a')).toBe(true);
-    expect(PluginPopup.getAllPanelCheckboxState('MSTR User')).toBe(true);
+    browser.pause(5000);
+    expect(PluginPopup.getCheckboxState('Type', 'Dossier')).toBe(false);
+    expect(PluginPopup.getCheckboxState('Owner', 'Administrator')).toBe(false);
   });
 });

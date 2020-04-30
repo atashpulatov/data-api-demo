@@ -210,7 +210,7 @@ export default class DossierWindowNotConnected extends React.Component {
     const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
 
     return (
-      <div>
+      <div className="dossier-window">
         <h1
           title={chosenObjectName}
           className="ant-col folder-browser-title dossier-title-margin-top"
