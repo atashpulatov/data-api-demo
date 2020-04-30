@@ -19,6 +19,7 @@ import DB from '../cache/cache-db';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
+import { calculateNumberOfFiltersActive } from '../helpers/numberOfFiltersActive';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
@@ -200,7 +201,7 @@ export class NavigationTreeNotConnected extends Component {
     const {
       chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
       changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t,
-      i18n,
+      i18n, numberOfFiltersActive,
     } = this.props;
     const { previewDisplay, isPublished } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
@@ -220,7 +221,8 @@ export class NavigationTreeNotConnected extends Component {
             filter={myLibrary ? myLibraryFilter : envFilter}
             searchText={searchText}
             onRefresh={() => this.refresh()}
-            onSwitch={switchMyLibrary} />
+            onSwitch={switchMyLibrary}
+            numberOfFiltersActive={numberOfFiltersActive} />
         </div>
         <ObjectTable
           objects={objects}
@@ -292,6 +294,7 @@ NavigationTreeNotConnected.propTypes = {
   switchMyLibrary: PropTypes.func,
   changeFilter: PropTypes.func,
   t: PropTypes.func,
+  numberOfFiltersActive: PropTypes.number,
 };
 
 

@@ -45,6 +45,7 @@ export const initialState = {
   chosenLibraryElement: {},
   chosenEnvElement: {},
   myLibraryOwners: {},
+  numberOfFiltersActive: 0,
 };
 
 
@@ -224,6 +225,7 @@ export const navigationTree = (state = initialState, action) => {
       } else {
         newState.myLibraryFilter.owners = data.owners.filter(item => newState.myLibraryOwners[item]);
       }
+      newState.numberOfFiltersActive = calculateNumberOfFiltersActive(newState.envFilter, newState.myLibrary);
       return newState;
     }
     case LOAD_BROWSING_STATE_CONST: {
