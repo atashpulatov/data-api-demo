@@ -40,6 +40,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     const firstReport = $('#overlay > div > section > div > div > div:nth-child(1)');
     PluginRightPanel.doubleClick(firstReport);
     browser.pause(1111);
+    PluginRightPanel.closeAllNotificationsOnHover();
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);

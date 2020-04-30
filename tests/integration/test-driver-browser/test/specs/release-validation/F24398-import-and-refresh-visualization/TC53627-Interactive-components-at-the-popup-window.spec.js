@@ -33,7 +33,7 @@ describe('F24398 - import and refresh visualization', () => {
     expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Three vizualizations');
 
     // Apply Bookmark
-    PluginPopup.applyDossierBookmark(1)
+    PluginPopup.applyDossierBookmark(1);
     browser.pause(3000);
     expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Pie Chart');
 
@@ -44,8 +44,8 @@ describe('F24398 - import and refresh visualization', () => {
 
     // Filtes
     waitAndClick($(dossierWindow.buttonFilters), 1000);
-    PluginPopup.selectValuesFromDossierListFilter(1, [1, 2])
-    PluginPopup.setValueOnDossierSliderFilter(2, 'right', '150000')
+    PluginPopup.selectValuesFromDossierListFilter(1, [1, 2]);
+    PluginPopup.setValueOnDossierSliderFilter(2, 'right', '150000');
     waitAndClick($(dossierWindow.filtersMenu.buttonApplyFilters), 1000);
     browser.pause(1000);
     expect($(dossierWindow.filterCount).getText()).toEqual('FILTERS (2)');

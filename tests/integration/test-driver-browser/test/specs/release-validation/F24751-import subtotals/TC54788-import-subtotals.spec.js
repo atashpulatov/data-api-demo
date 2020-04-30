@@ -27,10 +27,13 @@ describe('TC54788 - Import subtotals', () => {
     waitForNotification();
     switchToExcelFrame();
     const B17 = '#gridRows > div:nth-child(17) > div:nth-child(2) > div > div';
-    OfficeWorksheet.selectCell('B17')
-    expect($(B17).getText()).toEqual('$3,945,456')
+    OfficeWorksheet.selectCell('B17');
+    expect($(B17).getText()).toEqual('$3,945,456');
     browser.pause(1000);
-    PluginRightPanel.edit();
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
+    switchToPluginFrame();
+    PluginRightPanel.editObject(1);
     browser.pause(1000);
     switchToPluginFrame();
     PluginPopup.clickSubtotalToggler();
@@ -38,9 +41,9 @@ describe('TC54788 - Import subtotals', () => {
     waitForNotification();
     browser.pause(3000);
     switchToExcelFrame();
-    const B9 = '#gridRows > div:nth-child(9) > div:nth-child(2) > div > div'
-    OfficeWorksheet.selectCell('B9')
-    expect($(B9).getText()).toEqual('$3,902,762')
+    const B9 = '#gridRows > div:nth-child(9) > div:nth-child(2) > div > div';
+    OfficeWorksheet.selectCell('B9');
+    expect($(B9).getText()).toEqual('$3,902,762');
     browser.pause(1000);
     switchToPluginFrame();
     PluginRightPanel.logout();

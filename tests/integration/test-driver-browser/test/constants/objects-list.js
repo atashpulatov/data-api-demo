@@ -1,5 +1,6 @@
 export const objectsList = {
   reports: {
+    blankReport: 'Blank Report',
     reportXML: 'Report accessing XML file',
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
     seasonalReport: 'Seasonal Report',
@@ -23,7 +24,7 @@ export const objectsList = {
     secureDataAlwaysWorking: 'Secure data - always working',
     nestedPrompt: 'Report with nested prompt',
     over100k: '100010 rows report',
-    marginReport: '1048576 rows',
+    marginReport: 'Report 1048576 rows',
     numberFormating: 'Number Formatting',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
@@ -39,13 +40,13 @@ export const objectsList = {
     },
     longReportWithInvalidCharacters: {
       sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&\'()*+,-:;<=>@/`testtesttes/km123456',
-      excelTableNameStart:'_01___________________________________Report_for_testing_binding_and_special_characters',
-      excelTableFullName:'_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP'
+      excelTableNameStart: '_01___________________________________Report_for_testing_binding_and_special_characters',
+      excelTableFullName: '_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_TIMESTAMP'
     },
-    basic01Report:{
+    basic01Report: {
       sourceName: '01 Basic Report',
-      excelTableNameStart:'_01_Basic_Report',
-      excelTableFullName:'_01_Basic_Report_TIMESTAMP'
+      excelTableNameStart: '_01_Basic_Report',
+      excelTableFullName: '_01_Basic_Report_TIMESTAMP'
     }
   },
 
@@ -53,7 +54,7 @@ export const objectsList = {
     datasetSQL: 'DATA_IMPORT_SQL_STATEMENT',
     basicDataset: '100_dataset',
     notPublished: 'not published dataset',
-    cubeLimitProject: 'Limit Project 1,5M Sales Records.csv',
+    cubeLimitProject: '500k Sales Records.csv',
     notSupportedCube: 'multi table cube',
     salesRecords1k: '1k Sales Records.csv',
   },
@@ -67,13 +68,13 @@ export const objectsList = {
         heatMap: '#mstr191',
         grid: '#mstr227',
         barChart: '#mstr271',
-        lineChart: '#mstr459',
-        areaChart: '#mstr436',
-        bubbleChart: '#mstr505',
+        lineChart: '#mstr444',
+        areaChart: '#mstr421',
+        bubbleChart: '#mstr490',
         pieChart: '#mstr310',
-        comboChart: '#mstr572',
+        comboChart: '#mstr557',
         geospatialService: '#mstr338',
-        network: '#mstr646',
+        network: '#mstr631',
         histogram: '#mstr131',
         boxPlot: '#mstr212',
         waterfall: '#mstr248',
@@ -81,31 +82,31 @@ export const objectsList = {
         KPI: '#mstr287',
       },
     },
-    visualizationManipulation:{
-      name:'Visualization manipulation',
+    visualizationManipulation: {
+      name: 'Visualization manipulation',
       visualizations: {
-        visualization1 : {
+        visualization1: {
           name: '#mstr106',
-          gridTableId:'#mstr121',
+          gridTableId: '#mstr121',
           getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
       },
     },
-    interactiveDossier: { name: 'Automation Dossier for interactive components', },
+    interactiveDossier: { name: 'Dossier for interactive components', },
     customVisualizations: {
       name: 'Custom Visualizations',
       visualizations: { GoogleTimeline: '#mstr114', }
     },
 
-    userActivityDossier:{
-      name:'User Activity',
-      visualizations:{
-        accounts:'#mstr162',
-        dailyActiveAccounts:'#mstr131',
+    userActivityDossier: {
+      name: 'User Activity',
+      visualizations: {
+        accounts: '#mstr162',
+        dailyActiveAccounts: '#mstr131',
       }
     },
     promptedDossier: {
-      name:'Prompted dossier - don\'t add to Library',
+      name: 'Prompted dossier',
       visualizations: { vis1: '#mstr106' }
     }
   }
