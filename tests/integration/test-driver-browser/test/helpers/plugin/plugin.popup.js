@@ -267,6 +267,7 @@ class PluginPopup {
     $(popupSelectors.calendarInput).click();
     $(popupSelectors.calendarInput).clearValue();
     $(popupSelectors.calendarInput).setValue(`${value}\uE004\uE004\uE006`);
+    console.log('Prompts are answered');
   }
 
   removeAllSelected() {
