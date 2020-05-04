@@ -7,7 +7,7 @@ import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
 import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
-import { httpStatusCodes } from '../error/constants';
+import { httpStatusCodes, incomingErrorStrings } from '../error/constants';
 
 export const EXTEND_SESSION = 'EXTEND_SESSION';
 const DEFAULT_SESSION_REFRESH_TIME = 60000;
@@ -102,7 +102,11 @@ class SessionHelper {
           onSessionExpire();
         }
       }
-      errorService.handleError(error);
+      const castedError = String(error);
+      const { CONNECTION_BROKEN } = incomingErrorStrings;
+      if (!castedError.includes(CONNECTION_BROKEN)) {
+        errorService.handleError(error);
+      }
     }
   };
 

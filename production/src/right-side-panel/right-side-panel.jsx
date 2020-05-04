@@ -18,23 +18,21 @@ import {
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
-import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
+import { incomingErrorStrings } from '../error/constants';
 
-export const RightSidePanelNotConnected = (props) => {
-  const {
-    loadedObjects,
-    isConfirm,
-    isSettings,
-    isSecured,
-    isClearDataFailed,
-    toggleIsSettingsFlag,
-    toggleSecuredFlag,
-    toggleIsClearDataFailedFlag,
-    globalNotification,
-    notifications,
-    operations,
-  } = props;
-
+export const RightSidePanelNotConnected = ({
+  loadedObjects,
+  isConfirm,
+  isSettings,
+  isSecured,
+  isClearDataFailed,
+  toggleIsSettingsFlag,
+  toggleSecuredFlag,
+  toggleIsClearDataFailedFlag,
+  globalNotification,
+  notifications,
+  operations,
+}) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
@@ -98,12 +96,19 @@ export const RightSidePanelNotConnected = (props) => {
    */
   const wrapper = async (func, params, name) => {
     try {
-      await officeApiHelper.checkStatusOfSessions();
-      if (officeReducerHelper.noOperationInProgress()) {
-        await func(params, name);
+      const { onLine } = window.navigator;
+      if (onLine) {
+        await officeApiHelper.checkStatusOfSessions();
+        if (officeReducerHelper.noOperationInProgress()) {
+          await func(params, name);
+        }
       }
     } catch (error) {
-      errorService.handleError(error);
+      const castedError = String(error);
+      const { CONNECTION_BROKEN } = incomingErrorStrings;
+      if (!castedError.includes(CONNECTION_BROKEN)) {
+        errorService.handleError(error);
+      }
     }
   };
 
