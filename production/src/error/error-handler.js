@@ -151,7 +151,7 @@ class ErrorService {
   }
 
   fullLogOut = () => {
-    this.notificationService.clearNotifications();
+    this.notificationService.dismissNotifications();
     this.sessionHelper.logOutRest();
     this.sessionActions.logOut();
     this.sessionHelper.logOutRedirect();
