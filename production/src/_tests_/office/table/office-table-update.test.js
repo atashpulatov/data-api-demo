@@ -285,14 +285,25 @@ describe('OfficeTableUpdate', () => {
 
   it('updateRows should work as expected when newRowCount >= tableRowCount', async () => {
     // given
+    const excelContextSyncMock = jest.fn();
+    const suspendApiCalculationUntilNextSyncMock = jest.fn();
+    const excelContextMock = {
+      sync: excelContextSyncMock,
+      workbook: {
+        application: {
+          suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock
+        },
+      },
+    };
     jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue(0);
 
     // when
-    await officeTableUpdate.updateRows('excelContextTest', { rows: 'rowsTest' }, 1);
+    await officeTableUpdate.updateRows(excelContextMock, { rows: 'rowsTest' }, 1);
 
     // then
     expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', 'rowsTest', 'count');
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith(excelContextMock, 'rowsTest', 'count');
+    expect(suspendApiCalculationUntilNextSyncMock).toBeCalledTimes(1);
   });
 
   it.each`
