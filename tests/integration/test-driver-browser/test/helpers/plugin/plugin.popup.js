@@ -195,6 +195,8 @@ class PluginPopup {
 
   preparePrompt(objectName) {
     switchToPluginFrame();
+    browser.pause(500);
+    this.switchLibrary(false);
     this.searchForObject(objectName);
     browser.pause(500);
     this.selectFirstObject();
@@ -797,6 +799,11 @@ class PluginPopup {
       expandButtons[i].waitForExist({ timeout: 3000 });
       expandButtons[i].click();
     }
+  }
+
+  clickAndKeys(selector, value) {
+    $(selector).click();
+    $(selector).keys(value);
   }
 
   /**
