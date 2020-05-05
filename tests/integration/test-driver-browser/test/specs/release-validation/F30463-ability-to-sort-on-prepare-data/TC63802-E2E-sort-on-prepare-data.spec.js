@@ -9,7 +9,7 @@ import { waitAndClick } from '../../../helpers/utils/click-helper';
 import pluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 
-describe('Ability to sort on prepare data', () => {
+describe('[F30463] Ability to sort on prepare data', () => {
   beforeAll(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
