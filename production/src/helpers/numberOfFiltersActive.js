@@ -4,12 +4,12 @@ export function calculateNumberOfFiltersActive({
 }, myLibrary) {
   let result = 0;
   if (!myLibrary) {
-    result = projects && projects.length > 0 ? result + 1 : result;
-    result = types && types.length > 0 ? result + 1 : result;
+    result += projects && projects.length > 0 ? 1 : 0;
+    result += types && types.length > 0 ? 1 : 0;
   }
-  result = dateSetByUser ? result + 1 : result;
-  result = certified ? result + 1 : result;
-  result = owners && owners.length > 0 ? result + 1 : result;
+  result += dateSetByUser ? 1 : 0;
+  result += certified ? 1 : 0;
+  result += owners && owners.length > 0 ? 1 : 0;
   console.log(owners);
   return result;
 }
