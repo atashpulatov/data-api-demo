@@ -28,21 +28,41 @@ describe('F21402 - Handle Prompted Object', () => {
     console.log('Prompt is opened');
     switchToPromptFrame();
     $(popupSelectors.promptedAll.prompt1).click();
+    console.log('Prompt 1 selected');
+
     $(popupSelectors.promptedAll.prompt2).click();
+    console.log('Prompt 2 selected');
+
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt8, '2016');
+    console.log('Prompt 3 selected');
+
     $(popupSelectors.promptPanel(5)).click();
     browser.pause(2222);
     $(popupSelectors.promptedAll.prompt4).keys('\uE004\uE004\uE004\uE004\uE004\uE004\uE004\uE006');
+    console.log('Prompt 4 selected');
+
     $(popupSelectors.promptedAll.prompt9).click();
+    console.log('Prompt 5 selected');
+
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt3, '2000');
+    console.log('Prompt 6 selected');
+
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt4, '1820');
+    console.log('Prompt 7 selected');
+
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt5, '11/6/2016');
     $(popupSelectors.promptPanel(9)).click();
+    console.log('Prompt 8 selected');
+
     $(popupSelectors.promptedAll.prompt6).clearValue();
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt6, '2016');
+    console.log('Prompt 9 selected');
+
     $(popupSelectors.promptPanel(10)).click();
+    console.log('Prompt 10 selected');
+
     $(popupSelectors.promptedAll.prompt7).click();
-    console.log('All prompts are selected correctly');
+    console.log('Prompt 11 selected and all prompts are selected correctly');
 
     // should click run and select attributes metrics filters
     switchToDialogFrame();
