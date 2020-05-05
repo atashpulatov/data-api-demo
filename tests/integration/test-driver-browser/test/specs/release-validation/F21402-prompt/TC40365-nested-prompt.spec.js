@@ -9,18 +9,19 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 
 describe('F21402 - Handle Prompted Object', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[Import prompt] Importing prompted reports functionality, for nested prompts without Prepare Data', () => {
     // should import a report
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
+
     console.log('Should import nested prompt');
     PluginPopup.importPromptDefaultNested(objectsList.reports.nestedPrompt);
     waitForNotification();

@@ -11,11 +11,11 @@ import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('F21402 - Handle Prompted Object', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
   afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[Import prompt] Navigation while importing prompted reports (Run, Back and Cancel buttons)', () => {
@@ -24,18 +24,22 @@ describe('F21402 - Handle Prompted Object', () => {
     PluginRightPanel.clickImportDataButton();
     PluginPopup.openPrompt(objectsList.reports.objectPromptedReport);
     switchToDialogFrame();
+
     console.log('Should click Back button');
     PluginPopup.clickBack();
     PluginPopup.preparePrompt(objectsList.reports.objectPromptedReport);
     switchToDialogFrame();
+
     console.log('Should Click Run button');
     PluginPopup.clickRun();
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
+
     console.log('Should click Back button');
     PluginPopup.clickBack();
     PluginPopup.openPrompt(objectsList.reports.objectPromptedReport);
     switchToDialogFrame();
+
     console.log('Should click Cancel button');
     PluginPopup.clickCancel();
   });
