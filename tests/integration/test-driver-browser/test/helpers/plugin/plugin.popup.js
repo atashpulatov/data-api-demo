@@ -1009,6 +1009,31 @@ class PluginPopup {
   getDescriptionText(detailsTable) {
     return detailsTable.$(popupSelectors.descriptionDetail).getText();
   }
+
+  /**
+    * Presses the tab key until element is focused
+    *
+    * @param {Element} element that will be focused
+    * @memberof PluginPopup
+    */
+  pressTabUntilElementIsFocused(element) {
+    while (!element.isFocused()) {
+      browser.keys('\uE004'); // Press Tab
+    }
+  }
+
+  /**
+    * Clears searchbar on prepare data
+    * By pressing backspace
+    *
+    * @memberof PluginPopup
+    */
+  clearElementSearchWithBackspace() {
+    waitAndClick($(popupSelectors.searchInputPrepareDataPopup));
+    while ($(popupSelectors.searchInputPrepareDataPopup).getValue() !== '') {
+      browser.keys('\uE003'); // Press Backspace
+    }
+  }
 }
 
 export default new PluginPopup();
