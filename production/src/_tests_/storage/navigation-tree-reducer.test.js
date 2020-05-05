@@ -442,7 +442,7 @@ describe('NavigationTree Reducer', () => {
       chosenLibraryElement: { chosenObjectId: '1' }
     }, action);
     // then
-    // expect(newState.myLibrary).toEqual(true);
+    expect(newState.myLibrary).toEqual(true);
     expect(newState.chosenObjectId).toEqual('1');
   });
 
