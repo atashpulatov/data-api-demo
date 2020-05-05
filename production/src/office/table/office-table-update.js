@@ -4,8 +4,6 @@ import officeFormatSubtotals from '../format/office-format-subtotals';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import officeApiDataLoader from '../api/office-api-data-loader';
 
-const MAX_ROWS_GROUP_TO_DELETE = 1000;
-
 class OfficeTableUpdate {
   /**
    * Updates office table if the number of columns or rows of an existing table changes.
@@ -94,10 +92,14 @@ class OfficeTableUpdate {
     let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
     excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
-    while (newRowsCount < tableRowCount) {
-      const rowsToDeleteCount = (tableRowCount - newRowsCount > MAX_ROWS_GROUP_TO_DELETE)
-        ? MAX_ROWS_GROUP_TO_DELETE
-        : tableRowCount - newRowsCount;
+    const totalSumOfRowsToDelete = tableRowCount - newRowsCount;
+    let i = 0;
+
+    while (i * CONTEXT_LIMIT < totalSumOfRowsToDelete) {
+      const sumOfRowsToDeleteInNextStep = tableRowCount - newRowsCount;
+      const rowsToDeleteCount = sumOfRowsToDeleteInNextStep > CONTEXT_LIMIT
+        ? CONTEXT_LIMIT
+        : sumOfRowsToDeleteInNextStep;
       prevOfficeTable
         .getRange()
         .getLastRow()
@@ -107,6 +109,7 @@ class OfficeTableUpdate {
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
       tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+      i++;
     }
   }
 }
