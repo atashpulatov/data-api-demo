@@ -17,13 +17,14 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/deprecated/sample.spec.js',
+    // './test/specs/release-validation/deprecated/sample.spec.js',
+    './test/specs/release-validation/F22954-editing/TC48339-edit-dataset.spec.js',
   ],
   suites: {
     acceptance: [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
-      './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
+      './test/specs/release-validation/F22954-editing/TC48339-edit-dataset.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-I-refresh-report-prompt-object-required-defaultanswer.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-II-refresh-report-prompt-nested-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-III-refresh-report-prompt-multiple-prompts.spec.js',
@@ -201,7 +202,7 @@ exports.config = {
     'goog:chromeOptions': {
       // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
-      // debuggerAddress: '127.0.0.1:9222'
+      debuggerAddress: '127.0.0.1:9222'
 
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)

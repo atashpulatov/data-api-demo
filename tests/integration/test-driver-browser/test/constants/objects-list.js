@@ -47,7 +47,8 @@ export const objectsList = {
       sourceName: '01 Basic Report',
       excelTableNameStart: '_01_Basic_Report',
       excelTableFullName: '_01_Basic_Report_TIMESTAMP'
-    }
+    },
+    promptedReportAllPrompts: 'Report with all type of prompts (except nested)',
   },
 
   datasets: {
