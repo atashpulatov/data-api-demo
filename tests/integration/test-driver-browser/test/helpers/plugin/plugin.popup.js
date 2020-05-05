@@ -31,6 +31,7 @@ class PluginPopup {
 
   clickImport() {
     waitAndClick($(popupSelectors.importBtn));
+    console.log('Import button is clicked');
   }
 
   clickPrepareData() {
@@ -69,6 +70,7 @@ class PluginPopup {
     switchToPluginFrame();
     $(popupSelectors.runBtn).waitForExist(3333);
     waitAndClick($(popupSelectors.runBtn));
+    console.log('Run button is clicked');
   }
 
   clickPromptArrow() {

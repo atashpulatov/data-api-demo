@@ -77,6 +77,7 @@ class PluginRightPanel {
     $(editBtn).moveTo();
     browser.pause(1000);
     waitAndClick($(editBtn));
+    console.log('Edit button clicked');
   }
 
   /**
