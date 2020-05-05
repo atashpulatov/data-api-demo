@@ -4,6 +4,8 @@ import officeFormatSubtotals from '../format/office-format-subtotals';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import officeApiDataLoader from '../api/office-api-data-loader';
 
+const MAX_ROWS_GROUP_TO_DELETE = 1000;
+
 class OfficeTableUpdate {
   /**
    * Updates office table if the number of columns or rows of an existing table changes.
@@ -89,25 +91,22 @@ class OfficeTableUpdate {
   updateRows = async (excelContext, prevOfficeTable, newRowsCount) => {
     const tableRows = prevOfficeTable.rows;
 
-    const tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
-    // Delete extra rows if new report is smaller
-    if (newRowsCount < tableRowCount) {
+    let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
+    excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+
+    while (newRowsCount < tableRowCount) {
+      const rowsToDeleteCount = (tableRowCount - newRowsCount > MAX_ROWS_GROUP_TO_DELETE)
+        ? MAX_ROWS_GROUP_TO_DELETE
+        : tableRowCount - newRowsCount;
       prevOfficeTable
         .getRange()
-        .getRow(newRowsCount + 1)
-        .getResizedRange(tableRowCount - newRowsCount, 0)
-        .clear();
-
+        .getLastRow()
+        .getRowsAbove(rowsToDeleteCount)
+        .delete('Up');
       await excelContext.sync();
-
-      const rowsToRemove = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'items');
-
-      for (let i = tableRowCount - 1; i >= newRowsCount; i--) {
-        rowsToRemove[i].delete();
-        if (i === newRowsCount || i % CONTEXT_LIMIT === 0) {
-          await excelContext.sync();
-        }
-      }
+      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+      tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
+      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
     }
   }
 }
