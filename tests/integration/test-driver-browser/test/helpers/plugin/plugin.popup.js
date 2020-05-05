@@ -1031,6 +1031,7 @@ class PluginPopup {
   clearElementSearchWithBackspace() {
     waitAndClick($(popupSelectors.searchInputPrepareDataPopup));
     while ($(popupSelectors.searchInputPrepareDataPopup).getValue() !== '') {
+      browser.keys('\uE014'); // Right arrow
       browser.keys('\uE003'); // Press Backspace
     }
   }
