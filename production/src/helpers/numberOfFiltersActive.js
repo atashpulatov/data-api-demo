@@ -1,12 +1,15 @@
 
-export function calculateNumberOfFiltersActive(envFilter, myLibrary) {
+export function calculateNumberOfFiltersActive({
+  projects, types, dateSetByUser, certified, owners
+}, myLibrary) {
   let result = 0;
   if (!myLibrary) {
-    result = envFilter.projects.length > 0 ? result + 1 : result;
-    result = envFilter.types.length > 0 ? result + 1 : result;
+    result = projects && projects.length > 0 ? result + 1 : result;
+    result = types && types.length > 0 ? result + 1 : result;
   }
-  result = envFilter.dateSetByUser ? result + 1 : result;
-  result = envFilter.certified ? result + 1 : result;
-  result = envFilter.owners.length > 0 ? result + 1 : result;
+  result = dateSetByUser ? result + 1 : result;
+  result = certified ? result + 1 : result;
+  result = owners && owners.length > 0 ? result + 1 : result;
+  console.log(owners);
   return result;
 }
