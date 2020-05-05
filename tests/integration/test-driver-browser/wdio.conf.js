@@ -166,6 +166,9 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
+    ],
+    'F30463-ability-to-sort-on-prepare-data': [
+      'TC63802-E2E-sort-on-prepare-data.spec.js',
     ]
   },
   // Patterns to exclude.
