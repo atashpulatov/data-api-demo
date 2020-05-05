@@ -10,6 +10,5 @@ export function calculateNumberOfFiltersActive({
   result += dateSetByUser ? 1 : 0;
   result += certified ? 1 : 0;
   result += owners && owners.length > 0 ? 1 : 0;
-  console.log(owners);
   return result;
 }
