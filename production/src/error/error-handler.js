@@ -5,12 +5,14 @@ import {
   errorMessageFactory,
   incomingErrorStrings,
 } from './constants';
+import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import {
   IMPORT_OPERATION,
   DUPLICATE_OPERATION,
   REFRESH_OPERATION,
   EDIT_OPERATION
 } from '../operation/operation-type-names';
+import { customT } from '../redux-reducer/notification-reducer/notification-title-maps';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -69,8 +71,16 @@ class ErrorService {
       return;
     }
     const payload = this.createNotificationPayload(message, details);
+    payload.children = this.getChildrenButtons();
     this.notificationService.globalWarningAppeared(payload);
   }
+
+  getChildrenButtons = () => getNotificationButtons([{
+    title: customT('OK'),
+    type: 'basic',
+    label: customT('OK'),
+    onClick: () => this.notificationService.globalNotificationDissapear(),
+  }]);
 
   checkForLogout = (isLogout = false, errorType) => {
     if (!isLogout
@@ -141,6 +151,7 @@ class ErrorService {
   }
 
   fullLogOut = () => {
+    this.notificationService.clearNotifications();
     this.sessionHelper.logOutRest();
     this.sessionActions.logOut();
     this.sessionHelper.logOutRedirect();

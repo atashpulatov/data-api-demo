@@ -2,7 +2,6 @@ import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr
 import officeInsertService from './office-insert-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
-import { officeApiHelper } from '../api/office-api-helper';
 
 class StepFetchInsertDataIntoExcel {
   /**
@@ -34,11 +33,11 @@ class StepFetchInsertDataIntoExcel {
       const {
         operationType,
         tableColumnsChanged,
+        excelContext,
         officeTable,
         instanceDefinition,
       } = operationData;
 
-      let { excelContext } = operationData;
 
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
@@ -48,7 +47,6 @@ class StepFetchInsertDataIntoExcel {
       let rowIndex = 0;
       const contextPromises = [];
       const subtotalsAddresses = [];
-      if (!tableColumnsChanged) { excelContext = await officeApiHelper.getExcelContext(); }
 
 
       console.time('Fetch and insert into excel');
