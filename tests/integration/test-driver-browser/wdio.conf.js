@@ -166,6 +166,9 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
+    ],
+    'F21411-right-panel': [
+      '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js'
     ]
   },
   // Patterns to exclude.
