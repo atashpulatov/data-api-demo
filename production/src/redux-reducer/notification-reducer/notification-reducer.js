@@ -102,7 +102,7 @@ const displayNotificationCompleted = (state, payload) => {
     ...notificationToUpdate,
     type: objectNotificationTypes.SUCCESS,
     title: customT(titleOperationCompletedMap[notificationToUpdate.operationType]),
-    onHover: (notificationToUpdate.operationType === REMOVE_OPERATION
+    dismissNotification: (notificationToUpdate.operationType === REMOVE_OPERATION
       ? () => notificationService.dismissSuccessfulRemoveNotification(notificationToUpdate.objectWorkingId)
       : () => notificationService.dismissNotification(notificationToUpdate.objectWorkingId)),
   };
