@@ -123,6 +123,7 @@ describe('[F30463] Ability to sort on prepare data', () => {
     // Check if attribute forms are changed - descending
     waitAndClick(sortAttributeSelector);
     waitAndClick(sortAttributeSelector);
+    browser.pause(999);
     const lengh = attributeContainer.$$('li').length;
     waitAndClick(attributeContainer.$$('li')[lengh - 1]);
     waitAndClick(attributeContainer.$$('li')[lengh - 1].$$('span')[0]);

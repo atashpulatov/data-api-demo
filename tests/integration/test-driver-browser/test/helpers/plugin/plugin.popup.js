@@ -23,7 +23,7 @@ class PluginPopup {
    *
    * @param {String} elementName indicates the attribute or metric name that will be searched
    *
-   * @memberof PluginPopup
+   *
    */
   searchForElements(elementName) {
     $(popupSelectors.searchInputPrepareDataPopup).clearValue();
@@ -93,7 +93,7 @@ class PluginPopup {
    * useful to validate that action has been started and finished
    *
    * @param {String} selector a css selector to validate
-   * @memberof PluginPopup
+   *
    */
   waitUntilActionIsFinished(selector) {
     browser.waitUntil(() => ($(selector).isExisting()));
@@ -108,7 +108,7 @@ class PluginPopup {
    * After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
    *
    * @param {String} elements an array with the names of the attributes/metrics to be selected/unselected
-   * @memberof PluginPopup
+   *
    */
   selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
@@ -124,7 +124,7 @@ class PluginPopup {
    * After the introduction of Attribute forms, the selectors for attributes in Reports and in Datasets are not the same
    *
    * @param {String} elements an array with the names of the attributes/metrics to be selected/unselected
-   * @memberof PluginPopup
+   *
    */
   selectAttributeElementsForReportObjects(attributes) {
     for (let i = 0; i < attributes.length; i++) {
@@ -402,7 +402,7 @@ class PluginPopup {
    * It has to be used inside the Dossier window.
    *
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
-   * @memberof PluginPopup
+   *
    */
   selectAndImportVizualiation(visContainerId) {
     switchToPromptFrame();
@@ -763,7 +763,7 @@ class PluginPopup {
    * Scrolls down ObjectTable by the given number of pages
    *
    * @param {Number} count Number of pages to scroll down
-   * @memberof PluginPopup
+   *
    */
   scrollTableDownByPages(count) {
     const scrollContainer = $(popupSelectors.objectTable.scrollContainer);
@@ -967,7 +967,7 @@ class PluginPopup {
     *
     * @param {Element} detailsTable Details Table to extract the tooltip from
     * @returns {String} tooltip text for the location element
-    * @memberof PluginPopup
+    *
     */
   getLocationTooltipText(detailsTable) {
     detailsTable.$(popupSelectors.locationDetail).moveTo();
@@ -980,7 +980,7 @@ class PluginPopup {
     *
     * @param {Element} detailsTable Details Table to extract the location from
     * @returns {String} text for the location element
-    * @memberof PluginPopup
+    *
     */
   getLocationText(detailsTable) {
     return detailsTable.$(popupSelectors.locationDetail).getText();
@@ -992,7 +992,7 @@ class PluginPopup {
     *
     * @param {Element} detailsTable Details Table to extract the tooltip from
     * @returns {String} tooltip text for the description element
-    * @memberof PluginPopup
+    *
     */
   getDescriptionTooltipText(detailsTable) {
     detailsTable.$(popupSelectors.descriptionDetail).moveTo();
@@ -1001,37 +1001,48 @@ class PluginPopup {
   }
 
   /**
-    * Gets the text for the description element in the given details table
+    * Gets the text for the description element in the given details table.
     *
     * @param {Element} detailsTable Details Table to extract the description from
     * @returns {String} text for the description element
-    * @memberof PluginPopup
+    *
     */
   getDescriptionText(detailsTable) {
     return detailsTable.$(popupSelectors.descriptionDetail).getText();
   }
 
   /**
-    * Presses the tab key until element is focused
+    * Presses the tab key until element is focused.
+    *
+    * If tab limit is reached and the element is still not focused,
+    * throws the error that the tab limit is reached.
     *
     * @param {Element} element that will be focused
-    * @memberof PluginPopup
+    * @param {Number} limit for tab count
+    *
+    * @throws {Error} Tab limit is reached.
+    *
     */
-  pressTabUntilElementIsFocused(element) {
+  pressTabUntilElementIsFocused(element, limit = 50) {
+    let count = 0;
     while (!element.isFocused()) {
-      pressTab();
+      if (count === limit) {
+        throw new Error('Tab limit is reached. Element still could not be focused');
+      } else {
+        pressTab();
+        count++;
+      }
     }
   }
 
   /**
-    * Clears searchbar on prepare data
-    * By pressing backspace
+    * Clears searchbar on prepare data by pressing backspace.
     *
-    * @memberof PluginPopup
     */
   clearElementSearchWithBackspace() {
-    waitAndClick($(popupSelectors.searchInputPrepareDataPopup));
-    while ($(popupSelectors.searchInputPrepareDataPopup).getValue() !== '') {
+    const searchInputInPrepareData = $(popupSelectors.searchInputPrepareDataPopup);
+    waitAndClick(searchInputInPrepareData);
+    while (searchInputInPrepareData.getValue() !== '') {
       pressRightArrow();
       pressBackspace();
     }
