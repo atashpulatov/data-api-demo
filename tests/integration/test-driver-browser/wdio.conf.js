@@ -86,7 +86,7 @@ exports.config = {
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
     ],
     'F22954-editing': [
-      './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
+      './test/specs/release-validation/F22954-editing/TC48339-edit-dataset.spec.js',
     ],
     'F22955-refresh': [
       './test/specs/release-validation/F22955-refresh/TC48131-refresh-report.spec.js',
