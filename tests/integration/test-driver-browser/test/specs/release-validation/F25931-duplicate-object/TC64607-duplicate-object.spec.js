@@ -35,7 +35,7 @@ describe('F25931 duplicate object', () => {
     PluginRightPanel.duplicateObject(1);
 
     // Click import button in duplicate popup
-    PluginRightPanel.duplicateImport();
+    PluginRightPanel.clickDuplicatePopupImportBtn();
 
     // Expect succesfull duplication notification
     waitForNotification();
