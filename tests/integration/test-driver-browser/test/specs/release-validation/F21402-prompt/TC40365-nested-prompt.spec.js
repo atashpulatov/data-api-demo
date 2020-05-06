@@ -17,7 +17,7 @@ describe('F21402 - Handle Prompted Object', () => {
     changeBrowserTab(0);
   });
 
-  it('[Import prompt] Importing prompted reports functionality, for nested prompts without Prepare Data', () => {
+  it('[TC40365] Importing prompted reports functionality, for nested prompts without Prepare Data', () => {
     // should import a report
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);

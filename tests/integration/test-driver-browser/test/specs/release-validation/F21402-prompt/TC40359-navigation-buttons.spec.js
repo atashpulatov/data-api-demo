@@ -18,7 +18,7 @@ describe('F21402 - Handle Prompted Object', () => {
     changeBrowserTab(0);
   });
 
-  it('[Import prompt] Navigation while importing prompted reports (Run, Back and Cancel buttons)', () => {
+  it('[TC40359] Navigation while importing prompted reports (Run, Back and Cancel buttons)', () => {
     // should click prepare data on selected report
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();

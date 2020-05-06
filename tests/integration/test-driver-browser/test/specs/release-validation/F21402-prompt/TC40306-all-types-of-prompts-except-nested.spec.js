@@ -18,7 +18,7 @@ describe('F21402 - Handle Prompted Object', () => {
     changeBrowserTab(0);
   });
 
-  it('[Import prompt] Importing prompted reports functionality, for all type of prompts (value, object, expression, etc) with Prepare Data', () => {
+  it('[TC40306] Importing prompted reports functionality, for all type of prompts (value, object, expression, etc) with Prepare Data', () => {
     // should click prepare data on selected report
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();

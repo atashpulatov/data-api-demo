@@ -801,6 +801,12 @@ class PluginPopup {
     }
   }
 
+  /**
+   * Clicks on selector and then type a value
+   *
+   * @param {Number} selector selector to be clicked
+   * @param {String} value value to typed
+   */
   clickAndKeys(selector, value) {
     $(selector).click();
     $(selector).keys(value);
