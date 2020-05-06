@@ -208,7 +208,7 @@ RightSidePanelNotConnected.propTypes = {
       title: PropTypes.string,
       details: PropTypes.string,
       percentage: PropTypes.number,
-      onHover: PropTypes.func
+      dismissNotification: PropTypes.func
     }),
   ),
   operations: PropTypes.arrayOf(
