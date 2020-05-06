@@ -10,6 +10,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import officeLogin from '../../../helpers/office/office.login';
+import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
 describe('TC48976 - perform-basic-functionalities', () => {
   beforeAll(() => {
@@ -46,7 +47,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     const datasetFilter = 'label=Dataset';
     const removeIcon = '.mstr-icon.trash';
     const P3 = '#gridRows > div:nth-child(3) > div:nth-child(16) > div > div';
-
+    OfficeWorksheet.selectCell('A1');
     switchToRightPanelFrame();
     $(rightPanelSelectors.importDataBtn).waitForDisplayed(3000, false);
     PluginRightPanel.clickImportDataButton();
@@ -69,7 +70,51 @@ describe('TC48976 - perform-basic-functionalities', () => {
     browser.pause(500);
     PluginPopup.searchForElements('Item Type');
     PluginPopup.searchForElements('Invalid metric');
-    $(popupSelectors.searchInputPrepareDataPopup).clearValue();
+
+    pluginPopup.clearElementSearchWithBackspace();
+
+    // sort for Attributes
+    const attributeContainer = $(popupSelectors.attributesContainer);
+    const sortAttributeSelector = $(popupSelectors.sortAttributes);
+    // All attributes Ascending sort
+    waitAndClick(sortAttributeSelector);
+    browser.pause(2222);
+    expect(attributeContainer.$$('li')[0].getText()).toEqual('Country');
+    // All attributes Descending sort
+    waitAndClick(sortAttributeSelector);
+    browser.pause(2222);
+    expect(attributeContainer.$$('li')[0].getText()).toEqual('Sales Channel');
+    // Back to default sort
+    waitAndClick(sortAttributeSelector);
+    browser.pause(2222);
+
+    // sort for Metrics
+    const metricsContainer = $(popupSelectors.metricsContainer);
+    const sortMetricsSelector = $(popupSelectors.sortMetrics);
+    // All metrics Ascending sort
+    waitAndClick(sortMetricsSelector);
+    browser.pause(2222);
+    expect(metricsContainer.$$('div')[0].getText()).toEqual('Total Cost');
+    // All metrics Descending sort
+    waitAndClick(sortMetricsSelector);
+    browser.pause(2222);
+    expect(metricsContainer.$$('div')[0].getText()).toEqual('Total Profit');
+    // Back to default sort
+    waitAndClick(sortMetricsSelector);
+    browser.pause(2222);
+
+    // sort for Filters
+    const filterContainer = $(popupSelectors.filtersContainer);
+    const sortFiltersSelector = $(popupSelectors.sortFilters);
+    // All filters Ascending sort
+    waitAndClick(sortFiltersSelector);
+    expect(filterContainer.$$('li')[0].getText()).toEqual('Country');
+    // All filters Descending sort
+    waitAndClick(sortFiltersSelector);
+    expect(filterContainer.$$('li')[0].getText()).toEqual('Sales Channel');
+    // Back to default sort
+    waitAndClick(sortFiltersSelector);
+
     PluginPopup.clickViewSelected();
     PluginPopup.clickDataPreview();
     ($(popupSelectors.closePreviewBtn)).waitForDisplayed(1000, false);

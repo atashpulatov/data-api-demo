@@ -177,6 +177,9 @@ exports.config = {
     ],
     'F21411-right-panel': [
       '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js'
+    ],
+    'F30463-ability-to-sort-on-prepare-data': [
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
     ]
   },
   // Patterns to exclude.
