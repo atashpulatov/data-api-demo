@@ -1,13 +1,13 @@
 import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
-import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { switchToPluginFrame, switchToRightPanelFrame, switchToPopupFrame } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import pluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { pressEnter } from '../../../helpers/utils/keyboard-actions';
+import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('[F30463] Ability to sort on prepare data', () => {
   beforeAll(() => {
@@ -24,99 +24,88 @@ describe('[F30463] Ability to sort on prepare data', () => {
     OfficeWorksheet.selectCell('A3');
 
     // Open prepare data
-    PluginRightPanel.clickImportDataButton();
+    pluginRightPanel.clickImportDataButton();
     const report = objectsList.reports.reportToSortAttributeAndMetrics;
-    PluginPopup.openPrepareData(report, false);
+    pluginPopup.openPrepareData(report, false);
 
     switchToPluginFrame();
 
     // sort for Attributes
     const attributeContainer = $(popupSelectors.attributesContainer);
     const sortAttributeSelector = $(popupSelectors.sortAttributes);
-
     // All attributes Default sort
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Age Range');
-
     // All attributes Ascending sort
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Age Range');
-
     // All attributes Descending sort
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Zip Code');
-
     // Back to default sort
     waitAndClick(sortAttributeSelector);
 
     // sort for Metrics
     const metricsContainer = $(popupSelectors.metricsContainer);
     const sortMetricsSelector = $(popupSelectors.sortMetrics);
-
     // All metrics Default sort
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Average Revenue');
-
     // All metrics Ascending sort
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Average Revenue');
-
     // All metrics Descending sort
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Sales Rank');
-
     // Back to default sort
     waitAndClick(sortMetricsSelector);
 
     // sort for Filters
     const filterContainer = $(popupSelectors.filtersContainer);
     const sortFiltersSelector = $(popupSelectors.sortFilters);
-
     // All filters Default sort
     expect(filterContainer.$$('li')[0].getText()).toEqual('Age Range');
-
     // All filters Ascending sort
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Age Range');
-
     // All filters Descending sort
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Zip Code');
-
     // Back to default sort
     waitAndClick(sortFiltersSelector);
 
     pluginPopup.searchForElements('age');
+
     // Sort for attributes by keyboard
-    PluginPopup.pressTabUntilElementIsFocused(sortAttributeSelector);
+    pluginPopup.pressTabUntilElementIsFocused(sortAttributeSelector);
     // Sort ascending
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Age Range');
     // Sort descending
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Phone Usage');
     // Back to normal sort attributes
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
 
     // Sort for metrics by keyboard
-    PluginPopup.pressTabUntilElementIsFocused(sortMetricsSelector);
+    pluginPopup.pressTabUntilElementIsFocused(sortMetricsSelector);
     // Sort ascending
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Average Revenue');
     // Sort descending
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Running Revenue Average');
     // Back to normal sort metrics
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
 
     // Sort for filters by keyboard
-    PluginPopup.pressTabUntilElementIsFocused(sortFiltersSelector);
+    pluginPopup.pressTabUntilElementIsFocused(sortFiltersSelector);
     // Sort ascending
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
     expect(filterContainer.$$('li')[0].getText()).toEqual('Age Range');
     // Sort descending
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
     expect(filterContainer.$$('li')[0].getText()).toEqual('Phone Usage');
     // Back to normal sort filters
-    browser.keys('\uE007'); // Press Enter
+    pressEnter();
 
     browser.pause(1111);
 
@@ -145,10 +134,10 @@ describe('[F30463] Ability to sort on prepare data', () => {
     // Import report
     pluginPopup.selectAllAttributes();
     pluginPopup.selectAllMetrics();
-    PluginPopup.selectFilters([['Age Range', ['25 to 34', '35 to 44']]]);
-    PluginPopup.clickImport();
+    pluginPopup.selectFilters([['Age Range', ['25 to 34', '35 to 44']]]);
+    pluginPopup.clickImport();
     waitForNotification();
-    PluginRightPanel.closeNotificationOnHover();
+    pluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
   });
 });

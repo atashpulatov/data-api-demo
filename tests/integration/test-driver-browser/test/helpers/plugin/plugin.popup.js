@@ -10,6 +10,7 @@ import {
   switchToPromptFrameForImportDossier
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
+import { pressTab, pressRightArrow, pressBackspace } from '../utils/keyboard-actions';
 
 class PluginPopup {
   searchForObject(objectName) {
@@ -505,7 +506,7 @@ class PluginPopup {
     const { dossierWindow } = popupSelectors;
     const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(filterIndex)} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`);
     maxValueInput.doubleClick();
-    browser.keys('\uE003'); // Press Backspace
+    pressBackspace();
     maxValueInput.setValue(value);
   }
 
@@ -1018,7 +1019,7 @@ class PluginPopup {
     */
   pressTabUntilElementIsFocused(element) {
     while (!element.isFocused()) {
-      browser.keys('\uE004'); // Press Tab
+      pressTab();
     }
   }
 
@@ -1031,8 +1032,8 @@ class PluginPopup {
   clearElementSearchWithBackspace() {
     waitAndClick($(popupSelectors.searchInputPrepareDataPopup));
     while ($(popupSelectors.searchInputPrepareDataPopup).getValue() !== '') {
-      browser.keys('\uE014'); // Right arrow
-      browser.keys('\uE003'); // Press Backspace
+      pressRightArrow();
+      pressBackspace();
     }
   }
 }

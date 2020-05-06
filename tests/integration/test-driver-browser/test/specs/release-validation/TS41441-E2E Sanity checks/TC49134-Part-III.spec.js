@@ -12,6 +12,7 @@ import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import { pressBackspace, pressEnter } from '../../../helpers/utils/keyboard-actions';
 
 function changeFontNameInCell(fontName, cell) {
   switchToExcelFrame();
@@ -20,9 +21,9 @@ function changeFontNameInCell(fontName, cell) {
   }
   const excelFontName = '#m_excelWebRenderer_ewaCtl_Font\\.FontName';
   waitAndClick($(excelFontName));
-  browser.keys('\uE003'); // Press Backspace
+  pressBackspace();
   $(excelFontName).setValue(fontName);
-  browser.keys('\uE007'); // Press Enter
+  pressEnter();
 }
 
 describe('TS41441 - E2E Sanity checks', () => {
