@@ -6,6 +6,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { pressEnter, pressDownArrow } from '../../../helpers/utils/keyboard-actions';
 
 describe('F25946 - details panel', () => {
   beforeEach(() => {
@@ -25,12 +26,12 @@ describe('F25946 - details panel', () => {
 
     // expand 1 row
     PluginPopup.selectFirstObject();
-    browser.keys('ArrowDown');
-    browser.keys('Enter');
+    pressDownArrow();
+    pressEnter();
     expect(PluginPopup.areAllRowsCollapsed()).toEqual(false);
 
     // hide details panel
-    browser.keys('Enter');
+    pressEnter();
     expect(PluginPopup.areAllRowsCollapsed()).toEqual(true);
   });
 });

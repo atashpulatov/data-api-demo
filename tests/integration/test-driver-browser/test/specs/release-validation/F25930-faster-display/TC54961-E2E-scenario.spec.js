@@ -6,6 +6,7 @@ import officeLogin from '../../../helpers/office/office.login';
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import { pressEscape } from '../../../helpers/utils/keyboard-actions';
 
 
 describe('F25930 - Faster display of data sources by caching object list', () => {
@@ -27,7 +28,7 @@ describe('F25930 - Faster display of data sources by caching object list', () =>
     switchToDialogFrame();
     pluginPopup.switchLibrary(false);
     browser.pause(1000);
-    browser.keys('\uE00c'); // Press Escape to close the Smart Data window
+    pressEscape(); // Press Escape to close the Smart Data window
     pluginRightPanel.clickImportDataButton();
     browser.pause(1000);
 
