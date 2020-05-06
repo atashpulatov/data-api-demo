@@ -79,6 +79,9 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40359-navigation-buttons.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40365-nested-prompt.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -92,6 +95,11 @@ exports.config = {
       './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48136-refresh-report-prompt-multiple-prompts.spec.js',
+    ],
+    'F21402-prompt': [
+      './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40359-navigation-buttons.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40365-nested-prompt.spec.js',
     ],
     'F24087-improve-scrolling-performance': [
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
@@ -167,9 +175,12 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
     ],
+    'F21411-right-panel': [
+      '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js'
+    ],
     'F25931-duplicate-object': [
       './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
-    ]
+    ],
   },
   // Patterns to exclude.
   exclude: [
@@ -205,7 +216,6 @@ exports.config = {
       // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
       // debuggerAddress: '127.0.0.1:9222'
-
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
       // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],
