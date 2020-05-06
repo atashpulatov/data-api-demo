@@ -77,7 +77,12 @@ const OfficeWorksheet = function() {
     $(excelSelectors.newSheetBtn).click();
   };
 
-  this.selectCellAlternatively = function(cellId) {
+  this.getNumberOfWorksheets = function () {
+    switchToExcelFrame();
+    return $$(excelSelectors.worksheetsTabs).length;
+  };
+
+  this.selectCellAlternatively = function (cellId) {
     switchToExcelFrame();
     waitAndClick($(excelSelectors.findAndSelectBtn));
     waitAndClick($(excelSelectors.goToBtn));

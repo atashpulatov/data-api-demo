@@ -166,6 +166,9 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
+    ],
+    'F25931-duplicate-object': [
+      './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
     ]
   },
   // Patterns to exclude.
