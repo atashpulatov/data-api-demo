@@ -33,9 +33,12 @@ describe('[F22954] - Ability to edit data already imported to the workbook', () 
     PluginRightPanel.editObject(1);
     browser.pause(1000);
     switchToPluginFrame();
-    browser.pause(1000);
-    PluginPopup.selectObjectElements(['Region']);
+    PluginPopup.selectAllAttributes();
+    PluginPopup.selectAllMetrics();
+    PluginPopup.selectFilters([['Sales Channel', ['Online']]]);
     PluginPopup.clickImport();
     waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
+    browser.pause(3000);
   });
 });
