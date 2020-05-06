@@ -9,10 +9,6 @@ import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToExcelFrame, switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
-
-const cellInput = 'm_excelWebRenderer_ewaCtl_NameBox';
-
-
 describe('Selecting highlights data - ', () => {
   beforeEach(() => {
     officeLogin.openExcelAndLoginToPlugin();
@@ -21,7 +17,6 @@ describe('Selecting highlights data - ', () => {
     browser.closeWindow();
     changeBrowserTab(0);
   });
-
 
   it('[TC40305] Selecting objects imported to the different worksheets', () => {
     // should import a report
@@ -36,8 +31,7 @@ describe('Selecting highlights data - ', () => {
     PluginRightPanel.closeNotificationOnHover();
     console.log('Report is imported');
 
-
-    // // should import a report to a different worksheet
+    // should import a report to a different worksheet
     OfficeWorksheet.openNewSheet();
     OfficeWorksheet.selectCell('C1');
     PluginRightPanel.clickAddDataButton();
@@ -48,7 +42,6 @@ describe('Selecting highlights data - ', () => {
     PluginRightPanel.closeNotificationOnHover();
     console.log('Dataset is imported');
 
-
     // should click on the object imported to the first sheet in the right panel
     PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'C1');
     console.log('Report\'s placeholder in the right panel is clicked');
@@ -58,7 +51,6 @@ describe('Selecting highlights data - ', () => {
     const objectSelected = $(rightPanelSelectors.getObjectSelector(1));
     objectSelected.moveTo();
     console.log('Hovered overt the dataset\'s placeholder in the right panel is clicked');
-
 
     // should click on the object imported to the second sheet in the right panel
     PluginRightPanel.clickObjectInRightPanelAndAssert(2, 'A1');
