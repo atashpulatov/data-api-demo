@@ -9,12 +9,12 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 
 describe('[F22955] - Ability to refresh prompted data already imported to the workbook', () => {
   beforeEach(() => {
-    OfficeLogin.openExcelAndLoginToPlugin();
+    // OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
-    browser.closeWindow();
-    changeBrowserTab(0);
+    // browser.closeWindow();
+    // changeBrowserTab(0);
   });
 
   it('[TC48134] Refresh a report with prompt - Object|Required|Default answer', () => {
