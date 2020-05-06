@@ -26,6 +26,7 @@ export const objectsList = {
     over100k: '100010 rows report',
     marginReport: 'Report 1048576 rows',
     numberFormating: 'Number Formatting',
+    allPrompt: 'Report with all type of prompts (except nested)',
     grpahReport: 'report graph',
     gridReport: 'Grid/graph',
     basicSubtotalsReport: 'Report Totals Subtotals 1',
