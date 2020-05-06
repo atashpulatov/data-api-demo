@@ -39,6 +39,12 @@ export const popupSelectors = {
   modifiedHeader: $('#popup > div > div.ant-col-sm-18.ant-col-lg-19 > div.ant-table-wrapper.table-container.object-browser > div > div > div > div > div > div.ant-table-header > table > thead > tr > th:nth-child(7) > div'),
   attributeCheckBox: '.item-title',
   firstClosedAttributeFormSwitcher: 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div.attribute-forms > ul > li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > span.ant-tree-switcher',
+  attributesContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div > ul',
+  metricsContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div',
+  filtersContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(1) > div.filter-list.ant-list > div > div > ul',
+  sortAttributes: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.selector-title > div',
+  sortMetrics: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.selector-title > div',
+  sortFilters: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(1) > div.selector-title.filter-selector-title > div',
   allAttributes: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > label > input[type=checkbox]',
   allMetrics: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > label > input[type=checkbox]',
   allFilters: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(2) > div > div.checkbox-list.all-showed > div > div > label > input[type=checkbox]',
@@ -128,4 +134,7 @@ export const popupSelectors = {
     clearAll: '.filter-panel__button'
   },
   objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', },
+  metricsSort: '#sort-toggle-metrics > span',
+  attributeSort: '#sort-toggle-attributes > span',
+  filtersSort: '#sort-toggle-filters > span',
 };

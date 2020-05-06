@@ -181,6 +181,9 @@ exports.config = {
     'F25931-duplicate-object': [
       './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
     ],
+    'F30463-ability-to-sort-on-prepare-data': [
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
+    ],
   },
   // Patterns to exclude.
   exclude: [

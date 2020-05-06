@@ -31,6 +31,7 @@ export const objectsList = {
     gridReport: 'Grid/graph',
     basicSubtotalsReport: 'Report Totals Subtotals 1',
     categorySubCategory: 'CategorySubCategoryQuarter',
+    reportToSortAttributeAndMetrics: 'Report with attributes and metrics to sort',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
       reportBasedOnIntelligentCube: 'Report based on cube without subtotals',

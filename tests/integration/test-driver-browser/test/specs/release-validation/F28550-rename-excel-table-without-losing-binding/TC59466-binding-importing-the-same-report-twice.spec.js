@@ -10,6 +10,7 @@ import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-h
 import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelManipulation-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
+import { pressEscape } from '../../../helpers/utils/keyboard-actions';
 
 
 describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
@@ -37,7 +38,7 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     const normalizedFirstTableName = removeTimestampFromTableName(importedFirstTableName);
     expect(normalizedFirstTableName).toEqual(basic01Report.excelTableFullName);
 
-    browser.keys('\uE00C');
+    pressEscape();
     PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
 
     OfficeWorksheet.selectCell('I2');
@@ -51,7 +52,7 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
     expect(normalizedSecondTableName).toEqual(basic01Report.excelTableFullName);
 
-    browser.keys('\uE00C'); // Escape key
+    pressEscape();
     PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'I2');
   });
 });
