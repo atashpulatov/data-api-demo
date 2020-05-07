@@ -8,7 +8,6 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
-
 describe('F21409 - Refresh All - ', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
@@ -102,7 +101,6 @@ describe('F21409 - Refresh All - ', () => {
     PluginRightPanel.closeNotificationOnHover();
     console.log('Ninth object is imported');
 
-
     OfficeWorksheet.selectCell('S41');
     PluginRightPanel.clickAddDataButton();
     browser.pause(6000);
@@ -111,7 +109,6 @@ describe('F21409 - Refresh All - ', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
     console.log('Tenth object is imported');
-
 
     PluginRightPanel.refreshAll();
     console.log('Selected "refresh all"');
