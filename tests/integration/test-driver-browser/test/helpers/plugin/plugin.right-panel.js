@@ -106,6 +106,18 @@ class PluginRightPanel {
   }
 
   /**
+   * Clicks edit button in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  clickDuplicatePopupEditBtn() {
+    switchToPluginFrame();
+    const duplicatePopupEditBtn = $(rightPanelSelectors.duplicatePopupEditBtn);
+    duplicatePopupEditBtn.moveTo();
+    browser.pause(1000);
+    waitAndClick(duplicatePopupEditBtn);
+  }
+
+  /**
    * Clicks to remove button for imported object. Will work when there is one or more objects imported.
    *
    * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
