@@ -17,6 +17,7 @@ import { calculateLoadingProgress } from '../operation/operation-loading-progres
 import { officeContext } from '../office/office-context';
 import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
+import { notificationService } from '../notification-v2/notification-service';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -286,10 +287,11 @@ class SidePanelService {
    *
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    */
+  // eslint-disable-next-line class-methods-use-this
   removeExistingNotification(objectWorkingId) {
     const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
     if (notification) {
-      this.dismissNotifications([notification]);
+      notificationService.callDismissNotification(notification);
     }
   }
 }
