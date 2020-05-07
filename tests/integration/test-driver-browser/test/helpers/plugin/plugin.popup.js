@@ -1001,9 +1001,9 @@ class PluginPopup {
     * @returns {String} tooltip text for the ID element
     *
     */
-  getDetailsIDTooltipText(detailsTable, timeout = 1000) {
+  getDetailsIDTooltipText(detailsTable, timeout = 3000) {
     detailsTable.$(popupSelectors.idDetail).moveTo();
-    browser.pause(timeout); // Wait for DOM to update and show tooltip on hover
+    $(popupSelectors.idDetailTooltip).waitForDisplayed(timeout); // Wait for DOM to update and show tooltip on hover
     return $(popupSelectors.idDetailTooltip).getText();
   }
 
