@@ -580,6 +580,24 @@ class PluginPopup {
   }
 
   /**
+    * Hovers over the expand button for the given object
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Number} index index of the object in the table
+    * @param {Boolean} isExpanded represents row state collapsed/expanded
+    * @returns {String} tooltip text for the location element
+    *
+    */
+  getExpandButtonTooltipText(index, isExpanded = false) {
+    const expandButtonSelector = !isExpanded ? popupSelectors.expandButton : popupSelectors.expandButtonOpen;
+    $(expandButtonSelector).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(expandButtonSelector);
+    expandButtons[index - 1].moveTo();
+    const expandButtonTooltips = $$(popupSelectors.expandButtonTooltip);
+    return expandButtonTooltips[index - 1].getText();
+  }
+
+  /**
    * copies Object Details from Details panel to clipboard and return the detail value
    * @param {Number} index index of the Detail Table to copy from
    * @returns {String} the detail value
@@ -972,6 +990,20 @@ class PluginPopup {
    */
   getDetailsTableByIndex(index) {
     return $$(popupSelectors.detailsTable)[index];
+  }
+
+  /**
+    * Hovers over the ID element in the given details table
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @returns {String} tooltip text for the ID element
+    *
+    */
+  getDetailsIDTooltipText(detailsTable) {
+    detailsTable.$(popupSelectors.idDetail).moveTo();
+    browser.pause(1000); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.idDetailTooltip).getText();
   }
 
   /**
