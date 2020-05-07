@@ -74,7 +74,7 @@ class NotificationService {
     const currentState = this.reduxStore.getState();
     const { notifications } = currentState.notificationReducer;
     notifications.forEach((notification) => {
-      notification.onHover && notification.onHover();
+      notification.dismissNotification && notification.dismissNotification();
       notification.callback && notification.callback();
     });
   }
