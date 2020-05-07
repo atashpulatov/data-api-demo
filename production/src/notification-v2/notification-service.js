@@ -67,7 +67,6 @@ class NotificationService {
    *
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    */
-  // eslint-disable-next-line class-methods-use-this
   removeExistingNotification = (objectWorkingId) => {
     const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
     if (notification) {
