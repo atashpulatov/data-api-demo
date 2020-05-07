@@ -28,13 +28,24 @@ describe('[F22954] - Ability to edit data already imported to the workbook', () 
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
-    // should edit the report
+    console.log('Should edit dataset the first time');
     switchToRightPanelFrame();
     PluginRightPanel.editObject(1);
     browser.pause(1000);
     switchToPluginFrame();
-    PluginPopup.selectAllAttributes();
-    PluginPopup.selectAllMetrics();
+    PluginPopup.selectObjectElements(['Country', 'Unit Cost']);
+    PluginPopup.selectFilters([['Sales Channel', ['Online']]]);
+    PluginPopup.clickImport();
+    waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
+    browser.pause(3000);
+
+    console.log('Should edit dataset the second time');
+    switchToRightPanelFrame();
+    PluginRightPanel.editObject(1);
+    browser.pause(1000);
+    switchToPluginFrame();
+    PluginPopup.selectObjectElements(['Country', 'Unit Cost']);
     PluginPopup.selectFilters([['Sales Channel', ['Online']]]);
     PluginPopup.clickImport();
     waitForNotification();
