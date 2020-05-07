@@ -20,7 +20,7 @@ describe('F24398 - Import and refresh visualization', () => {
   });
 
   it('[TC54787] - Importing grid visualisations from prompted dossiers', () => {
-    // It should import grid visualization
+    console.log('It should import grid visualization');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
 

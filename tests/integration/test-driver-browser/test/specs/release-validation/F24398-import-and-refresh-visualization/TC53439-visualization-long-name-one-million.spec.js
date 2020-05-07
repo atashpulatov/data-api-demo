@@ -20,7 +20,7 @@ describe('F24398 - Import and refresh visualization', () => {
   });
 
   it('[TC53439] - Importing selected visualisations with long paths and 1 milion rows', () => {
-    // It should import grid visualization
+    console.log('It should import grid visualization');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
 
