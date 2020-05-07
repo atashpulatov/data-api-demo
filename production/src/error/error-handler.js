@@ -150,9 +150,9 @@ class ErrorService {
     return errorMessageFactory(errorType)({ error, ...options });
   }
 
-  fullLogOut = () => {
+  fullLogOut = async () => {
     this.notificationService.dismissNotifications();
-    this.sessionHelper.logOutRest();
+    await this.sessionHelper.logOutRest();
     this.sessionActions.logOut();
     this.sessionHelper.logOutRedirect();
   }
