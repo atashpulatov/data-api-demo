@@ -28,7 +28,6 @@ describe('F21409 - Refresh All - ', () => {
     PluginRightPanel.closeNotificationOnHover();
     console.log('First object is imported');
 
-
     OfficeWorksheet.selectCell('I1');
     PluginRightPanel.clickAddDataButton();
     browser.pause(6000);
