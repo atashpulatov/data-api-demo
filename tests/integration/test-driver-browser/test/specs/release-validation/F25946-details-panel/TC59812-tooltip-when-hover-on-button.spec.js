@@ -21,17 +21,18 @@ describe('F25946 - Details Panel', () => {
 
     PluginPopup.searchForObject(objectsList.reports.reportXML);
 
-    // hover over expand button in collapsed state
+    console.log('hover over expand button in collapsed state');
     expect(PluginPopup.getExpandButtonTooltipText(1)).toEqual('Show more');
     PluginPopup.expandObjectDetails(1);
-    // hover over expand button in expanded state
+
+    console.log('hover over expand button in expanded state');
     expect(PluginPopup.getExpandButtonTooltipText(1, true)).toEqual('Show less');
 
-    // hover over ID details of the given object
+    console.log('hover over ID details of the given object');
     const detailsTable = PluginPopup.getDetailsTableByIndex(1);
     expect(PluginPopup.getDetailsIDTooltipText(detailsTable)).toEqual('Click to Copy');
 
-    // hover over ID details of the given object after copying its value
+    console.log('hover over ID details of the given object after copying its value');
     PluginPopup.copyToClipboardObjectDetails(2);
     expect(PluginPopup.getDetailsIDTooltipText(detailsTable)).toEqual('Copied');
   });
