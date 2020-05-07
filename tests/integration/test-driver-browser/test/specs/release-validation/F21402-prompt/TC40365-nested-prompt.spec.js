@@ -7,7 +7,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
-describe('[F22955] - Ability to refresh prompted data already imported to the workbook', () => {
+describe('F21402 - Handle Prompted Object', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -17,21 +17,14 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
     changeBrowserTab(0);
   });
 
-  it('[TC48134] Refresh a report with prompt - Object|Required|Default answer', () => {
+  it('[TC40365] Importing prompted reports functionality, for nested prompts without Prepare Data', () => {
     // should import a report
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.objectPromptedReport);
-    browser.pause(5555); // temp solution
-    PluginPopup.clickRun();
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
 
-    // should refresh the report
-    PluginRightPanel.refreshFirstObjectFromTheList();
+    console.log('Should import nested prompt');
+    PluginPopup.importPromptDefaultNested(objectsList.reports.nestedPrompt);
     waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
 });

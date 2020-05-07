@@ -16,7 +16,8 @@ import {
   DELETE_NOTIFICATION,
   CREATE_GLOBAL_NOTIFICATION,
   REMOVE_GLOBAL_NOTIFICATION,
-  DISPLAY_NOTIFICATION_WARNING
+  DISPLAY_NOTIFICATION_WARNING,
+  CLEAR_NOTIFICATIONS
 } from './notification-actions';
 import {
   titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap, customT
@@ -60,6 +61,9 @@ export const notificationReducer = (state = initialState, action) => {
     case officeProperties.actions.toggleSecuredFlag:
       return deleteAllNotifications(action, state);
 
+    case CLEAR_NOTIFICATIONS:
+      return clearNotifications(state);
+
     default:
       return state;
   }
@@ -98,7 +102,7 @@ const displayNotificationCompleted = (state, payload) => {
     ...notificationToUpdate,
     type: objectNotificationTypes.SUCCESS,
     title: customT(titleOperationCompletedMap[notificationToUpdate.operationType]),
-    onHover: (notificationToUpdate.operationType === REMOVE_OPERATION
+    dismissNotification: (notificationToUpdate.operationType === REMOVE_OPERATION
       ? () => notificationService.dismissSuccessfulRemoveNotification(notificationToUpdate.objectWorkingId)
       : () => notificationService.dismissNotification(notificationToUpdate.objectWorkingId)),
   };
@@ -153,6 +157,12 @@ const removeGlobalNotification = (state, paylaod) => (
 const deleteAllNotifications = (action, state) => (action.isSecured
   ? { notifications: [], globalNotification: state.globalNotification }
   : state);
+
+const clearNotifications = (state) => ({
+  ...state,
+  notifications: initialState.notifications,
+  globalNotification: initialState.globalNotification,
+});
 
 const getOkButton = (payload) => [{
   title: customT('OK'),

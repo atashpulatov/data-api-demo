@@ -16,10 +16,6 @@ describe('StepApplyFormatting', () => {
     jest.spyOn(console, 'log');
     jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValueOnce({ sync: excelContextSyncMock });
-
-    jest.spyOn(officeApiHelper, 'getTable').mockReturnValueOnce({ columns: 'columnsTest' });
-
     jest.spyOn(stepApplyFormatting, 'filterColumnInformation').mockImplementation(() => {
       throw new Error('errorTest');
     });
@@ -56,10 +52,6 @@ describe('StepApplyFormatting', () => {
       },
       officeTable: { columns: 'columnsTest' },
     };
-
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValueOnce({ sync: excelContextSyncMock });
-
-    jest.spyOn(officeApiHelper, 'getTable').mockReturnValueOnce({ columns: 'columnsTest' });
 
     jest.spyOn(stepApplyFormatting, 'filterColumnInformation').mockReturnValue('filteredColumnInformationTest');
 

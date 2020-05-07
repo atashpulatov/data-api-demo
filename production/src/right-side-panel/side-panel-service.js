@@ -180,8 +180,9 @@ class SidePanelService {
 
       if (officeContext.isSetSupported(1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
-          await officeApiHelper.checkStatusOfSessions();
           const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
+          this.removeExistingNotification(ObjectToDelete.objectWorkingId);
+          await officeApiHelper.checkStatusOfSessions();
           this.remove([ObjectToDelete.objectWorkingId]);
         });
       } else if (officeContext.isSetSupported(1.7)) {
@@ -197,6 +198,8 @@ class SidePanelService {
             (object) => !objectsOfSheets.find((officeTable) => officeTable.name === object.bindId)
           );
           const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
+
+          objectsToDelete.forEach((object) => { this.removeExistingNotification(object.objectWorkingId); });
 
           this.remove(objectWorkingIds);
         });
@@ -278,7 +281,7 @@ class SidePanelService {
   });
 
   /**
-   * Manually calls onHover and callback methods from notifications.
+   * Manually calls dismissNotification and callback methods from notifications.
    * This way, it dismisses all provided notifications
    * Works for notifications concerning finished operations.
    * For others it doesn't bring any effect.
@@ -287,7 +290,7 @@ class SidePanelService {
    */
   dismissNotifications = (notifications) => {
     notifications.forEach((notification) => {
-      notification.onHover && notification.onHover();
+      notification.dismissNotification && notification.dismissNotification();
       notification.callback && notification.callback();
     });
   }
@@ -296,6 +299,18 @@ class SidePanelService {
     && objectOperation.operationType !== REMOVE_OPERATION
     && objectOperation.operationType !== CLEAR_DATA_OPERATION
     && objectOperation.operationType !== HIGHLIGHT_OPERATION
+
+  /**
+   * Removes the notification on rightside panel if exist
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  removeExistingNotification(objectWorkingId) {
+    const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
+    if (notification) {
+      this.dismissNotifications([notification]);
+    }
+  }
 }
 
 export const sidePanelService = new SidePanelService();

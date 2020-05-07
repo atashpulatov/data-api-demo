@@ -4,7 +4,8 @@ import {
   clearGlobalNotification,
   displayGlobalNotification,
   deleteObjectNotification,
-  displayObjectWarning
+  displayObjectWarning,
+  clearNotifications
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import officeStoreObject from '../office/store/office-store-object';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
@@ -58,6 +59,10 @@ class NotificationService {
 
   cancelOperationFromNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
+  }
+
+  clearNotifications = () => {
+    this.reduxStore.dispatch(clearNotifications());
   }
 }
 

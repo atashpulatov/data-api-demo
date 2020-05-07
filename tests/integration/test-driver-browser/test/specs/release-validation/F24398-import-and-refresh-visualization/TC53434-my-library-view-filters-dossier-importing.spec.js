@@ -5,6 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { pressEscape } from '../../../helpers/utils/keyboard-actions';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
@@ -24,7 +25,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.switchLibrary(false);
     waitAndClick($('#Filter'));
     $('label[title=\'Administrator\']').click();
-    browser.keys('\uE00c');
+    pressEscape();
     PluginPopup.switchLibrary();
     PluginPopup.switchLibrary();
     PluginPopup.importObject('Dossier for interactive components');
