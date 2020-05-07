@@ -200,8 +200,8 @@ export const navigationTree = (state = initialState, action) => {
     case SWITCH_MY_LIBRARY: {
       const newState = { ...state };
       newState.myLibrary = !state.myLibrary;
-      // eslint-disable-next-line max-len
-      newState.numberOfFiltersActive = calculateNumberOfFiltersActive(newState.myLibrary ? newState.myLibraryFilter : newState.envFilter, newState.myLibrary);
+      const filter = newState.myLibrary ? newState.myLibraryFilter : newState.envFilter;
+      newState.numberOfFiltersActive = calculateNumberOfFiltersActive(filter, newState.myLibrary);
       return makeSelection(newState, newState.myLibrary ? newState.chosenLibraryElement : newState.chosenEnvElement);
     }
     case SWITCH_IMPORT_SUBTOTALS: {
