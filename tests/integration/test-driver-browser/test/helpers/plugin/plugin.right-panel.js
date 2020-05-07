@@ -118,6 +118,30 @@ class PluginRightPanel {
   }
 
   /**
+   * Selects active cell option in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  selectActiveCellOptionInDuplicatePopup() {
+    switchToPluginFrame();
+    const activeCellOption = $(rightPanelSelectors.duplicatePopupActiveCellOption);
+    activeCellOption.moveTo();
+    browser.pause(1000);
+    waitAndClick(activeCellOption);
+  }
+
+  /**
+   * Selects new sheet option in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  selectNewSheetOptionInDuplicatePopup() {
+    switchToPluginFrame();
+    const newSheetOption = $(rightPanelSelectors.duplicatePopupNewSheetOption);
+    newSheetOption.moveTo();
+    browser.pause(1000);
+    waitAndClick(newSheetOption);
+  }
+
+  /**
    * Clicks to remove button for imported object. Will work when there is one or more objects imported.
    *
    * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
