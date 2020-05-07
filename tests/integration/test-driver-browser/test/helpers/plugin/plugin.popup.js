@@ -30,8 +30,8 @@ class PluginPopup {
   }
 
   clickImport() {
+    console.log('Should click Import button');
     waitAndClick($(popupSelectors.importBtn));
-    console.log('Import button is clicked');
   }
 
   clickPrepareData() {

@@ -9,16 +9,16 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 
 describe('[F22955] - Ability to refresh prompted data already imported to the workbook', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[TC48134] Refresh a report with prompt - Object|Required|Default answer', () => {
-    // should import a report
+    console.log('Should import prompted report');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.switchLibraryAndImportObject(objectsList.reports.objectPromptedReport);
@@ -28,7 +28,7 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
-    // should refresh the report
+    console.log('Should refresh prompted report');
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);

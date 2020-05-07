@@ -19,21 +19,19 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
   });
 
   it('[TC48137] Refresh and edited report with prompt', () => {
-    // should import a report
+    console.log('Should import prompted report');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibraryAndImportObject(objectsList.reports.objectPromptedReport);
-    browser.pause(5555); // temp solution
+    browser.pause(5555);
     PluginPopup.clickRun();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
-    //  should edit report
+    console.log('Should edit report');
     switchToPluginFrame();
     PluginRightPanel.editObject(1);
     browser.pause(5000);
-
-    // switchToDialogFrame();
     PluginPopup.clickRun();
     browser.pause(3000);
 
@@ -47,7 +45,7 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
       $(rightPanelSelectors.notificationPopUp).getAttribute('textContent')
     ).toContain(dictionary.en.importSuccess);
 
-    // // should refresh the report
+    console.log('Should refresh report');
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
