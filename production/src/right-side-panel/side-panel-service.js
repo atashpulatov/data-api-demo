@@ -277,7 +277,7 @@ class SidePanelService {
   });
 
   /**
-   * Manually calls onHover and callback methods from notifications.
+   * Manually calls dismissNotification and callback methods from notifications.
    * This way, it dismisses all provided notifications
    * Works for notifications concerning finished operations.
    * For others it doesn't bring any effect.
@@ -286,7 +286,7 @@ class SidePanelService {
    */
   dismissNotifications = (notifications) => {
     notifications.forEach((notification) => {
-      notification.onHover && notification.onHover();
+      notification.dismissNotification && notification.dismissNotification();
       notification.callback && notification.callback();
     });
   }
