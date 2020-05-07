@@ -180,6 +180,9 @@ exports.config = {
     ],
     'F30463-ability-to-sort-on-prepare-data': [
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
+    ],
+    'F21409-refresh-all': [
+      './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js'
     ]
   },
   // Patterns to exclude.
