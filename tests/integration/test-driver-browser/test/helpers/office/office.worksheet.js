@@ -78,6 +78,11 @@ function OfficeWorksheet() {
     $(excelSelectors.newSheetBtn).click();
   };
 
+  this.getNumberOfWorksheets = () => {
+    switchToExcelFrame();
+    return $$(excelSelectors.worksheetsTabs).length;
+  };
+
   this.selectCellAlternatively = (cellId) => {
     switchToExcelFrame();
     waitAndClick($(excelSelectors.findAndSelectBtn));

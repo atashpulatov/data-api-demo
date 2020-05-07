@@ -85,6 +85,31 @@ class PluginRightPanel {
   }
 
   /**
+   * Clicks duplicate button for imported object under given index. Will work when there is one or more objects imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   */
+  duplicateObject(index) {
+    switchToPluginFrame();
+    const duplicateBtn = rightPanelSelectors.getDuplicateBtnForObject(index);
+    $(duplicateBtn).moveTo();
+    browser.pause(1000);
+    waitAndClick($(duplicateBtn));
+  }
+
+  /**
+   * Clicks import button in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  clickDuplicatePopupImportBtn() {
+    switchToPluginFrame();
+    const duplicatePopupImportBtn = $(rightPanelSelectors.duplicatePopupImportBtn);
+    duplicatePopupImportBtn.moveTo();
+    browser.pause(1000);
+    waitAndClick(duplicatePopupImportBtn);
+  }
+
+  /**
    * Clicks to remove button for imported object. Will work when there is one or more objects imported.
    *
    * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
@@ -111,6 +136,19 @@ class PluginRightPanel {
     const objectSelected = rightPanelSelectors.getObjectSelector(index);
     browser.pause(1000);
     waitAndClick($(objectSelected));
+  }
+
+  /**
+   * Gets text of input name for imported object under given index. Will work when there is one or more objects imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   * @returns {String} Name of imported object under given index
+   */
+  getNameOfObject(index) {
+    switchToPluginFrame();
+    const nameInput = $(rightPanelSelectors.getNameInputForObject(index));
+    return nameInput.getText();
   }
 
   refreshAll() {
