@@ -10,7 +10,7 @@ import {
 import officeStoreObject from '../office/store/office-store-object';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { sidePanelService } from '../right-side-panel/side-panel-service';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 
 class NotificationService {
   init = (reduxStore) => {
@@ -63,7 +63,20 @@ class NotificationService {
   }
 
   /**
-   * Manually calls onHover and callback methods from notifications.
+   * Removes the notification on rightside panel if exist
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  // eslint-disable-next-line class-methods-use-this
+  removeExistingNotification = (objectWorkingId) => {
+    const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
+    if (notification) {
+      this.callDismissNotification(notification);
+    }
+  }
+
+  /**
+   * Manually calls dismissNotification and callback methods from notifications.
    * This way, it dismisses all notifications available
    * Works for notifications concerning finished operations.
    * For others it doesn't bring any effect.
@@ -78,6 +91,12 @@ class NotificationService {
     });
   }
 
+  /**
+   * Manually calls dismissNotification and callback methods from single notification.
+   * This way, it dismisses notification of provided object
+   *
+   * @param {Object} notification
+   */
   callDismissNotification = (notification) => {
     notification.dismissNotification && notification.dismissNotification();
     notification.callback && notification.callback();

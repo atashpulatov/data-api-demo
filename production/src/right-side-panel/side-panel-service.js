@@ -178,7 +178,7 @@ class SidePanelService {
       if (officeContext.isSetSupported(1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
-          this.removeExistingNotification(ObjectToDelete.objectWorkingId);
+          notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
           await officeApiHelper.checkStatusOfSessions();
           this.remove([ObjectToDelete.objectWorkingId]);
         });
@@ -196,7 +196,9 @@ class SidePanelService {
           );
           const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
 
-          objectsToDelete.forEach((object) => { this.removeExistingNotification(object.objectWorkingId); });
+          objectsToDelete.forEach((object) => {
+            notificationService.removeExistingNotification(object.objectWorkingId);
+          });
 
           this.remove(objectWorkingIds);
         });
@@ -281,19 +283,6 @@ class SidePanelService {
   && objectOperation.operationType !== REMOVE_OPERATION
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
   && objectOperation.operationType !== HIGHLIGHT_OPERATION
-
-  /**
-   * Removes the notification on rightside panel if exist
-   *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-   */
-  // eslint-disable-next-line class-methods-use-this
-  removeExistingNotification(objectWorkingId) {
-    const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
-    if (notification) {
-      notificationService.callDismissNotification(notification);
-    }
-  }
 }
 
 export const sidePanelService = new SidePanelService();
