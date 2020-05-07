@@ -21,56 +21,47 @@ describe('F25931 - Duplicate object', () => {
   });
 
   it('[TC64624] - Duplicate with edit', () => {
-    // import a basicReport to duplicate it later
+    console.log('Import BasicReport');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.basicReport);
-
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
-    console.log('BasicReport is imported');
 
-    // Get initial number of worksheets
+    console.log('Save number of worksheets');
     const initialNumberOfWorksheets = OfficeWorksheet.getNumberOfWorksheets();
 
-    // Click duplicate button on first object on the list
+    console.log('Open duplcate popup for 1st imported object and click edit button in it');
     PluginRightPanel.duplicateObject(1);
-    console.log('Duplicate Popup is opened');
-
-    // Click edit button in duplicate popup
     PluginRightPanel.clickDuplicatePopupEditBtn();
-    console.log('Edit button in Duplicate Popup is clicked');
 
+    console.log('Uncheck all attributes and all metrics in prepare data screen');
     switchToDialogFrame();
-    // should click on "All" object in attributes and metrics columns to uncheck all elelemnts
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
-    console.log('Uncheck all attributes and all metrics');
 
-    // should click on first object in attributes and metrics columns to select them
+    console.log('Select first attribute and first metric in prepare data screen');
     PluginPopup.selectAttributeIndex([1]);
     PluginPopup.selectObjectElements(['Total Cost']);
-    console.log('Seletc 1 attribute and 1 metric');
 
+    console.log('Click import button in Prepare Data popup');
     PluginPopup.clickImport();
-    console.log('Click import in Prepare Data popup');
 
+    console.log('Check success of duplication');
     switchToPluginFrame();
-    // Expect succesfull duplication notification
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.duplicateSucces);
     PluginRightPanel.closeNotificationOnHover();
-    console.log('BasicReport is duplicated with edit');
 
-    // Expect new object name to be old name with added copy
+    console.log('Check name of duplicated object');
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.basicReport} Copy`);
 
-    // Expect new sheet beeing added - number of worksheets got increased
+    console.log('Check number of worksheets - should increase by 1');
     expect(OfficeWorksheet.getNumberOfWorksheets()).toBe(initialNumberOfWorksheets + 1);
 
-    // TODO: Expect data in table to be filtered out to 2 columns and 77 rows.
+    // TODO: console.log('Check imported data - table should have 2 columns and 77 rows');
     // switchToExcelFrame();
     // const A2 = $('#gridRows > div:nth-child(2) > div:nth-child(1) > div > div');
     // const B77 = $('#gridRows > div:nth-child(77) > div:nth-child(2) > div > div');
