@@ -64,7 +64,9 @@ class SidePanelService {
    */
   refresh = (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-      this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+      setTimeout(() => {
+        this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+      }, 0);
     });
   };
 
@@ -76,7 +78,9 @@ class SidePanelService {
    */
   remove = async (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-      this.reduxStore.dispatch(removeRequested(objectWorkingId));
+      setTimeout(() => {
+        this.reduxStore.dispatch(removeRequested(objectWorkingId));
+      }, 0);
     });
   };
 
@@ -289,9 +293,9 @@ class SidePanelService {
   }
 
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
-  && objectOperation.operationType !== REMOVE_OPERATION
-  && objectOperation.operationType !== CLEAR_DATA_OPERATION
-  && objectOperation.operationType !== HIGHLIGHT_OPERATION
+    && objectOperation.operationType !== REMOVE_OPERATION
+    && objectOperation.operationType !== CLEAR_DATA_OPERATION
+    && objectOperation.operationType !== HIGHLIGHT_OPERATION
 }
 
 export const sidePanelService = new SidePanelService();
