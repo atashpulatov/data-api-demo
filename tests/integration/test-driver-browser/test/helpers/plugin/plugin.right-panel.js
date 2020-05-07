@@ -46,6 +46,7 @@ class PluginRightPanel {
 
   refreshFirstObjectFromTheList() {
     this.refreshObject(1);
+    console.log('First object from the list is refreshed');
   }
 
 
