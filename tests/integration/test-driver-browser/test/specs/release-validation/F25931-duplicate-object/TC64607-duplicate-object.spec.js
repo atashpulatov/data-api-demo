@@ -8,7 +8,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
-describe('[TC64607] - Duplicate object', () => {
+describe('F25931 - Duplicate object', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
