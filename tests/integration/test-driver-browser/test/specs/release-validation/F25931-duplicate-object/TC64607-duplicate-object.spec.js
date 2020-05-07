@@ -19,38 +19,31 @@ describe('F25931 - Duplicate object', () => {
   });
 
   it('[TC64607] - Duplicate object', () => {
-    // import a basicReport to duplicate it later
+    console.log('Import BasicReport');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.basicReport);
-
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
-    console.log('BasicReport is imported');
 
-    // Get initial number of worksheets
+    console.log('Save number of worksheets');
     const initialNumberOfWorksheets = OfficeWorksheet.getNumberOfWorksheets();
 
-    // Click duplicate button on first object on the list
+    console.log('Open duplcate popup for 1st imported object and click import button in it');
     PluginRightPanel.duplicateObject(1);
-    console.log('Duplicate Popup is opened');
-
-    // Click import button in duplicate popup
     PluginRightPanel.clickDuplicatePopupImportBtn();
-    console.log('Import button in Duplicate Popup is clicked');
 
-    // Expect succesfull duplication notification
+    console.log('Check success of duplication');
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.duplicateSucces);
     PluginRightPanel.closeNotificationOnHover();
-    console.log('BasicReport is duplicated');
 
-    // Expect new object name to be old name with added copy
+    console.log('Check name of duplicated object');
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.basicReport} Copy`);
 
-    // Expect new sheet beeing added - number of worksheets got increased
+    console.log('Check number of worksheets - should increase by 1');
     expect(OfficeWorksheet.getNumberOfWorksheets()).toBe(initialNumberOfWorksheets + 1);
   });
 });
