@@ -19,129 +19,30 @@ describe('F21409 - Refresh All - ', () => {
 
 
   it('[TC41094] - Refreshing at least 10 already imported objects with very long names', () => {
-    OfficeWorksheet.selectCell('A1');
-    PluginRightPanel.clickImportDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.reportXML);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('First object is imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('A1', objectsList.reports.reportXML, 'First object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('I1', objectsList.reports.reportXML, 'Second object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('Q1', objectsList.reports.reportXML, 'Third object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('A21', objectsList.datasets.datasetSQL, 'Fourth object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('G21', objectsList.datasets.datasetSQL, 'Fifth object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('M21', objectsList.datasets.datasetSQL, 'Sixth object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('A41', objectsList.reports.reportWithLongName, 'Seventh object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('F41', objectsList.reports.longReportWithInvalidCharacters.sourceName, 'Eighth object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('L41', objectsList.reports.longReportWithInvalidCharacters.sourceNam, 'Ninth object should be imported');
+    PluginRightPanel.importObjectToCellAndAssertSuccess('S41', objectsList.reports.reportWithLongName, 'Tenth object should be imported');
 
-    OfficeWorksheet.selectCell('I1');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.reportXML);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Second object is imported');
-
-    OfficeWorksheet.selectCell('Q1');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.reportXML);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Third object is imported');
-
-    OfficeWorksheet.selectCell('A21');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.datasets.datasetSQL);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Fourth object is imported');
-
-    OfficeWorksheet.selectCell('G21');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.datasets.datasetSQL);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Fifth object is imported');
-
-    OfficeWorksheet.selectCell('M21');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.datasets.datasetSQL);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Sixth object is imported');
-
-    OfficeWorksheet.selectCell('A41');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.reportWithLongName);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Seventh object is imported');
-
-    OfficeWorksheet.selectCell('F41');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.longReportWithInvalidCharacters.sourceName);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Eighth object is imported');
-
-    OfficeWorksheet.selectCell('L41');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.longReportWithInvalidCharacters.sourceName);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Ninth object is imported');
-
-    OfficeWorksheet.selectCell('S41');
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.reportWithLongName);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Tenth object is imported');
-
+    console.log('Should refresh all');
     PluginRightPanel.refreshAll();
-    console.log('Selected "refresh all"');
 
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    PluginRightPanel.closeNotificationOnHover();
-    console.log('Refreshed all');
+    console.log('Should close notifications and assert the "Refresh complete" message');
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.reportRefreshed);
   });
 });
