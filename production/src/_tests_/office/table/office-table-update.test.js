@@ -316,9 +316,12 @@ describe('OfficeTableUpdate', () => {
 
   `('updateRows should work as expected when newRowCount < tableRowCount',
   async ({ expectedRowsNo, contextLimitParam, newRowsCount, expectedLoopSteps }) => {
-    // given
-    // TODO: mock different value for each call
-    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => expectedRowsNo);
+    let i = 0;
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => {
+      const newRowsValue = expectedRowsNo - (i * contextLimitParam);
+      i += 1;
+      return newRowsValue;
+    });
     const excelContextSyncMock = jest.fn();
     const suspendApiCalculationUntilNextSyncMock = jest.fn();
     const excelContextMock = {
@@ -348,8 +351,8 @@ describe('OfficeTableUpdate', () => {
     expect(deleteMock).toHaveBeenCalledTimes(expectedLoopSteps);
     expect(excelContextSyncMock).toHaveBeenCalledTimes(expectedLoopSteps);
     expect(getRowsAboveMock).toHaveBeenCalledTimes(expectedLoopSteps);
-    // TODO:
-    // const nrOfRowsToDeleteInLastStep = expectedRowsNo - ((expectedLoopSteps - 1) * contextLimitParam) - newRowsCount;
-    // expect(getRowsAboveMock).toHaveBeenNthCalledWith(expectedLoopSteps, nrOfRowsToDeleteInLastStep);
+
+    const nrOfRowsToDeleteInLastStep = expectedRowsNo - ((expectedLoopSteps - 1) * contextLimitParam) - newRowsCount;
+    expect(getRowsAboveMock).toHaveBeenNthCalledWith(expectedLoopSteps, nrOfRowsToDeleteInLastStep);
   });
 });
