@@ -23,7 +23,7 @@ describe('F21409 - Refresh All - ', () => {
     PluginPopUp.importObjectToCellAndAssertSuccess('M21', objectsList.datasets.datasetSQL, 'Sixth object should be imported', true);
     PluginPopUp.importObjectToCellAndAssertSuccess('A41', objectsList.reports.reportWithLongName, 'Seventh object should be imported', true);
     PluginPopUp.importObjectToCellAndAssertSuccess('F41', objectsList.reports.longReportWithInvalidCharacters.sourceName, 'Eighth object should be imported', true);
-    PluginPopUp.importObjectToCellAndAssertSuccess('L41', objectsList.reports.longReportWithInvalidCharacters.sourceNam, 'Ninth object should be imported', true);
+    PluginPopUp.importObjectToCellAndAssertSuccess('L41', objectsList.reports.longReportWithInvalidCharacters.sourceName, 'Ninth object should be imported', true);
     PluginPopUp.importObjectToCellAndAssertSuccess('S41', objectsList.reports.reportWithLongName, 'Tenth object should be imported', true);
 
     console.log('Should refresh all');
