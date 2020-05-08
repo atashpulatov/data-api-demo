@@ -21,6 +21,7 @@ exports.config = {
   ],
   suites: {
     acceptance: [
+      './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
       './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
@@ -190,6 +191,9 @@ exports.config = {
     'F30463-ability-to-sort-on-prepare-data': [
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
     ],
+    'F21409-refresh-all': [
+      './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js'
+    ]
   },
   // Patterns to exclude.
   exclude: [

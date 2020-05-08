@@ -3,6 +3,8 @@ import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../ut
 import { waitAndClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
+import { waitForNotification } from '../utils/wait-helper';
+
 
 class PluginRightPanel {
   clickLoginPopUpBtn() {
@@ -148,6 +150,7 @@ class PluginRightPanel {
   }
 
   refreshAll() {
+    console.log('Should refresh all');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.checkBoxAll));
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
@@ -248,6 +251,17 @@ class PluginRightPanel {
     switchToExcelFrame();
     browser.pause(1000); // TODO: Not sure if this is necessary
     expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
+  }
+
+  /**
+   * Waits for notification, asserts the notification message was displayed and closes the notification
+   *
+   * @param {String} notificationMessage Notification message that should be displayed
+   */
+  waitAndCloseNotification(notificationMessage) {
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
+    this.closeNotificationOnHover();
   }
 }
 
