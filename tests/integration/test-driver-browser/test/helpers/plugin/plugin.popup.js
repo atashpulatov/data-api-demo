@@ -179,7 +179,7 @@ class PluginPopup {
     this.clickImport();
   }
 
-  importAnyObject(objectName, index) {
+  importAnyObject(objectName, index = 1) {
     switchToDialogFrame();
     browser.pause(500);
     this.switchLibrary(false);

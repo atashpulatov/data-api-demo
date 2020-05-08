@@ -80,6 +80,8 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53439-visualization-long-name-one-million.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC54787-prompted-dossier.spec.js',
       './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
       './test/specs/release-validation/F21402-prompt/TC40359-navigation-buttons.spec.js',
       './test/specs/release-validation/F21402-prompt/TC40365-nested-prompt.spec.js',
@@ -120,6 +122,8 @@ exports.config = {
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC60974-importing-custom-visualisation.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61043-E2E-prompted-dossier.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61046-E2E-with-edit-change-text.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53439-visualization-long-name-one-million.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC54787-prompted-dossier.spec.js',
     ],
     'F24751-import subtotals': [
       './test/specs/release-validation/F24751-import subtotals/TC53340-import-report-with-subtotals.spec.js',
