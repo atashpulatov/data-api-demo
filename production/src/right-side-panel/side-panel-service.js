@@ -1,4 +1,5 @@
 import { popupTypes } from '@mstr/rc';
+import request from 'superagent';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import officeStoreObject from '../office/store/office-store-object';
@@ -18,6 +19,9 @@ import { officeContext } from '../office/office-context';
 import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification-v2/notification-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+
+const CONNECTION_CHECK_TIMEOUT = 3000;
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -283,6 +287,19 @@ class SidePanelService {
   && objectOperation.operationType !== REMOVE_OPERATION
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
   && objectOperation.operationType !== HIGHLIGHT_OPERATION
+
+  connectionCheckerLoop = () => {
+    const checkInterval = setInterval(async () => {
+      console.log('in checker loop');
+      authenticationHelper.doesConnectionExist(checkInterval);
+      // console.log(connectionExist);
+      // if (connectionExist) {
+      //   console.log('checking connection');
+      //   notificationService.connectionRestored();
+      //   clearInterval(checkInterval);
+      // }
+    }, CONNECTION_CHECK_TIMEOUT);
+  }
 }
 
 export const sidePanelService = new SidePanelService();

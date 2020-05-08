@@ -107,9 +107,15 @@ export const RightSidePanelNotConnected = ({
     } catch (error) {
       const castedError = String(error);
       const { CONNECTION_BROKEN } = incomingErrorStrings;
-      if (!castedError.includes(CONNECTION_BROKEN)) {
-        errorService.handleError(error);
+      if (castedError.includes(CONNECTION_BROKEN)) {
+        notificationService.connectionLost();
+        if (navigator.userAgent.toLowerCase().includes('applewebkit')) {
+          console.log('it is safari');
+          sidePanelService.connectionCheckerLoop();
+        }
+        return;
       }
+      errorService.handleError(error);
     }
   };
 

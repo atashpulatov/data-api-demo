@@ -23,8 +23,14 @@ export const HomeNotConnected = (props) => {
     loading, popupOpen, authToken, t
   } = props;
 
-  const handleConnectionRestored = () => notificationService.connectionRestored();
-  const handleConnectionLost = () => !popupOpen && notificationService.connectionLost();
+  const handleConnectionRestored = () => {
+    console.log('connection restored');
+    notificationService.connectionRestored();
+  };
+  const handleConnectionLost = () => {
+    console.log('connection lost');
+    !popupOpen && notificationService.connectionLost();
+  };
 
   React.useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
