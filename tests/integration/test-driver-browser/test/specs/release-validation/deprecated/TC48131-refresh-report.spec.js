@@ -6,7 +6,6 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import officeLogin from '../../../helpers/office/office.login';
-import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('[F22955] - Ability to refresh prompted data already imported to the workbook', () => {
   beforeEach(() => {
@@ -24,12 +23,12 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
     PluginPopup.switchLibraryAndImportObject(objectsList.reports.reportXML);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
 
     // should refresh the report
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
   });
 });

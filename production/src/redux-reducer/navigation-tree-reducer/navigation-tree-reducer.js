@@ -11,6 +11,7 @@ import {
 import { sessionProperties } from '../session-reducer/session-properties';
 import { CLEAR_POPUP_STATE } from '../popup-state-reducer/popup-state-actions';
 import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
+import { calculateNumberOfFiltersActive } from '../../helpers/numberOfFiltersActive';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const DEFAULT_TYPE = 'Data';
@@ -45,6 +46,7 @@ export const initialState = {
   chosenLibraryElement: {},
   chosenEnvElement: {},
   myLibraryOwners: {},
+  numberOfFiltersActive: 0,
 };
 
 
@@ -198,6 +200,8 @@ export const navigationTree = (state = initialState, action) => {
     case SWITCH_MY_LIBRARY: {
       const newState = { ...state };
       newState.myLibrary = !state.myLibrary;
+      const filter = newState.myLibrary ? newState.myLibraryFilter : newState.envFilter;
+      newState.numberOfFiltersActive = calculateNumberOfFiltersActive(filter, newState.myLibrary);
       return makeSelection(newState, newState.myLibrary ? newState.chosenLibraryElement : newState.chosenEnvElement);
     }
     case SWITCH_IMPORT_SUBTOTALS: {
@@ -224,6 +228,7 @@ export const navigationTree = (state = initialState, action) => {
       } else {
         newState.myLibraryFilter.owners = data.owners.filter(item => newState.myLibraryOwners[item]);
       }
+      newState.numberOfFiltersActive = calculateNumberOfFiltersActive(newState.envFilter, newState.myLibrary);
       return newState;
     }
     case LOAD_BROWSING_STATE_CONST: {

@@ -17,21 +17,20 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
     changeBrowserTab(0);
   });
 
-  it('[TC48134] Refresh a report with prompt - Object|Required|Default answer', () => {
-    console.log('Should import prompted report');
+  it('[TC48134] Part II - Refresh a report with prompt - Nested prompts', () => {
+    // should import a report
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    PluginPopup.switchLibraryAndImportObject(objectsList.reports.objectPromptedReport);
-    browser.pause(5555); // temp solution
-    PluginPopup.clickRun();
+    PluginPopup.importPromptDefaultNested(objectsList.reports.nestedPrompt);
+    console.log('Report with nested prompts is imported');
     waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
-    console.log('Should refresh prompted report');
+    // should refresh the report
     PluginRightPanel.refreshFirstObjectFromTheList();
     waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.reportRefreshed);
     PluginRightPanel.closeNotificationOnHover();
   });
 });

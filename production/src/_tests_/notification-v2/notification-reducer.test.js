@@ -284,7 +284,7 @@ describe('Notification reducer', () => {
         // then
         expect(resultState.notifications[0].type).toEqual('SUCCESS');
         expect(resultState.notifications[0].title).toEqual('Import successful');
-        expect(resultState.notifications[0].onHover).toBeDefined();
+        expect(resultState.notifications[0].dismissNotification).toBeDefined();
       });
 
       it('should assign proper method for operation other than remove', () => {
@@ -296,7 +296,7 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialStateProgress, actionForImport);
 
         // when
-        resultState.notifications[0].onHover();
+        resultState.notifications[0].dismissNotification();
 
         // then
         expect(mockedDismissNotification).toBeCalled();
@@ -311,7 +311,7 @@ describe('Notification reducer', () => {
         const resultState = notificationReducer(initialStateProgress, actionForRemove);
 
         // when
-        resultState.notifications[1].onHover();
+        resultState.notifications[1].dismissNotification();
 
         // then
         expect(mockedDismissSuccessfulRemoveNotification).toBeCalled();

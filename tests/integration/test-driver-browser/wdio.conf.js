@@ -24,7 +24,9 @@ exports.config = {
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
       './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
-      './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48134-Part-I-refresh-report-prompt-object-required-defaultanswer.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48134-Part-II-refresh-report-prompt-nested-prompts.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48134-Part-III-refresh-report-prompt-multiple-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
       './test/specs/release-validation/F22955-refresh/TC62619-refresh-edited-object.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
@@ -49,6 +51,7 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59812-tooltip-when-hover-on-button.spec.js',
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
       './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
@@ -79,6 +82,10 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40359-navigation-buttons.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40365-nested-prompt.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -91,6 +98,11 @@ exports.config = {
       './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
       './test/specs/release-validation/F22955-refresh/TC62619-refresh-edited-object.spec.js',
+    ],
+    'F21402-prompt': [
+      './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40359-navigation-buttons.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40365-nested-prompt.spec.js',
     ],
     'F24087-improve-scrolling-performance': [
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
@@ -165,7 +177,16 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
-    ]
+    ],
+    'F21411-right-panel': [
+      '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js'
+    ],
+    'F25931-duplicate-object': [
+      './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
+    ],
+    'F30463-ability-to-sort-on-prepare-data': [
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
+    ],
   },
   // Patterns to exclude.
   exclude: [
@@ -201,7 +222,6 @@ exports.config = {
       // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/slukaszewicz/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
       // debuggerAddress: '127.0.0.1:9222'
-
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
       // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],

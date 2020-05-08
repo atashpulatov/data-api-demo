@@ -438,6 +438,7 @@ describe('NavigationTree Reducer', () => {
     // when
     const newState = navigationTree({
       myLibrary: false,
+      myLibraryFilter: {},
       chosenLibraryElement: { chosenObjectId: '1' }
     }, action);
     // then
