@@ -21,8 +21,15 @@
  * and there will be prop parameter which results in export data funcitionality being hidden or
  * when export functionality starts to work correctly.
  */
-(function () {
-  window.mstrApp.features['web-export-to-excel-privilege'] = false;
-  window.mstrApp.features['web-export-to-pdf-privilege'] = false;
-  window.mstrApp.features['web-export-to-csv-privilege'] = false;
-}());
+const interval = setInterval(function () {
+  if (window.mstrApp.features['web-export-to-excel-privilege'] === false) {
+    console.log('interval success');
+    clearInterval(interval);
+  } else {
+    window.mstrApp.features = {
+      'web-export-to-excel-privilege': false,
+      'web-export-to-pdf-privilege': false,
+      'web-export-to-csv-privilege': false,
+    };
+  }
+}, 1000);
