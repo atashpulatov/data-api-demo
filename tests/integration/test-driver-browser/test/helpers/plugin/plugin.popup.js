@@ -68,10 +68,10 @@ class PluginPopup {
   }
 
   clickRun() {
+    console.log('Should click run button');
     switchToPluginFrame();
     $(popupSelectors.runBtn).waitForExist(3333);
     waitAndClick($(popupSelectors.runBtn));
-    console.log('Run button is clicked');
   }
 
   clickPromptArrow() {

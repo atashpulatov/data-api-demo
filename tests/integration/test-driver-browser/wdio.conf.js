@@ -219,7 +219,7 @@ exports.config = {
     browserName:
       'chrome',
     'goog:chromeOptions': {
-      // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/slukaszewicz/Chrome_Test_Profile"
+      // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
       // debuggerAddress: '127.0.0.1:9222'
       // to run chrome headless the following flags are required
