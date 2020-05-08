@@ -1106,7 +1106,6 @@ class PluginPopup {
    * @param {String} object Name of the object that will be imported
    * @param {String} message Message logged to the console at the beginning of the import
    * @param {boolean} add Boolean value - if true, select "Add data" button, not "Import data"
-   *
    */
   importObjectToCellAndAssertSuccess(cellValue, object, message, add = false) {
     console.log(message);

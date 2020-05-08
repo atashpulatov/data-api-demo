@@ -256,7 +256,6 @@ class PluginRightPanel {
    * Waits for notification, asserts the notification message was displayed and closes the notification
    *
    * @param {String} notificationMessage Notification message that should be displayed
-   *
    */
   waitAndCloseNotification(notificationMessage) {
     waitForNotification();
