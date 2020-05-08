@@ -3,11 +3,7 @@ import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../ut
 import { waitAndClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
-import OfficeWorksheet from '../office/office.worksheet';
-// eslint-disable-next-line import/no-cycle
-import PluginPopup from './plugin.popup';
 import { waitForNotification } from '../utils/wait-helper';
-import { dictionary } from '../../constants/dictionaries/dictionary';
 
 
 class PluginRightPanel {
@@ -256,36 +252,15 @@ class PluginRightPanel {
     expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
   }
 
-
-  /**
-   * Imports an object to particular cell, logs a message at the beginning of action and and asserts whether the import was successful
-   * @param {String} cellValue Cell value to which the object will be imported
-   * @param {String} object Name of the object that will be imported
-   * @param {String} message Message logged to the console at the beginning of the import
-   *
-   * @memberof PluginRightPanel
-   */
-  importObjectToCellAndAssertSuccess(cellValue, object, message) {
-    console.log(message);
-    OfficeWorksheet.selectCell(cellValue);
-    PluginRightPanel.clickAddDataButton();
-    browser.pause(6000);
-    PluginPopup.switchLibraryAndImportObject(object);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-  }
-
   /**
    * Waits for notification, asserts the notification message was displayed and closes the notification
    * @param {String} notificationMessage Notification message that should be displayed
    *
-   * @memberof PluginRightPanel
    */
   waitAndCloseNotification(notificationMessage) {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
-    PluginRightPanel.closeNotificationOnHover();
+    this.closeNotificationOnHover();
   }
 }
 

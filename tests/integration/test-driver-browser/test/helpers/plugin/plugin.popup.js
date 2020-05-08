@@ -11,6 +11,11 @@ import {
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 import { pressTab, pressRightArrow, pressBackspace } from '../utils/keyboard-actions';
+import { waitForNotification } from '../utils/wait-helper';
+import { dictionary } from '../../constants/dictionaries/dictionary';
+import OfficeWorksheet from '../office/office.worksheet';
+import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
+
 
 class PluginPopup {
   searchForObject(objectName) {
@@ -1092,6 +1097,29 @@ class PluginPopup {
       pressRightArrow();
       pressBackspace();
     }
+  }
+
+  /**
+   * Imports an object to particular cell, logs a message at the beginning of action and and asserts whether the import was successful
+   * @param {String} cellValue Cell value to which the object will be imported
+   * @param {String} object Name of the object that will be imported
+   * @param {String} message Message logged to the console at the beginning of the import
+   * @param {boolean} add Boolean value - if true, select "Add data" button, not "Import data"
+   *
+   */
+  importObjectToCellAndAssertSuccess(cellValue, object, message, add = false) {
+    console.log(message);
+    OfficeWorksheet.selectCell(cellValue);
+    if (add) {
+      pluginRightPanel.clickAddDataButton();
+    } else {
+      pluginRightPanel.clickImportDataButton();
+    }
+    browser.pause(6000);
+    this.switchLibraryAndImportObject(object);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    pluginRightPanel.closeNotificationOnHover();
   }
 }
 
