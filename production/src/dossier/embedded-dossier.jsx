@@ -257,7 +257,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       /*
       Height needs to be passed for container because without it, embedded api will set default height: 600px;
       We need to calculate actual height, regarding the size of other elements:
-      58px for header, 9px for header margin and 68px for buttons.
+      58px for header, 19px for header and title margin and 68px for buttons.
       */
       <>
         {loadingFrame && <Empty isLoading />}
