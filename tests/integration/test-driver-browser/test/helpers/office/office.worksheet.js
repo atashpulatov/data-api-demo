@@ -83,6 +83,11 @@ function OfficeWorksheet() {
     return $$(excelSelectors.worksheetsTabs).length;
   };
 
+  this.openSheet = (index) => {
+    switchToExcelFrame();
+    waitAndClick($(excelSelectors.selectsheet(index)));
+  };
+
   this.selectCellAlternatively = (cellId) => {
     switchToExcelFrame();
     waitAndClick($(excelSelectors.findAndSelectBtn));
