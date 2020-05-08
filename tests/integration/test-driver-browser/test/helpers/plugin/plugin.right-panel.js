@@ -47,6 +47,7 @@ class PluginRightPanel {
   }
 
   refreshFirstObjectFromTheList() {
+    console.log('Should refresh first object');
     this.refreshObject(1);
     console.log('First object from the list is refreshed');
   }
@@ -75,6 +76,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   editObject(index) {
+    console.log('Should click Edit');
     switchToPluginFrame();
     const editBtn = rightPanelSelectors.getEdithBtnForObject(index);
     $(editBtn).moveTo();

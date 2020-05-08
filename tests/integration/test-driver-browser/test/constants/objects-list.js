@@ -51,7 +51,8 @@ export const objectsList = {
       sourceName: '01 Basic Report',
       excelTableNameStart: '_01_Basic_Report',
       excelTableFullName: '_01_Basic_Report_TIMESTAMP'
-    }
+    },
+    BasicReportWBrand: 'Basic Report with brand',
   },
 
   datasets: {
@@ -61,6 +62,7 @@ export const objectsList = {
     cubeLimitProject: '500k Sales Records.csv',
     notSupportedCube: 'multi table cube',
     salesRecords1k: '1k Sales Records.csv',
+    salesData: 'Sales Data',
   },
 
   dossiers: {

@@ -28,6 +28,8 @@ exports.config = {
       './test/specs/release-validation/F22955-refresh/TC48134-Part-I-refresh-report-prompt-object-required-defaultanswer.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-II-refresh-report-prompt-nested-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-III-refresh-report-prompt-multiple-prompts.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC62619-refresh-edited-object.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC59877-Highlighting-the-row-on-hover_selection.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
@@ -99,10 +101,9 @@ exports.config = {
       './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
     ],
     'F22955-refresh': [
-      './test/specs/release-validation/F22955-refresh/TC48131-refresh-report.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
-      './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
-      './test/specs/release-validation/F22955-refresh/TC48136-refresh-report-prompt-multiple-prompts.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC62619-refresh-edited-object.spec.js',
     ],
     'F21402-prompt': [
       './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',

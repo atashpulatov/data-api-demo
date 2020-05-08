@@ -36,6 +36,7 @@ class PluginPopup {
   }
 
   clickImport() {
+    console.log('Should click Import button');
     waitAndClick($(popupSelectors.importBtn));
   }
 
@@ -72,6 +73,7 @@ class PluginPopup {
   }
 
   clickRun() {
+    console.log('Should click run button');
     switchToPluginFrame();
     $(popupSelectors.runBtn).waitForExist(3333);
     waitAndClick($(popupSelectors.runBtn));
