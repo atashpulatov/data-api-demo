@@ -1100,7 +1100,8 @@ class PluginPopup {
   }
 
   /**
-   * Imports an object to particular cell, logs a message at the beginning of action and and asserts whether the import was successful
+   * Imports an object to particular cell, logs a message at the beginning of action and asserts whether the import was successful
+   *
    * @param {String} cellValue Cell value to which the object will be imported
    * @param {String} object Name of the object that will be imported
    * @param {String} message Message logged to the console at the beginning of the import
