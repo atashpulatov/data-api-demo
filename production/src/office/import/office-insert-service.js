@@ -71,10 +71,13 @@ class OfficeInsertService {
       // relative to the current range.
       const rowRange = officeTable
         .getDataBodyRange()
-        .getRow(rowIndex)
+        .getRow(0)
+        .getOffsetRange(rowIndex, 0)
         .getResizedRange(splitExcelRows[i].length - 1, 0);
-      rowIndex += splitExcelRows[i].length;
+
       if (!tableColumnsChanged && operationType !== IMPORT_OPERATION && operationType !== DUPLICATE_OPERATION) { rowRange.clear('Contents'); }
+
+      rowIndex += splitExcelRows[i].length;
       rowRange.values = splitExcelRows[i];
       if (isOverLimit) {
         console.time(`Sync for ${splitExcelRows[i].length} rows`);
