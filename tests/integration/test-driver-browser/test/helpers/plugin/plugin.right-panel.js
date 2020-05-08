@@ -150,6 +150,7 @@ class PluginRightPanel {
   }
 
   refreshAll() {
+    console.log('Should refresh all');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.checkBoxAll));
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
