@@ -19,6 +19,7 @@ import {
 } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
 import { incomingErrorStrings } from '../error/constants';
+import { notificationService } from '../notification-v2/notification-service';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -138,7 +139,7 @@ export const RightSidePanelNotConnected = ({
       onSettingsClick={handleSettingsClick}
       confirmationWindow={isConfirm && <Confirmation />}
       globalNotification={globalNotification}
-      onSelectAll={() => sidePanelService.dismissNotifications(notifications)}
+      onSelectAll={notificationService.dismissNotifications}
       shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
     />
   );
