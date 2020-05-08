@@ -17,6 +17,7 @@ import { calculateLoadingProgress } from '../operation/operation-loading-progres
 import { officeContext } from '../office/office-context';
 import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
+import { notificationService } from '../notification-v2/notification-service';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -177,7 +178,7 @@ class SidePanelService {
       if (officeContext.isSetSupported(1.9)) {
         this.eventRemove = excelContext.workbook.tables.onDeleted.add(async (e) => {
           const ObjectToDelete = officeReducerHelper.getObjectFromObjectReducerByBindId(e.tableId);
-          this.removeExistingNotification(ObjectToDelete.objectWorkingId);
+          notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
           await officeApiHelper.checkStatusOfSessions();
           this.remove([ObjectToDelete.objectWorkingId]);
         });
@@ -195,7 +196,9 @@ class SidePanelService {
           );
           const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
 
-          objectsToDelete.forEach((object) => { this.removeExistingNotification(object.objectWorkingId); });
+          objectsToDelete.forEach((object) => {
+            notificationService.removeExistingNotification(object.objectWorkingId);
+          });
 
           this.remove(objectWorkingIds);
         });
@@ -276,37 +279,10 @@ class SidePanelService {
     };
   });
 
-  /**
-   * Manually calls dismissNotification and callback methods from notifications.
-   * This way, it dismisses all provided notifications
-   * Works for notifications concerning finished operations.
-   * For others it doesn't bring any effect.
-   *
-   * @param {Object[]} notifications
-   */
-  dismissNotifications = (notifications) => {
-    notifications.forEach((notification) => {
-      notification.dismissNotification && notification.dismissNotification();
-      notification.callback && notification.callback();
-    });
-  }
-
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
   && objectOperation.operationType !== REMOVE_OPERATION
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
   && objectOperation.operationType !== HIGHLIGHT_OPERATION
-
-  /**
-   * Removes the notification on rightside panel if exist
-   *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-   */
-  removeExistingNotification(objectWorkingId) {
-    const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
-    if (notification) {
-      this.dismissNotifications([notification]);
-    }
-  }
 }
 
 export const sidePanelService = new SidePanelService();

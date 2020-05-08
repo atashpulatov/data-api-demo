@@ -3,11 +3,9 @@ import { mount } from 'enzyme';
 import { ConfirmationNotConnected } from '../../home/confirmation';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { errorService } from '../../error/error-handler';
-import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
-import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { officeRemoveHelper } from '../../office/remove/office-remove-helper';
 import { homeHelper } from '../../home/home-helper';
-import { sidePanelService } from '../../right-side-panel/side-panel-service';
+import { notificationService } from '../../notification-v2/notification-service';
 
 describe('Confirmation', () => {
   afterEach(() => {
@@ -17,7 +15,7 @@ describe('Confirmation', () => {
   it('should call proper methods from secureData when Ok button is clicked', () => {
     // given
     const mockSecureData = jest.spyOn(homeHelper, 'secureData').mockImplementation(() => jest.fn);
-    const mockDismissAll = jest.spyOn(sidePanelService, 'dismissNotifications').mockImplementation(() => jest.fn);
+    const mockDismissAll = jest.spyOn(notificationService, 'dismissNotifications').mockImplementation(() => jest.fn);
     const mockToggleIsConfirmFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
     const confirmationWrapper = mount(<ConfirmationNotConnected
