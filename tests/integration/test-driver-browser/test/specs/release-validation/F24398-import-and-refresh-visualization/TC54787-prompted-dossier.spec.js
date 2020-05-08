@@ -23,7 +23,6 @@ describe('F24398 - Import and refresh visualization', () => {
     console.log('It should import grid visualization');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-
     console.log('Should open dossier');
     PluginPopup.openDossier(objectsList.dossiers.promptedDossier.name);
 
