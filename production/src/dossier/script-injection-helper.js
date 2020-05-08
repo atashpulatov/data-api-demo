@@ -43,6 +43,11 @@ class ScriptInjectionHelper {
    */
   createFileLocation = relativePath => window.location.origin
     + window.location.pathname.replace('index.html', relativePath);
+
+  /**
+   * This function returns false if a document is login page and true otherwise
+   */
+  isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
 }
 
 const scriptInjectionHelper = new ScriptInjectionHelper();
