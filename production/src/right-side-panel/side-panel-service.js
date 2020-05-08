@@ -20,6 +20,7 @@ import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification-v2/notification-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { incomingErrorStrings } from '../error/constants';
 
 const CONNECTION_CHECK_TIMEOUT = 3000;
 
@@ -288,16 +289,34 @@ class SidePanelService {
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
   && objectOperation.operationType !== HIGHLIGHT_OPERATION
 
+  /**
+   * Handles error thrown during invoking side panel actions like refresh, edit etc.
+   * For Webkit based clients (Safari, Excel for Mac) it performs additional operations.
+   * This logic allows us to provide user with connection lost notification
+   *
+   * @param {Object} error Plain error object thrown by method calls.
+   */
+  handleSidePanelActionError = (error) => {
+    const castedError = String(error);
+    const { CONNECTION_BROKEN } = incomingErrorStrings;
+    if (castedError.includes(CONNECTION_BROKEN)) {
+      if (navigator.userAgent.toLowerCase().includes('applewebkit')) {
+        notificationService.connectionLost();
+        this.connectionCheckerLoop();
+      }
+      return;
+    }
+    errorService.handleError(error);
+  }
+
+  /**
+   * This method creates an interval and checkes every CONNECTION_CHECK_TIMOUT seconds
+   * wether the connection has been restored
+   *
+   */
   connectionCheckerLoop = () => {
-    const checkInterval = setInterval(async () => {
-      console.log('in checker loop');
+    const checkInterval = setInterval(() => {
       authenticationHelper.doesConnectionExist(checkInterval);
-      // console.log(connectionExist);
-      // if (connectionExist) {
-      //   console.log('checking connection');
-      //   notificationService.connectionRestored();
-      //   clearInterval(checkInterval);
-      // }
     }, CONNECTION_CHECK_TIMEOUT);
   }
 }

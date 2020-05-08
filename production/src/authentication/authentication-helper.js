@@ -32,7 +32,12 @@ class AuthenticationHelper {
     return this.authenticationService.putSessions(envUrl, authToken);
   }
 
-  doesConnectionExist = async (checkInterval) => {
+  /**
+   * Checks for internet connection by trying to get image resource
+   *
+   * @param {Object} checkInterval id of setInterval required to clear it on connection restored
+   */
+  doesConnectionExist = (checkInterval) => {
     const reduxStoreState = this.reduxStore.getState();
     const { envUrl } = reduxStoreState.sessionReducer;
     const changedUrl = envUrl.slice(0, -3);
@@ -44,9 +49,6 @@ class AuthenticationHelper {
     xhr.send();
 
     const processRequest = (event) => {
-      console.log('in processRequest');
-      console.log(event);
-      console.log(xhr);
       if (xhr.readyState === 4) {
         if (xhr.status >= 200 && xhr.status < 304) {
           notificationService.connectionRestored();
@@ -56,7 +58,7 @@ class AuthenticationHelper {
       }
     };
 
-    return xhr.addEventListener('readystatechange', processRequest, false);
+    xhr.addEventListener('readystatechange', processRequest, false);
   }
 }
 
