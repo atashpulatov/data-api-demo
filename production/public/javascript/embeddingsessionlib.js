@@ -22,14 +22,16 @@
  * when export functionality starts to work correctly.
  */
 const interval = setInterval(function () {
-  if (window.mstrApp.features['web-export-to-excel-privilege'] === false) {
-    console.log('interval success');
-    clearInterval(interval);
-  } else {
-    window.mstrApp.features = {
-      'web-export-to-excel-privilege': false,
-      'web-export-to-pdf-privilege': false,
-      'web-export-to-csv-privilege': false,
-    };
+  console.log('interval step');
+  const { mstrApp } = window;
+  if (mstrApp) {
+    const { features } = mstrApp;
+    if (features) {
+      features['web-export-to-excel-privilege'] = false;
+      features['web-export-to-pdf-privilege'] = false;
+      features['web-export-to-csv-privilege'] = false;
+      clearInterval(interval);
+      console.log('interval success');
+    }
   }
-}, 1000);
+}, 100);
