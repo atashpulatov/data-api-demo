@@ -42,14 +42,14 @@ class StepGetOfficeTableEditRefresh {
       let officeTable;
 
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
-      const { tableColumnsChanged, prevOfficeTable, startCell, } = await officeTableRefresh.getExistingOfficeTableData(
+      const { tableChanged, prevOfficeTable, startCell, } = await officeTableRefresh.getExistingOfficeTableData(
         excelContext,
         oldBindId,
         instanceDefinition,
         previousTableDimensions,
       );
 
-      if (tableColumnsChanged) {
+      if (tableChanged) {
         console.log('Instance definition changed, creating new table');
 
         ({ officeTable, bindId } = await officeTableCreate.createOfficeTable(
@@ -59,7 +59,7 @@ class StepGetOfficeTableEditRefresh {
             startCell,
             tableName,
             prevOfficeTable,
-            tableColumnsChanged,
+            tableChanged,
           }
         ));
       } else {
@@ -79,7 +79,7 @@ class StepGetOfficeTableEditRefresh {
         objectWorkingId,
         officeTable,
         shouldFormat,
-        tableColumnsChanged,
+        tableChanged,
         instanceDefinition,
         startCell,
       };

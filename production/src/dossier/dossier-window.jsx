@@ -260,11 +260,6 @@ DossierWindowNotConnected.propTypes = {
   chosenObjectName: PropTypes.string,
   chosenProjectId: PropTypes.string,
   t: PropTypes.func,
-  mstrData: PropTypes.shape({
-    envUrl: PropTypes.string,
-    authToken: PropTypes.string,
-    promptsAnswers: PropTypes.array || null,
-  }),
   handleBack: PropTypes.func,
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
@@ -282,11 +277,6 @@ DossierWindowNotConnected.defaultProps = {
   chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
   t: (text) => text,
-  mstrData: {
-    envUrl: 'no env url',
-    authToken: null,
-    promptsAnswers: null,
-  },
   handleBack: () => {},
   editedObject: {
     chosenObjectId: undefined,
