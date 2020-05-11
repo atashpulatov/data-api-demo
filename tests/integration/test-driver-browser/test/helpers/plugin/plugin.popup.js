@@ -1125,7 +1125,6 @@ class PluginPopup {
   }
     /**
     * Edits imported report and click re-prompt button
-    *
     */
    editAndOpenReprompt() {
     console.log('Should click edit button');
