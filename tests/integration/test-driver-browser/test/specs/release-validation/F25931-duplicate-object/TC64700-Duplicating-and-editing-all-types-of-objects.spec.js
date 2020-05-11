@@ -15,7 +15,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import officeWorksheet from '../../../helpers/office/office.worksheet';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
 
-describe('[F30463] Ability to sort on prepare data', () => {
+describe('F25931 - Duplicate object', () => {
   beforeAll(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -25,7 +25,7 @@ describe('[F30463] Ability to sort on prepare data', () => {
   });
 
   // Create test for each visType defined in visualizations
-  it(`[TC64700] TC64700-Duplicating-and-editing-all-types-of-objects.spec) `, () => {
+  it(`[TC64700] Duplicating and editing all types of objects) `, () => {
     console.log('Importing Merged Header Report');
     OfficeWorksheet.selectCell('A1');
     pluginRightPanel.clickImportDataButton();
