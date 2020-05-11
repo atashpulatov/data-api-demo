@@ -6,7 +6,8 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
+import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
@@ -18,23 +19,18 @@ describe('F24398 - Import and refresh visualization', () => {
     changeBrowserTab(0);
   });
 
-  it('[TC53560] - Importing grid visualisations - basic scenario', () => {
-    const dossierObject = objectsList.dossiers.complexDossier;
-    const D16 = $('#gridRows > div:nth-child(16) > div:nth-child(4) > div > div');
-
-    // It should import grid visualization
+  it('[TC53439] - Importing selected visualisations with long paths and 1 milion rows', () => {
+    console.log('It should import grid visualization');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importAnyObject(dossierObject.name, 1);
-    browser.pause(5555);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.grid);
 
-    // Assert that import is successfully imported and cell D16 contains '$583,538'
+    console.log('Should open dossier');
+    pluginPopup.importAnyObject(objectsList.dossiers.oneMillionAndLongName.name);
+    browser.pause(5555);
+
+    console.log('Should select and import visualization');
+    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.oneMillionAndLongName.visualization);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-    switchToExcelFrame();
-    OfficeWorksheet.selectCell('D16');
-    expect(D16.getText()).toEqual('$583,538');
   });
 });

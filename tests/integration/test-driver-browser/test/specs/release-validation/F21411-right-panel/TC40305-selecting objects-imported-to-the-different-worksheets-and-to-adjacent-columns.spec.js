@@ -21,7 +21,6 @@ describe('Selecting highlights data - ', () => {
   it('[TC40305] Selecting objects imported to the different worksheets', () => {
     // should import a report
     switchToExcelFrame();
-    console.log('elo');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
