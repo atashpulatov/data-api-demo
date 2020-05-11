@@ -6,6 +6,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
 describe('F25931 - Duplicate object', () => {
   beforeEach(() => {
@@ -14,6 +15,7 @@ describe('F25931 - Duplicate object', () => {
 
   afterEach(() => {
     browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[TC64607] - Duplicate object', () => {
