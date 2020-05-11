@@ -1060,6 +1060,27 @@ class PluginPopup {
       pressBackspace();
     }
   }
+
+  /**
+    * Edits imported report and click re-prompt button
+    *
+    */
+  editAndOpenReprompt() {
+    console.log('Should click edit button');
+    pluginRightPanel.editObject(1);
+    browser.pause(5000);
+    switchToPromptFrame();
+
+    console.log('click reprompt icon');
+    $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
+    $(popupSelectors.dossierWindow.repromptDossier).click();
+    browser.pause(3000);
+
+    console.log('reprompt and import');
+    switchToPromptFrame();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    switchToPromptFrameForImportDossier();
+  }
 }
 
 export default new PluginPopup();
