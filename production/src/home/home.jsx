@@ -24,11 +24,9 @@ export const HomeNotConnected = (props) => {
   } = props;
 
   const handleConnectionRestored = () => {
-    console.log('connection restored');
     notificationService.connectionRestored();
   };
   const handleConnectionLost = () => {
-    console.log('connection lost');
     !popupOpen && notificationService.connectionLost();
   };
 
@@ -77,7 +75,6 @@ export const HomeNotConnected = (props) => {
 
 async function getUserData(authToken) {
   if (authToken) {
-    console.log('saving token');
     homeHelper.saveTokenFromCookies();
     await sessionHelper.getUserInfo();
     await sessionHelper.getUserAttributeFormPrivilege();
