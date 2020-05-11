@@ -34,7 +34,7 @@ class AuthenticationHelper {
   }
 
   /**
-   * Checks for internet connection by trying to get image resource
+   * Checks for internet connection by trying to access image resource
    * Clears the connection notification even if we get error from the server
    *
    * @param {Object} checkInterval id of setInterval required to clear it on connection restored
@@ -53,7 +53,7 @@ class AuthenticationHelper {
         clearInterval(checkInterval);
       })
       .catch((error) => {
-        // if we get any response it means that we are connected
+        // if we get any response status it means that we are connected
         if (error.status) {
           notificationService.connectionRestored();
           clearInterval(checkInterval);

@@ -291,7 +291,8 @@ class SidePanelService {
 
   /**
    * Handles error thrown during invoking side panel actions like refresh, edit etc.
-   * For Webkit based clients (Safari, Excel for Mac) it performs additional operations.
+   * For Webkit based clients (Safari, Excel for Mac)
+   * it checks for network connection with custom implementation
    * This logic allows us to provide user with connection lost notification
    *
    * @param {Object} error Plain error object thrown by method calls.
@@ -311,7 +312,7 @@ class SidePanelService {
 
   /**
    * This method creates an interval and checkes every CONNECTION_CHECK_TIMOUT seconds
-   * wether the connection has been restored
+   * wether the connection to the internet has been restored
    *
    */
   connectionCheckerLoop = () => {
