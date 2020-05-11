@@ -89,25 +89,27 @@ class OfficeTableUpdate {
   updateRows = async (excelContext, prevOfficeTable, newRowsCount) => {
     const tableRows = prevOfficeTable.rows;
 
-    const tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
-    // Delete extra rows if new report is smaller
-    if (newRowsCount < tableRowCount) {
+    let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
+    excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+
+    const totalSumOfRowsToDelete = tableRowCount - newRowsCount;
+    let i = 0;
+
+    while (i * CONTEXT_LIMIT < totalSumOfRowsToDelete) {
+      const sumOfRowsToDeleteInNextStep = tableRowCount - newRowsCount;
+      const rowsToDeleteCount = sumOfRowsToDeleteInNextStep > CONTEXT_LIMIT
+        ? CONTEXT_LIMIT
+        : sumOfRowsToDeleteInNextStep;
       prevOfficeTable
         .getRange()
-        .getRow(newRowsCount + 1)
-        .getResizedRange(tableRowCount - newRowsCount, 0)
-        .clear();
-
+        .getLastRow()
+        .getRowsAbove(rowsToDeleteCount)
+        .delete('Up');
       await excelContext.sync();
-
-      const rowsToRemove = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'items');
-
-      for (let i = tableRowCount - 1; i >= newRowsCount; i--) {
-        rowsToRemove[i].delete();
-        if (i === newRowsCount || i % CONTEXT_LIMIT === 0) {
-          await excelContext.sync();
-        }
-      }
+      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+      tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
+      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+      i++;
     }
   }
 }
