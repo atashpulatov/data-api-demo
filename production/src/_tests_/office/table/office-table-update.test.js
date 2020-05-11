@@ -285,81 +285,74 @@ describe('OfficeTableUpdate', () => {
 
   it('updateRows should work as expected when newRowCount >= tableRowCount', async () => {
     // given
+    const excelContextSyncMock = jest.fn();
+    const suspendApiCalculationUntilNextSyncMock = jest.fn();
+    const excelContextMock = {
+      sync: excelContextSyncMock,
+      workbook: {
+        application: {
+          suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock
+        },
+      },
+    };
     jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue(0);
 
     // when
-    await officeTableUpdate.updateRows('excelContextTest', { rows: 'rowsTest' }, 1);
+    await officeTableUpdate.updateRows(excelContextMock, { rows: 'rowsTest' }, 1);
 
     // then
     expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', 'rowsTest', 'count');
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith(excelContextMock, 'rowsTest', 'count');
+    expect(suspendApiCalculationUntilNextSyncMock).toBeCalledTimes(1);
   });
 
   it.each`
-  expectedRowsNo | expectedExcelContextSyncCallNo | rowsToRemoveParam                                                        | contextLimitParam
+  expectedRowsNo | contextLimitParam | newRowsCount | expectedLoopSteps
   
-  ${2}           | ${2}                           | ${[{ delete: jest.fn() }, { delete: jest.fn() }]}                        | ${500}
-  ${2}           | ${2}                           | ${[{ delete: jest.fn() }, { delete: jest.fn() }]}                        | ${2}
-  ${2}           | ${2}                           | ${[{ delete: jest.fn() }, { delete: jest.fn() }]}                        | ${1}
-  ${3}           | ${2}                           | ${[{ delete: jest.fn() }, { delete: jest.fn() }, { delete: jest.fn() }]} | ${500}
-  ${3}           | ${2}                           | ${[{ delete: jest.fn() }, { delete: jest.fn() }, { delete: jest.fn() }]} | ${3}
-  ${3}           | ${3}                           | ${[{ delete: jest.fn() }, { delete: jest.fn() }, { delete: jest.fn() }]} | ${2}
-  ${3}           | ${3}                           | ${[{ delete: jest.fn() }, { delete: jest.fn() }, { delete: jest.fn() }]} | ${1}
-  
+  ${600}         | ${500}            | ${50}        | ${2}
+  ${20}          | ${100}            | ${9}         | ${1}
+  ${39}          | ${10}             | ${1}         | ${4}
+  ${10000}       | ${500}            | ${484}       | ${20}
+
   `('updateRows should work as expected when newRowCount < tableRowCount',
-  async ({ expectedRowsNo, expectedExcelContextSyncCallNo, rowsToRemoveParam, contextLimitParam }) => {
-    // given
-    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation((excelContext, obj, key) => {
-      if (key === 'count') {
-        return expectedRowsNo;
-      }
-      if (key === 'items') {
-        return rowsToRemoveParam;
-      }
+  async ({ expectedRowsNo, contextLimitParam, newRowsCount, expectedLoopSteps }) => {
+    let i = 0;
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => {
+      const newRowsValue = expectedRowsNo - (i * contextLimitParam);
+      i += 1;
+      return newRowsValue;
     });
-
     const excelContextSyncMock = jest.fn();
-    const excelContextMock = { sync: excelContextSyncMock };
-
-    const clearMock = jest.fn();
-    const getResizedRangeMock = jest.fn().mockReturnValue({
-      clear: clearMock,
-    });
-    const getRowMock = jest.fn().mockReturnValue({
-      getResizedRange: getResizedRangeMock,
+    const suspendApiCalculationUntilNextSyncMock = jest.fn();
+    const excelContextMock = {
+      sync: excelContextSyncMock,
+      workbook: {
+        application: {
+          suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock
+        },
+      },
+    };
+    const deleteMock = jest.fn();
+    const getRowsAboveMock = jest.fn().mockReturnValue({
+      delete: deleteMock
     });
     const prevOfficeTable = {
       rows: 'rowsTest',
       getRange: () => ({
-        getRow: getRowMock,
+        getLastRow: () => ({
+          getRowsAbove: getRowsAboveMock
+        })
       })
     };
-
     mstrObjectRestService.CONTEXT_LIMIT = contextLimitParam;
-
     // when
-    await officeTableUpdate.updateRows(excelContextMock, prevOfficeTable, 1);
-
+    await officeTableUpdate.updateRows(excelContextMock, prevOfficeTable, newRowsCount);
     // then
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(2);
-    expect(officeApiDataLoader.loadSingleExcelData).nthCalledWith(1, excelContextMock, 'rowsTest', 'count');
+    expect(deleteMock).toHaveBeenCalledTimes(expectedLoopSteps);
+    expect(excelContextSyncMock).toHaveBeenCalledTimes(expectedLoopSteps);
+    expect(getRowsAboveMock).toHaveBeenCalledTimes(expectedLoopSteps);
 
-    expect(getRowMock).toBeCalledTimes(1);
-    expect(getRowMock).toBeCalledWith(2);
-    expect(getResizedRangeMock).toBeCalledTimes(1);
-    expect(getResizedRangeMock).toBeCalledWith(expectedRowsNo - 1, 0);
-    expect(clearMock).toBeCalledTimes(1);
-    expect(clearMock).toBeCalledWith();
-
-    for (let i = 1; i < rowsToRemoveParam.length; i++) {
-      const row = rowsToRemoveParam[i];
-      expect(row.delete).toBeCalledTimes(1);
-      expect(row.delete).toBeCalledWith();
-    }
-
-    expect(excelContextSyncMock).toBeCalledTimes(expectedExcelContextSyncCallNo);
-    expect(excelContextSyncMock).toBeCalledWith();
-
-    expect(officeApiDataLoader.loadSingleExcelData).nthCalledWith(2, excelContextMock, 'rowsTest', 'items');
+    const nrOfRowsToDeleteInLastStep = expectedRowsNo - ((expectedLoopSteps - 1) * contextLimitParam) - newRowsCount;
+    expect(getRowsAboveMock).toHaveBeenNthCalledWith(expectedLoopSteps, nrOfRowsToDeleteInLastStep);
   });
 });
