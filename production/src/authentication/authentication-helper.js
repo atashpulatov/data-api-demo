@@ -1,3 +1,4 @@
+import request from 'superagent';
 import { notificationService } from '../notification-v2/notification-service';
 
 class AuthenticationHelper {
@@ -34,6 +35,7 @@ class AuthenticationHelper {
 
   /**
    * Checks for internet connection by trying to get image resource
+   * Clears the connection notification even if we get error from the server
    *
    * @param {Object} checkInterval id of setInterval required to clear it on connection restored
    */
@@ -41,24 +43,22 @@ class AuthenticationHelper {
     const reduxStoreState = this.reduxStore.getState();
     const { envUrl } = reduxStoreState.sessionReducer;
     const changedUrl = envUrl.slice(0, -3);
-    const xhr = new XMLHttpRequest();
     const file = `${changedUrl}static/loader-mstr-office/assets/mstr_logo_32.png`;
     const randomNum = Math.round(Math.random() * 10000);
 
-    xhr.open('HEAD', `${file}?rand=${randomNum}`, true);
-    xhr.send();
-
-    const processRequest = (event) => {
-      if (xhr.readyState === 4) {
-        if (xhr.status >= 200 && xhr.status < 304) {
+    request
+      .head(`${file}?rand=${randomNum}`)
+      .then(() => {
+        notificationService.connectionRestored();
+        clearInterval(checkInterval);
+      })
+      .catch((error) => {
+        // if we get any response it means that we are connected
+        if (error.status) {
           notificationService.connectionRestored();
           clearInterval(checkInterval);
         }
-        return false;
-      }
-    };
-
-    xhr.addEventListener('readystatechange', processRequest, false);
+      });
   }
 }
 
