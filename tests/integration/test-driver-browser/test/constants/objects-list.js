@@ -1,5 +1,6 @@
 export const objectsList = {
   reports: {
+    reportWithLongName: 'Report with very long name - This is a very long text to know what happens when plugging is dealing with files with such a long name it is important to see if it will add three dots at the end or if it is going to display the whole text',
     blankReport: 'Blank Report',
     reportXML: 'Report accessing XML file',
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
@@ -32,6 +33,7 @@ export const objectsList = {
     basicSubtotalsReport: 'Report Totals Subtotals 1',
     categorySubCategory: 'CategorySubCategoryQuarter',
     reportToSortAttributeAndMetrics: 'Report with attributes and metrics to sort',
+    mergedHeaderReport: 'Merged Header Report',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
       reportBasedOnIntelligentCube: 'Report based on cube without subtotals',
@@ -49,7 +51,8 @@ export const objectsList = {
       sourceName: '01 Basic Report',
       excelTableNameStart: '_01_Basic_Report',
       excelTableFullName: '_01_Basic_Report_TIMESTAMP'
-    }
+    },
+    BasicReportWBrand: 'Basic Report with brand',
   },
 
   datasets: {
@@ -59,6 +62,7 @@ export const objectsList = {
     cubeLimitProject: '500k Sales Records.csv',
     notSupportedCube: 'multi table cube',
     salesRecords1k: '1k Sales Records.csv',
+    salesData: 'Sales Data',
   },
 
   dossiers: {
@@ -110,6 +114,10 @@ export const objectsList = {
     promptedDossier: {
       name: 'Prompted dossier',
       visualizations: { vis1: '#mstr106' }
-    }
-  }
+    },
+    oneMillionAndLongName: {
+      name: '1 MILION rows This is a very long name for a dossier so that we can test how we display long path to dossier visualisationsNew Dossier',
+      visualization: '#mstr106'
+    },
+  },
 };

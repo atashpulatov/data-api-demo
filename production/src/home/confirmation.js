@@ -7,11 +7,10 @@ import warningIcon from './assets/icon_conflict.svg';
 import { toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../redux-reducer/office-reducer/office-actions';
 
 import { homeHelper } from './home-helper';
-import { sidePanelService } from '../right-side-panel/side-panel-service';
+import { notificationService } from '../notification-v2/notification-service';
 
 export const ConfirmationNotConnected = ({
   objects,
-  notifications,
   isConfirm,
   toggleIsConfirmFlag,
   t
@@ -69,7 +68,7 @@ export const ConfirmationNotConnected = ({
           </div>
         </div>
         <div className="confirm-buttons">
-          <button className="ant-btn" id="confirm-btn" type="button" onClick={() => clearData(objects, notifications)}>{t('OK')}</button>
+          <button className="ant-btn" id="confirm-btn" type="button" onClick={() => clearData(objects)}>{t('OK')}</button>
           <button className="ant-btn" id="cancel-btn" type="button" onClick={() => toggleIsConfirmFlag(false)}>{t('Cancel')}</button>
         </div>
       </div>
@@ -79,7 +78,6 @@ export const ConfirmationNotConnected = ({
 
 ConfirmationNotConnected.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.shape({})),
-  notifications: PropTypes.arrayOf(PropTypes.shape({})),
   isConfirm: PropTypes.bool,
   toggleIsConfirmFlag: PropTypes.func,
   t: PropTypes.func
@@ -87,16 +85,15 @@ ConfirmationNotConnected.propTypes = {
 
 ConfirmationNotConnected.defaultProps = { t: (text) => text, };
 
-function clearData(objects, notifications) {
-  sidePanelService.dismissNotifications(notifications);
+function clearData(objects) {
+  notificationService.dismissNotifications();
   homeHelper.secureData(objects);
 }
 
 function mapStateToProps({ officeReducer, objectReducer, notificationReducer }) {
   const { objects } = objectReducer;
   const { isConfirm } = officeReducer;
-  const { notifications } = notificationReducer;
-  return { objects, notifications, isConfirm };
+  return { objects, isConfirm };
 }
 
 const mapDispatchToProps = { toggleIsConfirmFlag: toggleIsConfirmFlagImported };

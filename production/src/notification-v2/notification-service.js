@@ -10,6 +10,7 @@ import {
 import officeStoreObject from '../office/store/office-store-object';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 
 class NotificationService {
   init = (reduxStore) => {
@@ -61,8 +62,43 @@ class NotificationService {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
   }
 
-  clearNotifications = () => {
-    this.reduxStore.dispatch(clearNotifications());
+  /**
+   * Removes the notification on rightside panel if exist
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  removeExistingNotification = (objectWorkingId) => {
+    const notification = officeReducerHelper.getNotificationFromNotificationReducer(objectWorkingId);
+    if (notification) {
+      this.callDismissNotification(notification);
+    }
+  }
+
+  /**
+   * Manually calls dismissNotification and callback methods from notifications.
+   * This way, it dismisses all notifications available
+   * Works for notifications concerning finished operations.
+   * For others it doesn't bring any effect.
+   *
+   * @param {Object[]} notifications
+   */
+  dismissNotifications = () => {
+    const currentState = this.reduxStore.getState();
+    const { notifications } = currentState.notificationReducer;
+    notifications.forEach((notification) => {
+      this.callDismissNotification(notification);
+    });
+  }
+
+  /**
+   * Manually calls dismissNotification and callback methods from single notification.
+   * This way, it dismisses notification of provided object
+   *
+   * @param {Object} notification
+   */
+  callDismissNotification = (notification) => {
+    notification.dismissNotification && notification.dismissNotification();
+    notification.callback && notification.callback();
   }
 }
 

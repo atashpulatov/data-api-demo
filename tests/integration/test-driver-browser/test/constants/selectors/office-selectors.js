@@ -10,6 +10,7 @@ export const excelSelectors = {
   manifestInput: '#BrowserFile',
   confirmUpload: '#DialogInstall',
   newSheetBtn: '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-navareaextra > a:nth-child(2)',
+  worksheetsTabs: '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div.ewa-stb-tabarea > ul.ewa-stb-tabs > li',
   mainMenuBtn: '#O365_MainLink_NavMenu',
   newDocumentBtn: '#NewDocumentsButton',
   excelWorkbookBtn: '#ExcelOnline',
@@ -27,6 +28,6 @@ export const excelSelectors = {
   replaceAllBtn: '#buttonarea > button:nth-child(4)',
   refreshAllfinished: '.refresh-header',
   nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a',
-  nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul'
-
+  nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul',
+  selectsheet: (index) => `#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > li:nth-child(${index + 1})`,
 };

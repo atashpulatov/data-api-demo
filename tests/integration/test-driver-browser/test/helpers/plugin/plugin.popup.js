@@ -11,6 +11,11 @@ import {
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
 import { pressTab, pressRightArrow, pressBackspace } from '../utils/keyboard-actions';
+import { waitForNotification } from '../utils/wait-helper';
+import { dictionary } from '../../constants/dictionaries/dictionary';
+import OfficeWorksheet from '../office/office.worksheet';
+import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
+
 
 class PluginPopup {
   searchForObject(objectName) {
@@ -31,6 +36,7 @@ class PluginPopup {
   }
 
   clickImport() {
+    console.log('Should click Import button');
     waitAndClick($(popupSelectors.importBtn));
   }
 
@@ -67,6 +73,7 @@ class PluginPopup {
   }
 
   clickRun() {
+    console.log('Should click run button');
     switchToPluginFrame();
     $(popupSelectors.runBtn).waitForExist(3333);
     waitAndClick($(popupSelectors.runBtn));
@@ -179,7 +186,7 @@ class PluginPopup {
     this.clickImport();
   }
 
-  importAnyObject(objectName, index) {
+  importAnyObject(objectName, index = 1) {
     switchToDialogFrame();
     browser.pause(500);
     this.switchLibrary(false);
@@ -580,6 +587,24 @@ class PluginPopup {
   }
 
   /**
+    * Hovers over the expand button for the given object
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Number} index index of the object in the table
+    * @param {Boolean} isExpanded represents row state collapsed/expanded
+    * @returns {String} tooltip text for the location element
+    *
+    */
+  getExpandButtonTooltipText(index, isExpanded = false) {
+    const expandButtonSelector = !isExpanded ? popupSelectors.expandButton : popupSelectors.expandButtonOpen;
+    $(expandButtonSelector).waitForExist({ timeout: 3000 });
+    const expandButtons = $$(expandButtonSelector);
+    expandButtons[index - 1].moveTo();
+    const expandButtonTooltips = $$(popupSelectors.expandButtonTooltip);
+    return expandButtonTooltips[index - 1].getText();
+  }
+
+  /**
    * copies Object Details from Details panel to clipboard and return the detail value
    * @param {Number} index index of the Detail Table to copy from
    * @returns {String} the detail value
@@ -975,6 +1000,21 @@ class PluginPopup {
   }
 
   /**
+    * Hovers over the ID element in the given details table
+    * to show the tooltip and gets the tooltip text
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @param {Number} timeout the amount of time in ms we wait for DOM to update and show tooltip on hover
+    * @returns {String} tooltip text for the ID element
+    *
+    */
+  getDetailsIDTooltipText(detailsTable, timeout = 3000) {
+    detailsTable.$(popupSelectors.idDetail).moveTo();
+    $(popupSelectors.idDetailTooltip).waitForDisplayed(timeout); // Wait for DOM to update and show tooltip on hover
+    return $(popupSelectors.idDetailTooltip).getText();
+  }
+
+  /**
     * Hovers over the location element in the given details table
     * to show the tooltip and gets the tooltip text
     *
@@ -1059,6 +1099,29 @@ class PluginPopup {
       pressRightArrow();
       pressBackspace();
     }
+  }
+
+  /**
+   * Imports an object to particular cell, logs a message at the beginning of action and asserts whether the import was successful
+   *
+   * @param {String} cellValue Cell value to which the object will be imported
+   * @param {String} object Name of the object that will be imported
+   * @param {String} message Message logged to the console at the beginning of the import
+   * @param {boolean} add Boolean value - if true, select "Add data" button, not "Import data"
+   */
+  importObjectToCellAndAssertSuccess(cellValue, object, message, add = false) {
+    console.log(message);
+    OfficeWorksheet.selectCell(cellValue);
+    if (add) {
+      pluginRightPanel.clickAddDataButton();
+    } else {
+      pluginRightPanel.clickImportDataButton();
+    }
+    browser.pause(6000);
+    this.switchLibraryAndImportObject(object);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    pluginRightPanel.closeNotificationOnHover();
   }
 }
 

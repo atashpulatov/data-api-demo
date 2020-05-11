@@ -13,7 +13,8 @@ export const dictionary = {
     worksheetLimits: 'The table you try to import exceeds the worksheet limits',
     projectLimits: 'This object exceeds the MicroStrategy project row limit. Please contact your administrator.',
     clickToCopy: 'Click to Copy',
-    objectRemoved: 'Object removed'
+    objectRemoved: 'Object removed',
+    duplicateSucces: 'Object duplicated',
   },
   de: {
     importSuccess: 'Import successful',
