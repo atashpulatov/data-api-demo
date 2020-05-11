@@ -29,6 +29,9 @@ class OfficeRemoveHelper {
    removeExcelTable = async (officeTable, excelContext, isCrosstab, crosstabHeaderDimensions = {}, isClear = false) => {
      excelContext.runtime.enableEvents = false;
      await excelContext.sync();
+
+     await this.deleteBy10k(excelContext);
+
      const isClearContentOnly = isClear ? 'contents' : '';
      const tableRange = officeTable.getDataBodyRange();
      excelContext.trackedObjects.add(tableRange);
@@ -54,6 +57,23 @@ class OfficeRemoveHelper {
      excelContext.runtime.enableEvents = true;
      await excelContext.sync();
      excelContext.trackedObjects.remove(tableRange);
+   }
+
+   deleteBy10k = async (context) => {
+     console.log('in delete by 10k');
+     const startIndex = 1;
+     const sheet = context.workbook.worksheets.getItem('Sheet1');
+     let range = `A9000${startIndex}:O10000${startIndex}`;
+     for (let i = 9; i > 0; i--) {
+       console.log(range);
+       const contextRange = sheet.getRange(range);
+       contextRange.delete();
+       await context.sync();
+       range = `A${(startIndex + ((i - 1) * 10000) - (10 - i))}:O${(startIndex + (i * 10000) - (10 - i))}`;
+     }
+     const contextRange = sheet.getRange('A2:O9992');
+     contextRange.delete();
+     await context.sync();
    }
 
   /**
