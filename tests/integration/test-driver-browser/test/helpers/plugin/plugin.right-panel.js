@@ -187,6 +187,14 @@ class PluginRightPanel {
     return nameInput.getText();
   }
 
+  clickMasterCheckbox() {
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+  }
+
+  clickObjectCheckbox(index) {
+    waitAndClick($(rightPanelSelectors.getObjectCheckbox(index)));
+  }
+
   refreshAll() {
     console.log('Should refresh all');
     switchToPluginFrame();
@@ -300,6 +308,29 @@ class PluginRightPanel {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
     this.closeNotificationOnHover();
+  }
+
+  getIconBarTooltipText(objectIndex, iconIndex) {
+    switch (iconIndex) {
+      case 1:
+        $(rightPanelSelectors.getDuplicateBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getDuplicateBtnForObjectTooltip(objectIndex)).getText();
+      case 2:
+        $(rightPanelSelectors.getEdithBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getEdithBtnForObjectTooltip(objectIndex)).getText();
+      case 3:
+        $(rightPanelSelectors.getRefreshBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getRefreshBtnForObjectTooltip(objectIndex)).getText();
+      case 4:
+        $(rightPanelSelectors.getRemoveBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getRemoveBtnForObjectTooltip(objectIndex)).getText();
+      default:
+        console.log('wrong input data');
+    }
   }
 }
 
