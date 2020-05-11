@@ -312,8 +312,10 @@ class PluginRightPanel {
   changeObjectName(index, text) {
     switchToPluginFrame();
     const divNameInput = $(rightPanelSelectors.getNameInputForObject(index));
+    divNameInput.moveTo();
+    browser.pause(2222);
     waitAndDoubleClick(divNameInput);
-    browser.pause(1111);
+    browser.pause(3333);
     const nameText = $(rightPanelSelectors.getNameInputTextForObject(index));
     nameText.clearValue();
     nameText.setValue(text);
