@@ -33,7 +33,7 @@ describe('F25931 - Duplicate object', () => {
     console.log('Save number of worksheets');
     const initialNumberOfWorksheets = OfficeWorksheet.getNumberOfWorksheets();
 
-    console.log('Open duplcate popup for 1st imported object and click edit button in it');
+    console.log('Open duplicate popup for 1st imported object and click edit button in it');
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupEditBtn();
 
