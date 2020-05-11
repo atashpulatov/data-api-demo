@@ -1,3 +1,5 @@
+/* eslint-disable vars-on-top */
+/* eslint-disable no-var */
 /* eslint-disable func-names */
 /* eslint-disable prefer-arrow-callback */
 
@@ -15,23 +17,30 @@
   }, false);
 });
 
+// 500ms for interval step
+var intervalDelay = 500;
+// 10min for max interval period
+var maxIntervalSteps = (10 * 60 * 1000) / intervalDelay;
+var intervalStepCounter = 0;
 /**
- * Temporary inject global variables to embedded dossier iframe, to disable the possibilty of
+ * Inject global variables to embedded dossier iframe, to disable the possibilty of
  * export data from visualiation menu. Remove when DE166960 will be solved from embedded sdk side
- * and there will be prop parameter which results in export data funcitionality being hidden or
- * when export functionality starts to work correctly.
+ * or when export functionality starts to work correctly.
+ *
+ * Interval which tryies to inject the variables runs every @param intervalDelay ms.
+ * It stops running after reaching @param maxIntervalSteps steps or when
+ * the variables are set up to expected values correctly.
  */
-const interval = setInterval(function () {
-  console.log('interval step');
-  const { mstrApp } = window;
-  if (mstrApp) {
-    const { features } = mstrApp;
-    if (features) {
-      features['web-export-to-excel-privilege'] = false;
-      features['web-export-to-pdf-privilege'] = false;
-      features['web-export-to-csv-privilege'] = false;
+var interval = setInterval(function () {
+  intervalStepCounter += 1;
+  if (window.mstrApp) {
+    if (window.mstrApp.features) {
+      window.mstrApp.features['web-export-to-excel-privilege'] = false;
+      window.mstrApp.features['web-export-to-pdf-privilege'] = false;
+      window.mstrApp.features['web-export-to-csv-privilege'] = false;
       clearInterval(interval);
-      console.log('interval success');
     }
+  } else if (intervalStepCounter >= maxIntervalSteps) {
+    clearInterval(interval);
   }
-}, 100);
+}, intervalDelay);
