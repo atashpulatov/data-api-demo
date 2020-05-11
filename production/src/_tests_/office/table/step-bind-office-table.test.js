@@ -12,7 +12,7 @@ describe('StepBindOfficeTable', () => {
 
   it('bindOfficeTable should handle exception', async () => {
     // given
-    const operationData = { tableColumnsChanged: true, };
+    const operationData = { tableChanged: true, };
 
     jest.spyOn(console, 'error');
 
@@ -42,7 +42,7 @@ describe('StepBindOfficeTable', () => {
     const operationData = {
       excelContext: 'excelContextTest',
       officeTable: 'officeTableTest',
-      tableColumnsChanged: true,
+      tableChanged: true,
     };
 
     jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue('tableNameTest');
@@ -80,7 +80,7 @@ describe('StepBindOfficeTable', () => {
     excelContext: 'excelContextTest',
     officeTable: 'officeTableTest',
     operationType,
-    tableColumnsChanged: false,
+    tableChanged: false,
   };
 
   jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue('tableNameTest');

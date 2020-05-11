@@ -231,7 +231,7 @@ RightSidePanelNotConnected.propTypes = {
       startCell: PropTypes.string,
       excelContext: PropTypes.shape({}),
       officeTable: PropTypes.shape({}),
-      tableColumnsChanged: PropTypes.boolean,
+      tableChanged: PropTypes.boolean,
       totalRows: PropTypes.number,
       loadedRows: PropTypes.number,
       shouldFormat: PropTypes.bool,
