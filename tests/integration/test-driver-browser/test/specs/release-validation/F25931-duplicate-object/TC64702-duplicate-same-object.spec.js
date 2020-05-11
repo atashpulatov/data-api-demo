@@ -6,21 +6,15 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
 describe('F25931 - Duplicate object', () => {
-  // let originalTimeout;
-  // beforeEach(() => {
-  // originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-  // jasmine.DEFAULT_TIMEOUT_INTERVAL = 2 * 60 * 1000;
-  //   OfficeLogin.openExcelAndLoginToPlugin();
-  // });
+  beforeEach(() => {
+    OfficeLogin.openExcelAndLoginToPlugin();
+  });
 
-  // afterEach(() => {
-  //   browser.closeWindow();
-  //   changeBrowserTab(0);
-  // jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-  // });
+  afterEach(() => {
+    browser.closeWindow();
+  });
 
   it('[TC64702] - Duplicate same object multiple times', () => {
     console.log('Import seasonalReport');

@@ -6,9 +6,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import {
-  changeBrowserTab, switchToDialogFrame, switchToPluginFrame, switchToExcelFrame
-} from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame, switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('F25931 - Duplicate object', () => {
   beforeEach(() => {
@@ -17,7 +15,6 @@ describe('F25931 - Duplicate object', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    changeBrowserTab(0);
   });
 
   it('[TC64624] - Duplicate with edit', () => {
