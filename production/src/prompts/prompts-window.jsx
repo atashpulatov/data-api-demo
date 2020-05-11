@@ -222,21 +222,16 @@ export class PromptsWindowNotConnected extends Component {
   };
 
   /**
-   * This function returns false if a document is login page and true otherwise
-   */
-  isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
-
-  /**
    * This function is called after a child (iframe) is added into mbedded dossier container
    */
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       this.embeddedDocument = contentDocument;
-      if (!this.isLoginPage(contentDocument)) {
+      if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
         scriptInjectionHelper.applyStyle(contentDocument, 'promptsWindow.css');
+        scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
       }
-      scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
     });
   }
 
