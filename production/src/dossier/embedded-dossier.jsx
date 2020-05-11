@@ -42,7 +42,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
-    this.state = { loadingFrame: true, };
+    this.state = { loadingFrame: true };
   }
 
   componentDidMount() {
