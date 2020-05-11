@@ -40,7 +40,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
   const operationDataMock = {
     objectWorkingId: 'objectWorkingIdTest',
     operationType: 'operationTypeTest',
-    tableColumnsChanged: 'tableColumnsChangedTest',
+    tableChanged: 'tableChangedTest',
     officeTable: 'officeTableTest',
     excelContext: excelContextMock,
     instanceDefinition: {
@@ -205,7 +205,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
       [42, 42],
       0,
       'operationTypeTest',
-      'tableColumnsChangedTest',
+      'tableChangedTest',
       [],
       'headerTest',
       {
@@ -319,7 +319,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
       [42, 42],
       0,
       'operationTypeTest',
-      'tableColumnsChangedTest',
+      'tableChangedTest',
       [],
       'headerOneTest',
       {
@@ -336,7 +336,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
       [42, 42, 42, 42],
       2,
       'operationTypeTest',
-      'tableColumnsChangedTest',
+      'tableChangedTest',
       [],
       'headerTwoTest',
       {
