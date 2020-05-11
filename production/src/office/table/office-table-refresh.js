@@ -1,8 +1,8 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 
-const rowsNumberChangeLimit = 10000;
-const cellsNumberChangeLimit = 100000;
+const ROWS_NUMBER_CHANGE_LIMIT = 10000;
+const CELLS_NUMBER_CHANGE_LIMIT = 100000;
 
 class OfficeTableRefresh {
   /**
@@ -131,8 +131,8 @@ class OfficeTableRefresh {
     const rowsNumberChange = await this.checkRowsNumberChange(prevOfficeTable, excelContext, rows);
     console.log('tableChanged:', tableChanged, rowsNumberChange, rowsNumberChange * columns);
     return tableChanged
-        || rowsNumberChange > rowsNumberChangeLimit
-        || rowsNumberChange * columns > cellsNumberChangeLimit;
+        || rowsNumberChange > ROWS_NUMBER_CHANGE_LIMIT
+        || rowsNumberChange * columns > CELLS_NUMBER_CHANGE_LIMIT;
   };
 
   /**
@@ -159,7 +159,7 @@ class OfficeTableRefresh {
   };
 
   /**
-   * Compares if the number of columns in table has changed.
+   * Compares if the number of rows in table has changed.
    *
    * @param {Object} prevOfficeTable Reference to previous Excel table
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
