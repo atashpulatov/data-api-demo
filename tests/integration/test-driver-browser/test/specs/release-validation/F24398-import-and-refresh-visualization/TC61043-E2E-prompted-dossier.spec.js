@@ -11,12 +11,12 @@ import { switchToPromptFrameForImportDossier, switchToPromptFrame, switchToDialo
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[TC61043] - E2E with dossier containing all types of prompts (including nested prompts)', () => {
