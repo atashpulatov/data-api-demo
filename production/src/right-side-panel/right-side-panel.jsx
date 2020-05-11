@@ -17,8 +17,6 @@ import {
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
-import { errorService } from '../error/error-handler';
-import { incomingErrorStrings } from '../error/constants';
 import { notificationService } from '../notification-v2/notification-service';
 
 export const RightSidePanelNotConnected = ({
@@ -105,11 +103,7 @@ export const RightSidePanelNotConnected = ({
         }
       }
     } catch (error) {
-      const castedError = String(error);
-      const { CONNECTION_BROKEN } = incomingErrorStrings;
-      if (!castedError.includes(CONNECTION_BROKEN)) {
-        errorService.handleError(error);
-      }
+      sidePanelService.handleSidePanelActionError(error);
     }
   };
 
