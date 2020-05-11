@@ -22,9 +22,9 @@
 }
 
 #popup-wrapper .dossier-window .empty  {
-  position: relative;
+  position: fixed;
   left: 0;
-  top: 0;
+  top: 77px;
   width: 100%;
   height: calc(100vh - 145px);
 }
