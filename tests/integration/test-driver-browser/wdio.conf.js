@@ -17,7 +17,7 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/deprecated/sample.spec.js',
+    './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
   ],
   suites: {
     acceptance: [
@@ -54,8 +54,8 @@ exports.config = {
       './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
@@ -144,8 +144,8 @@ exports.config = {
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
     ],
     'F28550-rename-excel-table-without-losing-binding': [
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
     ],
     'TS41441-E2E Sanity checks': [
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
@@ -220,7 +220,7 @@ exports.config = {
     'goog:chromeOptions': {
       // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
-      // debuggerAddress: '127.0.0.1:9222'
+      debuggerAddress: '127.0.0.1:9222'
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
       // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],

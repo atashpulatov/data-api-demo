@@ -49,7 +49,64 @@ export const objectsList = {
       sourceName: '01 Basic Report',
       excelTableNameStart: '_01_Basic_Report',
       excelTableFullName: '_01_Basic_Report_TIMESTAMP'
-    }
+    },
+    bindingInternationalisation: {
+      polish: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Polish Pójdźże, kiń tę chmurność w głąb flaszy!',
+        excelTableNameStart: '_01___________________________________Polish_Pójdźże__kiń_tę_chmurność_w_głąb_flaszy_',
+        excelTableFullName: '_01___________________________________Polish_Pójdźże__kiń_tę_chmurność_w_głąb_flaszy__TIMESTAMP'
+      },
+      german: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» German Zwölf große Boxkämpfer jagen Viktor quer über den Sylter Deich',
+        excelTableNameStart: '_01___________________________________German_Zwölf_große_Boxkämpfer_jagen_Viktor_quer_über_den_Sylter_Deich',
+        excelTableFullName: '_01___________________________________German_Zwölf_große_Boxkämpfer_jagen_Viktor_quer_über_den_Sylter_Deich_TIMESTAMP'
+      },
+      french: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» french Voyez le brick géant que j’examine près du wharf',
+        excelTableNameStart: '_01___________________________________french_Voyez_le_brick_géant_que_j’examine_près_du_wharf',
+        excelTableFullName: '_01___________________________________french_Voyez_le_brick_géant_que_j’examine_près_du_wharf_IMESTAMP'
+      },
+      spanish: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» spanish La cigüeña tocaba cada vez mejor el saxofón y el búho pedía kiwi y queso',
+        excelTableNameStart: '_01___________________________________spanish_La_cigüeña_tocaba_cada_vez_mejor_el_saxofón_y_el_búho_pedía_kiwi_y_queso',
+        excelTableFullName: '_01___________________________________spanish_La_cigüeña_tocaba_cada_vez_mejor_el_saxofón_y_el_búho_pedía_kiwi_y_queso_TIMESTAMP'
+      },
+      japanese: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Japanese いろはにほへと　ちりぬるを　わかよたれそ　つねならむ　うゐのおくやま　けふこえて　あさきゆめみし　ゑひもせす 色は匂へど　散りぬるを　我が世誰ぞ　常ならむ　有為の奥山　今日越えて　浅き夢見じ　酔ひもせず（ん）',
+        excelTableNameStart: '_01___________________________________Japanese_いろはにほへと　ちりぬるを　わかよたれそ　つねならむ　うゐのおくやま　けふこえて　あさきゆめみし　ゑひもせす_色は匂へど　散りぬるを　我が世誰ぞ　常ならむ　有為の奥山　今日越えて　浅き夢見じ　酔ひもせず（ん）',
+        excelTableFullName: '_01___________________________________Japanese_いろはにほへと　ちりぬるを　わかよたれそ　つねならむ　うゐのおくやま　けふこえて　あさきゆめみし　ゑひもせす_色は匂へど　散りぬるを　我が世誰ぞ　常ならむ　有為の奥山　今日越えて　浅き夢見じ　酔ひもせず（ん）_TIMESTAMP'
+      },
+      chineseTraditional: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Chinese Traditional 視野無限廣，窗外有藍天',
+        excelTableNameStart: '_01___________________________________Chinese_Traditional_視野無限廣，窗外有藍天',
+        excelTableFullName: '_01___________________________________Chinese_Traditional_視野無限廣，窗外有藍天_TIMESTAMP'
+      },
+      korean: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» korean 키스의 고유조건은 입술끼리 만나야 하고 특별한 기술은 필요치 않다',
+        excelTableNameStart: '_01___________________________________korean_키스의_고유조건은_입술끼리_만나야_하고_특별한_기술은_필요치_않다',
+        excelTableFullName: '_01___________________________________korean_키스의_고유조건은_입술끼리_만나야_하고_특별한_기술은_필요치_않다_TIMESTAMP'
+      },
+      danish: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Danish Høj bly gom vandt fræk sexquiz på wc',
+        excelTableNameStart: '_01___________________________________Danish_Høj_bly_gom_vandt_fræk_sexquiz_på_wc',
+        excelTableFullName: '_01___________________________________Danish_Høj_bly_gom_vandt_fræk_sexquiz_på_wc_TIMESTAMP'
+      },
+      portuguese: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Portuguese À noite, vovô Kowalsky vê o ímã cair no pé do pingüim queixoso e vovó põe açúcar no chá de tâmaras do jabuti feliz',
+        excelTableNameStart: '_01___________________________________Portuguese_À_noite__vovô_Kowalsky_vê_o_ímã_cair_no_pé_do_pingüim_queixoso_e_vovó_põe_açúcar_no_chá_de_tâmaras_do_jabuti_feliz',
+        excelTableFullName: '_01___________________________________Portuguese_À_noite__vovô_Kowalsky_vê_o_ímã_cair_no_pé_do_pingüim_queixoso_e_vovó_põe_açúcar_no_chá_de_tâmaras_do_jabuti_feliz_TIMESTAMP'
+      },
+      swedish: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Swedish Flygande bäckasiner söka hwila på mjuka tuvor',
+        excelTableNameStart: '_01___________________________________Swedish_Flygande_bäckasiner_söka_hwila_på_mjuka_tuvor',
+        excelTableFullName: '_01___________________________________Swedish_Flygande_bäckasiner_söka_hwila_på_mjuka_tuvor_TIMESTAMP'
+      },
+      chineseSimplified: {
+        sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» Chinese Simplified 中国智造，慧及全球 0123456789',
+        excelTableNameStart: '_01___________________________________Chinese_Simplified_中国智造，慧及全球_0123456789',
+        excelTableFullName: '_01___________________________________Chinese_Simplified_中国智造，慧及全球_0123456789_TIMESTAMP'
+      },
+    },
   },
 
   datasets: {
