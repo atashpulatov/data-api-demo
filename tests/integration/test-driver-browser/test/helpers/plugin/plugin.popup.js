@@ -419,6 +419,8 @@ class PluginPopup {
     if (typeof visContainerId === 'undefined') {
       visSelector = $(popupSelectors.visualizationSelector);
     } else {
+      $(visContainerId).waitForDisplayed(60000, false, `${visContainerId} is not displated`);
+      ($(visContainerId).$(popupSelectors.visualizationSelector)).waitForClickable(60000, false, `${$(visContainerId).$(popupSelectors.visualizationSelector)} is not clicakble`);
       visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
     }
     waitAndClick(visSelector, 40000);
