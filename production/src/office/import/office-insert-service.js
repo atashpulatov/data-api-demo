@@ -30,7 +30,7 @@ class OfficeInsertService {
    * @param {Array} excelRows Array of table data
    * @param {Number} rowIndex Specify from row we should append rows
    * @param {Boolean} isRefresh
-   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
+   * @param {Boolean} tableChanged Specify if table columns has been changed
    * @param {Array} contextPromises Array excel context sync promises.
    * @param {Object} header Contains data for crosstab headers.
    * @param {Object} mstrTable Contains informations about mstr object
@@ -41,11 +41,11 @@ class OfficeInsertService {
     excelRows,
     rowIndex,
     operationType,
-    tableColumnsChanged,
+    tableChanged,
     contextPromises,
     header,
     mstrTable) => {
-    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, operationType);
+    await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableChanged, operationType);
 
     if (mstrTable.isCrosstab) { this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex); }
     contextPromises.push(excelContext.sync());
@@ -58,10 +58,10 @@ class OfficeInsertService {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {Office} officeTable Reference to Excel table
    * @param {Number} rowIndex Specify from row we should append rows
-   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed
+   * @param {Boolean} tableChanged Specify if table columns has been changed
    * @param {Boolean} isRefresh
    */
-  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex, tableColumnsChanged, operationType) => {
+  appendRowsToTable = async (excelRows, excelContext, officeTable, rowIndex, tableChanged, operationType) => {
     console.group('Append rows');
     const isOverLimit = officeInsertSplitHelper.checkIfSizeOverLimit(excelRows);
     const splitExcelRows = officeInsertSplitHelper.getExcelRows(excelRows, isOverLimit);
@@ -71,10 +71,13 @@ class OfficeInsertService {
       // relative to the current range.
       const rowRange = officeTable
         .getDataBodyRange()
-        .getRow(rowIndex)
+        .getRow(0)
+        .getOffsetRange(rowIndex, 0)
         .getResizedRange(splitExcelRows[i].length - 1, 0);
+
+      if (!tableChanged && operationType !== IMPORT_OPERATION && operationType !== DUPLICATE_OPERATION) { rowRange.clear('Contents'); }
+
       rowIndex += splitExcelRows[i].length;
-      if (!tableColumnsChanged && operationType !== IMPORT_OPERATION && operationType !== DUPLICATE_OPERATION) { rowRange.clear('Contents'); }
       rowRange.values = splitExcelRows[i];
       if (isOverLimit) {
         console.time(`Sync for ${splitExcelRows[i].length} rows`);

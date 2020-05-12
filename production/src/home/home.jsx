@@ -23,8 +23,12 @@ export const HomeNotConnected = (props) => {
     loading, popupOpen, authToken, t
   } = props;
 
-  const handleConnectionRestored = () => notificationService.connectionRestored();
-  const handleConnectionLost = () => !popupOpen && notificationService.connectionLost();
+  const handleConnectionRestored = () => {
+    notificationService.connectionRestored();
+  };
+  const handleConnectionLost = () => {
+    !popupOpen && notificationService.connectionLost();
+  };
 
   React.useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
@@ -71,7 +75,6 @@ export const HomeNotConnected = (props) => {
 
 async function getUserData(authToken) {
   if (authToken) {
-    console.log('saving token');
     homeHelper.saveTokenFromCookies();
     await sessionHelper.getUserInfo();
     await sessionHelper.getUserAttributeFormPrivilege();

@@ -16,7 +16,6 @@ class StepApplyFormatting {
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
-   * @param {Boolean} operationData.tableColumnsChanged Determines if columns number in Excel table has been changed
    */
   applyFormatting = async (objectData, operationData) => {
     console.time('Apply formatting');

@@ -19,7 +19,7 @@ describe('[F30463] Ability to sort on prepare data', () => {
   });
 
   // Create test for each visType defined in visualizations
-  it(`[TC63802] E2E-sort-on-prepare-data.spec) `, () => {
+  it(`[TC63802] E2E sort on prepare data) `, () => {
     switchToRightPanelFrame();
     OfficeWorksheet.selectCell('A3');
 

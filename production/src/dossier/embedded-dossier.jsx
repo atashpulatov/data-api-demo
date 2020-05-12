@@ -42,7 +42,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
-    this.state = { loadingFrame: true, };
+    this.state = { loadingFrame: true };
   }
 
   componentDidMount() {
@@ -68,13 +68,15 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       const { handleIframeLoadEvent } = this.props;
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
-      // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
-      const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
-      const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
-      if (!isOfficeOnline && isIE) {
-        scriptInjectionHelper.applyFile(contentDocument, 'javascript/mshtmllib.js');
+      if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
+        // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
+        const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
+        const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
+        if (!isOfficeOnline && isIE) {
+          scriptInjectionHelper.applyFile(contentDocument, 'javascript/mshtmllib.js');
+        }
+        scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
       }
-      scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
     });
   };
 
@@ -255,7 +257,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       /*
       Height needs to be passed for container because without it, embedded api will set default height: 600px;
       We need to calculate actual height, regarding the size of other elements:
-      58px for header, 9px for header margin and 68px for buttons.
+      58px for header, 19px for header and title margin and 68px for buttons.
       */
       <>
         {loadingFrame && <Empty isLoading />}
@@ -326,7 +328,7 @@ const mapStateToProps = (state) => {
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
   const mstrData = {
     envUrl,
-    token: authToken,
+    authToken,
     dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
     projectId: isEdit ? editedObject.projectId : chosenProjectId,
     promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,

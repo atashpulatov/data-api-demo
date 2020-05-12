@@ -43,6 +43,14 @@ class ScriptInjectionHelper {
    */
   createFileLocation = relativePath => window.location.origin
     + window.location.pathname.replace('index.html', relativePath);
+
+  /**
+   * Checks if document is login page of embedded library.
+   *
+   * @param {Document} document content document of embedded dossier iframe.
+   * @returns {Boolean} True if document is login page, false otherwise.
+   */
+  isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
 }
 
 const scriptInjectionHelper = new ScriptInjectionHelper();

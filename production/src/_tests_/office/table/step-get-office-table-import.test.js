@@ -70,7 +70,7 @@ describe('StepGetOfficeTableImport', () => {
       objectWorkingId: 'objectWorkingIdTest',
       officeTable: 'officeTableTest',
       shouldFormat: true,
-      tableColumnsChanged: false,
+      tableChanged: false,
       instanceDefinition: 'instanceDefinitionTest',
       startCell: 'startCellTest',
     });

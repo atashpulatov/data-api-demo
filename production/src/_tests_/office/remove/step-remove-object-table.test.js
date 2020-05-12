@@ -50,7 +50,6 @@ describe('StepRemoveObjectStore', () => {
   }) => {
     // given
     const getItemMock = jest.fn().mockReturnValue({ sth: 42 });
-    const syncMock = jest.fn();
 
     const excelContextMock = {
       workbook: {
@@ -58,7 +57,6 @@ describe('StepRemoveObjectStore', () => {
           getItem: getItemMock,
         }
       },
-      sync: syncMock,
     };
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
@@ -113,9 +111,6 @@ describe('StepRemoveObjectStore', () => {
       expectedIsCrosstab,
       expectedCrosstabHeaderDimensions,
     );
-
-    expect(syncMock).toBeCalledTimes(1);
-    expect(syncMock).toBeCalledWith();
 
     expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeRemoveObjectTable).toBeCalledWith('objectWorkingIdTest');

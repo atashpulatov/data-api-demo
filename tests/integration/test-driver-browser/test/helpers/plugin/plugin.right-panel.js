@@ -3,6 +3,8 @@ import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../ut
 import { waitAndClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
+import { waitForNotification } from '../utils/wait-helper';
+
 
 class PluginRightPanel {
   clickLoginPopUpBtn() {
@@ -45,6 +47,7 @@ class PluginRightPanel {
   }
 
   refreshFirstObjectFromTheList() {
+    console.log('Should refresh first object');
     this.refreshObject(1);
     console.log('First object from the list is refreshed');
   }
@@ -73,6 +76,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   editObject(index) {
+    console.log('Should click Edit');
     switchToPluginFrame();
     const editBtn = rightPanelSelectors.getEdithBtnForObject(index);
     $(editBtn).moveTo();
@@ -103,6 +107,42 @@ class PluginRightPanel {
     duplicatePopupImportBtn.moveTo();
     browser.pause(1000);
     waitAndClick(duplicatePopupImportBtn);
+  }
+
+  /**
+   * Clicks edit button in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  clickDuplicatePopupEditBtn() {
+    switchToPluginFrame();
+    const duplicatePopupEditBtn = $(rightPanelSelectors.duplicatePopupEditBtn);
+    duplicatePopupEditBtn.moveTo();
+    browser.pause(1000);
+    waitAndClick(duplicatePopupEditBtn);
+  }
+
+  /**
+   * Selects active cell option in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  selectActiveCellOptionInDuplicatePopup() {
+    switchToPluginFrame();
+    const activeCellOption = $(rightPanelSelectors.duplicatePopupActiveCellOption);
+    activeCellOption.moveTo();
+    browser.pause(1000);
+    waitAndClick(activeCellOption);
+  }
+
+  /**
+   * Selects new sheet option in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  selectNewSheetOptionInDuplicatePopup() {
+    switchToPluginFrame();
+    const newSheetOption = $(rightPanelSelectors.duplicatePopupNewSheetOption);
+    newSheetOption.moveTo();
+    browser.pause(1000);
+    waitAndClick(newSheetOption);
   }
 
   /**
@@ -148,6 +188,7 @@ class PluginRightPanel {
   }
 
   refreshAll() {
+    console.log('Should refresh all');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.checkBoxAll));
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
@@ -248,6 +289,17 @@ class PluginRightPanel {
     switchToExcelFrame();
     browser.pause(1000); // TODO: Not sure if this is necessary
     expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
+  }
+
+  /**
+   * Waits for notification, asserts the notification message was displayed and closes the notification
+   *
+   * @param {String} notificationMessage Notification message that should be displayed
+   */
+  waitAndCloseNotification(notificationMessage) {
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
+    this.closeNotificationOnHover();
   }
 }
 
