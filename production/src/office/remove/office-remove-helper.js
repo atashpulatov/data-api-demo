@@ -66,14 +66,12 @@ class OfficeRemoveHelper {
 
   deleteBy10kTake2 = async (excelContext, officeTable) => {
     const tableRows = officeTable.rows;
-    const CONTEXT_LIMIT = 10000;
-    const newRowsCount = 0;
+    const rowsToDeleteCount = 10000;
     let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
     excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
-    while (tableRowCount > CONTEXT_LIMIT) {
+    while (tableRowCount >= rowsToDeleteCount) {
       console.log('deleting rows');
-      const rowsToDeleteCount = CONTEXT_LIMIT;
       officeTable
         .getRange()
         .getLastRow()
@@ -85,8 +83,6 @@ class OfficeRemoveHelper {
       console.log(tableRowCount);
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
     }
-    await excelContext.sync();
-
     officeTable.delete();
     await excelContext.sync();
   }
