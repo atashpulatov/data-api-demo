@@ -3,8 +3,6 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 describe('F25931 - Duplicate object', () => {
@@ -22,10 +20,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.seasonalReport);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
-
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     console.log('Save number of worksheets');
     const initialNumberOfWorksheets = OfficeWorksheet.getNumberOfWorksheets();
 
@@ -33,9 +28,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupImportBtn();
     console.log('Check success of duplication');
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.duplicateSucces);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
     console.log('Check name of duplicated object');
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.seasonalReport} Copy`);
 
@@ -43,9 +36,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupImportBtn();
     console.log('Check success of duplication');
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.duplicateSucces);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
     console.log('Check name of duplicated object');
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.seasonalReport} Copy 2`);
 
@@ -53,9 +44,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupImportBtn();
     console.log('Check success of duplication');
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.duplicateSucces);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
     console.log('Check name of duplicated object');
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.seasonalReport} Copy 3`);
 
@@ -63,9 +52,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupImportBtn();
     console.log('Check success of duplication');
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.duplicateSucces);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
     console.log('Check name of duplicated object');
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.seasonalReport} Copy 4`);
 
