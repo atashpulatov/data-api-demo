@@ -72,6 +72,25 @@ export class HomeHelper {
       errorService.handleError(error);
     }
   };
+
+  /**
+   * Checks if we are running on macOS Safari based client
+   * Checking only for webkit or safari is not enought:
+   * https://security.stackexchange.com/questions/126407/why-does-chrome-send-four-browsers-in-the-user-agent-header
+   *
+   */
+  isMacAndSafariBased = () => {
+    const userAgent = navigator.userAgent.toLowerCase();
+
+    const macintosh = userAgent.includes('macintosh');
+    const webkit = userAgent.includes('applewebkit');
+    const safari = userAgent.includes('safari');
+    const chrome = userAgent.includes('chrome');
+
+    const excelForMac = macintosh && webkit && !safari && !chrome;
+    const safariMac = macintosh && webkit && safari && !chrome;
+    return excelForMac || safariMac;
+  }
 }
 
 export const homeHelper = new HomeHelper();

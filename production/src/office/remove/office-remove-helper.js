@@ -3,6 +3,7 @@ import officeStoreObject from '../store/office-store-object';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import officeApiDataLoader from '../api/office-api-data-loader';
+import { homeHelper } from '../../home/home-helper';
 
 class OfficeRemoveHelper {
   /**
@@ -52,8 +53,13 @@ class OfficeRemoveHelper {
     if (!isClear) {
       excelContext.runtime.enableEvents = false;
       await excelContext.sync();
-
-      await this.deleteBy10kTake2(excelContext, officeTable);
+      console.log(navigator.userAgent.toLowerCase().includes('applewebkit'));
+      if (homeHelper.isMacAndSafariBased()) {
+        console.log('running custom delete');
+        await this.deleteTableInChunks(excelContext, officeTable);
+      } else {
+        officeTable.delete();
+      }
 
       excelContext.runtime.enableEvents = true;
     } else {
@@ -64,44 +70,27 @@ class OfficeRemoveHelper {
     await excelContext.sync();
   }
 
-  deleteBy10kTake2 = async (excelContext, officeTable) => {
+  deleteTableInChunks = async (excelContext, officeTable) => {
     const tableRows = officeTable.rows;
-    const rowsToDeleteCount = 10000;
+    const deleteChunkSize = 10000;
     let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
     excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
-    while (tableRowCount > rowsToDeleteCount) {
-      console.log('deleting rows');
+    while (tableRowCount > deleteChunkSize) {
       officeTable
         .getRange()
         .getLastRow()
-        .getRowsAbove(rowsToDeleteCount)
+        .getRowsAbove(deleteChunkSize)
         .delete('Up');
       await excelContext.sync();
+
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
       tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
-      console.log(tableRowCount);
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
     }
+
     officeTable.delete();
     await excelContext.sync();
-  }
-
-  deleteBy10k = async (context) => {
-    console.log('in delete by 10k');
-    const startIndex = 1;
-    const sheet = context.workbook.worksheets.getItem('Sheet1');
-    let range = `A9000${startIndex}:O10000${startIndex}`;
-    for (let i = 9; i > 0; i--) {
-      console.log(range);
-      const contextRange = sheet.getRange(range);
-      contextRange.delete();
-      await context.sync();
-      range = `A${(startIndex + ((i - 1) * 10000) - (10 - i))}:O${(startIndex + (i * 10000) - (10 - i))}`;
-    }
-    const contextRange = sheet.getRange('A2:O9992');
-    contextRange.delete();
-    await context.sync();
   }
 
   /**
