@@ -3,7 +3,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
@@ -39,25 +39,25 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     OfficeWorksheet.selectCell('P1');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.switchLibrary(false);
-    console.log('Should import nested prompt');
     PluginPopup.importPromptDefaultNested(objectsList.reports.nestedPrompt);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
     console.log('check if icon bar is not visible');
-    expect($(rightPanelSelectors.getIconBar(1)).isDisplayed()).toBe(false);
+    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getIconBar(2))).toBe(false);
     console.log('check if number of imported objects in UI is equal to 3');
     expect($(rightPanelSelectors.importedData).getText()).toContain('3');
 
     console.log('hover over the third object');
     $(rightPanelSelectors.getObjectSelector(3)).moveTo();
-    expect($(rightPanelSelectors.getDuplicateBtnForObject(3)).isDisplayed()).toBe(true);
-    expect($(rightPanelSelectors.getEdithBtnForObject(3)).isDisplayed()).toBe(true);
-    expect($(rightPanelSelectors.getRefreshBtnForObject(3)).isDisplayed()).toBe(true);
-    expect($(rightPanelSelectors.getRemoveBtnForObject(3)).isDisplayed()).toBe(true);
+    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getDuplicateBtnForObject(3))).toBe(true);
+    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getEdithBtnForObject(3))).toBe(true);
+    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getRefreshBtnForObject(3))).toBe(true);
+    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getRemoveBtnForObject(3))).toBe(true);
 
     console.log('hover over individual action icons');
+    $(rightPanelSelectors.getObjectSelector(1)).moveTo();
     expect(PluginRightPanel.getIconBarTooltipText(1, 1)).toContain('Duplicate');
     expect(PluginRightPanel.getIconBarTooltipText(1, 2)).toContain('Edit');
     expect(PluginRightPanel.getIconBarTooltipText(1, 3)).toContain('Refresh');
@@ -89,6 +89,8 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     expect($(rightPanelSelectors.refreshAllBtn).isDisplayed()).toBe(true);
     expect($(rightPanelSelectors.deleteAllBtn).isDisplayed()).toBe(true);
 
-    browser.pause(1111);
+    console.log('check if refreshAll and removeAll buttons have correct tooltips');
+    expect(PluginRightPanel.getMasterIconBarTooltipText(1)).toContain('Refresh');
+    expect(PluginRightPanel.getMasterIconBarTooltipText(2)).toContain('Remove');
   });
 });

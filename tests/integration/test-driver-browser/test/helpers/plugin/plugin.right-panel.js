@@ -187,10 +187,18 @@ class PluginRightPanel {
     return nameInput.getText();
   }
 
+  /**
+   * Clicks master checkbox
+   */
   clickMasterCheckbox() {
     waitAndClick($(rightPanelSelectors.checkBoxAll));
   }
 
+  /**
+   * Clicks checkbox for a given object
+   *
+   * @param {Number} index index of an imported object in the right side panel
+   */
   clickObjectCheckbox(index) {
     waitAndClick($(rightPanelSelectors.getObjectCheckbox(index)));
   }
@@ -310,6 +318,26 @@ class PluginRightPanel {
     this.closeNotificationOnHover();
   }
 
+  /**
+   * Checks whether an element is opaque (not transparent)
+   *
+   * @param {String} selector selector for which element to check opacity
+   *
+   * @returns {Boolean} true if an element is opaque, false if an element is transparent
+   */
+  isOpaque(selector) {
+    return $(selector).getCSSProperty('opacity').value === 1;
+  }
+
+  /**
+   * Hovers over icon bar buttons for a given object
+   * to show the tooltip and gets the tooltip text
+   *
+   * @param {Number} objectIndex index of the imported object
+   * @param {Number} iconIndex index of the icon in the icon bar
+   *
+   * @returns {String} tooltip text for a given button
+   */
   getIconBarTooltipText(objectIndex, iconIndex) {
     switch (iconIndex) {
       case 1:
@@ -329,7 +357,30 @@ class PluginRightPanel {
         browser.pause(1000);
         return $(rightPanelSelectors.getRemoveBtnForObjectTooltip(objectIndex)).getText();
       default:
-        console.log('wrong input data');
+        throw new Error('Error in getIconBarTooltipText');
+    }
+  }
+
+  /**
+   * Hovers over master icon bar buttons
+   * to show tooltip and gets tooltip text
+   *
+   * @param {Number} iconIndex index of the icon in the icon bar
+   *
+   * @returns {String} tooltip text for the given button
+   */
+  getMasterIconBarTooltipText(iconIndex) {
+    switch (iconIndex) {
+      case 1:
+        $(rightPanelSelectors.refreshAllBtn).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.refreshAllBtnTooltip).getText();
+      case 2:
+        $(rightPanelSelectors.deleteAllBtn).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.deleteAllBtnTooltip).getText();
+      default:
+        throw new Error('Error in getMasterIconBarTooltipText');
     }
   }
 }
