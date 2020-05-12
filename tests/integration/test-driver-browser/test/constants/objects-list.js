@@ -66,7 +66,7 @@ export const objectsList = {
       french: {
         sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» french Voyez le brick géant que j’examine près du wharf',
         excelTableNameStart: '_01___________________________________french_Voyez_le_brick_géant_que_j’examine_près_du_wharf',
-        excelTableFullName: '_01___________________________________french_Voyez_le_brick_géant_que_j’examine_près_du_wharf_IMESTAMP'
+        excelTableFullName: '_01___________________________________french_Voyez_le_brick_géant_que_j’examine_près_du_wharf_TIMESTAMP'
       },
       spanish: {
         sourceName: '01. • !#$%&\'()*+,-:;<=>@^`{|}~¢£¥¬«» spanish La cigüeña tocaba cada vez mejor el saxofón y el búho pedía kiwi y queso',

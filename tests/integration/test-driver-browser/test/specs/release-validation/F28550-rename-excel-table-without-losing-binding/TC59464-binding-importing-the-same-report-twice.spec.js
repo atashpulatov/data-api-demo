@@ -23,20 +23,20 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
   });
 
   it('[TC59464] - Checking binding for newly imported report with special characters and binding for importing the same report twice', () => {
-    const { basic01Report } = objectsList.reports;
+    const { longReportWithInvalidCharacters } = objectsList.reports;
     OfficeWorksheet.selectCell('A2');
     PluginRightPanel.clickImportDataButton();
 
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
-    PluginPopup.importObject(basic01Report.sourceName);
+    PluginPopup.importObject(longReportWithInvalidCharacters.sourceName);
     browser.pause(10000);
 
     switchToExcelFrame();
     waitAndClick($(excelSelectors.nameBoxDropdownButton), 4000);
-    const importedFirstTableName = $(`[id^=${basic01Report.excelTableNameStart}]> span`).getText(); // searches for the beginning of the id's string only because of changing timestamps at the end
+    const importedFirstTableName = $(`[id^=${longReportWithInvalidCharacters.excelTableNameStart}]> span`).getText(); // searches for the beginning of the id's string only because of changing timestamps at the end
     const normalizedFirstTableName = removeTimestampFromTableName(importedFirstTableName);
-    expect(normalizedFirstTableName).toEqual(basic01Report.excelTableFullName);
+    expect(normalizedFirstTableName).toEqual(longReportWithInvalidCharacters.excelTableFullName);
 
     pressEscape();
     PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
@@ -45,12 +45,12 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
 
     switchToRightPanelFrame();
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.importObject(basic01Report.sourceName);
+    PluginPopup.importObject(longReportWithInvalidCharacters.sourceName);
     browser.pause(10000);
 
     const importedSecondTableName = getTextOfNthObjectOnNameBoxList(2);
     const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
-    expect(normalizedSecondTableName).toEqual(basic01Report.excelTableFullName);
+    expect(normalizedSecondTableName).toEqual(longReportWithInvalidCharacters.excelTableFullName);
 
     pressEscape();
     PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'I2');

@@ -17,6 +17,8 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
+    // './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+
     './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
   ],
   suites: {

@@ -4,9 +4,11 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToDialogFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { objectsList } from '../../../constants/objects-list';
 import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-helper';
+import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelManipulation-helper';
+import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
+import { pressEscape } from '../../../helpers/utils/keyboard-actions';
 
 describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
   beforeEach(() => {
@@ -19,51 +21,37 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
 
   it('[TC61080] - Internationalisation', () => {
     const { bindingInternationalisation } = objectsList.reports;
-    const sourceName = Object.keys(bindingInternationalisation).map(key => ({ [key]: bindingInternationalisation[key].sourceName }));
-    OfficeWorksheet.selectCell('A2');
+    const language = Object.keys(bindingInternationalisation).map(key => ({ [key]: bindingInternationalisation[key] }));
+    const srcNAmes = Object.values(bindingInternationalisation).map(object => object.sourceName);
+    const excelTableNameStarts = Object.values(bindingInternationalisation).map(object => object.excelTableNameStart);
+    const excelTableFullNames = Object.values(bindingInternationalisation).map(object => object.excelTableFullName);
+    let isFirstReport = true;
 
-    Object.keys(sourceName).forEach(i => {
-      OfficeWorksheet.selectCell('A1');
-      let isFirstReport = true;
+
+    Object.keys(language).forEach(i => {
+      OfficeWorksheet.selectCell('A2');
       if (isFirstReport) {
         PluginRightPanel.clickImportDataButton();
         isFirstReport = false;
       } else {
         PluginRightPanel.clickAddDataButton();
       }
-      const excelTableNameStart = Object.keys(bindingInternationalisation).map(key => ({ [key]: bindingInternationalisation[key].excelTableNameStart }));
-      console.log(excelTableNameStart[i]);
-      const test = Object.keys(sourceName[i])[0];
-      const visSelector = sourceName[i][test];
-
+      console.log(`Should import ${srcNAmes[i]}`);
       PluginPopup.switchLibrary(false);
-      PluginPopup.importObject(visSelector);
+      PluginPopup.importObject(srcNAmes[i]);
+      browser.pause(10000);
 
-      // switchToExcelFrame();
-      // waitAndClick($(excelSelectors.nameBoxDropdownButton), 4000);
+      console.log('Assert binding');
+      const importedSecondTableName = getTextOfNthObjectOnNameBoxList(i - 1);
+      const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
+      expect(normalizedSecondTableName).toEqual(excelTableFullNames[i]);
 
-      // const importedTableName = $(`[id^=${bindingInternationalisation.excelTableNameStart}]> span`).getText();
-      // const normalizedTableName = removeTimestampFromTableName(importedTableName);
-      // expect(normalizedTableName).toEqual(bindingInternationalisation.excelTableFullName);
+      pressEscape();
+      PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
 
+      console.log(`Open new sheet`);
+      OfficeWorksheet.openNewSheet();
+      browser.pause(1000);
     });
-    // console.log(bindingInternationalisation.language[1]);
-
-    // PluginRightPanel.clickImportDataButton();
-    // browser.pause(4000);
-
-    // PluginPopup.importAnyObject(bindingInternationalisation.sourceName);
-    // browser.pause(4000);
-
-    // switchToExcelFrame();
-    // waitAndClick($(excelSelectors.nameBoxDropdownButton), 4000);
-
-    // const importedTableName = $(`[id^=${bindingInternationalisation.excelTableNameStart}]> span`).getText();
-    // const normalizedTableName = removeTimestampFromTableName(importedTableName);
-    // expect(normalizedTableName).toEqual(bindingInternationalisation.excelTableFullName);
-    browser.pause(100);
-    console.log(`${test} successfully imported`);
-    OfficeWorksheet.openNewSheet();
-    browser.pause(1000);
   });
 });
