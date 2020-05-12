@@ -70,7 +70,7 @@ class OfficeRemoveHelper {
     let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
     excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
-    while (tableRowCount >= rowsToDeleteCount) {
+    while (tableRowCount > rowsToDeleteCount) {
       console.log('deleting rows');
       officeTable
         .getRange()
