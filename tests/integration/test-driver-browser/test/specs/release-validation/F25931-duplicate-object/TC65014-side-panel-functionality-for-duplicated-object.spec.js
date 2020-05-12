@@ -28,8 +28,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.clickObjectInRightPanel(1);
 
     console.log('Changing the name of duplicated report');
-    const name = 'This is a veeery long text that would exceed the limit of the input text field';
-    PluginRightPanel.changeObjectName(1, name);
+    PluginRightPanel.changeObjectName(1, dictionary.en.longText);
 
     console.log('Highligting the name of duplicated report');
     switchToPluginFrame();

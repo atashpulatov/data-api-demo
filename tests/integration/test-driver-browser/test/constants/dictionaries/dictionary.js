@@ -15,6 +15,7 @@ export const dictionary = {
     clickToCopy: 'Click to Copy',
     objectRemoved: 'Object removed',
     duplicateSucces: 'Object duplicated',
+    longText: 'This is a veeery long text that would exceed the limit of the input text field',
   },
   de: {
     importSuccess: 'Import successful',
