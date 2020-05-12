@@ -1,4 +1,5 @@
 import { popupTypes } from '@mstr/rc';
+import request from 'superagent';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import officeStoreObject from '../office/store/office-store-object';
@@ -18,6 +19,10 @@ import { officeContext } from '../office/office-context';
 import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification-v2/notification-service';
+import { authenticationHelper } from '../authentication/authentication-helper';
+import { incomingErrorStrings } from '../error/constants';
+
+const CONNECTION_CHECK_TIMEOUT = 3000;
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -284,9 +289,41 @@ class SidePanelService {
   });
 
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
-    && objectOperation.operationType !== REMOVE_OPERATION
-    && objectOperation.operationType !== CLEAR_DATA_OPERATION
-    && objectOperation.operationType !== HIGHLIGHT_OPERATION
+  && objectOperation.operationType !== REMOVE_OPERATION
+  && objectOperation.operationType !== CLEAR_DATA_OPERATION
+  && objectOperation.operationType !== HIGHLIGHT_OPERATION
+
+  /**
+   * Handles error thrown during invoking side panel actions like refresh, edit etc.
+   * For Webkit based clients (Safari, Excel for Mac)
+   * it checks for network connection with custom implementation
+   * This logic allows us to provide user with connection lost notification
+   *
+   * @param {Object} error Plain error object thrown by method calls.
+   */
+  handleSidePanelActionError = (error) => {
+    const castedError = String(error);
+    const { CONNECTION_BROKEN } = incomingErrorStrings;
+    if (castedError.includes(CONNECTION_BROKEN)) {
+      if (navigator.userAgent.toLowerCase().includes('applewebkit')) {
+        notificationService.connectionLost();
+        this.connectionCheckerLoop();
+      }
+      return;
+    }
+    errorService.handleError(error);
+  }
+
+  /**
+   * This method creates an interval and checkes every CONNECTION_CHECK_TIMOUT seconds
+   * wether the connection to the internet has been restored
+   *
+   */
+  connectionCheckerLoop = () => {
+    const checkInterval = setInterval(() => {
+      authenticationHelper.doesConnectionExist(checkInterval);
+    }, CONNECTION_CHECK_TIMEOUT);
+  }
 }
 
 export const sidePanelService = new SidePanelService();

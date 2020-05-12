@@ -17,16 +17,16 @@ class StepBindOfficeTable {
    * @param {String} objectData.bindId Unique id of the Office table used for referencing the table in Excel
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
-   * @param {Boolean} operationData.tableColumnsChanged Determines if columns number in Excel table has been changed
+   * @param {Boolean} operationData.tableChanged Determines if columns number in Excel table has been changed
    */
   bindOfficeTable = async (objectData, operationData) => {
     try {
       const { bindId, objectWorkingId } = objectData;
       const {
-        excelContext, officeTable, operationType, tableColumnsChanged
+        excelContext, officeTable, operationType, tableChanged
       } = operationData;
 
-      if (tableColumnsChanged || operationType === DUPLICATE_OPERATION || operationType === IMPORT_OPERATION) {
+      if (tableChanged || operationType === DUPLICATE_OPERATION || operationType === IMPORT_OPERATION) {
         const tableName = await officeApiDataLoader.loadSingleExcelData(excelContext, officeTable, 'name');
 
         await officeApiHelper.bindNamedItem(tableName, bindId);
