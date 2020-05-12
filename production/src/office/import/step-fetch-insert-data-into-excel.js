@@ -23,7 +23,7 @@ class StepFetchInsertDataIntoExcel {
    * @param {Object} [objectData.visualizationInfo] Information about location of visualization in dossier
    * @param {Object} objectData.displayAttrFormNames The style in which attribute form will be displayed
    * @param {Office} operationData.operationType The type of the operation that called this function
-   * @param {Boolean} operationData.tableColumnsChanged Determines if columns number in Excel table has been changed
+   * @param {Boolean} operationData.tableChanged Determines if columns number in Excel table has been changed
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {String} operationData.instanceDefinition Object containing information about MSTR object
    */
@@ -32,7 +32,7 @@ class StepFetchInsertDataIntoExcel {
       const { objectWorkingId, subtotalsInfo, subtotalsInfo: { importSubtotal = true } } = objectData;
       const {
         operationType,
-        tableColumnsChanged,
+        tableChanged,
         excelContext,
         officeTable,
         instanceDefinition,
@@ -63,7 +63,7 @@ class StepFetchInsertDataIntoExcel {
           row,
           rowIndex,
           operationType,
-          tableColumnsChanged,
+          tableChanged,
           contextPromises,
           header,
           mstrTable

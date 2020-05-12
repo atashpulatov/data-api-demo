@@ -95,6 +95,7 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js'
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -144,6 +145,8 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59812-tooltip-when-hover-on-button.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59676-ellipsis-longer-strings.spec.js',
     ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
@@ -205,7 +208,10 @@ exports.config = {
     ],
     'F21409-refresh-all': [
       './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js'
-    ]
+    ],
+    'F25943-refresh-move-to-add-in-side-panel': [
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
+    ],
   },
   // Patterns to exclude.
   exclude: [

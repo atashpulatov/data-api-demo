@@ -31,7 +31,7 @@ class StepGetOfficeTableImport {
         objectWorkingId,
         officeTable,
         shouldFormat: true,
-        tableColumnsChanged: false,
+        tableChanged: false,
         instanceDefinition,
         startCell,
       };
