@@ -2,6 +2,7 @@
 import officeStoreObject from '../store/office-store-object';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
+import officeApiDataLoader from '../api/office-api-data-loader';
 
 class OfficeRemoveHelper {
   /**
@@ -52,7 +53,7 @@ class OfficeRemoveHelper {
        excelContext.runtime.enableEvents = false;
        await excelContext.sync();
 
-       await this.deleteBy10k(excelContext);
+       await this.deleteBy10kTake2(excelContext, officeTable);
 
        excelContext.runtime.enableEvents = true;
      } else {
@@ -62,6 +63,33 @@ class OfficeRemoveHelper {
      excelContext.trackedObjects.remove(tableRange);
      await excelContext.sync();
    }
+
+deleteBy10kTake2 = async (excelContext, officeTable) => {
+  const tableRows = officeTable.rows;
+  const CONTEXT_LIMIT = 10000;
+  const newRowsCount = 0;
+  let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
+  excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+
+  while (tableRowCount) {
+    console.log('deleting rows');
+    const rowsToDeleteCount = tableRowCount > CONTEXT_LIMIT
+      ? CONTEXT_LIMIT // 500
+      : tableRowCount - 1;
+    officeTable
+      .getRange()
+      .getLastRow()
+      .getRowsAbove(rowsToDeleteCount)
+      .delete('Up');
+    await excelContext.sync();
+    excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+    tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
+    console.log(tableRowCount);
+    excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+  }
+  officeTable.delete();
+  await excelContext.sync();
+}
 
    deleteBy10k = async (context) => {
      console.log('in delete by 10k');
