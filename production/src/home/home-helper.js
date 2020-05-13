@@ -83,11 +83,11 @@ export class HomeHelper {
   isMacAndSafariBased = () => {
     const userAgent = navigator.userAgent.toLowerCase();
 
-    const macintosh = userAgent.includes('macintosh');
-    const webkit = userAgent.includes('applewebkit');
-    const chrome = userAgent.includes('chrome');
+    const isMacintosh = userAgent.includes('macintosh');
+    const isWebkit = userAgent.includes('applewebkit');
+    const isChrome = userAgent.includes('chrome');
 
-    return macintosh && webkit && !chrome;
+    return isMacintosh && isWebkit && !isChrome;
   }
 }
 
