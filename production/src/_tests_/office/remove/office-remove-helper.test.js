@@ -67,9 +67,8 @@ describe('OfficeRemoveHelper', () => {
         })
       })
     };
-    // mstrObjectRestService.CONTEXT_LIMIT = contextLimitParam;
     // when
-    await officeRemoveHelper.deleteRowsInChunks(excelContextMock, prevOfficeTable, 10, newRowsCount);
+    await officeRemoveHelper.deleteRowsInChunks(excelContextMock, prevOfficeTable, contextLimitParam, newRowsCount);
     // then
     expect(deleteMock).toHaveBeenCalledTimes(expectedLoopSteps);
     expect(excelContextSyncMock).toHaveBeenCalledTimes(expectedLoopSteps);
