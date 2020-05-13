@@ -10,12 +10,12 @@ import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('[F22954] - Ability to edit data already imported to the workbook', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[TC48339]  Editing an imported dataset', () => {

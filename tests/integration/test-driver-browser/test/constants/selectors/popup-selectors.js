@@ -123,6 +123,10 @@ export const popupSelectors = {
     prompt7: '#id_mstr317 .mstrBGIcon_tbAddAll',
     prompt8: '#id_mstr201 .mstrCalendarAndTimePickerCellTextBox',
     prompt9: '#id_mstr275ListContainer > div.mstrListBlockItem > div',
+    prompt10: '#id_mstr239 > div.mstrExprEditorContents > div',
+    prompt11: '#id_mstr278_txt',
+    prompt12: '#id_mstr329_txt',
+    prompt13: '.mstrBGIcon_tbAdd',
   },
   filterPanel: {
     expandButton: '.expand-btn',

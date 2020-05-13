@@ -9,12 +9,12 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 
 describe('[F22954] - Ability to edit data already imported to the workbook', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[TC62676] Editing prompted reports functionality while report contains nested prompts imported without Prepare Data', () => {

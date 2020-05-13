@@ -13,12 +13,12 @@ import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('[F22954] - Ability to edit data already imported to the workbook', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[TC62674]  Editing prompted reports functionality, for all type of prompts (value, object, expression, etc) imported with Prepare Data', () => {
@@ -49,7 +49,7 @@ describe('[F22954] - Ability to edit data already imported to the workbook', () 
     console.log('Prompt 4 selected');
 
     browser.pause(3111);
-    $(popupSelectors.promptedAll.prompt9).click();
+    $(popupSelectors.promptedAll.prompt10).click();
     console.log('Prompt 5 selected');
 
     browser.pause(1111);
@@ -61,14 +61,14 @@ describe('[F22954] - Ability to edit data already imported to the workbook', () 
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt4, '1820');
     console.log('Prompt 7 selected');
 
-    browser.pause(1111);
-    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt5, '11/6/2016');
+    browser.pause(2111);
+    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt11, '11/06/2016');
     $(popupSelectors.promptPanel(9)).click();
     console.log('Prompt 8 selected');
 
     browser.pause(2111);
-    $(popupSelectors.promptedAll.prompt6).clearValue();
-    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt6, '2016');
+    $(popupSelectors.promptedAll.prompt12).clearValue();
+    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt12, '2016');
     $(popupSelectors.promptPanel(10)).click();
     console.log('Prompt 9 selected');
 
@@ -78,7 +78,7 @@ describe('[F22954] - Ability to edit data already imported to the workbook', () 
     console.log('Prompt 10 selected');
 
     browser.pause(1111);
-    $(popupSelectors.promptedAll.prompt7).click();
+    $(popupSelectors.promptedAll.prompt13).click();
     console.log('Prompt 11 selected and all prompts are selected correctly');
 
     // should click run and select attributes metrics filters
@@ -99,7 +99,7 @@ describe('[F22954] - Ability to edit data already imported to the workbook', () 
     PluginRightPanel.editObject(1);
     browser.pause(1000);
     switchToPluginFrame();
-    browser.pause(5555); // temp solution
+    browser.pause(5555);
     PluginPopup.clickRun();
     browser.pause(1000);
     PluginPopup.selectObjectElements(['Region']);
