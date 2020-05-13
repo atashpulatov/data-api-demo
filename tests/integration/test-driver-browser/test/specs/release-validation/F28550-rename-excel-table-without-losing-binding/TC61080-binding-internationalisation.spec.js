@@ -10,17 +10,17 @@ import { pressEscape } from '../../../helpers/utils/keyboard-actions';
 
 describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
   beforeEach(() => {
-    OfficeLogin.openExcelAndLoginToPlugin();
+    // OfficeLogin.openExcelAndLoginToPlugin();
   });
   afterEach(() => {
-    browser.closeWindow();
-    changeBrowserTab(0);
+    // browser.closeWindow();
+    // changeBrowserTab(0);
   });
 
   it('[TC61080] - Internationalisation', () => {
     const { bindingInternationalisation } = objectsList.reports;
     const language = Object.keys(bindingInternationalisation).map(key => ({ [key]: bindingInternationalisation[key] }));
-    const srcNAmes = Object.values(bindingInternationalisation).map(object => object.sourceName);
+    const sourceNames = Object.values(bindingInternationalisation).map(object => object.sourceName);
     const excelTableFullNames = Object.values(bindingInternationalisation).map(object => object.excelTableFullName);
     let isFirstReport = true;
 
@@ -34,9 +34,9 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
         PluginRightPanel.clickAddDataButton();
       }
 
-      console.log(`Should import ${srcNAmes[i]}`);
+      console.log(`Should import ${sourceNames[i]}`);
       PluginPopup.switchLibrary(false);
-      PluginPopup.importObject(srcNAmes[i]);
+      PluginPopup.importObject(sourceNames[i]);
       browser.pause(10000);
 
       console.log('Assert binding');
@@ -48,9 +48,9 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
       pressEscape();
       PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
 
-      // afterEach
+      console.log('Should open new sheet');
       browser.pause(100);
-      console.log(`${srcNAmes[i]} successfully imported`);
+      console.log(`${sourceNames[i]} successfully imported`);
       OfficeWorksheet.openNewSheet();
       browser.pause(1000);
     });
