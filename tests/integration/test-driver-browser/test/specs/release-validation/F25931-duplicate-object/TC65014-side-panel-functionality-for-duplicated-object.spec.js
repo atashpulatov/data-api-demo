@@ -5,6 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { stringsUsedInSpecs } from '../../../constants/strings-used-in-specs';
 
 describe('F25931 - Duplicate object', () => {
   beforeAll(() => {
@@ -28,7 +29,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.clickObjectInRightPanel(1);
 
     console.log('Changing the name of duplicated report');
-    PluginRightPanel.changeObjectName(1, dictionary.en.longText);
+    PluginRightPanel.changeObjectName(1, stringsUsedInSpecs.longText);
 
     console.log('Highligting the name of duplicated report');
     switchToPluginFrame();
