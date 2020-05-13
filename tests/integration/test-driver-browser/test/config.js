@@ -1,16 +1,18 @@
 
 const settings = {
   officeOnline: {
-    username:'test3@mstrtesting.onmicrosoft.com',
-    password:'FordFocus2019',
-    url:'https://www.office.com/launch/excel?auth=2',
+    username: 'test3@mstrtesting.onmicrosoft.com',
+    password: 'FordFocus2019',
+    url: 'https://www.office.com/launch/excel?auth=2',
   },
   env: {
     hostname: getEnvironment(),
     username: 'a',
     password: '',
+    chineseUser: 'User_SChinese',
+    germanUser: 'User_German',
   }
-}
+};
 
 /**
  * It checks if last parameter contains "env-#######" if not it returns localhost
