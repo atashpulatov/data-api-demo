@@ -243,6 +243,28 @@ class PluginPopup {
     }
   }
 
+  /**
+   * This function is used for report with nested prompts.
+   * It click on edit for the first object from the list.
+   * After that it is clicking run for all nested default prompts.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   */
+
+  editPromptDefaultNested(index = 1) {
+    pluginRightPanel.editObject(index);
+    browser.pause(5555);
+    while (true) {
+      browser.pause(3000);
+      switchToPluginFrame();
+      if ($(popupSelectors.runBtn).isExisting()) {
+        this.clickRun();
+      } else {
+        break;
+      }
+    }
+  }
+
   isViewSelected() {
     return $(popupSelectors.viewSelected).getAttribute('class') === 'ant-switch ant-switch-checked';
   }
