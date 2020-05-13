@@ -9,6 +9,7 @@ import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelMan
 import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
 import { pressEscape } from '../../../helpers/utils/keyboard-actions';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
   beforeEach(() => {
@@ -36,20 +37,25 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
       } else {
         PluginRightPanel.clickAddDataButton();
       }
+
       console.log(`Should import ${srcNAmes[i]}`);
       PluginPopup.switchLibrary(false);
       PluginPopup.importObject(srcNAmes[i]);
       browser.pause(10000);
 
       console.log('Assert binding');
-      const importedSecondTableName = getTextOfNthObjectOnNameBoxList(i - 1);
+      const number = Number(i) + 1;
+      const importedSecondTableName = getTextOfNthObjectOnNameBoxList(number);
       const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
+      console.log(excelTableFullNames[i]);
       expect(normalizedSecondTableName).toEqual(excelTableFullNames[i]);
 
       pressEscape();
       PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
 
-      console.log(`Open new sheet`);
+      // afterEach
+      browser.pause(100);
+      console.log(`${srcNAmes[i]} successfully imported`);
       OfficeWorksheet.openNewSheet();
       browser.pause(1000);
     });
