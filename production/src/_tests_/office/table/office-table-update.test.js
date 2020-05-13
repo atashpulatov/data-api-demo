@@ -4,6 +4,7 @@ import * as mstrObjectRestService from '../../../mstr-object/mstr-object-rest-se
 import { officeApiCrosstabHelper } from '../../../office/api/office-api-crosstab-helper';
 import officeTableHelperRange from '../../../office/table/office-table-helper-range';
 import officeFormatSubtotals from '../../../office/format/office-format-subtotals';
+import { officeRemoveHelper } from '../../../office/remove/office-remove-helper';
 
 describe('OfficeTableUpdate', () => {
   let contextLimitOriginal;
@@ -85,7 +86,7 @@ describe('OfficeTableUpdate', () => {
 
     jest.spyOn(officeTableUpdate, 'setHeaderValuesNoCrosstab').mockImplementation();
 
-    jest.spyOn(officeTableUpdate, 'updateRows').mockImplementation();
+    jest.spyOn(officeRemoveHelper, 'deleteRowsInChunks').mockImplementation();
 
     const excelContextSyncMock = jest.fn();
     const excelContextMock = { sync: excelContextSyncMock };
@@ -125,8 +126,10 @@ describe('OfficeTableUpdate', () => {
       );
     }
 
-    expect(officeTableUpdate.updateRows).toBeCalledTimes(1);
-    expect(officeTableUpdate.updateRows).toBeCalledWith(excelContextMock, prevOfficeTableMock, 'rowsTest');
+    expect(officeRemoveHelper.deleteRowsInChunks).toBeCalledTimes(1);
+    expect(officeRemoveHelper.deleteRowsInChunks).toBeCalledWith(
+      excelContextMock, prevOfficeTableMock, 500, 'rowsTest'
+    );
 
     expect(result).toEqual(prevOfficeTableMock);
   });
