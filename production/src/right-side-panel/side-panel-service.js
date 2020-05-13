@@ -70,7 +70,9 @@ class SidePanelService {
    */
   refresh = (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-      this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+      setTimeout(() => {
+        this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+      }, 0);
     });
   };
 
@@ -82,7 +84,9 @@ class SidePanelService {
    */
   remove = async (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-      this.reduxStore.dispatch(removeRequested(objectWorkingId));
+      setTimeout(() => {
+        this.reduxStore.dispatch(removeRequested(objectWorkingId));
+      }, 0);
     });
   };
 
