@@ -11,7 +11,7 @@ import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('F21402 - Handle Prompted Object', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
   afterEach(() => {
     browser.closeWindow();
