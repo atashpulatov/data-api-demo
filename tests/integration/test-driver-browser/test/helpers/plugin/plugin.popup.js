@@ -119,7 +119,7 @@ class PluginPopup {
    */
   selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
-      waitAndClick($(`input[name="${elements[i]}"]`));
+      waitAndClick($(`span=${elements[i]}`));
     }
   }
 
