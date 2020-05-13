@@ -78,6 +78,7 @@ export class HomeHelper {
    * Checking only for webkit or safari is not enought:
    * https://security.stackexchange.com/questions/126407/why-does-chrome-send-four-browsers-in-the-user-agent-header
    *
+   * @returns {boolean} true if user agent is instance of mac desktop or safari
    */
   isMacAndSafariBased = () => {
     const userAgent = navigator.userAgent.toLowerCase();
