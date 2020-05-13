@@ -17,10 +17,7 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    // './test/specs/release-validation/deprecated/sample.spec.js',
-    './test/specs/release-validation/F22954-editing/TC48339-edit-dataset.spec.js',
-    './test/specs/release-validation/F22954-editing/TC62674-prepare-edit-report-all-prompts-except-nested.spec.js',
-    './test/specs/release-validation/F22954-editing/TC62676-edit-neasted-prompt.spec.js',
+    './test/specs/release-validation/deprecated/sample.spec.js',
 
   ],
   suites: {
