@@ -84,12 +84,9 @@ export class HomeHelper {
 
     const macintosh = userAgent.includes('macintosh');
     const webkit = userAgent.includes('applewebkit');
-    const safari = userAgent.includes('safari');
     const chrome = userAgent.includes('chrome');
 
-    const excelForMac = macintosh && webkit && !safari && !chrome;
-    const safariMac = macintosh && webkit && safari && !chrome;
-    return excelForMac || safariMac;
+    return macintosh && webkit && !chrome;
   }
 }
 
