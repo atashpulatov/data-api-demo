@@ -60,7 +60,7 @@ describe('F21402 - Handle Prompted Object', () => {
 
     browser.pause(2111);
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt5, '11/06/2016');
-    //$(popupSelectors.promptPanel(9)).click();
+    $(popupSelectors.promptPanel(9)).click();
     console.log('Prompt 8 selected');
 
     browser.pause(2111);
