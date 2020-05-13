@@ -34,7 +34,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     expect(operationErrorHandler.handleOperationError).toBeCalledWith({}, { instanceDefinition: {} }, new Error('errorTest'));
   });
 
-  it('getOfficeTableEditRefresh should work as expected when tableColumnsChanged true', async () => {
+  it('getOfficeTableEditRefresh should work as expected when tableChanged true', async () => {
     // given
     const objectData = {
       tableName: 'tableNameTest',
@@ -52,7 +52,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
 
     jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(() => ({
-      tableColumnsChanged: true,
+      tableChanged: true,
       prevOfficeTable: 'prevOfficeTableTest',
       startCell: 'startCellTest',
     }));
@@ -90,7 +90,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       startCell: 'startCellTest',
       tableName: 'tableNameTest',
       prevOfficeTable: 'prevOfficeTableTest',
-      tableColumnsChanged: true,
+      tableChanged: true,
     });
 
     expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
@@ -98,7 +98,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       objectWorkingId: 'objectWorkingIdTest',
       officeTable: 'officeTableTest',
       shouldFormat: undefined,
-      tableColumnsChanged: true,
+      tableChanged: true,
       instanceDefinition: { mstrTable: 'mstrTableTest' },
       startCell: 'startCellTest',
     });
@@ -119,7 +119,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
   ${true}                        | ${true}
   ${false}                       | ${false}
   
-  `('getOfficeTableEditRefresh should work as expected when tableColumnsChanged',
+  `('getOfficeTableEditRefresh should work as expected when tableChanged',
   async ({ inputNameAndFormatShouldUpdate, resultShouldFormat }) => {
     // given
     const objectData = {
@@ -139,7 +139,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
 
     jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData')
       .mockImplementation(() => ({
-        tableColumnsChanged: false,
+        tableChanged: false,
         prevOfficeTable: 'prevOfficeTableTest',
         startCell: 'startCellTest',
       }));
@@ -180,7 +180,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
       objectWorkingId: 'objectWorkingIdTest',
       officeTable: 'officeTableTest',
       shouldFormat: resultShouldFormat,
-      tableColumnsChanged: false,
+      tableChanged: false,
       instanceDefinition: { mstrTable: 'mstrTableTest' },
       startCell: 'startCellTest',
     });

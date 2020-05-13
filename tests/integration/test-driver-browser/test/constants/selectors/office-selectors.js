@@ -28,6 +28,6 @@ export const excelSelectors = {
   replaceAllBtn: '#buttonarea > button:nth-child(4)',
   refreshAllfinished: '.refresh-header',
   nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a',
-  nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul'
-
+  nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul',
+  selectsheet: (index) => `#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > li:nth-child(${index + 1})`,
 };

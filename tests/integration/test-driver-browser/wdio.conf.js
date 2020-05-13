@@ -21,6 +21,7 @@ exports.config = {
   ],
   suites: {
     acceptance: [
+      './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
       './test/specs/release-validation/F22954-editing/TC48339-edit-dataset.spec.js',
@@ -28,6 +29,8 @@ exports.config = {
       './test/specs/release-validation/F22955-refresh/TC48134-Part-I-refresh-report-prompt-object-required-defaultanswer.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-II-refresh-report-prompt-nested-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-III-refresh-report-prompt-multiple-prompts.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC62619-refresh-edited-object.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC59877-Highlighting-the-row-on-hover_selection.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
@@ -51,6 +54,7 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59812-tooltip-when-hover-on-button.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59676-ellipsis-longer-strings.spec.js',
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
       './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
@@ -81,10 +85,16 @@ exports.config = {
       './test/specs/release-validation/F12909-import-report/TC39670-graph-on-smart-folder.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39671-graph-functionality.spec.js',
       './test/specs/release-validation/F12909-import-report/TC39688-unpublished-cube.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53439-visualization-long-name-one-million.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC54787-prompted-dossier.spec.js',
       './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
       './test/specs/release-validation/F21402-prompt/TC40359-navigation-buttons.spec.js',
       './test/specs/release-validation/F21402-prompt/TC40365-nested-prompt.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js'
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -95,10 +105,9 @@ exports.config = {
       './test/specs/release-validation/F22954-editing/TC62674-prepare-edit-report-all-prompts-except-nested.spec.js',
     ],
     'F22955-refresh': [
-      './test/specs/release-validation/F22955-refresh/TC48131-refresh-report.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
-      './test/specs/release-validation/F22955-refresh/TC48135-refresh-report-prompt-nested-prompts.spec.js',
-      './test/specs/release-validation/F22955-refresh/TC48136-refresh-report-prompt-multiple-prompts.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC62619-refresh-edited-object.spec.js',
     ],
     'F21402-prompt': [
       './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
@@ -122,6 +131,8 @@ exports.config = {
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC60974-importing-custom-visualisation.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61043-E2E-prompted-dossier.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61046-E2E-with-edit-change-text.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53439-visualization-long-name-one-million.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC54787-prompted-dossier.spec.js',
     ],
     'F24751-import subtotals': [
       './test/specs/release-validation/F24751-import subtotals/TC53340-import-report-with-subtotals.spec.js',
@@ -134,6 +145,8 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59812-tooltip-when-hover-on-button.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59676-ellipsis-longer-strings.spec.js',
     ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
@@ -184,9 +197,18 @@ exports.config = {
     ],
     'F25931-duplicate-object': [
       './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
     ],
     'F30463-ability-to-sort-on-prepare-data': [
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
+    ],
+    'F21409-refresh-all': [
+      './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js'
+    ],
+    'F25943-refresh-move-to-add-in-side-panel': [
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
     ],
   },
   // Patterns to exclude.

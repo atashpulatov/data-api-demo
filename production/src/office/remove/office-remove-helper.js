@@ -27,11 +27,9 @@ class OfficeRemoveHelper {
   * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
   */
    removeExcelTable = async (officeTable, excelContext, isCrosstab, crosstabHeaderDimensions = {}, isClear = false) => {
-     excelContext.runtime.enableEvents = false;
-     await excelContext.sync();
-     const isClearContentOnly = isClear ? 'contents' : '';
      const tableRange = officeTable.getDataBodyRange();
      excelContext.trackedObjects.add(tableRange);
+
      if (isCrosstab) {
        officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
        officeTable.showHeaders = true;
@@ -49,11 +47,20 @@ class OfficeRemoveHelper {
        );
        await excelContext.sync();
      }
-     tableRange.clear(isClearContentOnly);
-     if (!isClear) { officeTable.delete(); }
-     excelContext.runtime.enableEvents = true;
-     await excelContext.sync();
+
+     if (!isClear) {
+       excelContext.runtime.enableEvents = false;
+       await excelContext.sync();
+
+       officeTable.delete();
+
+       excelContext.runtime.enableEvents = true;
+     } else {
+       tableRange.clear('contents');
+     }
+
      excelContext.trackedObjects.remove(tableRange);
+     await excelContext.sync();
    }
 
   /**

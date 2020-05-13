@@ -25,8 +25,8 @@ export function switchToPromptFrame() {
 
 export function switchToPromptFrameForImportDossier() {
   switchToPluginFrame();
-  const editFrame = '#popup-wrapper > div > div:nth-child(2) > iframe';
-  $(editFrame).waitForExist(9999);
+  const editFrame = 'iframe[src*="message=true&ui"]';
+  $(editFrame).waitForExist(19999);
   browser.switchToFrame($(editFrame));
 }
 

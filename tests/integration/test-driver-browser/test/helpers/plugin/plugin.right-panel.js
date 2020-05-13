@@ -3,6 +3,8 @@ import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../ut
 import { waitAndClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
+import { waitForNotification } from '../utils/wait-helper';
+
 
 class PluginRightPanel {
   clickLoginPopUpBtn() {
@@ -45,6 +47,7 @@ class PluginRightPanel {
   }
 
   refreshFirstObjectFromTheList() {
+    console.log('Should refresh first object');
     this.refreshObject(1);
     console.log('First object from the list is refreshed');
   }
@@ -73,6 +76,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   editObject(index) {
+    console.log('Should click Edit');
     switchToPluginFrame();
     const editBtn = rightPanelSelectors.getEdithBtnForObject(index);
     $(editBtn).moveTo();
@@ -103,6 +107,42 @@ class PluginRightPanel {
     duplicatePopupImportBtn.moveTo();
     browser.pause(1000);
     waitAndClick(duplicatePopupImportBtn);
+  }
+
+  /**
+   * Clicks edit button in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  clickDuplicatePopupEditBtn() {
+    switchToPluginFrame();
+    const duplicatePopupEditBtn = $(rightPanelSelectors.duplicatePopupEditBtn);
+    duplicatePopupEditBtn.moveTo();
+    browser.pause(1000);
+    waitAndClick(duplicatePopupEditBtn);
+  }
+
+  /**
+   * Selects active cell option in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  selectActiveCellOptionInDuplicatePopup() {
+    switchToPluginFrame();
+    const activeCellOption = $(rightPanelSelectors.duplicatePopupActiveCellOption);
+    activeCellOption.moveTo();
+    browser.pause(1000);
+    waitAndClick(activeCellOption);
+  }
+
+  /**
+   * Selects new sheet option in duplicate popup. Will work only when duplicate popup is opened.
+   *
+   */
+  selectNewSheetOptionInDuplicatePopup() {
+    switchToPluginFrame();
+    const newSheetOption = $(rightPanelSelectors.duplicatePopupNewSheetOption);
+    newSheetOption.moveTo();
+    browser.pause(1000);
+    waitAndClick(newSheetOption);
   }
 
   /**
@@ -147,7 +187,24 @@ class PluginRightPanel {
     return nameInput.getText();
   }
 
+  /**
+   * Clicks master checkbox
+   */
+  clickMasterCheckbox() {
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+  }
+
+  /**
+   * Clicks checkbox for a given object
+   *
+   * @param {Number} index index of an imported object in the right side panel
+   */
+  clickObjectCheckbox(index) {
+    waitAndClick($(rightPanelSelectors.getObjectCheckbox(index)));
+  }
+
   refreshAll() {
+    console.log('Should refresh all');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.checkBoxAll));
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
@@ -248,6 +305,83 @@ class PluginRightPanel {
     switchToExcelFrame();
     browser.pause(1000); // TODO: Not sure if this is necessary
     expect($(excelSelectors.cellInput).getValue()).toEqual(cellValue);
+  }
+
+  /**
+   * Waits for notification, asserts the notification message was displayed and closes the notification
+   *
+   * @param {String} notificationMessage Notification message that should be displayed
+   */
+  waitAndCloseNotification(notificationMessage) {
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
+    this.closeNotificationOnHover();
+  }
+
+  /**
+   * Checks whether an element is opaque (not transparent)
+   *
+   * @param {String} selector selector for which element to check opacity
+   *
+   * @returns {Boolean} true if an element is opaque, false if an element is transparent
+   */
+  isOpaque(selector) {
+    return $(selector).getCSSProperty('opacity').value === 1;
+  }
+
+  /**
+   * Hovers over icon bar buttons for a given object
+   * to show the tooltip and gets the tooltip text
+   *
+   * @param {Number} objectIndex index of the imported object
+   * @param {Number} iconIndex index of the icon in the icon bar
+   *
+   * @returns {String} tooltip text for a given button
+   */
+  getIconBarTooltipText(objectIndex, iconIndex) {
+    switch (iconIndex) {
+      case 1:
+        $(rightPanelSelectors.getDuplicateBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getDuplicateBtnForObjectTooltip(objectIndex)).getText();
+      case 2:
+        $(rightPanelSelectors.getEdithBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getEdithBtnForObjectTooltip(objectIndex)).getText();
+      case 3:
+        $(rightPanelSelectors.getRefreshBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getRefreshBtnForObjectTooltip(objectIndex)).getText();
+      case 4:
+        $(rightPanelSelectors.getRemoveBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getRemoveBtnForObjectTooltip(objectIndex)).getText();
+      default:
+        throw new Error('Error in getIconBarTooltipText');
+    }
+  }
+
+  /**
+   * Hovers over master icon bar buttons
+   * to show tooltip and gets tooltip text
+   *
+   * @param {Number} iconIndex index of the icon in the icon bar
+   *
+   * @returns {String} tooltip text for the given button
+   */
+  getMasterIconBarTooltipText(iconIndex) {
+    switch (iconIndex) {
+      case 1:
+        $(rightPanelSelectors.refreshAllBtn).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.refreshAllBtnTooltip).getText();
+      case 2:
+        $(rightPanelSelectors.deleteAllBtn).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.deleteAllBtnTooltip).getText();
+      default:
+        throw new Error('Error in getMasterIconBarTooltipText');
+    }
   }
 }
 

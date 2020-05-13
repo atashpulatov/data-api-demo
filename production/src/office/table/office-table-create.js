@@ -17,7 +17,7 @@ class OfficeTableCreate {
    * @param {string} startCell  Top left corner cell
    * @param {string} tableName Name of the Excel Table
    * @param {Object} prevOfficeTable Previous office table to refresh
-   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed. False by default
+   * @param {Boolean} tableChanged Specify if table columns has been changed. False by default
    *
    */
   createOfficeTable = async (
@@ -27,7 +27,7 @@ class OfficeTableCreate {
       startCell,
       tableName,
       prevOfficeTable,
-      tableColumnsChanged = false
+      tableChanged = false
     }) => {
     const {
       rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions }
@@ -41,7 +41,7 @@ class OfficeTableCreate {
       worksheet,
       instanceDefinition,
       prevOfficeTable,
-      tableColumnsChanged
+      tableChanged
     );
 
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
@@ -124,10 +124,10 @@ class OfficeTableCreate {
    * @param {Object} sheet  excel worksheet
    * @param {Object} instanceDefinition
    * @param {Object} prevOfficeTable previous office table
-   * @param {Boolean} tableColumnsChanged Specify if table columns has been changed.
+   * @param {Boolean} tableChanged Specify if table columns has been changed.
    *
    */
-  getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable, tableColumnsChanged) => {
+  getTableStartCell = (startCell, sheet, instanceDefinition, prevOfficeTable, tableChanged) => {
     const { mstrTable } = instanceDefinition;
     const { isCrosstab, prevCrosstabDimensions = false, crosstabHeaderDimensions = false } = mstrTable;
     const { rowsX: prevRowsX, columnsY: prevColumnsY } = prevCrosstabDimensions;
@@ -138,12 +138,12 @@ class OfficeTableCreate {
       sheet,
       instanceDefinition,
       prevOfficeTable,
-      tableColumnsChanged
+      tableChanged
     });
 
 
     if (prevCrosstabDimensions && prevCrosstabDimensions !== crosstabHeaderDimensions && isCrosstab) {
-      if (tableColumnsChanged) {
+      if (tableChanged) {
         tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY, rowsX);
       } else {
         tableStartCell = officeApiHelper.offsetCellBy(tableStartCell, columnsY - prevColumnsY, rowsX - prevRowsX);
