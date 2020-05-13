@@ -3,7 +3,7 @@ import officeTableHelperRange from './office-table-helper-range';
 import officeFormatSubtotals from '../format/office-format-subtotals';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import officeApiDataLoader from '../api/office-api-data-loader';
-import {officeRemoveHelper} from '../remove/office-remove-helper';
+import { officeRemoveHelper } from '../remove/office-remove-helper';
 
 class OfficeTableUpdate {
   /**
