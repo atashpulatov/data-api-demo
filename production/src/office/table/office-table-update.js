@@ -3,6 +3,7 @@ import officeTableHelperRange from './office-table-helper-range';
 import officeFormatSubtotals from '../format/office-format-subtotals';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import officeApiDataLoader from '../api/office-api-data-loader';
+import { officeRemoveHelper } from '../remove/office-remove-helper';
 
 class OfficeTableUpdate {
   /**
@@ -32,7 +33,7 @@ class OfficeTableUpdate {
 
       await excelContext.sync();
 
-      await this.updateRows(excelContext, prevOfficeTable, rows);
+      await officeRemoveHelper.deleteRowsInChunks(excelContext, prevOfficeTable, CONTEXT_LIMIT, rows);
 
       return prevOfficeTable;
     } catch (error) {
@@ -77,41 +78,6 @@ class OfficeTableUpdate {
 
     prevOfficeTable.getHeaderRowRange().values = [headerColumns[headerColumns.length - 1]];
   };
-
-  /**
-   * Updates number of rows in office table.
-   *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Object} prevOfficeTable Previous office table to refresh
-   * @param {number} newRowsCount Number of rows in the object
-   *
-   */
-  updateRows = async (excelContext, prevOfficeTable, newRowsCount) => {
-    const tableRows = prevOfficeTable.rows;
-
-    let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
-    excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-
-    const totalSumOfRowsToDelete = tableRowCount - newRowsCount;
-    let i = 0;
-
-    while (i * CONTEXT_LIMIT < totalSumOfRowsToDelete) {
-      const sumOfRowsToDeleteInNextStep = tableRowCount - newRowsCount;
-      const rowsToDeleteCount = sumOfRowsToDeleteInNextStep > CONTEXT_LIMIT
-        ? CONTEXT_LIMIT
-        : sumOfRowsToDeleteInNextStep;
-      prevOfficeTable
-        .getRange()
-        .getLastRow()
-        .getRowsAbove(rowsToDeleteCount)
-        .delete('Up');
-      await excelContext.sync();
-      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-      tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
-      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-      i++;
-    }
-  }
 }
 
 const officeTableUpdate = new OfficeTableUpdate();

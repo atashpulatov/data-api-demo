@@ -59,8 +59,8 @@ exports.config = {
       './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
@@ -94,6 +94,8 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js'
     ],
     'F12910-import-dataset': [
@@ -158,8 +160,8 @@ exports.config = {
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
     ],
     'F28550-rename-excel-table-without-losing-binding': [
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
     ],
     'TS41441-E2E Sanity checks': [
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
@@ -199,6 +201,8 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
     ],
     'F30463-ability-to-sort-on-prepare-data': [
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
