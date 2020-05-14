@@ -1155,12 +1155,12 @@ class PluginPopup {
    * Checks if the given array of strings is sorted ascending
    *
    * @param {Array} data array of strings
+   * @param {String} locale locale to be used when comparing strings
    * @returns true if data is sorted ascending, false otherwise
-   * @memberof PluginPopup
    */
-  isSortedAsceding(data) {
+  isSortedAsceding(data, locale = 'en') {
     for (let i = 1; i < data.length; i++) {
-      if (data[i].localeCompare(data[i - 1], 'en', { sensitivity: 'base' }) < 0) {
+      if (data[i].localeCompare(data[i - 1], locale, { sensitivity: 'base' }) < 0) {
         return false;
       }
     }
@@ -1171,12 +1171,12 @@ class PluginPopup {
    * Checks if the given array of strings is sorted descending
    *
    * @param {Array} data array of strings
+   * @param {String} locale locale to be used when comparing strings
    * @returns true if data is sorted descending, false otherwise
-   * @memberof PluginPopup
    */
-  isSortedDesceding(data) {
+  isSortedDesceding(data, locale = 'en') {
     for (let i = 1; i < data.length; i++) {
-      if (data[i].localeCompare(data[i - 1], 'en', { sensitivity: 'base' }) > 0) {
+      if (data[i].localeCompare(data[i - 1], locale, { sensitivity: 'base' }) > 0) {
         return false;
       }
     }
