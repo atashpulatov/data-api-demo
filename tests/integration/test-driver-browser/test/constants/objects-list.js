@@ -37,7 +37,7 @@ export const objectsList = {
     PromptedReportWithandWithoutSubtotals: 'Prompted report with attributes with and without subtotals',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
-      reportBasedOnIntelligentCube: 'Report based on cube without subtotals',
+      reportBasedOnIntelligentCubeWithoutSubtotals: 'Report based on cube without subtotals',
       promptedReport: 'Prompted report without subtotals',
       reportWithCrosstabs: 'Report with crosstab and without subtotals',
       promptedReportWithCrosstabs: 'Prompted report with crosstab and without subtotals',
