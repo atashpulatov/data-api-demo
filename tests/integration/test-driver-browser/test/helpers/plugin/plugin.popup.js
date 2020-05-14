@@ -419,7 +419,9 @@ class PluginPopup {
     if (typeof visContainerId === 'undefined') {
       visSelector = $(popupSelectors.visualizationSelector);
     } else {
+      $(visContainerId).waitForDisplayed(60000, false, `${visContainerId} is not displayed`);
       visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+      visSelector.waitForClickable(60000, false, `${visSelector} is not clickable`);
     }
     waitAndClick(visSelector, 40000);
     browser.pause(2500);
@@ -1123,6 +1125,25 @@ class PluginPopup {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     pluginRightPanel.closeNotificationOnHover();
   }
-}
+    /**
+    * Edits imported report and click re-prompt button
+    */
+   editAndOpenReprompt() {
+    console.log('Should click edit button');
+    pluginRightPanel.editObject(1);
+    browser.pause(5000);
+    switchToPromptFrame();
+
+    console.log('click reprompt icon');
+    $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
+    $(popupSelectors.dossierWindow.repromptDossier).click();
+    browser.pause(3000);
+
+    console.log('reprompt and import');
+    switchToPromptFrame();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    switchToPromptFrameForImportDossier();
+  }
+
 
 export default new PluginPopup();
