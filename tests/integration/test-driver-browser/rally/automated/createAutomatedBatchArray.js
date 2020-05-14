@@ -11,8 +11,6 @@ const today = new Date();
 
 module.exports = async function createBatchArray(testCaseArray) {
   const batch = [];
-  //* *******/ HERE ADD TEST SET FOR RELAESE VALIDATION
-
   for (let i = 0; i < testCaseArray.length; i++) {
     const {
       duration, browser, verdict, build, release, testCaseId
