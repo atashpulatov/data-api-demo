@@ -5,7 +5,6 @@ export const NotificationButtons = ({ buttons }) => buttons.map(
     <button
       type="button"
       onClick={button.onClick}
-      title={button.title}
       key={button.title}>
       {button.label}
     </button>
