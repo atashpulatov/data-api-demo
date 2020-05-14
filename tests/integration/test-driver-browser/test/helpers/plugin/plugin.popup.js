@@ -1152,6 +1152,15 @@ class PluginPopup {
   clickViewSelectedInAllPanel() {
     waitAndClick($(popupSelectors.filterPanel.viewSelected));
   }
+
+  /**
+   * Counts the number of items in the All Panel that are present in the DOM
+   *
+   * @returns {Number} number of items
+   */
+  getAllPanelItemCount() {
+    return $$(popupSelectors.filterPanel.allPanelCheckbox).length;
+  }
 }
 
 export default new PluginPopup();

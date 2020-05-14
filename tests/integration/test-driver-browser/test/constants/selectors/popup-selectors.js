@@ -127,6 +127,7 @@ export const popupSelectors = {
   filterPanel: {
     expandButton: '.expand-btn',
     selectAllButton: '.all-panel__buttons button:first-of-type',
+    allPanelCheckbox: '.all-panel__content input',
     getAllPanelCheckbox: (checkboxTitle) => `.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}"] + .checkmark`,
     getAllPanelCheckboxState: (checkboxTitle) => `.all-panel__content input[aria-label="Checkbox for ${checkboxTitle}."]`,
     getAllPanelDisabledCheckbox: (checkboxTitle) => `.all-panel__content .category-list-row.disabled label[title="${checkboxTitle}"]`,
