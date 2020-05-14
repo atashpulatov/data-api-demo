@@ -8,15 +8,10 @@ const rallyConfig = require('./rallyconfig');
  * @returns {String} URL to the Test Set endpoint
  */
 async function getTestSet(testSetId) {
-  if (testSetId !== '') {
-    const formattedIDUrl = `${rallyConfig.apiUrl}/testset/?query=(FormattedID%20%3D%20"${testSetId}")`;
-    try {
-      const testSetUrl = await getDataFromRally(formattedIDUrl);
-      return testSetUrl.QueryResult.Results[0]._ref;
-    } catch (error) {
-      console.log(`Couldn't upload ${testSetId} as TestSet`);
-    }
-  }
+  const formattedIDUrl = `${rallyConfig.apiUrl}/testset/?query=(FormattedID%20%3D%20"${testSetId}")`;
+  return getDataFromRally(formattedIDUrl)
+    .then(({ QueryResult }) => QueryResult.Results[0]._ref)
+    .catch(() => { throw Error(`Couldn't upload ${testSetId} as TestSet`); });
 }
 
 /**
@@ -27,12 +22,9 @@ async function getTestSet(testSetId) {
  */
 async function getOwner(testCaseId) {
   const tcUrl = await getRallyTCUrl(testCaseId);
-  try {
-    const tcDetails = await getDataFromRally(tcUrl);
-    return tcDetails.TestCase.Owner._ref;
-  } catch (error) {
-    console.log(`Couldn't get ${testCaseId} owner`);
-  }
+  return getDataFromRally(tcUrl)
+    .then(({ TestCase }) => TestCase.Owner._ref)
+    .catch(() => { throw Error(`Couldn't get ${testCaseId} owner`); });
 }
 
 /**
@@ -44,15 +36,11 @@ async function getOwner(testCaseId) {
 async function getTesterUrl(testerEmail) {
   if (testerEmail !== '') {
     const emailUrl = `${rallyConfig.apiUrl}/user/?query=(EmailAddress%20%3D%20"${testerEmail}")`;
-    try {
-      const testerUrl = await getDataFromRally(emailUrl);
-      return testerUrl.QueryResult.Results[0]._ref;
-    } catch (error) {
-      console.log(`Couldn't upload ${testerEmail} as tester`);
-    }
-  } else {
-    console.log('Add your email to rallyconfig.js');
+    return getDataFromRally(emailUrl)
+      .then(({ QueryResult }) => QueryResult.Results[0]._ref)
+      .catch(() => { throw Error(`Couldn't add ${testerEmail} as tester`); });
   }
+  throw Error('Add your email to rallyconfig.js');
 }
 
 /**
@@ -63,12 +51,9 @@ async function getTesterUrl(testerEmail) {
  */
 async function getRallyTCUrl(formattedID) {
   const formattedIDUrl = `${rallyConfig.apiUrl}/testcase/?query=(FormattedID%20%3D%20%22${formattedID}%22)`;
-  try {
-    const tcUrl = await getDataFromRally(formattedIDUrl);
-    return tcUrl.QueryResult.Results[0]._ref;
-  } catch (error) {
-    console.log(`Couldn't get ${formattedID} URL`);
-  }
+  return getDataFromRally(formattedIDUrl)
+    .then(({ QueryResult }) => QueryResult.Results[0]._ref)
+    .catch(() => { throw Error(`Couldn't get ${formattedID} URL`); });
 }
 
 /**
@@ -79,12 +64,9 @@ async function getRallyTCUrl(formattedID) {
  */
 async function getTCDetailsFromRally(formattedID) {
   const tcUrl = await getRallyTCUrl(formattedID);
-  try {
-    const tcDetails = await getDataFromRally(tcUrl);
-    return tcDetails;
-  } catch (error) {
-    console.log(`Couldn't get ${formattedID} details`);
-  }
+  return getDataFromRally(tcUrl)
+    .then((tcDetails) => tcDetails)
+    .catch(() => { throw Error(`Couldn't get ${formattedID} details`); });
 }
 
 

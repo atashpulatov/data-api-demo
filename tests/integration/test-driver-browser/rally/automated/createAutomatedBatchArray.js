@@ -1,4 +1,5 @@
 const helpers = require('../helpers');
+const rallyConfig = require('../rallyconfig');
 
 const today = new Date();
 
@@ -11,40 +12,51 @@ const today = new Date();
 module.exports = async function createBatchArray(testCaseArray) {
   const batch = [];
   //* *******/ HERE ADD TEST SET FOR RELAESE VALIDATION
-  const testSet = '';
 
   for (let i = 0; i < testCaseArray.length; i++) {
     const {
       duration, browser, verdict, build, release, testCaseId
     } = testCaseArray[i];
-    const tcUrl = await helpers.getRallyTCUrl(testCaseId);
-    const owner = await helpers.getOwner(testCaseId);
 
-    const batchItem = {
-      Entry: {
-        Path: '/testcaseresult/create',
-        Method: 'POST',
-        Body: {
-          testcaseresult: {
-            Build: build,
-            Date: today,
-            Testcase: tcUrl.split('v2.0')[1],
-            Verdict: verdict,
-            Tester: owner,
-            TestSet: helpers.getTestSet(testSet), // for release validation add TS ID
-            Duration: duration,
-            Notes: 'Automation results', // for release validation change to 'Release validation'
-            c_Browsertype: browser,
-            c_Environment: '',
-            c_ProductionRelease: release,
-            // 'c_ExportApplication': exportApp,
-            // c_ClientOS': clientOS,
-            // 'c_Language': language
+    try {
+      const tcUrl = await helpers.getRallyTCUrl(testCaseId);
+      const owner = await helpers.getOwner(testCaseId);
+      console.log(owner);
+      let testSet = '';
+      if (rallyConfig.testSet !== '') {
+        testSet = await helpers.getTestSet();
+      }
+
+      const batchItem = {
+        Entry: {
+          Path: '/testcaseresult/create',
+          Method: 'POST',
+          Body: {
+            testcaseresult: {
+              Build: build,
+              Date: today,
+              Testcase: tcUrl.split('v2.0')[1],
+              Verdict: verdict,
+              Tester: owner,
+              TestSet: testSet, // for release validation add TS ID
+              Duration: duration,
+              Notes: 'Automation results', // for release validation change to 'Release validation'
+              c_Browsertype: browser,
+              c_Environment: '',
+              c_ProductionRelease: release,
+              // TODO add the fields below
+              c_ExportApplication: '',
+              c_ClientOS: '',
+              c_Language: 'English'
+            }
           }
         }
-      }
-    };
-    batch.push(batchItem);
+      };
+      batch.push(batchItem);
+      return { Batch: batch };
+    } catch (error) {
+      console.error(error);
+      process.exit(1);
+    }
   }
-  return { Batch: batch };
 };
