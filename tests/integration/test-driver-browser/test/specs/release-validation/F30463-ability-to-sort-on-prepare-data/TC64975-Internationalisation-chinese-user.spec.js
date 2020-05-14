@@ -17,57 +17,56 @@ describe('[F30463] Ability to sort on prepare data', () => {
     browser.closeWindow();
   });
 
-  // Create test for each visType defined in visualizations
   it(`[TC64975] sort on prepare data for chinese user) `, () => {
     switchToRightPanelFrame();
     OfficeWorksheet.selectCell('A3');
 
-    // Open prepare data
+    console.log('Open Prepare Data');
     pluginRightPanel.clickImportDataButton();
     const report = objectsList.reports.reportToSortAttributeAndMetrics;
     pluginPopup.openPrepareData(report, false);
 
     switchToPluginFrame();
-    // sort for Attributes
+    console.log('Sort for attributes');
     const attributeContainer = $(popupSelectors.attributesContainer);
     const sortAttributeSelector = $(popupSelectors.sortAttributes);
-    // All attributes Default sort
+    console.log('All attributes default sort');
     expect(attributeContainer.$$('li')[0].getText()).toEqual('年龄范围');
-    // All attributes Ascending sort
+    console.log('All attributes ascending sort');
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Customer Latitude');
-    // All attributes Descending sort
+    console.log('All attributes descending sort');
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('首个订单日期');
-    // Back to default sort
+    console.log('Back to default sort');
     waitAndClick(sortAttributeSelector);
 
-    // sort for Metrics
+    console.log('sort for Metrics');
     const metricsContainer = $(popupSelectors.metricsContainer);
     const sortMetricsSelector = $(popupSelectors.sortMetrics);
-    // All metrics Default sort
+    console.log('All metrics default sort');
     expect(metricsContainer.$$('div')[0].getText()).toEqual('平均收入');
-    // All metrics Ascending sort
+    console.log('All metrics ascending sort');
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Profit Per Year');
-    // All metrics Descending sort
+    console.log('All metrics descending sort');
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('随机数');
-    // Back to default sort
+    console.log('Back to default sort');
     waitAndClick(sortMetricsSelector);
 
-    // sort for Filters
+    console.log('sort for Filters');
     const filterContainer = $(popupSelectors.filtersContainer);
     const sortFiltersSelector = $(popupSelectors.sortFilters);
-    // All filters Default sort
+    console.log('All filters default sort');
     expect(filterContainer.$$('li')[0].getText()).toEqual('年龄范围');
-    // All filters Ascending sort
+    console.log('All filters ascending sort');
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Customer Latitude');
-    // All filters Descending sort
+    console.log('All filters descending sort');
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('首个订单日期');
-    // Back to default sort
+    console.log('Back to default sort');
     waitAndClick(sortFiltersSelector);
   });
 });
