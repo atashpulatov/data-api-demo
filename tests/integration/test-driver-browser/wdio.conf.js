@@ -93,6 +93,8 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js'
     ],
     'F12910-import-dataset': [
@@ -198,6 +200,8 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
     ],
     'F30463-ability-to-sort-on-prepare-data': [
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
