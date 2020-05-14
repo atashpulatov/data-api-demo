@@ -7,13 +7,13 @@ import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('[F24751] Import report with or without subtotals', () => {
   beforeEach(() => {
-    // officeLogin.openExcelAndLoginToPlugin();
+    officeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
-    // browser.closeWindow();
-    // const handles = browser.getWindowHandles();
-    // browser.switchToWindow(handles[0]);
+    browser.closeWindow();
+    const handles = browser.getWindowHandles();
+    browser.switchToWindow(handles[0]);
   });
 
   it('[TC53745] Checking if subtotals toggle is hidden while importing objects without subtotals and prompted report with attributes with and without subtotals', () => {
@@ -23,53 +23,36 @@ describe('[F24751] Import report with or without subtotals', () => {
     const { reportWithCrosstabs } = objectsList.reports.withoutSubtotals;
     const { promptedReportWithCrosstabs } = objectsList.reports.withoutSubtotals;
     const { dataset } = objectsList.reports.withoutSubtotals;
+    const { PromptedReportWithandWithoutSubtotals } = objectsList.reports;
     const objects = [basicReport, reportBasedOnIntelligentCube, promptedReport, reportWithCrosstabs, promptedReportWithCrosstabs, promptedReportWithCrosstabs, dataset];
 
 
-
+    PluginRightPanel.clickImportDataButton();
     objects.forEach((obj) => {
-      
-    })
+      if (obj.includes('Prompted')) {
+        console.log(`Check toggle for ${obj}`);
+        PluginPopup.preparePrompt(obj, false);
+        PluginPopup.clickRun();
+        console.log('swich to prepare data');
+        switchToDialogFrame();
+        expect($(popupSelectors.subtotalToggler).isExisting(false));
+        PluginPopup.clickBack();
+      } else {
+        console.log(`Check toggle for ${obj}`);
+        PluginPopup.openPrepareData(obj, false);
+        expect($(popupSelectors.subtotalToggler).isExisting(false));
+        PluginPopup.clickBack();
+      }
+    });
 
-    // // should check if the toggle is hidden for basic report without subtotals
-    // PluginRightPanel.clickImportDataButton();
-    // PluginPopup.openPrepareData(basicReport, false);
-    // expect($(popupSelectors.subtotalToggler).isExisting(false));
-    // PluginPopup.clickBack();
-
-    // // should check if the toggle is hidden for report without subtotals based on intelligent cube
-    // PluginPopup.openPrepareData(reportBasedOnIntelligentCube, false);
-    // expect($(popupSelectors.subtotalToggler).isExisting(false));
-    // PluginPopup.clickBack();
-
-    // // should check if the toggle is hidden for prompted report without subtotals
-
-    // PluginPopup.preparePrompt(promptedReport, false);
-    // PluginPopup.clickRun();
-    // console.log('swich to prepare data');
-    // switchToDialogFrame();
-    // expect($(popupSelectors.subtotalToggler).isExisting(false));
-    // PluginPopup.clickBack();
-
-    // // should check if the toggle is hidden for  report with crosstabs without subtotals
-
-    // PluginPopup.openPrepareData(reportWithCrosstabs, false);
-    // expect($(popupSelectors.subtotalToggler).isExisting(false));
-    // PluginPopup.clickBack();
-
-    // // should check if the toggle is hidden for prompted report with crosstabs and without subtotals
-
-    // PluginPopup.preparePrompt(promptedReportWithCrosstabs, false);
-    // PluginPopup.clickRun();
-    // console.log('swich to prepare data');
-    // switchToDialogFrame();
-    // expect($(popupSelectors.subtotalToggler).isExisting(false));
-    // PluginPopup.clickBack();
-
-    // // should  check if the toggle is hidden for dataset
-    
-    // PluginPopup.openPrepareData(dataset, false);
-    // expect($(popupSelectors.subtotalToggler).isExisting(false));
-    // PluginPopup.clickBack();
+    console.log(`Assert there is no toggle when report is prompted without subtotals`);
+    PluginPopup.preparePrompt(PromptedReportWithandWithoutSubtotals, false);
+    switchToDialogFrame();
+    PluginPopup.removeAllSelected();
+    PluginPopup.promptSelectObjectForEdit('Subcategory');
+    PluginPopup.clickRun();
+    browser.pause(3000);
+    expect($(popupSelectors.subtotalToggler).isExisting(false));
+    PluginPopup.clickBack();
   });
 });

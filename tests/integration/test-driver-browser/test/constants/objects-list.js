@@ -34,6 +34,7 @@ export const objectsList = {
     categorySubCategory: 'CategorySubCategoryQuarter',
     reportToSortAttributeAndMetrics: 'Report with attributes and metrics to sort',
     mergedHeaderReport: 'Merged Header Report',
+    PromptedReportWithandWithoutSubtotals: 'Prompted report with attributes with and without subtotals',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
       reportBasedOnIntelligentCube: 'Report based on cube without subtotals',
