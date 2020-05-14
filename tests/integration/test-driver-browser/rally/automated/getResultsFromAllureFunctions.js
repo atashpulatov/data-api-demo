@@ -24,10 +24,14 @@ function parseReportData(report) {
  * @returns {String} Test Case ID
  */
 function getTestCaseId(testCase) {
-  const re = /\[(TC\d+)\]/;
-  const testName = testCase.name;
-  const testId = testName.split(re)[1];
-  return testId;
+  try {
+    const re = /\[(TC\d+)\]/;
+    const testName = testCase.name;
+    const testId = testName.split(re)[1];
+    return testId;
+  } catch (error) {
+    throw Error(`No Test Case ID found for ${testCase}`);
+  }
 }
 
 /**
