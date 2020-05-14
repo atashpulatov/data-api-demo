@@ -19,7 +19,6 @@ module.exports = async function createBatchArray(testCaseArray) {
     try {
       const tcUrl = await helpers.getRallyTCUrl(testCaseId);
       const owner = await helpers.getOwner(testCaseId);
-      console.log(owner);
       let testSet = '';
       if (rallyConfig.testSet !== '') {
         testSet = await helpers.getTestSet();
@@ -51,10 +50,10 @@ module.exports = async function createBatchArray(testCaseArray) {
         }
       };
       batch.push(batchItem);
-      return { Batch: batch };
     } catch (error) {
       console.error(error);
       process.exit(1);
     }
   }
+  return { Batch: batch };
 };

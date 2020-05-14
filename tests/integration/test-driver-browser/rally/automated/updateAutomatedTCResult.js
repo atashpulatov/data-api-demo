@@ -3,12 +3,9 @@ const rallyConfig = require('../rallyconfig');
 const getResultsFromAllure = require('./getResultsFromAllureFunctions');
 const createBatchArray = require('./createAutomatedBatchArray');
 
-// add comment how to use it
-
 /**
  * Upload Test Case result to Rally
  *
- * @param {}
  * @returns {Promise} Promise to be resolved when the Test Case result is uploaded
  */
 async function updateRallyTCResult() {
@@ -26,6 +23,8 @@ async function updateRallyTCResult() {
 
   const testsToUpdate = getResultsFromAllure.getTestsWithVerdict(allTests, testsToUpload);
   const batch = await createBatchArray(testsToUpdate);
+
+  // console.log(batch.Batch[0].Entry);
 
   const options = {
     url: 'https://rally1.rallydev.com/slm/webservice/v2.0/batch',
@@ -48,6 +47,7 @@ async function updateRallyTCResult() {
 updateRallyTCResult()
   .then(result => {
     const jsonResult = JSON.parse(result);
+    console.log(jsonResult);
     const { Errors } = jsonResult.BatchResult;
     if (Errors.length > 0) {
       throw new Error(Errors);

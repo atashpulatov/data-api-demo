@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 const allureReport = './allure-report/data/behaviors.json';
 const path = require('path');
 const fs = require('fs');
@@ -41,15 +42,8 @@ function getTestCaseId(testCase) {
  * @returns {String} Test Case verdict
  */
 function getStatus(testCase) {
-  let verdict = '';
   const { status } = testCase;
-  switch (status) {
-    case 'failed': verdict = 'Fail';
-      break;
-    case 'passed': verdict = 'Pass';
-      break;
-  }
-  return verdict;
+  return status[0].toUpperCase() + status.slice(1, 4);
 }
 
 /**
@@ -140,14 +134,11 @@ function getReportData() {
  * of the test cases to be uploaded
  * @returns {Array} Array of objects (test results) with specified verdict containing data that will be uploaded to Rally
  */
-function getTestsWithVerdict(tests, testVerdict) {
+function getTestsWithVerdict(tests, testVerdict = 'pass') {
   if (testVerdict === 'all') {
     return tests;
   }
-  if (testVerdict === 'fail') {
-    return tests.filter(test => test.verdict === 'Fail');
-  }
-  return tests.filter(test => test.verdict === 'Pass');
+  return tests.filter(test => test.verdict === (testVerdict.charAt(0).toUpperCase() + testVerdict.slice(1)));
 }
 
 exports.getReportData = getReportData;
