@@ -139,6 +139,15 @@ function OfficeWorksheet() {
     browser.pause(1999);
     browser.keys(['Backspace']);
   };
+
+  /**
+   * TODO: jsdoc
+   */
+  this.formatTable = () => {
+    switchToExcelFrame();
+    $(excelSelectors.formatAsTable).click();
+    $(excelSelectors.lightGrayTableFormat).click();
+  };
 }
 
 export default new OfficeWorksheet();

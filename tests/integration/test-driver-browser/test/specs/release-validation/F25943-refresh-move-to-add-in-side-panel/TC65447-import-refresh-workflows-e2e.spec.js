@@ -27,12 +27,12 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.datasets.salesRecords50k);
-    browser.pause(5555);
+    browser.pause(3000); // allow import to make some initial progress
 
     console.log('Enter edit mode');
     OfficeWorksheet.selectCell('D5');
     browser.keys('Entering edit mode');
-    browser.pause(5555);
+    browser.pause(40000); // longer pause as per test case description
 
     console.log('Exit edit mode');
     pressEnter();
@@ -42,6 +42,12 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
+    console.log('get value of E4 cell from sheet1');
+    OfficeWorksheet.selectCell('E4');
+    browser.pause(2000);
+    const selectedCell = '#m_excelWebRenderer_ewaCtl_selectionHighlight0-1-0';
+    const sheet1CellE4Value = $(selectedCell).getText();
+
 
     console.log('duplicate first object');
     PluginRightPanel.duplicateObject(1);
@@ -49,6 +55,12 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.duplicateSucces);
     PluginRightPanel.closeNotificationOnHover();
+
+    console.log('get value of E4 cell from sheet2 and compare it to E4 from sheet 1');
+    OfficeWorksheet.selectCell('E4');
+    browser.pause(2000);
+    expect(sheet1CellE4Value).toBe($(selectedCell).getText());
+
 
     console.log('import a prompted report');
     OfficeWorksheet.openNewSheet();
@@ -99,27 +111,55 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
-    console.log('hover over the third object');
-    $(rightPanelSelectors.getObjectSelector(3)).moveTo();
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getDuplicateBtnForObject(3))).toBe(true);
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getEdithBtnForObject(3))).toBe(true);
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getRefreshBtnForObject(3))).toBe(true);
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getRemoveBtnForObject(3))).toBe(true);
+    const numberOfObjects = $$('.object-tile').length;
 
-    console.log('hover over the fifth object');
-    $(rightPanelSelectors.getObjectSelector(5)).moveTo();
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getDuplicateBtnForObject(5))).toBe(true);
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getEdithBtnForObject(5))).toBe(true);
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getRefreshBtnForObject(5))).toBe(true);
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.getRemoveBtnForObject(5))).toBe(true);
+    console.log('hover over imported objects');
+    for (let objectIndex = 1; objectIndex <= numberOfObjects; objectIndex++) {
+      $(rightPanelSelectors.getObjectSelector(objectIndex)).moveTo();
+      expect(PluginRightPanel.isOpaque(rightPanelSelectors.getDuplicateBtnForObject(objectIndex))).toBe(true);
+      expect(PluginRightPanel.isOpaque(rightPanelSelectors.getEdithBtnForObject(objectIndex))).toBe(true);
+      expect(PluginRightPanel.isOpaque(rightPanelSelectors.getRefreshBtnForObject(objectIndex))).toBe(true);
+      expect(PluginRightPanel.isOpaque(rightPanelSelectors.getRemoveBtnForObject(objectIndex))).toBe(true);
+    }
 
     console.log('click master checkbox to select all objects');
     PluginRightPanel.clickMasterCheckbox();
-    const numberOfObjects = $$('.object-tile').length;
     for (let objectIndex = 1; objectIndex <= numberOfObjects; objectIndex++) {
       expect($(rightPanelSelectors.getObjectCheckbox(objectIndex)).getAttribute('aria-checked')).toBe('true');
     }
-    // expect($(rightPanelSelectors.getObjectCheckbox(2)).getAttribute('aria-checked')).toBe('true');
-    // expect($(rightPanelSelectors.getObjectCheckbox(3)).getAttribute('aria-checked')).toBe('true');
+
+    console.log('check if refreshAll and removeAll buttons are visible');
+    expect(PluginRightPanel.isOpaque(rightPanelSelectors.refreshAllBtn)).toBe(true);
+    expect(PluginRightPanel.isOpaque(rightPanelSelectors.deleteAllBtn)).toBe(true);
+
+    console.log('select table to apply formatting to');
+    PluginRightPanel.clickObjectInRightPanel(6);
+
+    console.log('refresh all');
+    PluginRightPanel.clickMasterCheckbox();
+    browser.pause(2000);
+    PluginRightPanel.refreshAll();
+
+    console.log('apply formatting');
+    OfficeWorksheet.formatTable();
+    browser.pause(5000);
+
+    console.log('scroll to the bottom of the table');
+    OfficeWorksheet.selectCell('D5');
+    browser.keys(['End']);
+    browser.pause(5000);
+
+    console.log('switch between worksheets');
+    OfficeWorksheet.openSheet(3);
+    OfficeWorksheet.openSheet(4);
+
+    waitForNotification();
+    PluginRightPanel.closeAllNotificationsOnHover();
+    browser.pause(3000);
+
+    PluginRightPanel.logout();
+    browser.pause(2222);
+    expect($(rightPanelSelectors.pluginImage).isDisplayed()).toBe(true);
+    expect($(rightPanelSelectors.loginRightPanelBtn).isDisplayed()).toBe(true);
   });
 });
