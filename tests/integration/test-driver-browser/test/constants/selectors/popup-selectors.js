@@ -133,7 +133,8 @@ export const popupSelectors = {
     disabledCheckboxAllPanel: '.all-panel__content .category-list-row.disabled .checkbox-cell',
     categoryListRowDisabled: '.category-list-row.disabled',
     dates: '.mstr-date-picker input',
-    clearAll: '.filter-panel__button'
+    clearAll: '.filter-panel__button',
+    viewSelected: '.all-panel .mstr-switch',
   },
   objectTable: { scrollContainer: '.ReactVirtualized__Grid.ReactVirtualized__Table__Grid', },
   metricsSort: '#sort-toggle-metrics > span',
