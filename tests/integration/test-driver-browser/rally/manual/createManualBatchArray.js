@@ -25,18 +25,18 @@ module.exports = async function createManualBatchArray(testCaseArray) {
           testcaseresult: {
             Date: today,
             Tester: testerUrl,
-            Build: '11.2.0100.22936',
+            Build: rallyConfig.build,
             TestSet: testSet,
             Testcase: tcUrl.split('v2.0')[1],
             Verdict: verdict,
             Duration: '',
-            //      'Notes': notes,
+            // 'Notes': notes,
             c_Browsertype: '',
-            c_ProductionRelease: '11.1.5 [2020-Mar-27]',
+            c_ProductionRelease: rallyConfig.release,
             c_Environment: '',
-            //      'c_ExportApplication': exportApp,
-            //      'c_ClientOS': clientOS,
-            //      'c_Language': language
+            // 'c_ExportApplication': exportApp,
+            // 'c_ClientOS': clientOS,
+            // 'c_Language': language
           }
         }
       }

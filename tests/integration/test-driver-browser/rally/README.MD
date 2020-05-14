@@ -10,7 +10,7 @@ If you trigerred the automation suites manually and you want to upload the resul
 
 1) After the automation suite execution finished, the results from this run were created under allure-report and allure-results folders.
 
-2) Specify the build and release with which you want to upload the results in ./rallyconfig.js file in automation: {release:'', build: ''} object [PREFERED_OPTION]. You can specify them also from CMD as shown below but this option is more convenient.
+2) Specify the build and release with which you want to upload the results in ./rallyconfig.js file in {release:'', build: ''} object [PREFERED_OPTION]. You can specify them also from CMD as shown below but this option is more convenient.
 
 3) The rest of the fields for uploading results to Rally can be found in ./automated/createAutomatedBatchArray.js
   a) You can add the Test Set - only for RELEASE VALIDATION, environment, exportApp, notes or add your fields
@@ -37,6 +37,7 @@ To upload the results from manual execution, follow these points:
       passedTestCases: ['TC7321', 'TC62729']
       failedTestCases: ['TC7393']
     }
+  b) add release and build 
 
   b) If you want to add those results under some specific Test Set, add Test Set ID in testSet,
     e.g. testSet: 'TS2234'
@@ -45,7 +46,7 @@ To upload the results from manual execution, follow these points:
     email: 'stasiek@microstrategy.com'
   
   d) The rest of the fields for uploading results to Rally can be found in ./manual/createManualBatchArray.js
-    a) You can add there BUILD, RELEASE, browser, duration, notes, etc.
+    a) You can add there browser, duration, notes, etc.
 
 
 ## Built With

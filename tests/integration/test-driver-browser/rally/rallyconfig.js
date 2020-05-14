@@ -9,8 +9,6 @@ module.exports = {
     email: '',
     testSet: '',
   },
-  automation: {
-    release: '11.2.x',
-    build: '1'
-  }
+  release: '',
+  build: ''
 };

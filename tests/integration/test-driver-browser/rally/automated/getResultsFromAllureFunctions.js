@@ -82,7 +82,7 @@ function getBrowser(testCase) {
 function getBuild() {
   let build;
   if (!cmd[2] || cmd[2] === 'pass' || cmd[2] === 'fail' || cmd[2] === 'all') {
-    build = rallyconfig.automation.build;
+    build = rallyconfig.build;
   } else {
     build = cmd[3];
   }
@@ -97,7 +97,7 @@ function getBuild() {
 function getRelease() {
   let release;
   if (!cmd[3] || cmd[3] === 'pass' || cmd[3] === 'fail' || cmd[3] === 'all') {
-    release = rallyconfig.automation.release;
+    release = rallyconfig.release;
   } else {
     release = cmd[4];
   }
