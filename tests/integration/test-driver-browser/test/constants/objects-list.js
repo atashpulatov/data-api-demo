@@ -66,6 +66,20 @@ export const objectsList = {
   },
 
   dossiers: {
+    nested: {
+      name: 'Dossier with all prompts (incl. nested)',
+      prompt1: '#id_mstr105',
+      prompt2: '#id_mstr142_txt',
+      prompt3: '#id_mstr238ListContainer > div.mstrListBlockItem',
+      prompt4: '#id_mstr198_txt',
+      prompt5: '#id_mstr68 > table > tbody > tr:nth-child(7) > td.mstrPromptTOCListItemTitle > span',
+      prompt6: '#id_mstr249_txt',
+      prompt7: '#id_mstr243_txt',
+      prompt8: '#id_mstr255_txt',
+      prompt9: '#id_mstr68 > table > tbody > tr:nth-child(10) > td.mstrPromptTOCListItemTitle > span',
+      prompt10: '#id_mstr263_txt',
+      prompt11: '#mstr129',
+    },
     complexDossier: {
       name: 'Complex dossier (20 visualizations)',
       timeToOpen: 10000,
