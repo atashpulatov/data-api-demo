@@ -9,7 +9,7 @@ const settings = {
     hostname: getEnvironment(),
     username: 'a',
     password: '',
-    chineseUser: 'User_SChinese',
+    chineseSimplifiedUser: 'User_SChinese',
     germanUser: 'User_German',
   }
 };

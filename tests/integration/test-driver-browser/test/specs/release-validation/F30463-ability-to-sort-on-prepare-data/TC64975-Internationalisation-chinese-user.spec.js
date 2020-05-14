@@ -10,7 +10,7 @@ import settings from '../../../config';
 
 describe('[F30463] Ability to sort on prepare data', () => {
   beforeAll(() => {
-    OfficeLogin.openExcelAndLoginToPlugin(settings.env.chineseUser);
+    OfficeLogin.openExcelAndLoginToPlugin(settings.env.chineseSimplifiedUser);
   });
 
   afterEach(() => {
