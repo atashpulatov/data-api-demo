@@ -37,9 +37,9 @@ module.exports = async function createBatchArray(testCaseArray) {
             c_Browsertype: browser,
             c_Environment: '',
             c_ProductionRelease: release,
-            //      'c_ExportApplication': exportApp,
-            //      'c_ClientOS': clientOS,
-            //      'c_Language': language
+            // 'c_ExportApplication': exportApp,
+            // c_ClientOS': clientOS,
+            // 'c_Language': language
           }
         }
       }
