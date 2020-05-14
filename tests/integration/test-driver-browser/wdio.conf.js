@@ -67,6 +67,7 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
       './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54856-filtering-with-type-owner-certified-date.spec.js',
       './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC53430-refreshing-and-filtering-during-refresh.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54855-filtering-object-list-with-all-panel.spec.js',
       './test/specs/release-validation/F12909-import-report/TC35090-right-under-excel-limit.spec.js',
       './test/specs/release-validation/F12909-import-report/TC35247-excel-limits.spec.js',
       './test/specs/release-validation/F12909-import-report/TC35248-excel-limits-size-placement.spec.js',
