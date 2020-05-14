@@ -54,7 +54,7 @@ describe('Smart Folder - IMPORT -', () => {
     PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectName);
     browser.pause(500);
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     PluginPopup.clickPrepareData();
 
     selectObjectElementsInPrepareData(['Session', 'Account', 'Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);

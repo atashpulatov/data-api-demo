@@ -21,14 +21,34 @@ class PluginRightPanel {
   }
 
   logout() {
+    console.log('Should log out');
     this.clickSettings();
     this.clickLogout();
   }
 
   clickImportDataButton() {
+    console.log('Should click import data button');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.importDataBtn), 20000);
     browser.pause(999);
+  }
+
+  /**
+   * Moves cursor over particular element (ex. refresh icon)
+   *
+   * @param {Number} index index of the icon in the icon bar
+   */
+  moveToRefreshIcon(index) {
+    $(rightPanelSelectors.getRefreshBtnForObject(index)).moveTo();
+  }
+
+  /**
+   * Moves cursor over particular element (ex. edit icon)
+   *
+   * @param {Number} index index of the icon in the icon bar
+   */
+  moveToEditIcon(index) {
+    $(rightPanelSelectors.getEdithBtnForObject(index)).moveTo();
   }
 
   // Currently it is not used
@@ -42,6 +62,7 @@ class PluginRightPanel {
   }
 
   clickAddDataButton() {
+    console.log('Should click add data button');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.addDataBtn));
     browser.pause(999);
@@ -62,6 +83,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   refreshObject(index) {
+    console.log('Should refresh the object');
     switchToPluginFrame();
     const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(index);
     $(refreshBtn).moveTo();
@@ -169,6 +191,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   clickObjectInRightPanel(index) {
+    console.log('Should click the object in right panel');
     switchToPluginFrame();
     const objectSelected = rightPanelSelectors.getObjectSelector(index);
     browser.pause(1000);
@@ -234,6 +257,7 @@ class PluginRightPanel {
   }
 
   closeNotificationOnHover() {
+    console.log('Should close the notification');
     const selector = rightPanelSelectors.notificationContainer;
     const selectorOther = rightPanelSelectors.objectHeaderContainer;
     $(selectorOther).moveTo();

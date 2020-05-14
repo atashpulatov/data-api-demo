@@ -32,7 +32,7 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
 
     PluginPopup.searchForObject('Supplier Sales Report');
     browser.pause(999); // waiting for search to filter the ObjectTable
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     PluginPopup.clickImport();
 
     waitForNotification();

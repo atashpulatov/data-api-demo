@@ -18,21 +18,20 @@ describe('[F24751] Import report with or without subtotals', () => {
 
   it('[TC53745] Checking if subtotals toggle is hidden while importing report/dataset without subtotals', () => {
     // should check if the toggle is hidden for basic report without subtotals
-    const basicReport = objectsList.reports.withoutSubtotals.basicReport;
+    const { basicReport } = objectsList.reports.withoutSubtotals;
     PluginRightPanel.clickImportDataButton();
     PluginPopup.openPrepareData(basicReport, false);
     expect($(popupSelectors.subtotalToggler).isExisting(false));
     PluginPopup.clickBack();
 
     // should check if the toggle is hidden for report without subtotals based on intelligent cube
-    const reportBasedOnIntelligentCube = objectsList.reports.withoutSubtotals.reportBasedOnIntelligentCube;
-    PluginPopup.openPrepareData(reportBasedOnIntelligentCube, false);
+    const { reportBasedOnIntelligentCubeWithoutSubtotals } = objectsList.reports.withoutSubtotals;
+    PluginPopup.openPrepareData(reportBasedOnIntelligentCubeWithoutSubtotals, false);
     expect($(popupSelectors.subtotalToggler).isExisting(false));
     PluginPopup.clickBack();
 
     // should check if the toggle is hidden for prompted report without subtotals
-    const promptedReportWithoutSubtotals =
-      objectsList.reports.withoutSubtotals.promptedReport;
+    const promptedReportWithoutSubtotals = objectsList.reports.withoutSubtotals.promptedReport;
     PluginPopup.preparePrompt(promptedReportWithoutSubtotals, false);
     PluginPopup.clickRun();
     console.log('swich to prepare data');
@@ -40,16 +39,14 @@ describe('[F24751] Import report with or without subtotals', () => {
     expect($(popupSelectors.subtotalToggler).isExisting(false));
     PluginPopup.clickBack();
 
-    //should check if the toggle is hidden for  report with crosstabs without subtotals
-    const reportWithCrosstabsWithoutSubtotals =
-      objectsList.reports.withoutSubtotals.reportWithCrosstabs;
+    // should check if the toggle is hidden for  report with crosstabs without subtotals
+    const reportWithCrosstabsWithoutSubtotals = objectsList.reports.withoutSubtotals.reportWithCrosstabs;
     PluginPopup.openPrepareData(reportWithCrosstabsWithoutSubtotals, false);
     expect($(popupSelectors.subtotalToggler).isExisting(false));
     PluginPopup.clickBack();
 
     // should check if the toggle is hidden for prompted report with crosstabs and without subtotals
-    const promptedReportWithCrosstabsWithoutSubtotals =
-      objectsList.reports.withoutSubtotals.promptedReportWithCrosstabs;
+    const promptedReportWithCrosstabsWithoutSubtotals = objectsList.reports.withoutSubtotals.promptedReportWithCrosstabs;
     PluginPopup.preparePrompt(
       promptedReportWithCrosstabsWithoutSubtotals,
       false
@@ -61,7 +58,7 @@ describe('[F24751] Import report with or without subtotals', () => {
     PluginPopup.clickBack();
 
     // should  check if the toggle is hidden for dataset
-    const dataset = objectsList.reports.withoutSubtotals.dataset;
+    const { dataset } = objectsList.reports.withoutSubtotals;
     PluginPopup.openPrepareData(dataset, false);
     expect($(popupSelectors.subtotalToggler).isExisting(false));
     PluginPopup.clickBack();

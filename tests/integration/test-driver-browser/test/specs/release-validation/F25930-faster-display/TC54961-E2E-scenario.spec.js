@@ -41,7 +41,7 @@ describe('F25930 - Faster display of data sources by caching object list', () =>
     switchToPluginFrame();
     pluginPopup.searchForObject(objectsList.datasets.salesRecords1k);
     browser.pause(1111);
-    pluginPopup.selectFirstObject();
+    pluginPopup.selectObject();
     pluginPopup.clickPrepareData();
 
     const begin = Date.now();

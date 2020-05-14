@@ -44,7 +44,7 @@ describe('Prepare Data - ', () => {
     await PluginRightPanel.clickAddDataButton();
     await switchToPluginFrame();
     await PluginPopup.searchForObject(objectsList.reports.basicReport);
-    await PluginPopup.selectFirstObject();
+    await PluginPopup.selectObject();
     await PluginPopup.clickPrepareData();
 
     // (4) should enter a string that matches a name of some listed metrics

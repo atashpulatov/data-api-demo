@@ -138,6 +138,7 @@ exports.config = {
       './test/specs/release-validation/F24751-import subtotals/TC53340-import-report-with-subtotals.spec.js',
       './test/specs/release-validation/F24751-import subtotals/TC53745-subtotals-toggle-hidden.spec.js',
       './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
+      './test/specs/release-validation/F24751-import subtotals/TC53752-subtotals-settings.spec.js'
     ],
     'F25946-details-panel': [
       './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
