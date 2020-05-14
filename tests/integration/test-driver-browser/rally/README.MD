@@ -13,7 +13,7 @@ If you trigerred the automation suites manually and you want to upload the resul
 2) Specify the build and release with which you want to upload the results in ./rallyconfig.js file in automation: {release:'', build: ''} object [PREFERED_OPTION]. You can specify them also from CMD as shown below but this option is more convenient.
 
 3) The rest of the fields for uploading results to Rally can be found in ./automated/createAutomatedBatchArray.js
-  a) You can add the Test Set - only for release validation, environment, exportApp, notes or add your fields
+  a) You can add the Test Set - only for RELEASE VALIDATION, environment, exportApp, notes or add your fields
 
 4) To upload the parsed results with passed verdict use: 'npm run rally' script from test-driver-browser. The command has following options:
   a) verdict: 'npm run rally' command by default uploads passed results. Add 'fail' parameter to upload failed results or 'all' to upload all the results. Use these parameters after build and release if you also pass those 
