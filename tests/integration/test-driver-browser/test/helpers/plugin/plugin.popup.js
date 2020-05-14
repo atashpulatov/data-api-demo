@@ -41,6 +41,7 @@ class PluginPopup {
   }
 
   clickPrepareData() {
+    console.log('Should click prepare data button');
     waitAndClick($(popupSelectors.prepareBtn));
   }
 
