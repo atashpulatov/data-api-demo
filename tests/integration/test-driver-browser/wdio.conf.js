@@ -58,8 +58,8 @@ exports.config = {
       './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
@@ -159,8 +159,8 @@ exports.config = {
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
     ],
     'F28550-rename-excel-table-without-losing-binding': [
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
     ],
     'TS41441-E2E Sanity checks': [
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
