@@ -1144,6 +1144,6 @@ class PluginPopup {
     $('#mstrdossierPromptEditor').waitForExist(10000);
     switchToPromptFrameForImportDossier();
   }
-
+}
 
 export default new PluginPopup();
