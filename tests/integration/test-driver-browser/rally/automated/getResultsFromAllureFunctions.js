@@ -13,9 +13,8 @@ const cmd = process.argv;
  */
 function parseReportData(report) {
   const filePath = path.resolve(report);
-  const results = (JSON.parse(fs.readFileSync(filePath)));
-  const data = results.children;
-  return data;
+  const results = JSON.parse(fs.readFileSync(filePath));
+  return results.children;
 }
 
 /**
