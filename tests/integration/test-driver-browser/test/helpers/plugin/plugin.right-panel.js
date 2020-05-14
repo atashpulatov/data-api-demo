@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
-import { waitAndClick } from '../utils/click-helper';
+import { waitAndClick, waitAndDoubleClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import { waitForNotification } from '../utils/wait-helper';
+import { pressEnter } from '../utils/keyboard-actions';
 
 
 class PluginRightPanel {
@@ -367,6 +368,25 @@ class PluginRightPanel {
     console.log('Should cancel object pending action');
     const objectCancelBtn = $(rightPanelSelectors.getPendingNotificationCancelBtnAt(index));
     waitAndClick(objectCancelBtn);
+  }
+
+  /**
+   * Changes the name of object that is imported. Will work if there is an object imported.
+   *
+   * @param {Number} index Index of the object in the right side panel that the name will be changed. Starts from 1 (1 is the first from the top)
+   * @param {String} text Text to enter for new object name
+   */
+  changeObjectName(index, text) {
+    switchToPluginFrame();
+    const divNameInput = $(rightPanelSelectors.getNameInputForObject(index));
+    divNameInput.moveTo();
+    browser.pause(2222);
+    waitAndDoubleClick(divNameInput);
+    browser.pause(3333);
+    const nameText = $(rightPanelSelectors.getNameInputTextForObject(index));
+    nameText.clearValue();
+    nameText.setValue(text);
+    pressEnter();
   }
 
   /**

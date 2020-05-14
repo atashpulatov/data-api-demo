@@ -42,6 +42,7 @@ export const rightPanelSelectors = {
   getRemoveBtnForObject: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div > div.object-tile-header > span.icon-bar-container > span > button:nth-child(6)`,
   getRemoveBtnForObjectTooltip: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div > div.object-tile-header > span.icon-bar-container > span > button:nth-child(6) > div`,
   getNameInputForObject: (index) => `#overlay > div.side-panel > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div > div.object-tile-name-row > div.rename-input`,
+  getNameInputTextForObject: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div > div.object-tile-name-row > input`,
   notificationContainer: '.notification-container',
   progressBar: '.notification-container > div.notification-body > div.progress',
   getNotificationAt: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container`,

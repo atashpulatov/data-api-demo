@@ -2,6 +2,8 @@
 import officeStoreObject from '../store/office-store-object';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import { officeApiHelper } from '../api/office-api-helper';
+import officeApiDataLoader from '../api/office-api-data-loader';
+import { homeHelper } from '../../home/home-helper';
 
 class OfficeRemoveHelper {
   /**
@@ -26,42 +28,85 @@ class OfficeRemoveHelper {
   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
   * @param {Boolean} isClear Specify if object should be cleared or deleted. False by default
   */
-   removeExcelTable = async (officeTable, excelContext, isCrosstab, crosstabHeaderDimensions = {}, isClear = false) => {
-     const tableRange = officeTable.getDataBodyRange();
-     excelContext.trackedObjects.add(tableRange);
+  removeExcelTable = async (officeTable, excelContext, isCrosstab, crosstabHeaderDimensions = {}, isClear = false) => {
+    const tableRange = officeTable.getDataBodyRange();
+    excelContext.trackedObjects.add(tableRange);
 
-     if (isCrosstab) {
-       officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
-       officeTable.showHeaders = true;
-       await excelContext.sync();
+    if (isCrosstab) {
+      officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
+      officeTable.showHeaders = true;
+      await excelContext.sync();
 
-       await officeApiCrosstabHelper.clearCrosstabRange(
-         officeTable,
-         {
-           crosstabHeaderDimensions: {},
-           isCrosstab,
-           prevCrosstabDimensions: crosstabHeaderDimensions
-         },
-         excelContext,
-         isClear
-       );
-       await excelContext.sync();
-     }
+      await officeApiCrosstabHelper.clearCrosstabRange(
+        officeTable,
+        {
+          crosstabHeaderDimensions: {},
+          isCrosstab,
+          prevCrosstabDimensions: crosstabHeaderDimensions
+        },
+        excelContext,
+        isClear
+      );
+      await excelContext.sync();
+    }
 
-     if (!isClear) {
-       excelContext.runtime.enableEvents = false;
-       await excelContext.sync();
+    if (!isClear) {
+      excelContext.runtime.enableEvents = false;
+      await excelContext.sync();
+      if (homeHelper.isMacAndSafariBased()) {
+        await this.deleteTableInChunks(excelContext, officeTable);
+      } else {
+        officeTable.delete();
+      }
 
-       officeTable.delete();
+      excelContext.runtime.enableEvents = true;
+    } else {
+      tableRange.clear('contents');
+    }
 
-       excelContext.runtime.enableEvents = true;
-     } else {
-       tableRange.clear('contents');
-     }
+    excelContext.trackedObjects.remove(tableRange);
+    await excelContext.sync();
+  }
 
-     excelContext.trackedObjects.remove(tableRange);
-     await excelContext.sync();
-   }
+  deleteTableInChunks = async (excelContext, officeTable) => {
+    const deleteChunkSize = 10000;
+    this.deleteRowsInChunks(excelContext, officeTable, deleteChunkSize, deleteChunkSize);
+
+    officeTable.delete();
+    await excelContext.sync();
+  }
+
+  /**
+ * Deletes redundant rows in office table.
+ *
+ * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+ * @param {Object} officeTable Previous office table to refresh
+ * @param {number} chunkSize Number of rows to delete in one chunk
+ * @param {number} rowsToPreserveCount Number of rows to preserve
+ *
+ */
+  deleteRowsInChunks = async (excelContext, officeTable, chunkSize, rowsToPreserveCount) => {
+    const tableRows = officeTable.rows;
+
+    let tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
+    excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+
+    while (tableRowCount > rowsToPreserveCount) {
+      const sumOfRowsToDeleteInNextStep = tableRowCount - rowsToPreserveCount;
+      const rowsToDeleteCount = sumOfRowsToDeleteInNextStep > chunkSize
+        ? chunkSize
+        : sumOfRowsToDeleteInNextStep;
+      officeTable
+        .getRange()
+        .getLastRow()
+        .getRowsAbove(rowsToDeleteCount)
+        .delete('Up');
+      await excelContext.sync();
+      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+      tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
+      excelContext.workbook.application.suspendApiCalculationUntilNextSync();
+    }
+  }
 
   /**
    * Checks if the object existing in Excel workbook
