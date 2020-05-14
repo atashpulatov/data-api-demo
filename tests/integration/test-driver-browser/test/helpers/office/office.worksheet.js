@@ -118,6 +118,7 @@ function OfficeWorksheet() {
   };
 
   this.selectCell = (cellId) => {
+    console.log(`Should select cell ${cellId}`);
     switchToExcelFrame();
     $(excelSelectors.cellInput).click();
     pressBackspace();

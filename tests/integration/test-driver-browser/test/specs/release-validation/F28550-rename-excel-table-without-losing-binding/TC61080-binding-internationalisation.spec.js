@@ -10,11 +10,11 @@ import { pressEscape } from '../../../helpers/utils/keyboard-actions';
 
 describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
   beforeEach(() => {
-    // OfficeLogin.openExcelAndLoginToPlugin();
+    OfficeLogin.openExcelAndLoginToPlugin();
   });
   afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
   it('[TC61080] - Internationalisation', () => {
@@ -45,6 +45,7 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
       const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
       expect(normalizedSecondTableName).toEqual(excelTableFullNames[i]);
 
+      console.log('Shold close the NameBoxMenu');
       pressEscape();
       PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
 

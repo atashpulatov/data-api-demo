@@ -27,31 +27,37 @@ describe('F28550 - Excel Connector Hardening: Rename Excel table without losing 
     OfficeWorksheet.selectCell('A2');
     PluginRightPanel.clickImportDataButton();
 
+    console.log(`Should import ${longReportWithInvalidCharacters}`);
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(longReportWithInvalidCharacters.sourceName);
     browser.pause(10000);
 
+    console.log('Assert binding');
     switchToExcelFrame();
     waitAndClick($(excelSelectors.nameBoxDropdownButton), 4000);
     const importedFirstTableName = $(`[id^=${longReportWithInvalidCharacters.excelTableNameStart}]> span`).getText(); // searches for the beginning of the id's string only because of changing timestamps at the end
     const normalizedFirstTableName = removeTimestampFromTableName(importedFirstTableName);
     expect(normalizedFirstTableName).toEqual(longReportWithInvalidCharacters.excelTableFullName);
 
+    console.log('Shold close the NameBoxMenu');
     pressEscape();
     PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A2');
 
     OfficeWorksheet.selectCell('I2');
 
+    console.log(`Should import ${longReportWithInvalidCharacters} second time`);
     switchToRightPanelFrame();
     PluginRightPanel.clickAddDataButton();
     PluginPopup.importObject(longReportWithInvalidCharacters.sourceName);
     browser.pause(10000);
 
+    console.log('Assert binding');
     const importedSecondTableName = getTextOfNthObjectOnNameBoxList(2);
     const normalizedSecondTableName = removeTimestampFromTableName(importedSecondTableName);
     expect(normalizedSecondTableName).toEqual(longReportWithInvalidCharacters.excelTableFullName);
 
+    console.log('Shold close the NameBoxMenu');
     pressEscape();
     PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'I2');
   });
