@@ -35,7 +35,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     PluginRightPanel.clickAddDataButton();
     switchToPluginFrame();
     PluginPopup.searchForObject(objectsList.reports.seasonalReport);
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     PluginPopup.clickPrepareData();
 
     // should select one metric from many listed

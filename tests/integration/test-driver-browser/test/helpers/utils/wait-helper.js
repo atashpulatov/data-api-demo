@@ -2,6 +2,7 @@ import { switchToPluginFrame, switchToExcelFrame } from './iframe-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 
 export function waitForNotification() {
+  console.log('Should wait for notification');
   const notification = $(rightPanelSelectors.notificationContainer);
   const progressBar = $(rightPanelSelectors.progressBar);
   getNotification(notification, progressBar);
