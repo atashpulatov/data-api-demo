@@ -660,7 +660,7 @@ class PluginPopup {
 
   openPrepareData(objectName, isObjectFromLibrary = false) {
     switchToDialogFrame();
-    this.switchLibrary(isObjectFromLibrary);
+    // this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
     this.selectFirstObject();

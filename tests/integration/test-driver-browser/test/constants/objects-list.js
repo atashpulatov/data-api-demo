@@ -191,4 +191,5 @@ export const objectsList = {
       visualization: '#mstr106'
     },
   },
+  aqdtMirror2Objects: { tcAutomation: 'TC to automate', },
 };
