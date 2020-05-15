@@ -34,13 +34,10 @@ async function getOwner(testCaseId) {
  * @returns {String} URL to tester endpoint
  */
 async function getTesterUrl(testerEmail) {
-  if (testerEmail !== '') {
-    const emailUrl = `${rallyConfig.apiUrl}/user/?query=(EmailAddress%20%3D%20"${testerEmail}")`;
-    return getDataFromRally(emailUrl)
-      .then(({ QueryResult }) => QueryResult.Results[0]._ref)
-      .catch(() => { throw Error(`Couldn't add ${testerEmail} as tester`); });
-  }
-  throw Error('Add your email to rallyconfig.js');
+  const emailUrl = `${rallyConfig.apiUrl}/user/?query=(EmailAddress%20%3D%20"${testerEmail}")`;
+  return getDataFromRally(emailUrl)
+    .then(({ QueryResult }) => QueryResult.Results[0]._ref)
+    .catch(() => { throw Error(`Couldn't add ${testerEmail} as tester`); });
 }
 
 /**

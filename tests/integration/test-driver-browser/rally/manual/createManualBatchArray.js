@@ -13,7 +13,12 @@ module.exports = async function createManualBatchArray(testCaseArray) {
   const batch = [];
   try {
     for (let i = 0; i < testCaseArray.length; i++) {
-      const testerUrl = await helpers.getTesterUrl(rallyConfig.email);
+      let testerUrl = '';
+      if (rallyConfig.email !== '') {
+        testerUrl = await helpers.getTesterUrl(rallyConfig.email);
+      } else {
+        throw Error('Add your email to rallyconfig.js');
+      }
       const tcUrl = await helpers.getRallyTCUrl(testCaseArray[i].testCaseId);
       const { verdict } = testCaseArray[i];
       let testSet = '';
