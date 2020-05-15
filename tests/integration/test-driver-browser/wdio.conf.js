@@ -51,6 +51,7 @@ exports.config = {
       './test/specs/release-validation/F24751-import subtotals/TC53340-import-report-with-subtotals.spec.js',
       './test/specs/release-validation/F24751-import subtotals/TC53745-subtotals-toggle-hidden.spec.js',
       './test/specs/release-validation/F24751-import subtotals/TC54788-import-subtotals.spec.js',
+      './test/specs/release-validation/F24751-import subtotals/TC53752-subtotals-settings.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-within-details-panel.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
@@ -100,13 +101,13 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC65447-import-refresh-workflows-e2e.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-chinese-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-a-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
-      './test/specs/release-validation/F24751-import subtotals/TC53752-subtotals-settings.spec.js',
-      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC65447-import-refresh-workflows-e2e.spec.js',
+      './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -232,6 +233,9 @@ exports.config = {
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC65447-import-refresh-workflows-e2e.spec.js',
+    ],
+    'F30479-hardening-import-from-dossier': [
+      './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
     ],
   },
   // Patterns to exclude.
