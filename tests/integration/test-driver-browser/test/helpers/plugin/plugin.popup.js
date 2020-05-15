@@ -1219,10 +1219,11 @@ class PluginPopup {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     pluginRightPanel.closeNotificationOnHover();
   }
-    /**
+
+  /**
     * Edits imported report and click re-prompt button
     */
-   editAndOpenReprompt() {
+  editAndOpenReprompt() {
     console.log('Should click edit button');
     pluginRightPanel.editObject(1);
     browser.pause(5000);
@@ -1269,6 +1270,22 @@ class PluginPopup {
       }
     }
     return true;
+  }
+
+  /**
+   * Clicks view selected toggle in all panel
+   */
+  clickViewSelectedInAllPanel() {
+    waitAndClick($(popupSelectors.filterPanel.viewSelected));
+  }
+
+  /**
+   * Counts the number of items in the All Panel that are present in the DOM
+   *
+   * @returns {Number} number of items
+   */
+  getAllPanelItemCount() {
+    return $$(popupSelectors.filterPanel.allPanelCheckbox).length;
   }
 }
 

@@ -39,6 +39,7 @@ export const objectsList = {
     reportWithSubtotalAndPrompt: 'Report with a subtotal & prompt',
     promptedReportWithCrosstabAndSubtotals: 'Prompted report with crosstab and subtotals',
     mergedHeaderReport: 'Merged Header Report',
+    PromptedReportWithandWithoutSubtotals: 'Prompted report with attributes with and without subtotals',
     report50k: 'report 50k sales records',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
