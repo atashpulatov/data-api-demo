@@ -95,12 +95,12 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-chinese-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-a-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
-      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js'
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -220,6 +220,7 @@ exports.config = {
     ],
     'F25943-refresh-move-to-add-in-side-panel': [
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
     ],
   },
   // Patterns to exclude.
