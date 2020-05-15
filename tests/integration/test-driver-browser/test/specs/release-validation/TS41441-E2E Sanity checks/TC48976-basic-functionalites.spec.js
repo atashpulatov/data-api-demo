@@ -62,7 +62,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
 
     // Import report and select elements (attributes & metrics & filters)
     PluginPopup.searchForObject(objectsList.reports.report1k);
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     PluginPopup.clickPrepareData();
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
@@ -140,7 +140,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
 
     // Import dataset and select elements (attributes & metrics & filters)
     PluginPopup.searchForObject(objectsList.datasets.basicDataset);
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     PluginPopup.clickPrepareData();
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();

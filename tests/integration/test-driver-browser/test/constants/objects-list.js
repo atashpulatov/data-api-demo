@@ -15,6 +15,7 @@ export const objectsList = {
     valueDayPromptReport: 'Report with prompt - Value prompt - Date (Day) | Required | No default answer',
     bigDecimalPromptedReport: 'Report with prompt - Value prompt - Big Decimal (Customer ID) | Not required | No default answer',
     attributePromptedReport: 'Report with prompt - Attribute element prompt of Category | Required | Not default',
+    promptedReportWithSubtotals: 'Prompted report with subtotals',
     hierarchyPromptedReport: 'Report with prompt - Hierarchy prompt | Not required | Default',
     multiplePromptsReport: 'Report with multiple prompts.',
     report1k: '1k report',
@@ -33,11 +34,16 @@ export const objectsList = {
     basicSubtotalsReport: 'Report Totals Subtotals 1',
     categorySubCategory: 'CategorySubCategoryQuarter',
     reportToSortAttributeAndMetrics: 'Report with attributes and metrics to sort',
+    reportWithCrosstabAndSubtotals: 'Report with crosstab and subtotals',
+    reportBasedOnIntelligentCubeWithSubtotals: 'Report based on cube with subtotals',
+    reportWithSubtotalAndPrompt: 'Report with a subtotal & prompt',
+    promptedReportWithCrosstabAndSubtotals: 'Prompted report with crosstab and subtotals',
     mergedHeaderReport: 'Merged Header Report',
+    PromptedReportWithandWithoutSubtotals: 'Prompted report with attributes with and without subtotals',
     report50k: 'report 50k sales records',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
-      reportBasedOnIntelligentCube: 'Report based on cube without subtotals',
+      reportBasedOnIntelligentCubeWithoutSubtotals: 'Report based on cube without subtotals',
       promptedReport: 'Prompted report without subtotals',
       reportWithCrosstabs: 'Report with crosstab and without subtotals',
       promptedReportWithCrosstabs: 'Prompted report with crosstab and without subtotals',
@@ -121,6 +127,7 @@ export const objectsList = {
     notSupportedCube: 'multi table cube',
     salesRecords1k: '1k Sales Records.csv',
     salesData: 'Sales Data',
+    salesRecords50k: '50k Sales Records.csv',
   },
 
   dossiers: {
@@ -191,5 +198,13 @@ export const objectsList = {
       name: '1 MILION rows This is a very long name for a dossier so that we can test how we display long path to dossier visualisationsNew Dossier',
       visualization: '#mstr106'
     },
+    withFilter: {
+      name: 'Dossier with filter',
+      visualizations: { vis1: '#mstr106' }
+    },
+    withAttributeMetricSelector: {
+      name: 'dossier with attribute/metric selector',
+      visualizations: { vis1: '#mstr107' }
+    }
   },
 };

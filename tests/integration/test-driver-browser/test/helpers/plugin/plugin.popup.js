@@ -10,7 +10,9 @@ import {
   switchToPromptFrameForImportDossier
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
-import { pressTab, pressRightArrow, pressBackspace } from '../utils/keyboard-actions';
+import {
+  pressTab, pressRightArrow, pressBackspace, pressEnter
+} from '../utils/keyboard-actions';
 import { waitForNotification } from '../utils/wait-helper';
 import { dictionary } from '../../constants/dictionaries/dictionary';
 import OfficeWorksheet from '../office/office.worksheet';
@@ -41,6 +43,7 @@ class PluginPopup {
   }
 
   clickPrepareData() {
+    console.log('Should click prepare data button');
     waitAndClick($(popupSelectors.prepareBtn));
   }
 
@@ -61,6 +64,7 @@ class PluginPopup {
   }
 
   clickSubtotalToggler() {
+    console.log('Should switch subtotal toggler');
     waitAndClick($(popupSelectors.subtotalToggler));
   }
 
@@ -96,6 +100,15 @@ class PluginPopup {
   }
 
   /**
+   * Selects atrributes and metrics using all.
+   */
+  selectAllAttributesAndMetrics() {
+    console.log('Should select all attributes and metrics');
+    this.selectAllAttributes();
+    this.selectAllMetrics();
+  }
+
+  /**
    * Waits for element to show up and dissapear
    * useful to validate that action has been started and finished
    *
@@ -119,7 +132,7 @@ class PluginPopup {
    */
   selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
-      waitAndClick($(`input[name="${elements[i]}"]`));
+      waitAndClick($(`span=${elements[i]}`));
     }
   }
 
@@ -157,9 +170,27 @@ class PluginPopup {
     waitAndClick($(`.data-tip*=${headerName}`));
   }
 
-  selectFirstObject() {
+  /**
+   * Selects object from objects list depending on passed parameter.
+   *
+   * NOTE: by default selects first object.
+   *
+   * @param {Number} objectOrder is order of an object on the list
+   */
+  selectObject(objectOrder = 1) {
     browser.pause(2222);
-    waitAndClick($(popupSelectors.firstObject));
+    let selector = '';
+    switch (objectOrder) {
+      case 1:
+        selector = $(popupSelectors.firstObject);
+        break;
+      case 2:
+        selector = $(popupSelectors.secondObject);
+        break;
+      default:
+        return;
+    }
+    waitAndClick(selector);
   }
 
   selectFirstObjectWithoutSearch() {
@@ -174,7 +205,7 @@ class PluginPopup {
     browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectFirstObject();
+    this.selectObject();
     this.clickImport();
   }
 
@@ -182,7 +213,7 @@ class PluginPopup {
     switchToDialogFrame();
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectFirstObject();
+    this.selectObject();
     this.clickImport();
   }
 
@@ -207,7 +238,7 @@ class PluginPopup {
     this.switchLibrary(false);
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectFirstObject();
+    this.selectObject();
     this.clickPrepareData();
     browser.pause(9999); // temp solution
     switchToPromptFrame();
@@ -231,6 +262,28 @@ class PluginPopup {
 
   importPromptDefaultNested(objectName) {
     this.switchLibraryAndImportObject(objectName, false);
+    browser.pause(5555);
+    while (true) {
+      browser.pause(3000);
+      switchToPluginFrame();
+      if ($(popupSelectors.runBtn).isExisting()) {
+        this.clickRun();
+      } else {
+        break;
+      }
+    }
+  }
+
+  /**
+   * This function is used for report with nested prompts.
+   * It click on edit for the first object from the list.
+   * After that it is clicking run for all nested default prompts.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   */
+
+  editPromptDefaultNested(index = 1) {
+    pluginRightPanel.editObject(index);
     browser.pause(5555);
     while (true) {
       browser.pause(3000);
@@ -658,12 +711,13 @@ class PluginPopup {
     return searchBox.getValue() === stringToCompare;
   }
 
-  openPrepareData(objectName, isObjectFromLibrary = false) {
+  openPrepareData(objectName, isObjectFromLibrary = false, objectOrder = 1) {
+    console.log('Should open prepare data');
     switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
-    this.selectFirstObject();
+    this.selectObject(objectOrder);
     this.clickPrepareData();
   }
 
@@ -1029,6 +1083,19 @@ class PluginPopup {
   }
 
   /**
+    * Navigates to particular element (ex. button), via tab and presses enter.
+    *
+    * @param {Number} numberOfSteps is number of steps to navigate to particular element
+    */
+  navigateUsingTabAndPressEnter(numberOfSteps) {
+    for (let i = 0; i < numberOfSteps; i++) {
+      pressTab();
+      browser.pause(100);
+    }
+    pressEnter();
+  }
+
+  /**
     * Hovers over the ID element in the given details table
     * to show the tooltip and gets the tooltip text
     *
@@ -1152,10 +1219,11 @@ class PluginPopup {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     pluginRightPanel.closeNotificationOnHover();
   }
-    /**
+
+  /**
     * Edits imported report and click re-prompt button
     */
-   editAndOpenReprompt() {
+  editAndOpenReprompt() {
     console.log('Should click edit button');
     pluginRightPanel.editObject(1);
     browser.pause(5000);
@@ -1202,6 +1270,22 @@ class PluginPopup {
       }
     }
     return true;
+  }
+
+  /**
+   * Clicks view selected toggle in all panel
+   */
+  clickViewSelectedInAllPanel() {
+    waitAndClick($(popupSelectors.filterPanel.viewSelected));
+  }
+
+  /**
+   * Counts the number of items in the All Panel that are present in the DOM
+   *
+   * @returns {Number} number of items
+   */
+  getAllPanelItemCount() {
+    return $$(popupSelectors.filterPanel.allPanelCheckbox).length;
   }
 }
 
