@@ -853,6 +853,20 @@ class PluginPopup {
   }
 
   /**
+   * Closes given number of rows starting at the beginning of visible rows in Table of Objects
+   *
+   * @param {Number} amount Number of rows to close
+   */
+  closeFirstRows(amount) {
+    $(popupSelectors.expandButtonOpen).waitForExist({ timeout: 3000 });
+    const openExpandButtons = $$(popupSelectors.expandButtonOpen);
+    for (let i = 0; i < amount; i++) {
+      openExpandButtons[i].waitForExist({ timeout: 3000 });
+      openExpandButtons[i].click();
+    }
+  }
+
+  /**
    * Clicks the Refresh button located at the top bar of Table of Objects
    */
   clickRefreshButton() {
@@ -997,6 +1011,21 @@ class PluginPopup {
    */
   getDetailsTableByIndex(index) {
     return $$(popupSelectors.detailsTable)[index];
+  }
+
+  /**
+    * Checks if the passed details table contains all required elements
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @param {Boolean} [isMyLibraryOn] myLibrary switch state
+    */
+  assertDetailsTableDisplayedCorrectly(detailsTable, isMyLibraryOn) {
+    const detailsTableText = detailsTable.getText();
+    expect(detailsTableText).toContain('Type');
+    expect(detailsTableText).toContain('ID');
+    !isMyLibraryOn && expect(detailsTableText).toContain('Created');
+    !isMyLibraryOn && expect(detailsTableText).toContain('Location');
+    expect(detailsTableText).toContain('Description');
   }
 
   /**

@@ -20,6 +20,9 @@ exports.config = {
     './test/specs/release-validation/deprecated/sample.spec.js',
   ],
   suites: {
+    temp: [
+      './test/specs/release-validation/F25946-details-panel/TC59675-exanding-many-rows.spec.js',
+    ],
     acceptance: [
       './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -144,6 +147,7 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59676-expanding-many-rows.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59675-exanding-many-rows.spec.js'
     ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
