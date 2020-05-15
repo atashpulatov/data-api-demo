@@ -34,7 +34,7 @@ You run the script with command: npm run rally-man. The command has no other opt
 To upload the results from manual execution, follow these points:
 
 1) Create your Rally API key.
-  a) Go to this website and log in with your corporate credentials: https://rally1.rallydev.com/login/accounts/index.html#/keys
+  a) Go to this website, log in with your corporate credentials and go to API KEYS: https://rally1.rallydev.com/login/accounts/index.html#/apps
   b) Create your key.
   c) create file ".env" in test-driver-browser folder
   d) add this line there: 
