@@ -165,14 +165,12 @@ const clearNotifications = (state) => ({
 });
 
 const getOkButton = (payload) => [{
-  title: customT('OK'),
   type: 'basic',
   label: customT('OK'),
   onClick: payload.notification.callback,
 }];
 
 const getCancelButton = (objectWorkingId, operationType) => [{
-  title: customT('Cancel'),
   type: 'basic',
   label: customT('Cancel'),
   onClick: () => {
