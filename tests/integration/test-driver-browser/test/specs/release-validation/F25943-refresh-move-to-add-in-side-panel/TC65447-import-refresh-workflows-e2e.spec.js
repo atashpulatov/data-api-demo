@@ -19,7 +19,7 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     changeBrowserTab(0);
   });
 
-  it('[TC65447] - show action buttons on hover, select objects for batch actions', () => {
+  it('[TC65447] - import/refresh workflows while interacting with Excel application - E2E user journey', () => {
     const dossierObject = objectsList.dossiers.complexDossier;
 
     console.log('import first object');
