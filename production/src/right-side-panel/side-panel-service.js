@@ -21,6 +21,7 @@ import { errorService } from '../error/error-handler';
 import { notificationService } from '../notification-v2/notification-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { incomingErrorStrings } from '../error/constants';
+import { homeHelper } from '../home/home-helper';
 
 const CONNECTION_CHECK_TIMEOUT = 3000;
 
@@ -305,7 +306,7 @@ class SidePanelService {
     const castedError = String(error);
     const { CONNECTION_BROKEN } = incomingErrorStrings;
     if (castedError.includes(CONNECTION_BROKEN)) {
-      if (navigator.userAgent.toLowerCase().includes('applewebkit')) {
+      if (homeHelper.isMacAndSafariBased()) {
         notificationService.connectionLost();
         this.connectionCheckerLoop();
       }

@@ -18,19 +18,23 @@ exports.config = {
   //
   specs: [
     './test/specs/release-validation/deprecated/sample.spec.js',
+
   ],
   suites: {
     acceptance: [
       './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
-      './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
+      './test/specs/release-validation/F22954-editing/TC48339-edit-dataset.spec.js',
+      './test/specs/release-validation/F22954-editing/TC62674-prepare-edit-report-all-prompts-except-nested.spec.js',
+      './test/specs/release-validation/F22954-editing/TC62676-edit-neasted-prompt.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-I-refresh-report-prompt-object-required-defaultanswer.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-II-refresh-report-prompt-nested-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48134-Part-III-refresh-report-prompt-multiple-prompts.spec.js',
       './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
       './test/specs/release-validation/F22955-refresh/TC62619-refresh-edited-object.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC55130-Sorting-table.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC59877-Highlighting-the-row-on-hover_selection.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53434-my-library-view-filters-dossier-importing.spec.js',
@@ -58,8 +62,8 @@ exports.config = {
       './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
@@ -67,6 +71,7 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
       './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54856-filtering-with-type-owner-certified-date.spec.js',
       './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC53430-refreshing-and-filtering-during-refresh.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54855-filtering-object-list-with-all-panel.spec.js',
       './test/specs/release-validation/F12909-import-report/TC35090-right-under-excel-limit.spec.js',
       './test/specs/release-validation/F12909-import-report/TC35247-excel-limits.spec.js',
       './test/specs/release-validation/F12909-import-report/TC35248-excel-limits-size-placement.spec.js',
@@ -94,6 +99,12 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-chinese-user.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-a-user.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC65447-import-refresh-workflows-e2e.spec.js',
     ],
     'F12910-import-dataset': [
@@ -101,7 +112,9 @@ exports.config = {
       './test/specs/release-validation/F12910-import-dataset/TC35249-cubes-limits-project.spec.js',
     ],
     'F22954-editing': [
-      './test/specs/release-validation/F22954-editing/TC48354-edit-prompt-value-dateTime-req-noDef.spec.js',
+      './test/specs/release-validation/F22954-editing/TC48339-edit-dataset.spec.js',
+      './test/specs/release-validation/F22954-editing/TC62674-prepare-edit-report-all-prompts-except-nested.spec.js',
+      './test/specs/release-validation/F22954-editing/TC62676-edit-neasted-prompt.spec.js',
     ],
     'F22955-refresh': [
       './test/specs/release-validation/F22955-refresh/TC48134-refresh-report-prompt-object-required-defaultanswer.spec.js',
@@ -115,6 +128,7 @@ exports.config = {
     ],
     'F24087-improve-scrolling-performance': [
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC55130-Sorting-table.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC59877-Highlighting-the-row-on-hover_selection.spec.js',
       './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
     ],
@@ -158,8 +172,8 @@ exports.config = {
       './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
     ],
     'F28550-rename-excel-table-without-losing-binding': [
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59466-binding-importing-the-same-report-twice.spec.js',
-      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-imported-report.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC61080-binding-internationalisation.spec.js',
     ],
     'TS41441-E2E Sanity checks': [
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
@@ -171,6 +185,7 @@ exports.config = {
     'F24086-improved-browsing-by-adding-filters': [
       './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54856-filtering-with-type-owner-certified-date.spec.js',
       './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC53430-refreshing-and-filtering-during-refresh.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54855-filtering-object-list-with-all-panel.spec.js',
     ],
     'F12909-import-report': [
       './test/specs/release-validation/F12909-import-report/TC35090-right-under-excel-limit.spec.js',
@@ -199,15 +214,21 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
     ],
     'F30463-ability-to-sort-on-prepare-data': [
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-chinese-user.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-a-user.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
     ],
     'F21409-refresh-all': [
       './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js'
     ],
     'F25943-refresh-move-to-add-in-side-panel': [
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC65447-import-refresh-workflows-e2e.spec.js',
     ],
   },
@@ -245,6 +266,7 @@ exports.config = {
       // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
       // debuggerAddress: '127.0.0.1:9222'
+
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
       // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],

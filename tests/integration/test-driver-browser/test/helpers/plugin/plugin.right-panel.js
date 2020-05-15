@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
-import { waitAndClick } from '../utils/click-helper';
+import { waitAndClick, waitAndDoubleClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import { waitForNotification } from '../utils/wait-helper';
+import { pressEnter } from '../utils/keyboard-actions';
 
 
 class PluginRightPanel {
@@ -17,6 +18,20 @@ class PluginRightPanel {
 
   clickSettings() {
     waitAndClick($(rightPanelSelectors.settingsBtn));
+  }
+
+  /**
+   * Clicks Clear Data button in Settings menu
+   */
+  clickClearData() {
+    waitAndClick($(rightPanelSelectors.clearDataBtn));
+  }
+
+  /**
+   * Clicks Ok button on Clear Data confiramtion to start the action
+   */
+  clickClearDataOk() {
+    waitAndClick($(rightPanelSelectors.clearOkBtn));
   }
 
   logout() {
@@ -186,6 +201,32 @@ class PluginRightPanel {
     const nameInput = $(rightPanelSelectors.getNameInputForObject(index));
     return nameInput.getText();
   }
+  /**
+   * Select all imported objects. Will work when there is at least one or more objects imported.
+   */
+  selectAll() {
+    console.log('Should select all imported objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+  }
+
+  /**
+   * Run refresh for selected imported objects. Will work when there is at least one or more objects selected.
+   */
+  refreshSelected() {
+    console.log('Should refresh selected objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.refreshAllBtn));
+  }
+
+  /**
+   * Run remove for selected imported objects. Will work when there is at least one or more objects selected.
+   */
+  removeSelected() {
+    console.log('Should remove selected objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.deleteAllBtn));
+  }
 
   /**
    * Clicks master checkbox
@@ -316,6 +357,36 @@ class PluginRightPanel {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
     this.closeNotificationOnHover();
+  }
+
+  /**
+   * Press Cancel button on object pending notification
+   *
+   * @param {Number} index index of an imported object in the right side panel
+   */
+  cancelObjectPendingAction(index) {
+    console.log('Should cancel object pending action');
+    const objectCancelBtn = $(rightPanelSelectors.getPendingNotificationCancelBtnAt(index));
+    waitAndClick(objectCancelBtn);
+  }
+
+  /**
+   * Changes the name of object that is imported. Will work if there is an object imported.
+   *
+   * @param {Number} index Index of the object in the right side panel that the name will be changed. Starts from 1 (1 is the first from the top)
+   * @param {String} text Text to enter for new object name
+   */
+  changeObjectName(index, text) {
+    switchToPluginFrame();
+    const divNameInput = $(rightPanelSelectors.getNameInputForObject(index));
+    divNameInput.moveTo();
+    browser.pause(2222);
+    waitAndDoubleClick(divNameInput);
+    browser.pause(3333);
+    const nameText = $(rightPanelSelectors.getNameInputTextForObject(index));
+    nameText.clearValue();
+    nameText.setValue(text);
+    pressEnter();
   }
 
   /**
