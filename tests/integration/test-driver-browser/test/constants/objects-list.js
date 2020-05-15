@@ -34,10 +34,11 @@ export const objectsList = {
     categorySubCategory: 'CategorySubCategoryQuarter',
     reportToSortAttributeAndMetrics: 'Report with attributes and metrics to sort',
     mergedHeaderReport: 'Merged Header Report',
+    PromptedReportWithandWithoutSubtotals: 'Prompted report with attributes with and without subtotals',
     report50k: 'report 50k sales records',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
-      reportBasedOnIntelligentCube: 'Report based on cube without subtotals',
+      reportBasedOnIntelligentCubeWithoutSubtotals: 'Report based on cube without subtotals',
       promptedReport: 'Prompted report without subtotals',
       reportWithCrosstabs: 'Report with crosstab and without subtotals',
       promptedReportWithCrosstabs: 'Prompted report with crosstab and without subtotals',

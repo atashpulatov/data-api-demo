@@ -41,6 +41,7 @@ class PluginPopup {
   }
 
   clickPrepareData() {
+    console.log('Should click prepare data button');
     waitAndClick($(popupSelectors.prepareBtn));
   }
 
@@ -119,7 +120,7 @@ class PluginPopup {
    */
   selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
-      waitAndClick($(`input[name="${elements[i]}"]`));
+      waitAndClick($(`span=${elements[i]}`));
     }
   }
 
@@ -231,6 +232,28 @@ class PluginPopup {
 
   importPromptDefaultNested(objectName) {
     this.switchLibraryAndImportObject(objectName, false);
+    browser.pause(5555);
+    while (true) {
+      browser.pause(3000);
+      switchToPluginFrame();
+      if ($(popupSelectors.runBtn).isExisting()) {
+        this.clickRun();
+      } else {
+        break;
+      }
+    }
+  }
+
+  /**
+   * This function is used for report with nested prompts.
+   * It click on edit for the first object from the list.
+   * After that it is clicking run for all nested default prompts.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   */
+
+  editPromptDefaultNested(index = 1) {
+    pluginRightPanel.editObject(index);
     browser.pause(5555);
     while (true) {
       browser.pause(3000);
@@ -1152,10 +1175,11 @@ class PluginPopup {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     pluginRightPanel.closeNotificationOnHover();
   }
-    /**
+
+  /**
     * Edits imported report and click re-prompt button
     */
-   editAndOpenReprompt() {
+  editAndOpenReprompt() {
     console.log('Should click edit button');
     pluginRightPanel.editObject(1);
     browser.pause(5000);
@@ -1202,6 +1226,22 @@ class PluginPopup {
       }
     }
     return true;
+  }
+
+  /**
+   * Clicks view selected toggle in all panel
+   */
+  clickViewSelectedInAllPanel() {
+    waitAndClick($(popupSelectors.filterPanel.viewSelected));
+  }
+
+  /**
+   * Counts the number of items in the All Panel that are present in the DOM
+   *
+   * @returns {Number} number of items
+   */
+  getAllPanelItemCount() {
+    return $$(popupSelectors.filterPanel.allPanelCheckbox).length;
   }
 }
 
