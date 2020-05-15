@@ -34,7 +34,7 @@ describe('TC59756 - Expanded view E2E workflow', () => {
     PluginPopup.pasteToSearchBox(); // We paste clipboard content to searchbox for easier comparison
     expect(PluginPopup.compareSearchBoxToString(idsArray[1])).toBe(true);
 
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     PluginPopup.clickImport();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
