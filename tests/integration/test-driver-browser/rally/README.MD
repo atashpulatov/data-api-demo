@@ -29,10 +29,18 @@ You can specify the Test Set - only for RELEASE VALIDATION.
 
 ##### Manual testing
 The main logic for uploading Test Case results to Rally from manual testing can be found in ./manual/updateManualResults.js
+You run the script with command: npm run rally-man. The command has no other options.
 
 To upload the results from manual execution, follow these points:
 
-1) Go to ./rallyconfig.js file and
+1) Create your Rally API key.
+  a) Go to this website and log in with your corporate credentials: https://rally1.rallydev.com/login/accounts/index.html#/keys
+  b) Create your key.
+  c) create file ".env" in test-driver-browser folder
+  d) add this line there: 
+  RALLY_API_KEY ='YOUR_KEY'
+
+2) Go to ./rallyconfig.js file and
   a) add IDs of the Test Cases that should be uploaded with Pass verdict to passedTestCases array
      and those with Fail verdict to failedTestCases array
      e.g. manualTestCases: {
