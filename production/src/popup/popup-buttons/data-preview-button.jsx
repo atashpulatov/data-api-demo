@@ -2,12 +2,15 @@ import React from 'react';
 import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 
-export const DataPreviewButton = ({ disableReason, loading, onPreviewClick, t }) => {
+export const DataPreviewButton = ({
+  disableReason, loading, onPreviewClick, t
+}) => {
   const internalButton = (
-    <Button id="data-preview"
-            onMouseDown={(e) => { e.preventDefault(); }}
-            onClick={onPreviewClick}
-            disabled={!!disableReason || loading}>
+    <Button
+      id="data-preview"
+      onMouseDown={(e) => { e.preventDefault(); }}
+      onClick={onPreviewClick}
+      disabled={!!disableReason || loading}>
       {t('Data Preview')}
     </Button>
   );

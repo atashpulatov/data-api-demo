@@ -11,8 +11,20 @@
   max-width: 18px;
 }
 
-.dossier-window-information-text{
-  font-size: 10px;
+.dossier-window-information-text {
+  font-size: 11px;
   color: #9A9A9A;
   margin-left: 4px;
+}
+
+.dossier-title-margin-top {
+  margin-top: 10px;
+}
+
+#popup-wrapper .dossier-window .empty  {
+  position: fixed;
+  left: 0;
+  top: 77px;
+  width: 100%;
+  height: calc(100vh - 145px);
 }

@@ -1,5 +1,5 @@
 import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
-import { officeProperties } from './office-properties';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 
 /**
  * Service to parse JSON response from REST API v2
@@ -37,7 +37,6 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} response
    * @return {Object}
-   * @memberof OfficeConverterServiceV2
    */
   getSubtotalsInformation = (response) => {
     try {
@@ -53,9 +52,8 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} response
    * @return {Boolean}
-   * @memberof OfficeConverterServiceV2
    */
-  isCrosstab(response) {
+  isCrosstab = (response) => {
     try {
       const { grid } = response.definition;
       return !!grid.crossTab && grid.columns.length !== 0;
@@ -71,7 +69,6 @@ class OfficeConverterServiceV2 {
    * @param {JSON} e Object definition element from response
    * @param {String} attrforms Dispay attribute form names setting inside office-properties.js
    * @return {Object} Contains arrays of columns and rows attributes forms names
-   * @memberof OfficeConverterServiceV2
    */
   getAttributesTitleWithForms = (e, attrforms) => {
     const supportForms = attrforms ? attrforms.supportForms : false;
@@ -84,27 +81,27 @@ class OfficeConverterServiceV2 {
         const formName = e.forms[index].name;
         let title;
         switch (nameSet) {
-        case displayAttrFormNames.automatic:
-          title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
-          titles.push(title);
-          break;
-        case displayAttrFormNames.on:
-          titles.push(`'${e.name} ${formName}`);
-          break;
-        case displayAttrFormNames.off:
-          titles.push(`'${e.name}`);
-          break;
-        case displayAttrFormNames.formNameOnly:
-          titles.push(`'${formName}`);
-          break;
-        case displayAttrFormNames.showAttrNameOnce:
-          title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
-          titles.push(title);
-          break;
-        default:
-          title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
-          titles.push(title);
-          break;
+          case displayAttrFormNames.automatic:
+            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+            titles.push(title);
+            break;
+          case displayAttrFormNames.on:
+            titles.push(`'${e.name} ${formName}`);
+            break;
+          case displayAttrFormNames.off:
+            titles.push(`'${e.name}`);
+            break;
+          case displayAttrFormNames.formNameOnly:
+            titles.push(`'${formName}`);
+            break;
+          case displayAttrFormNames.showAttrNameOnce:
+            title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
+            titles.push(title);
+            break;
+          default:
+            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+            titles.push(title);
+            break;
         }
       }
       return titles;
@@ -117,7 +114,6 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} definition Object definition from response
    * @return {Object} Contains arrays of columns and rows attributes names
-   * @memberof OfficeConverterServiceV2
    */
   getAttributesName = (definition, attrforms) => {
     const getAttributeWithForms = (elements) => {
@@ -139,15 +135,14 @@ class OfficeConverterServiceV2 {
    * Gets raw table rows
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @return {number[]}
-   * @memberof OfficeConverterServiceV2
    */
-  getRows(response, isCrosstab) {
+  getRows=(response, isCrosstab) => {
     const rowTotals = [];
     const { attrforms } = response;
     const onAttribute = (array) => (e) => {
-      if (array) array.push(e.subtotalAddress);
+      if (array) { array.push(e.subtotalAddress); }
       return `'${e.value.join(' ')}`;
     };
     if (isCrosstab) {
@@ -164,10 +159,10 @@ class OfficeConverterServiceV2 {
    * Gets object with crosstab rows and column headers
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstab
-   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
+   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
    * @return {Object}
-   * @memberof OfficeConverterServiceV2
+
    */
   getHeaders(response, isCrosstab, isCrosstabular) {
     const rowTotals = [];
@@ -175,7 +170,7 @@ class OfficeConverterServiceV2 {
     const { attrforms } = response;
     const supportForms = attrforms ? attrforms.supportForms : false;
     const onElement = (array) => (e) => {
-      if (array) array.push(e.subtotalAddress);
+      if (array) { array.push(e.subtotalAddress); }
       // attribute as row with forms
       const forms = this.getAttributesTitleWithForms(e, attrforms);
       if (forms) {
@@ -200,24 +195,23 @@ class OfficeConverterServiceV2 {
    *
    * @param {JSON} response
    * @param {Object} columnInformation - Array with indexed column definition for metrics and attributes
-   * @param {Boolean} isCrosstab
+   * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @return {Number}
-   * @memberof OfficeConverterServiceV2
    */
-  getTableSize(response, columnInformation, isCrosstab) {
-    let columnsCount = columnInformation.length;
+  getTableSize = (response, columnInformation, isCrosstab) => {
+    const columnsCount = columnInformation.length;
     const columnHeader = response.data.headers.columns[0];
-    const { attrforms } = response;
-    const supportForms = attrforms ? attrforms.supportForms : false;
-    for (let index = 0; supportForms && index < columnInformation.length; index++) {
-      const element = columnInformation[index];
-      if (element.isAttribute && element.forms.length > 1) {
-        columnsCount = columnsCount + element.forms.length - 1;
-      }
+    let columns;
+
+    if (isCrosstab) {
+      columns = columnHeader ? columnHeader.length : 0;
+    } else {
+      columns = columnsCount;
     }
+
     return {
       rows: response.data.paging.total,
-      columns: isCrosstab ? (columnHeader ? columnHeader.length : 0) : columnsCount,
+      columns
     };
   }
 
@@ -225,11 +219,13 @@ class OfficeConverterServiceV2 {
    * Gets array with indexed column definition
    *
    * @param {JSON} response
-   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
+   * @param {Boolean} isCrosstabular Crosstabular is a Crosstab report with metrics in Rows and nothing in columns
    * @return {Object}
-   * @memberof OfficeConverterServiceV2
    */
-  getColumnInformation(response, isCrosstabular) {
+  getColumnInformation = (response, isCrosstabular) => {
+    const { attrforms } = response;
+    const supportForms = attrforms ? attrforms.supportForms : false;
+
     let columns;
     const onElement = (element) => element;
     const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
@@ -240,32 +236,57 @@ class OfficeConverterServiceV2 {
       columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1], []];
     } else {
       columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
-    } // we return only columns attributes if there is no attributes in rows
-    return columns.map((element, index) => {
-      const type = element.type ? element.type.toLowerCase() : null;
+    }
+    return this.splitAttributeForms(columns, supportForms);
+  }
+
+  /**
+   * Split attribute forms with their own column information,
+   * only if the user has privileges.
+   *
+   * @param {Array} columns column definition from MicroStrategy
+   * @param {Boolean} supportForms user's privilege to use attribute forms
+   * @returns {Array} column information including attribute forms
+   */
+  splitAttributeForms = (columns, supportForms) => {
+    const fullColumnInformation = [];
+    columns.forEach((column) => {
+      const type = column.type ? column.type.toLowerCase() : null;
       switch (type) {
-      case 'metric':
-        return {
-          category: element.numberFormatting.category,
-          formatString: element.numberFormatting.formatString,
-          id: element.id,
-          index,
-          isAttribute: false,
-          name: element.name,
-        };
-      case 'attribute':
-      case 'consolidation':
-        return {
-          attributeId: element.id,
-          attributeName: element.name,
-          forms: element.forms ? element.forms : [],
-          index,
-          isAttribute: true,
-        };
-      default:
-        return {};
+        case 'metric':
+          fullColumnInformation.push({
+            category: column.numberFormatting.category,
+            formatString: column.numberFormatting.formatString,
+            id: column.id,
+            isAttribute: false,
+            name: column.name,
+          });
+          break;
+        case 'attribute':
+        case 'consolidation':
+          if (column.forms && supportForms) {
+            for (let i = 0; i < column.forms.length; i++) {
+              fullColumnInformation.push({
+                attributeId: column.id,
+                attributeName: column.name,
+                forms: [column.forms[i]],
+                isAttribute: true,
+              });
+            }
+          } else {
+            fullColumnInformation.push({
+              attributeId: column.id,
+              attributeName: column.name,
+              forms: column.forms ? column.forms : [],
+              isAttribute: true,
+            });
+          }
+          break;
+        default:
+          fullColumnInformation.push({});
       }
     });
+    return fullColumnInformation;
   }
 }
 

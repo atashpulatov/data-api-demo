@@ -1,11 +1,13 @@
 import { createStore } from 'redux';
-import { sessionReducer } from '../../storage/session-reducer';
-import { sessionProperties } from '../../storage/session-properties';
+import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
+import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
 import { sessionHelper } from '../../storage/session-helper';
 import { errorService } from '../../error/error-handler';
 import { authenticationService } from '../../authentication/auth-rest-service';
-import { homeHelper } from '../../home/home-helper';
+import { HomeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
+import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../../error/constants';
+import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 describe('sessionHelper', () => {
   const sessionStore = createStore(sessionReducer);
@@ -25,26 +27,29 @@ describe('sessionHelper', () => {
     authenticationService.logout = jest.fn().mockImplementationOnce(() => {
       throw new Error();
     });
-    const logOutErrorSpy = jest.spyOn(errorService, 'handleError');
+    jest.spyOn(errorService, 'handleError').mockImplementation();
+
     // when
     sessionHelper.logOutRest();
+
     // then
-    expect(logOutErrorSpy).toHaveBeenCalled();
+    expect(errorService.handleError).toHaveBeenCalled();
   });
   it('should call redirect logOutRedirect', () => {
     // given
-    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'origin' });
+    jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
     sessionHelper.replaceWindowLocation = jest.fn();
-    const replaceHelper = jest.spyOn(sessionHelper, 'replaceWindowLocation');
+    jest.spyOn(sessionHelper, 'replaceWindowLocation');
     // when
     sessionHelper.logOutRedirect();
     // then
-    expect(replaceHelper).toBeCalled();
+    expect(sessionHelper.replaceWindowLocation).toBeCalled();
   });
   it('should disable loading for localhost in logOutRedirect', () => {
     // given
-    const loadingHelper = jest.spyOn(sessionHelper, 'disableLoading');
-    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
+    jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(true);
+    const loadingHelper = jest.spyOn(sessionActions, 'disableLoading');
+    HomeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
 
     // when
     sessionHelper.logOutRedirect();
@@ -59,7 +64,7 @@ describe('sessionHelper', () => {
     const authToken = 'token';
 
     // when
-    sessionHelper.logIn(authToken);
+    sessionActions.logIn(authToken);
     // then
     expect(dispatchSpy).toHaveBeenCalledWith({ type: sessionProperties.actions.loggedIn, authToken });
   });
@@ -69,9 +74,99 @@ describe('sessionHelper', () => {
     const dispatchSpy = jest.spyOn(reduxStore, 'dispatch');
     const givenValues = { envUrl: 'envUrl' };
     // when
-    sessionHelper.saveLoginValues(givenValues);
+    sessionActions.saveLoginValues(givenValues);
 
     // then
-    expect(dispatchSpy).toHaveBeenCalledWith({ type: sessionProperties.actions.logIn, values: { envUrl: givenValues.envUrl } });
+    expect(dispatchSpy).toHaveBeenCalledWith({
+      type: sessionProperties.actions.logIn,
+      values: { envUrl: givenValues.envUrl }
+    });
+  });
+
+  it('should call putSessions on installSessionProlongingHandler invocation', () => {
+    // given
+    const onSessionExpire = jest.fn();
+    jest.spyOn(authenticationService, 'putSessions');
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
+    // when
+    const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
+    prolongSession();
+
+    // then
+    expect(authenticationService.putSessions).toHaveBeenCalled();
+  });
+
+  it('should call handleError in case of session expired', () => {
+    // given
+    const sessionFailureError = {
+      response: {
+        statusCode: 405,
+        key: 'value',
+        body: {
+          code: 'ERR009',
+          message: SESSION_EXTENSION_FAILURE_MESSAGE,
+        },
+        text: `{code: ERR009, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+      },
+    };
+    const onSessionExpire = jest.fn();
+    authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
+      throw sessionFailureError;
+    });
+    jest.spyOn(errorService, 'handleError');
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
+    // when
+    const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
+    prolongSession();
+
+    // then
+    expect(errorService.handleError).toHaveBeenCalledTimes(1);
+  });
+
+
+  it('should not call onSessionExpire in case of error message and error code correpond', () => {
+    // given
+    const sessionFailureError = {
+      response: {
+        statusCode: 401,
+      },
+    };
+    const onSessionExpire = jest.fn();
+    authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
+      throw sessionFailureError;
+    });
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
+
+    // when
+    const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
+    prolongSession();
+
+    // then
+    expect(onSessionExpire).toHaveBeenCalled();
+  });
+
+  it('should call keepSessionAlive with default callback parameter', () => {
+    // given
+    jest.spyOn(sessionHelper, 'keepSessionAlive');
+
+    // when
+    const prolongSession = sessionHelper.installSessionProlongingHandler();
+    prolongSession();
+
+    // then
+    expect(sessionHelper.keepSessionAlive).toHaveBeenCalledWith(null);
+  });
+
+  it('should call keepSessionAlive with callback function parameter', () => {
+    // given
+    const onSessionExpire = jest.fn();
+    jest.spyOn(sessionHelper, 'keepSessionAlive');
+
+    // when
+    const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
+    prolongSession();
+
+    // then
+    expect(sessionHelper.keepSessionAlive).toHaveBeenCalledWith(onSessionExpire);
   });
 });

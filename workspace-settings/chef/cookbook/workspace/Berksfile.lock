@@ -24,6 +24,10 @@ DEPENDENCIES
     git: https://github.microstrategy.com/ecosystem-cookbooks/java_ecosystem.git
     revision: 538dbe2ac03558faca247dd670a5c42ba96cc6cb
     tag: 0.1.18
+  maven
+    git: https://github.microstrategy.com/ecosystem-cookbooks/maven.git
+    revision: add70874962b21e7dbbd68a788342d98ec761194
+    tag: 0.2.7
   nodejs
     git: https://github.microstrategy.com/ecosystem-cookbooks/nodejs.git
     revision: e39da16a582f0781eb9488b6542556fc4b0311f3
@@ -31,11 +35,7 @@ DEPENDENCIES
   seven_zip (~> 2.0.0)
 
 GRAPH
-  ark (4.0.0)
-    build-essential (>= 0.0.0)
-    seven_zip (>= 0.0.0)
-  build-essential (8.2.1)
-    mingw (>= 1.1)
+  ark (5.0.0)
     seven_zip (>= 0.0.0)
   chef_commons (1.1.13)
     ark (>= 0.0.0)
@@ -54,8 +54,7 @@ GRAPH
     java (>= 0.0.0)
     java-osx (>= 0.0.0)
     java-windows (>= 0.0.0)
-  mingw (2.1.0)
-    seven_zip (>= 0.0.0)
+  maven (0.2.7)
   nodejs (0.1.10)
   seven_zip (2.0.2)
     windows (>= 1.2.2)

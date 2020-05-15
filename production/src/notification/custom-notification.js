@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class CustomNotification extends Component {
-  state = { isExpanded: false, }
+  constructor(props) {
+    super(props);
+    this.state = { isExpanded: false };
+  }
 
   handleCollapse = () => {
     this.setState(({ isExpanded }) => ({ isExpanded: !isExpanded, }));
@@ -25,25 +29,34 @@ export default class CustomNotification extends Component {
         <header className="error__header">{translatedContent}</header>
         {
           details && (
-          <div>
-            <nav className="error__nav">
-              <p
-                onClick={this.handleCollapse}
-                className={config.actionClass}
+            <div>
+              <nav className="error__nav">
+                <div
+                  onClick={this.handleCollapse}
+                  onKeyUp={(e) => e.key === 'Enter' && this.handleCollapse}
+                  className={config.actionClass}
+                  role="button"
+                  tabIndex="0"
+                >
+                  {t(config.message)}
+                  <span className="error__arrow" />
+                </div>
+              </nav>
+              <div
+                className={`${config.messageClass} error__text`}
               >
-                {t(config.message)}
-                <span className="error__arrow" />
-              </p>
-            </nav>
-            <div
-              className={`${config.messageClass} error__text`}
-            >
-              <p className="error__message">{details}</p>
+                <p className="error__message">{details}</p>
+              </div>
             </div>
-          </div>
           )
         }
       </section>
     );
   }
 }
+
+CustomNotification.propTypes = {
+  details: PropTypes.string,
+  translatedContent: PropTypes.string,
+  t: PropTypes.func
+};

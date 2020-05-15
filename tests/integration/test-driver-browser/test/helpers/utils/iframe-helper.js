@@ -4,22 +4,29 @@ export function switchToPluginFrame() {
   browser.switchToFrame($('.AddinIframe'));
 }
 
+export function switchToDialogFrame() {
+  switchToExcelFrame();
+  $('#WACDialogPanel .AddinIframe').waitForExist(9999);
+  browser.switchToFrame($('#WACDialogPanel .AddinIframe'));
+}
+
 export function switchToExcelFrame() {
   browser.switchToFrame(null);
-  $('#WebApplicationFrame').waitForExist(9999);
+  $('#WebApplicationFrame').waitForDisplayed(19999);
   browser.switchToFrame($('#WebApplicationFrame'));
 }
 
+// This frame is used for report prompt window and visualizations window
 export function switchToPromptFrame() {
   switchToPluginFrame();
   $('iframe[src*="app.embedded=true"]').waitForExist(9999);
   browser.switchToFrame($('iframe[src*="app.embedded=true"]'));
 }
 
-export function switchToPromptFrameForEditDossier() {
+export function switchToPromptFrameForImportDossier() {
   switchToPluginFrame();
-  const editFrame = '#root > div > div:nth-child(3) > iframe';
-  $(editFrame).waitForExist(9999);
+  const editFrame = 'iframe[src*="message=true&ui"]';
+  $(editFrame).waitForExist(19999);
   browser.switchToFrame($(editFrame));
 }
 
@@ -33,4 +40,14 @@ export function switchToPopupFrame() {
   switchToExcelFrame();
   $('iframe[src*="api&et="]').waitForExist(9999);
   browser.switchToFrame($('iframe[src*="api&et="]'));
+}
+
+/**
+ * Changes the browser tab to the passed index
+ *
+ * @param {Number} tabIndex
+ */
+export function changeBrowserTab(tabIndex) {
+  const handles = browser.getWindowHandles();
+  browser.switchToWindow(handles[tabIndex]);
 }

@@ -6,14 +6,14 @@ export const notificationReducer = (state = {}, action) => {
     throw new NotificationError('Missing type');
   }
   switch (action.type) {
-  case reduxNotificationProperties.actions.showMessage:
-    return onShowMessage(action, state);
-  case reduxNotificationProperties.actions.showNotification:
-    return onShowNotification(action);
-  case reduxNotificationProperties.actions.showTranslatedNotification:
-    return onShowNotification(action, true);
-  default:
-    break;
+    case reduxNotificationProperties.actions.showMessage:
+      return onShowMessage(action);
+    case reduxNotificationProperties.actions.showNotification:
+      return onShowNotification(action);
+    case reduxNotificationProperties.actions.showTranslatedNotification:
+      return onShowNotification(action, true);
+    default:
+      break;
   }
   return state;
 };

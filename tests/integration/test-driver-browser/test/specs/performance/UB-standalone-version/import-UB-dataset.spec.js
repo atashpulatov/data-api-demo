@@ -2,9 +2,12 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
-import { writeDataIntoFile, getJsonData } from '../../../helpers/utils/benchmark-helper';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
+import { switchToExcelFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { waitAndClick } from '../../../helpers/utils/click-helper';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 const fs = require('fs');
 
@@ -21,47 +24,54 @@ describe('Smart Folder - IMPORT -', () => {
   const testCaseLink = 'https://rally1.rallydev.com/#/53987408409d/detail/testcase/362684441788';
   let startTimestamp = 0;
   let endTimestamp = 0;
-  const webServerEnvironmentID = process.argv[process.argv.length - 1];
+  const webServerEnvironmentID = process.argv[process.argv.length - 3];
+  const username = process.argv[process.argv.length - 2];
+  const password = process.argv[process.argv.length - 1];
 
   function createManifestFile(newEnv) {
     let xmlContent;
     fs.readFile(sampleManifestFilePath, 'utf8', (err, content) => {
-      if (err) throw err;
+      if (err) { throw err; }
       xmlContent = content.replace(/env-173736/gi, newEnv); // 173736 is the number of the environment of the sample manifest file
       fs.writeFile(outputManifestFilePath, xmlContent, (err2) => {
-        if (err2) throw err;
+        if (err2) { throw err2; }
       });
     });
   }
 
+  function selectObjectElementsInPrepareData(elements) {
+    $(popupSelectors.prepareSearchInput).waitForExist(7777);
+    for (let i = 0; i < elements.length; i++) {
+      $(popupSelectors.prepareSearchInput).clearValue();
+      $(popupSelectors.prepareSearchInput).setValue(`${elements[i]}`);
+      waitAndClick($(`input[name="${elements[i]}"]`));
+      $(popupSelectors.prepareSearchInput).clearValue();
+    }
+  }
+
   function importUBObjectAndGetTotalTime() {
-    switchToPluginFrame();
+    switchToDialogFrame();
+    PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectName);
     browser.pause(500);
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     PluginPopup.clickPrepareData();
 
-    PluginPopup.selectObjectElementsInPrepareData(['Session', 'Account', 'Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);
+    selectObjectElementsInPrepareData(['Session', 'Account', 'Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);
     PluginPopup.clickImport();
 
     const begin = Date.now();
-    browser.pause(2000);
-    let popupExists = true;
-    while (popupExists) {
-      switchToExcelFrame();
-      const popupDiv = $('#WACDialogPanel').isExisting();
-      if (!popupDiv) {
-        if (!$('#WACDialogPanel').isExisting()) {
-          waitForNotification();
-          popupExists = false;
-        }
-      }
-    }
+    waitForNotification();
     const end = Date.now();
-    const timeSpent = ((end - begin) / 1000);
-    console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
+    const notificationText = $(rightPanelSelectors.notificationPopUp).getAttribute('textContent');
+    expect(notificationText).toContain(dictionary.en.importSuccess);
+    if (notificationText === dictionary.en.importSuccess) {
+      const timeSpent = ((end - begin) / 1000);
+      console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
 
-    return timeSpent;
+      return timeSpent;
+    }
+    return 'ERROR';
   }
 
   function getFormattedDate() {
@@ -79,9 +89,15 @@ describe('Smart Folder - IMPORT -', () => {
     return false;
   }
 
-  beforeAll(() => {
+  function checkIfInputFormatIsCorrect() {
+    if (process.argv[process.argv.length - 4] !== '--PASSWORD') {
+      throw new Error('Incorrect command line arguments. Please introduce arguments for: --ENVIRONMENT --USERNAME --PASSWORD \n For example: npm run test-UB env-180792 user1 password1');
+    }
+  }
+
+  beforeEach(() => {
     browser.setWindowSize(1500, 900);
-    console.log(webServerEnvironmentID);
+    checkIfInputFormatIsCorrect();
     startTimestamp = getFormattedDate();
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
@@ -92,19 +108,19 @@ describe('Smart Folder - IMPORT -', () => {
     createManifestFile(webServerEnvironmentID);
     const pathToManifest = isMac() ? `${__dirname}/manifest.xml` : `${__dirname}\\manifest.xml`;
     OfficeWorksheet.uploadAndOpenPlugin(pathToManifest, webServerEnvironmentID);
-    PluginRightPanel.loginToPlugin('administrator', '');
+    PluginRightPanel.loginToPlugin(username, password);
   });
 
-  afterAll(() => {
+  afterEach(() => {
     endTimestamp = getFormattedDate();
     if (numberOfExecutions === 1) {
-      const averageImportingTime = totalAddedImportingTime / 1;
+      const averageImportingTime = (typeof totalAddedImportingTime === 'number') ? (totalAddedImportingTime / 1) : 'ERROR';
       console.log('Preparing performance data');
       const stringOfData = `\n${testCaseID},${testCaseName},${testCaseLink},${startTimestamp},${endTimestamp},${numberOfClicks},${averageImportingTime}`;
 
       console.log('Saving performance data');
       fs.appendFile(csvFilePath, stringOfData, (err) => {
-        if (err) throw err;
+        if (err) { throw err; }
         console.log('The data was appended to CSV file!');
       });
       console.log('Performance data saved');
@@ -112,8 +128,7 @@ describe('Smart Folder - IMPORT -', () => {
       console.log(averageImportingTime);
     }
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('Import object selecting attributes and metrics', () => {

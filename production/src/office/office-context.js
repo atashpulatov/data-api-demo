@@ -6,7 +6,6 @@ class OfficeContext {
   /**
    * Returns the highest requirement set supported by the current platform.
    *
-   * @memberof OfficeContext
    * @returns {String} Requirement set
    */
   getRequirementSet = () => {
@@ -15,9 +14,23 @@ class OfficeContext {
     let api = 0;
     while (isSupported && !!Office) {
       isSupported = Office.context.requirements.isSetSupported('ExcelAPI', `1.${api}`);
-      if (isSupported) api += 1;
+      if (isSupported) { api += 1; }
     }
     return `1.${api - 1}`;
+  }
+
+  /**
+   * Check if requirement set is supported.
+   *
+   * @param {Number} version ExcelAPI version
+   * @returns {Boolean} Requirement set supported
+   */
+  isSetSupported = (version) => {
+    const { Office } = window;
+    if (Office) {
+      return Office.context.requirements.isSetSupported('ExcelAPI', `${version}`);
+    }
+    return false;
   }
 }
 

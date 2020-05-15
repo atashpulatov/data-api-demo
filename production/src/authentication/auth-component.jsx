@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import './auth-component.css';
 import PropTypes from 'prop-types';
-import { Form, Icon, Input, Button, Checkbox, Select, } from 'antd';
+import {
+  Form, Icon, Input, Button, Checkbox, Select,
+} from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { authenticationHelper } from './authentication-helper';
-import { popupActions } from '../popup/popup-actions';
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 const FormItem = Form.Item;
 
@@ -13,13 +15,13 @@ export class AuthenticateNotConnected extends Component {
   constructor(props) {
     super(props);
     localStorage.removeItem('refreshData');
-    this.props.resetState();
+    props.resetState();
   }
 
   onLoginUser = async (event) => {
     event.preventDefault();
-    const { validateFields } = this.props.form;
-    await validateFields(async (err, values) => authenticationHelper.loginUser(err, values));
+    const { form } = this.props;
+    await form.validateFields(async (err, values) => authenticationHelper.loginUser(err, values));
   }
 
   render() {
@@ -34,50 +36,36 @@ export class AuthenticateNotConnected extends Component {
           </h1>
         </header>
         <Form onSubmit={(event) => this.onLoginUser(event)} className="login-form grid-container padding">
-          <FormItem
-            label={t('Username')}
-          >
+          <FormItem label={t('Username')}>
             {getFieldDecorator('username', {
               initialValue: session.username,
               rules: [{ required: true, message: t('Please input your username!') }],
             })(<Input
-              prefix={
-                <Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />
-              }
+              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               placeholder={t('Username')}
               maxLength={250}
             />)}
           </FormItem>
-          <FormItem
-            label={t('Password')}
-          >
+          <FormItem label={t('Password')}>
             {getFieldDecorator('password', {
               initialValue: session.password || '',
               rules: [{ message: t('Please input your Password!') }],
             })(<Input
-              prefix={
-                <Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />
-              }
+              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
               type="password"
               placeholder={t('Password')}
             />)}
           </FormItem>
-          <FormItem
-            label={t('Environment URL')}
-          >
+          <FormItem label={t('Environment URL')}>
             {getFieldDecorator('envUrl', {
               initialValue: session.envUrl || '',
               rules: [{ required: true, message: t('Please input environment URL!'), type: 'url' }],
             })(<Input
-              prefix={
-                <Icon type="link" style={{ color: 'rgba(0,0,0,.25)' }} />
-              }
+              prefix={<Icon type="link" style={{ color: 'rgba(0,0,0,.25)' }} />}
               placeholder={t('environment URL')}
             />)}
           </FormItem>
-          <FormItem
-            label="Login mode"
-          >
+          <FormItem label="Login mode">
             {getFieldDecorator('loginMode', {
               initialValue: session.loginMode || '1',
               rules: [{ required: true }],
@@ -92,9 +80,7 @@ export class AuthenticateNotConnected extends Component {
               initialValue: session.isRememberMeOn || false,
             })(<Checkbox>{t('Remember Me')}</Checkbox>)}
           </FormItem>
-          <div
-            className="centered-fields-container"
-          >
+          <div className="centered-fields-container">
             <FormItem>
               <Button type="primary" htmlType="submit" className="login-form-button">
                 {t('Log in')}

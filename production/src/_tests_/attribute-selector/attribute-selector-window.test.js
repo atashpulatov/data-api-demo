@@ -2,18 +2,21 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { shallow, mount } from 'enzyme';
 import { reduxStore } from '../../store';
-import { AttributeSelectorWindow, AttributeSelectorWindowNotConnected } from '../../attribute-selector/attribute-selector-window';
+import { AttributeSelectorWindowNotConnected } from '../../attribute-selector/attribute-selector-window';
 import { AttributeSelector } from '../../attribute-selector/attribute-selector';
-import { attributeSelectorHelpers } from '../../attribute-selector/attribute-selector-helpers';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
+import { popupHelper } from '../../popup/popup-helper';
+import { officeContext } from '../../office/office-context';
 
-jest.mock('../../attribute-selector/attribute-selector-helpers');
+jest.mock('../../office/office-context');
+jest.mock('../../popup/popup-helper');
 
 describe('AttributeSelectorWindow', () => {
   it('should contain attribute selector', () => {
     // given
     const mstrData = { chosenObjectType: 'report' };
     const chosenObject = { objectType: { name: 'dossier' } };
+    const displayLanguageMock = 'en-US';
+    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const componentWrapper = mount(
       <Provider store={reduxStore}>
@@ -25,6 +28,7 @@ describe('AttributeSelectorWindow', () => {
     );
     // then
     const selectorWrapper = componentWrapper.find(AttributeSelector);
+    expect(getOfficeSpy).toHaveBeenCalled();
     expect(selectorWrapper.get(0)).toBeDefined();
   });
 
@@ -38,7 +42,7 @@ describe('AttributeSelectorWindow', () => {
     };
     const chosenObject = {
       promptsAnswers: 'promptsAnswers',
-      objectType: { name: 'dossier' }
+      mstrObjectType: { name: 'dossier' }
     };
     const objectName = '55';
     // when
@@ -68,8 +72,8 @@ describe('AttributeSelectorWindow', () => {
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+        mstrData={mstrData}
+        chosenObject={chosenObject}
       />
     );
     const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
@@ -91,8 +95,8 @@ describe('AttributeSelectorWindow', () => {
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+        mstrData={mstrData}
+        chosenObject={chosenObject}
       />
     );
     const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
@@ -114,8 +118,8 @@ describe('AttributeSelectorWindow', () => {
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-      mstrData={mstrData}
-      chosenObject={chosenObject}
+        mstrData={mstrData}
+        chosenObject={chosenObject}
       />
     );
     const spyMethod = jest.spyOn(componentWrapper.instance(), 'setState');
@@ -141,21 +145,32 @@ describe('AttributeSelectorWindow', () => {
 
     const displayAttrFormNames = 'Automatic';
     const editedObject = { subtotalsInfo: { importSubtotal: true }, displayAttrFormNames };
-    const importSubtotal = true;
+
     // when
     const componentWrapper = shallow(
       <AttributeSelectorWindowNotConnected
-       mstrData={mstrData}
-       chosenObject={chosenObject}
-       editedObject={editedObject}
+        mstrData={mstrData}
+        chosenObject={chosenObject}
+        editedObject={editedObject}
       />
     );
-    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
+    const spyMethod = jest.spyOn(popupHelper, 'officeMessageParent');
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4);
+
     // then
-    expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, chosenObject.chosenObjectName, chosenObject.preparedInstanceId, chosenObject.promptsAnswers, { importSubtotal }, displayAttrFormNames
-    );
+    expect(spyMethod).toHaveBeenCalledWith({
+      body: 4,
+      chosenObjectId: 1,
+      chosenObjectName: '55',
+      chosenObjectSubtype: 3,
+      command: 'commandOnUpdate',
+      displayAttrFormNames: 'Automatic',
+      instanceId: 'instanceId',
+      isPrompted: true,
+      projectId: 2,
+      promptsAnswers: 'promptsAnswers',
+      subtotalsInfo: { importSubtotal: true },
+    });
   });
 
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called with report name', () => {
@@ -184,13 +199,23 @@ describe('AttributeSelectorWindow', () => {
         editedObject={editedObject}
       />
     );
-    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
+    const spyMethod = jest.spyOn(popupHelper, 'officeMessageParent');
     componentWrapper.instance().onTriggerUpdate(1, 2, 3, 4, 5);
 
     // then
-    expect(spyMethod).toHaveBeenCalledWith(
-      selectorProperties.commandOnUpdate, 1, 2, 3, 4, 5, chosenObject.preparedInstanceId, chosenObject.promptsAnswers, { importSubtotal }, displayAttrFormNames
-    );
+    expect(spyMethod).toHaveBeenCalledWith({
+      body: 4,
+      chosenObjectId: 1,
+      chosenObjectName: '55',
+      chosenObjectSubtype: 3,
+      command: 'commandOnUpdate',
+      displayAttrFormNames: 'Automatic',
+      instanceId: 'instanceId',
+      isPrompted: true,
+      projectId: 2,
+      promptsAnswers: 'promptsAnswers',
+      subtotalsInfo: { importSubtotal: true },
+    });
   });
 
   it('should trigger handleCancel when Cancel was clicked', () => {
@@ -205,6 +230,8 @@ describe('AttributeSelectorWindow', () => {
       promptsAnswers: 'promptsAnswers',
       objectType: { name: 'dossier' }
     };
+    const displayLanguageMock = 'en-US';
+    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const componentWrapper = mount(<Provider store={reduxStore}>
       <AttributeSelectorWindowNotConnected
@@ -212,8 +239,8 @@ describe('AttributeSelectorWindow', () => {
         chosenObject={chosenObject}
       />
     </Provider>);
-    const spyMethod = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
-
+    const spyMethod = jest.spyOn(popupHelper, 'officeMessageParent');
+    expect(getOfficeSpy).toHaveBeenCalled();
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
     wrappedCancelButton.simulate('click');
 
@@ -232,6 +259,8 @@ describe('AttributeSelectorWindow', () => {
     };
     const chosenObject = { chosenObjectName: '55' };
     const handleBack = jest.fn();
+    const displayLanguageMock = 'en-US';
+    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const componentWrapper = mount(
       <Provider store={reduxStore}>
@@ -242,7 +271,7 @@ describe('AttributeSelectorWindow', () => {
         />
       </Provider>
     );
-
+    expect(getOfficeSpy).toHaveBeenCalled();
     const wrappedCancelButton = componentWrapper.find('Button #back');
     wrappedCancelButton.simulate('click');
 
@@ -270,7 +299,7 @@ describe('AttributeSelectorWindow', () => {
       chosenObject={chosenObject}
     />);
 
-    const officeMessageParentSpy = jest.spyOn(attributeSelectorHelpers, 'officeMessageParent');
+    const officeMessageParentSpy = jest.spyOn(popupHelper, 'officeMessageParent');
     officeMessageParentSpy.mockClear();
     componentWrapper.instance().handleCancel();
 

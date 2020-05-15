@@ -8,78 +8,122 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './dossier.css';
-import { DEFAULT_PROJECT_NAME, } from '../storage/navigation-tree-reducer';
+import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { popupHelper } from '../popup/popup-helper';
-import { popupStateActions } from '../popup/popup-state-actions';
-import { officeContext } from '../office/office-context';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
+import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
+import { errorCodes } from '../error/constants';
 
 export default class DossierWindowNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isVisualizationSelected: false,
-      chapterKey: '',
-      visualizationKey: '',
       promptsAnswers: [],
-      preparedInstanceId: '',
-      isVisualizationSupported: true,
+      instanceId: '',
+      vizualizationsData: [],
+      lastSelectedViz: {},
+      isEmbeddedDossierLoaded: false,
     };
     this.handleSelection = this.handleSelection.bind(this);
     this.handleOk = this.handleOk.bind(this);
     this.handlePromptAnswer = this.handlePromptAnswer.bind(this);
     this.handleInstanceIdChange = this.handleInstanceIdChange.bind(this);
+    this.handleEmbeddedDossierLoad = this.handleEmbeddedDossierLoad.bind(this);
+
+    const { installSessionProlongingHandler } = sessionHelper;
+    this.prolongSession = installSessionProlongingHandler(this.handleCancel);
 
     this.previousSelectionBackup = [];
   }
 
+  componentDidMount() {
+    window.addEventListener('message', this.extendSession);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', this.extendSession);
+  }
+
+  extendSession = (message = {}) => {
+    const { data: postMessage, origin } = message;
+    const { origin: targetOrigin } = window;
+    if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
+      this.prolongSession();
+    }
+  }
+
   validateSession = () => {
-    authenticationHelper.validateAuthToken()
-      .catch(error => {
-        popupHelper.handlePopupErrors(error);
-      });
+    authenticationHelper.validateAuthToken().catch((error) => {
+      popupHelper.handlePopupErrors(error);
+    });
   }
 
   handleCancel = () => {
-    const { Office } = window;
-    const cancelObject = { command: selectorProperties.commandCancel, };
-    Office.context.ui.messageParent(JSON.stringify(cancelObject));
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
+    popupHelper.officeMessageParent(message);
   }
 
   async handleSelection(dossierData) {
     const { chosenObjectId, chosenProjectId } = this.props;
-    const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = dossierData;
-    let newValue = false;
-    if ((chapterKey !== '') && (visualizationKey !== '')) {
-      newValue = true;
-    }
-    let isVisualizationSupported = true;
-    try {
-      await mstrObjectRestService.fetchVisualizationDefinition({ projectId:chosenProjectId, objectId:chosenObjectId, instanceId:preparedInstanceId, visualizationInfo:{ chapterKey, visualizationKey } });
-    } catch (error) {
-      if (error.response && error.response.body.code === 'ERR009') {
-        // Close popup if session expired
-        popupHelper.handlePopupErrors(error);
-      } else {
-        isVisualizationSupported = false;
+    const {
+      chapterKey, visualizationKey, promptsAnswers, instanceId
+    } = dossierData;
+
+    if (instanceId) {
+      this.setState({
+        lastSelectedViz: {
+          chapterKey,
+          visualizationKey
+        },
+        promptsAnswers,
+        instanceId,
+      });
+
+      const { vizualizationsData } = this.state;
+
+      if (!vizualizationsData.find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey))) {
+        let isSupported = true;
+        try {
+          await mstrObjectRestService.fetchVisualizationDefinition({
+            projectId: chosenProjectId,
+            objectId: chosenObjectId,
+            instanceId,
+            visualizationInfo: { chapterKey, visualizationKey }
+          });
+        } catch (error) {
+          const { ERR009 } = errorCodes;
+          if (error.response && error.response.body.code === ERR009) {
+          // Close popup if session expired
+            popupHelper.handlePopupErrors(error);
+          } else {
+            isSupported = false;
+          }
+        }
+
+        vizualizationsData.push({
+          chapterKey,
+          visualizationKey,
+          isSupported,
+        });
+        this.setState({ vizualizationsData });
       }
     }
-    this.setState({
-      isVisualizationSelected: newValue,
-      chapterKey,
-      visualizationKey,
-      promptsAnswers,
-      preparedInstanceId,
-      isVisualizationSupported
-    });
   }
 
   handleOk() {
-    const { chosenObjectName, chosenObjectId, chosenProjectId, editedObject } = this.props;
+    const {
+      chosenObjectName,
+      chosenObjectId,
+      chosenProjectId,
+      editedObject,
+    } = this.props;
     const { isEdit } = editedObject;
-    const { chapterKey, visualizationKey, promptsAnswers, preparedInstanceId } = this.state;
-    const okObject = {
+    const { lastSelectedViz, promptsAnswers, instanceId } = this.state;
+    const { chapterKey, visualizationKey } = lastSelectedViz;
+    const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
       chosenObject: chosenObjectId,
@@ -91,89 +135,120 @@ export default class DossierWindowNotConnected extends React.Component {
         chapterKey,
         visualizationKey,
       },
-      preparedInstanceId,
+      preparedInstanceId: instanceId,
       isEdit,
     };
-    const Office = officeContext.getOffice();
-    Office.context.ui.messageParent(JSON.stringify(okObject));
+    popupHelper.officeMessageParent(message);
   }
 
   /**
-  * Store new instance id in state.
-  * Unselect visualization after instanceId changed.
-  * Restore backuped viz selection info in case of return to previous instance.
-  * Above happens on reprompt button click followed by cancel button click in reprompt popup.
-  *
-  * @param {String} newInstanceId
-  * @memberof DossierWindowNotConnected
-  */
+   * Store new instance id in state.
+   * Unselect visualization after instanceId changed.
+   * Restore backuped viz selection info in case of return to previous instance.
+   * Above happens on reprompt button click followed by cancel button click in reprompt popup.
+   *
+   * @param {String} newInstanceId
+   */
   handleInstanceIdChange(newInstanceId) {
-    const { preparedInstanceId, isVisualizationSelected, chapterKey, visualizationKey, isVisualizationSupported } = this.state;
+    const { instanceId, lastSelectedViz, promptsAnswers } = this.state;
 
-    const backup = this.previousSelectionBackup.find(el => el.preparedInstanceId === newInstanceId);
+    const backup = this.previousSelectionBackup.find((el) => el.instanceId === newInstanceId);
 
-    if (preparedInstanceId !== newInstanceId && !backup) {
+    if (instanceId !== newInstanceId && !backup) {
       // Make a backup of last selection info.
       this.previousSelectionBackup.unshift({
-        preparedInstanceId,
-        isVisualizationSelected,
-        chapterKey,
-        visualizationKey,
-        isVisualizationSupported,
+        instanceId,
+        lastSelectedViz,
       });
       // Clear selection of viz and update instance id.
       this.setState({
-        preparedInstanceId: newInstanceId,
-        isVisualizationSelected: false,
-        chapterKey: '',
-        visualizationKey: '',
-        isVisualizationSupported: true,
+        instanceId: newInstanceId,
+        lastSelectedViz: {},
+        vizualizationsData: [],
       });
     } else {
       // Restore backuped viz selection info in case of return to prev instance
-      this.setState({ ...backup });
+      this.setState({ vizualizationsData: [] });
+      this.handleSelection({
+        ...backup.lastSelectedViz,
+        promptsAnswers,
+        instanceId: backup.instanceId,
+      });
     }
   }
 
   /**
-  * Store new prompts answers in state
-  *
-  * @param {Array} newAnswers
-  * @memberof DossierWindowNotConnected
-  */
+   * Store new prompts answers in state
+   *
+   * @param {Array} newAnswers
+   */
   handlePromptAnswer(newAnswers) {
-    this.setState({ promptsAnswers: newAnswers });
+    this.setState({ promptsAnswers: newAnswers, vizualizationsData: [], });
+  }
+
+  /**
+  * Change state of component so that informative message is showed only after embedded dossier is loaded.
+  *
+  */
+  handleEmbeddedDossierLoad() {
+    this.setState({ isEmbeddedDossierLoaded: true });
   }
 
   render() {
-    const { chosenObjectName, t, handleBack, editedObject } = this.props;
+    const {
+      chosenObjectName, t, handleBack, editedObject
+    } = this.props;
     const { isEdit } = editedObject;
-    const { isVisualizationSelected, isVisualizationSupported } = this.state;
+    const { isEmbeddedDossierLoaded, lastSelectedViz, vizualizationsData } = this.state;
+
+    const { chapterKey, visualizationKey, } = lastSelectedViz;
+    const vizData = vizualizationsData
+      .find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey));
+
+    const isSelected = !!((chapterKey && visualizationKey));
+    const isSupported = !!(isSelected && vizData && vizData.isSupported);
+    const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
+
     return (
-      <div>
-        <h1 title={chosenObjectName} className="ant-col folder-browser-title">
+      <div className="dossier-window">
+        <h1
+          title={chosenObjectName}
+          className="ant-col folder-browser-title dossier-title-margin-top"
+        >
           {`${t('Import Dossier')} > ${chosenObjectName}`}
         </h1>
-        <span className="dossier-window-information-frame">
-          <MSTRIcon clasName="dossier-window-information-icon" type="info-icon" />
-          <span className="dossier-window-information-text">
-            {`${t('This view supports the regular dossier manipulations. To import data, select a visualization.')}`}
+
+        { isEmbeddedDossierLoaded
+        && (
+          <span className="dossier-window-information-frame">
+            <MSTRIcon
+              clasName="dossier-window-information-icon"
+              type="info-icon"
+            />
+            <span className="dossier-window-information-text">
+              {`${t(
+                'This view supports the regular dossier manipulations. To import data, select a visualization.'
+              )}`}
+            </span>
           </span>
-        </span>
+        )}
+
         <EmbeddedDossier
           handleSelection={this.handleSelection}
           handlePromptAnswer={this.handlePromptAnswer}
           handleInstanceIdChange={this.handleInstanceIdChange}
-          handleLoadEvent={this.validateSession}
+          handleIframeLoadEvent={this.validateSession}
+          handleEmbeddedDossierLoad={this.handleEmbeddedDossierLoad}
         />
         <PopupButtons
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
           handleBack={!isEdit && handleBack}
           hideSecondary
-          disableActiveActions={!isVisualizationSelected}
-          isPublished={isVisualizationSupported}
-          disableSecondary={!isVisualizationSupported}
+          disableActiveActions={!isSelected}
+          isPublished={!(isSelected && !isSupported && !isChecking)}
+          disableSecondary={isSelected && !isSupported && !isChecking}
+          checkingSelection={isChecking}
         />
       </div>
     );
@@ -185,11 +260,6 @@ DossierWindowNotConnected.propTypes = {
   chosenObjectName: PropTypes.string,
   chosenProjectId: PropTypes.string,
   t: PropTypes.func,
-  mstrData: PropTypes.shape({
-    envUrl: PropTypes.string,
-    authToken: PropTypes.string,
-    promptsAnswers: PropTypes.array || null
-  }),
   handleBack: PropTypes.func,
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
@@ -207,12 +277,7 @@ DossierWindowNotConnected.defaultProps = {
   chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
   t: (text) => text,
-  mstrData: {
-    envUrl: 'no env url',
-    authToken: null,
-    promptsAnswers: null
-  },
-  handleBack: () => { },
+  handleBack: () => {},
   editedObject: {
     chosenObjectId: undefined,
     projectId: undefined,
@@ -225,23 +290,44 @@ DossierWindowNotConnected.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const { navigationTree, popupReducer, sessionReducer, officeReducer } = state;
-  const { chosenObjectName, chosenObjectId, chosenProjectId, promptsAnswers } = navigationTree;
+  const {
+    navigationTree, popupReducer, sessionReducer, officeReducer
+  } = state;
+  const {
+    chosenObjectName,
+    chosenObjectId,
+    chosenProjectId,
+    promptsAnswers,
+  } = navigationTree;
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
-  const editedObjectParse = { ...(popupHelper.parsePopupState(editedObject, promptsAnswers, formsPrivilege)) };
+  const editedObjectParse = {
+    ...popupHelper.parsePopupState(
+      editedObject,
+      promptsAnswers,
+      formsPrivilege
+    ),
+  };
   return {
-    chosenObjectName: editedObject ? editedObjectParse.dossierName : chosenObjectName,
-    chosenObjectId: editedObject ? editedObjectParse.chosenObjectId : chosenObjectId,
-    chosenProjectId: editedObject ? editedObjectParse.projectId : chosenProjectId,
+    chosenObjectName: editedObject
+      ? editedObjectParse.dossierName
+      : chosenObjectName,
+    chosenObjectId: editedObject
+      ? editedObjectParse.chosenObjectId
+      : chosenObjectId,
+    chosenProjectId: editedObject
+      ? editedObjectParse.projectId
+      : chosenProjectId,
     editedObject: editedObjectParse,
   };
 }
 
-const mapActionsToProps = { handleBack: popupStateActions.onPopupBack, };
+const mapActionsToProps = { handleBack: popupStateActions.onPopupBack };
 
-export const DossierWindow = connect(mapStateToProps, mapActionsToProps)(withTranslation('common')(DossierWindowNotConnected));
+export const DossierWindow = connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withTranslation('common')(DossierWindowNotConnected));

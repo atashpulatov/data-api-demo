@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
-import { sessionReducer } from '../../storage/session-reducer';
-import { sessionProperties } from '../../storage/session-properties';
-import { SessionError } from '../../storage/session-error';
+import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
+import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
+import { SessionError } from '../../error/session-error';
 
 describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);
@@ -79,7 +79,12 @@ describe('sessionReducer', () => {
     const givenToken = 'token';
     const givenFullName = 'Name';
     const givenInitials = 'Initials';
-    const state = { isRememberMeOn: rememberMe, authToken: givenToken, userFullName: givenFullName, userInitials: givenInitials, };
+    const state = {
+      isRememberMeOn: rememberMe,
+      authToken: givenToken,
+      userFullName: givenFullName,
+      userInitials: givenInitials,
+    };
     const action = { type: sessionProperties.actions.logOut };
     // const spyLogOut = jest.spyOn(sessionReducer, 'onLogOut');
     // when

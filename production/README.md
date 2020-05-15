@@ -12,6 +12,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
+To use MicroStrategy Dossier or Prompts during development please review the following [readme](public/javascript/README.md)
+
 ### `npm test` or `npm run test:debug`
 
 Launches the test runner in the interactive watch mode.<br>
@@ -30,6 +32,10 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ### `npm run eslint`
 
 Run ESLint static code analysis.
+
+###  `./aws-deploy.sh`
+
+Script to upload a local build to a cloud environment. Can take two extra parameters `build  y/n` and iServer ip (e.g., `./aws-deploy.sh y 0.0.0.0`).
 
 ## Learn More
 

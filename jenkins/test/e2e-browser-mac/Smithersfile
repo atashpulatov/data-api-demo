@@ -34,7 +34,7 @@ source .ecosystem
 export HATS=pipeline:$HATS
 
 rake deploy_tester_server[$APPLICATION_VERSION]
-rake e2e_test_browser
+rake e2e_test_browser[$APPLICATION_VERSION]
 '
     end
   end

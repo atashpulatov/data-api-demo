@@ -1,22 +1,30 @@
+
+import { officeApiHelper } from '../office/api/office-api-helper';
+import { errorService } from '../error/error-handler';
+import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
+import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { toggleIsConfirmFlag } from '../redux-reducer/office-reducer/office-actions';
+
 export class HomeHelper {
-  init = (reduxStore, sessionHelper) => {
+  init = (reduxStore, sessionActions, sessionHelper) => {
     this.reduxStore = reduxStore;
+    this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
   }
 
   saveLoginValues = () => {
     const { authToken } = this.reduxStore.getState().sessionReducer;
     const location = this.getWindowLocation();
-    if (location.origin.search('localhost') !== -1) {
+    if (this.sessionHelper.isDevelopment()) {
       if (!authToken) {
-        this.sessionHelper.logOut();
+        this.sessionActions.logOut();
       }
     } else {
       const currentPath = location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const envUrl = `${location.origin}${pathBeginning}/api`;
       const values = { envUrl, };
-      this.sessionHelper.saveLoginValues(values);
+      this.sessionActions.saveLoginValues(values);
       return values.envUrl;
     }
   };
@@ -38,7 +46,7 @@ export class HomeHelper {
   saveTokenFromCookies = () => {
     const splittedCookiesJar = this.getParsedCookies();
     if (splittedCookiesJar.iSession) {
-      this.sessionHelper.logIn(splittedCookiesJar.iSession);
+      this.sessionActions.logIn(splittedCookiesJar.iSession);
       return splittedCookiesJar.iSession;
     }
   };
@@ -46,6 +54,41 @@ export class HomeHelper {
   getWindowLocation = () => window.location
 
   getDocumentCookie = () => document.cookie
+
+  secureData = async (objects) => {
+    try {
+      const { dispatch } = this.reduxStore;
+      toggleIsConfirmFlag(false)(dispatch);
+
+      setTimeout(async () => {
+        const excelContext = await officeApiHelper.getExcelContext();
+        await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
+
+        for (const object of objects) {
+          this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId));
+        }
+      }, 0);
+    } catch (error) {
+      errorService.handleError(error);
+    }
+  };
+
+  /**
+   * Checks if we are running on macOS Safari based client
+   * Checking only for webkit or safari is not enought:
+   * https://security.stackexchange.com/questions/126407/why-does-chrome-send-four-browsers-in-the-user-agent-header
+   *
+   * @returns {boolean} true if user agent is instance of mac desktop or safari
+   */
+  isMacAndSafariBased = () => {
+    const userAgent = navigator.userAgent.toLowerCase();
+
+    const isMacintosh = userAgent.includes('macintosh');
+    const isWebkit = userAgent.includes('applewebkit');
+    const isChrome = userAgent.includes('chrome');
+
+    return isMacintosh && isWebkit && !isChrome;
+  }
 }
 
 export const homeHelper = new HomeHelper();

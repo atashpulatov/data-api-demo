@@ -3,13 +3,15 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from './popup-helper';
-import { officeProperties } from '../office/office-properties';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
-export class PopupViewSelectorHelper {
+class PopupViewSelectorHelper {
   setPopupType = (props, popupType) => {
-    const { importRequested, dossierOpenRequested, loading, isPrompted } = props;
+    const {
+      importRequested, dossierOpenRequested, loading, isPrompted
+    } = props;
     if (
       (importRequested && !isPrompted)
       || (importRequested && this.arePromptsAnswered(props))
@@ -79,7 +81,9 @@ export class PopupViewSelectorHelper {
         promptsAnswers: props.promptsAnswers[count],
       };
       await answerPrompts(configPrompts);
-      const configAnsPrompts = { objectId, projectId, instanceId: instanceDefinition.instanceId, displayAttrFormNames };
+      const configAnsPrompts = {
+        objectId, projectId, instanceId: instanceDefinition.instanceId, displayAttrFormNames
+      };
       try {
         instanceDefinition = await getInstance(configAnsPrompts);
       } catch (error) {
@@ -94,7 +98,7 @@ export class PopupViewSelectorHelper {
       id: objectId,
       projectId,
       name: props.chosenObjectName || props.editedObject.chosenObjectName,
-      objectType: mstrObjectEnum.mstrObjectType.report,
+      mstrObjectType: mstrObjectEnum.mstrObjectType.report,
       instanceId: instanceDefinition.instanceId,
       promptsAnswers: props.promptsAnswers,
       body,
@@ -138,7 +142,7 @@ export class PopupViewSelectorHelper {
     const addItem = (item) => {
       branch.operands[1].elements.push({ id: item, });
     };
-    for (const att in selectedFilters) {
+    for (const att of selectedFilters) {
       if (selectedFilters[att].length) {
         branch = {
           operator: 'In',
@@ -173,11 +177,12 @@ export class PopupViewSelectorHelper {
         visualizationKey: props.chosenVisualizationKey,
       };
     }
-    const okObject = {
+    const message = {
       command: selectorProperties.commandOk,
       chosenObject: props.chosenObjectId,
       chosenProject: props.chosenProjectId,
       chosenSubtype: props.chosenSubtype,
+      chosenObjectName: props.chosenObjectName,
       isPrompted: props.isPrompted,
       promptsAnswers: props.promptsAnswers,
       visualizationInfo,
@@ -185,21 +190,21 @@ export class PopupViewSelectorHelper {
       isEdit: props.isEdit,
     };
     if (props.dossierData) {
-      okObject.dossierData = {
+      message.dossierData = {
         ...props.dossierData,
         chosenObjectName: props.chosenObjectName,
       };
       const { isReprompt } = props.dossierData;
       // skip this part if report contains no selected attribiutes/metrics/filters
       if (isReprompt && !this.wasReportJustImported(props)) {
-        okObject.command = selectorProperties.commandOnUpdate;
+        message.command = selectorProperties.commandOnUpdate;
         const { selectedAttributes, selectedMetrics, selectedFilters } = props.editedObject;
-        okObject.body = this.createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
+        message.body = this.createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
       }
     }
     props.startLoading();
     props.startImport();
-    window.Office.context.ui.messageParent(JSON.stringify(okObject));
+    popupHelper.officeMessageParent(message);
   }
 }
 

@@ -1,8 +1,6 @@
-import { officeApiHelper } from '../../office/office-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
-import { OfficeError, OfficeBindingError } from '../../office/office-error';
-import { reduxStore } from '../../store';
-import { officeProperties } from '../../office/office-properties';
+import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 // FIXME: these were disabled anyway. Needs to be redone.
 describe('OfficeApiHelper', () => {
@@ -131,18 +129,6 @@ describe('OfficeApiHelper', () => {
     }
     expect(result).toBeUndefined();
   });
-  it('should forward error different than OfficeExtension.Error', () => {
-    // given
-    const error = new Error();
-    // when
-    const callThatThrows = () => {
-      officeApiHelper.handleOfficeApiException(error);
-    };
-    // then
-    expect(callThatThrows).toThrowError();
-  });
-
-
 
   describe('getSelectedCell', () => {
     it('should return starting cell from range address(single cell)', async () => {
@@ -190,12 +176,12 @@ describe('OfficeApiHelper', () => {
       expect(mockSync).toBeCalled();
     });
   });
-  describe('getStartCell', () => {
+  describe('getStartCellOfRange', () => {
     it('should return starting cell from range address(single cell)', () => {
       // given
       const range = 'Sheet1!A12';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('A12');
     });
@@ -203,7 +189,7 @@ describe('OfficeApiHelper', () => {
       // given
       const range = 'Sheet1!ABC12:BDE15';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('ABC12');
     });
@@ -211,7 +197,7 @@ describe('OfficeApiHelper', () => {
       // given
       const range = 'No!Sheet1!ABC12:BDE15';
       // when
-      const result = officeApiHelper.getStartCell(range);
+      const result = officeApiHelper.getStartCellOfRange(range);
       // then
       expect(result).toEqual('ABC12');
     });

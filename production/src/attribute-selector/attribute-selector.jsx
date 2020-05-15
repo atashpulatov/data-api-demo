@@ -4,9 +4,15 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
-import { switchImportSubtotals, updateDisplayAttrForm } from '../navigation/navigation-tree-actions';
-import { officeProperties } from '../office/office-properties';
+import {
+  switchImportSubtotals as switchImportSubtotalsImported,
+  updateDisplayAttrForm as updateDisplayAttrFormImported
+} from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { officeContext } from '../office/office-context';
+import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../error/constants';
+
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
@@ -21,16 +27,17 @@ export class AttributeSelectorNotConnected extends Component {
    * @param {Error} e -  Error thrown by mstrReactLibrary
    */
   handleUnauthorized(e) {
+    const { ERR009 } = errorCodes;
     const { handlePopupErrors } = this.props;
     const newErrorObject = {
       status: e.status,
       response: {
         ...e.response,
         body: {
-          code: 'ERR009',
-          message: 'The user\'s session has expired, please reauthenticate',
+          code: ERR009,
+          message: SESSION_EXTENSION_FAILURE_MESSAGE,
         },
-        text: '{"code":"ERR009","message":"The user\'s session has expired, please reauthenticate"}',
+        text: `{code: ${ERR009}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       }
     };
     handlePopupErrors(newErrorObject);
@@ -42,13 +49,14 @@ export class AttributeSelectorNotConnected extends Component {
       triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, switchImportSubtotals,
     } = this.props;
+    const locale = officeContext.getOffice().context.displayLanguage;
     const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
     const displayAttrFormSet = editedObject.displayAttrFormNames || displayAttrFormNames || defaultAttrFormNames;
-
     return (
       <ErrorBoundary>
         <AttributeMetricFilter
           t={t}
+          locale={locale}
           attributesSelectedChange={attributesSelectedChange}
           key={chosenObject.id}
           title={title}
@@ -76,10 +84,10 @@ export class AttributeSelectorNotConnected extends Component {
 const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
   const legacyObject = {
     reportId: chosenObject.chosenObjectId || editedObject.chosenObjectId,
-    envUrl: session.envUrl || session.envUrl,
+    envUrl: session.envUrl,
     projectId: chosenObject.chosenProjectId || editedObject.projectId,
     reportSubtype: chosenObject.chosenSubtype || editedObject.chosenObjectSubtype,
-    reportType: chosenObject.chosenObjectId ? chosenObject.objectType.name : editedObject.chosenObjectType,
+    reportType: chosenObject.chosenObjectId ? chosenObject.mstrObjectType.name : editedObject.chosenObjectType,
     reportName: chosenObject.chosenObjectName || editedObject.chosenObjectName,
     token: session.authToken,
     authToken: session.authToken,
@@ -108,10 +116,7 @@ AttributeSelectorNotConnected.propTypes = {
   triggerUpdate: PropTypes.bool,
   openModal: PropTypes.bool,
   session: PropTypes.shape({}),
-  mstrData: PropTypes.shape({
-    chosenObjectId: PropTypes.string,
-    // subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool })
-  }),
+  mstrData: PropTypes.shape({ chosenObjectId: PropTypes.string, }),
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,
   closeModal: PropTypes.func,
@@ -119,17 +124,36 @@ AttributeSelectorNotConnected.propTypes = {
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func,
-  isEdit: PropTypes.bool
+  isEdit: PropTypes.bool,
+  importSubtotal: PropTypes.bool,
+  switchImportSubtotals: PropTypes.func,
+  displayAttrFormNames: PropTypes.string,
+  chosenObject: PropTypes.shape({ id: PropTypes.string, }),
+  editedObject: PropTypes.shape({
+    displayAttrFormNames: PropTypes.string,
+    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
+  supportForms: PropTypes.bool,
 };
+
 AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
-  const { navigationTree: { promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject }, popupStateReducer, popupReducer, sessionReducer, officeReducer } = state;
+  const {
+    navigationTree: {
+      promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject
+    },
+    popupStateReducer,
+    popupReducer,
+    sessionReducer,
+    officeReducer
+  } = state;
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
-  const objectType = editedObject && editedObject.objectType ? editedObject.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     chosenObject,
@@ -142,6 +166,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = { switchImportSubtotals, updateDisplayAttrForm };
+const mapDispatchToProps = {
+  switchImportSubtotals: switchImportSubtotalsImported,
+  updateDisplayAttrForm: updateDisplayAttrFormImported
+};
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));

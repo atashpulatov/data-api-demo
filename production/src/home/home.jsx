@@ -1,47 +1,104 @@
-import React, { Component } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
 import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
+import { Spin } from 'antd';
+import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
-import HomeContent from './home-content';
 import { homeHelper } from './home-helper';
-import { toggleRenderSettingsFlag } from '../office/office-actions';
-import { officeStoreService } from '../office/store/office-store-service';
+import { toggleRenderSettingsFlag } from '../redux-reducer/office-reducer/office-actions';
+import { RightSidePanel } from '../right-side-panel/right-side-panel';
+import { HomeDialog } from './home-dialog';
+import { Authenticate } from '../authentication/auth-component';
+import { DevelopmentImportList } from '../development-import-list';
+import { notificationService } from '../notification-v2/notification-service';
+import officeStoreRestoreObject from '../office/store/office-store-restore-object';
+import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
+import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 
-export class _Home extends Component {
-  componentDidMount = async () => {
+const IS_DEVELOPMENT = sessionHelper.isDevelopment();
+
+export const HomeNotConnected = (props) => {
+  const {
+    loading, popupOpen, authToken, t
+  } = props;
+
+  const handleConnectionRestored = () => {
+    notificationService.connectionRestored();
+  };
+  const handleConnectionLost = () => {
+    !popupOpen && notificationService.connectionLost();
+  };
+
+  React.useEffect(() => {
+    window.addEventListener('online', handleConnectionRestored);
+    window.addEventListener('offline', handleConnectionLost);
+    return (() => window.removeEventListener('online', handleConnectionRestored),
+    () => window.removeEventListener('offline', handleConnectionLost));
+  },);
+
+  React.useEffect(() => {
+    if (!popupOpen && !window.navigator.onLine) {
+      notificationService.connectionLost();
+    }
+  }, [popupOpen]);
+
+  useEffect(() => {
     try {
-      await officeStoreService.loadExistingReportBindingsExcel();
+      officeStoreRestoreObject.restoreObjectsFromExcelStore();
       homeHelper.saveLoginValues();
       homeHelper.saveTokenFromCookies();
-      sessionHelper.disableLoading();
+      sessionActions.disableLoading();
     } catch (error) {
       console.error(error);
     }
-  };
+  }, []);
 
-  componentDidUpdate() {
+  useEffect(() => {
+    getUserData(authToken);
+  }, [authToken]);
+
+  return (
+    <SessionExtendingWrapper id="overlay">
+      {IS_DEVELOPMENT && authToken && <DevelopmentImportList />}
+      {authToken
+        ? <RightSidePanel />
+        : (
+          <Spin spinning={loading}>
+            {IS_DEVELOPMENT && <Authenticate />}
+          </Spin>
+        )}
+      <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
+    </SessionExtendingWrapper>
+  );
+};
+
+async function getUserData(authToken) {
+  if (authToken) {
     homeHelper.saveTokenFromCookies();
-  }
-
-  render() {
-    return (<HomeContent {...this.props} />);
+    await sessionHelper.getUserInfo();
+    await sessionHelper.getUserAttributeFormPrivilege();
   }
 }
 
 function mapStateToProps(state) {
   return {
     loading: state.sessionReducer.loading,
-    loadingReport: state.officeReducer.loading || state.officeReducer.popupOpen,
     popupOpen: state.officeReducer.popupOpen,
     authToken: state.sessionReducer.authToken,
-    reportArray: state.officeReducer.reportArray,
     shouldRenderSettings: state.officeReducer.shouldRenderSettings,
   };
 }
 
 const mapDispatchToProps = { toggleRenderSettingsFlag, };
 
-_Home.defaultProps = { t: (text) => text, };
+HomeNotConnected.propTypes = {
+  loading: PropTypes.bool,
+  popupOpen: PropTypes.bool,
+  authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  t: PropTypes.func,
+};
 
-export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(_Home));
+HomeNotConnected.defaultProps = { t: (text) => text, };
+
+export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(HomeNotConnected));

@@ -4,7 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { switchToPromptFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPromptFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('F24398 - import and refresh visualization', () => {
@@ -13,8 +13,7 @@ describe('F24398 - import and refresh visualization', () => {
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC53627] Dossier top menu buttons', () => {
@@ -34,7 +33,7 @@ describe('F24398 - import and refresh visualization', () => {
     expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Three vizualizations');
 
     // Apply Bookmark
-    PluginPopup.applyDossierBookmark(1)
+    PluginPopup.applyDossierBookmark(1);
     browser.pause(3000);
     expect($(dossierWindow.visualizationName).getText()).toEqual('Chapter 1: Pie Chart');
 
@@ -45,8 +44,8 @@ describe('F24398 - import and refresh visualization', () => {
 
     // Filtes
     waitAndClick($(dossierWindow.buttonFilters), 1000);
-    PluginPopup.selectValuesFromDossierListFilter(1, [1, 2])
-    PluginPopup.setValueOnDossierSliderFilter(2, 'right', '150000')
+    PluginPopup.selectValuesFromDossierListFilter(1, [1, 2]);
+    PluginPopup.setValueOnDossierSliderFilter(2, 'right', '150000');
     waitAndClick($(dossierWindow.filtersMenu.buttonApplyFilters), 1000);
     browser.pause(1000);
     expect($(dossierWindow.filterCount).getText()).toEqual('FILTERS (2)');

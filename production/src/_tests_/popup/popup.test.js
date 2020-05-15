@@ -1,11 +1,8 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { Provider } from 'react-redux';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import { libraryErrorController } from '@mstr/mstr-react-library';
 import { Popup } from '../../popup/popup';
-import { popupStateActions, SET_MSTR_DATA } from '../../popup/popup-state-actions';
 import { popupHelper } from '../../popup/popup-helper';
 import { PopupViewSelector } from '../../popup/popup-view-selector';
 import { Office } from '../mockOffice';
@@ -23,18 +20,45 @@ describe('Popup.js', () => {
     expect(popupButtonsWrapped.get(0)).toBeDefined();
   });
 
+  it('should exist and have two children nodes', () => {
+    // when
+    const componentWrapper = shallow(<Popup />);
+
+    // then
+    expect(componentWrapper.exists('SessionExtendingWrapper')).toBeTruthy();
+    expect(componentWrapper.find('PopupViewSelector')).toBeTruthy();
+    expect(componentWrapper.find('InternetConnectionError')).toBeTruthy();
+    expect(componentWrapper.find('SessionExtendingWrapper').children()).toHaveLength(2);
+  });
+
+  it('should contain all assigned props and return true', () => {
+    // given
+    const mstrSetDataFunction = jest.fn();
+
+    // when
+    const wrappedComponent = mount(<Provider store={reduxStore}>
+      <Popup setMstrData={mstrSetDataFunction} />
+    </Provider>);
+    const popupWrapperId = '#popup-wrapper';
+
+    // then
+    const popupWrapper = wrappedComponent.find(popupWrapperId).at(1);
+    expect(popupWrapper.props().onClick).toBeDefined();
+    expect(popupWrapper.props().onKeyDown).toBeDefined();
+    expect(popupWrapper.props().role).toEqual('button');
+    expect(popupWrapper.props().tabIndex).toEqual('0');
+  });
+
   it('should call libraryErrorController.initializeHttpErrorsHandling', () => {
     // given
     const libraryErrorControllerSpy = jest.spyOn(libraryErrorController, 'initializeHttpErrorsHandling');
     const mstrSetDataFunction = jest.fn();
-
     // when
     mount(
       <Provider store={reduxStore}>
         <Popup setMstrData={mstrSetDataFunction} />
       </Provider>
     );
-
     // then
     expect(libraryErrorControllerSpy).toHaveBeenCalledWith(popupHelper.handlePopupErrors);
   });

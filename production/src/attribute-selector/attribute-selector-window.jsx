@@ -3,10 +3,9 @@ import '../home/home.css';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { selectorProperties } from './selector-properties';
-import { attributeSelectorHelpers } from './attribute-selector-helpers';
 import { AttributeSelector } from './attribute-selector';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { popupStateActions } from '../popup/popup-state-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -25,36 +24,47 @@ export class AttributeSelectorWindowNotConnected extends Component {
     this.setState({ triggerUpdate: true, loading: true });
   };
 
-  handleCancel = () => attributeSelectorHelpers.officeMessageParent(
-    selectorProperties.commandCancel
-  );
+  handleCancel = () => {
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
+    popupHelper.officeMessageParent(message);
+  }
 
   onTriggerUpdate = (
     chosenObjectId,
     projectId,
     chosenObjectSubtype,
     body,
-    chosenObjectName = this.props.chosenObject.chosenObjectName
+    chosenObjectName,
   ) => {
-    const { chosenObject, editedObject, importSubtotal, displayAttrFormNames } = this.props;
+    const { chosenObject: { chosenObjectName: objectName } } = this.props;
+    chosenObjectName = chosenObjectName || objectName;
+
+    const {
+      chosenObject, editedObject, importSubtotal, displayAttrFormNames
+    } = this.props;
+
     const subtotalsInfo = {
       importSubtotal: (editedObject && editedObject.subtotalsInfo)
         ? editedObject.subtotalsInfo.importSubtotal
         : importSubtotal
     };
     const displayAttrFormNamesSet = (editedObject && editedObject.displayAttrFormNames) || displayAttrFormNames;
-    attributeSelectorHelpers.officeMessageParent(
-      selectorProperties.commandOnUpdate,
+
+    const message = {
+      command: selectorProperties.commandOnUpdate,
       chosenObjectId,
       projectId,
       chosenObjectSubtype,
       body,
       chosenObjectName,
-      chosenObject.preparedInstanceId,
-      chosenObject.promptsAnswers,
+      instanceId: chosenObject.preparedInstanceId,
+      promptsAnswers: chosenObject.promptsAnswers,
+      isPrompted: !!chosenObject.promptsAnswers,
       subtotalsInfo,
-      displayAttrFormNamesSet
-    );
+      displayAttrFormNames: displayAttrFormNamesSet,
+    };
+    popupHelper.officeMessageParent(message);
   };
 
   /**
@@ -78,19 +88,22 @@ export class AttributeSelectorWindowNotConnected extends Component {
   };
 
   render() {
-    const { handleBack, chosenObject, mstrData, objectName } = this.props;
-    const { triggerUpdate, openModal, attributesSelected, loading, } = this.state;
+    const {
+      handleBack, chosenObject, mstrData, objectName, editedObject
+    } = this.props;
+    const {
+      triggerUpdate, openModal, attributesSelected, loading,
+    } = this.state;
     const { isPrompted } = mstrData;
     const { chosenObjectName } = chosenObject;
-    const typeName = chosenObject.objectType
-      && chosenObject.objectType.name
-      && chosenObject.objectType.name.charAt(0).toUpperCase()
-        + chosenObject.objectType.name.substring(1);
+    const typeOfObject = editedObject || chosenObject;
+    const typeName = typeOfObject.mstrObjectType
+      ? typeOfObject.mstrObjectType.name.charAt(0).toUpperCase() + typeOfObject.mstrObjectType.name.substring(1)
+      : 'Data';
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     return (
       <div>
         <AttributeSelector
-          // TODO: logic for a title
           title={`Import ${typeName} > ${objectName}`}
           attributesSelectedChange={this.attributesBeingSelected}
           triggerUpdate={triggerUpdate}
@@ -117,7 +130,9 @@ export class AttributeSelectorWindowNotConnected extends Component {
 AttributeSelectorWindowNotConnected.propTypes = {
   chosenObject: PropTypes.shape({
     chosenObjectName: PropTypes.string,
-    objectType: PropTypes.string,
+    objectType: PropTypes.shape({ name: PropTypes.string }),
+    preparedInstanceId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   }),
   objectName: PropTypes.string,
   mstrData: PropTypes.shape({
@@ -126,14 +141,23 @@ AttributeSelectorWindowNotConnected.propTypes = {
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.string,
-    isPrompted: PropTypes.bool
+    isPrompted: PropTypes.number
   }).isRequired,
-  handleBack: PropTypes.func
+  handleBack: PropTypes.func,
+  importSubtotal: PropTypes.bool,
+  displayAttrFormNames: PropTypes.string,
+  editedObject: PropTypes.shape({
+    displayAttrFormNames: PropTypes.string,
+    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
+    projectId: PropTypes.string,
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+  }),
 };
 
 const mapStateToProps = state => {
   const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   const { editedObject } = state.popupReducer;
+
   return {
     mstrData: { ...state.popupStateReducer },
     chosenObject,

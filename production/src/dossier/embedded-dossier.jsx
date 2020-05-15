@@ -1,11 +1,13 @@
-/* eslint-disable no-await-in-loop */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Empty } from '@mstr/rc/';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../popup/popup-helper';
-import { DEFAULT_PROJECT_NAME } from '../storage/navigation-tree-reducer';
+import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import scriptInjectionHelper from './script-injection-helper';
+import './dossier.css';
 
 const { microstrategy, Office } = window;
 
@@ -30,7 +32,7 @@ export function watchForIframeAddition(container, callback) {
   observer.observe(container, config);
 }
 
-export default class _EmbeddedDossier extends React.Component {
+export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
     this.container = React.createRef();
@@ -40,6 +42,7 @@ export default class _EmbeddedDossier extends React.Component {
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.embeddedDossier = null;
+    this.state = { loadingFrame: true };
   }
 
   componentDidMount() {
@@ -62,16 +65,17 @@ export default class _EmbeddedDossier extends React.Component {
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
-      const { handleLoadEvent } = this.props;
+      const { handleIframeLoadEvent } = this.props;
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
-      handleLoadEvent();
-      // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
-      const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
-      const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
-      if (!isOfficeOnline && isIE) {
-        const fileLocation = window.location.origin
-          + window.location.pathname.replace('index.html', 'javascript/mshtmllib.js');
-        this.applyFile(contentDocument, fileLocation);
+      handleIframeLoadEvent();
+      if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
+        // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
+        const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
+        const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
+        if (!isOfficeOnline && isIE) {
+          scriptInjectionHelper.applyFile(contentDocument, 'javascript/mshtmllib.js');
+        }
+        scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
       }
     });
   };
@@ -95,23 +99,12 @@ export default class _EmbeddedDossier extends React.Component {
     handleSelection(this.dossierData);
   }
 
-  /**
-   * This function applies an external script file to a embedded document
-   * @param {*} _document
-   * @param {*} fileLocation
-   */
-  applyFile = (_document, fileLocation) => {
-    const script = _document.createElement('script');
-    script.src = fileLocation;
-    if (_document) {
-      const title = _document.head.getElementsByTagName('title')[0];
-      _document.head.insertBefore(script, title);
-    }
-  }
-
   loadEmbeddedDossier = async (container) => {
-    const { mstrData } = this.props;
-    const { envUrl, authToken, dossierId, projectId, promptsAnswers, instanceId, selectedViz, visualizationInfo } = mstrData;
+    const { mstrData, handleEmbeddedDossierLoad } = this.props;
+    const {
+      envUrl, authToken, dossierId, projectId, promptsAnswers,
+      instanceId, selectedViz, visualizationInfo
+    } = mstrData;
     const instance = {};
     try {
       if (instanceId) {
@@ -139,23 +132,26 @@ export default class _EmbeddedDossier extends React.Component {
 
     this.dossierData = {
       ...this.dossierData,
-      preparedInstanceId: instance.mid,
+      instanceId: instance.mid,
     };
 
-    const libraryUrl = envUrl.replace('api', 'app');
-    let url = `${libraryUrl}/${projectId}/${dossierId}`;
+    const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
+    // delete last occurence of '/api' from the enviroment url
     let selectedVizChecked = selectedViz;
-
+    let activePage;
     if (selectedViz && visualizationInfo) {
       const { chapterKey, pageKey, visualizationKey } = visualizationInfo;
       selectedVizChecked = `${chapterKey}:${visualizationKey}`;
-      url = `${libraryUrl}/${projectId}/${dossierId}/${pageKey}`;
+      activePage = pageKey;
     }
     const { CustomAuthenticationType } = microstrategy.dossier;
 
     const props = {
       instance,
-      url,
+      serverURL,
+      applicationID: projectId,
+      objectID: dossierId,
+      pageKey: activePage,
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
@@ -213,7 +209,13 @@ export default class _EmbeddedDossier extends React.Component {
         this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
       },
     };
-    this.embeddedDossier = await microstrategy.dossier.create(props);
+    if (microstrategy && microstrategy.dossier) {
+      this.embeddedDossier = await microstrategy.dossier.create(props);
+      this.setState({ loadingFrame: false });
+      handleEmbeddedDossierLoad();
+    } else {
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+    }
   }
 
   /**
@@ -222,7 +224,6 @@ export default class _EmbeddedDossier extends React.Component {
   * to keep the import button enabled.
   *
   * @param {Array} promptsAnswers
-  * @memberof _EmbeddedDossier
   */
   async promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
@@ -243,27 +244,39 @@ export default class _EmbeddedDossier extends React.Component {
   * bookmark or new prompts answers given.
   *
   * @param {String} newInstanceId
-  * @memberof _EmbeddedDossier
   */
   instanceIdChangeHandler(newInstanceId) {
     const { handleInstanceIdChange } = this.props;
-    this.dossierData.preparedInstanceId = newInstanceId;
+    this.dossierData.instanceId = newInstanceId;
     handleInstanceIdChange(newInstanceId);
   }
 
   render() {
+    const { loadingFrame } = this.state;
     return (
       /*
       Height needs to be passed for container because without it, embedded api will set default height: 600px;
       We need to calculate actual height, regarding the size of other elements:
-      58px for header, 9px for header margin and 68px for buttons
+      58px for header, 19px for header and title margin and 68px for buttons.
       */
-      <div ref={this.container} style={{ position: 'relative', top: '0', left: '0', height: 'calc(100vh - 135px)' }} />
+      <>
+        {loadingFrame && <Empty isLoading />}
+        <div
+          ref={this.container}
+          style={{
+            position: 'relative',
+            top: '0',
+            left: '0',
+            height: 'calc(100vh - 145px)',
+            minHeight: 'calc(100vh - 145px)',
+            maxHeight: 'calc(100vh - 145px)',
+          }} />
+      </>
     );
   }
 }
 
-_EmbeddedDossier.propTypes = {
+EmbeddedDossierNotConnected.propTypes = {
   mstrData: PropTypes.shape({
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
@@ -272,19 +285,20 @@ _EmbeddedDossier.propTypes = {
     instanceId: PropTypes.string,
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
-    visualizationInfo: {
+    visualizationInfo: PropTypes.shape({
       chapterKey: PropTypes.string,
       pageKey: PropTypes.string,
       visualizationKey: PropTypes.string,
-    }
+    })
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
   handleInstanceIdChange: PropTypes.func,
-  handleLoadEvent: PropTypes.func
+  handleIframeLoadEvent: PropTypes.func,
+  handleEmbeddedDossierLoad: PropTypes.func,
 };
 
-_EmbeddedDossier.defaultProps = {
+EmbeddedDossierNotConnected.defaultProps = {
   mstrData: {
     envUrl: 'no env url',
     authToken: null,
@@ -298,19 +312,23 @@ _EmbeddedDossier.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { navigationTree, popupReducer, sessionReducer: { attrFormPrivilege, envUrl, authToken }, officeReducer } = state;
+  const {
+    navigationTree,
+    popupReducer,
+    sessionReducer: { attrFormPrivilege, envUrl, authToken },
+    officeReducer
+  } = state;
   const { chosenObjectName, chosenObjectId, chosenProjectId } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
-  const objectType = popupState && popupState.objectType ? popupState.objectType : mstrObjectEnum.mstrObjectType.report.name;
-  const isReport = objectType && (objectType === mstrObjectEnum.mstrObjectType.report.name || objectType.name === mstrObjectEnum.mstrObjectType.report.name);
+  const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
   const mstrData = {
     envUrl,
-    token: authToken,
+    authToken,
     dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
     projectId: isEdit ? editedObject.projectId : chosenProjectId,
     promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
@@ -321,4 +339,4 @@ const mapStateToProps = (state) => {
   return { mstrData };
 };
 
-export const EmbeddedDossier = connect(mapStateToProps)(_EmbeddedDossier);
+export const EmbeddedDossier = connect(mapStateToProps)(EmbeddedDossierNotConnected);

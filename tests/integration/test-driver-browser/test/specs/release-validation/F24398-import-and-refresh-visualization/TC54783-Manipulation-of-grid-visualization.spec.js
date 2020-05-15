@@ -3,8 +3,9 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
-import settings from '../../../config';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
+import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
@@ -12,15 +13,14 @@ describe('F24398 - Import and refresh visualization', () => {
   });
   afterEach(() => {
     browser.closeWindow();
-    const handles = browser.getWindowHandles();
-    browser.switchToWindow(handles[0]);
+    changeBrowserTab(0);
   });
 
   it('[TC54783] Manipulation of grid visualization such as totals, ordering and drilling', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     const dossierObject = objectsList.dossiers.visualizationManipulation;
-    PluginPopup.openDossier(dossierObject.name);
+    PluginPopup.openDossier(dossierObject.name, 30000);
     const yearAttribute = dossierObject.visualizations.visualization1.getTableItemAt(1, 1);
     const profitMetric = dossierObject.visualizations.visualization1.getTableItemAt(1, 3);
     const revenueMetric = dossierObject.visualizations.visualization1.getTableItemAt(1, 4);
@@ -38,6 +38,7 @@ describe('F24398 - Import and refresh visualization', () => {
     expect($(categoryText).getText()).toEqual('Books');
     PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.visualization1.name);
     waitForNotification();
+    pluginRightPanel.closeNotificationOnHover();
     browser.pause(5000);
   });
 });
