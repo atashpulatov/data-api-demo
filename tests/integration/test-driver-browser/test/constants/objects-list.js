@@ -191,5 +191,13 @@ export const objectsList = {
       name: '1 MILION rows This is a very long name for a dossier so that we can test how we display long path to dossier visualisationsNew Dossier',
       visualization: '#mstr106'
     },
+    withFilter: {
+      name: 'Dossier with filter',
+      visualizations: { vis1: '#mstr106' }
+    },
+    withAttributeMetricSelector: {
+      name: 'dossier with attribute/metric selector',
+      visualizations: { vis1: '#mstr107' }
+    }
   },
 };
