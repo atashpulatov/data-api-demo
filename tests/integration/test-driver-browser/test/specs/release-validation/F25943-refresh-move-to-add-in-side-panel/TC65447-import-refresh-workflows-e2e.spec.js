@@ -111,6 +111,9 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
+    console.log('check if number of imported objects in UI is equal to 7');
+    expect($(rightPanelSelectors.importedData).getText()).toContain('7');
+
     const numberOfObjects = $$('.object-tile').length;
 
     console.log('hover over imported objects');
@@ -129,11 +132,12 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     }
 
     console.log('check if refreshAll and removeAll buttons are visible');
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.refreshAllBtn)).toBe(true);
-    expect(PluginRightPanel.isOpaque(rightPanelSelectors.deleteAllBtn)).toBe(true);
+    expect($(rightPanelSelectors.refreshAllBtn).isDisplayed()).toBe(true);
+    expect($(rightPanelSelectors.deleteAllBtn).isDisplayed()).toBe(true);
 
     console.log('select table to apply formatting to');
     PluginRightPanel.clickObjectInRightPanel(6);
+    browser.pause(4000); // allow excel select table in worksheet
 
     console.log('refresh all');
     PluginRightPanel.clickMasterCheckbox();
@@ -142,12 +146,12 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
 
     console.log('apply formatting');
     OfficeWorksheet.formatTable();
-    browser.pause(5000);
+    browser.pause(5000); // allow formatting to be applied
 
     console.log('scroll to the bottom of the table');
     OfficeWorksheet.selectCell('D5');
     browser.keys(['End']);
-    browser.pause(5000);
+    browser.pause(5000); // allow excel to perform scroll operation
 
     console.log('switch between worksheets');
     OfficeWorksheet.openSheet(3);
@@ -155,11 +159,18 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
 
     waitForNotification();
     PluginRightPanel.closeAllNotificationsOnHover();
-    browser.pause(3000);
+
+    console.log('check if all objects are deselected after refresh all operation');
+    for (let objectIndex = 1; objectIndex <= numberOfObjects; objectIndex++) {
+      expect($(rightPanelSelectors.getObjectCheckbox(objectIndex)).getAttribute('aria-checked')).toBe('false');
+    }
+
+    console.log('check if refreshAll and removeAll buttons are no longer visible');
+    expect($(rightPanelSelectors.refreshAllBtn).isDisplayed()).toBe(false);
+    expect($(rightPanelSelectors.deleteAllBtn).isDisplayed()).toBe(false);
 
     PluginRightPanel.logout();
     browser.pause(2222);
-    expect($(rightPanelSelectors.pluginImage).isDisplayed()).toBe(true);
     expect($(rightPanelSelectors.loginRightPanelBtn).isDisplayed()).toBe(true);
   });
 });
