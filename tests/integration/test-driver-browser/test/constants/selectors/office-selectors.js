@@ -30,4 +30,6 @@ export const excelSelectors = {
   nameBoxDropdownButton: '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a',
   nameBoxListContent: '[id^=WacAirSpace] > div > div > div > ul',
   selectsheet: (index) => `#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > li:nth-child(${index + 1})`,
+  formatAsTable: '#m_excelWebRenderer_ewaCtl_Styles\\.FormatAsTable-Large',
+  lightGrayTableFormat: '#\\30 -Menu',
 };

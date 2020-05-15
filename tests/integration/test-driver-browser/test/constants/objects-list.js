@@ -127,6 +127,7 @@ export const objectsList = {
     notSupportedCube: 'multi table cube',
     salesRecords1k: '1k Sales Records.csv',
     salesData: 'Sales Data',
+    salesRecords50k: '50k Sales Records.csv',
   },
 
   dossiers: {
