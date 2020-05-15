@@ -5,8 +5,9 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification, waitForAllNotifications } from '../../../helpers/utils/wait-helper';
 import { objectsList } from '../../../constants/objects-list';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('TC53752 - Subtotals settings', () => {
+describe('[F24751] Subtotals settings', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -15,7 +16,7 @@ describe('TC53752 - Subtotals settings', () => {
     browser.closeWindow();
     changeBrowserTab(0);
   });
-  it('Enable and disable subtotals', () => {
+  it('[TC53752] Enable and disable subtotals', () => {
     const {
       reportBasedOnIntelligentCubeWithSubtotals,
       reportWithSubtotalAndPrompt,
@@ -127,6 +128,7 @@ describe('TC53752 - Subtotals settings', () => {
     for (let i = 0; i < 11; i++) {
       PluginPopup.clickSubtotalToggler();
     }
+    expect($(popupSelectors.subtotalTogglerOn)).toBeDefined();
     PluginPopup.clickImport();
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
