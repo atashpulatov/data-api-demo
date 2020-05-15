@@ -38,6 +38,8 @@ export const objectsList = {
     reportBasedOnIntelligentCubeWithSubtotals: 'Report based on cube with subtotals',
     reportWithSubtotalAndPrompt: 'Report with a subtotal & prompt',
     promptedReportWithCrosstabAndSubtotals: 'Prompted report with crosstab and subtotals',
+    mergedHeaderReport: 'Merged Header Report',
+    report50k: 'report 50k sales records',
     withoutSubtotals: {
       basicReport: 'Report without subtotals',
       reportBasedOnIntelligentCubeWithoutSubtotals: 'Report based on cube without subtotals',

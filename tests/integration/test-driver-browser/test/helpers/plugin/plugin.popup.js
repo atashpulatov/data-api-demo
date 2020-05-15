@@ -971,6 +971,33 @@ class PluginPopup {
   }
 
   /**
+   * Returns an array containing 'Date modified' timestamps as strings
+   *
+   * @returns {Array} array of timestamps as strings
+   * @memberof PluginPopup
+   */
+  getObjectsTimestamps() {
+    return $$(popupSelectors.columnModified).map(dateObject => {
+      const [dateString, hourString] = dateObject.getAttribute('title').split(' ');
+      const date = dateString.split('/');
+      const hour = hourString.split(':');
+      const preparedDate = new Date(date[2], date[0], date[1], hour[0], hour[1]);
+      return Date.parse(preparedDate).toString();
+    });
+  }
+
+  /**
+   * Returns an array objects' values for the given column
+   *
+   * @param {String} column name of the column selector
+   * @returns {Array} array of objects' values
+   * @memberof PluginPopup
+   */
+  getColumnContents(column) {
+    return $$(popupSelectors[column]).map(domObject => domObject.getAttribute('title'));
+  }
+
+  /**
    * Returns background color hex number for the given element (object on Table of Objects)
    * @param {String} selector a css selector for which we get the background color
    * @return {String}
@@ -1187,6 +1214,38 @@ class PluginPopup {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(10000);
     switchToPromptFrameForImportDossier();
+  }
+
+  /**
+   * Checks if the given array of strings is sorted ascending
+   *
+   * @param {Array} data array of strings
+   * @param {String} locale locale to be used when comparing strings
+   * @returns true if data is sorted ascending, false otherwise
+   */
+  isSortedAsceding(data, locale = 'en') {
+    for (let i = 1; i < data.length; i++) {
+      if (data[i].localeCompare(data[i - 1], locale, { sensitivity: 'base' }) < 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Checks if the given array of strings is sorted descending
+   *
+   * @param {Array} data array of strings
+   * @param {String} locale locale to be used when comparing strings
+   * @returns true if data is sorted descending, false otherwise
+   */
+  isSortedDesceding(data, locale = 'en') {
+    for (let i = 1; i < data.length; i++) {
+      if (data[i].localeCompare(data[i - 1], locale, { sensitivity: 'base' }) > 0) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 

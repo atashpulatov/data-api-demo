@@ -20,6 +20,20 @@ class PluginRightPanel {
     waitAndClick($(rightPanelSelectors.settingsBtn));
   }
 
+  /**
+   * Clicks Clear Data button in Settings menu
+   */
+  clickClearData() {
+    waitAndClick($(rightPanelSelectors.clearDataBtn));
+  }
+
+  /**
+   * Clicks Ok button on Clear Data confiramtion to start the action
+   */
+  clickClearDataOk() {
+    waitAndClick($(rightPanelSelectors.clearOkBtn));
+  }
+
   logout() {
     console.log('Should log out');
     this.clickSettings();
@@ -210,6 +224,32 @@ class PluginRightPanel {
     const nameInput = $(rightPanelSelectors.getNameInputForObject(index));
     return nameInput.getText();
   }
+  /**
+   * Select all imported objects. Will work when there is at least one or more objects imported.
+   */
+  selectAll() {
+    console.log('Should select all imported objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+  }
+
+  /**
+   * Run refresh for selected imported objects. Will work when there is at least one or more objects selected.
+   */
+  refreshSelected() {
+    console.log('Should refresh selected objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.refreshAllBtn));
+  }
+
+  /**
+   * Run remove for selected imported objects. Will work when there is at least one or more objects selected.
+   */
+  removeSelected() {
+    console.log('Should remove selected objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.deleteAllBtn));
+  }
 
   /**
    * Clicks master checkbox
@@ -341,6 +381,17 @@ class PluginRightPanel {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
     this.closeNotificationOnHover();
+  }
+
+  /**
+   * Press Cancel button on object pending notification
+   *
+   * @param {Number} index index of an imported object in the right side panel
+   */
+  cancelObjectPendingAction(index) {
+    console.log('Should cancel object pending action');
+    const objectCancelBtn = $(rightPanelSelectors.getPendingNotificationCancelBtnAt(index));
+    waitAndClick(objectCancelBtn);
   }
 
   /**
