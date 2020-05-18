@@ -21,9 +21,6 @@ exports.config = {
 
   ],
   suites: {
-    temp: [
-      './test/specs/release-validation/F25946-details-panel/TC59675-exanding-many-rows.spec.js',
-    ],
     acceptance: [
       './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
