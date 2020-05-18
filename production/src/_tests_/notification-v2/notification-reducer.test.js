@@ -358,7 +358,7 @@ describe('Notification reducer', () => {
         // then
         expect(mockedGetNotificationButtons).toBeCalled();
         expect(mockedGetNotificationButtons).toBeCalledWith([{
-          label: 'OK', onClick: mockedCallback, title: 'OK', type: 'basic'
+          label: 'OK', onClick: mockedCallback, type: 'basic'
         }]);
       });
 

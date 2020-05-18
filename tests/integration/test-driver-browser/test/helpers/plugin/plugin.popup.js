@@ -10,7 +10,9 @@ import {
   switchToPromptFrameForImportDossier
 } from '../utils/iframe-helper';
 import pluginRightPanel from './plugin.right-panel';
-import { pressTab, pressRightArrow, pressBackspace } from '../utils/keyboard-actions';
+import {
+  pressTab, pressRightArrow, pressBackspace, pressEnter
+} from '../utils/keyboard-actions';
 import { waitForNotification } from '../utils/wait-helper';
 import { dictionary } from '../../constants/dictionaries/dictionary';
 import OfficeWorksheet from '../office/office.worksheet';
@@ -41,6 +43,7 @@ class PluginPopup {
   }
 
   clickPrepareData() {
+    console.log('Should click prepare data button');
     waitAndClick($(popupSelectors.prepareBtn));
   }
 
@@ -61,6 +64,7 @@ class PluginPopup {
   }
 
   clickSubtotalToggler() {
+    console.log('Should switch subtotal toggler');
     waitAndClick($(popupSelectors.subtotalToggler));
   }
 
@@ -96,6 +100,15 @@ class PluginPopup {
   }
 
   /**
+   * Selects atrributes and metrics using all.
+   */
+  selectAllAttributesAndMetrics() {
+    console.log('Should select all attributes and metrics');
+    this.selectAllAttributes();
+    this.selectAllMetrics();
+  }
+
+  /**
    * Waits for element to show up and dissapear
    * useful to validate that action has been started and finished
    *
@@ -119,7 +132,7 @@ class PluginPopup {
    */
   selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
-      waitAndClick($(`input[name="${elements[i]}"]`));
+      waitAndClick($(`span=${elements[i]}`));
     }
   }
 
@@ -157,9 +170,27 @@ class PluginPopup {
     waitAndClick($(`.data-tip*=${headerName}`));
   }
 
-  selectFirstObject() {
+  /**
+   * Selects object from objects list depending on passed parameter.
+   *
+   * NOTE: by default selects first object.
+   *
+   * @param {Number} objectOrder is order of an object on the list
+   */
+  selectObject(objectOrder = 1) {
     browser.pause(2222);
-    waitAndClick($(popupSelectors.firstObject));
+    let selector = '';
+    switch (objectOrder) {
+      case 1:
+        selector = $(popupSelectors.firstObject);
+        break;
+      case 2:
+        selector = $(popupSelectors.secondObject);
+        break;
+      default:
+        return;
+    }
+    waitAndClick(selector);
   }
 
   selectFirstObjectWithoutSearch() {
@@ -174,7 +205,7 @@ class PluginPopup {
     browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectFirstObject();
+    this.selectObject();
     this.clickImport();
   }
 
@@ -182,7 +213,7 @@ class PluginPopup {
     switchToDialogFrame();
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectFirstObject();
+    this.selectObject();
     this.clickImport();
   }
 
@@ -207,7 +238,7 @@ class PluginPopup {
     this.switchLibrary(false);
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectFirstObject();
+    this.selectObject();
     this.clickPrepareData();
     browser.pause(9999); // temp solution
     switchToPromptFrame();
@@ -231,6 +262,28 @@ class PluginPopup {
 
   importPromptDefaultNested(objectName) {
     this.switchLibraryAndImportObject(objectName, false);
+    browser.pause(5555);
+    while (true) {
+      browser.pause(3000);
+      switchToPluginFrame();
+      if ($(popupSelectors.runBtn).isExisting()) {
+        this.clickRun();
+      } else {
+        break;
+      }
+    }
+  }
+
+  /**
+   * This function is used for report with nested prompts.
+   * It click on edit for the first object from the list.
+   * After that it is clicking run for all nested default prompts.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   */
+
+  editPromptDefaultNested(index = 1) {
+    pluginRightPanel.editObject(index);
     browser.pause(5555);
     while (true) {
       browser.pause(3000);
@@ -419,7 +472,9 @@ class PluginPopup {
     if (typeof visContainerId === 'undefined') {
       visSelector = $(popupSelectors.visualizationSelector);
     } else {
+      $(visContainerId).waitForDisplayed(60000, false, `${visContainerId} is not displayed`);
       visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+      visSelector.waitForClickable(60000, false, `${visSelector} is not clickable`);
     }
     waitAndClick(visSelector, 40000);
     browser.pause(2500);
@@ -656,12 +711,13 @@ class PluginPopup {
     return searchBox.getValue() === stringToCompare;
   }
 
-  openPrepareData(objectName, isObjectFromLibrary = false) {
+  openPrepareData(objectName, isObjectFromLibrary = false, objectOrder = 1) {
+    console.log('Should open prepare data');
     switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
-    this.selectFirstObject();
+    this.selectObject(objectOrder);
     this.clickPrepareData();
   }
 
@@ -952,6 +1008,33 @@ class PluginPopup {
   }
 
   /**
+   * Returns an array containing 'Date modified' timestamps as strings
+   *
+   * @returns {Array} array of timestamps as strings
+   * @memberof PluginPopup
+   */
+  getObjectsTimestamps() {
+    return $$(popupSelectors.columnModified).map(dateObject => {
+      const [dateString, hourString] = dateObject.getAttribute('title').split(' ');
+      const date = dateString.split('/');
+      const hour = hourString.split(':');
+      const preparedDate = new Date(date[2], date[0], date[1], hour[0], hour[1]);
+      return Date.parse(preparedDate).toString();
+    });
+  }
+
+  /**
+   * Returns an array objects' values for the given column
+   *
+   * @param {String} column name of the column selector
+   * @returns {Array} array of objects' values
+   * @memberof PluginPopup
+   */
+  getColumnContents(column) {
+    return $$(popupSelectors[column]).map(domObject => domObject.getAttribute('title'));
+  }
+
+  /**
    * Returns background color hex number for the given element (object on Table of Objects)
    * @param {String} selector a css selector for which we get the background color
    * @return {String}
@@ -1026,6 +1109,19 @@ class PluginPopup {
     !isMyLibraryOn && expect(detailsTableText).toContain('Created');
     !isMyLibraryOn && expect(detailsTableText).toContain('Location');
     expect(detailsTableText).toContain('Description');
+  }
+
+  /**
+    * Navigates to particular element (ex. button), via tab and presses enter.
+    *
+    * @param {Number} numberOfSteps is number of steps to navigate to particular element
+    */
+  navigateUsingTabAndPressEnter(numberOfSteps) {
+    for (let i = 0; i < numberOfSteps; i++) {
+      pressTab();
+      browser.pause(100);
+    }
+    pressEnter();
   }
 
   /**
@@ -1151,6 +1247,74 @@ class PluginPopup {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     pluginRightPanel.closeNotificationOnHover();
+  }
+
+  /**
+    * Edits imported report and click re-prompt button
+    */
+  editAndOpenReprompt() {
+    console.log('Should click edit button');
+    pluginRightPanel.editObject(1);
+    browser.pause(5000);
+    switchToPromptFrame();
+
+    console.log('click reprompt icon');
+    $(popupSelectors.dossierWindow.repromptDossier).waitForExist(5000);
+    $(popupSelectors.dossierWindow.repromptDossier).click();
+    browser.pause(3000);
+
+    console.log('reprompt and import');
+    switchToPromptFrame();
+    $('#mstrdossierPromptEditor').waitForExist(10000);
+    switchToPromptFrameForImportDossier();
+  }
+
+  /**
+   * Checks if the given array of strings is sorted ascending
+   *
+   * @param {Array} data array of strings
+   * @param {String} locale locale to be used when comparing strings
+   * @returns true if data is sorted ascending, false otherwise
+   */
+  isSortedAsceding(data, locale = 'en') {
+    for (let i = 1; i < data.length; i++) {
+      if (data[i].localeCompare(data[i - 1], locale, { sensitivity: 'base' }) < 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Checks if the given array of strings is sorted descending
+   *
+   * @param {Array} data array of strings
+   * @param {String} locale locale to be used when comparing strings
+   * @returns true if data is sorted descending, false otherwise
+   */
+  isSortedDesceding(data, locale = 'en') {
+    for (let i = 1; i < data.length; i++) {
+      if (data[i].localeCompare(data[i - 1], locale, { sensitivity: 'base' }) > 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Clicks view selected toggle in all panel
+   */
+  clickViewSelectedInAllPanel() {
+    waitAndClick($(popupSelectors.filterPanel.viewSelected));
+  }
+
+  /**
+   * Counts the number of items in the All Panel that are present in the DOM
+   *
+   * @returns {Number} number of items
+   */
+  getAllPanelItemCount() {
+    return $$(popupSelectors.filterPanel.allPanelCheckbox).length;
   }
 }
 
