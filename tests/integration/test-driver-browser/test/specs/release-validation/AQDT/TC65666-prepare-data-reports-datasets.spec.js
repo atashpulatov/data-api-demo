@@ -21,10 +21,12 @@ describe('Personal TC for AQDT Mirror2', () => {
     browser.pause(5555); // temp solution
     console.log('Should sort attributes and metrics');
     const sortAttributeSelector = $(popupSelectors.sortAttributes);
+    const attributeContainer = $(popupSelectors.attributesContainer);
     const sortMetricsSelector = $(popupSelectors.sortMetrics);
     const sortFiltersSelector = $(popupSelectors.sortFilters);
 
     waitAndClick(sortAttributeSelector);
+    expect(attributeContainer.$$('li')[0].getText()).toEqual('Date (Test Case Result)');
     waitAndClick(sortMetricsSelector);
     waitAndClick(sortFiltersSelector);
 
