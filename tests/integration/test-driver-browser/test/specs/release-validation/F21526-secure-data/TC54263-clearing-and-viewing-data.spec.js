@@ -1,147 +1,147 @@
-import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
+import officeLogin from '../../../helpers/office/office.login';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { waitForNotification, waitForPopup, waitByClass, waitById } from '../../../helpers/utils/wait-helper';
+import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import {
+  switchToPluginFrame, switchToExcelFrame, changeBrowserTab, switchToRightPanelFrame
+} from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
-import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { objectsList } from '../../../constants/objects-list';
-import { excelSelectors } from '../../../constants/selectors/office-selectors'
-
-const EC = protractor.ExpectedConditions;
-const clearingLoadingClass = 'loading-text-container';
-const showDataBtnClass = 'show-data-btn';
-
+import { excelSelectors } from '../../../constants/selectors/office-selectors';
 
 describe('[TC54263] Secure data - clearing data', () => {
-  beforeAll(async () => {
-    await OfficeWorksheet.openExcelHome();
-    const url = await browser.getCurrentUrl();
-    if (url.includes('login.microsoftonline')) {
-      await OfficeLogin.login(officeCredentials.username, officeCredentials.password);
-    }
-    await OfficeWorksheet.createNewWorkbook();
-    await OfficeWorksheet.openPlugin();
-    await PluginRightPanel.loginToPlugin('a', '');
+  beforeEach(() => {
+    officeLogin.openExcelAndLoginToPlugin();
+  });
+  afterEach(() => {
+    browser.closeWindow();
+    changeBrowserTab(0);
   });
 
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
-  });
+  it('[TC54263] should clear data', () => {
+    console.log(`should import 'Revenue by Region and Category - secure data' report`);
+    PluginPopup.importObjectToCellAndAssertSuccess('A1', objectsList.reports.secureDataFiltering, 'Report for clearing data should be imported', false);
 
-  it('[TC54263] should clear data', async () => {
-    // should import 'Revenue by Region and Category - secure data' report
-    await OfficeWorksheet.selectCell('A1');
-    await PluginRightPanel.clickImportDataButton();
-    await PluginPopup.importObject(objectsList.reports.secureDataFiltering);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    console.log(`should import 'Secure data - always working' report`);
+    switchToExcelFrame();
+    PluginPopup.importObjectToCellAndAssertSuccess('E1', objectsList.reports.secureDataAlwaysWorking, 'Report which will alway display all the data should be imported', true);
 
-    // should import 'Secure data - always working' report
-    await switchToExcelFrame();
-    await OfficeWorksheet.selectCell('E1');
-    await PluginRightPanel.clickAddDataButton();
-    await PluginPopup.importObject(objectsList.reports.secureDataAlwaysWorking);
-    await waitForNotification();
-    await expect(rightPanelSelectors.notificationPopUp.getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
+    console.log(`should clear data`);
+    switchToPluginFrame();
+    PluginRightPanel.clickSettings();
+    PluginRightPanel.clickClearData();
+    PluginRightPanel.clickClearDataOk();
+    browser.pause(4000);
 
-    // should clear data
-    await switchToPluginFrame();
-    await PluginRightPanel.clickSettings();
-    await PluginRightPanel.clearData();
-    await browser.sleep(4000);
+    console.log('should log out');
+    switchToPluginFrame();
+    PluginRightPanel.logout();
 
-    // should assert data was cleared
-    await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, ''), 10000);
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, ''), 5000);
+    console.log('should log in with Tim user');
+    browser.pause(1000);
+    switchToRightPanelFrame();
+    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
+    PluginRightPanel.clickLoginRightPanelBtn();
+    changeBrowserTab(2);
+    PluginRightPanel.enterCredentialsAndPressLoginBtn('Tim', '');
+    changeBrowserTab(1);
 
-    // should log out
-    await switchToPluginFrame();
-    await PluginRightPanel.clickSettings();
-    await PluginRightPanel.clickLogout();
+    console.log('should assert A2 and E2 cells are empty');
+    switchToExcelFrame();
+    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('');
+    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('');
 
-    // should log in with Tim user
-    await PluginRightPanel.loginToPlugin('Tim', '');
+    console.log(`should click "View Data"`);
+    browser.pause(4000);
+    switchToPluginFrame();
+    PluginRightPanel.viewDataBtn();
+    const { reportRefreshed, emptyObject } = dictionary.en;
+    switchToPluginFrame();
+    PluginRightPanel.waitAndCloseNotification(reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(reportRefreshed);
 
-    // should click "View Data" and close the "Refresh All Data" pop-up
-    await switchToPluginFrame();
-    await PluginRightPanel.viewDataBtn();
-    await waitForPopup();
-    await switchToExcelFrame();
-    await browser.actions().mouseMove(popupSelectors.closeRefreshAll).perform();
-    await browser.actions().click(popupSelectors.closeRefreshAll).perform();
 
-    // should assert data was refreshed
-    await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, 'Central'), 5000);
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, 'Albania'), 5000);
+    console.log(`should assert data was refreshed`);
+    switchToExcelFrame();
+    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('Central');
+    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('Albania');
 
-    // should clear data
-    await switchToPluginFrame();
-    await PluginRightPanel.clickSettings();
-    await PluginRightPanel.clearData();
-    await browser.sleep(4000);
+    console.log(`should clear data`);
+    switchToPluginFrame();
+    PluginRightPanel.clickSettings();
+    PluginRightPanel.clickClearData();
+    PluginRightPanel.clickClearDataOk();
+    browser.pause(2000);
 
-    // should assert data was cleared
-    await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, ''), 5000);
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, ''), 10000);
+    console.log('should assert A2 and E2 cells are empty');
+    switchToExcelFrame();
+    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('');
+    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('');
 
-    // should log out
-    await switchToPluginFrame();
-    await PluginRightPanel.clickSettings();
-    await PluginRightPanel.clickLogout();
+    console.log('should log out');
+    browser.pause(2000);
+    switchToPluginFrame();
+    PluginRightPanel.logout();
 
-    // should log in with Jeff user
-    await PluginRightPanel.loginToPlugin('Jeff', '');
+    console.log('should log in with Jeff user');
+    browser.pause(1000);
+    switchToRightPanelFrame();
+    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
+    PluginRightPanel.clickLoginRightPanelBtn();
+    changeBrowserTab(2);
+    PluginRightPanel.enterCredentialsAndPressLoginBtn('Jeff', '');
+    changeBrowserTab(1);
 
-    // should click "View Data" and close the "Refresh All Data" pop-up
-    await switchToPluginFrame();
-    await PluginRightPanel.viewDataBtn();
-    await waitForPopup();
-    await switchToExcelFrame();
-    await browser.actions().mouseMove(popupSelectors.closeRefreshAll).perform();
-    await browser.actions().click(popupSelectors.closeRefreshAll).perform();
+    console.log(`should click "View Data"`);
+    switchToPluginFrame();
+    PluginRightPanel.viewDataBtn();
+    PluginRightPanel.waitAndCloseNotification(reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(reportRefreshed);
 
-    // assert data was refreshed
-    await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, 'Mid-Atlantic'), 5000);
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, 'Albania'), 5000);
+    console.log(`should assert data was refreshed`);
+    switchToExcelFrame();
+    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('Mid-Atlantic');
+    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('Albania');
+    browser.pause(2000);
 
-    // should clear data
-    await switchToPluginFrame();
-    await PluginRightPanel.clickSettings();
-    await PluginRightPanel.clearData();
-    await browser.sleep(4000);
+    console.log(`should clear data`);
+    switchToPluginFrame();
+    PluginRightPanel.clickSettings();
+    PluginRightPanel.clickClearData();
+    PluginRightPanel.clickClearDataOk();
+    browser.pause(2000);
 
-    // should assert data was cleared
-    await switchToExcelFrame();
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, ''), 5000);
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, ''), 5000);
+    console.log('should assert A2 and E2 cells are empty');
+    switchToExcelFrame();
+    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('');
+    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('');
 
-    // should log out
-    await switchToPluginFrame();
-    await PluginRightPanel.clickSettings();
-    await PluginRightPanel.clickLogout();
+    console.log('should log out');
+    switchToPluginFrame();
+    PluginRightPanel.logout();
 
-    // should log in with Martyna user
-    await PluginRightPanel.loginToPlugin('Martyna', '');
+    console.log('should log in with Martyna user');
+    browser.pause(1000);
+    switchToRightPanelFrame();
+    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
+    PluginRightPanel.clickLoginRightPanelBtn();
+    changeBrowserTab(2);
+    PluginRightPanel.enterCredentialsAndPressLoginBtn('Martyna', '');
+    changeBrowserTab(1);
 
-    // should click "View Data" and close the "Refresh All Data" pop-up
-    await switchToPluginFrame();
-    await PluginRightPanel.viewDataBtn();
-    await waitForPopup();
-    await switchToExcelFrame();
-    await browser.actions().mouseMove(popupSelectors.closeRefreshAll).perform();
-    await browser.actions().click(popupSelectors.closeRefreshAll).perform();
+    console.log(`should click "View Data"`);
+    switchToPluginFrame();
+    PluginRightPanel.viewDataBtn();
+    switchToPluginFrame();
+    PluginRightPanel.waitAndCloseNotification(reportRefreshed);
 
-    // assert data was refreshed
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.A2, ''), 5000);
-    await browser.wait(EC.textToBePresentInElement(excelSelectors.E2, 'Albania'), 5000);
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(emptyObject);
+
+    console.log(`should assert data was refreshed`);
+    switchToExcelFrame();
+    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('');
+    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('Albania');
   });
 });
