@@ -36,7 +36,7 @@ describe('F25946 - details panel', () => {
     expect(PluginPopup.findAmountOfOpenRows()).toEqual(2);
 
     console.log('hide first row');
-    PluginPopup.closeFirstRows(1);
+    PluginPopup.closeRowsFromTop(1);
     expect(PluginPopup.findAmountOfOpenRows()).toEqual(1);
   });
 });

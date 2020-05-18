@@ -913,7 +913,7 @@ class PluginPopup {
    *
    * @param {Number} amount Number of rows to close
    */
-  closeFirstRows(amount) {
+  closeRowsFromTop(amount) {
     $(popupSelectors.expandButtonOpen).waitForExist({ timeout: 3000 });
     const openExpandButtons = $$(popupSelectors.expandButtonOpen);
     for (let i = 0; i < amount; i++) {
@@ -1106,9 +1106,11 @@ class PluginPopup {
     const detailsTableText = detailsTable.getText();
     expect(detailsTableText).toContain('Type');
     expect(detailsTableText).toContain('ID');
-    !isMyLibraryOn && expect(detailsTableText).toContain('Created');
-    !isMyLibraryOn && expect(detailsTableText).toContain('Location');
     expect(detailsTableText).toContain('Description');
+    if (!isMyLibraryOn) {
+      expect(detailsTableText).toContain('Created');
+      expect(detailsTableText).toContain('Location');
+    }
   }
 
   /**
