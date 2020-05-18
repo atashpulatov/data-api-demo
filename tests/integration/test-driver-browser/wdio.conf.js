@@ -59,6 +59,7 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59812-tooltip-when-hover-on-button.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59676-ellipsis-longer-strings.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59676-expanding-many-rows.spec.js',
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
       './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
       './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
@@ -163,6 +164,7 @@ exports.config = {
       './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59812-tooltip-when-hover-on-button.spec.js',
       './test/specs/release-validation/F25946-details-panel/TC59676-ellipsis-longer-strings.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59675-exanding-many-rows.spec.js',
     ],
     'F25930-faster-display': [
       './test/specs/release-validation/F25930-faster-display/TC54961-E2E-scenario.spec.js',
