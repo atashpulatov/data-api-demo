@@ -21,7 +21,7 @@ describe('F12909 - Ability to import a report from MicroStrategy report', () => 
     PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectsList.datasets.notPublished);
     browser.pause(500);
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     expect($(popupSelectors.importBtn).isEnabled()).toBe(false);
   });
 });

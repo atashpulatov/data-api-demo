@@ -4,7 +4,7 @@ export const dictionary = {
     reportRemoved: 'Report removed',
     reportRefreshed: 'Refresh complete',
     visualizationRefreshed: 'Refresh complete',
-    excelLimit: 'The table you try to import exceeds the worksheet limits',
+    excelLimit: 'The table you try to import exceeds the worksheet limits.',
     rangeNotEmpty: 'This operation requires the use of additional empty rows or columns.',
     loginError: 'Incorrect username and/or password. Please try again',
     notSupported: 'This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office',

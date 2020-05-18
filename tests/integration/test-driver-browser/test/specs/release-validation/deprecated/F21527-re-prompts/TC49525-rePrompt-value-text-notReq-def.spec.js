@@ -1,12 +1,12 @@
 import { browser } from 'protractor';
-import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
-import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { objectsList } from '../../../constants/objects-list';
-import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
+import OfficeLogin from '../../../../helpers/office/office.login';
+import OfficeWorksheet from '../../../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../../../helpers/plugin/plugin.popup';
+import { waitForNotification } from '../../../../helpers/utils/wait-helper';
+import { dictionary } from '../../../../constants/dictionaries/dictionary';
+import { objectsList } from '../../../../constants/objects-list';
+import { rightPanelSelectors } from '../../../../constants/selectors/plugin.right-panel-selectors';
 
 describe('[TC49525] Re-prompt after import | Value | Text | Not Required | Default', () => {
   beforeAll(async () => {

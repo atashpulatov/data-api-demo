@@ -3,12 +3,8 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import {
-  changeBrowserTab, switchToDialogFrame, switchToPluginFrame, switchToExcelFrame
-} from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame, switchToPluginFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('F25931 - Duplicate object', () => {
   beforeEach(() => {
@@ -17,7 +13,6 @@ describe('F25931 - Duplicate object', () => {
 
   afterEach(() => {
     browser.closeWindow();
-    changeBrowserTab(0);
   });
 
   it('[TC64624] - Duplicate with edit', () => {
@@ -26,14 +21,12 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.reports.basicReport);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     console.log('Save number of worksheets');
     const initialNumberOfWorksheets = OfficeWorksheet.getNumberOfWorksheets();
 
-    console.log('Open duplcate popup for 1st imported object and click edit button in it');
+    console.log('Open duplicate popup for 1st imported object and click edit button in it');
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupEditBtn();
 
@@ -51,9 +44,7 @@ describe('F25931 - Duplicate object', () => {
 
     console.log('Check success of duplication');
     switchToPluginFrame();
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.duplicateSucces);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
 
     console.log('Check name of duplicated object');
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.basicReport} Copy`);

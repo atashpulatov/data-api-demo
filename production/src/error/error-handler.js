@@ -76,7 +76,6 @@ class ErrorService {
   }
 
   getChildrenButtons = () => getNotificationButtons([{
-    title: customT('OK'),
     type: 'basic',
     label: customT('OK'),
     onClick: () => this.notificationService.globalNotificationDissapear(),

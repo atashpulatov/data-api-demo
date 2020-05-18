@@ -85,4 +85,26 @@ describe('ScriptInjectionHelper', () => {
     // then
     expect(scriptInjectionHelper.createFileLocation).not.toBeCalled();
   });
+
+  it('should check if isLoginPage returns true for loginPage', () => {
+    // given
+    const contentDocument = {
+      URL: 'https://MicroStrategyLibrary/embeddedTest/embeddedLogin.jsp'
+    };
+    // when
+    const isLoginPage = scriptInjectionHelper.isLoginPage(contentDocument);
+    // then
+    expect(isLoginPage).toBe(true);
+  });
+
+  it('should check if isLoginPage returns false for dossierPage', () => {
+    // given
+    const contentDocument = {
+      URL: 'https://MicroStrategyLibrary/embeddedTest/dossierPage.jsp'
+    };
+    // when
+    const isLoginPage = scriptInjectionHelper.isLoginPage(contentDocument);
+    // then
+    expect(isLoginPage).toBe(false);
+  });
 });

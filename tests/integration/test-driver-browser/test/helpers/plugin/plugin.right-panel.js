@@ -1,9 +1,10 @@
 /* eslint-disable class-methods-use-this */
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
-import { waitAndClick } from '../utils/click-helper';
+import { waitAndClick, waitAndDoubleClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import { waitForNotification } from '../utils/wait-helper';
+import { pressEnter } from '../utils/keyboard-actions';
 
 
 class PluginRightPanel {
@@ -19,15 +20,49 @@ class PluginRightPanel {
     waitAndClick($(rightPanelSelectors.settingsBtn));
   }
 
+  /**
+   * Clicks Clear Data button in Settings menu
+   */
+  clickClearData() {
+    waitAndClick($(rightPanelSelectors.clearDataBtn));
+  }
+
+  /**
+   * Clicks Ok button on Clear Data confiramtion to start the action
+   */
+  clickClearDataOk() {
+    waitAndClick($(rightPanelSelectors.clearOkBtn));
+  }
+
   logout() {
+    console.log('Should log out');
     this.clickSettings();
     this.clickLogout();
   }
 
   clickImportDataButton() {
+    console.log('Should click import data button');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.importDataBtn), 20000);
     browser.pause(999);
+  }
+
+  /**
+   * Moves cursor over particular element (ex. refresh icon)
+   *
+   * @param {Number} index index of the icon in the icon bar
+   */
+  moveToRefreshIcon(index) {
+    $(rightPanelSelectors.getRefreshBtnForObject(index)).moveTo();
+  }
+
+  /**
+   * Moves cursor over particular element (ex. edit icon)
+   *
+   * @param {Number} index index of the icon in the icon bar
+   */
+  moveToEditIcon(index) {
+    $(rightPanelSelectors.getEdithBtnForObject(index)).moveTo();
   }
 
   // Currently it is not used
@@ -41,6 +76,7 @@ class PluginRightPanel {
   }
 
   clickAddDataButton() {
+    console.log('Should click add data button');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.addDataBtn));
     browser.pause(999);
@@ -61,6 +97,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   refreshObject(index) {
+    console.log('Should refresh the object');
     switchToPluginFrame();
     const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(index);
     $(refreshBtn).moveTo();
@@ -168,6 +205,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   clickObjectInRightPanel(index) {
+    console.log('Should click the object in right panel');
     switchToPluginFrame();
     const objectSelected = rightPanelSelectors.getObjectSelector(index);
     browser.pause(1000);
@@ -185,6 +223,48 @@ class PluginRightPanel {
     switchToPluginFrame();
     const nameInput = $(rightPanelSelectors.getNameInputForObject(index));
     return nameInput.getText();
+  }
+  /**
+   * Select all imported objects. Will work when there is at least one or more objects imported.
+   */
+  selectAll() {
+    console.log('Should select all imported objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+  }
+
+  /**
+   * Run refresh for selected imported objects. Will work when there is at least one or more objects selected.
+   */
+  refreshSelected() {
+    console.log('Should refresh selected objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.refreshAllBtn));
+  }
+
+  /**
+   * Run remove for selected imported objects. Will work when there is at least one or more objects selected.
+   */
+  removeSelected() {
+    console.log('Should remove selected objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.deleteAllBtn));
+  }
+
+  /**
+   * Clicks master checkbox
+   */
+  clickMasterCheckbox() {
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+  }
+
+  /**
+   * Clicks checkbox for a given object
+   *
+   * @param {Number} index index of an imported object in the right side panel
+   */
+  clickObjectCheckbox(index) {
+    waitAndClick($(rightPanelSelectors.getObjectCheckbox(index)));
   }
 
   refreshAll() {
@@ -217,6 +297,7 @@ class PluginRightPanel {
   }
 
   closeNotificationOnHover() {
+    console.log('Should close the notification');
     const selector = rightPanelSelectors.notificationContainer;
     const selectorOther = rightPanelSelectors.objectHeaderContainer;
     $(selectorOther).moveTo();
@@ -300,6 +381,102 @@ class PluginRightPanel {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
     this.closeNotificationOnHover();
+  }
+
+  /**
+   * Press Cancel button on object pending notification
+   *
+   * @param {Number} index index of an imported object in the right side panel
+   */
+  cancelObjectPendingAction(index) {
+    console.log('Should cancel object pending action');
+    const objectCancelBtn = $(rightPanelSelectors.getPendingNotificationCancelBtnAt(index));
+    waitAndClick(objectCancelBtn);
+  }
+
+  /**
+   * Changes the name of object that is imported. Will work if there is an object imported.
+   *
+   * @param {Number} index Index of the object in the right side panel that the name will be changed. Starts from 1 (1 is the first from the top)
+   * @param {String} text Text to enter for new object name
+   */
+  changeObjectName(index, text) {
+    switchToPluginFrame();
+    const divNameInput = $(rightPanelSelectors.getNameInputForObject(index));
+    divNameInput.moveTo();
+    browser.pause(2222);
+    waitAndDoubleClick(divNameInput);
+    browser.pause(3333);
+    const nameText = $(rightPanelSelectors.getNameInputTextForObject(index));
+    nameText.clearValue();
+    nameText.setValue(text);
+    pressEnter();
+  }
+
+  /**
+   * Checks whether an element is opaque (not transparent)
+   *
+   * @param {String} selector selector for which element to check opacity
+   *
+   * @returns {Boolean} true if an element is opaque, false if an element is transparent
+   */
+  isOpaque(selector) {
+    return $(selector).getCSSProperty('opacity').value === 1;
+  }
+
+  /**
+   * Hovers over icon bar buttons for a given object
+   * to show the tooltip and gets the tooltip text
+   *
+   * @param {Number} objectIndex index of the imported object
+   * @param {Number} iconIndex index of the icon in the icon bar
+   *
+   * @returns {String} tooltip text for a given button
+   */
+  getIconBarTooltipText(objectIndex, iconIndex) {
+    switch (iconIndex) {
+      case 1:
+        $(rightPanelSelectors.getDuplicateBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getDuplicateBtnForObjectTooltip(objectIndex)).getText();
+      case 2:
+        $(rightPanelSelectors.getEdithBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getEdithBtnForObjectTooltip(objectIndex)).getText();
+      case 3:
+        $(rightPanelSelectors.getRefreshBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getRefreshBtnForObjectTooltip(objectIndex)).getText();
+      case 4:
+        $(rightPanelSelectors.getRemoveBtnForObject(objectIndex)).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.getRemoveBtnForObjectTooltip(objectIndex)).getText();
+      default:
+        throw new Error('Error in getIconBarTooltipText');
+    }
+  }
+
+  /**
+   * Hovers over master icon bar buttons
+   * to show tooltip and gets tooltip text
+   *
+   * @param {Number} iconIndex index of the icon in the icon bar
+   *
+   * @returns {String} tooltip text for the given button
+   */
+  getMasterIconBarTooltipText(iconIndex) {
+    switch (iconIndex) {
+      case 1:
+        $(rightPanelSelectors.refreshAllBtn).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.refreshAllBtnTooltip).getText();
+      case 2:
+        $(rightPanelSelectors.deleteAllBtn).moveTo();
+        browser.pause(1000);
+        return $(rightPanelSelectors.deleteAllBtnTooltip).getText();
+      default:
+        throw new Error('Error in getMasterIconBarTooltipText');
+    }
   }
 }
 
