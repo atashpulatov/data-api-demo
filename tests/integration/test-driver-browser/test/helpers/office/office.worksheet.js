@@ -140,6 +140,17 @@ function OfficeWorksheet() {
     browser.pause(1999);
     browser.keys(['Backspace']);
   };
+
+  /**
+   * Applies the first available table formatting to the selected table
+   * Table should be selected prior to calling this function
+   *
+   */
+  this.formatTable = () => {
+    switchToExcelFrame();
+    $(excelSelectors.formatAsTable).click();
+    $(excelSelectors.lightGrayTableFormat).click();
+  };
 }
 
 export default new OfficeWorksheet();

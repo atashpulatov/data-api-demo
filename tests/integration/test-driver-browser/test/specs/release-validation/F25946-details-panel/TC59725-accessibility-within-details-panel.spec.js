@@ -25,7 +25,7 @@ describe('F25946 - details panel', () => {
     PluginPopup.switchLibrary(false);
 
     // expand 1 row
-    PluginPopup.selectFirstObject();
+    PluginPopup.selectObject();
     pressDownArrow();
     pressEnter();
     expect(PluginPopup.areAllRowsCollapsed()).toEqual(false);

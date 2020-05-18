@@ -20,15 +20,49 @@ class PluginRightPanel {
     waitAndClick($(rightPanelSelectors.settingsBtn));
   }
 
+  /**
+   * Clicks Clear Data button in Settings menu
+   */
+  clickClearData() {
+    waitAndClick($(rightPanelSelectors.clearDataBtn));
+  }
+
+  /**
+   * Clicks Ok button on Clear Data confiramtion to start the action
+   */
+  clickClearDataOk() {
+    waitAndClick($(rightPanelSelectors.clearOkBtn));
+  }
+
   logout() {
+    console.log('Should log out');
     this.clickSettings();
     this.clickLogout();
   }
 
   clickImportDataButton() {
+    console.log('Should click import data button');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.importDataBtn), 20000);
     browser.pause(999);
+  }
+
+  /**
+   * Moves cursor over particular element (ex. refresh icon)
+   *
+   * @param {Number} index index of the icon in the icon bar
+   */
+  moveToRefreshIcon(index) {
+    $(rightPanelSelectors.getRefreshBtnForObject(index)).moveTo();
+  }
+
+  /**
+   * Moves cursor over particular element (ex. edit icon)
+   *
+   * @param {Number} index index of the icon in the icon bar
+   */
+  moveToEditIcon(index) {
+    $(rightPanelSelectors.getEdithBtnForObject(index)).moveTo();
   }
 
   // Currently it is not used
@@ -42,6 +76,7 @@ class PluginRightPanel {
   }
 
   clickAddDataButton() {
+    console.log('Should click add data button');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.addDataBtn));
     browser.pause(999);
@@ -62,6 +97,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   refreshObject(index) {
+    console.log('Should refresh the object');
     switchToPluginFrame();
     const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(index);
     $(refreshBtn).moveTo();
@@ -169,6 +205,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   clickObjectInRightPanel(index) {
+    console.log('Should click the object in right panel');
     switchToPluginFrame();
     const objectSelected = rightPanelSelectors.getObjectSelector(index);
     browser.pause(1000);
@@ -186,6 +223,32 @@ class PluginRightPanel {
     switchToPluginFrame();
     const nameInput = $(rightPanelSelectors.getNameInputForObject(index));
     return nameInput.getText();
+  }
+  /**
+   * Select all imported objects. Will work when there is at least one or more objects imported.
+   */
+  selectAll() {
+    console.log('Should select all imported objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.checkBoxAll));
+  }
+
+  /**
+   * Run refresh for selected imported objects. Will work when there is at least one or more objects selected.
+   */
+  refreshSelected() {
+    console.log('Should refresh selected objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.refreshAllBtn));
+  }
+
+  /**
+   * Run remove for selected imported objects. Will work when there is at least one or more objects selected.
+   */
+  removeSelected() {
+    console.log('Should remove selected objects');
+    switchToPluginFrame();
+    waitAndClick($(rightPanelSelectors.deleteAllBtn));
   }
 
   /**
@@ -234,6 +297,7 @@ class PluginRightPanel {
   }
 
   closeNotificationOnHover() {
+    console.log('Should close the notification');
     const selector = rightPanelSelectors.notificationContainer;
     const selectorOther = rightPanelSelectors.objectHeaderContainer;
     $(selectorOther).moveTo();
@@ -317,6 +381,17 @@ class PluginRightPanel {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(notificationMessage);
     this.closeNotificationOnHover();
+  }
+
+  /**
+   * Press Cancel button on object pending notification
+   *
+   * @param {Number} index index of an imported object in the right side panel
+   */
+  cancelObjectPendingAction(index) {
+    console.log('Should cancel object pending action');
+    const objectCancelBtn = $(rightPanelSelectors.getPendingNotificationCancelBtnAt(index));
+    waitAndClick(objectCancelBtn);
   }
 
   /**
