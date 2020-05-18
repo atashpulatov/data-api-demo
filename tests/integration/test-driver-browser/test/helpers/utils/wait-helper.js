@@ -1,5 +1,6 @@
 import { switchToPluginFrame, switchToExcelFrame } from './iframe-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
+import { logStep } from './allure-helper';
 
 export function waitForNotification() {
   console.log('Should wait for notification');
@@ -10,6 +11,7 @@ export function waitForNotification() {
 
 
 export function waitForAllNotifications() {
+  logStep(`Waiting for all notifications to finish...    [wait-helper.js - waitForAllNotifications()]`);
   switchToPluginFrame();
   const objectCount = $$(rightPanelSelectors.objectContainer).length;
   for (let index = 1; index <= objectCount; index++) {
