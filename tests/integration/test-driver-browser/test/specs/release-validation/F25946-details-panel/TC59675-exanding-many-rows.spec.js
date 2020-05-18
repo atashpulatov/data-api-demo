@@ -23,24 +23,24 @@ describe('F25946 - details panel', () => {
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
 
-    // expand fist 2 rows
+    console.log('expand fist 2 rows');
     PluginPopup.expandFirstRows(2);
     expect(PluginPopup.findAmountOfOpenRows()).toEqual(2);
 
     PluginPopup.assertDetailsTableDisplayedCorrectly(PluginPopup.getDetailsTableByIndex(1));
     PluginPopup.assertDetailsTableDisplayedCorrectly(PluginPopup.getDetailsTableByIndex(2));
 
-    // expand last row
+    console.log('expand last row');
     PluginPopup.scrollTable(['End']);
     PluginPopup.expandLastRows(1);
     expect(PluginPopup.findAmountOfOpenRows()).toEqual(1);
     PluginPopup.assertDetailsTableDisplayedCorrectly(PluginPopup.getDetailsTableByIndex(1));
 
-    // check if first two rows are still expanded
+    console.log('check if first two rows are still expanded');
     PluginPopup.scrollTable(['Home']);
     expect(PluginPopup.findAmountOfOpenRows()).toEqual(2);
 
-    // hide first row
+    console.log('hide first row');
     PluginPopup.closeFirstRows(1);
     expect(PluginPopup.findAmountOfOpenRows()).toEqual(1);
   });
