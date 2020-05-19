@@ -7,7 +7,7 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 
-describe('TC59987 - Import attribute forms', () => {
+describe('F25932 - Import attribute forms in separate columns', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -17,7 +17,7 @@ describe('TC59987 - Import attribute forms', () => {
     changeBrowserTab(0);
   });
 
-  it('Display attribute forms', () => {
+  it('[TC59987] [Attribute forms] Edit an imported report', () => {
     const objectName = '06 Sort by Revenue Rank - Month Report Filter';
     switchToPluginFrame();
     PluginRightPanel.clickImportDataButton();

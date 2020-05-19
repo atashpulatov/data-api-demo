@@ -109,6 +109,8 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
+      './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js',
+      '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -213,6 +215,9 @@ exports.config = {
     ],
     'F21411-right-panel': [
       '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js'
+    ],
+    'F21526-secure-data': [
+      './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js'
     ],
     'F25931-duplicate-object': [
       './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',

@@ -8,7 +8,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import officeLogin from '../../../helpers/office/office.login';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('[F22955] - Ability to refresh prompted data already imported to the workbook', () => {
+describe('F22955 - Ability to refresh prompted data already imported to the workbook', () => {
   beforeEach(() => {
     officeLogin.openExcelAndLoginToPlugin();
   });

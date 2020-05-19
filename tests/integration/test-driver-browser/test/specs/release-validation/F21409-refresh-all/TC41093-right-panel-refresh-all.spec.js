@@ -5,7 +5,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
-describe('F21409 - Refresh All - ', () => {
+describe('F21409 - Add "Refresh All" functionality', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

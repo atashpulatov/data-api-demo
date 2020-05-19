@@ -7,8 +7,8 @@ import { waitAndClick } from '../../../helpers/utils/click-helper';
 import pluginPopup from '../../../helpers/plugin/plugin.popup';
 import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
-describe('[F30463] Ability to sort on prepare data', () => {
-  beforeAll(() => {
+describe('F30463 - Ability to sort attributes and metrics on Prepare Data screen in Excel (Citibank)', () => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
@@ -16,7 +16,7 @@ describe('[F30463] Ability to sort on prepare data', () => {
     browser.closeWindow();
   });
 
-  it(`[TC64975] sort on prepare data for a user) `, () => {
+  it(`[TC64975] Sort on prepare data for a user `, () => {
     switchToRightPanelFrame();
     OfficeWorksheet.selectCell('A3');
 
