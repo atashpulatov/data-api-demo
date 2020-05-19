@@ -8,7 +8,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
-describe('TS41441 - E2E Sanity checks', () => {
+describe('TS41441 - Sanity checks', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

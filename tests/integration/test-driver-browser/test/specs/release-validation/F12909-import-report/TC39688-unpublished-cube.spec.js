@@ -5,7 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+describe('F12909 - Ability to import a report from MicroStrategy', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

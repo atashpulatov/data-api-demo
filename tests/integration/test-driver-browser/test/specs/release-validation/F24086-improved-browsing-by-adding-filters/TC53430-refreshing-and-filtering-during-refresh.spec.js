@@ -5,7 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('F24086 Improved browsing by adding filters', () => {
+describe('F24086 - Improved browsing by adding filters', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

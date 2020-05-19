@@ -5,8 +5,8 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 
 
-describe('Login - ', () => {
-  beforeAll(async () => {
+describe('F17583 - Ability to Authenticate using Badge, SAML, LDAP and Kerberos', () => {
+  beforeEach(() => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
     if (url.includes('login.microsoftonline')) {
@@ -15,12 +15,6 @@ describe('Login - ', () => {
     await OfficeWorksheet.createNewWorkbook();
     await OfficeWorksheet.openPlugin();
     await PluginRightPanel.loginToPlugin('a', '');
-  });
-
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
   });
 
 

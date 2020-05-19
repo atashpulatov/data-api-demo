@@ -6,7 +6,7 @@ import { switchToDialogFrame, changeBrowserTab } from '../../../helpers/utils/if
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 
-describe('[F25968] - Dynamically update numbers of objects displayed next to categories in filter panel', () => {
+describe('F25968 - Dynamically update numbers of objects displayed next to categories in filter panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -16,7 +16,7 @@ describe('[F25968] - Dynamically update numbers of objects displayed next to cat
     changeBrowserTab(0);
   });
 
-  it('[TC58932] - Deselecting/selecting filters with no objects', () => {
+  it('[TC58932] Deselecting/selecting filters with no objects', () => {
     // open import data popup
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
