@@ -17,7 +17,7 @@ describe('TC59987 - Import attribute forms', () => {
     changeBrowserTab(0);
   });
 
-  it('Display attribute forms', () => {
+  it('[TC59987] - Display attribute forms', () => {
     const objectName = '06 Sort by Revenue Rank - Month Report Filter';
     switchToPluginFrame();
     PluginRightPanel.clickImportDataButton();

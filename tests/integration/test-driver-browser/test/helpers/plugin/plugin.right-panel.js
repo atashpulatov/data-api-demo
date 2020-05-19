@@ -127,6 +127,7 @@ class PluginRightPanel {
    * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
    */
   duplicateObject(index) {
+    console.log('Should click duplicate button');
     switchToPluginFrame();
     const duplicateBtn = rightPanelSelectors.getDuplicateBtnForObject(index);
     $(duplicateBtn).moveTo();
@@ -151,6 +152,7 @@ class PluginRightPanel {
    *
    */
   clickDuplicatePopupEditBtn() {
+    console.log('Should click Edit on dublicate popup');
     switchToPluginFrame();
     const duplicatePopupEditBtn = $(rightPanelSelectors.duplicatePopupEditBtn);
     duplicatePopupEditBtn.moveTo();

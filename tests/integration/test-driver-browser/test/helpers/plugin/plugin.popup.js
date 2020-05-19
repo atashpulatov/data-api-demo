@@ -132,6 +132,7 @@ class PluginPopup {
    */
   selectObjectElements(elements) {
     for (let i = 0; i < elements.length; i++) {
+      console.log(`Should select ${elements[i]}`);
       waitAndClick($(`span=${elements[i]}`));
     }
   }
@@ -164,6 +165,10 @@ class PluginPopup {
       waitAndClick(filter);
       this.selectObjectElements(filterInstances);
     }
+  }
+
+  selectFilterInstance(filterInstances) {
+    this.selectObjectElements(filterInstances);
   }
 
   clickHeader(headerName) {
@@ -520,6 +525,7 @@ class PluginPopup {
   }
 
   selectAttributeFormVisualisation(type) {
+    console.log(`Should set attibute forms to ${type}`);
     waitAndClick($(popupSelectors.attributeFormDropdown));
     browser.pause(500);
     waitAndClick($(`${popupSelectors.attributeFormDropDownItem}=${type}`));
@@ -714,7 +720,7 @@ class PluginPopup {
   openPrepareData(objectName, isObjectFromLibrary = false, objectOrder = 1) {
     console.log('Should open prepare data');
     switchToDialogFrame();
-    // this.switchLibrary(isObjectFromLibrary);
+    this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
     this.selectObject(objectOrder);

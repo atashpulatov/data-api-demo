@@ -19,6 +19,7 @@ exports.config = {
   specs: [
     // './test/specs/release-validation/deprecated/sample.spec.js',
     './test/specs/release-validation/AQDT/TC65666-prepare-data-reports-datasets.spec.js',
+    // './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
   ],
   suites: {
     acceptance: [
