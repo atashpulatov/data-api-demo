@@ -103,6 +103,7 @@ exports.config = {
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC65447-import-refresh-workflows-e2e.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-chinese-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-a-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
