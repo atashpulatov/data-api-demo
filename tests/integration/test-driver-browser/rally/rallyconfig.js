@@ -4,9 +4,17 @@ module.exports = {
   manualTestCases: {
     passedTestCases: [],
     failedTestCases: []
+
   },
   email: '',
   testSet: '',
   release: '',
-  build: ''
+  build: '',
+  OS: '',
+  manual: {},
+  automation: {
+    notes: 'Automation results', // for Release Validation change to 'Release Validation'
+    env: '',
+    exportApp: '',
+  }
 };
