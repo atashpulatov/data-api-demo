@@ -427,7 +427,7 @@ class PluginPopup {
     console.log('Opening more menu of visualization');
     switchToPromptFrame();
     const titleBar = $(popupSelectors.dossierWindow.getVisualisationTitleBar(visID));
-    titleBar.waitForClickable(60000, false, `${titleBar} is not clickable`);
+    titleBar.waitForClickable(10000, false, `${titleBar} is not clickable`);
     titleBar.moveTo();
     browser.pause(1000);
     const moreMenu = $(popupSelectors.dossierWindow.getMoreItemMenu(visID));
@@ -646,12 +646,13 @@ class PluginPopup {
   /**
    * This function is used to import the visualization.
    * It has to be used inside the Dossier window.
-   * 
+   *
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    */
   importVizualiation(visContainerId) {
     logStep(`Importing the visualization: "${visContainerId}"...    [${fileName} - importVizualiation()]`);
     this.selectVizualiation(visContainerId);
+    switchToPluginFrame();
     this.clickImport();
   }
 
@@ -662,7 +663,7 @@ class PluginPopup {
    *
    */
   selectAndMoveToImportVisualization(visContainerId) {
-    this.selectVisualization(visContainerId);
+    this.selectVizualiation(visContainerId);
     switchToPluginFrame();
     $(popupSelectors.importBtn).moveTo();
     browser.pause(1000);
