@@ -212,7 +212,7 @@ class PluginRightPanel {
    *
    */
   removeObjectWithRightClick(index) {
-    console.log('Removing the object with right click');
+    logStep('Removing the object with right click');
     switchToPluginFrame();
     const objectToRemove = rightPanelSelectors.getObjectSelector(index);
     $(objectToRemove).waitForClickable(60000, false, `${objectToRemove} is not clickable`);
@@ -440,7 +440,7 @@ class PluginRightPanel {
    * @param {String} text Text to enter for new object name
    */
   changeObjectName(index, text) {
-    logStep(`Changingthe  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectName()]`);
+    logStep(`Changing the  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectName()]`);
     switchToPluginFrame();
     const divNameInput = $(rightPanelSelectors.getNameInputForObject(index));
     divNameInput.moveTo();
@@ -460,6 +460,7 @@ class PluginRightPanel {
    * @param {String} text Text to enter for new object name
    */
   changeObjectNameUsingMenu(index, text){
+     logStep(`Changing the  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectNameUsingMenu()]`);
     waitAndRightClick($(rightPanelSelectors.getObjectSelector(index)));
     browser.pause(1000);
     $('#overlay > div > div.object-tile-container > div.object-tile-list > article > div > nav > div:nth-child(5)').click();

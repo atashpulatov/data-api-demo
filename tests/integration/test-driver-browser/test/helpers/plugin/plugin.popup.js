@@ -650,7 +650,7 @@ class PluginPopup {
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    */
   selectAndImportVisualization(visContainerId) {
-    logStep(`Importing the visualization: "${visContainerId}"...    [${fileName} - importVisualization()]`);
+    logStep(`Importing the visualization: "${visContainerId}"...    [${fileName} - selectAndImportVisualization()]`);
     this.selectVisualization(visContainerId);
     switchToPluginFrame();
     this.clickImport();
@@ -796,7 +796,7 @@ class PluginPopup {
    * @param {Number} value is a value for given input
    */
   setFilterOnDossier(input, value) {
-    console.log(`Setting value ${value} for given input`);
+    logStep(`Setting value ${value} for given input`);
     const { filterBtn, filtersMenu } = popupSelectors.dossierWindow;
     waitAndClick($(filterBtn));
     browser.pause(1000);
