@@ -4,11 +4,11 @@ const getDataFromRally = require('../getDataFromRally');
 const rallyConfig = require('../rallyconfig');
 
 /**
- * Get Test Set duration of the Test Set which ID is passed as a parameter
- *
- * @param {String} testSetId Formatted Test Set ID (e.g. 'TS32506')
- * @returns {Integer} Sum of duration of all Test Cases under the Test Set
- */
+* Get Test Set duration of the Test Set which ID is passed as a parameter
+*
+* @param {String} testSetId Formatted Test Set ID (e.g. 'TS32506')
+* @returns {Integer} Sum of duration of all Test Cases under the Test Set
+*/
 module.exports = async function getDuration(testSetId) {
   try {
     // URL to the Test Set
@@ -16,16 +16,16 @@ module.exports = async function getDuration(testSetId) {
     const testSetID = testSetUrl.split('/')[7];
 
     // URL to list of Test Cases under the Test Set
-    const testCasesUrl = await getDataFromRally(testSetUrl).then(({ TestSet }) => TestSet.TestCases._ref)
-      .catch(() => { throw Error(`Couldn't find ${testSetUrl}`); });
+    const { TestSet } = await getDataFromRally(testSetUrl);
+    const testCasesUrl = TestSet.TestCases._ref;
 
     // URL with result page size extended to 1000
     const tCUrlWithPageSize = testCasesUrl.concat('?pagesize=1000');
 
     // List of Test Cases under the Test Set
-    const testCasesList = await getDataFromRally(tCUrlWithPageSize).then(({ QueryResult }) => QueryResult.Results)
-      .catch(() => { throw Error(`Couldn't find ${testSetUrl}`); });
+    const { QueryResult: tcListResult } = await getDataFromRally(tCUrlWithPageSize);
 
+    const testCasesList = tcListResult.Results;
     // List of URLs to results of Test Cases from testCasesList
     const listOfUrlsToTCResults = [];
 
@@ -44,8 +44,8 @@ module.exports = async function getDuration(testSetId) {
     let duration = 0;
 
     for (let i = 0; i < listOfUrlsToTCResults.length; i++) {
-      const results = await getDataFromRally(listOfUrlsToTCResults[i]).then(({ QueryResult }) => QueryResult.Results)
-        .catch(() => { throw Error(`Couldn't find ${testSetUrl}`); });
+      const { QueryResult } = await getDataFromRally(listOfUrlsToTCResults[i]);
+      const results = QueryResult.Results;
       resultsArray.push(results);
       for (let j = 0; j < results.length; j++) {
         if (resultsArray[i][j].TestSet !== null) {
