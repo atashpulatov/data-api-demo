@@ -33,7 +33,7 @@ describe('F24398 - Import and refresh visualization', () => {
       // test
       const visType = Object.keys(onlyFiveVisualizations[i])[0];
       const visSelector = onlyFiveVisualizations[i][visType];
-      PluginPopup.selectAndImportVizualiation(visSelector);
+      PluginPopup.importVizualiation(visSelector);
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
       pluginRightPanel.closeNotificationOnHover();

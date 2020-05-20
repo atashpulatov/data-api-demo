@@ -644,17 +644,14 @@ class PluginPopup {
   }
 
   /**
-   * This function is used to import the desired visualization.
+   * This function is used to import the visualization.
    * It has to be used inside the Dossier window.
-   *
+   * 
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
-   *
    */
-  selectAndImportVizualiation(visContainerId) {
-    logStep(`Selecting and importing the visualization: "${visContainerId}"...    [${fileName} - selectAndImportVizualiation()]`);
-    this.selectVisualization(visContainerId);
-    switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForEnabled(5000);
+  importVizualiation(visContainerId) {
+    logStep(`Importing the visualization: "${visContainerId}"...    [${fileName} - importVizualiation()]`);
+    this.selectVizualiation(visContainerId);
     this.clickImport();
   }
 
@@ -677,7 +674,8 @@ class PluginPopup {
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    *
    */
-  selectVisualization(visContainerId) {
+  selectVizualiation(visContainerId) {
+    logStep(`Selecting the visualization ${visContainerId}.`);
     switchToPromptFrame();
     let visSelector;
     if (typeof visContainerId === 'undefined') {
@@ -788,6 +786,24 @@ class PluginPopup {
     maxValueInput.doubleClick();
     pressBackspace();
     maxValueInput.setValue(value);
+  }
+
+  /**
+   * This function sets the filter.
+   * Value for given input.
+   *
+   * @param {String} input is a selector for given input
+   * @param {Number} value is a value for given input
+   */
+  setFilterOnDossier(input, value) {
+    console.log(`Setting value ${value} for given input`);
+    const { filterBtn, filtersMenu } = popupSelectors.dossierWindow;
+    waitAndClick($(filterBtn));
+    browser.pause(1000);
+    $(input).setValue(value);
+    browser.pause(1000);
+    waitAndClick($(filtersMenu.buttonApplyFilters));
+    browser.pause(1000);
   }
 
   /**
@@ -962,7 +978,7 @@ class PluginPopup {
     console.log('it was clicked');
     browser.pause(6000);
     // Importing the selected visualization
-    this.selectAndImportVizualiation(visContainerId);
+    this.importVizualiation(visContainerId);
   }
 
   /**
@@ -989,7 +1005,7 @@ class PluginPopup {
     this.clickRunForPromptedDossier();
     console.log('it was clicked');
     browser.pause(6000);
-    this.selectAndImportVizualiation(visContainerId);
+    this.importVizualiation(visContainerId);
   }
 
   /**

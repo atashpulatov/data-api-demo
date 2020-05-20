@@ -145,6 +145,11 @@ export const objectsList = {
       prompt10: '#id_mstr263_txt',
       prompt11: '#mstr129',
     },
+    dossierWithPagesAndChapters: {
+      name: 'Dossier with vis that can be moved to different pages / chapters',
+      defaultGridVisualization: '#mstr115',
+      gridVisualizationWithFilter: '#mstr575'
+    },
     complexDossier: {
       name: 'Complex dossier (20 visualizations)',
       timeToOpen: 10000,

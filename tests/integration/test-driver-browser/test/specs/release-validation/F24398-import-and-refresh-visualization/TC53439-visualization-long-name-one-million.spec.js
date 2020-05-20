@@ -29,7 +29,7 @@ describe('F24398 - Import and refresh visualization', () => {
     browser.pause(5555);
 
     console.log('Should select and import visualization');
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.oneMillionAndLongName.visualization);
+    PluginPopup.importVizualiation(objectsList.dossiers.oneMillionAndLongName.visualization);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });

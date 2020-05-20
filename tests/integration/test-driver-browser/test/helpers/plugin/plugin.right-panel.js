@@ -454,6 +454,23 @@ class PluginRightPanel {
   }
 
   /**
+   * Renames the object using menu for imported object.
+   *
+   * @param {Number} index Index of the object in the right side panel that the name will be changed. Starts from 1 (1 is the first from the top)
+   * @param {String} text Text to enter for new object name
+   */
+  changeObjectNameUsingMenu(index, text){
+    waitAndRightClick($(rightPanelSelectors.getObjectSelector(index)));
+    browser.pause(1000);
+    $('#overlay > div > div.object-tile-container > div.object-tile-list > article > div > nav > div:nth-child(5)').click();
+    browser.pause(1000);
+    const nameText = $(rightPanelSelectors.getNameInputTextForObject(index));
+    nameText.clearValue();
+    nameText.setValue(text);
+    pressEnter();
+  }
+
+  /**
    * Checks whether an element is opaque (not transparent)
    *
    * @param {String} selector selector for which element to check opacity

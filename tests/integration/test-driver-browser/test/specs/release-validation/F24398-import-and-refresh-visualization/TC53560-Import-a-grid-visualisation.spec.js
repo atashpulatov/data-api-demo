@@ -3,44 +3,76 @@ import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
-import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
-import { stringsUsedInSpecs } from '../../../constants/strings-used-in-specs';
-import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, switchToPromptFrame } from '../../../helpers/utils/iframe-helper';
+import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
 describe('F24398 - Import and refresh visualization', () => {
-/*   beforeEach(() => {
+   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
   afterEach(() => {
     browser.closeWindow();
     changeBrowserTab(0);
-  }); */
+  }); 
 
   it('[TC53560] - Importing grid visualisations - basic scenario', () => {
-    /* const dossierObject = objectsList.dossiers.complexDossier;
-    const D16 = $('#gridRows > div:nth-child(16) > div:nth-child(4) > div > div');
+    const { visualizationManipulation, dossierWithPagesAndChapters } = objectsList.dossiers;
+    const { name, visualizations } = visualizationManipulation;
+    const { name: visualizationManipulationName, getTableItemAt } = visualizations.visualization1;
+    const { name: dossierWithPagesAndChaptersName, defaultGridVisualization, gridVisualizationWithFilters } = dossierWithPagesAndChapters;
+    const dossierVisManipulationVisID = visualizationManipulation.visualizations.visualization1.name;
+    const { filterCostInput } = popupSelectors;
+    const yearAttribute = getTableItemAt(1, 1);
+    const profitMetric = getTableItemAt(1, 3);
+    const revenueMetric = getTableItemAt(1, 4);
 
-    // It should import grid visualization
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importAnyObject(dossierObject.name, 1);
-    browser.pause(5555);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.grid);
 
-    // Assert that import is successfully imported and cell D16 contains '$583,538'
+    console.log('Import Dossier with vis that can be moved to different pages / chapters');
+    PluginPopup.importAnyObject(dossierWithPagesAndChaptersName, 1);
+    PluginPopup.selectVizualiation(defaultGridVisualization);
+    browser.pause(2000);
+    switchToPromptFrame();
+    PluginPopup.goToDossierPageOrChapter(4);
+    browser.pause(1000);
+    PluginPopup.goToDossierPageOrChapter(3);
+    browser.pause(1000);
+    PluginPopup.applyDossierBookmark(2);
+    browser.pause(1000);
+    PluginPopup.refreshDossier();
+    browser.pause(1000);
+    PluginPopup.setFilterOnDossier(filterCostInput, 500)
+    PluginPopup.selectVizualiation(gridVisualizationWithFilters);
+    switchToPluginFrame();
+    PluginPopup.clickImport();
     waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
-    switchToExcelFrame();
-    OfficeWorksheet.selectCell('D16');
-    expect(D16.getText()).toEqual('$583,538'); */
 
-    const { visualizationManipulation } = objectsList.dossiers;
-    const dossierVisManipulationVisID = visualizationManipulation.visualizations.visualization1.name;
+    console.log('Import Visualization manipulation');
+    OfficeWorksheet.selectCell('H1');
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.importAnyObject(name, 1);
+    PluginPopup.selectVizualiation(visualizationManipulationName);
+    PluginPopup.showTotals(yearAttribute);
+    PluginPopup.sortAscending(profitMetric);
+    PluginPopup.sortDescending(revenueMetric);
+    PluginPopup.drillByCategory(yearAttribute);
+    switchToPluginFrame();
+    PluginPopup.clickImport();
+    waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
+
+    console.log('Change visualization name');
+    PluginRightPanel.changeObjectName(1, 'Visualization-name');
+    browser.pause(2000);
+    PluginRightPanel.changeObjectNameUsingMenu(1, 'Modified-visualization-name');
+    PluginRightPanel.refreshObject(1);
+    waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
 
     OfficeWorksheet.selectCell('L1');
     console.log('Open Dossier Visualization Manipulation');
@@ -129,5 +161,6 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.openDossier(dossierWithDifferentCustomVis.name);
     PluginPopup.selectAndImportVizualiation(sequenceSunburst);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
+
   });
 });

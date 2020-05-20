@@ -38,7 +38,7 @@ describe('F25931 - Duplicate object', () => {
     browser.pause(3333);
     const dossier = objectsList.dossiers.userActivityDossier;
     PluginPopup.openDossier(dossier.name);
-    PluginPopup.selectAndImportVizualiation(dossier.visualizations.accounts);
+    PluginPopup.importVizualiation(dossier.visualizations.accounts);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     browser.pause(1000);
 
@@ -77,7 +77,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.clickDuplicatePopupEditBtn();
     switchToDialogFrame();
     const visualization = objectsList.dossiers.userActivityDossier.visualizations.dailyActiveAccounts;
-    PluginPopup.selectAndImportVizualiation(visualization);
+    PluginPopup.importVizualiation(visualization);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
   });
 });
