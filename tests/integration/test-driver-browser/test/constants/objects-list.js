@@ -180,7 +180,19 @@ export const objectsList = {
     interactiveDossier: { name: 'Dossier for interactive components', },
     customVisualizations: {
       name: 'Custom Visualizations',
-      visualizations: { GoogleTimeline: '#mstr114', }
+      visualizations: {
+        GoogleTimeline: '#mstr114',
+        modelsByYear: '#mstr141',
+      }
+    },
+
+    dossierWithDifferentCustomVis: {
+      name: 'Dossier with different custom visualizations',
+      Visualizations: {
+        worldCloud: '#mstr109',
+        googleTimeLine: '#mstr125',
+        sequenceSunburst: '#mstr141',
+      }
     },
 
     userActivityDossier: {
@@ -205,6 +217,18 @@ export const objectsList = {
     withAttributeMetricSelector: {
       name: 'dossier with attribute/metric selector',
       visualizations: { vis1: '#mstr107' }
+    },
+    dossierWithBasicGrid: {
+      name: 'Dossier with basic grid vis, vis with totals and vis with crosstabs',
+      visualizations: {
+        basicGrid: '#mstr108',
+        gridWithSubtotals: '#mstr123',
+        gridWithSubtotalsAndCrosstabs: '#mstr138',
+      }
+    },
+    dossierWithCompoundGrid: {
+      name: 'Dossier with compound grid',
+      visualizations: { visualization1: '#mstr106', }
     }
   },
 };

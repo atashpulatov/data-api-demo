@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
-import { waitAndClick, waitAndDoubleClick } from '../utils/click-helper';
+import { waitAndClick, waitAndDoubleClick, waitAndRightClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import { waitForNotification } from '../utils/wait-helper';
@@ -200,6 +200,24 @@ class PluginRightPanel {
     logStep(`Removing object number ${index} from the list...    [${fileName} - removeObject()]`);
     switchToPluginFrame();
     const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
+    $(removeBtn).moveTo();
+    browser.pause(1000);
+    waitAndClick($(removeBtn));
+  }
+
+  /**
+   * Clicks to remove button inside the drop down menu opened with right click. Will work when there is one or more objects imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   */
+  removeObjectWithRightClick(index) {
+    console.log('Removing the object with right click');
+    switchToPluginFrame();
+    const objectToRemove = rightPanelSelectors.getObjectSelector(index);
+    $(objectToRemove).waitForClickable(60000, false, `${objectToRemove} is not clickable`);
+    waitAndRightClick($(objectToRemove));
+    const removeBtn = rightPanelSelectors.getRightClickRemoveBtn(index);
     $(removeBtn).moveTo();
     browser.pause(1000);
     waitAndClick($(removeBtn));
