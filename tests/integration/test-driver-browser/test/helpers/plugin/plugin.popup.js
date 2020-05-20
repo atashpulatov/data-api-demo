@@ -644,7 +644,7 @@ class PluginPopup {
   }
 
   /**
-   * This function is used to import the visualization.
+   * Used to import the visualization.
    * It has to be used inside the Dossier window.
    *
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
@@ -657,7 +657,7 @@ class PluginPopup {
   }
 
   /**
-   * This function is used to get the tooltip of the not clickable import button. Will work if dossier window is presented.
+   * Used to get the tooltip of the not clickable import button. Will work if dossier window is presented.
    *
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    *
@@ -670,7 +670,7 @@ class PluginPopup {
   }
 
   /**
-   * This function is used to select the desired visualization. Will work if dossier window is presented.
+   * Used to select the desired visualization. Will work if dossier window is presented.
    *
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    *
@@ -790,8 +790,7 @@ class PluginPopup {
   }
 
   /**
-   * This function sets the filter.
-   * Value for given input.
+   * Sets filter (value for given input) on dossier.
    *
    * @param {String} input is a selector for given input
    * @param {Number} value is a value for given input
