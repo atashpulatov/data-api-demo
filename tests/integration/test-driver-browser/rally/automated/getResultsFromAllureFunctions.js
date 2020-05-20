@@ -78,13 +78,10 @@ function getBrowser(testCase) {
  * @returns {String} Build number
  */
 function getBuild() {
-  let build;
-  if (!cmd[2] || cmd[2] === 'pass' || cmd[2] === 'fail' || cmd[2] === 'all') {
-    build = rallyconfig.build;
-  } else {
-    build = cmd[3];
+  if (!cmd[2]) {
+    return rallyconfig.build;
   }
-  return build;
+  return cmd[3];
 }
 
 /**
@@ -93,13 +90,10 @@ function getBuild() {
  * @returns {String} Release
  */
 function getRelease() {
-  let release;
-  if (!cmd[3] || cmd[3] === 'pass' || cmd[3] === 'fail' || cmd[3] === 'all') {
-    release = rallyconfig.release;
-  } else {
-    release = cmd[4];
+  if (!cmd[3]) {
+    return rallyconfig.release;
   }
-  return release;
+  return cmd[4];
 }
 
 /**
