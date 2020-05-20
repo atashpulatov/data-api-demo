@@ -207,4 +207,9 @@ export const objectsList = {
       visualizations: { vis1: '#mstr107' }
     }
   },
+  AQDT: {
+    owner: 'Putney, David',
+    visualization1: '#mstr273',
+    visualization2: '#mstr108',
+  },
 };

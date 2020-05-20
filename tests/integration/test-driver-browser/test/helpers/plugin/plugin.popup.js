@@ -601,7 +601,11 @@ class PluginPopup {
    * @param {Number} index Index of the page/chapter item in dossier (starts from 1)
    */
   goToDossierPageOrChapter(index) {
+    switchToPromptFrame();
     const { dossierWindow } = popupSelectors;
+    $(dossierWindow.buttonToC).waitForExist(10000);
+    // browser.waitUntil(() => $(dossierWindow.buttonToC).isEnabled());
+    browser.pause(5555);
     waitAndClick($(dossierWindow.buttonToC), 1000);
     waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
   }
