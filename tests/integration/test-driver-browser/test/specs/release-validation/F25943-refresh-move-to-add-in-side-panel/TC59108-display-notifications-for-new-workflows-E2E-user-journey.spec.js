@@ -79,7 +79,7 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     const fifthObject = objectsList.dossiers.complexDossier;
     PluginPopup.importAnyObject(fifthObject.name, 1);
     browser.pause(5000);
-    PluginPopup.importVizualiation(fifthObject.visualizations.grid);
+    PluginPopup.selectAndImportVisualization(fifthObject.visualizations.grid);
     waitForNotification();
     pluginRightPanel.closeNotificationOnHover();
 

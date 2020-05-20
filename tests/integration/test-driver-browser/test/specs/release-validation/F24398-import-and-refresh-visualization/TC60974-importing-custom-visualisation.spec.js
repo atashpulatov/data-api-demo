@@ -28,7 +28,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibraryAndImportObject(dossierObject.name, null, false);
     browser.pause(5555);
-    PluginPopup.importVizualiation(dossierObject.visualizations.GoogleTimeline);
+    PluginPopup.selectAndImportVisualization(dossierObject.visualizations.GoogleTimeline);
 
     // Assert that import is successfully imported and cell D18 contains "1/1/2013"
     waitForNotification();

@@ -646,12 +646,12 @@ class PluginPopup {
   /**
    * This function is used to import the visualization.
    * It has to be used inside the Dossier window.
-   *
+   * 
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    */
-  importVizualiation(visContainerId) {
-    logStep(`Importing the visualization: "${visContainerId}"...    [${fileName} - importVizualiation()]`);
-    this.selectVizualiation(visContainerId);
+  selectAndImportVisualization(visContainerId) {
+    logStep(`Importing the visualization: "${visContainerId}"...    [${fileName} - importVisualization()]`);
+    this.selectVisualization(visContainerId);
     switchToPluginFrame();
     this.clickImport();
   }
@@ -663,7 +663,7 @@ class PluginPopup {
    *
    */
   selectAndMoveToImportVisualization(visContainerId) {
-    this.selectVizualiation(visContainerId);
+    this.selectVisualization(visContainerId);
     switchToPluginFrame();
     $(popupSelectors.importBtn).moveTo();
     browser.pause(1000);
@@ -675,7 +675,7 @@ class PluginPopup {
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    *
    */
-  selectVizualiation(visContainerId) {
+  selectVisualization(visContainerId) {
     logStep(`Selecting the visualization ${visContainerId}.`);
     switchToPromptFrame();
     let visSelector;
@@ -979,7 +979,7 @@ class PluginPopup {
     console.log('it was clicked');
     browser.pause(6000);
     // Importing the selected visualization
-    this.importVizualiation(visContainerId);
+    this.selectAndImportVisualization(visContainerId);
   }
 
   /**
@@ -1006,7 +1006,7 @@ class PluginPopup {
     this.clickRunForPromptedDossier();
     console.log('it was clicked');
     browser.pause(6000);
-    this.importVizualiation(visContainerId);
+    this.selectAndImportVisualization(visContainerId);
   }
 
   /**

@@ -25,7 +25,7 @@ describe('F30479 hardening import from dossier', () => {
     console.log(`Find, select and open ${objectsList.dossiers.withFilter.name}`);
     PluginPopup.openDossier(objectsList.dossiers.withFilter.name);
     console.log('Select and import the visualization');
-    PluginPopup.importVizualiation(objectsList.dossiers.withFilter.visualizations.vis1);
+    PluginPopup.selectAndImportVisualization(objectsList.dossiers.withFilter.visualizations.vis1);
     console.log('Check success of data import');
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
@@ -54,7 +54,7 @@ describe('F30479 hardening import from dossier', () => {
     console.log(`Find, select and open ${objectsList.dossiers.withAttributeMetricSelector.name}`);
     PluginPopup.openDossier(objectsList.dossiers.withAttributeMetricSelector.name);
     console.log('Select and import the visualization');
-    PluginPopup.importVizualiation(objectsList.dossiers.withAttributeMetricSelector.visualizations.vis1);
+    PluginPopup.selectAndImportVisualization(objectsList.dossiers.withAttributeMetricSelector.visualizations.vis1);
     console.log('Check success of data import');
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     console.groupEnd();

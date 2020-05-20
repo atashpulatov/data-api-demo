@@ -28,7 +28,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginRightPanel.clickImportDataButton();
     PluginPopup.importAnyObject(dossierObject.name, 1);
     browser.pause(5555);
-    PluginPopup.importVizualiation(dossierObject.visualizations.grid);
+    PluginPopup.selectAndImportVisualization(dossierObject.visualizations.grid);
 
     // Assert that import is successfully imported and cell D16 contains '$583,538'
     waitForNotification();

@@ -106,7 +106,7 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     PluginRightPanel.clickAddDataButton();
     PluginPopup.importAnyObject(dossierObject.name, 1);
     browser.pause(5555);
-    PluginPopup.importVizualiation(dossierObject.visualizations.grid);
+    PluginPopup.selectAndImportVisualization(dossierObject.visualizations.grid);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();

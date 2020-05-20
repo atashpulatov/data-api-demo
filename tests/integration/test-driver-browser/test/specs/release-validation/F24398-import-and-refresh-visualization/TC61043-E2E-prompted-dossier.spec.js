@@ -65,7 +65,7 @@ describe('F24398 - Import and refresh visualization', () => {
     console.log('Prompt 7 selected');
 
     PluginPopup.clickRunForPromptedDossier();
-    PluginPopup.importVizualiation(objectsList.dossiers.nested.prompt11);
+    PluginPopup.selectAndImportVisualization(objectsList.dossiers.nested.prompt11);
     console.log('Imported selected visualization');
 
     waitForNotification();

@@ -53,7 +53,7 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
       PluginRightPanel.closeNotificationOnHover();
       browser.pause(3000);
     } else {
-      PluginPopup.importVizualiation(objectsList.dossiers.complexDossier.visualizations.grid);
+      PluginPopup.selectAndImportVisualization(objectsList.dossiers.complexDossier.visualizations.grid);
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
       PluginRightPanel.closeNotificationOnHover();
@@ -63,7 +63,7 @@ describe('[F22955] - Ability to refresh prompted data already imported to the wo
       PluginRightPanel.editObject(1);
       browser.pause(5000);
 
-      PluginPopup.importVizualiation(objectsList.dossiers.complexDossier.visualizations.heatMap);
+      PluginPopup.selectAndImportVisualization(objectsList.dossiers.complexDossier.visualizations.heatMap);
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
       PluginRightPanel.closeNotificationOnHover();

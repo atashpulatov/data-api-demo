@@ -35,7 +35,7 @@ describe('F24398 - Import and refresh visualization', () => {
 
     logStep('Import Dossier with vis that can be moved to different pages / chapters');
     PluginPopup.importAnyObject(dossierWithPagesAndChaptersName, 1);
-    PluginPopup.selectVizualiation(defaultGridVisualization);
+    PluginPopup.selectVisualization(defaultGridVisualization);
     browser.pause(2000);
     switchToPromptFrame();
     PluginPopup.goToDossierPageOrChapter(4);
@@ -47,7 +47,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.refreshDossier();
     browser.pause(1000);
     PluginPopup.setFilterOnDossier(filterCostInput, 500);
-    PluginPopup.selectVizualiation(gridVisualizationWithFilters);
+    PluginPopup.selectVisualization(gridVisualizationWithFilters);
     switchToPluginFrame();
     PluginPopup.clickImport();
     waitForNotification();
@@ -57,7 +57,7 @@ describe('F24398 - Import and refresh visualization', () => {
     OfficeWorksheet.selectCell('H1');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.importAnyObject(name, 1);
-    PluginPopup.selectVizualiation(visualizationManipulationName);
+    PluginPopup.selectVisualization(visualizationManipulationName);
     PluginPopup.showTotals(yearAttribute);
     PluginPopup.sortAscending(profitMetric);
     PluginPopup.sortDescending(revenueMetric);
@@ -78,7 +78,7 @@ describe('F24398 - Import and refresh visualization', () => {
     OfficeWorksheet.selectCell('N1');
     console.log('Open Dossier Visualization Manipulation');
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(name, 20000);
+    PluginPopup.openDossier(name);
     PluginPopup.openShowDataPanel(visualizationManipulationName);
     PluginPopup.closeShowDataPanel();
 
@@ -87,7 +87,7 @@ describe('F24398 - Import and refresh visualization', () => {
     // PluginPopup.exportToPDF(visualizationManipulationName);
     // PluginPopup.exportToData(visualizationManipulationName);
 
-    PluginPopup.importVizualiation(visualizationManipulation.visualizations.visualization1.name);
+    PluginPopup.selectAndImportVisualization(visualizationManipulation.visualizations.visualization1.name);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     PluginRightPanel.removeObject(1);
@@ -101,7 +101,7 @@ describe('F24398 - Import and refresh visualization', () => {
     OfficeWorksheet.selectCell('G1');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierWithBasicGrid.name);
-    PluginPopup.importVizualiation(gridWithSubtotalsAndCrosstabs);
+    PluginPopup.selectAndImportVisualization(gridWithSubtotalsAndCrosstabs);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     logStep('Import compound grid');
@@ -123,13 +123,13 @@ describe('F24398 - Import and refresh visualization', () => {
     const { customVisualizations } = objectsList.dossiers;
     const { GoogleTimeline, modelsByYear } = customVisualizations.visualizations;
     PluginPopup.openDossier(customVisualizations.name);
-    PluginPopup.importVizualiation(GoogleTimeline);
+    PluginPopup.selectAndImportVisualization(GoogleTimeline);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     OfficeWorksheet.selectCell('AI1');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(customVisualizations.name);
-    PluginPopup.importVizualiation(modelsByYear);
+    PluginPopup.selectAndImportVisualization(modelsByYear);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     logStep('Import prompted dossier');
@@ -148,19 +148,19 @@ describe('F24398 - Import and refresh visualization', () => {
     OfficeWorksheet.selectCell('AG20');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierWithDifferentCustomVis.name);
-    PluginPopup.importVizualiation(worldCloud);
+    PluginPopup.selectAndImportVisualization(worldCloud);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     OfficeWorksheet.selectCell('AL20');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierWithDifferentCustomVis.name);
-    PluginPopup.importVizualiation(googleTimeLine);
+    PluginPopup.selectAndImportVisualization(googleTimeLine);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     OfficeWorksheet.selectCell('AS20');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierWithDifferentCustomVis.name);
-    PluginPopup.importVizualiation(sequenceSunburst);
+    PluginPopup.selectAndImportVisualization(sequenceSunburst);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
   });
 });
