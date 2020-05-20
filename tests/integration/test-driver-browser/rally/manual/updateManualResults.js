@@ -18,12 +18,12 @@ function mapTCtoBatchObject(testArray, verdict) {
  */
 async function updateRallyTCResult() {
   try {
-    if (rallyConfig.manualTestCases.passedTestCases.length === 0 && rallyConfig.manualTestCases.failedTestCases.length === 0) {
+    if (rallyConfig.manual.passedTestCases.length === 0 && rallyConfig.manual.failedTestCases.length === 0) {
       console.log('Add the Test Cases for which you want to upload the results in rallyconfig.js');
       process.exit(1);
     }
-    const passedTestCasesId = mapTCtoBatchObject(rallyConfig.manualTestCases.passedTestCases, 'Pass');
-    const failedTestCasesId = mapTCtoBatchObject(rallyConfig.manualTestCases.failedTestCases, 'Fail');
+    const passedTestCasesId = mapTCtoBatchObject(rallyConfig.manual.passedTestCases, 'Pass');
+    const failedTestCasesId = mapTCtoBatchObject(rallyConfig.manual.failedTestCases, 'Fail');
     const batch = await createManualBatchArray([...failedTestCasesId, ...passedTestCasesId]);
 
 

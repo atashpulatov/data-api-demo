@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const helpers = require('../helpers');
 const rallyConfig = require('../rallyconfig');
 
@@ -20,7 +21,7 @@ module.exports = async function createBatchArray(testCaseArray) {
       const tcUrl = await helpers.getRallyTCUrl(testCaseId);
       const owner = await helpers.getOwner(testCaseId);
       let testSet = '';
-      if (rallyConfig.testSet !== '') {
+      if (rallyConfig.automation.testSet !== '') {
         testSet = await helpers.getTestSet();
       }
 
@@ -43,7 +44,7 @@ module.exports = async function createBatchArray(testCaseArray) {
               c_ProductionRelease: release,
               c_ExportApplication: rallyConfig.automation.exportApp,
               c_ClientOS: OS,
-              c_Language: 'English'
+              c_Language: rallyConfig.automation.language
             }
           }
         }

@@ -22,8 +22,8 @@ module.exports = async function createManualBatchArray(testCaseArray) {
       const tcUrl = await helpers.getRallyTCUrl(testCaseArray[i].testCaseId);
       const { verdict } = testCaseArray[i];
       let testSet = '';
-      if (rallyConfig.testSet !== '') {
-        testSet = await helpers.getTestSet(rallyConfig.testSet);
+      if (rallyConfig.manual.testSet !== '') {
+        testSet = await helpers.getTestSet(rallyConfig.manual.testSet);
       }
 
       const batchItem = {
@@ -34,18 +34,18 @@ module.exports = async function createManualBatchArray(testCaseArray) {
             testcaseresult: {
               Date: today,
               Tester: testerUrl,
-              Build: rallyConfig.build,
+              Build: rallyConfig.manual.build,
               TestSet: testSet,
               Testcase: tcUrl.split('v2.0')[1],
               Verdict: verdict,
-              Duration: '',
-              Notes: '',
-              c_Browsertype: '',
-              c_ProductionRelease: rallyConfig.release,
-              c_Environment: '',
-              c_ExportApplication: '',
-              c_ClientOS: '',
-              c_Language: ''
+              Duration: rallyConfig.manual.duration,
+              Notes: rallyConfig.manual.notes,
+              c_Browsertype: rallyConfig.manual.browser,
+              c_ProductionRelease: rallyConfig.manual.release,
+              c_Environment: rallyConfig.manual.env,
+              c_ExportApplication: rallyConfig.manual.exportApp,
+              c_ClientOS: rallyConfig.manual.OS,
+              c_Language: rallyConfig.manual.language
             }
           }
         }
