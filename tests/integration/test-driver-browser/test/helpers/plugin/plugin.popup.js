@@ -530,12 +530,12 @@ class PluginPopup {
   waitForExport(limit = 10) {
     let count = 0;
     let progress = true;
-    const exportSelector = $('.mstrd-spinner-export');
-    exportSelector.waitForDisplayed(60000, false, `${exportSelector} is not displayed`);
+    const { exportButton } = popupSelectors;
+    exportButton.waitForDisplayed(60000, false, `${exportButton} is not displayed`);
     while (progress) {
       if (count === limit) {
         throw new Error('Export wait limit is reached. Object still could not exported');
-      } else if (!exportSelector.isDisplayed()) {
+      } else if (!exportButton.isDisplayed()) {
         progress = false;
       } else {
         browser.pause(1000);
