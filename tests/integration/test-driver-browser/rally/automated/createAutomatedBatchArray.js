@@ -13,7 +13,7 @@ module.exports = async function createBatchArray(testCaseArray) {
   const batch = [];
   for (let i = 0; i < testCaseArray.length; i++) {
     const {
-      duration, browser, verdict, build, release, testCaseId
+      duration, browser, verdict, build, release, testCaseId, OS
     } = testCaseArray[i];
 
     try {
@@ -37,13 +37,12 @@ module.exports = async function createBatchArray(testCaseArray) {
               Tester: owner,
               TestSet: testSet, // for release validation add TS ID
               Duration: duration,
-              Notes: 'Automation results', // for release validation change to 'Release validation'
+              Notes: rallyConfig.automation.notes, // for release validation change to 'Release validation'
               c_Browsertype: browser,
-              c_Environment: '',
+              c_Environment: rallyConfig.automation.env,
               c_ProductionRelease: release,
-              // TODO add the fields below
-              c_ExportApplication: '',
-              c_ClientOS: '',
+              c_ExportApplication: rallyConfig.automation.exportApp,
+              c_ClientOS: OS,
               c_Language: 'English'
             }
           }
