@@ -24,7 +24,6 @@ describe('F24398 - Import and refresh visualization', () => {
     const { name, visualizations } = visualizationManipulation;
     const { name: visualizationManipulationName, getTableItemAt } = visualizations.visualization1;
     const { name: dossierWithPagesAndChaptersName, defaultGridVisualization, gridVisualizationWithFilters } = dossierWithPagesAndChapters;
-    const dossierVisManipulationVisID = visualizationManipulation.visualizations.visualization1.name;
     const { filterCostInput } = popupSelectors;
     const yearAttribute = getTableItemAt(1, 1);
     const profitMetric = getTableItemAt(1, 3);
@@ -78,14 +77,14 @@ describe('F24398 - Import and refresh visualization', () => {
     OfficeWorksheet.selectCell('L1');
     logStep('Open Dossier Visualization Manipulation');
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(visualizationManipulation.name);
+    PluginPopup.openDossier(name);
 
-    PluginPopup.openShowDataPanel(dossierVisManipulationVisID);
+    PluginPopup.openShowDataPanel(visualizationManipulationName);
     PluginPopup.closeShowDataPanel();
 
-    PluginPopup.exportToExcel(dossierVisManipulationVisID);
-    PluginPopup.exportToPDF(dossierVisManipulationVisID);
-    PluginPopup.exportToData(dossierVisManipulationVisID);
+    PluginPopup.exportToExcel(visualizationManipulationName);
+    PluginPopup.exportToPDF(visualizationManipulationName);
+    PluginPopup.exportToData(visualizationManipulationName);
 
     PluginPopup.selectAndImportVizualiation(visualizationManipulation.visualizations.visualization1.name);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
