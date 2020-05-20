@@ -530,12 +530,12 @@ class PluginPopup {
   waitForExport(limit = 10) {
     let count = 0;
     let progress = true;
-    const { exportButton } = popupSelectors;
-    exportButton.waitForDisplayed(60000, false, `${exportButton} is not displayed`);
+    const { exportSpinner } = popupSelectors;
+    exportSpinner.waitForDisplayed(60000, false, `${exportSpinner} is not displayed`);
     while (progress) {
       if (count === limit) {
         throw new Error('Export wait limit is reached. Object still could not exported');
-      } else if (!exportButton.isDisplayed()) {
+      } else if (!exportSpinner.isDisplayed()) {
         progress = false;
       } else {
         browser.pause(1000);
@@ -646,7 +646,7 @@ class PluginPopup {
   /**
    * This function is used to import the visualization.
    * It has to be used inside the Dossier window.
-   * 
+   *
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    */
   selectAndImportVisualization(visContainerId) {

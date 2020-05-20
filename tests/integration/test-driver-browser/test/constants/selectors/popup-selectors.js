@@ -93,7 +93,7 @@ export const popupSelectors = {
   categoryButton: 'div=Category',
   visualizationSelector: '.mstrmojo-VizBox-selector',
   refreshButton: '.refresh-button',
-  exportButton: $('.mstrd-spinner-export'),
+  exportSpinner: $('.mstrd-spinner-export'),
   filterCostInput: '#mstrd-Root > div > div > div.mstrd-AppContainer-mainContent > div > nav > div > ul.mstrd-NavBar.mstrd-NavBar-right > li > div > div.mstrd-FilterDropdownMenuContainer > div > div > div.mstrd-DropdownMenu-content > div > div.mstrd-FilterPanel-content > ul > li:nth-child(3) > div.mstrd-FilterItemContainer-body > div > div.mstrd-SliderSummary-summary-label > div.mstrd-MQInput.mstrd-SliderSummary-left-input > input',
   prepareData: { getAttributeAt: (index) => `#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
   smartFolderTable:
