@@ -54,7 +54,7 @@ class PluginRightPanel {
   /**
    * Moves cursor over particular element (ex. refresh icon)
    *
-   * @param {Number} index index of the icon in the icon bar
+   * @param {Number} index index of the object
    */
   moveToRefreshIcon(index) {
     $(rightPanelSelectors.getRefreshBtnForObject(index)).moveTo();
@@ -63,7 +63,7 @@ class PluginRightPanel {
   /**
    * Moves cursor over particular element (ex. edit icon)
    *
-   * @param {Number} index index of the icon in the icon bar
+   * @param {Number} index index of the object
    */
   moveToEditIcon(index) {
     $(rightPanelSelectors.getEdithBtnForObject(index)).moveTo();
