@@ -424,7 +424,7 @@ class PluginPopup {
    *
    */
   openMoreMenuForVisualization(visID) {
-    console.log('Opening more menu of visualization');
+    logStep('Opening more menu of visualization');
     switchToPromptFrame();
     const titleBar = $(popupSelectors.dossierWindow.getVisualisationTitleBar(visID));
     titleBar.waitForClickable(10000, false, `${titleBar} is not clickable`);
@@ -443,7 +443,7 @@ class PluginPopup {
    */
   openShowDataPanel(visID) {
     this.openMoreMenuForVisualization(visID);
-    console.log('Opening show data panel');
+    logStep('Opening show data panel');
     const showDataSelector = $(popupSelectors.dossierWindow.showDataSelector);
     showDataSelector.waitForClickable(60000, false, `${showDataSelector} is not clickable`);
     waitAndClick(showDataSelector);
@@ -454,7 +454,7 @@ class PluginPopup {
    *
    */
   closeShowDataPanel() {
-    console.log('Closing show data panel');
+    logStep('Closing show data panel');
     const closeShowDataSelector = $(popupSelectors.dossierWindow.closeShowDataSelector);
     closeShowDataSelector.waitForClickable(60000, false, `${closeShowDataSelector} is not clickable`);
     waitAndClick(closeShowDataSelector);
@@ -479,7 +479,7 @@ class PluginPopup {
    *
    */
   exportToExcel(visID) {
-    console.log('Export to excel');
+    logStep('Export to excel');
     this.showExportMenu(visID);
     const exportToExcel = $(popupSelectors.dossierWindow.exportToExcel);
     exportToExcel.waitForClickable(60000, false, `${exportToExcel} is not clickable`);
@@ -494,7 +494,7 @@ class PluginPopup {
    *
    */
   exportToPDF(visID) {
-    console.log('Export to PDF');
+    logStep('Export to PDF');
     this.showExportMenu(visID);
     const exportToPDF = $(popupSelectors.dossierWindow.exportToPDF);
     exportToPDF.waitForClickable(60000, false, `${exportToPDF} is not clickable`);
@@ -512,7 +512,7 @@ class PluginPopup {
    *
    */
   exportToData(visID) {
-    console.log('Export to Data');
+    logStep('Export to Data');
     this.showExportMenu(visID);
     const exportToData = $(popupSelectors.dossierWindow.exportToData);
     exportToData.waitForClickable(60000, false, `${exportToData} is not clickable`);
