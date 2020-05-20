@@ -205,6 +205,17 @@ export const objectsList = {
     withAttributeMetricSelector: {
       name: 'dossier with attribute/metric selector',
       visualizations: { vis1: '#mstr107' }
+    },
+    aqueductTECQA: {
+      name: 'TEC.QA',
+      visualizations: {
+        automationProgress: '#mstr176',
+        testSets: '#mstr161',
+      }
+    },
+    aqueductTECPD: {
+      name: 'TEC.PD',
+      visualization: '#mstr240'
     }
   },
 };

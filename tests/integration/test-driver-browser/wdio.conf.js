@@ -239,6 +239,9 @@ exports.config = {
     'F30479-hardening-import-from-dossier': [
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
     ],
+    'AQDT-Tests': [
+      './test/specs/release-validation/AQDT-Tests/TC65783-E2E-import-and-edit-of-Aqueduct-dossiers.spec.js'
+    ]
   },
   // Patterns to exclude.
   exclude: [
@@ -273,8 +276,7 @@ exports.config = {
     'goog:chromeOptions': {
       // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
-      // debuggerAddress: '127.0.0.1:9222'
-
+      debuggerAddress: '127.0.0.1:9222',
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
       // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],
@@ -355,7 +357,7 @@ exports.config = {
 
   //
   // The number of times to retry the entire specfile when it fails as a whole
-  specFileRetries: 3,
+  specFileRetries: 0,
   //
   // Test reporter for stdout.
   // The only one supported by default is 'dot'

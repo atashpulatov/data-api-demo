@@ -517,13 +517,13 @@ class PluginPopup {
       visSelector = $(popupSelectors.visualizationSelector);
     } else {
       $(visContainerId).waitForDisplayed(60000, false, `${visContainerId} is not displayed`);
-      visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
+      visSelector = $(`${visContainerId} ${popupSelectors.visualizationSelector}`);
       visSelector.waitForClickable(60000, false, `${visSelector} is not clickable`);
     }
     waitAndClick(visSelector, 40000);
     browser.pause(2500);
     switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForEnabled(5000);
+    $(popupSelectors.importBtn).waitForEnabled(15000);
     this.clickImport();
   }
 
