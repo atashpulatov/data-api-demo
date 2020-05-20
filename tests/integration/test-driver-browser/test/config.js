@@ -1,3 +1,4 @@
+import { parse } from '@babel/core';
 
 const settings = {
   officeOnline: {
@@ -5,6 +6,7 @@ const settings = {
     password: 'FordFocus2019',
     url: 'https://www.office.com/launch/excel?auth=2',
   },
+  args: parseArgs(),
   env: {
     hostname: getEnvironment(),
     username: 'a',
@@ -13,6 +15,18 @@ const settings = {
     germanUser: 'User_German',
   }
 };
+
+function parseArgs() {
+  const { argv } = process;
+  const args = {};
+  argv.forEach(argument => {
+    if (argument.includes('=')) {
+      const [key, value] = argument.split('=');
+      args[key] = value.substring(0, value.length);
+    }
+  });
+  return args;
+}
 
 /**
  * It checks if last parameter contains "env-#######" if not it returns localhost
