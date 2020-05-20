@@ -9,7 +9,7 @@ export const dictionary = {
     loginError: 'Incorrect username and/or password. Please try again',
     notSupported: 'This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office',
     notPublished: 'This object cannot be imported. The Intelligent Cube is not published',
-    emptyObject: 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty',
+    emptyObject: 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.',
     worksheetLimits: 'The table you try to import exceeds the worksheet limits',
     projectLimits: 'This object exceeds the MicroStrategy project row limit. Please contact your administrator.',
     clickToCopy: 'Click to Copy',

@@ -5,18 +5,22 @@ import { rightPanelSelectors } from '../../constants/selectors/plugin.right-pane
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import { waitForNotification } from '../utils/wait-helper';
 import { pressEnter } from '../utils/keyboard-actions';
+import { logStep } from '../utils/allure-helper';
 
-
+const fileName = 'plugin.right-panel.js';
 class PluginRightPanel {
   clickLoginPopUpBtn() {
+    logStep(`Clicking "Log in" popup button...    [${fileName} - clickLoginPopUpBtn()]`);
     waitAndClick($(rightPanelSelectors.loginPopUpBtn));
   }
 
   clickLogout() {
+    logStep(`Clicking "Log out" button...    [${fileName} - clickLogout()]`);
     waitAndClick($(rightPanelSelectors.logoutBtn));
   }
 
   clickSettings() {
+    logStep(`Clicking 3 dots "Setting" button...    [${fileName} - clickSettings()]`);
     waitAndClick($(rightPanelSelectors.settingsBtn));
   }
 
@@ -35,13 +39,13 @@ class PluginRightPanel {
   }
 
   logout() {
-    console.log('Should log out');
+    logStep(`+ Logging out...    [${fileName} - logout()]`);
     this.clickSettings();
     this.clickLogout();
   }
 
   clickImportDataButton() {
-    console.log('Should click import data button');
+    logStep(`Clicking "Import Data" button...    [${fileName} - clickImportDataButton()]`);
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.importDataBtn), 20000);
     browser.pause(999);
@@ -76,16 +80,14 @@ class PluginRightPanel {
   }
 
   clickAddDataButton() {
-    console.log('Should click add data button');
+    logStep(`Clicking "Add Data" button...    [${fileName} - clickAddDataButton()]`);
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.addDataBtn));
     browser.pause(999);
   }
 
   refreshFirstObjectFromTheList() {
-    console.log('Should refresh first object');
     this.refreshObject(1);
-    console.log('First object from the list is refreshed');
   }
 
 
@@ -97,7 +99,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   refreshObject(index) {
-    console.log('Should refresh the object');
+    logStep(`Refreshing object number ${index} from the list...    [${fileName} - refreshObject()]`);
     switchToPluginFrame();
     const refreshBtn = rightPanelSelectors.getRefreshBtnForObject(index);
     $(refreshBtn).moveTo();
@@ -113,7 +115,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   editObject(index) {
-    console.log('Should click Edit');
+    logStep(`Editing object number ${index} from the list...    [${fileName} - editObject()]`);
     switchToPluginFrame();
     const editBtn = rightPanelSelectors.getEdithBtnForObject(index);
     $(editBtn).moveTo();
@@ -127,6 +129,7 @@ class PluginRightPanel {
    * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
    */
   duplicateObject(index) {
+    logStep(`Clicking "duplicate" button for imported object number ${index}...    [${fileName} - duplicateObject()]`);
     switchToPluginFrame();
     const duplicateBtn = rightPanelSelectors.getDuplicateBtnForObject(index);
     $(duplicateBtn).moveTo();
@@ -139,6 +142,7 @@ class PluginRightPanel {
    *
    */
   clickDuplicatePopupImportBtn() {
+    logStep(`Clicking "import" button in duplicate popup...    [${fileName} - clickDuplicatePopupImportBtn()]`);
     switchToPluginFrame();
     const duplicatePopupImportBtn = $(rightPanelSelectors.duplicatePopupImportBtn);
     duplicatePopupImportBtn.moveTo();
@@ -151,6 +155,7 @@ class PluginRightPanel {
    *
    */
   clickDuplicatePopupEditBtn() {
+    logStep(`Clicking "edit" button in duplicate popup...    [${fileName} - clickDuplicatePopupEditBtn()]`);
     switchToPluginFrame();
     const duplicatePopupEditBtn = $(rightPanelSelectors.duplicatePopupEditBtn);
     duplicatePopupEditBtn.moveTo();
@@ -163,6 +168,7 @@ class PluginRightPanel {
    *
    */
   selectActiveCellOptionInDuplicatePopup() {
+    logStep(`Selecting active cell option in duplicate popup...    [${fileName} - selectActiveCellOptionInDuplicatePopup()]`);
     switchToPluginFrame();
     const activeCellOption = $(rightPanelSelectors.duplicatePopupActiveCellOption);
     activeCellOption.moveTo();
@@ -175,6 +181,7 @@ class PluginRightPanel {
    *
    */
   selectNewSheetOptionInDuplicatePopup() {
+    logStep(`Selecting new sheet option in duplicated popup...    [${fileName} - selectNewSheetOptionInDuplicatePopup()]`);
     switchToPluginFrame();
     const newSheetOption = $(rightPanelSelectors.duplicatePopupNewSheetOption);
     newSheetOption.moveTo();
@@ -190,6 +197,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   removeObject(index) {
+    logStep(`Removing object number ${index} from the list...    [${fileName} - removeObject()]`);
     switchToPluginFrame();
     const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
     $(removeBtn).moveTo();
@@ -205,7 +213,7 @@ class PluginRightPanel {
    * @memberof PluginRightPanel
    */
   clickObjectInRightPanel(index) {
-    console.log('Should click the object in right panel');
+    logStep(`Clicking in the object number ${index} from the list...    [${fileName} - refreshObject()]`);
     switchToPluginFrame();
     const objectSelected = rightPanelSelectors.getObjectSelector(index);
     browser.pause(1000);
@@ -220,15 +228,17 @@ class PluginRightPanel {
    * @returns {String} Name of imported object under given index
    */
   getNameOfObject(index) {
+    logStep(`Getting the name of the objects number ${index}...    [${fileName} - getNameOfObject()]`);
     switchToPluginFrame();
     const nameInput = $(rightPanelSelectors.getNameInputForObject(index));
     return nameInput.getText();
   }
+
   /**
    * Select all imported objects. Will work when there is at least one or more objects imported.
    */
   selectAll() {
-    console.log('Should select all imported objects');
+    logStep(`Selecting all imported objects...    [${fileName} - selectAll()]`);
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.checkBoxAll));
   }
@@ -237,7 +247,7 @@ class PluginRightPanel {
    * Run refresh for selected imported objects. Will work when there is at least one or more objects selected.
    */
   refreshSelected() {
-    console.log('Should refresh selected objects');
+    logStep(`Refreshing selected objects...    [${fileName} - refreshSelected()]`);
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
   }
@@ -246,6 +256,7 @@ class PluginRightPanel {
    * Run remove for selected imported objects. Will work when there is at least one or more objects selected.
    */
   removeSelected() {
+    logStep(`Removing selected objects...    [${fileName} - removeSelected()]`);
     console.log('Should remove selected objects');
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.deleteAllBtn));
@@ -255,6 +266,7 @@ class PluginRightPanel {
    * Clicks master checkbox
    */
   clickMasterCheckbox() {
+    logStep(`Clicking master checkbox...    [${fileName} - clickMasterCheckbox()]`);
     waitAndClick($(rightPanelSelectors.checkBoxAll));
   }
 
@@ -264,11 +276,12 @@ class PluginRightPanel {
    * @param {Number} index index of an imported object in the right side panel
    */
   clickObjectCheckbox(index) {
+    logStep(`Clicking checkbox for the object number  ${index}...    [${fileName} - clickObjectCheckbox()]`);
     waitAndClick($(rightPanelSelectors.getObjectCheckbox(index)));
   }
 
   refreshAll() {
-    console.log('Should refresh all');
+    logStep(`Refreshing all the objects...    [${fileName} - refreshAll()]`);
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.checkBoxAll));
     waitAndClick($(rightPanelSelectors.refreshAllBtn));
@@ -293,11 +306,12 @@ class PluginRightPanel {
   }
 
   clickLoginRightPanelBtn() {
+    logStep(`Clicking "Log in" button in the right panel...    [${fileName} - clickLoginRightPanelBtn()]`);
     waitAndClick($(rightPanelSelectors.loginRightPanelBtn));
   }
 
   closeNotificationOnHover() {
-    console.log('Should close the notification');
+    logStep(`Closing notification on hover...    [${fileName} - closeNotificationOnHover()]`);
     const selector = rightPanelSelectors.notificationContainer;
     const selectorOther = rightPanelSelectors.objectHeaderContainer;
     $(selectorOther).moveTo();
@@ -307,6 +321,7 @@ class PluginRightPanel {
   }
 
   closeAllNotificationsOnHover() {
+    logStep(`Closing ALL notification on hover...    [${fileName} - closeAllNotificationsOnHover()]`);
     switchToPluginFrame();
     const objectCount = $$(rightPanelSelectors.objectContainer).length;
     for (let index = 1; index <= objectCount; index++) {
@@ -316,6 +331,7 @@ class PluginRightPanel {
 
 
   loginToPlugin(username, password, isValidCredentials) {
+    logStep(`+ Loging into the Add-in...    [${fileName} - loginToPlugin()]`);
     switchToPluginFrame();
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(17777);
     if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
@@ -329,6 +345,7 @@ class PluginRightPanel {
   }
 
   enterCredentialsAndPressLoginBtn(username, password) {
+    logStep(`Entering credentials and press login button...    [${fileName} - enterCredentialsAndPressLoginBtn()]`);
     $(rightPanelSelectors.usernameInput).setValue(username);
     $(rightPanelSelectors.passwordInput).setValue(password);
     this.clickLoginPopUpBtn();
@@ -336,16 +353,19 @@ class PluginRightPanel {
   }
 
   clearData() {
+    logStep(`Clearing data...    [${fileName} - clearData()]`);
     const clearBtn = $(`.no-trigger-close*=Clear Data`); // TODO: This method will not work with localisation (Don't use 'Clear Data')
     waitAndClick(clearBtn);
     waitAndClick($(rightPanelSelectors.clearOkBtn));
   }
 
   viewDataBtn() {
+    logStep(`Clicking "view data" button...    [${fileName} - viewDataBtn()]`);
     waitAndClick($(rightPanelSelectors.viewDataBtn));
   }
 
   getVersionOfThePlugin() {
+    logStep(`Getting the version of the plugin...    [${fileName} - getVersionOfThePlugin()]`);
     switchToPluginFrame();
     this.clickSettings();
     const version = $('.settings-version').getText();
@@ -366,6 +386,7 @@ class PluginRightPanel {
    * @memberof PluginPopup
    */
   clickObjectInRightPanelAndAssert(index, cellValue) {
+    logStep(`Clicking object number ${index}...    [${fileName} - clickObjectInRightPanelAndAssert()]`);
     this.clickObjectInRightPanel(index);
     switchToExcelFrame();
     browser.pause(1000); // TODO: Not sure if this is necessary
@@ -389,7 +410,7 @@ class PluginRightPanel {
    * @param {Number} index index of an imported object in the right side panel
    */
   cancelObjectPendingAction(index) {
-    console.log('Should cancel object pending action');
+    logStep(`Cancelling pending action fpor the object number ${index}...    [${fileName} - cancelObjectPendingAction()]`);
     const objectCancelBtn = $(rightPanelSelectors.getPendingNotificationCancelBtnAt(index));
     waitAndClick(objectCancelBtn);
   }
@@ -401,6 +422,7 @@ class PluginRightPanel {
    * @param {String} text Text to enter for new object name
    */
   changeObjectName(index, text) {
+    logStep(`Changingthe  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectName()]`);
     switchToPluginFrame();
     const divNameInput = $(rightPanelSelectors.getNameInputForObject(index));
     divNameInput.moveTo();

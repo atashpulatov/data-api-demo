@@ -5,7 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 
-describe('TC54788 - Import subtotals', () => {
+describe('F24751 - Import report with or without subtotals', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -14,7 +14,7 @@ describe('TC54788 - Import subtotals', () => {
     browser.closeWindow();
     changeBrowserTab(0);
   });
-  it('Enable and disable subtotals', () => {
+  it('[TC54788] -  Turning  OFF subtotals after importing report with subtotals.', () => {
     const objectName = 'Subtotals - display all types';
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);

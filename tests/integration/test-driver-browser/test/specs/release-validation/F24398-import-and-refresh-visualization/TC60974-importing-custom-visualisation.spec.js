@@ -7,7 +7,6 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
-import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
@@ -33,7 +32,7 @@ describe('F24398 - Import and refresh visualization', () => {
     // Assert that import is successfully imported and cell D18 contains "1/1/2013"
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     switchToExcelFrame();
     OfficeWorksheet.selectCell('D18');
     expect(D18.getText()).toEqual('01/01/2013');

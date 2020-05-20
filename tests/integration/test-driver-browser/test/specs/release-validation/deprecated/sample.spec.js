@@ -18,7 +18,7 @@ import { removeTimestampFromTableName } from '../../../helpers/utils/tableName-h
 import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelManipulation-helper';
 
 
-describe('Smart Folder - IMPORT -', () => {
+describe('SAMPLE TEST - ', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -28,7 +28,7 @@ describe('Smart Folder - IMPORT -', () => {
     changeBrowserTab(0);
   });
 
-  it('Import object (1st time)', () => {
+  it('Running Sample spec file', () => {
     /**
      * Testing refactor 11.2.2
      */

@@ -8,7 +8,7 @@ import { switchToPromptFrame, switchToPluginFrame } from '../../../helpers/utils
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 
-describe('F30479 hardening import from dossier', () => {
+describe('F30479 - Hardening of importing data from Dossier to Excel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -17,7 +17,7 @@ describe('F30479 hardening import from dossier', () => {
     browser.closeWindow();
   });
 
-  it('[TC65052] - e2e hardening import from dossier', () => {
+  it('[TC65052] - E2E hardening import from dossier', () => {
     console.group(`Import and edit viz from  ${objectsList.dossiers.withFilter.name}`);
     console.log('Add/Import data to A1 cell');
     OfficeWorksheet.selectCell('A1');

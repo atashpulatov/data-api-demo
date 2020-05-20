@@ -10,9 +10,8 @@ import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import officeLogin from '../../../helpers/office/office.login';
-import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
-describe('TC48976 - perform-basic-functionalities', () => {
+describe('TS41441 - Sanity checks', () => {
   beforeAll(() => {
     const acceptBtn = '#accept-cookies-btn';
 
@@ -71,7 +70,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     PluginPopup.searchForElements('Item Type');
     PluginPopup.searchForElements('Invalid metric');
 
-    pluginPopup.clearElementSearchWithBackspace();
+    PluginPopup.clearElementSearchWithBackspace();
 
     // sort for Attributes
     const attributeContainer = $(popupSelectors.attributesContainer);
