@@ -76,7 +76,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginRightPanel.closeNotificationOnHover();
 
     OfficeWorksheet.selectCell('N1');
-    console.log('Open Dossier Visualization Manipulation');
+    logStep('Open Dossier Visualization Manipulation');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(name);
     PluginPopup.openShowDataPanel(visualizationManipulationName);

@@ -108,7 +108,7 @@ export const popupSelectors = {
     getBookmarkItemAt: (index) => `div.mstrd-BookmarkDropdownMenuContainer-myBookmarks > ul > div:nth-child(${index})`,
     buttonRefreshDossier: 'div.mstr-nav-icon.icon-resetfile',
     buttonConfirmRefresh: '.mstrd-DeleteDossier-button',
-    filterBtn: 'mstr-nav-icon.icon-filter',
+    filterBtn: '.mstr-nav-icon.icon-filter',
     buttonFilters: 'li.mstrd-FilterNavItemContainer',
     filtersMenu: {
       getFilterAt: (index) => `div.mstrd-FilterPanel-content > ul > li:nth-child(${index})`,
