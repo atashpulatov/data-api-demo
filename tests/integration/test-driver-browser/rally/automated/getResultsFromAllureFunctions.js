@@ -3,6 +3,7 @@ const allureReport = './allure-report/data/behaviors.json';
 const path = require('path');
 const fs = require('fs');
 const rallyconfig = require('../rallyconfig');
+const strings = require('../strings');
 
 const cmd = process.argv;
 
@@ -65,11 +66,10 @@ function getDuration(testCase) {
  */
 function getBrowser(testCase) {
   const parameters = testCase.parameters[0];
-  let browser = '';
   if (parameters.includes('chrome')) {
-    browser = 'Chrome';
+    return 'Chrome';
   }
-  return browser;
+  return '';
 }
 
 /**
@@ -79,7 +79,7 @@ function getBrowser(testCase) {
  */
 function getBuild() {
   if (!cmd[2]) {
-    return rallyconfig.build;
+    return rallyconfig.automation.build;
   }
   return cmd[3];
 }
@@ -91,9 +91,28 @@ function getBuild() {
  */
 function getRelease() {
   if (!cmd[3]) {
-    return rallyconfig.release;
+    return rallyconfig.automation.release;
   }
-  return cmd[4];
+  return cmd[5];
+}
+
+/**
+* Returns OS on which the Test Case was executed
+* If
+*
+* @returns {String} OS on which the Test Case was executed
+*/
+function getOS() {
+  if (!cmd[2]) {
+    return rallyconfig.automation.OS;
+  }
+  switch (cmd[4]) {
+    case strings.osCMD.mac13: return strings.OS.macOS13;
+    case strings.osCMD.mac14: return strings.OS.macOS14;
+    case strings.osCMD.mac15: return strings.OS.macOS15;
+    case strings.osCMD.win10: return strings.OS.msWin10;
+    case strings.osCMD.win19: return strings.OS.msWin19;
+  }
 }
 
 /**
@@ -113,6 +132,7 @@ function getReportData() {
         testCaseId: getTestCaseId(arrayData[i]),
         build: getBuild(),
         release: getRelease(),
+        OS: getOS()
       };
       allureDataArray.push(allure);
     }
