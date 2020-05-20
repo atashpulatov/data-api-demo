@@ -110,7 +110,8 @@ describe('TS41441 - Sanity checks', () => {
     expect(filterContainer.$$('li')[0].getText()).toEqual('Country');
     // All filters Descending sort
     waitAndClick(sortFiltersSelector);
-    expect(filterContainer.$$('li')[0].getText()).toEqual('Sales Channel');
+    const filterTitlesList = $$(popupSelectors.filterTitles);
+    expect(filterTitlesList[0].getAttribute('textContent')).toEqual(`Sales Channel`);
     // Back to default sort
     waitAndClick(sortFiltersSelector);
 
