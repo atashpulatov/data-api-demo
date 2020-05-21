@@ -6,6 +6,7 @@ export const objectsList = {
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
     seasonalReport: 'Seasonal Report',
     basicReport: '100_report',
+    promptedAndMultiformReport: 'Report with Prompt and Multiform attribute',
     metricExpPromptedReport: 'Report with prompt - Expression prompt (Metric Qualification Prompt on Revenue) | Not required | Not default',
     attributeExprPromptedReport: 'Report with prompt - Expression prompt (Attribute Qualification Prompt on Year) | Required | Not default',
     numericPromptedReport: 'Report with prompt - Value prompt - Numeric (Year) | Required | Default answer',
