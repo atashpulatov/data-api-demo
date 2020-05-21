@@ -24,7 +24,7 @@ describe('TS41441 - Sanity checks', () => {
     PluginRightPanel.clickImportDataButton();
 
     // Import first prompted report
-    const firstReport = objectsList.reports.attributePromptedReport;
+    const firstReport = objectsList.reports.promptedAndMultiformReport;
     PluginPopup.openPrepareData(firstReport, false);
     PluginPopup.promptSelectObject('Books');
     PluginPopup.promptSelectObject('Electronics');
@@ -32,7 +32,7 @@ describe('TS41441 - Sanity checks', () => {
     PluginPopup.clickRun();
     browser.pause(3000);
     switchToDialogFrame();
-    PluginPopup.selectObjectElements(['Year', 'Region']);
+    PluginPopup.selectAttributesAndAttributeForms({ Region: ['DESC'] });
     PluginPopup.selectAllMetrics();
     PluginPopup.selectFilters([['Category', ['Books']]]);
     PluginPopup.clickDataPreview();
