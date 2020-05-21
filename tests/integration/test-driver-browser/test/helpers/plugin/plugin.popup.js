@@ -790,6 +790,26 @@ class PluginPopup {
   }
 
   /**
+  * Search for object and sort on one of the headers on import data table, than select prepare data button
+  *
+  * @param {String} objectName name of the object
+  * @param {String} headerName name of the header in import data table
+  * @param {boolean} [isObjectFromLibrary=false] switch MyLibrary toggle to true/false
+  * @param {number} [objectOrder=1] select object from the list, as default is first
+  * @memberof PluginPopup
+  */
+  sortAndOpenPrepareData(objectName, headerName, isObjectFromLibrary = false, objectOrder = 1) {
+    logStep(`+ Selecting the object "${objectName}" sorting on ${headerName} and opening Prepare Data...    [${fileName} - openPrepareData()]`);
+    switchToDialogFrame();
+    this.switchLibrary(isObjectFromLibrary);
+    this.searchForObject(objectName);
+    browser.pause(1111);
+    this.clickHeader(headerName);
+    this.selectObject(objectOrder);
+    this.clickPrepareData();
+  }
+
+  /**
    * This function is used for prompted Dossiers. It is answering the default prompt answer and it is selecting the desired visualization and importing it
    *
    * @param {Number} index Id of the visualization, for ex: '#mstr114'

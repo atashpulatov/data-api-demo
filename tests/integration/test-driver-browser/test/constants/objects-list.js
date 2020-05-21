@@ -207,5 +207,8 @@ export const objectsList = {
       visualizations: { vis1: '#mstr107' }
     }
   },
-  aqdtMirror2Objects: { tcAutomation: 'TC to automate', },
+  aqdtMirror2Objects: { 
+    tcAutomation: 'TC to automate',
+    pdCube: 'PD Cube',
+  },
 };

@@ -9,20 +9,22 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
 describe('Personal TC for AQDT Mirror2', () => {
 
   it('[TC65666] AQDT E2E - Prepare Data for reports and datasets', () => {
     const A2 = '#gridRows > div:nth-child(2) > div:nth-child(1) > div > div';
     const { tcAutomation } = objectsList.aqdtMirror2Objects;
+    const { pdCube } = objectsList.aqdtMirror2Objects;
 
     OfficeWorksheet.selectCell('A1');
-    console.log('Should import prompted report');
+    logStep(`Should import ${tcAutomation}`);
     PluginRightPanel.clickImportDataButton();
     PluginPopup.openPrepareData(tcAutomation, false);
 
     switchToDialogFrame();
-    console.log('Should sort attributes and metrics');
+    logStep('+ Sort attributes, metrics and filters');
     const sortAttributeSelector = $(popupSelectors.sortAttributes);
     const attributeContainer = $(popupSelectors.attributesContainer);
     const sortMetricsSelector = $(popupSelectors.sortMetrics);
@@ -30,33 +32,33 @@ describe('Personal TC for AQDT Mirror2', () => {
     const sortFiltersSelector = $(popupSelectors.sortFilters);
     const filterContainer = $(popupSelectors.filtersContainer);
 
-    console.log('Should sort ascending');
+    logStep('Should sort attributes ascending');
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Date (Test Case Result)');
-    console.log('Should sort decending');
+    logStep('Should sort attributes decending');
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Test Case Type');
-    console.log('Should sort default');
+    logStep('Should sort attributes default');
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Test Case Owner');
 
-    console.log('Should sort ascending');
+    logStep('Should sort metrics ascending');
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Row Count - Last_Verdict');
-    console.log('Should sort decending');
+    logStep('Should sort metrics decending');
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Row Count - Tester');
-    console.log('Should sort default');
+    logStep('Should sort metrics default');
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Row Count - Last_Verdict');
 
-    console.log('Should sort ascending');
+    logStep('Should sort filters ascending');
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Date (Test Case Result)');
-    console.log('Should sort decending');
+    logStep('Should sort filters decending');
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Test Case Type');
-    console.log('Should sort default');
+    logStep('Should sort filters default');
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Test Case Owner');
 
@@ -82,7 +84,7 @@ describe('Personal TC for AQDT Mirror2', () => {
     expect($(A2).getText()).toEqual('Sonia Lukaszewicz');
     browser.pause(1000);
 
-    console.log('Duplicate and edit report');
+    logStep('Duplicate and edit report');
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupEditBtn();
     switchToDialogFrame();
@@ -96,12 +98,67 @@ describe('Personal TC for AQDT Mirror2', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.duplicateSucces);
     PluginRightPanel.closeNotificationOnHover();
 
+    OfficeWorksheet.deleteSheet(2);
+
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.objectRemoved);
+    PluginRightPanel.closeNotificationOnHover();
+
+    expect(PluginRightPanel.getNameOfObject(1)).toBe(`${tcAutomation}`);
+
+    logStep(`+Import ${pdCube} sort on 'Modified' header and prepare data to import`);
+    OfficeWorksheet.openNewSheet();
+    switchToDialogFrame();
+    PluginRightPanel.clickAddDataButton();
+    PluginPopup.sortAndOpenPrepareData(pdCube, 'Modified');
+    PluginPopup.selectObjectElements(['Feature', 'Initiative', 'QA Status', 'SE Status']);
+    PluginPopup.selectFilters([['Scrum Team', []]]);
+
+    PluginPopup.searchForElements('Excel');
+    PluginPopup.selectFilterInstance(['CT-Application-Excel']);
+    PluginPopup.clearElementSearchWithBackspace();
+    browser.pause(1111);
+
+    logStep('+ Sort attributes, metrics and filters');
+    logStep('Should sort attributes ascending');
+    waitAndClick(sortAttributeSelector);
+    expect(attributeContainer.$$('li')[0].getText()).toEqual('Area (Timesheet)');
+    logStep('Should sort attributes decending');
+    waitAndClick(sortAttributeSelector);
+    expect(attributeContainer.$$('li')[0].getText()).toEqual('Work Item Work Type');
+    logStep('Should sort attributes default');
+    waitAndClick(sortAttributeSelector);
+    expect(attributeContainer.$$('li')[0].getText()).toEqual('Feature');
+
+    logStep('Should sort metrics ascending');
+    waitAndClick(sortMetricsSelector);
+    expect(metricsContainer.$$('div')[0].getText()).toEqual('(Feature level) Percentdonebystorycount');
+    logStep('Should sort metrics decending');
+    waitAndClick(sortMetricsSelector);
+    expect(metricsContainer.$$('div')[0].getText()).toEqual('WorkItemPoints');
+    logStep('Should sort metrics default');
+    waitAndClick(sortMetricsSelector);
+    expect(metricsContainer.$$('div')[0].getText()).toEqual('QA Status');
+
+    logStep('Should sort filters ascending');
+    waitAndClick(sortFiltersSelector);
+    expect(filterContainer.$$('li')[0].getText()).toEqual('Area (Timesheet)');
+    logStep('Should sort filters decending');
+    waitAndClick(sortFiltersSelector);
+    expect(filterContainer.$$('li')[0].getText()).toEqual('Work Item Work Type');
+    logStep('Should sort filters default');
+    waitAndClick(sortFiltersSelector);
+    expect(filterContainer.$$('li')[0].getText()).toEqual('Feature');
+
+    this.clickImport();
+
+    PluginRightPanel.removeAllObjectsFromTheList();
 
     // waitForNotification();
     // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
     // PluginRightPanel.closeNotificationOnHover();
 
-    // console.log('Should refresh prompted report');
+    // logStep('Should refresh prompted report');
     // PluginRightPanel.refreshFirstObjectFromTheList();
     // waitForNotification();
     // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
