@@ -1,3 +1,4 @@
+import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
 
 export function parseColumnSets(columnSets) {
   const parsedColumns = [];
@@ -16,8 +17,9 @@ export function calculateColumnHeaderHeight(columnSetsHeaders, columnSets) {
   // TODO: Take into consideration attribute forms from columnSets
   let boundingHeight = 0;
   columnSetsHeaders.forEach(columnSet => {
-    if (columnSet.length > boundingHeight) {
-      boundingHeight = columnSet.length;
+    const { length } = columnSet[0];
+    if (length > boundingHeight) {
+      boundingHeight = length;
     }
   });
   return boundingHeight;
@@ -35,29 +37,46 @@ export function calculateColumnHeaderOffset(columnSets, columnSetsDefinition) {
 }
 
 export function parseColumnSetHeaders(columnSetsHeaders, columnSetsDefinition) {
+  const transposedHeaders = columnSetsHeaders.map(mstrNormalizedJsonHandler.transposeMatrix);
   const boundingHeight = calculateColumnHeaderHeight(columnSetsHeaders, columnSetsDefinition);
-  const indexOffset = calculateColumnHeaderOffset(columnSetsHeaders, columnSetsDefinition);
-  console.log(indexOffset);
-  const normalizedHeaders = [];
 
-  for (let i = 0; i < columnSetsHeaders.length; i++) {
-    const header = columnSetsHeaders[i];
-    console.log('header', header);
-    if (header) {
-      const offset = indexOffset[i];
-      if (i > 0) {
-        header.forEach(headerIndex => { headerIndex[1] += offset; });
-      }
+  const parsedHeaders = [];
 
-      const emptyHeader = [];
-      while (header.length + emptyHeader.length < boundingHeight) {
-        emptyHeader.push([-1, -1]);
+  for (let i = 0; i < transposedHeaders.length; i++) {
+    const header = transposedHeaders[i];
+    const columnsDefinition = columnSetsDefinition[i].columns;
+
+    // Add empty row when column sets have different height
+    while (header.length < boundingHeight) {
+      header.unshift(Array(header[0].length).fill(-1));
+    }
+
+
+    for (let j = 0; j < boundingHeight; j++) {
+      const headerRow = header[j];
+      const { type, elements } = columnsDefinition[j];
+      const columnSetRow = headerRow.map(index => {
+        // -1 is for empty row
+        if (index < 0) { return ''; }
+        switch (type) {
+          case 'attribute':
+            return elements[index].formValues[0];
+          case 'templateMetrics':
+            return elements[index].name;
+          // Consolidation will go here
+          default:
+            return '';
+        }
+      });
+      if (parsedHeaders[j]) {
+        parsedHeaders[j].push(...columnSetRow);
+      } else {
+        parsedHeaders[j] = columnSetRow;
       }
-      normalizedHeaders.push(...emptyHeader, ...header);
     }
   }
-  console.log('caca', normalizedHeaders);
-  return normalizedHeaders;
+
+  return parsedHeaders;
 }
 
 export function parseCompoundGrid(response) {
