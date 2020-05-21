@@ -8,6 +8,7 @@ import {
   FORMAT_OFFICE_TABLE,
   FORMAT_SUBTOTALS,
   GET_INSTANCE_DEFINITION,
+  GET_OBJECT_DETAILS,
   GET_OFFICE_TABLE_EDIT_REFRESH,
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
@@ -46,6 +47,10 @@ class OperationStepDispatcher {
 
   completeGetInstanceDefinition = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_INSTANCE_DEFINITION));
+  };
+
+  completeGetObjectDetails = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, GET_OBJECT_DETAILS));
   };
 
   completeFormatOfficeTable = (objectWorkingId) => {

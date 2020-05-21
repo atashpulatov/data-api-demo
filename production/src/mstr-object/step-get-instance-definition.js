@@ -31,7 +31,7 @@ class StepGetInstanceDefinition {
     try {
       console.group('Importing data performance');
       console.time('Total');
-      const nextStep = operationData.stepsQueue[1];
+      const nextStep = operationData.stepsQueue[2];
 
       const {
         objectWorkingId,

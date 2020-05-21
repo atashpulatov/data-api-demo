@@ -81,6 +81,8 @@ export const RightSidePanelNotConnected = ({
     ));
   }, [loadedObjects, notifications, operations]);
 
+  console.log({ loadedObjects });
+
   /**
    * Wraps a function to be called when user clicks an action icon.
    *
