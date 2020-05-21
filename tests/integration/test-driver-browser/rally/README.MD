@@ -14,6 +14,7 @@ Start with creating your API key.
 ##### Automated testing
 
 The main logic for uploading Test Case results to Rally from automation can be found in ./automated/updateAutomatedTCResult.js
+For results from CI pipeline release should be changed in [./rallyconfig.js] in automated{} object every release and pushed to m2020 branch.
 
 If you trigerred the [AUTOMATION] suites manually and you want to upload the results to Rally, follow these points:
 
