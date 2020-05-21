@@ -24,8 +24,6 @@ async function updateRallyTCResult() {
   const testsToUpdate = getResultsFromAllure.getTestsWithVerdict(allTests, testsToUpload);
   const batch = await createBatchArray(testsToUpdate);
 
-  // console.log(batch.Batch[0].Entry);
-
   const options = {
     url: 'https://rally1.rallydev.com/slm/webservice/v2.0/batch',
     method: 'POST',
@@ -47,7 +45,6 @@ async function updateRallyTCResult() {
 updateRallyTCResult()
   .then(result => {
     const jsonResult = JSON.parse(result);
-    console.log(jsonResult);
     const { Errors } = jsonResult.BatchResult;
     if (Errors.length > 0) {
       throw new Error(Errors);

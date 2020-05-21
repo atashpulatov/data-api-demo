@@ -4,7 +4,8 @@ const rallyConfig = require('../rallyconfig');
 
 const today = new Date();
 
-/** Update Rally Test Cases results from automation using the retrieved Test Case URL and the corresponding test results
+/**
+ * Update Rally Test Cases results from automation using the retrieved Test Case URL and the corresponding test results
  *
  * @param {Array} testCaseArray Array of objects (test results) to be uploaded to Rally
  * @returns {Array} Array of JS objects containing test results parsed to the format that can be uploaded to Rally
