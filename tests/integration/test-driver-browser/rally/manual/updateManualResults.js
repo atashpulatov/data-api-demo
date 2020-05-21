@@ -27,7 +27,6 @@ async function updateRallyTCResult() {
     const failedTestCasesId = mapTCtoBatchObject(failedTestCases, 'Fail');
     const batch = await createManualBatchArray([...failedTestCasesId, ...passedTestCasesId]);
 
-
     const options = {
       url: 'https://rally1.rallydev.com/slm/webservice/v2.0/batch',
       method: 'POST',
@@ -37,11 +36,10 @@ async function updateRallyTCResult() {
 
     return new Promise((resolve, reject) => {
       request(options, (error, response, body) => {
-        if (!error) {
-          resolve(body);
-        } else {
+        if (error) {
           reject(error);
         }
+        resolve(body);
       });
     });
   } catch (e) {

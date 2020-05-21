@@ -14,16 +14,15 @@ const today = new Date();
 module.exports = async function createBatchArray(testCaseArray) {
   const batch = [];
   for (let i = 0; i < testCaseArray.length; i++) {
-    const {
-      duration, browser, verdict, build, release, testCaseId, OS
-    } = testCaseArray[i];
-
     try {
+      const {
+        duration, browser, verdict, build, release, testCaseId, OS
+      } = testCaseArray[i];
       const tcUrl = await helpers.getRallyTCUrl(testCaseId);
       const owner = await helpers.getOwner(testCaseId);
       let testSet = '';
       if (rallyConfig.automation.testSet !== '') {
-        testSet = await helpers.getTestSet();
+        testSet = await helpers.getTestSet(rallyConfig.automation.testSet);
       }
 
       const batchItem = {

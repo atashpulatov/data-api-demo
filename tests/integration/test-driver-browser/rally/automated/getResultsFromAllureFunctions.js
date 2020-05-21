@@ -1,10 +1,10 @@
 /* eslint-disable default-case */
-const allureReport = './allure-report/data/behaviors.json';
 const path = require('path');
 const fs = require('fs');
 const rallyconfig = require('../rallyconfig');
 const strings = require('../strings');
 
+const ALLURE_REPORT = './allure-report/data/behaviors.json';
 const cmd = process.argv;
 
 /**
@@ -122,7 +122,7 @@ function getOS() {
  * @returns {Array} Array of objects containing data that will be uploaded to Rally
  */
 function getReportData() {
-  const arrayData = parseReportData(allureReport);
+  const arrayData = parseReportData(ALLURE_REPORT);
   const allureDataArray = [];
   for (let i = 0; i < arrayData.length; i++) {
     if (arrayData[i].name.includes('[TC')) {
