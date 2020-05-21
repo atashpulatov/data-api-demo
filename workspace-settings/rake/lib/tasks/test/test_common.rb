@@ -31,11 +31,13 @@ task :browser_e2e_push_results,[:build_no] do | t, args|
   test_dir = get_browser_test_dir()
   build_no = args['build_no']
   unless build_no.nil?
+    test_os = "mac14"
     if is_windows_jenkins_env? #if it is windows jenkins envrionment, we need to use another path
       test_dir = "c:/test-driver-browser" 
+      test_os = "win19"
     end
     info "publish e2e test result to Rally"
-    shell_command! "npm run rally pass #{build_no}", cwd: test_dir
+    shell_command! "npm run rally pass #{build_no} #{test_os}" , cwd: test_dir
   else
     info "no build number specified, no test result will be published"
   end
