@@ -45,7 +45,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep(`+ should refresh all objects`);
+    logStep(`should refresh all objects`);
     PluginRightPanel.refreshAll();
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
