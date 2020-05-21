@@ -235,7 +235,7 @@ exports.config = {
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
     ],
     'F21409-refresh-all': [
-      './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js'
+      './test/specs/release-validation/F21409-refresh-all/TC41094-right-panel-refresh-all.spec.js'
     ],
     'F25943-refresh-move-to-add-in-side-panel': [
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
