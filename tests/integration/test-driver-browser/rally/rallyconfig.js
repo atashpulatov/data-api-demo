@@ -24,6 +24,6 @@ module.exports = {
     OS: '',
     language: 'English',
     build: '',
-    release: ''
+    release: '11.2.2 [2020-Jun-05]'
   }
 };
