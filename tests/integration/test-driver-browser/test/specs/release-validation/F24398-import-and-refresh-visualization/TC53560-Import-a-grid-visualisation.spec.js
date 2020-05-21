@@ -33,7 +33,7 @@ describe('F24398 - Import and refresh visualization', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
 
-    logStep('Import Dossier with vis that can be moved to different pages / chapters');
+    logStep('+ Import Dossier with vis that can be moved to different pages / chapters');
     PluginPopup.importAnyObject(dossierWithPagesAndChaptersName, 1);
     PluginPopup.selectVisualization(defaultGridVisualization);
     browser.pause(2000);
@@ -53,7 +53,7 @@ describe('F24398 - Import and refresh visualization', () => {
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('Import Visualization manipulation');
+    logStep('+ Import Visualization manipulation');
     OfficeWorksheet.selectCell('H1');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.importAnyObject(name, 1);
@@ -67,7 +67,7 @@ describe('F24398 - Import and refresh visualization', () => {
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('Change visualization name');
+    logStep('+ Change visualization name');
     PluginRightPanel.changeObjectName(1, 'Visualization-name');
     browser.pause(2000);
     PluginRightPanel.changeObjectNameUsingMenu(1, 'Modified-visualization-name');
@@ -76,7 +76,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginRightPanel.closeNotificationOnHover();
 
     OfficeWorksheet.selectCell('N1');
-    logStep('Open Dossier Visualization Manipulation');
+    logStep('+ Open Dossier Visualization Manipulation');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(name);
     PluginPopup.openShowDataPanel(visualizationManipulationName);
@@ -104,7 +104,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.selectAndImportVisualization(gridWithSubtotalsAndCrosstabs);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
-    logStep('Import compound grid');
+    logStep('+ Import compound grid');
     const { dossierWithCompoundGrid } = objectsList.dossiers;
     const { visualization1 } = dossierWithCompoundGrid.visualizations;
     OfficeWorksheet.selectCell('AC1');
@@ -119,7 +119,7 @@ describe('F24398 - Import and refresh visualization', () => {
     logStep('Click back button');
     PluginPopup.clickBack();
 
-    logStep('Import custom visualizations dossier');
+    logStep('+ Import custom visualizations dossier');
     const { customVisualizations } = objectsList.dossiers;
     const { GoogleTimeline, modelsByYear } = customVisualizations.visualizations;
     PluginPopup.openDossier(customVisualizations.name);
@@ -132,7 +132,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.selectAndImportVisualization(modelsByYear);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
-    logStep('Import prompted dossier');
+    logStep('+ Import prompted dossier');
     const { promptedDossier } = objectsList.dossiers;
     const { vis1 } = promptedDossier.visualizations;
     OfficeWorksheet.selectCell('AA20');
@@ -141,7 +141,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.importDefaultPromptedVisualisation(vis1);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
-    logStep('Import Dossier with different custom visualizations');
+    logStep('+ Import Dossier with different custom visualizations');
     const { dossierWithDifferentCustomVis } = objectsList.dossiers;
     const { worldCloud, googleTimeLine, sequenceSunburst } = dossierWithDifferentCustomVis.Visualizations;
     logStep('Import D3 WorldCloud visualization');

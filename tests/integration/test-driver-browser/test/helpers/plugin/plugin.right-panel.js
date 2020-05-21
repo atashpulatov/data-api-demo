@@ -459,8 +459,8 @@ class PluginRightPanel {
    * @param {Number} index Index of the object in the right side panel that the name will be changed. Starts from 1 (1 is the first from the top)
    * @param {String} text Text to enter for new object name
    */
-  changeObjectNameUsingMenu(index, text){
-     logStep(`Changing the  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectNameUsingMenu()]`);
+  changeObjectNameUsingMenu(index, text) {
+    logStep(`Changing the  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectNameUsingMenu()]`);
     waitAndRightClick($(rightPanelSelectors.getObjectSelector(index)));
     browser.pause(1000);
     $('#overlay > div > div.object-tile-container > div.object-tile-list > article > div > nav > div:nth-child(5)').click();

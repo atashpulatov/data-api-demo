@@ -650,7 +650,7 @@ class PluginPopup {
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    */
   selectAndImportVisualization(visContainerId) {
-    logStep(`Importing the visualization: "${visContainerId}"...    [${fileName} - selectAndImportVisualization()]`);
+    logStep(`+ Importing the visualization: "${visContainerId}"...    [${fileName} - selectAndImportVisualization()]`);
     this.selectVisualization(visContainerId);
     switchToPluginFrame();
     this.clickImport();
@@ -663,6 +663,7 @@ class PluginPopup {
    *
    */
   selectAndMoveToImportVisualization(visContainerId) {
+    logStep(`+ Selecting and moving to import visualization: "${visContainerId}"...    [${fileName} - selectAndMoveToImportVisualization()]`);
     this.selectVisualization(visContainerId);
     switchToPluginFrame();
     $(popupSelectors.importBtn).moveTo();
