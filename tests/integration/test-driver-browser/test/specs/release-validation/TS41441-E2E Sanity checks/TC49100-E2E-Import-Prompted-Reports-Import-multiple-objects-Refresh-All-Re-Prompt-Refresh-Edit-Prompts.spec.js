@@ -4,11 +4,11 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 describe('TS41441 - Sanity checks', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
@@ -31,7 +31,8 @@ describe('TS41441 - Sanity checks', () => {
     switchToPluginFrame();
     PluginPopup.clickRun();
     browser.pause(3000);
-    PluginPopup.selectAttributesAndAttributeForms({ Year: [], Region: [] });
+    switchToDialogFrame();
+    PluginPopup.selectObjectElements(['Year', 'Region']);
     PluginPopup.selectAllMetrics();
     PluginPopup.selectFilters([['Category', ['Books']]]);
     PluginPopup.clickDataPreview();
@@ -76,7 +77,8 @@ describe('TS41441 - Sanity checks', () => {
     PluginPopup.promptSelectObjectForEdit('Movies');
     PluginPopup.clickRun();
     browser.pause(3000);
-    PluginPopup.selectAttributesAndAttributeForms({ Year: [] });
+    switchToDialogFrame();
+    PluginPopup.selectObjectElements(['Year']);
     PluginPopup.selectAllMetrics();
     PluginPopup.selectFilters([['Category', ['Movies']]]);
     switchToPluginFrame();
@@ -104,8 +106,9 @@ describe('TS41441 - Sanity checks', () => {
     PluginPopup.removeAllSelected();
     PluginPopup.promptSelectObjectForEdit('Year');
     PluginPopup.clickRun();
-    browser.pause(3000);
-    PluginPopup.selectAttributesAndAttributeForms({ Year: [] });
+    browser.pause(5000);
+    switchToDialogFrame();
+    PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
     switchToPluginFrame();
     PluginPopup.clickImport();
