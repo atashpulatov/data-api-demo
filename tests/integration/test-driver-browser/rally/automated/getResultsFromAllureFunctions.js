@@ -69,6 +69,7 @@ function getBrowser(testCase) {
   if (parameters.includes('chrome')) {
     return 'Chrome';
   }
+  // TODO different browsers
   return '';
 }
 
