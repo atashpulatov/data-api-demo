@@ -12,6 +12,8 @@ module.exports = {
     macOS15: 'Mac OS 10.15 Catalina',
     msWin10: 'Microsoft Windows 10',
     msWin19: 'Microsoft Windows Server 2019',
-  }
+  },
+  batchURL: 'https://rally1.rallydev.com/slm/webservice/v2.0/batch',
+
 
 };

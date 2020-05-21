@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
-const request = require('request');
+const fetch = require('node-fetch');
 const rallyConfig = require('../rallyconfig');
 const getTestSetDuration = require('./getTestSetDuration');
 const helpers = require('../helpers');
+
 /**
  * Upload Test Set duration to existing Test Set Rally
  *
@@ -17,30 +18,19 @@ async function updateMachineTime() {
   const testSetUrl = await helpers.getTestSet(testSetId);
 
   const options = {
-    url: testSetUrl,
     method: 'PUT',
     headers: { zsessionid: rallyConfig.rallyApiKey, },
-    json: { TestSet: { c_MachineTimeHrs: testSetDuration } }
+    body: JSON.stringify({ TestSet: { c_MachineTimeHrs: testSetDuration } })
   };
 
-
-  return new Promise((resolve, reject) => {
-    request(options, (error, response, body) => {
-      if (!error) {
-        resolve(body);
-      } else {
-        reject(error);
-      }
-    });
-  });
+  return fetch(testSetUrl, options)
+    .then(res => res.json());
 }
 
 updateMachineTime()
-  .then(result => {
+  .then((result) => {
     const { Errors } = result.OperationResult;
-    if (Errors.length > 0) {
-      throw new Error(Errors);
-    }
+    if (Errors.length > 0) { throw new Error(Errors); }
     console.log('Rally request completed');
     process.exit(0);
   })

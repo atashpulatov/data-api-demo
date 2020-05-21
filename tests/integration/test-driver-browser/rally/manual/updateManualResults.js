@@ -1,6 +1,7 @@
-const request = require('request');
+const fetch = require('node-fetch');
 const rallyConfig = require('../rallyconfig');
 const createManualBatchArray = require('./createManualBatchArray');
+const strings = require('../strings');
 
 /** Map array containing test case IDs to Batch object that can be uploaded to Rally with specified verdict
  *
@@ -28,32 +29,22 @@ async function updateRallyTCResult() {
     const batch = await createManualBatchArray([...failedTestCasesId, ...passedTestCasesId]);
 
     const options = {
-      url: 'https://rally1.rallydev.com/slm/webservice/v2.0/batch',
       method: 'POST',
       headers: { zsessionid: rallyConfig.rallyApiKey, },
       body: JSON.stringify(batch)
     };
 
-    return new Promise((resolve, reject) => {
-      request(options, (error, response, body) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(body);
-      });
-    });
+    return fetch(strings.batchURL, options).then(result => result.json());
   } catch (e) {
     throw Error(e);
   }
 }
 
 updateRallyTCResult()
-  .then(result => {
-    const jsonResult = JSON.parse(result);
-    const { Errors } = jsonResult.BatchResult;
-    if (Errors.length > 0) {
-      throw new Error(Errors);
-    }
+  .then((result) => {
+    console.log(result);
+    const { Errors } = result.BatchResult;
+    if (Errors.length > 0) { throw new Error(Errors); }
     console.log('Rally request completed');
     process.exit(0);
   })
