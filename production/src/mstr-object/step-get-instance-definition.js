@@ -68,6 +68,9 @@ class StepGetInstanceDefinition {
         startCell = await this.getStartCell(insertNewWorksheet, excelContext);
       }
 
+      console.log('instanceDefinition');
+      console.log(instanceDefinition);
+
       const { mstrTable } = instanceDefinition;
       const updatedObject = {
         objectWorkingId,
@@ -79,6 +82,8 @@ class StepGetInstanceDefinition {
         isCrosstab: mstrTable.isCrosstab,
         subtotalsInfo,
         manipulationsXML: instanceDefinition.manipulationsXML || false,
+        attributes: instanceDefinition.attributes,
+        metrics: instanceDefinition.metrics,
       };
 
       const updatedOperation = {

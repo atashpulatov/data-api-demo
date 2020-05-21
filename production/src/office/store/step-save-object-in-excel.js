@@ -24,7 +24,15 @@ class StepSaveObjectInExcel {
     try {
       const { instanceDefinition } = operationData;
 
-      objectData.previousTableDimensions = { columns: instanceDefinition.columns };
+      objectData.previousTableDimensions = { rows: instanceDefinition.rows, columns: instanceDefinition.columns };
+      objectData.excelTableSize = {
+        rows: objectData.previousTableDimensions.rows + 1,
+        columns: objectData.previousTableDimensions.columns,
+      };
+      if (instanceDefinition.mstrTable.crosstabHeaderDimensions) {
+        objectData.excelTableSize.rows += instanceDefinition.mstrTable.crosstabHeaderDimensions.columnsY;
+        objectData.excelTableSize.columns += instanceDefinition.mstrTable.crosstabHeaderDimensions.rowsX;
+      }
       objectData.refreshDate = Date.now();
 
       delete objectData.preparedInstanceId;
