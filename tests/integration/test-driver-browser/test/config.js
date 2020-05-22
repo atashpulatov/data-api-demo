@@ -83,7 +83,7 @@ const settings = {
 
 /**
  * Parses arguments passed to terminal
- * Syntax of passing arguments - argument="value"
+ * Syntax of passing arguments - argument="value", f.e. npm run test-suite acceptance env="env-123453" lang="ko-kr"
  * @return {Object} arguments
  */
 function parseArgs() {
