@@ -88,7 +88,7 @@ class PluginPopup {
   clickRun() {
     logStep(`Clicking "Run" button...    [${fileName} - clickRun()]`);
     switchToPluginFrame();
-    $(popupSelectors.runBtn).waitForExist(3333);
+    $(popupSelectors.runBtn).waitForExist(6000);
     waitAndClick($(popupSelectors.runBtn));
   }
 
@@ -117,6 +117,7 @@ class PluginPopup {
    */
   selectAllAttributesAndMetrics() {
     logStep(`Selecting all attributes and metrics...    [${fileName} - selectAllAttributesAndMetrics()]`);
+    switchToDialogFrame();
     this.selectAllAttributes();
     this.selectAllMetrics();
   }
@@ -553,6 +554,7 @@ class PluginPopup {
   // parameters: JSON object, containing attributes as keys and attribute forms as values
   selectAttributesAndAttributeForms(elements) {
     logStep(`Selecting attributes and attributes forms: "${elements}"...    [${fileName} - selectAttributesAndAttributeForms()]`);
+    switchToDialogFrame();
     for (const [attribute, attributeForm] of Object.entries(elements)) {
       waitAndClick($(`${popupSelectors.attributeCheckBox}=${attribute}`));
       if (attributeForm && attributeForm.length > 0) {

@@ -17,8 +17,11 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    './test/specs/release-validation/deprecated/sample.spec.js',
-
+    // './test/specs/release-validation/deprecated/sample.spec.js',
+    './test/specs/release-validation/F24751-import subtotals/TC53752-subtotals-settings.spec.js',
+    // './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61043-E2E-prompted-dossier.spec.js',
+    // './test/specs/release-validation/F22954-editing/TC62674-prepare-edit-report-all-prompts-except-nested.spec.js',
+    // './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
   ],
   suites: {
     acceptance: [
