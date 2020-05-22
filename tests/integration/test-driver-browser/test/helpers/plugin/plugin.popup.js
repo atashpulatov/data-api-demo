@@ -1369,45 +1369,46 @@ class PluginPopup {
   * @param {number} [index=1] number of prompt
   * @memberof PluginPopup
  */
-  answerPrompt(type, value, index = 1, required = false) {
+  answerPrompt(type, value, index = 1) {
     // eslint-disable-next-line default-case
     switch (type) {
       case 'Year':
         logStep(`Answear prompt ${index} and set ${value}...`);
-        this.selectPromptOnPanel(index, required);
+        this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getYearPrompt(index)).doubleClick();
-        browser.keys('\uE00C');
         $(popupSelectors.prompts.getYearPrompt(index)).keys(value);
-        browser.keys('\uE00C');
+        browser.keys('\uE004');
+        browser.pause(1000);
+        break;
+      case 'Value':
+        logStep(`Answear prompt ${index} and set ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getValuePrompt(index)).doubleClick();
+        $(popupSelectors.prompts.getValuePrompt(index)).keys(value);
+        browser.keys('\uE004');
         browser.pause(1000);
         break;
       case 'Object':
         logStep(`Answear prompt ${index} and select ${value}...`);
-        this.selectPromptOnPanel(index, required);
+        this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getObjectsPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
+        browser.keys('\uE004');
         browser.pause(1000);
         break;
       case 'Category':
         logStep(`Answear prompt ${index} and select ${value}...`);
-        this.selectPromptOnPanel(index, required);
+        this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).click();
         $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).doubleClick();
-        browser.pause(1000);
-        break;
-      case 'Date&Time':
-        logStep(`Answear prompt ${index} and set ${value}...`);
-        this.selectPromptOnPanel(index, required);
-        $(popupSelectors.prompts.getDateTimePrompt(index)).click();
-        browser.keys('\uE00C');
-        $(popupSelectors.prompts.getDateTimePrompt(index)).keys(value);
-        browser.keys('\uE00C');
+        browser.keys('\uE004');
         browser.pause(1000);
         break;
       case 'Attribute elements':
         logStep(`Answear prompt ${index} and select ${value}...`);
-        this.selectPromptOnPanel(index, required);
+        this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
+        browser.keys('\uE004');
         browser.pause(1000);
     }
   }
@@ -1418,14 +1419,10 @@ class PluginPopup {
  * @param {number} index of prompt
  * @memberof PluginPopup
  */
-  selectPromptOnPanel(index, required) {
-    if (required === true) {
-      $(popupSelectors.promptPanelRequired).$(`.mstrPromptTOCListItemIndex=${index}`).click();
-      browser.pause(2000);
-    } else {
-      $(popupSelectors.promptPanelNotRequired).$(`.mstrPromptTOCListItemIndex=${index}`).click();
-      browser.pause(2000);
-    }
+  selectPromptOnPanel(index) {
+    $(popupSelectors.getpromptPanel(index)).$(`.mstrPromptTOCListItemIndex=${index}`).click();
+    expect($(popupSelectors.getpromptPanel(index)).$(`.mstrPromptTOCListItemIndex=${index}`).isSelected())
+    browser.pause(2000);
   }
 
   /**
