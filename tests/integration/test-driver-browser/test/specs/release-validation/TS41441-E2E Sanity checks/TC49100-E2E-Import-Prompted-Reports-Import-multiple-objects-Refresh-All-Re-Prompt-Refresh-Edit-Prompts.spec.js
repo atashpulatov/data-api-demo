@@ -6,9 +6,8 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
-import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
-describe('IMPORT diferent types of vizualizations', () => {
+describe('TS41441 - Sanity checks', () => {
   beforeAll(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -41,7 +40,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     switchToPluginFrame();
     PluginPopup.clickImport();
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(1000);
 
     // Import second prompted report
@@ -52,23 +51,23 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.promptSelectObject('Electronics');
     PluginPopup.clickRun();
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(2000);
     switchToPluginFrame();
 
     // Refresh second prompted report
-    pluginRightPanel.clickObjectInRightPanel(1);
+    PluginRightPanel.clickObjectInRightPanel(1);
     browser.pause(2000);
     $(rightPanelSelectors.getRefreshBtnForObject(1)).moveTo();
     browser.pause(2000);
     PluginRightPanel.refreshObject(1);
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(2000);
     switchToPluginFrame();
 
     // Edit first prompted report
-    pluginRightPanel.clickObjectInRightPanel(2);
+    PluginRightPanel.clickObjectInRightPanel(2);
     $(rightPanelSelectors.getEdithBtnForObject(2)).moveTo();
     browser.pause(2000);
     PluginRightPanel.editObject(2);
@@ -83,7 +82,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     switchToPluginFrame();
     PluginPopup.clickImport();
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(1000);
 
     // Import third prompted report
@@ -94,7 +93,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     browser.pause(5000);
     PluginPopup.clickRun();
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(2000);
 
     // Edit third imported report
@@ -111,7 +110,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     switchToPluginFrame();
     PluginPopup.clickImport();
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(2000);
 
     // import dataset
@@ -125,29 +124,29 @@ describe('IMPORT diferent types of vizualizations', () => {
     // Refresh all
     PluginRightPanel.refreshAll();
     waitForNotification();
-    pluginRightPanel.closeAllNotificationsOnHover();
+    PluginRightPanel.closeAllNotificationsOnHover();
     browser.pause(3000);
 
     // Remove first imported prompted report
     switchToPluginFrame();
-    pluginRightPanel.clickObjectInRightPanel(4);
+    PluginRightPanel.clickObjectInRightPanel(4);
     browser.pause(2000);
     $(rightPanelSelectors.getRemoveBtnForObject(4)).moveTo();
     browser.pause(2000);
     PluginRightPanel.removeObject(4);
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
 
     // Remove imported dataset
     switchToPluginFrame();
-    pluginRightPanel.clickObjectInRightPanel(1);
+    PluginRightPanel.clickObjectInRightPanel(1);
     browser.pause(2000);
     $(rightPanelSelectors.getRemoveBtnForObject(1)).moveTo();
     browser.pause(2000);
     PluginRightPanel.removeObject(1);
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
 
     // Log out

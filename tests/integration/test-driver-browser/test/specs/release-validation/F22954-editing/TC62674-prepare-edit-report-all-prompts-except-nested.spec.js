@@ -12,7 +12,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { logStep } from '../../../helpers/utils/allure-helper';
 
-describe('[F22954] - Ability to edit data already imported to the workbook', () => {
+describe('F22954 - Ability to edit data already imported to the workbook', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -23,7 +23,6 @@ describe('[F22954] - Ability to edit data already imported to the workbook', () 
   });
 
   it('[TC62674]  Editing prompted reports functionality, for all type of prompts (value, object, expression, etc) imported with Prepare Data', () => {
-
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.preparePrompt(objectsList.reports.allPrompt);

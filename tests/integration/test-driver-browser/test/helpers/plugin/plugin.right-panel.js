@@ -158,6 +158,7 @@ class PluginRightPanel {
     logStep(`Clicking "edit" button in duplicate popup...    [${fileName} - clickDuplicatePopupEditBtn()]`);
     switchToPluginFrame();
     const duplicatePopupEditBtn = $(rightPanelSelectors.duplicatePopupEditBtn);
+    duplicatePopupEditBtn.waitForClickable({ timeout: 10000 });
     duplicatePopupEditBtn.moveTo();
     browser.pause(1000);
     waitAndClick(duplicatePopupEditBtn);

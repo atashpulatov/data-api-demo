@@ -10,9 +10,8 @@ import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import officeLogin from '../../../helpers/office/office.login';
-import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
-describe('TC48976 - perform-basic-functionalities', () => {
+describe('TS41441 - Sanity checks', () => {
   beforeAll(() => {
     const acceptBtn = '#accept-cookies-btn';
 
@@ -71,7 +70,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     PluginPopup.searchForElements('Item Type');
     PluginPopup.searchForElements('Invalid metric');
 
-    pluginPopup.clearElementSearchWithBackspace();
+    PluginPopup.clearElementSearchWithBackspace();
 
     // sort for Attributes
     const attributeContainer = $(popupSelectors.attributesContainer);
@@ -111,7 +110,8 @@ describe('TC48976 - perform-basic-functionalities', () => {
     expect(filterContainer.$$('li')[0].getText()).toEqual('Country');
     // All filters Descending sort
     waitAndClick(sortFiltersSelector);
-    expect(filterContainer.$$('li')[0].getText()).toEqual('Sales Channel');
+    const filterTitlesList = $$(popupSelectors.filterTitles);
+    expect(filterTitlesList[0].getAttribute('textContent')).toEqual(`Sales Channel`);
     // Back to default sort
     waitAndClick(sortFiltersSelector);
 
@@ -163,7 +163,7 @@ describe('TC48976 - perform-basic-functionalities', () => {
     // Assertion after "Region" filter addition
     switchToExcelFrame();
     OfficeWorksheet.selectCell('P3');
-    expect($(P3).getText()).toEqual('868214595');
+    expect($(P3).getText()).toEqual('Europe');
     browser.pause(1000);
 
     // Rename the report

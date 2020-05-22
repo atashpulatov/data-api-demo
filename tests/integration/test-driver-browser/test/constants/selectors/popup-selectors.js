@@ -1,5 +1,3 @@
-// import {$$} from 'protractor';
-
 export const popupSelectors = {
   // TODO group selectors based on location
   tableOfObjects: '#WACDialogPanel',
@@ -42,6 +40,7 @@ export const popupSelectors = {
   firstClosedAttributeFormSwitcher: 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div.attribute-forms > ul > li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > span.ant-tree-switcher',
   attributesContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div > ul',
   metricsContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div',
+  filterTitles: '.filter-title',
   filtersContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(1) > div.filter-list.ant-list > div > div > ul',
   sortAttributes: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.selector-title > div',
   sortMetrics: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.selector-title > div',
@@ -93,10 +92,10 @@ export const popupSelectors = {
   visualizationSelector: '.mstrmojo-VizBox-selector',
   refreshButton: '.refresh-button',
   prepareData: { getAttributeAt: (index) => `#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
-  smartFolderTable:
-  { availableObjectNumber: '#popup-wrapper> div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
+  smartFolderTable: { availableObjectNumber: '#popup-wrapper> div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
   },
   dossierWindow: {
+    getVizAT: (index) => `.mstrmojo-DocSubPanel-content > div > div:nth-child(${index})`,
     visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
     filterCount: '.mstrd-FilterSummaryBar-filterCount',
     buttonToC: 'li.mstrd-NavItemWrapper.mstrd-ToCNavItemContainer.mstr-navbar-item > div > div',

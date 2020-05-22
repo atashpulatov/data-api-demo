@@ -7,7 +7,7 @@ import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { switchToPromptFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('F24398 - import and refresh visualization', () => {
+describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

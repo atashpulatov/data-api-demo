@@ -26,7 +26,7 @@ function changeFontNameInCell(fontName, cell) {
   pressEnter();
 }
 
-describe('TS41441 - E2E Sanity checks', () => {
+describe('TS41441 - Sanity checks', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
