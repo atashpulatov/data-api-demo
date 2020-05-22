@@ -59,5 +59,6 @@ module.exports = async function getDuration(testSetId) {
     return duration / 3600;
   } catch (e) {
     console.log(e);
+    process.exit(1);
   }
 };
