@@ -13,8 +13,8 @@ const today = new Date();
 
 module.exports = async function createBatchArray(testCaseArray) {
   const batch = [];
-  for (let i = 0; i < testCaseArray.length; i++) {
-    try {
+  try {
+    for (let i = 0; i < testCaseArray.length; i++) {
       const {
         duration, browser, verdict, build, release, testCaseId, OS
       } = testCaseArray[i];
@@ -50,10 +50,10 @@ module.exports = async function createBatchArray(testCaseArray) {
         }
       };
       batch.push(batchItem);
-    } catch (error) {
-      console.error(error);
-      process.exit(1);
     }
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
   }
   return { Batch: batch };
 };
