@@ -112,7 +112,6 @@ function getRelease() {
 
 /**
 * Returns OS on which the Test Case was executed
-* If
 *
 * @returns {String} OS on which the Test Case was executed
 */
