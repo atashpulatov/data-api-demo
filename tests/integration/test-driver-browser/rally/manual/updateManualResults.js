@@ -42,8 +42,8 @@ async function updateRallyTCResult() {
 
 updateRallyTCResult()
   .then((result) => {
-    const { Errors } = result.BatchResult;
-    if (Errors.length > 0) { throw new Error(Errors); }
+    const { Errors: errors } = result.BatchResult;
+    if (errors.length > 0) { throw new Error(errors); }
     console.log('Rally request completed');
     process.exit(0);
   })
