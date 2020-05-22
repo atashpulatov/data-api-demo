@@ -4,6 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
 describe('F25931 - Duplicate object', () => {
   beforeEach(() => {
@@ -15,11 +16,12 @@ describe('F25931 - Duplicate object', () => {
   });
 
   it('[TC64626] - Duplicate all types of objects', () => {
-    console.log('Import Report - Seasonal Report');
+    console.log('Import Report- Secure Data always working');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    PluginPopup.importObject(objectsList.reports.seasonalReport);
+    browser.pause(3000);
+    PluginPopup.importObject(objectsList.reports.secureDataAlwaysWorking);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     console.log('Import Dataset - Sales Records 1k - to new worksheet');
@@ -33,8 +35,9 @@ describe('F25931 - Duplicate object', () => {
     OfficeWorksheet.openNewSheet();
     PluginRightPanel.clickAddDataButton();
     const dossierObject = objectsList.dossiers.complexDossier;
+    const { bubbleChart } = dossierObject.visualizations;
     PluginPopup.openDossier(dossierObject.name, null, false);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.bubbleChart);
+    PluginPopup.selectAndImportVizualiation(bubbleChart);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     console.log('Save initial number of worksheets');
@@ -52,7 +55,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.clickDuplicatePopupImportBtn();
     console.log('Check duplicated Seasonal Report');
     PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
-    expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.seasonalReport} Copy`);
+    expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.secureDataAlwaysWorking} Copy`);
 
     console.log('Go to 2 excel worksheet');
     OfficeWorksheet.openSheet(2);

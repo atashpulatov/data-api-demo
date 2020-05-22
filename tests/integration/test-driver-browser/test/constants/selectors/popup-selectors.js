@@ -1,5 +1,3 @@
-// import {$$} from 'protractor';
-
 export const popupSelectors = {
   // TODO group selectors based on location
   tableOfObjects: '#WACDialogPanel',
@@ -94,10 +92,10 @@ export const popupSelectors = {
   visualizationSelector: '.mstrmojo-VizBox-selector',
   refreshButton: '.refresh-button',
   prepareData: { getAttributeAt: (index) => `#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
-  smartFolderTable:
-  { availableObjectNumber: '#popup-wrapper> div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
+  smartFolderTable: { availableObjectNumber: '#popup-wrapper> div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
   },
   dossierWindow: {
+    getVizAT: (index) => `.mstrmojo-DocSubPanel-content > div > div:nth-child(${index})`,
     visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
     filterCount: '.mstrd-FilterSummaryBar-filterCount',
     buttonToC: 'li.mstrd-NavItemWrapper.mstrd-ToCNavItemContainer.mstr-navbar-item > div > div',

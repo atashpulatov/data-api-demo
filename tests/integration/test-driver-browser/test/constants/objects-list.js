@@ -1,3 +1,5 @@
+import { popupSelectors } from './selectors/popup-selectors';
+
 export const objectsList = {
   reports: {
     reportWithLongName: 'Report with very long name - This is a very long text to know what happens when plugging is dealing with files with such a long name it is important to see if it will add three dots at the end or if it is going to display the whole text',
@@ -156,7 +158,7 @@ export const objectsList = {
         barChart: '#mstr271',
         lineChart: '#mstr444',
         areaChart: '#mstr421',
-        bubbleChart: '#mstr490',
+        bubbleChart: popupSelectors.dossierWindow.getVizAT(16),
         pieChart: '#mstr310',
         comboChart: '#mstr557',
         geospatialService: '#mstr338',

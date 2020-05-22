@@ -163,7 +163,7 @@ describe('TS41441 - Sanity checks', () => {
     // Assertion after "Region" filter addition
     switchToExcelFrame();
     OfficeWorksheet.selectCell('P3');
-    expect($(P3).getText()).toEqual('868214595');
+    expect($(P3).getText()).toEqual('Europe');
     browser.pause(1000);
 
     // Rename the report
