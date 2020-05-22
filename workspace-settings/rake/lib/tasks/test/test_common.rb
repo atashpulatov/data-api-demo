@@ -37,7 +37,7 @@ task :browser_e2e_push_results,[:build_no] do | t, args|
       test_os = "win19"
     end
     info "publish e2e test result to Rally"
-    shell_command! "npm run rally pass #{build_no} #{test_os}" , cwd: test_dir
+    shell_command! "npm run rally verdict=pass build=#{build_no} os=#{test_os}" , cwd: test_dir
   else
     info "no build number specified, no test result will be published"
   end
