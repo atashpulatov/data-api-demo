@@ -3,59 +3,73 @@ import { parse } from '@babel/core';
 const settings = {
   officeOnline: {
     url: 'https://www.office.com/launch/excel?auth=2',
-    en: {
+    //English United States - default
+    'en-us': {
       username: 'test3@mstrtesting.onmicrosoft.com',
       password: 'FordFocus2019',
     },
-    sp: {
+    //Spanish Spain
+    'es-es': {
       username: 'testes@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    fr: {
+    //French France
+    'fr-fr': {
       username: 'testfr@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    it: {
+    //Italian Italy
+    'it-it': {
       username: 'testit@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    cn: {
+    //Chinese Simplified
+    'zn-cn': {
       username: 'testcn@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    cn2: {
+    //Chinese Traditional
+    'zn-tw': {
       username: 'testcn2@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    de: {
+    //German Germany
+    'de-de': {
       username: 'testde@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    nl: {
+    //Dutch Nederlands
+    'nl-nl': {
       username: 'testnl@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    dk: {
+    //Danish Denmark
+    'da-dk': {
       username: 'testdk@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    se: {
+    //Swedish Sweden
+    'sv-se': {
       username: 'testse@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    pt: {
+    //Portugese Brazil
+    'pt-br': {
       username: 'testpt@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    jp: {
+    //Japanese Japan
+    'ja-jp': {
       username: 'testjp@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    kr: {
+    //Korean Korea
+    'ko-kr': {
       username: 'testkr@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    pl: {
+    //Polish Poland
+    'pl-pl': {
       username: 'testpl@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
@@ -79,7 +93,7 @@ function parseArgs() {
   const { argv } = process;
   const args = { // passing default values when user doesn't provide
     env: '127.0.0.1',
-    lang: 'en',
+    lang: 'en-us',
   };
   argv.forEach(argument => {
     if (argument.includes('=')) {
