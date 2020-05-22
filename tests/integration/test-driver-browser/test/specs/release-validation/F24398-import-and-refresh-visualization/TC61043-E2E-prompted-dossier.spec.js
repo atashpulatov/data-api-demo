@@ -6,7 +6,9 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { switchToPromptFrameForImportDossier, switchToPromptFrame, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import {
+  switchToPromptFrameForImportDossier, switchToPromptFrame, switchToDialogFrame, changeBrowserTab
+} from '../../../helpers/utils/iframe-helper';
 
 
 describe('F24398 - Import and refresh visualization', () => {

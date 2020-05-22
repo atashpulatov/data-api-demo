@@ -4,7 +4,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
 
-describe('F25946 - Details Panel', () => {
+describe('F25946 - Object Details Panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

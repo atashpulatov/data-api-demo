@@ -54,6 +54,6 @@ export const rightPanelSelectors = {
   duplicatePopupActiveCellOption: '#overlay > div.side-panel > div.object-tile-container > div.overlay-container > div.duplicate-popup > div.duplicate-popup-body > div.duplicate-popup-body-options > label:nth-child(1)',
   duplicatePopupNewSheetOption: '#overlay > div.side-panel > div.object-tile-container > div.overlay-container > div.duplicate-popup > div.duplicate-popup-body > div.duplicate-popup-body-options > label:nth-child(2)',
   duplicatePopupImportBtn: '#overlay > div.side-panel > div.object-tile-container > div.overlay-container > div.duplicate-popup > div.duplicate-popup-footer > div > button:nth-child(1)',
-  duplicatePopupEditBtn: '#overlay > div.side-panel > div.object-tile-container > div.overlay-container > div.duplicate-popup > div.duplicate-popup-footer > div > button:nth-child(3)',
+  duplicatePopupEditBtn: '#overlay > div > div.object-tile-container > div.overlay-container > div > div.duplicate-popup-footer > div > button:nth-child(2)',
   importedData: '.imported-data',
 };

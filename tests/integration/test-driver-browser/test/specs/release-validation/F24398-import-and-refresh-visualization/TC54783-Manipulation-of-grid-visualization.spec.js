@@ -5,7 +5,6 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
-import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
@@ -38,7 +37,7 @@ describe('F24398 - Import and refresh visualization', () => {
     expect($(categoryText).getText()).toEqual('Books');
     PluginPopup.selectAndImportVisualization(dossierObject.visualizations.visualization1.name);
     waitForNotification();
-    pluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.closeNotificationOnHover();
     browser.pause(5000);
   });
 });

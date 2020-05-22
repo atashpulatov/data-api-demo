@@ -9,7 +9,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { switchToExcelFrame, switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
-describe('Selecting highlights data - ', () => {
+describe('F21411 - Selecting an object in the side panel highlights the data in the workbook', () => {
   beforeEach(() => {
     officeLogin.openExcelAndLoginToPlugin();
   });

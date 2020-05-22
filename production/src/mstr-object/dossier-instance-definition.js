@@ -92,12 +92,16 @@ class DossierInstanceDefinition {
    */
   getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
     try {
-      return await mstrObjectRestService.getVisualizationInfo(
+      const visualizationInfo = await mstrObjectRestService.getVisualizationInfo(
         projectId,
         objectId,
         visualizationKey,
         instanceId
       );
+      if (visualizationInfo) {
+        return visualizationInfo;
+      }
+      throw new Error(DOSSIER_HAS_CHANGED);
     } catch (error) {
       if (errorService.getErrorMessage(error) === DOSSIER_HAS_CHANGED) {
         throw new Error(DOSSIER_HAS_CHANGED);

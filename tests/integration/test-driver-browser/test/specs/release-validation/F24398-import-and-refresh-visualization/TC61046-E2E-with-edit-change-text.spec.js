@@ -6,7 +6,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
-describe('IMPORT diferent types of vizualizations', () => {
+describe('F24398 - Import and refresh visualization', () => {
   beforeAll(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

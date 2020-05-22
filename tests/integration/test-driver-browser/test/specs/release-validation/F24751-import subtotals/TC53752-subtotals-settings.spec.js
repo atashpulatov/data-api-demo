@@ -7,7 +7,7 @@ import { waitForNotification, waitForAllNotifications } from '../../../helpers/u
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('[F24751] Subtotals settings', () => {
+describe('F24751 - Import report with or without subtotals', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

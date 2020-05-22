@@ -8,8 +8,9 @@ import { changeBrowserTab, switchToPromptFrame, switchToDialogFrame } from '../.
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
-describe('F21402 - Handle Prompted Object', () => {
+describe('F21402 - Support for prompted reports while importing data for Excel add-in', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -25,68 +26,65 @@ describe('F21402 - Handle Prompted Object', () => {
     PluginPopup.preparePrompt(objectsList.reports.allPrompt);
 
     // should select answers for 11 prompts
-    console.log('Prompt is opened');
+    logStep(`Prompt window is opened`);
     switchToPromptFrame();
     browser.pause(1111);
+
+    logStep(`Prompt 1 "Choose objects from the list" - selecting ALL Objects...`);
     $(popupSelectors.promptedAll.prompt1).click();
-    console.log('Prompt 1 selected');
-    
     browser.pause(1111);
+    logStep(`Prompt 1 - finished selecting answer`);
+
+    logStep(`Prompt 3 "Choose elements of Category" - selecting ALL Categories...`);
     $(popupSelectors.promptedAll.prompt2).click();
-    console.log('Prompt 2 selected');
-
     browser.pause(1111);
+    logStep(`Prompt 3 - finished selecting answer`);
+
+    logStep(`Prompt 4 "Qualify on Year.(2014, 2015 or 2016)" - selecting year 2016...`);
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt8, '2016');
-    console.log('Prompt 3 selected');
-
     browser.pause(1111);
+    logStep(`Prompt 4 - finished selecting answer`);
+
+    logStep(`Prompt 6 "Qualify on Revenue" - selecting Revenue greateer than 2000...`);
     $(popupSelectors.promptPanel(5)).click();
     browser.pause(2222);
-    $(popupSelectors.promptedAll.prompt4).keys('\uE004\uE004\uE004\uE004\uE004\uE004\uE004\uE006');
-    console.log('Prompt 4 selected');
-
+    $(popupSelectors.promptedAll.prompt4a).keys('\uE004\uE004\uE004\uE004\uE004\uE004\uE004\uE006');
     browser.pause(1111);
     $(popupSelectors.promptedAll.prompt9).click();
-    console.log('Prompt 5 selected');
-
     browser.pause(1111);
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt3, '2000');
-    console.log('Prompt 6 selected');
-
     browser.pause(1111);
-    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt4, '1820');
-    $(popupSelectors.promptPanel(8)).click();
-    console.log('Prompt 7 selected');
+    logStep(`Prompt 6 - finished selecting answer`);
 
+    logStep(`Prompt 7 "Enter a value (Big Decimal)" - selecting the Bid Decimal value 1820...`);
+    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt4, '1820');
+    browser.pause(1111);
+    logStep(`Prompt 7 - finished selecting answer`);
+
+    logStep(`Prompt 8 "Enter a value (Date)" - selecting the date "11/06/2016"...`);
+    $(popupSelectors.promptPanel(8)).click();
     browser.pause(2111);
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt5, '11/06/2016');
-    $(popupSelectors.promptPanel(9)).click();
-    console.log('Prompt 8 selected');
+    browser.pause(1111);
+    logStep(`Prompt 8 - finished selecting answer`);
 
+    logStep(`Prompt 9 "Enter a value (Number) for the year you want to select" - selecting the year 2016...`);
+    $(popupSelectors.promptPanel(9)).click();
     browser.pause(2111);
     $(popupSelectors.promptedAll.prompt6).clearValue();
     PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt6, '2016');
-    $(popupSelectors.promptPanel(10)).click();
-    console.log('Prompt 9 selected');
-
-    browser.pause(1111);
-    $(popupSelectors.promptPanel(10)).click();
-    $(popupSelectors.promptPanel(11)).click();
-    console.log('Prompt 10 selected');
-
-    browser.pause(1111);
-    $(popupSelectors.promptedAll.prompt7).click();
-    console.log('Prompt 11 selected and all prompts are selected correctly');
+    logStep(`Prompt 9 - finished selecting answer`);
 
     // should click run and select attributes metrics filters
     switchToDialogFrame();
-    console.log('Prepare data popup is opened');
     PluginPopup.clickRun();
+    logStep(`+ Preparing Data...`);
+    $(popupSelectors.allAttributes).waitForEnabled(20000);
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
-    PluginPopup.clickImport();
-    console.log('Attributes metrics and filters are selected');
+    logStep(`All attributes and metrics were selected`);
 
+    PluginPopup.clickImport();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });
