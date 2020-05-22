@@ -62,7 +62,6 @@ const settings = {
   },
   args: parseArgs(),
   env: {
-    // hostname: getEnvironment(),
     username: 'a',
     password: '',
     chineseSimplifiedUser: 'User_SChinese',
@@ -77,7 +76,7 @@ const settings = {
  */
 function parseArgs() {
   const { argv } = process;
-  const args = { // passing default values when user doesn't provide
+  const args = { // passing default values when user doesn't provide them
     env: '127.0.0.1',
     lang: 'en',
   };
