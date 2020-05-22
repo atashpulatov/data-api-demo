@@ -1,5 +1,3 @@
-import { parse } from '@babel/core';
-
 const settings = {
   officeOnline: {
     url: 'https://www.office.com/launch/excel?auth=2',
@@ -71,7 +69,7 @@ const settings = {
 
 /**
  * Parses arguments passed to terminal
- * syntax of passing arguments: argument="value"
+ * Syntax of passing arguments - argument="value"
  * @return {Object} arguments
  */
 function parseArgs() {
