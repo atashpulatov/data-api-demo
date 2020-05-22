@@ -1,72 +1,72 @@
 const settings = {
   officeOnline: {
     url: 'https://www.office.com/launch/excel?auth=2',
-    //English United States - default
+    // English United States - default
     'en-us': {
       username: 'test3@mstrtesting.onmicrosoft.com',
       password: 'FordFocus2019',
     },
-    //Spanish Spain
+    // Spanish Spain
     'es-es': {
       username: 'testes@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //French France
+    // French France
     'fr-fr': {
       username: 'testfr@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Italian Italy
+    // Italian Italy
     'it-it': {
       username: 'testit@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Chinese Simplified
+    // Chinese Simplified
     'zn-cn': {
       username: 'testcn@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Chinese Traditional
+    // Chinese Traditional
     'zn-tw': {
       username: 'testcn2@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //German Germany
+    // German Germany
     'de-de': {
       username: 'testde@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Dutch Nederlands
+    // Dutch Nederlands
     'nl-nl': {
       username: 'testnl@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Danish Denmark
+    // Danish Denmark
     'da-dk': {
       username: 'testdk@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Swedish Sweden
+    // Swedish Sweden
     'sv-se': {
       username: 'testse@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Portugese Brazil
+    // Portugese Brazil
     'pt-br': {
       username: 'testpt@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Japanese Japan
+    // Japanese Japan
     'ja-jp': {
       username: 'testjp@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Korean Korea
+    // Korean Korea
     'ko-kr': {
       username: 'testkr@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
     },
-    //Polish Poland
+    // Polish Poland
     'pl-pl': {
       username: 'testpl@mstrtesting.onmicrosoft.com',
       password: 'Testing1212'
@@ -95,7 +95,7 @@ function parseArgs() {
   argv.forEach(argument => {
     if (argument.includes('=')) {
       const [key, value] = argument.split('=');
-      args[key] = value.substring(0, value.length);
+      args[key] = value.substring(0, value.length).toLowerCase();
     }
   });
   return args;
