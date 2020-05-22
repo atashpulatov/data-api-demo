@@ -1,16 +1,16 @@
 module.exports = {
   apiUrl: 'https://rally1.rallydev.com/slm/webservice/v2.0',
   rallyApiKey: process.env.RALLY_API_KEY,
-  email: 'jkowalczyk@microstrategy.com',
+  email: '',
   manual: {
-    passedTestCases: ['TC54263'],
+    passedTestCases: [],
     failedTestCases: [],
     testSet: '',
-    release: '11.2.x',
-    build: '1',
+    release: '',
+    build: '',
     duration: '',
     OS: '',
-    language: '',
+    language: 'English',
     exportApp: '',
     env: '',
     notes: '',
@@ -23,7 +23,7 @@ module.exports = {
     exportApp: '',
     OS: '',
     language: 'English',
-    build: '1',
+    build: '',
     release: '11.2.2 [2020-Jun-05]'
   }
 };
