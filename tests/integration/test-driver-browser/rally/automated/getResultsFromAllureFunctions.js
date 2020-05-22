@@ -151,7 +151,6 @@ function getReportData() {
       allureDataArray.push(allure);
     }
   }
-  console.log(allureDataArray);
   return allureDataArray;
 }
 
