@@ -39,12 +39,12 @@ Build, release, and OS can also be specified from cmd as mentioned later.
 You can specify the Test Set only for RELEASE VALIDATION.
 
 3) To upload the parsed results use: 'npm run rally' command from test-driver-browser folder with the following options:
-  a) verdict: 'npm run rally' command by default uploads passed results. Add 'fail' parameter to upload failed results or 'all' to upload all the results. 
-    e.g. npm run rally fail 
-    e.g. npm run rally all 
-    e.g. npm run rally pass = npm run rally
-  b) build, OS and release: you can specify the build, OS and release IN THIS PARTICULAR ORDER after all/fail/pass parameter: 
-    e.g. npm run rally pass 11.2.0100.22939 mac14 11.2.x
+  a) verdict: 'npm run rally' command by default uploads passed results. Add 'verdict=fail' parameter to upload failed results or 'verdict=all' to upload all the results. 
+    e.g. npm run rally verdict=fail 
+    e.g. npm run rally verdict=all 
+    e.g. npm run rally = (npm run rally verdict=pass)
+  b) build, OS and release: you can specify the build, OS and release with this options: 
+    e.g. npm run rally verdict=pass build=11.2.0100.22939 os=mac14 release=11.2.x
     For OS you have following options:
     mac13 for 'Mac OS 10.13 High Sierra',
     mac14 for 'Mac OS 10.14 Mojave',

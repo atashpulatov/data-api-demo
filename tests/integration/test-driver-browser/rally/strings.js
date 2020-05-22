@@ -14,6 +14,10 @@ module.exports = {
     msWin19: 'Microsoft Windows Server 2019',
   },
   batchURL: 'https://rally1.rallydev.com/slm/webservice/v2.0/batch',
-
-
+  cmdArguments: {
+    os: 'os',
+    build: 'build',
+    release: 'release',
+    verdict: 'verdict'
+  }
 };
