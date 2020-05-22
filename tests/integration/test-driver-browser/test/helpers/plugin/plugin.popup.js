@@ -1358,6 +1358,77 @@ class PluginPopup {
   }
 
   /**
+ * Answer Prompts for ptompts type:
+ *  Year - value prompt with value of the year, eg answerPrompt('Year', '2016', 1)
+ *  Object - selecting single object to add/remove form selection, eg answerPrompt('Object', 'Books', 1)
+ *  Category - this prompt is having search box and table for selection, here we are selecting
+ *
+ *  //TODO - rest of the prompts type and ipadete Object and Category to have ability to select more items
+  * @param {String} type one of type: Year, Object, Category, Date&Time, Attribute elements,
+  * @param {String} value input for the prompt
+  * @param {number} [index=1] number of prompt
+  * @memberof PluginPopup
+ */
+  answerPrompt(type, value, index = 1, required = false) {
+    // eslint-disable-next-line default-case
+    switch (type) {
+      case 'Year':
+        logStep(`Answear prompt ${index} and set ${value}...`);
+        this.selectPromptOnPanel(index, required);
+        $(popupSelectors.prompts.getYearPrompt(index)).doubleClick();
+        browser.keys('\uE00C');
+        $(popupSelectors.prompts.getYearPrompt(index)).keys(value);
+        browser.keys('\uE00C');
+        browser.pause(1000);
+        break;
+      case 'Object':
+        logStep(`Answear prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index, required);
+        $(popupSelectors.prompts.getObjectsPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
+        browser.pause(1000);
+        break;
+      case 'Category':
+        logStep(`Answear prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index, required);
+        $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).click();
+        $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).doubleClick();
+        browser.pause(1000);
+        break;
+      case 'Date&Time':
+        logStep(`Answear prompt ${index} and set ${value}...`);
+        this.selectPromptOnPanel(index, required);
+        $(popupSelectors.prompts.getDateTimePrompt(index)).click();
+        browser.keys('\uE00C');
+        $(popupSelectors.prompts.getDateTimePrompt(index)).keys(value);
+        browser.keys('\uE00C');
+        browser.pause(1000);
+        break;
+      case 'Attribute elements':
+        logStep(`Answear prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index, required);
+        $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
+        $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
+        browser.pause(1000);
+    }
+  }
+
+  /**
+ *
+ *
+ * @param {number} index of prompt
+ * @memberof PluginPopup
+ */
+  selectPromptOnPanel(index, required) {
+    if (required === true) {
+      $(popupSelectors.promptPanelRequired).$(`.mstrPromptTOCListItemIndex=${index}`).click();
+      browser.pause(2000);
+    } else {
+      $(popupSelectors.promptPanelNotRequired).$(`.mstrPromptTOCListItemIndex=${index}`).click();
+      browser.pause(2000);
+    }
+  }
+
+  /**
    * Checks if the given array of strings is sorted ascending
    *
    * @param {Array} data array of strings

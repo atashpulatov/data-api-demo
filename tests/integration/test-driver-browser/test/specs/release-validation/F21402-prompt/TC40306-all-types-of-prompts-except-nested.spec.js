@@ -20,12 +20,12 @@ describe('F21402 - Support for prompted reports while importing data for Excel a
   });
 
   it('[TC40306] Importing prompted reports functionality, for all type of prompts (value, object, expression, etc) with Prepare Data', () => {
-    // should click prepare data on selected report
+    logStep(`+ Prepare data for report ${objectsList.reports.allPrompt}`);
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.preparePrompt(objectsList.reports.allPrompt);
 
-    // should select answers for 11 prompts
+    logStep('+ Answer for 11 prompts');
     logStep(`Prompt window is opened`);
     switchToPromptFrame();
     browser.pause(1111);

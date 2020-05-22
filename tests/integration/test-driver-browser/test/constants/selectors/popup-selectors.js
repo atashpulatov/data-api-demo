@@ -22,7 +22,8 @@ export const popupSelectors = {
   attributeSelector: (index) => `#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div > ul > li:nth-child(${index}) > span.ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-close > span.ant-tree-title > span`,
   filterCheckbox: (category, item) => `.category-list-header[aria-label="${category}"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ${item}."] + span`,
   filterCheckboxState: (category, item) => `.category-list-header[aria-label="${category}"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ${item}."]`,
-  promptPanel: (index) => `#id_mstr71 > table > tbody > tr:nth-child(${index}) > td.mstrPromptTOCListItemTitle`,
+  promptPanelRequired: `.mstrPromptTOC`,
+  promptPanelNotRequired: `.mstrPromptTOC`,
   selectorFilter: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12 > div > div:nth-child(1) > div.selector-title',
   backBtn: '#back',
   dataPreviewBtn: '#data-preview',
@@ -130,6 +131,14 @@ export const popupSelectors = {
     prompt12: '#id_mstr329_txt',
     prompt13: '.mstrBGIcon_tbAdd',
   },
+  prompts: {
+    getYearPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) span .mstrCalendarAndTimePickerCellTextBox`,
+    getObjectsPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index})`,
+    getTableCategoryPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) span .mstrListCartCellTableContainer`,
+    getDateTimePrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrCalendarAndTimePickerCellTextBox`,
+    getAttributeElementListPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrListBlockContents`
+  },
+
   filterPanel: {
     expandButton: '.expand-btn',
     selectAllButton: '.all-panel__buttons button:first-of-type',

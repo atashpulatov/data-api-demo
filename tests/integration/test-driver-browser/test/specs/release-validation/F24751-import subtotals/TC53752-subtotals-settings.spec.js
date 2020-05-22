@@ -2,7 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToPluginFrame, changeBrowserTab, switchToDialogFrame, switchToPromptFrame } from '../../../helpers/utils/iframe-helper';
 import { waitForNotification, waitForAllNotifications } from '../../../helpers/utils/wait-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
@@ -124,6 +124,9 @@ describe('F24751 - Import report with or without subtotals', () => {
     OfficeWorksheet.selectCell('DG1');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openPrepareData(promptedReportWithCrosstabAndSubtotals);
+    switchToPromptFrame();
+    browser.pause(1111);
+    PluginPopup.selectPromptOnPanel(1, false);
     browser.pause(3000);
     PluginPopup.clickRun();
     browser.pause(5000);
