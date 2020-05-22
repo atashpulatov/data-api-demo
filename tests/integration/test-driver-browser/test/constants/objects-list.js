@@ -212,7 +212,7 @@ export const objectsList = {
   },
   AQDT: {
     owner: 'Putney, David',
-    visualization1: '#mstr273',
-    visualization2: '#mstr108',
+    visualization1: popupSelectors.dossierWindow.getVizAT(3),
+    visualization2: popupSelectors.dossierWindow.getVizAT(1),
   },
 };
