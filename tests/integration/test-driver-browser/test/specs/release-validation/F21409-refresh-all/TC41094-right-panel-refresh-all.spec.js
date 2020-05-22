@@ -4,6 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import { objectsList } from '../../../constants/objects-list';
 import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
 describe('F21409 - Add "Refresh All" functionality', () => {
   beforeEach(() => {
@@ -59,8 +60,8 @@ describe('F21409 - Add "Refresh All" functionality', () => {
 
     PluginRightPanel.refreshAll();
 
-    console.log('Should close notifications and assert the "Refresh complete" message');
-    for (let i = 0; i < 10; i++) {
+    logStep(`+ Closing all ${objects.length} notifications and asserting the "Refresh complete" message...`);
+    for (let i = 0; i < objects.length; i++) {
       const { reportRefreshed } = dictionary.en;
       PluginRightPanel.waitAndCloseNotification(reportRefreshed);
     }
