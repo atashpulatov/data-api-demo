@@ -36,6 +36,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
     chosenObjectSubtype,
     body,
     chosenObjectName,
+    filterDetails,
   ) => {
     const { chosenObject: { chosenObjectName: objectName } } = this.props;
     chosenObjectName = chosenObjectName || objectName;
@@ -63,6 +64,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
       isPrompted: !!chosenObject.promptsAnswers,
       subtotalsInfo,
       displayAttrFormNames: displayAttrFormNamesSet,
+      filterDetails,
     };
     popupHelper.officeMessageParent(message);
   };

@@ -169,6 +169,7 @@ class PopupController {
       instanceId: response.instanceId,
       subtotalsInfo: response.subtotalsInfo,
       displayAttrFormNames: response.displayAttrFormNames,
+      filterDetails: response.filterDetails,
     };
     this.reduxStore.dispatch(importRequested(objectData));
   };
