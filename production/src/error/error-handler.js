@@ -13,6 +13,7 @@ import {
   EDIT_OPERATION
 } from '../operation/operation-type-names';
 import { customT } from '../redux-reducer/notification-reducer/notification-title-maps';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -29,9 +30,17 @@ class ErrorService {
     if (error.Code === 5012) {
       this.handleError(error);
     }
+
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage, errorType);
-    this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
+
+    if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
+      operationStepDispatcher.dispayPopupOnSidePanel({
+        objectWorkingId, title: errorMessage, message: details, callback
+      });
+    } else {
+      this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
+    }
   }
 
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {

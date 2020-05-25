@@ -9,7 +9,7 @@ import {
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { toggleSecuredFlag, toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
+import { toggleSecuredFlag, toggleIsClearDataFailedFlag, clearSidePanelPopupData } from '../redux-reducer/office-reducer/office-actions';
 
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
@@ -111,7 +111,7 @@ class SidePanelService {
     setDuplicatedObjectId(objectWorkingId);
     setSidePanelPopup({
       type: popupTypes.DUPLICATE,
-      activeCell: activeCellAddress,
+      activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected) => {
         this.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
         closePopup();
@@ -230,24 +230,26 @@ class SidePanelService {
    * @param {Function} data.setDuplicatedObjectId - Callback to save objectWorkingId in state of RightSidePanel.
    */
   setRangeTakenPopup = ({
-    objectWorkingId, activeCellAddress, setSidePanelPopup, setDuplicatedObjectId
+    objectWorkingId, activeCellAddress, setSidePanelPopup, callback
   }) => {
-    const closePopup = () => {
-      setSidePanelPopup(null);
-      setDuplicatedObjectId(null);
-    };
-    setDuplicatedObjectId(objectWorkingId);
     setSidePanelPopup({
       type: popupTypes.DUPLICATE,
-      activeCell: activeCellAddress,
+      activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected) => {
         this.importInNewRange(objectWorkingId, activeCellAddress, isActiveCellOptionSelected);
-        closePopup();
+        this.reduxStore.dispatch(clearSidePanelPopupData());
+        setSidePanelPopup(null);
       },
       onEdit: () => {
-        closePopup();
+        this.reduxStore.dispatch(clearSidePanelPopupData());
+        callback();
+        setSidePanelPopup(null);
       },
-      onClose: closePopup
+      onClose: () => {
+        this.reduxStore.dispatch(clearSidePanelPopupData());
+        callback();
+        setSidePanelPopup(null);
+      },
     });
   };
 
@@ -299,8 +301,7 @@ class SidePanelService {
   initializeActiveCellChangedListener = async (setActiveCellAddress) => {
     const excelContext = await officeApiHelper.getExcelContext();
     const initialCellAddress = await officeApiHelper.getSelectedCell(excelContext);
-    const initialCellAddressWithDollars = officeApiHelper.getCellAddressWithDollars(initialCellAddress);
-    setActiveCellAddress(initialCellAddressWithDollars);
+    setActiveCellAddress(initialCellAddress);
     await officeApiHelper.addOnSelectionChangedListener(excelContext, setActiveCellAddress);
   };
 

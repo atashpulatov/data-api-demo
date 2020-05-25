@@ -34,6 +34,8 @@ export const officeProperties = new Proxy({
     toggleIsConfirmFlag: 'TOGGLE_IS_CONFIRM_FLAG',
     toggleRenderSettingsFlag: 'TOGGLE_RENDER_SETTINGS_FLAG',
     toggleIsClearDataFailedFlag: 'TOGGLE_IS_CLEAR_DATA_FAILED',
+    setRangeTakenPopup: 'SET_RANGE_TAKEN_POPUP',
+    clearSidePanelPopupData: 'CLEAR_SIDE_PANEL_POUP_DATA',
   },
   displayAttrFormNames: {
     automatic: 'AUTOMATIC',

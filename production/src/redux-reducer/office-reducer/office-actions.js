@@ -42,4 +42,11 @@ export function toggleRenderSettingsFlag() {
   };
 }
 
+export const setRangeTakenPopup = (popupData) => ({
+  type: officeProperties.actions.setRangeTakenPopup,
+  popupData,
+});
+
+export const clearSidePanelPopupData = () => ({ type: officeProperties.actions.setRangeTakenPopup });
+
 export const actions = { toggleSecuredFlag, };

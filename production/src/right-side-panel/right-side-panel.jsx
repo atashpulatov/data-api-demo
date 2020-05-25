@@ -31,6 +31,7 @@ export const RightSidePanelNotConnected = ({
   globalNotification,
   notifications,
   operations,
+  popupData,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
@@ -68,6 +69,13 @@ export const RightSidePanelNotConnected = ({
     // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCellAddress]);
+
+  React.useEffect(() => {
+    if (popupData) {
+      sidePanelService.setRangeTakenPopup({ ...popupData, setSidePanelPopup, activeCellAddress });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCellAddress, popupData]);
 
   const handleSettingsClick = () => {
     officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
@@ -144,7 +152,7 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const {
-    isConfirm, isSettings, isSecured, isClearDataFailed
+    isConfirm, isSettings, isSecured, isClearDataFailed, popupData,
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -156,7 +164,8 @@ export const mapStateToProps = (state) => {
     globalNotification,
     notifications,
     isSecured,
-    isClearDataFailed
+    isClearDataFailed,
+    popupData
   };
 };
 
