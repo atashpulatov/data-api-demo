@@ -1150,7 +1150,6 @@ GEM
       systemu (~> 2.6.4)
       wmi-lite (~> 1.0)
     option_initializer (1.5.1)
-    passwordmasker (1.2.0)
     plist (3.5.0)
     proxifier (1.0.3)
     pry (0.12.2)
@@ -1302,16 +1301,11 @@ GEM
       iniparse (~> 1.4, >= 1.4.2)
     vagrant-triggers (0.5.3)
       bundler (~> 1.3)
-    vagrant-vrealize (1.1.0)
-      vmware-vra (~> 2.0)
     vagrant-winrm (0.7.0)
       minitar (~> 0.5)
     varia_model (0.6.0)
       buff-extensions (~> 2.0)
       hashie (>= 2.0.2, < 4.0.0)
-    vmware-vra (2.7.1)
-      ffi-yajl (~> 2.2)
-      passwordmasker (~> 1.2)
     wdm (0.1.1.1)
     win32-api (1.5.3-universal-mingw32)
     win32-dir (0.5.1)
@@ -1373,7 +1367,6 @@ DEPENDENCIES
   elasticsearch
   facets
   fauxhai (= 5.6.0)
-  ffi-yajl (= 2.3.1)
   fog-ovirt (= 0.1.3)
   fog-xenserver (= 0.3.0)
   hashdiff
@@ -1405,7 +1398,6 @@ DEPENDENCIES
   vagrant (= 2.0.1)
   vagrant-aws
   vagrant-triggers (~> 0.5.3)
-  vagrant-vrealize (~> 1.1.0)
   vagrant-winrm
   wdm (= 0.1.1.1)
   win32-api (~> 1.5.3)

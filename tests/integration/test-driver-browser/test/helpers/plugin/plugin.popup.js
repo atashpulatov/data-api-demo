@@ -1359,12 +1359,15 @@ class PluginPopup {
 
   /**
  * Answer Prompts for ptompts type:
- *  Year - value prompt with value of the year, eg answerPrompt('Year', '2016', 1)
+ *  Year - value prompt with value of the year, eg answerPrompt('Year', '2016', 1),
+ *  Value - prompt with text box to answer eg answerPrompt('Value', '1820', 7)
  *  Object - selecting single object to add/remove form selection, eg answerPrompt('Object', 'Books', 1)
- *  Category - this prompt is having search box and table for selection, here we are selecting
+ *  Category - this prompt is having search box and table for selection eg answerPrompt('Category', 'Books', 3)
+ *  Attribute elements - when you are selecting elements from attribute (moving form one side to other)
  *
  *  //TODO - rest of the prompts type and ipadete Object and Category to have ability to select more items
-  * @param {String} type one of type: Year, Object, Category, Date&Time, Attribute elements,
+ * 
+  * @param {String} type one of type: Year, VAlue, Object, Category, Attribute elements
   * @param {String} value input for the prompt
   * @param {number} [index=1] number of prompt
   * @memberof PluginPopup
@@ -1378,7 +1381,6 @@ class PluginPopup {
         $(popupSelectors.prompts.getYearPrompt(index)).doubleClick();
         $(popupSelectors.prompts.getYearPrompt(index)).keys(value);
         browser.keys('\uE004');
-        browser.pause(1000);
         break;
       case 'Value':
         logStep(`Answear prompt ${index} and set ${value}...`);
@@ -1386,14 +1388,12 @@ class PluginPopup {
         $(popupSelectors.prompts.getValuePrompt(index)).doubleClick();
         $(popupSelectors.prompts.getValuePrompt(index)).keys(value);
         browser.keys('\uE004');
-        browser.pause(1000);
         break;
       case 'Object':
         logStep(`Answear prompt ${index} and select ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getObjectsPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
         browser.keys('\uE004');
-        browser.pause(1000);
         break;
       case 'Category':
         logStep(`Answear prompt ${index} and select ${value}...`);
@@ -1401,7 +1401,6 @@ class PluginPopup {
         $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).click();
         $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).doubleClick();
         browser.keys('\uE004');
-        browser.pause(1000);
         break;
       case 'Attribute elements':
         logStep(`Answear prompt ${index} and select ${value}...`);
@@ -1409,7 +1408,6 @@ class PluginPopup {
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
         browser.keys('\uE004');
-        browser.pause(1000);
     }
   }
 
@@ -1421,8 +1419,7 @@ class PluginPopup {
  */
   selectPromptOnPanel(index) {
     $(popupSelectors.getpromptPanel(index)).$(`.mstrPromptTOCListItemIndex=${index}`).click();
-    expect($(popupSelectors.getpromptPanel(index)).$(`.mstrPromptTOCListItemIndex=${index}`).isSelected())
-    browser.pause(2000);
+    browser.pause(1000);
   }
 
   /**
