@@ -24,7 +24,8 @@ describe('F24398 - Import and refresh visualization', () => {
     const { visualizationManipulation, dossierWithPagesAndChapters } = objectsList.dossiers;
     const { name, visualizations } = visualizationManipulation;
     const { name: visualizationManipulationName, getTableItemAt } = visualizations.visualization1;
-    const { name: dossierWithPagesAndChaptersName, defaultGridVisualization, gridVisualizationWithFilters } = dossierWithPagesAndChapters;
+    const { name: dossierWithPagesAndChaptersName, gridVisualization } = dossierWithPagesAndChapters;
+    const { getVizAT } = popupSelectors.dossierWindow;
     const { filterCostInput } = popupSelectors;
     const yearAttribute = getTableItemAt(1, 1);
     const profitMetric = getTableItemAt(1, 3);
@@ -35,7 +36,7 @@ describe('F24398 - Import and refresh visualization', () => {
 
     logStep('+ Import Dossier with vis that can be moved to different pages / chapters');
     PluginPopup.importAnyObject(dossierWithPagesAndChaptersName, 1);
-    PluginPopup.selectVisualization(defaultGridVisualization);
+    PluginPopup.selectVisualization(gridVisualization);
     browser.pause(2000);
     switchToPromptFrame();
     PluginPopup.goToDossierPageOrChapter(4);
@@ -47,7 +48,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.refreshDossier();
     browser.pause(1000);
     PluginPopup.setFilterOnDossier(filterCostInput, 500);
-    PluginPopup.selectVisualization(gridVisualizationWithFilters);
+    PluginPopup.selectVisualization(gridVisualization);
     switchToPluginFrame();
     PluginPopup.clickImport();
     waitForNotification();
@@ -87,7 +88,7 @@ describe('F24398 - Import and refresh visualization', () => {
     // PluginPopup.exportToPDF(visualizationManipulationName);
     // PluginPopup.exportToData(visualizationManipulationName);
 
-    PluginPopup.selectAndImportVisualization(visualizationManipulation.visualizations.visualization1.name);
+    PluginPopup.selectAndImportVisualization(visualizationManipulationName);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     PluginRightPanel.removeObject(1);
