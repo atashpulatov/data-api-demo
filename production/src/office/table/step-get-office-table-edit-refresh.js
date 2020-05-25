@@ -33,7 +33,7 @@ class StepGetOfficeTableEditRefresh {
         objectWorkingId,
       } = objectData;
       const {
-        excelContext, instanceDefinition, oldBindId, objectEditedData
+        excelContext, instanceDefinition, oldBindId, objectEditedData, tableChanged: tmp, startCell: newStartCell
       } = operationData;
       const { mstrTable } = instanceDefinition;
 
@@ -49,7 +49,8 @@ class StepGetOfficeTableEditRefresh {
         previousTableDimensions,
       );
 
-      if (tableChanged) {
+      const lol = tmp || tableChanged;
+      if (lol) {
         console.log('Instance definition changed, creating new table');
 
         ({ officeTable, bindId } = await officeTableCreate.createOfficeTable(
@@ -59,7 +60,8 @@ class StepGetOfficeTableEditRefresh {
             startCell,
             tableName,
             prevOfficeTable,
-            tableChanged,
+            tableChanged: lol,
+            newStartCell
           }
         ));
       } else {
@@ -79,9 +81,9 @@ class StepGetOfficeTableEditRefresh {
         objectWorkingId,
         officeTable,
         shouldFormat,
-        tableChanged,
+        tableChanged: lol,
         instanceDefinition,
-        startCell,
+        startCell: newStartCell,
       };
 
       const updatedObject = {

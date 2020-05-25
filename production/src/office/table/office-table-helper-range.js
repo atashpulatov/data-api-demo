@@ -6,17 +6,22 @@ class OfficeTableHelperRange {
    * Checks if the range for the table after refresh is cleared.
    *
    * @param {Object} prevOfficeTable previous office table
-   * @param {Object} context excelContext
+   * @param {Object} excelContext excelContext
    * @param {Object} range range of the resized table
    * @param {Object} instanceDefinition
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkObjectRangeValidity(prevOfficeTable, context, range, instanceDefinition) {
+  async checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition, newStartCell) {
     if (prevOfficeTable) {
-      await this.checkObjectRangeValidityOnRefresh(prevOfficeTable, context, instanceDefinition);
+      if (newStartCell) {
+        await this.checkRangeValidity(excelContext, range);
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
+      } else {
+        await this.checkObjectRangeValidityOnRefresh(prevOfficeTable, excelContext, instanceDefinition);
+      }
     } else {
-      await this.checkRangeValidity(context, range);
+      await this.checkRangeValidity(excelContext, range);
     }
   }
 

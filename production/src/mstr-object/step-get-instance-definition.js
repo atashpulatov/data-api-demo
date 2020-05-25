@@ -79,6 +79,7 @@ class StepGetInstanceDefinition {
         isCrosstab: mstrTable.isCrosstab,
         subtotalsInfo,
         manipulationsXML: instanceDefinition.manipulationsXML || false,
+        insertNewWorksheet: false,
       };
 
       const updatedOperation = {
