@@ -1564,34 +1564,34 @@ class PluginPopup {
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getYearPrompt(index)).doubleClick();
         $(popupSelectors.prompts.getYearPrompt(index)).keys(value);
-        browser.keys('\uE004');
+        pressTab();
         break;
       case 'Value':
         logStep(`Answer prompt ${index} and set ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getValuePrompt(index)).doubleClick();
         $(popupSelectors.prompts.getValuePrompt(index)).keys(value);
-        browser.keys('\uE004');
+        pressTab();
         break;
       case 'Object':
         logStep(`Answer prompt ${index} and select ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getObjectsPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
-        browser.keys('\uE004');
+        pressTab();
         break;
       case 'Category':
         logStep(`Answer prompt ${index} and select ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).click();
         $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).doubleClick();
-        browser.keys('\uE004');
+        pressTab();
         break;
       case 'Attribute elements':
         logStep(`Answer prompt ${index} and select ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
-        browser.keys('\uE004');
+        pressTab();
     }
   }
 
