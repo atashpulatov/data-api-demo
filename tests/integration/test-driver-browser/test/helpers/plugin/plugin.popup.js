@@ -1560,34 +1560,34 @@ class PluginPopup {
     // eslint-disable-next-line default-case
     switch (type) {
       case 'Year':
-        logStep(`Answear prompt ${index} and set ${value}...`);
+        logStep(`Answer prompt ${index} and set ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getYearPrompt(index)).doubleClick();
         $(popupSelectors.prompts.getYearPrompt(index)).keys(value);
         browser.keys('\uE004');
         break;
       case 'Value':
-        logStep(`Answear prompt ${index} and set ${value}...`);
+        logStep(`Answer prompt ${index} and set ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getValuePrompt(index)).doubleClick();
         $(popupSelectors.prompts.getValuePrompt(index)).keys(value);
         browser.keys('\uE004');
         break;
       case 'Object':
-        logStep(`Answear prompt ${index} and select ${value}...`);
+        logStep(`Answer prompt ${index} and select ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getObjectsPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
         browser.keys('\uE004');
         break;
       case 'Category':
-        logStep(`Answear prompt ${index} and select ${value}...`);
+        logStep(`Answer prompt ${index} and select ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).click();
         $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).doubleClick();
         browser.keys('\uE004');
         break;
       case 'Attribute elements':
-        logStep(`Answear prompt ${index} and select ${value}...`);
+        logStep(`Answer prompt ${index} and select ${value}...`);
         this.selectPromptOnPanel(index);
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();

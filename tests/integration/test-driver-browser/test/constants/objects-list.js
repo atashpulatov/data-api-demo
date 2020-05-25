@@ -137,8 +137,8 @@ export const objectsList = {
   dossiers: {
     nested: {
       name: 'Dossier with all prompts (incl. nested)',
-      DateTime: popupSelectors.dossierWindow.getVizAT(2),
-      text: popupSelectors.dossierWindow.getVizAT(3),
+      DateTime: getVizAT(2),
+      text: getVizAT(3),
     },
     dossierWithPagesAndChapters: {
       name: 'Dossier with vis that can be moved to different pages / chapters',
