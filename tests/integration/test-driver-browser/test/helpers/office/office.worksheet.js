@@ -7,7 +7,7 @@ import { logStep } from '../utils/allure-helper';
 
 const OfficeWorksheet = function () {
   const pluginStartId = '#m_excelWebRenderer_ewaCtl_3D10BAF8-D37F-DCF9-711E-7D53E9DC4090MSTR.Group1'; // aws169915
-  const pluginIcon = `img[src^="https://${settings.env.hostname}"]`;
+  const pluginIcon = `img[src^="https://${settings.args.env}"]`;
   const fileName = 'office.worksheet.js';
 
   this.openExcelHome = function () {

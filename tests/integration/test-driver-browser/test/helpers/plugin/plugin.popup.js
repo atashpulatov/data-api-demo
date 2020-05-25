@@ -418,6 +418,133 @@ class PluginPopup {
     $(popupSelectors.prepareSearchInput).setValue(objectName);
   }
 
+  /**
+   * Opens the more menu for visualization. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  openMoreMenuForVisualization(visID) {
+    logStep('Opening more menu of visualization');
+    switchToPromptFrame();
+    const titleBar = $(popupSelectors.dossierWindow.getVisualisationTitleBar(visID));
+    titleBar.waitForClickable(10000, false, `${titleBar} is not clickable`);
+    titleBar.moveTo();
+    browser.pause(1000);
+    const moreMenu = $(popupSelectors.dossierWindow.getMoreItemMenu(visID));
+    moreMenu.waitForClickable(60000, false, `${moreMenu} is not clickable`);
+    waitAndClick(moreMenu);
+  }
+
+  /**
+   * Opens show data panel for for visualization. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  openShowDataPanel(visID) {
+    this.openMoreMenuForVisualization(visID);
+    logStep('Opening show data panel');
+    const showDataSelector = $(popupSelectors.dossierWindow.showDataSelector);
+    showDataSelector.waitForClickable(60000, false, `${showDataSelector} is not clickable`);
+    waitAndClick(showDataSelector);
+  }
+
+  /**
+   * Closes show data panel for for visualization. Will work if dossier window and show data panel is presented.
+   *
+   */
+  closeShowDataPanel() {
+    logStep('Closing show data panel');
+    const closeShowDataSelector = $(popupSelectors.dossierWindow.closeShowDataSelector);
+    closeShowDataSelector.waitForClickable(60000, false, `${closeShowDataSelector} is not clickable`);
+    waitAndClick(closeShowDataSelector);
+  }
+
+  /**
+   * Opens export menu that is inside more menu. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   */
+  showExportMenu(visID) {
+    const exportSelector = $(popupSelectors.dossierWindow.exportSelector);
+    this.openMoreMenuForVisualization(visID);
+    exportSelector.waitForDisplayed(60000, false, `${exportSelector} is not displayed`);
+    exportSelector.moveTo();
+  }
+
+  /**
+   * Clicks export to excel button if presented. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  exportToExcel(visID) {
+    logStep('Export to excel');
+    this.showExportMenu(visID);
+    const exportToExcel = $(popupSelectors.dossierWindow.exportToExcel);
+    exportToExcel.waitForClickable(60000, false, `${exportToExcel} is not clickable`);
+    waitAndClick(exportToExcel);
+    this.waitForExport();
+  }
+
+  /**
+   * Clicks export to PDF button if presented. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  exportToPDF(visID) {
+    logStep('Export to PDF');
+    this.showExportMenu(visID);
+    const exportToPDF = $(popupSelectors.dossierWindow.exportToPDF);
+    exportToPDF.waitForClickable(60000, false, `${exportToPDF} is not clickable`);
+    waitAndClick(exportToPDF);
+    const confirmExportToPDF = $(popupSelectors.dossierWindow.confirmExportToPDF);
+    confirmExportToPDF.waitForClickable(60000, false, `${confirmExportToPDF} is not clickable`);
+    waitAndClick(confirmExportToPDF);
+    this.waitForExport();
+  }
+
+  /**
+   * Clicks export to Data button if presented. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  exportToData(visID) {
+    logStep('Export to Data');
+    this.showExportMenu(visID);
+    const exportToData = $(popupSelectors.dossierWindow.exportToData);
+    exportToData.waitForClickable(60000, false, `${exportToData} is not clickable`);
+    waitAndClick(exportToData);
+    this.waitForExport();
+  }
+
+  /**
+   * Waits for exporting the object. If limit is reached. Will work if dossier window is presented.
+   *
+   * @param {Number} limit of duration for export. Assigned to 10 by default.
+   *
+   * @throws {Error} Export wait limit is reached.
+   */
+  waitForExport(limit = 10) {
+    let count = 0;
+    let progress = true;
+    const { exportSpinner } = popupSelectors;
+    exportSpinner.waitForDisplayed(60000, false, `${exportSpinner} is not displayed`);
+    while (progress) {
+      if (count === limit) {
+        throw new Error('Export wait limit is reached. Object still could not exported');
+      } else if (!exportSpinner.isDisplayed()) {
+        progress = false;
+      } else {
+        browser.pause(1000);
+        count++;
+      }
+    }
+  }
+
   // TODO: Refactor to webDriverIO. This method is only used in TC39453
   // async checkSorting (order, headerName) {
   //   const columnHeaders = element.all(by.css(popupSelectors.columnHeaders));
@@ -489,6 +616,12 @@ class PluginPopup {
     return myLibrarySwitch.getAttribute('aria-checked') === 'true';
   }
 
+  /**
+   * Swtiches the my library toggle to desired state.
+   *
+   * @param {Boolean} newState indicates how the state of switch should be.
+   *
+   */
   switchLibrary(newState) {
     logStep(`Switching "My Library" button to "${newState}"...    [${fileName} - switchLibrary()]`);
     switchToDialogFrame();
@@ -498,20 +631,54 @@ class PluginPopup {
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
   }
 
+  /**
+   * Opens the desired dossier window. Will work if objects window is rendered.
+   *
+   * @param {String} dossierName indicates the name of dossier that is wanted
+   * @param {Time} timeToLoadDossier amount of time that browser will be paused for dossier to load. Is set to 10 sec by default
+   * @param {Boolean} myLibrarySwitch indicates how the state of my library switch should be.
+   *
+   */
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
     this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
   }
 
   /**
-   * This function is used to import the desired visualization.
+   * Used to import the visualization.
    * It has to be used inside the Dossier window.
+   *
+   * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
+   */
+  selectAndImportVisualization(visContainerId) {
+    logStep(`+ Importing the visualization: "${visContainerId}"...    [${fileName} - selectAndImportVisualization()]`);
+    this.selectVisualization(visContainerId);
+    switchToPluginFrame();
+    this.clickImport();
+  }
+
+  /**
+   * Used to get the tooltip of the not clickable import button. Will work if dossier window is presented.
    *
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    *
    */
-  selectAndImportVizualiation(visContainerId) {
-    logStep(`Selecting and importing the visualization: "${visContainerId}"...    [${fileName} - selectAndImportVizualiation()]`);
+  selectAndMoveToImportVisualization(visContainerId) {
+    logStep(`+ Selecting and moving to import visualization: "${visContainerId}"...    [${fileName} - selectAndMoveToImportVisualization()]`);
+    this.selectVisualization(visContainerId);
+    switchToPluginFrame();
+    $(popupSelectors.importBtn).moveTo();
+    browser.pause(1000);
+  }
+
+  /**
+   * Used to select the desired visualization. Will work if dossier window is presented.
+   *
+   * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
+   *
+   */
+  selectVisualization(visContainerId) {
+    logStep(`Selecting the visualization ${visContainerId}.`);
     switchToPromptFrame();
     let visSelector;
     if (typeof visContainerId === 'undefined') {
@@ -523,9 +690,6 @@ class PluginPopup {
     }
     waitAndClick(visSelector, 40000);
     browser.pause(2500);
-    switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForEnabled(5000);
-    this.clickImport();
   }
 
   showTotals(objectId) {
@@ -629,6 +793,23 @@ class PluginPopup {
   }
 
   /**
+   * Sets filter (value for given input) on dossier.
+   *
+   * @param {String} input is a selector for given input
+   * @param {Number} value is a value for given input
+   */
+  setFilterOnDossier(input, value) {
+    logStep(`Setting value ${value} for given input`);
+    const { filterBtn, filtersMenu } = popupSelectors.dossierWindow;
+    waitAndClick($(filterBtn));
+    browser.pause(1000);
+    $(input).setValue(value);
+    browser.pause(1000);
+    waitAndClick($(filtersMenu.buttonApplyFilters));
+    browser.pause(1000);
+  }
+
+  /**
    * Refresh Dossier to default state
    *
    */
@@ -657,8 +838,11 @@ class PluginPopup {
    * @param {Number} index Index of the page/chapter item in dossier (starts from 1)
    */
   goToDossierPageOrChapter(index) {
+    switchToPromptFrame();
     logStep(`Changing to page or chapter number ${index}...    [${fileName} - goToDossierPageOrChapter()]`);
     const { dossierWindow } = popupSelectors;
+    $(dossierWindow.buttonToC).waitForExist(10000);
+    browser.pause(5555);
     waitAndClick($(dossierWindow.buttonToC), 1000);
     waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
   }
@@ -800,7 +984,7 @@ class PluginPopup {
     console.log('it was clicked');
     browser.pause(6000);
     // Importing the selected visualization
-    this.selectAndImportVizualiation(visContainerId);
+    this.selectAndImportVisualization(visContainerId);
   }
 
   /**
@@ -827,7 +1011,7 @@ class PluginPopup {
     this.clickRunForPromptedDossier();
     console.log('it was clicked');
     browser.pause(6000);
-    this.selectAndImportVizualiation(visContainerId);
+    this.selectAndImportVisualization(visContainerId);
   }
 
   /**

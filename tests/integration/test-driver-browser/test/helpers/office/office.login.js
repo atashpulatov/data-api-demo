@@ -36,7 +36,7 @@ const OfficeLogin = function () {
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
-      this.login(settings.officeOnline.username, settings.officeOnline.password);
+      this.login(settings.officeOnline[settings.args.lang].username, settings.officeOnline[settings.args.lang].password);
     }
     OfficeWorksheet.createNewWorkbook();
     logStep(`Getting Language and Region for Excel logged in user...    [${fileName} - openExcelAndLoginToPlugin()]`);
