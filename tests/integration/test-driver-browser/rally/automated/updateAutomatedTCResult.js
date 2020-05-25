@@ -32,8 +32,7 @@ async function updateRallyTCResult() {
   };
 
   return fetch(strings.batchURL, options)
-    .then(res => res.json())
-    .catch(error => console.log(error));
+    .then(res => res.json());
 }
 
 updateRallyTCResult()
