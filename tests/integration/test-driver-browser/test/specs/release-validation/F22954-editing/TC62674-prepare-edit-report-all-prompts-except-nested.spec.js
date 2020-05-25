@@ -33,6 +33,7 @@ describe('F22954 - Ability to edit data already imported to the workbook', () =>
     logStep(`Prompt window is opened`);
     switchToPromptFrame();
     browser.pause(1111);
+    
     PluginPopup.answerPrompt('Object', 'Item', 1);
     PluginPopup.selectPromptOnPanel(2);
     PluginPopup.answerPrompt('Category', 'Books', 3);
