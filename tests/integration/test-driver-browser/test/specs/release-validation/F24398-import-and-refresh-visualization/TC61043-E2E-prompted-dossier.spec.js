@@ -36,7 +36,6 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.answerPrompt('Category', 'Movies', 1);
     browser.pause(5000);
     PluginPopup.answerPrompt('Year', '2016', 2);
-    browser.keys('\uE006');
     browser.pause(5000);
     PluginPopup.selectPromptOnPanel(3);
     // todo prompt 3
@@ -51,9 +50,10 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.answerPrompt('Year', 'Movies', 11);
     PluginPopup.clickRunForPromptedDossier();
 
+    switchToDialogFrame();
     const { text } = dossierObject;
     console.log(text);
-    PluginPopup.selectAndImportVizualiation(text);
+    PluginPopup.selectAndImportVisualization(text);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     logStep('+ Should edit and reprompt object');
