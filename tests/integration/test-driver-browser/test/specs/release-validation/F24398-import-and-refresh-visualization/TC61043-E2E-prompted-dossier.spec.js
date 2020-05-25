@@ -28,7 +28,8 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginRightPanel.clickImportDataButton();
 
     logStep('Should open dossier');
-    PluginPopup.openDossier(objectsList.dossiers.nested.name);
+    const dossierObject = objectsList.dossiers.nested;
+    PluginPopup.openDossier(dossierObject.name);
     switchToPromptFrameForImportDossier();
     $('#mstrdossierPromptEditor').waitForExist(10000);
     logStep('Should start selecting prompts');
@@ -50,33 +51,32 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.answerPrompt('Year', 'Movies', 11);
     PluginPopup.clickRunForPromptedDossier();
 
-    // PluginPopup.selectAndImportVizualiation(objectsList.dossiers.nested.prompt11);
-    // logStep('Imported selected visualization');
+    const { text } = dossierObject;
+    console.log(text);
+    PluginPopup.selectAndImportVizualiation(text);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
-    // waitForNotification();
-    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    // PluginRightPanel.closeNotificationOnHover();
+    logStep('+ Should edit and reprompt object');
+    PluginPopup.editAndOpenReprompt();
+    switchToPromptFrame();
+    PluginPopup.answerPrompt('Category', 'Electronics', 1);
+    browser.pause(5000);
+    PluginPopup.clickRunForPromptedDossier();
+    switchToDialogFrame();
+    PluginPopup.clickImport();
+    waitForNotification();
+    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    PluginRightPanel.closeNotificationOnHover();
 
-    // logStep('Should edit and reprompt object');
-    // PluginPopup.editAndOpenReprompt();
-    // $(objectsList.dossiers.nested.prompt1).click();
-    // switchToPromptFrame();
-    // PluginPopup.clickRunForPromptedDossier();
-    // switchToDialogFrame();
-    // PluginPopup.clickImport();
-    // waitForNotification();
-    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    // PluginRightPanel.closeNotificationOnHover();
+    logStep('Should refresh object');
+    PluginRightPanel.refreshObject(1);
+    waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
 
-    // logStep('Should refresh object');
-    // PluginRightPanel.refreshObject(1);
-    // waitForNotification();
-    // PluginRightPanel.closeNotificationOnHover();
-
-    // logStep('Should remove object');
-    // browser.pause(1111);
-    // PluginRightPanel.removeObject(1);
-    // waitForNotification();
-    // PluginRightPanel.closeNotificationOnHover();
+    logStep('Should remove object');
+    browser.pause(1111);
+    PluginRightPanel.removeObject(1);
+    waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
   });
 });
