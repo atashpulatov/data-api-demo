@@ -58,7 +58,7 @@ export const popupSelectors = {
   sortedUp: '.ant-table-column-sorter-up.on',
   sortedDown: '.ant-table-column-sorter-up.on',
   noDataIcon: $('.ant-table-placeholder'),
-  myLibrary: '#popup-wrapper > div.navigation_tree__main_wrapper > div.navigation_tree__title_bar > div.top-filter-panel > div.mstr-switch-container > div.mstr-switch[aria-label="My Library"]',
+  myLibrary: '#mstr-switch-toggle',
   closeRefreshAll: '.WACGlyph.WACDialogCloseAnchor',
   clearSearchInput: '.search-field__clear-button',
   columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="4"] > span',
