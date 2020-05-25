@@ -1,12 +1,11 @@
 import { popupTypes } from '@mstr/rc';
-import request from 'superagent';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { popupController } from '../popup/popup-controller';
 import {
-  refreshRequested, removeRequested, duplicateRequested, highlightRequested
+  refreshRequested, removeRequested, duplicateRequested, highlightRequested, updateOperation
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
@@ -218,6 +217,50 @@ class SidePanelService {
       console.log('Cannot add onDeleted event listener');
     }
   };
+
+  /**
+   * Creates or updates duplicate popup.
+   * Saves the popup and the objectWorkingId in state of RightSidePanel.
+   * Called after user click on duplicate icon or after the activeCellAddress changed, while popup was opened.
+   *
+   * @param {Object} data - Data required to create and update duplicate popup.
+   * @param {Number} data.objectWorkingId - Uniqe id of source object for duplication.
+   * @param {String} data.activeCellAddress - Adress of selected cell in excel.
+   * @param {Function} data.setSidePanelPopup - Callback to save popup in state of RightSidePanel.
+   * @param {Function} data.setDuplicatedObjectId - Callback to save objectWorkingId in state of RightSidePanel.
+   */
+  setRangeTakenPopup = ({
+    objectWorkingId, activeCellAddress, setSidePanelPopup, setDuplicatedObjectId
+  }) => {
+    const closePopup = () => {
+      setSidePanelPopup(null);
+      setDuplicatedObjectId(null);
+    };
+    setDuplicatedObjectId(objectWorkingId);
+    setSidePanelPopup({
+      type: popupTypes.DUPLICATE,
+      activeCell: activeCellAddress,
+      onImport: (isActiveCellOptionSelected) => {
+        this.importInNewRange(objectWorkingId, activeCellAddress, isActiveCellOptionSelected);
+        closePopup();
+      },
+      onEdit: () => {
+        closePopup();
+      },
+      onClose: closePopup
+    });
+  };
+
+  importInNewRange = (objectWorkingId, activeCellAddress, insertNewWorksheet) => {
+    const object = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+    object.insertNewWorksheet = !insertNewWorksheet;
+
+    const updatedOperation = {
+      objectWorkingId, startCell: activeCellAddress, repeatStep: true, tableChanged: true
+    };
+    this.reduxStore.dispatch(updateObject(object));
+    this.reduxStore.dispatch(updateOperation(updatedOperation));
+  }
 
 
   getSidePanelPopup = () => {

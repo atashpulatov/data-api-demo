@@ -8,6 +8,9 @@ import { deleteObjectNotification } from '../redux-reducer/notification-reducer/
 import {
   IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION,
 } from './operation-type-names';
+import operationStepDispatcher from './operation-step-dispatcher';
+import { TABLE_OVERLAP } from '../error/constants';
+import { sidePanelService } from '../right-side-panel/side-panel-service';
 
 class OperationErrorHandler {
   init = (reduxStore) => {
@@ -23,8 +26,8 @@ class OperationErrorHandler {
    * @param {Error} error Error thrown during the operation execution
    */
   handleOperationError = async (objectData, operationData, error) => {
-    const callback = this.getCallback(objectData, operationData);
-    errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
+    const callback = this.getCallback(objectData, operationData, error);
+    if (callback) { errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData); }
   }
 
   /**
@@ -119,9 +122,16 @@ class OperationErrorHandler {
    * @param {Object} objectData Unique Id of the object allowing to reference specific object
    * @param {Object} operationData Contains informatons about current operation
    */
-  getCallback(objectData, operationData) {
+  getCallback(objectData, operationData, error) {
     const { operationType } = operationData;
 
+    if (error.message === TABLE_OVERLAP) {
+      // operationStepDispatcher.updateAndRepeatStep({
+      //   ...operationData, startCell: 'H1', repeatStep: true, tableChanged: true
+      // });
+      sidePanelService.setRangeTakenPopup();
+      return;
+    }
     let callback;
     switch (operationType) {
       case IMPORT_OPERATION:
