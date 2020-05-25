@@ -36,9 +36,9 @@ describe('F25931 - Duplicate object', () => {
     OfficeWorksheet.openNewSheet();
     PluginRightPanel.clickAddDataButton();
     browser.pause(3333);
-    const dossier = objectsList.dossiers.userActivityDossier;
+    const dossier = objectsList.dossiers.interactiveDossier;
     PluginPopup.openDossier(dossier.name);
-    PluginPopup.selectAndImportVizualiation(dossier.visualizations.accounts);
+    PluginPopup.selectAndImportVizualiation(dossier.vis2);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     browser.pause(1000);
 
@@ -71,12 +71,12 @@ describe('F25931 - Duplicate object', () => {
 
     console.log('Duplicate Dossier');
     OfficeWorksheet.openSheet(3);
-    OfficeWorksheet.selectCell('D1');
+    OfficeWorksheet.selectCell('G1');
     PluginRightPanel.duplicateObject(3);
     PluginRightPanel.selectActiveCellOptionInDuplicatePopup();
     PluginRightPanel.clickDuplicatePopupEditBtn();
     switchToDialogFrame();
-    const visualization = objectsList.dossiers.userActivityDossier.visualizations.dailyActiveAccounts;
+    const visualization = objectsList.dossiers.interactiveDossier.vis2;
     PluginPopup.selectAndImportVizualiation(visualization);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
   });

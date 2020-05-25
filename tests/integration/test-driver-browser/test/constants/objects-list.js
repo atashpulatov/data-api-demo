@@ -180,7 +180,10 @@ export const objectsList = {
         }
       },
     },
-    interactiveDossier: { name: 'Dossier for interactive components', },
+    interactiveDossier: {
+      name: 'Dossier for interactive components',
+      vis2: popupSelectors.dossierWindow.getVizAT(2),
+    },
     customVisualizations: {
       name: 'Custom Visualizations',
       visualizations: { GoogleTimeline: '#mstr114', }
