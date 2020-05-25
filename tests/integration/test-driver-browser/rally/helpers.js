@@ -21,7 +21,7 @@ function getTestSet(testSetId) {
 * @param {String} testCaseId Formatted Test Case ID (e.g. 'TC12567')
 * @returns {String} URL to the Test Case endpoint
 */
-async function getOwner(testCaseId) {
+function getOwner(testCaseId) {
   return getRallyTCUrl(testCaseId)
     .then(tcUrl => getDataFromRally(tcUrl).then(({ TestCase }) => TestCase.Owner._ref))
     .catch(() => { throw Error(`Couldn't get ${testCaseId} owner`); });
