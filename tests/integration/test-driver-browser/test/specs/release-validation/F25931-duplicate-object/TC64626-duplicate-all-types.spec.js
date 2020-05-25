@@ -37,7 +37,7 @@ describe('F25931 - Duplicate object', () => {
     const dossierObject = objectsList.dossiers.complexDossier;
     const { bubbleChart } = dossierObject.visualizations;
     PluginPopup.openDossier(dossierObject.name, null, false);
-    PluginPopup.selectAndImportVizualiation(bubbleChart);
+    PluginPopup.selectAndImportVisualization(bubbleChart);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     logStep('Save initial number of worksheets');

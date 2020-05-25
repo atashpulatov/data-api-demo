@@ -1,5 +1,6 @@
 import { popupSelectors } from './selectors/popup-selectors';
 
+const { getVizAT } = popupSelectors.dossierWindow;
 export const objectsList = {
   reports: {
     reportWithLongName: 'Report with very long name - This is a very long text to know what happens when plugging is dealing with files with such a long name it is important to see if it will add three dots at the end or if it is going to display the whole text',
@@ -148,6 +149,10 @@ export const objectsList = {
       prompt10: '#id_mstr263_txt',
       prompt11: '#mstr129',
     },
+    dossierWithPagesAndChapters: {
+      name: 'Dossier with vis that can be moved to different pages / chapters',
+      gridVisualization: getVizAT(2)
+    },
     complexDossier: {
       name: 'Complex dossier (20 visualizations)',
       timeToOpen: 10000,
@@ -183,7 +188,19 @@ export const objectsList = {
     interactiveDossier: { name: 'Dossier for interactive components', },
     customVisualizations: {
       name: 'Custom Visualizations',
-      visualizations: { GoogleTimeline: '#mstr114', }
+      visualizations: {
+        GoogleTimeline: getVizAT(2),
+        modelsByYear: getVizAT(3),
+      }
+    },
+
+    dossierWithDifferentCustomVis: {
+      name: 'Dossier with different custom visualizations',
+      Visualizations: {
+        worldCloud: getVizAT(2),
+        googleTimeLine: '#mstr125',
+        sequenceSunburst: getVizAT(3),
+      }
     },
 
     userActivityDossier: {
@@ -195,7 +212,7 @@ export const objectsList = {
     },
     promptedDossier: {
       name: 'Prompted dossier',
-      visualizations: { vis1: '#mstr106' }
+      visualizations: { vis1: getVizAT(2) }
     },
     oneMillionAndLongName: {
       name: '1 MILION rows This is a very long name for a dossier so that we can test how we display long path to dossier visualisationsNew Dossier',
@@ -208,6 +225,18 @@ export const objectsList = {
     withAttributeMetricSelector: {
       name: 'dossier with attribute/metric selector',
       visualizations: { vis1: '#mstr107' }
+    },
+    dossierWithBasicGrid: {
+      name: 'Dossier with basic grid vis, vis with totals and vis with crosstabs',
+      visualizations: {
+        basicGrid: '#mstr108',
+        gridWithSubtotals: '#mstr123',
+        gridWithSubtotalsAndCrosstabs: getVizAT(3),
+      }
+    },
+    dossierWithCompoundGrid: {
+      name: 'Dossier with compound grid',
+      visualizations: { visualization1: getVizAT(2) }
     }
   },
   AQDT: {
