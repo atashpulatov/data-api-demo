@@ -18,26 +18,22 @@ function mapTCtoBatchObject(testArray, verdict) {
  * @returns {Promise} Promise that will be resolved when the results are uploaded to Rally
  */
 async function updateRallyTCResult() {
-  try {
-    const { passedTestCases, failedTestCases } = rallyConfig.manual;
-    if (passedTestCases.length === 0 && failedTestCases.length === 0) {
-      console.log('Add the Test Cases for which you want to upload the results in rallyconfig.js');
-      process.exit(1);
-    }
-    const passedTestCasesId = mapTCtoBatchObject(passedTestCases, 'Pass');
-    const failedTestCasesId = mapTCtoBatchObject(failedTestCases, 'Fail');
-    const batch = await createManualBatchArray([...failedTestCasesId, ...passedTestCasesId]);
-
-    const options = {
-      method: 'POST',
-      headers: { zsessionid: rallyConfig.rallyApiKey, },
-      body: JSON.stringify(batch)
-    };
-
-    return fetch(strings.batchURL, options).then(result => result.json());
-  } catch (e) {
-    throw Error(e);
+  const { passedTestCases, failedTestCases } = rallyConfig.manual;
+  if (passedTestCases.length === 0 && failedTestCases.length === 0) {
+    console.log('Add the Test Cases for which you want to upload the results in rallyconfig.js');
+    process.exit(1);
   }
+  const passedTestCasesId = mapTCtoBatchObject(passedTestCases, 'Pass');
+  const failedTestCasesId = mapTCtoBatchObject(failedTestCases, 'Fail');
+  const batch = await createManualBatchArray([...failedTestCasesId, ...passedTestCasesId]);
+
+  const options = {
+    method: 'POST',
+    headers: { zsessionid: rallyConfig.rallyApiKey, },
+    body: JSON.stringify(batch)
+  };
+
+  return fetch(strings.batchURL, options).then(result => result.json());
 }
 
 updateRallyTCResult()
