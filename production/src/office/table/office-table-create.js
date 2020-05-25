@@ -27,7 +27,8 @@ class OfficeTableCreate {
       startCell,
       tableName,
       prevOfficeTable,
-      tableChanged = false
+      tableChanged = false,
+      newStartCell,
     }) => {
     const {
       rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions }
@@ -35,23 +36,28 @@ class OfficeTableCreate {
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
 
+    const newStartCellAdress = newStartCell || startCell;
+    console.log('newStartCell:', newStartCell);
+
     const worksheet = this.getExcelWorksheet(prevOfficeTable, excelContext);
     const tableStartCell = this.getTableStartCell(
-      startCell,
+      newStartCellAdress,
       worksheet,
       instanceDefinition,
       prevOfficeTable,
       tableChanged
     );
+    console.log('tableStartCell:', tableStartCell);
 
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
+    console.log('tableRange:', tableRange);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
     excelContext.trackedObjects.add(range);
 
-    await officeTableHelperRange.checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition);
+    await officeTableHelperRange.checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition, newStartCell);
 
     if (isCrosstab) {
-      officeApiCrosstabHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions);
+      officeApiCrosstabHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions,);
     }
 
 

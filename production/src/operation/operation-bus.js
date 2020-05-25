@@ -34,6 +34,7 @@ class OperationBus {
     if (didOperationNotChange(this.previousOperationCopy, currentOperation)) {
       return;
     }
+    currentOperation.repeatStep = false;
 
     const nextStep = currentOperation.stepsQueue[0];
     this.previousOperationCopy = copyOperationInfo(currentOperation);
@@ -82,7 +83,7 @@ const copyOperationInfo = (currentOperation) => {
 };
 
 const didOperationNotChange = (previousOperationCopy, currentOperation) => {
-  if (previousOperationCopy) {
+  if (previousOperationCopy && !currentOperation.repeatStep) {
     const currentOperationToCompare = copyOperationInfo(currentOperation);
     return previousOperationCopy.operationType === currentOperationToCompare.operationType
       && previousOperationCopy.objectWorkingId === currentOperationToCompare.objectWorkingId
