@@ -1369,7 +1369,7 @@ class PluginPopup {
  * 
   * @param {String} type one of type: Year, VAlue, Object, Category, Attribute elements
   * @param {String} value input for the prompt
-  * @param {number} [index=1] number of prompt
+  * @param {number} [index=1] number of prompt on list
   * @memberof PluginPopup
  */
   answerPrompt(type, value, index = 1) {
