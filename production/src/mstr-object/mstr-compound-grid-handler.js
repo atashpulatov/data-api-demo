@@ -35,16 +35,14 @@ export function calculateColumnHeaderHeight(columnSetsHeaders, columnSets) {
 export function calculateColumnHeaderOffset(columnSets, columnSetsDefinition) {
   const offset = [0]; // No offset for first columnSet
   for (let i = 0; i < columnSets.length - 1; i++) {
-    // console.log(columnSets[i]);
-    // console.log(columnSetsDefinition[i].columns);
-
     offset.push(columnSetsDefinition[i].columns.length + offset[i]);
   }
   return offset;
 }
 
-export function renderCompoundGridRowHeaders(columnSetsHeaders, columnSetsDefinition) {
-
+export function renderCompoundGridRowHeaders(headers, definition) {
+  const onElement = (e) => `'${e.value.join(' ')}`;
+  return mstrNormalizedJsonHandler.renderHeaders(definition, 'rows', headers, onElement, false);
 }
 
 export function renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition) {

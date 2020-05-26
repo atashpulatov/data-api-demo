@@ -1,4 +1,4 @@
-import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows } from '../../mstr-object/mstr-compound-grid-handler';
+import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows, renderCompoundGridRowHeaders } from '../../mstr-object/mstr-compound-grid-handler';
 import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
 import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 import metricsInRowCompoundJSON from './compound-grid/Compound Grid with Metrics on Row.json';
@@ -71,5 +71,28 @@ describe('Compound Grid Handler', () => {
 
     // then
     expect(headers).toEqual(expectedHeaders);
+  });
+
+  it('should create normalized row headers', () => {
+    // given
+    const response = JSON.parse(JSON.stringify(regularCompoundJSON));
+    const { definition, data } = response;
+    const { headers } = data;
+
+    const expectedHeaders = [
+      ['\'Art & Architecture'],
+      ['\'Business'],
+      ['\'Cameras'],
+      ['\'Kids / Family'],
+      ['\'Special Interests'],
+      ['\'Alternative'],
+      ['\'Country'],
+    ];
+
+    // when
+    const rowHeaders = renderCompoundGridRowHeaders(headers, definition);
+
+    // then
+    expect(rowHeaders).toEqual(expectedHeaders);
   });
 });
