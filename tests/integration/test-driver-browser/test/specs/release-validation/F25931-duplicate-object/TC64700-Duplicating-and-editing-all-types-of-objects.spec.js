@@ -38,7 +38,7 @@ describe('F25931 - Duplicate object', () => {
     browser.pause(3333);
     const dossier = objectsList.dossiers.interactiveDossier;
     PluginPopup.openDossier(dossier.name);
-    PluginPopup.selectAndImportVizualization(dossier.vis2);
+    PluginPopup.selectAndImportVisualization(dossier.vis2);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     browser.pause(1000);
 
