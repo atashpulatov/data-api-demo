@@ -8,16 +8,23 @@ export function parseColumnSets(columnSets) {
   return parsedColumns;
 }
 
-export function renderRows(columnSetsMetricValues, currentRows, valueMatrix = 'raw') {
-  const rowTable = [];
-  for (let row = 0; row < currentRows; row++) {
-    const rowValues = [];
-    for (let colSet = 0; colSet < columnSetsMetricValues.length; colSet++) {
-      rowValues.push(...columnSetsMetricValues[colSet][valueMatrix][row]);
-    }
-    rowTable.push(rowValues);
-  }
-  return rowTable;
+export function getColumnInformation(definition, data) {
+  const { headers } = data;
+  const { columnSets: columnSetsHeaders } = headers;
+  const { columnSets: columnSetsDefinition } = definition.grid;
+  const onElement = (element) => element;
+  const commonColumns = renderCompoundGridRowTitles(headers, definition, onElement);
+  const params = [columnSetsHeaders, columnSetsDefinition, onElement, onElement];
+  // TODO: In ColumnSets Metrics are not always the last row!! We may need for formatting properly
+  const columnSetColumns = renderCompoundGridColumnHeaders(...params);
+  return [...commonColumns[commonColumns.length - 1], ...columnSetColumns[columnSetColumns.length - 1]];
+}
+
+export function getTableSize(columnInformation, data) {
+  return {
+    rows: data.paging.total,
+    columns: columnInformation.length
+  };
 }
 
 export function calculateColumnHeaderHeight(columnSetsHeaders, columnSets) {
@@ -40,12 +47,27 @@ export function calculateColumnHeaderOffset(columnSets, columnSetsDefinition) {
   return offset;
 }
 
-export function renderCompoundGridRowHeaders(headers, definition) {
-  const onElement = (e) => `'${e.value.join(' ')}`;
+export function renderRows(columnSetsMetricValues, currentRows, valueMatrix = 'raw') {
+  const rowTable = [];
+  for (let row = 0; row < currentRows; row++) {
+    const rowValues = [];
+    for (let colSet = 0; colSet < columnSetsMetricValues.length; colSet++) {
+      rowValues.push(...columnSetsMetricValues[colSet][valueMatrix][row]);
+    }
+    rowTable.push(rowValues);
+  }
+  return rowTable;
+}
+
+export function renderCompoundGridRowTitles(headers, definition, onElement = (e) => e) {
+  return mstrNormalizedJsonHandler.renderTitles(definition, 'rows', headers, onElement, false);
+}
+
+export function renderCompoundGridRowHeaders(headers, definition, onElement = (e) => e) {
   return mstrNormalizedJsonHandler.renderHeaders(definition, 'rows', headers, onElement, false);
 }
 
-export function renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition) {
+export function renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition, onAttribute, onMetric) {
   const transposedHeaders = columnSetsHeaders.map(mstrNormalizedJsonHandler.transposeMatrix);
   const boundingHeight = calculateColumnHeaderHeight(columnSetsHeaders, columnSetsDefinition);
 
@@ -65,13 +87,14 @@ export function renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDef
       const headerRow = header[j];
       const { type, elements } = columnsDefinition[j];
       const columnSetRow = headerRow.map(index => {
+        const element = elements[index];
         // -1 is for empty row
         if (index < 0) { return ''; }
         switch (type) {
           case 'attribute':
-            return elements[index].formValues[0];
+            return onAttribute(element);
           case 'templateMetrics':
-            return elements[index].name;
+            return onMetric(element);
           // Consolidation will go here
           default:
             return '';

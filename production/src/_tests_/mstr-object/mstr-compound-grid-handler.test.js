@@ -1,4 +1,4 @@
-import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows, renderCompoundGridRowHeaders } from '../../mstr-object/mstr-compound-grid-handler';
+import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows, renderCompoundGridRowHeaders, getColumnInformation, getTableSize } from '../../mstr-object/mstr-compound-grid-handler';
 import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
 import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 import metricsInRowCompoundJSON from './compound-grid/Compound Grid with Metrics on Row.json';
@@ -15,6 +15,35 @@ describe('Compound Grid Handler', () => {
 
     // then
     expect(columns).toHaveLength(expectedLength);
+  });
+
+  it('should return column information', () => {
+    // given
+    const { definition, data } = regularCompoundJSON;
+    const expectedLength = 8;
+    const expectedFirstCol = definition.grid.rows[0];
+    expectedFirstCol.value = ['Subcategory'];
+
+    // when
+    const colInformation = getColumnInformation(definition, data);
+
+    // then
+    expect(colInformation).toHaveLength(expectedLength);
+    expect(colInformation[0]).toEqual(expectedFirstCol);
+  });
+
+  it('should return final table size', () => {
+    // given
+    const { definition, data } = regularCompoundJSON;
+    const colInformation = getColumnInformation(definition, data);
+    const expectedSize = { columns: 8, rows: 7 };
+
+
+    // when
+    const tableSize = getTableSize(colInformation, data);
+
+    // then
+    expect(tableSize).toEqual(expectedSize);
   });
 
   it('should create table rows from columnSets', () => {
@@ -58,8 +87,10 @@ describe('Compound Grid Handler', () => {
   it('should create normalized column headers', () => {
     // given
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));
-    const { columnSets: columnSetHeaders } = response.data.headers;
+    const { columnSets: columnSetsHeaders } = response.data.headers;
     const { columnSets: columnSetsDefinition } = response.definition.grid;
+    const onAttribute = (e) => e.formValues[0];
+    const onMetric = (e) => e.name;
 
     const expectedHeaders = [
       ['Music', 'Movies', 'Electronics', 'Books', 'Cost', 'Cost', 'Cost'],
@@ -67,7 +98,7 @@ describe('Compound Grid Handler', () => {
     ];
 
     // when
-    const headers = renderCompoundGridColumnHeaders(columnSetHeaders, columnSetsDefinition);
+    const headers = renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition, onAttribute, onMetric);
 
     // then
     expect(headers).toEqual(expectedHeaders);
@@ -78,6 +109,7 @@ describe('Compound Grid Handler', () => {
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));
     const { definition, data } = response;
     const { headers } = data;
+    const onElement = (e) => `'${e.value.join(' ')}`;
 
     const expectedHeaders = [
       ['\'Art & Architecture'],
@@ -90,7 +122,7 @@ describe('Compound Grid Handler', () => {
     ];
 
     // when
-    const rowHeaders = renderCompoundGridRowHeaders(headers, definition);
+    const rowHeaders = renderCompoundGridRowHeaders(headers, definition, onElement);
 
     // then
     expect(rowHeaders).toEqual(expectedHeaders);
