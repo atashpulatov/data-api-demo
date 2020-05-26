@@ -1550,7 +1550,7 @@ class PluginPopup {
  *  Attribute elements - when you are selecting elements from attribute (moving form one side to other)
  *
  *  //TODO - rest of the prompts type and ipadete Object and Category to have ability to select more items
- * 
+ *
   * @param {String} type one of type: Year, VAlue, Object, Category, Attribute elements
   * @param {String} value input for the prompt
   * @param {number} [index=1] number of prompt on list
@@ -1592,6 +1592,7 @@ class PluginPopup {
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
         pressTab();
+        break;
     }
   }
 
