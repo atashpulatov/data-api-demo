@@ -21,32 +21,32 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     PluginRightPanel.clickImportDataButton();
 
     switchToDialogFrame();
-    //Switching to non My Libray view as there is more objects available
+    // Switching to non My Libray view as there is more objects available
     PluginPopup.switchLibrary(false);
-    browser.pause(500); //wait before next action
+    browser.pause(500); // wait before next action
 
-    //Expected background colors
+    // Expected background colors
     const backgroundColorNotSelectedNotHighlighted = '#000000';
     const backgroundColorNotSelectedHighlighted = '#f9f9f9';
     const backgroundColorSelected = '#f0f7fe';
 
-    //Check the background color for not selected and not highlighted object
+    // Check the background color for not selected and not highlighted object
     expect(PluginPopup.getBackgroundColor(popupSelectors.anyObject(4)) === backgroundColorNotSelectedNotHighlighted).toBe(true);
 
-    //Move the mouse cursor to one of the objects and check the background color for it - highlighted
+    // Move the mouse cursor to one of the objects and check the background color for it - highlighted
     $(popupSelectors.anyObject(4)).moveTo();
     expect(PluginPopup.getBackgroundColor(popupSelectors.anyObject(4)) === backgroundColorNotSelectedHighlighted).toBe(true);
 
-    //Select one of the objects and check the background color for it - selected
+    // Select one of the objects and check the background color for it - selected
     PluginPopup.selectAnyObject(4);
-    browser.pause(500); //wait for the selection to get active before getting color value
+    browser.pause(500); // wait for the selection to get active before getting color value
     expect(PluginPopup.getBackgroundColor(popupSelectors.anyObject(4)) === backgroundColorSelected).toBe(true);
 
-    //Move the mouse cursor to the not selected object and check the background color for it - highlighted
+    // Move the mouse cursor to the not selected object and check the background color for it - highlighted
     $(popupSelectors.anyObject(5)).moveTo();
     expect(PluginPopup.getBackgroundColor(popupSelectors.anyObject(5)) === backgroundColorNotSelectedHighlighted).toBe(true);
 
-    //Move the mouse cursor back to the selected object and check the background color for it - selected
+    // Move the mouse cursor back to the selected object and check the background color for it - selected
     $(popupSelectors.anyObject(4)).moveTo();
     expect(PluginPopup.getBackgroundColor(popupSelectors.anyObject(4)) === backgroundColorSelected).toBe(true);
   });

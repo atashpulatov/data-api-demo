@@ -3,16 +3,20 @@ import { waitAndClick } from '../utils/click-helper';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import settings from '../../config';
 import { pressEnter, pressBackspace, pressEscape } from '../utils/keyboard-actions';
+import { logStep } from '../utils/allure-helper';
 
-function OfficeWorksheet() {
+const OfficeWorksheet = function () {
   const pluginStartId = '#m_excelWebRenderer_ewaCtl_3D10BAF8-D37F-DCF9-711E-7D53E9DC4090MSTR.Group1'; // aws169915
-  const pluginIcon = `img[src^="https://${settings.env.hostname}"]`;
+  const pluginIcon = `img[src^="https://${settings.args.env}"]`;
+  const fileName = 'office.worksheet.js';
 
-  this.openExcelHome = () => {
+  this.openExcelHome = function () {
+    logStep(`Opening Excel...    [${fileName} - openExcelAndLoginToPlugin()]`);
     browser.url(settings.officeOnline.url);
   };
 
-  this.uploadAndOpenPlugin = (pathToManifest, webServerEnvironmentID) => {
+  this.uploadAndOpenPlugin = function (pathToManifest, webServerEnvironmentID) {
+    logStep(`Uploading manifest and opening add-in...    [${fileName} - uploadAndOpenPlugin()]`);
     switchToExcelFrame();
     $(excelSelectors.insertBtn).click();
     $(excelSelectors.addInBtn).click();
@@ -33,6 +37,7 @@ function OfficeWorksheet() {
   };
 
   this.openPlugin = () => {
+    logStep(`Opening MSTR Add-in...    [${fileName} - openPlugin()]`);
     switchToExcelFrame();
     try {
       // $('img[src^="https://127.0.0.1"]').waitForDisplayed(7777);
@@ -67,6 +72,7 @@ function OfficeWorksheet() {
   };
 
   this.createNewWorkbook = () => {
+    logStep(`Creating a new workbook...    [${fileName} - createNewWorkbook()]`);
     waitAndClick($(excelSelectors.mainMenuBtn));
     waitAndClick($(excelSelectors.newDocumentBtn));
     waitAndClick($(excelSelectors.excelWorkbookBtn));
@@ -74,21 +80,25 @@ function OfficeWorksheet() {
   };
 
   this.openNewSheet = () => {
+    logStep(`Opening a new sheet in the workbook...    [${fileName} - openNewSheet()]`);
     switchToExcelFrame();
     $(excelSelectors.newSheetBtn).click();
   };
 
   this.getNumberOfWorksheets = () => {
+    logStep(`Getting number of worksheets...    [${fileName} - getNumberOfWorksheets()]`);
     switchToExcelFrame();
     return $$(excelSelectors.worksheetsTabs).length;
   };
 
   this.openSheet = (index) => {
+    logStep(`Opening the sheet number ${index}...    [${fileName} - openSheet()]`);
     switchToExcelFrame();
     waitAndClick($(excelSelectors.selectsheet(index)));
   };
 
   this.selectCellAlternatively = (cellId) => {
+    logStep(`Selecting the cell "${cellId}"...    [${fileName} - selectCellAlternatively()]`);
     switchToExcelFrame();
     waitAndClick($(excelSelectors.findAndSelectBtn));
     waitAndClick($(excelSelectors.goToBtn));
@@ -101,6 +111,7 @@ function OfficeWorksheet() {
   };
 
   this.replaceAllThatMatches = (textToReplace, value) => {
+    logStep(`Replacing all the texts "${textToReplace}" with the text"${value}"...    [${fileName} - selectCellAlternatively()]`);
     switchToExcelFrame();
     waitAndClick($(excelSelectors.findAndSelectBtn));
     waitAndClick($(excelSelectors.replaceSelector));
@@ -118,7 +129,7 @@ function OfficeWorksheet() {
   };
 
   this.selectCell = (cellId) => {
-    console.log(`Should select cell ${cellId}`);
+    logStep(`Selecting the cell "${cellId}"...    [${fileName} - selectCell()]`);
     switchToExcelFrame();
     $(excelSelectors.cellInput).click();
     pressBackspace();
@@ -127,6 +138,7 @@ function OfficeWorksheet() {
   };
 
   this.changeTextInCell = (cellId, text) => {
+    logStep(`Changing text in the cell "${cellId}"...    [${fileName} - changeTextInCell()]`);
     switchToExcelFrame();
     this.selectCell(cellId);
     $(excelSelectors.excelFormulaBar).click();
@@ -136,6 +148,7 @@ function OfficeWorksheet() {
   };
 
   this.clearExcelRange = (cellRange) => {
+    logStep(`Clearing the excel range of cells "${cellRange}"...    [${fileName} - clearExcelRange()]`);
     this.selectCell(cellRange);
     browser.pause(1999);
     browser.keys(['Backspace']);
@@ -151,6 +164,6 @@ function OfficeWorksheet() {
     $(excelSelectors.formatAsTable).click();
     $(excelSelectors.lightGrayTableFormat).click();
   };
-}
+};
 
 export default new OfficeWorksheet();

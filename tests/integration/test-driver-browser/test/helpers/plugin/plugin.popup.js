@@ -17,10 +17,12 @@ import { waitForNotification } from '../utils/wait-helper';
 import { dictionary } from '../../constants/dictionaries/dictionary';
 import OfficeWorksheet from '../office/office.worksheet';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
+import { logStep } from '../utils/allure-helper';
 
-
+const fileName = 'plugin.popup.js';
 class PluginPopup {
   searchForObject(objectName) {
+    logStep(`Searching for the object "${objectName}"...    [${fileName} - searchForObject()]`);
     $(popupSelectors.searchInput).clearValue();
     $(popupSelectors.searchInput).setValue(objectName);
   }
@@ -33,69 +35,80 @@ class PluginPopup {
    *
    */
   searchForElements(elementName) {
+    logStep(`Searching for the attribute or metric "${elementName}"...    [${fileName} - searchForElements()]`);
     $(popupSelectors.searchInputPrepareDataPopup).clearValue();
     $(popupSelectors.searchInputPrepareDataPopup).setValue(elementName);
   }
 
   clickImport() {
-    console.log('Should click Import button');
+    logStep(`Clicking "Import" button...    [${fileName} - clickImport()]`);
     waitAndClick($(popupSelectors.importBtn));
   }
 
   clickPrepareData() {
-    console.log('Should click prepare data button');
+    logStep(`Clicking "Prepare Data" button...    [${fileName} - clickPrepareData()]`);
     waitAndClick($(popupSelectors.prepareBtn));
   }
 
   clickCancel() {
+    logStep(`Clicking "Cancel" button...    [${fileName} - clickCancel()]`);
     waitAndClick($(popupSelectors.cancelBtn));
   }
 
   clickBack() {
+    logStep(`Clicking "Back" button...    [${fileName} - clickBack()]`);
     waitAndClick($(popupSelectors.backBtn));
   }
 
   clickDataPreview() {
+    logStep(`Clicking "Data Preview" button...    [${fileName} - clickDataPreview()]`);
     waitAndClick($(popupSelectors.dataPreviewBtn));
   }
 
   clickViewSelected() {
+    logStep(`Clicking "View Selected" button...    [${fileName} - clickViewSelected()]`);
     waitAndClick($(popupSelectors.viewSelected));
   }
 
   clickSubtotalToggler() {
-    console.log('Should switch subtotal toggler');
+    logStep(`Clicking subtotal toggler...    [${fileName} - clickSubtotalToggler()]`);
     waitAndClick($(popupSelectors.subtotalToggler));
   }
 
   closePreview() {
+    logStep(`Clicking "Close preview" button...    [${fileName} - closePreview()]`);
     waitAndClick($(popupSelectors.closePreviewBtn));
   }
 
   clickRunForPromptedDossier() {
+    logStep(`Clicking "Run" for prompted dossier...    [${fileName} - clickRunForPromptedDossier()]`);
     waitAndClick($(popupSelectors.runBtnForPromptedDossier));
   }
 
   clickRun() {
-    console.log('Should click run button');
+    logStep(`Clicking "Run" button...    [${fileName} - clickRun()]`);
     switchToPluginFrame();
-    $(popupSelectors.runBtn).waitForExist(3333);
+    $(popupSelectors.runBtn).waitForExist(6000);
     waitAndClick($(popupSelectors.runBtn));
   }
 
   clickPromptArrow() {
+    logStep(`Clicking Prompt Arrow...    [${fileName} - clickPromptArrow()]`);
     waitAndClick($(popupSelectors.promptArrow));
   }
 
   selectAllAttributes() {
+    logStep(`Selecting all the attributes...    [${fileName} - selectAllAttributes()]`);
     waitAndClick($(popupSelectors.allAttributes));
   }
 
   selectAllMetrics() {
+    logStep(`Selecting all the metrics...    [${fileName} - selectAllMetrics()]`);
     waitAndClick($(popupSelectors.allMetrics));
   }
 
   selectAllFilters() {
+    logStep(`Selecting all the filters...    [${fileName} - selectAllFilters()]`);
     waitAndClick($(popupSelectors.allFilters));
   }
 
@@ -103,7 +116,8 @@ class PluginPopup {
    * Selects atrributes and metrics using all.
    */
   selectAllAttributesAndMetrics() {
-    console.log('Should select all attributes and metrics');
+    logStep(`Selecting all attributes and metrics...    [${fileName} - selectAllAttributesAndMetrics()]`);
+    switchToDialogFrame();
     this.selectAllAttributes();
     this.selectAllMetrics();
   }
@@ -116,6 +130,7 @@ class PluginPopup {
    *
    */
   waitUntilActionIsFinished(selector) {
+    logStep(`Waiting for element to show up and dissapear...    [${fileName} - waitUntilActionIsFinished()]`);
     browser.waitUntil(() => ($(selector).isExisting()));
     browser.waitUntil(() => !($(selector).isExisting()));
   }
@@ -131,6 +146,7 @@ class PluginPopup {
    *
    */
   selectObjectElements(elements) {
+    logStep(`Selecting the attributes and metrics: ${elements}...    [${fileName} - selectObjectElements()]`);
     for (let i = 0; i < elements.length; i++) {
       waitAndClick($(`span=${elements[i]}`));
     }
@@ -147,18 +163,21 @@ class PluginPopup {
    *
    */
   selectAttributeElementsForReportObjects(attributes) {
+    logStep(`Selecting the attributes: ${attributes}...    [${fileName} - selectAttributeElementsForReportObjects()]`);
     for (let i = 0; i < attributes.length; i++) {
       waitAndClick($(`.item-title=${attributes[i]}`));
     }
   }
 
   changePromptQualificationItem(value) {
+    logStep(`Changing the prompt qualification item to new value ${value}...    [${fileName} - changePromptQualificationItem()]`);
     switchToPopupFrame();
     waitAndClick($('div[title="- none -"]'));
     waitAndClick($(`div[title=${value}"]`));
   }
 
   selectFilters(names) {
+    logStep(`Selecting the filters ${names}...    [${fileName} - selectFilters()]`);
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
@@ -167,6 +186,7 @@ class PluginPopup {
   }
 
   clickHeader(headerName) {
+    logStep(`Clicking the header ${headerName}...    [${fileName} - clickHeader()]`);
     waitAndClick($(`.data-tip*=${headerName}`));
   }
 
@@ -178,6 +198,7 @@ class PluginPopup {
    * @param {Number} objectOrder is order of an object on the list
    */
   selectObject(objectOrder = 1) {
+    logStep(`Selecting the object number ${objectOrder}...    [${fileName} - selectFirstObject()]`);
     browser.pause(2222);
     let selector = '';
     switch (objectOrder) {
@@ -194,11 +215,13 @@ class PluginPopup {
   }
 
   selectFirstObjectWithoutSearch() {
+    logStep(`Selecting the first object...    [${fileName} - selectFirstObjectWithoutSearch()]`);
     browser.pause(2222);
     waitAndClick($(popupSelectors.firstObjectWithoutSearch));
   }
 
   switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
+    logStep(`+ Importing the object "${objectName}"...    [${fileName} - switchLibraryAndImportObject()]`);
     switchToDialogFrame();
     browser.pause(4000);
     this.switchLibrary(myLibrarySwitch);
@@ -210,6 +233,7 @@ class PluginPopup {
   }
 
   importObject(objectName) {
+    logStep(`+ Importing the object "${objectName}"...    [${fileName} - importObject()]`);
     switchToDialogFrame();
     this.searchForObject(objectName);
     browser.pause(500);
@@ -218,6 +242,7 @@ class PluginPopup {
   }
 
   importAnyObject(objectName, index = 1) {
+    logStep(`+ Importing the object "${objectName}"...    [${fileName} - importAnyObject()]`);
     switchToDialogFrame();
     browser.pause(500);
     this.switchLibrary(false);
@@ -228,11 +253,13 @@ class PluginPopup {
   }
 
   selectAnyObject(index) {
+    logStep(`Selecting the object number ${index}...    [${fileName} - selectAnyObject()]`);
     browser.pause(2222);
     waitAndClick($(popupSelectors.anyObject(index)));
   }
 
   preparePrompt(objectName) {
+    logStep(`+ Selecting the object "${objectName}" and clicking "Prepare Data" button...    [${fileName} - preparePrompt()]`);
     switchToPluginFrame();
     browser.pause(500);
     this.switchLibrary(false);
@@ -246,12 +273,14 @@ class PluginPopup {
   }
 
   selectAttributeIndex(index) {
+    logStep(`Selecting the attribute number ${index}...    [${fileName} - selectAttributeIndex()]`);
     for (let i = 0; i < index.length; i++) {
       waitAndClick($(popupSelectors.attributeSelector(index[i])));
     }
   }
 
   importPromptDefault(objectName) {
+    logStep(`+ Importing the object "${objectName}" with the default prompt answers...    [${fileName} - importPromptDefault()]`);
     this.importObject(objectName);
     browser.pause(5555); // temp solution
     $(popupSelectors.runBtn).waitForExist(3333);
@@ -261,6 +290,7 @@ class PluginPopup {
   }
 
   importPromptDefaultNested(objectName) {
+    logStep(`+ Importing the object "${objectName}" with the default prompt answers...    [${fileName} - importPromptDefaultNested()]`);
     this.switchLibraryAndImportObject(objectName, false);
     browser.pause(5555);
     while (true) {
@@ -283,6 +313,7 @@ class PluginPopup {
    */
 
   editPromptDefaultNested(index = 1) {
+    logStep(`Importing nested prompt report number ${index} using the default answers...    [${fileName} - importPromptDefaultNested()]`);
     pluginRightPanel.editObject(index);
     browser.pause(5555);
     while (true) {
@@ -301,6 +332,7 @@ class PluginPopup {
   }
 
   openPrompt(objectName) {
+    logStep(`+ Opening the prompt object "${objectName}"...    [${fileName} - openPrompt()]`);
     this.switchLibraryAndImportObject(objectName, false);
     browser.pause(9999); // temp solution
     switchToPromptFrame();
@@ -308,6 +340,7 @@ class PluginPopup {
   }
 
   writeValueText(value) {
+    logStep(`Writing the text value: "${value}"...    [${fileName} - writeValueText()]`);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(7777);
     waitAndClick($(popupSelectors.valueInput), 5555);
@@ -316,6 +349,7 @@ class PluginPopup {
   }
 
   writeAttrQualificationValue(value) {
+    logStep(`Writing attribute qualification value: "${value}"...    [${fileName} - writeAttrQualificationValue()]`);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.attrQualificationInput).click();
@@ -324,6 +358,7 @@ class PluginPopup {
   }
 
   writeMultiPrompt(value) {
+    logStep(`Writing multiple prompt value: "${value}"...    [${fileName} - writeMultiPrompt()]`);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.calendarInput).waitForExist(7777);
@@ -334,12 +369,14 @@ class PluginPopup {
   }
 
   removeAllSelected() {
+    logStep(`Removing all the selected...    [${fileName} - removeAllSelected()]`);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.promptRemoveAllSelected).click();
   }
 
   changeExpressionQualificationAndRun(value) {
+    logStep(`Writing value in Expression Qualification: "${value}"...    [${fileName} - changeExpressionQualificationAndRun()]`);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(3333);
     $(popupSelectors.expressionInList).click();
@@ -348,6 +385,7 @@ class PluginPopup {
   }
 
   promptSelectObject(objectName) {
+    logStep(`Prompting selected object "${objectName}"...    [${fileName} - promptSelectObject()]`);
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(22222);
     waitAndClick($(`.mstrListBlockItem*=${objectName}`));
@@ -356,6 +394,7 @@ class PluginPopup {
   }
 
   promptSelectObjectForEdit(objectName) {
+    logStep(`Prompting selected object for edit "${objectName}"...    [${fileName} - promptSelectObjectForEdit()]`);
     switchToPromptFrame();
     browser.pause(10000);
     $('#mstrdossierPromptEditor').waitForExist(7777);
@@ -365,6 +404,7 @@ class PluginPopup {
   }
 
   prepareObject(objectName, elements, filters) {
+    logStep(`+ Preparing data for the object "${objectName}", selecting the attributes/metrics:"${elements}", and filters: "${filters}"...    [${fileName} - prepareObject()]`);
     this.openPrepareData(objectName);
     this.selectObjectElements(elements);
     this.selectFilters(filters);
@@ -373,8 +413,136 @@ class PluginPopup {
   }
 
   searchForPreparedObject(objectName) {
+    logStep(`Searching the element "${objectName}" in Prepare Data...    [${fileName} - searchForPreparedObject()]`);
     $(popupSelectors.prepareSearchInput).clearValue();
     $(popupSelectors.prepareSearchInput).setValue(objectName);
+  }
+
+  /**
+   * Opens the more menu for visualization. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  openMoreMenuForVisualization(visID) {
+    logStep('Opening more menu of visualization');
+    switchToPromptFrame();
+    const titleBar = $(popupSelectors.dossierWindow.getVisualisationTitleBar(visID));
+    titleBar.waitForClickable(10000, false, `${titleBar} is not clickable`);
+    titleBar.moveTo();
+    browser.pause(1000);
+    const moreMenu = $(popupSelectors.dossierWindow.getMoreItemMenu(visID));
+    moreMenu.waitForClickable(60000, false, `${moreMenu} is not clickable`);
+    waitAndClick(moreMenu);
+  }
+
+  /**
+   * Opens show data panel for for visualization. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  openShowDataPanel(visID) {
+    this.openMoreMenuForVisualization(visID);
+    logStep('Opening show data panel');
+    const showDataSelector = $(popupSelectors.dossierWindow.showDataSelector);
+    showDataSelector.waitForClickable(60000, false, `${showDataSelector} is not clickable`);
+    waitAndClick(showDataSelector);
+  }
+
+  /**
+   * Closes show data panel for for visualization. Will work if dossier window and show data panel is presented.
+   *
+   */
+  closeShowDataPanel() {
+    logStep('Closing show data panel');
+    const closeShowDataSelector = $(popupSelectors.dossierWindow.closeShowDataSelector);
+    closeShowDataSelector.waitForClickable(60000, false, `${closeShowDataSelector} is not clickable`);
+    waitAndClick(closeShowDataSelector);
+  }
+
+  /**
+   * Opens export menu that is inside more menu. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   */
+  showExportMenu(visID) {
+    const exportSelector = $(popupSelectors.dossierWindow.exportSelector);
+    this.openMoreMenuForVisualization(visID);
+    exportSelector.waitForDisplayed(60000, false, `${exportSelector} is not displayed`);
+    exportSelector.moveTo();
+  }
+
+  /**
+   * Clicks export to excel button if presented. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  exportToExcel(visID) {
+    logStep('Export to excel');
+    this.showExportMenu(visID);
+    const exportToExcel = $(popupSelectors.dossierWindow.exportToExcel);
+    exportToExcel.waitForClickable(60000, false, `${exportToExcel} is not clickable`);
+    waitAndClick(exportToExcel);
+    this.waitForExport();
+  }
+
+  /**
+   * Clicks export to PDF button if presented. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  exportToPDF(visID) {
+    logStep('Export to PDF');
+    this.showExportMenu(visID);
+    const exportToPDF = $(popupSelectors.dossierWindow.exportToPDF);
+    exportToPDF.waitForClickable(60000, false, `${exportToPDF} is not clickable`);
+    waitAndClick(exportToPDF);
+    const confirmExportToPDF = $(popupSelectors.dossierWindow.confirmExportToPDF);
+    confirmExportToPDF.waitForClickable(60000, false, `${confirmExportToPDF} is not clickable`);
+    waitAndClick(confirmExportToPDF);
+    this.waitForExport();
+  }
+
+  /**
+   * Clicks export to Data button if presented. Will work if dossier window is presented.
+   *
+   * @param {String} visID Id of the visualization, for ex: '#mstr106'
+   *
+   */
+  exportToData(visID) {
+    logStep('Export to Data');
+    this.showExportMenu(visID);
+    const exportToData = $(popupSelectors.dossierWindow.exportToData);
+    exportToData.waitForClickable(60000, false, `${exportToData} is not clickable`);
+    waitAndClick(exportToData);
+    this.waitForExport();
+  }
+
+  /**
+   * Waits for exporting the object. If limit is reached. Will work if dossier window is presented.
+   *
+   * @param {Number} limit of duration for export. Assigned to 10 by default.
+   *
+   * @throws {Error} Export wait limit is reached.
+   */
+  waitForExport(limit = 10) {
+    let count = 0;
+    let progress = true;
+    const { exportSpinner } = popupSelectors;
+    exportSpinner.waitForDisplayed(60000, false, `${exportSpinner} is not displayed`);
+    while (progress) {
+      if (count === limit) {
+        throw new Error('Export wait limit is reached. Object still could not exported');
+      } else if (!exportSpinner.isDisplayed()) {
+        progress = false;
+      } else {
+        browser.pause(1000);
+        count++;
+      }
+    }
   }
 
   // TODO: Refactor to webDriverIO. This method is only used in TC39453
@@ -410,6 +578,7 @@ class PluginPopup {
   }
 
   deleteFromSearch() {
+    logStep(`+ Deleting from searchi...    [${fileName} - deleteFromSearch()]`);
     const searchedValue = $(popupSelectors.searchInput).getAttribute('value');
     for (let i = 0; i < searchedValue.length; i++) {
       $(popupSelectors.searchInput).setValue('\uE003');
@@ -417,6 +586,7 @@ class PluginPopup {
   }
 
   importObjectAndGetTotalTime(objectName) {
+    logStep(`+ Importing object "${objectName}" and getting the total time...    [${fileName} - importObjectAndGetTotalTime()]`);
     this.importObject(objectName);
     const begin = Date.now();
     browser.pause(2000);
@@ -446,7 +616,14 @@ class PluginPopup {
     return myLibrarySwitch.getAttribute('aria-checked') === 'true';
   }
 
+  /**
+   * Swtiches the my library toggle to desired state.
+   *
+   * @param {Boolean} newState indicates how the state of switch should be.
+   *
+   */
   switchLibrary(newState) {
+    logStep(`Switching "My Library" button to "${newState}"...    [${fileName} - switchLibrary()]`);
     switchToDialogFrame();
     const myLibrarySwitch = $(popupSelectors.myLibrary);
     myLibrarySwitch.waitForExist(5000);
@@ -454,19 +631,54 @@ class PluginPopup {
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
   }
 
+  /**
+   * Opens the desired dossier window. Will work if objects window is rendered.
+   *
+   * @param {String} dossierName indicates the name of dossier that is wanted
+   * @param {Time} timeToLoadDossier amount of time that browser will be paused for dossier to load. Is set to 10 sec by default
+   * @param {Boolean} myLibrarySwitch indicates how the state of my library switch should be.
+   *
+   */
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
     this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
     browser.pause(timeToLoadDossier);
   }
 
   /**
-   * This function is used to import the desired visualization.
+   * Used to import the visualization.
    * It has to be used inside the Dossier window.
+   *
+   * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
+   */
+  selectAndImportVisualization(visContainerId) {
+    logStep(`+ Importing the visualization: "${visContainerId}"...    [${fileName} - selectAndImportVisualization()]`);
+    this.selectVisualization(visContainerId);
+    switchToPluginFrame();
+    this.clickImport();
+  }
+
+  /**
+   * Used to get the tooltip of the not clickable import button. Will work if dossier window is presented.
    *
    * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
    *
    */
-  selectAndImportVizualiation(visContainerId) {
+  selectAndMoveToImportVisualization(visContainerId) {
+    logStep(`+ Selecting and moving to import visualization: "${visContainerId}"...    [${fileName} - selectAndMoveToImportVisualization()]`);
+    this.selectVisualization(visContainerId);
+    switchToPluginFrame();
+    $(popupSelectors.importBtn).moveTo();
+    browser.pause(1000);
+  }
+
+  /**
+   * Used to select the desired visualization. Will work if dossier window is presented.
+   *
+   * @param {String} visContainerId Id of the visualization, for ex: '#mstr114'
+   *
+   */
+  selectVisualization(visContainerId) {
+    logStep(`Selecting the visualization ${visContainerId}.`);
     switchToPromptFrame();
     let visSelector;
     if (typeof visContainerId === 'undefined') {
@@ -478,12 +690,10 @@ class PluginPopup {
     }
     waitAndClick(visSelector, 40000);
     browser.pause(2500);
-    switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForEnabled(5000);
-    this.clickImport();
   }
 
   showTotals(objectId) {
+    logStep(`Showing totals: "${objectId}"...    [${fileName} - showTotals()]`);
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -495,6 +705,7 @@ class PluginPopup {
   }
 
   sortAscending(objectId) {
+    logStep(`Sorting ascending: "${objectId}"...    [${fileName} - sortAscending()]`);
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -506,6 +717,8 @@ class PluginPopup {
   // method is used to select attributes(to check checkboxes) and attribute forms.
   // parameters: JSON object, containing attributes as keys and attribute forms as values
   selectAttributesAndAttributeForms(elements) {
+    logStep(`Selecting attributes and attributes forms: "${elements}"...    [${fileName} - selectAttributesAndAttributeForms()]`);
+    switchToDialogFrame();
     for (const [attribute, attributeForm] of Object.entries(elements)) {
       waitAndClick($(`${popupSelectors.attributeCheckBox}=${attribute}`));
       if (attributeForm && attributeForm.length > 0) {
@@ -520,6 +733,7 @@ class PluginPopup {
   }
 
   selectAttributeFormVisualisation(type) {
+    logStep(`Selecting attributes attributes forms visualization: "${type}"...    [${fileName} - selectAttributeFormVisualisation()]`);
     waitAndClick($(popupSelectors.attributeFormDropdown));
     browser.pause(500);
     waitAndClick($(`${popupSelectors.attributeFormDropDownItem}=${type}`));
@@ -527,6 +741,7 @@ class PluginPopup {
   }
 
   sortDescending(objectId) {
+    logStep(`Sorting descending: "${objectId}"...    [${fileName} - sortDescending()]`);
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -535,6 +750,7 @@ class PluginPopup {
   }
 
   drillByCategory(objectId) {
+    logStep(`Drilling by  category: "${objectId}"...    [${fileName} - drillByCategory()]`);
     switchToPromptFrame();
     waitAndRightClick($(`${objectId}`));
     browser.pause(1000);
@@ -551,6 +767,7 @@ class PluginPopup {
    * @param {Array} valuesIndexes Indexes of elements to toggle (starts from 1)
    */
   selectValuesFromDossierListFilter(filterIndex, valuesIndexes) {
+    logStep(`Selecting attribute elements for filter at dossier filter panel...    [${fileName} - selectValuesFromDossierListFilter()]`);
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.filtersMenu.getFilterAt(filterIndex)), 1000);
     valuesIndexes.forEach(valueIndex => {
@@ -567,6 +784,7 @@ class PluginPopup {
    * @param {String} value value that will be inserted to input
    */
   setValueOnDossierSliderFilter(filterIndex, position, value) {
+    logStep(`Setting value for one of the inputs for slider filter in dossier filters...    [${fileName} - setValueOnDossierSliderFilter()]`);
     const { dossierWindow } = popupSelectors;
     const maxValueInput = $(`${dossierWindow.filtersMenu.getFilterAt(filterIndex)} ${dossierWindow.filtersMenu.getSliderInput(position)} > input`);
     maxValueInput.doubleClick();
@@ -575,21 +793,40 @@ class PluginPopup {
   }
 
   /**
+   * Sets filter (value for given input) on dossier.
+   *
+   * @param {String} input is a selector for given input
+   * @param {Number} value is a value for given input
+   */
+  setFilterOnDossier(input, value) {
+    logStep(`Setting value ${value} for given input`);
+    const { filterBtn, filtersMenu } = popupSelectors.dossierWindow;
+    waitAndClick($(filterBtn));
+    browser.pause(1000);
+    $(input).setValue(value);
+    browser.pause(1000);
+    waitAndClick($(filtersMenu.buttonApplyFilters));
+    browser.pause(1000);
+  }
+
+  /**
    * Refresh Dossier to default state
    *
    */
   refreshDossier() {
+    logStep(`Refreshing Dossier...    [${fileName} - refreshDossier()]`);
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonRefreshDossier), 1000);
     waitAndClick($(dossierWindow.buttonConfirmRefresh), 1000);
   }
 
   /**
-   * Refresh Dossier to default state
+   * Apply the selected bookmark
    *
    * @param {Number} index Index of the bookmark in dossier (starts from 1)
    */
   applyDossierBookmark(index) {
+    logStep(`Applying the bokmark number ${index}...    [${fileName} - applyDossierBookmark()]`);
     const { dossierWindow } = popupSelectors;
     waitAndClick($(dossierWindow.buttonBookmarks), 1000);
     waitAndClick($(dossierWindow.getBookmarkItemAt(index)), 1000);
@@ -601,7 +838,11 @@ class PluginPopup {
    * @param {Number} index Index of the page/chapter item in dossier (starts from 1)
    */
   goToDossierPageOrChapter(index) {
+    switchToPromptFrame();
+    logStep(`Changing to page or chapter number ${index}...    [${fileName} - goToDossierPageOrChapter()]`);
     const { dossierWindow } = popupSelectors;
+    $(dossierWindow.buttonToC).waitForExist(10000);
+    browser.pause(5555);
     waitAndClick($(dossierWindow.buttonToC), 1000);
     waitAndClick($(dossierWindow.getTocItemAt(index)), 1000);
   }
@@ -619,6 +860,7 @@ class PluginPopup {
    * @returns {String[]} array of IDs
    */
   copyObjectsID() {
+    logStep(`Copying objects ID...    [${fileName} - copyObjectsID()]`);
     const rows = this.getTableRows();
     const idsArray = [];
     for (const row of rows) {
@@ -636,21 +878,23 @@ class PluginPopup {
    * @param {Number} index row number to expand Details panel for
    */
   expandObjectDetails(index) {
+    logStep(`Expanding details for the object number ${index}...    [${fileName} - expandObjectDetails()]`);
     $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
     const expandButtons = $$(popupSelectors.expandButton);
     expandButtons[index - 1].click();
   }
 
   /**
-    * Hovers over the expand button for the given object
-    * to show the tooltip and gets the tooltip text
-    *
-    * @param {Number} index index of the object in the table
-    * @param {Boolean} isExpanded represents row state collapsed/expanded
-    * @returns {String} tooltip text for the location element
-    *
-    */
+   * Hovers over the expand button for the given object
+   * to show the tooltip and gets the tooltip text
+   *
+   * @param {Number} index index of the object in the table
+   * @param {Boolean} isExpanded represents row state collapsed/expanded
+   * @returns {String} tooltip text for the location element
+   *
+   */
   getExpandButtonTooltipText(index, isExpanded = false) {
+    logStep(`Hovering over the expand button for the object number ${index}...    [${fileName} - getExpandButtonTooltipText()]`);
     const expandButtonSelector = !isExpanded ? popupSelectors.expandButton : popupSelectors.expandButtonOpen;
     $(expandButtonSelector).waitForExist({ timeout: 3000 });
     const expandButtons = $$(expandButtonSelector);
@@ -665,6 +909,7 @@ class PluginPopup {
    * @returns {String} the detail value
    */
   copyToClipboardObjectDetails(index) {
+    logStep(`Copyig Object Details from Details panel of the object number ${index}...    [${fileName} - copyToClipboardObjectDetails()]`);
     const INDEX_TO_DETAIL = {
       1: popupSelectors.typeDetail, // Type
       2: popupSelectors.idDetail, // ID
@@ -681,6 +926,7 @@ class PluginPopup {
    * Clicks Filter button, that opens Filter Panel
    */
   clickFilterButton() {
+    logStep(`Clicking filter button...    [${fileName} - clickFilterButton()]`);
     waitAndClick($(popupSelectors.filterButton));
   }
 
@@ -690,6 +936,7 @@ class PluginPopup {
    * @param {String} item name of the chosen checkBox, like 'MicroStrategy Tutorial'
    */
   tickFilterCheckBox(category, item) {
+    logStep(`Setting checkbox checked for the category: "${category}" and the item "${item}"...    [${fileName} - tickFilterCheckBox()]`);
     $(popupSelectors.filterCheckbox(category, item)).click();
   }
 
@@ -697,6 +944,7 @@ class PluginPopup {
    * Pastes clipboard's content to Search box, using 'Shift' + 'Insert' key combination
    */
   pasteToSearchBox() {
+    logStep(`Pasting clipboard's content to Search box, using 'Shift' + 'Insert' key combination...    [${fileName} - pasteToSearchBox()]`);
     const searchBox = $(popupSelectors.searchInput);
     searchBox.setValue(['Shift', 'Insert']);
   }
@@ -706,13 +954,14 @@ class PluginPopup {
    * @param {String} stringToCompare
    */
   compareSearchBoxToString(stringToCompare) {
+    logStep(`Comparing value of Search box to the string "${stringToCompare}"...    [${fileName} - compareSearchBoxToString()]`);
     const searchBox = $(popupSelectors.searchInput);
     browser.pause(1111);
     return searchBox.getValue() === stringToCompare;
   }
 
   openPrepareData(objectName, isObjectFromLibrary = false, objectOrder = 1) {
-    console.log('Should open prepare data');
+    logStep(`+ Selecting the object "${objectName}" and opening Prepare Data...    [${fileName} - openPrepareData()]`);
     switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
@@ -727,6 +976,7 @@ class PluginPopup {
    * @param {Number} index Id of the visualization, for ex: '#mstr114'
    */
   importDefaultPromptedVisualisation(visContainerId) {
+    logStep(`+ Answering the default prompt answer and selecting the visualization "${visContainerId}"...    [${fileName} - importDefaultPromptedVisualisation()]`);
     // Clicking 'Run' in the prompt window
     switchToPromptFrameForImportDossier();
     $('#mstrdossierPromptEditor').waitForExist(10000);
@@ -734,7 +984,7 @@ class PluginPopup {
     console.log('it was clicked');
     browser.pause(6000);
     // Importing the selected visualization
-    this.selectAndImportVizualiation(visContainerId);
+    this.selectAndImportVisualization(visContainerId);
   }
 
   /**
@@ -746,6 +996,7 @@ class PluginPopup {
    * @param {Number} index Id of the visualization, for ex: '#mstr114'
    */
   repromptDefaultVisualisation(visContainerId) {
+    logStep(`+ Reprompting the default prompt answer and selecting the visualization "${visContainerId}"...    [${fileName} - repromptDefaultVisualisation()]`);
     // edit
     pluginRightPanel.editObject(1);
     browser.pause(5000);
@@ -760,7 +1011,7 @@ class PluginPopup {
     this.clickRunForPromptedDossier();
     console.log('it was clicked');
     browser.pause(6000);
-    this.selectAndImportVizualiation(visContainerId);
+    this.selectAndImportVisualization(visContainerId);
   }
 
   /**
@@ -768,6 +1019,7 @@ class PluginPopup {
    * @param {String[]} keyNames array of key strings e.g. ['End']
    */
   scrollTable(keyNames) {
+    logStep(`Scrolling the table...    [${fileName} - scrollTable()]`);
     waitAndClick($(popupSelectors.objectTable.scrollContainer));
     browser.keys(keyNames);
     browser.pause(1999); // time to scroll to the bottom of the list
@@ -777,6 +1029,7 @@ class PluginPopup {
    * Selects the last visible object from the tableOfObjects
    */
   selectLastObject() {
+    logStep(`Selecting the last object from the table...    [${fileName} - selectLastObject()]`);
     const renderedObjects = $$('[role="option"]');
     const lastObject = renderedObjects[renderedObjects.length - 1];
     waitAndClick(lastObject);
@@ -786,6 +1039,7 @@ class PluginPopup {
    * Imports the first available visualization from a selected dossier
    */
   importVisualization() {
+    logStep(`Importing the first visualization from a selected dossier...    [${fileName} - importVisualization()]`);
     switchToPromptFrame();
     browser.pause(13000); // temp solution, time for dossier to load
     $('.mstrmojo-VizBox-selector').click();
@@ -800,6 +1054,7 @@ class PluginPopup {
    * @param {String} section name of the section to open all panel for, e.g 'Application'
    */
   clickAllButton(section) {
+    logStep(`Opening all panel for the given section "${section}"...    [${fileName} - clickAllButton()]`);
     switch (section) {
       case 'Application':
         waitAndClick($$(popupSelectors.filterPanel.expandButton)[0]);
@@ -820,10 +1075,11 @@ class PluginPopup {
   }
 
   /**
-   * Clicks a checkbox on all panel by given checkboxTitle
-   * @param {String} checkboxTitle title of the checkbox on the allPanel
-   */
+       * Clicks a checkbox on all panel by given checkboxTitle
+       * @param {String} checkboxTitle title of the checkbox on the allPanel
+       */
   clickAllPanelElement(checkboxTitle) {
+    logStep(`Clicking the checkbox "${checkboxTitle}"...    [${fileName} - clickAllPanelElement()]`);
     waitAndClick($(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)));
   }
 
@@ -831,6 +1087,7 @@ class PluginPopup {
    * Clicks selectAll button for open allPanel
    */
   clickSelectAll() {
+    logStep(`Clicking the "Select all" button...    [${fileName} - clickSelectAll()]`);
     waitAndClick($(popupSelectors.filterPanel.selectAllButton));
   }
 
@@ -839,6 +1096,7 @@ class PluginPopup {
    * @param {String} checkboxTitle title of the checkbox on the allPanel
    */
   clickDisabledElement(checkboxTitle) {
+    logStep(`Clicking the disabled checkbox "${checkboxTitle}"...    [${fileName} - clickDisabledElement()]`);
     waitAndClick($(popupSelectors.filterPanel.getAllPanelDisabledCheckbox(checkboxTitle)));
   }
 
@@ -849,6 +1107,7 @@ class PluginPopup {
    *
    */
   scrollTableDownByPages(count) {
+    logStep(`Scrolling down ${count} pages...    [${fileName} - scrollTableDownByPages()]`);
     const scrollContainer = $(popupSelectors.objectTable.scrollContainer);
     waitAndClick(scrollContainer);
     for (let page = 0; page < count; page++) {
@@ -862,6 +1121,7 @@ class PluginPopup {
    * @param {Number} amount Number of rows to expand
    */
   expandFirstRows(amount) {
+    logStep(`Expading ${amount} rows...    [${fileName} - expandFirstRows()]`);
     $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
     const expandButtons = $$(popupSelectors.expandButton);
     for (let i = 0; i < amount; i++) {
@@ -876,6 +1136,7 @@ class PluginPopup {
    * @param {Number} amount Number of rows to expand
    */
   expandLastRows(amount) {
+    logStep(`Expading ${amount} last rows...    [${fileName} - expandLastRows()]`);
     $(popupSelectors.expandButton).waitForExist({ timeout: 3000 });
     const expandButtons = $$(popupSelectors.expandButton);
     for (let i = expandButtons.length - 1; i > expandButtons.length - 1 - amount; i--) {
@@ -891,6 +1152,7 @@ class PluginPopup {
    * @param {String} value value to typed
    */
   clickAndKeys(selector, value) {
+    logStep(`Clicking selector and typing the value ${value}...    [${fileName} - clickAndKeys()]`);
     $(selector).click();
     $(selector).keys(value);
   }
@@ -901,6 +1163,7 @@ class PluginPopup {
    * @param {Number} amount Number of rows to expand
    */
   expandFirstAndLastRows(amount) {
+    logStep(`Expading ${amount} rows...    [${fileName} - expandFirstAndLastRows()]`);
     const filterResults = this.getFilterResults();
     amount = filterResults < amount ? filterResults : amount;
     this.expandFirstRows(amount);
@@ -909,9 +1172,24 @@ class PluginPopup {
   }
 
   /**
+   * Closes given number of rows starting at the beginning of visible rows in Table of Objects
+   *
+   * @param {Number} amount Number of rows to close
+   */
+  closeRowsFromTop(amount) {
+    $(popupSelectors.expandButtonOpen).waitForExist({ timeout: 3000 });
+    const openExpandButtons = $$(popupSelectors.expandButtonOpen);
+    for (let i = 0; i < amount; i++) {
+      openExpandButtons[i].waitForExist({ timeout: 3000 });
+      openExpandButtons[i].click();
+    }
+  }
+
+  /**
    * Clicks the Refresh button located at the top bar of Table of Objects
    */
   clickRefreshButton() {
+    logStep(`Clicking refresh button...    [${fileName} - clickRefreshButton()]`);
     waitAndClick($(popupSelectors.refreshButton));
   }
 
@@ -919,6 +1197,7 @@ class PluginPopup {
    *  Waits for the Refresh to finish by checking if spinner animation of Refresh button ended
    */
   waitForRefresh() {
+    logStep(`Waiting for refresh to finish...    [${fileName} - waitForRefresh()]`);
     $(popupSelectors.refreshButton).waitForExist({ timeout: 5000 });
     browser.pause(500);
   }
@@ -960,6 +1239,7 @@ class PluginPopup {
    * @param {String} dateTo
    */
   filterByDate(dateFrom, dateTo) {
+    logStep(`Filtering by dates from ${dateFrom} to ${dateTo}...    [${fileName} - filterByDate()]`);
     const dateFromInput = $$(popupSelectors.filterPanel.dates)[0];
     const dateToInput = $$(popupSelectors.filterPanel.dates)[1];
     dateFromInput.click();
@@ -979,6 +1259,7 @@ class PluginPopup {
    * Clicks the 'Clear all' button in the filter panel
    */
   clearAll() {
+    logStep(`Clicking the 'Clear all' button in the filter panel...    [${fileName} - clearAll()]`);
     const clearAllButton = $(popupSelectors.filterPanel.clearAll);
     waitAndClick(clearAllButton);
   }
@@ -1083,6 +1364,23 @@ class PluginPopup {
   }
 
   /**
+    * Checks if the passed details table contains all required elements
+    *
+    * @param {Element} detailsTable Details Table to extract the tooltip from
+    * @param {Boolean} [isMyLibraryOn] myLibrary switch state
+    */
+  assertDetailsTableDisplayedCorrectly(detailsTable, isMyLibraryOn) {
+    const detailsTableText = detailsTable.getText();
+    expect(detailsTableText).toContain('Type');
+    expect(detailsTableText).toContain('ID');
+    expect(detailsTableText).toContain('Description');
+    if (!isMyLibraryOn) {
+      expect(detailsTableText).toContain('Created');
+      expect(detailsTableText).toContain('Location');
+    }
+  }
+
+  /**
     * Navigates to particular element (ex. button), via tab and presses enter.
     *
     * @param {Number} numberOfSteps is number of steps to navigate to particular element
@@ -1173,6 +1471,7 @@ class PluginPopup {
     *
     */
   pressTabUntilElementIsFocused(element, limit = 50) {
+    logStep(`Pressing the tab key until element is focused...    [${fileName} - pressTabUntilElementIsFocused()]`);
     let count = 0;
     while (!element.isFocused()) {
       if (count === limit) {
@@ -1185,10 +1484,11 @@ class PluginPopup {
   }
 
   /**
-    * Clears searchbar on prepare data by pressing backspace.
-    *
-    */
+   * Clears searchbar on prepare data by pressing backspace.
+   *
+   */
   clearElementSearchWithBackspace() {
+    logStep(`Clearing searchbar on prepare data...    [${fileName} - clearElementSearchWithBackspace()]`);
     const searchInputInPrepareData = $(popupSelectors.searchInputPrepareDataPopup);
     waitAndClick(searchInputInPrepareData);
     while (searchInputInPrepareData.getValue() !== '') {
@@ -1206,6 +1506,7 @@ class PluginPopup {
    * @param {boolean} add Boolean value - if true, select "Add data" button, not "Import data"
    */
   importObjectToCellAndAssertSuccess(cellValue, object, message, add = false) {
+    logStep(`Importing object ${object} to the cell ${cellValue}...    [${fileName} - importObjectToCellAndAssertSuccess()]`);
     console.log(message);
     OfficeWorksheet.selectCell(cellValue);
     if (add) {
@@ -1238,6 +1539,71 @@ class PluginPopup {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(10000);
     switchToPromptFrameForImportDossier();
+  }
+
+  /**
+ * Answer Prompts for ptompts type:
+ *  Year - value prompt with value of the year, eg answerPrompt('Year', '2016', 1),
+ *  Value - prompt with text box to answer eg answerPrompt('Value', '1820', 7)
+ *  Object - selecting single object to add/remove form selection, eg answerPrompt('Object', 'Books', 1)
+ *  Category - this prompt is having search box and table for selection eg answerPrompt('Category', 'Books', 3)
+ *  Attribute elements - when you are selecting elements from attribute (moving form one side to other)
+ *
+ *  //TODO - rest of the prompts type and ipadete Object and Category to have ability to select more items
+ * 
+  * @param {String} type one of type: Year, VAlue, Object, Category, Attribute elements
+  * @param {String} value input for the prompt
+  * @param {number} [index=1] number of prompt on list
+  * @memberof PluginPopup
+ */
+  answerPrompt(type, value, index = 1) {
+    // eslint-disable-next-line default-case
+    switch (type) {
+      case 'Year':
+        logStep(`Answer prompt ${index} and set ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getYearPrompt(index)).doubleClick();
+        $(popupSelectors.prompts.getYearPrompt(index)).keys(value);
+        pressTab();
+        break;
+      case 'Value':
+        logStep(`Answer prompt ${index} and set ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getValuePrompt(index)).doubleClick();
+        $(popupSelectors.prompts.getValuePrompt(index)).keys(value);
+        pressTab();
+        break;
+      case 'Object':
+        logStep(`Answer prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getObjectsPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
+        pressTab();
+        break;
+      case 'Category':
+        logStep(`Answer prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).click();
+        $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).doubleClick();
+        pressTab();
+        break;
+      case 'Attribute elements':
+        logStep(`Answer prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
+        $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
+        pressTab();
+    }
+  }
+
+  /**
+ *
+ *
+ * @param {number} index of prompt
+ * @memberof PluginPopup
+ */
+  selectPromptOnPanel(index) {
+    $(popupSelectors.getpromptPanel(index)).$(`.mstrPromptTOCListItemIndex=${index}`).click();
+    browser.pause(1000);
   }
 
   /**

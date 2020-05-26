@@ -9,7 +9,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 
-describe('F21402 - Handle Prompted Object', () => {
+describe('F21402 - Support for prompted reports while importing data for Excel add-in', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

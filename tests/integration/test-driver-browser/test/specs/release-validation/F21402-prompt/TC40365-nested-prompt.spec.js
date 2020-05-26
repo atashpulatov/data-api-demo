@@ -7,7 +7,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
-describe('F21402 - Handle Prompted Object', () => {
+describe('F21402 - Support for prompted reports while importing data for Excel add-in', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

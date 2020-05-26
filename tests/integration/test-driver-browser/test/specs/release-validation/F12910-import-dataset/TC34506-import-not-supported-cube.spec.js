@@ -8,7 +8,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import officeLogin from '../../../helpers/office/office.login';
 
-describe('[F12910] - Ability to import a dataset from MicroStrategy', () => {
+describe('F12910 - Ability to import a dataset from MicroStrategy', () => {
   beforeEach(() => {
     officeLogin.openExcelAndLoginToPlugin();
   });

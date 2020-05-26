@@ -9,7 +9,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { objectsList } from '../../../constants/objects-list';
 
-describe('F24751 Import report with or without subtotals', () => {
+describe('F24751 - Import report with or without subtotals', () => {
   it('[TC53340] - Set subtotals toggle ON during import report with subtotals', () => {
     // step0 - open plugin
     OfficeLogin.openExcelAndLoginToPlugin();

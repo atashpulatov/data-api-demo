@@ -7,7 +7,7 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
-describe('TC59756 - Expanded view E2E workflow', () => {
+describe('F25946 - Object Details Panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -17,7 +17,7 @@ describe('TC59756 - Expanded view E2E workflow', () => {
     changeBrowserTab(0);
   });
 
-  it('Imports an object after checking details', () => {
+  it('[TC59756] - [Object Details] Expanded view for Table of Objects', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
