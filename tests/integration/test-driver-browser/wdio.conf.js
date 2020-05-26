@@ -104,12 +104,15 @@ exports.config = {
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC65447-import-refresh-workflows-e2e.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-chinese-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-a-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
+      './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js',
+      '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -215,6 +218,9 @@ exports.config = {
     'F21411-right-panel': [
       '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js'
     ],
+    'F21526-secure-data': [
+      './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js'
+    ],
     'F25931-duplicate-object': [
       './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
       './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
@@ -230,7 +236,7 @@ exports.config = {
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
     ],
     'F21409-refresh-all': [
-      './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js'
+      './test/specs/release-validation/F21409-refresh-all/TC41094-right-panel-refresh-all.spec.js'
     ],
     'F25943-refresh-move-to-add-in-side-panel': [
       './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',

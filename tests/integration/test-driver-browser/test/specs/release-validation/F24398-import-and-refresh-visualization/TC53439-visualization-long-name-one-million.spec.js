@@ -7,7 +7,6 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
-import pluginPopup from '../../../helpers/plugin/plugin.popup';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {
@@ -25,11 +24,11 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginRightPanel.clickImportDataButton();
 
     console.log('Should open dossier');
-    pluginPopup.importAnyObject(objectsList.dossiers.oneMillionAndLongName.name);
+    PluginPopup.importAnyObject(objectsList.dossiers.oneMillionAndLongName.name);
     browser.pause(5555);
 
     console.log('Should select and import visualization');
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.oneMillionAndLongName.visualization);
+    PluginPopup.selectAndImportVisualization(objectsList.dossiers.oneMillionAndLongName.visualization);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
   });

@@ -1,9 +1,29 @@
 module.exports = {
-  // Rally REST API
   apiUrl: 'https://rally1.rallydev.com/slm/webservice/v2.0',
   rallyApiKey: process.env.RALLY_API_KEY,
-  manualTestCases: {
+  email: '',
+  manual: {
     passedTestCases: [],
-    failedTestCases: []
+    failedTestCases: [],
+    testSet: '',
+    release: '',
+    build: '',
+    duration: '',
+    OS: '',
+    language: 'English',
+    exportApp: '',
+    env: '',
+    notes: '',
+    browser: ''
+  },
+  automation: {
+    testSet: '', // only for Release Validation
+    notes: 'Automation results', // for Release Validation change to 'Release Validation'
+    env: '',
+    exportApp: '',
+    OS: '',
+    language: 'English',
+    build: '',
+    release: '11.2.2 [2020-Jun-05]'
   }
 };

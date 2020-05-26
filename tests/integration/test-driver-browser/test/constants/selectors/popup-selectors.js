@@ -1,5 +1,3 @@
-// import {$$} from 'protractor';
-
 export const popupSelectors = {
   // TODO group selectors based on location
   tableOfObjects: '#WACDialogPanel',
@@ -24,7 +22,7 @@ export const popupSelectors = {
   attributeSelector: (index) => `#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div > ul > li:nth-child(${index}) > span.ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-close > span.ant-tree-title > span`,
   filterCheckbox: (category, item) => `.category-list-header[aria-label="${category}"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ${item}."] + span`,
   filterCheckboxState: (category, item) => `.category-list-header[aria-label="${category}"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for ${item}."]`,
-  promptPanel: (index) => `#id_mstr71 > table > tbody > tr:nth-child(${index}) > td.mstrPromptTOCListItemTitle`,
+  getpromptPanel: (index) => `.mstrPromptTOCListTable tr:nth-child(${index})`,
   selectorFilter: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12 > div > div:nth-child(1) > div.selector-title',
   backBtn: '#back',
   dataPreviewBtn: '#data-preview',
@@ -42,6 +40,7 @@ export const popupSelectors = {
   firstClosedAttributeFormSwitcher: 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div.attribute-forms > ul > li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > span.ant-tree-switcher',
   attributesContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div > ul',
   metricsContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div',
+  filterTitles: '.filter-title',
   filtersContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(1) > div.filter-list.ant-list > div > div > ul',
   sortAttributes: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.selector-title > div',
   sortMetrics: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.selector-title > div',
@@ -59,7 +58,7 @@ export const popupSelectors = {
   sortedUp: '.ant-table-column-sorter-up.on',
   sortedDown: '.ant-table-column-sorter-up.on',
   noDataIcon: $('.ant-table-placeholder'),
-  myLibrary: '#popup-wrapper > div.navigation_tree__main_wrapper > div.navigation_tree__title_bar > div.top-filter-panel > div.mstr-switch-container > div.mstr-switch[aria-label="My Library"]',
+  myLibrary: '#mstr-switch-toggle',
   closeRefreshAll: '.WACGlyph.WACDialogCloseAnchor',
   clearSearchInput: '.search-field__clear-button',
   columnOwner: '.ReactVirtualized__Table__row > div[aria-colindex="4"] > span',
@@ -76,6 +75,7 @@ export const popupSelectors = {
   idDetailTooltip: 'tr:nth-of-type(2) .tooltiptext',
   locationDetailTooltip: 'tr:nth-of-type(4) .tooltiptext',
   descriptionDetailTooltip: 'tr:nth-of-type(5) .tooltiptext',
+  importButtonTooltip: 'body > div:nth-child(8) > div > div > div > div.ant-popover-inner > div > div',
   filterButton: '.filter-button',
   expandButtonOpen: '.details-indicator-opened',
   filterResults: '.FilterResult > strong',
@@ -92,11 +92,13 @@ export const popupSelectors = {
   categoryButton: 'div=Category',
   visualizationSelector: '.mstrmojo-VizBox-selector',
   refreshButton: '.refresh-button',
+  exportSpinner: $('.mstrd-spinner-export'),
+  filterCostInput: 'div.mstrd-MQInput.mstrd-SliderSummary-left-input > input',
   prepareData: { getAttributeAt: (index) => `#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
-  smartFolderTable:
-  { availableObjectNumber: '#popup-wrapper> div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
+  smartFolderTable: { availableObjectNumber: '#popup-wrapper> div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
   },
   dossierWindow: {
+    getVizAT: (index) => `.mstrmojo-DocSubPanel-content > div > div:nth-child(${index})`,
     visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
     filterCount: '.mstrd-FilterSummaryBar-filterCount',
     buttonToC: 'li.mstrd-NavItemWrapper.mstrd-ToCNavItemContainer.mstr-navbar-item > div > div',
@@ -105,6 +107,7 @@ export const popupSelectors = {
     getBookmarkItemAt: (index) => `div.mstrd-BookmarkDropdownMenuContainer-myBookmarks > ul > div:nth-child(${index})`,
     buttonRefreshDossier: 'div.mstr-nav-icon.icon-resetfile',
     buttonConfirmRefresh: '.mstrd-DeleteDossier-button',
+    filterBtn: '.mstr-nav-icon.icon-filter',
     buttonFilters: 'li.mstrd-FilterNavItemContainer',
     filtersMenu: {
       getFilterAt: (index) => `div.mstrd-FilterPanel-content > ul > li:nth-child(${index})`,
@@ -112,7 +115,16 @@ export const popupSelectors = {
       getSliderInput: (position) => (position === 'left' ? '.mstrd-SliderSummary-left-input' : '.mstrd-SliderSummary-right-input'),
       buttonApplyFilters: 'div.mstrd-FilterPanelFooterContainer-apply',
     },
-    repromptDossier: 'div.mstr-nav-icon.icon-reprompt'
+    repromptDossier: 'div.mstr-nav-icon.icon-reprompt',
+    getVisualisationTitleBar: (visID) => `${visID} > div.mstrmojo-UnitContainer-SplitterHost > div.mstrmojo-UnitContainer-ContentBox > div.mstrmojo-UnitContainer-titlebar`,
+    getMoreItemMenu: (visID) => `${visID} > div.hover-menu-btn.visible`,
+    showDataSelector: '.item.shwd.mstrmojo-ui-Menu-item',
+    closeShowDataSelector: '.mstrmojo-Button-text',
+    exportSelector: '.item.pop.export.mstrmojo-ui-Menu-item',
+    exportToExcel: '.item.exportToExcel.mstrmojo-ui-Menu-item',
+    exportToPDF: '.item.exportToPDF.mstrmojo-ui-Menu-item',
+    confirmExportToPDF: '.mstrmojo-Button.mstrmojo-WebButton.hot',
+    exportToData: '.item.exportToCSV.mstrmojo-ui-Menu-item',
   },
   promptedAll: {
     prompt1: '#id_mstr103 .mstrBGIcon_tbAdd',
@@ -131,6 +143,16 @@ export const popupSelectors = {
     prompt12: '#id_mstr329_txt',
     prompt13: '.mstrBGIcon_tbAdd',
   },
+  prompts: {
+    getYearPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) span .mstrCalendarAndTimePickerCellTextBox`,
+    getObjectsPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index})`,
+    getTableCategoryPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) span .mstrListCartCellTableContainer`,
+    getDateTimePrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrPromptQuestionSimpleAnswerView .mstrCalendarAndTimePickerCellTextBox`,
+    getValuePrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrPromptQuestionSimpleAnswerView .mstrCalendarAndTimePickerCellTextBox`,
+    getAttributeElementListPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrListBlockContents`,
+    getDatePrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrPromptQuestionSimpleAnswerView .mstrCalendarAndTimePickerCellTextBox`,
+  },
+  
   filterPanel: {
     expandButton: '.expand-btn',
     selectAllButton: '.all-panel__buttons button:first-of-type',

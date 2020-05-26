@@ -7,7 +7,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
-describe('[F22954] - Ability to edit data already imported to the workbook', () => {
+describe('F22954 - Ability to edit data already imported to the workbook', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

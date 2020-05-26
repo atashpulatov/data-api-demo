@@ -10,7 +10,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
 
 
-describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+describe('F12909 - Ability to import a report from MicroStrategy', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

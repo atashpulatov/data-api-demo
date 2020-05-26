@@ -27,7 +27,7 @@ function isTooltipCorrect(displayed, tooltip) {
       && tooltip.substring(tooltip.length - end.length) === end;
 }
 
-describe('F25946 - Display more information about the objects in the objects list', () => {
+describe('F25946 - Object Details Panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -38,7 +38,7 @@ describe('F25946 - Display more information about the objects in the objects lis
     browser.switchToWindow(handles[0]);
   });
 
-  it('TC60112 - [Object Details] Tooltips for details elements', () => {
+  it('[TC60112] - [Object Details] Tooltips for details elements', () => {
     PluginRightPanel.clickImportDataButton();
     switchToPluginFrame();
     PluginPopup.switchLibrary(false);
