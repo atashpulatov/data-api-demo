@@ -25,7 +25,7 @@ describe('F30479 - Hardening of importing data from Dossier to Excel', () => {
     console.log(`Find, select and open ${objectsList.dossiers.withFilter.name}`);
     PluginPopup.openDossier(objectsList.dossiers.withFilter.name, 10000, false, 2);
     console.log('Select and import the visualization');
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.withFilter.visualizations.vis1);
+    PluginPopup.selectAndImportVisualization(objectsList.dossiers.withFilter.visualizations.vis1);
     console.log('Check success of data import');
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
@@ -54,7 +54,7 @@ describe('F30479 - Hardening of importing data from Dossier to Excel', () => {
     console.log(`Find, select and open ${objectsList.dossiers.withAttributeMetricSelector.name}`);
     PluginPopup.openDossier(objectsList.dossiers.withAttributeMetricSelector.name);
     console.log('Select and import the visualization');
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.withAttributeMetricSelector.visualizations.vis1);
+    PluginPopup.selectAndImportVisualization(objectsList.dossiers.withAttributeMetricSelector.visualizations.vis1);
     console.log('Check success of data import');
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     console.groupEnd();

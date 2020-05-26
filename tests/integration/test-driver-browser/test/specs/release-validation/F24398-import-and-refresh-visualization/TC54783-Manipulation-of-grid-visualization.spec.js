@@ -35,7 +35,7 @@ describe('F24398 - Import and refresh visualization', () => {
     expect($(revenueText).getText()).toEqual('$1,553,525');
     PluginPopup.drillByCategory(yearAttribute);
     expect($(categoryText).getText()).toEqual('Books');
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.visualization1.name);
+    PluginPopup.selectAndImportVisualization(dossierObject.visualizations.visualization1.name);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(5000);

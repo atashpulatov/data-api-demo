@@ -76,8 +76,13 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.selectActiveCellOptionInDuplicatePopup();
     PluginRightPanel.clickDuplicatePopupEditBtn();
     switchToDialogFrame();
+<<<<<<< HEAD
     const visualization = objectsList.dossiers.interactiveDossier.vis2;
     PluginPopup.selectAndImportVizualiation(visualization);
+=======
+    const visualization = objectsList.dossiers.userActivityDossier.visualizations.dailyActiveAccounts;
+    PluginPopup.selectAndImportVisualization(visualization);
+>>>>>>> origin/m2020
     PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
   });
 });
