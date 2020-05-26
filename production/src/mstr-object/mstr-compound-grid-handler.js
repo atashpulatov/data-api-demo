@@ -8,9 +8,16 @@ export function parseColumnSets(columnSets) {
   return parsedColumns;
 }
 
-export function parseRowValues(columnSetsMetricValues, rows) {
-  // TODO: Proper row parsing
-
+export function renderRows(columnSetsMetricValues, currentRows, valueMatrix = 'raw') {
+  const rowTable = [];
+  for (let row = 0; row < currentRows; row++) {
+    const rowValues = [];
+    for (let colSet = 0; colSet < columnSetsMetricValues.length; colSet++) {
+      rowValues.push(...columnSetsMetricValues[colSet][valueMatrix][row]);
+    }
+    rowTable.push(rowValues);
+  }
+  return rowTable;
 }
 
 export function calculateColumnHeaderHeight(columnSetsHeaders, columnSets) {
@@ -36,7 +43,11 @@ export function calculateColumnHeaderOffset(columnSets, columnSetsDefinition) {
   return offset;
 }
 
-export function parseColumnSetHeaders(columnSetsHeaders, columnSetsDefinition) {
+export function renderCompoundGridRowHeaders(columnSetsHeaders, columnSetsDefinition) {
+
+}
+
+export function renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition) {
   const transposedHeaders = columnSetsHeaders.map(mstrNormalizedJsonHandler.transposeMatrix);
   const boundingHeight = calculateColumnHeaderHeight(columnSetsHeaders, columnSetsDefinition);
 
@@ -77,20 +88,4 @@ export function parseColumnSetHeaders(columnSetsHeaders, columnSetsDefinition) {
   }
 
   return parsedHeaders;
-}
-
-export function parseCompoundGrid(response) {
-  const { definition, data } = response;
-  const columns = parseColumnSets(definition.grid.columnSets);
-  const metrics = parseRowValues(data.metricValues.columnSets, data.paging.current);
-  const headers = parseColumnSetHeaders(data.headers.columnSets, definition.grid.columnSets);
-  console.log(columns);
-  console.log(headers);
-  delete definition.grid.columnSets;
-  delete data.headers.columnSets;
-  delete data.metricValues.columnSets;
-  definition.grid.columns = columns;
-  data.headers.columns = headers;
-  data.metricValues = { raw: metrics };
-  return response;
 }
