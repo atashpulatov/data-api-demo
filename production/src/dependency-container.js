@@ -17,6 +17,7 @@ import { popupActions } from './redux-reducer/popup-reducer/popup-actions';
 import { authenticationService } from './authentication/auth-rest-service';
 import { operationBus } from './operation/operation-bus';
 import { sidePanelService } from './right-side-panel/side-panel-service';
+import { sidePanelNotificationHelper } from './right-side-panel/side-panel-notification-helper';
 import subscribeSteps from './operation/operation-subscribe-steps';
 import operationStepDispatcher from './operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
@@ -59,6 +60,8 @@ class DIContainer {
     this.popupController.init(reduxStore, sessionActions, popupActions);
     this.sidePanelService = sidePanelService;
     this.sidePanelService.init(reduxStore);
+    this.sidePanelNotificationHelper = sidePanelNotificationHelper;
+    this.sidePanelNotificationHelper.init(reduxStore);
 
     this.initializeOperationSteps();
 
