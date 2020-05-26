@@ -219,7 +219,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.firstObjectWithoutSearch));
   }
 
-  switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
+  switchLibraryAndImportObject(objectName, myLibrarySwitch = false, index = 1) {
     logStep(`+ Importing the object "${objectName}"...    [${fileName} - switchLibraryAndImportObject()]`);
     switchToDialogFrame();
     browser.pause(4000);
@@ -227,7 +227,7 @@ class PluginPopup {
     browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectObject();
+    this.selectObject(index);
     this.clickImport();
   }
 
@@ -497,8 +497,8 @@ class PluginPopup {
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
   }
 
-  openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
-    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
+  openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false, index = 1) {
+    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch, index);
     browser.pause(timeToLoadDossier);
   }
 
