@@ -4,6 +4,7 @@ import officeTableCreate from './office-table-create';
 import officeTableUpdate from './office-table-update';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
+import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
 
 class StepGetOfficeTableEditRefresh {
   /**
@@ -31,11 +32,13 @@ class StepGetOfficeTableEditRefresh {
         tableName,
         previousTableDimensions,
         objectWorkingId,
+        insertNewWorksheet,
       } = objectData;
       const {
-        excelContext, instanceDefinition, oldBindId, objectEditedData, tableChanged: tmp, startCell: newStartCell
+        excelContext, instanceDefinition, oldBindId, objectEditedData, startCell: newStartCell,
       } = operationData;
       const { mstrTable } = instanceDefinition;
+      let { tableChanged: tmp, } = operationData;
 
       let shouldFormat;
       let bindId = oldBindId;
@@ -49,8 +52,9 @@ class StepGetOfficeTableEditRefresh {
         previousTableDimensions,
       );
 
-      const lol = tmp || tableChanged;
-      if (lol) {
+      tmp = tmp || tableChanged;
+
+      if (tmp) {
         console.log('Instance definition changed, creating new table');
 
         ({ officeTable, bindId } = await officeTableCreate.createOfficeTable(
@@ -60,8 +64,9 @@ class StepGetOfficeTableEditRefresh {
             startCell,
             tableName,
             prevOfficeTable,
-            tableChanged: lol,
-            newStartCell
+            tableChanged: tmp,
+            newStartCell,
+            insertNewWorksheet
           }
         ));
       } else {
@@ -81,7 +86,7 @@ class StepGetOfficeTableEditRefresh {
         objectWorkingId,
         officeTable,
         shouldFormat,
-        tableChanged: lol,
+        tableChanged: tmp,
         instanceDefinition,
         startCell: newStartCell,
       };

@@ -65,7 +65,7 @@ class StepGetInstanceDefinition {
       this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsInfo.subtotalsAddresses);
 
       if (nextStep === GET_OFFICE_TABLE_IMPORT) {
-        startCell = await this.getStartCell(insertNewWorksheet, excelContext);
+        startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
       }
 
       const { mstrTable } = instanceDefinition;
@@ -186,14 +186,6 @@ class StepGetInstanceDefinition {
       ? officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
-  };
-
-  getStartCell = async (insertNewWorksheet, excelContext) => {
-    if (insertNewWorksheet) {
-      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
-    }
-
-    return officeApiHelper.getSelectedCell(excelContext);
   };
 }
 

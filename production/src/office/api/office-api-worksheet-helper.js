@@ -60,6 +60,14 @@ class OfficeApiWorksheetHelper {
     }
   }
 
+  getStartCell = async (insertNewWorksheet, excelContext) => {
+    if (insertNewWorksheet) {
+      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
+    }
+
+    return officeApiHelper.getSelectedCell(excelContext);
+  };
+
   /**
   * Creates Excel worksheet and set it as a active one.
   *
