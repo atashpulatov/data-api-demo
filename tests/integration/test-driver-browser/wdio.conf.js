@@ -245,6 +245,9 @@ exports.config = {
     'F30479-hardening-import-from-dossier': [
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
     ],
+    UB: [
+      './test/specs/performance/UB-standalone-version/import-UB-dataset.spec.js',
+    ],
   },
   // Patterns to exclude.
   exclude: [
