@@ -44,7 +44,7 @@ class OfficeTableCreate {
     }
     const newStartCellAdress = newStartCell || startCell;
 
-    const worksheet = this.getExcelWorksheet(prevOfficeTable, excelContext);
+    const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);
     const tableStartCell = this.getTableStartCell(
       newStartCellAdress,
       worksheet,
@@ -52,10 +52,8 @@ class OfficeTableCreate {
       prevOfficeTable,
       tableChanged
     );
-    console.log('tableStartCell:', tableStartCell);
 
     const tableRange = officeApiHelper.getRange(columns, tableStartCell, rows);
-    console.log('tableRange:', tableRange);
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
     excelContext.trackedObjects.add(range);
 
@@ -103,8 +101,8 @@ class OfficeTableCreate {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    *
    */
-  getExcelWorksheet = (prevOfficeTable, excelContext) => {
-    if (prevOfficeTable) {
+  getExcelWorksheet = (prevOfficeTable, insertNewWorksheet, excelContext) => {
+    if (prevOfficeTable && !insertNewWorksheet) {
       return prevOfficeTable.worksheet;
     }
     return excelContext.workbook.worksheets.getActiveWorksheet();
