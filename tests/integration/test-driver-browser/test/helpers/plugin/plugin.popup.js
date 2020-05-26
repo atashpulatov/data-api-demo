@@ -88,7 +88,7 @@ class PluginPopup {
   clickRun() {
     logStep(`Clicking "Run" button...    [${fileName} - clickRun()]`);
     switchToPluginFrame();
-    $(popupSelectors.runBtn).waitForExist(3333);
+    $(popupSelectors.runBtn).waitForExist(6000);
     waitAndClick($(popupSelectors.runBtn));
   }
 
@@ -117,6 +117,7 @@ class PluginPopup {
    */
   selectAllAttributesAndMetrics() {
     logStep(`Selecting all attributes and metrics...    [${fileName} - selectAllAttributesAndMetrics()]`);
+    switchToDialogFrame();
     this.selectAllAttributes();
     this.selectAllMetrics();
   }
@@ -717,6 +718,7 @@ class PluginPopup {
   // parameters: JSON object, containing attributes as keys and attribute forms as values
   selectAttributesAndAttributeForms(elements) {
     logStep(`Selecting attributes and attributes forms: "${elements}"...    [${fileName} - selectAttributesAndAttributeForms()]`);
+    switchToDialogFrame();
     for (const [attribute, attributeForm] of Object.entries(elements)) {
       waitAndClick($(`${popupSelectors.attributeCheckBox}=${attribute}`));
       if (attributeForm && attributeForm.length > 0) {
@@ -1537,6 +1539,71 @@ class PluginPopup {
     switchToPromptFrame();
     $('#mstrdossierPromptEditor').waitForExist(10000);
     switchToPromptFrameForImportDossier();
+  }
+
+  /**
+ * Answer Prompts for ptompts type:
+ *  Year - value prompt with value of the year, eg answerPrompt('Year', '2016', 1),
+ *  Value - prompt with text box to answer eg answerPrompt('Value', '1820', 7)
+ *  Object - selecting single object to add/remove form selection, eg answerPrompt('Object', 'Books', 1)
+ *  Category - this prompt is having search box and table for selection eg answerPrompt('Category', 'Books', 3)
+ *  Attribute elements - when you are selecting elements from attribute (moving form one side to other)
+ *
+ *  //TODO - rest of the prompts type and ipadete Object and Category to have ability to select more items
+ * 
+  * @param {String} type one of type: Year, VAlue, Object, Category, Attribute elements
+  * @param {String} value input for the prompt
+  * @param {number} [index=1] number of prompt on list
+  * @memberof PluginPopup
+ */
+  answerPrompt(type, value, index = 1) {
+    // eslint-disable-next-line default-case
+    switch (type) {
+      case 'Year':
+        logStep(`Answer prompt ${index} and set ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getYearPrompt(index)).doubleClick();
+        $(popupSelectors.prompts.getYearPrompt(index)).keys(value);
+        pressTab();
+        break;
+      case 'Value':
+        logStep(`Answer prompt ${index} and set ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getValuePrompt(index)).doubleClick();
+        $(popupSelectors.prompts.getValuePrompt(index)).keys(value);
+        pressTab();
+        break;
+      case 'Object':
+        logStep(`Answer prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getObjectsPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
+        pressTab();
+        break;
+      case 'Category':
+        logStep(`Answer prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).click();
+        $(popupSelectors.prompts.getTableCategoryPrompt(index)).$(`.mstrListBlockItemName*=${value}`).doubleClick();
+        pressTab();
+        break;
+      case 'Attribute elements':
+        logStep(`Answer prompt ${index} and select ${value}...`);
+        this.selectPromptOnPanel(index);
+        $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
+        $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
+        pressTab();
+    }
+  }
+
+  /**
+ *
+ *
+ * @param {number} index of prompt
+ * @memberof PluginPopup
+ */
+  selectPromptOnPanel(index) {
+    $(popupSelectors.getpromptPanel(index)).$(`.mstrPromptTOCListItemIndex=${index}`).click();
+    browser.pause(1000);
   }
 
   /**

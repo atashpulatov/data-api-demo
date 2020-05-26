@@ -9,6 +9,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import {
   switchToPromptFrameForImportDossier, switchToPromptFrame, switchToDialogFrame, changeBrowserTab
 } from '../../../helpers/utils/iframe-helper';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
 
 describe('F24398 - Import and refresh visualization', () => {
@@ -22,62 +23,44 @@ describe('F24398 - Import and refresh visualization', () => {
   });
 
   it('[TC61043] - E2E with dossier containing all types of prompts (including nested prompts)', () => {
-    console.log('It should import grid visualization');
+    logStep('It should import grid visualization');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
 
-    console.log('Should open dossier');
-    PluginPopup.openDossier(objectsList.dossiers.nested.name);
+    logStep('Should open dossier');
+    const dossierObject = objectsList.dossiers.nested;
+    PluginPopup.openDossier(dossierObject.name);
     switchToPromptFrameForImportDossier();
     $('#mstrdossierPromptEditor').waitForExist(10000);
-    console.log('Should start selecting prompts');
-
-    $(objectsList.dossiers.nested.prompt1).click();
-    $(objectsList.dossiers.nested.prompt1).click();
-    console.log('Prompt 1 selected');
-
-    PluginPopup.clickAndKeys(objectsList.dossiers.nested.prompt2, '2016');
-    $(objectsList.dossiers.nested.prompt2).keys('\uE006');
-    console.log('Prompt 2 selected');
-
-    $(objectsList.dossiers.nested.prompt2).keys('\uE004\uE004\uE004\uE004\uE004\uE004\uE004\uE006');
-    $(objectsList.dossiers.nested.prompt3).click();
-    browser.pause(1111);
-    PluginPopup.clickAndKeys(objectsList.dossiers.nested.prompt4, '2000');
-    console.log('Prompt 3 selected');
-
-    browser.pause(1111);
-    $(objectsList.dossiers.nested.prompt5).click();
-    browser.pause(2111);
-    PluginPopup.clickAndKeys(objectsList.dossiers.nested.prompt6, '1/1/2016');
-    console.log('Prompt 4 selected');
-
-    browser.pause(1111);
-    PluginPopup.clickAndKeys(objectsList.dossiers.nested.prompt7, '1820');
-    console.log('Prompt 5 selected');
-
-    browser.pause(1111);
-    PluginPopup.clickAndKeys(objectsList.dossiers.nested.prompt8, '1/2/2016');
-    $(objectsList.dossiers.nested.prompt9).click();
-    console.log('Prompt 6 selected');
-
-    browser.pause(1111);
-    $(objectsList.dossiers.nested.prompt10).clearValue();
-    PluginPopup.clickAndKeys(objectsList.dossiers.nested.prompt10, '2016');
-    console.log('Prompt 7 selected');
-
+    logStep('Should start selecting prompts');
+    PluginPopup.answerPrompt('Category', 'Movies', 1);
+    browser.pause(5000);
+    PluginPopup.answerPrompt('Year', '2016', 2);
+    browser.pause(5000);
+    PluginPopup.selectPromptOnPanel(3);
+    // todo prompt 3
+    PluginPopup.selectPromptOnPanel(4);
+    // todo prompt 4
+    PluginPopup.selectPromptOnPanel(5);
+    PluginPopup.selectPromptOnPanel(6);
+    PluginPopup.answerPrompt('Value', '1820', 7);
+    PluginPopup.answerPrompt('Value', '01/01/2016', 8);
+    PluginPopup.answerPrompt('Value', '01/02/2016', 9);
+    PluginPopup.answerPrompt('Year', '2016', 10);
+    PluginPopup.answerPrompt('Year', 'Movies', 11);
     PluginPopup.clickRunForPromptedDossier();
-    PluginPopup.selectAndImportVisualization(objectsList.dossiers.nested.prompt11);
-    console.log('Imported selected visualization');
 
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
+    switchToDialogFrame();
+    const { text } = dossierObject;
+    console.log(text);
+    PluginPopup.selectAndImportVisualization(text);
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
-    console.log('Should edit and reprompt object');
+    logStep('+ Should edit and reprompt object');
     PluginPopup.editAndOpenReprompt();
-    $(objectsList.dossiers.nested.prompt1).click();
     switchToPromptFrame();
+    PluginPopup.answerPrompt('Category', 'Electronics', 1);
+    browser.pause(5000);
     PluginPopup.clickRunForPromptedDossier();
     switchToDialogFrame();
     PluginPopup.clickImport();
@@ -85,12 +68,12 @@ describe('F24398 - Import and refresh visualization', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
-    console.log('Should refresh object');
+    logStep('Should refresh object');
     PluginRightPanel.refreshObject(1);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    console.log('Should remove object');
+    logStep('Should remove object');
     browser.pause(1111);
     PluginRightPanel.removeObject(1);
     waitForNotification();
