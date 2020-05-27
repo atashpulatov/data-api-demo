@@ -630,7 +630,15 @@ class PluginPopup {
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
   }
-
+  /**
+   * Opens the desired dossier window. Will work if objects window is rendered.
+   *
+   * @param {String} dossierName indicates the name of dossier that is wanted
+   * @param {Number} timeToLoadDossier amount of time that browser will be paused for dossier to load. Is set to 10 sec by default
+   * @param {Boolean} myLibrarySwitch indicates how the state of my library switch should be.
+   * @param {Number} index  indicates which object should be imported.
+   *
+   */
   openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false, index = 1) {
     this.switchLibraryAndImportObject(dossierName, myLibrarySwitch, index);
     browser.pause(timeToLoadDossier);
