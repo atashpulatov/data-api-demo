@@ -69,10 +69,6 @@ export const RightSidePanelNotConnected = ({
     }
     // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
     // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeCellAddress]);
-
-  React.useEffect(() => {
     if (popupData) {
       sidePanelNotificationHelper.setRangeTakenPopup({ ...popupData, setSidePanelPopup, activeCellAddress });
     }
