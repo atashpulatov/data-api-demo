@@ -7,7 +7,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 describe('F25931 - Duplicate object', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 

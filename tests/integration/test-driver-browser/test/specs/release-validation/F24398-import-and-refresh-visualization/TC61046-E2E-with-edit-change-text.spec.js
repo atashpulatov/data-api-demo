@@ -7,7 +7,7 @@ import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-h
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
 describe('F24398 - Import and refresh visualization', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 

@@ -90,6 +90,7 @@ class PluginPopup {
     switchToPluginFrame();
     $(popupSelectors.runBtn).waitForExist(6000);
     waitAndClick($(popupSelectors.runBtn));
+    browser.pause(3000);
   }
 
   clickPromptArrow() {
