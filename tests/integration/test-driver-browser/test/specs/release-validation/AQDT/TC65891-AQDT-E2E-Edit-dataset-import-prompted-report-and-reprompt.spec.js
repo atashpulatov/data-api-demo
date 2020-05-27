@@ -9,13 +9,15 @@ import { switchToPromptFrame, switchToPluginFrame } from '../../../helpers/utils
 describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
   it('[TC65891] - AQDT E2E - Edit a dataset, import prompted report and re-prompt', () => {
     logStep('+ should import QA Cube by Sundarababu, Arun');
+    const { aqdtMirrorTwoQACube } = objectsList.datasets;
+    const { defectAnalysisPrompted } = objectsList.reports;
+    const { importSuccess } = dictionary.en;
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
-    const QACube = objectsList.datasets.aqdtMirrorTwoQACube;
-    PluginPopup.openPrepareData(QACube, false, 2);
+    PluginPopup.openPrepareData(aqdtMirrorTwoQACube, false, 2);
     PluginPopup.selectObjectElements(['Client OS', 'Export Application', 'Tester', 'Test Set', 'Fun', 'Sca', 'Duration']);
     PluginPopup.clickImport();
-    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
+    PluginRightPanel.waitAndCloseNotification(importSuccess);
     PluginRightPanel.editObject(1);
     logStep('+ should remove all attributes and metrics');
     switchToPluginFrame();
@@ -24,17 +26,16 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     PluginPopup.selectObjectElements(['App Server', 'Browser type', 'Per', 'Sim']);
     PluginPopup.selectFilters([['App Server', ['IIS 8']]]);
     PluginPopup.clickImport();
-    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
+    PluginRightPanel.waitAndCloseNotification(importSuccess);
     logStep('+ should import Defect Analysis_with prompt by Wang, Zhixing');
     OfficeWorksheet.selectCell('A7');
-    const promptedReport = objectsList.datasets.defectAnalysis;
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.importAnyObject(promptedReport);
+    PluginPopup.importAnyObject(defectAnalysisPrompted);
     switchToPromptFrame();
     PluginPopup.answerPrompt('Attribute elements', 'Performance', 1);
     PluginPopup.answerPrompt('Attribute elements', 'Security', 1);
     PluginPopup.clickRun();
-    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
+    PluginRightPanel.waitAndCloseNotification(importSuccess);
     logStep('+ should edit Defect Analysis_with prompt by Wang, Zhixing');
     PluginRightPanel.editObject(1);
     browser.pause(3000);
@@ -47,6 +48,6 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     PluginPopup.selectObjectElements(['Days Open (Defect)']);
     PluginPopup.selectFilters([['Submitted By (Defect)', ['Rally']]]);
     PluginPopup.clickImport();
-    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
+    PluginRightPanel.waitAndCloseNotification(importSuccess);
   });
 });
