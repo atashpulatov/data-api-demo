@@ -181,6 +181,7 @@ const mapDispatchToProps = {
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
+  popupData: PropTypes.shape({}),
   globalNotification: PropTypes.shape({}),
   loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({

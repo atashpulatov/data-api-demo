@@ -139,10 +139,6 @@ class OperationStepDispatcher {
   completeDisplaySuccessNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, DISPLAY_NOTIFICATION_COMPLETED));
   }
-
-  dispayPopupOnSidePanel = (Props) => {
-    this.reduxStore.dispatch(setRangeTakenPopup(Props));
-  }
 }
 
 const operationStepDispatcher = new OperationStepDispatcher();

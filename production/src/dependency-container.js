@@ -23,6 +23,7 @@ import operationStepDispatcher from './operation/operation-step-dispatcher';
 import stepSaveObjectInExcel from './office/store/step-save-object-in-excel';
 import stepGetDuplicateName from './office/step-get-duplicate-name';
 import operationErrorHandler from './operation/operation-error-handler';
+import officeStoreHelper from './office/store/office-store-helper';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -34,32 +35,49 @@ class DIContainer {
   initializeAll = () => {
     this.operationBus = operationBus;
     this.operationBus.init(reduxStore);
+
     this.officeApiHelper = officeApiHelper;
     this.officeApiHelper.init(reduxStore);
+
     this.officeReducerHelper = officeReducerHelper;
     this.officeReducerHelper.init(reduxStore);
+
+    this.officeStoreHelper = officeStoreHelper;
+    this.officeStoreHelper.init(errorService);
+
     this.officeStoreObject = officeStoreObject;
     this.officeStoreObject.init(reduxStore);
+
     this.officeStoreRestoreObject = officeStoreRestoreObject;
     this.officeStoreRestoreObject.init(reduxStore);
+
     this.notificationService = notificationService;
     this.notificationService.init(reduxStore);
+
     this.sessionHelper = sessionHelper;
     this.sessionHelper.init(reduxStore);
+
     this.sessionActions = sessionActions;
     this.sessionActions.init(reduxStore);
+
     this.errorService = errorService;
     this.errorService.init(sessionActions, sessionHelper, notificationService);
+
     this.authenticationHelper = authenticationHelper;
     this.authenticationHelper.init(reduxStore, sessionActions, authenticationService, errorService);
+
     this.homeHelper = homeHelper;
     this.homeHelper.init(reduxStore, sessionActions, sessionHelper);
+
     this.mstrObjectRestService = mstrObjectRestService;
     this.mstrObjectRestService.init(reduxStore);
+
     this.popupController = popupController;
     this.popupController.init(reduxStore, sessionActions, popupActions);
+
     this.sidePanelService = sidePanelService;
     this.sidePanelService.init(reduxStore);
+
     this.sidePanelNotificationHelper = sidePanelNotificationHelper;
     this.sidePanelNotificationHelper.init(reduxStore);
 

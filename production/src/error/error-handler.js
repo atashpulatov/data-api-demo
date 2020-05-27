@@ -1,3 +1,6 @@
+import officeReducerHelper from '../office/store/office-reducer-helper';
+import { getNotificationButtons } from '../notification-v2/notification-buttons';
+import { customT } from '../redux-reducer/notification-reducer/notification-title-maps';
 import {
   errorTypes,
   httpStatusToErrorType,
@@ -5,15 +8,12 @@ import {
   errorMessageFactory,
   incomingErrorStrings,
 } from './constants';
-import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import {
   IMPORT_OPERATION,
   DUPLICATE_OPERATION,
   REFRESH_OPERATION,
   EDIT_OPERATION
 } from '../operation/operation-type-names';
-import { customT } from '../redux-reducer/notification-reducer/notification-title-maps';
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -35,7 +35,7 @@ class ErrorService {
     const details = this.getErrorDetails(error, errorMessage, errorType);
 
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
-      operationStepDispatcher.dispayPopupOnSidePanel({
+      officeReducerHelper.dispayPopupOnSidePanel({
         objectWorkingId, title: errorMessage, message: details, callback
       });
     } else {

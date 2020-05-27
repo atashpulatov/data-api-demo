@@ -1,3 +1,5 @@
+import { setRangeTakenPopup } from '../../redux-reducer/office-reducer/office-actions';
+
 class OfficeReducerHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
@@ -58,6 +60,10 @@ class OfficeReducerHelper {
     const { notifications } = this.reduxStore.getState().notificationReducer;
     return notifications.find(notification => notification.objectWorkingId === objectWorkingId);
   };
+
+  dispayPopupOnSidePanel = (Props) => {
+    this.reduxStore.dispatch(setRangeTakenPopup(Props));
+  }
 }
 
 const officeReducerHelper = new OfficeReducerHelper();
