@@ -17,6 +17,7 @@ describe('Personal TC for AQDT Mirror2', () => {
     const A2 = '#gridRows > div:nth-child(2) > div:nth-child(1) > div > div';
     const { tcAutomation } = objectsList.aqdtMirror2Objects;
     const { pdCube } = objectsList.aqdtMirror2Objects;
+    const { importSuccess, duplicateSucces, objectRemoved, reportRefreshed } = dictionary.en;
 
     OfficeWorksheet.selectCell('A1');
     logStep(`Should import ${tcAutomation}`);
@@ -39,6 +40,7 @@ describe('Personal TC for AQDT Mirror2', () => {
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Test Case Type');
     logStep('Should sort attributes default');
+    browser.pause(2000);
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Test Case Owner');
 
@@ -75,14 +77,12 @@ describe('Personal TC for AQDT Mirror2', () => {
     PluginPopup.selectAllMetrics();
 
     PluginPopup.clickImport();
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(importSuccess);
 
-    switchToExcelFrame();
-    OfficeWorksheet.selectCell('A2');
-    expect($(A2).getText()).toEqual('Sonia Lukaszewicz');
-    browser.pause(1000);
+    // switchToExcelFrame();
+    // OfficeWorksheet.selectCell('A2');
+    // expect($(A2).getText()).toEqual('Sonia Lukaszewicz');
+    // browser.pause(1000);
 
     logStep('Duplicate and edit report');
     PluginRightPanel.duplicateObject(1);
@@ -94,23 +94,21 @@ describe('Personal TC for AQDT Mirror2', () => {
     PluginPopup.clickSubtotalToggler();
     expect($(popupSelectors.subtotalToggler).getAttribute('aria-checked')).toEqual('false');
     PluginPopup.clickImport();
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.duplicateSucces);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(duplicateSucces);
 
     OfficeWorksheet.deleteSheet(2);
 
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.objectRemoved);
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(objectRemoved);
 
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${tcAutomation}`);
 
     logStep(`+Import ${pdCube} sort on 'Modified' header and prepare data to import`);
     OfficeWorksheet.openNewSheet();
-    switchToDialogFrame();
+    switchToExcelFrame();
+    OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.sortAndOpenPrepareData(pdCube, 'Modified');
+    switchToDialogFrame();
+    PluginPopup.sortDescAndOpenPrepareData(pdCube, 'Modified');
     PluginPopup.selectObjectElements(['Feature', 'Initiative', 'QA Status', 'SE Status']);
     PluginPopup.selectFilters([['Scrum Team', []]]);
 
@@ -123,9 +121,11 @@ describe('Personal TC for AQDT Mirror2', () => {
     logStep('Should sort attributes ascending');
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Area (Timesheet)');
+    browser.pause(2000);
     logStep('Should sort attributes decending');
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Work Item Work Type');
+    browser.pause(2000);
     logStep('Should sort attributes default');
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Feature');
@@ -154,14 +154,10 @@ describe('Personal TC for AQDT Mirror2', () => {
 
     PluginRightPanel.removeAllObjectsFromTheList();
 
-    // waitForNotification();
-    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
-    // PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(importSuccess);
 
-    // logStep('Should refresh prompted report');
-    // PluginRightPanel.refreshFirstObjectFromTheList();
-    // waitForNotification();
-    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.reportRefreshed);
-    // PluginRightPanel.closeNotificationOnHover();
+    logStep('Should refresh prompted report');
+    PluginRightPanel.refreshFirstObjectFromTheList();
+    PluginRightPanel.waitAndCloseNotification(reportRefreshed);
   });
 });

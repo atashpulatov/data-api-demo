@@ -984,12 +984,13 @@ class PluginPopup {
   * @param {number} [objectOrder=1] select object from the list, as default is first
   * @memberof PluginPopup
   */
-  sortAndOpenPrepareData(objectName, headerName, isObjectFromLibrary = false, objectOrder = 1) {
+  sortDescAndOpenPrepareData(objectName, headerName, isObjectFromLibrary = false, objectOrder = 1) {
     logStep(`+ Selecting the object "${objectName}" sorting on ${headerName} and opening Prepare Data...    [${fileName} - openPrepareData()]`);
     switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
+    this.clickHeader(headerName);
     this.clickHeader(headerName);
     this.selectObject(objectOrder);
     this.clickPrepareData();
