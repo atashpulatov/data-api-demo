@@ -1,4 +1,4 @@
-import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows, renderCompoundGridRowHeaders, getColumnInformation, getTableSize } from '../../mstr-object/mstr-compound-grid-handler';
+import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows, renderCompoundGridRowHeaders, getColumnInformation, getTableSize, renderCompoundGridRowTitles } from '../../mstr-object/mstr-compound-grid-handler';
 import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
 import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 import metricsInRowCompoundJSON from './compound-grid/Compound Grid with Metrics on Row.json';
@@ -102,6 +102,22 @@ describe('Compound Grid Handler', () => {
 
     // then
     expect(headers).toEqual(expectedHeaders);
+  });
+
+  it('should create normalized row titles', () => {
+    // given
+    const response = JSON.parse(JSON.stringify(metricsInRowCompoundJSON));
+    const { definition, data } = response;
+    const { headers } = data;
+    const onElement = (e) => `'${e.value.join(' ')}`;
+
+    const expectedTitles = []; // TODO
+
+    // when
+    const rowTitles = renderCompoundGridRowTitles(headers, definition, onElement);
+
+    // then
+    expect(rowTitles).toEqual(definition.grid.rows);
   });
 
   it('should create normalized row headers', () => {

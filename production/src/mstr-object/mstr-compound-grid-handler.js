@@ -59,6 +59,19 @@ export function renderRows(columnSetsMetricValues, currentRows, valueMatrix = 'r
   return rowTable;
 }
 
+export function getHeaders(response) {
+  const { definition, data } = response;
+  const { headers } = data;
+  const onElement = (e) => `'${e.value.join(' ')}`;
+  const onAttribute = (e) => e.formValues[0];
+  const onMetric = (e) => e.name;
+
+  return {
+    rows: renderCompoundGridRowHeaders(headers, definition, onElement),
+    columns: renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric)
+  };
+}
+
 export function renderCompoundGridRowTitles(headers, definition, onElement = (e) => e) {
   return mstrNormalizedJsonHandler.renderTitles(definition, 'rows', headers, onElement, false);
 }
