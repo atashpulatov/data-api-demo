@@ -245,6 +245,9 @@ exports.config = {
     'F30479-hardening-import-from-dossier': [
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
     ],
+    AQDT: [
+      './test/specs/release-validation/AQDT/TC65891-AQDT-E2E-Edit-dataset-import-prompted-report-and-reprompt.spec.js',
+    ]
   },
   // Patterns to exclude.
   exclude: [
