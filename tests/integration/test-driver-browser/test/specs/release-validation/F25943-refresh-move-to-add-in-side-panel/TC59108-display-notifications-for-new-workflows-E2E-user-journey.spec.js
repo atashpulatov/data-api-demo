@@ -9,7 +9,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 describe('F25943 - refresh move to add-in side panel and removal of blocking behavior', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 

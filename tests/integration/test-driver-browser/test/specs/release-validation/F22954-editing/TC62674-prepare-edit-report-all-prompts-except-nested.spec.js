@@ -67,7 +67,6 @@ describe('F22954 - Ability to edit data already imported to the workbook', () =>
     browser.pause(5555);
     PluginPopup.selectPromptOnPanel(1);
     PluginPopup.clickRun();
-    browser.pause(1000);
     switchToDialogFrame();
     PluginPopup.selectObjectElements(['Region']);
     PluginPopup.clickImport();
