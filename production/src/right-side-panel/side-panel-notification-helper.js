@@ -79,7 +79,7 @@ class SidePanelNotificationHelper {
       type: popupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected) => {
-        this.importInNewRange(objectWorkingId, activeCellAddress, isActiveCellOptionSelected);
+        this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
         this.reduxStore.dispatch(clearSidePanelPopupData());
         setSidePanelPopup(null);
       },
@@ -94,7 +94,7 @@ class SidePanelNotificationHelper {
       startCell: activeCellAddress,
       repeatStep: true,
       tableChanged: true,
-      insertNewWorksheet
+      insertNewWorksheet,
     }));
   }
 

@@ -29,7 +29,7 @@ class OfficeTableCreate {
       tableName,
       prevOfficeTable,
       tableChanged = false,
-      newStartCell,
+      isRepeatStep,
       insertNewWorksheet
     }) => {
     const {
@@ -39,14 +39,12 @@ class OfficeTableCreate {
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
 
     if (insertNewWorksheet) {
-      newStartCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
-      console.log('newStartCell:', newStartCell);
+      startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
     }
-    const newStartCellAdress = newStartCell || startCell;
 
     const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);
     const tableStartCell = this.getTableStartCell(
-      newStartCellAdress,
+      startCell,
       worksheet,
       instanceDefinition,
       prevOfficeTable,
@@ -57,7 +55,13 @@ class OfficeTableCreate {
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
     excelContext.trackedObjects.add(range);
 
-    await officeTableHelperRange.checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition, newStartCell);
+    await officeTableHelperRange.checkObjectRangeValidity(
+      prevOfficeTable,
+      excelContext,
+      range,
+      instanceDefinition,
+      isRepeatStep
+    );
 
     if (isCrosstab) {
       officeApiCrosstabHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions,);

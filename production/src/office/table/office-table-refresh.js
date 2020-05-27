@@ -19,16 +19,7 @@ class OfficeTableRefresh {
    * - prevOfficeTable - reference to previous table
    * - startCell - starting cell address
    */
-  getExistingOfficeTableData = async (excelContext, bindId, instanceDefinition, previousTableDimensions) => {
-    const { mstrTable } = instanceDefinition;
-
-    const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
-    await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
-
-    prevOfficeTable.showHeaders = true;
-    prevOfficeTable.load('name');
-    await excelContext.sync();
-
+  getExistingOfficeTableData = async (excelContext, instanceDefinition, prevOfficeTable, previousTableDimensions) => {
     let startCell = await this.getStartCellOnRefresh(prevOfficeTable, excelContext);
 
     let tableChanged = false;
@@ -40,7 +31,7 @@ class OfficeTableRefresh {
       startCell,
     ));
 
-    return { tableChanged, prevOfficeTable, startCell };
+    return { tableChanged, startCell };
   };
 
   /**
@@ -230,6 +221,15 @@ class OfficeTableRefresh {
 
      await excelContext.sync();
      return { tableChanged, startCell };
+   }
+
+   async getPreviousOfficeTable(excelContext, bindId, mstrTable) {
+     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
+     await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
+     prevOfficeTable.showHeaders = true;
+     prevOfficeTable.load('name');
+     await excelContext.sync();
+     return prevOfficeTable;
    }
 }
 const officeTableRefresh = new OfficeTableRefresh();

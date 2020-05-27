@@ -12,9 +12,9 @@ class OfficeTableHelperRange {
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition, newStartCell) {
+  async checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition, isRepeatStep) {
     if (prevOfficeTable) {
-      if (newStartCell) {
+      if (isRepeatStep) {
         await this.checkRangeValidity(excelContext, range);
         await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
       } else {

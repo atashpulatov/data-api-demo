@@ -4,7 +4,6 @@ import officeTableCreate from './office-table-create';
 import officeTableUpdate from './office-table-update';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
-import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
 
 class StepGetOfficeTableEditRefresh {
   /**
@@ -28,28 +27,37 @@ class StepGetOfficeTableEditRefresh {
   getOfficeTableEditRefresh = async (objectData, operationData) => {
     try {
       console.time('Create or get table - edit or refresh');
-      const { tableName, previousTableDimensions, objectWorkingId, } = objectData;
+      const { tableName, previousTableDimensions, objectWorkingId } = objectData;
       const {
-        excelContext, instanceDefinition, oldBindId, objectEditedData, startCell: newStartCell, insertNewWorksheet
+        excelContext,
+        instanceDefinition,
+        oldBindId,
+        objectEditedData,
+        insertNewWorksheet,
       } = operationData;
+      let { tableChanged, startCell } = operationData;
+
       const { mstrTable } = instanceDefinition;
-      let { tableChanged: tmp, } = operationData;
+      const isRepeatStep = !!startCell; // If we have startCell on refresh it means that we are repeating step
 
       let shouldFormat;
       let bindId = oldBindId;
       let officeTable;
 
+
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
-      const { tableChanged, prevOfficeTable, startCell, } = await officeTableRefresh.getExistingOfficeTableData(
-        excelContext,
-        oldBindId,
-        instanceDefinition,
-        previousTableDimensions,
-      );
+      const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(excelContext, oldBindId, mstrTable);
 
-      tmp = tmp || tableChanged;
+      if (!isRepeatStep) {
+        ({ tableChanged, startCell } = await officeTableRefresh.getExistingOfficeTableData(
+          excelContext,
+          instanceDefinition,
+          prevOfficeTable,
+          previousTableDimensions,
+        ));
+      }
 
-      if (tmp) {
+      if (tableChanged) {
         console.log('Instance definition changed, creating new table');
 
         ({ officeTable, bindId } = await officeTableCreate.createOfficeTable(
@@ -59,8 +67,8 @@ class StepGetOfficeTableEditRefresh {
             startCell,
             tableName,
             prevOfficeTable,
-            tableChanged: tmp,
-            newStartCell,
+            tableChanged,
+            isRepeatStep,
             insertNewWorksheet
           }
         ));
@@ -81,9 +89,9 @@ class StepGetOfficeTableEditRefresh {
         objectWorkingId,
         officeTable,
         shouldFormat,
-        tableChanged: tmp,
+        tableChanged,
         instanceDefinition,
-        startCell: newStartCell,
+        startCell,
       };
 
       const updatedObject = {
