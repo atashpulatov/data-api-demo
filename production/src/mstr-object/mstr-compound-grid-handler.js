@@ -1,5 +1,32 @@
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
 
+
+export function getCompopundGridTable(response) {
+  const { definition, data } = response;
+  // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
+  const isCrosstabular = false;
+  const columnInformation = getColumnInformation(definition, data);
+  const isCrosstab = true;
+  // let subtotalsInfo = {};
+  // const subtotals = this.getSubtotalsInformation(response);
+  // if (subtotals) {
+  //   subtotalsInfo = { subtotalsDefined: subtotals.defined, subtotalsVisible: subtotals.visible };
+  // }
+  return {
+    tableSize: getTableSize(columnInformation, response.data),
+    columnInformation,
+    headers: getHeaders(response),
+    id: response.k,
+    isCrosstab,
+    isCrosstabular,
+    name: response.n,
+    rows: renderRows(response, isCrosstab),
+    // attributesNames: this.getAttributesName(response.definition, response.attrforms),
+    // subtotalsInfo,
+  };
+}
+
+
 export function parseColumnSets(columnSets) {
   const parsedColumns = [];
   columnSets.forEach(({ columns }) => {
@@ -68,7 +95,7 @@ export function getHeaders(response) {
 
   return {
     rows: renderCompoundGridRowHeaders(headers, definition, onElement),
-    columns: renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric)
+    columns: renderCompoundGridColumnHeaders(headers.columnSets, definition.grid.columnSets, onAttribute, onMetric)
   };
 }
 
