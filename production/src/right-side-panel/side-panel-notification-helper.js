@@ -68,6 +68,13 @@ class SidePanelNotificationHelper {
   setRangeTakenPopup = ({
     objectWorkingId, activeCellAddress, setSidePanelPopup, callback
   }) => {
+    const onCancel = () => {
+      this.reduxStore.dispatch(clearSidePanelPopupData());
+      callback();
+      setSidePanelPopup(null);
+    };
+
+
     setSidePanelPopup({
       type: popupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
@@ -76,28 +83,19 @@ class SidePanelNotificationHelper {
         this.reduxStore.dispatch(clearSidePanelPopupData());
         setSidePanelPopup(null);
       },
-      onEdit: () => {
-        this.reduxStore.dispatch(clearSidePanelPopupData());
-        callback();
-        setSidePanelPopup(null);
-      },
-      onClose: () => {
-        this.reduxStore.dispatch(clearSidePanelPopupData());
-        callback();
-        setSidePanelPopup(null);
-      },
+      onEdit: onCancel,
+      onClose: onCancel
     });
   };
 
   importInNewRange = (objectWorkingId, activeCellAddress, insertNewWorksheet) => {
-    const object = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    object.insertNewWorksheet = !insertNewWorksheet;
-
-    const updatedOperation = {
-      objectWorkingId, startCell: activeCellAddress, repeatStep: true, tableChanged: true
-    };
-    this.reduxStore.dispatch(updateObject(object));
-    this.reduxStore.dispatch(updateOperation(updatedOperation));
+    this.reduxStore.dispatch(updateOperation({
+      objectWorkingId,
+      startCell: activeCellAddress,
+      repeatStep: true,
+      tableChanged: true,
+      insertNewWorksheet
+    }));
   }
 
 

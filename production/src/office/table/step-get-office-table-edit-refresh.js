@@ -28,14 +28,9 @@ class StepGetOfficeTableEditRefresh {
   getOfficeTableEditRefresh = async (objectData, operationData) => {
     try {
       console.time('Create or get table - edit or refresh');
+      const { tableName, previousTableDimensions, objectWorkingId, } = objectData;
       const {
-        tableName,
-        previousTableDimensions,
-        objectWorkingId,
-        insertNewWorksheet,
-      } = objectData;
-      const {
-        excelContext, instanceDefinition, oldBindId, objectEditedData, startCell: newStartCell,
+        excelContext, instanceDefinition, oldBindId, objectEditedData, startCell: newStartCell, insertNewWorksheet
       } = operationData;
       const { mstrTable } = instanceDefinition;
       let { tableChanged: tmp, } = operationData;
