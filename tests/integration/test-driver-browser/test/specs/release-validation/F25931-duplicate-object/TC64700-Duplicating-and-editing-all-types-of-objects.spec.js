@@ -77,7 +77,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.clickDuplicatePopupEditBtn();
     switchToDialogFrame();
     const visualization = objectsList.dossiers.interactiveDossier.vis2;
-    PluginPopup.selectAndImportVizualiation(visualization);
+    PluginPopup.selectAndImportVisualization(visualization);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
   });
 });
