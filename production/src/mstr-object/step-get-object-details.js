@@ -38,14 +38,24 @@ class StepGetObjectDetails {
 
       console.log('objectData');
       console.log(objectData);
+      console.log('operationData');
+      console.log(operationData);
 
       const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
       const {
         ancestors, certifiedInfo, dateModified, owner,
       } = objectInfo;
 
+      const objectPrompts = (await mstrObjectRestService
+        .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId))
+        .map(this.extractPromptAnswerName);
+
+
       console.log('objectInfo');
       console.log(objectInfo);
+
+      console.log('objectPrompts');
+      console.log(objectPrompts);
 
       const updatedObject = {
         ...objectData,
@@ -53,6 +63,7 @@ class StepGetObjectDetails {
         certified: certifiedInfo,
         dateModified,
         owner,
+        objectPrompts,
       };
 
       operationStepDispatcher.updateObject(updatedObject);
@@ -62,6 +73,16 @@ class StepGetObjectDetails {
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   };
+
+  promptAnswerMapFunctions = {
+    OBJECTS: (prompt) => prompt.answers.map(answer => answer.name),
+    LEVEL: (prompt) => prompt.answers.units.map(unit => unit.name),
+    EXPRESSION: (prompt) => prompt.answers.content,
+    ELEMENTS: (prompt) => prompt.answers.map(answer => answer.name),
+    VALUE: (prompt) => prompt.answers,
+  };
+
+  extractPromptAnswerName = (prompt) => this.promptAnswerMapFunctions[prompt.type](prompt);
 }
 
 const stepGetObjectDetails = new StepGetObjectDetails();

@@ -436,6 +436,19 @@ class MstrObjectRestService {
       .then((res) => res.body);
   }
 
+  getObjectPrompts = (objectId, projectId, instanceId) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts`;
+
+    return request
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => res.body);
+  }
+
   isPrompted = (objectId, projectId, objectTypeName) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
