@@ -425,6 +425,9 @@ class MstrObjectRestService {
 
   getObjectInfo = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();
+    if (mstrObjectType.type === 'undefined') {
+      mstrObjectType.type = 55;
+    }
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/objects/${objectId}?type=${mstrObjectType.type}`;
 
