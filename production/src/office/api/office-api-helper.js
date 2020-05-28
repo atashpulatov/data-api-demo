@@ -76,6 +76,11 @@ class OfficeApiHelper {
     return { envUrl, username };
   };
 
+  getCurrentMstrUserFullName = () => {
+    const { userFullName } = this.reduxStore.getState().sessionReducer;
+    return userFullName;
+  }
+
   /**
    * Returns top left cell of selected range.
    *

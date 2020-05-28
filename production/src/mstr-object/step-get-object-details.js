@@ -46,7 +46,7 @@ class StepGetObjectDetails {
         ancestors, certifiedInfo, dateModified, owner,
       } = objectInfo;
 
-      const objectPrompts = (await mstrObjectRestService
+      const objectPrompts = objectData.promptsAnswers && (await mstrObjectRestService
         .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId))
         .map(this.extractPromptAnswerName);
 
@@ -63,7 +63,10 @@ class StepGetObjectDetails {
         certified: certifiedInfo,
         dateModified,
         owner,
-        objectPrompts,
+        objectPrompts: objectPrompts || null,
+        // conditionally add importedBy and importDate
+        ...((operationData.operationType === 'IMPORT_OPERATION' || operationData.operationType === 'DUPLICATE_OPERATION')
+        && { importedBy: officeApiHelper.getCurrentMstrUserFullName(), importDate: Date.now() })
       };
 
       operationStepDispatcher.updateObject(updatedObject);
