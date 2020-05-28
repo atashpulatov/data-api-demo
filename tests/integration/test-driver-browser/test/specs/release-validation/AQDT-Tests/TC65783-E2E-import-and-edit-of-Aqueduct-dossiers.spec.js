@@ -10,7 +10,6 @@ import {
 
 describe('IMPORT diferent types of vizualizations', () => {
   beforeAll(() => {
-    console.log('running headless');
   });
 
   afterEach(() => {
@@ -26,7 +25,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.switchLibrary();
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Certified Status', 'Certified');
-    PluginPopup.searchForObject(objectList.dossiers.aqueductTECQA.name);
+    PluginPopup.searchForObject(objectsList.dossiers.aqueductTECQA.name);
     switchToDialogFrame();
     PluginPopup.selectFirstObjectWithoutSearch();
     PluginPopup.clickImport();
