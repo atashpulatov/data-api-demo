@@ -3,12 +3,12 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { logStep } from '../../../helpers/utils/allure-helper';
+import { logStep, logFirstStep } from '../../../helpers/utils/allure-helper';
 import { switchToPromptFrame, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
   it('[TC65891] - AQDT E2E - Edit a dataset, import prompted report and re-prompt', () => {
-    logStep('+ should import QA Cube by Sundarababu, Arun');
+    logFirstStep('+ should import QA Cube by Sundarababu, Arun');
     const { aqdtMirrorTwoQACube } = objectsList.datasets;
     const { defectAnalysisPrompted } = objectsList.reports;
     const { importSuccess } = dictionary.en;
