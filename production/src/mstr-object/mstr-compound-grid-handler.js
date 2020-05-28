@@ -1,7 +1,8 @@
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
+import regularCompoundJSON from '../_tests_/mstr-object/compound-grid/Regular Compound Grid.json';
 
-
-export function getCompopundGridTable(response) {
+export function getCompoundGridTable() {
+  const response = regularCompoundJSON;
   const { definition, data } = response;
   // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
   const isCrosstabular = false;
@@ -20,7 +21,8 @@ export function getCompopundGridTable(response) {
     isCrosstab,
     isCrosstabular,
     name: response.n,
-    rows: renderRows(response, isCrosstab),
+    rows: renderRows(data.metricValues.columnSets, 1).row,
+    visualizationType: response.visualizationType,
     // attributesNames: this.getAttributesName(response.definition, response.attrforms),
     // subtotalsInfo,
   };
@@ -48,9 +50,11 @@ export function getColumnInformation(definition, data) {
 }
 
 export function getTableSize(columnInformation, data) {
+  console.log('columnInformation:', columnInformation, data);
+
   return {
     rows: data.paging.total,
-    columns: columnInformation.length
+    columns: data.headers.rows.length
   };
 }
 
@@ -75,6 +79,8 @@ export function calculateColumnHeaderOffset(columnSets, columnSetsDefinition) {
 }
 
 export function renderRows(columnSetsMetricValues, currentRows, valueMatrix = 'raw') {
+  console.log('currentRows:', currentRows);
+  columnSetsMetricValues = regularCompoundJSON.data.metricValues.columnSets;
   const rowTable = [];
   for (let row = 0; row < currentRows; row++) {
     const rowValues = [];
@@ -83,11 +89,12 @@ export function renderRows(columnSetsMetricValues, currentRows, valueMatrix = 'r
     }
     rowTable.push(rowValues);
   }
-  return rowTable;
+  return { row: rowTable };
 }
 
-export function getHeaders(response) {
+export function getHeaders(response = regularCompoundJSON) {
   const { definition, data } = response;
+  console.log('definition, data:', definition, data);
   const { headers } = data;
   const onElement = (e) => `'${e.value.join(' ')}`;
   const onAttribute = (e) => e.formValues[0];

@@ -1,5 +1,7 @@
 import jsonHandler from '../mstr-object/mstr-normalized-json-handler';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { getCompoundGridTable } from '../mstr-object/mstr-compound-grid-handler';
+import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 
 /**
  * Service to parse JSON response from REST API v2
@@ -8,6 +10,14 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
  */
 class OfficeConverterServiceV2 {
   createTable(response) {
+    if (response.visualizationType === mstrObjectType.visualizationType.COMPOUND_GRID) {
+      return getCompoundGridTable(response);
+    }
+
+    return this.createGridTable(response);
+  }
+
+  createGridTable(response) {
     const { grid } = response.definition;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular = grid.metricsPosition && grid.metricsPosition.axis === 'rows' && grid.columns.length === 0;
@@ -27,6 +37,7 @@ class OfficeConverterServiceV2 {
       isCrosstabular,
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
+      visualizationType: response.visualizationType || null,
       attributesNames: this.getAttributesName(response.definition, response.attrforms),
       subtotalsInfo,
     };
@@ -154,6 +165,7 @@ class OfficeConverterServiceV2 {
     const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
     return { row, rowTotals };
   }
+
 
   /**
    * Gets object with crosstab rows and column headers

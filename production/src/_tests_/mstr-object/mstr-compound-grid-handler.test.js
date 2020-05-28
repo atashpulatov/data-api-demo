@@ -1,4 +1,4 @@
-import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows, renderCompoundGridRowHeaders, getColumnInformation, getTableSize, renderCompoundGridRowTitles, getCompopundGridTable } from '../../mstr-object/mstr-compound-grid-handler';
+import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows, renderCompoundGridRowHeaders, getColumnInformation, getTableSize, renderCompoundGridRowTitles, getCompoundGridTable } from '../../mstr-object/mstr-compound-grid-handler';
 import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
 import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 import metricsInRowCompoundJSON from './compound-grid/Compound Grid with Metrics on Row.json';
@@ -149,7 +149,7 @@ describe('Compound Grid Handler', () => {
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));
 
     // when
-    const mstrTable = getCompopundGridTable(response);
+    const mstrTable = getCompoundGridTable(response);
     // then
     expect(mstrTable).toEqual({});
   });
