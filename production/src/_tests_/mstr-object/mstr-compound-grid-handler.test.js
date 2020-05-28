@@ -1,8 +1,8 @@
-import { calculateColumnHeaderHeight, parseColumnSets, renderCompoundGridColumnHeaders, renderRows, renderCompoundGridRowHeaders, getColumnInformation, getTableSize, renderCompoundGridRowTitles, getCompoundGridTable } from '../../mstr-object/mstr-compound-grid-handler';
 import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
 import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 import metricsInRowCompoundJSON from './compound-grid/Compound Grid with Metrics on Row.json';
 import oneEmptyCompoundJSON from './compound-grid/Compound Grid with Empty Column Set.json';
+import mstrCompoundGridHandler from '../../mstr-object/mstr-compound-grid-handler';
 
 describe('Compound Grid Handler', () => {
   it('should group columnSets into a single array', () => {
@@ -11,7 +11,7 @@ describe('Compound Grid Handler', () => {
     const expectedLength = 4;
 
     // when
-    const columns = parseColumnSets(columnSets);
+    const columns = mstrCompoundGridHandler.parseColumnSets(columnSets);
 
     // then
     expect(columns).toHaveLength(expectedLength);
@@ -25,7 +25,7 @@ describe('Compound Grid Handler', () => {
     expectedFirstCol.value = ['Subcategory'];
 
     // when
-    const colInformation = getColumnInformation(definition, data);
+    const colInformation = mstrCompoundGridHandler.getColumnInformation(definition, data);
 
     // then
     expect(colInformation).toHaveLength(expectedLength);
@@ -35,12 +35,12 @@ describe('Compound Grid Handler', () => {
   it('should return final table size', () => {
     // given
     const { definition, data } = regularCompoundJSON;
-    const colInformation = getColumnInformation(definition, data);
+    const colInformation = mstrCompoundGridHandler.getColumnInformation(definition, data);
     const expectedSize = { columns: 8, rows: 7 };
 
 
     // when
-    const tableSize = getTableSize(colInformation, data);
+    const tableSize = mstrCompoundGridHandler.getTableSize(colInformation, data);
 
     // then
     expect(tableSize).toEqual(expectedSize);
@@ -53,7 +53,7 @@ describe('Compound Grid Handler', () => {
     const expectedLastRow = [6708.9268000006, null, null, null, 308419.5428999996, 237860.2502999999, 176310.18];
 
     // when
-    const metrics = renderRows(metricValues.columnSets, paging.current);
+    const metrics = mstrCompoundGridHandler.getRows(metricValues.columnSets, paging.current);
 
     // then
     expect(metrics[0]).toEqual(expected1stRow);
@@ -66,7 +66,7 @@ describe('Compound Grid Handler', () => {
     const expectedLength = 0;
 
     // when
-    const columns = parseColumnSets(columnSets);
+    const columns = mstrCompoundGridHandler.parseColumnSets(columnSets);
 
     // then
     expect(columns).toHaveLength(expectedLength);
@@ -78,7 +78,7 @@ describe('Compound Grid Handler', () => {
     const expectedHeight = 2;
 
     // when
-    const height = calculateColumnHeaderHeight(columnSets);
+    const height = mstrCompoundGridHandler.calculateColumnHeaderHeight(columnSets);
 
     // then
     expect(height).toEqual(expectedHeight);
@@ -98,7 +98,7 @@ describe('Compound Grid Handler', () => {
     ];
 
     // when
-    const headers = renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition, onAttribute, onMetric);
+    const headers = mstrCompoundGridHandler.renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition, onAttribute, onMetric);
 
     // then
     expect(headers).toEqual(expectedHeaders);
@@ -114,7 +114,7 @@ describe('Compound Grid Handler', () => {
     const expectedTitles = []; // TODO
 
     // when
-    const rowTitles = renderCompoundGridRowTitles(headers, definition, onElement);
+    const rowTitles = mstrCompoundGridHandler.renderCompoundGridRowTitles(headers, definition, onElement);
 
     // then
     expect(rowTitles).toEqual(definition.grid.rows);
@@ -138,7 +138,7 @@ describe('Compound Grid Handler', () => {
     ];
 
     // when
-    const rowHeaders = renderCompoundGridRowHeaders(headers, definition, onElement);
+    const rowHeaders = mstrCompoundGridHandler.renderCompoundGridRowHeaders(headers, definition, onElement);
 
     // then
     expect(rowHeaders).toEqual(expectedHeaders);
@@ -149,7 +149,7 @@ describe('Compound Grid Handler', () => {
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));
 
     // when
-    const mstrTable = getCompoundGridTable(response);
+    const mstrTable = mstrCompoundGridHandler.createTable(response);
     // then
     expect(mstrTable).toEqual({});
   });
