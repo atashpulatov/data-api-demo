@@ -7,8 +7,8 @@ import { switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 
-describe('Error Handling - LOGIN - ', () => {
-  beforeAll(async () => {
+describe('F17583 - Ability to Authenticate using Badge, SAML, LDAP and Kerberos', () => {
+  beforeEach(() => {
     await OfficeWorksheet.openExcelHome();
     const url = await browser.getCurrentUrl();
     if (url.includes('login.microsoftonline')) {
@@ -16,12 +16,6 @@ describe('Error Handling - LOGIN - ', () => {
     }
     await OfficeWorksheet.createNewWorkbook();
     await OfficeWorksheet.openPlugin();
-  });
-
-  afterAll(async () => {
-    await browser.close();
-    const handles = await browser.getAllWindowHandles();
-    await browser.switchTo().window(handles[0]);
   });
 
   it('[TC39215] Standard negative login', async () => {

@@ -10,7 +10,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
 
-describe('[TC54263] Secure data - clearing data', () => {
+describe('F21526 - Secure data - clearing data', () => {
   beforeEach(() => {
     officeLogin.openExcelAndLoginToPlugin();
   });
@@ -19,7 +19,7 @@ describe('[TC54263] Secure data - clearing data', () => {
     changeBrowserTab(0);
   });
 
-  it('[TC54263] should clear data', () => {
+  it('[TC54263] - Clearing and viewing data for users with different privileges', () => {
     console.log(`should import 'Revenue by Region and Category - secure data' report`);
     PluginPopup.importObjectToCellAndAssertSuccess('A1', objectsList.reports.secureDataFiltering, 'Report for clearing data should be imported', false);
 

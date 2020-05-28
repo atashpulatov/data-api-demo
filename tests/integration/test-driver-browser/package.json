@@ -10,8 +10,9 @@
     "report-and-open": "allure generate allure-results --clean && allure open",
     "test-suite": "rimraf ./allure-results && wdio wdio.conf.js --suite",
     "test-UB": "rimraf ./allure-results && wdio wdio.conf.js --suite UB --ENVIRONMENT --USERNAME --PASSWORD",
-    "rally": "node -r dotenv/config ./rally/updateRallyTCResult.js",
-    "rally-man": "node -r dotenv/config ./rally/manual/updateManualResults.js"
+    "rally": "node -r dotenv/config ./rally/automated/updateAutomatedTCResult.js",
+    "rally-man": "node -r dotenv/config ./rally/manual/updateManualResults.js",
+    "add-duration": "node -r dotenv/config ./rally/getTestSetDuration/updateMachineTime.js"
   },
   "author": "",
   "license": "MIT",
@@ -42,6 +43,6 @@
     "allure-commandline": "^2.13.0",
     "chromedriver": "^79.0.0",
     "dotenv": "^8.2.0",
-    "request": "^2.88.0"
+    "node-fetch": "^2.6.0"
   }
 }

@@ -8,7 +8,7 @@ import { switchToPromptFrame, switchToPluginFrame } from '../../../helpers/utils
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 
-describe('F30479 hardening import from dossier', () => {
+describe('F30479 - Hardening of importing data from Dossier to Excel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -17,15 +17,15 @@ describe('F30479 hardening import from dossier', () => {
     browser.closeWindow();
   });
 
-  it('[TC65052] - e2e hardening import from dossier', () => {
+  it('[TC65052] - E2E hardening import from dossier', () => {
     console.group(`Import and edit viz from  ${objectsList.dossiers.withFilter.name}`);
     console.log('Add/Import data to A1 cell');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     console.log(`Find, select and open ${objectsList.dossiers.withFilter.name}`);
-    PluginPopup.openDossier(objectsList.dossiers.withFilter.name);
+    PluginPopup.openDossier(objectsList.dossiers.withFilter.name, 10000, false, 2);
     console.log('Select and import the visualization');
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.withFilter.visualizations.vis1);
+    PluginPopup.selectAndImportVisualization(objectsList.dossiers.withFilter.visualizations.vis1);
     console.log('Check success of data import');
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
@@ -54,7 +54,7 @@ describe('F30479 hardening import from dossier', () => {
     console.log(`Find, select and open ${objectsList.dossiers.withAttributeMetricSelector.name}`);
     PluginPopup.openDossier(objectsList.dossiers.withAttributeMetricSelector.name);
     console.log('Select and import the visualization');
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.withAttributeMetricSelector.visualizations.vis1);
+    PluginPopup.selectAndImportVisualization(objectsList.dossiers.withAttributeMetricSelector.visualizations.vis1);
     console.log('Check success of data import');
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     console.groupEnd();

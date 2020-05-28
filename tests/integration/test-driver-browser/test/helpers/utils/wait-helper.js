@@ -3,7 +3,7 @@ import { rightPanelSelectors } from '../../constants/selectors/plugin.right-pane
 import { logStep } from './allure-helper';
 
 export function waitForNotification() {
-  console.log('Should wait for notification');
+  logStep(`Waiting for notifications...    [wait-helper.js - waitForNotification()]`);
   const notification = $(rightPanelSelectors.notificationContainer);
   const progressBar = $(rightPanelSelectors.progressBar);
   getNotification(notification, progressBar);

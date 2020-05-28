@@ -4,7 +4,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { switchToDialogFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
 
-describe('TC59677 - Altering Table of Objects with rows expanded', () => {
+describe('F25946 - Object Details Panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -14,7 +14,7 @@ describe('TC59677 - Altering Table of Objects with rows expanded', () => {
     changeBrowserTab(0);
   });
 
-  it('Imports an object after checking details', () => {
+  it('[TC59677] - Altering Table of Objects with rows expanded', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
 

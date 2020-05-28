@@ -29,7 +29,7 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginPopup.switchLibrary();
     PluginPopup.switchLibrary();
     PluginPopup.importObject('Dossier for interactive components');
-    PluginPopup.selectAndImportVizualiation('#mstr114');
+    PluginPopup.selectAndImportVisualization('#mstr114');
     waitForNotification();
     OfficeWorksheet.selectCell('D9');
     browser.pause(2000);

@@ -8,8 +8,9 @@ import { changeBrowserTab, switchToPromptFrame, switchToDialogFrame } from '../.
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
-describe('F21402 - Handle Prompted Object', () => {
+describe('F21402 - Support for prompted reports while importing data for Excel add-in', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
@@ -19,75 +20,39 @@ describe('F21402 - Handle Prompted Object', () => {
   });
 
   it('[TC40306] Importing prompted reports functionality, for all type of prompts (value, object, expression, etc) with Prepare Data', () => {
-    // should click prepare data on selected report
+    logStep(`+ Prepare data for report ${objectsList.reports.allPrompt}`);
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.preparePrompt(objectsList.reports.allPrompt);
 
-    // should select answers for 11 prompts
-    console.log('Prompt is opened');
+    logStep('+ Answer for 11 prompts');
+    logStep(`Prompt window is opened`);
     switchToPromptFrame();
     browser.pause(1111);
-    $(popupSelectors.promptedAll.prompt1).click();
-    console.log('Prompt 1 selected');
     
+    PluginPopup.answerPrompt('Object', 'Item', 1);
+    PluginPopup.selectPromptOnPanel(2);
+    PluginPopup.answerPrompt('Category', 'Books', 3);
+    PluginPopup.answerPrompt('Year', '2016', 4);
+    browser.pause(3000);
+    PluginPopup.selectPromptOnPanel(5);
+    PluginPopup.selectPromptOnPanel(6);
+    PluginPopup.answerPrompt('Value', '1820', 7);
+    browser.pause(2000);
+    PluginPopup.answerPrompt('Value', '11/06/2016', 8);
+    PluginPopup.answerPrompt('Year', '2016', 9);
     browser.pause(1111);
-    $(popupSelectors.promptedAll.prompt2).click();
-    console.log('Prompt 2 selected');
-
-    browser.pause(1111);
-    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt8, '2016');
-    console.log('Prompt 3 selected');
-
-    browser.pause(1111);
-    $(popupSelectors.promptPanel(5)).click();
-    browser.pause(2222);
-    $(popupSelectors.promptedAll.prompt4).keys('\uE004\uE004\uE004\uE004\uE004\uE004\uE004\uE006');
-    console.log('Prompt 4 selected');
-
-    browser.pause(1111);
-    $(popupSelectors.promptedAll.prompt9).click();
-    console.log('Prompt 5 selected');
-
-    browser.pause(1111);
-    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt3, '2000');
-    console.log('Prompt 6 selected');
-
-    browser.pause(1111);
-    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt4, '1820');
-    $(popupSelectors.promptPanel(8)).click();
-    console.log('Prompt 7 selected');
-
-    browser.pause(2111);
-    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt5, '11/06/2016');
-    $(popupSelectors.promptPanel(9)).click();
-    console.log('Prompt 8 selected');
-
-    browser.pause(2111);
-    $(popupSelectors.promptedAll.prompt6).clearValue();
-    PluginPopup.clickAndKeys(popupSelectors.promptedAll.prompt6, '2016');
-    $(popupSelectors.promptPanel(10)).click();
-    console.log('Prompt 9 selected');
-
-    browser.pause(1111);
-    $(popupSelectors.promptPanel(10)).click();
-    $(popupSelectors.promptPanel(11)).click();
-    console.log('Prompt 10 selected');
-
-    browser.pause(1111);
-    $(popupSelectors.promptedAll.prompt7).click();
-    console.log('Prompt 11 selected and all prompts are selected correctly');
-
-    // should click run and select attributes metrics filters
-    switchToDialogFrame();
-    console.log('Prepare data popup is opened');
     PluginPopup.clickRun();
+
+    logStep(`+ Preparing Data...`);
+    $(popupSelectors.allAttributes).waitForEnabled(20000);
     PluginPopup.selectAllAttributes();
     PluginPopup.selectAllMetrics();
-    PluginPopup.clickImport();
-    console.log('Attributes metrics and filters are selected');
+    logStep(`All attributes and metrics were selected`);
 
+    PluginPopup.clickImport();
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    PluginRightPanel.closeNotificationOnHover();
   });
 });

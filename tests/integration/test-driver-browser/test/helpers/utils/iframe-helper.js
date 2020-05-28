@@ -19,7 +19,7 @@ export function switchToExcelFrame() {
 // This frame is used for report prompt window and visualizations window
 export function switchToPromptFrame() {
   switchToPluginFrame();
-  $('iframe[src*="app.embedded=true"]').waitForExist(9999);
+  $('iframe[src*="app.embedded=true"]').waitForExist(20000);
   browser.switchToFrame($('iframe[src*="app.embedded=true"]'));
 }
 

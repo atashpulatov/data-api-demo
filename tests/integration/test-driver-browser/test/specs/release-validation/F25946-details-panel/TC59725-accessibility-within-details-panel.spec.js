@@ -8,7 +8,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { pressEnter, pressDownArrow } from '../../../helpers/utils/keyboard-actions';
 
-describe('F25946 - details panel', () => {
+describe('F25946 - Object Details Panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

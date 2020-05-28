@@ -8,7 +8,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { objectsList } from '../../../constants/objects-list';
 
-describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+describe('F12909 - Ability to import a report from MicroStrategy', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
