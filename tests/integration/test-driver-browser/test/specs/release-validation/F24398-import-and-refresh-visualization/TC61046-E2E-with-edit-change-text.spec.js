@@ -6,8 +6,8 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 
-describe('IMPORT diferent types of vizualizations', () => {
-  beforeAll(() => {
+describe('F24398 - Import and refresh visualization', () => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
@@ -24,7 +24,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginRightPanel.clickImportDataButton();
     const dossierObject = objectsList.dossiers.userActivityDossier;
     PluginPopup.openDossier(dossierObject.name, null, false);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.accounts);
+    PluginPopup.selectAndImportVisualization(dossierObject.visualizations.accounts);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
@@ -33,7 +33,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     OfficeWorksheet.selectCell('E3');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.openDossier(dossierObject.name, null, false);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.dailyActiveAccounts);
+    PluginPopup.selectAndImportVisualization(dossierObject.visualizations.dailyActiveAccounts);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);
@@ -52,7 +52,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginRightPanel.editObject(1);
     browser.pause(3000);
 
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.accounts);
+    PluginPopup.selectAndImportVisualization(dossierObject.visualizations.accounts);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(3000);

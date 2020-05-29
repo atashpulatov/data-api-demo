@@ -11,7 +11,7 @@ import settings from '../../../config';
 describe('F24398 - Import and refresh visualization', () => {
   const { name, timeToOpen, visualizations } = objectsList.dossiers.complexDossier;
 
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
@@ -32,7 +32,7 @@ describe('F24398 - Import and refresh visualization', () => {
       // test
       const visType = Object.keys(onlyFiveVisualizations[i])[0];
       const visSelector = onlyFiveVisualizations[i][visType];
-      PluginPopup.selectAndImportVizualiation(visSelector);
+      PluginPopup.selectAndImportVisualization(visSelector);
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
       PluginRightPanel.closeNotificationOnHover();

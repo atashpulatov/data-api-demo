@@ -7,12 +7,11 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import settings from '../../../config';
-import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('F24398 - Import and refresh visualization', () => {
   const { name, timeToOpen, visualizations } = objectsList.dossiers.complexDossier;
 
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
@@ -33,10 +32,10 @@ describe('F24398 - Import and refresh visualization', () => {
       // test
       const visType = Object.keys(onlyFiveVisualizations[i])[0];
       const visSelector = onlyFiveVisualizations[i][visType];
-      PluginPopup.selectAndImportVizualiation(visSelector);
+      PluginPopup.selectAndImportVisualization(visSelector);
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-      pluginRightPanel.closeNotificationOnHover();
+      PluginRightPanel.closeNotificationOnHover();
 
       // afterEach
       browser.pause(100);

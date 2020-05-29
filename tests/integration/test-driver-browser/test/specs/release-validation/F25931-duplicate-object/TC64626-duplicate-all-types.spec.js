@@ -4,6 +4,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { objectsList } from '../../../constants/objects-list';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
 describe('F25931 - Duplicate object', () => {
   beforeEach(() => {
@@ -15,74 +16,76 @@ describe('F25931 - Duplicate object', () => {
   });
 
   it('[TC64626] - Duplicate all types of objects', () => {
-    console.log('Import Report - Seasonal Report');
+    logStep(`Import Report ${objectsList.reports.secureDataAlwaysWorking}`);
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    PluginPopup.importObject(objectsList.reports.seasonalReport);
+    browser.pause(3000);
+    PluginPopup.importObject(objectsList.reports.secureDataAlwaysWorking);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
-    console.log('Import Dataset - Sales Records 1k - to new worksheet');
+    logStep(`Import Dataset ${objectsList.datasets.salesRecords1k}`);
     OfficeWorksheet.openNewSheet();
     PluginRightPanel.clickAddDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.datasets.salesRecords1k);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
-    console.log('Import Bubble Chart from Complex Dossier to new worksheet');
+    logStep(`Import Bubble Chart from ${objectsList.dossiers.complexDossier.name}`);
     OfficeWorksheet.openNewSheet();
     PluginRightPanel.clickAddDataButton();
     const dossierObject = objectsList.dossiers.complexDossier;
+    const { bubbleChart } = dossierObject.visualizations;
     PluginPopup.openDossier(dossierObject.name, null, false);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.bubbleChart);
+    PluginPopup.selectAndImportVisualization(bubbleChart);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
-    console.log('Save initial number of worksheets');
+    logStep('Save initial number of worksheets');
     const initialNumberOfWorksheets = OfficeWorksheet.getNumberOfWorksheets();
 
-    console.log('Go to 1 excel worksheet');
+    logStep('Go to 1 excel worksheet');
     OfficeWorksheet.openSheet(1);
-    console.log('Select G1 cell');
+    logStep('Select G1 cell');
     OfficeWorksheet.selectCell('G1');
-    console.log('Open Duplicate Popup for imported Seasonal Report');
+    logStep(`Open Duplicate Popup for imported ${objectsList.reports.secureDataAlwaysWorking}`);
     PluginRightPanel.duplicateObject(3);
-    console.log('Select actibe cell option in duplicate popup');
+    logStep('Select actibe cell option in duplicate popup');
     PluginRightPanel.selectActiveCellOptionInDuplicatePopup();
-    console.log('Click import button in duplicate popup');
+    logStep('Click import button in duplicate popup');
     PluginRightPanel.clickDuplicatePopupImportBtn();
-    console.log('Check duplicated Seasonal Report');
+    logStep(`Check duplicated ${objectsList.reports.secureDataAlwaysWorking}`);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
-    expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.seasonalReport} Copy`);
+    expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.reports.secureDataAlwaysWorking} Copy`);
 
-    console.log('Go to 2 excel worksheet');
+    logStep('Go to 2 excel worksheet');
     OfficeWorksheet.openSheet(2);
-    console.log('Select R1 cell');
+    logStep('Select R1 cell');
     OfficeWorksheet.selectCell('R1');
-    console.log('Open Duplicate Popup for imported Sales Records 1k');
+    logStep(`Open Duplicate Popup for imported ${objectsList.datasets.salesRecords1k}`);
     PluginRightPanel.duplicateObject(3);
-    console.log('Select actibe cell option in duplicate popup');
+    logStep('Select actibe cell option in duplicate popup');
     PluginRightPanel.selectActiveCellOptionInDuplicatePopup();
-    console.log('Click import button in duplicate popup');
+    logStep('Click import button in duplicate popup');
     PluginRightPanel.clickDuplicatePopupImportBtn();
-    console.log('Check duplicated Sales Records 1k');
+    logStep(`Check duplicated ${objectsList.datasets.salesRecords1k}`);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`${objectsList.datasets.salesRecords1k} Copy`);
 
-    console.log('Go to 3 excel worksheet');
+    logStep('Go to 3 excel worksheet');
     OfficeWorksheet.openSheet(3);
-    console.log('Select A10 cell');
+    logStep('Select A10 cell');
     OfficeWorksheet.selectCell('A10');
-    console.log('Open Duplicate Popup for imported Bubble Chart');
+    logStep('Open Duplicate Popup for imported Bubble Chart');
     PluginRightPanel.duplicateObject(3);
-    console.log('Select actibe cell option in duplicate popup');
+    logStep('Select actibe cell option in duplicate popup');
     PluginRightPanel.selectActiveCellOptionInDuplicatePopup();
-    console.log('Click import button in duplicate popup');
+    logStep('Click import button in duplicate popup');
     PluginRightPanel.clickDuplicatePopupImportBtn();
-    console.log('Check duplicated Bubble Chart');
+    logStep('Check duplicated Bubble Chart');
     PluginRightPanel.waitAndCloseNotification(dictionary.en.duplicateSucces);
     expect(PluginRightPanel.getNameOfObject(1)).toBe(`Bubble Chart Copy`);
 
-    console.log('Check if all objects were duplicated to active cells (number of worksheets did not change)');
+    logStep('Check if all objects were duplicated to active cells (number of worksheets did not change)');
     expect(OfficeWorksheet.getNumberOfWorksheets()).toBe(initialNumberOfWorksheets);
   });
 });

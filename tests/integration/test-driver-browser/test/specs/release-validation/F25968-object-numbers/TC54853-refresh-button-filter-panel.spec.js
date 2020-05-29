@@ -17,7 +17,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     changeBrowserTab(0);
   });
 
-  it('TC54853 refresh button and filter panel', () => {
+  it('[TC54853] Refresh button and filter panel', () => {
     // open import data popup
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();

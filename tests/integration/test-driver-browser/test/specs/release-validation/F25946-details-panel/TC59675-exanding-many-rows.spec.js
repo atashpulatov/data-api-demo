@@ -3,7 +3,7 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 
-describe('F25946 - details panel', () => {
+describe('F25946 - Object Details Panel', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

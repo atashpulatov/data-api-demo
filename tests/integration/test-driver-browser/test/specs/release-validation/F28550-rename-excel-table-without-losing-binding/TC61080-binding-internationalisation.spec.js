@@ -8,7 +8,7 @@ import { getTextOfNthObjectOnNameBoxList } from '../../../helpers/utils/excelMan
 import { objectsList } from '../../../constants/objects-list';
 import { pressEscape } from '../../../helpers/utils/keyboard-actions';
 
-describe('F28550 - Excel Connector Hardening: Rename Excel table without losing binding', () => {
+describe('F28550 - Connector Hardening: Rename Excel table without losing binding', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

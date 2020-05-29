@@ -8,7 +8,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
-describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+describe('F12909 - Ability to import a report from MicroStrategy', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });

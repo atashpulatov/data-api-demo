@@ -18,7 +18,7 @@ describe('F12909 - Ability to import a report from MicroStrategy', () => {
   });
 
 
-  it('[Tc35090] - Importing the report right under Exel limits', () => {
+  it('[TC35090] - Importing the report right under Exel limits', () => {
     // should import report which is exactly at the excel limit
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();

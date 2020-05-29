@@ -7,7 +7,7 @@ import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
 
-describe('F12909 - Ability to import a report from MicroStrategy report', () => {
+describe('F12909 - Ability to import a report from MicroStrategy', () => {
   beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
