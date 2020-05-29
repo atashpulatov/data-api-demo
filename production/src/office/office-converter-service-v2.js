@@ -47,26 +47,25 @@ class OfficeConverterServiceV2 {
   getHeaders = (response, isCrosstab, isCrosstabular) => {
     const handler = this.getHandler(response);
     return handler.getHeaders(response, isCrosstab, isCrosstabular);
-    }
   }
 
   /**
-   * Gets subtotals defined or visible information from the response.
-   *
-   * @param {JSON} response
-   * @return {Object}
-   */
+     * Gets subtotals defined or visible information from the response.
+     *
+     * @param {JSON} response
+     * @return {Object}
+     */
   getSubtotalsInformation = (response) => {
     const handler = this.getHandler(response);
     return handler.getSubtotalsInformation(response);
-  }
+  };
 
   /**
-   * Checks if response contains crosstabs
-   *
-   * @param {JSON} response
-   * @return {Boolean}
-   */
+     * Checks if response contains crosstabs
+     *
+     * @param {JSON} response
+     * @return {Boolean}
+     */
   isCrosstab = (response) => {
     try {
       const { grid } = response.definition;
@@ -75,7 +74,7 @@ class OfficeConverterServiceV2 {
       // This is changing so often that we want to at least return false
       return false;
     }
-  }
+  };
 
   getHandler = (response) => {
     switch (response.visualizationType) {
