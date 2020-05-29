@@ -160,8 +160,7 @@ class OfficeApiCrosstabHelper {
 
     this.createColumnsHeaders(tableStartCell, columns, sheet);
 
-    // TODO Compound Grid Support
-    // this.createRowsTitleHeaders(tableStartCell, attributesNames, sheet, crosstabHeaderDimensions);
+    this.createRowsTitleHeaders(tableStartCell, attributesNames, sheet, crosstabHeaderDimensions);
   };
 
   /**
@@ -193,6 +192,7 @@ class OfficeApiCrosstabHelper {
   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
   */
   createRowsTitleHeaders = (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
+    const { rowsAttributes, columnsAttributes } = attributesNames;
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
@@ -207,13 +207,15 @@ class OfficeApiCrosstabHelper {
     headerTitlesRange.values = '  ';
 
     // we are not inserting row attributes names if they do not exist
-    if (attributesNames.rowsAttributes.length) {
-      rowsTitlesRange.values = [attributesNames.rowsAttributes];
-      mergeHeaderRows(attributesNames.rowsAttributes, rowsTitlesRange);
+    if (rowsAttributes && rowsAttributes.length) {
+      rowsTitlesRange.values = [rowsAttributes];
+      mergeHeaderRows(rowsAttributes, rowsTitlesRange);
     }
 
-    columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
-    mergeHeaderColumns(attributesNames.columnsAttributes, columnsTitlesRange);
+    if (columnsAttributes && columnsAttributes.length) {
+      columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([columnsAttributes]);
+      mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
+    }
   };
 
 

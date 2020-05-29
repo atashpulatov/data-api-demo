@@ -10,14 +10,14 @@ import regularCompound from '../_tests_/mstr-object/compound-grid/Regular Compou
 class CompoundGridHandler {
   createTable(response) {
     response = regularCompound;
-    const { definition, data } = response;
+    const { definition, data, attrforms } = response;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular = false; // We may have crosstabular in compoundGrid
     const columnInformation = this.getColumnInformation(definition, data);
     const isCrosstab = true;
 
     return {
-      tableSize: this.getTableSize(columnInformation, response.data),
+      tableSize: this.getTableSize(data),
       columnInformation,
       headers: this.getHeaders(response),
       id: response.k,
@@ -26,7 +26,7 @@ class CompoundGridHandler {
       name: response.n,
       rows: this.getRows(data),
       visualizationType: response.visualizationType,
-      // attributesNames: this.getAttributesName(response.definition, response.attrforms),
+      attributesNames: this.getAttributesName(definition, attrforms),
     };
   }
 
@@ -48,11 +48,17 @@ class CompoundGridHandler {
     return [...commonColumns[commonColumns.length - 1], ...columnSetColumns[columnSetColumns.length - 1]];
   }
 
-  getTableSize(columnInformation, data) {
+  getTableSize(data) {
     return {
       rows: data.paging.total,
-      columns: columnInformation.length
+      columns: data.headers.rows.length,
     };
+  }
+
+  getAttributesName(definition, attrforms) {
+    // TODO Compound Grid Support
+    const rowsAttributes = definition.grid.rows.map(({ name }) => name);
+    return { rowsAttributes };
   }
 
   calculateColumnHeaderHeight(columnSetsHeaders, columnSets) {
@@ -97,7 +103,6 @@ class CompoundGridHandler {
 
   getHeaders(response) {
     response = regularCompound;
-    console.log('getHeaders', response);
     const { definition, data } = response;
     const { headers } = data;
     const onElement = (e) => `'${e.value.join(' ')}`;
