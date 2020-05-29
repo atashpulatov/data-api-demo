@@ -9,15 +9,8 @@ import mstrGridHandler from '../mstr-object/mstr-grid-handler';
  */
 class OfficeConverterServiceV2 {
   createTable(response) {
-    let mstrTable = {};
-    switch (response.visualizationType) {
-      case mstrObjectType.visualizationType.COMPOUND_GRID:
-        mstrTable = mstrCompoundGridHandler.createTable(response);
-        break;
-      default:
-        mstrTable = mstrGridHandler.createTable(response);
-        break;
-    }
+    const handler = this.getHandler(response);
+    const mstrTable = handler.createTable(response);
 
     mstrTable.subtotalsInfo = {};
     const subtotals = this.getSubtotalsInformation(response);
@@ -37,12 +30,8 @@ class OfficeConverterServiceV2 {
    * @return {number[]}
    */
   getRows = (response, isCrosstab) => {
-    switch (response.visualizationType) {
-      case mstrObjectType.visualizationType.COMPOUND_GRID:
-        return mstrCompoundGridHandler.getRows(response);
-      default:
-        return mstrGridHandler.getRows(response, isCrosstab);
-    }
+    const handler = this.getHandler(response);
+    return handler.getRows(response, isCrosstab);
   }
 
 
@@ -56,11 +45,8 @@ class OfficeConverterServiceV2 {
 
    */
   getHeaders = (response, isCrosstab, isCrosstabular) => {
-    switch (response.visualizationType) {
-      case mstrObjectType.visualizationType.COMPOUND_GRID:
-        return mstrCompoundGridHandler.getHeaders(response);
-      default:
-        return mstrGridHandler.getHeaders(response, isCrosstab, isCrosstabular);
+    const handler = this.getHandler(response);
+    return handler.getHeaders(response, isCrosstab, isCrosstabular);
     }
   }
 
@@ -71,12 +57,8 @@ class OfficeConverterServiceV2 {
    * @return {Object}
    */
   getSubtotalsInformation = (response) => {
-    switch (response.visualizationType) {
-      case mstrObjectType.visualizationType.COMPOUND_GRID:
-        return mstrCompoundGridHandler.getSubtotalsInformation(response);
-      default:
-        return mstrGridHandler.getSubtotalsInformation(response);
-    }
+    const handler = this.getHandler(response);
+    return handler.getSubtotalsInformation(response);
   }
 
   /**
@@ -92,6 +74,15 @@ class OfficeConverterServiceV2 {
     } catch (error) {
       // This is changing so often that we want to at least return false
       return false;
+    }
+  }
+
+  getHandler = (response) => {
+    switch (response.visualizationType) {
+      case mstrObjectType.visualizationType.COMPOUND_GRID:
+        return mstrCompoundGridHandler;
+      default:
+        return mstrGridHandler;
     }
   }
 }
