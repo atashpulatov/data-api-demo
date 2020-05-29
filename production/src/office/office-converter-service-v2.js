@@ -77,6 +77,8 @@ class OfficeConverterServiceV2 {
   };
 
   getHandler = (response) => {
+    // Don't forget to remove
+    return mstrCompoundGridHandler;
     switch (response.visualizationType) {
       case mstrObjectType.visualizationType.COMPOUND_GRID:
         return mstrCompoundGridHandler;

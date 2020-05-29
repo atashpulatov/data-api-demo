@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
+import regularCompound from '../_tests_/mstr-object/compound-grid/Regular Compound Grid.json';
 
 /**
  * Handler to parse compound grid
@@ -8,6 +9,7 @@ import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
  */
 class CompoundGridHandler {
   createTable(response) {
+    response = regularCompound;
     const { definition, data } = response;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular = false; // We may have crosstabular in compoundGrid
@@ -22,9 +24,9 @@ class CompoundGridHandler {
       isCrosstab,
       isCrosstabular,
       name: response.n,
-      rows: this.renderRows(data.metricValues.columnSets, 1).row,
+      rows: this.getRows(data),
       visualizationType: response.visualizationType,
-      attributesNames: this.getAttributesName(response.definition, response.attrforms),
+      // attributesNames: this.getAttributesName(response.definition, response.attrforms),
     };
   }
 
@@ -38,11 +40,9 @@ class CompoundGridHandler {
 
   getColumnInformation(definition, data) {
     const { headers } = data;
-    const { columnSets: columnSetsHeaders } = headers;
-    const { columnSets: columnSetsDefinition } = definition.grid;
     const onElement = (element) => element;
     const commonColumns = this.renderCompoundGridRowTitles(headers, definition, onElement);
-    const params = [columnSetsHeaders, columnSetsDefinition, onElement, onElement];
+    const params = [headers, definition, onElement, onElement];
     // TODO: In ColumnSets Metrics are not always the last row!! We may need for formatting properly
     const columnSetColumns = this.renderCompoundGridColumnHeaders(...params);
     return [...commonColumns[commonColumns.length - 1], ...columnSetColumns[columnSetColumns.length - 1]];
@@ -75,12 +75,20 @@ class CompoundGridHandler {
     return offset;
   }
 
-  getRows(columnSetsMetricValues, currentRows, valueMatrix = 'raw') {
+  getRows = (response) => {
+    response = regularCompound;
+    return { row: this.renderRows(response.data) };
+  }
+
+  getSubtotalsInformation = () => [] // TODO
+
+  renderRows(data, valueMatrix = 'raw') {
+    const { metricValues: { columnSets }, paging } = data;
     const rowTable = [];
-    for (let row = 0; row < currentRows; row++) {
+    for (let row = 0; row < paging.current; row++) {
       const rowValues = [];
-      for (let colSet = 0; colSet < columnSetsMetricValues.length; colSet++) {
-        rowValues.push(...columnSetsMetricValues[colSet][valueMatrix][row]);
+      for (let colSet = 0; colSet < columnSets.length; colSet++) {
+        rowValues.push(...columnSets[colSet][valueMatrix][row]);
       }
       rowTable.push(rowValues);
     }
@@ -88,6 +96,8 @@ class CompoundGridHandler {
   }
 
   getHeaders(response) {
+    response = regularCompound;
+    console.log('getHeaders', response);
     const { definition, data } = response;
     const { headers } = data;
     const onElement = (e) => `'${e.value.join(' ')}`;
@@ -108,7 +118,9 @@ class CompoundGridHandler {
     return mstrNormalizedJsonHandler.renderHeaders(definition, 'rows', headers, onElement, false);
   }
 
-  renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition, onAttribute, onMetric) {
+  renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric) {
+    const { columnSets: columnSetsHeaders } = headers;
+    const { columnSets: columnSetsDefinition } = definition.grid;
     const transposedHeaders = columnSetsHeaders.map(mstrNormalizedJsonHandler.transposeMatrix);
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders, columnSetsDefinition);
 

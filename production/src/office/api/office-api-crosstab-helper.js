@@ -160,7 +160,8 @@ class OfficeApiCrosstabHelper {
 
     this.createColumnsHeaders(tableStartCell, columns, sheet);
 
-    this.createRowsTitleHeaders(tableStartCell, attributesNames, sheet, crosstabHeaderDimensions);
+    // TODO Compound Grid Support
+    // this.createRowsTitleHeaders(tableStartCell, attributesNames, sheet, crosstabHeaderDimensions);
   };
 
   /**
