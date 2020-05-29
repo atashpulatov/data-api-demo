@@ -181,6 +181,22 @@ class GridHandler {
   }
 
   /**
+   * Checks if response contains crosstabs
+   *
+   * @param {JSON} response
+   * @return {Boolean}
+   */
+    isCrosstab = (response) => {
+      try {
+        const { grid } = response.definition;
+        return !!grid.crossTab && grid.columns.length !== 0;
+      } catch (error) {
+        // This is changing so often that we want to at least return false
+        return false;
+      }
+    };
+
+  /**
    * Gets array with indexed column definition
    *
    * @param {JSON} response
