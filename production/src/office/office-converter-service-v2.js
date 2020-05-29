@@ -9,23 +9,23 @@ import mstrGridHandler from '../mstr-object/mstr-grid-handler';
  */
 class OfficeConverterServiceV2 {
   createTable(response) {
-    let table = {};
+    let mstrTable = {};
     switch (response.visualizationType) {
       case mstrObjectType.visualizationType.COMPOUND_GRID:
-        table = mstrCompoundGridHandler.createTable(response);
+        mstrTable = mstrCompoundGridHandler.createTable(response);
         break;
       default:
-        table = mstrGridHandler.createTable(response);
+        mstrTable = mstrGridHandler.createTable(response);
         break;
     }
 
-    table.subtotalsInfo = {};
+    mstrTable.subtotalsInfo = {};
     const subtotals = this.getSubtotalsInformation(response);
     if (subtotals) {
-      table.subtotalsInfo = { subtotalsDefined: subtotals.defined, subtotalsVisible: subtotals.visible };
+      mstrTable.subtotalsInfo = { subtotalsDefined: subtotals.defined, subtotalsVisible: subtotals.visible };
     }
 
-    return table;
+    return mstrTable;
   }
 
 
