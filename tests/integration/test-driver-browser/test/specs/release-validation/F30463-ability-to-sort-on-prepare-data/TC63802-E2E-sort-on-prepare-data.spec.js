@@ -10,7 +10,7 @@ import { pressEnter } from '../../../helpers/utils/keyboard-actions';
 import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 
 describe('F30463 - Ability to sort attributes and metrics on Prepare Data screen in Excel (Citibank)', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
