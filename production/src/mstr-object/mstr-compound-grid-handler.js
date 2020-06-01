@@ -22,7 +22,7 @@ class CompoundGridHandler {
       isCrosstab,
       isCrosstabular,
       name: response.n,
-      rows: this.getRows(data),
+      rows: this.getRows(response),
       visualizationType: response.visualizationType,
       attributesNames: this.getAttributesName(definition, attrforms),
     };
@@ -47,9 +47,14 @@ class CompoundGridHandler {
   }
 
   getTableSize(data) {
+    const { headers: { columnSets } } = data;
+    let columns = 0;
+    for (let index = 0; index < columnSets.length; index++) {
+      columns += columnSets[index].length;
+    }
     return {
       rows: data.paging.total,
-      columns: data.headers.rows.length,
+      columns,
     };
   }
 
