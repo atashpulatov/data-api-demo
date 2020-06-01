@@ -121,6 +121,7 @@ export const objectsList = {
       },
     },
     BasicReportWBrand: 'Basic Report with brand',
+    defectAnalysisPrompted: 'Defect Analysis_with prompt',
   },
 
   datasets: {
@@ -132,6 +133,7 @@ export const objectsList = {
     salesRecords1k: '1k Sales Records.csv',
     salesData: 'Sales Data',
     salesRecords50k: '50k Sales Records.csv',
+    aqdtMirrorTwoQACube: 'QA Cube',
   },
 
   dossiers: {
