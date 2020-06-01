@@ -137,26 +137,25 @@ class PopupViewSelectorHelper {
 
   // TODO: remove once create body is from library
   composeFilter = (selectedFilters) => {
-    let branch;
     const filterOperands = [];
-    const addItem = (item) => {
+    const addItem = (item, branch) => {
       branch.operands[1].elements.push({ id: item, });
     };
-    for (const att of selectedFilters) {
-      if (selectedFilters[att].length) {
-        branch = {
+    for (const [key, value] of Object.entries(selectedFilters)) {
+      if (selectedFilters[key].length) {
+        const branch = {
           operator: 'In',
           operands: [],
         };
         branch.operands.push({
           type: 'attribute',
-          id: att,
+          id: value,
         });
         branch.operands.push({
           type: 'elements',
           elements: [],
         });
-        selectedFilters[att].forEach(addItem);
+        selectedFilters[key].forEach(item => addItem(item, branch));
         filterOperands.push(branch);
       }
     }
