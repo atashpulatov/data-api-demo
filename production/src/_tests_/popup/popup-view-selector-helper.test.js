@@ -80,16 +80,19 @@ describe('PopupViewSelectorHelper', () => {
       ]
     };
 
+    /* eslint-disable indent */
     it.each`
     givenFilter           | expectedResult
     ${givenFilter1}       | ${expectedResult1}
     ${givenFilter2}       | ${expectedResult2}
     ${givenFilter3}       | ${expectedResult3}
-    `('should return $expectedResult when composeFilter was called with $givenFilter', ({ givenFilter, expectedResult }) => {
-      // when
-      const result = popupViewSelectorHelper.composeFilter(givenFilter);
-      // then
-      expect(result).toStrictEqual(expectedResult);
-    });
+    `('should return $expectedResult when composeFilter was called with $givenFilter',
+      ({ givenFilter, expectedResult }) => {
+        // when
+        const result = popupViewSelectorHelper.composeFilter(givenFilter);
+        // then
+        expect(result).toStrictEqual(expectedResult);
+      });
+    /* eslint-enable indent */
   });
 });
