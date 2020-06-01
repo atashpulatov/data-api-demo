@@ -1,6 +1,5 @@
 /* eslint-disable class-methods-use-this */
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
-import regularCompound from '../_tests_/mstr-object/compound-grid/Regular Compound Grid.json';
 
 /**
  * Handler to parse compound grid
@@ -9,7 +8,6 @@ import regularCompound from '../_tests_/mstr-object/compound-grid/Regular Compou
  */
 class CompoundGridHandler {
   createTable(response) {
-    response = regularCompound;
     const { definition, data, attrforms } = response;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular = false; // We may have crosstabular in compoundGrid
@@ -81,10 +79,7 @@ class CompoundGridHandler {
     return offset;
   }
 
-  getRows = (response) => {
-    response = regularCompound;
-    return { row: this.renderRows(response.data) };
-  }
+  getRows = (response) => ({ row: this.renderRows(response.data) })
 
   getSubtotalsInformation = () => [] // TODO
 
@@ -102,7 +97,6 @@ class CompoundGridHandler {
   }
 
   getHeaders(response) {
-    response = regularCompound;
     const { definition, data } = response;
     const { headers } = data;
     const onElement = (e) => `'${e.value.join(' ')}`;
@@ -133,21 +127,21 @@ class CompoundGridHandler {
 
     for (let i = 0; i < transposedHeaders.length; i++) {
       const header = transposedHeaders[i];
-      const columnsDefinition = columnSetsDefinition[i].columns;
+      const columnsDefinition = [...columnSetsDefinition[i].columns];
 
       // Add empty row when column sets have different height
       while (header.length < boundingHeight) {
+        columnsDefinition.unshift({ type: null, elements: [] });
         header.unshift(Array(header[0].length).fill(-1));
       }
-
 
       for (let j = 0; j < boundingHeight; j++) {
         const headerRow = header[j];
         const { type, elements } = columnsDefinition[j];
         const columnSetRow = headerRow.map(index => {
-          const element = elements[index];
           // -1 is for empty row
           if (index < 0) { return ''; }
+          const element = elements[index];
           switch (type) {
             case 'attribute':
               return onAttribute(element);
