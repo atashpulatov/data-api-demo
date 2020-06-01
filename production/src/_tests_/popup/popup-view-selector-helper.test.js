@@ -15,7 +15,7 @@ describe('PopupViewSelectorHelper', () => {
     const expectedResult1 = {
       operator: 'In',
       operands: [
-        { type: 'attribute', id: [filter1Element1] },
+        { type: 'attribute', id: filter1 },
         { type: 'elements', elements: [{ id: filter1Element1 }] }
       ]
     };
@@ -30,14 +30,14 @@ describe('PopupViewSelectorHelper', () => {
         {
           operator: 'In',
           operands: [
-            { type: 'attribute', id: [filter1Element1] },
+            { type: 'attribute', id: filter1 },
             { type: 'elements', elements: [{ id: filter1Element1 }] }
           ]
         },
         {
           operator: 'In',
           operands: [
-            { type: 'attribute', id: [filter4Element3] },
+            { type: 'attribute', id: filter4 },
             { type: 'elements', elements: [{ id: filter4Element3 }] }
           ]
         }
@@ -54,7 +54,7 @@ describe('PopupViewSelectorHelper', () => {
         {
           operator: 'In',
           operands: [
-            { type: 'attribute', id: [filter1Element1, filter1Element7] },
+            { type: 'attribute', id: filter1 },
             {
               type: 'elements',
               elements: [
@@ -67,7 +67,7 @@ describe('PopupViewSelectorHelper', () => {
         {
           operator: 'In',
           operands: [
-            { type: 'attribute', id: [filter4Element3, filter4Element9] },
+            { type: 'attribute', id: filter4 },
             {
               type: 'elements',
               elements: [
