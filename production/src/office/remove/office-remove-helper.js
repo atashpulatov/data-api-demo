@@ -96,12 +96,15 @@ class OfficeRemoveHelper {
       const rowsToDeleteCount = sumOfRowsToDeleteInNextStep > chunkSize
         ? chunkSize
         : sumOfRowsToDeleteInNextStep;
+
       officeTable
         .getRange()
         .getLastRow()
         .getRowsAbove(rowsToDeleteCount)
         .delete('Up');
+
       await excelContext.sync();
+
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
       tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();

@@ -41,9 +41,13 @@ class CompoundGridHandler {
     const onElement = (element) => element;
     const commonColumns = this.renderCompoundGridRowTitles(headers, definition, onElement);
     const params = [headers, definition, onElement, onElement];
-    // TODO: In ColumnSets Metrics are not always the last row!! We may need for formatting properly
     const columnSetColumns = this.renderCompoundGridColumnHeaders(...params);
-    return [...commonColumns[commonColumns.length - 1], ...columnSetColumns[columnSetColumns.length - 1]];
+
+    const parsedColumnSetColumns = mstrNormalizedJsonHandler.getMetricsColumnsInformation(columnSetColumns);
+    const columns = [...commonColumns[commonColumns.length - 1], ...parsedColumnSetColumns];
+
+    // TODO Attribute forms
+    return mstrNormalizedJsonHandler.splitAttributeForms(columns, false);
   }
 
   getTableSize(data) {

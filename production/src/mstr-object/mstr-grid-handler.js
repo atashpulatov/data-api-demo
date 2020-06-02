@@ -206,19 +206,23 @@ class GridHandler {
   getColumnInformation = (response, isCrosstabular) => {
     const { attrforms } = response;
     const supportForms = attrforms ? attrforms.supportForms : false;
-
     let columns;
+
     const onElement = (element) => element;
     const metricColumns = jsonHandler.renderHeaders(response.definition, 'columns', response.data.headers, onElement);
+    const parsedMetricColumns = jsonHandler.getMetricsColumnsInformation(metricColumns);
+
     const attributeColumns = jsonHandler.renderTitles(response.definition, 'rows', response.data.headers, onElement);
+
     if (!attributeColumns.length) {
-      columns = metricColumns[metricColumns.length - 1];
+      columns = parsedMetricColumns;
     } else if (isCrosstabular) {
-      columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1], []];
+      columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns, []];
     } else {
-      columns = [...attributeColumns[attributeColumns.length - 1], ...metricColumns[metricColumns.length - 1]];
+      columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns];
     }
-    return this.splitAttributeForms(columns, supportForms);
+
+    return jsonHandler.splitAttributeForms(columns, supportForms);
   }
 
   /**
@@ -234,55 +238,6 @@ class GridHandler {
     } catch (error) {
       return false;
     }
-  }
-
-  /**
-   * Split attribute forms with their own column information,
-   * only if the user has privileges.
-   *
-   * @param {Array} columns column definition from MicroStrategy
-   * @param {Boolean} supportForms user's privilege to use attribute forms
-   * @returns {Array} column information including attribute forms
-   */
-  splitAttributeForms = (columns, supportForms) => {
-    const fullColumnInformation = [];
-    columns.forEach((column) => {
-      const type = column.type ? column.type.toLowerCase() : null;
-      switch (type) {
-        case 'metric':
-          fullColumnInformation.push({
-            category: column.numberFormatting.category,
-            formatString: column.numberFormatting.formatString,
-            id: column.id,
-            isAttribute: false,
-            name: column.name,
-          });
-          break;
-        case 'attribute':
-        case 'consolidation':
-          if (column.forms && supportForms) {
-            for (let i = 0; i < column.forms.length; i++) {
-              fullColumnInformation.push({
-                attributeId: column.id,
-                attributeName: column.name,
-                forms: [column.forms[i]],
-                isAttribute: true,
-              });
-            }
-          } else {
-            fullColumnInformation.push({
-              attributeId: column.id,
-              attributeName: column.name,
-              forms: column.forms ? column.forms : [],
-              isAttribute: true,
-            });
-          }
-          break;
-        default:
-          fullColumnInformation.push({});
-      }
-    });
-    return fullColumnInformation;
   }
 }
 

@@ -125,12 +125,12 @@ class StepApplyFormatting {
     }
 
     // For fractions set General format
-    if (formatString.match(/# \?+?\/\?+?/)) {
+    if (formatString && formatString.match(/# \?+?\/\?+?/)) {
       return 'General';
     }
 
     // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
-    if (formatString.indexOf('$') !== -1) {
+    if (formatString && formatString.indexOf('$') !== -1) {
       return formatString.replace(/\[\$-/g, '[$$$$-')
         .replace(/\$/g, '\\$')
         .replace(/\\\$\\\$/g, '$')

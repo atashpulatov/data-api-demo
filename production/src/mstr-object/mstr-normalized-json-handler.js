@@ -259,6 +259,73 @@ class NormalizedJsonHandler {
   }
 
   /**
+   * Split attribute forms with their own column information,
+   * only if the user has privileges.
+   *
+   * @param {Array} columns column definition from MicroStrategy
+   * @param {Boolean} supportForms user's privilege to use attribute forms
+   * @returns {Array} column information including attribute forms
+   */
+  splitAttributeForms = (columns, supportForms) => {
+    const fullColumnInformation = [];
+    columns.forEach((column) => {
+      const type = column.type ? column.type.toLowerCase() : null;
+      switch (type) {
+        case 'metric':
+          fullColumnInformation.push({
+            category: column.numberFormatting.category,
+            formatString: column.numberFormatting.formatString,
+            id: column.id,
+            isAttribute: false,
+            name: column.name,
+          });
+          break;
+        case 'attribute':
+        case 'consolidation':
+          if (column.forms && supportForms) {
+            for (let i = 0; i < column.forms.length; i++) {
+              fullColumnInformation.push({
+                attributeId: column.id,
+                attributeName: column.name,
+                forms: [column.forms[i]],
+                isAttribute: true,
+              });
+            }
+          } else {
+            fullColumnInformation.push({
+              attributeId: column.id,
+              attributeName: column.name,
+              forms: column.forms ? column.forms : [],
+              isAttribute: true,
+            });
+          }
+          break;
+        default:
+          fullColumnInformation.push({});
+      }
+    });
+    return fullColumnInformation;
+  }
+
+  getMetricsColumnsInformation(columns) {
+    const transposedHeaders = this.transposeMatrix(columns);
+
+    const parsedColumns = [];
+
+    for (let index = 0; index < transposedHeaders.length; index++) {
+      const currentColumn = transposedHeaders[index];
+      const metrics = currentColumn.find((element) => element.type === 'metric');
+
+      if (metrics) {
+        parsedColumns.push(metrics);
+      } else {
+        parsedColumns.push(currentColumn[currentColumn.length - 1]);
+      }
+    }
+    return parsedColumns;
+  }
+
+  /**
    * Tranpose a matrix (2D array)
    *
    * @param {Array} matrix - 2D Array
