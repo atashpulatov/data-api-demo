@@ -41,6 +41,7 @@ export const popupSelectors = {
   attributesContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div > ul',
   metricsContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div',
   filterTitles: '.filter-title',
+  attributesContainerForDataset: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div',
   filtersContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(1) > div.filter-list.ant-list > div > div > ul',
   sortAttributes: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.selector-title > div',
   sortMetrics: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.selector-title > div',
@@ -152,7 +153,6 @@ export const popupSelectors = {
     getAttributeElementListPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrListBlockContents`,
     getDatePrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrPromptQuestionSimpleAnswerView .mstrCalendarAndTimePickerCellTextBox`,
   },
-  
   filterPanel: {
     expandButton: '.expand-btn',
     selectAllButton: '.all-panel__buttons button:first-of-type',

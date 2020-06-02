@@ -979,20 +979,41 @@ class PluginPopup {
   * Search for object and sort on one of the headers on import data table, than select prepare data button
   *
   * @param {String} objectName name of the object
+  * @param {String} sortOrder order for sorting
   * @param {String} headerName name of the header in import data table
   * @param {boolean} [isObjectFromLibrary=false] switch MyLibrary toggle to true/false
   * @param {number} [objectOrder=1] select object from the list, as default is first
   * @memberof PluginPopup
   */
-  sortAndOpenPrepareData(objectName, headerName, isObjectFromLibrary = false, objectOrder = 1) {
+  sortAndOpenPrepareData(objectName, sortOrder, headerName, isObjectFromLibrary = false, objectOrder = 1) {
     logStep(`+ Selecting the object "${objectName}" sorting on ${headerName} and opening Prepare Data...    [${fileName} - openPrepareData()]`);
     switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
-    this.clickHeader(headerName);
+    this.sortForHeader(headerName, sortOrder);
     this.selectObject(objectOrder);
     this.clickPrepareData();
+  }
+
+  /**
+  * Sorts objects list ascending or descending based on the header name provided. Works if prepare data is open and assumes that the header has not been sorted yet
+  *
+  * @param {String} headerName name of the header in import data table
+  * @param {String} sortOrder order for sorting
+  */
+  sortForHeader(headerName, sortOrder) {
+    switch (sortOrder) {
+      case 'ascending':
+        this.clickHeader(headerName);
+        break;
+      case 'descending':
+        this.clickHeader(headerName);
+        this.clickHeader(headerName);
+        break;
+      default:
+        break;
+    }
   }
 
   /**
@@ -1574,8 +1595,8 @@ class PluginPopup {
  *  Category - this prompt is having search box and table for selection eg answerPrompt('Category', 'Books', 3)
  *  Attribute elements - when you are selecting elements from attribute (moving form one side to other)
  *
- *  //TODO - rest of the prompts type and ipadete Object and Category to have ability to select more items
- * 
+ *  //TODO - rest of the prompts type and ipadete Object and Category to ha ability to select more items
+ *
   * @param {String} type one of type: Year, VAlue, Object, Category, Attribute elements
   * @param {String} value input for the prompt
   * @param {number} [index=1] number of prompt on list
