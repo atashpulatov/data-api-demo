@@ -635,6 +635,7 @@ class PluginPopup {
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
   }
+
   /**
    * Opens the desired dossier window. Will work if objects window is rendered.
    *
@@ -981,8 +982,8 @@ class PluginPopup {
   * @param {String} objectName name of the object
   * @param {String} sortOrder order for sorting
   * @param {String} headerName name of the header in import data table
-  * @param {boolean} [isObjectFromLibrary=false] switch MyLibrary toggle to true/false
-  * @param {number} [objectOrder=1] select object from the list, as default is first
+  * @param {Boolean} [isObjectFromLibrary=false] switch MyLibrary toggle to true/false
+  * @param {Number} [objectOrder=1] select object from the list, as default is first
   * @memberof PluginPopup
   */
   sortAndOpenPrepareData(objectName, sortOrder, headerName, isObjectFromLibrary = false, objectOrder = 1) {
