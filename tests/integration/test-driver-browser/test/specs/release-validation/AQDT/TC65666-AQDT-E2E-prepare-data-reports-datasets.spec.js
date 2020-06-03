@@ -75,10 +75,10 @@ describe('Personal TC for AQDT Mirror2', () => {
     PluginPopup.clickImport();
     PluginRightPanel.waitAndCloseNotification(importSuccess);
 
-    // switchToExcelFrame();
-    // OfficeWorksheet.selectCell('A2');
-    // expect($(A2).getText()).toEqual('Sonia Lukaszewicz');
-    // browser.pause(1000);
+    switchToExcelFrame();
+    OfficeWorksheet.selectCell('A2');
+    expect($(A2).getText()).toEqual('Sonia Lukaszewicz');
+    browser.pause(1000);
 
     logStep('Duplicate and edit report');
     PluginRightPanel.duplicateObject(1);
