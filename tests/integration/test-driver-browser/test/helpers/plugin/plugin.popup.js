@@ -90,6 +90,7 @@ class PluginPopup {
     switchToPluginFrame();
     $(popupSelectors.runBtn).waitForExist(6000);
     waitAndClick($(popupSelectors.runBtn));
+    browser.pause(3000);
   }
 
   clickPromptArrow() {
@@ -225,7 +226,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.firstObjectWithoutSearch));
   }
 
-  switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
+  switchLibraryAndImportObject(objectName, myLibrarySwitch = false, index = 1) {
     logStep(`+ Importing the object "${objectName}"...    [${fileName} - switchLibraryAndImportObject()]`);
     switchToDialogFrame();
     browser.pause(4000);
@@ -233,7 +234,7 @@ class PluginPopup {
     browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectObject();
+    this.selectObject(index);
     this.clickImport();
   }
 
@@ -635,17 +636,17 @@ class PluginPopup {
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
   }
-
   /**
    * Opens the desired dossier window. Will work if objects window is rendered.
    *
    * @param {String} dossierName indicates the name of dossier that is wanted
-   * @param {Time} timeToLoadDossier amount of time that browser will be paused for dossier to load. Is set to 10 sec by default
+   * @param {Number} timeToLoadDossier amount of time that browser will be paused for dossier to load. Is set to 10 sec by default
    * @param {Boolean} myLibrarySwitch indicates how the state of my library switch should be.
+   * @param {Number} index  indicates which object should be imported.
    *
    */
-  openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
-    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
+  openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false, index = 1) {
+    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch, index);
     browser.pause(timeToLoadDossier);
   }
 
@@ -1638,6 +1639,7 @@ class PluginPopup {
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
         pressTab();
+        break;
     }
   }
 

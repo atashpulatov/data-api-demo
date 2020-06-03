@@ -23,7 +23,7 @@ describe('F30479 - Hardening of importing data from Dossier to Excel', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     console.log(`Find, select and open ${objectsList.dossiers.withFilter.name}`);
-    PluginPopup.openDossier(objectsList.dossiers.withFilter.name);
+    PluginPopup.openDossier(objectsList.dossiers.withFilter.name, 10000, false, 2);
     console.log('Select and import the visualization');
     PluginPopup.selectAndImportVisualization(objectsList.dossiers.withFilter.visualizations.vis1);
     console.log('Check success of data import');
