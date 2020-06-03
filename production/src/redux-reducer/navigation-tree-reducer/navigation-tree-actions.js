@@ -20,6 +20,7 @@ export const SWITCH_IMPORT_SUBTOTALS = 'SWITCH_IMPORT_SUBTOTALS';
 export const CHANGE_IS_PROMPTED = 'CHANGE_IS_PROMPTED';
 export const LOAD_BROWSING_STATE_CONST = 'LOAD_BROWSING_STATE_CONST';
 export const UPDATE_DISPLAY_ATTR_FORM = 'UPDATE_DISPLAY_ATTR_FORM';
+export const CLEAR_SELECTION = 'CLEAR_SELECTION';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({
@@ -108,6 +109,10 @@ export function changeFilter(data) {
   return (dispatch) => dispatch({ type: CHANGE_FILTER, data });
 }
 
+export function clearSelection() {
+  return (dispatch) => dispatch({ type: CLEAR_SELECTION });
+}
+
 export const actions = {
   selectFolder,
   selectObject,
@@ -123,5 +128,6 @@ export const actions = {
   updateSize,
   requestDossierOpen,
   switchMyLibrary,
-  changeFilter
+  changeFilter,
+  clearSelection
 };
