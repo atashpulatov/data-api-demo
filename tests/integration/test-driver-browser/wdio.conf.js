@@ -144,6 +144,7 @@ exports.config = {
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
       './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js',
       '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
+      './test/specs/release-validation/F21409-refresh-all/TC41094-right-panel-refresh-all.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
