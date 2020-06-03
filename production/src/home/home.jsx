@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
@@ -27,21 +27,29 @@ export const HomeNotConnected = (props) => {
     notificationService.connectionRestored();
   };
   const handleConnectionLost = () => {
-    !popupOpen && notificationService.connectionLost();
+    if (!popupOpen) {
+       notificationService.connectionLost();
+    }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
     return (() => window.removeEventListener('online', handleConnectionRestored),
     () => window.removeEventListener('offline', handleConnectionLost));
   },);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!popupOpen && !window.navigator.onLine) {
       notificationService.connectionLost();
     }
   }, [popupOpen]);
+
+  useEffect(() => {
+    if (!authToken) {
+      notificationService.sessionRestored();
+    }
+  });
 
   useEffect(() => {
     try {
