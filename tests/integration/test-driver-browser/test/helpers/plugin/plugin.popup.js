@@ -149,7 +149,6 @@ class PluginPopup {
   selectObjectElements(elements) {
     logStep(`Selecting the attributes and metrics: ${elements}...    [${fileName} - selectObjectElements()]`);
     for (let i = 0; i < elements.length; i++) {
-      console.log(`Should select ${elements[i]}`);
       waitAndClick($(`span=${elements[i]}`));
     }
   }
@@ -1596,7 +1595,7 @@ class PluginPopup {
  *  Category - this prompt is having search box and table for selection eg answerPrompt('Category', 'Books', 3)
  *  Attribute elements - when you are selecting elements from attribute (moving form one side to other)
  *
- *  //TODO - rest of the prompts type and ipadete Object and Category to ha ability to select more items
+ *  //TODO - rest of the prompts type and ipadete Object and Category to have ability to select more items
  *
   * @param {String} type one of type: Year, VAlue, Object, Category, Attribute elements
   * @param {String} value input for the prompt
