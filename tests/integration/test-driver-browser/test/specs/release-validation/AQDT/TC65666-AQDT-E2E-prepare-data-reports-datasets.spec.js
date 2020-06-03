@@ -2,17 +2,15 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { switchToDialogFrame, switchToExcelFrame } from '../../../helpers/utils/iframe-helper';
+import { switchToDialogFrame, switchToExcelFrame, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { excelSelectors } from '../../../constants/selectors/office-selectors';
 import { logStep } from '../../../helpers/utils/allure-helper';
 
 describe('Personal TC for AQDT Mirror2', () => {
-
   it('[TC65666] AQDT E2E - Prepare Data for reports and datasets', () => {
     const A2 = '#gridRows > div:nth-child(2) > div:nth-child(1) > div > div';
     const { tcAutomation } = objectsList.aqdtMirror2Objects;
@@ -24,7 +22,6 @@ describe('Personal TC for AQDT Mirror2', () => {
     PluginRightPanel.clickImportDataButton();
     PluginPopup.openPrepareData(tcAutomation, false);
 
-    switchToDialogFrame();
     logStep('+ Sort attributes, metrics and filters');
     const sortAttributeSelector = $(popupSelectors.sortAttributes);
     const attributeContainer = $(popupSelectors.attributesContainer);
@@ -67,7 +64,6 @@ describe('Personal TC for AQDT Mirror2', () => {
     PluginPopup.selectAttributesAndAttributeForms({ 'Test Case Owner': ['Synonym 1', 'Synonym 2', 'Synonym 3', 'ID'] });
 
 
-
     PluginPopup.selectFilters([['Test Case Owner', []]]);
 
     PluginPopup.searchForElements('326610459064');
@@ -88,7 +84,7 @@ describe('Personal TC for AQDT Mirror2', () => {
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupEditBtn();
     switchToDialogFrame();
-    PluginPopup.selectObjectElements(['Test Case Status', 'Test Case Method', 'Date (Test Case Result)']);
+    PluginPopup.selectAttributesAndAttributeForms({ 'Test Case Status': [], 'Test Case Method': [], 'Date (Test Case Result)': [] });
     PluginPopup.selectFilters([['Test Case Status', ['Active']]]);
     PluginPopup.selectAttributeFormVisualisation('On');
     PluginPopup.clickSubtotalToggler();
@@ -105,10 +101,9 @@ describe('Personal TC for AQDT Mirror2', () => {
     logStep(`+Import ${pdCube} sort on 'Modified' header and prepare data to import`);
     OfficeWorksheet.openNewSheet();
     switchToExcelFrame();
-    OfficeWorksheet.selectCell('A1');
+    switchToPluginFrame();
     PluginRightPanel.clickAddDataButton();
-    switchToDialogFrame();
-    PluginPopup.sortDescAndOpenPrepareData(pdCube, 'Modified');
+    PluginPopup.sortAndOpenPrepareData(pdCube, 'descending', 'Modified');
     PluginPopup.selectObjectElements(['Feature', 'Initiative', 'QA Status', 'SE Status']);
     PluginPopup.selectFilters([['Scrum Team', []]]);
 
@@ -120,15 +115,14 @@ describe('Personal TC for AQDT Mirror2', () => {
     logStep('+ Sort attributes, metrics and filters');
     logStep('Should sort attributes ascending');
     waitAndClick(sortAttributeSelector);
-    expect(attributeContainer.$$('li')[0].getText()).toEqual('Area (Timesheet)');
-    browser.pause(2000);
+    const attributesContainerForDataset = $(popupSelectors.attributesContainerForDataset);
+    expect(attributesContainerForDataset.$$('div')[0].getText()).toEqual('Area (Timesheet)');
     logStep('Should sort attributes decending');
     waitAndClick(sortAttributeSelector);
-    expect(attributeContainer.$$('li')[0].getText()).toEqual('Work Item Work Type');
-    browser.pause(2000);
+    expect(attributesContainerForDataset.$$('div')[0].getText()).toEqual('Work Item Work Type');
     logStep('Should sort attributes default');
     waitAndClick(sortAttributeSelector);
-    expect(attributeContainer.$$('li')[0].getText()).toEqual('Feature');
+    expect(attributesContainerForDataset.$$('div')[0].getText()).toEqual('Feature');
 
     logStep('Should sort metrics ascending');
     waitAndClick(sortMetricsSelector);
@@ -150,14 +144,10 @@ describe('Personal TC for AQDT Mirror2', () => {
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Feature');
 
-    this.clickImport();
+    PluginPopup.clickImport();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     PluginRightPanel.removeAllObjectsFromTheList();
-
-    PluginRightPanel.waitAndCloseNotification(importSuccess);
-
-    logStep('Should refresh prompted report');
-    PluginRightPanel.refreshFirstObjectFromTheList();
-    PluginRightPanel.waitAndCloseNotification(reportRefreshed);
+    PluginRightPanel.waitAndCloseAllNotifications(dictionary.en.objectRemoved);
   });
 });

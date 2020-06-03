@@ -3,7 +3,7 @@ import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../ut
 import { waitAndClick, waitAndDoubleClick, waitAndRightClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
-import { waitForNotification } from '../utils/wait-helper';
+import { waitForNotification, waitForAllNotifications } from '../utils/wait-helper';
 import { pressEnter } from '../utils/keyboard-actions';
 import { logStep } from '../utils/allure-helper';
 
@@ -314,6 +314,7 @@ class PluginRightPanel {
 
   // Currently it is not used
   removeAllObjectsFromTheList() {
+    logStep(`Removing all objects...    [${fileName} - closeNotificationOnHover()]`);
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.checkBoxAll));
     waitAndClick($(rightPanelSelectors.deleteAllBtn));
@@ -348,6 +349,19 @@ class PluginRightPanel {
     }
   }
 
+  /**
+   * Waits for all operation to finish(refresh or remove). Checks if notification is as expected. Removes each notifications by hover.
+   *
+   * @param {String} notificationMessage message that will be checked in expect case.
+   */
+  waitAndCloseAllNotifications(notificationMessage) {
+    waitForAllNotifications();
+    const objects = $$(rightPanelSelectors.objectContainer);
+    objects.forEach((object, index) => {
+      expect($(rightPanelSelectors.getNotificationAt(index + 1)).getText()).toEqual(notificationMessage);
+    });
+    this.closeAllNotificationsOnHover();
+  }
 
   loginToPlugin(username, password, isValidCredentials) {
     logStep(`+ Loging into the Add-in...    [${fileName} - loginToPlugin()]`);

@@ -17,11 +17,42 @@ exports.config = {
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
   specs: [
-    // './test/specs/release-validation/deprecated/sample.spec.js',
-    './test/specs/release-validation/AQDT/TC65666-AQDT-E2E-prepare-data-reports-datasets.spec.js',
-    // './test/specs/release-validation/F25932-import-attribute-forms/TC59987-attribute-form-display.spec.js',
+    './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61043-E2E-prompted-dossier.spec.js',
   ],
   suites: {
+    RV: [
+      './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js',
+      './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
+      './test/specs/release-validation/F24751-import subtotals/TC53752-subtotals-settings.spec.js',
+      './test/specs/release-validation/F24398-import-and-refresh-visualization/TC61043-E2E-prompted-dossier.spec.js',
+      './test/specs/release-validation/F22954-editing/TC62676-edit-neasted-prompt.spec.js',
+      './test/specs/release-validation/F22954-editing/TC62674-prepare-edit-report-all-prompts-except-nested.spec.js',
+      './test/specs/release-validation/F22954-editing/TC48339-edit-dataset.spec.js',
+      './test/specs/release-validation/F22955-refresh/TC48137-refresh-edited-report-with-prompt.spec.js',
+      './test/specs/release-validation/F21409-refresh-all/TC41094-right-panel-refresh-all.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40359-navigation-buttons.spec.js',
+      './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
+      '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC36826-report-all-filtered-out.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35248-excel-limits-size-placement.spec.js',
+      './test/specs/release-validation/F12909-import-report/TC35247-excel-limits.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
+      './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64607-duplicate-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64624-duplicate-with-edit.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64626-duplicate-all-types.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64700-Duplicating-and-editing-all-types-of-objects.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
+      './test/specs/release-validation/F25931-duplicate-object/TC65014-side-panel-functionality-for-duplicated-object.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-chinese-user.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-a-user.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
+      './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
+    ],
     acceptance: [
       './test/specs/release-validation/F21409-refresh-all/TC41093-right-panel-refresh-all.spec.js',
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -113,6 +144,7 @@ exports.config = {
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
       './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js',
       '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
+      './test/specs/release-validation/F21409-refresh-all/TC41094-right-panel-refresh-all.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -246,6 +278,12 @@ exports.config = {
     'F30479-hardening-import-from-dossier': [
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
     ],
+    UB: [
+      './test/specs/performance/UB-standalone-version/import-UB-dataset.spec.js',
+    ],
+    AQDT: [
+      './test/specs/release-validation/AQDT/TC65891-AQDT-E2E-Edit-dataset-import-prompted-report-and-reprompt.spec.js',
+    ]
   },
   // Patterns to exclude.
   exclude: [
@@ -280,7 +318,7 @@ exports.config = {
     'goog:chromeOptions': {
       // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
-      debuggerAddress: '127.0.0.1:9222'
+      // debuggerAddress: '127.0.0.1:9222'
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
       // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],

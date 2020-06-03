@@ -8,9 +8,10 @@ import pluginPopup from '../../../helpers/plugin/plugin.popup';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { pressEnter } from '../../../helpers/utils/keyboard-actions';
 import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
 describe('F30463 - Ability to sort attributes and metrics on Prepare Data screen in Excel (Citibank)', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
@@ -18,93 +19,115 @@ describe('F30463 - Ability to sort attributes and metrics on Prepare Data screen
     browser.closeWindow();
   });
 
-  // Create test for each visType defined in visualizations
+
   it(`[TC63802] E2E sort on prepare data) `, () => {
     switchToRightPanelFrame();
     OfficeWorksheet.selectCell('A3');
 
-    // Open prepare data
+    logStep(`+ Opening prepare data`);
     pluginRightPanel.clickImportDataButton();
     const report = objectsList.reports.reportToSortAttributeAndMetrics;
     pluginPopup.openPrepareData(report, false);
 
     switchToPluginFrame();
 
-    // sort for Attributes
+    logStep(`+ Sorting attributes`);
     const attributeContainer = $(popupSelectors.attributesContainer);
     const sortAttributeSelector = $(popupSelectors.sortAttributes);
-    // All attributes Default sort
+
+    logStep(`+ Default sort for all attributes`);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Age Range');
-    // All attributes Ascending sort
+
+    logStep(`+ Sort ascending`);
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Age Range');
-    // All attributes Descending sort
+
+    logStep(`+ Sort descending`);
     waitAndClick(sortAttributeSelector);
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Zip Code');
-    // Back to default sort
+
+    logStep(`+ Sort back to default`);
     waitAndClick(sortAttributeSelector);
 
-    // sort for Metrics
+    logStep(`+ Sorting metrics`);
     const metricsContainer = $(popupSelectors.metricsContainer);
     const sortMetricsSelector = $(popupSelectors.sortMetrics);
-    // All metrics Default sort
+
+    logStep(`+ Default sort for all metrics`);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Average Revenue');
-    // All metrics Ascending sort
+
+    logStep(`+ Sort ascending`);
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Average Revenue');
-    // All metrics Descending sort
+
+    logStep(`+ Sort descending`);
     waitAndClick(sortMetricsSelector);
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Sales Rank');
-    // Back to default sort
+
+    logStep(`+ Sort back to default`);
     waitAndClick(sortMetricsSelector);
 
-    // sort for Filters
+    logStep(`+ Sorting filters`);
     const filterContainer = $(popupSelectors.filtersContainer);
     const sortFiltersSelector = $(popupSelectors.sortFilters);
-    // All filters Default sort
+
+    logStep(`+ Default sort for all filters`);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Age Range');
-    // All filters Ascending sort
+
+    logStep(`+ Sort ascending`);
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Age Range');
-    // All filters Descending sort
+
+    logStep(`+ Sorting descending`);
     waitAndClick(sortFiltersSelector);
     expect(filterContainer.$$('li')[0].getText()).toEqual('Zip Code');
-    // Back to default sort
+
+    logStep(`+ Sort back to default`);
     waitAndClick(sortFiltersSelector);
 
+    logStep(`+ Searching for attribute element age`);
     pluginPopup.searchForElements('age');
 
-    // Sort for attributes by keyboard
+    logStep(`+ Sorting attributes by keyboard`);
     pluginPopup.pressTabUntilElementIsFocused(sortAttributeSelector);
-    // Sort ascending
+
+    logStep(`+ Sort ascending`);
     pressEnter();
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Age Range');
-    // Sort descending
+
+    logStep(`+ Sort descending`);
     pressEnter();
     expect(attributeContainer.$$('li')[0].getText()).toEqual('Phone Usage');
-    // Back to normal sort attributes
+
+    logStep(`+ Sort back to default`);
     pressEnter();
 
-    // Sort for metrics by keyboard
+    logStep(`+ Sorting metrics by keyboard`);
     pluginPopup.pressTabUntilElementIsFocused(sortMetricsSelector);
-    // Sort ascending
+
+    logStep(`+ Sort ascending`);
     pressEnter();
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Average Revenue');
-    // Sort descending
+
+    logStep(`+ Sort descending`);
     pressEnter();
     expect(metricsContainer.$$('div')[0].getText()).toEqual('Running Revenue Average');
-    // Back to normal sort metrics
+
+    logStep(`+ Sort back to default`);
     pressEnter();
 
-    // Sort for filters by keyboard
+    logStep(`+ Sorting for filters by keyboard`);
     pluginPopup.pressTabUntilElementIsFocused(sortFiltersSelector);
-    // Sort ascending
+
+    logStep(`+ Sort ascending`);
     pressEnter();
     expect(filterContainer.$$('li')[0].getText()).toEqual('Age Range');
-    // Sort descending
+
+    logStep(`+ Sort descending`);
     pressEnter();
     expect(filterContainer.$$('li')[0].getText()).toEqual('Phone Usage');
-    // Back to normal sort filters
+    //
+    logStep(`+ Sort back to default`);
     pressEnter();
 
     browser.pause(1111);
@@ -113,18 +136,22 @@ describe('F30463 - Ability to sort attributes and metrics on Prepare Data screen
 
     browser.pause(1111);
 
-    // Check if attribute forms are changed - default, ascending
+    logStep(`+ Check if attribute forms are changed - default, ascending`);
     waitAndClick(attributeContainer.$$('li')[0]);
     waitAndClick(attributeContainer.$$('li')[0].$$('span')[0]);
     expect(attributeContainer.$$('li')[0].$$('ul')[0].$$('li')[0].getText()).toEqual('DESC');
     waitAndClick(attributeContainer.$$('li')[0].$$('span')[0]);
     waitAndClick(attributeContainer.$$('li')[0]);
 
-    // Check if attribute forms are changed - descending
+    logStep(`+ Check if attribute forms are changed - default, descending`);
     waitAndClick(sortAttributeSelector);
     waitAndClick(sortAttributeSelector);
     browser.pause(999);
     const lengh = attributeContainer.$$('li').length;
+
+    logStep(`+ Scrolling to last element and select it`);
+    attributeContainer.$$('li')[lengh - 1].scrollIntoView();
+    browser.pause(999);
     waitAndClick(attributeContainer.$$('li')[lengh - 1]);
     waitAndClick(attributeContainer.$$('li')[lengh - 1].$$('span')[0]);
     expect(attributeContainer.$$('li')[lengh - 1].$$('ul')[0].$$('li')[0].getText()).toEqual('DESC');
@@ -132,7 +159,7 @@ describe('F30463 - Ability to sort attributes and metrics on Prepare Data screen
     waitAndClick(attributeContainer.$$('li')[lengh - 1]);
     browser.pause(3000);
 
-    // Import report
+    logStep(`+ import report`);
     pluginPopup.selectAllAttributes();
     pluginPopup.selectAllMetrics();
     pluginPopup.selectFilters([['Age Range', ['25 to 34', '35 to 44']]]);

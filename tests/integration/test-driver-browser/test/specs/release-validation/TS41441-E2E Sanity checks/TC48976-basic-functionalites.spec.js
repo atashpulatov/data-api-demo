@@ -12,7 +12,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import officeLogin from '../../../helpers/office/office.login';
 
 describe('TS41441 - Sanity checks', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     const acceptBtn = '#accept-cookies-btn';
 
     // Invalid credentials

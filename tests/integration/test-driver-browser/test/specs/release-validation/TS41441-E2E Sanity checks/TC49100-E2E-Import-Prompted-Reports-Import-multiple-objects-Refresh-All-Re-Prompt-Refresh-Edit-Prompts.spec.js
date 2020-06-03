@@ -8,7 +8,7 @@ import { switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/if
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 describe('TS41441 - Sanity checks', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 

@@ -90,6 +90,7 @@ class PluginPopup {
     switchToPluginFrame();
     $(popupSelectors.runBtn).waitForExist(6000);
     waitAndClick($(popupSelectors.runBtn));
+    browser.pause(3000);
   }
 
   clickPromptArrow() {
@@ -148,7 +149,6 @@ class PluginPopup {
   selectObjectElements(elements) {
     logStep(`Selecting the attributes and metrics: ${elements}...    [${fileName} - selectObjectElements()]`);
     for (let i = 0; i < elements.length; i++) {
-      console.log(`Should select ${elements[i]}`);
       waitAndClick($(`span=${elements[i]}`));
     }
   }
@@ -225,7 +225,7 @@ class PluginPopup {
     waitAndClick($(popupSelectors.firstObjectWithoutSearch));
   }
 
-  switchLibraryAndImportObject(objectName, myLibrarySwitch = false) {
+  switchLibraryAndImportObject(objectName, myLibrarySwitch = false, index = 1) {
     logStep(`+ Importing the object "${objectName}"...    [${fileName} - switchLibraryAndImportObject()]`);
     switchToDialogFrame();
     browser.pause(4000);
@@ -233,7 +233,7 @@ class PluginPopup {
     browser.pause(1000);
     this.searchForObject(objectName);
     browser.pause(500);
-    this.selectObject();
+    this.selectObject(index);
     this.clickImport();
   }
 
@@ -640,12 +640,13 @@ class PluginPopup {
    * Opens the desired dossier window. Will work if objects window is rendered.
    *
    * @param {String} dossierName indicates the name of dossier that is wanted
-   * @param {Time} timeToLoadDossier amount of time that browser will be paused for dossier to load. Is set to 10 sec by default
+   * @param {Number} timeToLoadDossier amount of time that browser will be paused for dossier to load. Is set to 10 sec by default
    * @param {Boolean} myLibrarySwitch indicates how the state of my library switch should be.
+   * @param {Number} index  indicates which object should be imported.
    *
    */
-  openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false) {
-    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch);
+  openDossier(dossierName, timeToLoadDossier = 10000, myLibrarySwitch = false, index = 1) {
+    this.switchLibraryAndImportObject(dossierName, myLibrarySwitch, index);
     browser.pause(timeToLoadDossier);
   }
 
@@ -979,21 +980,41 @@ class PluginPopup {
   * Search for object and sort on one of the headers on import data table, than select prepare data button
   *
   * @param {String} objectName name of the object
+  * @param {String} sortOrder order for sorting
   * @param {String} headerName name of the header in import data table
-  * @param {boolean} [isObjectFromLibrary=false] switch MyLibrary toggle to true/false
-  * @param {number} [objectOrder=1] select object from the list, as default is first
+  * @param {Boolean} [isObjectFromLibrary=false] switch MyLibrary toggle to true/false
+  * @param {Number} [objectOrder=1] select object from the list, as default is first
   * @memberof PluginPopup
   */
-  sortDescAndOpenPrepareData(objectName, headerName, isObjectFromLibrary = false, objectOrder = 1) {
+  sortAndOpenPrepareData(objectName, sortOrder, headerName, isObjectFromLibrary = false, objectOrder = 1) {
     logStep(`+ Selecting the object "${objectName}" sorting on ${headerName} and opening Prepare Data...    [${fileName} - openPrepareData()]`);
     switchToDialogFrame();
     this.switchLibrary(isObjectFromLibrary);
     this.searchForObject(objectName);
     browser.pause(1111);
-    this.clickHeader(headerName);
-    this.clickHeader(headerName);
+    this.sortForHeader(headerName, sortOrder);
     this.selectObject(objectOrder);
     this.clickPrepareData();
+  }
+
+  /**
+  * Sorts objects list ascending or descending based on the header name provided. Works if prepare data is open and assumes that the header has not been sorted yet
+  *
+  * @param {String} headerName name of the header in import data table
+  * @param {String} sortOrder order for sorting
+  */
+  sortForHeader(headerName, sortOrder) {
+    switch (sortOrder) {
+      case 'ascending':
+        this.clickHeader(headerName);
+        break;
+      case 'descending':
+        this.clickHeader(headerName);
+        this.clickHeader(headerName);
+        break;
+      default:
+        break;
+    }
   }
 
   /**
@@ -1576,7 +1597,7 @@ class PluginPopup {
  *  Attribute elements - when you are selecting elements from attribute (moving form one side to other)
  *
  *  //TODO - rest of the prompts type and ipadete Object and Category to have ability to select more items
- * 
+ *
   * @param {String} type one of type: Year, VAlue, Object, Category, Attribute elements
   * @param {String} value input for the prompt
   * @param {number} [index=1] number of prompt on list
@@ -1618,6 +1639,7 @@ class PluginPopup {
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
         pressTab();
+        break;
     }
   }
 
