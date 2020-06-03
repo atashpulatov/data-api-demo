@@ -6,8 +6,8 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { LOAD_BROWSING_STATE_CONST, changeSorting } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
-import { RESET_STATE, CLEAR_WINDOW } from '../redux-reducer/popup-reducer/popup-actions';
+import { REFRESH_CACHE_COMMAND, CLEAR_CACHE, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
+import { RESET_STATE } from '../redux-reducer/popup-reducer/popup-actions';
 import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
@@ -30,7 +30,7 @@ class PopupController {
     // DE159475; clear sorting before popup display until it's fixed in object-table
     this.reduxStore.dispatch(changeSorting({}));
     this.reduxStore.dispatch({ type: CLEAR_POPUP_STATE });
-    this.reduxStore.dispatch({ type: CLEAR_WINDOW });
+    this.reduxStore.dispatch({ type: CLEAR_CACHE });
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 

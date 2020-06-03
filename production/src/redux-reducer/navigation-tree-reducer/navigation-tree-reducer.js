@@ -58,6 +58,10 @@ function cleanSelection(state) {
   newState.chosenSubtype = initialState.chosenSubtype;
   newState.chosenObjectName = initialState.chosenObjectName;
   newState.chosenType = initialState.chosenType;
+  newState.chosenEnvElement = initialState.chosenEnvElement;
+  newState.dossierOpenRequested = initialState.dossierOpenRequested;
+  newState.chosenLibraryElement = initialState.chosenLibraryElement;
+  newState.chosenLibraryDossier = initialState.chosenLibraryDossier;
   return newState;
 }
 
