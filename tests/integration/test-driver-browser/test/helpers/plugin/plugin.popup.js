@@ -78,6 +78,7 @@ class PluginPopup {
   closePreview() {
     logStep(`Clicking "Close preview" button...    [${fileName} - closePreview()]`);
     waitAndClick($(popupSelectors.closePreviewBtn));
+    browser.pause(1000);
   }
 
   clickRunForPromptedDossier() {
@@ -184,6 +185,10 @@ class PluginPopup {
       waitAndClick(filter);
       this.selectObjectElements(filterInstances);
     }
+  }
+
+  selectFilterInstance(filterInstances) {
+    this.selectObjectElements(filterInstances);
   }
 
   clickHeader(headerName) {
@@ -631,6 +636,7 @@ class PluginPopup {
     const checked = myLibrarySwitch.getAttribute('aria-checked');
     if ((checked === 'true') !== newState) { waitAndClick(myLibrarySwitch); }
   }
+
   /**
    * Opens the desired dossier window. Will work if objects window is rendered.
    *
@@ -969,6 +975,47 @@ class PluginPopup {
     browser.pause(1111);
     this.selectObject(objectOrder);
     this.clickPrepareData();
+  }
+
+  /**
+  * Search for object and sort on one of the headers on import data table, than select prepare data button
+  *
+  * @param {String} objectName name of the object
+  * @param {String} sortOrder order for sorting
+  * @param {String} headerName name of the header in import data table
+  * @param {Boolean} [isObjectFromLibrary=false] switch MyLibrary toggle to true/false
+  * @param {Number} [objectOrder=1] select object from the list, as default is first
+  * @memberof PluginPopup
+  */
+  sortAndOpenPrepareData(objectName, sortOrder, headerName, isObjectFromLibrary = false, objectOrder = 1) {
+    logStep(`+ Selecting the object "${objectName}" sorting on ${headerName} and opening Prepare Data...    [${fileName} - openPrepareData()]`);
+    switchToDialogFrame();
+    this.switchLibrary(isObjectFromLibrary);
+    this.searchForObject(objectName);
+    browser.pause(1111);
+    this.sortForHeader(headerName, sortOrder);
+    this.selectObject(objectOrder);
+    this.clickPrepareData();
+  }
+
+  /**
+  * Sorts objects list ascending or descending based on the header name provided. Works if prepare data is open and assumes that the header has not been sorted yet
+  *
+  * @param {String} headerName name of the header in import data table
+  * @param {String} sortOrder order for sorting
+  */
+  sortForHeader(headerName, sortOrder) {
+    switch (sortOrder) {
+      case 'ascending':
+        this.clickHeader(headerName);
+        break;
+      case 'descending':
+        this.clickHeader(headerName);
+        this.clickHeader(headerName);
+        break;
+      default:
+        break;
+    }
   }
 
   /**

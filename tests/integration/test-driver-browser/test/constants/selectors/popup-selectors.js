@@ -41,12 +41,13 @@ export const popupSelectors = {
   attributesContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div > ul',
   metricsContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div',
   filterTitles: '.filter-title',
+  attributesContainerForDataset: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div',
   filtersContainer: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(1) > div.filter-list.ant-list > div > div > ul',
   sortAttributes: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.selector-title > div',
   sortMetrics: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.selector-title > div',
   sortFilters: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(1) > div.selector-title.filter-selector-title > div',
   allAttributes: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > label.mstr-office-checkbox-all',
-  allMetrics: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > label.mstr-office-checkbox-all',
+  allMetrics: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > label',
   allFilters: '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > div:nth-child(2) > div > div.checkbox-list.all-showed > div > div > label > span.all-element',
   filter: $('#popup > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col-12 > div > div:nth-child(1) > div.filter-list.ant-list > div > div > ul > li:nth-child(1)'),
   attributeFormDropdown: '.ant-select-selection--single',
@@ -152,7 +153,6 @@ export const popupSelectors = {
     getAttributeElementListPrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrListBlockContents`,
     getDatePrompt: (index) => `.mstrViewRoll:nth-child(2) div:nth-child(${index}) .mstrPromptQuestionSimpleAnswerView .mstrCalendarAndTimePickerCellTextBox`,
   },
-  
   filterPanel: {
     expandButton: '.expand-btn',
     selectAllButton: '.all-panel__buttons button:first-of-type',

@@ -235,6 +235,10 @@ export const objectsList = {
       visualizations: { visualization1: getVizAT(2) }
     }
   },
+  aqdtMirror2Objects: {
+    tcAutomation: 'TC to automate',
+    pdCube: 'PD Cube',
+  },
   AQDT: {
     owner: 'Putney, David',
     visualization1: popupSelectors.dossierWindow.getVizAT(3),

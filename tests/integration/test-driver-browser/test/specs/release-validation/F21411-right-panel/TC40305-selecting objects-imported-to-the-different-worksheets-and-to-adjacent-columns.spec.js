@@ -35,7 +35,7 @@ describe('F21411 - Selecting an object in the side panel highlights the data in 
     OfficeWorksheet.selectCell('C1');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.switchLibrary(false);
-    PluginPopup.importObject(objectsList.datasets.datasetSQL);
+    PluginPopup.importObject(objectsList.datasets.basicDataset);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
