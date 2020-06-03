@@ -78,6 +78,7 @@ class PluginPopup {
   closePreview() {
     logStep(`Clicking "Close preview" button...    [${fileName} - closePreview()]`);
     waitAndClick($(popupSelectors.closePreviewBtn));
+    browser.pause(1000);
   }
 
   clickRunForPromptedDossier() {
