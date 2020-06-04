@@ -10,7 +10,7 @@ class CompoundGridHandler {
   createTable(response) {
     const { definition, data, attrforms } = response;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
-    const isCrosstabular = false; // We may have crosstabular in compoundGrid
+    const isCrosstabular = false;
     const columnInformation = this.getColumnInformation(definition, data);
     const isCrosstab = true;
 
@@ -129,6 +129,7 @@ class CompoundGridHandler {
   renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric) {
     const { columnSets: columnSetsHeaders } = headers;
     const { columnSets: columnSetsDefinition } = definition.grid;
+
     const transposedHeaders = columnSetsHeaders.map(mstrNormalizedJsonHandler.transposeMatrix);
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders, columnSetsDefinition);
 

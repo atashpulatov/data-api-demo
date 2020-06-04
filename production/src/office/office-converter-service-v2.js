@@ -1,6 +1,7 @@
 import mstrObjectType from '../mstr-object/mstr-object-type-enum';
 import mstrCompoundGridHandler from '../mstr-object/mstr-compound-grid-handler';
 import mstrGridHandler from '../mstr-object/mstr-grid-handler';
+import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
 
 /**
  * Service to parse JSON response from REST API v2
@@ -79,7 +80,12 @@ class OfficeConverterServiceV2 {
   getHandler = (response) => {
     switch (response.visualizationType) {
       case mstrObjectType.visualizationType.COMPOUND_GRID:
-        return mstrCompoundGridHandler;
+        if (response.definition.grid.crossTab) {
+          return mstrCompoundGridHandler;
+        }
+        mstrNormalizedJsonHandler.flattenColumnSets(response);
+
+        return mstrGridHandler;
       default:
         return mstrGridHandler;
     }

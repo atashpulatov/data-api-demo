@@ -139,12 +139,14 @@ class NormalizedJsonHandler {
           }
         }
       }
+
       if (metricValues && metricValues.raw.length > 0) {
         result.push(tabularRows.concat(metricValues[valueMatrix][rowIndex]));
       } else {
         result.push(tabularRows);
       }
     }
+
     if ((result.length === 0) && metricValues && metricValues.raw.length > 0) {
       result.push([].concat(metricValues[valueMatrix][0]));
     }
@@ -308,6 +310,7 @@ class NormalizedJsonHandler {
   }
 
   getMetricsColumnsInformation(columns) {
+    if (columns.length === 0) { return columns; }
     const transposedHeaders = this.transposeMatrix(columns);
 
     const parsedColumns = [];
@@ -323,6 +326,32 @@ class NormalizedJsonHandler {
       }
     }
     return parsedColumns;
+  }
+
+  flattenColumnSets(response) {
+    const { data, definition } = response;
+    const headerColumns = [];
+    const gridColumns = [];
+    const metricValues = { raw: [], formatted: [], extras: [] };
+    const columSetsNumber = data.headers.columnSets.length;
+    console.log('columSetsNumber:', columSetsNumber);
+
+    for (let index = 0; index < columSetsNumber; index++) {
+      headerColumns.push(...data.headers.columnSets[index]);
+      gridColumns.push(...definition.grid.columnSets[index].columns);
+
+      for (let i = 0; i < columSetsNumber.length; i++) {
+        metricValues.raw[i].push(...data.metricValues.columnSets[index].raw[i]);
+        metricValues.formatted[i].push(...data.metricValues.columnSets[index].formatted[i]);
+        metricValues.extras[i].push(...data.metricValues.columnSets[index].extras[i]);
+      }
+
+
+      data.headers.columns = headerColumns;
+      definition.grid.columns = gridColumns;
+      data.metricValues = metricValues;
+      console.log('response:', response);
+    }
   }
 
   /**
