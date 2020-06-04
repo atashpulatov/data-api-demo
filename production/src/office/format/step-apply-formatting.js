@@ -120,6 +120,10 @@ class StepApplyFormatting {
    * @return {String} Excel format
    */
   getFormat = ({ formatString, category }) => {
+    if (!formatString && !category) {
+      return 'General';
+    }
+
     if (category === 9) {
       return 'General';
     }

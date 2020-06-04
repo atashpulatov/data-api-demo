@@ -331,27 +331,50 @@ class NormalizedJsonHandler {
   flattenColumnSets(response) {
     const { data, definition } = response;
     const headerColumns = [];
-    const gridColumns = [];
     const metricValues = { raw: [], formatted: [], extras: [] };
+    let gridColumns = [];
+    let rawValues;
+    let headerIndexOffset = 0;
     const columSetsNumber = data.headers.columnSets.length;
-    console.log('columSetsNumber:', columSetsNumber);
 
-    for (let index = 0; index < columSetsNumber; index++) {
-      headerColumns.push(...data.headers.columnSets[index]);
-      gridColumns.push(...definition.grid.columnSets[index].columns);
-
-      for (let i = 0; i < columSetsNumber.length; i++) {
-        metricValues.raw[i].push(...data.metricValues.columnSets[index].raw[i]);
-        metricValues.formatted[i].push(...data.metricValues.columnSets[index].formatted[i]);
-        metricValues.extras[i].push(...data.metricValues.columnSets[index].extras[i]);
+    if (definition.grid.columnSets[0].columns[0]) {
+      gridColumns = [{
+        name: 'Metrics',
+        id: '00000000000000000000000000000000',
+        type: 'templateMetrics',
+        elements: []
+      }];
+      for (let i = 0; i < columSetsNumber; i++) {
+        for (let index = 0; index < definition.grid.columnSets[i].columns[0].elements.length; index++) {
+          gridColumns[0].elements.push(definition.grid.columnSets[i].columns[0].elements[index]);
+        }
       }
-
-
-      data.headers.columns = headerColumns;
-      definition.grid.columns = gridColumns;
-      data.metricValues = metricValues;
-      console.log('response:', response);
     }
+
+    if (!(columSetsNumber <= 1 && data.headers.columnSets[0].length)) {
+      for (let i = 0; i < columSetsNumber; i++) {
+        for (let index = 0; index < data.headers.columnSets[i].length; index++) {
+          headerColumns.push(data.headers.columnSets[i][index][0] + headerIndexOffset);
+        }
+        headerIndexOffset += data.headers.columnSets[i].length;
+      }
+    }
+
+
+    for (let i = 0; i < data.metricValues.columnSets[0].raw.length; i++) {
+      rawValues = [];
+
+      for (let index = 0; index < columSetsNumber; index++) {
+        rawValues.push(...data.metricValues.columnSets[index].raw[i]);
+        // metricValues.formatted[i].push(...data.metricValues.columnSets[index].formatted[i]);
+        // metricValues.extras[i].push(...data.metricValues.columnSets[index].extras[i]);
+      }
+      metricValues.raw.push(rawValues);
+    }
+
+    data.headers.columns = headerColumns.length ? [headerColumns] : [];
+    definition.grid.columns = gridColumns;
+    data.metricValues = { ...data.metricValues, ...metricValues };
   }
 
   /**
