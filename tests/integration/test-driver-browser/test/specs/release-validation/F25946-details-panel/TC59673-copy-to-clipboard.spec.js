@@ -36,7 +36,7 @@ describe('F25946 - Object Details Panel', () => {
     changeBrowserTab(0);
   });
 
-  it('[TC59673] Imports an object after checking details', () => {
+  it('[TC59673] Copy to clipboard', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
 
