@@ -78,13 +78,18 @@ class OfficeConverterServiceV2 {
   };
 
   getHandler = (response) => {
+    const { definition: { grid } } = response;
     switch (response.visualizationType) {
       case mstrObjectType.visualizationType.COMPOUND_GRID:
-        if (response.definition.grid.crossTab) {
+        if (
+          grid.crossTab
+          && !(grid.metricsPosition && grid.metricsPosition.axis === 'rows'
+          && grid.columnSets.length <= 1 && !grid.columnSets[0].length)
+        ) {
           return mstrCompoundGridHandler;
         }
-        mstrNormalizedJsonHandler.flattenColumnSets(response);
 
+        mstrNormalizedJsonHandler.flattenColumnSets(response);
         return mstrGridHandler;
       default:
         return mstrGridHandler;
