@@ -2,7 +2,6 @@ import { mstrObjectRestService, DATA_LIMIT, IMPORT_ROW_LIMIT, } from '../../mstr
 import officeInsertService from './office-insert-service';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
-import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
 
 class StepFetchInsertDataIntoExcel {
   /**
@@ -70,8 +69,7 @@ class StepFetchInsertDataIntoExcel {
           mstrTable
         );
 
-        // TODO Compound Grid Support
-        if (mstrTable.visualizationType !== mstrObjectType.visualizationType.COMPOUND_GRID && importSubtotal) {
+        if (importSubtotal) {
           this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
         }
 

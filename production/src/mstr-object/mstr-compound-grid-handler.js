@@ -108,14 +108,28 @@ class CompoundGridHandler {
   getHeaders(response) {
     const { definition, data } = response;
     const { headers } = data;
-    const onElement = (e) => `'${e.value.join(' ')}`;
-    const onAttribute = (e) => e.formValues[0];
+
+    const onElement = (array) => (e) => {
+      if (array) { array.push(e.subtotalAddress); }
+      return `'${e.value.join(' ')}`;
+    };
+    const onAttribute = (array) => (e, attributeIndex, colIndex) => {
+      if (array && e.subtotal) { array.push({ attributeIndex, colIndex, axis: 'columns' }); } else {
+        array.push(false);
+      }
+      return e.formValues[0];
+    };
+
     const onMetric = (e) => e.name;
 
-    return {
-      rows: this.renderCompoundGridRowHeaders(headers, definition, onElement),
-      columns: this.renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric)
-    };
+    const rowTotals = [];
+    const columnTotals = [];
+
+    const rows = this.renderCompoundGridRowHeaders(headers, definition, onElement(rowTotals));
+    const columns = this.renderCompoundGridColumnHeaders(headers, definition, onAttribute(columnTotals), onMetric);
+    const subtotalAddress = [...rowTotals, ...columnTotals];
+
+    return { rows, columns, subtotalAddress };
   }
 
   renderCompoundGridRowTitles(headers, definition, onElement = (e) => e) {
@@ -129,6 +143,10 @@ class CompoundGridHandler {
   renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric) {
     const { columnSets: columnSetsHeaders } = headers;
     const { columnSets: columnSetsDefinition } = definition.grid;
+
+    let attributeIndex = 0;
+    let colIndex = 0;
+    let startColIndex = 0;
 
     const transposedHeaders = columnSetsHeaders.map(mstrNormalizedJsonHandler.transposeMatrix);
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders, columnSetsDefinition);
@@ -148,13 +166,16 @@ class CompoundGridHandler {
       for (let j = 0; j < boundingHeight; j++) {
         const headerRow = header[j];
         const { type, elements } = columnsDefinition[j];
+        colIndex = startColIndex;
+        // eslint-disable-next-line no-loop-func
         const columnSetRow = headerRow.map(index => {
           // -1 is for empty row
+          colIndex++;
           if (index < 0) { return ''; }
           const element = elements[index];
           switch (type) {
             case 'attribute':
-              return onAttribute(element);
+              return onAttribute(element, attributeIndex, colIndex - 1);
             case 'templateMetrics':
               return onMetric(element);
               // Consolidation will go here
@@ -168,6 +189,8 @@ class CompoundGridHandler {
           parsedHeaders[j] = columnSetRow;
         }
       }
+      startColIndex += header[0].length;
+      attributeIndex++;
     }
 
     return parsedHeaders;
