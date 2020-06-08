@@ -1,6 +1,5 @@
+/* eslint-disable class-methods-use-this */
 import jsonHandler from './mstr-normalized-json-handler';
-import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
-
 /**
  * Handler to parse grids
  *
@@ -27,53 +26,6 @@ class GridHandler {
     };
   }
 
-
-  /**
-   * Get attribute title names with attribute forms
-   *
-   * @param {JSON} e Object definition element from response
-   * @param {String} attrforms Dispay attribute form names setting inside office-properties.js
-   * @return {Object} Contains arrays of columns and rows attributes forms names
-   */
-  getAttributesTitleWithForms = (e, attrforms) => {
-    const supportForms = attrforms ? attrforms.supportForms : false;
-    const nameSet = attrforms && attrforms.displayAttrFormNames;
-    const { displayAttrFormNames } = officeProperties;
-    const titles = [];
-    if (supportForms && e.type === 'attribute' && e.forms.length >= 0) {
-      const singleForm = e.forms.length === 1;
-      for (let index = 0; index < e.forms.length; index++) {
-        const formName = e.forms[index].name;
-        let title;
-        switch (nameSet) {
-          case displayAttrFormNames.automatic:
-            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
-            titles.push(title);
-            break;
-          case displayAttrFormNames.on:
-            titles.push(`'${e.name} ${formName}`);
-            break;
-          case displayAttrFormNames.off:
-            titles.push(`'${e.name}`);
-            break;
-          case displayAttrFormNames.formNameOnly:
-            titles.push(`'${formName}`);
-            break;
-          case displayAttrFormNames.showAttrNameOnce:
-            title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
-            titles.push(title);
-            break;
-          default:
-            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
-            titles.push(title);
-            break;
-        }
-      }
-      return titles;
-    }
-    return false;
-  }
-
   /**
    * Get attribute names for crosstab report
    *
@@ -81,18 +33,8 @@ class GridHandler {
    * @return {Object} Contains arrays of columns and rows attributes names
    */
   getAttributesName = (definition, attrforms) => {
-    const getAttributeWithForms = (elements) => {
-      let names = [];
-      for (let i = 0; i < elements.length; i++) {
-        const element = elements[i];
-        const forms = this.getAttributesTitleWithForms(element, attrforms);
-        names = forms ? [...names, ...forms] : [...names, `'${element.name}`];
-      }
-      return names;
-    };
-
-    const columnsAttributes = getAttributeWithForms(definition.grid.columns);
-    const rowsAttributes = getAttributeWithForms(definition.grid.rows);
+    const columnsAttributes = jsonHandler.getAttributeWithForms(definition.grid.columns, attrforms);
+    const rowsAttributes = jsonHandler.getAttributeWithForms(definition.grid.rows, attrforms);
     return { rowsAttributes, columnsAttributes };
   };
 
@@ -137,7 +79,7 @@ class GridHandler {
     const onElement = (array) => (e) => {
       if (array) { array.push(e.subtotalAddress); }
       // attribute as row with forms
-      const forms = this.getAttributesTitleWithForms(e, attrforms);
+      const forms = jsonHandler.getAttributesTitleWithForms(e, attrforms);
       if (forms) {
         return forms;
       }

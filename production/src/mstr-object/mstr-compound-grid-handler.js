@@ -11,7 +11,7 @@ class CompoundGridHandler {
     const { definition, data, attrforms } = response;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
     const isCrosstabular = false;
-    const columnInformation = this.getColumnInformation(definition, data);
+    const columnInformation = this.getColumnInformation(definition, data, attrforms);
     const isCrosstab = true;
 
     return {
@@ -36,18 +36,19 @@ class CompoundGridHandler {
     return parsedColumns;
   }
 
-  getColumnInformation(definition, data) {
+  getColumnInformation(definition, data, attrforms) {
     const { headers } = data;
-    const onElement = (element) => element;
-    const commonColumns = this.renderCompoundGridRowTitles(headers, definition, onElement);
+    const onElement = (element) => [element];
+    const supportForms = attrforms ? attrforms.supportForms : false;
+
+    const commonColumns = this.renderCompoundGridRowTitles(headers, definition, onElement, supportForms);
     const params = [headers, definition, onElement, onElement];
     const columnSetColumns = this.renderCompoundGridColumnHeaders(...params);
 
     const parsedColumnSetColumns = mstrNormalizedJsonHandler.getMetricsColumnsInformation(columnSetColumns);
     const columns = [...commonColumns[commonColumns.length - 1], ...parsedColumnSetColumns];
 
-    // TODO Attribute forms
-    return mstrNormalizedJsonHandler.splitAttributeForms(columns, false);
+    return mstrNormalizedJsonHandler.splitAttributeForms(columns, supportForms);
   }
 
   getTableSize(data) {
@@ -63,8 +64,7 @@ class CompoundGridHandler {
   }
 
   getAttributesName(definition, attrforms) {
-    // TODO Compound Grid Support
-    const rowsAttributes = definition.grid.rows.map(({ name }) => name);
+    const rowsAttributes = mstrNormalizedJsonHandler.getAttributeWithForms(definition.grid.rows, attrforms);
     return { rowsAttributes };
   }
 
@@ -106,47 +106,61 @@ class CompoundGridHandler {
   }
 
   getHeaders(response) {
-    const { definition, data } = response;
+    const { definition, data, attrforms } = response;
     const { headers } = data;
+    const supportForms = attrforms ? attrforms.supportForms : false;
 
     const onElement = (array) => (e) => {
       if (array) { array.push(e.subtotalAddress); }
-      return `'${e.value.join(' ')}`;
+      // attribute as row with forms
+      const forms = mstrNormalizedJsonHandler.getAttributesTitleWithForms(e, attrforms);
+      if (forms) {
+        return forms;
+      }
+      // attribute as column with forms
+      return supportForms && e.value.length > 1 ? e.value.map((form) => `'${form}`) : `'${e.value.join(' ')}`;
     };
+
     const onAttribute = (array) => (e, attributeIndex, colIndex) => {
       if (array && e.subtotal) { array.push({ attributeIndex, colIndex, axis: 'columns' }); } else {
         array.push(false);
       }
-      return e.formValues[0];
+      return supportForms ? e.formValues : [e.formValues[0]];
     };
 
-    const onMetric = (e) => e.name;
+    const onMetric = (e) => [e.name];
 
     const rowTotals = [];
     const columnTotals = [];
 
-    const rows = this.renderCompoundGridRowHeaders(headers, definition, onElement(rowTotals));
+    const rows = this.renderCompoundGridRowHeaders(headers, definition, onElement(rowTotals), supportForms);
     const columns = this.renderCompoundGridColumnHeaders(headers, definition, onAttribute(columnTotals), onMetric);
     const subtotalAddress = [...rowTotals, ...columnTotals];
 
     return { rows, columns, subtotalAddress };
   }
 
-  renderCompoundGridRowTitles(headers, definition, onElement = (e) => e) {
-    return mstrNormalizedJsonHandler.renderTitles(definition, 'rows', headers, onElement, false);
+  renderCompoundGridRowTitles(headers, definition, onElement = (e) => e, supportForms) {
+    return mstrNormalizedJsonHandler.renderTitles(definition, 'rows', headers, onElement, supportForms);
   }
 
-  renderCompoundGridRowHeaders(headers, definition, onElement = (e) => e) {
-    return mstrNormalizedJsonHandler.renderHeaders(definition, 'rows', headers, onElement, false);
+  renderCompoundGridRowHeaders(headers, definition, onElement = (e) => e, supportForms) {
+    return mstrNormalizedJsonHandler.renderHeaders(definition, 'rows', headers, onElement, supportForms);
   }
 
   renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric) {
     const { columnSets: columnSetsHeaders } = headers;
     const { columnSets: columnSetsDefinition } = definition.grid;
 
-    let attributeIndex = 0;
     let colIndex = 0;
     let startColIndex = 0;
+
+    for (let index = 0; index < columnSetsHeaders.length; index++) {
+      if (columnSetsHeaders[index].length === 0) {
+        columnSetsHeaders[index].push([-1]);
+        columnSetsDefinition[index].columns.push({ type: null, elements: [] });
+      }
+    }
 
     const transposedHeaders = columnSetsHeaders.map(mstrNormalizedJsonHandler.transposeMatrix);
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders, columnSetsDefinition);
@@ -156,6 +170,7 @@ class CompoundGridHandler {
     for (let i = 0; i < transposedHeaders.length; i++) {
       const header = transposedHeaders[i];
       const columnsDefinition = [...columnSetsDefinition[i].columns];
+      let columnSetColumn;
 
       // Add empty row when column sets have different height
       while (header.length < boundingHeight) {
@@ -163,37 +178,56 @@ class CompoundGridHandler {
         header.unshift(Array(header[0].length).fill(-1));
       }
 
-      for (let j = 0; j < boundingHeight; j++) {
-        const headerRow = header[j];
-        const { type, elements } = columnsDefinition[j];
+      for (let j = 0; j < header[0].length; j++) {
         colIndex = startColIndex;
-        // eslint-disable-next-line no-loop-func
-        const columnSetRow = headerRow.map(index => {
-          // -1 is for empty row
-          colIndex++;
-          if (index < 0) { return ''; }
-          const element = elements[index];
-          switch (type) {
-            case 'attribute':
-              return onAttribute(element, attributeIndex, colIndex - 1);
-            case 'templateMetrics':
-              return onMetric(element);
-              // Consolidation will go here
-            default:
-              return '';
+        columnSetColumn = [];
+
+        for (let k = 0; k < header.length; k++) {
+          colIndex = startColIndex + j;
+          if (!parsedHeaders[colIndex]) {
+            parsedHeaders[colIndex] = [];
           }
-        });
-        if (parsedHeaders[j]) {
-          parsedHeaders[j].push(...columnSetRow);
-        } else {
-          parsedHeaders[j] = columnSetRow;
+
+          const { type, elements } = columnsDefinition[k];
+          const elementIndex = header[k][j];
+
+          if (elementIndex < 0) {
+            // -1 is for empty row
+            parsedHeaders[colIndex].push('');
+          } else {
+            const element = elements[elementIndex];
+
+            switch (type) {
+              case 'attribute':
+                parsedHeaders[colIndex].push(...onAttribute(element, k, colIndex));
+                break;
+              case 'templateMetrics':
+                parsedHeaders[colIndex].push(...onMetric(element));
+                break;
+              // Consolidation will go here
+              default:
+                parsedHeaders[colIndex].push('');
+            }
+          }
         }
       }
       startColIndex += header[0].length;
-      attributeIndex++;
     }
 
-    return parsedHeaders;
+    let attrFormsBoundingHeight = 0;
+    for (let index = 0; index < parsedHeaders.length; index++) {
+      attrFormsBoundingHeight = Math.max(parsedHeaders[index].length, attrFormsBoundingHeight);
+    }
+
+    for (let index = 0; index < parsedHeaders.length; index++) {
+      while (parsedHeaders[index].length < attrFormsBoundingHeight) {
+        parsedHeaders[index].unshift('');
+      }
+    }
+
+    console.log(mstrNormalizedJsonHandler.transposeMatrix(parsedHeaders));
+
+    return mstrNormalizedJsonHandler.transposeMatrix(parsedHeaders);
   }
 }
 

@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 /**
  * Helper class to manipulate the new normalized REST API V2
  *
@@ -183,14 +183,17 @@ class NormalizedJsonHandler {
   renderHeaders = (definition, axis, headers, onElement, supportForms) => {
     if (headers[axis].length === 0) { return [[]]; }
     const headersNormalized = axis === 'columns' ? this.transposeMatrix(headers[axis]) : headers[axis];
+
     const matrix = headersNormalized.map((headerCells, colIndex) => {
       const axisElements = this.mapElementIndicesToElements({
         definition, axis, headerCells, colIndex
       });
+
       return supportForms
         ? this.convertForms([], axisElements, onElement)
         : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
+
     return axis === 'columns' ? this.transposeMatrix(matrix) : matrix;
   }
 
@@ -400,6 +403,68 @@ class NormalizedJsonHandler {
     }
     return gridColumns;
   }
+
+  /**
+   * Get attribute title names with attribute forms
+   *
+   * @param {JSON} e Object definition element from response
+   * @param {String} attrforms Dispay attribute form names setting inside office-properties.js
+   * @return {Object} Contains arrays of columns and rows attributes forms names
+   */
+  getAttributesTitleWithForms = (e, attrforms) => {
+    const supportForms = attrforms ? attrforms.supportForms : false;
+    const nameSet = attrforms && attrforms.displayAttrFormNames;
+    const { displayAttrFormNames } = officeProperties;
+    const titles = [];
+
+    if (supportForms && e.type === 'attribute' && e.forms.length >= 0) {
+      const singleForm = e.forms.length === 1;
+
+      for (let index = 0; index < e.forms.length; index++) {
+        const formName = e.forms[index].name;
+        let title;
+
+        switch (nameSet) {
+          case displayAttrFormNames.automatic:
+            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+            titles.push(title);
+            break;
+          case displayAttrFormNames.on:
+            titles.push(`'${e.name} ${formName}`);
+            break;
+          case displayAttrFormNames.off:
+            titles.push(`'${e.name}`);
+            break;
+          case displayAttrFormNames.formNameOnly:
+            titles.push(`'${formName}`);
+            break;
+          case displayAttrFormNames.showAttrNameOnce:
+            title = index === 0 ? `'${e.name} ${formName}` : `'${formName}`;
+            titles.push(title);
+            break;
+          default:
+            title = singleForm ? `'${e.name}` : `'${e.name} ${formName}`;
+            titles.push(title);
+            break;
+        }
+      }
+      return titles;
+    }
+    return false;
+  }
+
+  getAttributeWithForms = (elements, attrforms) => {
+    if (!elements) { return []; }
+
+    let names = [];
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
+      const forms = this.getAttributesTitleWithForms(element, attrforms);
+      names = forms ? [...names, ...forms] : [...names, `'${element.name}`];
+    }
+
+    return names;
+  };
 
 
   /**
