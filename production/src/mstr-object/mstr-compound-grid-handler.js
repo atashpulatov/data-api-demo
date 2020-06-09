@@ -154,52 +154,51 @@ class CompoundGridHandler {
 
     let colIndex = 0;
     let startColIndex = 0;
-
-    for (let index = 0; index < columnSetsHeaders.length; index++) {
-      if (columnSetsHeaders[index].length === 0) {
-        columnSetsHeaders[index].push([-1]);
-        columnSetsDefinition[index].columns.push({ type: null, elements: [] });
-      }
-    }
-
-    const transposedHeaders = columnSetsHeaders.map(mstrNormalizedJsonHandler.transposeMatrix);
-    const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders, columnSetsDefinition);
-
+    let attrFormsBoundingHeight = 0;
     const parsedHeaders = [];
 
-    for (let i = 0; i < transposedHeaders.length; i++) {
-      const header = transposedHeaders[i];
-      const columnsDefinition = [...columnSetsDefinition[i].columns];
-      let columnSetColumn;
-
-      // Add empty row when column sets have different height
-      while (header.length < boundingHeight) {
-        columnsDefinition.unshift({ type: null, elements: [] });
-        header.unshift(Array(header[0].length).fill(-1));
+    // adding empty header for empty column sets
+    for (let i = 0; i < columnSetsHeaders.length; i++) {
+      if (columnSetsHeaders[i].length === 0) {
+        columnSetsHeaders[i].push([-1]);
+        columnSetsDefinition[i].columns.push({ type: null, elements: [] });
       }
+    }
+    const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders);
 
-      for (let j = 0; j < header[0].length; j++) {
+
+    // iterating over column sets
+    for (let i = 0; i < columnSetsHeaders.length; i++) {
+      const header = columnSetsHeaders[i];
+      const currentColumnSet = columnSetsDefinition[i];
+      this.addEmptyHeaders(header, boundingHeight, currentColumnSet);
+      const columnsDefinition = [...currentColumnSet.columns];
+
+      // iterating over columns in column set
+      for (let j = 0; j < header.length; j++) {
         colIndex = startColIndex;
-        columnSetColumn = [];
 
-        for (let k = 0; k < header.length; k++) {
+        // iterating over elements in columns
+        for (let k = 0; k < header[j].length; k++) {
           colIndex = startColIndex + j;
+
+          // if array containing header of column does not exist we create it
           if (!parsedHeaders[colIndex]) {
             parsedHeaders[colIndex] = [];
           }
 
-          const { type, elements } = columnsDefinition[k];
-          const elementIndex = header[k][j];
+          const elementIndex = header[j][k];
 
           if (elementIndex < 0) {
             // -1 is for empty row
             parsedHeaders[colIndex].push('');
           } else {
+            const { type, elements } = columnsDefinition[k];
             const element = elements[elementIndex];
 
             switch (type) {
               case 'attribute':
-                parsedHeaders[colIndex].push(...onAttribute(element, k, colIndex));
+                parsedHeaders[colIndex].push(...onAttribute(element, j, colIndex));
                 break;
               case 'templateMetrics':
                 parsedHeaders[colIndex].push(...onMetric(element));
@@ -210,24 +209,49 @@ class CompoundGridHandler {
             }
           }
         }
+        attrFormsBoundingHeight = Math.max(parsedHeaders[colIndex].length, attrFormsBoundingHeight);
       }
-      startColIndex += header[0].length;
+      // startColIndex is number of columns in previous columnsets
+      startColIndex += header.length;
     }
 
-    let attrFormsBoundingHeight = 0;
-    for (let index = 0; index < parsedHeaders.length; index++) {
-      attrFormsBoundingHeight = Math.max(parsedHeaders[index].length, attrFormsBoundingHeight);
-    }
-
-    for (let index = 0; index < parsedHeaders.length; index++) {
-      while (parsedHeaders[index].length < attrFormsBoundingHeight) {
-        parsedHeaders[index].unshift('');
-      }
-    }
-
-    console.log(mstrNormalizedJsonHandler.transposeMatrix(parsedHeaders));
+    this.handleAttributeForms(boundingHeight, attrFormsBoundingHeight, parsedHeaders);
 
     return mstrNormalizedJsonHandler.transposeMatrix(parsedHeaders);
+  }
+
+  handleAttributeForms(boundingHeight, attrFormsBoundingHeight, parsedHeaders) {
+    if (boundingHeight !== attrFormsBoundingHeight) {
+      for (let i = 0; i < parsedHeaders.length; i++) {
+        const heightsDifference = attrFormsBoundingHeight - boundingHeight;
+
+        // Since we will add more rows to columnset we have to adjust the indexes for subtotals
+        if (parsedHeaders[i].length < attrFormsBoundingHeight) {
+          for (let j = 0; j < parsedHeaders[i].length; j++) {
+            const headerElement = parsedHeaders[i][j];
+
+            if (headerElement.subtotal) {
+              headerElement.subtotal.attributeIndex += heightsDifference;
+            }
+          }
+        }
+
+        while (parsedHeaders[i].length < attrFormsBoundingHeight) {
+          parsedHeaders[i].unshift('');
+        }
+      }
+    }
+  }
+
+  addEmptyHeaders(header, boundingHeight, currentColumnSet) {
+    for (let i = 0; i < header.length; i++) {
+      while (header[i].length < boundingHeight) {
+        if (i === 0) {
+          currentColumnSet.columns.unshift({ type: null, elements: [] });
+        }
+        header[i].unshift(-1);
+      }
+    }
   }
 }
 
