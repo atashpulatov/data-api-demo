@@ -223,19 +223,6 @@ class CompoundGridHandler {
   handleAttributeForms(boundingHeight, attrFormsBoundingHeight, parsedHeaders) {
     if (boundingHeight !== attrFormsBoundingHeight) {
       for (let i = 0; i < parsedHeaders.length; i++) {
-        const heightsDifference = attrFormsBoundingHeight - boundingHeight;
-
-        // Since we will add more rows to columnset we have to adjust the indexes for subtotals
-        if (parsedHeaders[i].length < attrFormsBoundingHeight) {
-          for (let j = 0; j < parsedHeaders[i].length; j++) {
-            const headerElement = parsedHeaders[i][j];
-
-            if (headerElement.subtotal) {
-              headerElement.subtotal.attributeIndex += heightsDifference;
-            }
-          }
-        }
-
         while (parsedHeaders[i].length < attrFormsBoundingHeight) {
           parsedHeaders[i].unshift('');
         }
