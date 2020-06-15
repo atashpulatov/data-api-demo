@@ -84,7 +84,7 @@ class OfficeConverterServiceV2 {
         if (
           grid.crossTab
           && !(grid.metricsPosition && grid.metricsPosition.axis === 'rows'
-          && grid.columnSets.length <= 1 && !grid.columnSets[0].length)
+          && grid.columnSets.length <= 1 && !grid.columnSets[0].length && !grid.columnSets[0].columns.length)
         ) {
           return mstrCompoundGridHandler;
         }
