@@ -335,16 +335,13 @@ class NormalizedJsonHandler {
     const { data, definition } = response;
     const { headers } = data;
     const { grid } = definition;
-    let headerColumns = [];
     let gridColumns = [];
 
     if (grid.columnSets[0].columns[0]) {
       gridColumns = this.flattenColumnSetsMetricElemets(grid);
     }
 
-    if (!(headers.columnSets.length <= 1 && headers.columnSets[0].length)) {
-      headerColumns = this.flattenColumnSetsHeaders(headers);
-    }
+    const headerColumns = this.flattenColumnSetsHeaders(headers);
 
     const metricValues = this.flattenMetricValues(data);
 
