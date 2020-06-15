@@ -175,11 +175,14 @@ class OfficeApiCrosstabHelper {
     const reportStartingCell = sheet.getRange(cellAddress);
     const columnOffset = columns.length;
     const rowOffset = 0;
+
     // we call getCell in case multiple cells are selected
     const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);
     const directionVector = [1, 0];
+
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
+
     return this.createHeaders(columns, startingCell, directionVector);
   }
 

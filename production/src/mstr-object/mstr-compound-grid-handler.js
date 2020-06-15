@@ -191,21 +191,21 @@ class CompoundGridHandler {
 
           if (elementIndex < 0) {
             // -1 is for empty row
-            parsedHeaders[colIndex].push('');
+            parsedHeaders[colIndex].push('\'');
           } else {
             const { type, elements } = columnsDefinition[k];
             const element = elements[elementIndex];
 
             switch (type) {
               case 'attribute':
+              case 'consolidation':
                 parsedHeaders[colIndex].push(...onAttribute(element, j, colIndex));
                 break;
               case 'templateMetrics':
                 parsedHeaders[colIndex].push(...onMetric(element));
                 break;
-              // Consolidation will go here
               default:
-                parsedHeaders[colIndex].push('');
+                parsedHeaders[colIndex].push('\'');
             }
           }
         }
@@ -224,7 +224,7 @@ class CompoundGridHandler {
     if (boundingHeight !== attrFormsBoundingHeight) {
       for (let i = 0; i < parsedHeaders.length; i++) {
         while (parsedHeaders[i].length < attrFormsBoundingHeight) {
-          parsedHeaders[i].unshift('');
+          parsedHeaders[i].unshift('\'');
         }
       }
     }
