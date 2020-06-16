@@ -238,6 +238,15 @@ class PluginPopup {
     this.clickImport();
   }
 
+  addToLibrary() {
+    browser.pause(5000);
+    switchToPromptFrame();
+    const addToLibraryButton = $(popupSelectors.addToLibraryButton);
+    if (addToLibraryButton.isExisting()) {
+      waitAndClick(addToLibraryButton, 1000);
+    }
+  }
+
   importObject(objectName) {
     logStep(`+ Importing the object "${objectName}"...    [${fileName} - importObject()]`);
     switchToDialogFrame();
