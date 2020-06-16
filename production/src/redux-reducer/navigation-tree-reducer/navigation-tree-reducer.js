@@ -2,7 +2,7 @@ import {
   SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
   UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
   CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED,
-  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM, SWITCH_IMPORT_SUBTOTALS, CLEAR_SELECTION, SET_POPUP_RENDERED,
+  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM, SWITCH_IMPORT_SUBTOTALS, CLEAR_SELECTION,
 } from './navigation-tree-actions';
 import { CLEAR_WINDOW } from '../popup-reducer/popup-actions';
 import {
@@ -249,8 +249,6 @@ export const navigationTree = (state = initialState, action) => {
     case REFRESH_CACHE: {
       return data ? cleanSelection(state) : state;
     }
-    case SET_POPUP_RENDERED:
-      return { ...state, isPopupRendered: action.isPopupRendered };
     case sessionProperties.actions.logIn:
     case sessionProperties.actions.logOut: {
       const newState = { ...state };

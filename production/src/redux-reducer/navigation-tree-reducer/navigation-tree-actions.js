@@ -21,7 +21,6 @@ export const CHANGE_IS_PROMPTED = 'CHANGE_IS_PROMPTED';
 export const LOAD_BROWSING_STATE_CONST = 'LOAD_BROWSING_STATE_CONST';
 export const UPDATE_DISPLAY_ATTR_FORM = 'UPDATE_DISPLAY_ATTR_FORM';
 export const CLEAR_SELECTION = 'CLEAR_SELECTION';
-export const SET_POPUP_RENDERED = 'SET_POPUP_RENDERED';
 
 export function selectObject(data) {
   return (dispatch) => dispatch({

@@ -118,6 +118,8 @@ export const RightSidePanelNotConnected = ({
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
 
+  console.log('in side panel', isPopupRendered);
+
   return (
     <SidePanel
       locale={i18n.language}
@@ -142,11 +144,11 @@ export const RightSidePanelNotConnected = ({
 };
 
 export const mapStateToProps = (state) => {
-  const { importRequested, dossierOpenRequested, isPopupRendered } = state.navigationTree;
+  const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const {
-    isConfirm, isSettings, isSecured, isClearDataFailed
+    isConfirm, isSettings, isSecured, isClearDataFailed, popupOpen
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -159,7 +161,7 @@ export const mapStateToProps = (state) => {
     notifications,
     isSecured,
     isClearDataFailed,
-    isPopupRendered,
+    isPopupRendered: popupOpen,
   };
 };
 

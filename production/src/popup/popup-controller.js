@@ -6,7 +6,7 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import {
-  LOAD_BROWSING_STATE_CONST, changeSorting, clearSelection, SET_POPUP_RENDERED
+  LOAD_BROWSING_STATE_CONST, changeSorting, clearSelection,
 } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
 import { RESET_STATE } from '../redux-reducer/popup-reducer/popup-actions';
@@ -103,10 +103,6 @@ class PopupController {
       this.reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
       return;
     }
-    if (response.command === selectorProperties.popupRendered) {
-      this.reduxStore.dispatch({ type: SET_POPUP_RENDERED, isPopupRendered: true });
-      return;
-    }
     try {
       if (response.command !== REFRESH_CACHE_COMMAND) { await this.closeDialog(dialog); }
       if (response.command !== selectorProperties.commandError) {
@@ -147,11 +143,9 @@ class PopupController {
       }
     } catch (error) {
       console.error(error);
-      this.reduxStore.dispatch({ type: SET_POPUP_RENDERED, isPopupRendered: false });
       errorService.handleError(error);
     } finally {
       this.reduxStore.dispatch({ type: RESET_STATE });
-      this.reduxStore.dispatch({ type: SET_POPUP_RENDERED, isPopupRendered: false });
       if (response.command !== REFRESH_CACHE_COMMAND) {
         this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
         this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
