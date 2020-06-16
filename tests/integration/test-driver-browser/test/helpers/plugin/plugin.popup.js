@@ -239,6 +239,7 @@ class PluginPopup {
   }
 
   addToLibrary() {
+    logStep(`+ Adding the dossier to library - addToLibrary()]`);
     browser.pause(5000);
     switchToPromptFrame();
     const addToLibraryButton = $(popupSelectors.addToLibraryButton);
