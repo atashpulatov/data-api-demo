@@ -36,10 +36,10 @@ class StepGetObjectDetails {
         mstrObjectType,
       } = objectData;
 
-      console.log('objectData');
-      console.log(objectData);
-      console.log('operationData');
-      console.log(operationData);
+      // console.log('objectData');
+      // console.log(objectData);
+      // console.log('operationData');
+      // console.log(operationData);
 
       const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
       const {
@@ -51,11 +51,11 @@ class StepGetObjectDetails {
         .map(this.extractPromptAnswerName);
 
 
-      console.log('objectInfo');
-      console.log(objectInfo);
+      // console.log('objectInfo');
+      // console.log(objectInfo);
 
-      console.log('objectPrompts');
-      console.log(objectPrompts);
+      // console.log('objectPrompts');
+      // console.log(objectPrompts);
 
       const updatedObject = {
         ...objectData,

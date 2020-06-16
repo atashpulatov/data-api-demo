@@ -68,8 +68,8 @@ class StepGetInstanceDefinition {
         startCell = await this.getStartCell(insertNewWorksheet, excelContext);
       }
 
-      console.log('instanceDefinition');
-      console.log(instanceDefinition);
+      // console.log('instanceDefinition');
+      // console.log(instanceDefinition);
 
       const { mstrTable } = instanceDefinition;
       const updatedObject = {
