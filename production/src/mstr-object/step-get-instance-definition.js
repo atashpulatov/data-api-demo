@@ -41,6 +41,7 @@ class StepGetInstanceDefinition {
         bindId,
         mstrObjectType,
         isPrompted,
+        definition,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
 
@@ -82,8 +83,11 @@ class StepGetInstanceDefinition {
         isCrosstab: mstrTable.isCrosstab,
         subtotalsInfo,
         manipulationsXML: instanceDefinition.manipulationsXML || false,
-        attributes: instanceDefinition.attributes,
-        metrics: instanceDefinition.metrics,
+        definition: {
+          ...objectData.definition,
+          attributes: instanceDefinition.attributes,
+          metrics: instanceDefinition.metrics,
+        },
       };
 
       const updatedOperation = {

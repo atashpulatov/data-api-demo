@@ -59,14 +59,17 @@ class StepGetObjectDetails {
 
       const updatedObject = {
         ...objectData,
-        ancestors,
-        certified: certifiedInfo,
-        dateModified,
-        owner,
-        objectPrompts: objectPrompts || null,
-        // conditionally add importedBy and importDate
-        ...((operationData.operationType === 'IMPORT_OPERATION' || operationData.operationType === 'DUPLICATE_OPERATION')
-        && { importedBy: officeApiHelper.getCurrentMstrUserFullName(), importDate: Date.now() })
+        details: {
+          ancestors,
+          certified: certifiedInfo,
+          modifiedDate: dateModified,
+          owner,
+          importedBy: officeApiHelper.getCurrentMstrUserFullName(),
+        },
+        definition: {
+          ...objectData.definition,
+          objectPrompts: objectPrompts || null
+        },
       };
 
       operationStepDispatcher.updateObject(updatedObject);
