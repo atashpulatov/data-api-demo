@@ -13,4 +13,5 @@ export const selectorProperties = {
   commandOnUpdate: 'commandOnUpdate',
   commandError: 'commandError',
   commandBrowseUpdate: 'commandBrowseUpdate',
+  popupRendered: 'popupRendered',
 };

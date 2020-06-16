@@ -31,6 +31,7 @@ export const RightSidePanelNotConnected = ({
   globalNotification,
   notifications,
   operations,
+  isPopupRendered
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
@@ -135,12 +136,13 @@ export const RightSidePanelNotConnected = ({
       globalNotification={globalNotification}
       onSelectAll={notificationService.dismissNotifications}
       shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+      isPopupRendered={isPopupRendered}
     />
   );
 };
 
 export const mapStateToProps = (state) => {
-  const { importRequested, dossierOpenRequested } = state.navigationTree;
+  const { importRequested, dossierOpenRequested, isPopupRendered } = state.navigationTree;
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const {
@@ -156,7 +158,8 @@ export const mapStateToProps = (state) => {
     globalNotification,
     notifications,
     isSecured,
-    isClearDataFailed
+    isClearDataFailed,
+    isPopupRendered,
   };
 };
 
@@ -237,5 +240,6 @@ RightSidePanelNotConnected.propTypes = {
   isClearDataFailed: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
-  toggleIsClearDataFailedFlag: PropTypes.func
+  toggleIsClearDataFailedFlag: PropTypes.func,
+  isPopupRendered: PropTypes.bool,
 };
