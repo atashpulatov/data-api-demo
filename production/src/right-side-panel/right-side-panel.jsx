@@ -118,8 +118,6 @@ export const RightSidePanelNotConnected = ({
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
 
-  console.log('in side panel', isPopupRendered);
-
   return (
     <SidePanel
       locale={i18n.language}

@@ -11,8 +11,6 @@ import { SessionExtendingWrapper } from './session-extending-wrapper';
 export const Popup = () => {
   React.useEffect(() => {
     libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
-    // const initialMessage = { command: selectorProperties.popupRendered };
-    // popupHelper.officeMessageParent(initialMessage);
   }, []);
 
   i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage]

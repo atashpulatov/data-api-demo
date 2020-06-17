@@ -47,7 +47,6 @@ export const initialState = {
   chosenEnvElement: {},
   myLibraryOwners: {},
   numberOfFiltersActive: 0,
-  isPopupRendered: false,
 };
 
 
