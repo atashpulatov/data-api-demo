@@ -32,11 +32,12 @@ describe('F22955 - Ability to refresh prompted data already imported to the work
     switchToPluginFrame();
     PluginRightPanel.editObject(1);
     browser.pause(5000);
+    switchToDialogFrame();
+    PluginPopup.promptSelectObject('Year');
     PluginPopup.clickRun();
-    browser.pause(3000);
-
-    $(popupSelectors.importBtn).waitForExist(3333);
-    PluginPopup.selectAttributesAndAttributeForms({ Category: [] });
+    browser.pause(5000);
+    switchToDialogFrame();
+    PluginPopup.selectObjectElements(['Category']);
     PluginPopup.selectAllMetrics();
     PluginPopup.clickImport();
     waitForNotification();
@@ -44,6 +45,7 @@ describe('F22955 - Ability to refresh prompted data already imported to the work
     expect(
       $(rightPanelSelectors.notificationPopUp).getAttribute('textContent')
     ).toContain(dictionary.en.importSuccess);
+    PluginRightPanel.closeNotificationOnHover();
 
     console.log('Should refresh report');
     PluginRightPanel.refreshFirstObjectFromTheList();

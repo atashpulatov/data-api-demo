@@ -120,7 +120,6 @@ class OfficeTableRefresh {
     const tableChanged = await this.checkColumnsChange(prevOfficeTable, excelContext, columns, previousTableDimensions);
 
     const rowsNumberChange = await this.checkRowsNumberChange(prevOfficeTable, excelContext, rows);
-
     return tableChanged
         || rowsNumberChange > ROWS_NUMBER_CHANGE_LIMIT
         || rowsNumberChange * columns > CELLS_NUMBER_CHANGE_LIMIT;

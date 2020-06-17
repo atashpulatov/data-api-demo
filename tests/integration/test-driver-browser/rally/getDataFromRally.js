@@ -1,10 +1,15 @@
 const request = require('request');
 const rallyConfig = require('./rallyconfig');
 
-// Retrieve Rally Test Case Object ID using Test Case Formatted ID (e.g. TCxxxx displayed in the Rally page)
-module.exports = function getRallyTCDetails(tcUrl) {
+/**
+ * Retrieve Rally Test Case data using url to the particular endpoint
+ *
+ * @param {String} url Url to the endpoint
+ * @returns {Promise} Promise that will be resolved when the request to the endpoint is made
+ */
+module.exports = function getDataFromRally(url) {
   const options = {
-    url: tcUrl,
+    url,
     method: 'GET',
     headers: { zsessionid: rallyConfig.rallyApiKey, },
   };
@@ -24,4 +29,4 @@ module.exports = function getRallyTCDetails(tcUrl) {
       }
     });
   });
-}
+};

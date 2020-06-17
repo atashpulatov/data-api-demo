@@ -8,7 +8,7 @@ import { switchToPluginFrame, changeBrowserTab } from '../../../helpers/utils/if
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 
 describe('TS41441 - Sanity checks', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
@@ -116,7 +116,7 @@ describe('TS41441 - Sanity checks', () => {
     // import dataset
     OfficeWorksheet.selectCell('R3');
     PluginRightPanel.clickAddDataButton();
-    const FourthReport = objectsList.datasets.datasetSQL;
+    const FourthReport = objectsList.datasets.basicDataset;
     PluginPopup.switchLibraryAndImportObject(FourthReport, false);
     waitForNotification();
     browser.pause(2000);
