@@ -62,7 +62,7 @@ const OfficeWorksheet = function () {
     browser.switchToFrame($(excelSelectors.officeAddInsFrame));
     browser.pause(1111);
     waitAndClick($(excelSelectors.adminManagedBtn));
-    let envNumber = process.argv[process.argv.length - 1];
+    let envNumber = settings.args.env;
     if (!envNumber.includes('env-')) {
       envNumber = 'yi_local_ip';
     }
