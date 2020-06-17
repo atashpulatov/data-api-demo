@@ -138,13 +138,17 @@ describe('F30463 - Ability to sort attributes and metrics on Prepare Data screen
 
     logStep(`+ Check if attribute forms are changed - default, ascending`);
     waitAndClick(attributeContainer.$$('li')[0]);
+    browser.pause(999);
     waitAndClick(attributeContainer.$$('li')[0].$$('span')[0]);
+    browser.pause(999);
     expect(attributeContainer.$$('li')[0].$$('ul')[0].$$('li')[0].getText()).toEqual('DESC');
     waitAndClick(attributeContainer.$$('li')[0].$$('span')[0]);
+    browser.pause(999);
     waitAndClick(attributeContainer.$$('li')[0]);
 
     logStep(`+ Check if attribute forms are changed - default, descending`);
     waitAndClick(sortAttributeSelector);
+    browser.pause(999);
     waitAndClick(sortAttributeSelector);
     browser.pause(999);
     const lengh = attributeContainer.$$('li').length;
@@ -153,9 +157,11 @@ describe('F30463 - Ability to sort attributes and metrics on Prepare Data screen
     attributeContainer.$$('li')[lengh - 1].scrollIntoView();
     browser.pause(999);
     waitAndClick(attributeContainer.$$('li')[lengh - 1]);
+    browser.pause(999);
     waitAndClick(attributeContainer.$$('li')[lengh - 1].$$('span')[0]);
     expect(attributeContainer.$$('li')[lengh - 1].$$('ul')[0].$$('li')[0].getText()).toEqual('DESC');
     waitAndClick(attributeContainer.$$('li')[lengh - 1].$$('span')[0]);
+    browser.pause(999);
     waitAndClick(attributeContainer.$$('li')[lengh - 1]);
     browser.pause(3000);
 
