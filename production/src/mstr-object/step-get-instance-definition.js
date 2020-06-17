@@ -67,6 +67,10 @@ class StepGetInstanceDefinition {
       if (nextStep === GET_OFFICE_TABLE_IMPORT) {
         startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
       }
+      if (insertNewWorksheet) {
+        delete objectData.insertNewWorksheet;
+      }
+
 
       const { mstrTable } = instanceDefinition;
       const updatedObject = {
@@ -79,7 +83,6 @@ class StepGetInstanceDefinition {
         isCrosstab: mstrTable.isCrosstab,
         subtotalsInfo,
         manipulationsXML: instanceDefinition.manipulationsXML || false,
-        insertNewWorksheet: false,
       };
 
       const updatedOperation = {

@@ -202,7 +202,7 @@ describe('StepGetInstanceDefinition', () => {
 
     jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-    jest.spyOn(stepGetInstanceDefinition, 'getStartCell').mockReturnValue('startCellTest');
+    jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
 
     jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -278,9 +278,9 @@ describe('StepGetInstanceDefinition', () => {
       'subtotalsAddressesTest',
     );
 
-    expect(stepGetInstanceDefinition.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
+    expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
     if (expectedGetStartCellCallsNo === 1) {
-      expect(stepGetInstanceDefinition.getStartCell).toBeCalledWith(
+      expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
         'insertNewWorksheetTest',
         'excelContextTest',
       );
@@ -393,7 +393,7 @@ describe('StepGetInstanceDefinition', () => {
 
     jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-    jest.spyOn(stepGetInstanceDefinition, 'getStartCell').mockReturnValue('startCellTest');
+    jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
 
     jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -456,9 +456,9 @@ describe('StepGetInstanceDefinition', () => {
       'subtotalsAddressesTest',
     );
 
-    expect(stepGetInstanceDefinition.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
+    expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
     if (expectedGetStartCellCallsNo === 1) {
-      expect(stepGetInstanceDefinition.getStartCell).toBeCalledWith(
+      expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
         'insertNewWorksheetTest',
         'excelContextTest',
       );
@@ -738,7 +738,7 @@ describe('StepGetInstanceDefinition', () => {
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValue(42);
 
     // when
-    const result = await stepGetInstanceDefinition.getStartCell(
+    const result = await officeApiWorksheetHelper.getStartCell(
       insertNewWorksheet,
       'excelContextTest',
     );
