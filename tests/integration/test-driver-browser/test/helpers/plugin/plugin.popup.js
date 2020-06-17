@@ -243,7 +243,7 @@ class PluginPopup {
     browser.pause(5000);
     switchToPromptFrame();
     const addToLibraryButton = $(popupSelectors.addToLibraryButton);
-    if (addToLibraryButton.isExisting()) {
+    if (addToLibraryButton.isClickable()) {
       waitAndClick(addToLibraryButton, 1000);
     }
   }
