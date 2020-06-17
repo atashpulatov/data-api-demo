@@ -59,7 +59,7 @@ export const RightSidePanelNotConnected = ({
   }, [toggleSecuredFlag, toggleIsClearDataFailedFlag]);
 
   React.useEffect(() => {
-    setSidePanelPopup(sidePanelNotificationHelper.getSidePanelPopup());
+    setSidePanelPopup(sidePanelNotificationHelper.setClearDataPopups());
   }, [isSecured, isClearDataFailed]);
 
   // Updates the activeCellAddress in duplicate popup if this popup is opened.

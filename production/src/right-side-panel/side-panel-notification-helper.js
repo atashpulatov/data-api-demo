@@ -55,15 +55,14 @@ class SidePanelNotificationHelper {
   };
 
   /**
-   * Creates or updates duplicate popup.
+   * Creates or updates range taken popup.
    * Saves the popup and the objectWorkingId in state of RightSidePanel.
-   * Called after user click on duplicate icon or after the activeCellAddress changed, while popup was opened.
+   * Called after value in redux is changed
    *
-   * @param {Object} data - Data required to create and update duplicate popup.
-   * @param {Number} data.objectWorkingId - Uniqe id of source object for duplication.
-   * @param {String} data.activeCellAddress - Adress of selected cell in excel.
-   * @param {Function} data.setSidePanelPopup - Callback to save popup in state of RightSidePanel.
-   * @param {Function} data.setDuplicatedObjectId - Callback to save objectWorkingId in state of RightSidePanel.
+   * @param {Object} data  Data required to create and update range taken popup.
+   * @param {Number} data.objectWorkingId  Uniqe id of source object for duplication.
+   * @param {String} data.activeCellAddress  Adress of selected cell in excel.
+   * @param {Function} data.callback  Callback to cancel operation
    */
   setRangeTakenPopup = ({
     objectWorkingId, activeCellAddress, setSidePanelPopup, callback
@@ -88,6 +87,13 @@ class SidePanelNotificationHelper {
     });
   };
 
+  /**
+   * Dispatches new data to redux in order to repeat step of the operation.
+   *
+   * @param {Number} objectWorkingId  Uniqe id of source object for duplication.
+   * @param {String} activeCellAddress  Adress of selected cell in excel.
+   * @param {Boolean} insertNewWorksheet  specify if the object will be imported on new worksheet
+   */
   importInNewRange = (objectWorkingId, activeCellAddress, insertNewWorksheet) => {
     this.reduxStore.dispatch(updateOperation({
       objectWorkingId,
@@ -98,34 +104,48 @@ class SidePanelNotificationHelper {
     }));
   }
 
-
-  getSidePanelPopup = () => {
+  /**
+   * Displays one of the 2 popup for clear data based on the values in redux store.
+   *
+   * @returns {Object} Contains type and callback for the popup
+   */
+  setClearDataPopups = () => {
     let popup = null;
-
-    const handleViewData = async () => {
-      try {
-        await officeApiHelper.checkStatusOfSessions();
-        this.reduxStore.dispatch(toggleSecuredFlag(false));
-        this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
-        sidePanelService.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
-          .map(({ objectWorkingId }) => objectWorkingId));
-      } catch (error) {
-        errorService.handleError(error);
-      }
-    };
 
     const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
     isSecured && (popup = {
       type: popupTypes.DATA_CLEARED,
-      onViewData: handleViewData,
+      onViewData: this.handleViewData,
     });
     isClearDataFailed && (popup = {
       type: popupTypes.DATA_CLEARED_FAILED,
-      onViewData: handleViewData,
+      onViewData: this.handleViewData,
     });
     return popup;
   };
 
+  /**
+   * Toggles flags for cleardata and refresh all existing objects.
+   */
+   handleViewData = async () => {
+     try {
+       await officeApiHelper.checkStatusOfSessions();
+       this.reduxStore.dispatch(toggleSecuredFlag(false));
+       this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
+       sidePanelService.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
+         .map(({ objectWorkingId }) => objectWorkingId));
+     } catch (error) {
+       errorService.handleError(error);
+     }
+   };
+
+  /**
+   * Displays notifications on the objects tiles
+   *
+   * @param {Array} loadedObjects  Contains all object currently existing in redux
+   * @param {Array} notifications  Contains data of all notifications to be displayed
+   * @param {Array} operations  Contains data of all currently existing operation
+   */
   injectNotificationsToObjects = (loadedObjects, notifications, operations) => loadedObjects.map((object) => {
     const objectOperation = operations.find((operation) => operation.objectWorkingId === object.objectWorkingId);
     const objectNotificationData = notifications.find(
@@ -154,6 +174,12 @@ class SidePanelNotificationHelper {
     };
   });
 
+  /**
+   * Determines whether the progress percentages should be displayed based on the type of the operation
+   *
+   * @param {Object} objectOperation Data about operation running on specific object
+   * @return {Boolean} specify whether progress percentages should be displayed
+   */
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
   && objectOperation.operationType !== REMOVE_OPERATION
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
