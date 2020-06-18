@@ -53,6 +53,7 @@ class PopupHelper {
       selectedViz: `${chapterKey}:${visualizationKey}`,
       displayAttrFormNames: popupState.displayAttrFormNames
     };
+
     return this.restoreFilters(popupState.body, chosenObjectData, formsPrivilege);
   }
 
