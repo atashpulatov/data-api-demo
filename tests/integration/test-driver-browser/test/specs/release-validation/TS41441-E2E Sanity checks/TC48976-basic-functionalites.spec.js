@@ -45,7 +45,7 @@ describe('TS41441 - Sanity checks', () => {
     const firstRefreshIcon = $('#overlay > div > section > div > div.tables-container > div:nth-child(1) > div.refresh-icons-row > span.object-icons > span:nth-child(2) > span');
     const datasetFilter = 'label=Dataset';
     const removeIcon = '.mstr-icon.trash';
-    const P3 = '#gridRows > div:nth-child(3) > div:nth-child(16) > div > div';
+    const R3 = '#gridRows > div:nth-child(3) > div:nth-child(18) > div > div';
     OfficeWorksheet.selectCell('A1');
     switchToRightPanelFrame();
     $(rightPanelSelectors.importDataBtn).waitForDisplayed(3000, false);
@@ -162,8 +162,8 @@ describe('TS41441 - Sanity checks', () => {
 
     // Assertion after "Region" filter addition
     switchToExcelFrame();
-    OfficeWorksheet.selectCell('P3');
-    expect($(P3).getText()).toEqual('Europe');
+    OfficeWorksheet.selectCell('R3');
+    expect($(R3).getText()).toEqual('Europe');
     browser.pause(1000);
 
     // Rename the report

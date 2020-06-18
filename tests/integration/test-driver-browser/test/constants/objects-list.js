@@ -29,7 +29,7 @@ export const objectsList = {
     secureDataFiltering: 'Revenue by Region and Category - secure data',
     secureDataAlwaysWorking: 'Secure data - always working',
     nestedPrompt: 'Report with nested prompt',
-    over100k: '100010 rows report',
+    over100k: '110k Sales Records.csv',
     marginReport: 'Report 1048576 rows',
     numberFormating: 'Number Formatting',
     allPrompt: 'Report with all type of prompts (except nested)',

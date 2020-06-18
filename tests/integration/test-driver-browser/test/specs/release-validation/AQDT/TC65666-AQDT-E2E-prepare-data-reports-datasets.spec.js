@@ -15,7 +15,7 @@ describe('Personal TC for AQDT Mirror2', () => {
     const A2 = '#gridRows > div:nth-child(2) > div:nth-child(1) > div > div';
     const { tcAutomation } = objectsList.aqdtMirror2Objects;
     const { pdCube } = objectsList.aqdtMirror2Objects;
-    const { importSuccess, duplicateSucces, objectRemoved, reportRefreshed } = dictionary.en;
+    const { importSuccess, duplicateSucces, objectRemoved } = dictionary.en;
 
     OfficeWorksheet.selectCell('A1');
     logStep(`Should import ${tcAutomation}`);
