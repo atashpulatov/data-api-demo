@@ -707,9 +707,6 @@ class PluginPopup {
     }
     waitAndClick(visSelector, 40000);
     browser.pause(2500);
-    switchToPluginFrame();
-    $(popupSelectors.importBtn).waitForEnabled(15000);
-    this.clickImport();
   }
 
   showTotals(objectId) {
