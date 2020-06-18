@@ -43,21 +43,13 @@ class SessionHelper {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
-      this.replaceWindowLocation(pathBeginning, loginParams);
+      window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
     } else {
       sessionActions.disableLoading();
       if (shouldReload) {
         window.location.reload();
       }
     }
-  }
-
-  /**
-   * Sets Window location for redirect during logout
-   *
-   */
-  replaceWindowLocation = (pathBeginning, loginParams) => {
-    window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
   }
 
   /**
