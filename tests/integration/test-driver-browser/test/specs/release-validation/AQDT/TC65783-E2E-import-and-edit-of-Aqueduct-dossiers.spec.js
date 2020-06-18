@@ -7,6 +7,7 @@ import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-h
 import {
   switchToPluginFrame, switchToExcelFrame, changeBrowserTab, switchToPopupFrame, switchToDialogFrame, switchToPromptFrame
 } from '../../../helpers/utils/iframe-helper';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
 describe('IMPORT diferent types of vizualizations', () => {
   beforeAll(() => {
@@ -30,7 +31,7 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginPopup.selectFirstObjectWithoutSearch();
     PluginPopup.clickImport();
 
-    console.log('Importing TEC.QA');
+    logStep('+ should import TEC.QA');
     browser.pause(5000);
     switchToPromptFrame();
     PluginPopup.goToDossierPageOrChapter(7);
@@ -39,14 +40,14 @@ describe('IMPORT diferent types of vizualizations', () => {
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(6000);
 
-    console.log('Editing imported TEC.QA visualization');
+    logStep('+ should edit imported TEC.QA visualization');
     PluginRightPanel.editObject(1);
     browser.pause(2000);
     PluginPopup.selectAndImportVizualiation(objectsList.dossiers.aqueductTECQA.visualizations.testSets);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    console.log('Importing TEC.PD visualization');
+    logStep('+ should import TEC.PD visualization');
     switchToExcelFrame();
     OfficeWorksheet.selectCell('I1');
     PluginRightPanel.clickAddDataButton();
@@ -61,12 +62,13 @@ describe('IMPORT diferent types of vizualizations', () => {
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    console.log('Clearing data');
+    logStep('+ should clear data');
     switchToPluginFrame();
     PluginRightPanel.clickSettings();
     PluginRightPanel.clearData();
     PluginRightPanel.viewDataBtn();
-    console.log('Loggin out');
+
+    logStep('+ should log out');
     switchToPluginFrame();
     PluginRightPanel.logout();
     browser.pause(3000);
