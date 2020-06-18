@@ -285,8 +285,7 @@ exports.config = {
       './test/specs/release-validation/AQDT/TC65891-AQDT-E2E-Edit-dataset-import-prompted-report-and-reprompt.spec.js',
       './test/specs/release-validation/AQDT/TC65480-AQDT-E2E-duplicatig-and-right-panel-functionalities.spec.js',
       './test/specs/release-validation/AQDT/TC65666-AQDT-E2E-prepare-data-reports-datasets.spec.js',
-      './test/specs/release-validation/AQDT/TC65783-E2E-import-and-edit-of-Aqueduct-dossiers.spec.js'
-
+      './test/specs/release-validation/AQDT/TC65783-E2E-import-and-edit-of-Aqueduct-dossiers.spec.js',
     ]
   },
   // Patterns to exclude.
