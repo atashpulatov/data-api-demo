@@ -1,4 +1,4 @@
-import { toggleSecuredFlag, setRangeTakenPopup } from '../redux-reducer/office-reducer/office-actions';
+import { toggleSecuredFlag } from '../redux-reducer/office-reducer/office-actions';
 import { markStepCompleted, updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { CLEAR_DATA_OPERATION } from './operation-type-names';
 import {

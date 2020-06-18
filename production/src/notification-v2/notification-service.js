@@ -5,7 +5,6 @@ import {
   displayGlobalNotification,
   deleteObjectNotification,
   displayObjectWarning,
-  clearNotifications
 } from '../redux-reducer/notification-reducer/notification-action-creators';
 import officeStoreObject from '../office/store/office-store-object';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';

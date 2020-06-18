@@ -2,7 +2,6 @@ import { popupTypes } from '@mstr/rc';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { toggleSecuredFlag, toggleIsClearDataFailedFlag, clearSidePanelPopupData } from '../redux-reducer/office-reducer/office-actions';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
 import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
