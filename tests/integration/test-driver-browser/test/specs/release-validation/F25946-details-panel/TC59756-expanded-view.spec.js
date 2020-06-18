@@ -32,11 +32,10 @@ describe('F25946 - Object Details Panel', () => {
     expect(idsArray[0]).not.toEqual(idsArray[1]);
 
     PluginPopup.pasteToSearchBox(); // We paste clipboard content to searchbox for easier comparison
-    expect(PluginPopup.compareSearchBoxToString(idsArray[1])).toBe(true);
-
+    expect(PluginPopup.compareSearchBoxToString(idsArray[idsArray.length - 1])).toBe(true);
     PluginPopup.selectObject();
     PluginPopup.clickImport();
     waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    PluginRightPanel.closeNotificationOnHover();
   });
 });
