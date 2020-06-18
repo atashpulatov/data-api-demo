@@ -17,6 +17,7 @@ const CONNECTION_CHECK_TIMEOUT = 3000;
 class SidePanelNotificationHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
+    this.popupTypes = popupTypes;
   };
 
   /**
@@ -39,7 +40,7 @@ class SidePanelNotificationHelper {
     };
     setDuplicatedObjectId(objectWorkingId);
     setSidePanelPopup({
-      type: popupTypes.DUPLICATE,
+      type: this.popupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected) => {
         sidePanelService.duplicate(objectWorkingId, !isActiveCellOptionSelected, false);
@@ -74,7 +75,7 @@ class SidePanelNotificationHelper {
 
 
     setSidePanelPopup({
-      type: popupTypes.DUPLICATE,
+      type: this.popupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected) => {
         this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
@@ -113,11 +114,11 @@ class SidePanelNotificationHelper {
 
     const { isSecured, isClearDataFailed } = this.reduxStore.getState().officeReducer;
     isSecured && (popup = {
-      type: popupTypes.DATA_CLEARED,
+      type: this.popupTypes.DATA_CLEARED,
       onViewData: this.handleViewData,
     });
     isClearDataFailed && (popup = {
-      type: popupTypes.DATA_CLEARED_FAILED,
+      type: this.popupTypes.DATA_CLEARED_FAILED,
       onViewData: this.handleViewData,
     });
     return popup;
@@ -207,7 +208,7 @@ class SidePanelNotificationHelper {
 
   /**
    * This method creates an interval and checkes every CONNECTION_CHECK_TIMOUT seconds
-   * wether the connection to the internet has been restored
+   * whether the connection to the internet has been restored
    *
    */
   connectionCheckerLoop = () => {

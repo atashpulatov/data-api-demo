@@ -1,10 +1,9 @@
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
-import { officeApiHelper } from '../../office/api/office-api-helper';
 import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 import { reduxStore } from '../../store';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
+import { popupController } from '../../popup/popup-controller';
 
 describe('SidePanelService', () => {
   let duplicateRequestedOriginal;
@@ -25,6 +24,19 @@ describe('SidePanelService', () => {
     operationActions.duplicateRequested = duplicateRequestedOriginal;
     popupActions.callForDuplicate = callForDuplicateOriginal;
   });
+
+  it('should open popup on adddata click', () => {
+    // given
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    const mockedRunPopup = jest.spyOn(popupController, 'runPopupNavigation').mockImplementation();
+    Date.now = jest.fn().mockImplementationOnce(() => 789);
+    // when
+    sidePanelService.addData();
+    // then
+    expect(mockedDispatch).toBeCalledTimes(1);
+    expect(mockedRunPopup).toBeCalledTimes(1);
+  });
+
 
   it('should dispatch duplicateRequested for duplicate with import', () => {
     // given
@@ -80,34 +92,5 @@ describe('SidePanelService', () => {
     expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalledWith(objectWorkingId);
     expect(popupActions.callForDuplicate).toBeCalledTimes(1);
     expect(popupActions.callForDuplicate).toBeCalledWith(expectedObject);
-  });
-
-  it('should call excel contex methods form initializeActiveCellChangedListener', async () => {
-    // given
-    const mockSync = jest.fn();
-    const mockContext = { sync: mockSync };
-    const mockActiveCell = 'Sheet123!ABC123';
-
-    const spyGetExcelContext = jest
-      .spyOn(officeApiHelper, 'getExcelContext')
-      .mockImplementationOnce(() => mockContext);
-
-    const spyGetSelectedCell = jest
-      .spyOn(officeApiHelper, 'getSelectedCell')
-      .mockImplementationOnce(() => mockActiveCell);
-
-    const stateSetterCallback = jest.fn();
-
-    const spyAddOnSelectionChangedListener = jest
-      .spyOn(officeApiHelper, 'addOnSelectionChangedListener')
-      .mockImplementationOnce(() => { });
-
-    // when
-    await sidePanelEventHelper.initializeActiveCellChangedListener(stateSetterCallback);
-    // then
-    expect(spyGetExcelContext).toBeCalled();
-    expect(spyGetSelectedCell).toBeCalledWith(mockContext);
-    expect(stateSetterCallback).toBeCalledWith(mockActiveCell);
-    expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, stateSetterCallback);
   });
 });
