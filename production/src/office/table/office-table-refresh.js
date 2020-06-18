@@ -9,14 +9,13 @@ class OfficeTableRefresh {
    * Gets data about table created on import based on bind Id.
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @param {Object} bindId Id of the Office table created on import used for referencing the Excel table
    * @param {Object} instanceDefinition
+   * @param {Office} prevOfficeTable Reference to previous Excel table
    * @param {Object} previousTableDimensions Dimensions of the previously created table
    *
    * @returns {Object} object containing:
    *
    * - tableChanged - true if columns number changed, false otherwise
-   * - prevOfficeTable - reference to previous table
    * - startCell - starting cell address
    */
   getExistingOfficeTableData = async (excelContext, instanceDefinition, prevOfficeTable, previousTableDimensions) => {
@@ -222,7 +221,16 @@ class OfficeTableRefresh {
      return { tableChanged, startCell };
    }
 
-   async getPreviousOfficeTable(excelContext, bindId, mstrTable) {
+   /**
+   * Get previously imported Excel table
+   *
+   * @param {Office} excelContext excel context
+   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
+   * @param {Object} mstrTable Contains information about mstr object
+   * @returns {Office} Reference to previously imported Excel table
+   *
+   */
+   getPreviousOfficeTable = async (excelContext, bindId, mstrTable) => {
      const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
      await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
      prevOfficeTable.showHeaders = true;

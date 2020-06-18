@@ -23,6 +23,7 @@ class StepGetOfficeTableEditRefresh {
    * @param {String} operationData.instanceDefinition Object containing information about MSTR object
    * @param {Number} operationData.oldBindId Id of the Office table created on import
    * @param {Object} [operationData.objectEditedData] Contains information modifications to object data
+   * @param {Boolean} [operationData.insertNewWorksheet] Specify if new worksheet has to be created
    */
   getOfficeTableEditRefresh = async (objectData, operationData) => {
     try {

@@ -61,8 +61,13 @@ class OfficeReducerHelper {
     return notifications.find(notification => notification.objectWorkingId === objectWorkingId);
   };
 
-  dispayPopupOnSidePanel = (Props) => {
-    this.reduxStore.dispatch(setRangeTakenPopup(Props));
+  /**
+  * Set popup data in office reducer. Based on this data side panel will display the popup.
+  *
+  * @param {Object} popupData Contains data about popup to be displayed
+  */
+  dispayPopupOnSidePanel = (popupData) => {
+    this.reduxStore.dispatch(setRangeTakenPopup(popupData));
   }
 }
 

@@ -3,12 +3,13 @@ import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 
 class OfficeTableHelperRange {
   /**
-   * Checks if the range for the table after refresh is cleared.
+   * Checks if the range for the table is clear.
    *
-   * @param {Object} prevOfficeTable previous office table
-   * @param {Object} excelContext excelContext
-   * @param {Object} range range of the resized table
+   * @param {Office} prevOfficeTable Reference to previously imported Excel table
+   * @param {Office} excelContext excelContext
+   * @param {Office} range range of the resized table
    * @param {Object} instanceDefinition
+   * @param {Boolean} isRepeatStep Specify if repeat creating of the table
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */

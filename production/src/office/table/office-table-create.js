@@ -19,6 +19,8 @@ class OfficeTableCreate {
    * @param {string} tableName Name of the Excel Table
    * @param {Object} prevOfficeTable Previous office table to refresh
    * @param {Boolean} tableChanged Specify if table columns has been changed. False by default
+   * @param {Boolean} isRepeatStep Specify if repeat creating of the table
+   * @param {Boolean} insertNewWorksheet Specify if new worksheet has to be created before creating the table
    *
    */
   createOfficeTable = async (
