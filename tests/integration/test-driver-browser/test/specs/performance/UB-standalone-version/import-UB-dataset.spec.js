@@ -2,12 +2,15 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToExcelFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import {
+  switchToExcelFrame, changeBrowserTab, switchToDialogFrame, switchToPluginFrame
+} from '../../../helpers/utils/iframe-helper';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import { logStep, logFirstStep } from '../../../helpers/utils/allure-helper';
 
 const fs = require('fs');
 
@@ -54,10 +57,12 @@ describe('Smart Folder - IMPORT -', () => {
     PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectName);
     browser.pause(500);
-    PluginPopup.selectObject();
+    PluginPopup.selectObject(2);
     PluginPopup.clickPrepareData();
 
-    selectObjectElementsInPrepareData(['Session', 'Account', 'Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);
+    // // selectObjectElementsInPrepareData(['Session', 'Account', 'Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);
+    selectAttributes(['Session', 'Account']);
+    selectMetrics(['Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);
     PluginPopup.clickImport();
 
     const begin = Date.now();
@@ -67,7 +72,7 @@ describe('Smart Folder - IMPORT -', () => {
     expect(notificationText).toContain(dictionary.en.importSuccess);
     if (notificationText === dictionary.en.importSuccess) {
       const timeSpent = ((end - begin) / 1000);
-      console.log(`Total time importing "${objectName}":  ${timeSpent} secs`);
+      logStep(`Total time importing "${objectName}":  ${timeSpent} secs`);
 
       return timeSpent;
     }
@@ -95,10 +100,35 @@ describe('Smart Folder - IMPORT -', () => {
     }
   }
 
+  function selectAttributes(elements) {
+    $(popupSelectors.prepareSearchInput).waitForExist(7777);
+    $(popupSelectors.prepareSearchInput).clearValue();
+    $(popupSelectors.prepareSearchInput).setValue(`${elements[0]}`);
+    waitAndClick($('#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(1) > label > span:nth-child(3)'));
+    $(popupSelectors.prepareSearchInput).clearValue();
+    $(popupSelectors.prepareSearchInput).waitForExist(7777);
+    $(popupSelectors.prepareSearchInput).clearValue();
+    $(popupSelectors.prepareSearchInput).setValue(`${elements[1]}`);
+    waitAndClick($('#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(5) > label > span:nth-child(3)'));
+    $(popupSelectors.prepareSearchInput).clearValue();
+  }
+
+  function selectMetrics(elements) {
+    $(popupSelectors.prepareSearchInput).waitForExist(7777);
+    for (let i = 0; i < elements.length; i++) {
+      $(popupSelectors.prepareSearchInput).clearValue();
+      $(popupSelectors.prepareSearchInput).setValue(`${elements[i]}`);
+      waitAndClick($('#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(1) > label > span:nth-child(3)'));
+      $(popupSelectors.prepareSearchInput).clearValue();
+    }
+  }
+
   beforeEach(() => {
-    browser.setWindowSize(1500, 900);
+    browser.setWindowSize(1900, 900);
     checkIfInputFormatIsCorrect();
     startTimestamp = getFormattedDate();
+
+    logFirstStep(`+ Opening Excel and Login to Plugin...`);
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
@@ -108,24 +138,25 @@ describe('Smart Folder - IMPORT -', () => {
     createManifestFile(webServerEnvironmentID);
     const pathToManifest = isMac() ? `${__dirname}/manifest.xml` : `${__dirname}\\manifest.xml`;
     OfficeWorksheet.uploadAndOpenPlugin(pathToManifest, webServerEnvironmentID);
-    PluginRightPanel.loginToPlugin(username, password);
+    const isValidCredentials = true;
+    PluginRightPanel.loginToPlugin(username, password, isValidCredentials);
   });
 
   afterEach(() => {
     endTimestamp = getFormattedDate();
     if (numberOfExecutions === 1) {
       const averageImportingTime = (typeof totalAddedImportingTime === 'number') ? (totalAddedImportingTime / 1) : 'ERROR';
-      console.log('Preparing performance data');
+      logStep('Preparing performance data');
       const stringOfData = `\n${testCaseID},${testCaseName},${testCaseLink},${startTimestamp},${endTimestamp},${numberOfClicks},${averageImportingTime}`;
 
-      console.log('Saving performance data');
+      logStep('Saving performance data');
       fs.appendFile(csvFilePath, stringOfData, (err) => {
         if (err) { throw err; }
-        console.log('The data was appended to CSV file!');
+        logStep('The data was appended to CSV file!');
       });
-      console.log('Performance data saved');
+      logStep('Performance data saved');
 
-      console.log(averageImportingTime);
+      logStep(averageImportingTime);
     }
     browser.closeWindow();
     changeBrowserTab(0);

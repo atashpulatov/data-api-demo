@@ -78,6 +78,7 @@ class PluginPopup {
   closePreview() {
     logStep(`Clicking "Close preview" button...    [${fileName} - closePreview()]`);
     waitAndClick($(popupSelectors.closePreviewBtn));
+    browser.pause(1000);
   }
 
   clickRunForPromptedDossier() {
@@ -186,6 +187,10 @@ class PluginPopup {
     }
   }
 
+  selectFilterInstance(filterInstances) {
+    this.selectObjectElements(filterInstances);
+  }
+
   clickHeader(headerName) {
     logStep(`Clicking the header ${headerName}...    [${fileName} - clickHeader()]`);
     waitAndClick($(`.data-tip*=${headerName}`));
@@ -231,6 +236,16 @@ class PluginPopup {
     browser.pause(500);
     this.selectObject(index);
     this.clickImport();
+  }
+
+  addToLibrary() {
+    logStep(`+ Adding the dossier to library - addToLibrary()]`);
+    browser.pause(5000);
+    switchToPromptFrame();
+    const addToLibraryButton = $(popupSelectors.addToLibraryButton);
+    if (addToLibraryButton.isClickable()) {
+      waitAndClick(addToLibraryButton, 1000);
+    }
   }
 
   importObject(objectName) {
@@ -976,6 +991,47 @@ class PluginPopup {
   }
 
   /**
+  * Search for object and sort on one of the headers on import data table, than select prepare data button
+  *
+  * @param {String} objectName name of the object
+  * @param {String} sortOrder order for sorting
+  * @param {String} headerName name of the header in import data table
+  * @param {Boolean} [isObjectFromLibrary=false] switch MyLibrary toggle to true/false
+  * @param {Number} [objectOrder=1] select object from the list, as default is first
+  * @memberof PluginPopup
+  */
+  sortAndOpenPrepareData(objectName, sortOrder, headerName, isObjectFromLibrary = false, objectOrder = 1) {
+    logStep(`+ Selecting the object "${objectName}" sorting on ${headerName} and opening Prepare Data...    [${fileName} - openPrepareData()]`);
+    switchToDialogFrame();
+    this.switchLibrary(isObjectFromLibrary);
+    this.searchForObject(objectName);
+    browser.pause(1111);
+    this.sortForHeader(headerName, sortOrder);
+    this.selectObject(objectOrder);
+    this.clickPrepareData();
+  }
+
+  /**
+  * Sorts objects list ascending or descending based on the header name provided. Works if prepare data is open and assumes that the header has not been sorted yet
+  *
+  * @param {String} headerName name of the header in import data table
+  * @param {String} sortOrder order for sorting
+  */
+  sortForHeader(headerName, sortOrder) {
+    switch (sortOrder) {
+      case 'ascending':
+        this.clickHeader(headerName);
+        break;
+      case 'descending':
+        this.clickHeader(headerName);
+        this.clickHeader(headerName);
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
    * This function is used for prompted Dossiers. It is answering the default prompt answer and it is selecting the desired visualization and importing it
    *
    * @param {Number} index Id of the visualization, for ex: '#mstr114'
@@ -1597,6 +1653,7 @@ class PluginPopup {
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).click();
         $(popupSelectors.prompts.getAttributeElementListPrompt(index)).$(`.mstrListBlockItemName=${value}`).doubleClick();
         pressTab();
+        break;
     }
   }
 

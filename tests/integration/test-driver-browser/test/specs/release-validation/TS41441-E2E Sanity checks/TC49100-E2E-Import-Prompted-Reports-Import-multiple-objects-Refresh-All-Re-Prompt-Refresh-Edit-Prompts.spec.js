@@ -116,7 +116,7 @@ describe('TS41441 - Sanity checks', () => {
     // import dataset
     OfficeWorksheet.selectCell('R3');
     PluginRightPanel.clickAddDataButton();
-    const FourthReport = objectsList.datasets.datasetSQL;
+    const FourthReport = objectsList.datasets.basicDataset;
     PluginPopup.switchLibraryAndImportObject(FourthReport, false);
     waitForNotification();
     browser.pause(2000);

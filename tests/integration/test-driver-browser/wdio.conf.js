@@ -32,7 +32,7 @@ exports.config = {
       './test/specs/release-validation/F21409-refresh-all/TC41094-right-panel-refresh-all.spec.js',
       './test/specs/release-validation/F21402-prompt/TC40359-navigation-buttons.spec.js',
       './test/specs/release-validation/F21402-prompt/TC40306-all-types-of-prompts-except-nested.spec.js',
-      '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
+      './test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
       './test/specs/release-validation/F12909-import-report/TC36826-report-all-filtered-out.spec.js',
       './test/specs/release-validation/F12909-import-report/TC35248-excel-limits-size-placement.spec.js',
       './test/specs/release-validation/F12909-import-report/TC35247-excel-limits.spec.js',
@@ -143,7 +143,8 @@ exports.config = {
       './test/specs/release-validation/F25931-duplicate-object/TC64702-duplicate-same-object.spec.js',
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
       './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js',
-      '.test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
+      './test/specs/release-validation/F21411-right-panel/TC40305-selecting objects-imported-to-the-different-worksheets-and-to-adjacent-columns.spec.js',
+      './test/specs/release-validation/F21409-refresh-all/TC41094-right-panel-refresh-all.spec.js',
     ],
     'F12910-import-dataset': [
       './test/specs/release-validation/F12910-import-dataset/TC34506-import-not-supported-cube.spec.js',
@@ -277,8 +278,15 @@ exports.config = {
     'F30479-hardening-import-from-dossier': [
       './test/specs/release-validation/F30479-hardening-import-from-dossier/TC65052-e2e-hardening-import-from-dossier.spec.js',
     ],
-    'AQDT-Tests': [
-      './test/specs/release-validation/AQDT-Tests/TC65783-E2E-import-and-edit-of-Aqueduct-dossiers.spec.js'
+    UB: [
+      './test/specs/performance/UB-standalone-version/import-UB-dataset.spec.js',
+    ],
+    AQDT: [
+      './test/specs/release-validation/AQDT/TC65891-AQDT-E2E-Edit-dataset-import-prompted-report-and-reprompt.spec.js',
+      './test/specs/release-validation/AQDT/TC65480-AQDT-E2E-duplicatig-and-right-panel-functionalities.spec.js',
+      './test/specs/release-validation/AQDT/TC65666-AQDT-E2E-prepare-data-reports-datasets.spec.js',
+      './test/specs/release-validation/AQDT/TC65783-E2E-import-and-edit-of-Aqueduct-dossiers.spec.js'
+
     ]
   },
   // Patterns to exclude.
@@ -314,7 +322,7 @@ exports.config = {
     'goog:chromeOptions': {
       // In Mac: run in terminal: /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="/Users/dhornos/Documents/Selenium/Chrome_Test_Profile"
       // In Windows, run in terminal: chrome.exe -remote-debugging-port=9222 --user-data-dir="C:\Selenium\Chrome_Test_Profile"
-      debuggerAddress: '127.0.0.1:9222',
+      // debuggerAddress: '127.0.0.1:9222'
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
       // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],
