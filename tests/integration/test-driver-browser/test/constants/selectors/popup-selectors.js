@@ -92,6 +92,7 @@ export const popupSelectors = {
   drillButton: 'div=Drill',
   categoryButton: 'div=Category',
   visualizationSelector: '.mstrmojo-VizBox-selector',
+  addToLibraryButton: '.mstrd-PageNotification-buttonContainer > .mstrd-Button.mstrd-Button--primary',
   refreshButton: '.refresh-button',
   exportSpinner: $('.mstrd-spinner-export'),
   filterCostInput: 'div.mstrd-MQInput.mstrd-SliderSummary-left-input > input',

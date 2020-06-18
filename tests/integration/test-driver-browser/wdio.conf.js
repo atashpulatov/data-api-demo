@@ -113,7 +113,7 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC48976-basic-functionalites.spec.js',
       './test/specs/release-validation/F24398-import-and-refresh-visualization/TC53560-Import-a-grid-visualisation.spec.js',
     ],
-    RV: [
+    'RV-excel': [
       './test/specs/release-validation/F21526-secure-data/TC54263-clearing-and-viewing-data.spec.js',
       './test/specs/release-validation/F28550-rename-excel-table-without-losing-binding/TC59464-binding-importing-the-same-report-twice.spec.js',
       './test/specs/release-validation/F24751-import subtotals/TC53752-subtotals-settings.spec.js',
@@ -145,6 +145,29 @@ exports.config = {
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-a-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC64975-Internationalisation-german-user.spec.js',
       './test/specs/release-validation/F30463-ability-to-sort-on-prepare-data/TC63802-E2E-sort-on-prepare-data.spec.js',
+    ],
+    'RV-Office365': [
+      './test/specs/release-validation/F25946-details-panel/TC59673-copy-to-clipboard.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59675-expanding-many-rows.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59676-ellipsis-longer-strings.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59677-altering-table-with-rows-expanded.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59725-accessibility-within-details-panel.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59756-expanded-view.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC59812-tooltip-when-hover-on-button.spec.js',
+      './test/specs/release-validation/F25946-details-panel/TC60112-tooltips-for-details-elements.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC54976-E2E-scenario.spec.js',
+      './test/specs/release-validation/F25968-object-numbers/TC58932-select-deselect-no-objects.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC55130-Sorting-table.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC55132-Date-format-I18N.spec.js',
+      './test/specs/release-validation/F24087-improve-scrolling-performance/TC59877-Highlighting-the-row-on-hover_selection.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54855-filtering-object-list-with-all-panel.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC54856-filtering-with-type-owner-certified-date.spec.js',
+      './test/specs/release-validation/F25968-object-numbers/TC54853-refresh-button-filter-panel.spec.js',
+      './test/specs/release-validation/F24086-improved-browsing-by-adding-filters/TC53430-refreshing-and-filtering-during-refresh.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59108-display-notifications-for-new-workflows-E2E-user-journey.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC65447-import-refresh-workflows-e2e.spec.js',
+      './test/specs/release-validation/F25943-refresh-move-to-add-in-side-panel/TC59003-show-action-buttons-on-hover-batch-actions.spec.js',
+
     ],
     UB: [
       './test/specs/performance/UB-standalone-version/*.spec.js',
