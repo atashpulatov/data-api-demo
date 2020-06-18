@@ -9,16 +9,7 @@ import {
 } from '../../../helpers/utils/iframe-helper';
 import { logStep } from '../../../helpers/utils/allure-helper';
 
-describe('IMPORT diferent types of vizualizations', () => {
-  beforeAll(() => {
-  });
-
-  afterEach(() => {
-    // browser.closeWindow();
-    // changeBrowserTab(0);
-  });
-
-  // Create test for each visType defined in visualizations
+describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
   it(`[TC61046] E2E import and edit of Aqueduct Dossiers`, () => {
     switchToExcelFrame();
     OfficeWorksheet.selectCell('A1');
