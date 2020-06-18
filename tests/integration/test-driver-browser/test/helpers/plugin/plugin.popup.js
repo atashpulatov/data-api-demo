@@ -238,6 +238,16 @@ class PluginPopup {
     this.clickImport();
   }
 
+  addToLibrary() {
+    logStep(`+ Adding the dossier to library - addToLibrary()]`);
+    browser.pause(5000);
+    switchToPromptFrame();
+    const addToLibraryButton = $(popupSelectors.addToLibraryButton);
+    if (addToLibraryButton.isClickable()) {
+      waitAndClick(addToLibraryButton, 1000);
+    }
+  }
+
   importObject(objectName) {
     logStep(`+ Importing the object "${objectName}"...    [${fileName} - importObject()]`);
     switchToDialogFrame();
