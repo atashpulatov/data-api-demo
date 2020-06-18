@@ -183,6 +183,7 @@ class PluginPopup {
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
+      $(`span=${filterInstances[0]}`).waitForExist(600000);
       this.selectObjectElements(filterInstances);
     }
   }

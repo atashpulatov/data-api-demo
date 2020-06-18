@@ -1,11 +1,11 @@
-import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
-import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { changeBrowserTab } from '../../../helpers/utils/iframe-helper';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
-import { objectsList } from '../../../constants/objects-list';
-import { excelSelectors } from '../../../constants/selectors/office-selectors';
+import OfficeLogin from '../../helpers/office/office.login';
+import OfficeWorksheet from '../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../helpers/plugin/plugin.popup';
+import { changeBrowserTab } from '../../helpers/utils/iframe-helper';
+import { waitForNotification } from '../../helpers/utils/wait-helper';
+import { objectsList } from '../../constants/objects-list';
+import { excelSelectors } from '../../constants/selectors/office-selectors';
 
 describe('F12909 - Ability to import a report from MicroStrategy', () => {
   beforeEach(() => {

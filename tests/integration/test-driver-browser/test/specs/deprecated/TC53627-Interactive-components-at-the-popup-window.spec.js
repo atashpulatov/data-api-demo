@@ -1,11 +1,11 @@
-import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
-import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { objectsList } from '../../../constants/objects-list';
-import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { switchToPromptFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
-import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import OfficeLogin from '../../helpers/office/office.login';
+import OfficeWorksheet from '../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../helpers/plugin/plugin.popup';
+import { objectsList } from '../../constants/objects-list';
+import { waitAndClick } from '../../helpers/utils/click-helper';
+import { switchToPromptFrame, changeBrowserTab } from '../../helpers/utils/iframe-helper';
+import { popupSelectors } from '../../constants/selectors/popup-selectors';
 
 describe('F24398 - Import and refresh visualization', () => {
   beforeEach(() => {

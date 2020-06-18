@@ -19,8 +19,8 @@ module.exports = {
   automation: {
     testSet: '', // only for Release Validation
     notes: 'Automation results', // for Release Validation change to 'Release Validation'
-    env: '',
-    exportApp: '',
+    env: 'AWS Tutorial',
+    exportApp: 'Microsoft Office 365',
     OS: '',
     language: 'English',
     build: '',
