@@ -702,7 +702,7 @@ class PluginPopup {
       visSelector = $(popupSelectors.visualizationSelector);
     } else {
       $(visContainerId).waitForDisplayed(60000, false, `${visContainerId} is not displayed`);
-      visSelector = $(`${visContainerId} ${popupSelectors.visualizationSelector}`);
+      visSelector = $(visContainerId).$(popupSelectors.visualizationSelector);
       visSelector.waitForClickable(60000, false, `${visSelector} is not clickable`);
     }
     waitAndClick(visSelector, 40000);
