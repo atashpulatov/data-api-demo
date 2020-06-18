@@ -1,12 +1,6 @@
 import { officeContext } from '../office/office-context';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 
-
-function sortPromptsAnswers(array) {
-  for (let i = 0; i < array.length; i++) {
-    array[i].values.sort();
-  }
-}
 class PopupHelper {
   handlePopupErrors = (error) => {
     const errorObj = error
@@ -59,21 +53,8 @@ class PopupHelper {
       selectedViz: `${chapterKey}:${visualizationKey}`,
       displayAttrFormNames: popupState.displayAttrFormNames
     };
-    if (promptsAnswers) {
-      return this.comparePromptAnswers(popupState, promptsAnswers, chosenObjectData, formsPrivilege);
-    }
     return this.restoreFilters(popupState.body, chosenObjectData, formsPrivilege);
   }
-
-  comparePromptAnswers(popupState, promptsAnswers, chosenObjectData, formsPrivilege) {
-    sortPromptsAnswers(popupState.promptsAnswers[0].answers);
-    sortPromptsAnswers(promptsAnswers[0].answers);
-    if (JSON.stringify(popupState.promptsAnswers) === JSON.stringify(promptsAnswers)) {
-      return this.restoreFilters(popupState.body, chosenObjectData, formsPrivilege);
-    }
-    return chosenObjectData;
-  }
-
 
   restoreFilters(body, chosenObjectData, formsPrivilege) {
     try {
@@ -81,9 +62,13 @@ class PopupHelper {
         const { requestedObjects, viewFilter } = body;
         if (requestedObjects) {
           const { attributes, metrics } = body.requestedObjects;
-          chosenObjectData.selectedAttributes = attributes && attributes.map((attribute) => attribute.id);
-          chosenObjectData.selectedMetrics = metrics && metrics.map((metric) => metric.id);
-          chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(attributes) : [];
+          if (attributes && attributes.length !== 0) {
+            chosenObjectData.selectedAttributes = attributes && attributes.map((attribute) => attribute.id);
+            chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(attributes) : [];
+          }
+          if (metrics && metrics.length !== 0) {
+            chosenObjectData.selectedMetrics = metrics && metrics.map((metric) => metric.id);
+          }
         }
         if (viewFilter) {
           chosenObjectData.selectedFilters = this.parseFilters(body.viewFilter.operands);
