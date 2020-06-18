@@ -26,8 +26,7 @@ class PopupViewSelectorHelper {
         // pass given prompts answers to dossierWindow
         return PopupTypeEnum.dossierWindow;
       } else {
-        this.obtainInstanceWithPromptsAnswers(props);
-        return PopupTypeEnum.emptyDiv;
+        return PopupTypeEnum.obtainInstanceHelper;
       }
     } else if (this.promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
       return PopupTypeEnum.promptsWindow;

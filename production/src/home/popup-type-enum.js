@@ -12,5 +12,6 @@ export const PopupTypeEnum = new Proxy({
   promptsWindow: 'prompts-window',
   repromptingWindow: 'reprompting-window',
   dossierWindow: 'dossier-window',
+  obtainInstanceHelper: 'obtain-instance-helper',
   emptyDiv: 'empty-div',
 }, propsProxy);

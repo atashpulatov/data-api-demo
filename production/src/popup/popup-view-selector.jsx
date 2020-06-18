@@ -10,6 +10,7 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { ObtainInstanceHelper } from './obtain-instance-helper';
 
 const renderProperComponent = (popupType) => {
   switch (popupType) {
@@ -25,6 +26,8 @@ const renderProperComponent = (popupType) => {
       return <div />;
     case PopupTypeEnum.dossierWindow:
       return <DossierWindow />; // TODO: Might be missing {t}
+    case PopupTypeEnum.obtainInstanceHelper:
+      return <ObtainInstanceHelper />;
     default:
       return null;
   }
