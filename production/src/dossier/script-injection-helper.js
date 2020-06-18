@@ -11,7 +11,7 @@ class ScriptInjectionHelper {
     if (contentDocument) {
       const fileLocation = this.createFileLocation(fileLocationRelativePath);
       const script = contentDocument.createElement('script');
-      script.src = fileLocation;
+      script.src = encodeURI(fileLocation);
       const title = contentDocument.head.getElementsByTagName('title')[0];
       contentDocument.head.insertBefore(script, title);
     }
@@ -28,7 +28,7 @@ class ScriptInjectionHelper {
     if (contentDocument) {
       const styleSheetLocation = this.createFileLocation(styleSheetRelativePath);
       const cssLink = document.createElement('link');
-      cssLink.href = styleSheetLocation;
+      cssLink.href = encodeURI(styleSheetLocation);
       cssLink.rel = 'stylesheet';
       cssLink.type = 'text/css';
       contentDocument.head.appendChild(cssLink);
