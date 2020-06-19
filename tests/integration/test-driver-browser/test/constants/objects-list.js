@@ -240,8 +240,12 @@ export const objectsList = {
     pdCube: 'PD Cube',
     tecQa: {
       name: 'TEC.QA',
-      visualizations: { automationByUnitVis1: getVizAT(1), workDetailLedger: getVizAT(1) }
-    }
+      visualizations: {
+        automationByUnitVis1: getVizAT(1),
+        useCaseDetail: getVizAT(1)
+      }
+    },
+    reportFormatting: 'Report with MSTR formatting'
   },
   AQDT: {
     owner: 'Putney, David',
