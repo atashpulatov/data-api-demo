@@ -75,14 +75,14 @@ class SidePanelNotificationHelper {
 
 
     setSidePanelPopup({
-      type: this.popupTypes.DUPLICATE,
+      type: this.popupTypes.RANGE_TAKEN,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
-      onImport: (isActiveCellOptionSelected) => {
+      onOk: (isActiveCellOptionSelected) => {
         this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
         this.reduxStore.dispatch(clearSidePanelPopupData());
         setSidePanelPopup(null);
       },
-      onEdit: onCancel,
+      onCancel,
       onClose: onCancel
     });
   };

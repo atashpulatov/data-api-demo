@@ -1,5 +1,3 @@
-
-import * as rc from '@mstr/rc';
 import { reduxStore } from '../../store';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
@@ -31,7 +29,7 @@ describe('SidePanelService', () => {
     const setSidePanelPopup = jest.fn();
     const callback = jest.fn();
 
-    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     // when
     sidePanelNotificationHelper.setRangeTakenPopup({ objectWorkingId, activeCellAddress, setSidePanelPopup, callback });
