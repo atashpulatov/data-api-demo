@@ -229,10 +229,6 @@ export const objectsList = {
         testSets: '#mstr161',
       }
     },
-    aqueductTECPD: {
-      name: 'TEC.PD',
-      visualization: '#mstr240'
-    },
     dossierWithBasicGrid: {
       name: 'Dossier with basic grid vis, vis with totals and vis with crosstabs',
       visualizations: {
@@ -255,6 +251,10 @@ export const objectsList = {
         automationByUnitVis1: getVizAT(1),
         useCaseDetail: getVizAT(1)
       }
+    },
+    tecPd: {
+      name: 'TEC.PD',
+      visualizations: { defectsByRelase: getVizAT(1), }
     },
     reportFormatting: 'Report with MSTR formatting'
   },

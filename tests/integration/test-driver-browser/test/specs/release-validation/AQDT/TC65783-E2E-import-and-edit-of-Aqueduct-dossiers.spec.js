@@ -8,16 +8,27 @@ import {
   switchToPluginFrame, switchToExcelFrame, changeBrowserTab, switchToPopupFrame, switchToDialogFrame, switchToPromptFrame
 } from '../../../helpers/utils/iframe-helper';
 import { logStep } from '../../../helpers/utils/allure-helper';
+import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+
 
 describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
   it(`[TC61046] E2E import and edit of Aqueduct Dossiers`, () => {
+    const { tecQa } = objectsList.aqdtMirror2Objects;
+    const qaPage = popupSelectors.dossierWindow.getPageAt(5);
+    const qaPage2 = popupSelectors.dossierWindow.getPageAt(12);
+    const vis1 = tecQa.visualizations.automationByUnitVis1;
+    const vis2 = tecQa.visualizations.useCaseDetail;
+    const { tecPd } = objectsList.aqdtMirror2Objects;
+    const pdPage = popupSelectors.dossierWindow.getPageAt(8);
+    const vis3 = tecPd.visualizations.defectsByRelase;
+
     switchToExcelFrame();
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary();
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Certified Status', 'Certified');
-    PluginPopup.searchForObject(objectsList.dossiers.aqueductTECQA.name);
+    PluginPopup.searchForObject(tecQa.name);
     switchToDialogFrame();
     PluginPopup.selectFirstObjectWithoutSearch();
     PluginPopup.clickImport();
@@ -26,7 +37,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     browser.pause(5000);
     switchToPromptFrame();
     PluginPopup.goToDossierPageOrChapter(7);
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.aqueductTECQA.visualizations.automationProgress);
+    PluginPopup.selectVisualizationOnPage(qaPage, vis1);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(6000);
@@ -34,7 +45,8 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     logStep('+ should edit imported TEC.QA visualization');
     PluginRightPanel.editObject(1);
     browser.pause(2000);
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.aqueductTECQA.visualizations.testSets);
+    PluginPopup.goToDossierPageOrChapter(15);
+    PluginPopup.selectVisualizationOnPage(qaPage2, vis2);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
@@ -49,7 +61,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     browser.pause(5000);
     switchToPromptFrame();
     PluginPopup.goToDossierPageOrChapter(8);
-    PluginPopup.selectAndImportVizualiation(objectsList.dossiers.aqueductTECPD.visualization);
+    PluginPopup.selectVisualizationOnPage(pdPage, vis3);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 

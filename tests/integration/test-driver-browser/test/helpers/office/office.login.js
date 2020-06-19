@@ -9,6 +9,7 @@ const OfficeLogin = function () {
   const nextBtn = '#idSIButton9';
   const passwordInput = '#i0118';
   const fileName = 'office.login.js';
+  const lang = settings.args.lang.toLowerCase();
 
   this.login = (username, password) => {
     logStep(`Introducing Username and Password in Excel...    [${fileName} - login()]`);
@@ -36,7 +37,7 @@ const OfficeLogin = function () {
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
-      this.login(settings.officeOnline[settings.args.lang].username, settings.officeOnline[settings.args.lang].password);
+      this.login(settings.officeOnline[lang].username, settings.officeOnline[lang].password);
     }
     OfficeWorksheet.createNewWorkbook();
     logStep(`Getting Language and Region for Excel logged in user...    [${fileName} - openExcelAndLoginToPlugin()]`);
