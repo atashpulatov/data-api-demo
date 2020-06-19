@@ -38,6 +38,8 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     switchToPromptFrame();
     PluginPopup.goToDossierPageOrChapter(7);
     PluginPopup.selectVisualizationOnPage(qaPage, vis1);
+    switchToPluginFrame();
+    PluginPopup.clickImport();
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
     browser.pause(6000);
@@ -47,6 +49,8 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     browser.pause(2000);
     PluginPopup.goToDossierPageOrChapter(15);
     PluginPopup.selectVisualizationOnPage(qaPage2, vis2);
+    switchToPluginFrame();
+    PluginPopup.clickImport();
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
@@ -55,13 +59,15 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     OfficeWorksheet.selectCell('I1');
     PluginRightPanel.clickAddDataButton();
     switchToDialogFrame();
-    PluginPopup.searchForObject(objectsList.dossiers.aqueductTECPD.name);
+    PluginPopup.searchForObject(tecPd.name);
     PluginPopup.selectFirstObjectWithoutSearch();
     PluginPopup.clickImport();
     browser.pause(5000);
     switchToPromptFrame();
-    PluginPopup.goToDossierPageOrChapter(8);
+    PluginPopup.goToDossierPageOrChapter(9);
     PluginPopup.selectVisualizationOnPage(pdPage, vis3);
+    switchToPluginFrame();
+    PluginPopup.clickImport();
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
@@ -70,6 +76,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     PluginRightPanel.clickSettings();
     PluginRightPanel.clearData();
     PluginRightPanel.viewDataBtn();
+    waitForNotification();
 
     logStep('+ should log out');
     switchToPluginFrame();
