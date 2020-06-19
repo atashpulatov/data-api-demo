@@ -144,7 +144,7 @@ export const objectsList = {
     },
     dossierWithPagesAndChapters: {
       name: 'Dossier with vis that can be moved to different pages / chapters',
-      gridVisualization: getVizAT(2)
+      gridVisualization: getVizAT(1)
     },
     complexDossier: {
       name: 'Complex dossier (20 visualizations)',
