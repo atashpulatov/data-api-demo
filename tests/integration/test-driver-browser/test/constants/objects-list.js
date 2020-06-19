@@ -210,6 +210,10 @@ export const objectsList = {
       name: 'Prompted dossier',
       visualizations: { vis1: getVizAT(2) }
     },
+    promptedDossier2: {
+      name: 'Prompted dossier (display prompt and default answers)',
+      visualizations: { vis1: getVizAT(2) }
+    },
     oneMillionAndLongName: {
       name: '1 MILION rows This is a very long name for a dossier so that we can test how we display long path to dossier visualisationsNew Dossier',
       visualization: '#mstr106'

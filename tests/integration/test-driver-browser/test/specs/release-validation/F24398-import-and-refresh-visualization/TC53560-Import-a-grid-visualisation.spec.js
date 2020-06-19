@@ -134,13 +134,14 @@ describe('F24398 - Import and refresh visualization', () => {
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     logStep('+ Import prompted dossier');
-    const { promptedDossier } = objectsList.dossiers;
-    const { vis1 } = promptedDossier.visualizations;
+    const { promptedDossier2 } = objectsList.dossiers;
+    const { vis1 } = promptedDossier2.visualizations;
     OfficeWorksheet.selectCell('AA20');
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(promptedDossier.name);
+    PluginPopup.openDossier(promptedDossier2.name);
     PluginPopup.importDefaultPromptedVisualisation(vis1);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
+
 
     logStep('+ Import Dossier with different custom visualizations');
     const { dossierWithDifferentCustomVis } = objectsList.dossiers;
