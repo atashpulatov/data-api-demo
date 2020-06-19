@@ -26,7 +26,6 @@ describe('F24398 - Import and refresh visualization', () => {
     const { name: visualizationManipulationName, getTableItemAt } = visualizations.visualization1;
     const { name: dossierWithPagesAndChaptersName, gridVisualization } = dossierWithPagesAndChapters;
     const { getVizAT } = popupSelectors.dossierWindow;
-    const { filterCostInput } = popupSelectors;
     const yearAttribute = getTableItemAt(1, 1);
     const profitMetric = getTableItemAt(1, 3);
     const revenueMetric = getTableItemAt(1, 4);
@@ -44,11 +43,11 @@ describe('F24398 - Import and refresh visualization', () => {
     browser.pause(1000);
     PluginPopup.goToDossierPageOrChapter(3);
     browser.pause(1000);
-    PluginPopup.applyDossierBookmark(2);
+    PluginPopup.applyDossierBookmark(1);
+    browser.pause(1000);
+    PluginPopup.setYearFilterOnDossier(false, 'increase');
     browser.pause(1000);
     PluginPopup.refreshDossier();
-    browser.pause(1000);
-    PluginPopup.setFilterOnDossier(filterCostInput, 500);
     PluginPopup.selectVisualization(gridVisualization);
     switchToPluginFrame();
     PluginPopup.clickImport();
