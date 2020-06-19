@@ -63,9 +63,7 @@ describe('Personal TC for AQDT Mirror2', () => {
 
     PluginPopup.selectAttributesAndAttributeForms({ 'Test Case Owner': ['Synonym 1', 'Synonym 2', 'Synonym 3', 'ID'] });
 
-
     PluginPopup.selectFilters([['Test Case Owner', []]]);
-
     PluginPopup.searchForElements('326610459064');
     PluginPopup.selectFilterInstance(['326610459064']);
     PluginPopup.clearElementSearchWithBackspace();
@@ -105,11 +103,6 @@ describe('Personal TC for AQDT Mirror2', () => {
     PluginRightPanel.clickAddDataButton();
     PluginPopup.sortAndOpenPrepareData(pdCube, 'descending', 'Modified');
     PluginPopup.selectObjectElements(['Feature', 'Initiative', 'QA Status', 'SE Status']);
-    PluginPopup.selectFilters([['Scrum Team', []]]);
-
-    PluginPopup.searchForElements('Excel');
-    PluginPopup.selectFilterInstance(['CT-Application-Excel']);
-    PluginPopup.clearElementSearchWithBackspace();
     browser.pause(1111);
 
     logStep('+ Sort attributes, metrics and filters');
