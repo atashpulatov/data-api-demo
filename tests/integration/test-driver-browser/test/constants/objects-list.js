@@ -222,13 +222,6 @@ export const objectsList = {
       name: 'dossier with attribute/metric selector',
       visualizations: { vis1: '#mstr107' }
     },
-    aqueductTECQA: {
-      name: 'TEC.QA',
-      visualizations: {
-        automationProgress: '#mstr176',
-        testSets: '#mstr161',
-      }
-    },
     dossierWithBasicGrid: {
       name: 'Dossier with basic grid vis, vis with totals and vis with crosstabs',
       visualizations: {
