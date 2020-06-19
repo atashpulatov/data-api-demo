@@ -1,6 +1,4 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
-import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
 
 describe('SidePanelService', () => {
@@ -37,4 +35,36 @@ describe('SidePanelService', () => {
     expect(stateSetterCallback).toBeCalledWith(mockActiveCell);
     expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, stateSetterCallback);
   });
+
+  it.each`
+  version   | firstCall | secondCall | eventAddedTimes
+  
+  ${1.9}    | ${true}   | ${false}   | ${1}
+  ${1.7}    | ${false}  | ${true}    | ${1}
+  ${1.1}    | ${false}  | ${false}   | ${0}
+  
+  `('should set up event listeners in addRemoveObjectListener', async ({ version, firstCall, secondCall, eventAddedTimes }) => {
+  // given
+  const mockSync = jest.fn();
+  const mockedAddEvent = jest.fn();
+  const mockedisSetSupported = jest.fn().mockReturnValueOnce(firstCall).mockReturnValueOnce(secondCall);
+
+  const exceContext = { sync: mockSync, workbook: {
+    tables: { onDeleted: { add: mockedAddEvent } },
+    worksheets: { onDeleted: { add: mockedAddEvent } } }
+  };
+  window.Office = {
+    context: {
+      requirements: { isSetSupported: mockedisSetSupported }
+    }
+  };
+
+  const mockedExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(exceContext);
+  // when
+  await sidePanelEventHelper.addRemoveObjectListener();
+  // then
+
+  expect(mockedExcelContext).toBeCalled();
+  expect(mockedAddEvent).toBeCalledTimes(eventAddedTimes);
+});
 });

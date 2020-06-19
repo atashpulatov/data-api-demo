@@ -22,7 +22,7 @@ describe('SidePanelService', () => {
   });
 
 
-  it('setRangeTakenPopup should dispatch update operation', () => {
+  it('setRangeTakenPopup should set up range taken popup', () => {
     // given
     const objectWorkingId = 1;
     const activeCellAddress = 'A1';
@@ -37,7 +37,26 @@ describe('SidePanelService', () => {
     expect(setSidePanelPopup).toBeCalledTimes(1);
   });
 
-  it('importInNewRange should set up range taken popup', () => {
+  it('setDuplicatePopup should set up duplicate popup', () => {
+    // given
+    const objectWorkingId = 1;
+    const activeCellAddress = 'A1';
+    const setSidePanelPopup = jest.fn();
+    const setDuplicatedObjectId = jest.fn();
+
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    sidePanelNotificationHelper.setDuplicatePopup({
+      objectWorkingId,
+      activeCellAddress,
+      setSidePanelPopup,
+      setDuplicatedObjectId });
+    // then
+    expect(setSidePanelPopup).toBeCalledTimes(1);
+  });
+
+  it('importInNewRange should dispatch popup data', () => {
     // given
     const objectWorkingId = 1;
     const startCell = 'A1';
@@ -60,6 +79,26 @@ describe('SidePanelService', () => {
     // then
     expect(mockedDispatch).toBeCalledWith(expectedObject);
     expect(mockedDispatch).toBeCalledTimes(1);
+  });
+
+  it('injectNotificationsToObjects should set up range taken popup', () => {
+    // given
+    const objectWorkingId = 1;
+    const loadedObjects = [{ objectWorkingId }];
+    const notifications = [{ objectWorkingId, notificationData: 'data' }];
+    const operations = [{ objectWorkingId }];
+
+    const expectedObjects = [{
+      objectWorkingId,
+      notification: notifications[0],
+    }];
+
+    jest.spyOn(sidePanelNotificationHelper, 'shouldGenerateProgressPercentage').mockImplementation();
+
+    // when
+    const object = sidePanelNotificationHelper.injectNotificationsToObjects(loadedObjects, notifications, operations);
+    // then
+    expect(object).toMatchObject(expectedObjects);
   });
 
 

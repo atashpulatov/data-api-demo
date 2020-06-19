@@ -4,8 +4,11 @@ import * as operationActions from '../../redux-reducer/operation-reducer/operati
 import { reduxStore } from '../../store';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { popupController } from '../../popup/popup-controller';
+import officeStoreObject from '../../office/store/office-store-object';
 
 describe('SidePanelService', () => {
+  jest.useFakeTimers();
+
   let duplicateRequestedOriginal;
   let callForDuplicateOriginal;
   beforeAll(() => {
@@ -25,11 +28,10 @@ describe('SidePanelService', () => {
     popupActions.callForDuplicate = callForDuplicateOriginal;
   });
 
-  it('should open popup on adddata click', () => {
+  it('should open popup', () => {
     // given
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     const mockedRunPopup = jest.spyOn(popupController, 'runPopupNavigation').mockImplementation();
-    Date.now = jest.fn().mockImplementationOnce(() => 789);
     // when
     sidePanelService.addData();
     // then
@@ -37,6 +39,52 @@ describe('SidePanelService', () => {
     expect(mockedRunPopup).toBeCalledTimes(1);
   });
 
+
+  it('should highlight an object', () => {
+    // given
+    const objectWorkingId = 12345;
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    sidePanelService.highlightObject(objectWorkingId);
+    // then
+    expect(mockedDispatch).toBeCalledTimes(1);
+  });
+
+  it('should rename an object', () => {
+    // given
+    const objectWorkingId = 12345;
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    const mockedSaveObjects = jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation();
+
+    // when
+    sidePanelService.rename(objectWorkingId);
+    // then
+    expect(mockedDispatch).toBeCalledTimes(1);
+    expect(mockedSaveObjects).toBeCalledTimes(1);
+  });
+
+  it('should refresh an objects', () => {
+    // given
+    const objectWorkingIds = [1, 2, 3, 4, 5];
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    // when
+    sidePanelService.refresh(objectWorkingIds);
+    jest.runAllTimers();
+    // then
+    expect(mockedDispatch).toBeCalledTimes(objectWorkingIds.length);
+  });
+
+  it('should remove an objects', () => {
+    // given
+    const objectWorkingIds = [12, 34, 56];
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    // when
+    sidePanelService.remove(objectWorkingIds);
+    jest.runAllTimers();
+    // then
+    expect(mockedDispatch).toBeCalledTimes(objectWorkingIds.length);
+  });
 
   it('should dispatch duplicateRequested for duplicate with import', () => {
     // given
