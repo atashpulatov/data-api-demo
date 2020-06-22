@@ -7,6 +7,12 @@ import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
  * @class CompoundGridHandler
  */
 class CompoundGridHandler {
+  /**
+   * Parses compound grid JSON response to the same structure as normal grids
+   *
+   * @param {JSON} response
+   * @returns {Object} mstr table
+   */
   createTable(response) {
     const { definition, data, attrforms } = response;
     // Crosstabular is a Crosstab report with metrics in Rows and nothing in columns, so we display it as tabular
@@ -28,14 +34,14 @@ class CompoundGridHandler {
     };
   }
 
-  parseColumnSets(columnSets) {
-    const parsedColumns = [];
-    columnSets.forEach(({ columns }) => {
-      parsedColumns.push(...columns);
-    });
-    return parsedColumns;
-  }
-
+  /**
+   * Returns array with indexed column definition
+   *
+   * @param {Object} definition grid definition from instance
+   * @param {Object} data grid data from instance
+   * @param {Object} attrforms attribute forms information
+   * @returns
+   */
   getColumnInformation(definition, data, attrforms) {
     const { headers } = data;
     const onElement = (element) => [element];
@@ -51,6 +57,12 @@ class CompoundGridHandler {
     return mstrNormalizedJsonHandler.splitAttributeForms(columns, supportForms);
   }
 
+  /**
+   * Returns number of rows and metric columns of tabular data if not crosstabs of metrics grid if crosstabs
+   *
+   * @param {Object} data grid data from response
+   * @return {Object} object with rows and columns
+   */
   getTableSize(data) {
     const { headers: { columnSets } } = data;
     let columns = 0;
@@ -63,12 +75,26 @@ class CompoundGridHandler {
     };
   }
 
+  /**
+   * Get attribute names
+   *
+   * @param {JSON} definition Object definition from response
+   * @param {JSON} attrforms attribute forms information
+   * @return {Object} Contains arrays of columns and rows attributes names
+   */
   getAttributesName(definition, attrforms) {
     const rowsAttributes = mstrNormalizedJsonHandler.getAttributeWithForms(definition.grid.rows, attrforms);
     return { rowsAttributes };
   }
 
-  calculateColumnHeaderHeight(columnSetsHeaders, columnSets) {
+  /**
+   * Column set headers may have different dimensions
+   * This function calculates the bounding height
+   *
+   * @param {Array} columnSetsHeaders column set headers from instance data
+   * @returns bounding height
+   */
+  calculateColumnHeaderHeight(columnSetsHeaders) {
   // TODO: Take into consideration attribute forms from columnSets
     let boundingHeight = 0;
     columnSetsHeaders.forEach(columnSet => {
@@ -80,18 +106,32 @@ class CompoundGridHandler {
     return boundingHeight;
   }
 
-  calculateColumnHeaderOffset(columnSets, columnSetsDefinition) {
-    const offset = [0]; // No offset for first columnSet
-    for (let i = 0; i < columnSets.length - 1; i++) {
-      offset.push(columnSetsDefinition[i].columns.length + offset[i]);
-    }
-    return offset;
-  }
-
+  /**
+   * Gets raw table rows
+   *
+   * @param {JSON} response
+   * @return {Object} object with rows property
+   */
   getRows = (response) => ({ row: this.renderRows(response.data) })
 
-  getSubtotalsInformation = () => [] // TODO
+  /**
+   * Gets subtotals defined or visible information from the response.
+   *
+   * @param {JSON} response
+   * @return {Object}
+   */
+  getSubtotalsInformation = (response) => [] // TODO
 
+
+  /**
+   * Creates an array with metric values per columnSet
+   * If the table doesn't have metrics we return an empty 2d array
+   *
+   * @param {Object} data - Metric values object
+   * @param {String} valueMatrix - Cell value ("raw*", "formatted", "extras")
+   *
+   * @return {Array}
+   */
   renderRows(data, valueMatrix = 'raw') {
     const { metricValues: { columnSets }, paging } = data;
     const rowTable = [];
@@ -105,6 +145,12 @@ class CompoundGridHandler {
     return rowTable;
   }
 
+  /**
+   * Gets object with compound grid rows and column headers
+   *
+   * @param {JSON} response
+   * @return {Object} rows, columns and subtotals values
+   */
   getHeaders(response) {
     const { definition, data, attrforms } = response;
     const { headers } = data;
@@ -140,14 +186,44 @@ class CompoundGridHandler {
     return { rows, columns, subtotalAddress };
   }
 
+  /**
+   * Creates a 2D array with the header titles
+   *
+   * @param {Array} headers - header data from response
+   * @param {Object} definition - Dataset definition
+   * @param {function} onElement - Callback function to process elements
+   * @param {string} supportForms - attribute form information
+   *
+   * @return {Array}
+   */
   renderCompoundGridRowTitles(headers, definition, onElement = (e) => e, supportForms) {
     return mstrNormalizedJsonHandler.renderTitles(definition, 'rows', headers, onElement, supportForms);
   }
 
+  /**
+   * Creates a 2D array with the compround grid row headers
+   *
+   * @param {Array} headers - Header data from response
+   * @param {Object} definition - Dataset definition
+   * @param {function} onElement - Callback function to process elements
+   * @param {string} supportForms - attribute form information
+   *
+   * @return {Array}
+   */
   renderCompoundGridRowHeaders(headers, definition, onElement = (e) => e, supportForms) {
     return mstrNormalizedJsonHandler.renderHeaders(definition, 'rows', headers, onElement, supportForms);
   }
 
+  /**
+   * Creates a 2D array with the column grid headers
+   *
+   * @param {Object} definition - Dataset definition
+   * @param {string} axis - 'rows' or 'columns'
+   * @param {Array} headers - Header data from response
+   * @param {function} onElement - Callback function to process elements
+   *
+   * @return {Array}
+   */
   renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric) {
     const { columnSets: columnSetsHeaders } = headers;
     const { columnSets: columnSetsDefinition } = definition.grid;
@@ -220,6 +296,13 @@ class CompoundGridHandler {
     return mstrNormalizedJsonHandler.transposeMatrix(parsedHeaders);
   }
 
+  /**
+   * Adds empty cells when we have different header height due to attribute forms
+   *
+   * @param {Number} boundingHeight headers height
+   * @param {Number} attrFormsBoundingHeight headerds height with attribute forms
+   * @param {Array} parsedHeaders compound grid normalized headers
+   */
   handleAttributeForms(boundingHeight, attrFormsBoundingHeight, parsedHeaders) {
     if (boundingHeight !== attrFormsBoundingHeight) {
       for (let i = 0; i < parsedHeaders.length; i++) {
@@ -230,6 +313,13 @@ class CompoundGridHandler {
     }
   }
 
+  /**
+   * Adds empty elements to columnSets with different dimensions
+   *
+   * @param {Array} header
+   * @param {Number} boundingHeight
+   * @param {Object} currentColumnSet
+   */
   addEmptyHeaders(header, boundingHeight, currentColumnSet) {
     for (let i = 0; i < header.length; i++) {
       while (header[i].length < boundingHeight) {
