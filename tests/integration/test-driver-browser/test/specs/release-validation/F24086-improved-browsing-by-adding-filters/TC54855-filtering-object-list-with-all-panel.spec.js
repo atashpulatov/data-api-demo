@@ -13,6 +13,7 @@ describe('F24086 - Improved browsing by adding filters', () => {
     browser.closeWindow();
     changeBrowserTab(0);
   });
+
   it('[TC54855] [Object filtering] Filtering object list with "All" panel', () => {
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
