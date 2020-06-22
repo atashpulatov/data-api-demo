@@ -63,7 +63,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     PluginPopup.clickImport();
     browser.pause(5000);
     switchToPromptFrame();
-    PluginPopup.goToDossierPageOrChapter(9);
+    PluginPopup.goToDossierPageOrChapter(10);
     PluginPopup.selectVisualizationOnPage(pdPage, vis3);
     switchToPluginFrame();
     PluginPopup.clickImport();
