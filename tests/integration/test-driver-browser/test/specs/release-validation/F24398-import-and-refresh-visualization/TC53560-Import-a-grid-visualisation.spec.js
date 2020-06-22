@@ -36,6 +36,7 @@ describe('F24398 - Import and refresh visualization', () => {
 
     logStep('+ Import Dossier with vis that can be moved to different pages / chapters');
     PluginPopup.importAnyObject(dossierWithPagesAndChaptersName, 1);
+    PluginPopup.addToLibrary();
     PluginPopup.selectVisualization(gridVisualization);
     browser.pause(2000);
     switchToPromptFrame();

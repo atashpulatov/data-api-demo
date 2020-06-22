@@ -183,6 +183,7 @@ class PluginPopup {
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
+      $(`span=${filterInstances[0]}`).waitForExist(600000);
       this.selectObjectElements(filterInstances);
     }
   }
@@ -236,6 +237,16 @@ class PluginPopup {
     browser.pause(500);
     this.selectObject(index);
     this.clickImport();
+  }
+
+  addToLibrary() {
+    logStep(`+ Adding the dossier to library - addToLibrary()]`);
+    browser.pause(5000);
+    switchToPromptFrame();
+    const addToLibraryButton = $(popupSelectors.addToLibraryButton);
+    if (addToLibraryButton.isClickable()) {
+      waitAndClick(addToLibraryButton, 1000);
+    }
   }
 
   importObject(objectName) {
