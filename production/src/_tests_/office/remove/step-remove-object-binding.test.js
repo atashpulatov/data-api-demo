@@ -49,6 +49,7 @@ describe('StepRemoveObjectBinding', () => {
     jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue(officeContextMock);
 
     jest.spyOn(operationStepDispatcher, 'completeRemoveObjectBinding').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
@@ -67,5 +68,10 @@ describe('StepRemoveObjectBinding', () => {
 
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith('objectWorkingIdTest');
+
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(
+      { objectWorkingId: 'objectWorkingIdTest', doNotPersist: true }
+    );
   });
 });
