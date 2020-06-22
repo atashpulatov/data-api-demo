@@ -13,6 +13,6 @@ _Please give a brief description on what the pull request is about. If it is a d
 - [ ] The PR has an assignee, label, code reviewers and Rally US/DE
 - [ ] My code is commented and follows our coding standards and [guidelines](https://github.microstrategy.com/pages/kiai/developers-guide/)
 - [ ] New and existing unit tests pass locally with my changes
-- [ ] New or modified TC pass on the CI pipeline
+- [ ] All affected TC pass on the CMD environment
 - [ ] New strings have been added to [Lost In Translation](https://localization.internal.microstrategy.com/)
 - [ ] UX/UI has been reviewed by UX Designer
