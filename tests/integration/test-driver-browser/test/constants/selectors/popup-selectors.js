@@ -101,6 +101,7 @@ export const popupSelectors = {
   },
   dossierWindow: {
     getVizAT: (index) => `.mstrmojo-DocSubPanel-content.mstrmojo-scrollNode> div > div:nth-child(${index})`,
+    getPageAt: (index) => `#mstrd-Root > div > div > div.mstrd-AppContainer-mainContent > div > div.mstrd-DossierViewContainer-main > div.mstrd-SwiperPage > div > div > div:nth-child(${index})`,
     visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
     filterCount: '.mstrd-FilterSummaryBar-filterCount',
     buttonToC: 'li.mstrd-NavItemWrapper.mstrd-ToCNavItemContainer.mstr-navbar-item > div > div',

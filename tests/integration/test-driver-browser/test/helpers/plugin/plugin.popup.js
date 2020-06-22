@@ -42,6 +42,7 @@ class PluginPopup {
 
   clickImport() {
     logStep(`Clicking "Import" button...    [${fileName} - clickImport()]`);
+    $(popupSelectors.importBtn).waitForEnabled({ reverse: true });
     waitAndClick($(popupSelectors.importBtn));
   }
 
@@ -183,7 +184,9 @@ class PluginPopup {
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
-      $(`span=${filterInstances[0]}`).waitForExist(600000);
+      if (filterInstances.length) {
+        $(`span=${filterInstances[0]}`).waitForExist(600000);
+      }
       this.selectObjectElements(filterInstances);
     }
   }
@@ -708,6 +711,18 @@ class PluginPopup {
     }
     waitAndClick(visSelector, 40000);
     browser.pause(2500);
+  }
+
+  /**
+   * Used to select the desired visualization on a particular page. Will work if dossier window is presented.
+   *
+   * @param {String} pageIndex Index of the page in the table of contents starting from 1 - chapters that do not have any page are counted as a page
+   * @param {String} visIndex Index of the visualization rendered in HTML starting from 1
+   *
+   */
+  selectVisualizationOnPage(pageIndex, visIndex) {
+    const visOnPage = `${pageIndex} ${visIndex}`;
+    this.selectVisualization(visOnPage);
   }
 
   showTotals(objectId) {

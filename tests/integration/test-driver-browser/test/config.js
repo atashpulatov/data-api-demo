@@ -95,7 +95,7 @@ function parseArgs() {
   argv.forEach(argument => {
     if (argument.includes('=')) {
       const [key, value] = argument.split('=');
-      args[key] = value.substring(0, value.length).toLowerCase();
+      args[key] = value.substring(0, value.length);
     }
   });
   return args;
