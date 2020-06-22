@@ -238,6 +238,18 @@ export const objectsList = {
   aqdtMirror2Objects: {
     tcAutomation: 'TC to automate',
     pdCube: 'PD Cube',
+    tecQa: {
+      name: 'TEC.QA',
+      visualizations: {
+        automationByUnitVis1: getVizAT(1),
+        useCaseDetail: getVizAT(1)
+      }
+    },
+    tecPd: {
+      name: 'TEC.PD',
+      visualizations: { defectsByRelase: getVizAT(1), }
+    },
+    reportFormatting: 'Report with MSTR formatting'
   },
   AQDT: {
     owner: 'Putney, David',

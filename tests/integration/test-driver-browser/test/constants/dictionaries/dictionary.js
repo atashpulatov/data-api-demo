@@ -15,6 +15,7 @@ export const dictionary = {
     clickToCopy: 'Click to Copy',
     objectRemoved: 'Object removed',
     duplicateSucces: 'Object duplicated',
+    objectCleared: 'Object cleared'
   },
   de: {
     importSuccess: 'Import successful',
