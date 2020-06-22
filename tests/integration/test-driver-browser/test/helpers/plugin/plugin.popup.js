@@ -710,6 +710,18 @@ class PluginPopup {
     browser.pause(2500);
   }
 
+  /**
+   * Used to select the desired visualization on a particular page. Will work if dossier window is presented.
+   *
+   * @param {String} pageIndex Index of the page in the table of contents starting from 1 - chapters that do not have any page are counted as a page
+   * @param {String} visIndex Index of the visualization rendered in HTML starting from 1
+   *
+   */
+  selectVisualizationOnPage(pageIndex, visIndex) {
+    const visOnPage = `${pageIndex} ${visIndex}`;
+    this.selectVisualization(visOnPage);
+  }
+
   showTotals(objectId) {
     logStep(`Showing totals: "${objectId}"...    [${fileName} - showTotals()]`);
     switchToPromptFrame();
