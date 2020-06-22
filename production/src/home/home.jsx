@@ -28,7 +28,7 @@ export const HomeNotConnected = (props) => {
   };
   const handleConnectionLost = () => {
     if (!popupOpen) {
-       notificationService.connectionLost();
+      notificationService.connectionLost();
     }
   };
 
