@@ -2,6 +2,7 @@ import OfficeLogin from '../../../helpers/office/office.login';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
+import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
 import {
@@ -40,8 +41,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     PluginPopup.selectVisualizationOnPage(qaPage, vis1);
     switchToPluginFrame();
     PluginPopup.clickImport();
-    waitForNotification();
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     browser.pause(6000);
 
     logStep('+ should edit imported TEC.QA visualization');
@@ -51,8 +51,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     PluginPopup.selectVisualizationOnPage(qaPage2, vis2);
     switchToPluginFrame();
     PluginPopup.clickImport();
-    waitForNotification();
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     logStep('+ should import TEC.PD visualization');
     switchToExcelFrame();
@@ -68,8 +67,8 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     PluginPopup.selectVisualizationOnPage(pdPage, vis3);
     switchToPluginFrame();
     PluginPopup.clickImport();
-    waitForNotification();
-    PluginRightPanel.closeNotificationOnHover();
+    PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
+
 
     logStep('+ should clear data');
     switchToPluginFrame();
