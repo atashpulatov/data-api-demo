@@ -1,14 +1,12 @@
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { switchToDialogFrame, switchToExcelFrame, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
-import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { logStep } from '../../../helpers/utils/allure-helper';
+import { logStep, logFirstStep, logEndStep } from '../../../helpers/utils/allure-helper';
 
 describe('Personal TC for AQDT Mirror2', () => {
   it('[TC65666] AQDT E2E - Prepare Data for reports and datasets', () => {
@@ -17,8 +15,8 @@ describe('Personal TC for AQDT Mirror2', () => {
     const { pdCube } = objectsList.aqdtMirror2Objects;
     const { importSuccess, duplicateSucces, objectRemoved } = dictionary.en;
 
+    logFirstStep(`Should import ${tcAutomation}`);
     OfficeWorksheet.selectCell('A1');
-    logStep(`Should import ${tcAutomation}`);
     PluginRightPanel.clickImportDataButton();
     PluginPopup.openPrepareData(tcAutomation, false);
 
@@ -142,5 +140,8 @@ describe('Personal TC for AQDT Mirror2', () => {
 
     PluginRightPanel.removeAllObjectsFromTheList();
     PluginRightPanel.waitAndCloseAllNotifications(dictionary.en.objectRemoved);
+
+    logEndStep('+ Should logout');
+    PluginRightPanel.logout();
   });
 });

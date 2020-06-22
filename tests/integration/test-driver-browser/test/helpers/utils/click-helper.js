@@ -6,7 +6,8 @@
    *
    */
 export function waitAndClick(button, timeout = 6000) {
-  button.waitForEnabled(timeout, false, `${JSON.stringify(button)} was not found`);
+  button.waitForDisplayed(60000, false, `${button} is not displayed`);
+  button.waitForClickable(60000, false, `${button} is not clickable`);
   button.click();
 }
 

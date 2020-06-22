@@ -5,12 +5,12 @@ import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
-import { logStep } from '../../../helpers/utils/allure-helper';
+import { logStep, logFirstStep, logEndStep } from '../../../helpers/utils/allure-helper';
 import { switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 
 describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
   it('[TC65480] - AQDT E2E - Duplicatig and Right Panel Functionalities', () => {
-    logStep('+ should import grid visualization');
+    logFirstStep('+ Should import grid visualization');
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.importAnyObject(objectsList.AQDT.owner, 4);
@@ -21,7 +21,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('+ should duplicate and edit imported object');
+    logStep('+ Should duplicate and edit imported object');
     OfficeWorksheet.selectCell('H1');
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.selectActiveCellOptionInDuplicatePopup();
@@ -31,29 +31,29 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('+ should duplicate imported object');
+    logStep('+ Should duplicate imported object');
     PluginRightPanel.duplicateObject(1);
     PluginRightPanel.clickDuplicatePopupImportBtn();
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('+ should change name of imported object');
+    logStep('+ Should change name of imported object');
     PluginRightPanel.changeObjectName(3, 'My own visualization');
     PluginRightPanel.refreshObject(2);
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('+ should remove imported object');
+    logStep('+ Should remove imported object');
     PluginRightPanel.removeFirstObjectFromTheList();
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('should refresh all objects');
+    logStep('Should refresh all objects');
     PluginRightPanel.refreshAll();
     waitForNotification();
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('+ should logout');
+    logEndStep('+ Should logout');
     PluginRightPanel.logout();
   });
 });
