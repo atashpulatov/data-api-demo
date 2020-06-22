@@ -172,7 +172,7 @@ export const objectsList = {
       name: 'Visualization manipulation',
       visualizations: {
         visualization1: {
-          name: '#mstr106',
+          name: getVizAT(2),
           gridTableId: '#mstr121',
           getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }

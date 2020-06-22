@@ -25,7 +25,6 @@ describe('F24398 - Import and refresh visualization', () => {
     const { name, visualizations } = visualizationManipulation;
     const { name: visualizationManipulationName, getTableItemAt } = visualizations.visualization1;
     const { name: dossierWithPagesAndChaptersName, gridVisualization } = dossierWithPagesAndChapters;
-    const { getVizAT } = popupSelectors.dossierWindow;
     const yearAttribute = getTableItemAt(1, 1);
     const profitMetric = getTableItemAt(1, 3);
     const revenueMetric = getTableItemAt(1, 4);
