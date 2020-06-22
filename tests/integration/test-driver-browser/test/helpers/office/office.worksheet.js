@@ -1,5 +1,5 @@
 import { switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
-import { waitAndClick } from '../utils/click-helper';
+import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import settings from '../../config';
 import { pressEnter, pressBackspace, pressEscape } from '../utils/keyboard-actions';
@@ -62,7 +62,7 @@ const OfficeWorksheet = function () {
     browser.switchToFrame($(excelSelectors.officeAddInsFrame));
     browser.pause(1111);
     waitAndClick($(excelSelectors.adminManagedBtn));
-    let envNumber = process.argv[process.argv.length - 1];
+    let envNumber = settings.args.env;
     if (!envNumber.includes('env-')) {
       envNumber = 'yi_local_ip';
     }
@@ -95,6 +95,14 @@ const OfficeWorksheet = function () {
     logStep(`Opening the sheet number ${index}...    [${fileName} - openSheet()]`);
     switchToExcelFrame();
     waitAndClick($(excelSelectors.selectsheet(index)));
+  };
+
+  this.deleteSheet = (index) => {
+    logStep(`Deleting the sheet number ${index}...    [${fileName} - openSheet()]`);
+    switchToExcelFrame();
+    waitAndRightClick($(excelSelectors.selectsheet(index)));
+    waitAndClick($(excelSelectors.deleteSheet));
+    waitAndClick($(excelSelectors.acceptDeletingSheet));
   };
 
   this.selectCellAlternatively = (cellId) => {

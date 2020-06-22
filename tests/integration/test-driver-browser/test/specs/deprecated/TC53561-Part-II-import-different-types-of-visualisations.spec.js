@@ -11,13 +11,13 @@ import settings from '../../../config';
 describe('F24398 - Import and refresh visualization', () => {
   const { name, timeToOpen, visualizations } = objectsList.dossiers.complexDossier;
 
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
-  it(`[TC53561] import different types of visualisations: heatmap, grid, barchart, linechart, areachart`, () => {
+  it(`[TC53561] import different types of visualisations: bubbleChart, pieChart, comboChart, geospatialService, network`, () => {
     let isFirstReport = true;
-    const onlyFiveVisualizations = Object.keys(visualizations).slice(0, 4).map(key => ({ [key]: visualizations[key] }));
+    const onlyFiveVisualizations = Object.keys(visualizations).slice(5, 9).map(key => ({ [key]: visualizations[key] }));
 
     Object.keys(onlyFiveVisualizations).forEach(i => {
       OfficeWorksheet.selectCell('A1');
@@ -36,7 +36,6 @@ describe('F24398 - Import and refresh visualization', () => {
       waitForNotification();
       expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
       PluginRightPanel.closeNotificationOnHover();
-
       // afterEach
       browser.pause(100);
       console.log(`${visType} successfully imported`);

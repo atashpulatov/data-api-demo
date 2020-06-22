@@ -76,7 +76,7 @@ const settings = {
   env: {
     username: 'a',
     password: '',
-    chineseSimplifiedUser: 'User_SChinese',
+    chineseSimplifiedUser: 'ChineseUser',
     germanUser: 'User_German',
   }
 };

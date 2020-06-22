@@ -8,7 +8,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { stringsUsedInSpecs } from '../../../constants/strings-used-in-specs';
 
 describe('F25931 - Duplicate object', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 

@@ -29,7 +29,7 @@ export const objectsList = {
     secureDataFiltering: 'Revenue by Region and Category - secure data',
     secureDataAlwaysWorking: 'Secure data - always working',
     nestedPrompt: 'Report with nested prompt',
-    over100k: '100010 rows report',
+    over100k: '110k Sales Records.csv',
     marginReport: 'Report 1048576 rows',
     numberFormating: 'Number Formatting',
     allPrompt: 'Report with all type of prompts (except nested)',
@@ -121,6 +121,7 @@ export const objectsList = {
       },
     },
     BasicReportWBrand: 'Basic Report with brand',
+    defectAnalysisPrompted: 'Defect Analysis_with prompt',
   },
 
   datasets: {
@@ -132,6 +133,7 @@ export const objectsList = {
     salesRecords1k: '1k Sales Records.csv',
     salesData: 'Sales Data',
     salesRecords50k: '50k Sales Records.csv',
+    aqdtMirrorTwoQACube: 'QA Cube',
   },
 
   dossiers: {
@@ -176,7 +178,10 @@ export const objectsList = {
         }
       },
     },
-    interactiveDossier: { name: 'Dossier for interactive components', },
+    interactiveDossier: {
+      name: 'Dossier for interactive components',
+      vis2: popupSelectors.dossierWindow.getVizAT(2),
+    },
     customVisualizations: {
       name: 'Custom Visualizations',
       visualizations: {
@@ -229,6 +234,10 @@ export const objectsList = {
       name: 'Dossier with compound grid',
       visualizations: { visualization1: getVizAT(2) }
     }
+  },
+  aqdtMirror2Objects: {
+    tcAutomation: 'TC to automate',
+    pdCube: 'PD Cube',
   },
   AQDT: {
     owner: 'Putney, David',

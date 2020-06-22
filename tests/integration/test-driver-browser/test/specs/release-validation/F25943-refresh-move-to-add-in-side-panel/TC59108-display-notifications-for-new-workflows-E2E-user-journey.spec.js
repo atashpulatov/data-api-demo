@@ -9,7 +9,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 
 describe('F25943 - refresh move to add-in side panel and removal of blocking behavior', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     OfficeLogin.openExcelAndLoginToPlugin();
   });
 
@@ -96,6 +96,7 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
 
     // Select checkboxes for imported objects and verify Refresh Selected, Remove Selected are displayed
     console.log('8 - Select checkboxes for imported objects and verify Refresh Selected, Remove Selected are displayed');
+    browser.pause(3000);
     PluginRightPanel.selectAll();
     const refreshSelectedBtn = rightPanelSelectors.refreshAllBtn;
     const removeSelectedBtn = rightPanelSelectors.deleteAllBtn;
