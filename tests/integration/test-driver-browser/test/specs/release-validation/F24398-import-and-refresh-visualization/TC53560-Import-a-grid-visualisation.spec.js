@@ -121,15 +121,16 @@ describe('F24398 - Import and refresh visualization', () => {
 
     logStep('+ Import custom visualizations dossier');
     const { customVisualizations } = objectsList.dossiers;
-    const { GoogleTimeline, modelsByYear } = customVisualizations.visualizations;
-    PluginPopup.openDossier(customVisualizations.name);
-    PluginPopup.selectAndImportVisualization(GoogleTimeline);
+    const { modelsByYear, modelsByYearData } = customVisualizations.visualizations;
+
+    PluginPopup.openDossier(customVisualizations.name, 10000, false, 2);
+    PluginPopup.selectAndImportVisualization(modelsByYear);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     OfficeWorksheet.selectCell('AI1');
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(customVisualizations.name);
-    PluginPopup.selectAndImportVisualization(modelsByYear);
+    PluginPopup.openDossier(customVisualizations.name, 10000, false, 2);
+    PluginPopup.selectAndImportVisualization(modelsByYearData);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     logStep('+ Import prompted dossier');
