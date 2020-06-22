@@ -1,0 +1,46 @@
+from driver.driver_factory import DriverFactory
+from pages.page_util.element_operation import ElementOperation
+from pages_factory.pages_factory import PagesFactory
+from util.config_util import ConfigUtil
+from util.test_util import TestUtil
+
+WINDOWS_DESKTOP_ATTACH_ELEMENT = 'Book1 - Excel'
+
+
+def before_all(context):
+    context.config.setup_logging()
+    ConfigUtil.initialize(context)
+
+
+def before_scenario(context, scenario):
+    if ConfigUtil.is_attaching_to_open_excel_enabled():
+        driver_type = ConfigUtil.get_driver_type()
+
+        driver = DriverFactory().get_driver(driver_type)
+        ElementOperation.reset_excel_root_element(driver, WINDOWS_DESKTOP_ATTACH_ELEMENT)
+
+        context.pages = PagesFactory().get_pages()
+
+    else:
+        DriverFactory.reset_driver()
+        PagesFactory.reset_pages()
+
+        context.pages = PagesFactory().get_pages()
+
+        context.pages.start_excel_page().go_to_excel()
+
+        context.pages.excel_menu_page().click_add_in_elem()
+
+
+def before_step(context, step):
+    pass
+
+
+def after_scenario(context, scenario):
+    if ConfigUtil.is_cleanup_after_tests_enabled():
+        context.pages.cleanup_page().clean_up_after_each_test()
+
+
+def after_all(context):
+    if ConfigUtil.is_cleanup_after_tests_enabled():
+        TestUtil.global_test_cleanup()

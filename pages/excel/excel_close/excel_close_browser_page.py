@@ -1,0 +1,14 @@
+from pages.base_browser_page import BaseBrowserPage
+from pages.right_panel.right_panel_browser_page import RightPanelBrowserPage
+
+
+class CleanupBrowserPage(BaseBrowserPage):
+    def __init__(self):
+        super().__init__()
+
+        self.right_panel_browser_page = RightPanelBrowserPage()
+
+    def clean_up_after_each_test(self):
+        self.switch_to_excel_workbook_window()
+        self.driver.close()
+        self.switch_to_excel_initial_window()

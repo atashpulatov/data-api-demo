@@ -1,0 +1,42 @@
+from selenium.common.exceptions import NoSuchElementException
+
+from pages.base_page import BasePage
+from util.const import ELEMENT_SEARCH_RETRY_NUMBER, DEFAULT_WAIT_AFTER_EXCEPTION
+
+
+class BaseWindowsDesktopPage(BasePage):
+    POPUP_MAIN_ELEMENT = 'MicroStrategy for Office'
+
+    popup_main_element = None
+
+    def get_popup_main_element(self):
+        if True or not BaseWindowsDesktopPage.popup_main_element:
+
+            i = 0
+            mstr_elems = None
+            while i < ELEMENT_SEARCH_RETRY_NUMBER and not mstr_elems:
+                mstr_elems = self.get_visible_elements_by_name(BaseWindowsDesktopPage.POPUP_MAIN_ELEMENT)
+                if not mstr_elems:
+                    self.log_warning('Element not found, try %s: %s' % (i, BaseWindowsDesktopPage.POPUP_MAIN_ELEMENT))
+                    self.pause(DEFAULT_WAIT_AFTER_EXCEPTION)
+
+                i += 1
+
+            if not mstr_elems:
+                raise Exception('Cannot find any element: %s' % BaseWindowsDesktopPage.POPUP_MAIN_ELEMENT)
+
+            BaseWindowsDesktopPage.popup_main_element = mstr_elems[0]
+
+        return BaseWindowsDesktopPage.popup_main_element
+
+    def find_element_by_xpath_from_parent(self, parent_element, selector):
+        i = 0
+        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+            try:
+                return parent_element.find_element_by_xpath(selector)
+            except NoSuchElementException:
+                self.log_warning('Element not found, try %s: %s' % (i, selector))
+                self.pause(5)
+            i += 1
+
+        raise Exception('Cannot find element: %s' % selector)

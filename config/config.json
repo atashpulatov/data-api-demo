@@ -1,0 +1,19 @@
+{
+  "image_recognition_enabled": true,
+  "connect_to_open_excel_enabled": false,
+  "cleanup_after_test_enabled": true,
+  "driver_executable_path": {
+    "mac_chrome": "resources/chromedriver83",
+    "windows_chrome": "resources\\chromedriver83.exe",
+    "windows_desktop": "C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\EXCEL.EXE"
+  },
+  "desktop_host": {
+    "mac_desktop": "http://localhost:4622/wd/hub",
+    "windows_desktop": "http://192.168.1.248:4723/wd/hub"
+  },
+  "excel": {
+    "add_in_environment": "env-190209",
+    "user_name": "testing.universal@mstrtesting.onmicrosoft.com",
+    "user_password": "somePassword1"
+  }
+}
