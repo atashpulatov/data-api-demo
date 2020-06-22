@@ -98,7 +98,12 @@ describe('Compound Grid Handler', () => {
     ];
 
     // when
-    const headers = mstrCompoundGridHandler.renderCompoundGridColumnHeaders(columnSetsHeaders, columnSetsDefinition, onAttribute, onMetric);
+    const headers = mstrCompoundGridHandler.renderCompoundGridColumnHeaders(
+      columnSetsHeaders,
+      columnSetsDefinition,
+      onAttribute,
+      onMetric
+    );
 
     // then
     expect(headers).toEqual(expectedHeaders);
