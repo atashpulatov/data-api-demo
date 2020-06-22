@@ -100,6 +100,7 @@ const OfficeWorksheet = function () {
   this.deleteSheet = (index) => {
     logStep(`Deleting the sheet number ${index}...    [${fileName} - openSheet()]`);
     switchToExcelFrame();
+    logStep('Right click on worksheet');
     waitAndRightClick($(excelSelectors.selectsheet(index)));
     waitAndClick($(excelSelectors.deleteSheet));
     waitAndClick($(excelSelectors.acceptDeletingSheet));

@@ -42,6 +42,7 @@ class PluginPopup {
 
   clickImport() {
     logStep(`Clicking "Import" button...    [${fileName} - clickImport()]`);
+    $(popupSelectors.importBtn).waitForEnabled({ reverse: true });
     waitAndClick($(popupSelectors.importBtn));
   }
 
@@ -183,7 +184,9 @@ class PluginPopup {
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
-      $(`span=${filterInstances[0]}`).waitForExist(600000);
+      if (filterInstances.length) {
+        $(`span=${filterInstances[0]}`).waitForExist(600000);
+      }
       this.selectObjectElements(filterInstances);
     }
   }
