@@ -68,7 +68,7 @@ class StepGetObjectDetails {
         },
         definition: {
           ...objectData.definition,
-          objectPrompts: objectPrompts || null
+          prompts: objectPrompts || null
         },
       };
 
