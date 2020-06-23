@@ -6,14 +6,15 @@ import scriptInjectionHelper from '../dossier/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
-import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { actions as navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
-import { PromptWindowButtons } from './prompts-window-buttons';
 import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
 const { microstrategy } = window;
 const {
@@ -39,7 +40,6 @@ export class PromptsWindowNotConnected extends Component {
     const { installSessionProlongingHandler } = sessionHelper;
     this.prolongSession = installSessionProlongingHandler(this.closePopup);
     this.container = React.createRef();
-    this.outerCont = React.createRef();
   }
 
   componentDidMount() {
@@ -285,25 +285,29 @@ export class PromptsWindowNotConnected extends Component {
     observer.observe(container, config);
   }
 
+  handleBack = () => {
+    const { cancelImportRequest, onPopupBack } = this.props;
+    cancelImportRequest();
+    onPopupBack();
+  }
+
   render() {
     const { isReprompt } = this.state;
     return (
       <div
         style={{ position: 'relative' }}
-        ref={this.outerCont}
       >
         <Notifications />
         <PromptsContainer
           postMount={this.onPromptsContainerMount}
         />
-
-        <div style={{ position: 'absolute', bottom: '0' }}>
-          <PromptWindowButtons
-            handleRun={this.handleRun}
-            isReprompt={isReprompt}
-            closePopup={this.closePopup}
-          />
-        </div>
+        <PopupButtons
+          handleOk={this.handleRun}
+          handleCancel={this.closePopup}
+          hideSecondary
+          handleBack={!isReprompt && this.handleBack}
+          useImportAsRunButton
+        />
       </div>
     );
   }
@@ -312,6 +316,8 @@ export class PromptsWindowNotConnected extends Component {
 PromptsWindowNotConnected.propTypes = {
   stopLoading: PropTypes.func,
   promptsAnswered: PropTypes.func,
+  cancelImportRequest: PropTypes.func,
+  onPopupBack: PropTypes.func,
   mstrData: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     chosenProjectId: PropTypes.string,
@@ -353,6 +359,11 @@ export const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = { ...actions, };
+const mapDispatchToProps = {
+  stopLoading: navigationTreeActions.stopLoading,
+  promptsAnswered: navigationTreeActions.promptsAnswered,
+  cancelImportRequest: navigationTreeActions.cancelImportRequest,
+  onPopupBack: popupStateActions.onPopupBack,
+};
 
 export const PromptsWindow = connect(mapStateToProps, mapDispatchToProps)(PromptsWindowNotConnected);
