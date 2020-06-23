@@ -47,22 +47,23 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
 
-    logStep('+ should import a report with MSTR formatting');
-    switchToExcelFrame();
-    OfficeWorksheet.selectCell('M1');
-    PluginRightPanel.clickAddDataButton();
-    switchToDialogFrame();
-    PluginPopup.clickFilterButton();
-    PluginPopup.tickFilterCheckBox('Certified Status', 'Certified');
-    PluginPopup.importAnyObject(reportFormatting);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-    PluginRightPanel.closeNotificationOnHover();
+    // TODO: after GA add the object with MSTR applied formatting
+    // logStep('+ should import a report with MSTR formatting');
+    // switchToExcelFrame();
+    // OfficeWorksheet.selectCell('M1');
+    // PluginRightPanel.clickAddDataButton();
+    // switchToDialogFrame();
+    // PluginPopup.clickFilterButton();
+    // PluginPopup.tickFilterCheckBox('Certified Status', 'Certified');
+    // PluginPopup.importAnyObject(reportFormatting);
+    // waitForNotification();
+    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    // PluginRightPanel.closeNotificationOnHover();
 
-    PluginRightPanel.clickObjectInRightPanel(1);
-    browser.pause(4000);
-    OfficeWorksheet.formatTable();
-    browser.pause(4000);
+    // PluginRightPanel.clickObjectInRightPanel(1);
+    // browser.pause(4000);
+    // OfficeWorksheet.formatTable();
+    // browser.pause(4000);
 
     logStep('+ should clear data');
     switchToPluginFrame();
@@ -72,6 +73,8 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     logStep('+ should click View Data');
     switchToPluginFrame();
     PluginRightPanel.viewDataBtn();
+    waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
 
     switchToExcelFrame();
     OfficeWorksheet.selectCell('A1');
@@ -81,6 +84,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
     browser.waitUntil(() => a1Value === 'ITEM', { timeout: 20000 });
 
     logStep('+ should logout');
+    switchToPluginFrame();
     PluginRightPanel.logout();
   });
 });

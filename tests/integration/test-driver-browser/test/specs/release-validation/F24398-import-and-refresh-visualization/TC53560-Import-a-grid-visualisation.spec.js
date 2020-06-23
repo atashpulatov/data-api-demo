@@ -25,8 +25,6 @@ describe('F24398 - Import and refresh visualization', () => {
     const { name, visualizations } = visualizationManipulation;
     const { name: visualizationManipulationName, getTableItemAt } = visualizations.visualization1;
     const { name: dossierWithPagesAndChaptersName, gridVisualization } = dossierWithPagesAndChapters;
-    const { getVizAT } = popupSelectors.dossierWindow;
-    const { filterCostInput } = popupSelectors;
     const yearAttribute = getTableItemAt(1, 1);
     const profitMetric = getTableItemAt(1, 3);
     const revenueMetric = getTableItemAt(1, 4);
@@ -44,11 +42,11 @@ describe('F24398 - Import and refresh visualization', () => {
     browser.pause(1000);
     PluginPopup.goToDossierPageOrChapter(3);
     browser.pause(1000);
-    PluginPopup.applyDossierBookmark(2);
+    PluginPopup.applyDossierBookmark(1);
+    browser.pause(1000);
+    PluginPopup.setYearFilterOnDossier(false, 'increase');
     browser.pause(1000);
     PluginPopup.refreshDossier();
-    browser.pause(1000);
-    PluginPopup.setFilterOnDossier(filterCostInput, 500);
     PluginPopup.selectVisualization(gridVisualization);
     switchToPluginFrame();
     PluginPopup.clickImport();
@@ -123,25 +121,27 @@ describe('F24398 - Import and refresh visualization', () => {
 
     logStep('+ Import custom visualizations dossier');
     const { customVisualizations } = objectsList.dossiers;
-    const { GoogleTimeline, modelsByYear } = customVisualizations.visualizations;
-    PluginPopup.openDossier(customVisualizations.name);
-    PluginPopup.selectAndImportVisualization(GoogleTimeline);
+    const { modelsByYear, modelsByYearData } = customVisualizations.visualizations;
+
+    PluginPopup.openDossier(customVisualizations.name, 10000, false, 2);
+    PluginPopup.selectAndImportVisualization(modelsByYear);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     OfficeWorksheet.selectCell('AI1');
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(customVisualizations.name);
-    PluginPopup.selectAndImportVisualization(modelsByYear);
+    PluginPopup.openDossier(customVisualizations.name, 10000, false, 2);
+    PluginPopup.selectAndImportVisualization(modelsByYearData);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
     logStep('+ Import prompted dossier');
-    const { promptedDossier } = objectsList.dossiers;
-    const { vis1 } = promptedDossier.visualizations;
+    const { promptedDossier2 } = objectsList.dossiers;
+    const { vis1 } = promptedDossier2.visualizations;
     OfficeWorksheet.selectCell('AA20');
     PluginRightPanel.clickAddDataButton();
-    PluginPopup.openDossier(promptedDossier.name);
+    PluginPopup.openDossier(promptedDossier2.name);
     PluginPopup.importDefaultPromptedVisualisation(vis1);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
+
 
     logStep('+ Import Dossier with different custom visualizations');
     const { dossierWithDifferentCustomVis } = objectsList.dossiers;
