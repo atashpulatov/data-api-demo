@@ -1,13 +1,7 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import mstrObjectEnum from './mstr-object-type-enum';
-import { GET_OFFICE_TABLE_IMPORT } from '../operation/operation-steps';
 import { officeApiHelper } from '../office/api/office-api-helper';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import dossierInstanceDefinition from './dossier-instance-definition';
 import operationErrorHandler from '../operation/operation-error-handler';
-import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../error/constants';
 
 class StepGetObjectDetails {
   /**
@@ -36,40 +30,19 @@ class StepGetObjectDetails {
         mstrObjectType,
       } = objectData;
 
-      // console.log('objectData');
-      // console.log(objectData);
-      // console.log('operationData');
-      // console.log(operationData);
-
-      const objectInfo = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
       const {
         ancestors, certifiedInfo, dateModified, owner,
-      } = objectInfo;
+      } = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
 
-      const objectPrompts = objectData.promptsAnswers && (await mstrObjectRestService
-        .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId))
-        .map(this.extractPromptAnswerName);
+      const objectPrompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 
-
-      // console.log('objectInfo');
-      // console.log(objectInfo);
-
-      // console.log('objectPrompts');
-      // console.log(objectPrompts);
+      const details = populateDetails(ancestors, certifiedInfo, dateModified, owner);
+      const definition = populateDefinition(objectData, objectPrompts);
 
       const updatedObject = {
         ...objectData,
-        details: {
-          ancestors,
-          certified: certifiedInfo,
-          modifiedDate: dateModified,
-          owner,
-          importedBy: officeApiHelper.getCurrentMstrUserFullName(),
-        },
-        definition: {
-          ...objectData.definition,
-          objectPrompts: objectPrompts || null
-        },
+        details,
+        definition,
       };
 
       operationStepDispatcher.updateObject(updatedObject);
@@ -79,17 +52,41 @@ class StepGetObjectDetails {
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
   };
-
-  promptAnswerMapFunctions = {
-    OBJECTS: (prompt) => prompt.answers.map(answer => answer.name),
-    LEVEL: (prompt) => prompt.answers.units.map(unit => unit.name),
-    EXPRESSION: (prompt) => prompt.answers.content,
-    ELEMENTS: (prompt) => prompt.answers.map(answer => answer.name),
-    VALUE: (prompt) => prompt.answers,
-  };
-
-  extractPromptAnswerName = (prompt) => this.promptAnswerMapFunctions[prompt.type](prompt);
 }
+
+const getObjectPrompts = async (objectData, objectId, projectId, operationData) => {
+  if (objectData.promptsAnswers) {
+    return (await mstrObjectRestService
+      .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId))
+      .map((prompt) => promptAnswerFunctionsMap[prompt.type](prompt));
+  }
+};
+
+const promptAnswerFunctionsMap = {
+  OBJECTS: (prompt) => prompt.answers.map(answer => answer.name),
+  LEVEL: (prompt) => prompt.answers.units.map(unit => unit.name),
+  EXPRESSION: (prompt) => prompt.answers.content,
+  ELEMENTS: (prompt) => prompt.answers.map(answer => answer.name),
+  VALUE: (prompt) => prompt.answers,
+};
+
+const populateDefinition = (objectData, objectPrompts) => {
+  if (objectPrompts) {
+    return {
+      ...objectData.definition,
+      objectPrompts, // might need to null
+    };
+  }
+  return { ...objectData.definition };
+};
+
+const populateDetails = (ancestors, certifiedInfo, dateModified, owner) => ({
+  ancestors,
+  certified: certifiedInfo,
+  modifiedDate: dateModified,
+  owner,
+  importedBy: officeApiHelper.getCurrentMstrUserFullName(),
+});
 
 const stepGetObjectDetails = new StepGetObjectDetails();
 export default stepGetObjectDetails;
