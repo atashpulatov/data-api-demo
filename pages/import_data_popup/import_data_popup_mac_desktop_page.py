@@ -56,7 +56,7 @@ class ImportDataPopupMacDesktopPage(BasePage):
 
     def find_and_select_object(self, object_name):
         search_box = self.get_visible_element_by_xpath_list(ImportDataPopupMacDesktopPage.SEARCH_BAR_ELEMS)
-        search_box.send_keys(object_name)
+        self.send_keys(search_box, object_name)
 
         Util.pause(2)  # TODO wait when ready
 

@@ -1,7 +1,9 @@
+@windows_desktop
+@windows_chrome
+@mac_chrome
 Feature: F25932 - Import attribute forms in separate columns
 
   Scenario: [TC59987] [Attribute forms] Edit an imported report
-    Given I pass
     Given I logged in as default user
     And I clicked Import Data button
     And MyLibrary Switch is OFF

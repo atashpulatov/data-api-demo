@@ -47,7 +47,11 @@ class ExcelSheetWindowsDesktopPage(BasePage):
     def _go_to_cell_single_check(self, cell_upper, element):
         try:
             self.click_element_simple(element)
-            element.send_keys((Keys.CONTROL, 'g', Keys.CONTROL, cell_upper, Keys.ENTER))
+            self.send_special_key(element, Keys.CONTROL)
+            self.send_keys(element, 'g')
+            self.send_special_key(element, Keys.CONTROL)
+            self.send_keys(element, cell_upper)
+            self.send_special_key(element, Keys.ENTER)
             return True
         except Exception:
             pass

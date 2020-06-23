@@ -56,10 +56,10 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         cell_input.click()
         self.pause(0.2)
 
-        cell_input.send_keys(cell_upper)
+        self.send_keys(cell_input, cell_upper)
         self.pause(0.2)
 
-        cell_input.send_keys(Keys.ENTER)
+        self.send_special_key(cell_input, Keys.ENTER)
         self.pause(0.2)
 
     def _get_selected_cell_value(self):

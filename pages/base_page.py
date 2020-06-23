@@ -58,7 +58,7 @@ class BasePage(ElementClick, ElementGet, ElementCheck):
             element.click()
         except ElementClickInterceptedException as e:
             self.log_error(e)
-            self.pause(120)
+            self.pause(120)  # wait for debug purposes
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
@@ -90,3 +90,28 @@ class BasePage(ElementClick, ElementGet, ElementCheck):
 
     def get_element_name(self, element):
         return element.get_attribute(BasePage.NAME_ATTRIBUTE)
+
+    def send_keys(self, element, text):
+        """
+        Sends text (keys) to element and verifies it's correctness.
+
+        Possibly to implement retries.
+        :param element: element to send text to
+        :param text: text to send
+        """
+
+        element.send_keys(text)
+
+        text_property = element.text
+        if text_property == text:
+            return
+
+        value_attribute = element.get_attribute('value')
+        if value_attribute == text:
+            return
+
+        raise Exception('Error while sending keys, expected: [%s], '
+                        'was text_property: [%s] and value_attribute: [%s]' % (text, text_property, value_attribute))
+
+    def send_special_key(self, element, control_key):
+        element.send_keys(control_key)

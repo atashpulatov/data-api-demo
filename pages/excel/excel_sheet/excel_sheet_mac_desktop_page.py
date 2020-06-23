@@ -49,10 +49,10 @@ class ExcelSheetMacDesktopPage(BasePage):
         cell_input.clear()
         Util.pause(0.1)
 
-        cell_input.send_keys(cell_upper)
+        self.send_keys(cell_input, cell_upper)
         Util.pause(0.1)
 
-        cell_input.send_keys(Keys.ENTER)
+        self.send_special_key(cell_input, Keys.ENTER)
         Util.pause(0.1)
 
     def _get_selected_cell_value(self):

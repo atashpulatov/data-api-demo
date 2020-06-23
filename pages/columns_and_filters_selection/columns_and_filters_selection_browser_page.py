@@ -5,7 +5,7 @@ from pages.base_browser_page import BaseBrowserPage
 
 class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTES_CHECKBOX = '.item-title'
-    METRIC_ITEM = 'label[aria-label^="%s"]'
+    METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
     FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
                                            'div.attribute-forms > ul > ' \
                                            'li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > ' \
@@ -29,8 +29,9 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         attribute = self.find_element_by_text_in_elements_list_by_css(
             ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX,
-            attribute_name)
-        self.click_element_with_offset(attribute, xoffset=-20, yoffset=0)
+            attribute_name
+        )
+        self.click_element_with_offset(attribute, xoffset=10, yoffset=5)
 
     def click_metric(self, metric_name):
         self.focus_on_import_data_pop_up_frame()
@@ -66,17 +67,13 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
         for attribute_name, form_names in attributes_and_forms.items():
-            attribute = self.find_element_by_text_in_elements_list_by_css(
-                ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX, attribute_name)
-            self.click_element_simple(attribute)
+            self.click_attribute(attribute_name)
 
             if len(form_names) > 0:
                 self.click_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER)
 
                 for form_name in form_names:
-                    form = self.find_element_by_text_in_elements_list_by_css(
-                        ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX, form_name)
-                    self.click_element_with_offset(form, xoffset=-20, yoffset=0)
+                    self.click_attribute(form_name)
 
     def click_import_button(self):
         self.click_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM)

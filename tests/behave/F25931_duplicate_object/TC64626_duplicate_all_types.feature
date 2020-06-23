@@ -1,3 +1,4 @@
+@mac_chrome
 Feature: F25931 - Duplicate object
 
   Scenario: [TC64626] - Duplicate all types of objects

@@ -37,7 +37,7 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         search_box = self.get_visible_element_by_css(ImportDataPopupBrowserPage.SEARCH_BAR_ELEM)
-        search_box.send_keys(object_name)
+        self.send_keys(search_box, object_name)
 
         self.click_element_by_css(ImportDataPopupBrowserPage.NAME_OBJECT_ELEM % object_name)
 
