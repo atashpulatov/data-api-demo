@@ -9,7 +9,6 @@ import '../index.css';
 import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
 import { PromptWindowButtons } from './prompts-window-buttons';
-import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
@@ -292,7 +291,6 @@ export class PromptsWindowNotConnected extends Component {
         style={{ position: 'relative' }}
         ref={this.outerCont}
       >
-        <Notifications />
         <PromptsContainer
           postMount={this.onPromptsContainerMount}
         />
