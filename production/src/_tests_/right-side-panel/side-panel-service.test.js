@@ -5,6 +5,8 @@ import { reduxStore } from '../../store';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { popupController } from '../../popup/popup-controller';
 import officeStoreObject from '../../office/store/office-store-object';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 
 describe('SidePanelService', () => {
   jest.useFakeTimers();
@@ -64,7 +66,7 @@ describe('SidePanelService', () => {
     expect(mockedSaveObjects).toBeCalledTimes(1);
   });
 
-  it('should refresh an objects', () => {
+  it('should refresh objects', () => {
     // given
     const objectWorkingIds = [1, 2, 3, 4, 5];
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
@@ -75,7 +77,7 @@ describe('SidePanelService', () => {
     expect(mockedDispatch).toBeCalledTimes(objectWorkingIds.length);
   });
 
-  it('should remove an objects', () => {
+  it('should remove objects', () => {
     // given
     const objectWorkingIds = [12, 34, 56];
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
@@ -92,7 +94,12 @@ describe('SidePanelService', () => {
     const insertNewWorksheet = true;
     const withEdit = false;
     const mockObject = {
-      data: 'data', bindId: 'test', tableName: 'name', refreshDate: 'date', preparedInstanceId: 'instance id',
+      data: 'data',
+      bindId: 'test',
+      tableName: 'name',
+      refreshDate: 'date',
+      preparedInstanceId: 'instance id',
+      subtotalsInfo: { subtotalsAddresses: [] }
     };
     const getObjectFromObjectReducerByObjectWorkingId = jest
       .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
@@ -101,7 +108,8 @@ describe('SidePanelService', () => {
     const expectedObject = {
       data: 'data',
       insertNewWorksheet,
-      objectWorkingId: 789
+      objectWorkingId: 789,
+      subtotalsInfo: {},
     };
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
@@ -120,8 +128,14 @@ describe('SidePanelService', () => {
     const insertNewWorksheet = false;
     const withEdit = true;
     const mockObject = {
-      data: 'data', bindId: 'test', tableName: 'name', refreshDate: 'date', preparedInstanceId: 'instance id',
+      data: 'data',
+      bindId: 'test',
+      tableName: 'name',
+      refreshDate: 'date',
+      preparedInstanceId: 'instance id',
+      subtotalsInfo: { subtotalsAddresses: [] }
     };
+
     const getObjectFromObjectReducerByObjectWorkingId = jest
       .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
       .mockImplementationOnce(() => mockObject);
@@ -129,7 +143,8 @@ describe('SidePanelService', () => {
     const expectedObject = {
       data: 'data',
       insertNewWorksheet,
-      objectWorkingId: 789
+      objectWorkingId: 789,
+      subtotalsInfo: {},
     };
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
@@ -141,4 +156,37 @@ describe('SidePanelService', () => {
     expect(popupActions.callForDuplicate).toBeCalledTimes(1);
     expect(popupActions.callForDuplicate).toBeCalledWith(expectedObject);
   });
+
+
+  it.each`
+  objectType
+
+  ${'report'}
+  ${'dataset'}
+  ${'visualization'}
+
+`('should edit an object', async ({ objectType }) => {
+  // given
+  const objectWorkingId = 1;
+  const mockObject = {
+    bindId: 1,
+    mstrObjectType: { name: objectType }
+  };
+
+  const mockedGetExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
+  const mockedisSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation();
+  const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+  const getObjectFromObjectReducerByObjectWorkingId = jest
+    .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+    .mockImplementationOnce(() => mockObject);
+
+  // when
+  await sidePanelService.edit(objectWorkingId);
+
+  // then
+  expect(mockedGetExcelContext).toBeCalled();
+  expect(mockedisSheetProtected).toBeCalled();
+  expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
+  expect(mockedDispatch).toBeCalled();
+});
 });
