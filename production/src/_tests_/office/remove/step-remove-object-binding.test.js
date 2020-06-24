@@ -22,6 +22,7 @@ describe('StepRemoveObjectBinding', () => {
     jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue(officeContextMock);
 
     jest.spyOn(operationStepDispatcher, 'completeRemoveObjectBinding').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
     officeContextMock.document.bindings.releaseByIdAsync = jest.fn().mockImplementation(() => {
       throw new Error('errorTest');
@@ -39,6 +40,11 @@ describe('StepRemoveObjectBinding', () => {
 
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith('objectWorkingIdTest');
+
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(
+      { objectWorkingId: 'objectWorkingIdTest', doNotPersist: true }
+    );
   });
 
   it('removeObjectBinding should work as expected', async () => {
