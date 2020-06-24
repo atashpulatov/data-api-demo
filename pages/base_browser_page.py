@@ -38,7 +38,7 @@ class BaseBrowserPage(BasePage):
             try:
                 self.driver.switch_to.default_content()
 
-                excel_frame = self.get_visible_element_by_id(BaseBrowserPage.EXCEL_FRAME_ELEM)
+                excel_frame = self.get_frame_element_by_id(BaseBrowserPage.EXCEL_FRAME_ELEM)
                 self._switch_to_frame(excel_frame)
 
                 self.pause(2)
@@ -58,14 +58,14 @@ class BaseBrowserPage(BasePage):
     def focus_on_import_data_pop_up_frame(self):
         self.focus_on_excel_frame()
 
-        popup_frame_element = self.get_visible_element_by_css(BaseBrowserPage.IMPORT_DATA_POPUP_FRAME_ELEM)
+        popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.IMPORT_DATA_POPUP_FRAME_ELEM)
 
         self._switch_to_frame(popup_frame_element)
 
     def focus_on_import_dossier_frame(self):
         self.focus_on_add_in_frame()
 
-        dossier_frame_element = self.get_visible_element_by_css(BaseBrowserPage.IMPORT_DOSSIER_FRAME_ELEM)
+        dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.IMPORT_DOSSIER_FRAME_ELEM)
 
         self._switch_to_frame(dossier_frame_element)
 
@@ -82,7 +82,7 @@ class BaseBrowserPage(BasePage):
                                                         timeout=DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
         while True:
-            notification_text_elem = self.get_visible_element_by_css(selector)
+            notification_text_elem = self.get_element_by_css(selector)
             value = notification_text_elem.get_attribute(attribute)
 
             if value == expected_value:
@@ -98,7 +98,7 @@ class BaseBrowserPage(BasePage):
     def find_element_by_text_in_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
         while True:
-            elements = self.get_visible_elements_by_css(selector)
+            elements = self.get_elements_by_css(selector)
 
             element = next((item for item in elements if item.text == expected_text), None)
             if element:
@@ -118,10 +118,12 @@ class BaseBrowserPage(BasePage):
             try:
                 self.focus_on_excel_frame()
 
-                add_in_frame = self.get_visible_element_by_css(BaseBrowserPage.ADD_IN_FRAME_ELEM, timeout=10)
+                add_in_frame = self.get_frame_element_by_css(BaseBrowserPage.ADD_IN_FRAME_ELEM, timeout=10)
                 self._switch_to_frame(add_in_frame)
 
-                self.get_visible_element_by_id(BaseBrowserPage.ADD_IN_ROOT_ELEM, timeout=5)
+                self.get_element_by_id(BaseBrowserPage.ADD_IN_ROOT_ELEM, timeout=5)
+
+                self.pause(2)
 
                 return
 

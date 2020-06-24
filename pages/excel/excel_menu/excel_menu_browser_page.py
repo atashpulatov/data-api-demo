@@ -13,9 +13,9 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
             self.focus_on_excel_frame()
 
-            if self.check_element_by_xpath(ExcelMenuBrowserPage.ADDIN_ELEM % environment, timeout=3):
+            if self.get_element_coordinates_by_xpath(ExcelMenuBrowserPage.ADDIN_ELEM % environment, timeout=3):
                 break
 
             self.pause(5)
 
-        self.click_element_by_xpath(ExcelMenuBrowserPage.ADDIN_ELEM % environment)
+        self.get_element_by_xpath(ExcelMenuBrowserPage.ADDIN_ELEM % environment).click()

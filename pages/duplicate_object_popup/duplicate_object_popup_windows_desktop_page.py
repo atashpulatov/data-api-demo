@@ -1,7 +1,7 @@
-from pages.base_page import BasePage
+from pages.base_windows_desktop_page import BaseWindowsDesktopPage
 
 
-class DuplicateObjectPopupWindowsDesktopPage(BasePage):
+class DuplicateObjectPopupWindowsDesktopPage(BaseWindowsDesktopPage):
     DUPLICATE_POPUP_IMPORT_BUTTON = 'Import button'
     DUPLICATE_POPUP_EDIT_BUTTON = 'Edit button'
 
@@ -11,15 +11,19 @@ class DuplicateObjectPopupWindowsDesktopPage(BasePage):
         # self.right_panel_browser_page = RightPanelBrowserPage()
 
     def click_import(self):
-        self.click_element_by_name(DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_IMPORT_BUTTON,
-                                   image_name=self.prepare_image_name(
-                                       DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_IMPORT_BUTTON))
+        self.get_element_by_name(
+            DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_IMPORT_BUTTON,
+            image_name=self.prepare_image_name(
+                DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_IMPORT_BUTTON)
+        ).click()
 
         # TODO check if import finished
 
     def click_edit(self):
-        self.click_element_by_name(DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_EDIT_BUTTON,
-                                   image_name=self.prepare_image_name(
-                                       DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_EDIT_BUTTON))
+        self.get_element_by_name(
+            DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_EDIT_BUTTON,
+            image_name=self.prepare_image_name(
+                DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_EDIT_BUTTON)
+        ).click()
 
         # TODO check if import finished

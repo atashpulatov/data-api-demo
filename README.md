@@ -20,6 +20,7 @@ README TODO:
 - driver factory, selecting driver
 - sets of pages
 - base pages, page utils
+- base elements
 - pages factory, selecting set of pages
 - utils
 - stability issues, pause()

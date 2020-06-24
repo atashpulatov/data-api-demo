@@ -31,40 +31,44 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         element = self.find_element_by_xpath_from_parent(popup_main_element, selector)
 
-        self.click_element_simple(element)
+        element.click()
 
     def click_display_attributes_names_type(self, form_visualization_type):
         popup_main_element = self.get_popup_main_element()
 
-        dropdown = self.find_element_by_xpath_from_parent(
+        self.find_element_by_xpath_from_parent(
             popup_main_element,
             ColumnsAndFiltersSelectionWindowsDesktopPage.DROPDOWN_ELEM
-        )
+        ).click()
 
-        self.click_element_simple(dropdown)
-
-        menu_item = self.find_element_by_xpath_from_parent(
+        self.find_element_by_xpath_from_parent(
             popup_main_element,
             ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ELEM % form_visualization_type
-        )
-
-        self.click_element_simple(menu_item)
+        ).click()
 
     def select_all_attributes(self):
-        self.click_element_by_name(ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ALL_ATTRIBUTES,
-                                   image_name=self.prepare_image_name('select_all_attributes'))
+        self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ALL_ATTRIBUTES,
+            image_name=self.prepare_image_name('select_all_attributes')
+        ).click()
 
     def unselect_all_attributes(self):
-        self.click_element_by_name(ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ALL_ATTRIBUTES,
-                                   image_name=self.prepare_image_name('unselect_all_attributes'))
+        self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ALL_ATTRIBUTES,
+            image_name=self.prepare_image_name('unselect_all_attributes')
+        ).click()
 
     def select_all_metrics(self):
-        self.click_element_by_name(ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ALL_METRICS,
-                                   image_name=self.prepare_image_name('select_all_metrics'))
+        self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ALL_METRICS,
+            image_name=self.prepare_image_name('select_all_metrics')
+        ).click()
 
     def unselect_all_metrics(self):
-        self.click_element_by_name(ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ALL_METRICS,
-                                   image_name=self.prepare_image_name('unselect_all_metrics'))
+        self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ALL_METRICS,
+            image_name=self.prepare_image_name('unselect_all_metrics')
+        ).click()
 
     def click_attributes_and_forms(self, attributes_and_forms_json):
         attributes_and_forms = json.loads(attributes_and_forms_json)
@@ -72,33 +76,31 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         popup_main_element = self.get_popup_main_element()
 
         for attribute_name, form_names in attributes_and_forms.items():
-            attribute = self.find_element_by_xpath_from_parent(
+            self.find_element_by_xpath_from_parent(
                 popup_main_element,
                 ColumnsAndFiltersSelectionWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
-            )
-            self.click_element_simple(attribute)
+            ).click()
 
             if len(form_names) > 0:
-                form_dropdown = self.find_element_by_xpath_from_parent(
+                self.find_element_by_xpath_from_parent(
                     popup_main_element,
                     ColumnsAndFiltersSelectionWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM % attribute_name
-                )
-                self.click_element_simple(form_dropdown)
+                ).click()
 
                 for form_name in form_names:
-                    form_item = self.find_element_by_xpath_from_parent(
+                    self.find_element_by_xpath_from_parent(
                         popup_main_element,
                         ColumnsAndFiltersSelectionWindowsDesktopPage.ATTRIBUTE_FORM_ITEM_ELEM % form_name
-                    )
-                    self.click_element_simple(form_item)
+                    ).click()
 
     def click_import_button(self):
-        self.click_element_by_accessibility_id(
+        self.get_element_by_accessibility_id(
             ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON))
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON)
+        ).click()
 
     def ensure_columns_and_filters_selection_is_visible(self):
-        element_coordinates = self.check_element_by_name(
+        element_coordinates = self.get_element_coordinates_by_name(
             ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT,
             image_name=self.prepare_image_name(
                 ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT))

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 
 from pages.base_page import BasePage
-from pages.page_util.element_operation import ElementOperation
+from pages.page_util.image_element import ImageElement
 from util.const import ELEMENT_SEARCH_RETRY_NUMBER
 
 
@@ -37,7 +37,7 @@ class ExcelSheetWindowsDesktopPage(BasePage):
     def _go_to_cell(self, cell):
         cell_upper = cell.upper()
 
-        root_element = ElementOperation.excel_element
+        root_element = ImageElement.excel_element
 
         i = 0
         while i < ELEMENT_SEARCH_RETRY_NUMBER and not self._go_to_cell_single_check(cell_upper, root_element):
@@ -46,22 +46,19 @@ class ExcelSheetWindowsDesktopPage(BasePage):
 
     def _go_to_cell_single_check(self, cell_upper, element):
         try:
-            self.click_element_simple(element)
-            self.send_special_key(element, Keys.CONTROL)
-            self.send_keys(element, 'g')
-            self.send_special_key(element, Keys.CONTROL)
-            self.send_keys(element, cell_upper)
-            self.send_special_key(element, Keys.ENTER)
+            element.click()
+            element.send_keys_raw((Keys.CONTROL, 'g', Keys.CONTROL, cell_upper, Keys.ENTER))
             return True
-        except Exception:
-            pass
+        except Exception as e:
+            self.log_warning('Error while executing _go_to_cell_single_check()')
+            self.log_warning(e)
 
         return False
 
     def _get_selected_cell_value(self, cell):
         cell_selector_name = self._get_selector_name(cell)
 
-        cell_elem = self.get_visible_element_by_name(cell_selector_name)
+        cell_elem = self.get_element_by_name(cell_selector_name)
 
         return cell_elem.get_attribute(ExcelSheetWindowsDesktopPage.VALUE_ATTRIBUTE)
 
@@ -79,13 +76,12 @@ class ExcelSheetWindowsDesktopPage(BasePage):
         return ''.join(result)
 
     def get_number_of_worksheets(self):
-        book_element = self.get_visible_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
+        book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
         book_children_elements = book_element.find_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
 
         sheet_tab_elements = list(
             filter(lambda item: item.get_attribute(
-                ExcelSheetWindowsDesktopPage.NAME_ATTRIBUTE).startswith(
-                ExcelSheetWindowsDesktopPage.SHEET_TAB_NAME),
+                ExcelSheetWindowsDesktopPage.NAME_ATTRIBUTE).startswith(ExcelSheetWindowsDesktopPage.SHEET_TAB_NAME),
                    book_children_elements))
 
         return len(sheet_tab_elements)

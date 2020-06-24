@@ -13,11 +13,9 @@ class CleanupMacDesktopPage(BasePage):
                             "[@AXTitle='Don't Save']"
 
     def clean_up_after_each_test(self):
-        excel_in_dock_element = self.get_visible_element_by_xpath(CleanupMacDesktopPage.EXCEL_IN_DOCK)
+        self.get_element_by_xpath(CleanupMacDesktopPage.EXCEL_IN_DOCK).right_click()
 
-        self.click_element_right_button(excel_in_dock_element)
-
-        self.click_element_by_xpath(CleanupMacDesktopPage.CONTEXT_MENU_QUIT_BUTTON)
-        self.click_element_by_xpath(CleanupMacDesktopPage.DONT_SAVE_BUTTON_ELEM)
+        self.get_element_by_xpath(CleanupMacDesktopPage.CONTEXT_MENU_QUIT_BUTTON).click()
+        self.get_element_by_xpath(CleanupMacDesktopPage.DONT_SAVE_BUTTON_ELEM).click()
 
         Util.pause(3)

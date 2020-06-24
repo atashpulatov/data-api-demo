@@ -15,7 +15,7 @@ class StartExcelBrowserPage(BaseBrowserPage):
     excel_not_started = True
 
     def go_to_excel(self):
-        self._go_to_excel_url()
+        self._go_to_excel_by_url()
 
         self._login_to_excel()
 
@@ -26,7 +26,7 @@ class StartExcelBrowserPage(BaseBrowserPage):
         self.driver.maximize_window()
         # self.driver.set_window_size(1920, 1080)
 
-    def _go_to_excel_url(self):
+    def _go_to_excel_by_url(self):
         self.driver.get(StartExcelBrowserPage.EXCEL_URL)
 
     def _login_to_excel(self):

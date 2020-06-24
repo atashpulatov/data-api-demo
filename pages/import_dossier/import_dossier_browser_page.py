@@ -18,18 +18,18 @@ class ImportDossierBrowserPage(BaseBrowserPage):
 
         radio_button_selector = ImportDossierBrowserPage.VISUALIZATION_AT_TILE % visualization_number
 
-        radio_buttons = self.get_visible_element_by_css(radio_button_selector)
+        radio_buttons = self.get_element_by_css(radio_button_selector)
         visualization = self.find_element_by_css_from_parent(
             radio_buttons,
             ImportDossierBrowserPage.VISUALIZATION_SELECTOR
         )
-        self.click_element_simple(visualization)
+        visualization.click()
 
         self._click_import_visualization()
 
     def _click_import_visualization(self):
         self.focus_on_add_in_frame()
 
-        self.click_element_by_id(ImportDossierBrowserPage.IMPORT_BUTTON_ELEM)
+        self.get_element_by_id(ImportDossierBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_browser_page.wait_for_import_to_finish_successfully()

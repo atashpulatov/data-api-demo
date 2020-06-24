@@ -46,3 +46,6 @@ class PagesMacDesktop(AbstractPages):
 
     def duplicate_object_popup_page(self):
         return None
+
+    def import_dossier_page(self):
+        pass

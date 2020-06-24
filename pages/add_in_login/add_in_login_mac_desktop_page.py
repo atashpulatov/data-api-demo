@@ -9,9 +9,9 @@ class AddInLoginMacDesktopPage(BasePage):
                           "'AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup" \
                           "[@AXSubrole='AXLandmarkMain']/AXGroup[1]/AXTextField[@AXDOMIdentifier='username']"
 
-    LOGIN_BUTTON_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole=" \
-                        "'AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXSubrole=" \
-                        "'AXLandmarkMain']/AXGroup[1]/AXButton[@AXDOMIdentifier='loginButton']"
+    PASSWORD_INPUT_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole=" \
+                          "'AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup" \
+                          "[@AXSubrole='AXLandmarkMain']/AXGroup[1]/AXTextField[@AXDOMIdentifier='password'"
 
     def __init__(self):
         super().__init__()
@@ -20,12 +20,9 @@ class AddInLoginMacDesktopPage(BasePage):
     def login(self, username, password):
         self.not_logged_right_panel_page.click_open_login_pop_up_button()
 
-        login_field = self.get_visible_element_by_xpath(AddInLoginMacDesktopPage.USERNAME_INPUT_ELEM)
+        username_field = self.get_element_by_xpath(AddInLoginMacDesktopPage.USERNAME_INPUT_ELEM)
+        username_field.send_keys(username)
 
-        (self.get_actions()
-         .move_to_element(login_field)
-         .send_keys(username)
-         .send_keys(Keys.TAB)
-         .send_keys(password)
-         .send_keys(Keys.ENTER)
-         .perform())
+        password_field = self.get_element_by_xpath(AddInLoginMacDesktopPage.PASSWORD_INPUT_ELEM)
+        password_field.send_keys_raw(password)
+        password_field.send_keys_raw(Keys.ENTER)

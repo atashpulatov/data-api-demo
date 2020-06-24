@@ -3,6 +3,7 @@ import re
 from selenium.webdriver.common.keys import Keys
 
 from pages.base_browser_page import BaseBrowserPage
+from util.const import DEFAULT_WAIT_AFTER_SEND_KEY
 
 
 class ExcelSheetBrowserPage(BaseBrowserPage):
@@ -51,36 +52,37 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         # TODO called few times in java app
         self.focus_on_excel_frame()
 
-        cell_input = self.get_visible_element_by_id(ExcelSheetBrowserPage.CELL_TRAVERSAL_INPUT_ELEM)
+        cell_input = self.get_element_by_id(ExcelSheetBrowserPage.CELL_TRAVERSAL_INPUT_ELEM)
 
         cell_input.click()
-        self.pause(0.2)
+        self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
 
-        self.send_keys(cell_input, cell_upper)
-        self.pause(0.2)
+        cell_input.send_keys(cell_upper)
 
-        self.send_special_key(cell_input, Keys.ENTER)
-        self.pause(0.2)
+        cell_input.send_keys_raw(Keys.ENTER)
+        self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
 
     def _get_selected_cell_value(self):
-        cell_formatting_drop_down_elem = self.get_visible_element_by_xpath(
-            ExcelSheetBrowserPage.CELL_FORMATTING_MENU_DROP_DOWN_ELEM)
+        cell_formatting_drop_down_elem = self.get_element_by_xpath(
+            ExcelSheetBrowserPage.CELL_FORMATTING_MENU_DROP_DOWN_ELEM
+        )
         self.pause(0.2)
 
         cell_formatting_drop_down_elem.click()
         self.pause(0.2)
 
-        self.click_element_by_id(
-            ExcelSheetBrowserPage.CELL_FORMATTING_MENU_MORE_NUMBER_FORMATS_OPTION_ELEM)
+        self.get_element_by_id(
+            ExcelSheetBrowserPage.CELL_FORMATTING_MENU_MORE_NUMBER_FORMATS_OPTION_ELEM
+        ).click()
 
-        sample_input_elem = self.get_visible_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_SAMPLE)
+        sample_input_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_SAMPLE)
 
         sample_input_elem_value = sample_input_elem.get_attribute(self.FORMAT_CELLS_PROMPT_SAMPLE_VALUE_ATTR)
 
         formatted_value = self._format_value(sample_input_elem_value)
 
-        value_elem = self.get_visible_elements_by_css(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)[1]
-        self.click_element_simple(value_elem)
+        value_elem = self.get_elements_by_css(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)[1]
+        value_elem.click()
 
         return formatted_value if formatted_value else None
 
@@ -102,52 +104,19 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         return value
 
-    # def _format_value_todo(self, value):
-    #     '''
-    #     TODO taken from original java code, rewrite it? comments copied
-    #
-    #     //TODO tmp solution for formatting ans since the browser account has different number delimiter settings
-    #
-    #     Helper to replace browser user preset of cell value format to sync between client applications.
-    #     Can cause assertion issues between different input.
-    #     Example cell value: "Books,Electronics" would be formatted as "Books Electronics"
-    #     Replaces ',' to ' ' to sync thousands separator.
-    #     Replaces '.' with ',' to sync decimal delimiter.
-    #     '''
-    #
-    #     if not value or len(value) < 2:
-    #         return value
-    #
-    #     arr = list(value)
-    #     prev_char = arr[0]
-    #     current_char = arr[1]
-    #     for i in range(1, len(value) - 1):
-    #         next_char = arr[i + 1]
-    #
-    #         if prev_char.isdigit() and next_char.isdigit():
-    #             if current_char == ',':
-    #                 arr[i] = ' '
-    #             elif current_char == '.':
-    #                 arr[i] = ','
-    #
-    #         prev_char = current_char
-    #         current_char = next_char
-    #
-    #     return ''.join(arr)
-
     def get_number_of_worksheets(self):
         self.focus_on_excel_frame()
 
-        return len(self.get_visible_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_TABS))
+        return len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_TABS))
 
     def add_worksheet(self):
         self.focus_on_excel_frame()
 
-        self.click_element_by_css(ExcelSheetBrowserPage.ADD_SHEET_BUTTON)
+        self.get_element_by_css(ExcelSheetBrowserPage.ADD_SHEET_BUTTON).click()
 
     def open_worksheet(self, worksheet_number):
         self.focus_on_excel_frame()
 
         worksheet_number_int = int(worksheet_number) + 1
 
-        self.click_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int)
+        self.get_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int).click()

@@ -25,10 +25,10 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def ensure_mylibrary_switch_is_off(self):
         self.focus_on_import_data_pop_up_frame()
 
-        element = self.get_visible_element_by_css(ImportDataPopupBrowserPage.MY_LIBRARY_SWITCH_ELEM)
+        element = self.get_element_by_css(ImportDataPopupBrowserPage.MY_LIBRARY_SWITCH_ELEM)
 
         if self._is_on(element):
-            self.click_element_simple(element)
+            element.click()
 
     def _is_on(self, element):
         return element.get_attribute(ImportDataPopupBrowserPage.ARIA_CHECKED_ATTRIBUTE) == 'true'
@@ -36,23 +36,23 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def find_and_select_object(self, object_name):
         self.focus_on_import_data_pop_up_frame()
 
-        search_box = self.get_visible_element_by_css(ImportDataPopupBrowserPage.SEARCH_BAR_ELEM)
-        self.send_keys(search_box, object_name)
+        search_box = self.get_element_by_css(ImportDataPopupBrowserPage.SEARCH_BAR_ELEM)
+        search_box.send_keys(object_name)
 
-        self.click_element_by_css(ImportDataPopupBrowserPage.NAME_OBJECT_ELEM % object_name)
+        self.get_element_by_css(ImportDataPopupBrowserPage.NAME_OBJECT_ELEM % object_name).click()
 
     def click_import_button(self):
-        self.click_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM)
+        self.get_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_browser_page.wait_for_import_to_finish_successfully()
 
     def click_import_button_to_open_import_dossier(self):
-        self.click_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM)
+        self.get_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.pause(25)  # TODO check if loaded
 
     def click_prepare_data_button(self):
-        self.click_element_by_id(ImportDataPopupBrowserPage.PREPARE_BUTTON_ELEM)
+        self.get_element_by_id(ImportDataPopupBrowserPage.PREPARE_BUTTON_ELEM).click()
 
         self.wait_for_element_to_have_attribute_value_by_css(
             ImportDataPopupBrowserPage.NOTIFICATION_TEXT_ELEM,

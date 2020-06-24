@@ -10,15 +10,16 @@ class RightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
     OBJECT_NAME_ELEM = '//Button/List/DataItem[%s]/Group/Button[5]/Text'
 
     def click_import_data_button_element(self):
-        self.click_element_by_name(RightPanelWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM,
-                                   image_name=self.prepare_image_name(
-                                       RightPanelWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM))
+        self.get_element_by_name(
+            RightPanelWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM,
+            image_name=self.prepare_image_name(RightPanelWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM)
+        ).click()
 
     def close_all_notifications_on_hover(self):
-        elements = self.get_visible_elements_by_name(RightPanelWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
+        elements = self.get_elements_by_name(RightPanelWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
 
         for element in elements:
-            self.move_to_element(element)
+            element.move_to()
 
     def click_duplicate(self, tile_no):
         self._click_button_on_tile(RightPanelWindowsDesktopPage.DUPLICATE_BUTTON_ELEM, tile_no)
@@ -36,10 +37,7 @@ class RightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         :param button_selector: Button selector.
         :param tile_no: Number of tile, counting from 1.
         """
-        # plugin_element = self.get_visible_element_by_name(RightPanelWindowsDesktopPage.RIGHT_PANEL_ELEM)
-        # self.move_to_element(plugin_element)
-
-        elements = self.get_visible_elements_by_name(button_selector)
+        elements = self.get_elements_by_name(button_selector)
 
         object_index = int(tile_no) - 1
 
@@ -49,13 +47,13 @@ class RightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         found_element = elements[object_index]
 
         # Workaround - move mouse a little to gain focus
-        self.move_to_element(found_element, 10, 10)
-        self.move_to_element(found_element, -10, -10)
+        found_element.move_to(10, 10)
+        found_element.move_to(-10, -10)
 
-        self.click_element_simple(found_element)
+        found_element.click()
 
     def get_object_name(self, index):
-        plugin_element = self.get_visible_element_by_name(RightPanelWindowsDesktopPage.RIGHT_PANEL_ELEM)
+        plugin_element = self.get_element_by_name(RightPanelWindowsDesktopPage.RIGHT_PANEL_ELEM)
 
         object_name_element = plugin_element.find_element_by_xpath(
             RightPanelWindowsDesktopPage.OBJECT_NAME_ELEM % index

@@ -14,10 +14,10 @@ class ExcelMenuMacDesktopPage(BasePage):
 
     def click_add_in_elem(self):
         self._refocus_on_home_tab()
-        self.click_element_by_xpath(ExcelMenuMacDesktopPage.ADDIN_IN_HOME_TAB_TEXT_ELEM)
+        self.get_element_by_xpath(ExcelMenuMacDesktopPage.ADDIN_IN_HOME_TAB_TEXT_ELEM).click()
 
     def _refocus_on_home_tab(self):
         try:
-            self.get_visible_element_by_xpath(ExcelMenuMacDesktopPage.PASTE_BUTTON)
+            self.get_element_by_xpath(ExcelMenuMacDesktopPage.PASTE_BUTTON)
         except:
-            self.get_visible_element_by_xpath(ExcelMenuMacDesktopPage.HOME_TAB_ELEM)
+            self.get_element_by_xpath(ExcelMenuMacDesktopPage.HOME_TAB_ELEM)

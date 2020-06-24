@@ -8,4 +8,4 @@ class NotLoggedRightPanelMacDesktopPage(BasePage):
                                    "'login-btn']"
 
     def click_open_login_pop_up_button(self):
-        self.click_element_by_xpath(NotLoggedRightPanelMacDesktopPage.OPEN_LOGIN_POPUP_BUTTON_ELEM)
+        self.get_element_by_xpath(NotLoggedRightPanelMacDesktopPage.OPEN_LOGIN_POPUP_BUTTON_ELEM).click()

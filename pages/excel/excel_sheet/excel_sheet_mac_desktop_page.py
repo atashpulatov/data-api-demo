@@ -39,32 +39,32 @@ class ExcelSheetMacDesktopPage(BasePage):
     def _go_to_cell(self, cell):
         cell_upper = cell.upper()
 
-        self.click_element_by_xpath(ExcelSheetMacDesktopPage.EDIT_MENU)
-        self.click_element_by_xpath(ExcelSheetMacDesktopPage.EDIT_TAB_FIND)
-        self.click_element_by_xpath(ExcelSheetMacDesktopPage.EDIT_TAB_FIND_GO_TO)
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.EDIT_MENU).click()
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.EDIT_TAB_FIND).click()
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.EDIT_TAB_FIND_GO_TO).click()
 
-        cell_input = self.get_visible_element_by_xpath(ExcelSheetMacDesktopPage.GO_TO_PROMPT_INPUT)
+        cell_input = self.get_element_by_xpath(ExcelSheetMacDesktopPage.GO_TO_PROMPT_INPUT)
         Util.pause(0.1)
 
         cell_input.clear()
         Util.pause(0.1)
 
-        self.send_keys(cell_input, cell_upper)
+        cell_input.send_keys(cell_upper)
         Util.pause(0.1)
 
-        self.send_special_key(cell_input, Keys.ENTER)
+        cell_input.send_keys_raw(Keys.ENTER)
         Util.pause(0.1)
 
     def _get_selected_cell_value(self):
-        self.click_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_TAB)
-        self.click_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_TAB_CELLS)
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_TAB).click()
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_TAB_CELLS).click()
 
-        sample_element = self.get_visible_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_CELLS_PROMPT_SAMPLE)
+        sample_element = self.get_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_CELLS_PROMPT_SAMPLE)
 
         sample_element_text = sample_element.text.strip()
 
         result = sample_element_text if len(sample_element_text) > 0 else None
 
-        self.click_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_CELLS_PROMPT_CANCEL_BUTTON)
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_CELLS_PROMPT_CANCEL_BUTTON).click()
 
         return result

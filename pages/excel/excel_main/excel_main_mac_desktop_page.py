@@ -20,18 +20,15 @@ class ExcelMainMacDesktopPage(BasePage):
                            "'popover_gallery_OfficeExtensionsGallery2_Control_0_0']"
 
     def click_new_blank_workbook_elem(self):
-        self.pause(5)
-        self.log_error(self.driver.page_source)
-
-        element = self.get_visible_element_by_xpath(ExcelMainMacDesktopPage.NEW_BLANK_WORKBOOK_ELEM)
+        element = self.get_element_by_xpath(ExcelMainMacDesktopPage.NEW_BLANK_WORKBOOK_ELEM)
         Util.pause(0.5)
-        self.click_element_simple(element)
+        element.click()
 
     def click_insert_tab_elem(self):
-        self.click_element_by_xpath(ExcelMainMacDesktopPage.INSERT_TAB_ELEM)
+        self.get_element_by_xpath(ExcelMainMacDesktopPage.INSERT_TAB_ELEM).click()
 
     def click_add_in_drop_down_elem(self):
-        self.click_element_by_xpath(ExcelMainMacDesktopPage.ADDIN_DROP_DOWN, offset_x=93, offset_y=20)
+        self.get_element_by_xpath(ExcelMainMacDesktopPage.ADDIN_DROP_DOWN).click(offset_x=93, offset_y=20)
 
     def click_first_add_in_to_import_elem(self):
-        self.click_element_by_xpath(ExcelMainMacDesktopPage.ADDIN_TO_IMPORT_ELEM)
+        self.get_element_by_xpath(ExcelMainMacDesktopPage.ADDIN_TO_IMPORT_ELEM).click()

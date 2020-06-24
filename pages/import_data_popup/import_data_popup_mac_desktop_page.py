@@ -45,26 +45,27 @@ class ImportDataPopupMacDesktopPage(BasePage):
     Y_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT = 130
 
     def ensure_mylibrary_switch_is_off(self):
-        element = self.get_visible_element_by_xpath_list(ImportDataPopupMacDesktopPage.MY_LIBRARY_SWITCH_ELEMS)
+        element = self.get_element_by_xpath_list(ImportDataPopupMacDesktopPage.MY_LIBRARY_SWITCH_ELEMS)
 
         if self._is_on(element):
-            self.click_element_simple(element)
+            element.click()
 
     def _is_on(self, element):
         value = element.get_attribute(ImportDataPopupMacDesktopPage.MY_LIBRARY_SWITCH_VALUE_ATTR)
         return value == ImportDataPopupMacDesktopPage.MY_LIBRARY_SWITCH_VALUE_ATTR_ON_VALUE
 
     def find_and_select_object(self, object_name):
-        search_box = self.get_visible_element_by_xpath_list(ImportDataPopupMacDesktopPage.SEARCH_BAR_ELEMS)
-        self.send_keys(search_box, object_name)
+        search_box = self.get_element_by_xpath_list(ImportDataPopupMacDesktopPage.SEARCH_BAR_ELEMS)
+        search_box.send_keys(object_name)
 
         Util.pause(2)  # TODO wait when ready
 
-        self.click_element_by_xpath_list(
-            ImportDataPopupMacDesktopPage.NAME_HEADER_ELEMS,
+        self.get_element_by_xpath_list(
+            ImportDataPopupMacDesktopPage.NAME_HEADER_ELEMS
+        ).click(
             offset_x=ImportDataPopupMacDesktopPage.X_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT,
             offset_y=ImportDataPopupMacDesktopPage.Y_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT
         )
 
     def click_import_button(self):
-        self.click_element_by_xpath_list(ImportDataPopupMacDesktopPage.IMPORT_BUTTON_ELEMS)
+        self.get_element_by_xpath_list(ImportDataPopupMacDesktopPage.IMPORT_BUTTON_ELEMS).click()

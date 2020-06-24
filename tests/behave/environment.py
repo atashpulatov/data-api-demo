@@ -1,5 +1,5 @@
 from driver.driver_factory import DriverFactory
-from pages.page_util.element_operation import ElementOperation
+from pages.page_util.image_element import ImageElement
 from pages_factory.pages_factory import PagesFactory
 from util.config_util import ConfigUtil
 from util.test_util import TestUtil
@@ -17,7 +17,7 @@ def before_scenario(context, scenario):
         driver_type = ConfigUtil.get_driver_type()
 
         driver = DriverFactory().get_driver(driver_type)
-        ElementOperation.reset_excel_root_element(driver, WINDOWS_DESKTOP_ATTACH_ELEMENT)
+        ImageElement.reset_excel_root_element(driver, WINDOWS_DESKTOP_ATTACH_ELEMENT)
 
         context.pages = PagesFactory().get_pages()
 
