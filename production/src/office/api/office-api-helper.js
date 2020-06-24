@@ -76,6 +76,11 @@ class OfficeApiHelper {
     return { envUrl, username };
   };
 
+  /**
+   * Gets full username from Redux store.
+   *
+   * @return {String} Text with mstr user fullname
+   */
   getCurrentMstrUserFullName = () => {
     const { userFullName } = this.reduxStore.getState().sessionReducer;
     return userFullName;
