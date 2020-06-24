@@ -9,7 +9,7 @@ from pages.page_util.element_check import ElementCheck
 from pages.page_util.element_click import ElementClick
 from pages.page_util.element_get import ElementGet
 from util.config_util import ConfigUtil
-from util.const import AFTER_OPERATION_WAIT_TIME
+from util.const import AFTER_OPERATION_WAIT_TIME, DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER
 from util.util import Util
 
 
@@ -91,27 +91,69 @@ class BasePage(ElementClick, ElementGet, ElementCheck):
     def get_element_name(self, element):
         return element.get_attribute(BasePage.NAME_ATTRIBUTE)
 
+    def send_special_key(self, element, control_key):
+        element.send_keys(control_key)
+
+        self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
+
     def send_keys(self, element, text):
         """
         Sends text (keys) to element and verifies it's correctness.
 
-        Possibly to implement retries.
+        In case of sending incomplete text, execute slower fallback method.
+
         :param element: element to send text to
         :param text: text to send
         """
 
         element.send_keys(text)
 
+        if not self._check_if_keys_sent_correctly(element, text):
+            self._execute_fallback_send_keys(element, text)
+
+    def _execute_fallback_send_keys(self, element, text):
+        """
+        Fallback methods sending text (keys) to element. Waits after sending each character and repeats entering when
+        even with waiting text is incorrect.
+        :param element: element to send text to
+        :param text: text to send
+        """
+        if text:
+            for i in range(0, SEND_KEYS_RETRY_NUMBER):
+                for c in text:
+                    element.send_keys(c)
+
+                    self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
+
+                if self._check_if_keys_sent_correctly(element, text):
+                    return
+
+                element.clear()
+
+            raise Exception('Error while sending keys')
+
+    def _check_if_keys_sent_correctly(self, element, text):
+        """
+        Checks if element contains expected text.
+
+        element.text - should contain text for Windows Desktop
+        element.get_attribute('value') - should contain text for browsers
+
+        TODO check Mac Desktop; TODO verify platform independence
+
+        :param element: element to check text content
+        :param text: expected text
+        :return: True if text is correct, False otherwise
+        """
         text_property = element.text
         if text_property == text:
-            return
+            return True
 
         value_attribute = element.get_attribute('value')
         if value_attribute == text:
-            return
+            return True
 
-        raise Exception('Error while sending keys, expected: [%s], '
-                        'was text_property: [%s] and value_attribute: [%s]' % (text, text_property, value_attribute))
+        self.log_warning('Error while sending keys, expected: [%s], was text_property: [%s] '
+                         'and value_attribute: [%s]' % (text, text_property, value_attribute))
 
-    def send_special_key(self, element, control_key):
-        element.send_keys(control_key)
+        return False
