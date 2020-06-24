@@ -34,10 +34,10 @@ class StepGetObjectDetails {
         ancestors, certifiedInfo, dateModified, owner,
       } = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
 
-      const objectPrompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
+      const prompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 
       const details = populateDetails(ancestors, certifiedInfo, dateModified, owner);
-      const definition = populateDefinition(objectData, objectPrompts);
+      const definition = populateDefinition(objectData, prompts);
 
       const updatedObject = {
         ...objectData,
@@ -70,11 +70,11 @@ const promptAnswerFunctionsMap = {
   VALUE: (prompt) => prompt.answers,
 };
 
-const populateDefinition = (objectData, objectPrompts) => {
-  if (objectPrompts) {
+const populateDefinition = (objectData, prompts) => {
+  if (prompts) {
     return {
       ...objectData.definition,
-      objectPrompts, // might need to null
+      prompts,
     };
   }
   return { ...objectData.definition };
