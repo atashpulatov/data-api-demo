@@ -2,6 +2,7 @@ import { mstrObjectRestService } from './mstr-object-rest-service';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import operationErrorHandler from '../operation/operation-error-handler';
+import {authenticationHelper} from '../authentication/authentication-helper';
 
 class StepGetObjectDetails {
   /**
@@ -85,7 +86,7 @@ const populateDetails = (ancestors, certifiedInfo, dateModified, owner) => ({
   certified: certifiedInfo,
   modifiedDate: dateModified,
   owner,
-  importedBy: officeApiHelper.getCurrentMstrUserFullName(),
+  importedBy: authenticationHelper.getCurrentMstrUserFullName(),
 });
 
 const stepGetObjectDetails = new StepGetObjectDetails();

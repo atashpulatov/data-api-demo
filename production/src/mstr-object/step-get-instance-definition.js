@@ -8,6 +8,7 @@ import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import operationErrorHandler from '../operation/operation-error-handler';
 import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../error/constants';
+import {authenticationHelper} from '../authentication/authentication-helper';
 
 class StepGetInstanceDefinition {
   /**
@@ -69,13 +70,10 @@ class StepGetInstanceDefinition {
         startCell = await this.getStartCell(insertNewWorksheet, excelContext);
       }
 
-      // console.log('instanceDefinition');
-      // console.log(instanceDefinition);
-
       const { mstrTable } = instanceDefinition;
       const updatedObject = {
         objectWorkingId,
-        envUrl: officeApiHelper.getCurrentMstrContext(),
+        envUrl: authenticationHelper.getCurrentMstrContext(),
         body,
         visualizationInfo: visualizationInfo || false,
         name: name || mstrTable.name,

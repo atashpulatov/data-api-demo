@@ -9,6 +9,7 @@ import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-
 import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
+import {authenticationHelper} from '../../authentication/authentication-helper';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -152,7 +153,7 @@ describe('StepGetInstanceDefinition', () => {
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-    jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
+    jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
       .mockReturnValue({
         envUrl: 'envUrlTest',
         username: 'usernameTest',
@@ -286,7 +287,7 @@ describe('StepGetInstanceDefinition', () => {
       );
     }
 
-    expect(officeApiHelper.getCurrentMstrContext).toBeCalledTimes(1);
+    expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
 
     expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
     expect(operationStepDispatcher.updateOperation).toBeCalledWith({
@@ -360,7 +361,7 @@ describe('StepGetInstanceDefinition', () => {
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-    jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
+    jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
       .mockReturnValue({
         envUrl: 'envUrlTest',
         username: 'usernameTest',
@@ -464,7 +465,7 @@ describe('StepGetInstanceDefinition', () => {
       );
     }
 
-    expect(officeApiHelper.getCurrentMstrContext).toBeCalledTimes(1);
+    expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
 
     expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
     expect(operationStepDispatcher.updateOperation).toBeCalledWith({
