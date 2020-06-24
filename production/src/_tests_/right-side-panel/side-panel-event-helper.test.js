@@ -1,5 +1,8 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { notificationService } from '../../notification-v2/notification-service';
+import { sidePanelService } from '../../right-side-panel/side-panel-service';
 
 describe('SidePanelService', () => {
   afterEach(() => {
@@ -35,6 +38,58 @@ describe('SidePanelService', () => {
     expect(stateSetterCallback).toBeCalledWith(mockActiveCell);
     expect(spyAddOnSelectionChangedListener).toBeCalledWith(mockContext, stateSetterCallback);
   });
+
+  it('should remove objects in setOnDeletedTablesEvent', async () => {
+    // given
+    const object = { objectWorkingId: 1, bindId: 1 };
+    const eventObject = { tableId: 1 };
+
+    const mockedExcelContext = jest.spyOn(officeApiHelper, 'checkStatusOfSessions').mockImplementation();
+    const mockedGetObjects = jest.spyOn(officeReducerHelper, 'getObjectFromObjectReducerByBindId').mockReturnValueOnce(object);
+    const mockedRemoveNotification = jest.spyOn(notificationService, 'removeExistingNotification').mockImplementation();
+    const mockedRemove = jest.spyOn(sidePanelService, 'remove').mockImplementation();
+
+
+    // when
+    await sidePanelEventHelper.setOnDeletedTablesEvent(eventObject);
+    // then
+    expect(mockedExcelContext).toBeCalled();
+    expect(mockedGetObjects).toBeCalled();
+    expect(mockedRemoveNotification).toBeCalled();
+    expect(mockedRemove).toBeCalled();
+    expect(mockedRemove).toBeCalledWith([1]);
+  });
+
+  it('should remove objects in setOnDeletedWorksheetEvent', async () => {
+  // given
+    const mockSync = jest.fn();
+    const mockedLoad = jest.fn();
+    const objectsList = [{ objectWorkingId: 1, bindId: 1 }, { objectWorkingId: 2, bindId: 2 }];
+    const objectsOfSheets = [{ objectWorkingId: 1, id: 1 }];
+
+    const mockedExcelContext = jest.spyOn(officeApiHelper, 'checkStatusOfSessions').mockImplementation();
+    const mockedGetObjects = jest.spyOn(officeReducerHelper, 'getObjectsListFromObjectReducer').mockReturnValueOnce(objectsList);
+    const mockedRemoveNotification = jest.spyOn(notificationService, 'removeExistingNotification').mockImplementation();
+    const mockedRemove = jest.spyOn(sidePanelService, 'remove').mockImplementation();
+
+    const exceContext = {
+      sync: mockSync,
+      workbook: {
+        tables: {
+          items: objectsOfSheets,
+          load: mockedLoad }
+      } };
+
+    // when
+    await sidePanelEventHelper.setOnDeletedWorksheetEvent(exceContext);
+    // then
+    expect(mockedExcelContext).toBeCalled();
+    expect(mockedGetObjects).toBeCalled();
+    expect(mockedRemoveNotification).toBeCalled();
+    expect(mockedRemove).toBeCalled();
+    expect(mockedRemove).toBeCalledWith([2]);
+  });
+
 
   it.each`
   version   | firstCall | secondCall | eventAddedTimes
