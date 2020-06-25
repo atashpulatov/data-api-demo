@@ -1,0 +1,47 @@
+<!-- <%@ page language="Java" import="com.microstrategy.auth.sessionmgr.SessionManager" %>
+<%@ page language="Java" import="com.microstrategy.auth.rest.ParamNames" %>
+<%
+  SessionManager sessionManager = (SessionManager)session.getAttribute(ParamNames.SESSION_MANAGER);
+  String authToken = sessionManager.getAccessToken();
+%> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MicroStrategy - Authenticating...</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to login.</noscript>
+  <script>
+    setTimeout(() => {
+    var o = Office;
+    var m = {
+      type: "auth-token",
+      payload: "<%=authToken%>"
+    };
+
+    if (parent && parent !== window) {
+        parent.postMessage(m);
+      }
+      
+      if (opener && opener !== window) {
+        opener.postMessage(m);
+      }
+      
+      function p() {
+        if (o && o.context && o.context.ui && o.context.ui.messageParent) {
+          o.context.ui.messageParent(JSON.stringify(m));
+        }
+      }
+      
+      o.initialize = p;
+      o.onReady().then(p);
+    }, 2500);
+  </script>
+</body>
+
+</html>
