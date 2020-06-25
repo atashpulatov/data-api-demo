@@ -1,8 +1,7 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
-import { officeApiHelper } from '../office/api/office-api-helper';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import operationErrorHandler from '../operation/operation-error-handler';
-import {authenticationHelper} from '../authentication/authentication-helper';
+import { getObjectPrompts, populateDetails, populateDefinition } from './get-object-details-methods';
 
 class StepGetObjectDetails {
   /**
@@ -42,8 +41,8 @@ class StepGetObjectDetails {
 
       const updatedObject = {
         ...objectData,
-        details,
-        definition,
+        ...(details ? { details } : {}),
+        ...(definition ? { definition } : {}),
       };
 
       operationStepDispatcher.updateObject(updatedObject);
@@ -54,40 +53,6 @@ class StepGetObjectDetails {
     }
   };
 }
-
-const getObjectPrompts = async (objectData, objectId, projectId, operationData) => {
-  if (objectData.promptsAnswers) {
-    return (await mstrObjectRestService
-      .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId))
-      .map((prompt) => promptAnswerFunctionsMap[prompt.type](prompt));
-  }
-};
-
-const promptAnswerFunctionsMap = {
-  OBJECTS: (prompt) => prompt.answers.map(answer => answer.name),
-  LEVEL: (prompt) => prompt.answers.units.map(unit => unit.name),
-  EXPRESSION: (prompt) => prompt.answers.content,
-  ELEMENTS: (prompt) => prompt.answers.map(answer => answer.name),
-  VALUE: (prompt) => prompt.answers,
-};
-
-const populateDefinition = (objectData, prompts) => {
-  if (prompts) {
-    return {
-      ...objectData.definition,
-      prompts,
-    };
-  }
-  return { ...objectData.definition };
-};
-
-const populateDetails = (ancestors, certifiedInfo, dateModified, owner) => ({
-  ancestors,
-  certified: certifiedInfo,
-  modifiedDate: dateModified,
-  owner,
-  importedBy: authenticationHelper.getCurrentMstrUserFullName(),
-});
 
 const stepGetObjectDetails = new StepGetObjectDetails();
 export default stepGetObjectDetails;
