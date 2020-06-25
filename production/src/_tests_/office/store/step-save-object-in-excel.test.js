@@ -34,17 +34,22 @@ describe('StepSaveObjectInExcel', () => {
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
     };
+    const instanceDefinition = {
+      rows: 5,
+      columns: 'columnsTest',
+      mstrTable: {},
+    };
 
     jest.spyOn(console, 'error');
-
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation(() => {
       throw new Error('errorTest');
     });
-
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepSaveObjectInExcel.saveObject(objectDataMock, { instanceDefinition: { columns: 'columnsTest' } });
+    await stepSaveObjectInExcel.saveObject(objectDataMock, {
+      instanceDefinition
+    });
 
     // then
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
@@ -52,6 +57,7 @@ describe('StepSaveObjectInExcel', () => {
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledWith(
       {
+        ...objectDataMock,
         previousTableDimensions: {
           rows: 5,
           columns: 'columnsTest'
@@ -64,11 +70,9 @@ describe('StepSaveObjectInExcel', () => {
         },
         refreshDate: 'nowTest'
       },
-      { instanceDefinition: { columns: 'columnsTest' } },
+      { instanceDefinition },
       new Error('errorTest')
     );
-
-    expect(true).toBeFalsy();
 
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
