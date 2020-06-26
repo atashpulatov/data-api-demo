@@ -169,13 +169,13 @@ function processDialogEvent(arg) {
   }
 }
 
-function getStorageItem(key = 'uuid') {
+function getStorageItem(key = 'iSession') {
   return window.localStorage.getItem(key);
 }
-function setStorageItem(value, key = 'uuid') {
+function setStorageItem(value, key = 'iSession') {
   window.localStorage.setItem(key, value);
 }
-function removeStorageItem(key = 'uuid') {
+function removeStorageItem(key = 'iSession') {
   window.localStorage.removeItem(key);
 }
 
