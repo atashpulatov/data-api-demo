@@ -8,7 +8,7 @@ import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import dossierInstanceDefinition from './dossier-instance-definition';
 import operationErrorHandler from '../operation/operation-error-handler';
 import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../error/constants';
-import {authenticationHelper} from '../authentication/authentication-helper';
+import { authenticationHelper } from '../authentication/authentication-helper';
 
 class StepGetInstanceDefinition {
   /**
@@ -83,7 +83,7 @@ class StepGetInstanceDefinition {
         subtotalsInfo,
         manipulationsXML: instanceDefinition.manipulationsXML || false,
         definition: {
-          ...objectData.definition,
+          ...definition,
           attributes: instanceDefinition.attributes,
           metrics: instanceDefinition.metrics,
         },
