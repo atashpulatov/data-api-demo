@@ -32,7 +32,7 @@ class StepGetInstanceDefinition {
     try {
       console.group('Importing data performance');
       console.time('Total');
-      const nextStep = operationData.stepsQueue[2];
+      const futureStep = operationData.stepsQueue[2];
 
       const {
         objectWorkingId,
@@ -66,7 +66,8 @@ class StepGetInstanceDefinition {
 
       this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsInfo.subtotalsAddresses);
 
-      if (nextStep === GET_OFFICE_TABLE_IMPORT) {
+      // FIXME: below flow should not be part of this step
+      if (futureStep === GET_OFFICE_TABLE_IMPORT) {
         startCell = await this.getStartCell(insertNewWorksheet, excelContext);
       }
 

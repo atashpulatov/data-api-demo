@@ -9,7 +9,7 @@ import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-
 import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
-import {authenticationHelper} from '../../authentication/authentication-helper';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -84,7 +84,7 @@ describe('StepGetInstanceDefinition', () => {
       mstrObjectType: {},
       isPrompted: isPromptedParam,
     }, {
-      stepsQueue: ['step_0', undefined],
+      stepsQueue: ['step_0', 'step_1', undefined],
     });
 
     // then
@@ -97,7 +97,7 @@ describe('StepGetInstanceDefinition', () => {
         mstrObjectType: {},
         isPrompted: isPromptedParam,
       }, {
-        stepsQueue: ['step_0', undefined],
+        stepsQueue: ['step_0', 'step_1', undefined],
       }, new Error(expectedErrorMsg));
     }
 
@@ -212,7 +212,7 @@ describe('StepGetInstanceDefinition', () => {
     // when
     await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
       operationType: 'operationTypeTest',
-      stepsQueue: ['step_0', nextStepParam],
+      stepsQueue: ['step_0', 'step_1', nextStepParam],
     });
 
     // then
@@ -240,7 +240,7 @@ describe('StepGetInstanceDefinition', () => {
 
     expect(dossierInstanceDefinition.getVisualizationName).toBeCalledTimes(1);
     expect(dossierInstanceDefinition.getVisualizationName).toBeCalledWith(
-      { operationType: 'operationTypeTest', stepsQueue: ['step_0', nextStepParam] },
+      { operationType: 'operationTypeTest', stepsQueue: ['step_0', 'step_1', nextStepParam] },
       'nameTest',
       { mstrTable: { name: 'mstrTableNameDossierTest' } }
     );
@@ -403,7 +403,7 @@ describe('StepGetInstanceDefinition', () => {
     // when
     await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
       operationType: 'operationTypeTest',
-      stepsQueue: ['step_0', nextStepParam],
+      stepsQueue: ['step_0', 'step_1', nextStepParam],
     });
 
     // then
