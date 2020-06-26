@@ -32,6 +32,7 @@ function startAuthentication() {
     })
     .catch((e) => {
       console.log(e);
+      removeStorageItem();
       showLoginBtn();
     });
 }
@@ -56,7 +57,7 @@ function getLibraryUrl() {
 }
 
 function verifyToken(libraryUrl) {
-  const url = libraryUrl + '/api/sessions/privileges/' + OFFICE_PRIVILEGE_ID;
+  const url = `${libraryUrl}/api/sessions/privileges/${OFFICE_PRIVILEGE_ID}`;
   const token = getStorageItem();
   const headers = { 'X-MSTR-AuthToken': token };
   return fetch(url, { credentials: 'include', headers })
@@ -79,12 +80,13 @@ function verifyToken(libraryUrl) {
 function logout(libraryUrl) {
   const url = libraryUrl + '/api/auth/logout';
   const token = getStorageItem();
+  removeStorageItem();
   const headers = { 'X-MSTR-AuthToken': token };
   return fetch(url, { method: 'POST', credentials: 'include', headers });
 }
 
 function openAuthDialog(url) {
-  const popupUrl = `${url}/apps/addin-mstr-office/auth.html?source=addin-mstr-office`;
+  const popupUrl = `${url}/auth/office-add-in.jsp?source=addin-mstr-office`;
   const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
   const openDialog = isOfficeOnline ? openPopup : openOfficeDialog;
   openDialog(popupUrl, onMessageReceived);
@@ -94,7 +96,7 @@ function onMessageReceived(payload) {
   popup.close();
   console.log(payload);
   setStorageItem(payload);
-  verifyToken(libraryUrl);
+  startAuthentication();
 }
 
 function openPopup(url, callback) {
@@ -125,7 +127,7 @@ function openOfficeDialog(url, callback) {
     popup.close();
   }
 
-  Office.context.ui.displayDialogAsync(url, { height: 85, width: 25 }, (asyncResult) => {
+  Office.context.ui.displayDialogAsync(url, { height: 75, width: 25 }, (asyncResult) => {
       const { error, value } = asyncResult || {};
       if (value) {
         popup = value;
@@ -172,6 +174,9 @@ function getStorageItem(key = 'uuid') {
 }
 function setStorageItem(value, key = 'uuid') {
   window.localStorage.setItem(key, value);
+}
+function removeStorageItem(key = 'uuid') {
+  window.localStorage.removeItem(key);
 }
 
 function showCookieWarning() {
