@@ -63,34 +63,27 @@ describe('HomeHelper', () => {
       expect(resultCookieArray).toEqual(expectedCookieArray);
     });
   });
-  describe('saveTokenFromCookies', () => {
-    it('should not save when there is no iSession cookie', () => {
+  describe('saveTokenFromStorage', () => {
+    it('should not save when there is no iSession', () => {
       // given
-      const cookieJarWithoutToken = {
-        someCookie: 'someCookieValue',
-        otherCookie: 'otherCookieValue',
-      };
-      jest.spyOn(homeHelper, 'getParsedCookies')
-        .mockReturnValueOnce(cookieJarWithoutToken);
+      const iSession = null;
+      jest.spyOn(homeHelper, 'getStorageItem')
+        .mockReturnValueOnce(iSession);
       // when
-      homeHelper.saveTokenFromCookies();
+      homeHelper.saveTokenFromStorage();
       // then
       expect(sessionActions.logIn).not.toBeCalled();
     });
-    it('should save authToken when there is iSession cookie', () => {
+    it('should save authToken when there is iSession in storage', () => {
       // given
-      const cookieJarWithoutToken = {
-        someCookie: 'someCookieValue',
-        otherCookie: 'otherCookieValue',
-        iSession: 'someAuthToken',
-      };
-      jest.spyOn(homeHelper, 'getParsedCookies')
-        .mockReturnValueOnce(cookieJarWithoutToken);
+      const iSession = 'token';
+      jest.spyOn(homeHelper, 'getStorageItem')
+        .mockReturnValueOnce(iSession);
       // when
-      homeHelper.saveTokenFromCookies();
+      homeHelper.saveTokenFromStorage();
       // then
       expect(sessionActions.logIn).toBeCalled();
-      expect(sessionActions.logIn).toBeCalledWith(cookieJarWithoutToken.iSession);
+      expect(sessionActions.logIn).toBeCalledWith(iSession);
     });
     it('should return window location', () => {
       // given
