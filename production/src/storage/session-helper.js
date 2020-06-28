@@ -43,7 +43,7 @@ class SessionHelper {
       const currentPath = window.location.pathname;
       const pathBeginning = currentPath.split('/apps/')[0];
       const loginParams = 'source=addin-mstr-office';
-      window.location.replace(`${pathBeginning}/static/loader-mstr-office/index.html?${loginParams}`);
+      window.location.replace(`${encodeURI(pathBeginning)}/static/loader-mstr-office/index.html?${loginParams}`);
     } else {
       sessionActions.disableLoading();
       if (shouldReload) {
