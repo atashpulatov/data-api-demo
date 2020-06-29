@@ -13,7 +13,8 @@ function officeInitialize() {
       if (window.location.protocol !== 'https:') {
         return window.location.replace(`${libraryUrl}/static/loader-mstr-office/no-https-connection.html`);
       }
-      if (!canSaveCookies()) {
+      if (!canSaveCookies() || !storageAvailable('localStorage')) {
+        //TODO: We may need to update the warning to include local storage
         showCookieWarning();
       } else {
         startAuthentication();
@@ -106,7 +107,7 @@ function openPopup(url, callback) {
     const left = (screen.width - width) / 2;
     const top = (screen.height - height) / 2;
     popup = window.open(url, 'MicroStrategy_for_Office', `resizable=1,status=1,height=${height},width=${width},top=${top},left=${left},screenX=${left},screenY=${top}location=0,dependent=1,alwaysOnTop=1`);
-    const onMessage =  (event) => {
+    const onMessage = (event) => {
       const { type, payload } = event.data || {};
       if (type === 'auth-token' && payload) {
         console.log('Received payload from child window.');
@@ -128,26 +129,26 @@ function openOfficeDialog(url, callback) {
   }
 
   Office.context.ui.displayDialogAsync(url, { height: 75, width: 25 }, (asyncResult) => {
-      const { error, value } = asyncResult || {};
-      if (value) {
-        popup = value;
-        popup.closed = false;
-        const onMessageReceived = (event) => {
-          const { message } = event || {};
-          if (message && typeof message === 'string') {
-            const { type, payload } = JSON.parse(message);
-            if (type === 'auth-token' && payload) {
-              console.log('Received payload from Office dialog');
-              callback(payload);
-            }
+    const { error, value } = asyncResult || {};
+    if (value) {
+      popup = value;
+      popup.closed = false;
+      const onMessageReceived = (event) => {
+        const { message } = event || {};
+        if (message && typeof message === 'string') {
+          const { type, payload } = JSON.parse(message);
+          if (type === 'auth-token' && payload) {
+            console.log('Received payload from Office dialog');
+            callback(payload);
           }
         }
-        popup.addEventHandler(Office.EventType.DialogEventReceived, processDialogEvent);
-        popup.addEventHandler(Office.EventType.DialogMessageReceived, onMessageReceived );
-      } else {
-        console.log(error);
       }
+      popup.addEventHandler(Office.EventType.DialogEventReceived, processDialogEvent);
+      popup.addEventHandler(Office.EventType.DialogMessageReceived, onMessageReceived);
+    } else {
+      console.log(error);
     }
+  }
   );
 }
 
@@ -207,6 +208,31 @@ function canSaveCookies() {
 
 function acceptCookies() {
   window.open('cookie-helper.html', 'mstr_helper', "width=1px,height=1px");
+}
+
+function storageAvailable(type) {
+  var storage;
+  try {
+    storage = window[type];
+    var x = '__storage_test__';
+    storage.setItem(x, x);
+    storage.removeItem(x);
+    return true;
+  }
+  catch (e) {
+    return e instanceof DOMException && (
+      // everything except Firefox
+      e.code === 22 ||
+      // Firefox
+      e.code === 1014 ||
+      // test name field too, because code might not be present
+      // everything except Firefox
+      e.name === 'QuotaExceededError' ||
+      // Firefox
+      e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+      // acknowledge QuotaExceededError only if there's something already stored
+      (storage && storage.length !== 0);
+  }
 }
 
 function translate() {
