@@ -84,7 +84,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         value_elem = self.get_elements_by_css(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)[1]
         value_elem.click()
 
-        return formatted_value if formatted_value else None
+        return formatted_value if formatted_value else ''
 
     def _format_value(self, value):
         """

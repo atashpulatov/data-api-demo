@@ -63,7 +63,7 @@ class ExcelSheetMacDesktopPage(BasePage):
 
         sample_element_text = sample_element.text.strip()
 
-        result = sample_element_text if len(sample_element_text) > 0 else None
+        result = sample_element_text if len(sample_element_text) > 0 else ''
 
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_CELLS_PROMPT_CANCEL_BUTTON).click()
 

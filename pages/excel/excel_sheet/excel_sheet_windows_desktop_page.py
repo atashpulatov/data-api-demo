@@ -60,7 +60,9 @@ class ExcelSheetWindowsDesktopPage(BasePage):
 
         cell_elem = self.get_element_by_name(cell_selector_name)
 
-        return cell_elem.get_attribute(ExcelSheetWindowsDesktopPage.VALUE_ATTRIBUTE)
+        cell_value = cell_elem.get_attribute(ExcelSheetWindowsDesktopPage.VALUE_ATTRIBUTE)
+
+        return cell_value if cell_value else ''
 
     def _get_selector_name(self, cell):
         cell_upper = cell.upper()
