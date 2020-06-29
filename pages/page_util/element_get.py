@@ -75,7 +75,7 @@ class ElementGet(ElementCheck):
 
     def _get_raw_element(self, selector_type, selector, timeout):
         start_time = time.time()
-        Util.log(('get_visible_element', selector))
+        Util.log(('_get_raw_element', selector))
 
         wait = WebDriverWait(self.driver, timeout)
         wait.until(ec.visibility_of_element_located((selector_type, selector)))
@@ -83,7 +83,7 @@ class ElementGet(ElementCheck):
         element = self.driver.find_element(selector_type, selector)
 
         diff_time = time.time() - start_time
-        Util.log(('get_visible_element', selector, diff_time))
+        Util.log(('_get_raw_element', selector, diff_time))
 
         return element
 

@@ -3,7 +3,7 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
     ColumnsAndFiltersSelectionWindowsDesktopPage
 from pages.duplicate_object_popup.duplicate_object_popup_windows_desktop_page import \
     DuplicateObjectPopupWindowsDesktopPage
-from pages.excel.excel_close.excel_close_windows_desktop_page import CleanupWindowsDesktopPage
+from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDesktopPage
 from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWindowsDesktopPage
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
 from pages.excel.start_excel.start_excel_windows_desktop_page import StartExcelWindowsDesktopPage

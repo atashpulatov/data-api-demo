@@ -106,6 +106,7 @@ class RightPanelBrowserPage(BaseBrowserPage):
     def logout(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelBrowserPage.DOTS_MENU).click()
+        if self.check_if_element_exists_by_css(RightPanelBrowserPage.DOTS_MENU, timeout=5):
+            self.get_element_by_css(RightPanelBrowserPage.DOTS_MENU).click()
 
-        self.get_element_by_id(RightPanelBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()
+            self.get_element_by_id(RightPanelBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()

@@ -9,6 +9,8 @@ class CleanupBrowserPage(BaseBrowserPage):
         self.right_panel_browser_page = RightPanelBrowserPage()
 
     def clean_up_after_each_test(self):
+        self.right_panel_browser_page.logout()
+
         self.switch_to_excel_workbook_window()
         self.driver.close()
         self.switch_to_excel_initial_window()

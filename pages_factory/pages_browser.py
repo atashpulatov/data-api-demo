@@ -2,7 +2,7 @@ from pages.add_in_login.add_in_login_browser_page import AddInLoginBrowserPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_browser_page import \
     ColumnsAndFiltersSelectionBrowserPage
 from pages.duplicate_object_popup.duplicate_object_popup_browser_page import DuplicateObjectPopupBrowserPage
-from pages.excel.excel_close.excel_close_browser_page import CleanupBrowserPage
+from pages.excel.cleanup.cleanup_browser_page import CleanupBrowserPage
 from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
 from pages.excel.start_excel.start_excel_browser_page import StartExcelBrowserPage

@@ -1,5 +1,5 @@
 from pages.add_in_login.add_in_login_mac_desktop_page import AddInLoginMacDesktopPage
-from pages.excel.excel_close.excel_close_mac_desktop_page import CleanupMacDesktopPage
+from pages.excel.cleanup.cleanup_mac_desktop_page import CleanupMacDesktopPage
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 from pages.excel.excel_sheet.excel_sheet_mac_desktop_page import ExcelSheetMacDesktopPage
 from pages.excel.start_excel.start_excel_mac_desktop_page import StartExcelMacDesktopPage

@@ -57,7 +57,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         cell_input.click()
         self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
 
-        cell_input.send_keys(cell_upper)
+        cell_input.send_keys_raw(cell_upper)
 
         cell_input.send_keys_raw(Keys.ENTER)
         self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
