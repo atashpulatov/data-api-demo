@@ -1,6 +1,7 @@
 import json
 
 from pages.base_windows_desktop_page import BaseWindowsDesktopPage
+from util.exception.MstrException import MstrException
 
 
 class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -106,4 +107,4 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
                 ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT))
 
         if not element_coordinates:
-            raise Exception('Error while opening Attributes Metrics Filters')
+            raise MstrException('Error while opening Attributes Metrics Filters')

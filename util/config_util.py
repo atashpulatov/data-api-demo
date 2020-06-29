@@ -2,6 +2,7 @@ import json
 import os
 
 from driver.driver_type import DRIVER_TYPE_WINDOWS_DESKTOP, AVAILABLE_DRIVERS
+from util.exception.MstrException import MstrException
 from util.util import Util
 
 
@@ -40,7 +41,7 @@ class ConfigUtil:
         driver_type = ConfigUtil._get_variable_value(ConfigUtil.VAR_DRIVER_TYPE)
 
         if driver_type not in AVAILABLE_DRIVERS:
-            raise Exception(
+            raise MstrException(
                 'Specified driver type not allowed: [%s], available drivers: %s.' % (driver_type, AVAILABLE_DRIVERS))
 
         return driver_type
@@ -121,7 +122,7 @@ class ConfigUtil:
             ConfigUtil.VAR_VALUES_CACHE[variable_name] = None
             return ConfigUtil.VAR_VALUES_CACHE[variable_name]
 
-        raise Exception('Configuration variable [%s] does not exist but is required.' % variable_name)
+        raise MstrException('Configuration variable [%s] does not exist but is required.' % variable_name)
 
     @staticmethod
     def _get_config():

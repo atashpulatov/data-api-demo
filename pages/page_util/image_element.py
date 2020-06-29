@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 
 from pages.page_util.base_element import BaseElement
 from util.const import AFTER_OPERATION_WAIT_TIME
+from util.exception.MstrException import MstrException
 from util.util import Util
 
 
@@ -31,39 +32,39 @@ class ImageElement(BaseElement):
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     def right_click(self):
-        raise NotImplementedError('Implement when needed')
+        raise MstrException('Implement when needed')
 
     @property
     def id(self):
-        raise Exception('Invalid usage of ImageElement, id is not allowed')
+        raise MstrException('Invalid usage of ImageElement, id is not allowed')
+
+    def clear(self):
+        raise MstrException('Invalid usage of ImageElement, clear() is not allowed')
 
     @property
     def text(self):
-        raise Exception('Invalid usage of ImageElement, text is not allowed')
-
-    def clear(self):
-        raise Exception('Invalid usage of ImageElement, clear() is not allowed')
+        raise MstrException('Invalid usage of ImageElement, text is not allowed')
 
     def get_attribute(self, attribute_name):
-        raise Exception('Invalid usage of ImageElement, get_attribute() is not allowed')
-
-    def send_keys(self, text):
-        raise Exception('Invalid usage of ImageElement, send_keys() is not allowed')
-
-    def send_keys_raw(self, special_key):
-        raise Exception('Invalid usage of ImageElement, send_keys_raw() is not allowed')
+        raise MstrException('Invalid usage of ImageElement, get_attribute() is not allowed')
 
     def find_element_by_xpath(self, selector):
-        raise Exception('Invalid usage of ImageElement, find_element_by_xpath() is not allowed')
+        raise MstrException('Invalid usage of ImageElement, find_element_by_xpath() is not allowed')
 
     def find_elements_by_xpath(self, selector):
-        raise Exception('Invalid usage of ImageElement, find_elements_by_xpath() is not allowed')
+        raise MstrException('Invalid usage of ImageElement, find_elements_by_xpath() is not allowed')
 
     def find_element(self, selector_type, selector):
-        raise Exception('Invalid usage of ImageElement, find_element() is not allowed')
-
-    def move_to(self, offset_x=0, offset_y=0):
-        raise Exception('Invalid usage of ImageElement, move_to() is not allowed')
+        raise MstrException('Invalid usage of ImageElement, find_element() is not allowed')
 
     def value_of_css_property(self, property_name):
-        raise Exception('Invalid usage of ImageElement, value_of_css_property() is not allowed')
+        raise MstrException('Invalid usage of ImageElement, value_of_css_property() is not allowed')
+
+    def move_to(self, offset_x=0, offset_y=0):
+        raise MstrException('Invalid usage of ImageElement, move_to() is not allowed')
+
+    def send_keys_raw(self, special_key):
+        raise MstrException('Invalid usage of ImageElement, send_keys_raw() is not allowed')
+
+    def send_keys(self, text):
+        raise MstrException('Invalid usage of ImageElement, send_keys() is not allowed')

@@ -2,6 +2,7 @@ from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.webdriver import ActionChains
 
 from util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME
+from util.exception.MstrException import MstrException
 from util.util import Util
 
 
@@ -58,9 +59,6 @@ class BaseElement:
     def value_of_css_property(self, property_name):
         return self.__element.value_of_css_property(property_name)
 
-    def send_keys_raw(self, special_key):
-        self.__element.send_keys(special_key)
-
     def move_to(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
             (ActionChains(self.__driver)
@@ -74,6 +72,9 @@ class BaseElement:
              .perform())
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
+
+    def send_keys_raw(self, special_key):
+        self.__element.send_keys(special_key)
 
     def send_keys(self, text):
         """
@@ -109,7 +110,7 @@ class BaseElement:
 
                 self.__element.clear()
 
-            raise Exception('Error while sending keys')
+            raise MstrException('Error while sending keys')
 
     def _check_if_keys_sent_correctly(self, text):
         """

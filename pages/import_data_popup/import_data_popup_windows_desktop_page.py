@@ -1,6 +1,7 @@
 from pages.base_windows_desktop_page import BaseWindowsDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
+from util.exception.MstrException import MstrException
 from util.util import Util
 
 
@@ -40,7 +41,7 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
             if property_on_off[0] == ImportDataPopupWindowsDesktopPage.ARIA_PROPERTY_CHECKED:
                 return property_on_off[1]
 
-        raise Exception('Missing Aria property')
+        raise MstrException('Missing Aria property')
 
     def _get_element_aria_properties(self, element):
         return element.get_attribute(ImportDataPopupWindowsDesktopPage.ARIA_PROPERTIES_ATTRIBUTE)
@@ -61,7 +62,7 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not self.check_if_element_exists_by_name(
                 ImportDataPopupWindowsDesktopPage.IMPORT_SUCCESSFUL_TEXT):
-            raise Exception('Error while importing')
+            raise MstrException('Error while importing')
 
     def click_prepare_data_button(self):
         self.get_element_by_name(

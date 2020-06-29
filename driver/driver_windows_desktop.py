@@ -2,6 +2,7 @@ from appium import webdriver
 from urllib3.exceptions import MaxRetryError
 
 from util.config_util import ConfigUtil
+from util.exception.MstrException import MstrException
 from util.util import Util
 
 
@@ -68,7 +69,7 @@ class DriverWindowsDesktop:
 
                 return driver
             except MaxRetryError:
-                raise Exception('Error while starting test, ensure Appium or WinAppDriver is running')
+                raise MstrException('Error while starting test, ensure Appium or WinAppDriver is running')
 
     @staticmethod
     def driver_cleanup(driver):

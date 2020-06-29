@@ -4,6 +4,7 @@ from selenium.common.exceptions import NoSuchFrameException, NoSuchWindowExcepti
 
 from pages.base_page import BasePage
 from util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, DEFAULT_WAIT_AFTER_EXCEPTION
+from util.exception.MstrException import MstrException
 from util.util import Util
 
 
@@ -53,7 +54,7 @@ class BaseBrowserPage(BasePage):
             self.pause(DEFAULT_WAIT_AFTER_EXCEPTION)
 
             if time.time() > end_time:
-                raise Exception('Cannot focus on excel frame')
+                raise MstrException('Cannot focus on excel frame')
 
     def focus_on_import_data_pop_up_frame(self):
         self.focus_on_excel_frame()
@@ -93,7 +94,7 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 break
 
-        raise Exception(('Value not found', selector, attribute, expected_value))
+        raise MstrException(('Value not found', selector, attribute, expected_value))
 
     def find_element_by_text_in_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
@@ -109,7 +110,7 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 break
 
-        raise Exception('No Attribute found: %s' % expected_text)
+        raise MstrException('No Attribute found: %s' % expected_text)
 
     def focus_on_add_in_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
@@ -135,4 +136,4 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 break
 
-        raise Exception('failed to focus on AddIn iframe')
+        raise MstrException('failed to focus on AddIn iframe')

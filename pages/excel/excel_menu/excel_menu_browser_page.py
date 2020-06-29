@@ -1,6 +1,7 @@
 from pages.base_browser_page import BaseBrowserPage
 from util.config_util import ConfigUtil
 from util.const import ELEMENT_SEARCH_RETRY_NUMBER
+from util.exception.MstrException import MstrException
 
 
 class ExcelMenuBrowserPage(BaseBrowserPage):
@@ -22,4 +23,4 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
             self.pause(5)
 
-        raise Exception('Cannot find AddIn element.')
+        raise MstrException('Cannot find AddIn element.')

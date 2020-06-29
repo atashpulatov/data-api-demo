@@ -2,6 +2,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 from pages.base_page import BasePage
 from util.const import ELEMENT_SEARCH_RETRY_NUMBER, DEFAULT_WAIT_AFTER_EXCEPTION
+from util.exception.MstrException import MstrException
 
 
 class BaseWindowsDesktopPage(BasePage):
@@ -24,7 +25,7 @@ class BaseWindowsDesktopPage(BasePage):
                 i += 1
 
             if not mstr_elems:
-                raise Exception('Cannot find any element: %s' % BaseWindowsDesktopPage.POPUP_MAIN_ELEMENT)
+                raise MstrException('Cannot find any element: %s' % BaseWindowsDesktopPage.POPUP_MAIN_ELEMENT)
 
             BaseWindowsDesktopPage.popup_main_element = mstr_elems[0]
 
@@ -40,7 +41,7 @@ class BaseWindowsDesktopPage(BasePage):
                 self.pause(5)
             i += 1
 
-        raise Exception('Cannot find element: %s' % selector)
+        raise MstrException('Cannot find element: %s' % selector)
 
     def get_element_name(self, element):
         return element.get_attribute(BaseWindowsDesktopPage.NAME_ATTRIBUTE)

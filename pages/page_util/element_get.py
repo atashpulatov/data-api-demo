@@ -10,6 +10,7 @@ from pages.page_util.base_element import BaseElement
 from pages.page_util.element_check import ElementCheck
 from pages.page_util.image_element import ImageElement
 from util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER
+from util.exception.MstrException import MstrException
 from util.util import Util
 
 
@@ -102,4 +103,4 @@ class ElementGet(ElementCheck):
                 Util.pause(5)
             i += 1
 
-        raise Exception('Cannot find element: %s' % selector)
+        raise MstrException('Cannot find element: %s' % selector)

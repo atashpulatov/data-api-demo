@@ -1,4 +1,5 @@
 from pages.base_windows_desktop_page import BaseWindowsDesktopPage
+from util.exception.MstrException import MstrException
 
 
 class RightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -42,7 +43,7 @@ class RightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         object_index = int(tile_no) - 1
 
         if object_index > len(elements):
-            raise Exception(('Not possible to click tile, given object index too big', object_index, elements))
+            raise MstrException(('Not possible to click tile, given object index too big', object_index, elements))
 
         found_element = elements[object_index]
 
