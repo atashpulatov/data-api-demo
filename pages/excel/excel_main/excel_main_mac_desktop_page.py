@@ -12,10 +12,10 @@ class ExcelMainMacDesktopPage(BasePage):
     INSERT_TAB_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole=" \
                       "'AXStandardWindow']/AXTabGroup[0]/AXRadioButton[@AXTitle='Insert']"
 
-    ADDIN_DROP_DOWN = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole=" \
+    ADD_IN_DROP_DOWN = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole=" \
                       "'AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[3]/AXMenuButton[@AXTitle='My Add-ins']"
 
-    ADDIN_TO_IMPORT_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='My Add-ins' and @AXSubrole=" \
+    ADD_IN_TO_IMPORT_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='My Add-ins' and @AXSubrole=" \
                            "'AXUnknown']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXRadioButton[@AXIdentifier=" \
                            "'popover_gallery_OfficeExtensionsGallery2_Control_0_0']"
 
@@ -28,7 +28,7 @@ class ExcelMainMacDesktopPage(BasePage):
         self.get_element_by_xpath(ExcelMainMacDesktopPage.INSERT_TAB_ELEM).click()
 
     def click_add_in_drop_down_elem(self):
-        self.get_element_by_xpath(ExcelMainMacDesktopPage.ADDIN_DROP_DOWN).click(offset_x=93, offset_y=20)
+        self.get_element_by_xpath(ExcelMainMacDesktopPage.ADD_IN_DROP_DOWN).click(offset_x=93, offset_y=20)
 
     def click_first_add_in_to_import_elem(self):
-        self.get_element_by_xpath(ExcelMainMacDesktopPage.ADDIN_TO_IMPORT_ELEM).click()
+        self.get_element_by_xpath(ExcelMainMacDesktopPage.ADD_IN_TO_IMPORT_ELEM).click()

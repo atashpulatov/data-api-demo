@@ -120,21 +120,21 @@ source venv_mac/bin/activate
 
 ```
 # test single feature, Windows Desktop:
-behave -D DRIVER_TYPE=windows_desktop tests/behave/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave -D driver_type=windows_desktop tests/behave/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, Mac Chrome, no colors, verbose logging, all logs printed to console: 
-behave -D DRIVER_TYPE=mac_chrome --tags=mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/behave/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/behave/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test all features in F25931_duplicate_object directory, Mac Chrome, no colors, less verbose logging, all logs printed to console:
-behave -D DRIVER_TYPE=mac_chrome --tags=mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/behave/F25931_duplicate_object/
+behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/behave/F25931_duplicate_object/
 
 # test all features, Mac Chrome, no colors, only steps related information and errors logged, all logs printed to console:
-behave -D DRIVER_TYPE=mac_chrome --tags=mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/behave/
+behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/behave/
 ```
 
 ##### Important parameters
 
-**-D DRIVER_TYPE=driver_name** specifies the target platform to execute test on (the driver to be used),
+**-D driver_type=driver_name** specifies the target platform to execute test on (the driver to be used),
 where **driver_name** is one of available driver types (see [driver_type.py](driver/driver_type.py)):
 
 - windows_desktop
@@ -150,6 +150,8 @@ values as for **driver_name** (windows_desktop, windows_chrome, mac_desktop, mac
 - DEBUG
 - WARNING
 - ERROR
+
+For complete list of available custom parameters (specified using -D) see [config.json](config/config.json). 
 
 ### 3. TODO
 

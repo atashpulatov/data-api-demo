@@ -1,19 +1,14 @@
 {
+  "driver_type": "windows_desktop",
   "image_recognition_enabled": true,
   "connect_to_open_excel_enabled": false,
   "cleanup_after_test_enabled": true,
-  "driver_executable_path": {
-    "mac_chrome": "resources/chromedriver83",
-    "windows_chrome": "resources\\chromedriver83.exe",
-    "windows_desktop": "C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\EXCEL.EXE"
-  },
-  "desktop_host": {
-    "mac_desktop": "http://localhost:4622/wd/hub",
-    "windows_desktop": "http://192.168.1.248:4723/wd/hub"
-  },
-  "excel": {
-    "add_in_environment": "env-190209",
-    "user_name": "testing.universal@mstrtesting.onmicrosoft.com",
-    "user_password": "somePassword1"
-  }
+  "driver_path_windows_desktop": "C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
+  "driver_path_windows_chrome": "resources\\chromedriver83.exe",
+  "driver_path_mac_chrome": "resources/chromedriver83",
+  "host_url_mac_desktop": "http://localhost:4622/wd/hub",
+  "host_url_windows_desktop": "http://localhost:4723/wd/hub",
+  "excel_add_in_environment": "190209",
+  "excel_user_name": "testing.universal@mstrtesting.onmicrosoft.com",
+  "excel_user_password": "somePassword1"
 }
