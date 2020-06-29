@@ -91,7 +91,7 @@ class ElementGet(ElementCheck):
         return self.driver.find_elements(selector_type, selector)
 
     def find_element_by_css_from_parent(self, parent_element, selector):
-        return BaseElement(self._find_raw_element_from_parent(By.CSS_SELECTOR, parent_element, selector))
+        return BaseElement(self._find_raw_element_from_parent(By.CSS_SELECTOR, parent_element, selector), self.driver)
 
     def _find_raw_element_from_parent(self, selector_type, parent_element, selector):
         i = 0
