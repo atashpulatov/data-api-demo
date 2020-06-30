@@ -20,7 +20,6 @@ class CompoundGridHandler {
     const isCrosstabular = false;
     const columnInformation = this.getColumnInformation(definition, data, attrforms);
     const isCrosstab = true;
-
     return {
       tableSize: this.getTableSize(data),
       columnInformation,
@@ -139,7 +138,7 @@ class CompoundGridHandler {
     for (let row = 0; row < paging.current; row++) {
       const rowValues = [];
       for (let colSet = 0; colSet < columnSets.length; colSet++) {
-        rowValues.push(...columnSets[colSet][valueMatrix][row]);
+        rowValues.push(...columnSets[colSet][valueMatrix][row] || '\'');
       }
       rowTable.push(rowValues);
     }
