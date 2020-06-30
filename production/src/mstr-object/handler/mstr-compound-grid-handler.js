@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
+import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
 
 /**
  * Handler to parse compound grid
@@ -54,7 +55,7 @@ class CompoundGridHandler {
     const parsedColumnSetColumns = mstrNormalizedJsonHandler.getMetricsColumnsInformation(columnSetColumns);
     const columns = [...commonColumns[commonColumns.length - 1], ...parsedColumnSetColumns];
 
-    return mstrNormalizedJsonHandler.splitAttributeForms(columns, supportForms);
+    return mstrAttributeFormHelper.splitAttributeForms(columns, supportForms);
   }
 
   /**
@@ -83,7 +84,7 @@ class CompoundGridHandler {
    * @return {Object} Contains arrays of columns and rows attributes names
    */
   getAttributesName(definition, attrforms) {
-    const rowsAttributes = mstrNormalizedJsonHandler.getAttributeWithForms(definition.grid.rows, attrforms);
+    const rowsAttributes = mstrAttributeFormHelper.getAttributeWithForms(definition.grid.rows, attrforms);
     return { rowsAttributes };
   }
 
@@ -159,7 +160,7 @@ class CompoundGridHandler {
     const onElement = (array) => (e) => {
       if (array) { array.push(e.subtotalAddress); }
       // attribute as row with forms
-      const forms = mstrNormalizedJsonHandler.getAttributesTitleWithForms(e, attrforms);
+      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(e, attrforms);
       if (forms) {
         return forms;
       }

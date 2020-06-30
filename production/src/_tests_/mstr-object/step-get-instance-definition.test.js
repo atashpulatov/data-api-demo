@@ -1,8 +1,8 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import stepGetInstanceDefinition from '../../mstr-object/step-get-instance-definition';
+import stepGetInstanceDefinition from '../../mstr-object/instance/step-get-instance-definition';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import dossierInstanceDefinition from '../../mstr-object/dossier-instance-definition';
+import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instance-definition';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';

@@ -2,7 +2,7 @@ import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
 import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 import metricsInRowCompoundJSON from './compound-grid/Compound Grid with Metrics on Row.json';
 import oneEmptyCompoundJSON from './compound-grid/Compound Grid with Empty Column Set.json';
-import mstrCompoundGridHandler from '../../mstr-object/mstr-compound-grid-handler';
+import mstrCompoundGridHandler from '../../mstr-object/handler/mstr-compound-grid-handler';
 
 describe('Compound Grid Handler', () => {
   it('should create mstr table object', () => {

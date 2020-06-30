@@ -1,4 +1,4 @@
-import dossierInstanceDefinition from '../../mstr-object/dossier-instance-definition';
+import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instance-definition';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE } from '../../error/constants';

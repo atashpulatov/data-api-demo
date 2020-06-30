@@ -1,13 +1,13 @@
-import { mstrObjectRestService } from './mstr-object-rest-service';
-import mstrObjectEnum from './mstr-object-type-enum';
-import { GET_OFFICE_TABLE_IMPORT } from '../operation/operation-steps';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import { mstrObjectRestService } from '../mstr-object-rest-service';
+import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import dossierInstanceDefinition from './dossier-instance-definition';
-import operationErrorHandler from '../operation/operation-error-handler';
-import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../error/constants';
+import operationErrorHandler from '../../operation/operation-error-handler';
+import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
+import mstrObjectEnum from '../mstr-object-type-enum';
 
 class StepGetInstanceDefinition {
   /**
