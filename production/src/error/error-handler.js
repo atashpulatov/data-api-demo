@@ -91,8 +91,7 @@ class ErrorService {
   }]);
 
   checkForLogout = (isLogout = false, errorType) => {
-    if (!isLogout
-      && [errorTypes.UNAUTHORIZED_ERR].includes(errorType)) {
+    if (!isLogout && [errorTypes.UNAUTHORIZED_ERR].includes(errorType)) {
       setTimeout(() => {
         this.fullLogOut();
       }, TIMEOUT);
