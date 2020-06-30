@@ -98,6 +98,21 @@ pip install opencv-python-headless
 - [AppiumForMac](https://github.com/appium/appium-for-mac/releases) (not Appium, e.g.
 [see issue](https://github.com/appium/appium-for-mac/issues/82)) installed and running.
 
+##### Mac Chrome browser
+
+Ensure version of **resources/chromedriverNN** is the same as Chrome browser installed (NN) and this file has proper
+permissions (-rwxr-xr-x):
+
+```
+-rwxr-xr-x  1 user  group  15093428 Jun 22 17:38 resources/chromedriverNN
+```
+
+To change permission execute from shell:
+
+```
+chmod a+rx resources/chromedriverNN
+```
+
 ### 2. Running tests
 
 #### Activate Python venv environment:
@@ -120,16 +135,16 @@ source venv_mac/bin/activate
 
 ```
 # test single feature, Windows Desktop:
-behave -D driver_type=windows_desktop tests/behave/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave -D driver_type=windows_desktop tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, Mac Chrome, no colors, verbose logging, all logs printed to console: 
-behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/behave/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test all features in F25931_duplicate_object directory, Mac Chrome, no colors, less verbose logging, all logs printed to console:
-behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/behave/F25931_duplicate_object/
+behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/
 
 # test all features, Mac Chrome, no colors, only steps related information and errors logged, all logs printed to console:
-behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/behave/
+behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/
 ```
 
 ##### Important parameters
