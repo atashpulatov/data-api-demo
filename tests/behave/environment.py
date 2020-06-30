@@ -1,4 +1,5 @@
 from driver.driver_factory import DriverFactory
+from driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
 from pages.page_util.image_element import ImageElement
 from pages_factory.pages_factory import PagesFactory
 from util.config_util import ConfigUtil
@@ -13,11 +14,13 @@ def before_all(context):
 
 
 def before_scenario(context, scenario):
-    if ConfigUtil.is_attaching_to_open_excel_enabled():
+    if ConfigUtil.is_attaching_to_existing_session_enabled():
         driver_type = ConfigUtil.get_driver_type()
 
         driver = DriverFactory().get_driver(driver_type)
-        ImageElement.reset_excel_root_element(driver, WINDOWS_DESKTOP_ATTACH_ELEMENT)
+
+        if driver_type in DRIVERS_SUPPORTING_IMAGE_RECOGNITION:
+            ImageElement.reset_excel_root_element(driver, WINDOWS_DESKTOP_ATTACH_ELEMENT)
 
         context.pages = PagesFactory().get_pages()
 

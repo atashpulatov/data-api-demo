@@ -23,14 +23,9 @@ class ImportDataPopupMacDesktopPage(BasePage):
          "'AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[0]/AXGroup[3]/AXTextField[0]")
     ]
 
-    NAME_HEADER_ELEMS = [
-        ("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole="
-         "'AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='root']/"
-         "AXGroup[0]/AXStaticText[@AXValue='Import Data']"),
-        ("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole="
-         "'AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup[2]/AXTable[0]/AXRow[0]/"
-         "AXCell[1]/AXGroup[0]/AXStaticText[@AXValue='Name']")
-    ]
+    NAME_HEADER_ELEM = ("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole="
+                        "'AXStandardWindow']/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup"
+                        "[@AXDOMIdentifier='root']/AXGroup[0]/AXStaticText[@AXValue='%s']")
 
     IMPORT_BUTTON_ELEMS = [
         ("/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:9' and @AXSubrole="
@@ -60,8 +55,8 @@ class ImportDataPopupMacDesktopPage(BasePage):
 
         Util.pause(2)  # TODO wait when ready
 
-        self.get_element_by_xpath_list(
-            ImportDataPopupMacDesktopPage.NAME_HEADER_ELEMS
+        self.get_element_by_xpath(
+            ImportDataPopupMacDesktopPage.NAME_HEADER_ELEM
         ).click(
             offset_x=ImportDataPopupMacDesktopPage.X_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT,
             offset_y=ImportDataPopupMacDesktopPage.Y_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT

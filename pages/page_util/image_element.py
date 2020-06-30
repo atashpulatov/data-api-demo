@@ -63,6 +63,10 @@ class ImageElement(BaseElement):
     def move_to(self, offset_x=0, offset_y=0):
         raise MstrException('Invalid usage of ImageElement, move_to() is not allowed')
 
+    @property
+    def size(self):
+        raise MstrException('Invalid usage of ImageElement, size is not allowed')
+
     def send_keys_raw(self, special_key):
         raise MstrException('Invalid usage of ImageElement, send_keys_raw() is not allowed')
 

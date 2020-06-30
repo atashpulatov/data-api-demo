@@ -45,20 +45,12 @@ class ElementGet(ElementCheck):
     def get_elements_by_css(self, selector):
         raw_elements = self._get_raw_elements(By.CSS_SELECTOR, selector)
 
-        return self._wrap_elements(raw_elements)
+        return BaseElement.wrap_raw_elements(raw_elements, self.driver)
 
     def get_elements_by_name(self, selector):
         raw_elements = self._get_raw_elements(By.NAME, selector)
 
-        return self._wrap_elements(raw_elements)
-
-    def _wrap_elements(self, raw_elements):
-        wrapped_elements = []
-
-        for raw_element in raw_elements:
-            wrapped_elements.append(BaseElement(raw_element, self.driver))
-
-        return wrapped_elements
+        return BaseElement.wrap_raw_elements(raw_elements, self.driver)
 
     def get_element_by_xpath_list(self, selectors, timeout=DEFAULT_TIMEOUT):
         for selector in selectors:

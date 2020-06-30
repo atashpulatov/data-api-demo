@@ -29,7 +29,7 @@ README TODO:
 - image recognition, limitations
 - configuration, chromedriver
 - reuse in different projects
-- attach to open Excel on Windows Desktop
+- attach to open Chrome (Mac, Windows) or Excel (Windows Desktop)
 - running in different environments, e.g. executing Python code on Mac, driving Windows Desktop using VirtualBox  
 
 ### 1. Prerequisites and installation
@@ -157,7 +157,8 @@ For complete list of available custom parameters (specified using -D) see [confi
 
 - change usage of send_keys as it's not stable on Windows Desktop (potentially in other environments too), 
 sometimes some chars are not sent;
-entered values can be checked using - Windows Desktop: element.text, Mac Chrome: element.get_attribute('value')
+entered values can be checked using - Windows Desktop: element.text (text node of element),
+Mac Chrome: element.get_attribute('value') (input element)
 - Windows Desktop - each time search for "MicroStrategy for Office"?
 - reporting
 - executing tests by Jenkins

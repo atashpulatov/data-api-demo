@@ -9,15 +9,13 @@ from util.util import Util
 class DriverWindowsDesktop:
     DRIVER_INITIALIZATION_ATTEMPT_COUNT = 10
 
-    CONNECT_TO_OPEN_EXCEL = True
-
     def get_driver(self):
-        if ConfigUtil.is_attaching_to_open_excel_enabled():
-            return self._prepare_driver_attached_to_open_excel()
+        if ConfigUtil.is_attaching_to_existing_session_enabled():
+            return self._prepare_driver_existing_session()
         else:
-            return self._prepare_driver()
+            return self._prepare_driver_new_session()
 
-    def _prepare_driver_attached_to_open_excel(self):
+    def _prepare_driver_existing_session(self):
         host = ConfigUtil.get_desktop_host()
 
         capabilities = {
@@ -47,7 +45,7 @@ class DriverWindowsDesktop:
 
         return driver
 
-    def _prepare_driver(self):
+    def _prepare_driver_new_session(self):
         host = ConfigUtil.get_desktop_host()
 
         executable_path = ConfigUtil.get_driver_executable_path()

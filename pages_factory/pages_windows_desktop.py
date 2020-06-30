@@ -8,6 +8,7 @@ from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWind
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
 from pages.excel.start_excel.start_excel_windows_desktop_page import StartExcelWindowsDesktopPage
 from pages.import_data_popup.import_data_popup_windows_desktop_page import ImportDataPopupWindowsDesktopPage
+from pages.import_dossier.import_dossier_windows_desktop_page import ImportDossierWindowsDesktopPage
 from pages.right_panel.right_panel_windows_desktop_page import RightPanelWindowsDesktopPage
 from pages_factory.abstract_pages import AbstractPages
 
@@ -25,6 +26,7 @@ class PagesWindowsDesktop(AbstractPages):
         self.excel_sheet_windows_desktop_page = ExcelSheetWindowsDesktopPage()
         self.duplicate_object_popup_windows_desktop_page = DuplicateObjectPopupWindowsDesktopPage()
         self.columns_and_filters_selection_browser_page = ColumnsAndFiltersSelectionWindowsDesktopPage()
+        self.import_dossier_windows_desktop_page = ImportDossierWindowsDesktopPage()
 
     def start_excel_page(self):
         return self.start_excel_windows_desktop_page
@@ -54,4 +56,4 @@ class PagesWindowsDesktop(AbstractPages):
         return self.duplicate_object_popup_windows_desktop_page
 
     def import_dossier_page(self):
-        pass
+        return self.import_dossier_windows_desktop_page

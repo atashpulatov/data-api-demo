@@ -60,9 +60,16 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM)
         ).click()
 
-        if not self.check_if_element_exists_by_name(
-                ImportDataPopupWindowsDesktopPage.IMPORT_SUCCESSFUL_TEXT):
+        if not self.check_if_element_exists_by_name(ImportDataPopupWindowsDesktopPage.IMPORT_SUCCESSFUL_TEXT):
             raise MstrException('Error while importing')
+
+    def click_import_button_to_open_import_dossier(self):
+        self.get_element_by_name(
+            ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+        ).click()
+
+        self.pause(25)  # TODO check if loaded
 
     def click_prepare_data_button(self):
         self.get_element_by_name(

@@ -48,13 +48,19 @@ class BaseElement:
         return self.__element.get_attribute(attribute_name)
 
     def find_element_by_xpath(self, selector):
-        return self.__element.find_element_by_xpath(selector)
+        raw_element = self.__element.find_element_by_xpath(selector)
+
+        return BaseElement(raw_element, self.__driver)
 
     def find_elements_by_xpath(self, selector):
-        return self.__element.find_elements_by_xpath(selector)
+        raw_elements = self.__element.find_elements_by_xpath(selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
 
     def find_element(self, selector_type, selector):
-        return self.__element.find_element(selector_type, selector)
+        raw_element = self.__element.find_element(selector_type, selector)
+
+        return BaseElement(raw_element, self.__driver)
 
     def value_of_css_property(self, property_name):
         return self.__element.value_of_css_property(property_name)
@@ -72,6 +78,10 @@ class BaseElement:
              .perform())
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
+
+    @property
+    def size(self):
+        return self.__element.size
 
     def send_keys_raw(self, special_key):
         self.__element.send_keys(special_key)
@@ -136,3 +146,12 @@ class BaseElement:
                          'and value_attribute: [%s]' % (text, text_property, value_attribute))
 
         return False
+
+    @staticmethod
+    def wrap_raw_elements(raw_elements, driver):
+        wrapped_elements = []
+
+        for raw_element in raw_elements:
+            wrapped_elements.append(BaseElement(raw_element, driver))
+
+        return wrapped_elements
