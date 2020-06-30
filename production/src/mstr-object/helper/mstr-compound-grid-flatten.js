@@ -1,4 +1,9 @@
 class MstrCompoundGridFlatten {
+  /**
+   * Flatten compound grid column sets to structure compatible with grid handler
+   *
+   * @param {Object} response response containing information about object
+   */
   flattenColumnSets(response) {
     const { data, definition } = response;
     const { headers } = data;
@@ -18,7 +23,12 @@ class MstrCompoundGridFlatten {
     data.metricValues = { ...data.metricValues, ...metricValues };
   }
 
-
+  /**
+   * Flatten metrics values from all column sets into single array
+   *
+   * @param {Object} data contains infromation about object table body
+   * @returns {Array} flattened metric values
+   */
   flattenMetricValues = (data) => {
     const columSetsNumber = data.metricValues.columnSets.length;
     const metricValues = { raw: [], formatted: [], extras: [] };
@@ -38,6 +48,12 @@ class MstrCompoundGridFlatten {
     return metricValues;
   }
 
+  /**
+   * Flatten headers values indexes from all column sets into single array
+   *
+   * @param {Object} headers contains infromation about headers values indexes
+   * @returns {Array} flattened metric values
+   */
   flattenColumnSetsHeaders= (headers) => {
     const columSetsNumber = headers.columnSets.length;
     let headerIndexOffset = 0;
@@ -52,7 +68,13 @@ class MstrCompoundGridFlatten {
     return headerColumns;
   }
 
-  flattenColumnSetsMetricElemets=(grid) => {
+  /**
+   * Flatten metric elemets from all column sets into single array
+   *
+   * @param {Object} grid contains infromation about metric elemets
+   * @returns {Array} flattened metric elemets
+   */
+  flattenColumnSetsMetricElemets = (grid) => {
     const columSetsNumber = grid.columnSets.length;
     const gridColumns = [{
       name: 'Metrics',
