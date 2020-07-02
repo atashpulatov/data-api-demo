@@ -95,7 +95,6 @@ function openAuthDialog(url) {
 
 function onMessageReceived(payload) {
   popup.close();
-  console.log(payload);
   setStorageItem(payload);
   startAuthentication();
 }
