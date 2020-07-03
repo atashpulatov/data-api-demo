@@ -76,7 +76,7 @@ const settings = {
   env: {
     username: 'a',
     password: '',
-    chineseSimplifiedUser: 'User_SChinese',
+    chineseSimplifiedUser: 'ChineseUser',
     germanUser: 'User_German',
   }
 };
@@ -95,7 +95,7 @@ function parseArgs() {
   argv.forEach(argument => {
     if (argument.includes('=')) {
       const [key, value] = argument.split('=');
-      args[key] = value.substring(0, value.length).toLowerCase();
+      args[key] = value.substring(0, value.length);
     }
   });
   return args;

@@ -1,24 +1,22 @@
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { switchToDialogFrame, switchToExcelFrame, switchToPluginFrame } from '../../../helpers/utils/iframe-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
-import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { logStep } from '../../../helpers/utils/allure-helper';
+import { logStep, logFirstStep, logEndStep } from '../../../helpers/utils/allure-helper';
 
 describe('Personal TC for AQDT Mirror2', () => {
   it('[TC65666] AQDT E2E - Prepare Data for reports and datasets', () => {
     const A2 = '#gridRows > div:nth-child(2) > div:nth-child(1) > div > div';
     const { tcAutomation } = objectsList.aqdtMirror2Objects;
     const { pdCube } = objectsList.aqdtMirror2Objects;
-    const { importSuccess, duplicateSucces, objectRemoved, reportRefreshed } = dictionary.en;
+    const { importSuccess, duplicateSucces, objectRemoved } = dictionary.en;
 
+    logFirstStep(`Should import ${tcAutomation}`);
     OfficeWorksheet.selectCell('A1');
-    logStep(`Should import ${tcAutomation}`);
     PluginRightPanel.clickImportDataButton();
     PluginPopup.openPrepareData(tcAutomation, false);
 
@@ -63,9 +61,7 @@ describe('Personal TC for AQDT Mirror2', () => {
 
     PluginPopup.selectAttributesAndAttributeForms({ 'Test Case Owner': ['Synonym 1', 'Synonym 2', 'Synonym 3', 'ID'] });
 
-
     PluginPopup.selectFilters([['Test Case Owner', []]]);
-
     PluginPopup.searchForElements('326610459064');
     PluginPopup.selectFilterInstance(['326610459064']);
     PluginPopup.clearElementSearchWithBackspace();
@@ -105,11 +101,6 @@ describe('Personal TC for AQDT Mirror2', () => {
     PluginRightPanel.clickAddDataButton();
     PluginPopup.sortAndOpenPrepareData(pdCube, 'descending', 'Modified');
     PluginPopup.selectObjectElements(['Feature', 'Initiative', 'QA Status', 'SE Status']);
-    PluginPopup.selectFilters([['Scrum Team', []]]);
-
-    PluginPopup.searchForElements('Excel');
-    PluginPopup.selectFilterInstance(['CT-Application-Excel']);
-    PluginPopup.clearElementSearchWithBackspace();
     browser.pause(1111);
 
     logStep('+ Sort attributes, metrics and filters');
@@ -149,5 +140,8 @@ describe('Personal TC for AQDT Mirror2', () => {
 
     PluginRightPanel.removeAllObjectsFromTheList();
     PluginRightPanel.waitAndCloseAllNotifications(dictionary.en.objectRemoved);
+
+    logEndStep('+ Should logout');
+    PluginRightPanel.logout();
   });
 });

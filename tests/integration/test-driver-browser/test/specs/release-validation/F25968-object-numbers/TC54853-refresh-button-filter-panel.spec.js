@@ -24,15 +24,19 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     switchToDialogFrame();
 
     // apply filters and import the last visualization from the list
+    PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
-    PluginPopup.tickFilterCheckBox('Owner', 'a');
-    PluginPopup.tickFilterCheckBox('Owner', 'Administrator');
+    PluginPopup.tickFilterCheckBox('Type', 'Dossier');
+    PluginPopup.clickAllButton('Owner');
+    PluginPopup.clickAllPanelElement('a.');
+    PluginPopup.clickAllPanelElement('Administrator.');
     PluginPopup.clickHeader('Name');
     PluginPopup.scrollTable(['End']);
     PluginPopup.selectLastObject();
     PluginPopup.clickImport();
     PluginPopup.importVisualization();
     waitForNotification();
+    PluginRightPanel.closeNotificationOnHover();
 
     // delete data from excel range and refresh
     OfficeWorksheet.clearExcelRange('A2:F15');
@@ -46,6 +50,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     switchToDialogFrame();
     PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
+    PluginPopup.clearAll();
     PluginPopup.clickAllButton('Modified');
     PluginPopup.clickAllPanelElement('Last Quarter.');
     PluginPopup.importObject(objectsList.reports.basicReport);

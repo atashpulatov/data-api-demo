@@ -42,6 +42,7 @@ class PluginPopup {
 
   clickImport() {
     logStep(`Clicking "Import" button...    [${fileName} - clickImport()]`);
+    $(popupSelectors.importBtn).waitForEnabled({ reverse: true });
     waitAndClick($(popupSelectors.importBtn));
   }
 
@@ -183,6 +184,9 @@ class PluginPopup {
     for (const [filterKey, filterInstances] of names) {
       const filter = $(`.filter-title*=${filterKey}`);
       waitAndClick(filter);
+      if (filterInstances.length) {
+        $(`span=${filterInstances[0]}`).waitForExist(600000);
+      }
       this.selectObjectElements(filterInstances);
     }
   }
@@ -709,6 +713,18 @@ class PluginPopup {
     browser.pause(2500);
   }
 
+  /**
+   * Used to select the desired visualization on a particular page. Will work if dossier window is presented.
+   *
+   * @param {String} pageIndex Index of the page in the table of contents starting from 1 - chapters that do not have any page are counted as a page
+   * @param {String} visIndex Index of the visualization rendered in HTML starting from 1
+   *
+   */
+  selectVisualizationOnPage(pageIndex, visIndex) {
+    const visOnPage = `${pageIndex} ${visIndex}`;
+    this.selectVisualization(visOnPage);
+  }
+
   showTotals(objectId) {
     logStep(`Showing totals: "${objectId}"...    [${fileName} - showTotals()]`);
     switchToPromptFrame();
@@ -812,18 +828,30 @@ class PluginPopup {
   /**
    * Sets filter (value for given input) on dossier.
    *
-   * @param {String} input is a selector for given input
-   * @param {Number} value is a value for given input
+   * @param {Boolean} isInitialPoint is a value that indicates which point needs to be switched
+   * @param {String} growth is a value that indicates whether slider should be increased or decreased
    */
-  setFilterOnDossier(input, value) {
-    logStep(`Setting value ${value} for given input`);
-    const { filterBtn, filtersMenu } = popupSelectors.dossierWindow;
+  setYearFilterOnDossier(isInitialPoint, growth) {
+    logStep(`Setting value  for given input`);
+    const { filterBtn, sliderMinFilterPoint, sliderMaxFilterPoint, applyFilterBtn } = popupSelectors.dossierWindow;
     waitAndClick($(filterBtn));
-    browser.pause(1000);
-    $(input).setValue(value);
-    browser.pause(1000);
-    waitAndClick($(filtersMenu.buttonApplyFilters));
-    browser.pause(1000);
+    const sliderPoint = isInitialPoint ? sliderMinFilterPoint : sliderMaxFilterPoint;
+    switch(growth){
+      case 'increase': {
+        waitAndClick($(sliderPoint), 1000)
+        pressRightArrow();
+        waitAndClick($(applyFilterBtn));
+        break;
+      }
+      case 'decrease':{
+        waitAndClick($(sliderPoint), 1000)
+        pressBackspace();
+        waitAndClick($(applyFilterBtn));
+        break;
+      }
+      default:
+        return;
+    }
   }
 
   /**

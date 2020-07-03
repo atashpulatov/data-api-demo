@@ -1,9 +1,9 @@
-import OfficeLogin from '../../../helpers/office/office.login';
-import OfficeWorksheet from '../../../helpers/office/office.worksheet';
-import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../../helpers/utils/iframe-helper';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
+import OfficeLogin from '../../helpers/office/office.login';
+import OfficeWorksheet from '../../helpers/office/office.worksheet';
+import PluginRightPanel from '../../helpers/plugin/plugin.right-panel';
+import PluginPopup from '../../helpers/plugin/plugin.popup';
+import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../../helpers/utils/iframe-helper';
+import { waitForNotification } from '../../helpers/utils/wait-helper';
 
 describe('F24751 - Import report with or without subtotals', () => {
   beforeEach(() => {

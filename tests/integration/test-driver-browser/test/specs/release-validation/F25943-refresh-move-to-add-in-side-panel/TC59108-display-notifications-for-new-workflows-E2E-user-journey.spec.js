@@ -17,9 +17,8 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     browser.closeWindow();
     changeBrowserTab(0);
   });
-
   it(`[TC59108] Display notifications for new workflows - E2E user journey `, () => {
-    // Display a correct warning notification when importing a report exceeding Excel row limit
+  // Display a correct warning notification when importing a report exceeding Excel row limit
     console.log('1 - Display a correct warning notification when importing a report exceeding Excel row limit');
     OfficeWorksheet.selectCell('A1048575');
     PluginRightPanel.clickImportDataButton();
@@ -96,6 +95,7 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
 
     // Select checkboxes for imported objects and verify Refresh Selected, Remove Selected are displayed
     console.log('8 - Select checkboxes for imported objects and verify Refresh Selected, Remove Selected are displayed');
+    browser.pause(3000);
     PluginRightPanel.selectAll();
     const refreshSelectedBtn = rightPanelSelectors.refreshAllBtn;
     const removeSelectedBtn = rightPanelSelectors.deleteAllBtn;

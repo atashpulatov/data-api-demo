@@ -95,12 +95,13 @@ export const popupSelectors = {
   addToLibraryButton: '.mstrd-PageNotification-buttonContainer > .mstrd-Button.mstrd-Button--primary',
   refreshButton: '.refresh-button',
   exportSpinner: $('.mstrd-spinner-export'),
-  filterCostInput: 'div.mstrd-MQInput.mstrd-SliderSummary-left-input > input',
+  filterCostInput: 'mstrd-SliderSummary-right-input mstrd-MQInput-isBottom',
   prepareData: { getAttributeAt: (index) => `#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
   smartFolderTable: { availableObjectNumber: '#popup-wrapper> div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
   },
   dossierWindow: {
-    getVizAT: (index) => `.mstrmojo-DocSubPanel-content > div > div:nth-child(${index})`,
+    getVizAT: (index) => `.mstrmojo-DocSubPanel-content.mstrmojo-scrollNode> div > div:nth-child(${index})`,
+    getPageAt: (index) => `#mstrd-Root > div > div > div.mstrd-AppContainer-mainContent > div > div.mstrd-DossierViewContainer-main > div.mstrd-SwiperPage > div > div > div:nth-child(${index})`,
     visualizationName: '.mstrd-NavBarTitle-item-active .mstrd-DossierTitle',
     filterCount: '.mstrd-FilterSummaryBar-filterCount',
     buttonToC: 'li.mstrd-NavItemWrapper.mstrd-ToCNavItemContainer.mstr-navbar-item > div > div',
@@ -110,6 +111,9 @@ export const popupSelectors = {
     buttonRefreshDossier: 'div.mstr-nav-icon.icon-resetfile',
     buttonConfirmRefresh: '.mstrd-DeleteDossier-button',
     filterBtn: '.mstr-nav-icon.icon-filter',
+    sliderMinFilterPoint: 'div.rc-slider-handle.rc-slider-handle-1',
+    sliderMaxFilterPoint: 'div.rc-slider-handle.rc-slider-handle-2',
+    applyFilterBtn: 'div.mstrd-FilterPanelFooterContainer-apply > div > span',
     buttonFilters: 'li.mstrd-FilterNavItemContainer',
     filtersMenu: {
       getFilterAt: (index) => `div.mstrd-FilterPanel-content > ul > li:nth-child(${index})`,
