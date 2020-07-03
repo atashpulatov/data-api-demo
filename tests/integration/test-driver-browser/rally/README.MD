@@ -18,7 +18,9 @@ For results from CI pipeline release should be changed in [./rallyconfig.js] in 
 
 If you trigerred the [AUTOMATION] suites manually and you want to upload the results to Rally, follow these points:
 
-1) After the automation suite execution finished, the results from this run were created under allure-report and allure-results folders.
+1) After the automation suite execution finished, you have to create the results report by executin script "report" from test-driver-browser folder. You run it with this command:
+  npm run report
+Now the results can be found under allure-report folder. We'll use "behaviours.json" file for uploading results.
 
 2) Specify the fields values which you want to upload the results in [./rallyconfig.js] file in 
 automation {} object, e.g.:
@@ -85,10 +87,18 @@ To upload the results from manual execution, follow these points:
   d) add your email to email, e.g:
     email: 'stasiek@microstrategy.com'
 
+## Test Set duration
+
+You can upload machine time to the given Test Set by running the script "add-duration" from test-driver-browser folder.
+You run it with the command "npm run add-duration testSetId", e.g.
+  npm run add-duration TS1324
+
+
 ## Built With
 
 node.js
 Rally Web Services Api
+
 
 ## Authors
 
