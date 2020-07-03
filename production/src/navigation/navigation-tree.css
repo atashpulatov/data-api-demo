@@ -4,10 +4,17 @@
   position: fixed;
   width: 100%;
   overflow: hidden;
+  min-width: 100%;    
+  overflow-x: auto;
+}
+
+.navigation_tree__main_wrapper .object-table {
+  min-width: 530px;
 }
 
 .navigation_tree__title_bar {
   margin: 15px;
+  min-width: 500px;
 }
 
 .navigation_tree__title_bar>span {
