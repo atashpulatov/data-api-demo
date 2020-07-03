@@ -5,25 +5,26 @@ module.exports = {
   manual: {
     passedTestCases: [],
     failedTestCases: [],
+    lowPassTestCases: [],
     testSet: '',
     release: '',
     build: '',
     duration: '',
     OS: '',
-    language: 'English',
+    language: '',
     exportApp: '',
     env: '',
     notes: '',
     browser: ''
   },
   automation: {
-    testSet: '', // only for Release Validation
-    notes: 'Automation results', // for Release Validation change to 'Release Validation'
-    env: 'AWS Tutorial',
-    exportApp: 'Microsoft Office 365',
-    OS: 'Mac OS 10.15 Catalina',
-    language: 'English',
+    testSet: '', // only for Release or GA Validation
+    notes: '', // for Release Validation change to 'Release Validation', for GA - 'GA Validation'
+    env: '',
+    exportApp: '',
+    OS: '',
+    language: '',
     build: '',
-    release: '11.2.2 [2020-Jun-05]'
+    release: ''
   }
 };
