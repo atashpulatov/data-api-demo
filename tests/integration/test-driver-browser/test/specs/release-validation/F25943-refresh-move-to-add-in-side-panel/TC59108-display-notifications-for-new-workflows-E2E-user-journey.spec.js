@@ -17,9 +17,8 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     browser.closeWindow();
     changeBrowserTab(0);
   });
-
   it(`[TC59108] Display notifications for new workflows - E2E user journey `, () => {
-    // Display a correct warning notification when importing a report exceeding Excel row limit
+  // Display a correct warning notification when importing a report exceeding Excel row limit
     console.log('1 - Display a correct warning notification when importing a report exceeding Excel row limit');
     OfficeWorksheet.selectCell('A1048575');
     PluginRightPanel.clickImportDataButton();

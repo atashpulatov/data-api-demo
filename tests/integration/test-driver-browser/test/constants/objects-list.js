@@ -144,7 +144,7 @@ export const objectsList = {
     },
     dossierWithPagesAndChapters: {
       name: 'Dossier with vis that can be moved to different pages / chapters',
-      gridVisualization: getVizAT(2)
+      gridVisualization: getVizAT(1)
     },
     complexDossier: {
       name: 'Complex dossier (20 visualizations)',
@@ -172,7 +172,7 @@ export const objectsList = {
       name: 'Visualization manipulation',
       visualizations: {
         visualization1: {
-          name: '#mstr106',
+          name: getVizAT(1),
           gridTableId: '#mstr121',
           getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
@@ -185,16 +185,16 @@ export const objectsList = {
     customVisualizations: {
       name: 'Custom Visualizations',
       visualizations: {
-        GoogleTimeline: getVizAT(2),
-        modelsByYear: getVizAT(3),
+        modelsByYear: getVizAT(1),
+        modelsByYearData: getVizAT(3),
       }
     },
 
     dossierWithDifferentCustomVis: {
       name: 'Dossier with different custom visualizations',
       Visualizations: {
-        worldCloud: getVizAT(2),
-        googleTimeLine: '#mstr125',
+        worldCloud: getVizAT(1),
+        googleTimeLine: getVizAT(2),
         sequenceSunburst: getVizAT(3),
       }
     },
@@ -209,6 +209,10 @@ export const objectsList = {
     promptedDossier: {
       name: 'Prompted dossier',
       visualizations: { vis1: getVizAT(2) }
+    },
+    promptedDossier2: {
+      name: 'Prompted dossier (display prompt and default answers)',
+      visualizations: { vis1: getVizAT(1) }
     },
     oneMillionAndLongName: {
       name: '1 MILION rows This is a very long name for a dossier so that we can test how we display long path to dossier visualisationsNew Dossier',
@@ -232,12 +236,24 @@ export const objectsList = {
     },
     dossierWithCompoundGrid: {
       name: 'Dossier with compound grid',
-      visualizations: { visualization1: getVizAT(2) }
+      visualizations: { visualization1: getVizAT(1) }
     }
   },
   aqdtMirror2Objects: {
     tcAutomation: 'TC to automate',
     pdCube: 'PD Cube',
+    tecQa: {
+      name: 'TEC.QA',
+      visualizations: {
+        automationByUnitVis1: getVizAT(1),
+        useCaseDetail: getVizAT(1)
+      }
+    },
+    tecPd: {
+      name: 'TEC.PD',
+      visualizations: { defectsByRelase: getVizAT(1), }
+    },
+    reportFormatting: 'Report with MSTR formatting'
   },
   AQDT: {
     owner: 'Putney, David',

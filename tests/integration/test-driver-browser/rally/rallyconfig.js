@@ -21,7 +21,7 @@ module.exports = {
     notes: 'Automation results', // for Release Validation change to 'Release Validation'
     env: 'AWS Tutorial',
     exportApp: 'Microsoft Office 365',
-    OS: '',
+    OS: 'Mac OS 10.15 Catalina',
     language: 'English',
     build: '',
     release: '11.2.2 [2020-Jun-05]'

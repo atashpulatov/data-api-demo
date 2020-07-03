@@ -107,6 +107,7 @@ exports.config = {
       './test/specs/release-validation/TS41441-E2E Sanity checks/*.spec.js',
     ],
     GA: [
+      './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-I.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-II.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49134-Part-III.spec.js',
       './test/specs/release-validation/TS41441-E2E Sanity checks/TC49100-E2E-Import-Prompted-Reports-Import-multiple-objects-Refresh-All-Re-Prompt-Refresh-Edit-Prompts.spec.js',
@@ -176,7 +177,7 @@ exports.config = {
       './test/specs/release-validation/AQDT/TC65891-AQDT-E2E-Edit-dataset-import-prompted-report-and-reprompt.spec.js',
       './test/specs/release-validation/AQDT/TC65480-AQDT-E2E-duplicatig-and-right-panel-functionalities.spec.js',
       './test/specs/release-validation/AQDT/TC65666-AQDT-E2E-prepare-data-reports-datasets.spec.js',
-
+      './test/specs/release-validation/AQDT/TC65783-E2E-import-and-edit-of-Aqueduct-dossiers.spec.js',
     ]
   },
   // Patterns to exclude.
