@@ -175,11 +175,14 @@ class OfficeApiCrosstabHelper {
     const reportStartingCell = sheet.getRange(cellAddress);
     const columnOffset = columns.length;
     const rowOffset = 0;
+
     // we call getCell in case multiple cells are selected
     const startingCell = reportStartingCell.getCell(0, 0).getOffsetRange(-columnOffset, -rowOffset);
     const directionVector = [1, 0];
+
     const headerRange = startingCell.getResizedRange(columns.length - 1, columns[0].length - 1);
     this.insertHeadersValues(headerRange, columns, 'columns');
+
     return this.createHeaders(columns, startingCell, directionVector);
   }
 
@@ -192,6 +195,7 @@ class OfficeApiCrosstabHelper {
   * @param {Object} crosstabHeaderDimensions Contains dimensions of crosstab report headers
   */
   createRowsTitleHeaders = (cellAddress, attributesNames, sheet, crosstabHeaderDimensions) => {
+    const { rowsAttributes, columnsAttributes } = attributesNames;
     const reportStartingCell = sheet.getRange(cellAddress);
     const titlesBottomCell = reportStartingCell.getOffsetRange(0, -1);
     const rowsTitlesRange = titlesBottomCell.getResizedRange(0, -(crosstabHeaderDimensions.rowsX - 1));
@@ -206,13 +210,15 @@ class OfficeApiCrosstabHelper {
     headerTitlesRange.values = '  ';
 
     // we are not inserting row attributes names if they do not exist
-    if (attributesNames.rowsAttributes.length) {
-      rowsTitlesRange.values = [attributesNames.rowsAttributes];
-      mergeHeaderRows(attributesNames.rowsAttributes, rowsTitlesRange);
+    if (rowsAttributes && rowsAttributes.length) {
+      rowsTitlesRange.values = [rowsAttributes];
+      mergeHeaderRows(rowsAttributes, rowsTitlesRange);
     }
 
-    columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([attributesNames.columnsAttributes]);
-    mergeHeaderColumns(attributesNames.columnsAttributes, columnsTitlesRange);
+    if (columnsAttributes && columnsAttributes.length) {
+      columnsTitlesRange.values = mstrNormalizedJsonHandler.transposeMatrix([columnsAttributes]);
+      mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
+    }
   };
 
 

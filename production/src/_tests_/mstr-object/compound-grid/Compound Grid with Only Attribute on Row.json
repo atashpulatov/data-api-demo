@@ -1,0 +1,147 @@
+{
+    "k": "8BCADEDF4B6C41FBAAFC742F9AF3464B",
+    "n": "Compound Grid with Only Attribute on Row",
+	"visualizationType": "compound_grid",
+    "definition": {
+        "grid": {
+            "crossTab": false,
+            "rows": [
+                {
+                    "name": "Subcategory",
+                    "id": "8D679D4F11D3E4981000E787EC6DE8A4",
+                    "type": "attribute",
+                    "forms": [
+                        {
+                            "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+                            "name": "DESC",
+                            "dataType": "nVarChar",
+                            "baseFormCategory": "DESC",
+                            "baseFormType": "text"
+                        }
+                    ],
+                    "elements": [
+                        {
+                            "formValues": [
+                                "Art & Architecture"
+                            ],
+                            "id": "h11;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Business"
+                            ],
+                            "id": "h12;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Cameras"
+                            ],
+                            "id": "h22;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Kids / Family"
+                            ],
+                            "id": "h35;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Special Interests"
+                            ],
+                            "id": "h36;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Alternative"
+                            ],
+                            "id": "h41;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Country"
+                            ],
+                            "id": "h42;8D679D4F11D3E4981000E787EC6DE8A4"
+                        }
+                    ]
+                }
+            ],
+            "columnSets": [
+				{
+					"key": "5867DC00855B4D938E99D769A000574A",
+					"name": "Column Set1",
+					"viewFilterSummary": "(Category = Books, Electronics, Movies, Music)",
+					"elementFilterSummary": "Not((Subcategory = Audio Equipment) And IsNotNull(Subcategory) And (Category = Electronics) And IsNotNull(Category))",
+					"metricLimitSummary": "Profit > 0",
+					"metricsPosition": {
+						"axis": "rows",
+						"index": 1
+					},
+					"columns": [],
+				    "sorting": {
+						"rows": [],
+						"columns": [
+							{
+								"type": "form",
+								"attribute": {
+									"id": "8D679D3711D3E4981000E787EC6DE8A4",
+									"name": "Category"
+								},
+								"form": {
+									"id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+									"name": "DESC"
+								},
+								"order": "descending"
+							}
+						]
+					},
+					"thresholds": []
+				}
+            ]
+        }
+    },
+    "data": {
+        "paging": {
+            "total": 7,
+            "current": 7,
+            "offset": 0,
+            "limit": 1000
+        },
+        "headers": {
+            "rows": [
+                [
+                    0
+                ],
+                [
+                    1
+                ],
+                [
+                    2
+                ],
+                [
+                    3
+                ],
+                [
+                    4
+                ],
+                [
+                    5
+                ],
+                [
+                    6
+                ]
+            ],
+            "columnSets": [
+				[]
+			]
+        },
+        "metricValues": {
+			"columnSets": [
+				{
+				   "raw": [],
+					"formatted": [],
+					"extras": []
+				}
+			]
+        }
+    }
+}
