@@ -1,0 +1,152 @@
+{
+    "k": "8BCADEDF4B6C41FBAAFC742F9AF3464B",
+    "n": "Compound Grid with Metrics on Row",
+	"visualizationType": "compound_grid",
+    "definition": {
+        "grid": {
+            "crossTab": true,
+            "rows": [
+                {
+                    "name": "Year",
+                    "id": "8D679D5111D3E4981000E787EC6DE8A4",
+                    "type": "attribute",
+                    "forms": [
+                        {
+                            "id": "45C11FA478E745FEA08D781CEA190FE5",
+                            "name": "ID",
+                            "dataType": "numeric",
+                            "baseFormCategory": "ID",
+                            "baseFormType": "number"
+                        }
+                    ],
+                    "elements": [
+                        {
+                            "formValues": [
+                                "2014"
+                            ],
+                            "id": "h2014;8D679D5111D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "2015"
+                            ],
+                            "id": "h2015;8D679D5111D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "2016"
+                            ],
+                            "id": "h2016;8D679D5111D3E4981000E787EC6DE8A4"
+                        }
+                    ]
+                },
+                {
+                    "name": "Metrics",
+                    "id": "00000000000000000000000000000000",
+                    "type": "templateMetrics",
+                    "elements": [
+                        {
+                            "name": "Cost",
+                            "id": "7FD5B69611D5AC76C000D98A4CC5F24F",
+                            "type": "metric",
+                            "min": 2638642.4659999997,
+                            "max": 4569340.0814,
+                            "dataType": "double",
+                            "numberFormatting": {
+                                "category": 1,
+                                "decimalPlaces": 0,
+                                "thousandSeparator": true,
+                                "currencySymbol": "$",
+                                "currencyPosition": 0,
+                                "formatString": "\"$\"#,##0",
+                                "negativeType": 1
+                            }
+                        }
+                    ]
+                }
+            ],
+            "columnSets": [
+				{
+					"key": "5867DC00855B4D938E99D769A000574A",
+					"name": "Column Set1",
+					"metricsPosition": {
+						"axis": "rows",
+						"index": 1
+					},
+					"columns": [],
+				   "sorting": {
+						"rows": [],
+						"columns": []
+					},
+					"thresholds": []
+				}
+            ]
+        }
+    },
+    "data": {
+        "paging": {
+            "total": 3,
+            "current": 3,
+            "offset": 0,
+            "limit": 1000
+        },
+        "headers": {
+            "rows": [
+                [
+                    0,
+					0
+                ],
+                [
+                    1,
+					0
+                ],
+                [
+                    2,
+					0
+                ]
+            ],
+            "columnSets": [
+				[]
+			]
+        },
+        "metricValues": {
+			"columnSets": [
+				{
+					"raw": [
+						[
+							2638642.4659999997
+						],
+						[
+							3580132.0651000004
+						],
+						[
+							4569340.0814
+						]
+					],
+					"formatted": [
+						[
+							"$2,638,642"
+						],
+						[
+							"$3,580,132"
+						],
+						[
+							"$4,569,340"
+						]
+					],
+					"extras": [
+						[
+							{}
+						],
+						[
+							{}
+						],
+						[
+							{}
+						]
+					]
+				}
+			]
+        }
+    }
+}
