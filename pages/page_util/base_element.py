@@ -27,6 +27,26 @@ class BaseElement:
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
+    def move_to_and_click(self, offset_x=None, offset_y=None):
+        self.move_to(offset_x, offset_y)
+        self.click()
+
+    def double_click(self, offset_x=None, offset_y=None):
+        if offset_x is None or offset_y is None:
+            (ActionChains(self.__driver)
+             .move_to_element(self.__element)
+             .pause(AFTER_OPERATION_WAIT_TIME)
+             .double_click()
+             .perform())
+        else:
+            (ActionChains(self.__driver)
+             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .pause(AFTER_OPERATION_WAIT_TIME)
+             .double_click()
+             .perform())
+
+        Util.pause(AFTER_OPERATION_WAIT_TIME)
+
     def right_click(self):
         (ActionChains(self.__driver)
          .move_to_element(self.__element)
@@ -40,6 +60,8 @@ class BaseElement:
     def clear(self):
         self.__element.clear()
 
+        Util.pause(AFTER_OPERATION_WAIT_TIME)
+
     @property
     def text(self):
         return self.__element.text
@@ -51,6 +73,11 @@ class BaseElement:
         raw_element = self.__element.find_element_by_xpath(selector)
 
         return BaseElement(raw_element, self.__driver)
+
+    def find_elements_by_css(self, selector):
+        raw_elements = self.__element.find_elements_by_css_selector(selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
 
     def find_elements_by_xpath(self, selector):
         raw_elements = self.__element.find_elements_by_xpath(selector)

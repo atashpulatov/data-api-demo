@@ -50,7 +50,7 @@ class RightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         object_index = int(tile_no) - 1
 
         if object_index > len(elements):
-            raise MstrException(('Not possible to click tile, given object index too big', object_index, elements))
+            raise MstrException(('Not possible to click tile, given object index is too big', object_index, elements))
 
         found_element = elements[object_index]
 

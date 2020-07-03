@@ -31,6 +31,7 @@ README TODO:
 - reuse in different projects
 - attach to open Chrome (Mac, Windows) or Excel (Windows Desktop)
 - running in different environments, e.g. executing Python code on Mac, driving Windows Desktop using VirtualBox  
+- how to check which test cases are tagged with a given tag (grep -ri '@mac_chrome' *) 
 
 ### 1. Prerequisites and installation
 

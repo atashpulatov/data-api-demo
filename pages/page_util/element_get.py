@@ -55,7 +55,7 @@ class ElementGet(ElementCheck):
     def get_element_by_xpath_list(self, selectors, timeout=DEFAULT_TIMEOUT):
         for selector in selectors:
             try:
-                return BaseElement(self._get_raw_element(By.XPATH, selector, timeout))
+                return BaseElement(self._get_raw_element(By.XPATH, selector, timeout), self.driver)
             except NoSuchElementException:
                 Util.log(('get_element_by_xpath_list', selector))
 
@@ -83,9 +83,9 @@ class ElementGet(ElementCheck):
         return self.driver.find_elements(selector_type, selector)
 
     def find_element_by_css_from_parent(self, parent_element, selector):
-        return BaseElement(self._find_raw_element_from_parent(By.CSS_SELECTOR, parent_element, selector), self.driver)
+        return self._find_element_from_parent(By.CSS_SELECTOR, parent_element, selector)
 
-    def _find_raw_element_from_parent(self, selector_type, parent_element, selector):
+    def _find_element_from_parent(self, selector_type, parent_element, selector):
         i = 0
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
             try:

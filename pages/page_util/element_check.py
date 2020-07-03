@@ -21,6 +21,7 @@ class ElementCheck:
 
     def __init__(self):
         super().__init__()
+
         driver_type = ConfigUtil.get_driver_type()
 
         self.driver = DriverFactory().get_driver(driver_type)

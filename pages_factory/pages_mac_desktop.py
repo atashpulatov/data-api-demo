@@ -49,3 +49,15 @@ class PagesMacDesktop(AbstractPages):
 
     def import_dossier_page(self):
         pass
+
+    def import_dossier_filter_page(self):
+        pass
+
+    def import_dossier_bookmarks_page(self):
+        pass
+
+    def import_dossier_table_of_contents_page(self):
+        pass
+
+    def import_dossier_context_menu_page(self):
+        pass

@@ -7,7 +7,15 @@ from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
 from pages.excel.start_excel.start_excel_browser_page import StartExcelBrowserPage
 from pages.import_data_popup.import_data_popup_browser_page import ImportDataPopupBrowserPage
-from pages.import_dossier.import_dossier_browser_page import ImportDossierBrowserPage
+from pages.import_dossier.import_dossier.import_dossier_browser_page import ImportDossierBrowserPage
+from pages.import_dossier.import_dossier_bookmarks.import_dossier_browser_page import ImportDossierBookmarksBrowserPage
+from pages.import_dossier.import_dossier_context_menu.import_dossier_context_menu_browser_page import \
+    ImportDossierContextMenuBrowserPage
+from pages.import_dossier.import_dossier_filter.import_dossier_filter_browser_page import ImportDossierFilterBrowserPage
+from pages.import_dossier.import_dossier_show_data.import_dossier_show_data_browser_page import \
+    ImportDossierShowDataBrowserPage
+from pages.import_dossier.import_dossier_table_of_contents.import_dossier_table_of_contents_browser_page import \
+    ImportDossierTableOfContentsBrowserPage
 from pages.right_panel.right_panel_browser_page import RightPanelBrowserPage
 from pages_factory.abstract_pages import AbstractPages
 
@@ -26,6 +34,11 @@ class PagesBrowser(AbstractPages):
         self.columns_and_filters_selection_browser_page = ColumnsAndFiltersSelectionBrowserPage()
         self.duplicate_object_popup_browser_page = DuplicateObjectPopupBrowserPage()
         self.import_dossier_browser_page = ImportDossierBrowserPage()
+        self.import_dossier_filter_browser_page = ImportDossierFilterBrowserPage()
+        self.import_dossier_bookmarks_browser_page = ImportDossierBookmarksBrowserPage()
+        self.import_dossier_table_of_contents_browser_page = ImportDossierTableOfContentsBrowserPage()
+        self.import_dossier_context_menu_browser_page = ImportDossierContextMenuBrowserPage()
+        self.import_dossier_show_data_browser_page = ImportDossierShowDataBrowserPage()
 
     def start_excel_page(self):
         return self.start_excel_browser_page
@@ -56,3 +69,18 @@ class PagesBrowser(AbstractPages):
 
     def import_dossier_page(self):
         return self.import_dossier_browser_page
+
+    def import_dossier_filter_page(self):
+        return self.import_dossier_filter_browser_page
+
+    def import_dossier_bookmarks_page(self):
+        return self.import_dossier_bookmarks_browser_page
+
+    def import_dossier_table_of_contents_page(self):
+        return self.import_dossier_table_of_contents_browser_page
+
+    def import_dossier_context_menu_page(self):
+        return self.import_dossier_context_menu_browser_page
+
+    def import_dossier_show_data_page(self):
+        return self.import_dossier_show_data_browser_page

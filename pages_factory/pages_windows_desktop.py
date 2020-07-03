@@ -8,7 +8,7 @@ from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWind
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
 from pages.excel.start_excel.start_excel_windows_desktop_page import StartExcelWindowsDesktopPage
 from pages.import_data_popup.import_data_popup_windows_desktop_page import ImportDataPopupWindowsDesktopPage
-from pages.import_dossier.import_dossier_windows_desktop_page import ImportDossierWindowsDesktopPage
+from pages.import_dossier.import_dossier.import_dossier_windows_desktop_page import ImportDossierWindowsDesktopPage
 from pages.right_panel.right_panel_windows_desktop_page import RightPanelWindowsDesktopPage
 from pages_factory.abstract_pages import AbstractPages
 
@@ -57,3 +57,18 @@ class PagesWindowsDesktop(AbstractPages):
 
     def import_dossier_page(self):
         return self.import_dossier_windows_desktop_page
+
+    def import_dossier_filter_page(self):
+        pass
+
+    def import_dossier_bookmarks_page(self):
+        pass
+
+    def import_dossier_table_of_contents_page(self):
+        pass
+
+    def import_dossier_context_menu_page(self):
+        pass
+
+    def import_dossier_show_data_page(self):
+        pass

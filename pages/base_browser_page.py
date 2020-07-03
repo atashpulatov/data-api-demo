@@ -137,3 +137,12 @@ class BaseBrowserPage(BasePage):
                 break
 
         raise MstrException('failed to focus on AddIn iframe')
+
+    def find_element_in_list_by_text(self, selector, text):
+        elements = self.get_elements_by_css(selector)
+
+        for item in elements:
+            if item.text == text:
+                return item
+
+        raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))

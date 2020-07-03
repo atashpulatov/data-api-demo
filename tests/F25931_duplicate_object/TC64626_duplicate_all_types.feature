@@ -20,7 +20,7 @@ Feature: F25931 - Duplicate object
     And I clicked Add Data button
     And I found and selected object "Complex dossier (20 visualizations)"
     And I clicked Import button to open Import Dossier
-    And I imported visualization called "Bubble Chart"
+    And I imported visualization "Bubble Chart"
 
     And number of worksheets should be 3
 

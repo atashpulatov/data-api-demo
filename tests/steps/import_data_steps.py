@@ -24,3 +24,8 @@ def step_impl(context):
 @step('I clicked Prepare Data button')
 def step_impl(context):
     context.pages.import_data_popup_page().click_prepare_data_button()
+
+
+@step('I added dossier to Library if not yet added')
+def step_impl(context):
+    context.pages.import_data_popup_page().add_dossier_to_library()

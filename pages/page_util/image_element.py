@@ -31,6 +31,9 @@ class ImageElement(BaseElement):
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
+    def double_click(self, offset_x=0, offset_y=0):
+        raise MstrException('Implement it')
+
     def right_click(self):
         raise MstrException('Implement when needed')
 
@@ -50,6 +53,9 @@ class ImageElement(BaseElement):
 
     def find_element_by_xpath(self, selector):
         raise MstrException('Invalid usage of ImageElement, find_element_by_xpath() is not allowed')
+
+    def find_elements_by_css(self, selector):
+        raise MstrException('Invalid usage of ImageElement, find_elements_by_css() is not allowed')
 
     def find_elements_by_xpath(self, selector):
         raise MstrException('Invalid usage of ImageElement, find_elements_by_xpath() is not allowed')

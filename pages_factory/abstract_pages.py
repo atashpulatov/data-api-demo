@@ -47,5 +47,25 @@ class AbstractPages(ABC):
     def import_dossier_page(self):
         pass
 
+    @abstractmethod
+    def import_dossier_filter_page(self):
+        pass
+
+    @abstractmethod
+    def import_dossier_bookmarks_page(self):
+        pass
+
+    @abstractmethod
+    def import_dossier_table_of_contents_page(self):
+        pass
+
+    @abstractmethod
+    def import_dossier_context_menu_page(self):
+        pass
+
+    @abstractmethod
+    def import_dossier_show_data_page(self):
+        pass
+
     def development_page(self):
         return self.development_common_page
