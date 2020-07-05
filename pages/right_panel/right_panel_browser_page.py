@@ -29,6 +29,7 @@ class RightPanelBrowserPage(BaseBrowserPage):
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(5)'
     EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(3)'
     REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(6)'
+    NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' > div.object-tile-name-row > div.rename-input'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' > div.object-tile-name-row > input'
@@ -72,6 +73,15 @@ class RightPanelBrowserPage(BaseBrowserPage):
         self.wait_for_element_to_have_attribute_value_by_css(RightPanelBrowserPage.NOTIFICATION_TEXT_ELEM,
                                                              RightPanelBrowserPage.TEXT_CONTENT_ATTRIBUTE,
                                                              expected_message)
+
+    def wait_for_operation_error(self, expected_message):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(RightPanelBrowserPage.NOTIFICATION_TEXT_ELEM,
+                                                             RightPanelBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+                                                             expected_message)
+                                                              
+        self.get_element_by_css(RightPanelBrowserPage.NOTIFICATION_BUTTON).click()
 
     def close_all_notifications_on_hover(self):
         self.focus_on_add_in_frame()
