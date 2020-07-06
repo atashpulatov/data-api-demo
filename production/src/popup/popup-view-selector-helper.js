@@ -22,9 +22,6 @@ class PopupViewSelectorHelper {
         if (popupType === PopupTypeEnum.repromptingWindow) {
           return PopupTypeEnum.editFilters;
         }
-      } else if (dossierOpenRequested) {
-        // pass given prompts answers to dossierWindow
-        return PopupTypeEnum.dossierWindow;
       } else {
         return PopupTypeEnum.obtainInstanceHelper;
       }
