@@ -59,19 +59,6 @@ describe('PopupViewSelectorNotConnected', () => {
   expect(setPopupType).toBeCalled();
   expect(componentWrapper.find(expectedComponent).get(0)).toBeDefined();
 });
-
-  it('should render empty <div /> when authToken provided and popupType equals PopupTypeEnum.emptyDiv', () => {
-    // given
-    const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType')
-      .mockImplementation(() => PopupTypeEnum.emptyDiv);
-
-    // when
-    const componentWrapper = shallow(<PopupViewSelectorNotConnected authToken="testAuthToken" />);
-
-    // then
-    expect(setPopupType).toBeCalled();
-    expect(componentWrapper.html()).toEqual('<div></div>');
-  });
 });
 
 describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps test', () => {
