@@ -8,6 +8,7 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
 import { DossierWindow } from '../../dossier/dossier-window';
+import { ObtainInstanceHelper } from '../../popup/obtain-instance-helper';
 import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { popupHelper } from '../../popup/popup-helper';
 import { popupActions, SET_PREPARED_REPORT } from '../../redux-reducer/popup-reducer/popup-actions';
@@ -41,13 +42,14 @@ describe('PopupViewSelectorNotConnected', () => {
   });
 
   it.each`
-  popupType                          | expectedComponent
-  ${PopupTypeEnum.dataPreparation}   | ${AttributeSelectorWindow}
-  ${PopupTypeEnum.editFilters}       | ${AttributeSelectorWindow}
-  ${PopupTypeEnum.navigationTree}    | ${NavigationTree}
-  ${PopupTypeEnum.promptsWindow}     | ${PromptsWindow}
-  ${PopupTypeEnum.repromptingWindow} | ${PromptsWindow}
-  ${PopupTypeEnum.dossierWindow}     | ${DossierWindow}
+  popupType                             | expectedComponent
+  ${PopupTypeEnum.dataPreparation}      | ${AttributeSelectorWindow}
+  ${PopupTypeEnum.editFilters}          | ${AttributeSelectorWindow}
+  ${PopupTypeEnum.navigationTree}       | ${NavigationTree}
+  ${PopupTypeEnum.promptsWindow}        | ${PromptsWindow}
+  ${PopupTypeEnum.repromptingWindow}    | ${PromptsWindow}
+  ${PopupTypeEnum.dossierWindow}        | ${DossierWindow}
+  ${PopupTypeEnum.obtainInstanceHelper} | ${ObtainInstanceHelper}
   `('should render $expectedComponent when setPopupType returns $popupType', ({ popupType, expectedComponent }) => {
   // given
   const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType').mockImplementation(() => popupType);
