@@ -30,6 +30,7 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_popup_page().add_dossier_to_library()
 
+
 @step('I clicked Import button and see error "{error_message}"')
 def step_impl(context, error_message):
     context.pages.import_data_popup_page().click_import_button_to_import_with_error(error_message)

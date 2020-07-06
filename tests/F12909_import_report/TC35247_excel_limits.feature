@@ -1,5 +1,3 @@
-@windows_desktop
-@windows_chrome
 @mac_chrome
 Feature: F12909 - Import report
 
@@ -10,3 +8,4 @@ Feature: F12909 - Import report
 
     And I found and selected object "1,5M Sales Records excel limit"
     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+    And I log out

@@ -56,32 +56,28 @@ class RightPanelBrowserPage(BaseBrowserPage):
         self.get_element_by_id(RightPanelBrowserPage.ADD_DATA_BUTTON_ELEM).click()
 
     def wait_for_import_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelBrowserPage.IMPORT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(RightPanelBrowserPage.IMPORT_SUCCESSFUL_TEXT)
 
     def wait_for_duplicate_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelBrowserPage.DUPLICATE_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(RightPanelBrowserPage.DUPLICATE_OBJECT_SUCCESSFUL_TEXT)
 
     def wait_for_refresh_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelBrowserPage.REFRESH_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(RightPanelBrowserPage.REFRESH_OBJECT_SUCCESSFUL_TEXT)
 
     def wait_for_remove_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelBrowserPage.REMOVE_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(RightPanelBrowserPage.REMOVE_OBJECT_SUCCESSFUL_TEXT)
 
-    def _wait_for_operation_successfully_completed(self, expected_message):
-        self.focus_on_add_in_frame()
+    def wait_for_operation_error_and_accept(self, expected_message):
+        self._wait_for_operation_with_status(expected_message)
 
-        self.wait_for_element_to_have_attribute_value_by_css(RightPanelBrowserPage.NOTIFICATION_TEXT_ELEM,
-                                                             RightPanelBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-                                                             expected_message)
-
-    def wait_for_operation_error(self, expected_message):
-        self.focus_on_add_in_frame()
-
-        self.wait_for_element_to_have_attribute_value_by_css(RightPanelBrowserPage.NOTIFICATION_TEXT_ELEM,
-                                                             RightPanelBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-                                                             expected_message)
-                                                              
         self.get_element_by_css(RightPanelBrowserPage.NOTIFICATION_BUTTON).click()
+
+    def _wait_for_operation_with_status(self, expected_message):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(RightPanelBrowserPage.NOTIFICATION_TEXT_ELEM,
+                                                             RightPanelBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+                                                             expected_message)
 
     def close_all_notifications_on_hover(self):
         self.focus_on_add_in_frame()

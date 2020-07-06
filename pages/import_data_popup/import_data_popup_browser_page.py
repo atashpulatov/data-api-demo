@@ -51,7 +51,7 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def click_import_button_to_import_with_error(self, error_message):
         self.get_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM).click()
 
-        self.right_panel_browser_page.wait_for_operation_error(error_message)
+        self.right_panel_browser_page.wait_for_operation_error_and_accept(error_message)
 
     def click_import_button_to_open_import_dossier(self):
         self.get_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM).click()
