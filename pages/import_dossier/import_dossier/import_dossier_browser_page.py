@@ -61,7 +61,7 @@ class ImportDossierBrowserPage(BaseBrowserPage):
 
         self.get_element_by_id(ImportDossierBrowserPage.IMPORT_BUTTON).click()
 
-        self.right_panel_browser_page.wait_for_import_to_finish_successfully()
+        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
     def reset_dossier(self):
         self.focus_on_import_dossier_frame()
