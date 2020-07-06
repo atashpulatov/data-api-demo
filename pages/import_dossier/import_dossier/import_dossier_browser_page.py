@@ -1,5 +1,5 @@
 from pages.base_browser_page import BaseBrowserPage
-from pages.right_panel.right_panel_browser_page import RightPanelBrowserPage
+from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 from util.exception.MstrException import MstrException
 
 
@@ -20,7 +20,7 @@ class ImportDossierBrowserPage(BaseBrowserPage):
     def __init__(self):
         super().__init__()
 
-        self.right_panel_browser_page = RightPanelBrowserPage()
+        self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
 
     def import_visualization_by_name(self, visualization_name):
         self.select_visualization_by_name(visualization_name)

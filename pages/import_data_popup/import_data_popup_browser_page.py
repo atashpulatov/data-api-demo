@@ -1,5 +1,5 @@
 from pages.base_browser_page import BaseBrowserPage
-from pages.right_panel.right_panel_browser_page import RightPanelBrowserPage
+from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
 class ImportDataPopupBrowserPage(BaseBrowserPage):
@@ -22,7 +22,7 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def __init__(self):
         super().__init__()
 
-        self.right_panel_browser_page = RightPanelBrowserPage()
+        self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
 
     def ensure_mylibrary_switch_is_off(self):
         self.focus_on_import_data_pop_up_frame()
@@ -46,7 +46,7 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def click_import_button(self):
         self.get_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM).click()
 
-        self.right_panel_browser_page.wait_for_import_to_finish_successfully()
+        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
     def click_import_button_to_open_import_dossier(self):
         self.get_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM).click()

@@ -1,5 +1,4 @@
 from pages.base_browser_page import BaseBrowserPage
-from pages.right_panel.right_panel_browser_page import RightPanelBrowserPage
 from util.exception.MstrException import MstrException
 
 
@@ -21,11 +20,6 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         'Ascending': CONTEXT_MENU_SORT_ASCENDING,
         'Descending': CONTEXT_MENU_SORT_DESCENDING
     }
-
-    def __init__(self):
-        super().__init__()
-
-        self.right_panel_browser_page = RightPanelBrowserPage()
 
     def select_show_totals_for_attribute(self, totals_to_select, attribute_name):
         self.focus_on_import_dossier_frame()

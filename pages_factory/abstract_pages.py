@@ -28,6 +28,10 @@ class AbstractPages(ABC):
         pass
 
     @abstractmethod
+    def right_panel_tile_page(self):
+        pass
+
+    @abstractmethod
     def import_data_popup_page(self):
         pass
 

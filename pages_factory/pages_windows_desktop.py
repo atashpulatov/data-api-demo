@@ -9,7 +9,8 @@ from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetW
 from pages.excel.start_excel.start_excel_windows_desktop_page import StartExcelWindowsDesktopPage
 from pages.import_data_popup.import_data_popup_windows_desktop_page import ImportDataPopupWindowsDesktopPage
 from pages.import_dossier.import_dossier.import_dossier_windows_desktop_page import ImportDossierWindowsDesktopPage
-from pages.right_panel.right_panel_windows_desktop_page import RightPanelWindowsDesktopPage
+from pages.right_panel.right_panel.right_panel_windows_desktop_page import RightPanelWindowsDesktopPage
+from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages_factory.abstract_pages import AbstractPages
 
 
@@ -22,6 +23,7 @@ class PagesWindowsDesktop(AbstractPages):
         self.excel_menu_windows_desktop_page = ExcelMenuWindowsDesktopPage()
         self.cleanup_windows_desktop_page = CleanupWindowsDesktopPage()
         self.right_panel_windows_desktop_page = RightPanelWindowsDesktopPage()
+        self.right_panel_tile_windows_desktop_page = RightPanelTileWindowsDesktopPage()
         self.import_data_popup_windows_desktop_page = ImportDataPopupWindowsDesktopPage()
         self.excel_sheet_windows_desktop_page = ExcelSheetWindowsDesktopPage()
         self.duplicate_object_popup_windows_desktop_page = DuplicateObjectPopupWindowsDesktopPage()
@@ -42,6 +44,9 @@ class PagesWindowsDesktop(AbstractPages):
 
     def right_panel_page(self):
         return self.right_panel_windows_desktop_page
+
+    def right_panel_tile_page(self):
+        return self.right_panel_tile_windows_desktop_page
 
     def import_data_popup_page(self):
         return self.import_data_popup_windows_desktop_page
