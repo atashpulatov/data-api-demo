@@ -9,6 +9,9 @@ export const getObjectPrompts = async (objectData, objectId, projectId, operatio
   }
 };
 
+export const getFilters = (operationData) => operationData.objectEditedData
+  && operationData.objectEditedData.filterDetails;
+
 const promptAnswerFunctionsMap = {
   OBJECTS: (prompt) => prompt.answers.map(answer => answer.name),
   LEVEL: (prompt) => prompt.answers.units.map(unit => unit.name),
