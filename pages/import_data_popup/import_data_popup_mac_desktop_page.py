@@ -49,11 +49,14 @@ class ImportDataPopupMacDesktopPage(BasePage):
         value = element.get_attribute(ImportDataPopupMacDesktopPage.MY_LIBRARY_SWITCH_VALUE_ATTR)
         return value == ImportDataPopupMacDesktopPage.MY_LIBRARY_SWITCH_VALUE_ATTR_ON_VALUE
 
-    def find_and_select_object(self, object_name):
+    def find_object(self, object_name):
         search_box = self.get_element_by_xpath_list(ImportDataPopupMacDesktopPage.SEARCH_BAR_ELEMS)
         search_box.send_keys(object_name)
 
         Util.pause(2)  # TODO wait when ready
+
+    def find_and_select_object(self, object_name):
+        self.find_object(object_name)
 
         self.get_element_by_xpath(
             ImportDataPopupMacDesktopPage.NAME_HEADER_ELEM

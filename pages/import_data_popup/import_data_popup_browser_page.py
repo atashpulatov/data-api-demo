@@ -1,6 +1,6 @@
 from pages.base_browser_page import BaseBrowserPage
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
-
+import pyperclip
 
 class ImportDataPopupBrowserPage(BaseBrowserPage):
     MY_LIBRARY_SWITCH_ELEM = '''div[aria-label='My Library']'''
@@ -9,6 +9,9 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     SEARCH_BAR_ELEM = '.search-field__input'
 
     NAME_OBJECT_ELEM = '''span[title='%s']'''
+    EXPAND_DETAILS_ELEM = '.details-indicator'
+    EXPAND_DETAILS_TABLE = '.details-table > table tr'
+    EXPAND_DETAILS_VALUE = '.tooltip :last-child'
 
     IMPORT_BUTTON_ELEM = 'import'
     PREPARE_BUTTON_ELEM = 'prepare'
@@ -35,11 +38,14 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def _is_on(self, element):
         return element.get_attribute(ImportDataPopupBrowserPage.ARIA_CHECKED_ATTRIBUTE) == 'true'
 
-    def find_and_select_object(self, object_name):
+    def find_object(self, object_name):
         self.focus_on_import_data_pop_up_frame()
 
         search_box = self.get_element_by_css(ImportDataPopupBrowserPage.SEARCH_BAR_ELEM)
         search_box.send_keys(object_name)
+
+    def find_and_select_object(self, object_name):
+        self.find_object(object_name)
 
         self.get_element_by_css(ImportDataPopupBrowserPage.NAME_OBJECT_ELEM % object_name).click()
 
@@ -65,3 +71,15 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def add_dossier_to_library(self):
         if self.check_if_element_exists_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON, timeout=5):
             self.get_elements_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON).click()
+
+    def expand_object(self, object_index):
+        self.get_elements_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_ELEM)[object_index].click()
+
+    def copy_and_compare_all_details(self):
+        details_rows = self.get_elements_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_TABLE)
+        for row in details_rows:
+            details_value = row.find_element_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_VALUE)
+            details_value.click()
+            if pyperclip.paste() != details_value.text:
+              return False
+        return True

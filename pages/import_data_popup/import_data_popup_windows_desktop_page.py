@@ -46,11 +46,14 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
     def _get_element_aria_properties(self, element):
         return element.get_attribute(ImportDataPopupWindowsDesktopPage.ARIA_PROPERTIES_ATTRIBUTE)
 
-    def find_and_select_object(self, object_name):
+    def find_object(self, object_name):
         search_box = self.get_element_by_name(ImportDataPopupWindowsDesktopPage.SEARCH_BAR_ELEM)
         search_box.send_keys(object_name)
 
         Util.pause(4)  # TODO wait when ready
+
+    def find_and_select_object(self, object_name):
+        self.find_object(object_name)
 
         self.get_element_by_name(object_name, image_name=self.prepare_image_name(object_name)).click()
 

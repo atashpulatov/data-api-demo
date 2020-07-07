@@ -74,6 +74,11 @@ class BaseElement:
 
         return BaseElement(raw_element, self.__driver)
 
+    def find_element_by_css(self, selector):
+        raw_element = self.__element.find_element_by_css_selector(selector)
+
+        return BaseElement(raw_element, self.__driver)
+
     def find_elements_by_css(self, selector):
         raw_elements = self.__element.find_elements_by_css_selector(selector)
 
