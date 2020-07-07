@@ -16,7 +16,8 @@ from pages.import_dossier.import_dossier_show_data.import_dossier_show_data_brow
     ImportDossierShowDataBrowserPage
 from pages.import_dossier.import_dossier_table_of_contents.import_dossier_table_of_contents_browser_page import \
     ImportDossierTableOfContentsBrowserPage
-from pages.right_panel.right_panel_browser_page import RightPanelBrowserPage
+from pages.right_panel.right_panel.right_panel_browser_page import RightPanelBrowserPage
+from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 from pages_factory.abstract_pages import AbstractPages
 
 
@@ -29,6 +30,7 @@ class PagesBrowser(AbstractPages):
         self.excel_menu_browser_page = ExcelMenuBrowserPage()
         self.cleanup_browser_page = CleanupBrowserPage()
         self.right_panel_browser_page = RightPanelBrowserPage()
+        self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
         self.import_data_popup_browser_page = ImportDataPopupBrowserPage()
         self.excel_sheet_browser_page = ExcelSheetBrowserPage()
         self.columns_and_filters_selection_browser_page = ColumnsAndFiltersSelectionBrowserPage()
@@ -54,6 +56,9 @@ class PagesBrowser(AbstractPages):
 
     def right_panel_page(self):
         return self.right_panel_browser_page
+
+    def right_panel_tile_page(self):
+        return self.right_panel_tile_browser_page
 
     def import_data_popup_page(self):
         return self.import_data_popup_browser_page

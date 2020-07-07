@@ -1,5 +1,6 @@
+from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
+
 from pages.base_browser_page import BaseBrowserPage
-from pages.right_panel.right_panel_browser_page import RightPanelBrowserPage
 
 
 class DuplicateObjectPopupBrowserPage(BaseBrowserPage):
@@ -16,12 +17,12 @@ class DuplicateObjectPopupBrowserPage(BaseBrowserPage):
     def __init__(self):
         super().__init__()
 
-        self.right_panel_browser_page = RightPanelBrowserPage()
+        self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
 
     def click_import(self):
         self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_IMPORT_BUTTON).click()
 
-        self.right_panel_browser_page.wait_for_duplicate_object_to_finish_successfully()
+        self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully()
 
     def click_edit(self):
         self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_EDIT_BUTTON).click()

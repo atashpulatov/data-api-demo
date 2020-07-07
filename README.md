@@ -169,6 +169,21 @@ values as for **driver_name** (windows_desktop, windows_chrome, mac_desktop, mac
 
 For complete list of available custom parameters (specified using -D) see [config.json](config/config.json). 
 
+#### Navigating from feature file to step definition in `Visual Studio Code`
+- install `Cucumber (Gherkin) Full Support` extension
+- go to `Settings` (Command/Control + ,)
+- search for `Cucumberautocomplete`
+- click on the `Edit` in `settings.json`
+- add following lines:
+```
+"cucumberautocomplete.steps": [
+    "tests/steps/*.py"
+],
+"cucumberautocomplete.syncfeatures": "tests/*/*feature",
+```
+- restart `Visual Studio Code`
+- open a feature file and right click a step and select `Go To Definition`
+
 ### 3. TODO
 
 - change usage of send_keys as it's not stable on Windows Desktop (potentially in other environments too), 
@@ -182,3 +197,4 @@ Mac Chrome: element.get_attribute('value') (input element)
 - parallel test execution 
 - use assertions library instead of simple Python's assert?
 - test 0 verifying required objects existence
+- support for different languages (Excel, app)
