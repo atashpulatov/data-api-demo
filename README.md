@@ -171,7 +171,7 @@ For complete list of available custom parameters (specified using -D) see [confi
 
 #### Navigating from feature file to step definition in Visual Studio Code
 - have Cucumber (Gherkin) Full Support extension installed
-- go into Settings (Command + ,)
+- go into Settings (Command/Control + ,)
 - search for Cucumberautocomplete
 - click on the Edit in "settings.json"
 - add following lines:
