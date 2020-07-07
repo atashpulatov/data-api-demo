@@ -52,14 +52,17 @@ class StepGetInstanceDefinition {
 
       let startCell;
       let instanceDefinition;
+      let sourceName;
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
           { ...objectData, visualizationInfo }
         ));
 
         name = dossierInstanceDefinition.getVisualizationName(operationData, name, instanceDefinition);
+        sourceName = visualizationInfo.dossierStructure && visualizationInfo.dossierStructure.dossierName;
       } else {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
+        sourceName = instanceDefinition.mstrTable.name;
       }
 
       instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
@@ -70,6 +73,7 @@ class StepGetInstanceDefinition {
       if (futureStep === GET_OFFICE_TABLE_IMPORT) {
         startCell = await this.getStartCell(insertNewWorksheet, excelContext);
       }
+
 
       const { mstrTable } = instanceDefinition;
       const updatedObject = {
@@ -86,6 +90,7 @@ class StepGetInstanceDefinition {
           ...definition,
           attributes: instanceDefinition.attributes,
           metrics: instanceDefinition.metrics,
+          sourceName,
         },
       };
 
