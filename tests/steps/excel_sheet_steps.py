@@ -10,6 +10,11 @@ def step_impl(context, cell_name):
     context.pages.excel_sheet_page().go_to_cell(cell_name)
 
 
+@step('I wrote text "{text}" in cell "{cell_name}"')
+def step_impl(context, text, cell_name):
+    context.pages.excel_sheet_page().write_value_in_cell(cell_name, text)
+
+
 @step('cell "{cell_name}" should have value "{expected_value}"')
 def step_impl(context, cell_name, expected_value):
     result = context.pages.excel_sheet_page().get_cells_values([cell_name])
