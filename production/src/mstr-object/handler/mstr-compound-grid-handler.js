@@ -138,7 +138,11 @@ class CompoundGridHandler {
     for (let row = 0; row < paging.current; row++) {
       const rowValues = [];
       for (let colSet = 0; colSet < columnSets.length; colSet++) {
-        rowValues.push(...columnSets[colSet][valueMatrix][row] || '\'');
+        if (columnSets[colSet][valueMatrix][row] && columnSets[colSet][valueMatrix][row].length) {
+          rowValues.push(...columnSets[colSet][valueMatrix][row]);
+        } else {
+          rowValues.push('\'');
+        }
       }
       rowTable.push(rowValues);
     }
