@@ -1,7 +1,7 @@
 @mac_chrome
 Feature: F12909 - Import report
 
-  Scenario: [TC35247] - Importing reports larger than Excel rows & project limitation
+  Scenario: [TC35248] - Importing objects exceeding Excel size and placement limits
     Given I logged in as default user
     And   I selected cell "A1048576"
     And   I clicked Import Data button
