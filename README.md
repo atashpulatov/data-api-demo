@@ -197,3 +197,4 @@ Mac Chrome: element.get_attribute('value') (input element)
 - parallel test execution 
 - use assertions library instead of simple Python's assert?
 - test 0 verifying required objects existence
+- support for different languages (Excel, app)
