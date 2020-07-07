@@ -66,3 +66,6 @@ class PagesMacDesktop(AbstractPages):
 
     def import_dossier_context_menu_page(self):
         pass
+
+    def import_dossier_show_data_page(self):
+        pass
