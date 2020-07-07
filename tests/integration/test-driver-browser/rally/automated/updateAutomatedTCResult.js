@@ -11,25 +11,13 @@ const strings = require('../strings');
  */
 async function updateRallyTCResult() {
   const allTests = getResultsFromAllure.getReportData();
-
   if (allTests.length === 0) {
     console.log('No test results found in Allure report.');
     process.exit(1);
   }
-  const cmd = process.argv;
-  let testsToUpload = '';
 
-  if (cmd.includes('all')) {
-    testsToUpload = 'all';
-  } else if (cmd.includes('fail')) {
-    testsToUpload = 'fail';
-  } else {
-    testsToUpload = 'pass';
-  }
-
-  const testsToUpdate = getResultsFromAllure.getTestsWithVerdict(allTests, testsToUpload);
+  const testsToUpdate = getResultsFromAllure.getTestsWithVerdict(allTests);
   const batch = await createBatchArray(testsToUpdate);
-
   const options = {
     method: 'POST',
     headers: { zsessionid: rallyConfig.rallyApiKey, },
