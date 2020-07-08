@@ -90,6 +90,7 @@ pip install Appium-Python-Client
 pip install behave
 pip install Pillow
 pip install opencv-python-headless
+pip install pyperclip
 ```
 
 ##### Mac Desktop

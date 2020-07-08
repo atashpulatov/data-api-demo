@@ -1,6 +1,8 @@
+from pyperclip import paste
+
 from pages.base_browser_page import BaseBrowserPage
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
-import pyperclip
+
 
 class ImportDataPopupBrowserPage(BaseBrowserPage):
     MY_LIBRARY_SWITCH_ELEM = '''div[aria-label='My Library']'''
@@ -21,6 +23,7 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
 
     ADD_TO_LIBRARY_BUTTON = '.mstrd-PageNotification-buttonContainer > .mstrd-Button.mstrd-Button--primary'
+    CLOSE_IMPORT_DATA_POPUP_BUTTON = '.popup-buttons > button'
 
     def __init__(self):
         super().__init__()
@@ -72,14 +75,20 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
         if self.check_if_element_exists_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON, timeout=5):
             self.get_elements_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON).click()
 
-    def expand_object(self, object_index):
-        self.get_elements_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_ELEM)[object_index].click()
+    def expand_object(self, object_number):
+        self.get_elements_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_ELEM)[int(object_number) - 1].click()
 
-    def copy_and_compare_all_details(self):
+    def copy_to_clipboard_and_compare_all_details(self):
         details_rows = self.get_elements_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_TABLE)
+
         for row in details_rows:
             details_value = row.find_element_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_VALUE)
             details_value.click()
-            if pyperclip.paste() != details_value.text:
-              return False
+
+            if paste() != details_value.text:
+                return False
+
         return True
+
+    def close_import_data_popup(self):
+        self.get_element_by_css(ImportDataPopupBrowserPage.CLOSE_IMPORT_DATA_POPUP_BUTTON).click()

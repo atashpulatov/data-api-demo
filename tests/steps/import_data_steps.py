@@ -2,6 +2,7 @@ from behave import *
 
 from util.assert_util import AssertUtil
 
+
 @step('MyLibrary Switch is OFF')
 def step_impl(context):
     context.pages.import_data_popup_page().ensure_mylibrary_switch_is_off()
@@ -37,11 +38,18 @@ def step_impl(context):
     context.pages.import_data_popup_page().add_dossier_to_library()
 
 
-@step('I expanded object details with index "{object_index}"')
-def step_impl(context, object_index):
-    context.pages.import_data_popup_page().expand_object(int(object_index))
+@step('I expanded details for object number {object_number}')
+def step_impl(context, object_number):
+    context.pages.import_data_popup_page().expand_object(object_number)
 
 
-@step('I verify copying the details works correctly')
+@step('I verify copying the details to clipboard works correctly')
 def step_impl(context):
-    AssertUtil.assert_simple(context.pages.import_data_popup_page().copy_and_compare_all_details(), True)
+    compare_result = context.pages.import_data_popup_page().copy_to_clipboard_and_compare_all_details()
+
+    AssertUtil.assert_simple(compare_result, True)
+
+
+@step('I close the Import Data popup')
+def step_impl(context):
+    context.pages.import_data_popup_page().close_import_data_popup()
