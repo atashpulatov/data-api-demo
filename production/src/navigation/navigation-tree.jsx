@@ -22,7 +22,9 @@ import { popupHelper } from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
-const { getCubeStatus, isPrompted } = mstrObjectRestService;
+const {
+  getCubeStatus, isPrompted, getCubeInformation, getCubeServerMode
+} = mstrObjectRestService;
 const checkIfPrompted = isPrompted;
 
 export class NavigationTreeNotConnected extends Component {
@@ -176,15 +178,19 @@ export class NavigationTreeNotConnected extends Component {
       objectId = targetId;
     }
 
-    let cubeStatus = true;
+    let isCubePublished = true;
     if (mstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
       try {
-        cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
+        const [cubeStatus, cubeServerMode] = await Promise.all([
+          getCubeStatus(objectId, projectId),
+          getCubeServerMode(objectId, projectId),
+        ]);
+        isCubePublished = cubeStatus !== '0' || cubeServerMode === 2;
       } catch (error) {
         popupHelper.handlePopupErrors(error);
       }
     }
-    this.setState({ isPublished: cubeStatus });
+    this.setState({ isPublished: isCubePublished });
 
     selectObject({
       chosenObjectId: objectId,

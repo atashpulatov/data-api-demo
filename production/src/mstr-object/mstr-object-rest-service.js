@@ -455,6 +455,27 @@ class MstrObjectRestService {
       .then((res) => res.headers['x-mstr-cubestatus']);
   }
 
+  getCubeInformation = (objectId, projectId) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const body = { id: [objectId] };
+    const fullPath = `${envUrl}/cubes?id=${objectId}`;
+    console.log(`objectID is:${objectId}`);
+
+    return request
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
+      .withCredentials()
+      .then((res) => res);
+  }
+
+  getCubeServerMode = async (objectId, projectId) => {
+    const cubeInformation = await this.getCubeInformation(objectId, projectId);
+    const cubeServerMode = cubeInformation.body.cubesInfos[0].serverMode;
+    return cubeServerMode;
+  }
+
   rePromptDossier = (dossierId, instanceId, projectId) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
