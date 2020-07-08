@@ -109,6 +109,27 @@ function getRelease() {
   return rallyconfig.automation.release;
 }
 
+/**
+* Gets data from the Allure report with the specified verdict from cmd (all, pass or fail)
+*
+* @param {Array} tests Array of objects (test results) to be uploaded to Rally
+* @returns {Array} Array of objects (test results) with specified verdict containing data that will be uploaded to Rally
+*/
+function getTestsWithVerdict(tests) {
+  const parameters = parseArgs();
+  let verdict = '';
+  if (strings.cmdArguments.verdict in parameters) {
+    verdict = parameters[strings.cmdArguments.verdict];
+  } else {
+    verdict = 'pass';
+  }
+
+  if (verdict === 'all') {
+    return tests;
+  }
+  return tests.filter(test => test.verdict === (verdict.charAt(0).toUpperCase() + verdict.slice(1)));
+}
+
 
 /**
 * Returns OS on which the Test Case was executed
@@ -154,20 +175,6 @@ function getReportData() {
   return allureDataArray;
 }
 
-/**
-* Gets data from the Allure report for all the test cases found in Allure report
-*
-* @param {Array} tests Array of objects (test results) to be uploaded to Rally
-* @param {String} testVerdict Parameter sent to command line call while running the script to indicate the verdict
-* of the test cases to be uploaded
-* @returns {Array} Array of objects (test results) with specified verdict containing data that will be uploaded to Rally
-*/
-function getTestsWithVerdict(tests, testVerdict = 'pass') {
-  if (testVerdict === 'all') {
-    return tests;
-  }
-  return tests.filter(test => test.verdict === (testVerdict.charAt(0).toUpperCase() + testVerdict.slice(1)));
-}
 
 exports.getReportData = getReportData;
 exports.getTestsWithVerdict = getTestsWithVerdict;
