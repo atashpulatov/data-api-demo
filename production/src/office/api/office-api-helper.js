@@ -290,8 +290,7 @@ class OfficeApiHelper {
     excelContext.workbook.onSelectionChanged.add(async () => {
       setActiveCellAddress('...');
       const activeCellAddress = await this.getSelectedCell(excelContext);
-      const activeCellAddressWithDollars = this.getCellAddressWithDollars(activeCellAddress);
-      setActiveCellAddress(activeCellAddressWithDollars);
+      setActiveCellAddress(activeCellAddress);
     });
     await excelContext.sync();
   }

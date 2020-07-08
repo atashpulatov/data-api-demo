@@ -1,3 +1,6 @@
+import { popupSelectors } from './selectors/popup-selectors';
+
+const { getVizAT } = popupSelectors.dossierWindow;
 export const objectsList = {
   reports: {
     reportWithLongName: 'Report with very long name - This is a very long text to know what happens when plugging is dealing with files with such a long name it is important to see if it will add three dots at the end or if it is going to display the whole text',
@@ -6,6 +9,7 @@ export const objectsList = {
     notSupportedFeatures: 'Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes',
     seasonalReport: 'Seasonal Report',
     basicReport: '100_report',
+    promptedAndMultiformReport: 'Report with Prompt and Multiform attribute',
     metricExpPromptedReport: 'Report with prompt - Expression prompt (Metric Qualification Prompt on Revenue) | Not required | Not default',
     attributeExprPromptedReport: 'Report with prompt - Expression prompt (Attribute Qualification Prompt on Year) | Required | Not default',
     numericPromptedReport: 'Report with prompt - Value prompt - Numeric (Year) | Required | Default answer',
@@ -25,7 +29,7 @@ export const objectsList = {
     secureDataFiltering: 'Revenue by Region and Category - secure data',
     secureDataAlwaysWorking: 'Secure data - always working',
     nestedPrompt: 'Report with nested prompt',
-    over100k: '100010 rows report',
+    over100k: '110k Sales Records.csv',
     marginReport: 'Report 1048576 rows',
     numberFormating: 'Number Formatting',
     allPrompt: 'Report with all type of prompts (except nested)',
@@ -117,6 +121,7 @@ export const objectsList = {
       },
     },
     BasicReportWBrand: 'Basic Report with brand',
+    defectAnalysisPrompted: 'Defect Analysis_with prompt',
   },
 
   datasets: {
@@ -128,22 +133,18 @@ export const objectsList = {
     salesRecords1k: '1k Sales Records.csv',
     salesData: 'Sales Data',
     salesRecords50k: '50k Sales Records.csv',
+    aqdtMirrorTwoQACube: 'QA Cube',
   },
 
   dossiers: {
     nested: {
       name: 'Dossier with all prompts (incl. nested)',
-      prompt1: '#id_mstr105',
-      prompt2: '#id_mstr142_txt',
-      prompt3: '#id_mstr238ListContainer > div.mstrListBlockItem',
-      prompt4: '#id_mstr198_txt',
-      prompt5: '#id_mstr68 > table > tbody > tr:nth-child(7) > td.mstrPromptTOCListItemTitle > span',
-      prompt6: '#id_mstr249_txt',
-      prompt7: '#id_mstr243_txt',
-      prompt8: '#id_mstr255_txt',
-      prompt9: '#id_mstr68 > table > tbody > tr:nth-child(10) > td.mstrPromptTOCListItemTitle > span',
-      prompt10: '#id_mstr263_txt',
-      prompt11: '#mstr129',
+      DateTime: getVizAT(2),
+      text: getVizAT(3),
+    },
+    dossierWithPagesAndChapters: {
+      name: 'Dossier with vis that can be moved to different pages / chapters',
+      gridVisualization: getVizAT(1)
     },
     complexDossier: {
       name: 'Complex dossier (20 visualizations)',
@@ -155,7 +156,7 @@ export const objectsList = {
         barChart: '#mstr271',
         lineChart: '#mstr444',
         areaChart: '#mstr421',
-        bubbleChart: '#mstr490',
+        bubbleChart: popupSelectors.dossierWindow.getVizAT(16),
         pieChart: '#mstr310',
         comboChart: '#mstr557',
         geospatialService: '#mstr338',
@@ -171,16 +172,31 @@ export const objectsList = {
       name: 'Visualization manipulation',
       visualizations: {
         visualization1: {
-          name: '#mstr106',
+          name: getVizAT(1),
           gridTableId: '#mstr121',
           getTableItemAt: (firstIndex, secondIndex) => `#mstr149 > table > tbody > tr:nth-child(${firstIndex}) > td:nth-child(${secondIndex})`,
         }
       },
     },
-    interactiveDossier: { name: 'Dossier for interactive components', },
+    interactiveDossier: {
+      name: 'Dossier for interactive components',
+      vis2: popupSelectors.dossierWindow.getVizAT(2),
+    },
     customVisualizations: {
       name: 'Custom Visualizations',
-      visualizations: { GoogleTimeline: '#mstr114', }
+      visualizations: {
+        modelsByYear: getVizAT(1),
+        modelsByYearData: getVizAT(3),
+      }
+    },
+
+    dossierWithDifferentCustomVis: {
+      name: 'Dossier with different custom visualizations',
+      Visualizations: {
+        worldCloud: getVizAT(1),
+        googleTimeLine: getVizAT(2),
+        sequenceSunburst: getVizAT(3),
+      }
     },
 
     userActivityDossier: {
@@ -192,7 +208,11 @@ export const objectsList = {
     },
     promptedDossier: {
       name: 'Prompted dossier',
-      visualizations: { vis1: '#mstr106' }
+      visualizations: { vis1: getVizAT(2) }
+    },
+    promptedDossier2: {
+      name: 'Prompted dossier (display prompt and default answers)',
+      visualizations: { vis1: getVizAT(1) }
     },
     oneMillionAndLongName: {
       name: '1 MILION rows This is a very long name for a dossier so that we can test how we display long path to dossier visualisationsNew Dossier',
@@ -205,6 +225,39 @@ export const objectsList = {
     withAttributeMetricSelector: {
       name: 'dossier with attribute/metric selector',
       visualizations: { vis1: '#mstr107' }
+    },
+    dossierWithBasicGrid: {
+      name: 'Dossier with basic grid vis, vis with totals and vis with crosstabs',
+      visualizations: {
+        basicGrid: '#mstr108',
+        gridWithSubtotals: '#mstr123',
+        gridWithSubtotalsAndCrosstabs: getVizAT(3),
+      }
+    },
+    dossierWithCompoundGrid: {
+      name: 'Dossier with compound grid',
+      visualizations: { visualization1: getVizAT(1) }
     }
+  },
+  aqdtMirror2Objects: {
+    tcAutomation: 'TC to automate',
+    pdCube: 'PD Cube',
+    tecQa: {
+      name: 'TEC.QA',
+      visualizations: {
+        automationByUnitVis1: getVizAT(1),
+        useCaseDetail: getVizAT(1)
+      }
+    },
+    tecPd: {
+      name: 'TEC.PD',
+      visualizations: { defectsByRelase: getVizAT(1), }
+    },
+    reportFormatting: 'Report with MSTR formatting'
+  },
+  AQDT: {
+    owner: 'Putney, David',
+    visualization1: popupSelectors.dossierWindow.getVizAT(3),
+    visualization2: popupSelectors.dossierWindow.getVizAT(1),
   },
 };

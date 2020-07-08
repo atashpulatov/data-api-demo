@@ -146,9 +146,15 @@ const markFetchingComplete = (state, payload) => {
   return state;
 };
 
-const createGlobalNotification = (state, payload) => (
-  { ...state, globalNotification: payload }
-);
+const createGlobalNotification = (state, payload) => {
+  payload.title = customT(payload.title);
+
+  if (payload.details) {
+    payload.details = customT(payload.details);
+  }
+
+  return { ...state, globalNotification: payload };
+};
 
 const removeGlobalNotification = (state, paylaod) => (
   { notifications: [...state.notifications], globalNotification: { type: '' } }

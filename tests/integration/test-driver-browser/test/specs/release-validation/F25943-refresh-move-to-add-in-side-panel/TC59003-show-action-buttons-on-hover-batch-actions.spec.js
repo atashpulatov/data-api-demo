@@ -23,6 +23,7 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
+    PluginPopup.clickHeader('Owner');
     PluginPopup.importObject(objectsList.datasets.datasetSQL);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);

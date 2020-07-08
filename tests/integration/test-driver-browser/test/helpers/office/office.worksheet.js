@@ -1,5 +1,5 @@
 import { switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
-import { waitAndClick } from '../utils/click-helper';
+import { waitAndClick, waitAndRightClick } from '../utils/click-helper';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
 import settings from '../../config';
 import { pressEnter, pressBackspace, pressEscape } from '../utils/keyboard-actions';
@@ -7,7 +7,7 @@ import { logStep } from '../utils/allure-helper';
 
 const OfficeWorksheet = function () {
   const pluginStartId = '#m_excelWebRenderer_ewaCtl_3D10BAF8-D37F-DCF9-711E-7D53E9DC4090MSTR.Group1'; // aws169915
-  const pluginIcon = `img[src^="https://${settings.env.hostname}"]`;
+  const pluginIcon = `img[src^="https://${settings.args.env}"]`;
   const fileName = 'office.worksheet.js';
 
   this.openExcelHome = function () {
@@ -62,7 +62,7 @@ const OfficeWorksheet = function () {
     browser.switchToFrame($(excelSelectors.officeAddInsFrame));
     browser.pause(1111);
     waitAndClick($(excelSelectors.adminManagedBtn));
-    let envNumber = process.argv[process.argv.length - 1];
+    let envNumber = settings.args.env;
     if (!envNumber.includes('env-')) {
       envNumber = 'yi_local_ip';
     }
@@ -95,6 +95,15 @@ const OfficeWorksheet = function () {
     logStep(`Opening the sheet number ${index}...    [${fileName} - openSheet()]`);
     switchToExcelFrame();
     waitAndClick($(excelSelectors.selectsheet(index)));
+  };
+
+  this.deleteSheet = (index) => {
+    logStep(`Deleting the sheet number ${index}...    [${fileName} - openSheet()]`);
+    switchToExcelFrame();
+    logStep('Right click on worksheet');
+    waitAndRightClick($(excelSelectors.selectsheet(index)));
+    waitAndClick($(excelSelectors.deleteSheet));
+    waitAndClick($(excelSelectors.acceptDeletingSheet));
   };
 
   this.selectCellAlternatively = (cellId) => {

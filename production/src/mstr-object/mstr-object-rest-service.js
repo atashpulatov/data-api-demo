@@ -73,7 +73,7 @@ function getFullPath({
 
 function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
   return request
-    .get(`${fullPath}?offset=${offset}&limit=${limit}`)
+    .get(`${fullPath}?offset=${offset}&limit=${limit}&fields=-data.metricValues.extras,-data.metricValues.formatted`)
     .set('x-mstr-authtoken', authToken)
     .set('x-mstr-projectid', projectId)
     .withCredentials();

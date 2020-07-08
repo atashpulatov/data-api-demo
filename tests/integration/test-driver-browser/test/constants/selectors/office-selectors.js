@@ -32,4 +32,6 @@ export const excelSelectors = {
   selectsheet: (index) => `#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > li:nth-child(${index + 1})`,
   formatAsTable: '#m_excelWebRenderer_ewaCtl_Styles\\.FormatAsTable-Large',
   lightGrayTableFormat: '#\\30 -Menu',
+  deleteSheet: '#ContextMenu\\.DeleteSheet-Menu16> span.cui-ctl-mediumlabel',
+  acceptDeletingSheet: '#errorbuttonarea > button:nth-child(1)',
 };

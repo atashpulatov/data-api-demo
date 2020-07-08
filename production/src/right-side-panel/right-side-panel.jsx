@@ -12,12 +12,14 @@ import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import { notificationService } from '../notification-v2/notification-service';
+import { sidePanelEventHelper } from './side-panel-event-helper';
+import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import {
   IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION,
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
-import { notificationService } from '../notification-v2/notification-service';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -31,6 +33,8 @@ export const RightSidePanelNotConnected = ({
   globalNotification,
   notifications,
   operations,
+  popupData,
+  isPopupRendered
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
@@ -43,8 +47,8 @@ export const RightSidePanelNotConnected = ({
 
   React.useEffect(() => {
     try {
-      sidePanelService.addRemoveObjectListener();
-      sidePanelService.initializeActiveCellChangedListener(setActiveCellAddress);
+      sidePanelEventHelper.addRemoveObjectListener();
+      sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
     } catch (error) {
       console.error(error);
     }
@@ -56,25 +60,28 @@ export const RightSidePanelNotConnected = ({
   }, [toggleSecuredFlag, toggleIsClearDataFailedFlag]);
 
   React.useEffect(() => {
-    setSidePanelPopup(sidePanelService.getSidePanelPopup());
+    setSidePanelPopup(sidePanelNotificationHelper.setClearDataPopups());
   }, [isSecured, isClearDataFailed]);
 
   // Updates the activeCellAddress in duplicate popup if this popup is opened.
   React.useEffect(() => {
     if (sidePanelPopup !== null && sidePanelPopup.type === popupTypes.DUPLICATE && duplicatedObjectId !== null) {
-      sidePanelService.setDuplicatePopup({ objectWorkingId: duplicatedObjectId, ...duplicatePopupParams });
+      sidePanelNotificationHelper.setDuplicatePopup({ objectWorkingId: duplicatedObjectId, ...duplicatePopupParams });
     }
     // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
     // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
+    if (popupData) {
+      sidePanelNotificationHelper.setRangeTakenPopup({ ...popupData, setSidePanelPopup, activeCellAddress });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeCellAddress]);
+  }, [activeCellAddress, popupData]);
 
   const handleSettingsClick = () => {
     officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
   };
 
   React.useEffect(() => {
-    setLoadedObjectsWrapped(() => sidePanelService.injectNotificationsToObjects(
+    setLoadedObjectsWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
       loadedObjects,
       notifications,
       operations
@@ -105,14 +112,14 @@ export const RightSidePanelNotConnected = ({
         }
       }
     } catch (error) {
-      sidePanelService.handleSidePanelActionError(error);
+      sidePanelNotificationHelper.handleSidePanelActionError(error);
     }
   };
 
   const addDataWrapper = async (params) => { await wrapper(sidePanelService.addData, params); };
   const highlightObjectWrapper = async (params) => { await wrapper(sidePanelService.highlightObject, params); };
   const duplicateWrapper = async (objectWorkingId) => {
-    await wrapper(sidePanelService.setDuplicatePopup, { objectWorkingId, ...duplicatePopupParams });
+    await wrapper(sidePanelNotificationHelper.setDuplicatePopup, { objectWorkingId, ...duplicatePopupParams });
   };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
@@ -139,6 +146,7 @@ export const RightSidePanelNotConnected = ({
       globalNotification={globalNotification}
       onSelectAll={notificationService.dismissNotifications}
       shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+      isPopupRendered={isPopupRendered}
     />
   );
 };
@@ -148,7 +156,7 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const {
-    isConfirm, isSettings, isSecured, isClearDataFailed
+    isConfirm, isSettings, isSecured, isClearDataFailed, popupOpen, popupData
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -160,7 +168,9 @@ export const mapStateToProps = (state) => {
     globalNotification,
     notifications,
     isSecured,
-    isClearDataFailed
+    isClearDataFailed,
+    popupData,
+    isPopupRendered: popupOpen,
   };
 };
 
@@ -174,6 +184,7 @@ const mapDispatchToProps = {
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
+  popupData: PropTypes.shape({}),
   globalNotification: PropTypes.shape({}),
   loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({
@@ -241,5 +252,6 @@ RightSidePanelNotConnected.propTypes = {
   isClearDataFailed: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
-  toggleIsClearDataFailedFlag: PropTypes.func
+  toggleIsClearDataFailedFlag: PropTypes.func,
+  isPopupRendered: PropTypes.bool,
 };

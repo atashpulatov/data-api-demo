@@ -1,5 +1,4 @@
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
-import stepGetInstanceDefinition from '../mstr-object/step-get-instance-definition';
 import stepGetObjectDetails from '../mstr-object/step-get-object-details';
 import stepApplyFormatting from '../office/format/step-apply-formatting';
 import stepFormatTable from '../office/format/step-format-table';
@@ -47,6 +46,7 @@ import {
   HIGHLIGHT_OBJECT,
 } from './operation-steps';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
+import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {

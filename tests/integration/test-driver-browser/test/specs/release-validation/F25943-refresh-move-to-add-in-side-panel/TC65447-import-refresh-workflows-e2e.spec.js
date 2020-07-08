@@ -95,6 +95,7 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     OfficeWorksheet.openNewSheet();
     PluginRightPanel.clickAddDataButton();
     PluginPopup.switchLibrary(false);
+    PluginPopup.clickHeader('Owner');
     PluginPopup.importObject(objectsList.datasets.datasetSQL);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
@@ -106,7 +107,7 @@ describe('F25943 - refresh move to add-in side panel and removal of blocking beh
     PluginRightPanel.clickAddDataButton();
     PluginPopup.importAnyObject(dossierObject.name, 1);
     browser.pause(5555);
-    PluginPopup.selectAndImportVizualiation(dossierObject.visualizations.grid);
+    PluginPopup.selectAndImportVisualization(dossierObject.visualizations.grid);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();

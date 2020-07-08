@@ -1,9 +1,9 @@
 /* eslint-disable class-methods-use-this */
 import { switchToPluginFrame, switchToExcelFrame, changeBrowserTab } from '../utils/iframe-helper';
-import { waitAndClick, waitAndDoubleClick } from '../utils/click-helper';
+import { waitAndClick, waitAndDoubleClick, waitAndRightClick } from '../utils/click-helper';
 import { rightPanelSelectors } from '../../constants/selectors/plugin.right-panel-selectors';
 import { excelSelectors } from '../../constants/selectors/office-selectors';
-import { waitForNotification } from '../utils/wait-helper';
+import { waitForNotification, waitForAllNotifications } from '../utils/wait-helper';
 import { pressEnter } from '../utils/keyboard-actions';
 import { logStep } from '../utils/allure-helper';
 
@@ -54,7 +54,7 @@ class PluginRightPanel {
   /**
    * Moves cursor over particular element (ex. refresh icon)
    *
-   * @param {Number} index index of the icon in the icon bar
+   * @param {Number} index index of the object
    */
   moveToRefreshIcon(index) {
     $(rightPanelSelectors.getRefreshBtnForObject(index)).moveTo();
@@ -63,7 +63,7 @@ class PluginRightPanel {
   /**
    * Moves cursor over particular element (ex. edit icon)
    *
-   * @param {Number} index index of the icon in the icon bar
+   * @param {Number} index index of the object
    */
   moveToEditIcon(index) {
     $(rightPanelSelectors.getEdithBtnForObject(index)).moveTo();
@@ -158,6 +158,7 @@ class PluginRightPanel {
     logStep(`Clicking "edit" button in duplicate popup...    [${fileName} - clickDuplicatePopupEditBtn()]`);
     switchToPluginFrame();
     const duplicatePopupEditBtn = $(rightPanelSelectors.duplicatePopupEditBtn);
+    duplicatePopupEditBtn.waitForClickable({ timeout: 10000 });
     duplicatePopupEditBtn.moveTo();
     browser.pause(1000);
     waitAndClick(duplicatePopupEditBtn);
@@ -200,6 +201,24 @@ class PluginRightPanel {
     logStep(`Removing object number ${index} from the list...    [${fileName} - removeObject()]`);
     switchToPluginFrame();
     const removeBtn = rightPanelSelectors.getRemoveBtnForObject(index);
+    $(removeBtn).moveTo();
+    browser.pause(1000);
+    waitAndClick($(removeBtn));
+  }
+
+  /**
+   * Clicks to remove button inside the drop down menu opened with right click. Will work when there is one or more objects imported.
+   *
+   * @param {Number} index indicates the report represented in the plugin. Starts with 1 which indicates the last imported object.
+   *
+   */
+  removeObjectWithRightClick(index) {
+    logStep('Removing the object with right click');
+    switchToPluginFrame();
+    const objectToRemove = rightPanelSelectors.getObjectSelector(index);
+    $(objectToRemove).waitForClickable(60000, false, `${objectToRemove} is not clickable`);
+    waitAndRightClick($(objectToRemove));
+    const removeBtn = rightPanelSelectors.getRightClickRemoveBtn(index);
     $(removeBtn).moveTo();
     browser.pause(1000);
     waitAndClick($(removeBtn));
@@ -295,6 +314,7 @@ class PluginRightPanel {
 
   // Currently it is not used
   removeAllObjectsFromTheList() {
+    logStep(`Removing all objects...    [${fileName} - closeNotificationOnHover()]`);
     switchToPluginFrame();
     waitAndClick($(rightPanelSelectors.checkBoxAll));
     waitAndClick($(rightPanelSelectors.deleteAllBtn));
@@ -329,6 +349,19 @@ class PluginRightPanel {
     }
   }
 
+  /**
+   * Waits for all operation to finish(refresh or remove). Checks if notification is as expected. Removes each notifications by hover.
+   *
+   * @param {String} notificationMessage message that will be checked in expect case.
+   */
+  waitAndCloseAllNotifications(notificationMessage) {
+    waitForAllNotifications();
+    const objects = $$(rightPanelSelectors.objectContainer);
+    objects.forEach((object, index) => {
+      expect($(rightPanelSelectors.getNotificationAt(index + 1)).getText()).toEqual(notificationMessage);
+    });
+    this.closeAllNotificationsOnHover();
+  }
 
   loginToPlugin(username, password, isValidCredentials) {
     logStep(`+ Loging into the Add-in...    [${fileName} - loginToPlugin()]`);
@@ -422,13 +455,31 @@ class PluginRightPanel {
    * @param {String} text Text to enter for new object name
    */
   changeObjectName(index, text) {
-    logStep(`Changingthe  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectName()]`);
+    logStep(`Changing the  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectName()]`);
     switchToPluginFrame();
     const divNameInput = $(rightPanelSelectors.getNameInputForObject(index));
     divNameInput.moveTo();
     browser.pause(2222);
     waitAndDoubleClick(divNameInput);
     browser.pause(3333);
+    const nameText = $(rightPanelSelectors.getNameInputTextForObject(index));
+    nameText.clearValue();
+    nameText.setValue(text);
+    pressEnter();
+  }
+
+  /**
+   * Renames the object using menu for imported object.
+   *
+   * @param {Number} index Index of the object in the right side panel that the name will be changed. Starts from 1 (1 is the first from the top)
+   * @param {String} text Text to enter for new object name
+   */
+  changeObjectNameUsingMenu(index, text) {
+    logStep(`Changing the  object number ${index} name for the new name "${text}"...    [${fileName} - changeObjectNameUsingMenu()]`);
+    waitAndRightClick($(rightPanelSelectors.getObjectSelector(index)));
+    browser.pause(1000);
+    $('#overlay > div > div.object-tile-container > div.object-tile-list > article > div > nav > div:nth-child(5)').click();
+    browser.pause(1000);
     const nameText = $(rightPanelSelectors.getNameInputTextForObject(index));
     nameText.clearValue();
     nameText.setValue(text);
