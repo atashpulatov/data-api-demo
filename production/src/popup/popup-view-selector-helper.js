@@ -97,7 +97,7 @@ class PopupViewSelectorHelper {
     const preparedReport = {
       id: objectId,
       projectId,
-      name: props.chosenObjectName || props.editedObject.chosenObjectName,
+      name: props.editedObject.chosenObjectName || props.chosenObjectName,
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
       instanceId: instanceDefinition.instanceId,
       promptsAnswers: props.promptsAnswers,
