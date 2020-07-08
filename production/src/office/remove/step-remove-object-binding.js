@@ -22,6 +22,7 @@ class StepRemoveObjectBinding {
       console.error(error);
     }
     operationStepDispatcher.completeRemoveObjectBinding(objectWorkingId);
+    operationStepDispatcher.updateObject({ objectWorkingId, doNotPersist: true });
   };
 }
 
