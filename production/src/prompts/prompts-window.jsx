@@ -36,7 +36,8 @@ export class PromptsWindowNotConnected extends Component {
       isReprompt: popupState.isReprompt,
       givenPromptsAnswers: mstrData.promptsAnswers || editedObject.promptsAnswers,
       newPromptsAnswers: [],
-      // TODO: isPromptLoading: true,
+      // TODO: Comment out when ON_PROMPT_LOADED is added
+      // isPromptLoading: true,
     };
     const { installSessionProlongingHandler } = sessionHelper;
     this.prolongSession = installSessionProlongingHandler(this.closePopup);
@@ -99,7 +100,8 @@ export class PromptsWindowNotConnected extends Component {
   }
 
   promptAnsweredHandler = (newAnswer) => {
-    // TODO: this.setState({ isPromptLoading: true });
+    // TODO: Comment out when ON_PROMPT_LOADED is added
+    // this.setState({ isPromptLoading: true });
     const { newPromptsAnswers } = this.state;
     if (newPromptsAnswers.length > 0) {
       const newArray = [...newPromptsAnswers, newAnswer];
@@ -109,9 +111,10 @@ export class PromptsWindowNotConnected extends Component {
     }
   }
 
-  promptLoadedHandler = () => {
-    // TODO: this.setState({ isPromptLoading: false });
-  }
+  // TODO: Comment out when ON_PROMPT_LOADED is added
+  // promptLoadedHandler = () => {
+  // this.setState({ isPromptLoading: false });
+  // }
 
   loadEmbeddedDossier = async (container) => {
     const { loading, chosenObjectId, isReprompt } = this.state;
@@ -157,7 +160,8 @@ export class PromptsWindowNotConnected extends Component {
         onMsgRouterReadyHandler: ({ MsgRouter }) => {
           msgRouter = MsgRouter;
           msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
-          // TODO:msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
+          // TODO: Comment out when ON_PROMPT_LOADED is added
+          // msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
 
           // TODO: We should remember to unregister this handler once the page loads
         },
@@ -192,7 +196,8 @@ export class PromptsWindowNotConnected extends Component {
           deleteDossierInstance(projectId, objectId, instanceId);
 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
-          // TODO: msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
+          // TODO: Comment out when ON_PROMPT_LOADED is added
+          // msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
 
           const { newPromptsAnswers } = this.state;
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
@@ -283,7 +288,8 @@ export class PromptsWindowNotConnected extends Component {
 
   render() {
     const { isReprompt } = this.state;
-    // TODO: const { isReprompt, isPromptLoading } = this.state;
+    // TODO: Comment out when ON_PROMPT_LOADED is added
+    // const { isReprompt, isPromptLoading } = this.state;
     return (
       <div
         style={{ position: 'relative' }}
@@ -297,7 +303,8 @@ export class PromptsWindowNotConnected extends Component {
           hideSecondary
           handleBack={!isReprompt && this.handleBack}
           useImportAsRunButton
-          // TODO: disableActiveActions={isPromptLoading}
+          // TODO: Comment out when ON_PROMPT_LOADED is added
+          // disableActiveActions={isPromptLoading}
         />
       </div>
     );
