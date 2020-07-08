@@ -15,7 +15,7 @@ export const popupSelectors = {
   buttonLoading: 'button.loading',
   emptySearchResults: 'p=None of the objects matched your search.',
   firstObject: '#popup-wrapper > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(1) > div > div:nth-child(2)',
-  secondObject: '#popup-wrapper > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(2) > div',
+  secondObject: '#popup-wrapper > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(2) > div > div:nth-child(2)',
   firstObjectWithoutSearch: '#popup-wrapper > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(1) > div',
   anyObject: (index) => `div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(${index}) > div > div:nth-child(2)`,
   selectorTitle: (index) => `div:nth-child(${index}) > div > div.selector-title`,
