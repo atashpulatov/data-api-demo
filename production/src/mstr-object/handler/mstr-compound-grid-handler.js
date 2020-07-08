@@ -95,12 +95,13 @@ class CompoundGridHandler {
    * @returns bounding height
    */
   calculateColumnHeaderHeight(columnSetsHeaders) {
-  // TODO: Take into consideration attribute forms from columnSets
     let boundingHeight = 0;
     columnSetsHeaders.forEach(columnSet => {
-      const { length } = columnSet[0];
-      if (length > boundingHeight) {
-        boundingHeight = length;
+      if (columnSet.length !== 0) {
+        const { length } = columnSet[0];
+        if (length > boundingHeight) {
+          boundingHeight = length;
+        }
       }
     });
     return boundingHeight;
@@ -140,8 +141,6 @@ class CompoundGridHandler {
       for (let colSet = 0; colSet < columnSets.length; colSet++) {
         if (columnSets[colSet][valueMatrix][row] && columnSets[colSet][valueMatrix][row].length) {
           rowValues.push(...columnSets[colSet][valueMatrix][row]);
-        } else {
-          rowValues.push('\'');
         }
       }
       rowTable.push(rowValues);
@@ -237,13 +236,6 @@ class CompoundGridHandler {
     let attrFormsBoundingHeight = 0;
     const parsedHeaders = [];
 
-    // adding empty header for empty column sets
-    for (let i = 0; i < columnSetsHeaders.length; i++) {
-      if (columnSetsHeaders[i].length === 0) {
-        columnSetsHeaders[i].push([-1]);
-        columnSetsDefinition[i].columns.push({ type: null, elements: [] });
-      }
-    }
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders);
 
 
