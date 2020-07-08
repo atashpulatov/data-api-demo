@@ -36,7 +36,7 @@ export class PromptsWindowNotConnected extends Component {
       isReprompt: popupState.isReprompt,
       givenPromptsAnswers: mstrData.promptsAnswers || editedObject.promptsAnswers,
       newPromptsAnswers: [],
-      // TODO: Comment out when ON_PROMPT_LOADED is added
+      // TODO: Restore when ON_PROMPT_LOADED is added
       // isPromptLoading: true,
     };
     const { installSessionProlongingHandler } = sessionHelper;
@@ -100,7 +100,7 @@ export class PromptsWindowNotConnected extends Component {
   }
 
   promptAnsweredHandler = (newAnswer) => {
-    // TODO: Comment out when ON_PROMPT_LOADED is added
+    // TODO: Restore when ON_PROMPT_LOADED is added
     // this.setState({ isPromptLoading: true });
     const { newPromptsAnswers } = this.state;
     if (newPromptsAnswers.length > 0) {
@@ -111,7 +111,7 @@ export class PromptsWindowNotConnected extends Component {
     }
   }
 
-  // TODO: Comment out when ON_PROMPT_LOADED is added
+  // TODO: Restore when ON_PROMPT_LOADED is added
   // promptLoadedHandler = () => {
   // this.setState({ isPromptLoading: false });
   // }
@@ -160,7 +160,7 @@ export class PromptsWindowNotConnected extends Component {
         onMsgRouterReadyHandler: ({ MsgRouter }) => {
           msgRouter = MsgRouter;
           msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
-          // TODO: Comment out when ON_PROMPT_LOADED is added
+          // TODO: Restore when ON_PROMPT_LOADED is added
           // msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
 
           // TODO: We should remember to unregister this handler once the page loads
@@ -196,7 +196,7 @@ export class PromptsWindowNotConnected extends Component {
           deleteDossierInstance(projectId, objectId, instanceId);
 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
-          // TODO: Comment out when ON_PROMPT_LOADED is added
+          // TODO: Restore when ON_PROMPT_LOADED is added
           // msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
 
           const { newPromptsAnswers } = this.state;
@@ -288,7 +288,7 @@ export class PromptsWindowNotConnected extends Component {
 
   render() {
     const { isReprompt } = this.state;
-    // TODO: Comment out when ON_PROMPT_LOADED is added
+    // TODO: Restore when ON_PROMPT_LOADED is added
     // const { isReprompt, isPromptLoading } = this.state;
     return (
       <div
@@ -303,7 +303,7 @@ export class PromptsWindowNotConnected extends Component {
           hideSecondary
           handleBack={!isReprompt && this.handleBack}
           useImportAsRunButton
-          // TODO: Comment out when ON_PROMPT_LOADED is added
+          // TODO: Restore when ON_PROMPT_LOADED is added
           // disableActiveActions={isPromptLoading}
         />
       </div>
