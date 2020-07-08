@@ -26,6 +26,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(5)'
     EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(3)'
     REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(6)'
+    NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' > div.object-tile-name-row > div.rename-input'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' > div.object-tile-name-row > input'
@@ -35,18 +36,23 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
 
     def wait_for_import_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelTileBrowserPage.IMPORT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(RightPanelTileBrowserPage.IMPORT_SUCCESSFUL_TEXT)
 
     def wait_for_duplicate_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelTileBrowserPage.DUPLICATE_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(RightPanelTileBrowserPage.DUPLICATE_OBJECT_SUCCESSFUL_TEXT)
 
     def wait_for_refresh_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelTileBrowserPage.REFRESH_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(RightPanelTileBrowserPage.REFRESH_OBJECT_SUCCESSFUL_TEXT)
 
     def wait_for_remove_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelTileBrowserPage.REMOVE_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(RightPanelTileBrowserPage.REMOVE_OBJECT_SUCCESSFUL_TEXT)
 
-    def _wait_for_operation_successfully_completed(self, expected_message):
+    def wait_for_operation_error_and_accept(self, expected_message):
+        self._wait_for_operation_with_status(expected_message)
+
+        self.get_element_by_css(RightPanelTileBrowserPage.NOTIFICATION_BUTTON).click()
+
+    def _wait_for_operation_with_status(self, expected_message):
         self.focus_on_add_in_frame()
 
         self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
