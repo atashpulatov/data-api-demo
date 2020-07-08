@@ -5,6 +5,8 @@ import { RightSidePanelNotConnected } from '../../right-side-panel/right-side-pa
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import officeStoreHelper from '../../office/store/office-store-helper';
+import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
+import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 
 describe('RightSidePanelNotConnected', () => {
   let mockedProps;
@@ -97,8 +99,8 @@ describe('RightSidePanelNotConnected', () => {
 
   it('should call addRemoveObjectListener and initializeActiveCellChangedListener on mount', () => {
     // given
-    const spyAddRemoveObjectListener = jest.spyOn(sidePanelService, 'addRemoveObjectListener');
-    const spyInitializeActiveCellChangedListener = jest.spyOn(sidePanelService, 'initializeActiveCellChangedListener');
+    const spyAddRemoveObjectListener = jest.spyOn(sidePanelEventHelper, 'addRemoveObjectListener');
+    const spyInitializeActiveCellChangedListener = jest.spyOn(sidePanelEventHelper, 'initializeActiveCellChangedListener');
     // when
     mount(<RightSidePanelNotConnected {...mockedProps} />);
     // then
@@ -108,7 +110,7 @@ describe('RightSidePanelNotConnected', () => {
 
   it('should call setDuplicatePopup on onDuplicateClick', async () => {
     // given
-    const spySetDuplicatePopup = jest.spyOn(sidePanelService, 'setDuplicatePopup').mockImplementationOnce(() => { });
+    const spySetDuplicatePopup = jest.spyOn(sidePanelNotificationHelper, 'setDuplicatePopup').mockImplementationOnce(() => { });
     const spyCheckStatusOfSessions = jest.spyOn(officeApiHelper, 'checkStatusOfSessions').mockImplementationOnce(() => { });
     // when
     const wrappedComponent = mount(<RightSidePanelNotConnected {...mockedProps} />);

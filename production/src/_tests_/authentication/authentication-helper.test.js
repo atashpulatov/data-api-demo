@@ -1,12 +1,10 @@
 import { authenticationService } from '../../authentication/auth-rest-service';
-import { notificationService } from '../../notification/notification-service';
 import { errorService } from '../../error/error-handler';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { reduxStore } from '../../store';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 jest.mock('../../error/error-handler');
-jest.mock('../../notification/notification-service');
 jest.mock('../../authentication/auth-rest-service');
 jest.mock('../../storage/session-helper');
 jest.mock('../../redux-reducer/session-reducer/session-actions');
@@ -24,7 +22,6 @@ describe('loginUser', () => {
     expect(sessionActions.enableLoading).not.toBeCalled();
     expect(sessionActions.saveLoginValues).not.toBeCalled();
     expect(authenticationService.authenticate).not.toBeCalled();
-    expect(notificationService.displayNotification).not.toBeCalled();
     expect(sessionActions.logIn).not.toBeCalled();
     expect(errorService.handleError).not.toBeCalled();
     expect(sessionActions.disableLoading).not.toBeCalled();

@@ -113,6 +113,7 @@
       "!src/office/api/*.*",
       "!src/office/table/*.*",
       "!src/office/import/*.*",
+      "!src/popup/assets/*.*",
       "!src/redux-reducer/*.*"
     ]
   }
