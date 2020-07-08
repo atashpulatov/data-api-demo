@@ -49,7 +49,7 @@ class NotificationService {
   }
 
   dismissSuccessfulRemoveNotification = (objectWorkingId) => {
-    officeStoreObject.removeObjectFromStore(objectWorkingId);
+    this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.dismissNotification(objectWorkingId);
   }
 
