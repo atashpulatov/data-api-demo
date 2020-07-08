@@ -6,14 +6,14 @@ import scriptInjectionHelper from '../dossier/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
-import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
+import { actions as navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
-import { PromptWindowButtons } from './prompts-window-buttons';
-import { Notifications } from '../notification/notifications';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
 const { microstrategy } = window;
 const {
@@ -29,17 +29,19 @@ const postAnswerDossierPrompts = answerDossierPrompts;
 export class PromptsWindowNotConnected extends Component {
   constructor(props) {
     super(props);
-    const { mstrData, popupState } = props;
+    const { mstrData, popupState, editedObject } = props;
     this.state = {
       chosenObjectId: mstrData.chosenObjectId,
       loading: true,
       isReprompt: popupState.isReprompt,
-      promptsAnswers: mstrData.promptsAnswers,
+      givenPromptsAnswers: mstrData.promptsAnswers || editedObject.promptsAnswers,
+      newPromptsAnswers: [],
+      // TODO: Restore when ON_PROMPT_LOADED is added
+      // isPromptLoading: true,
     };
     const { installSessionProlongingHandler } = sessionHelper;
     this.prolongSession = installSessionProlongingHandler(this.closePopup);
     this.container = React.createRef();
-    this.outerCont = React.createRef();
   }
 
   componentDidMount() {
@@ -97,16 +99,32 @@ export class PromptsWindowNotConnected extends Component {
     return instanceId;
   }
 
+  promptAnsweredHandler = (newAnswer) => {
+    // TODO: Restore when ON_PROMPT_LOADED is added
+    // this.setState({ isPromptLoading: true });
+    const { newPromptsAnswers } = this.state;
+    if (newPromptsAnswers.length > 0) {
+      const newArray = [...newPromptsAnswers, newAnswer];
+      this.setState({ newPromptsAnswers: newArray });
+    } else {
+      this.setState({ newPromptsAnswers: [newAnswer] });
+    }
+  }
+
+  // TODO: Restore when ON_PROMPT_LOADED is added
+  // promptLoadedHandler = () => {
+  // this.setState({ isPromptLoading: false });
+  // }
+
   loadEmbeddedDossier = async (container) => {
     const { loading, chosenObjectId, isReprompt } = this.state;
     if (!loading) {
       return;
     }
-    let { promptsAnswers: promptsAnswersLocal } = this.state;
+    const { givenPromptsAnswers } = this.state;
     const {
       promptsAnswered, mstrData, session, editedObject
     } = this.props;
-    promptsAnswersLocal = promptsAnswersLocal || editedObject.promptsAnswers;
     const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
     const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
     const { envUrl, authToken } = session;
@@ -114,24 +132,13 @@ export class PromptsWindowNotConnected extends Component {
     let instanceDefinition;
     const instance = {};
     try {
-      if (promptsAnswersLocal) {
-        instanceDefinition = await this.preparePromptedReport(chosenObjectIdLocal, projectId, promptsAnswersLocal);
+      if (givenPromptsAnswers) {
+        instanceDefinition = await this.preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
         instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
         instance.mid = instanceDefinition && instanceDefinition.mid;
       }
 
       let msgRouter = null;
-      promptsAnswersLocal = null;
-      const promptsAnsweredHandler = function promptsAnswerFn(_promptsAnswers) {
-        if (!_promptsAnswers) {
-          return;
-        }
-        if (promptsAnswersLocal) {
-          promptsAnswersLocal.push(_promptsAnswers);
-        } else {
-          promptsAnswersLocal = [_promptsAnswers];
-        }
-      };
       const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
       // delete last occurence of '/api' from the enviroment url
       const { CustomAuthenticationType } = microstrategy.dossier;
@@ -152,7 +159,10 @@ export class PromptsWindowNotConnected extends Component {
         placeholder: container,
         onMsgRouterReadyHandler: ({ MsgRouter }) => {
           msgRouter = MsgRouter;
-          msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
+          msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
+          // TODO: Restore when ON_PROMPT_LOADED is added
+          // msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
+
           // TODO: We should remember to unregister this handler once the page loads
         },
       };
@@ -185,9 +195,13 @@ export class PromptsWindowNotConnected extends Component {
           // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
           deleteDossierInstance(projectId, objectId, instanceId);
 
-          msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptsAnsweredHandler);
+          msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
+          // TODO: Restore when ON_PROMPT_LOADED is added
+          // msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
+
+          const { newPromptsAnswers } = this.state;
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
-          promptsAnswered({ dossierData, promptsAnswers: promptsAnswersLocal });
+          promptsAnswered({ dossierData, promptsAnswers: newPromptsAnswers });
         });
     } catch (error) {
       console.error({ error });
@@ -262,48 +276,36 @@ export class PromptsWindowNotConnected extends Component {
   }
 
   onPromptsContainerMount = (container) => {
-    this.watchForIframeAddition(container, this.onIframeLoad);
+    scriptInjectionHelper.watchForIframeAddition(container, this.onIframeLoad);
     this.loadEmbeddedDossier(container);
   }
 
-  /**
-   * Watches container for child addition and runs callback in case an iframe was added
-   * @param {*} container
-   * @param {*} callback
-   */
-  watchForIframeAddition = (container, callback) => {
-    const config = { childList: true };
-    const onMutation = (mutationList) => {
-      for (const mutation of mutationList) {
-        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
-          const iframe = mutation.addedNodes[0];
-          callback(iframe);
-        }
-      }
-    };
-    const observer = new MutationObserver(onMutation);
-    observer.observe(container, config);
+  handleBack = () => {
+    const { cancelImportRequest, onPopupBack } = this.props;
+    cancelImportRequest();
+    onPopupBack();
   }
 
   render() {
     const { isReprompt } = this.state;
+    // TODO: Restore when ON_PROMPT_LOADED is added
+    // const { isReprompt, isPromptLoading } = this.state;
     return (
       <div
         style={{ position: 'relative' }}
-        ref={this.outerCont}
       >
-        <Notifications />
         <PromptsContainer
           postMount={this.onPromptsContainerMount}
         />
-
-        <div style={{ position: 'absolute', bottom: '0' }}>
-          <PromptWindowButtons
-            handleRun={this.handleRun}
-            isReprompt={isReprompt}
-            closePopup={this.closePopup}
-          />
-        </div>
+        <PopupButtons
+          handleOk={this.handleRun}
+          handleCancel={this.closePopup}
+          hideSecondary
+          handleBack={!isReprompt && this.handleBack}
+          useImportAsRunButton
+          // TODO: Restore when ON_PROMPT_LOADED is added
+          // disableActiveActions={isPromptLoading}
+        />
       </div>
     );
   }
@@ -312,6 +314,8 @@ export class PromptsWindowNotConnected extends Component {
 PromptsWindowNotConnected.propTypes = {
   stopLoading: PropTypes.func,
   promptsAnswered: PropTypes.func,
+  cancelImportRequest: PropTypes.func,
+  onPopupBack: PropTypes.func,
   mstrData: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     chosenProjectId: PropTypes.string,
@@ -353,6 +357,11 @@ export const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = { ...actions, };
+const mapDispatchToProps = {
+  stopLoading: navigationTreeActions.stopLoading,
+  promptsAnswered: navigationTreeActions.promptsAnswered,
+  cancelImportRequest: navigationTreeActions.cancelImportRequest,
+  onPopupBack: popupStateActions.onPopupBack,
+};
 
 export const PromptsWindow = connect(mapStateToProps, mapDispatchToProps)(PromptsWindowNotConnected);

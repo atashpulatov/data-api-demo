@@ -22,12 +22,8 @@ class PopupViewSelectorHelper {
         if (popupType === PopupTypeEnum.repromptingWindow) {
           return PopupTypeEnum.editFilters;
         }
-      } else if (dossierOpenRequested) {
-        // pass given prompts answers to dossierWindow
-        return PopupTypeEnum.dossierWindow;
       } else {
-        this.obtainInstanceWithPromptsAnswers(props);
-        return PopupTypeEnum.emptyDiv;
+        return PopupTypeEnum.obtainInstanceHelper;
       }
     } else if (this.promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
       return PopupTypeEnum.promptsWindow;
@@ -97,7 +93,7 @@ class PopupViewSelectorHelper {
     const preparedReport = {
       id: objectId,
       projectId,
-      name: props.chosenObjectName || props.editedObject.chosenObjectName,
+      name: props.editedObject.chosenObjectName || props.chosenObjectName,
       mstrObjectType: mstrObjectEnum.mstrObjectType.report,
       instanceId: instanceDefinition.instanceId,
       promptsAnswers: props.promptsAnswers,

@@ -146,4 +146,17 @@ describe('PopupButtons', () => {
       expect(tooltipSpan).toHaveLength(1);
       // TODO expect('text of tooltip').toBe(NOT_SUPPORTED_VIZ);
     });
+
+  it('should display primary button as Run when useImportAsRunButton is provided ',
+    () => {
+      // given
+      // when
+      const buttonsWrapped = mount(<PopupButtonsNotConnected
+        useImportAsRunButton
+      />);
+      // then
+      expect(buttonsWrapped.exists('#data-preview')).toBeTruthy();
+      expect(buttonsWrapped.exists('#run')).toBeTruthy();
+      expect(buttonsWrapped.exists('#cancel')).toBeTruthy();
+    });
 });

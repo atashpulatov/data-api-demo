@@ -129,5 +129,6 @@ export const actions = {
   requestDossierOpen,
   switchMyLibrary,
   changeFilter,
-  clearSelection
+  clearSelection,
+  cancelImportRequest,
 };

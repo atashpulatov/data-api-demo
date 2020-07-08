@@ -90,7 +90,7 @@ function clearData(objects) {
   homeHelper.secureData(objects);
 }
 
-function mapStateToProps({ officeReducer, objectReducer, notificationReducer }) {
+function mapStateToProps({ officeReducer, objectReducer }) {
   const { objects } = objectReducer;
   const { isConfirm } = officeReducer;
   return { objects, isConfirm };
