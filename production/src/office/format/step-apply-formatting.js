@@ -120,17 +120,21 @@ class StepApplyFormatting {
    * @return {String} Excel format
    */
   getFormat = ({ formatString, category }) => {
+    if (!formatString && !category) {
+      return 'General';
+    }
+
     if (category === 9) {
       return 'General';
     }
 
     // For fractions set General format
-    if (formatString.match(/# \?+?\/\?+?/)) {
+    if (formatString && formatString.match(/# \?+?\/\?+?/)) {
       return 'General';
     }
 
     // Normalizing formatString from MicroStrategy when locale codes are used [$-\d+]
-    if (formatString.indexOf('$') !== -1) {
+    if (formatString && formatString.indexOf('$') !== -1) {
       return formatString.replace(/\[\$-/g, '[$$$$-')
         .replace(/\$/g, '\\$')
         .replace(/\\\$\\\$/g, '$')
