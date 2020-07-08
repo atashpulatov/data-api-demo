@@ -1,10 +1,11 @@
 import officeConverter from '../../office/office-converter-service-v2';
 import response from '../../mstr-object/rest-api-v2.json';
 import regularCompoundJSON from '../mstr-object/compound-grid/Regular Compound Grid.json';
-import jsonHandler from '../../mstr-object/mstr-normalized-json-handler';
+import jsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 import { columnInformationMock, expectedColumnSplit, expectedColumnNoSplit } from './__mock__object__/column-information-mock';
-import mstrCompoundGridHandler from '../../mstr-object/mstr-compound-grid-handler';
-import mstrGridHandler from '../../mstr-object/mstr-grid-handler';
+import mstrCompoundGridHandler from '../../mstr-object/handler/mstr-compound-grid-handler';
+import mstrGridHandler from '../../mstr-object/handler/mstr-grid-handler';
+import mstrAttributeFormHelper from '../../mstr-object/helper/mstr-attribute-form-helper';
 
 describe('Office converter service v2', () => {
   it('should return create a table', () => {
@@ -131,8 +132,8 @@ describe('Office converter service v2', () => {
     const columnInformation = columnInformationMock;
     const gridHandler = jsonHandler;
     // when
-    const colInformationSplit = gridHandler.splitAttributeForms(columnInformation, true);
-    const colInformationNoSplit = gridHandler.splitAttributeForms(columnInformation, false);
+    const colInformationSplit = mstrAttributeFormHelper.splitAttributeForms(columnInformation, true);
+    const colInformationNoSplit = mstrAttributeFormHelper.splitAttributeForms(columnInformation, false);
     // then
     expect(colInformationSplit).toEqual(expectedColumnSplit);
     expect(colInformationNoSplit).toEqual(expectedColumnNoSplit);

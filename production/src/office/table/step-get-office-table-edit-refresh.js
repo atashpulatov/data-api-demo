@@ -37,7 +37,7 @@ class StepGetOfficeTableEditRefresh {
       } = operationData;
       const { mstrTable } = instanceDefinition;
 
-      let shouldFormat;
+      let shouldFormat = true;
       let bindId = oldBindId;
       let officeTable;
 

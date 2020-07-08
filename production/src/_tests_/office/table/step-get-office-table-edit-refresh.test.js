@@ -97,7 +97,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       officeTable: 'officeTableTest',
-      shouldFormat: undefined,
+      shouldFormat: true,
       tableChanged: true,
       instanceDefinition: { mstrTable: 'mstrTableTest' },
       startCell: 'startCellTest',

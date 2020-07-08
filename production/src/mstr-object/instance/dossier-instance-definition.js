@@ -1,10 +1,10 @@
-import mstrObjectEnum from './mstr-object-type-enum';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import { mstrObjectRestService } from '../mstr-object-rest-service';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
+import { errorService } from '../../error/error-handler';
 import {
   errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE, DOSSIER_HAS_CHANGED
-} from '../error/constants';
-import { mstrObjectRestService } from './mstr-object-rest-service';
-import { IMPORT_OPERATION } from '../operation/operation-type-names';
-import { errorService } from '../error/error-handler';
+} from '../../error/constants';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition(
