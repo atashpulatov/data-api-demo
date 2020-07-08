@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import jsonHandler from './mstr-normalized-json-handler';
+import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
 /**
  * Handler to parse grids
  *
@@ -33,8 +34,8 @@ class GridHandler {
    * @return {Object} Contains arrays of columns and rows attributes names
    */
   getAttributesName = (definition, attrforms) => {
-    const columnsAttributes = jsonHandler.getAttributeWithForms(definition.grid.columns, attrforms);
-    const rowsAttributes = jsonHandler.getAttributeWithForms(definition.grid.rows, attrforms);
+    const columnsAttributes = mstrAttributeFormHelper.getAttributeWithForms(definition.grid.columns, attrforms);
+    const rowsAttributes = mstrAttributeFormHelper.getAttributeWithForms(definition.grid.rows, attrforms);
     return { rowsAttributes, columnsAttributes };
   };
 
@@ -79,7 +80,7 @@ class GridHandler {
     const onElement = (array) => (e) => {
       if (array) { array.push(e.subtotalAddress); }
       // attribute as row with forms
-      const forms = jsonHandler.getAttributesTitleWithForms(e, attrforms);
+      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(e, attrforms);
       if (forms) {
         return forms;
       }
@@ -164,7 +165,7 @@ class GridHandler {
       columns = [...attributeColumns[attributeColumns.length - 1], ...parsedMetricColumns];
     }
 
-    return jsonHandler.splitAttributeForms(columns, supportForms);
+    return mstrAttributeFormHelper.splitAttributeForms(columns, supportForms);
   }
 
   /**

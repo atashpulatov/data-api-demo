@@ -41,7 +41,7 @@ class StepGetOfficeTableEditRefresh {
       const { mstrTable } = instanceDefinition;
       const isRepeatStep = !!startCell; // If we have startCell on refresh it means that we are repeating step
 
-      let shouldFormat;
+      let shouldFormat = true;
       let bindId = oldBindId;
       let officeTable;
 

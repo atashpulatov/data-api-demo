@@ -1,7 +1,7 @@
 import mstrObjectType from '../mstr-object/mstr-object-type-enum';
-import mstrCompoundGridHandler from '../mstr-object/mstr-compound-grid-handler';
-import mstrGridHandler from '../mstr-object/mstr-grid-handler';
-import mstrNormalizedJsonHandler from '../mstr-object/mstr-normalized-json-handler';
+import mstrCompoundGridHandler from '../mstr-object/handler/mstr-compound-grid-handler';
+import mstrGridHandler from '../mstr-object/handler/mstr-grid-handler';
+import mstrCompoundGridFlatten from '../mstr-object/helper/mstr-compound-grid-flatten';
 
 /**
  * Service to parse JSON response from REST API v2
@@ -89,7 +89,7 @@ class OfficeConverterServiceV2 {
           return mstrCompoundGridHandler;
         }
 
-        mstrNormalizedJsonHandler.flattenColumnSets(response);
+        mstrCompoundGridFlatten.flattenColumnSets(response);
         return mstrGridHandler;
       default:
         return mstrGridHandler;
