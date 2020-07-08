@@ -30,7 +30,8 @@ export class NavigationTreeNotConnected extends Component {
     super(props);
     this.state = {
       previewDisplay: false,
-      isPublished: true,
+      isPublishedInLibrary: true,
+      isPublishedBeyondLibrary: false,
     };
     this.indexedDBSupport = DB.getIndexedDBSupport();
   }
@@ -184,8 +185,13 @@ export class NavigationTreeNotConnected extends Component {
         popupHelper.handlePopupErrors(error);
       }
     }
-    this.setState({ isPublished: cubeStatus });
-
+    if (objectId) {
+      if (myLibrary) {
+        this.setState({ isPublishedInLibrary: cubeStatus });
+      } else {
+        this.setState({ isPublishedBeyondLibrary: cubeStatus });
+      }
+    }
     selectObject({
       chosenObjectId: objectId,
       chosenObjectName: objectName,
@@ -202,7 +208,7 @@ export class NavigationTreeNotConnected extends Component {
       changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t,
       i18n, numberOfFiltersActive,
     } = this.props;
-    const { previewDisplay, isPublished } = this.state;
+    const { previewDisplay, isPublishedInLibrary, isPublishedBeyondLibrary } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
@@ -241,13 +247,13 @@ export class NavigationTreeNotConnected extends Component {
           isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
-          disableActiveActions={!chosenObjectId || !isPublished}
+          disableActiveActions={!chosenObjectId || !isPublishedInLibrary}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
           disableSecondary={mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
-          isPublished={isPublished}
+          isPublished={myLibrary ? isPublishedInLibrary : isPublishedBeyondLibrary}
         />
       </div>
     );

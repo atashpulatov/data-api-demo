@@ -258,6 +258,56 @@ describe('NavigationTree', () => {
     expect(mockSelectObject).toBeCalledWith(expectedObject);
   });
 
+  it('should return proper values for intial states on mount', () => {
+    // given
+    const givenMyLibrary = false;
+    const mockSelectObject = jest.fn();
+
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
+      {...mockFunctionsAndProps}
+      selectObject={mockSelectObject}
+      myLibrary={givenMyLibrary}
+    />);
+
+    // then
+    expect(wrappedComponent.state('isPublishedInLibrary')).toEqual(true);
+    expect(wrappedComponent.state('isPublishedBeyondLibrary')).toEqual(false);
+  });
+
+  it('should call setState twice and change states according to parameters', () => {
+    // given
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
+    const givenObjectName = 'objectName';
+    const givenTargetId = 'LibraryObjectId';
+    const givenMyLibrary = false;
+    const mockSelectObject = jest.fn();
+
+    const givenObject = {
+      id: givenObjectId,
+      projectId: givenProjectId,
+      subtype: givenSubtype,
+      name: givenObjectName,
+      targetId: givenTargetId,
+    };
+
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
+      {...mockFunctionsAndProps}
+      selectObject={mockSelectObject}
+      myLibrary={givenMyLibrary}
+    />);
+
+    // when
+    const setState = jest.spyOn(wrappedComponent.instance(), 'setState');
+    wrappedComponent.instance().onObjectChosen(givenObject);
+
+    // then
+    expect(wrappedComponent.state('isPublishedBeyondLibrary')).toEqual(true);
+    expect(wrappedComponent.state('isPublishedInLibrary')).toEqual(true);
+    expect(setState).toHaveBeenCalledTimes(1);
+  });
+
   it('should call requestDossierOpen on handleOk if provided objectType is dossier', async () => {
     // given
     const mstrData = {
