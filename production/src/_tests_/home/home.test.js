@@ -115,7 +115,6 @@ describe('Home', () => {
 
     // then
     const overlayWrapper = wrappedComponent.find(overlayId).at(1);
-    expect(overlayWrapper.props().role).toEqual('button');
-    expect(overlayWrapper.props().tabIndex).toEqual('0');
+    expect(overlayWrapper.props().role).toEqual('none');
   });
 });
