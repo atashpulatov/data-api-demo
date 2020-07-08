@@ -4,6 +4,7 @@
   "connect_to_existing_session_enabled": false,
   "browser_existing_session_executor_url": "",
   "browser_existing_session_id": "",
+  "windows_desktop_excel_root_element_name": "Book1 - Excel",
   "cleanup_after_test_enabled": true,
   "driver_path_windows_desktop": "C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
   "driver_path_windows_chrome": "resources\\chromedriver83.exe",

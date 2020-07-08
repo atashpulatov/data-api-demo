@@ -29,7 +29,8 @@ class DriverWindowsDesktop:
         tmp_driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
         tmp_driver.implicitly_wait(60)
 
-        excel_element = tmp_driver.find_element_by_name('Book1 - Excel')
+        excel_root_element_name = ConfigUtil.get_windows_desktop_excel_root_element_name()
+        excel_element = tmp_driver.find_element_by_name(excel_root_element_name)
         native_window_handle = hex(int(excel_element.get_attribute('NativeWindowHandle')))
 
         capabilities = {
