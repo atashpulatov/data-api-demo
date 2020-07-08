@@ -6,7 +6,8 @@ const initialState = {
   shouldRenderSettings: false,
   isConfirm: false,
   isSettings: false,
-  supportForms: true
+  supportForms: true,
+  popupData: null,
 };
 
 export const officeReducer = (state = initialState, action) => {
@@ -58,6 +59,12 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.toggleIsClearDataFailedFlag:
       return toggleIsClearDataFailedFlag(action, state);
+
+    case officeProperties.actions.setRangeTakenPopup:
+      return setRangeTakenPopup(action, state);
+
+    case officeProperties.actions.clearSidePanelPopupData:
+      return clearSidePanelPopupData(action, state);
 
     default:
       break;
@@ -220,5 +227,19 @@ function toggleIsClearDataFailedFlag(action, state) {
   return {
     ...state,
     isClearDataFailed: action.isClearDataFailed,
+  };
+}
+
+function setRangeTakenPopup(action, state) {
+  return {
+    ...state,
+    popupData: action.popupData,
+  };
+}
+
+function clearSidePanelPopupData(action, state) {
+  return {
+    ...state,
+    popupData: null,
   };
 }

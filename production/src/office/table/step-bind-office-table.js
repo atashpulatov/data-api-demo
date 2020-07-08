@@ -21,9 +21,9 @@ class StepBindOfficeTable {
    */
   bindOfficeTable = async (objectData, operationData) => {
     try {
-      const { bindId, objectWorkingId } = objectData;
+      const { bindId, objectWorkingId, isCrosstab } = objectData;
       const {
-        excelContext, officeTable, operationType, tableChanged
+        excelContext, officeTable, operationType, tableChanged,
       } = operationData;
 
       if (tableChanged || operationType === DUPLICATE_OPERATION || operationType === IMPORT_OPERATION) {
@@ -31,6 +31,11 @@ class StepBindOfficeTable {
 
         await officeApiHelper.bindNamedItem(tableName, bindId);
       }
+      if (isCrosstab) {
+        officeTable.showHeaders = false;
+        await excelContext.sync();
+      }
+
 
       operationStepDispatcher.completeBindOfficeTable(objectWorkingId);
     } catch (error) {

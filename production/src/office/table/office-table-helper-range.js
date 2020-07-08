@@ -3,20 +3,26 @@ import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 
 class OfficeTableHelperRange {
   /**
-   * Checks if the range for the table after refresh is cleared.
+   * Checks if the range for the table is clear.
    *
-   * @param {Object} prevOfficeTable previous office table
-   * @param {Object} context excelContext
-   * @param {Object} range range of the resized table
+   * @param {Office} prevOfficeTable Reference to previously imported Excel table
+   * @param {Office} excelContext excelContext
+   * @param {Office} range range of the resized table
    * @param {Object} instanceDefinition
+   * @param {Boolean} isRepeatStep Specify if repeat creating of the table
    *
    * @throws {OverlappingTablesError} when range is not empty.
    */
-  async checkObjectRangeValidity(prevOfficeTable, context, range, instanceDefinition) {
+  async checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition, isRepeatStep) {
     if (prevOfficeTable) {
-      await this.checkObjectRangeValidityOnRefresh(prevOfficeTable, context, instanceDefinition);
+      if (isRepeatStep) {
+        await this.checkRangeValidity(excelContext, range);
+        await this.deletePrevOfficeTable(excelContext, prevOfficeTable);
+      } else {
+        await this.checkObjectRangeValidityOnRefresh(prevOfficeTable, excelContext, instanceDefinition);
+      }
     } else {
-      await this.checkRangeValidity(context, range);
+      await this.checkRangeValidity(excelContext, range);
     }
   }
 

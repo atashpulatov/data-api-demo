@@ -1,5 +1,3 @@
-/* eslint-disable class-methods-use-this */
-
 /**
  * Helper class to manipulate the new normalized REST API V2
  *
@@ -139,12 +137,14 @@ class NormalizedJsonHandler {
           }
         }
       }
+
       if (metricValues && metricValues.raw.length > 0) {
         result.push(tabularRows.concat(metricValues[valueMatrix][rowIndex]));
       } else {
         result.push(tabularRows);
       }
     }
+
     if ((result.length === 0) && metricValues && metricValues.raw.length > 0) {
       result.push([].concat(metricValues[valueMatrix][0]));
     }
@@ -181,14 +181,17 @@ class NormalizedJsonHandler {
   renderHeaders = (definition, axis, headers, onElement, supportForms) => {
     if (headers[axis].length === 0) { return [[]]; }
     const headersNormalized = axis === 'columns' ? this.transposeMatrix(headers[axis]) : headers[axis];
+
     const matrix = headersNormalized.map((headerCells, colIndex) => {
       const axisElements = this.mapElementIndicesToElements({
         definition, axis, headerCells, colIndex
       });
+
       return supportForms
         ? this.convertForms([], axisElements, onElement)
         : axisElements.map((e, axisIndex, elementIndex) => onElement(e, axisIndex, elementIndex));
     });
+
     return axis === 'columns' ? this.transposeMatrix(matrix) : matrix;
   }
 
@@ -256,6 +259,25 @@ class NormalizedJsonHandler {
     const rowHeader = headers.rows[mvZoneRowIndex];
     const columnHeader = headers.columns[mvZoneColumnIndex];
     return (rowHeader.concat(columnHeader)).map((element) => element.id);
+  }
+
+  getMetricsColumnsInformation(columns) {
+    if (columns.length === 0) { return columns; }
+    const transposedHeaders = this.transposeMatrix(columns);
+
+    const parsedColumns = [];
+
+    for (let index = 0; index < transposedHeaders.length; index++) {
+      const currentColumn = transposedHeaders[index];
+      const metrics = currentColumn.find((element) => element.type === 'metric');
+
+      if (metrics) {
+        parsedColumns.push(metrics);
+      } else {
+        parsedColumns.push(currentColumn[currentColumn.length - 1]);
+      }
+    }
+    return parsedColumns;
   }
 
   /**

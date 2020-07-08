@@ -1,4 +1,4 @@
-const request = require('request');
+const fetch = require('node-fetch');
 const rallyConfig = require('./rallyconfig');
 
 /**
@@ -9,24 +9,10 @@ const rallyConfig = require('./rallyconfig');
  */
 module.exports = function getDataFromRally(url) {
   const options = {
-    url,
     method: 'GET',
-    headers: { zsessionid: rallyConfig.rallyApiKey, },
+    headers: { zsessionid: rallyConfig.rallyApiKey, }
   };
 
-  return new Promise((resolve, reject) => {
-    request(options, (error, response, body) => {
-      if (!error) {
-        try {
-          const bodyJson = JSON.parse(body);
-          resolve(bodyJson);
-        } catch (err) {
-          reject(err);
-        }
-      } else {
-        console.error(`Sending request to Rally REST Server has failed.`);
-        reject(error);
-      }
-    });
-  });
+  return fetch(url, options)
+    .then(result => result.json());
 };

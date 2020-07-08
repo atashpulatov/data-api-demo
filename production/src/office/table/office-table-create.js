@@ -2,6 +2,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 import officeTableHelperRange from './office-table-helper-range';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import getOfficeTableHelper from './get-office-table-helper';
+import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 const TABLE_HEADER_FONT_COLOR = '#000000';
@@ -18,6 +19,8 @@ class OfficeTableCreate {
    * @param {string} tableName Name of the Excel Table
    * @param {Object} prevOfficeTable Previous office table to refresh
    * @param {Boolean} tableChanged Specify if table columns has been changed. False by default
+   * @param {Boolean} isRepeatStep Specify if repeat creating of the table
+   * @param {Boolean} insertNewWorksheet Specify if new worksheet has to be created before creating the table
    *
    */
   createOfficeTable = async (
@@ -27,7 +30,9 @@ class OfficeTableCreate {
       startCell,
       tableName,
       prevOfficeTable,
-      tableChanged = false
+      tableChanged = false,
+      isRepeatStep,
+      insertNewWorksheet
     }) => {
     const {
       rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions }
@@ -35,7 +40,11 @@ class OfficeTableCreate {
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
 
-    const worksheet = this.getExcelWorksheet(prevOfficeTable, excelContext);
+    if (insertNewWorksheet) {
+      startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
+    }
+
+    const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);
     const tableStartCell = this.getTableStartCell(
       startCell,
       worksheet,
@@ -48,10 +57,16 @@ class OfficeTableCreate {
     const range = this.getObjectRange(tableStartCell, worksheet, tableRange, mstrTable);
     excelContext.trackedObjects.add(range);
 
-    await officeTableHelperRange.checkObjectRangeValidity(prevOfficeTable, excelContext, range, instanceDefinition);
+    await officeTableHelperRange.checkObjectRangeValidity(
+      prevOfficeTable,
+      excelContext,
+      range,
+      instanceDefinition,
+      isRepeatStep
+    );
 
     if (isCrosstab) {
-      officeApiCrosstabHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions);
+      officeApiCrosstabHelper.createCrosstabHeaders(tableStartCell, mstrTable, worksheet, crosstabHeaderDimensions,);
     }
 
 
@@ -92,8 +107,8 @@ class OfficeTableCreate {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    *
    */
-  getExcelWorksheet = (prevOfficeTable, excelContext) => {
-    if (prevOfficeTable) {
+  getExcelWorksheet = (prevOfficeTable, insertNewWorksheet, excelContext) => {
+    if (prevOfficeTable && !insertNewWorksheet) {
       return prevOfficeTable.worksheet;
     }
     return excelContext.workbook.worksheets.getActiveWorksheet();
