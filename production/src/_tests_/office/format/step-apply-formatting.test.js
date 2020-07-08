@@ -342,6 +342,7 @@ it.each`
   ${'General'} | ${9} | ${''}
   ${'General'} | ${9} | ${'formatString'}
   
+  ${'General'} | ${undefined} | ${''}
   ${'General'} | ${undefined} | ${'# ?/?'}
   ${'General'} | ${undefined} | ${'# ??/?'}
   ${'General'} | ${undefined} | ${'# ???/?'}
@@ -394,7 +395,6 @@ it.each`
   ${'\\$'} | ${undefined} | ${'""$'}
   ${'\\$'} | ${undefined} | ${'""$"'}
   
-  ${''} | ${undefined} | ${''}
   ${'"'} | ${undefined} | ${'"'}
   ${'a'} | ${undefined} | ${'a'}
   
