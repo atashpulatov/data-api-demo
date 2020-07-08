@@ -12,6 +12,10 @@
   min-width: 530px;
 }
 
+.navigation_tree__main_wrapper .popup-footer {
+  position: relative;
+}
+
 .navigation_tree__title_bar {
   margin: 15px;
   min-width: 500px;
