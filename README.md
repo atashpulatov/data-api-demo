@@ -7,9 +7,10 @@ Tests are written in [Gherkin](https://cucumber.io/docs/gherkin/reference/) (nat
 
 ### Content of this README:
 
-1. Prerequisites and installation
-1. Running tests
-1. TODO
+- Prerequisites and installation
+- Running tests
+- Developer environment
+- TODO
 
 README TODO:
 
@@ -33,7 +34,7 @@ README TODO:
 - running in different environments, e.g. executing Python code on Mac, driving Windows Desktop using VirtualBox  
 - how to check which test cases are tagged with a given tag (grep -ri '@mac_chrome' *) 
 
-### 1. Prerequisites and installation
+### Prerequisites and installation
 
 ##### General
 
@@ -62,15 +63,7 @@ pip install opencv-python-headless
 ##### Windows Desktop
 
 - Excel Add-In installed ([see details](https://www2.microstrategy.com/producthelp/Current/Office/en-us/Content/install_manually.htm))
-- [WinAppDriver](https://github.com/Microsoft/WinAppDriver/releases) installed and running, e.g.:
-
-```
-"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe"
-```
-or
-```
-"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 192.168.1.248 4723/wd/hub
-```
+- [WinAppDriver](https://github.com/Microsoft/WinAppDriver/releases) installed.
 
 ##### General Mac
 
@@ -97,7 +90,7 @@ pip install opencv-python-headless
 - Excel Add-In installed ([see details](https://microstrategy.atlassian.net/wiki/spaces/TECCLIENTS/pages/818920406/Guideline+-+How+to+create+a+new+environment+for+automation+and+manual+testing
 ))
 - [AppiumForMac](https://github.com/appium/appium-for-mac/releases) (not Appium, e.g.
-[see issue](https://github.com/appium/appium-for-mac/issues/82)) installed and running.
+[see issue](https://github.com/appium/appium-for-mac/issues/82)) installed.
 
 ##### Mac Chrome browser
 
@@ -114,7 +107,7 @@ To change permission execute from shell:
 chmod a+rx resources/chromedriverNN
 ```
 
-### 2. Running tests
+### Running tests
 
 #### Activate Python venv environment:
 
@@ -132,7 +125,27 @@ cd PROJECT_DIR
 source venv_mac/bin/activate
 ```
 
+#### Run driver software (for Desktop environments)
+
+##### Windows Desktop
+
+Run `WinAppDriver` from command line as Administrator, e.g.:
+
+```
+"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe"
+```
+or
+```
+"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 192.168.1.248 4723/wd/hub
+```
+
+##### Mac Desktop
+
+Run `AppiumForMac`.
+
 #### Executing tests
+
+Examples of running tests:
 
 ```
 # test single feature, Windows Desktop:
@@ -148,28 +161,94 @@ behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=WA
 behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/
 ```
 
-##### Important parameters
+##### Test execution parameters
 
-**-D driver_type=driver_name** specifies the target platform to execute test on (the driver to be used),
-where **driver_name** is one of available driver types (see [driver_type.py](driver/driver_type.py)):
+All custom parameters values can be defined in [config.json](config/config.json) file or as `behave` command options
+(specified using `-D`, takes precedence over configuration file). For complete list of available custom parameters see
+[config.json](config/config.json).
+
+For `behave` options (no `-D` flag) see [behave documentation](https://behave.readthedocs.io/en/latest/).
+
+`-D driver_type=driver_name` specifies the target platform to execute test on (the driver to be used),
+where `driver_name` is one of available driver types (see [driver_type.py](driver/driver_type.py)):
 
 - windows_desktop
 - windows_chrome
 - mac_desktop
 - mac_chrome
 
-**--tags=tag_name**, specifies which tests to execute (only those tagged **@tag_name**), for simplicity use the same 
-values as for **driver_name** (windows_desktop, windows_chrome, mac_desktop, mac_chrome) 
+`--tags=@tag_name`, specifies which tests to execute (only those tagged `@tag_name`), for simplicity use the same 
+values as for `driver_name` (`@windows_desktop`, `@windows_chrome`, `@mac_desktop`, `@mac_chrome`).
 
-**--logging_level=level** specifies logging level, where level is:
+Tags related to selecting tests for different tasks (e.g. release or GA validation, CI execution) are going to be
+added, e.g. @release_validation. To execute only tests tagged @windows_desktop AND @release_validation use `--tags`
+multiple times:
 
-- DEBUG
-- WARNING
-- ERROR
+`--tags=@windows --tags=@release_validation`.
 
-For complete list of available custom parameters (specified using -D) see [config.json](config/config.json). 
+`-D image_recognition_enabled=True` enables (`True`) or disables (`False`) usage of image recognition to speed up
+tests execution. Works only when implemented for selected driver (see `-D driver_type`), currently only
+`windows_desktop`. 
+
+`-D connect_to_existing_session_enabled=True` enables (`True`) or disables (`False`) attaching to an existing Excel
+or session. Speeds up tests development allowing to e.g. skip first part of the test (TODO see attaching
+to existing Excel or browser session).
+
+`-D browser_existing_session_executor_url=url` specifies `url` address used when attaching to an existing browser
+session (TODO see attaching to existing Excel or browser session).
+
+`-D browser_existing_session_id=session_id` specifies `session_id` address used when attaching to an existing browser
+session (TODO see attaching to existing Excel or browser session).
+
+`-D windows_desktop_excel_root_element_name=root_element_name` specifies Windows Desktop root Excel element name
+(e.g. `Book1 - Excel`) (TODO see attaching to existing Excel or browser session).
+
+`-D cleanup_after_test_enabled=True` enables (`True`) or disables (`False`) cleaning up after test execution (closing
+Excel or browser). Useful for debug purposes when developing tests.
+
+`-D driver_path_windows_desktop=path` specifies `path` to Excel for Windows Desktop.
+
+`-D driver_path_windows_chrome=path` specifies `path` to `chromiumdriver.exe` for Windows Desktop.
+
+`-D driver_path_mac_chrome=path` specifies `path` to `chromiumdriver` for Mac Desktop.
+
+`-D host_url_mac_desktop=url` specifies `url` to running `AppiumForMac`, used when executing tests on Mac Desktop.
+
+`-D host_url_windows_desktop=url` specifies `url` to running `WinAppDriver`, used when executing tests
+on Windows Desktop.
+
+`-D excel_add_in_environment=environemnt` specifies `environemnt` name used to select which Excel Add In should be
+started. Used on Windows Desktop and Mac Desktop.
+
+`-D excel_desktop_add_in_import_data_name=import_name` specifies `import_name` string used when choosing which
+Excel Add In should be started. Used in browsers.
+
+`-D excel_user_name=user_name` specifies `user_name` used when logging in to Excel in browser.
+ 
+`-D excel_user_password=user_password` specifies `user_password` used when logging in to Excel in browser. 
+
+`--logging_level=level` specifies logging level, where `level` is:
+
+- DEBUG _(the most verbose)_
+- WARNING _(somehow verbose)_
+- ERROR _(almost quiet, only errors)_
+
+`--no-skipped` disables printing skipped steps (due to tags).
+
+`--no-color` disables the use of ANSI color escapes.
+
+`--no-logcapture` disables logging capture.
+
+`--no-capture-stderr` disables capturing stderr (any stderr output will be printed immediately).
+
+`--format allure_behave.formatter:AllureFormatter` configures formatting tests results for reporting with Allure.
+
+`-o folder/` specifies tests results output folder when formatting is configured for using Allure.  
+
+### Developer environment
 
 #### Navigating from feature file to step definition in `Visual Studio Code`
+
 - install `Cucumber (Gherkin) Full Support` extension
 - go to `Settings` (Command/Control + ,)
 - search for `Cucumberautocomplete`
@@ -184,7 +263,7 @@ For complete list of available custom parameters (specified using -D) see [confi
 - restart `Visual Studio Code`
 - open a feature file and right click a step and select `Go To Definition`
 
-### 3. TODO
+### TODO
 
 - change usage of send_keys as it's not stable on Windows Desktop (potentially in other environments too), 
 sometimes some chars are not sent;
@@ -198,3 +277,4 @@ Mac Chrome: element.get_attribute('value') (input element)
 - use assertions library instead of simple Python's assert?
 - test 0 verifying required objects existence
 - support for different languages (Excel, app)
+- multiple test execution in case of failure
