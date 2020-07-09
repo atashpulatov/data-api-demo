@@ -4,6 +4,7 @@ export const RESET_STATE = 'POPUP_RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'POPUP_SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'POPUP_SET_PREPARED_REPORT';
 export const SWITCH_IMPORT_SUBTOTALS_ON_EDIT = 'POPUP_SWITCH_IMPORT_SUBTOTALS_ON_EDIT';
+export const CLEAR_EDITED_OBJECT = 'POPUP_CLEAR_EDITED_OBEJECT';
 
 class PopupActions {
   init = (
@@ -147,6 +148,10 @@ class PopupActions {
   }
 
   switchImportSubtotalsOnEdit = (data) => (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT, data });
+
+  clearEditedObject = () => (dispatch) => {
+    dispatch({ type: CLEAR_EDITED_OBJECT });
+  }
 }
 
 export const popupActions = new PopupActions();

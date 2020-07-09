@@ -2,9 +2,10 @@ import {
   RESET_STATE,
   SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_EDIT
+  SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
+  CLEAR_EDITED_OBJECT
 } from './popup-actions';
-import { CLEAR_PROMPTS_ANSWERS, UPDATE_DISPLAY_ATTR_FORM } from '../navigation-tree-reducer/navigation-tree-actions';
+import { UPDATE_DISPLAY_ATTR_FORM } from '../navigation-tree-reducer/navigation-tree-actions';
 
 export const initialState = {};
 
@@ -28,7 +29,7 @@ export const popupReducer = (state = initialState, action) => {
         },
       };
     }
-    case CLEAR_PROMPTS_ANSWERS: {
+    case CLEAR_EDITED_OBJECT: {
       return {
         ...state,
         preparedInstance: null,
