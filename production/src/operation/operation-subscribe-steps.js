@@ -75,6 +75,7 @@ class SubscribeSteps {
 
     operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
     operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
+    // FIXME: below step isn't used anywhere. TO BE REMOVED
     operationBus.subscribe(REMOVE_OBJECT_STORE, stepRemoveObjectStore.removeObjectStore);
 
     operationBus.subscribe(HIGHLIGHT_OBJECT, stepHighlightObject.highlightObject);
