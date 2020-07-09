@@ -442,38 +442,16 @@ class MstrObjectRestService {
       .then((res) => res.body && res.body.length);
   }
 
-  getCubeStatus = (objectId, projectId) => {
+  getCubeInfo = (objectId, projectId) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-
-    const fullPath = `${envUrl}/cubes/${objectId}`;
-    return request
-      .head(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('X-MSTR-ProjectID', projectId)
-      .withCredentials()
-      .then((res) => res.headers['x-mstr-cubestatus']);
-  }
-
-  getCubeInformation = (objectId, projectId) => {
-    const storeState = this.reduxStore.getState();
-    const { envUrl, authToken } = storeState.sessionReducer;
-    const body = { id: [objectId] };
     const fullPath = `${envUrl}/cubes?id=${objectId}`;
-    console.log(`objectID is:${objectId}`);
-
     return request
       .get(fullPath)
       .set('x-mstr-authtoken', authToken)
       .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
-      .then((res) => res);
-  }
-
-  getCubeServerMode = async (objectId, projectId) => {
-    const cubeInformation = await this.getCubeInformation(objectId, projectId);
-    const cubeServerMode = cubeInformation.body.cubesInfos[0].serverMode;
-    return cubeServerMode;
+      .then((res) => res.body.cubesInfos[0]);
   }
 
   rePromptDossier = (dossierId, instanceId, projectId) => {
