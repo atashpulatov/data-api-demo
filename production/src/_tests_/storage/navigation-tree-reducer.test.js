@@ -4,7 +4,6 @@ import {
   REQUEST_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER
 } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { navigationTree } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import { CLEAR_CACHE, REFRESH_CACHE } from '../../redux-reducer/cache-reducer/cache-actions';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action for myLibrary', () => {
@@ -201,51 +200,6 @@ describe('NavigationTree Reducer', () => {
 
     // then
     expect(newState.dossierOpenRequested).toEqual(true);
-  });
-
-  it('should return new proper state in case of CLEAR_CACHE action', () => {
-    // given
-    const action = { type: CLEAR_CACHE, };
-
-    // when
-    const newState = navigationTree({}, action);
-
-    // then
-    // expect(newState.sorter).toEqual({});
-    expect(newState.chosenObjectId).toEqual(null);
-    expect(newState.chosenProjectId).toEqual(null);
-    expect(newState.chosenSubtype).toEqual(null);
-    expect(newState.chosenObjectName).toEqual('Prepare Data');
-  });
-
-  it('should return new proper state in case of REFRESH_CACHE action', () => {
-    // given
-    const action = { type: REFRESH_CACHE, data: true };
-
-    // when
-    const newState = navigationTree({}, action);
-
-    // then
-    // expect(newState.sorter).toEqual({});
-    expect(newState.chosenObjectId).toEqual(null);
-    expect(newState.chosenProjectId).toEqual(null);
-    expect(newState.chosenSubtype).toEqual(null);
-    expect(newState.chosenObjectName).toEqual('Prepare Data');
-  });
-
-  it('should not return new proper state in case of REFRESH_CACHE action', () => {
-    // given
-    const action = { type: REFRESH_CACHE, };
-
-    // when
-    const newState = navigationTree({}, action);
-
-    // then
-    // expect(newState.sorter).not.toEqual({});
-    expect(newState.chosenObjectId).not.toEqual(null);
-    expect(newState.chosenProjectId).not.toEqual(null);
-    expect(newState.chosenSubtype).not.toEqual(null);
-    expect(newState.chosenObjectName).not.toEqual('Prepare Data');
   });
 
   it('should return new proper state in case of SWITCH_MY_LIBRARY action - from false to true', () => {

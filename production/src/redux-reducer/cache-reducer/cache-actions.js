@@ -47,10 +47,11 @@ export const addProjects = (objects) => ({
 
 export const clearStateCache = () => ({ type: CLEAR_CACHE, });
 
-export const refreshCacheAction = (shouldCleanSelection) => ({ type: REFRESH_CACHE, data: shouldCleanSelection });
+export const refreshCacheAction = () => ({ type: REFRESH_CACHE });
 
 export const refreshCacheState = (shouldCleanSelection) => (dispatch) => {
-  dispatch(refreshCacheAction(shouldCleanSelection));
+  dispatch(refreshCacheAction());
+  if (shouldCleanSelection) { dispatch(navigationTreeActions.clearSelection()); }
 };
 
 export function fetchObjects(dispatch, cache) {
@@ -205,6 +206,7 @@ export function clearCache(userID) {
   return (dispatch) => {
     const cache = new DB(userID);
     dispatch(clearStateCache());
+    dispatch(navigationTreeActions.clearSelection());
     console.log('Clearing cache');
     return cache.clearTable().catch(console.error);
   };
