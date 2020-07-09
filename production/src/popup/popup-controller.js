@@ -82,11 +82,11 @@ class PopupController {
             Office.EventType.DialogEventReceived,
             () => {
               this.reduxStore.dispatch({ type: RESET_STATE });
-              this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+              this.reduxStore.dispatch({ type: officeProperties.actions.hidePopup });
               this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
             }
           );
-          this.reduxStore.dispatch({ type: officeProperties.actions.popupShown });
+          this.reduxStore.dispatch({ type: officeProperties.actions.showPopup });
         });
     } catch (error) {
       this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
@@ -145,7 +145,7 @@ class PopupController {
     } finally {
       this.reduxStore.dispatch({ type: RESET_STATE });
       if (response.command !== REFRESH_CACHE_COMMAND) {
-        this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
+        this.reduxStore.dispatch({ type: officeProperties.actions.hidePopup });
         this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       }
     }

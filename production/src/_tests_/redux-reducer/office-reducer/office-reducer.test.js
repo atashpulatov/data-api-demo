@@ -17,20 +17,20 @@ describe('officeReducer', () => {
     });
   });
 
-  it('should set popupOpen to true onPopupShown', () => {
+  it('should set popupOpen to true on showPopup', () => {
     // given
     const prevState = { popupOpen: false };
-    const action = { type: officeProperties.actions.popupShown };
+    const action = { type: officeProperties.actions.showPopup };
     // when
     const newState = officeReducer(prevState, action);
     // then
     expect(newState.popupOpen).toBe(true);
   });
 
-  it('should set popupOpen to false onPopupHidden', () => {
+  it('should set popupOpen to false on hidePopup', () => {
     // given
     const prevState = { popupOpen: true };
-    const action = { type: officeProperties.actions.popupHidden };
+    const action = { type: officeProperties.actions.hidePopup };
     // when
     const newState = officeReducer(prevState, action);
     // then
