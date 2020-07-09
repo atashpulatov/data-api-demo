@@ -2,9 +2,7 @@ import React from 'react';
 import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 
-export const DataPreviewButton = ({
-  disableReason, onPreviewClick, t
-}) => {
+export const DataPreviewButton = ({ disableReason, onPreviewClick, t }) => {
   const internalButton = (
     <Button
       id="data-preview"
