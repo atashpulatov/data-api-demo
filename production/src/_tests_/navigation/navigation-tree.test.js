@@ -271,7 +271,7 @@ describe('NavigationTree', () => {
 
     // then
     expect(wrappedComponent.state('isPublishedInMyLibrary')).toEqual(true);
-    expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(false);
+    expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(true);
   });
 
   it('should call setState twice and change states according to parameters', () => {
