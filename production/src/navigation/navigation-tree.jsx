@@ -203,7 +203,7 @@ export class NavigationTreeNotConnected extends Component {
       changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t,
       i18n, numberOfFiltersActive,
     } = this.props;
-    const { previewDisplay, isPublishedInMyLibrary, isPublishedInEnvironment } = this.state;
+    const { previewDisplay, isPublishedInEnvironment } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     const disableActiveActions = myLibrary ? (!isPublishedInMyLibrary) : (!isPublishedInEnvironment);
