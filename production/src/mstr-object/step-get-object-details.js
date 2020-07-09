@@ -33,13 +33,13 @@ class StepGetObjectDetails {
       } = objectData;
 
       const {
-        ancestors, certifiedInfo, dateModified, owner,
+        ancestors, certifiedInfo, dateModified, owner, name,
       } = await mstrObjectRestService.getObjectInfo(objectId, projectId, mstrObjectType);
 
       const prompts = await getObjectPrompts(objectData, objectId, projectId, operationData);
 
       const details = populateDetails(ancestors, certifiedInfo, dateModified, owner);
-      const definition = populateDefinition(objectData, prompts);
+      const definition = populateDefinition(objectData, prompts, name);
       if (definition) {
         definition.filters = getFilters(operationData);
       }

@@ -20,14 +20,18 @@ const promptAnswerFunctionsMap = {
   VALUE: (prompt) => prompt.answers,
 };
 
-export const populateDefinition = (objectData, prompts) => {
+export const populateDefinition = (objectData, prompts, name) => {
+  const definition = {
+    ...objectData.definition,
+    sourceName: name,
+  };
   if (prompts) {
     return {
-      ...objectData.definition,
+      ...definition,
       prompts,
     };
   }
-  return { ...objectData.definition };
+  return definition;
 };
 
 export const populateDetails = (ancestors, certifiedInfo, dateModified, owner) => ({
