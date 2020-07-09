@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { SidePanel, popupTypes } from '@mstr/rc';
-import { cancelImportRequest, } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
-import * as officeActions from '../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
@@ -171,7 +171,7 @@ export const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  cancelCurrentImportRequest: cancelImportRequest,
+  cancelCurrentImportRequest: navigationTreeActions.cancelImportRequest,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
   toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,

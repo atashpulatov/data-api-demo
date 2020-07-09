@@ -182,7 +182,7 @@ export const navigationTree = (state = initialState, action) => {
     case LOAD_BROWSING_STATE_CONST: {
       return {
         ...initialState,
-        ...action.browsingState,
+        ...data,
       };
     }
     case CLEAR_CACHE:

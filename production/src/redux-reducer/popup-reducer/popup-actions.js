@@ -1,4 +1,4 @@
-import { officeProperties } from '../office-reducer/office-properties';
+import { officeActions } from '../office-reducer/office-actions';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 export const RESET_STATE = 'POPUP_RESET_STATE';
@@ -38,7 +38,7 @@ class PopupActions {
         this.popupController.runEditFiltersPopup(reportParams);
       }
     } catch (error) {
-      dispatch({ type: officeProperties.actions.stopLoading });
+      dispatch(officeActions.stopLoading());
       return this.errorService.handleError(error);
     }
   };
@@ -103,7 +103,7 @@ class PopupActions {
         this.popupController.runEditFiltersPopup(reportParams);
       }
     } catch (error) {
-      dispatch({ type: officeProperties.actions.stopLoading });
+      dispatch(officeActions.stopLoading());
       if (isDossier) {
         error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       }

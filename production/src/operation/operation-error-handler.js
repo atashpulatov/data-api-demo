@@ -1,6 +1,6 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeRemoveHelper } from '../office/remove/office-remove-helper';
-import { toggleIsClearDataFailedFlag } from '../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import { removeObject, restoreObjectBackup } from '../redux-reducer/object-reducer/object-actions';
 import { errorService } from '../error/error-handler';
@@ -95,7 +95,7 @@ class OperationErrorHandler {
       this.reduxStore.dispatch(deleteObjectNotification(operation.objectWorkingId));
     }
 
-    toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
+    officeActions.toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
   }
 
   /**

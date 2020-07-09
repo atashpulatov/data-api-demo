@@ -4,10 +4,7 @@ import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
-import {
-  switchImportSubtotals as switchImportSubtotalsImported,
-  updateDisplayAttrForm as updateDisplayAttrFormImported
-} from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
@@ -167,8 +164,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  switchImportSubtotals: switchImportSubtotalsImported,
-  updateDisplayAttrForm: updateDisplayAttrFormImported
+  switchImportSubtotals: navigationTreeActions.switchImportSubtotals,
+  updateDisplayAttrForm: navigationTreeActions.updateDisplayAttrForm,
 };
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));

@@ -6,7 +6,7 @@ import { Spin } from 'antd';
 import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
-import { toggleRenderSettingsFlag } from '../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
 import { Authenticate } from '../authentication/auth-component';
@@ -98,7 +98,7 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = { toggleRenderSettingsFlag, };
+const mapDispatchToProps = { toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag };
 
 HomeNotConnected.propTypes = {
   loading: PropTypes.bool,

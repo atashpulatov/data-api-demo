@@ -2,7 +2,7 @@ import { popupTypes } from '@mstr/rc';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';
-import { toggleSecuredFlag, toggleIsClearDataFailedFlag, clearSidePanelPopupData } from '../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { calculateLoadingProgress } from '../operation/operation-loading-progress';
 import { REMOVE_OPERATION, CLEAR_DATA_OPERATION, HIGHLIGHT_OPERATION } from '../operation/operation-type-names';
 import { errorService } from '../error/error-handler';
@@ -68,7 +68,7 @@ class SidePanelNotificationHelper {
     objectWorkingId, activeCellAddress, setSidePanelPopup, callback
   }) => {
     const onCancel = () => {
-      this.reduxStore.dispatch(clearSidePanelPopupData());
+      this.reduxStore.dispatch(officeActions.clearSidePanelPopupData());
       callback();
       setSidePanelPopup(null);
     };
@@ -79,7 +79,7 @@ class SidePanelNotificationHelper {
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onOk: (isActiveCellOptionSelected) => {
         this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
-        this.reduxStore.dispatch(clearSidePanelPopupData());
+        this.reduxStore.dispatch(officeActions.clearSidePanelPopupData());
         setSidePanelPopup(null);
       },
       onCancel,
@@ -130,8 +130,8 @@ class SidePanelNotificationHelper {
    handleViewData = async () => {
      try {
        await officeApiHelper.checkStatusOfSessions();
-       this.reduxStore.dispatch(toggleSecuredFlag(false));
-       this.reduxStore.dispatch(toggleIsClearDataFailedFlag(false));
+       this.reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
+       this.reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(false));
        sidePanelService.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
          .map(({ objectWorkingId }) => objectWorkingId));
      } catch (error) {

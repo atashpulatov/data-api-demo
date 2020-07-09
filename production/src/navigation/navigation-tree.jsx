@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
@@ -305,7 +305,7 @@ export const mapStateToProps = ({ navigationTree, cacheReducer }) => ({
 });
 
 const mapActionsToProps = {
-  ...actions,
+  ...navigationTreeActions,
   connectToDB: connectToCache,
   resetDBState: refreshCacheState,
   fetchObjectsFromNetwork: fetchObjectsFallback,

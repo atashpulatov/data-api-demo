@@ -6,7 +6,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { popupController } from '../popup/popup-controller';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
-import { CANCEL_REQUEST_IMPORT } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested,
@@ -23,7 +23,7 @@ class SidePanelService {
    * Prevent navigation tree from going straight into importing previously selected item.
    */
   addData = async () => {
-    this.reduxStore.dispatch({ type: CANCEL_REQUEST_IMPORT });
+    this.reduxStore.dispatch(navigationTreeActions.cancelImportRequest());
     await popupController.runPopupNavigation();
   };
 

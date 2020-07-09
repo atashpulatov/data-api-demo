@@ -7,7 +7,7 @@ import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { actions as navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
