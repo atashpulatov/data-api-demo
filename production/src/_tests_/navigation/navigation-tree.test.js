@@ -63,7 +63,6 @@ describe('NavigationTree', () => {
       chosenProjectId: 'projectId',
       chosenSubtype: mstrObjectEnum.mstrObjectType.report.subtypes[0],
       chosenObjectName: 'Prepare Data',
-      chosenType: 'Data',
       setObjectData: jest.fn(),
     };
     const givenIsPrompted = 'customPromptAnswer';
@@ -156,19 +155,6 @@ describe('NavigationTree', () => {
     wrappedComponent.instance().onTriggerUpdate(body);
     // then
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
-  });
-
-  it('should take proper data from state for name defined', () => {
-    // given
-    const initialState = {
-      navigationTree: {},
-      officeReducer: { preLoadReport: { name: 'Some name', }, },
-    };
-    // then
-    expect(mapStateToProps(initialState)).toEqual({
-      ...initialState.navigationTree,
-      title: initialState.officeReducer.preLoadReport.name,
-    });
   });
 
   it('should take proper data from state for name NOT defined', () => {
