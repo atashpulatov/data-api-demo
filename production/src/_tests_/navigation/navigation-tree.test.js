@@ -270,8 +270,8 @@ describe('NavigationTree', () => {
     />);
 
     // then
-    expect(wrappedComponent.state('isPublishedInLibrary')).toEqual(true);
-    expect(wrappedComponent.state('isPublishedBeyondLibrary')).toEqual(false);
+    expect(wrappedComponent.state('isPublishedInMyLibrary')).toEqual(true);
+    expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(false);
   });
 
   it('should call setState twice and change states according to parameters', () => {
@@ -303,8 +303,8 @@ describe('NavigationTree', () => {
     wrappedComponent.instance().onObjectChosen(givenObject);
 
     // then
-    expect(wrappedComponent.state('isPublishedBeyondLibrary')).toEqual(true);
-    expect(wrappedComponent.state('isPublishedInLibrary')).toEqual(true);
+    expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(true);
+    expect(wrappedComponent.state('isPublishedInMyLibrary')).toEqual(true);
     expect(setState).toHaveBeenCalledTimes(1);
   });
 

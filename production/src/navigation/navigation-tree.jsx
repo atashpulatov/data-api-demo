@@ -30,8 +30,8 @@ export class NavigationTreeNotConnected extends Component {
     super(props);
     this.state = {
       previewDisplay: false,
-      isPublishedInLibrary: true,
-      isPublishedBeyondLibrary: false,
+      isPublishedInMyLibrary: true,
+      isPublishedInEnvironment: true,
     };
     this.indexedDBSupport = DB.getIndexedDBSupport();
   }
@@ -187,9 +187,9 @@ export class NavigationTreeNotConnected extends Component {
     }
     if (objectId) {
       if (myLibrary) {
-        this.setState({ isPublishedInLibrary: cubeStatus });
+        this.setState({ isPublishedInMyLibrary: cubeStatus });
       } else {
-        this.setState({ isPublishedBeyondLibrary: cubeStatus });
+        this.setState({ isPublishedInEnvironment: cubeStatus });
       }
     }
     selectObject({
@@ -208,7 +208,7 @@ export class NavigationTreeNotConnected extends Component {
       changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t,
       i18n, numberOfFiltersActive,
     } = this.props;
-    const { previewDisplay, isPublishedInLibrary, isPublishedBeyondLibrary } = this.state;
+    const { previewDisplay, isPublishedInMyLibrary, isPublishedInEnvironment } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
     return (
@@ -247,13 +247,13 @@ export class NavigationTreeNotConnected extends Component {
           isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
-          disableActiveActions={!chosenObjectId || !isPublishedInLibrary}
+          disableActiveActions={!chosenObjectId || !isPublishedInMyLibrary}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
           disableSecondary={mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
-          isPublished={myLibrary ? isPublishedInLibrary : isPublishedBeyondLibrary}
+          isPublished={myLibrary ? isPublishedInMyLibrary : isPublishedInEnvironment}
         />
       </div>
     );
