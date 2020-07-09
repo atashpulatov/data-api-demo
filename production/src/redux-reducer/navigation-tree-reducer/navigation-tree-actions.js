@@ -89,10 +89,10 @@ function clearFilter() {
 }
 
 function saveMyLibraryOwners(objects) {
-  return {
+  return (dispatch) => dispatch({
     type: SAVE_MY_LIBRARY_OWNERS,
     data: objects.map(item => item.ownerId),
-  };
+  });
 }
 
 export const navigationTreeActions = {
