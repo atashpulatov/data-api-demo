@@ -5,8 +5,8 @@ import {
   CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
   UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, LOAD_BROWSING_STATE_CONST,
   SAVE_MY_LIBRARY_OWNERS, CLEAR_SELECTION, CLEAR_FILTER
-} from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { navigationTree, initialState } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+} from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTree, initialState } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action for myLibrary', () => {
