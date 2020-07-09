@@ -5,10 +5,6 @@ const showPopup = () => ({ type: officeProperties.actions.showPopup });
 
 const hidePopup = () => ({ type: officeProperties.actions.hidePopup });
 
-const startLoading = () => ({ type: officeProperties.actions.startLoading });
-
-const stopLoading = () => ({ type: officeProperties.actions.stopLoading });
-
 const toggleSecuredFlag = (isSecured) => (dispatch) => {
   officeStoreHelper.setFileSecuredFlag(isSecured);
   dispatch({
@@ -50,8 +46,6 @@ const clearSidePanelPopupData = () => ({ type: officeProperties.actions.setRange
 export const officeActions = {
   showPopup,
   hidePopup,
-  startLoading,
-  stopLoading,
   toggleSecuredFlag,
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,

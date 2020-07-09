@@ -54,8 +54,6 @@ class PopupController {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
       console.error({ error });
-
-      this.reduxStore.dispatch(officeActions.stopLoading());
       errorService.handleError(error);
       return;
     }
@@ -84,13 +82,11 @@ class PopupController {
             () => {
               this.reduxStore.dispatch(popupActions.resetState());
               this.reduxStore.dispatch(officeActions.hidePopup());
-              this.reduxStore.dispatch(officeActions.stopLoading());
             }
           );
           this.reduxStore.dispatch(officeActions.showPopup());
         });
     } catch (error) {
-      this.reduxStore.dispatch(officeActions.stopLoading());
       errorService.handleError(error);
     }
   };
@@ -147,7 +143,6 @@ class PopupController {
       this.reduxStore.dispatch(popupActions.resetState());
       if (response.command !== REFRESH_CACHE_COMMAND) {
         this.reduxStore.dispatch(officeActions.hidePopup());
-        this.reduxStore.dispatch(officeActions.stopLoading());
       }
     }
   };

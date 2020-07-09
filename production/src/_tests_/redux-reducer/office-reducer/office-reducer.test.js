@@ -8,7 +8,6 @@ describe('officeReducer', () => {
   beforeEach(() => {
     // default state should be empty
     expect(officeStore.getState()).toEqual({
-      loading: false,
       shouldRenderSettings: false,
       isSettings: false,
       isConfirm: false,
@@ -35,16 +34,6 @@ describe('officeReducer', () => {
     const newState = officeReducer(prevState, action);
     // then
     expect(newState.popupOpen).toBe(false);
-  });
-
-  it('should dispatch proper action when startLoading', () => {
-    // given
-    const prevState = { loading: false };
-    const action = { type: officeProperties.actions.startLoading };
-    // when
-    const newState = officeReducer(prevState, action);
-    // then
-    expect(newState.loading).toBe(true);
   });
 
   it('should return new proper state in case of toggleSecuredFlag action', () => {

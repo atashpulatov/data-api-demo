@@ -3,13 +3,13 @@ import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 
 export const PrepareDataButton = ({
-  disableReason, loading, handleSecondary, t
+  disableReason, handleSecondary, t
 }) => {
   const internalButton = (
     <Button
       id="prepare"
       type="primary"
-      disabled={!!disableReason || loading}
+      disabled={!!disableReason}
       onClick={handleSecondary}>
       {t('Prepare Data')}
     </Button>
@@ -26,6 +26,5 @@ export const PrepareDataButton = ({
 PrepareDataButton.propTypes = {
   handleSecondary: PropTypes.func,
   t: PropTypes.func,
-  loading: PropTypes.bool,
   disableReason: PropTypes.string,
 };

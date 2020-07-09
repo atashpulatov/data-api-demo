@@ -104,7 +104,6 @@ describe('PromptsWindowNotConnected', () => {
   it('prolongSession should be called on EXTEND_SESSION message', () => {
     // given
     const message = { data: EXTEND_SESSION };
-    const stopLoading = jest.fn();
     window.Office = {
       context: {
         ui: { messageParent: () => { }, },
@@ -116,8 +115,7 @@ describe('PromptsWindowNotConnected', () => {
     // when
     const wrappedComponent = shallow(<PromptsWindowNotConnected
       mstrData={mstrData}
-      popupState={popupState}
-      stopLoading={stopLoading} />);
+      popupState={popupState} />);
     const prolongSession = jest.spyOn(wrappedComponent.instance(), 'prolongSession');
     wrappedComponent.instance().messageReceived(message);
 
@@ -128,13 +126,11 @@ describe('PromptsWindowNotConnected', () => {
   it('prolongSession should not be called on different messages', () => {
     // given
     const message = {};
-    const stopLoading = jest.fn();
 
     // when
     const wrappedComponent = shallow(<PromptsWindowNotConnected
       mstrData={mstrData}
-      popupState={popupState}
-      stopLoading={stopLoading} />);
+      popupState={popupState} />);
     const prolongSession = jest.spyOn(wrappedComponent.instance(), 'prolongSession');
     wrappedComponent.instance().messageReceived(message);
 

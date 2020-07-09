@@ -14,8 +14,6 @@ export const officeProperties = new Proxy({
   actions: {
     showPopup: 'OFFICE_SHOW_POPUP',
     hidePopup: 'OFFICE_HIDE_POPUP',
-    startLoading: 'OFFICE_START_LOADING',
-    stopLoading: 'OFFICE_STOP_LOADING',
     toggleSecuredFlag: 'OFFICE_TOGGLE_SECURED_FLAG',
     toggleIsSettingsFlag: 'OFFICE_TOGGLE_IS_SETTINGS_FLAG',
     toggleIsConfirmFlag: 'OFFICE_TOGGLE_IS_CONFIRM_FLAG',

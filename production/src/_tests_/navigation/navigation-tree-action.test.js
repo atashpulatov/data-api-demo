@@ -1,5 +1,4 @@
 import { navigationTreeActions, SELECT_OBJECT, CANCEL_REQUEST_IMPORT, START_IMPORT, CHANGE_SEARCHING, REQUEST_IMPORT, PROMPTS_ANSWERED, REQUEST_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {
@@ -34,16 +33,7 @@ describe('NavigationTree Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: START_IMPORT });
   });
-  it('should dispatch proper startLoading action', () => {
-    // given
-    const listener = jest.fn();
 
-    // when
-    navigationTreeActions.startLoading(true)(listener);
-
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.startLoading });
-  });
   // it('should dispatch proper changeSorting action', () => {
   //   // given
   //   const listener = jest.fn();
@@ -97,15 +87,6 @@ describe('NavigationTree Actions', () => {
 
     // then
     expect(listener).toHaveBeenCalledWith({ type: REQUEST_DOSSIER_OPEN });
-  });
-
-  it('should dispatch proper stopLoading action', () => {
-    // given
-    const listener = jest.fn();
-    // when
-    navigationTreeActions.stopLoading()(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.stopLoading });
   });
 
   it('should dispatch proper switchMyLibrary action', () => {

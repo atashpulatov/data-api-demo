@@ -150,7 +150,6 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({}, action);
 
     // then
-    expect(newState.loading).toBeTruthy();
     expect(newState.importRequested).toBe(false);
   });
 

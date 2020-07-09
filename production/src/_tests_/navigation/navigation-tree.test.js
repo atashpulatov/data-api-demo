@@ -113,7 +113,6 @@ describe('NavigationTree', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const stopLoadingMocked = jest.fn();
     const mstrData = {
       envUrl: 'env',
       authToken: 'authToken',
@@ -123,7 +122,6 @@ describe('NavigationTree', () => {
     const message = { command: commandCancel, };
     const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
-      stopLoading={stopLoadingMocked}
       cache={CACHE_STATE}
       {...mockFunctionsAndProps}
     />);

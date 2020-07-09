@@ -113,7 +113,7 @@ export class NavigationTreeNotConnected extends Component {
       // If myLibrary is on, then selected object is a dossier.
       const mstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((mstrObjectType === mstrObjectEnum.mstrObjectType.report)
-      || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
         isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, mstrObjectType.name);
       }
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
@@ -143,7 +143,7 @@ export class NavigationTreeNotConnected extends Component {
       const mstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
 
       if ((mstrObjectType === mstrObjectEnum.mstrObjectType.report)
-      || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
         const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, mstrObjectType.name);
         setObjectData({ isPrompted: isPromptedResponse });
       }
@@ -155,8 +155,6 @@ export class NavigationTreeNotConnected extends Component {
   };
 
   handleCancel = () => {
-    const { stopLoading } = this.props;
-    stopLoading();
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
@@ -198,7 +196,7 @@ export class NavigationTreeNotConnected extends Component {
 
   render() {
     const {
-      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
+      chosenObjectId, chosenProjectId, changeSorting, chosenLibraryDossier, searchText, sorter,
       changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t,
       i18n, numberOfFiltersActive,
     } = this.props;
@@ -240,7 +238,6 @@ export class NavigationTreeNotConnected extends Component {
           filter={myLibrary ? myLibraryFilter : envFilter}
           isLoading={cacheLoading} />
         <PopupButtons
-          loading={loading}
           disableActiveActions={!chosenObjectId || !isPublished}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
@@ -255,8 +252,6 @@ export class NavigationTreeNotConnected extends Component {
 }
 
 NavigationTreeNotConnected.propTypes = {
-  stopLoading: PropTypes.func,
-  loading: PropTypes.bool,
   cache: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     projects: PropTypes.arrayOf(PropTypes.shape({})),

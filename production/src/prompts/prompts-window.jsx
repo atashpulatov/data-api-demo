@@ -228,8 +228,6 @@ export class PromptsWindowNotConnected extends Component {
   }
 
   closePopup = () => {
-    const { stopLoading } = this.props;
-    stopLoading();
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
@@ -312,7 +310,6 @@ export class PromptsWindowNotConnected extends Component {
 }
 
 PromptsWindowNotConnected.propTypes = {
-  stopLoading: PropTypes.func,
   promptsAnswered: PropTypes.func,
   cancelImportRequest: PropTypes.func,
   onPopupBack: PropTypes.func,
@@ -358,7 +355,6 @@ export const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  stopLoading: navigationTreeActions.stopLoading,
   promptsAnswered: navigationTreeActions.promptsAnswered,
   cancelImportRequest: navigationTreeActions.cancelImportRequest,
   onPopupBack: popupStateActions.onPopupBack,

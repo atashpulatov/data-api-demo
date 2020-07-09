@@ -1,5 +1,3 @@
-import { officeProperties } from '../office-reducer/office-properties';
-
 export const SELECT_OBJECT = 'NAV_TREE_SELECT_OBJECT';
 export const REQUEST_IMPORT = 'NAV_TREE_REQUEST_IMPORT';
 export const PROMPTS_ANSWERED = 'NAV_TREE_PROMPTS_ANSWERED';
@@ -38,14 +36,6 @@ function cancelImportRequest() {
 
 function startImport() {
   return (dispatch) => dispatch({ type: START_IMPORT });
-}
-
-function startLoading() {
-  return (dispatch) => dispatch({ type: officeProperties.actions.startLoading });
-}
-
-function stopLoading() {
-  return (dispatch) => dispatch({ type: officeProperties.actions.stopLoading });
 }
 
 function changeSorting(data) {
@@ -98,8 +88,6 @@ export const navigationTreeActions = {
   promptsAnswered,
   cancelImportRequest,
   startImport,
-  startLoading,
-  stopLoading,
   changeSorting,
   changeSearching,
   requestDossierOpen,
