@@ -270,7 +270,6 @@ describe('NavigationTree', () => {
     />);
 
     // then
-    expect(wrappedComponent.state('isPublishedInMyLibrary')).toEqual(true);
     expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(true);
   });
 
@@ -304,7 +303,6 @@ describe('NavigationTree', () => {
 
     // then
     expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(true);
-    expect(wrappedComponent.state('isPublishedInMyLibrary')).toEqual(true);
     expect(setState).toHaveBeenCalledTimes(1);
   });
 

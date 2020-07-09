@@ -21,16 +21,15 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { popupHelper } from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
-
 const { getCubeStatus, isPrompted } = mstrObjectRestService;
 const checkIfPrompted = isPrompted;
+const isPublishedInMyLibrary = true;
 
 export class NavigationTreeNotConnected extends Component {
   constructor(props) {
     super(props);
     this.state = {
       previewDisplay: false,
-      isPublishedInMyLibrary: true,
       isPublishedInEnvironment: true,
     };
     this.indexedDBSupport = DB.getIndexedDBSupport();
@@ -185,12 +184,8 @@ export class NavigationTreeNotConnected extends Component {
         popupHelper.handlePopupErrors(error);
       }
     }
-    if (objectId) {
-      if (myLibrary) {
-        this.setState({ isPublishedInMyLibrary: cubeStatus });
-      } else {
+      if (!myLibrary && objectId) {
         this.setState({ isPublishedInEnvironment: cubeStatus });
-      }
     }
     selectObject({
       chosenObjectId: objectId,
@@ -211,6 +206,7 @@ export class NavigationTreeNotConnected extends Component {
     const { previewDisplay, isPublishedInMyLibrary, isPublishedInEnvironment } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
+    const disableActiveActions = myLibrary ? (!isPublishedInMyLibrary) : (!isPublishedInEnvironment);
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">
@@ -247,7 +243,7 @@ export class NavigationTreeNotConnected extends Component {
           isLoading={cacheLoading} />
         <PopupButtons
           loading={loading}
-          disableActiveActions={!chosenObjectId || !isPublishedInMyLibrary}
+          disableActiveActions={!chosenObjectId || disableActiveActions}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
