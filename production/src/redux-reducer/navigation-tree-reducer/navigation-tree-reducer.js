@@ -2,7 +2,7 @@ import {
   SELECT_OBJECT, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING,
   REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
   CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER,
-  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM, SWITCH_IMPORT_SUBTOTALS, CLEAR_SELECTION, CLEAR_FILTER,
+  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_SELECTION, CLEAR_FILTER,
   SAVE_MY_LIBRARY_OWNERS
 } from './navigation-tree-actions';
 import { CLEAR_CACHE, REFRESH_CACHE } from '../cache-reducer/cache-actions';
@@ -149,7 +149,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.numberOfFiltersActive = calculateNumberOfFiltersActive(filter, newState.myLibrary);
       return makeSelection(newState, newState.myLibrary ? newState.chosenLibraryElement : newState.chosenEnvElement);
     }
-    case SWITCH_IMPORT_SUBTOTALS: {
+    case SWITCH_IMPORT_SUBTOTALS_ON_IMPORT: {
       const newState = { ...state };
       newState.importSubtotal = data;
       return newState;

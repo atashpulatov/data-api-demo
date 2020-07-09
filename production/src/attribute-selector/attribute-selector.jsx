@@ -9,7 +9,7 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../error/constants';
-
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
@@ -44,7 +44,8 @@ export class AttributeSelectorNotConnected extends Component {
     const {
       title, session, displayAttrFormNames, updateDisplayAttrForm, isEdit,
       triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
-      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, switchImportSubtotals,
+      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal,
+      switchImportSubtotalsOnImport, switchImportSubtotalsOnEdit
     } = this.props;
     const locale = officeContext.getOffice().context.displayLanguage;
     const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
@@ -66,7 +67,7 @@ export class AttributeSelectorNotConnected extends Component {
           withFolderTree={false}
           openModal={openModal}
           closeModal={closeModal}
-          toggleSubtotal={switchImportSubtotals}
+          toggleSubtotal={isEdit ? switchImportSubtotalsOnEdit : switchImportSubtotalsOnImport}
           importSubtotal={editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal}
           handleUnauthorized={this.handleUnauthorized}
           onDisplayAttrFormNamesUpdate={updateDisplayAttrForm}
@@ -123,7 +124,8 @@ AttributeSelectorNotConnected.propTypes = {
   t: PropTypes.func,
   isEdit: PropTypes.bool,
   importSubtotal: PropTypes.bool,
-  switchImportSubtotals: PropTypes.func,
+  switchImportSubtotalsOnImport: PropTypes.func,
+  switchImportSubtotalsOnEdit: PropTypes.func,
   displayAttrFormNames: PropTypes.string,
   chosenObject: PropTypes.shape({ id: PropTypes.string, }),
   editedObject: PropTypes.shape({
@@ -164,7 +166,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  switchImportSubtotals: navigationTreeActions.switchImportSubtotals,
+  switchImportSubtotalsOnImport: navigationTreeActions.switchImportSubtotalsOnImport,
+  switchImportSubtotalsOnEdit: popupActions.switchImportSubtotalsOnEdit,
   updateDisplayAttrForm: navigationTreeActions.updateDisplayAttrForm,
 };
 

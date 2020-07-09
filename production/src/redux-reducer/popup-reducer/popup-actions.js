@@ -3,6 +3,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 export const RESET_STATE = 'POPUP_RESET_STATE';
 export const SET_REPORT_N_FILTERS = 'POPUP_SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'POPUP_SET_PREPARED_REPORT';
+export const SWITCH_IMPORT_SUBTOTALS_ON_EDIT = 'POPUP_SWITCH_IMPORT_SUBTOTALS_ON_EDIT';
 
 class PopupActions {
   init = (
@@ -144,6 +145,8 @@ class PopupActions {
     }
     editedDossier.objectType = editedDossier.mstrObjectType;
   }
+
+  switchImportSubtotalsOnEdit = (data) => (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT, data });
 }
 
 export const popupActions = new PopupActions();

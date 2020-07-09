@@ -8,7 +8,7 @@ export const CHANGE_SEARCHING = 'NAV_TREE_CHANGE_SEARCHING';
 export const REQUEST_DOSSIER_OPEN = 'NAV_TREE_REQUEST_DOSSIER_OPEN';
 export const CANCEL_DOSSIER_OPEN = 'NAV_TREE_CANCEL_DOSSIER_OPEN';
 export const SWITCH_MY_LIBRARY = 'NAV_TREE_SWITCH_MY_LIBRARY';
-export const SWITCH_IMPORT_SUBTOTALS = 'NAV_TREE_SWITCH_IMPORT_SUBTOTALS';
+export const SWITCH_IMPORT_SUBTOTALS_ON_IMPORT = 'NAV_TREE_SWITCH_IMPORT_SUBTOTALS_ON_IMPORT';
 export const CLEAR_PROMPTS_ANSWERS = 'NAV_TREE_CLEAR_PROMPTS_ANSWERS';
 export const UPDATE_DISPLAY_ATTR_FORM = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM';
 export const CHANGE_FILTER = 'NAV_TREE_CHANGE_FILTER';
@@ -60,8 +60,8 @@ function switchMyLibrary() {
   return (dispatch) => dispatch({ type: SWITCH_MY_LIBRARY });
 }
 
-function switchImportSubtotals(data) {
-  return (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS, data });
+function switchImportSubtotalsOnImport(data) {
+  return (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, data });
 }
 
 function clearPromptAnswers() {
@@ -106,7 +106,7 @@ export const navigationTreeActions = {
   requestDossierOpen,
   cancelDossierOpen,
   switchMyLibrary,
-  switchImportSubtotals,
+  switchImportSubtotalsOnImport,
   clearPromptAnswers,
   updateDisplayAttrForm,
   changeFilter,
