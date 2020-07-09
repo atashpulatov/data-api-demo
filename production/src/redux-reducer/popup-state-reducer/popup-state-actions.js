@@ -31,6 +31,7 @@ class PopupStateActions {
   }
 
   onClearPopupState = () => (dispatch) => {
+    dispatch(navigationTreeActions.changeSearching(''));
     dispatch({ type: CLEAR_POPUP_STATE, });
   }
 

@@ -14,6 +14,8 @@ export const UPDATE_DISPLAY_ATTR_FORM = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM';
 export const CHANGE_FILTER = 'NAV_TREE_CHANGE_FILTER';
 export const CLEAR_SELECTION = 'NAV_TREE_CLEAR_SELECTION';
 export const LOAD_BROWSING_STATE_CONST = 'NAV_TREE_LOAD_BROWSING_STATE_CONST';
+export const CLEAR_FILTER = 'NAV_TREE_CLEAR_FILTER';
+export const SAVE_MY_LIBRARY_OWNERS = 'NAV_TREE_SAVE_MY_LIBRARY_OWNERS';
 
 function selectObject(data) {
   return (dispatch) => dispatch({
@@ -82,6 +84,17 @@ function loadBrowsingState(data) {
   return (dispatch) => dispatch({ type: LOAD_BROWSING_STATE_CONST, data });
 }
 
+function clearFilter() {
+  return (dispatch) => dispatch({ type: CLEAR_FILTER });
+}
+
+function saveMyLibraryOwners(objects) {
+  return {
+    type: SAVE_MY_LIBRARY_OWNERS,
+    data: objects.map(item => item.ownerId),
+  };
+}
+
 export const navigationTreeActions = {
   selectObject,
   requestImport,
@@ -99,4 +112,6 @@ export const navigationTreeActions = {
   changeFilter,
   clearSelection,
   loadBrowsingState,
+  clearFilter,
+  saveMyLibraryOwners
 };
