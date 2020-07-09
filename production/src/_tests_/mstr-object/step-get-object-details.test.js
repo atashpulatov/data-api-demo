@@ -17,6 +17,7 @@ describe('StepGetObjectDetails', () => {
     certifiedInfo: { mockedProp: 'some certified info' },
     dateModified: { mockedProp: 'some date modified' },
     owner: { mockedProp: 'some owner' },
+    name: 'testName',
   };
 
   beforeAll(() => {
@@ -83,7 +84,7 @@ describe('StepGetObjectDetails', () => {
     await stepGetObjectDetails.getObjectDetails(objectDataMock, operationDataMock);
     // then
     expect(objectDetailsMethods.populateDefinition).toBeCalled();
-    expect(objectDetailsMethods.populateDefinition).toBeCalledWith(objectDataMock, mockedPromptsAnswer);
+    expect(objectDetailsMethods.populateDefinition).toBeCalledWith(objectDataMock, mockedPromptsAnswer, 'testName');
   });
 
   it('should combine objectData with details if no prompts present and call updateObject', async () => {
