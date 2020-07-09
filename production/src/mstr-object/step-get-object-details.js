@@ -1,9 +1,7 @@
 import { mstrObjectRestService } from './mstr-object-rest-service';
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import operationErrorHandler from '../operation/operation-error-handler';
-import {
-  getObjectPrompts, populateDetails, populateDefinition, getFilters
-} from './get-object-details-methods';
+import { getObjectPrompts, populateDetails, populateDefinition } from './get-object-details-methods';
 
 class StepGetObjectDetails {
   /**
@@ -40,9 +38,6 @@ class StepGetObjectDetails {
 
       const details = populateDetails(ancestors, certifiedInfo, dateModified, owner);
       const definition = populateDefinition(objectData, prompts, name);
-      if (definition) {
-        definition.filters = getFilters(operationData);
-      }
 
       const updatedObject = {
         ...objectData,
