@@ -2,8 +2,8 @@ import {
   SELECT_OBJECT, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING,
   REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
   CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER,
-  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_SELECTION, CLEAR_FILTER,
-  SAVE_MY_LIBRARY_OWNERS
+  LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_SELECTION,
+  CLEAR_FILTER, SAVE_MY_LIBRARY_OWNERS
 } from './navigation-tree-actions';
 import { CLEAR_CACHE, REFRESH_CACHE } from '../cache-reducer/cache-actions';
 import { calculateNumberOfFiltersActive } from '../../helpers/numberOfFiltersActive';
@@ -154,7 +154,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.importSubtotal = data;
       return newState;
     }
-    case UPDATE_DISPLAY_ATTR_FORM: {
+    case UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT: {
       const newState = { ...state };
       newState.displayAttrFormNames = data;
       return newState;

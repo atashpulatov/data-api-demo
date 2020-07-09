@@ -3,9 +3,9 @@ import {
   SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT,
   SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
-  CLEAR_EDITED_OBJECT
+  CLEAR_EDITED_OBJECT,
+  UPDATE_DISPLAY_ATTR_FORM_ON_EDIT
 } from './popup-actions';
-import { UPDATE_DISPLAY_ATTR_FORM } from '../navigation-tree-reducer/navigation-tree-actions';
 
 export const initialState = {};
 
@@ -46,7 +46,7 @@ export const popupReducer = (state = initialState, action) => {
         editedObject: !state.editedObject ? state.editedObject : editedObject
       };
     }
-    case UPDATE_DISPLAY_ATTR_FORM: {
+    case UPDATE_DISPLAY_ATTR_FORM_ON_EDIT: {
       if (state.editedObject) {
         const editedObject = { ...state.editedObject };
         if (editedObject.displayAttrFormNames) {

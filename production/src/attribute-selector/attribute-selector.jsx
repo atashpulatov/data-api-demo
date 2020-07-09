@@ -42,10 +42,11 @@ export class AttributeSelectorNotConnected extends Component {
 
   render() {
     const {
-      title, session, displayAttrFormNames, updateDisplayAttrForm, isEdit,
+      title, session, displayAttrFormNames, isEdit,
       triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
       resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal,
-      switchImportSubtotalsOnImport, switchImportSubtotalsOnEdit
+      switchImportSubtotalsOnImport, switchImportSubtotalsOnEdit,
+      updateDisplayAttrFormOnImport, updateDisplayAttrFormOnEdit,
     } = this.props;
     const locale = officeContext.getOffice().context.displayLanguage;
     const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
@@ -70,7 +71,7 @@ export class AttributeSelectorNotConnected extends Component {
           toggleSubtotal={isEdit ? switchImportSubtotalsOnEdit : switchImportSubtotalsOnImport}
           importSubtotal={editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal}
           handleUnauthorized={this.handleUnauthorized}
-          onDisplayAttrFormNamesUpdate={updateDisplayAttrForm}
+          onDisplayAttrFormNamesUpdate={isEdit ? updateDisplayAttrFormOnEdit : updateDisplayAttrFormOnImport}
           displayAttrFormNames={displayAttrFormSet}
           displayAttrFormNamesOptions={officeProperties.displayAttrFormNamesOptions}
         />
@@ -118,7 +119,8 @@ AttributeSelectorNotConnected.propTypes = {
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,
   closeModal: PropTypes.func,
-  updateDisplayAttrForm: PropTypes.func,
+  updateDisplayAttrFormOnImport: PropTypes.func,
+  updateDisplayAttrFormOnEdit: PropTypes.func,
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func,
@@ -168,7 +170,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   switchImportSubtotalsOnImport: navigationTreeActions.switchImportSubtotalsOnImport,
   switchImportSubtotalsOnEdit: popupActions.switchImportSubtotalsOnEdit,
-  updateDisplayAttrForm: navigationTreeActions.updateDisplayAttrForm,
+  updateDisplayAttrFormOnImport: navigationTreeActions.updateDisplayAttrFormOnImport,
+  updateDisplayAttrFormOnEdit: popupActions.updateDisplayAttrFormOnEdit,
 };
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));

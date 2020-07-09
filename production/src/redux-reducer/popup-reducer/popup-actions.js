@@ -5,6 +5,7 @@ export const SET_REPORT_N_FILTERS = 'POPUP_SET_REPORT_N_FILTERS';
 export const SET_PREPARED_REPORT = 'POPUP_SET_PREPARED_REPORT';
 export const SWITCH_IMPORT_SUBTOTALS_ON_EDIT = 'POPUP_SWITCH_IMPORT_SUBTOTALS_ON_EDIT';
 export const CLEAR_EDITED_OBJECT = 'POPUP_CLEAR_EDITED_OBEJECT';
+export const UPDATE_DISPLAY_ATTR_FORM_ON_EDIT = 'POPUP_UPDATE_DISPLAY_ATTR_FORM_ON_EDIT';
 
 class PopupActions {
   init = (
@@ -151,6 +152,10 @@ class PopupActions {
 
   clearEditedObject = () => (dispatch) => {
     dispatch({ type: CLEAR_EDITED_OBJECT });
+  }
+
+  updateDisplayAttrFormOnEdit = (data) => (dispatch) => {
+    dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_EDIT, data });
   }
 }
 

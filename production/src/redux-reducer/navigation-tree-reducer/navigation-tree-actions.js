@@ -10,7 +10,7 @@ export const CANCEL_DOSSIER_OPEN = 'NAV_TREE_CANCEL_DOSSIER_OPEN';
 export const SWITCH_MY_LIBRARY = 'NAV_TREE_SWITCH_MY_LIBRARY';
 export const SWITCH_IMPORT_SUBTOTALS_ON_IMPORT = 'NAV_TREE_SWITCH_IMPORT_SUBTOTALS_ON_IMPORT';
 export const CLEAR_PROMPTS_ANSWERS = 'NAV_TREE_CLEAR_PROMPTS_ANSWERS';
-export const UPDATE_DISPLAY_ATTR_FORM = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM';
+export const UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT';
 export const CHANGE_FILTER = 'NAV_TREE_CHANGE_FILTER';
 export const CLEAR_SELECTION = 'NAV_TREE_CLEAR_SELECTION';
 export const LOAD_BROWSING_STATE_CONST = 'NAV_TREE_LOAD_BROWSING_STATE_CONST';
@@ -68,8 +68,8 @@ function clearPromptAnswers() {
   return (dispatch) => dispatch({ type: CLEAR_PROMPTS_ANSWERS });
 }
 
-function updateDisplayAttrForm(data) {
-  return (dispatch) => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM, data });
+function updateDisplayAttrFormOnImport(data) {
+  return (dispatch) => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
 }
 
 function changeFilter(data) {
@@ -108,7 +108,7 @@ export const navigationTreeActions = {
   switchMyLibrary,
   switchImportSubtotalsOnImport,
   clearPromptAnswers,
-  updateDisplayAttrForm,
+  updateDisplayAttrFormOnImport,
   changeFilter,
   clearSelection,
   loadBrowsingState,
