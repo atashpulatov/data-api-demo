@@ -51,6 +51,25 @@ class ScriptInjectionHelper {
    * @returns {Boolean} True if document is login page, false otherwise.
    */
   isLoginPage = (document) => document && document.URL.includes('embeddedLogin.jsp');
+
+  /**
+   * Watches container for child addition and runs callback in case an iframe was added
+   * @param {*} container
+   * @param {*} callback
+   */
+  watchForIframeAddition = (container, callback) => {
+    const config = { childList: true };
+    const onMutation = (mutationList) => {
+      for (const mutation of mutationList) {
+        if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
+          const iframe = mutation.addedNodes[0];
+          callback(iframe);
+        }
+      }
+    };
+    const observer = new MutationObserver(onMutation);
+    observer.observe(container, config);
+  }
 }
 
 const scriptInjectionHelper = new ScriptInjectionHelper();
