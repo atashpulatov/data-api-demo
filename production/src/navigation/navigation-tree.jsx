@@ -184,8 +184,8 @@ export class NavigationTreeNotConnected extends Component {
         popupHelper.handlePopupErrors(error);
       }
     }
-      if (!myLibrary && objectId) {
-        this.setState({ isPublishedInEnvironment: cubeStatus });
+    if (!myLibrary && objectId) {
+      this.setState({ isPublishedInEnvironment: cubeStatus });
     }
     selectObject({
       chosenObjectId: objectId,
