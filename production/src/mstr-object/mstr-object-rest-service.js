@@ -439,6 +439,13 @@ class MstrObjectRestService {
       .then((res) => res.body);
   }
 
+  /**
+   * Gets the prompts applied to the object's instance.
+   * 
+   * @param {String} objectId Id of an object
+   * @param {String} projectId Id of a project
+   * @param {String} instanceId Id of an instance
+   */
   getObjectPrompts = (objectId, projectId, instanceId) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;

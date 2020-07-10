@@ -55,8 +55,10 @@ function prepareObjectData(objectData, instanceDefinition) {
     columns: objectData.previousTableDimensions.columns,
   };
   if (instanceDefinition.mstrTable.crosstabHeaderDimensions) {
-    objectData.details.excelTableSize.rows += instanceDefinition.mstrTable.crosstabHeaderDimensions.columnsY;
-    objectData.details.excelTableSize.columns += instanceDefinition.mstrTable.crosstabHeaderDimensions.rowsX;
+    const { details: { excelTableSize } } = objectData;
+    const { mstrTable: { crosstabHeaderDimensions: { columnsY, rowsX } } } = instanceDefinition;
+    excelTableSize.rows += columnsY;
+    excelTableSize.columns += rowsX;
   }
   objectData.refreshDate = Date.now();
   delete objectData.preparedInstanceId;
