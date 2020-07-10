@@ -299,14 +299,10 @@ NavigationTreeNotConnected.propTypes = {
 
 NavigationTreeNotConnected.defaultProps = { t: (text) => text };
 
-export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer }) => {
-  const object = officeReducer.preLoadReport;
-  return {
-    ...navigationTree,
-    title: object ? object.name : undefined,
-    cache: cacheReducer,
-  };
-};
+export const mapStateToProps = ({ navigationTree, cacheReducer }) => ({
+  ...navigationTree,
+  cache: cacheReducer,
+});
 
 const mapActionsToProps = {
   ...actions,
