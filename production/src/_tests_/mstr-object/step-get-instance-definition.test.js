@@ -9,6 +9,7 @@ import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-
 import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -83,7 +84,7 @@ describe('StepGetInstanceDefinition', () => {
       mstrObjectType: {},
       isPrompted: isPromptedParam,
     }, {
-      stepsQueue: ['step_0', undefined],
+      stepsQueue: ['step_0', 'step_1', undefined],
     });
 
     // then
@@ -96,7 +97,7 @@ describe('StepGetInstanceDefinition', () => {
         mstrObjectType: {},
         isPrompted: isPromptedParam,
       }, {
-        stepsQueue: ['step_0', undefined],
+        stepsQueue: ['step_0', 'step_1', undefined],
       }, new Error(expectedErrorMsg));
     }
 
@@ -152,7 +153,7 @@ describe('StepGetInstanceDefinition', () => {
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-    jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
+    jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
       .mockReturnValue({
         envUrl: 'envUrlTest',
         username: 'usernameTest',
@@ -185,6 +186,8 @@ describe('StepGetInstanceDefinition', () => {
           isCrosstab: 'isCrossTabTest',
           manipulationsXML: manipulationsXMLParam,
         },
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
         rows: 'rowsModifyInstanceWithPromptTest',
       });
 
@@ -211,7 +214,7 @@ describe('StepGetInstanceDefinition', () => {
     // when
     await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
       operationType: 'operationTypeTest',
-      stepsQueue: ['step_0', nextStepParam],
+      stepsQueue: ['step_0', 'step_1', nextStepParam],
     });
 
     // then
@@ -239,7 +242,7 @@ describe('StepGetInstanceDefinition', () => {
 
     expect(dossierInstanceDefinition.getVisualizationName).toBeCalledTimes(1);
     expect(dossierInstanceDefinition.getVisualizationName).toBeCalledWith(
-      { operationType: 'operationTypeTest', stepsQueue: ['step_0', nextStepParam] },
+      { operationType: 'operationTypeTest', stepsQueue: ['step_0', 'step_1', nextStepParam] },
       'nameTest',
       { mstrTable: { name: 'mstrTableNameDossierTest' } }
     );
@@ -272,6 +275,8 @@ describe('StepGetInstanceDefinition', () => {
     expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
       {
         mstrTable: expectedMstrTable,
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
         rows: 'rowsModifyInstanceWithPromptTest',
       },
       'crosstabHeaderDimensionsTest',
@@ -286,12 +291,14 @@ describe('StepGetInstanceDefinition', () => {
       );
     }
 
-    expect(officeApiHelper.getCurrentMstrContext).toBeCalledTimes(1);
+    expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
 
     expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
     expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       excelContext: 'excelContextTest',
       instanceDefinition: {
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
         mstrTable: expectedMstrTable,
         rows: 'rowsModifyInstanceWithPromptTest',
       },
@@ -315,6 +322,10 @@ describe('StepGetInstanceDefinition', () => {
       visualizationInfo: expectedVisualizationInfo,
       subtotalsInfo: {
         subtotalsAddresses: 'subtotalsAddressesTest',
+      },
+      definition: {
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
       },
       manipulationsXML: false,
     });
@@ -360,7 +371,7 @@ describe('StepGetInstanceDefinition', () => {
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-    jest.spyOn(officeApiHelper, 'getCurrentMstrContext')
+    jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
       .mockReturnValue({
         envUrl: 'envUrlTest',
         username: 'usernameTest',
@@ -388,6 +399,8 @@ describe('StepGetInstanceDefinition', () => {
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
         isCrosstab: 'isCrossTabTest',
       },
+      attributes: ['some attributes'],
+      metrics: ['some metrics'],
       rows: 'rowsModifyInstanceWithPromptTest',
     });
 
@@ -402,7 +415,7 @@ describe('StepGetInstanceDefinition', () => {
     // when
     await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
       operationType: 'operationTypeTest',
-      stepsQueue: ['step_0', nextStepParam],
+      stepsQueue: ['step_0', 'step_1', nextStepParam],
     });
 
     // then
@@ -451,6 +464,8 @@ describe('StepGetInstanceDefinition', () => {
           isCrosstab: 'isCrossTabTest',
         },
         rows: 'rowsModifyInstanceWithPromptTest',
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
       },
       'crosstabHeaderDimensionsTest',
       'subtotalsAddressesTest',
@@ -464,12 +479,14 @@ describe('StepGetInstanceDefinition', () => {
       );
     }
 
-    expect(officeApiHelper.getCurrentMstrContext).toBeCalledTimes(1);
+    expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
 
     expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
     expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       excelContext: 'excelContextTest',
       instanceDefinition: {
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
@@ -499,6 +516,10 @@ describe('StepGetInstanceDefinition', () => {
       visualizationInfo: expectedVisualizationInfo,
       subtotalsInfo: {
         subtotalsAddresses: 'subtotalsAddressesTest',
+      },
+      definition: {
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
       },
       manipulationsXML: false,
     });

@@ -60,6 +60,26 @@ class AuthenticationHelper {
         }
       });
   }
+
+  /**
+   * Gets username and environment URL from Redux store.
+   *
+   * @return {Object} Object containing username and envUrl (environment URL)
+   */
+  getCurrentMstrContext = () => {
+    const { envUrl, username } = this.reduxStore.getState().sessionReducer;
+    return { envUrl, username };
+  };
+
+  /**
+   * Gets full username from Redux store.
+   *
+   * @return {String} Text with mstr user fullname
+   */
+  getCurrentMstrUserFullName = () => {
+    const { userFullName } = this.reduxStore.getState().sessionReducer;
+    return userFullName;
+  }
 }
 
 export const authenticationHelper = new AuthenticationHelper();

@@ -33,12 +33,25 @@ function parseInstanceDefinition(res, attrforms) {
   if (data.paging.total === 0) { throw new Error(NO_DATA_RETURNED); }
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
+
+  const { grid } = body.definition;
+  const attributes = grid.columns.filter(({ type }) => type === 'attribute')
+    .concat(grid.rows.filter(({ type }) => type === 'attribute'))
+    .map(({ id, name }) => ({ id, name }));
+
+  const metrics = grid.columns.filter(({ type }) => type === 'templateMetrics')
+    .concat(grid.rows.filter(({ type }) => type === 'templateMetrics'))
+    .flatMap(({ elements }) => elements)
+    .map(({ id, name }) => ({ id, name }));
+
   return {
     instanceId,
     rows,
     columns,
     mstrTable,
     manipulationsXML: internal,
+    attributes,
+    metrics,
   };
 }
 
@@ -412,8 +425,31 @@ class MstrObjectRestService {
 
   getObjectInfo = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();
+    if (mstrObjectType.type === 'undefined') {
+      mstrObjectType.type = 55;
+    }
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/objects/${objectId}?type=${mstrObjectType.type}`;
+
+    return request
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => res.body);
+  }
+
+  /**
+   * Gets the prompts applied to the object's instance.
+   *
+   * @param {String} objectId Id of an object
+   * @param {String} projectId Id of a project
+   * @param {String} instanceId Id of an instance
+   */
+  getObjectPrompts = (objectId, projectId, instanceId) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts`;
 
     return request
       .get(fullPath)

@@ -5,9 +5,10 @@ import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import dossierInstanceDefinition from './dossier-instance-definition';
+import mstrObjectEnum from '../mstr-object-type-enum';
+import { authenticationHelper } from '../../authentication/authentication-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
-import mstrObjectEnum from '../mstr-object-type-enum';
 
 class StepGetInstanceDefinition {
   /**
@@ -31,7 +32,7 @@ class StepGetInstanceDefinition {
     try {
       console.group('Importing data performance');
       console.time('Total');
-      const nextStep = operationData.stepsQueue[1];
+      const futureStep = operationData.stepsQueue[2];
 
       const {
         objectWorkingId,
@@ -41,6 +42,7 @@ class StepGetInstanceDefinition {
         bindId,
         mstrObjectType,
         isPrompted,
+        definition,
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
 
@@ -64,7 +66,8 @@ class StepGetInstanceDefinition {
 
       this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsInfo.subtotalsAddresses);
 
-      if (nextStep === GET_OFFICE_TABLE_IMPORT) {
+      // FIXME: below flow should not be part of this step
+      if (futureStep === GET_OFFICE_TABLE_IMPORT) {
         startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
       }
       if (insertNewWorksheet) {
@@ -75,7 +78,7 @@ class StepGetInstanceDefinition {
       const { mstrTable } = instanceDefinition;
       const updatedObject = {
         objectWorkingId,
-        envUrl: officeApiHelper.getCurrentMstrContext(),
+        envUrl: authenticationHelper.getCurrentMstrContext(),
         body,
         visualizationInfo: visualizationInfo || false,
         name: name || mstrTable.name,
@@ -83,6 +86,11 @@ class StepGetInstanceDefinition {
         isCrosstab: mstrTable.isCrosstab,
         subtotalsInfo,
         manipulationsXML: instanceDefinition.manipulationsXML || false,
+        definition: {
+          ...definition,
+          attributes: instanceDefinition.attributes,
+          metrics: instanceDefinition.metrics,
+        },
       };
 
       const updatedOperation = {
