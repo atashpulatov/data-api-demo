@@ -1,10 +1,12 @@
 import {
   SELECT_OBJECT, START_IMPORT,
   CHANGE_SEARCHING, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
-  REQUEST_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER
-} from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { navigationTree } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import { CLEAR_CACHE, REFRESH_CACHE } from '../../redux-reducer/cache-reducer/cache-actions';
+  REQUEST_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_SORTING,
+  CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
+  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, LOAD_BROWSING_STATE_CONST,
+  SAVE_MY_LIBRARY_OWNERS, CLEAR_SELECTION, CLEAR_FILTER
+} from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTree, initialState } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
 describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of SELECT_OBJECT action for myLibrary', () => {
@@ -25,7 +27,6 @@ describe('NavigationTree Reducer', () => {
     };
     // when
     const newState = navigationTree({ myLibrary: true }, action);
-
     // then
     expect(newState.chosenLibraryElement).toEqual(action.data);
     expect(newState.chosenObjectId).toEqual(action.data.chosenObjectId);
@@ -47,10 +48,8 @@ describe('NavigationTree Reducer', () => {
         chosenLibraryDossier: null,
       },
     };
-
     // when
     const newState = navigationTree({}, action);
-
     // then
     expect(newState.chosenEnvElement).toEqual(action.data);
     expect(newState.chosenObjectId).toEqual(action.data.chosenObjectId);
@@ -62,10 +61,8 @@ describe('NavigationTree Reducer', () => {
       type: SELECT_OBJECT,
       data: { chosenObjectId: 'something' },
     };
-
     // when
     const newState = navigationTree({}, action);
-
     // then
     expect(newState).toEqual({
       chosenObjectId: 'something',
@@ -81,35 +78,38 @@ describe('NavigationTree Reducer', () => {
     });
   });
 
+  it('should return new proper state in case of SAVE_MY_LIBRARY_OWNERS action', () => {
+    // given
+    const action = {
+      type: SAVE_MY_LIBRARY_OWNERS,
+      data: ['123A', '456B', '789C'],
+    };
+    const state = {
+      someOtherProperty: {}
+    };
+    const expectedMyLibraryOwners = {
+      '123A': true,
+      '456B': true,
+      '789C': true,
+    };
+    // when
+    const newState = navigationTree(state, action);
+    // then
+    expect(newState.myLibraryOwners).toEqual(expectedMyLibraryOwners);
+    expect(newState.someOtherProperty).toEqual(state.someOtherProperty);
+  });
+
   it('should set request import flag within state on REQUEST_IMPORT action', () => {
     // given
     const action = {
       type: REQUEST_IMPORT,
       data: {},
     };
-
     // when
     const newState = navigationTree({}, action);
-
     // then
     expect(newState.importRequested).toBe(true);
   });
-
-  // TODO: once we have workflow with report instance id this may be needed
-  // it('should set request import flag and instance on REQUEST_IMPORT action', () => {
-  //   // given
-  //   const action = {
-  //     type: REQUEST_IMPORT,
-  //     data: { instanceId: 'instance', },
-  //   };
-
-  //   // when
-  //   const newState = navigationTree({}, action);
-
-  //   // then
-  //   expect(newState.importRequested).toBe(true);
-  //   expect(newState.instanceId).toBe(action.data.instanceId);
-  // });
 
   it('should set request import flag on REQUEST_IMPORT action', () => {
     // given
@@ -117,10 +117,8 @@ describe('NavigationTree Reducer', () => {
       type: REQUEST_IMPORT,
       data: { dossierData: 'whatever', },
     };
-
     // when
     const newState = navigationTree({}, action);
-
     // then
     expect(newState.importRequested).toBe(true);
     expect(newState.dossierData).not.toBeDefined();
@@ -132,51 +130,53 @@ describe('NavigationTree Reducer', () => {
       type: PROMPTS_ANSWERED,
       data: { dossierData: 'whatever', },
     };
-
     // when
     const newState = navigationTree({}, action);
-
     // then
     expect(newState.importRequested).toBeFalsy();
     expect(newState.dossierData).toBe(action.data.dossierData);
     expect(newState.isPrompted).toBeTruthy();
   });
 
-  it('should return new proper state in case of START_IMPORT action', () => {
+  it('should return new proper state in case of CLEAR_PROMPTS_ANSWERS action', () => {
     // given
-    const action = { type: START_IMPORT, };
-
+    const action = { type: CLEAR_PROMPTS_ANSWERS, };
     // when
-    const newState = navigationTree({}, action);
-
+    const newState = navigationTree({ promptsAnswers: ['some', 'some'], dossierData: {} }, action);
     // then
-    expect(newState.importRequested).toBe(false);
+    expect(newState.promptsAnswers).toEqual(null);
+    expect(newState.dossierData).toEqual(null);
   });
 
   it('should return new proper state in case of CANCEL_REQUEST_IMPORT action', () => {
     // given
     const action = { type: CANCEL_REQUEST_IMPORT, };
-
     // when
     const newState = navigationTree({ importRequested: true }, action);
-
     // then
     expect(newState.importRequested).toBeFalsy();
   });
 
-  // it('should return new proper state in case of CHANGE_SORTING action', () => {
-  //   // given
-  //   const action = {
-  //     type: CHANGE_SORTING,
-  //     data: 'mock',
-  //   };
+  it('should return new proper state in case of START_IMPORT action', () => {
+    // given
+    const action = { type: START_IMPORT, };
+    // when
+    const newState = navigationTree({}, action);
+    // then
+    expect(newState.importRequested).toBe(false);
+  });
 
-  //   // when
-  //   const newState = navigationTree({}, action);
-
-  //   // then
-  //   expect(newState.sorter).toEqual(action.data);
-  // });
+  it('should return new proper state in case of CHANGE_SORTING action', () => {
+    // given
+    const action = {
+      type: CHANGE_SORTING,
+      data: 'mock',
+    };
+    // when
+    const newState = navigationTree({}, action);
+    // then
+    expect(newState.sorter).toEqual(action.data);
+  });
 
   it('should return new proper state in case of CHANGE_SEARCHING action', () => {
     // given
@@ -184,10 +184,8 @@ describe('NavigationTree Reducer', () => {
       type: CHANGE_SEARCHING,
       data: 'mock',
     };
-
     // when
     const newState = navigationTree({}, action);
-
     // then
     expect(newState.searchText).toEqual(action.data);
   });
@@ -195,57 +193,19 @@ describe('NavigationTree Reducer', () => {
   it('should return new proper state in case of REQUEST_DOSSIER_OPEN action', () => {
     // given
     const action = { type: REQUEST_DOSSIER_OPEN, };
-
     // when
     const newState = navigationTree({}, action);
-
     // then
     expect(newState.dossierOpenRequested).toEqual(true);
   });
 
-  it('should return new proper state in case of CLEAR_CACHE action', () => {
+  it('should return new proper state in case of CANCEL_DOSSIER_OPEN action', () => {
     // given
-    const action = { type: CLEAR_CACHE, };
-
+    const action = { type: CANCEL_DOSSIER_OPEN, };
     // when
     const newState = navigationTree({}, action);
-
     // then
-    // expect(newState.sorter).toEqual({});
-    expect(newState.chosenObjectId).toEqual(null);
-    expect(newState.chosenProjectId).toEqual(null);
-    expect(newState.chosenSubtype).toEqual(null);
-    expect(newState.chosenObjectName).toEqual('Prepare Data');
-  });
-
-  it('should return new proper state in case of REFRESH_CACHE action', () => {
-    // given
-    const action = { type: REFRESH_CACHE, data: true };
-
-    // when
-    const newState = navigationTree({}, action);
-
-    // then
-    // expect(newState.sorter).toEqual({});
-    expect(newState.chosenObjectId).toEqual(null);
-    expect(newState.chosenProjectId).toEqual(null);
-    expect(newState.chosenSubtype).toEqual(null);
-    expect(newState.chosenObjectName).toEqual('Prepare Data');
-  });
-
-  it('should not return new proper state in case of REFRESH_CACHE action', () => {
-    // given
-    const action = { type: REFRESH_CACHE, };
-
-    // when
-    const newState = navigationTree({}, action);
-
-    // then
-    // expect(newState.sorter).not.toEqual({});
-    expect(newState.chosenObjectId).not.toEqual(null);
-    expect(newState.chosenProjectId).not.toEqual(null);
-    expect(newState.chosenSubtype).not.toEqual(null);
-    expect(newState.chosenObjectName).not.toEqual('Prepare Data');
+    expect(newState.dossierOpenRequested).toEqual(false);
   });
 
   it('should return new proper state in case of SWITCH_MY_LIBRARY action - from false to true', () => {
@@ -260,6 +220,26 @@ describe('NavigationTree Reducer', () => {
     // then
     expect(newState.myLibrary).toEqual(true);
     expect(newState.chosenObjectId).toEqual('1');
+  });
+
+  it('should return new proper state in case of SWITCH_IMPORT_SUBTOTALS_ON_IMPORT action', () => {
+    // given
+    const testData = { import: 'true' };
+    const action = { type: SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, data: testData };
+    // when
+    const newState = navigationTree({}, action);
+    // then
+    expect(newState.importSubtotal).toEqual(testData);
+  });
+
+  it('should return new proper state in case of UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT action', () => {
+    // given
+    const testData = { import: 'true' };
+    const action = { type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data: testData };
+    // when
+    const newState = navigationTree({}, action);
+    // then
+    expect(newState.displayAttrFormNames).toEqual(testData);
   });
 
   it('should return new proper state in case of CHANGE_FILTER action - it should update myLibraryFilter', () => {
@@ -290,5 +270,65 @@ describe('NavigationTree Reducer', () => {
     const newState = navigationTree({ myLibrary: false, myLibraryOwners: {} }, action);
     // then
     expect(newState.envFilter).toEqual({ ...testData, shouldClear: false });
+  });
+
+  it('should return new proper state in case of LOAD_BROWSING_STATE_CONST action', () => {
+    // given
+    const action = {
+      type: LOAD_BROWSING_STATE_CONST,
+      data: {
+        envFilter: { test: 'test' },
+        myLibraryFilter: {},
+      },
+    };
+    // when
+    const newState = navigationTree({}, action);
+    // then
+    expect(newState.envFilter).toEqual({ test: 'test' });
+    expect(newState.myLibraryFilter).toEqual({ });
+  });
+
+  it('should return new proper state in case of CLEAR_SELECTION action', () => {
+    // given
+    const action = { type: CLEAR_SELECTION };
+    const state = {
+      chosenObjectId: '123',
+      chosenProjectId: '456',
+      chosenSubtype: 12345,
+      chosenObjectName: 'name',
+      chosenEnvElement: { test: 'test' },
+      dossierOpenRequested: true,
+      chosenLibraryElement: { someValue: '' },
+      chosenLibraryDossier: '123123',
+    };
+    // when
+    const newState = navigationTree(state, action);
+    // then
+    expect(newState.chosenObjectId).toEqual(initialState.chosenObjectId);
+    expect(newState.chosenProjectId).toEqual(initialState.chosenProjectId);
+    expect(newState.chosenSubtype).toEqual(initialState.chosenSubtype);
+    expect(newState.chosenObjectName).toEqual(initialState.chosenObjectName);
+    expect(newState.chosenEnvElement).toEqual(initialState.chosenEnvElement);
+    expect(newState.dossierOpenRequested).toEqual(initialState.dossierOpenRequested);
+    expect(newState.chosenLibraryElement).toEqual(initialState.chosenLibraryElement);
+    expect(newState.chosenLibraryDossier).toEqual(initialState.chosenLibraryDossier);
+  });
+
+  it('should return new proper state in case of CLEAR_FILTER action', () => {
+    // given
+    const action = { type: CLEAR_FILTER };
+    const state = {
+      envFilter: { test: 'test' },
+      myLibraryFilter: {},
+      myLibrary: false,
+      someOtherProperty: {}
+    };
+    // when
+    const newState = navigationTree(state, action);
+    // then
+    expect(newState.envFilter).toEqual({});
+    expect(newState.myLibraryFilter).toEqual({});
+    expect(newState.myLibrary).toEqual(true);
+    expect(newState.someOtherProperty).toEqual(state.someOtherProperty);
   });
 });

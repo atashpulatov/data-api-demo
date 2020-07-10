@@ -9,7 +9,7 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../error/constants';
-
+import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
@@ -42,9 +42,11 @@ export class AttributeSelectorNotConnected extends Component {
 
   render() {
     const {
-      title, session, displayAttrFormNames, updateDisplayAttrForm, isEdit,
+      title, session, displayAttrFormNames, isEdit,
       triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
-      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal, switchImportSubtotals,
+      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal,
+      switchImportSubtotalsOnImport, switchImportSubtotalsOnEdit,
+      updateDisplayAttrFormOnImport, updateDisplayAttrFormOnEdit,
     } = this.props;
     const locale = officeContext.getOffice().context.displayLanguage;
     const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
@@ -66,10 +68,10 @@ export class AttributeSelectorNotConnected extends Component {
           withFolderTree={false}
           openModal={openModal}
           closeModal={closeModal}
-          toggleSubtotal={switchImportSubtotals}
+          toggleSubtotal={isEdit ? switchImportSubtotalsOnEdit : switchImportSubtotalsOnImport}
           importSubtotal={editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal}
           handleUnauthorized={this.handleUnauthorized}
-          onDisplayAttrFormNamesUpdate={updateDisplayAttrForm}
+          onDisplayAttrFormNamesUpdate={isEdit ? updateDisplayAttrFormOnEdit : updateDisplayAttrFormOnImport}
           displayAttrFormNames={displayAttrFormSet}
           displayAttrFormNamesOptions={officeProperties.displayAttrFormNamesOptions}
         />
@@ -117,13 +119,15 @@ AttributeSelectorNotConnected.propTypes = {
   resetTriggerUpdate: PropTypes.func,
   attributesSelectedChange: PropTypes.func,
   closeModal: PropTypes.func,
-  updateDisplayAttrForm: PropTypes.func,
+  updateDisplayAttrFormOnImport: PropTypes.func,
+  updateDisplayAttrFormOnEdit: PropTypes.func,
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
   t: PropTypes.func,
   isEdit: PropTypes.bool,
   importSubtotal: PropTypes.bool,
-  switchImportSubtotals: PropTypes.func,
+  switchImportSubtotalsOnImport: PropTypes.func,
+  switchImportSubtotalsOnEdit: PropTypes.func,
   displayAttrFormNames: PropTypes.string,
   chosenObject: PropTypes.shape({ id: PropTypes.string, }),
   editedObject: PropTypes.shape({
@@ -164,8 +168,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  switchImportSubtotals: navigationTreeActions.switchImportSubtotals,
-  updateDisplayAttrForm: navigationTreeActions.updateDisplayAttrForm,
+  switchImportSubtotalsOnImport: navigationTreeActions.switchImportSubtotalsOnImport,
+  switchImportSubtotalsOnEdit: popupActions.switchImportSubtotalsOnEdit,
+  updateDisplayAttrFormOnImport: navigationTreeActions.updateDisplayAttrFormOnImport,
+  updateDisplayAttrFormOnEdit: popupActions.updateDisplayAttrFormOnEdit,
 };
 
 export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));
