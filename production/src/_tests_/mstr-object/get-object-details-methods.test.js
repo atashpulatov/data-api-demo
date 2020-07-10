@@ -4,13 +4,13 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 
 describe('Get Object Details Methods', () => {
   describe('getObjectPrompts', () => {
-    it('should not return anything if there are no promptAnswers', async () => {
+    it('should return falsy if there are no promptAnswers', async () => {
       // given
       const mockedObjectDataWithoutPrompts = {};
       // when
       const objectPrompts = await getObjectPrompts(mockedObjectDataWithoutPrompts);
       // then
-      expect(objectPrompts).toBeUndefined();
+      expect(objectPrompts).toBeFalsy();
     });
     it('should call mstrObjectRestService to get object prompts with provided arguments', async () => {
       // given
