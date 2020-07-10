@@ -38,7 +38,6 @@ export const PopupButtonsNotConnected = ({
   handleSecondary,
   handleCancel,
   handleBack,
-  loading,
   disableActiveActions,
   onPreviewClick,
   t = (text) => text,
@@ -57,13 +56,11 @@ export const PopupButtonsNotConnected = ({
       {handleBack && <BackButton handleBack={handleBack} t={t} />}
       {(!hideSecondary && !handleSecondary) && (
         <DataPreviewButton
-          loading={loading}
           onPreviewClick={onPreviewClick}
           disableReason={disableReason}
           t={t} />
       )}
       <ImportButton
-        loading={loading}
         handleSecondary={handleSecondary}
         handleOk={handleOk}
         disableReason={disableReasonForImport}
@@ -72,7 +69,6 @@ export const PopupButtonsNotConnected = ({
       />
       {!hideSecondary && handleSecondary && (
         <PrepareDataButton
-          loading={loading}
           handleSecondary={handleSecondary}
           disableReason={disableReason}
           t={t} />
@@ -87,7 +83,6 @@ PopupButtonsNotConnected.propTypes = {
   handleSecondary: PropTypes.func,
   handleCancel: PropTypes.func,
   t: PropTypes.func,
-  loading: PropTypes.bool,
   handleBack: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.func

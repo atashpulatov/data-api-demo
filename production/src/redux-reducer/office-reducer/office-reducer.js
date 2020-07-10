@@ -1,7 +1,6 @@
 import { officeProperties } from './office-properties';
 
 const initialState = {
-  loading: false,
   shouldRenderSettings: false,
   isConfirm: false,
   isSettings: false,
@@ -11,17 +10,11 @@ const initialState = {
 
 export const officeReducer = (state = initialState, action) => {
   switch (action.type) {
-    case officeProperties.actions.popupShown:
-      return onPopupShown(state);
+    case officeProperties.actions.showPopup:
+      return onShowPopup(state);
 
-    case officeProperties.actions.popupHidden:
-      return onPopupHidden(state);
-
-    case officeProperties.actions.startLoading:
-      return onStartLoading(state);
-
-    case officeProperties.actions.stopLoading:
-      return onStopLoading(state);
+    case officeProperties.actions.hidePopup:
+      return onHidePopup(state);
 
     case officeProperties.actions.toggleSecuredFlag:
       return toggleSecuredFlag(action, state);
@@ -50,27 +43,14 @@ export const officeReducer = (state = initialState, action) => {
   return state;
 };
 
-function onStartLoading(state) {
-  return {
-    ...state,
-    loading: true,
-  };
-}
-function onStopLoading(state) {
-  return {
-    ...state,
-    loading: false,
-  };
-}
-
-function onPopupShown(state) {
+function onShowPopup(state) {
   return {
     ...state,
     popupOpen: true,
   };
 }
 
-function onPopupHidden(state) {
+function onHidePopup(state) {
   return {
     ...state,
     popupOpen: false,

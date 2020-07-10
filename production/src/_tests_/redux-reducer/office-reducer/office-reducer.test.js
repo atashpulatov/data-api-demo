@@ -8,7 +8,6 @@ describe('officeReducer', () => {
   beforeEach(() => {
     // default state should be empty
     expect(officeStore.getState()).toEqual({
-      loading: false,
       shouldRenderSettings: false,
       isSettings: false,
       isConfirm: false,
@@ -17,34 +16,24 @@ describe('officeReducer', () => {
     });
   });
 
-  it('should set popupOpen to true onPopupShown', () => {
+  it('should set popupOpen to true on showPopup', () => {
     // given
     const prevState = { popupOpen: false };
-    const action = { type: officeProperties.actions.popupShown };
+    const action = { type: officeProperties.actions.showPopup };
     // when
     const newState = officeReducer(prevState, action);
     // then
     expect(newState.popupOpen).toBe(true);
   });
 
-  it('should set popupOpen to false onPopupHidden', () => {
+  it('should set popupOpen to false on hidePopup', () => {
     // given
     const prevState = { popupOpen: true };
-    const action = { type: officeProperties.actions.popupHidden };
+    const action = { type: officeProperties.actions.hidePopup };
     // when
     const newState = officeReducer(prevState, action);
     // then
     expect(newState.popupOpen).toBe(false);
-  });
-
-  it('should dispatch proper action when startLoading', () => {
-    // given
-    const prevState = { loading: false };
-    const action = { type: officeProperties.actions.startLoading };
-    // when
-    const newState = officeReducer(prevState, action);
-    // then
-    expect(newState.loading).toBe(true);
   });
 
   it('should return new proper state in case of toggleSecuredFlag action', () => {

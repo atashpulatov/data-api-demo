@@ -1,4 +1,4 @@
-import { setRangeTakenPopup } from '../../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
 class OfficeReducerHelper {
   init = (reduxStore) => {
@@ -67,7 +67,7 @@ class OfficeReducerHelper {
   * @param {Object} popupData Contains data about popup to be displayed
   */
   dispayPopupOnSidePanel = (popupData) => {
-    this.reduxStore.dispatch(setRangeTakenPopup(popupData));
+    this.reduxStore.dispatch(officeActions.setRangeTakenPopup(popupData));
   }
 }
 

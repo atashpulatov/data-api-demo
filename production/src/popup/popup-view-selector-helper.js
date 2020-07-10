@@ -9,9 +9,7 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
 class PopupViewSelectorHelper {
   setPopupType = (props, popupType) => {
-    const {
-      importRequested, dossierOpenRequested, loading, isPrompted
-    } = props;
+    const { importRequested, dossierOpenRequested, isPrompted } = props;
     if (
       (importRequested && !isPrompted)
       || (importRequested && this.arePromptsAnswered(props))
@@ -27,7 +25,7 @@ class PopupViewSelectorHelper {
       }
     } else if (this.promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
       return PopupTypeEnum.promptsWindow;
-    } else if ((dossierOpenRequested) && (!loading)) {
+    } else if (dossierOpenRequested) {
       // open dossier without prompts
       return PopupTypeEnum.dossierWindow;
     }
@@ -196,7 +194,6 @@ class PopupViewSelectorHelper {
         message.body = this.createBody(selectedAttributes, selectedMetrics, selectedFilters, false);
       }
     }
-    props.startLoading();
     props.startImport();
     popupHelper.officeMessageParent(message);
   }

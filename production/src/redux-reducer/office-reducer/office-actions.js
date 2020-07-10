@@ -1,52 +1,56 @@
 import { officeProperties } from './office-properties';
 import officeStoreHelper from '../../office/store/office-store-helper';
 
-export function toggleSecuredFlag(isSecured) {
+const showPopup = () => ({ type: officeProperties.actions.showPopup });
+
+const hidePopup = () => ({ type: officeProperties.actions.hidePopup });
+
+const toggleSecuredFlag = (isSecured) => (dispatch) => {
   officeStoreHelper.setFileSecuredFlag(isSecured);
-  return (dispatch) => {
-    dispatch({
-      type: officeProperties.actions.toggleSecuredFlag,
-      isSecured,
-    });
-  };
-}
+  dispatch({
+    type: officeProperties.actions.toggleSecuredFlag,
+    isSecured,
+  });
+};
 
-export function toggleIsSettingsFlag(isSettings) {
-  return (dispatch) => {
-    dispatch({
-      type: officeProperties.actions.toggleIsSettingsFlag,
-      isSettings,
-    });
-  };
-}
+const toggleIsSettingsFlag = (isSettings) => (dispatch) => {
+  dispatch({
+    type: officeProperties.actions.toggleIsSettingsFlag,
+    isSettings,
+  });
+};
 
-export function toggleIsConfirmFlag(isConfirm) {
-  return (dispatch) => {
-    dispatch({ type: officeProperties.actions.toggleIsConfirmFlag, isConfirm });
-  };
-}
+const toggleIsConfirmFlag = (isConfirm) => (dispatch) => {
+  dispatch({ type: officeProperties.actions.toggleIsConfirmFlag, isConfirm });
+};
 
-export function toggleIsClearDataFailedFlag(isClearDataFailed) {
+const toggleIsClearDataFailedFlag = (isClearDataFailed) => (dispatch) => {
   officeStoreHelper.setIsClearDataFailed(isClearDataFailed);
-  return (dispatch) => {
-    dispatch({
-      type: officeProperties.actions.toggleIsClearDataFailedFlag,
-      isClearDataFailed,
-    });
-  };
-}
+  dispatch({
+    type: officeProperties.actions.toggleIsClearDataFailedFlag,
+    isClearDataFailed,
+  });
+};
 
-export function toggleRenderSettingsFlag() {
-  return (dispatch) => {
-    dispatch({ type: officeProperties.actions.toggleRenderSettingsFlag, });
-  };
-}
+const toggleRenderSettingsFlag = () => (dispatch) => {
+  dispatch({ type: officeProperties.actions.toggleRenderSettingsFlag, });
+};
 
-export const setRangeTakenPopup = (popupData) => ({
+const setRangeTakenPopup = (popupData) => ({
   type: officeProperties.actions.setRangeTakenPopup,
   popupData,
 });
 
-export const clearSidePanelPopupData = () => ({ type: officeProperties.actions.setRangeTakenPopup });
+const clearSidePanelPopupData = () => ({ type: officeProperties.actions.setRangeTakenPopup });
 
-export const actions = { toggleSecuredFlag, };
+export const officeActions = {
+  showPopup,
+  hidePopup,
+  toggleSecuredFlag,
+  toggleIsSettingsFlag,
+  toggleIsConfirmFlag,
+  toggleIsClearDataFailedFlag,
+  toggleRenderSettingsFlag,
+  setRangeTakenPopup,
+  clearSidePanelPopupData
+};

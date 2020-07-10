@@ -17,7 +17,6 @@ export const initialState = {
   chosenSubtype: null,
   chosenObjectName: DEFAULT_PROJECT_NAME,
   isPrompted: false,
-  loading: false,
   sorter: {},
   searchText: '',
   importRequested: false,
@@ -121,7 +120,6 @@ export const navigationTree = (state = initialState, action) => {
     case START_IMPORT: {
       const newState = { ...state };
       newState.importRequested = false;
-      newState.loading = true;
       return newState;
     }
     case CHANGE_SORTING: {
@@ -182,7 +180,7 @@ export const navigationTree = (state = initialState, action) => {
     case LOAD_BROWSING_STATE_CONST: {
       return {
         ...initialState,
-        ...action.browsingState,
+        ...data,
       };
     }
     case CLEAR_CACHE:

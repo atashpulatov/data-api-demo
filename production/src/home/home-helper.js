@@ -3,7 +3,7 @@ import { officeApiHelper } from '../office/api/office-api-helper';
 import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
-import { toggleIsConfirmFlag } from '../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 
 export class HomeHelper {
   init = (reduxStore, sessionActions, sessionHelper) => {
@@ -58,7 +58,7 @@ export class HomeHelper {
   secureData = async (objects) => {
     try {
       const { dispatch } = this.reduxStore;
-      toggleIsConfirmFlag(false)(dispatch);
+      officeActions.toggleIsConfirmFlag(false)(dispatch);
 
       setTimeout(async () => {
         const excelContext = await officeApiHelper.getExcelContext();

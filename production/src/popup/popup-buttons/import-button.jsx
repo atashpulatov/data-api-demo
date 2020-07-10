@@ -4,15 +4,14 @@ import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
 
 export const ImportButton = ({
-  disableReason, handleSecondary, handleOk, loading, t, useImportAsRunButton
+  disableReason, handleSecondary, handleOk, t, useImportAsRunButton
 }) => {
   const internalButton = (
     <Button
       id={useImportAsRunButton ? 'run' : 'import'}
       type={!handleSecondary ? 'primary' : ''}
       onClick={handleOk}
-      loading={loading}
-      disabled={!!disableReason || loading}>
+      disabled={!!disableReason}>
       {t(useImportAsRunButton ? 'Run' : 'Import')}
     </Button>
   );
@@ -30,7 +29,6 @@ ImportButton.propTypes = {
   handleSecondary: PropTypes.func,
   handleOk: PropTypes.func,
   t: PropTypes.func,
-  loading: PropTypes.bool,
   disableReason: PropTypes.string,
   useImportAsRunButton: PropTypes.bool,
 };
