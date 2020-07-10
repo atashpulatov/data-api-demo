@@ -10,9 +10,7 @@ class StepSaveObjectInExcel {
   /**
    * Saves information about object in Excel settings and modifies object.
    *
-   * Adds refreshDate field to object.
-   * Adds previousTableDimensions field to object.
-   * Removes preparedInstanceId field from object.
+   * Prepares object data to save.
    *
    * This function is subscribed as one of the operation steps with the key SAVE_OBJECT_IN_EXCEL,
    * therefore should be called only via operation bus.
@@ -24,13 +22,9 @@ class StepSaveObjectInExcel {
     try {
       const { instanceDefinition } = operationData;
 
-      objectData.previousTableDimensions = { columns: instanceDefinition.columns };
-      objectData.refreshDate = Date.now();
-
-      delete objectData.preparedInstanceId;
+      prepareObjectData(objectData, instanceDefinition);
 
       await officeStoreObject.saveObjectsInExcelStore();
-
       operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
@@ -44,3 +38,28 @@ class StepSaveObjectInExcel {
 
 const stepSaveObjectInExcel = new StepSaveObjectInExcel();
 export default stepSaveObjectInExcel;
+
+/**
+ * Adds refreshDate field to object.
+ * Adds previousTableDimensions field to object.
+ * Adds excelTableSize field to object's details.
+ * Removes preparedInstanceId field from object.
+ *
+ * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
+ * @param {Object} instanceDefinition Object containing information about MSTR object
+ */
+function prepareObjectData(objectData, instanceDefinition) {
+  objectData.previousTableDimensions = { rows: instanceDefinition.rows, columns: instanceDefinition.columns };
+  objectData.details.excelTableSize = {
+    rows: objectData.previousTableDimensions.rows + 1,
+    columns: objectData.previousTableDimensions.columns,
+  };
+  if (instanceDefinition.mstrTable.crosstabHeaderDimensions) {
+    const { details: { excelTableSize } } = objectData;
+    const { mstrTable: { crosstabHeaderDimensions: { columnsY, rowsX } } } = instanceDefinition;
+    excelTableSize.rows += columnsY;
+    excelTableSize.columns += rowsX;
+  }
+  objectData.refreshDate = Date.now();
+  delete objectData.preparedInstanceId;
+}

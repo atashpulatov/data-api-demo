@@ -23,15 +23,16 @@ import { popupHelper } from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
-const { getCubeStatus, isPrompted } = mstrObjectRestService;
+const { isPrompted, getCubeInfo } = mstrObjectRestService;
 const checkIfPrompted = isPrompted;
+const isPublishedInMyLibrary = true;
 
 export class NavigationTreeNotConnected extends Component {
   constructor(props) {
     super(props);
     this.state = {
       previewDisplay: false,
-      isPublished: true,
+      isPublishedInEnvironment: true,
     };
     this.indexedDBSupport = DB.getIndexedDBSupport();
   }
@@ -174,16 +175,18 @@ export class NavigationTreeNotConnected extends Component {
       objectId = targetId;
     }
 
-    let cubeStatus = true;
+    let isCubePublished = true;
     if (mstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
       try {
-        cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
+        const cubeInfo = await getCubeInfo(objectId, projectId);
+        isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
       } catch (error) {
         popupHelper.handlePopupErrors(error);
       }
     }
-    this.setState({ isPublished: cubeStatus });
-
+    if (!myLibrary && objectId) {
+      this.setState({ isPublishedInEnvironment: isCubePublished });
+    }
     selectObject({
       chosenObjectId: objectId,
       chosenObjectName: objectName,
@@ -206,9 +209,10 @@ export class NavigationTreeNotConnected extends Component {
       changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, changeFilter, t,
       i18n, numberOfFiltersActive,
     } = this.props;
-    const { previewDisplay, isPublished } = this.state;
+    const { previewDisplay, isPublishedInEnvironment } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
+    const disableActiveActions = myLibrary ? (!isPublishedInMyLibrary) : (!isPublishedInEnvironment);
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">
@@ -244,13 +248,13 @@ export class NavigationTreeNotConnected extends Component {
           filter={myLibrary ? myLibraryFilter : envFilter}
           isLoading={cacheLoading} />
         <PopupButtons
-          disableActiveActions={!chosenObjectId || !isPublished}
+          disableActiveActions={!chosenObjectId || disableActiveActions}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
           disableSecondary={mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
-          isPublished={isPublished}
+          isPublished={myLibrary ? isPublishedInMyLibrary : isPublishedInEnvironment}
         />
       </div>
     );

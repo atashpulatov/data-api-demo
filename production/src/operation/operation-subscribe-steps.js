@@ -1,5 +1,5 @@
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
-import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
+import stepGetObjectDetails from '../mstr-object/step-get-object-details';
 import stepApplyFormatting from '../office/format/step-apply-formatting';
 import stepFormatTable from '../office/format/step-format-table';
 import stepFetchInsertDataIntoExcel from '../office/import/step-fetch-insert-data-into-excel';
@@ -27,6 +27,7 @@ import {
   FORMAT_OFFICE_TABLE,
   FORMAT_SUBTOTALS,
   GET_INSTANCE_DEFINITION,
+  GET_OBJECT_DETAILS,
   GET_OFFICE_TABLE_EDIT_REFRESH,
   GET_OFFICE_TABLE_IMPORT,
   MODIFY_OBJECT,
@@ -45,6 +46,7 @@ import {
   HIGHLIGHT_OBJECT,
 } from './operation-steps';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
+import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -55,6 +57,7 @@ class SubscribeSteps {
     operationBus.subscribe(BACKUP_OBJECT_DATA, stepBackupObjectData.backupObjectData);
 
     operationBus.subscribe(GET_INSTANCE_DEFINITION, stepGetInstanceDefinition.getInstanceDefinition);
+    operationBus.subscribe(GET_OBJECT_DETAILS, stepGetObjectDetails.getObjectDetails);
 
     operationBus.subscribe(GET_OFFICE_TABLE_IMPORT, stepGetOfficeTableImport.getOfficeTableImport);
     operationBus.subscribe(GET_OFFICE_TABLE_EDIT_REFRESH, stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh);
@@ -75,6 +78,7 @@ class SubscribeSteps {
 
     operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
     operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
+    // FIXME: below step isn't used anywhere. TO BE REMOVED
     operationBus.subscribe(REMOVE_OBJECT_STORE, stepRemoveObjectStore.removeObjectStore);
 
     operationBus.subscribe(HIGHLIGHT_OBJECT, stepHighlightObject.highlightObject);

@@ -29,24 +29,48 @@ describe('StepSaveObjectInExcel', () => {
 
   it('saveObject should handle an error', async () => {
     // given
-    jest.spyOn(console, 'error');
+    const objectDataMock = {
+      objectWorkingId: 'objectWorkingIdTest',
+      preparedInstanceId: 'preparedInstanceIdTest',
+      details: {},
+    };
+    const instanceDefinition = {
+      rows: 5,
+      columns: 'columnsTest',
+      mstrTable: {},
+    };
 
+    jest.spyOn(console, 'error');
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation(() => {
       throw new Error('errorTest');
     });
-
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepSaveObjectInExcel.saveObject({}, { instanceDefinition: { columns: 'columnsTest' } });
+    await stepSaveObjectInExcel.saveObject(objectDataMock, {
+      instanceDefinition
+    });
 
     // then
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
 
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledWith(
-      { previousTableDimensions: { columns: 'columnsTest' }, refreshDate: 'nowTest' },
-      { instanceDefinition: { columns: 'columnsTest' } },
+      {
+        ...objectDataMock,
+        previousTableDimensions: {
+          rows: 5,
+          columns: 'columnsTest'
+        },
+        details: {
+          excelTableSize: {
+            rows: 6,
+            columns: 'columnsTest'
+          }
+        },
+        refreshDate: 'nowTest'
+      },
+      { instanceDefinition },
       new Error('errorTest')
     );
 
@@ -59,6 +83,7 @@ describe('StepSaveObjectInExcel', () => {
     const objectDataMock = {
       objectWorkingId: 'objectWorkingIdTest',
       preparedInstanceId: 'preparedInstanceIdTest',
+      details: {},
     };
 
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation();
@@ -66,10 +91,27 @@ describe('StepSaveObjectInExcel', () => {
     jest.spyOn(operationStepDispatcher, 'completeSaveObjectInExcel').mockImplementation();
 
     // when
-    await stepSaveObjectInExcel.saveObject(objectDataMock, { instanceDefinition: { columns: 'columnsTest' } });
+    await stepSaveObjectInExcel.saveObject(objectDataMock, {
+      instanceDefinition: {
+        rows: 5,
+        columns: 'columnsTest',
+        mstrTable: {},
+      }
+    });
 
     // then
-    expect(objectDataMock.previousTableDimensions).toEqual({ columns: 'columnsTest' });
+    expect(objectDataMock.previousTableDimensions).toEqual(
+      {
+        rows: 5,
+        columns: 'columnsTest'
+      }
+    );
+    expect(objectDataMock.details.excelTableSize).toEqual(
+      {
+        rows: 6,
+        columns: 'columnsTest'
+      }
+    );
     expect(objectDataMock.refreshDate).toEqual('nowTest');
     expect(objectDataMock).not.toHaveProperty('preparedInstanceId');
 

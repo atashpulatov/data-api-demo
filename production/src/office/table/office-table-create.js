@@ -78,7 +78,7 @@ class OfficeTableCreate {
       newOfficeTableName,
       mstrTable,
       worksheet,
-      excelContext
+      excelContext,
     });
   };
 
