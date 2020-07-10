@@ -6,6 +6,7 @@ import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
@@ -48,11 +49,10 @@ export class NavigationTreeNotConnected extends Component {
 
   componentDidUpdate() {
     const {
-      sorter, mstrObjectType, myLibrary, myLibraryFilter, envFilter
+      sorter, myLibrary, myLibraryFilter, envFilter
     } = this.props;
     const propsToSave = {
       sorter,
-      mstrObjectType,
       myLibrary,
       envFilter,
       myLibraryFilter,
@@ -197,10 +197,16 @@ export class NavigationTreeNotConnected extends Component {
     });
   };
 
+  onSwitch = () => {
+    const { myLibrary, switchMyLibrary, restoreSelection } = this.props;
+    restoreSelection({ nextMyLibraryState: !myLibrary });
+    switchMyLibrary();
+  }
+
   render() {
     const {
       chosenObjectId, chosenProjectId, changeSorting, chosenLibraryDossier, searchText, sorter,
-      changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t,
+      changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, changeFilter, t,
       i18n, numberOfFiltersActive,
     } = this.props;
     const { previewDisplay, isPublishedInEnvironment } = this.state;
@@ -222,7 +228,7 @@ export class NavigationTreeNotConnected extends Component {
             filter={myLibrary ? myLibraryFilter : envFilter}
             searchText={searchText}
             onRefresh={() => this.refresh()}
-            onSwitch={switchMyLibrary}
+            onSwitch={this.onSwitch}
             numberOfFiltersActive={numberOfFiltersActive} />
         </div>
         <ObjectTable
@@ -293,18 +299,21 @@ NavigationTreeNotConnected.propTypes = {
   changeFilter: PropTypes.func,
   t: PropTypes.func,
   numberOfFiltersActive: PropTypes.number,
+  restoreSelection: PropTypes.func,
 };
 
 
 NavigationTreeNotConnected.defaultProps = { t: (text) => text };
 
-export const mapStateToProps = ({ navigationTree, cacheReducer }) => ({
+export const mapStateToProps = ({ navigationTree, filterReducer, cacheReducer }) => ({
   ...navigationTree,
+  ...filterReducer,
   cache: cacheReducer,
 });
 
 const mapActionsToProps = {
   ...navigationTreeActions,
+  ...filterActions,
   connectToDB: connectToCache,
   resetDBState: refreshCacheState,
   fetchObjectsFromNetwork: fetchObjectsFallback,

@@ -7,8 +7,8 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
-import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
@@ -21,17 +21,18 @@ class PopupController {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
 
-  init = (reduxStore, sessionActions, popupAction) => {
+  init = (reduxStore, sessionActions, popupActions) => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
-    this.popupAction = popupAction;
+    this.popupActions = popupActions;
   }
 
   runPopupNavigation = async () => {
     // DE159475; clear sorting before popup display until it's fixed in object-table
-    this.reduxStore.dispatch(navigationTreeActions.changeSorting({}));
+    this.reduxStore.dispatch(filterActions.changeSorting({}));
     this.reduxStore.dispatch(popupStateActions.onClearPopupState());
     this.reduxStore.dispatch(navigationTreeActions.clearSelection());
+    this.reduxStore.dispatch(this.popupActions.resetState());
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
@@ -80,7 +81,7 @@ class PopupController {
             // Event received on dialog close
             Office.EventType.DialogEventReceived,
             () => {
-              this.reduxStore.dispatch(popupActions.resetState());
+              this.reduxStore.dispatch(this.popupActions.resetState());
               this.reduxStore.dispatch(officeActions.hidePopup());
             }
           );
@@ -95,7 +96,7 @@ class PopupController {
     const { message } = arg;
     const response = JSON.parse(message);
     if (response.command === selectorProperties.commandBrowseUpdate) {
-      this.reduxStore.dispatch(navigationTreeActions.loadBrowsingState(response.body));
+      this.reduxStore.dispatch(filterActions.loadBrowsingState(response.body));
       return;
     }
     try {
@@ -140,7 +141,7 @@ class PopupController {
       console.error(error);
       errorService.handleError(error);
     } finally {
-      this.reduxStore.dispatch(popupActions.resetState());
+      this.reduxStore.dispatch(this.popupActions.resetState());
       if (response.command !== REFRESH_CACHE_COMMAND) {
         this.reduxStore.dispatch(officeActions.hidePopup());
       }

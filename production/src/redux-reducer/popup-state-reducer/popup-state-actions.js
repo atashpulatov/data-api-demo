@@ -1,4 +1,5 @@
 import { navigationTreeActions } from '../navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../filter-reducer/filter-actions';
 import { popupActions } from '../popup-reducer/popup-actions';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 
@@ -32,7 +33,7 @@ class PopupStateActions {
   }
 
   onClearPopupState = () => (dispatch) => {
-    dispatch(navigationTreeActions.changeSearching(''));
+    dispatch(filterActions.changeSearching(''));
     dispatch({ type: CLEAR_POPUP_STATE, });
   }
 

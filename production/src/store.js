@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import { sessionReducer } from './redux-reducer/session-reducer/session-reducer';
 import { navigationTree } from './redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { filterReducer } from './redux-reducer/filter-reducer/filter-reducer';
 import { officeReducer } from './redux-reducer/office-reducer/office-reducer';
 import { notificationReducer } from './redux-reducer/notification-reducer/notification-reducer';
 import { popupReducer } from './redux-reducer/popup-reducer/popup-reducer';
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   officeReducer,
   notificationReducer,
   navigationTree,
+  filterReducer,
   popupReducer,
   popupStateReducer,
   cacheReducer,
@@ -29,7 +31,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['officeReducer', 'notificationReducer', 'cacheReducer', 'operationReducer', 'objectReducer'],
+  blacklist: ['officeReducer', 'notificationReducer', 'navigationTree', 'cacheReducer', 'operationReducer', 'objectReducer'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 let middleWare;

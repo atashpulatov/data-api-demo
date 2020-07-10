@@ -3,6 +3,7 @@ import DB from '../../cache/cache-db';
 import i18next from '../../i18n';
 import { mstrListRestService } from '../../mstr-object/mstr-list-rest-service';
 import { navigationTreeActions } from '../navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../filter-reducer/filter-actions';
 
 export const CLEAR_CACHE = 'CLEAR_CACHE';
 export const REFRESH_CACHE = 'REFRESH_CACHE';
@@ -65,7 +66,7 @@ export function fetchObjects(dispatch, cache) {
     cache.updateData(LOADING_DB + MY_LIBRARY_DB_ID, true);
     getMyLibraryObjectList((objects) => {
       objects = addNestedPropertiesToObjects(objects, projects, i18next.language);
-      dispatch(navigationTreeActions.saveMyLibraryOwners(objects));
+      dispatch(filterActions.saveMyLibraryOwners(objects));
       cache.putData(MY_LIBRARY_DB_ID, objects);
     })
       .catch(console.error)
@@ -103,7 +104,7 @@ export function fetchObjectsFallback() {
       // My Library
       dispatch(myLibraryLoading(true));
       getMyLibraryObjectList((objects) => {
-        dispatch(navigationTreeActions.saveMyLibraryOwners(objects));
+        dispatch(filterActions.saveMyLibraryOwners(objects));
         objects = { data: addNestedPropertiesToObjects(objects, projects, i18next.language) };
         dispatch(addMyLibraryObjects(objects));
       })
@@ -169,7 +170,7 @@ export function dispatchCacheResults({ type, data, uuid }, dispatch) {
       dispatch(addProjects(data));
       break;
     case MY_LIBRARY_DB_ID:
-      dispatch(navigationTreeActions.saveMyLibraryOwners(data));
+      dispatch(filterActions.saveMyLibraryOwners(data));
       dispatch(addMyLibraryObjects({ data, uuid }));
       break;
     case ENV_LIBRARY_DB_ID:
