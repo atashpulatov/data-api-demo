@@ -478,17 +478,23 @@ class MstrObjectRestService {
       .then((res) => res.body && res.body.length);
   }
 
-  getCubeStatus = (objectId, projectId) => {
+  /**
+   * Function getting information about a cube from a certain project.
+   *
+   * @param {string} objectId
+   * @param {string} projectId
+   * @returns {Object} Contains info for cube that match objectId and projectId
+   */
+  getCubeInfo = (objectId, projectId) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-
-    const fullPath = `${envUrl}/cubes/${objectId}`;
+    const fullPath = `${envUrl}/cubes?id=${objectId}`;
     return request
-      .head(fullPath)
+      .get(fullPath)
       .set('x-mstr-authtoken', authToken)
       .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
-      .then((res) => res.headers['x-mstr-cubestatus']);
+      .then((res) => res.body.cubesInfos[0]);
   }
 
   rePromptDossier = (dossierId, instanceId, projectId) => {
