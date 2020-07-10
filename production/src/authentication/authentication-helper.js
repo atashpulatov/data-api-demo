@@ -67,8 +67,7 @@ class AuthenticationHelper {
    * @return {Object} Object containing username and envUrl (environment URL)
    */
   getCurrentMstrContext = () => {
-    const { envUrl } = this.reduxStore.getState().sessionReducer;
-    const { username } = this.reduxStore.getState().sessionReducer;
+    const { envUrl, username } = this.reduxStore.getState().sessionReducer;
     return { envUrl, username };
   };
 
