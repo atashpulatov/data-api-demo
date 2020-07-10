@@ -23,8 +23,8 @@ export const Popup = () => {
 
   return (
     <SessionExtendingWrapper id="popup-wrapper" onSessionExpire={closePopup}>
-      <PopupViewSelector />
       <InternetConnectionError />
+      <PopupViewSelector />
     </SessionExtendingWrapper>
   );
 };
