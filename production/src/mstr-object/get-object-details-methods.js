@@ -3,9 +3,9 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 
 export const getObjectPrompts = async (objectData, objectId, projectId, operationData) => {
   if (objectData.promptsAnswers) {
-    return (await mstrObjectRestService
-      .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId))
-      .map((prompt) => promptAnswerFunctionsMap[prompt.type](prompt));
+    const unfilteredPrompts = await mstrObjectRestService
+      .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId);
+    return unfilteredPrompts.map((prompt) => promptAnswerFunctionsMap[prompt.type](prompt));
   }
 };
 
@@ -17,13 +17,11 @@ const promptAnswerFunctionsMap = {
   VALUE: (prompt) => prompt.answers,
 };
 
-export const populateDefinition = (objectData, prompts, name) => {
-  return {
-    ...objectData.definition,
-    sourceName: name,
-    ...(prompts ? { prompts } : {}),
-  };
-};
+export const populateDefinition = (objectData, prompts, name) => ({
+  ...objectData.definition,
+  sourceName: name,
+  ...(prompts ? { prompts } : {}),
+});
 
 export const populateDetails = (ancestors, certifiedInfo, dateModified, owner) => ({
   ancestors,
