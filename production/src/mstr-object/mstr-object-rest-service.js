@@ -442,6 +442,13 @@ class MstrObjectRestService {
       .then((res) => res.body && res.body.length);
   }
 
+  /**
+   * Function getting information about a cube from a certain project.
+   *
+   * @param {string} objectId
+   * @param {string} projectId
+   * @returns {Object} Contains info for cube that match objectId and projectId
+   */
   getCubeInfo = (objectId, projectId) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
