@@ -84,7 +84,7 @@ describe('NavigationTree Reducer', () => {
       type: SAVE_MY_LIBRARY_OWNERS,
       data: ['123A', '456B', '789C'],
     };
-    const initialState = {
+    const state = {
       someOtherProperty: {}
     };
     const expectedMyLibraryOwners = {
@@ -93,10 +93,10 @@ describe('NavigationTree Reducer', () => {
       '789C': true,
     };
     // when
-    const newState = navigationTree(initialState, action);
+    const newState = navigationTree(state, action);
     // then
     expect(newState.myLibraryOwners).toEqual(expectedMyLibraryOwners);
-    expect(newState.someOtherProperty).toEqual(initialState.someOtherProperty);
+    expect(newState.someOtherProperty).toEqual(state.someOtherProperty);
   });
 
   it('should set request import flag within state on REQUEST_IMPORT action', () => {
