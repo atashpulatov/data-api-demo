@@ -48,6 +48,10 @@ class StepModifyObject {
         updatedObject.isEdit = false;
       }
 
+      if (objectEditedData.filterDetails) {
+        updatedObject.filters = objectEditedData.filterDetails;
+      }
+
       operationStepDispatcher.updateObject(updatedObject);
     }
     operationStepDispatcher.completeModifyObject(objectWorkingId);

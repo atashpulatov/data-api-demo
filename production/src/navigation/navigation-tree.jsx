@@ -21,7 +21,8 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { popupHelper } from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
-const { getCubeStatus, isPrompted } = mstrObjectRestService;
+
+const { isPrompted, getCubeInfo } = mstrObjectRestService;
 const checkIfPrompted = isPrompted;
 const isPublishedInMyLibrary = true;
 
@@ -174,16 +175,17 @@ export class NavigationTreeNotConnected extends Component {
       objectId = targetId;
     }
 
-    let cubeStatus = true;
+    let isCubePublished = true;
     if (mstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
       try {
-        cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
+        const cubeInfo = await getCubeInfo(objectId, projectId);
+        isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
       } catch (error) {
         popupHelper.handlePopupErrors(error);
       }
     }
     if (!myLibrary && objectId) {
-      this.setState({ isPublishedInEnvironment: cubeStatus });
+      this.setState({ isPublishedInEnvironment: isCubePublished });
     }
     selectObject({
       chosenObjectId: objectId,

@@ -66,17 +66,6 @@ class OfficeApiHelper {
   getExcelSessionStatus = async () => !!await this.getExcelContext();
 
   /**
-   * Gets username and environment URL from Redux store.
-   *
-   * @return {Object} Object containing username and envUrl (environment URL)
-   */
-  getCurrentMstrContext = () => {
-    const { envUrl } = this.reduxStore.getState().sessionReducer;
-    const { username } = this.reduxStore.getState().sessionReducer;
-    return { envUrl, username };
-  };
-
-  /**
    * Returns top left cell of selected range.
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
