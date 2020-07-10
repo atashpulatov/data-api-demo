@@ -75,6 +75,7 @@ describe('NavigationTree Reducer', () => {
     });
   });
 
+
   it('should set request import flag within state on REQUEST_IMPORT action', () => {
     // given
     const action = {
