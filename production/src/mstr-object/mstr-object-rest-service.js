@@ -441,7 +441,7 @@ class MstrObjectRestService {
 
   /**
    * Gets the prompts applied to the object's instance.
-   * 
+   *
    * @param {String} objectId Id of an object
    * @param {String} projectId Id of a project
    * @param {String} instanceId Id of an instance
