@@ -88,8 +88,6 @@ export const RightSidePanelNotConnected = ({
     ));
   }, [loadedObjects, notifications, operations]);
 
-  // console.log({ loadedObjects });
-
   /**
    * Wraps a function to be called when user clicks an action icon.
    *
@@ -125,8 +123,6 @@ export const RightSidePanelNotConnected = ({
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
-
-  console.log(loadedObjectsWrapped);
 
   return (
     <SidePanel
