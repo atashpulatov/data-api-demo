@@ -1,34 +1,22 @@
 import {
-  SELECT_FOLDER, SELECT_OBJECT, SET_DATA_SOURCE, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING, UPDATE_SCROLL,
-  UPDATE_SIZE, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
-  CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER, CHANGE_IS_PROMPTED,
+  SELECT_OBJECT, START_IMPORT, CHANGE_SORTING, CHANGE_SEARCHING,
+  REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED, CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN,
+  CANCEL_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER,
   LOAD_BROWSING_STATE_CONST, UPDATE_DISPLAY_ATTR_FORM, SWITCH_IMPORT_SUBTOTALS, CLEAR_SELECTION,
 } from './navigation-tree-actions';
-import { CLEAR_WINDOW } from '../popup-reducer/popup-actions';
-import {
-  CREATE_CACHE, CLEAR_CACHE, REFRESH_CACHE, SAVE_MY_LIBRARY_OWNERS
-} from '../cache-reducer/cache-actions';
+import { CLEAR_CACHE, REFRESH_CACHE, SAVE_MY_LIBRARY_OWNERS } from '../cache-reducer/cache-actions';
 import { sessionProperties } from '../session-reducer/session-properties';
 import { CLEAR_POPUP_STATE } from '../popup-state-reducer/popup-state-actions';
-import mstrObjectType from '../../mstr-object/mstr-object-type-enum';
 import { calculateNumberOfFiltersActive } from '../../helpers/numberOfFiltersActive';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
-export const DEFAULT_TYPE = 'Data';
 
 export const initialState = {
-  folder: null,
-  requestPerformed: false,
   chosenObjectId: null,
   chosenProjectId: null,
   chosenSubtype: null,
   chosenObjectName: DEFAULT_PROJECT_NAME,
-  chosenType: DEFAULT_TYPE,
   isPrompted: false,
-  dataSource: null,
-  loading: false,
-  scrollPosition: null,
-  pageSize: null,
   sorter: {},
   searchText: '',
   importRequested: false,
@@ -57,7 +45,6 @@ function cleanSelection(state) {
   newState.chosenProjectId = initialState.chosenProjectId;
   newState.chosenSubtype = initialState.chosenSubtype;
   newState.chosenObjectName = initialState.chosenObjectName;
-  newState.chosenType = initialState.chosenType;
   newState.chosenEnvElement = initialState.chosenEnvElement;
   newState.dossierOpenRequested = initialState.dossierOpenRequested;
   newState.chosenLibraryElement = initialState.chosenLibraryElement;
@@ -66,12 +53,10 @@ function cleanSelection(state) {
 }
 
 function makeSelection(newState, data) {
-  newState.requestPerformed = data.requestPerformed || false;
   newState.chosenObjectId = data.chosenObjectId || null;
   newState.chosenProjectId = data.chosenProjectId || null;
   newState.chosenSubtype = data.chosenSubtype || null;
   newState.chosenObjectName = data.chosenObjectName || DEFAULT_PROJECT_NAME;
-  newState.chosenType = (mstrObjectType.getMstrTypeBySubtype(data.chosenSubtype) || DEFAULT_TYPE);
   newState.mstrObjectType = data.mstrObjectType;
   newState.chosenChapterKey = data.chosenChapterKey || null;
   newState.chosenVisualizationKey = data.chosenVisualizationKey || null;
@@ -105,49 +90,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.myLibraryOwners = tempObject;
       return newState;
     }
-    case UPDATE_SCROLL: {
-      const newState = { ...state };
-      newState.scrollPosition = data;
-      return newState;
-    }
-    case CHANGE_IS_PROMPTED: {
-      const newState = { ...state };
-      newState.isPrompted = data;
-      return newState;
-    }
-    case UPDATE_SIZE: {
-      const newState = { ...state };
-      newState.pageSize = data;
-      return newState;
-    }
-    case SET_DATA_SOURCE: {
-      const newState = { ...state };
-      newState.dataSource = data;
-      return newState;
-    }
-    case SELECT_FOLDER: {
-      if (state.folder === data) {
-        return state;
-      }
-      const newState = { ...state };
-      newState.folder = data;
-      newState.chosenObjectId = null;
-      newState.chosenProjectId = null;
-      newState.chosenSubtype = null;
-      newState.chosenObjectName = DEFAULT_PROJECT_NAME;
-      newState.chosenType = DEFAULT_TYPE;
-      newState.scrollPosition = null;
-      newState.pageSize = null;
-      newState.sorter = {
-        columnKey: 'dateModified',
-        order: 'descend',
-      };
-      newState.searchText = '';
-      return newState;
-    }
-    case CLEAR_WINDOW: {
-      return { ...initialState };
-    }
+
     case REQUEST_IMPORT: {
       const newState = { ...state };
       newState.importRequested = true;
@@ -177,7 +120,6 @@ export const navigationTree = (state = initialState, action) => {
     case START_IMPORT: {
       const newState = { ...state };
       newState.importRequested = false;
-      newState.loading = true;
       return newState;
     }
     case CHANGE_SORTING: {
@@ -238,10 +180,9 @@ export const navigationTree = (state = initialState, action) => {
     case LOAD_BROWSING_STATE_CONST: {
       return {
         ...initialState,
-        ...action.browsingState,
+        ...data,
       };
     }
-    case CREATE_CACHE:
     case CLEAR_CACHE:
     case CLEAR_SELECTION:
       return cleanSelection(state);

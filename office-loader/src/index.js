@@ -124,7 +124,7 @@ function openOfficeDialog(url) {
     }
 
     return new Promise((resolve) => {
-        Office.context.ui.displayDialogAsync(url, { height: 85, width: 25 },
+        Office.context.ui.displayDialogAsync(url, { height: 75, width: 25 },
             function (asyncResult) {
                 popup = asyncResult.value;
                 popup.addEventHandler(Office.EventType.DialogEventReceived, processDialogEvent);

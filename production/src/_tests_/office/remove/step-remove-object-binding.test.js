@@ -1,6 +1,7 @@
 import stepRemoveObjectBinding from '../../../office/remove/step-remove-object-binding';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
+import officeStoreObject from '../../../office/store/office-store-object';
 
 const officeContextMock = {
   document: {
@@ -22,6 +23,8 @@ describe('StepRemoveObjectBinding', () => {
     jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue(officeContextMock);
 
     jest.spyOn(operationStepDispatcher, 'completeRemoveObjectBinding').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(officeStoreObject, 'removeObjectInExcelStore').mockImplementation();
 
     officeContextMock.document.bindings.releaseByIdAsync = jest.fn().mockImplementation(() => {
       throw new Error('errorTest');
@@ -39,6 +42,14 @@ describe('StepRemoveObjectBinding', () => {
 
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith('objectWorkingIdTest');
+
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(
+      { objectWorkingId: 'objectWorkingIdTest', doNotPersist: true }
+    );
+
+    expect(officeStoreObject.removeObjectInExcelStore).toBeCalledTimes(1);
+    expect(officeStoreObject.removeObjectInExcelStore).toBeCalledWith('objectWorkingIdTest');
   });
 
   it('removeObjectBinding should work as expected', async () => {
@@ -49,6 +60,9 @@ describe('StepRemoveObjectBinding', () => {
     jest.spyOn(officeApiHelper, 'getOfficeContext').mockReturnValue(officeContextMock);
 
     jest.spyOn(operationStepDispatcher, 'completeRemoveObjectBinding').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(officeStoreObject, 'removeObjectInExcelStore').mockImplementation();
+
 
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
@@ -67,5 +81,13 @@ describe('StepRemoveObjectBinding', () => {
 
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeRemoveObjectBinding).toBeCalledWith('objectWorkingIdTest');
+
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(
+      { objectWorkingId: 'objectWorkingIdTest', doNotPersist: true }
+    );
+
+    expect(officeStoreObject.removeObjectInExcelStore).toBeCalledTimes(1);
+    expect(officeStoreObject.removeObjectInExcelStore).toBeCalledWith('objectWorkingIdTest');
   });
 });

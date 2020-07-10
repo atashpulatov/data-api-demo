@@ -28,7 +28,7 @@ describe('F25931 - Duplicate object', () => {
     OfficeWorksheet.openNewSheet();
     PluginRightPanel.clickAddDataButton();
     browser.pause(3333);
-    PluginPopup.importObject(objectsList.datasets.datasetSQL);
+    PluginPopup.importAnyObject(objectsList.datasets.datasetSQL, 3);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
     browser.pause(1000);
 

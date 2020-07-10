@@ -1,13 +1,13 @@
-import { mstrObjectRestService } from './mstr-object-rest-service';
-import mstrObjectEnum from './mstr-object-type-enum';
-import { GET_OFFICE_TABLE_IMPORT } from '../operation/operation-steps';
-import { officeApiHelper } from '../office/api/office-api-helper';
-import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
-import { officeApiCrosstabHelper } from '../office/api/office-api-crosstab-helper';
-import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import { mstrObjectRestService } from '../mstr-object-rest-service';
+import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import dossierInstanceDefinition from './dossier-instance-definition';
-import operationErrorHandler from '../operation/operation-error-handler';
-import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../error/constants';
+import operationErrorHandler from '../../operation/operation-error-handler';
+import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
+import mstrObjectEnum from '../mstr-object-type-enum';
 
 class StepGetInstanceDefinition {
   /**
@@ -65,8 +65,12 @@ class StepGetInstanceDefinition {
       this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsInfo.subtotalsAddresses);
 
       if (nextStep === GET_OFFICE_TABLE_IMPORT) {
-        startCell = await this.getStartCell(insertNewWorksheet, excelContext);
+        startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
       }
+      if (insertNewWorksheet) {
+        delete objectData.insertNewWorksheet;
+      }
+
 
       const { mstrTable } = instanceDefinition;
       const updatedObject = {
@@ -185,14 +189,6 @@ class StepGetInstanceDefinition {
       ? officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;
     mstrTable.subtotalsInfo.subtotalsAddresses = subtotalsAddresses;
-  };
-
-  getStartCell = async (insertNewWorksheet, excelContext) => {
-    if (insertNewWorksheet) {
-      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
-    }
-
-    return officeApiHelper.getSelectedCell(excelContext);
   };
 }
 

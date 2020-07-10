@@ -1,5 +1,5 @@
 import stepBackupObjectData from '../office/backup-object-data/step-backup-object-data';
-import stepGetInstanceDefinition from '../mstr-object/step-get-instance-definition';
+import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepApplyFormatting from '../office/format/step-apply-formatting';
 import stepFormatTable from '../office/format/step-format-table';
 import stepFetchInsertDataIntoExcel from '../office/import/step-fetch-insert-data-into-excel';
@@ -75,6 +75,7 @@ class SubscribeSteps {
 
     operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
     operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
+    // FIXME: below step isn't used anywhere. TO BE REMOVED
     operationBus.subscribe(REMOVE_OBJECT_STORE, stepRemoveObjectStore.removeObjectStore);
 
     operationBus.subscribe(HIGHLIGHT_OBJECT, stepHighlightObject.highlightObject);

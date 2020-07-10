@@ -1,10 +1,13 @@
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
-import { errorService } from '../../error/error-handler';
 
 /* global Office */
 
 class OfficeStoreHelper {
+  init = (errorService) => {
+    this.errorService = errorService;
+  }
+
   /**
   * Return reference to Office settings that is required in order to use Office Api
   *
@@ -59,7 +62,7 @@ class OfficeStoreHelper {
       settings.set(propertyName, value);
       settings.saveAsync();
     } catch (error) {
-      errorService.handleError(error);
+      this.errorService.handleError(error);
     }
   };
 
@@ -74,7 +77,7 @@ class OfficeStoreHelper {
       const settings = this.getOfficeSettings();
       return settings.get(propertyName);
     } catch (error) {
-      errorService.handleError(error);
+      this.errorService.handleError(error);
     }
   };
 }

@@ -1,5 +1,4 @@
-import * as actions from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { navigationTreeActions, SELECT_OBJECT, CANCEL_REQUEST_IMPORT, START_IMPORT, CHANGE_SEARCHING, REQUEST_IMPORT, PROMPTS_ANSWERED, REQUEST_DOSSIER_OPEN, SWITCH_MY_LIBRARY, CHANGE_FILTER } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {
@@ -7,10 +6,10 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.selectObject(true)(listener);
+    navigationTreeActions.selectObject(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.SELECT_OBJECT, data: true });
+    expect(listener).toHaveBeenCalledWith({ type: SELECT_OBJECT, data: true });
   });
 
   it('should dispatch proper cancelImportRequest action', () => {
@@ -18,32 +17,10 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.cancelImportRequest()(listener);
+    navigationTreeActions.cancelImportRequest()(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.CANCEL_REQUEST_IMPORT });
-  });
-
-  it('should dispatch proper setDataSource action', () => {
-    // given
-    const listener = jest.fn();
-
-    // when
-    actions.setDataSource(true)(listener);
-
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.SET_DATA_SOURCE, data: true });
-  });
-
-  it('should dispatch proper selectFolder action', () => {
-    // given
-    const listener = jest.fn();
-
-    // when
-    actions.selectFolder(true)(listener);
-
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.SELECT_FOLDER, data: true });
+    expect(listener).toHaveBeenCalledWith({ type: CANCEL_REQUEST_IMPORT });
   });
 
   it('should dispatch proper startImport action', () => {
@@ -51,21 +28,12 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.startImport(true)(listener);
+    navigationTreeActions.startImport(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.START_IMPORT });
+    expect(listener).toHaveBeenCalledWith({ type: START_IMPORT });
   });
-  it('should dispatch proper startLoading action', () => {
-    // given
-    const listener = jest.fn();
 
-    // when
-    actions.startLoading(true)(listener);
-
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.startLoading });
-  });
   // it('should dispatch proper changeSorting action', () => {
   //   // given
   //   const listener = jest.fn();
@@ -81,30 +49,10 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.changeSearching(true)(listener);
+    navigationTreeActions.changeSearching(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_SEARCHING, data: true });
-  });
-  it('should dispatch proper updateScroll action', () => {
-    // given
-    const listener = jest.fn();
-
-    // when
-    actions.updateScroll(true)(listener);
-
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.UPDATE_SCROLL, data: true });
-  });
-  it('should dispatch proper updateSize action', () => {
-    // given
-    const listener = jest.fn();
-
-    // when
-    actions.updateSize(true)(listener);
-
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.UPDATE_SIZE, data: true });
+    expect(listener).toHaveBeenCalledWith({ type: CHANGE_SEARCHING, data: true });
   });
 
   it('should dispatch proper requestImport action', () => {
@@ -112,10 +60,10 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.requestImport()(listener);
+    navigationTreeActions.requestImport()(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.REQUEST_IMPORT });
+    expect(listener).toHaveBeenCalledWith({ type: REQUEST_IMPORT });
   });
 
   it('should dispatch proper promptsAnswered action', () => {
@@ -124,10 +72,10 @@ describe('NavigationTree Actions', () => {
     const data = 'whatever';
 
     // when
-    actions.promptsAnswered(data)(listener);
+    navigationTreeActions.promptsAnswered(data)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.PROMPTS_ANSWERED, data });
+    expect(listener).toHaveBeenCalledWith({ type: PROMPTS_ANSWERED, data });
   });
 
   it('should dispatch proper requestDossierOpen action', () => {
@@ -135,38 +83,19 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
 
     // when
-    actions.requestDossierOpen()(listener);
+    navigationTreeActions.requestDossierOpen()(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.REQUEST_DOSSIER_OPEN });
-  });
-
-  it('should dispatch proper changeIsPrompted action', () => {
-    // given
-    const listener = jest.fn();
-    const data = 'whatever';
-    // when
-    actions.changeIsPrompted(data)(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_IS_PROMPTED, data });
-  });
-
-  it('should dispatch proper stopLoading action', () => {
-    // given
-    const listener = jest.fn();
-    // when
-    actions.stopLoading()(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.stopLoading });
+    expect(listener).toHaveBeenCalledWith({ type: REQUEST_DOSSIER_OPEN });
   });
 
   it('should dispatch proper switchMyLibrary action', () => {
     // given
     const listener = jest.fn();
     // when
-    actions.switchMyLibrary()(listener);
+    navigationTreeActions.switchMyLibrary()(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.SWITCH_MY_LIBRARY });
+    expect(listener).toHaveBeenCalledWith({ type: SWITCH_MY_LIBRARY });
   });
 
   it('should dispatch proper changeFilter action', () => {
@@ -174,8 +103,8 @@ describe('NavigationTree Actions', () => {
     const listener = jest.fn();
     const data = 'whatever';
     // when
-    actions.changeFilter(data)(listener);
+    navigationTreeActions.changeFilter(data)(listener);
     // then
-    expect(listener).toHaveBeenCalledWith({ type: actions.CHANGE_FILTER, data });
+    expect(listener).toHaveBeenCalledWith({ type: CHANGE_FILTER, data });
   });
 });

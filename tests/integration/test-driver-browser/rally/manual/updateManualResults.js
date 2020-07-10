@@ -18,14 +18,15 @@ function mapTCtoBatchObject(testArray, verdict) {
  * @returns {Promise} Promise that will be resolved when the results are uploaded to Rally
  */
 async function updateRallyTCResult() {
-  const { passedTestCases, failedTestCases } = rallyConfig.manual;
+  const { passedTestCases, failedTestCases, lowPassTestCases } = rallyConfig.manual;
   if (passedTestCases.length === 0 && failedTestCases.length === 0) {
     console.log('Add the Test Cases for which you want to upload the results in rallyconfig.js');
     process.exit(1);
   }
   const passedTestCasesId = mapTCtoBatchObject(passedTestCases, 'Pass');
   const failedTestCasesId = mapTCtoBatchObject(failedTestCases, 'Fail');
-  const batch = await createManualBatchArray([...failedTestCasesId, ...passedTestCasesId]);
+  const lowPassTestCasesId = mapTCtoBatchObject(lowPassTestCases, 'Low pass');
+  const batch = await createManualBatchArray([...failedTestCasesId, ...passedTestCasesId, ...lowPassTestCasesId]);
 
   const options = {
     method: 'POST',

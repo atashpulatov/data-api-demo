@@ -1,5 +1,6 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../api/office-api-helper';
+import officeStoreObject from '../store/office-store-object';
 
 class StepRemoveObjectBinding {
   /**
@@ -22,6 +23,8 @@ class StepRemoveObjectBinding {
       console.error(error);
     }
     operationStepDispatcher.completeRemoveObjectBinding(objectWorkingId);
+    operationStepDispatcher.updateObject({ objectWorkingId, doNotPersist: true });
+    officeStoreObject.removeObjectInExcelStore(objectWorkingId);
   };
 }
 

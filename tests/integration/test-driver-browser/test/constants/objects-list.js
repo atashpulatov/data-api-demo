@@ -180,7 +180,7 @@ export const objectsList = {
     },
     interactiveDossier: {
       name: 'Dossier for interactive components',
-      vis2: popupSelectors.dossierWindow.getVizAT(2),
+      vis2: popupSelectors.dossierWindow.getVizAT(1),
     },
     customVisualizations: {
       name: 'Custom Visualizations',

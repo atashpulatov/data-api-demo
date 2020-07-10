@@ -15,13 +15,12 @@ export class AttributeSelectorWindowNotConnected extends Component {
     this.state = {
       openModal: false,
       triggerUpdate: false,
-      loading: false,
       attributesSelected: false
     };
   }
 
   handleOk = () => {
-    this.setState({ triggerUpdate: true, loading: true });
+    this.setState({ triggerUpdate: true });
   };
 
   handleCancel = () => {
@@ -72,7 +71,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
    * should be called every time OK is pressed but selector popup should not close
    */
   resetTriggerUpdate = () => {
-    this.setState({ triggerUpdate: false, loading: false });
+    this.setState({ triggerUpdate: false });
   };
 
   attributesBeingSelected = attributesSelected => {
@@ -91,9 +90,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
     const {
       handleBack, chosenObject, mstrData, objectName, editedObject
     } = this.props;
-    const {
-      triggerUpdate, openModal, attributesSelected, loading,
-    } = this.state;
+    const { triggerUpdate, openModal, attributesSelected, } = this.state;
     const { isPrompted } = mstrData;
     const { chosenObjectName } = chosenObject;
     const typeOfObject = editedObject || chosenObject;
@@ -119,7 +116,6 @@ export class AttributeSelectorWindowNotConnected extends Component {
           handleBack={(!isEdit || isPrompted) && handleBack}
           handleOk={this.handleOk}
           handleCancel={this.handleCancel}
-          loading={loading}
           onPreviewClick={this.openModal}
         />
       </div>

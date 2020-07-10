@@ -1,13 +1,9 @@
-import { officeProperties } from '../office-reducer/office-properties';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
-export const CLEAR_WINDOW = 'POPUP_CLOSE_WINDOW';
-export const START_REPORT_LOADING = 'START_REPORT_LOADING';
-export const STOP_REPORT_LOADING = 'STOP_REPORT_LOADING';
-export const RESET_STATE = 'RESET_STATE';
-export const SET_REPORT_N_FILTERS = 'SET_REPORT_N_FILTERS';
-export const SET_PREPARED_REPORT = 'SET_PREPARED_REPORT';
-// export const PRELOAD = 'PRELOAD';
+export const RESET_STATE = 'POPUP_RESET_STATE';
+export const SET_REPORT_N_FILTERS = 'POPUP_SET_REPORT_N_FILTERS';
+export const SET_PREPARED_REPORT = 'POPUP_SET_PREPARED_REPORT';
+
 class PopupActions {
   init = (
     errorService,
@@ -41,7 +37,6 @@ class PopupActions {
         this.popupController.runEditFiltersPopup(reportParams);
       }
     } catch (error) {
-      dispatch({ type: officeProperties.actions.stopLoading });
       return this.errorService.handleError(error);
     }
   };
@@ -106,7 +101,6 @@ class PopupActions {
         this.popupController.runEditFiltersPopup(reportParams);
       }
     } catch (error) {
-      dispatch({ type: officeProperties.actions.stopLoading });
       if (isDossier) {
         error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       }

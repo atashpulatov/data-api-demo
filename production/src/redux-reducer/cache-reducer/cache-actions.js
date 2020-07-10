@@ -3,23 +3,20 @@ import DB from '../../cache/cache-db';
 import i18next from '../../i18n';
 import { mstrListRestService } from '../../mstr-object/mstr-list-rest-service';
 
-export const CREATE_CACHE = 'CREATE_CACHE';
 export const CLEAR_CACHE = 'CLEAR_CACHE';
 export const REFRESH_CACHE = 'REFRESH_CACHE';
-export const SET_OBJECT_LIST_LOADING = 'SET_OBJECT_LIST_LOADING';
-export const SET_MY_LIBRARY_LOADING = 'SET_MY_LIBRARY_LOADING';
-export const SET_PROJECTS_LOADING = 'SET_PROJECTS_LOADING';
-export const ADD_MY_LIBRARY_OBJECTS = 'ADD_MY_LIBRARY_OBJECTS';
-export const ADD_PROJECTS = 'ADD_PROJECTS';
-export const ADD_ENV_OBJECTS = 'ADD_ENV_OBJECTS';
-export const REFRESH_CACHE_COMMAND = 'REFRESH_COMMAND';
-export const SAVE_MY_LIBRARY_OWNERS = 'SAVE_MY_LIBRARY_OWNERS';
+export const SET_OBJECT_LIST_LOADING = 'CACHE_SET_OBJECT_LIST_LOADING';
+export const SET_MY_LIBRARY_LOADING = 'CACHE_SET_MY_LIBRARY_LOADING';
+export const ADD_MY_LIBRARY_OBJECTS = 'CACHE_ADD_MY_LIBRARY_OBJECTS';
+export const ADD_PROJECTS = 'CACHE_ADD_PROJECTS';
+export const ADD_ENV_OBJECTS = 'CACHE_ADD_ENV_OBJECTS';
+export const REFRESH_CACHE_COMMAND = 'REFRESH_CACHE_COMMAND';
+export const SAVE_MY_LIBRARY_OWNERS = 'CACHE_SAVE_MY_LIBRARY_OWNERS';
 
 export const PROJECTS_DB_ID = 'projects';
 export const MY_LIBRARY_DB_ID = 'my-library';
 export const ENV_LIBRARY_DB_ID = 'env-library';
 export const LOADING_DB = 'loading-';
-export const CURRENT_USER = 'user';
 
 const { getObjectList, fetchProjects, getMyLibraryObjectList } = mstrListRestService;
 

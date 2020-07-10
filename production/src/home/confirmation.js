@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import warningIcon from './assets/icon_conflict.svg';
-import { toggleIsConfirmFlag as toggleIsConfirmFlagImported } from '../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 
 import { homeHelper } from './home-helper';
 import { notificationService } from '../notification-v2/notification-service';
@@ -90,12 +90,12 @@ function clearData(objects) {
   homeHelper.secureData(objects);
 }
 
-function mapStateToProps({ officeReducer, objectReducer, notificationReducer }) {
+function mapStateToProps({ officeReducer, objectReducer }) {
   const { objects } = objectReducer;
   const { isConfirm } = officeReducer;
   return { objects, isConfirm };
 }
 
-const mapDispatchToProps = { toggleIsConfirmFlag: toggleIsConfirmFlagImported };
+const mapDispatchToProps = { toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag };
 
 export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationNotConnected));

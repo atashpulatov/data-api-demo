@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
+import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
 
 /**
  * Handler to parse compound grid
@@ -19,7 +20,6 @@ class CompoundGridHandler {
     const isCrosstabular = false;
     const columnInformation = this.getColumnInformation(definition, data, attrforms);
     const isCrosstab = true;
-
     return {
       tableSize: this.getTableSize(data),
       columnInformation,
@@ -54,7 +54,7 @@ class CompoundGridHandler {
     const parsedColumnSetColumns = mstrNormalizedJsonHandler.getMetricsColumnsInformation(columnSetColumns);
     const columns = [...commonColumns[commonColumns.length - 1], ...parsedColumnSetColumns];
 
-    return mstrNormalizedJsonHandler.splitAttributeForms(columns, supportForms);
+    return mstrAttributeFormHelper.splitAttributeForms(columns, supportForms);
   }
 
   /**
@@ -83,7 +83,7 @@ class CompoundGridHandler {
    * @return {Object} Contains arrays of columns and rows attributes names
    */
   getAttributesName(definition, attrforms) {
-    const rowsAttributes = mstrNormalizedJsonHandler.getAttributeWithForms(definition.grid.rows, attrforms);
+    const rowsAttributes = mstrAttributeFormHelper.getAttributeWithForms(definition.grid.rows, attrforms);
     return { rowsAttributes };
   }
 
@@ -95,12 +95,13 @@ class CompoundGridHandler {
    * @returns bounding height
    */
   calculateColumnHeaderHeight(columnSetsHeaders) {
-  // TODO: Take into consideration attribute forms from columnSets
     let boundingHeight = 0;
     columnSetsHeaders.forEach(columnSet => {
-      const { length } = columnSet[0];
-      if (length > boundingHeight) {
-        boundingHeight = length;
+      if (columnSet.length !== 0) {
+        const { length } = columnSet[0];
+        if (length > boundingHeight) {
+          boundingHeight = length;
+        }
       }
     });
     return boundingHeight;
@@ -138,7 +139,9 @@ class CompoundGridHandler {
     for (let row = 0; row < paging.current; row++) {
       const rowValues = [];
       for (let colSet = 0; colSet < columnSets.length; colSet++) {
-        rowValues.push(...columnSets[colSet][valueMatrix][row]);
+        if (columnSets[colSet][valueMatrix][row] && columnSets[colSet][valueMatrix][row].length) {
+          rowValues.push(...columnSets[colSet][valueMatrix][row]);
+        }
       }
       rowTable.push(rowValues);
     }
@@ -159,7 +162,7 @@ class CompoundGridHandler {
     const onElement = (array) => (e) => {
       if (array) { array.push(e.subtotalAddress); }
       // attribute as row with forms
-      const forms = mstrNormalizedJsonHandler.getAttributesTitleWithForms(e, attrforms);
+      const forms = mstrAttributeFormHelper.getAttributesTitleWithForms(e, attrforms);
       if (forms) {
         return forms;
       }
@@ -233,13 +236,6 @@ class CompoundGridHandler {
     let attrFormsBoundingHeight = 0;
     const parsedHeaders = [];
 
-    // adding empty header for empty column sets
-    for (let i = 0; i < columnSetsHeaders.length; i++) {
-      if (columnSetsHeaders[i].length === 0) {
-        columnSetsHeaders[i].push([-1]);
-        columnSetsDefinition[i].columns.push({ type: null, elements: [] });
-      }
-    }
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders);
 
 

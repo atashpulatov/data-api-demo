@@ -19,8 +19,8 @@ export function switchToExcelFrame() {
 // This frame is used for report prompt window and visualizations window
 export function switchToPromptFrame() {
   switchToPluginFrame();
-  $('iframe[src*="app.embedded=true"]').waitForExist(20000);
-  browser.switchToFrame($('iframe[src*="app.embedded=true"]'));
+  $('iframe[mstr-embed-iframe="true"]').waitForExist(40000);
+  browser.switchToFrame($('iframe[mstr-embed-iframe="true"]'));
 }
 
 export function switchToPromptFrameForImportDossier() {

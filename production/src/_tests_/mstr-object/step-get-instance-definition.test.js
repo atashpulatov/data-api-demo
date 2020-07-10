@@ -1,8 +1,8 @@
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import stepGetInstanceDefinition from '../../mstr-object/step-get-instance-definition';
+import stepGetInstanceDefinition from '../../mstr-object/instance/step-get-instance-definition';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import dossierInstanceDefinition from '../../mstr-object/dossier-instance-definition';
+import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instance-definition';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
@@ -202,7 +202,7 @@ describe('StepGetInstanceDefinition', () => {
 
     jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-    jest.spyOn(stepGetInstanceDefinition, 'getStartCell').mockReturnValue('startCellTest');
+    jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
 
     jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -278,9 +278,9 @@ describe('StepGetInstanceDefinition', () => {
       'subtotalsAddressesTest',
     );
 
-    expect(stepGetInstanceDefinition.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
+    expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
     if (expectedGetStartCellCallsNo === 1) {
-      expect(stepGetInstanceDefinition.getStartCell).toBeCalledWith(
+      expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
         'insertNewWorksheetTest',
         'excelContextTest',
       );
@@ -393,7 +393,7 @@ describe('StepGetInstanceDefinition', () => {
 
     jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-    jest.spyOn(stepGetInstanceDefinition, 'getStartCell').mockReturnValue('startCellTest');
+    jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
 
     jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -456,9 +456,9 @@ describe('StepGetInstanceDefinition', () => {
       'subtotalsAddressesTest',
     );
 
-    expect(stepGetInstanceDefinition.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
+    expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
     if (expectedGetStartCellCallsNo === 1) {
-      expect(stepGetInstanceDefinition.getStartCell).toBeCalledWith(
+      expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
         'insertNewWorksheetTest',
         'excelContextTest',
       );
@@ -738,7 +738,7 @@ describe('StepGetInstanceDefinition', () => {
     jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValue(42);
 
     // when
-    const result = await stepGetInstanceDefinition.getStartCell(
+    const result = await officeApiWorksheetHelper.getStartCell(
       insertNewWorksheet,
       'excelContextTest',
     );

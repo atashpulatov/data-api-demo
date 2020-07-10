@@ -4,6 +4,7 @@ import { PromptsWindowNotConnected } from '../../prompts/prompts-window';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { popupHelper } from '../../popup/popup-helper';
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
+import scriptInjectionHelper from '../../dossier/script-injection-helper';
 
 jest.mock('../../popup/popup-helper');
 
@@ -55,7 +56,7 @@ describe('PromptsWindowNotConnected', () => {
     const ref = React.createRef();
     // when
     const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
-    const watchForIframeAddition = jest.spyOn(wrappedComponent.instance(), 'watchForIframeAddition').mockImplementation(() => true);
+    const watchForIframeAddition = jest.spyOn(scriptInjectionHelper, 'watchForIframeAddition').mockImplementation(() => true);
     const loadEmbeddedDossier = jest.spyOn(wrappedComponent.instance(), 'loadEmbeddedDossier').mockImplementation(() => true);
     const onIframeLoad = jest.spyOn(wrappedComponent.instance(), 'onIframeLoad').mockImplementation(() => true);
     wrappedComponent.instance().onPromptsContainerMount(ref);
@@ -103,7 +104,6 @@ describe('PromptsWindowNotConnected', () => {
   it('prolongSession should be called on EXTEND_SESSION message', () => {
     // given
     const message = { data: EXTEND_SESSION };
-    const stopLoading = jest.fn();
     window.Office = {
       context: {
         ui: { messageParent: () => { }, },
@@ -115,8 +115,7 @@ describe('PromptsWindowNotConnected', () => {
     // when
     const wrappedComponent = shallow(<PromptsWindowNotConnected
       mstrData={mstrData}
-      popupState={popupState}
-      stopLoading={stopLoading} />);
+      popupState={popupState} />);
     const prolongSession = jest.spyOn(wrappedComponent.instance(), 'prolongSession');
     wrappedComponent.instance().messageReceived(message);
 
@@ -127,13 +126,11 @@ describe('PromptsWindowNotConnected', () => {
   it('prolongSession should not be called on different messages', () => {
     // given
     const message = {};
-    const stopLoading = jest.fn();
 
     // when
     const wrappedComponent = shallow(<PromptsWindowNotConnected
       mstrData={mstrData}
-      popupState={popupState}
-      stopLoading={stopLoading} />);
+      popupState={popupState} />);
     const prolongSession = jest.spyOn(wrappedComponent.instance(), 'prolongSession');
     wrappedComponent.instance().messageReceived(message);
 

@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Popover } from 'antd';
 import PropTypes from 'prop-types';
-import {
-  toggleIsConfirmFlag as toggleIsConfirmFlagImported,
-  toggleIsSettingsFlag as toggleIsSettingsFlagImported
-} from '../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import logo from './assets/mstr_logo.png';
 import overflowHelper from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
@@ -172,8 +169,8 @@ function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
 }
 
 const mapDispatchToProps = {
-  toggleIsSettingsFlag: toggleIsSettingsFlagImported,
-  toggleIsConfirmFlag: toggleIsConfirmFlagImported,
+  toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
+  toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
   clearCache: clearCacheImported,
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuNotConnected));

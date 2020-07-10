@@ -63,7 +63,6 @@ describe('NavigationTree', () => {
       chosenProjectId: 'projectId',
       chosenSubtype: mstrObjectEnum.mstrObjectType.report.subtypes[0],
       chosenObjectName: 'Prepare Data',
-      chosenType: 'Data',
       setObjectData: jest.fn(),
     };
     const givenIsPrompted = 'customPromptAnswer';
@@ -114,7 +113,6 @@ describe('NavigationTree', () => {
 
   it('should call proper method on cancel action', () => {
     // given
-    const stopLoadingMocked = jest.fn();
     const mstrData = {
       envUrl: 'env',
       authToken: 'authToken',
@@ -124,7 +122,6 @@ describe('NavigationTree', () => {
     const message = { command: commandCancel, };
     const wrappedComponent = shallow(<NavigationTreeNotConnected
       mstrData={mstrData}
-      stopLoading={stopLoadingMocked}
       cache={CACHE_STATE}
       {...mockFunctionsAndProps}
     />);
@@ -156,19 +153,6 @@ describe('NavigationTree', () => {
     wrappedComponent.instance().onTriggerUpdate(body);
     // then
     expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
-  });
-
-  it('should take proper data from state for name defined', () => {
-    // given
-    const initialState = {
-      navigationTree: {},
-      officeReducer: { preLoadReport: { name: 'Some name', }, },
-    };
-    // then
-    expect(mapStateToProps(initialState)).toEqual({
-      ...initialState.navigationTree,
-      title: initialState.officeReducer.preLoadReport.name,
-    });
   });
 
   it('should take proper data from state for name NOT defined', () => {
@@ -256,6 +240,54 @@ describe('NavigationTree', () => {
       chosenLibraryDossier: givenObjectId
     };
     expect(mockSelectObject).toBeCalledWith(expectedObject);
+  });
+
+  it('should return proper values for intial states on mount', () => {
+    // given
+    const givenMyLibrary = false;
+    const mockSelectObject = jest.fn();
+
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
+      {...mockFunctionsAndProps}
+      selectObject={mockSelectObject}
+      myLibrary={givenMyLibrary}
+    />);
+
+    // then
+    expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(true);
+  });
+
+  it('should call setState twice and change states according to parameters', () => {
+    // given
+    const givenObjectId = 'objectId';
+    const givenProjectId = 'projectId';
+    const givenSubtype = mstrObjectEnum.mstrObjectType.dossier.subtypes[0];
+    const givenObjectName = 'objectName';
+    const givenTargetId = 'LibraryObjectId';
+    const givenMyLibrary = false;
+    const mockSelectObject = jest.fn();
+
+    const givenObject = {
+      id: givenObjectId,
+      projectId: givenProjectId,
+      subtype: givenSubtype,
+      name: givenObjectName,
+      targetId: givenTargetId,
+    };
+
+    const wrappedComponent = shallow(<NavigationTreeNotConnected
+      {...mockFunctionsAndProps}
+      selectObject={mockSelectObject}
+      myLibrary={givenMyLibrary}
+    />);
+
+    // when
+    const setState = jest.spyOn(wrappedComponent.instance(), 'setState');
+    wrappedComponent.instance().onObjectChosen(givenObject);
+
+    // then
+    expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(true);
+    expect(setState).toHaveBeenCalledTimes(1);
   });
 
   it('should call requestDossierOpen on handleOk if provided objectType is dossier', async () => {
