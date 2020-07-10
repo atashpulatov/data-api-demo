@@ -2,11 +2,12 @@ import { mstrObjectRestService } from './mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 
 export const getObjectPrompts = async (objectData, objectId, projectId, operationData) => {
-  if (objectData.promptsAnswers) {
-    const unfilteredPrompts = await mstrObjectRestService
-      .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId);
-    return unfilteredPrompts.map((prompt) => promptAnswerFunctionsMap[prompt.type](prompt));
+  if (!objectData.promptsAnswers) {
+    return null;
   }
+  const unfilteredPrompts = await mstrObjectRestService
+    .getObjectPrompts(objectId, projectId, operationData.instanceDefinition.instanceId);
+  return unfilteredPrompts.map((prompt) => promptAnswerFunctionsMap[prompt.type](prompt));
 };
 
 const promptAnswerFunctionsMap = {
