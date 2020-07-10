@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
@@ -67,6 +68,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   ...navigationTreeActions,
+  ...filterActions,
   preparePromptedReport: popupActions.preparePromptedReport,
 };
 
