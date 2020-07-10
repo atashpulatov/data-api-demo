@@ -6,7 +6,6 @@ import {
   deleteObjectNotification,
   displayObjectWarning,
 } from '../redux-reducer/notification-reducer/notification-action-creators';
-import officeStoreObject from '../office/store/office-store-object';
 import { removeObject } from '../redux-reducer/object-reducer/object-actions';
 import { cancelOperation } from '../redux-reducer/operation-reducer/operation-actions';
 import officeReducerHelper from '../office/store/office-reducer-helper';
@@ -49,7 +48,7 @@ class NotificationService {
   }
 
   dismissSuccessfulRemoveNotification = (objectWorkingId) => {
-    officeStoreObject.removeObjectFromStore(objectWorkingId);
+    this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.dismissNotification(objectWorkingId);
   }
 
