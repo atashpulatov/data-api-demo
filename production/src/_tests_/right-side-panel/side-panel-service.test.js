@@ -72,7 +72,6 @@ describe('SidePanelService', () => {
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     // when
     sidePanelService.refresh(objectWorkingIds);
-    jest.runAllTimers();
     // then
     expect(mockedDispatch).toBeCalledTimes(objectWorkingIds.length);
   });
@@ -83,7 +82,6 @@ describe('SidePanelService', () => {
     const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
     // when
     sidePanelService.remove(objectWorkingIds);
-    jest.runAllTimers();
     // then
     expect(mockedDispatch).toBeCalledTimes(objectWorkingIds.length);
   });
