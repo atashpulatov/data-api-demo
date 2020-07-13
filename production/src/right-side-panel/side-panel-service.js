@@ -23,12 +23,8 @@ class SidePanelService {
    * Prevent navigation tree from going straight into importing previously selected item.
    */
   addData = async () => {
-    const { dispatch, getState } = this.reduxStore;
-    const { popupOpen } = getState().officeReducer;
-    if (!popupOpen) {
-      dispatch(navigationTreeActions.cancelImportRequest());
-      await popupController.runPopupNavigation();
-    }
+    this.reduxStore.dispatch(navigationTreeActions.cancelImportRequest());
+    await popupController.runPopupNavigation();
   };
 
   /**
@@ -118,19 +114,15 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   edit = async (objectWorkingId) => {
-    const { dispatch, getState } = this.reduxStore;
-    const { popupOpen } = getState().officeReducer;
-    if (!popupOpen) {
-      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      const { bindId, mstrObjectType } = objectData;
-      const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+    const { bindId, mstrObjectType } = objectData;
+    const excelContext = await officeApiHelper.getExcelContext();
+    await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
-      } else {
-        dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
-      }
+    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+      this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+    } else {
+      this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
     }
   };
 }
