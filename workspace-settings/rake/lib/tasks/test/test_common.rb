@@ -76,20 +76,6 @@ task :e2e_test_browser,[:build_no] do | t, args|
   raise "test failed" if test_fail
 end
 
-desc "run client based e2e test"
-task :e2e_test_client do
-  test_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-client"
-  shell_command! "mvn clean", cwd: test_dir
-  test_fail = false
-  begin
-    shell_command! "mvn clean -DdriverType=#{DRIVER[ENV['TEST_TYPES']]} -Dtest=LogInLogOutTests test", cwd: test_dir
-  rescue
-    test_fail = true
-  end
-  raise "test failed" if test_fail
-  
-end
-
 def is_windows_jenkins_env?
   return ENV['USER'] == "jenkins" && ENV['TEST_TYPES'] == "integration_win"
 end
