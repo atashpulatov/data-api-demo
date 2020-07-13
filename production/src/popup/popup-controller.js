@@ -71,7 +71,8 @@ class PopupController {
       Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}`,
         { height, width, displayInIframe: true },
         (asyncResult) => {
-          const dialog = asyncResult.value;
+          const { value: dialog } = asyncResult;
+          if(dialog) {
           this.sessionActions.setDialog(dialog);
           console.timeEnd('Popup load time');
           dialog.addEventHandler(Office.EventType.DialogMessageReceived,
@@ -86,6 +87,7 @@ class PopupController {
             }
           );
           this.reduxStore.dispatch(officeActions.showPopup());
+        }
         });
     } catch (error) {
       errorService.handleError(error);

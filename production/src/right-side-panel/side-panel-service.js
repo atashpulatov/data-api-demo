@@ -23,8 +23,12 @@ class SidePanelService {
    * Prevent navigation tree from going straight into importing previously selected item.
    */
   addData = async () => {
-    this.reduxStore.dispatch(navigationTreeActions.cancelImportRequest());
-    await popupController.runPopupNavigation();
+    const { dispatch, getState } = this.reduxStore;
+    const { popupOpen } = getState().officeReducer;
+    if (!popupOpen) {
+      dispatch(navigationTreeActions.cancelImportRequest());
+      await popupController.runPopupNavigation();
+    }
   };
 
   /**
@@ -59,9 +63,7 @@ class SidePanelService {
    */
   refresh = (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-      setTimeout(() => {
         this.reduxStore.dispatch(refreshRequested(objectWorkingId));
-      }, 0);
     });
   };
 
@@ -73,9 +75,7 @@ class SidePanelService {
    */
   remove = async (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-      setTimeout(() => {
         this.reduxStore.dispatch(removeRequested(objectWorkingId));
-      }, 0);
     });
   };
 
@@ -118,16 +118,20 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   edit = async (objectWorkingId) => {
+    const { dispatch, getState } = this.reduxStore;
+    const { popupOpen } = getState().officeReducer;
+    if (!popupOpen) {
     const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     const { bindId, mstrObjectType } = objectData;
     const excelContext = await officeApiHelper.getExcelContext();
     await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
     if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-      this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+      dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
     } else {
-      this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+      dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
     }
+  }
   };
 }
 
