@@ -63,7 +63,7 @@ class SidePanelService {
    */
   refresh = (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-        this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+      this.reduxStore.dispatch(refreshRequested(objectWorkingId));
     });
   };
 
@@ -75,7 +75,7 @@ class SidePanelService {
    */
   remove = async (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
-        this.reduxStore.dispatch(removeRequested(objectWorkingId));
+      this.reduxStore.dispatch(removeRequested(objectWorkingId));
     });
   };
 
@@ -121,17 +121,17 @@ class SidePanelService {
     const { dispatch, getState } = this.reduxStore;
     const { popupOpen } = getState().officeReducer;
     if (!popupOpen) {
-    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    const { bindId, mstrObjectType } = objectData;
-    const excelContext = await officeApiHelper.getExcelContext();
-    await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const { bindId, mstrObjectType } = objectData;
+      const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
-    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-      dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
-    } else {
-      dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+      } else {
+        dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+      }
     }
-  }
   };
 }
 

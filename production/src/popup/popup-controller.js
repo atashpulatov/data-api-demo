@@ -72,22 +72,22 @@ class PopupController {
         { height, width, displayInIframe: true },
         (asyncResult) => {
           const { value: dialog } = asyncResult;
-          if(dialog) {
-          this.sessionActions.setDialog(dialog);
-          console.timeEnd('Popup load time');
-          dialog.addEventHandler(Office.EventType.DialogMessageReceived,
-            this.onMessageFromPopup.bind(null, dialog, reportParams));
+          if (dialog) {
+            this.sessionActions.setDialog(dialog);
+            console.timeEnd('Popup load time');
+            dialog.addEventHandler(Office.EventType.DialogMessageReceived,
+              this.onMessageFromPopup.bind(null, dialog, reportParams));
 
-          dialog.addEventHandler(
+            dialog.addEventHandler(
             // Event received on dialog close
-            Office.EventType.DialogEventReceived,
-            () => {
-              this.reduxStore.dispatch(this.popupActions.resetState());
-              this.reduxStore.dispatch(officeActions.hidePopup());
-            }
-          );
-          this.reduxStore.dispatch(officeActions.showPopup());
-        }
+              Office.EventType.DialogEventReceived,
+              () => {
+                this.reduxStore.dispatch(this.popupActions.resetState());
+                this.reduxStore.dispatch(officeActions.hidePopup());
+              }
+            );
+            this.reduxStore.dispatch(officeActions.showPopup());
+          }
         });
     } catch (error) {
       errorService.handleError(error);
