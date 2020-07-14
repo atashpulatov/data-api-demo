@@ -7,7 +7,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 import { reduxStore } from '../../store';
-import { Office } from '../mockOffice'
+import { Office } from '../mockOffice';
 
 describe('PopupController', () => {
   const dialog = {};
