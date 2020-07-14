@@ -12,7 +12,8 @@ describe('officeReducer', () => {
       isSettings: false,
       isConfirm: false,
       supportForms: true,
-      popupData: null
+      popupData: null,
+      popupOpen: false,
     });
   });
 

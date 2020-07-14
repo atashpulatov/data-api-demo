@@ -6,6 +6,7 @@ const initialState = {
   isSettings: false,
   supportForms: true,
   popupData: null,
+  popupOpen: false,
 };
 
 export const officeReducer = (state = initialState, action) => {
