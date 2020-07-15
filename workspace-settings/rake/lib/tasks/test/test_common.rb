@@ -33,7 +33,7 @@ task :browser_e2e_push_results,[:build_no] do | t, args|
   unless build_no.nil?
     test_os = "mac14"
     if is_windows_jenkins_env? #if it is windows jenkins envrionment, we need to use another path
-      test_dir = "c:/test-driver-browser" 
+      test_dir = "c:/test-driver-browser"
       test_os = "win19"
     end
     info "publish e2e test result to Rally"
@@ -46,14 +46,14 @@ end
 desc "run browser based test"
 task :e2e_test_browser,[:build_no] do | t, args|
   test_dir = get_browser_test_dir()
-  #always clean the report dir. 
+  #always clean the report dir.
   report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser/allure-report"
   FileUtils.rm_rf report_dir if Dir.exist? report_dir
   good "clean up #{report_dir}, #{Dir.exist?(report_dir)}"
   npm_install_dir= test_dir
   build_no = args['build_no']
   if is_windows_jenkins_env?# we need to copy the test driver to the root dir of c because of there is a path length limitation of windows
-    short_dir = "c:/test-driver-browser" 
+    short_dir = "c:/test-driver-browser"
     FileUtils.rm_rf short_dir if Dir.exist? short_dir
     shell_command! "cp -r #{test_dir} c:/"
     test_dir = short_dir
@@ -69,7 +69,7 @@ task :e2e_test_browser,[:build_no] do | t, args|
   if is_windows_jenkins_env?# copy the test result back
     shell_command! "cp -r #{test_dir}/allure-report #{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
   end
-  if is_jenkins_env? 
+  if is_jenkins_env?
     Rake::Task["browser_e2e_push_results"].invoke(build_no)
   end
   ci_metrics_system_test
@@ -84,10 +84,6 @@ def is_jenkins_env?
   return ENV['USER'] == "jenkins"
 end
 
-DRIVER = {
-  "integration_win" => "WINDOWS_DESKTOP",
-  "integration_mac" => "MAC_DESKTOP"
-}
 ######################################common web dossier check code######################################
 def wait_web_dossier_online()
   cnt = 0
@@ -102,7 +98,7 @@ def wait_web_dossier_online()
       raise "web dossier not started in limited time, please have a check"
     end
   end
-  
+
 end
 
 def is_web_dossier_started?()
@@ -138,7 +134,7 @@ def ci_metrics_system_test()
         end
       end
     end
-    
+
     metrics_system_test = {}
     metrics_system_test['TOTAL_CASES'] = scenarios_num
     metrics_system_test['PASSED'] = pass_num
