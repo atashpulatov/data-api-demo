@@ -6,7 +6,10 @@ describe('Get Object Details Methods', () => {
   describe('getObjectPrompts', () => {
     it('should return falsy if there are no promptAnswers', async () => {
       // given
-      const mockedObjectDataWithoutPrompts = {};
+      const mockedObjectDataWithoutPrompts = {
+        promptsAnswers: false,
+        mstrObjectType: { name: 'report' },
+      };
       // when
       const objectPrompts = await getObjectPrompts(mockedObjectDataWithoutPrompts);
       // then
@@ -14,7 +17,11 @@ describe('Get Object Details Methods', () => {
     });
     it('should call mstrObjectRestService to get object prompts with provided arguments', async () => {
       // given
-      const mockedObjectData = { promptsAnswers: true };
+      const mockedObjectData = {
+        promptsAnswers: true,
+        mstrObjectType: { name: 'report' },
+        manipulationsXML: { promptAnswers: {} },
+      };
       const mockedObjectId = 1;
       const mockedProjectId = 12;
       const mockedOperationData = { instanceDefinition: { instanceId: 2 } };
@@ -30,7 +37,15 @@ describe('Get Object Details Methods', () => {
       );
     });
     describe('promptAnswerFunctionsMap', () => {
-      const mockedObjectData = { promptsAnswers: true };
+      let mockedObjectData;
+
+      beforeEach(() => {
+        mockedObjectData = {
+          promptsAnswers: true,
+          mstrObjectType: { name: 'report' },
+          manipulationsXML: { promptAnswers: {} },
+        };
+      });
 
       it('should map object answers', async () => {
         // given
