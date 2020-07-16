@@ -68,7 +68,7 @@ class DriverWindowsDesktop:
 
                 return driver
             except MaxRetryError:
-                raise MstrException('Error while starting test, ensure Appium or WinAppDriver is running')
+                raise MstrException('Error while starting test, ensure WinAppDriver is running')
 
     @staticmethod
     def driver_cleanup(driver):

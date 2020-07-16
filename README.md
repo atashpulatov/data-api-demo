@@ -26,7 +26,7 @@ README TODO:
 - utils
 - stability issues, pause()
 - performance
-- preparing selectors
+- preparing selectors https://accessibilityinsights.io/en/downloads
 - image recognition, limitations
 - configuration, chromedriver
 - reuse in different projects
@@ -63,7 +63,7 @@ pip install opencv-python-headless
 ##### Windows Desktop
 
 - Excel Add-In installed ([see details](https://www2.microstrategy.com/producthelp/Current/Office/en-us/Content/install_manually.htm))
-- [WinAppDriver](https://github.com/Microsoft/WinAppDriver/releases) installed.
+- [WinAppDriver](https://github.com/Microsoft/WinAppDriver/releases) installed. TODO Enable developer mode
 
 ##### General Mac
 
@@ -132,11 +132,8 @@ source venv_mac/bin/activate
 Run `WinAppDriver` from command line as Administrator, e.g.:
 
 ```
-"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe"
-```
-or
-```
-"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 192.168.1.248 4723/wd/hub
+"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hub
+"C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" EXTERNAL_IP 4723/wd/hub
 ```
 
 ##### Mac Desktop
@@ -148,17 +145,20 @@ Run `AppiumForMac`.
 Examples of running tests:
 
 ```
-# test single feature, Windows Desktop:
+# test single feature, Windows Desktop, default logging:
 behave -D driver_type=windows_desktop tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
+# test single feature, Windows Desktop, verbose logging:
+behave -D driver_type=windows_desktop --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture  tests/F25931_duplicate_object/TC64607_duplicate_object.feature 2> log.err.txt |tee log.out.txt
+
 # test single feature, Mac Chrome, no colors, verbose logging, all logs printed to console: 
-behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave -D driver_type=mac_chrome --tags=@mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test all features in F25931_duplicate_object directory, Mac Chrome, no colors, less verbose logging, all logs printed to console:
-behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/
+behave -D driver_type=mac_chrome --tags=@mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/
 
 # test all features, Mac Chrome, no colors, only steps related information and errors logged, all logs printed to console:
-behave -D driver_type=mac_chrome --tags=mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/
+behave -D driver_type=mac_chrome --tags=@mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/
 ```
 
 ##### Test execution parameters
