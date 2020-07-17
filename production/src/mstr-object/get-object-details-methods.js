@@ -3,9 +3,10 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import mstrObjectEnum from './mstr-object-type-enum';
 
 export const getObjectPrompts = async (objectData, objectId, projectId, operationData) => {
-  if ((objectData.mstrObjectType.name !== mstrObjectEnum.mstrObjectType.visualization.name
-    && !objectData.promptsAnswers)
-    || !objectData.manipulationsXML.promptAnswers) {
+  const { mstrObjectType, manipulationsXML, promptsAnswers } = objectData;
+  if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+    ? !manipulationsXML.promptAnswers
+    : !promptsAnswers) {
     return null;
   }
   const unfilteredPrompts = await mstrObjectRestService
