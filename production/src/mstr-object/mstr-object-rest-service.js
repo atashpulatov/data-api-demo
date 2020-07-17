@@ -14,6 +14,22 @@ export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
 export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during data import.
 export const PROMISE_LIMIT = 10; // Number of concurrent excelContext.sync() promises during data import.
 
+function extractAttributesMetrics({ definition: { grid }, visualizationType }) {
+  const columns = visualizationType === mstrObjectEnum.visualizationType.COMPOUND_GRID
+    ? grid.columnSets.map(columnSet => columnSet.columns).flat()
+    : grid.columns;
+
+  const attributes = columns.filter(({ type }) => type === 'attribute')
+    .concat(grid.rows.filter(({ type }) => type === 'attribute'))
+    .map(({ id, name }) => ({ id, name }));
+
+  const metrics = columns.filter(({ type }) => type === 'templateMetrics')
+    .concat(grid.rows.filter(({ type }) => type === 'templateMetrics'))
+    .flatMap(({ elements }) => elements)
+    .map(({ id, name }) => ({ id, name }));
+
+  return { attributes, metrics };
+}
 
 function checkTableDimensions({ rows, columns }) {
   if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
@@ -33,16 +49,7 @@ function parseInstanceDefinition(res, attrforms) {
   if (data.paging.total === 0) { throw new Error(NO_DATA_RETURNED); }
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
-
-  const { grid } = body.definition;
-  const attributes = grid.columns.filter(({ type }) => type === 'attribute')
-    .concat(grid.rows.filter(({ type }) => type === 'attribute'))
-    .map(({ id, name }) => ({ id, name }));
-
-  const metrics = grid.columns.filter(({ type }) => type === 'templateMetrics')
-    .concat(grid.rows.filter(({ type }) => type === 'templateMetrics'))
-    .flatMap(({ elements }) => elements)
-    .map(({ id, name }) => ({ id, name }));
+  const { attributes, metrics } = extractAttributesMetrics(body);
 
   return {
     instanceId,
