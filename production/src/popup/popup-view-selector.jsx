@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
@@ -10,6 +11,7 @@ import { PromptsWindow } from '../prompts/prompts-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import { ObtainInstanceHelper } from './obtain-instance-helper';
 
 const renderProperComponent = (popupType) => {
   switch (popupType) {
@@ -21,10 +23,10 @@ const renderProperComponent = (popupType) => {
     case PopupTypeEnum.promptsWindow:
     case PopupTypeEnum.repromptingWindow:
       return <PromptsWindow />;
-    case PopupTypeEnum.emptyDiv:
-      return <div />;
     case PopupTypeEnum.dossierWindow:
       return <DossierWindow />; // TODO: Might be missing {t}
+    case PopupTypeEnum.obtainInstanceHelper:
+      return <ObtainInstanceHelper />;
     default:
       return null;
   }
@@ -65,7 +67,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  ...actions,
+  ...navigationTreeActions,
+  ...filterActions,
   preparePromptedReport: popupActions.preparePromptedReport,
 };
 

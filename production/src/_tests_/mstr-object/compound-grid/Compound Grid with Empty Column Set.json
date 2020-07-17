@@ -1,0 +1,657 @@
+{
+	"k": "8BCADEDF4B6C41FBAAFC742F9AF3464B",
+	"n": "Compound Grid with Empty Column Set",
+	"visualizationType": "compound_grid",
+	"definition": {
+		"grid": {
+			"crossTab": true,
+            "rows": [
+                {
+                    "name": "Subcategory",
+                    "id": "8D679D4F11D3E4981000E787EC6DE8A4",
+                    "type": "attribute",
+                    "forms": [
+                        {
+                            "id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+                            "name": "DESC",
+                            "dataType": "nVarChar",
+                            "baseFormCategory": "DESC",
+                            "baseFormType": "text"
+                        }
+                    ],
+                    "elements": [
+                        {
+                            "formValues": [
+                                "Art & Architecture"
+                            ],
+                            "id": "h11;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Business"
+                            ],
+                            "id": "h12;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Audio Equipment"
+                            ],
+                            "id": "h21;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Cameras"
+                            ],
+                            "id": "h22;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Kids / Family"
+                            ],
+                            "id": "h35;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Special Interests"
+                            ],
+                            "id": "h36;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Alternative"
+                            ],
+                            "id": "h41;8D679D4F11D3E4981000E787EC6DE8A4"
+                        },
+                        {
+                            "formValues": [
+                                "Country"
+                            ],
+                            "id": "h42;8D679D4F11D3E4981000E787EC6DE8A4"
+                        }
+                    ]
+                },
+                {
+                    "name": "Metrics",
+                    "id": "00000000000000000000000000000000",
+                    "type": "templateMetrics",
+                    "elements": [
+                        {
+                            "name": "Cost",
+                            "id": "7FD5B69611D5AC76C000D98A4CC5F24F",
+                            "type": "metric",
+                            "min": 311596.93500000008,
+                            "max": 4160317.597400001,
+                            "dataType": "double",
+                            "numberFormatting": {
+                                "category": 1,
+                                "decimalPlaces": 0,
+                                "thousandSeparator": true,
+                                "currencySymbol": "$",
+                                "currencyPosition": 0,
+                                "formatString": "\"$\"#,##0",
+                                "negativeType": 1
+                            }
+                        }
+                    ]
+                }
+            ],
+			"columnSets": [
+				{
+					"key": "5867DC00855B4D938E99D769A000574A",
+					"name": "Column Set1",
+					"metricsPosition": {
+						"axis": "rows",
+						"index": 1
+					},
+					"columns": [
+						{
+							"name": "Category",
+							"id": "8D679D3711D3E4981000E787EC6DE8A4",
+							"type": "attribute",
+							"forms": [
+								{
+									"id": "CCFBE2A5EADB4F50941FB879CCF1721C",
+									"name": "DESC",
+									"dataType": "nVarChar",
+									"baseFormCategory": "DESC",
+									"baseFormType": "text"
+								}
+							],
+							"elements": [
+								{
+									"formValues": [
+										"Books"
+									],
+									"id": "h1;8D679D3711D3E4981000E787EC6DE8A4"
+								},
+								{
+									"formValues": [
+										"Electronics"
+									],
+									"id": "h2;8D679D3711D3E4981000E787EC6DE8A4"
+								},
+								{
+									"formValues": [
+										"Movies"
+									],
+									"id": "h3;8D679D3711D3E4981000E787EC6DE8A4"
+								},
+								{
+									"formValues": [
+										"Music"
+									],
+									"id": "h4;8D679D3711D3E4981000E787EC6DE8A4"
+								}
+							]
+						}
+					],
+					"sorting": {
+						"rows": [],
+						"columns": []
+					},
+					"thresholds": []
+				},
+				{
+					"key": "5867DC00855B4D938E99D769A000574A",
+					"name": "Column Set2",
+					"metricsPosition": {
+						"axis": "rows",
+						"index": 1
+					},
+					"columns": [],
+				    "sorting": {
+						"rows": [],
+						"columns": []
+					},
+					"thresholds": []
+				},
+				{
+					"key": "W497B447244B240639C575D90C5E5850B",
+					"name": "Column Set3",
+					"metricsPosition": {
+						"axis": "rows",
+						"index": 1
+					},
+					"columns": [
+						{
+							"name": "Year",
+							"id": "8D679D5111D3E4981000E787EC6DE8A4",
+							"type": "attribute",
+							"forms": [
+								{
+									"id": "45C11FA478E745FEA08D781CEA190FE5",
+									"name": "ID",
+									"dataType": "numeric",
+									"baseFormCategory": "ID",
+									"baseFormType": "number"
+								}
+							],
+							"elements": [
+								{
+									"formValues": [
+										"2014"
+									],
+									"id": "h2014;8D679D5111D3E4981000E787EC6DE8A4"
+								},
+								{
+									"formValues": [
+										"2015"
+									],
+									"id": "h2015;8D679D5111D3E4981000E787EC6DE8A4"
+								},
+								{
+									"formValues": [
+										"2016"
+									],
+									"id": "h2016;8D679D5111D3E4981000E787EC6DE8A4"
+								}
+							]
+						}
+					],
+					"sorting": {
+						"rows": [],
+						"columns": []
+					},
+					"thresholds": []
+				}
+			]
+		}
+	},
+	"data": {
+		"paging": {
+			"total": 8,
+			"current": 8,
+			"offset": 0,
+			"limit": 1000
+		},
+		"headers": {
+            "rows": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    1,
+                    0
+                ],
+                [
+                    2,
+                    0
+                ],
+                [
+                    3,
+                    0
+                ],
+                [
+                    4,
+                    0
+                ],
+                [
+                    5,
+                    0
+                ],
+                [
+                    6,
+                    0
+                ],
+                [
+                    7,
+                    0
+                ]
+            ],
+			"columnSets": [
+				[
+					[
+						0
+					],
+					[
+						1
+					],
+					[
+						2
+					],
+					[
+						3
+					]
+				],
+				[
+				],
+				[
+					[
+						0
+					],
+					[
+						1
+					],
+					[
+						2
+					]
+				]
+			]
+		},
+		"metricValues": {
+			"columnSets": [
+				{
+					"raw": [
+						[
+							370160.5830000001,
+							null,
+							null,
+							null
+						],
+						[
+							311596.9350000001,
+							null,
+							null,
+							null
+						],
+						[
+							null,
+							3149663.3641999999,
+							null,
+							null
+						],
+						[
+							null,
+							4160317.597400001,
+							null,
+							null
+						],
+						[
+							null,
+							null,
+							625034.1145000003,
+							null
+						],
+						[
+							null,
+							null,
+							751774.6995000003,
+							null
+						],
+						[
+							null,
+							null,
+							null,
+							696977.3456999993
+						],
+						[
+							null,
+							null,
+							null,
+							722589.9731999994
+						]
+					],
+					"formatted": [
+						[
+							"$370,161",
+							"",
+							"",
+							""
+						],
+						[
+							"$311,597",
+							"",
+							"",
+							""
+						],
+						[
+							"",
+							"$3,149,663",
+							"",
+							""
+						],
+						[
+							"",
+							"$4,160,318",
+							"",
+							""
+						],
+						[
+							"",
+							"",
+							"$625,034",
+							""
+						],
+						[
+							"",
+							"",
+							"$751,775",
+							""
+						],
+						[
+							"",
+							"",
+							"",
+							"$696,977"
+						],
+						[
+							"",
+							"",
+							"",
+							"$722,590"
+						]
+					],
+					"extras": [
+						[
+							{},
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{},
+							{}
+						]
+					]
+				},
+				{
+					"raw": [
+						[
+							370160.5830000001
+						],
+						[
+							311596.9350000001
+						],
+						[
+							3149663.3641999999
+						],
+						[
+							4160317.597400001
+						],
+						[
+							625034.1145000003
+						],
+						[
+							751774.6995000003
+						],
+						[
+							696977.3456999993
+						],
+						[
+							722589.9731999994
+						]
+					],
+					"formatted": [
+						[
+							"$370,161"
+						],
+						[
+							"$311,597"
+						],
+						[
+							"$3,149,663"
+						],
+						[
+							"$4,160,318"
+						],
+						[
+							"$625,034"
+						],
+						[
+							"$751,775"
+						],
+						[
+							"$696,977"
+						],
+						[
+							"$722,590"
+						]
+					],
+					"extras": [
+						[
+							{}
+						],
+						[
+							{}
+						],
+						[
+							{}
+						],
+						[
+							{}
+						],
+						[
+							{}
+						],
+						[
+							{}
+						],
+						[
+							{}
+						],
+						[
+							{}
+						]
+					]
+				},
+				{
+					"raw": [
+						[
+							88179.247,
+							122315.7,
+							159665.636
+						],
+						[
+							76319.451,
+							102823.2400000000,
+							132454.244
+						],
+						[
+							768144.1835999998,
+							1030682.003,
+							1350837.1776000004
+						],
+						[
+							1018905.2302000001,
+							1402264.9108000003,
+							1739147.4564000003
+						],
+						[
+							154194.827,
+							205141.3890000001,
+							265697.8985000002
+						],
+						[
+							184264.2745,
+							248261.5905000001,
+							319248.8345000004
+						],
+						[
+							172325.0726999999,
+							230782.9814999998,
+							293869.2914999997
+						],
+						[
+							176310.18,
+							237860.2502999999,
+							308419.5428999996
+						]
+					],
+					"formatted": [
+						[
+							"$88,179",
+							"$122,316",
+							"$159,666"
+						],
+						[
+							"$76,319",
+							"$102,823",
+							"$132,454"
+						],
+						[
+							"$768,144",
+							"$1,030,682",
+							"$1,350,837"
+						],
+						[
+							"$1,018,905",
+							"$1,402,265",
+							"$1,739,147"
+						],
+						[
+							"$154,195",
+							"$205,141",
+							"$265,698"
+						],
+						[
+							"$184,264",
+							"$248,262",
+							"$319,249"
+						],
+						[
+							"$172,325",
+							"$230,783",
+							"$293,869"
+						],
+						[
+							"$176,310",
+							"$237,860",
+							"$308,420"
+						]
+					],
+					"extras": [
+						[
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{}
+						],
+						[
+							{},
+							{},
+							{}
+						]
+					]
+				}
+			]
+		}
+	}
+}

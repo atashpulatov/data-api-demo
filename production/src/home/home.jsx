@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // eslint-disable-line no-unused-vars
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import './home.css';
 import { withTranslation } from 'react-i18next';
@@ -6,7 +6,7 @@ import { Spin } from 'antd';
 import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
-import { toggleRenderSettingsFlag } from '../redux-reducer/office-reducer/office-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { RightSidePanel } from '../right-side-panel/right-side-panel';
 import { HomeDialog } from './home-dialog';
 import { Authenticate } from '../authentication/auth-component';
@@ -27,21 +27,29 @@ export const HomeNotConnected = (props) => {
     notificationService.connectionRestored();
   };
   const handleConnectionLost = () => {
-    !popupOpen && notificationService.connectionLost();
+    if (!popupOpen) {
+      notificationService.connectionLost();
+    }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
     return (() => window.removeEventListener('online', handleConnectionRestored),
     () => window.removeEventListener('offline', handleConnectionLost));
   },);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!popupOpen && !window.navigator.onLine) {
       notificationService.connectionLost();
     }
   }, [popupOpen]);
+
+  useEffect(() => {
+    if (!authToken) {
+      notificationService.sessionRestored();
+    }
+  });
 
   useEffect(() => {
     try {
@@ -90,7 +98,7 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = { toggleRenderSettingsFlag, };
+const mapDispatchToProps = { toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag };
 
 HomeNotConnected.propTypes = {
   loading: PropTypes.bool,

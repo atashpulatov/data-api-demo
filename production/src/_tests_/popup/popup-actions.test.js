@@ -6,7 +6,6 @@ import {
 } from '../../redux-reducer/popup-reducer/popup-actions';
 import { popupHelper } from '../../popup/popup-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
@@ -121,7 +120,7 @@ describe('Popup actions', () => {
     expect(popupController.runRepromptPopup).toBeCalledWith(report);
   });
 
-  it('should call error service and dispatch stop loading when edit action fails', async () => {
+  it('should call error service when edit action fails', async () => {
     // given
     const bindId = 'bindId';
     const report = { bindId, objectType: 'whatever' };
@@ -132,7 +131,6 @@ describe('Popup actions', () => {
     await actions.callForEdit(report)(mockedDispatch);
     // then
     expect(errorService.handleError).toBeCalledWith(error);
-    expect(mockedDispatch).toBeCalledWith({ type: officeProperties.actions.stopLoading });
   });
 
   it('should set proper popupType when switch to edit requested', () => {

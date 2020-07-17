@@ -1,7 +1,11 @@
 import officeConverter from '../../office/office-converter-service-v2';
 import response from '../../mstr-object/rest-api-v2.json';
-import jsonHandler from '../../mstr-object/mstr-normalized-json-handler';
+import regularCompoundJSON from '../mstr-object/compound-grid/Regular Compound Grid.json';
+import jsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 import { columnInformationMock, expectedColumnSplit, expectedColumnNoSplit } from './__mock__object__/column-information-mock';
+import mstrCompoundGridHandler from '../../mstr-object/handler/mstr-compound-grid-handler';
+import mstrGridHandler from '../../mstr-object/handler/mstr-grid-handler';
+import mstrAttributeFormHelper from '../../mstr-object/helper/mstr-attribute-form-helper';
 
 describe('Office converter service v2', () => {
   it('should return create a table', () => {
@@ -98,10 +102,11 @@ describe('Office converter service v2', () => {
     const attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
     const crosstabsResponse = { ...response, attrforms };
     const isCrosstab = officeConverter.isCrosstab(crosstabsResponse);
-    const columnInformation = officeConverter.getColumnInformation(crosstabsResponse);
+    const gridHandler = officeConverter.getHandler(response);
+    const columnInformation = gridHandler.getColumnInformation(crosstabsResponse);
     const expectedValue = { columns: 6, rows: 8 };
     // when
-    const tableSize = officeConverter.getTableSize(crosstabsResponse, columnInformation, isCrosstab);
+    const tableSize = gridHandler.getTableSize(crosstabsResponse, columnInformation, isCrosstab);
     // then
     expect(tableSize).toEqual(expectedValue);
   });
@@ -117,16 +122,18 @@ describe('Office converter service v2', () => {
       isAttribute: true,
     };
     // when
-    const colInformation = officeConverter.getColumnInformation(crosstabsResponse);
+    const gridHandler = officeConverter.getHandler(response);
+    const colInformation = gridHandler.getColumnInformation(crosstabsResponse);
     // then
     expect(colInformation[0]).toEqual(expectedFirstColumn);
   });
   it('should split column information per attribute form for formatting', () => {
     // given
     const columnInformation = columnInformationMock;
+    const gridHandler = jsonHandler;
     // when
-    const colInformationSplit = officeConverter.splitAttributeForms(columnInformation, true);
-    const colInformationNoSplit = officeConverter.splitAttributeForms(columnInformation, false);
+    const colInformationSplit = mstrAttributeFormHelper.splitAttributeForms(columnInformation, true);
+    const colInformationNoSplit = mstrAttributeFormHelper.splitAttributeForms(columnInformation, false);
     // then
     expect(colInformationSplit).toEqual(expectedColumnSplit);
     expect(colInformationNoSplit).toEqual(expectedColumnNoSplit);
@@ -148,5 +155,21 @@ describe('Office converter service v2', () => {
     // then
     expect(renderTabularSpy).toBeCalled();
     expect(returnedValue).toStrictEqual({ row: [], rowTotals: [] });
+  });
+  it('should return grid handler', () => {
+    // given
+    const gridResponse = response;
+    // when
+    const gridHandler = officeConverter.getHandler(gridResponse);
+    // then
+    expect(gridHandler).toEqual(mstrGridHandler);
+  });
+  it('should return compound grid handler', () => {
+    // given
+    const gridResponse = regularCompoundJSON;
+    // when
+    const gridHandler = officeConverter.getHandler(gridResponse);
+    // then
+    expect(gridHandler).toEqual(mstrCompoundGridHandler);
   });
 });

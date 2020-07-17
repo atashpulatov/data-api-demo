@@ -61,6 +61,21 @@ class OfficeApiWorksheetHelper {
   }
 
   /**
+  * Get address of the Excel cell based on value of insertNewWorksheet might also create new worksheet.
+  *
+  * @param {Boolean} insertNewWorksheet specify whether new worksheet should be create before getting startcell
+  * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+  * @return {String} address of Excel cell
+  */
+  getStartCell = async (insertNewWorksheet, excelContext) => {
+    if (insertNewWorksheet) {
+      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
+    }
+
+    return officeApiHelper.getSelectedCell(excelContext);
+  };
+
+  /**
   * Creates Excel worksheet and set it as a active one.
   *
   * @param {Office} excelContext Reference to Excel Context used by Excel API functions

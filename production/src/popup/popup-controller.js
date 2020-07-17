@@ -3,12 +3,13 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import { errorService } from '../error/error-handler';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { LOAD_BROWSING_STATE_CONST, changeSorting, clearSelection } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
 import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
-import { RESET_STATE } from '../redux-reducer/popup-reducer/popup-actions';
-import { CLEAR_POPUP_STATE, SET_MSTR_DATA } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
 const URL = `${window.location.href}`;
@@ -20,17 +21,18 @@ class PopupController {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
 
-  init = (reduxStore, sessionActions, popupAction) => {
+  init = (reduxStore, sessionActions, popupActions) => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
-    this.popupAction = popupAction;
+    this.popupActions = popupActions;
   }
 
   runPopupNavigation = async () => {
     // DE159475; clear sorting before popup display until it's fixed in object-table
-    this.reduxStore.dispatch(changeSorting({}));
-    this.reduxStore.dispatch({ type: CLEAR_POPUP_STATE });
-    this.reduxStore.dispatch(clearSelection());
+    this.reduxStore.dispatch(filterActions.changeSorting({}));
+    this.reduxStore.dispatch(popupStateActions.onClearPopupState());
+    this.reduxStore.dispatch(navigationTreeActions.clearSelection());
+    this.reduxStore.dispatch(this.popupActions.resetState());
     await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
   };
 
@@ -39,7 +41,7 @@ class PopupController {
   };
 
   runRepromptPopup = async (reportParams) => {
-    this.reduxStore.dispatch({ type: SET_MSTR_DATA, payload: { isReprompt: true } });
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
@@ -48,13 +50,11 @@ class PopupController {
   };
 
   runPopup = async (popupType, height, width, reportParams = null) => {
-    this.reduxStore.dispatch({ type: SET_MSTR_DATA, payload: { popupType } });
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
       console.error({ error });
-
-      this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       errorService.handleError(error);
       return;
     }
@@ -71,25 +71,25 @@ class PopupController {
       Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}`,
         { height, width, displayInIframe: true },
         (asyncResult) => {
-          const dialog = asyncResult.value;
-          this.sessionActions.setDialog(dialog);
-          console.timeEnd('Popup load time');
-          dialog.addEventHandler(Office.EventType.DialogMessageReceived,
-            this.onMessageFromPopup.bind(null, dialog, reportParams));
+          const { value: dialog } = asyncResult;
+          if (dialog) {
+            this.sessionActions.setDialog(dialog);
+            console.timeEnd('Popup load time');
+            dialog.addEventHandler(Office.EventType.DialogMessageReceived,
+              this.onMessageFromPopup.bind(null, dialog, reportParams));
 
-          dialog.addEventHandler(
+            dialog.addEventHandler(
             // Event received on dialog close
-            Office.EventType.DialogEventReceived,
-            () => {
-              this.reduxStore.dispatch({ type: RESET_STATE });
-              this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-              this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
-            }
-          );
-          this.reduxStore.dispatch({ type: officeProperties.actions.popupShown });
+              Office.EventType.DialogEventReceived,
+              () => {
+                this.reduxStore.dispatch(this.popupActions.resetState());
+                this.reduxStore.dispatch(officeActions.hidePopup());
+              }
+            );
+            this.reduxStore.dispatch(officeActions.showPopup());
+          }
         });
     } catch (error) {
-      this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
       errorService.handleError(error);
     }
   };
@@ -98,7 +98,7 @@ class PopupController {
     const { message } = arg;
     const response = JSON.parse(message);
     if (response.command === selectorProperties.commandBrowseUpdate) {
-      this.reduxStore.dispatch({ type: LOAD_BROWSING_STATE_CONST, browsingState: response.body });
+      this.reduxStore.dispatch(filterActions.loadBrowsingState(response.body));
       return;
     }
     try {
@@ -143,10 +143,9 @@ class PopupController {
       console.error(error);
       errorService.handleError(error);
     } finally {
-      this.reduxStore.dispatch({ type: RESET_STATE });
+      this.reduxStore.dispatch(this.popupActions.resetState());
       if (response.command !== REFRESH_CACHE_COMMAND) {
-        this.reduxStore.dispatch({ type: officeProperties.actions.popupHidden });
-        this.reduxStore.dispatch({ type: officeProperties.actions.stopLoading });
+        this.reduxStore.dispatch(officeActions.hidePopup());
       }
     }
   };
@@ -169,6 +168,7 @@ class PopupController {
       instanceId: response.instanceId,
       subtotalsInfo: response.subtotalsInfo,
       displayAttrFormNames: response.displayAttrFormNames,
+      definition: { filters: response.filterDetails },
     };
     this.reduxStore.dispatch(importRequested(objectData));
   };
@@ -186,6 +186,7 @@ class PopupController {
         promptsAnswers: response.promptsAnswers,
         visualizationInfo: response.visualizationInfo,
         preparedInstanceId: response.preparedInstanceId,
+        definition: { filters: response.filterDetails, }
       };
       this.reduxStore.dispatch(importRequested(objectData));
     }

@@ -51,9 +51,10 @@ describe('StepGetOfficeTableEditRefresh', () => {
 
     jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
 
+    jest.spyOn(officeTableRefresh, 'getPreviousOfficeTable').mockImplementation(() => 'prevOfficeTableTest',);
+
     jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(() => ({
       tableChanged: true,
-      prevOfficeTable: 'prevOfficeTableTest',
       startCell: 'startCellTest',
     }));
 
@@ -78,14 +79,17 @@ describe('StepGetOfficeTableEditRefresh', () => {
     expect(officeTableRefresh.getExistingOfficeTableData).toBeCalledTimes(1);
     expect(officeTableRefresh.getExistingOfficeTableData).toBeCalledWith(
       'excelContextTest',
-      'oldBindIdTest',
+      // 'oldBindIdTest',
       { mstrTable: 'mstrTableTest' },
+      'prevOfficeTableTest',
       'previousTableDimensionsTest',
     );
+
 
     expect(officeTableCreate.createOfficeTable).toBeCalledTimes(1);
     expect(officeTableCreate.createOfficeTable).toBeCalledWith({
       instanceDefinition: { mstrTable: 'mstrTableTest' },
+      isRepeatStep: false,
       excelContext: 'excelContextTest',
       startCell: 'startCellTest',
       tableName: 'tableNameTest',
@@ -97,7 +101,7 @@ describe('StepGetOfficeTableEditRefresh', () => {
     expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
       officeTable: 'officeTableTest',
-      shouldFormat: undefined,
+      shouldFormat: true,
       tableChanged: true,
       instanceDefinition: { mstrTable: 'mstrTableTest' },
       startCell: 'startCellTest',
@@ -137,12 +141,12 @@ describe('StepGetOfficeTableEditRefresh', () => {
 
     jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
 
-    jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData')
-      .mockImplementation(() => ({
-        tableChanged: false,
-        prevOfficeTable: 'prevOfficeTableTest',
-        startCell: 'startCellTest',
-      }));
+    jest.spyOn(officeTableRefresh, 'getPreviousOfficeTable').mockImplementation(() => 'prevOfficeTableTest',);
+
+    jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(() => ({
+      tableChanged: false,
+      startCell: 'startCellTest',
+    }));
 
     jest.spyOn(officeTableUpdate, 'updateOfficeTable').mockReturnValue('officeTableTest');
 
@@ -162,8 +166,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
     expect(officeTableRefresh.getExistingOfficeTableData).toBeCalledTimes(1);
     expect(officeTableRefresh.getExistingOfficeTableData).toBeCalledWith(
       'excelContextTest',
-      'oldBindIdTest',
       { mstrTable: 'mstrTableTest' },
+      'prevOfficeTableTest',
       'previousTableDimensionsTest',
     );
 

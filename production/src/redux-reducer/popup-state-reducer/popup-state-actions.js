@@ -1,11 +1,13 @@
-import { CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN } from '../navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../filter-reducer/filter-actions';
+import { popupActions } from '../popup-reducer/popup-actions';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 
-export const SET_POPUP_TYPE = 'SET_POPUP_TYPE';
-export const SET_MSTR_DATA = 'SET_MSTR_DATA';
-export const SET_OBJECT_DATA = 'SET_OBJECT_DATA';
-export const ON_POPUP_BACK = 'ON_POPUP_BACK';
-export const CLEAR_POPUP_STATE = 'CLEAR_POPUP_STATE';
+export const SET_POPUP_TYPE = 'POPUP_STATE_SET_POPUP_TYPE';
+export const SET_MSTR_DATA = 'POPUP_STATE_SET_MSTR_DATA';
+export const SET_OBJECT_DATA = 'POPUP_STATE_SET_OBJECT_DATA';
+export const ON_POPUP_BACK = 'POPUP_STATE_ON_POPUP_BACK';
+export const CLEAR_POPUP_STATE = 'POPUP_STATE_CLEAR_POPUP_STATE';
 
 class PopupStateActions {
   setPopupType = (popupType) => (dispatch) => dispatch({
@@ -31,13 +33,15 @@ class PopupStateActions {
   }
 
   onClearPopupState = () => (dispatch) => {
+    dispatch(filterActions.changeSearching(''));
     dispatch({ type: CLEAR_POPUP_STATE, });
   }
 
   onPopupBack = () => (dispatch) => {
     dispatch({ type: ON_POPUP_BACK });
-    dispatch({ type: CLEAR_PROMPTS_ANSWERS });
-    dispatch({ type: CANCEL_DOSSIER_OPEN });
+    dispatch(navigationTreeActions.clearPromptAnswers());
+    dispatch(popupActions.clearEditedObject());
+    dispatch(navigationTreeActions.cancelDossierOpen());
   }
 }
 

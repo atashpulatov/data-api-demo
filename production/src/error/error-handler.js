@@ -1,3 +1,6 @@
+import officeReducerHelper from '../office/store/office-reducer-helper';
+import { getNotificationButtons } from '../notification-v2/notification-buttons';
+import { customT } from '../redux-reducer/notification-reducer/notification-title-maps';
 import {
   errorTypes,
   httpStatusToErrorType,
@@ -5,14 +8,12 @@ import {
   errorMessageFactory,
   incomingErrorStrings,
 } from './constants';
-import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import {
   IMPORT_OPERATION,
   DUPLICATE_OPERATION,
   REFRESH_OPERATION,
   EDIT_OPERATION
 } from '../operation/operation-type-names';
-import { customT } from '../redux-reducer/notification-reducer/notification-title-maps';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -29,9 +30,17 @@ class ErrorService {
     if (error.Code === 5012) {
       this.handleError(error);
     }
+
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage, errorType);
-    this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
+
+    if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
+      officeReducerHelper.dispayPopupOnSidePanel({
+        objectWorkingId, title: errorMessage, message: details, callback
+      });
+    } else {
+      this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
+    }
   }
 
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
@@ -82,8 +91,7 @@ class ErrorService {
   }]);
 
   checkForLogout = (isLogout = false, errorType) => {
-    if (!isLogout
-      && [errorTypes.UNAUTHORIZED_ERR].includes(errorType)) {
+    if (!isLogout && [errorTypes.UNAUTHORIZED_ERR].includes(errorType)) {
       setTimeout(() => {
         this.fullLogOut();
       }, TIMEOUT);

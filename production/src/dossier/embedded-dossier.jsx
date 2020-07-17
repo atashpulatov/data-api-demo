@@ -13,25 +13,6 @@ const { microstrategy, Office } = window;
 
 const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
-/**
- * Watches container for child addition and runs callback in case an iframe was added
- * @param {*} container
- * @param {*} callback
- */
-export function watchForIframeAddition(container, callback) {
-  const config = { childList: true };
-  const onMutation = (mutationList) => {
-    for (const mutation of mutationList) {
-      if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
-        const iframe = mutation.addedNodes[0];
-        callback(iframe);
-      }
-    }
-  };
-  const observer = new MutationObserver(onMutation);
-  observer.observe(container, config);
-}
-
 export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
@@ -46,7 +27,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   componentDidMount() {
-    watchForIframeAddition(this.container.current, this.onIframeLoad);
+    scriptInjectionHelper.watchForIframeAddition(this.container.current, this.onIframeLoad);
     this.loadEmbeddedDossier(this.container.current);
   }
 

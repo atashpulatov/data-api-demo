@@ -104,17 +104,14 @@ describe('Cache actions', () => {
     // given
     const expectedClearAction = { type: CLEAR_CACHE, };
     const expectedRefreshAction = { type: REFRESH_CACHE, };
-    const expectedRefreshActionWithUpdate = { type: REFRESH_CACHE, data: true };
 
     // when
     const clearAction = clearStateCache();
-    const refreshAction = refreshCacheAction();
-    const refreshActionWithUpdate = refreshCacheAction(true);
+    const refreshAction = refreshCacheAction(false);
 
     // then
     expect(clearAction).toEqual(expectedClearAction);
     expect(refreshAction).toEqual(expectedRefreshAction);
-    expect(refreshActionWithUpdate).toEqual(expectedRefreshActionWithUpdate);
   });
 
   it('should return create cache higher order function', () => {

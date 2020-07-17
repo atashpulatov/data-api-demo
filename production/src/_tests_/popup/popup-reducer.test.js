@@ -1,36 +1,11 @@
 import {
-  START_REPORT_LOADING,
-  STOP_REPORT_LOADING,
   RESET_STATE,
   SET_REPORT_N_FILTERS,
   SET_PREPARED_REPORT,
-} from '../../redux-reducer/popup-reducer/popup-actions';
-
+  SWITCH_IMPORT_SUBTOTALS_ON_EDIT } from '../../redux-reducer/popup-reducer/popup-actions';
 import { initialState, popupReducer } from '../../redux-reducer/popup-reducer/popup-reducer';
-import { SWITCH_IMPORT_SUBTOTALS } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
 describe('Popup Reducer', () => {
-  it('should return proper state in case of START_REPORT_LOADING action', () => {
-    // given
-    const action = {
-      type: START_REPORT_LOADING,
-      data: { name: 'testReport', },
-    };
-    // when
-    const newState = popupReducer(initialState, action);
-    // then
-    expect(newState).toEqual({ ...initialState, refreshingReport: 'testReport' });
-  });
-
-  it('should return proper state in case of STOP_REPORT_LOADING action', () => {
-    // given
-    const action = { type: STOP_REPORT_LOADING, };
-    // when
-    const newState = popupReducer(initialState, action);
-    // then
-    expect(newState).toEqual({ ...initialState, refreshingReport: undefined });
-  });
-
   it('should return proper state in case of RESET_STATE action', () => {
     // given
     const action = { type: RESET_STATE, };
@@ -68,10 +43,10 @@ describe('Popup Reducer', () => {
     expect(newState).toEqual({ preparedInstance: instanceId, editedObject: chosenObjectData });
   });
 
-  it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS action, no initial subtotalsInfo', () => {
+  it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS_ON_EDIT action, no initial subtotalsInfo', () => {
     // given
     const action = {
-      type: SWITCH_IMPORT_SUBTOTALS,
+      type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
       data: { newSubtotalProperty: 'testNewSubtotalProperty', },
     };
 
@@ -84,10 +59,10 @@ describe('Popup Reducer', () => {
     expect(newState).toEqual({ ...initialState, editedObject: {} });
   });
 
-  it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS action', () => {
+  it('should return proper state in case of SWITCH_IMPORT_SUBTOTALS_ON_EDIT action', () => {
     // given
     const action = {
-      type: SWITCH_IMPORT_SUBTOTALS,
+      type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
       data: { newSubtotalProperty: 'testNewSubtotalProperty', },
     };
 
@@ -107,10 +82,10 @@ describe('Popup Reducer', () => {
     expect(newState).toEqual({ ...initialState, editedObject: resultState });
   });
 
-  it('should return undefined editedObject after SWITCH_IMPORT_SUBTOTALS action was called on undefined editedObject', () => {
+  it('should return undefined editedObject after SWITCH_IMPORT_SUBTOTALS_ON_EDIT action was called on undefined editedObject', () => {
     // given
     const action = {
-      type: SWITCH_IMPORT_SUBTOTALS,
+      type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT,
       data: { newSubtotalProperty: 'testNewSubtotalProperty', },
     };
 

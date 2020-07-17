@@ -7,6 +7,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 import { reduxStore } from '../../store';
+import { Office } from '../mockOffice';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -41,6 +42,19 @@ describe('PopupController', () => {
     expect(runPopupSpy).toBeCalled();
     expect(runPopupSpy).toBeCalledWith(popupType, size, size);
   });
+
+  it('should call displayDialogAsync on runPopup invocation', async () => {
+    // given
+    const popupType = PopupTypeEnum.editFilters;
+    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
+    jest.spyOn(popupController, 'onMessageFromPopup').mockImplementationOnce(() => { });
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => { });
+    // when
+    await popupController.runPopup(popupType, 80, 80);
+    // then
+    expect(Office.context.ui.displayDialogAsync).toBeCalled();
+  });
+
 
   it('should run edit popup with proper settings', () => {
     // given

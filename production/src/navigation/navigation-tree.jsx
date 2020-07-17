@@ -5,7 +5,8 @@ import { withTranslation } from 'react-i18next';
 import { ObjectTable, TopFilterPanel } from '@mstr/rc';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { actions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import './navigation-tree.css';
@@ -22,15 +23,16 @@ import { popupHelper } from '../popup/popup-helper';
 
 const SAFETY_FALLBACK = 7000; // Interval for falling back to network
 
-const { getCubeStatus, isPrompted } = mstrObjectRestService;
+const { isPrompted, getCubeInfo } = mstrObjectRestService;
 const checkIfPrompted = isPrompted;
+const isPublishedInMyLibrary = true;
 
 export class NavigationTreeNotConnected extends Component {
   constructor(props) {
     super(props);
     this.state = {
       previewDisplay: false,
-      isPublished: true,
+      isPublishedInEnvironment: true,
     };
     this.indexedDBSupport = DB.getIndexedDBSupport();
   }
@@ -47,11 +49,10 @@ export class NavigationTreeNotConnected extends Component {
 
   componentDidUpdate() {
     const {
-      sorter, mstrObjectType, myLibrary, myLibraryFilter, envFilter
+      sorter, myLibrary, myLibraryFilter, envFilter
     } = this.props;
     const propsToSave = {
       sorter,
-      mstrObjectType,
       myLibrary,
       envFilter,
       myLibraryFilter,
@@ -113,7 +114,7 @@ export class NavigationTreeNotConnected extends Component {
       // If myLibrary is on, then selected object is a dossier.
       const mstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if ((mstrObjectType === mstrObjectEnum.mstrObjectType.report)
-      || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
         isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, mstrObjectType.name);
       }
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
@@ -143,7 +144,7 @@ export class NavigationTreeNotConnected extends Component {
       const mstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
 
       if ((mstrObjectType === mstrObjectEnum.mstrObjectType.report)
-      || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
+        || (mstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
         const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, mstrObjectType.name);
         setObjectData({ isPrompted: isPromptedResponse });
       }
@@ -155,8 +156,6 @@ export class NavigationTreeNotConnected extends Component {
   };
 
   handleCancel = () => {
-    const { stopLoading } = this.props;
-    stopLoading();
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
@@ -176,16 +175,18 @@ export class NavigationTreeNotConnected extends Component {
       objectId = targetId;
     }
 
-    let cubeStatus = true;
+    let isCubePublished = true;
     if (mstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
       try {
-        cubeStatus = await getCubeStatus(objectId, projectId) !== '0';
+        const cubeInfo = await getCubeInfo(objectId, projectId);
+        isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
       } catch (error) {
         popupHelper.handlePopupErrors(error);
       }
     }
-    this.setState({ isPublished: cubeStatus });
-
+    if (!myLibrary && objectId) {
+      this.setState({ isPublishedInEnvironment: isCubePublished });
+    }
     selectObject({
       chosenObjectId: objectId,
       chosenObjectName: objectName,
@@ -196,15 +197,22 @@ export class NavigationTreeNotConnected extends Component {
     });
   };
 
+  onSwitch = () => {
+    const { myLibrary, switchMyLibrary, restoreSelection } = this.props;
+    restoreSelection({ nextMyLibraryState: !myLibrary });
+    switchMyLibrary();
+  }
+
   render() {
     const {
-      chosenObjectId, chosenProjectId, changeSorting, loading, chosenLibraryDossier, searchText, sorter,
-      changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, switchMyLibrary, changeFilter, t,
+      chosenObjectId, chosenProjectId, changeSorting, chosenLibraryDossier, searchText, sorter,
+      changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, changeFilter, t,
       i18n, numberOfFiltersActive,
     } = this.props;
-    const { previewDisplay, isPublished } = this.state;
+    const { previewDisplay, isPublishedInEnvironment } = this.state;
     const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
     const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
+    const disableActiveActions = myLibrary ? (!isPublishedInMyLibrary) : (!isPublishedInEnvironment);
     return (
       <div className="navigation_tree__main_wrapper">
         <div className="navigation_tree__title_bar">
@@ -220,7 +228,7 @@ export class NavigationTreeNotConnected extends Component {
             filter={myLibrary ? myLibraryFilter : envFilter}
             searchText={searchText}
             onRefresh={() => this.refresh()}
-            onSwitch={switchMyLibrary}
+            onSwitch={this.onSwitch}
             numberOfFiltersActive={numberOfFiltersActive} />
         </div>
         <ObjectTable
@@ -240,14 +248,13 @@ export class NavigationTreeNotConnected extends Component {
           filter={myLibrary ? myLibraryFilter : envFilter}
           isLoading={cacheLoading} />
         <PopupButtons
-          loading={loading}
-          disableActiveActions={!chosenObjectId || !isPublished}
+          disableActiveActions={!chosenObjectId || disableActiveActions}
           handleOk={this.handleOk}
           handleSecondary={this.handleSecondary}
           handleCancel={this.handleCancel}
           previewDisplay={previewDisplay}
           disableSecondary={mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name}
-          isPublished={isPublished}
+          isPublished={myLibrary ? isPublishedInMyLibrary : isPublishedInEnvironment}
         />
       </div>
     );
@@ -255,8 +262,6 @@ export class NavigationTreeNotConnected extends Component {
 }
 
 NavigationTreeNotConnected.propTypes = {
-  stopLoading: PropTypes.func,
-  loading: PropTypes.bool,
   cache: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     projects: PropTypes.arrayOf(PropTypes.shape({})),
@@ -294,22 +299,21 @@ NavigationTreeNotConnected.propTypes = {
   changeFilter: PropTypes.func,
   t: PropTypes.func,
   numberOfFiltersActive: PropTypes.number,
+  restoreSelection: PropTypes.func,
 };
 
 
 NavigationTreeNotConnected.defaultProps = { t: (text) => text };
 
-export const mapStateToProps = ({ officeReducer, navigationTree, cacheReducer }) => {
-  const object = officeReducer.preLoadReport;
-  return {
-    ...navigationTree,
-    title: object ? object.name : undefined,
-    cache: cacheReducer,
-  };
-};
+export const mapStateToProps = ({ navigationTree, filterReducer, cacheReducer }) => ({
+  ...navigationTree,
+  ...filterReducer,
+  cache: cacheReducer,
+});
 
 const mapActionsToProps = {
-  ...actions,
+  ...navigationTreeActions,
+  ...filterActions,
   connectToDB: connectToCache,
   resetDBState: refreshCacheState,
   fetchObjectsFromNetwork: fetchObjectsFallback,

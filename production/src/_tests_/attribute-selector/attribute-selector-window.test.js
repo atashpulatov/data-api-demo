@@ -126,7 +126,7 @@ describe('AttributeSelectorWindow', () => {
     componentWrapper.instance().handleOk();
 
     // then
-    expect(spyMethod).toHaveBeenCalledWith({ triggerUpdate: true, loading: true });
+    expect(spyMethod).toHaveBeenCalledWith({ triggerUpdate: true });
   });
 
   it('should call attributeSelectorHelpers.officeMessageParent if onTriggerUpdate is called without report name', () => {
@@ -356,7 +356,6 @@ describe('AttributeSelectorWindow', () => {
     componentWrapper.instance().resetTriggerUpdate();
     // then
     expect(componentWrapper.instance().state.triggerUpdate).toBeFalsy();
-    expect(componentWrapper.instance().state.loading).toBeFalsy();
   });
   it('should change value of openModal if openModal is being invoked', () => {
     // given
