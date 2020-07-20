@@ -245,7 +245,7 @@ Excel Add In should be started. Used in browsers.
 
 `-o folder/` specifies tests results output folder when formatting is configured for using Allure.  
 
-##### Run tests remotely on Windows Desktop
+#### Run tests remotely on Windows Desktop
 
 ##### GO TO YOUR WINDOWS MACHINE
 1. Install `PuTTY` you can use this [link] (https://www.putty.org/)
