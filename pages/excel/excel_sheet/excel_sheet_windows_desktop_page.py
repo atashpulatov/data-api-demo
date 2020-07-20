@@ -81,7 +81,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def get_number_of_worksheets(self):
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
-        book_children_elements = book_element.find_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
+        book_children_elements = book_element.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
 
         sheet_tab_elements = list(
             filter(lambda item: item.get_attribute(
@@ -100,7 +100,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         worksheet_number_int = int(worksheet_number)
 
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
-        book_children_elements = book_element.find_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
+        book_children_elements = book_element.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
 
         i = 0
         for child in book_children_elements:

@@ -2,6 +2,7 @@ from appium import webdriver
 from urllib3.exceptions import MaxRetryError
 
 from util.config_util import ConfigUtil
+from util.const import DEFAULT_TIMEOUT
 from util.exception.MstrException import MstrException
 from util.util import Util
 
@@ -63,7 +64,7 @@ class DriverWindowsDesktop:
         for i in range(1, DriverWindowsDesktop.DRIVER_INITIALIZATION_ATTEMPT_COUNT):
             try:
                 driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
-                driver.implicitly_wait(60)
+                driver.implicitly_wait(DEFAULT_TIMEOUT)
                 Util.pause(4)
 
                 return driver

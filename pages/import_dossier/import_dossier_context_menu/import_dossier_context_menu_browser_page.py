@@ -74,7 +74,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         ).click()
 
         menu_boxes = self.get_elements_by_css(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_BOX)
-        menu_items = menu_boxes[1].find_elements_by_css(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_TEXT_ELEMENTS)
+        menu_items = menu_boxes[1].get_elements_by_css(ImportDossierContextMenuBrowserPage.CONTEXT_MENU_TEXT_ELEMENTS)
 
         for item in menu_items:
             if item.text == drill_by:

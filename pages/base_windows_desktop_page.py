@@ -1,14 +1,10 @@
-from selenium.common.exceptions import NoSuchElementException
-
 from pages.base_page import BasePage
-from pages.page_util.base_element import BaseElement
 from util.const import ELEMENT_SEARCH_RETRY_NUMBER, DEFAULT_WAIT_AFTER_EXCEPTION
 from util.exception.MstrException import MstrException
 
 
 class BaseWindowsDesktopPage(BasePage):
     POPUP_MAIN_ELEMENT = 'MicroStrategy for Office'
-    NAME_ATTRIBUTE = 'Name'
 
     popup_main_element = None
 
@@ -31,35 +27,6 @@ class BaseWindowsDesktopPage(BasePage):
             BaseWindowsDesktopPage.popup_main_element = mstr_elems[0]
 
         return BaseWindowsDesktopPage.popup_main_element
-
-    def find_element_by_xpath_from_parent(self, parent_element, selector):
-        i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
-            try:
-                return BaseElement(parent_element.find_element_by_xpath(selector), self.driver)
-            except NoSuchElementException:
-                self.log_warning('Element not found, try %s: %s' % (i, selector))
-                self.pause(5)
-            i += 1
-
-        raise MstrException('Cannot find element: %s' % selector)
-
-    def find_elements_by_xpath_from_parent(self, parent_element, selector):
-        i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
-            try:
-                raw_elements = parent_element.find_elements_by_xpath(selector)
-                return BaseElement.wrap_raw_elements(raw_elements, self.driver)
-
-            except NoSuchElementException:
-                self.log_warning('Element not found, try %s: %s' % (i, selector))
-                self.pause(5)
-            i += 1
-
-        raise MstrException('Cannot find elements: %s' % selector)
-
-    def get_element_name(self, element):
-        return element.get_attribute(BaseWindowsDesktopPage.NAME_ATTRIBUTE)
 
     def prepare_image_name(self, image_name):
         return '%s_%s' % (self.__class__.__name__, image_name)

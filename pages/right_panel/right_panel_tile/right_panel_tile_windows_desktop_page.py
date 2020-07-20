@@ -49,8 +49,8 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def get_object_name(self, index):
         plugin_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
 
-        object_name_element = plugin_element.find_element_by_xpath(
+        object_name_element = plugin_element.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.OBJECT_NAME_ELEM % index
         )
 
-        return self.get_element_name(object_name_element)
+        return object_name_element.get_name_by_attribute()
