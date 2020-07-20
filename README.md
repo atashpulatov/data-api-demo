@@ -248,7 +248,7 @@ Excel Add In should be started. Used in browsers.
 #### Run tests remotely on Windows Desktop
 
 ##### GO TO YOUR WINDOWS MACHINE
-1. Install `PuTTY` you can use this [link] (https://www.putty.org/)
+1. Install `PuTTY` you can use this [link](https://www.putty.org/)
 2. Using PuTTY, configure connection to your Mac 
     ```
     Host Name (or IP adress) of yor Mac 
