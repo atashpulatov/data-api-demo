@@ -75,6 +75,14 @@ class BaseElement:
     def get_name_by_attribute(self):
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
 
+    @property
+    def location(self):
+        return self.__element.location
+
+    @property
+    def size(self):
+        return self.__element.size
+
     def get_element_by_xpath(self, selector):
         i = 0
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
