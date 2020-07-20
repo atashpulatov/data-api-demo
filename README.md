@@ -10,6 +10,7 @@ Tests are written in [Gherkin](https://cucumber.io/docs/gherkin/reference/) (nat
 - Prerequisites and installation
 - Running tests
 - Run tests remotely on Windows Desktop
+- Run tests using the same session
 - Developer environment
 - TODO
 
@@ -280,6 +281,45 @@ Excel Add In should be started. Used in browsers.
     ```
     driver_type=windows_desktop
     ```
+
+#### Run tests using the same session
+
+You can runn tests using the same opened excel session to do this you need to: 
+
+#####  FOR  BROWSER 
+1. In config.json change:
+
+    ```
+    "cleanup_after_test_enabled": false,
+    ```
+2. Run first TC with --logging-level=WARNING eg tests/debug_features/debug.feature
+3. Copy session_id and execution_url (should look like this)
+    ```
+    WARNING:root:Starting WebDriver, execution_url: [http://127.0.0.1:59498], session_id: [d26e0c8f59db329bb2a75f9a85fbb93c]
+    WARNING:root:Image recognition enabled but not supported for [mac_chrome].
+    ```
+4. Paste elements from step 3. to config.json
+
+    ```
+    "browser_existing_session_executor_url": "[http://127.0.0.1:59498]",
+    "browser_existing_session_id": "d26e0c8f59db329bb2a75f9a85fbb93c",
+    ```
+5. Set `"connect_to_existing_session_enabled": ` to true
+
+#####  FOR  WINDOWS DESKTOP PLATFORM
+1. In config.json change:
+
+    ```
+    "cleanup_after_test_enabled": false,
+    "connect_to_existing_session_enabled": true,
+    ```
+2. Open Excel Desktop application
+3. Make sure you workbook is named as in config.json ` "windows_desktop_excel_root_element_name": "Book1 - Excel",`
+
+Tip:
+```
+In our automation, all TC are starting from the login step, make sure you prepared the excel app to have the addin opened. Also if you'd like to start from the other step comment the TC steps until you are satisfied.
+```
 
 
 ### Developer environment
