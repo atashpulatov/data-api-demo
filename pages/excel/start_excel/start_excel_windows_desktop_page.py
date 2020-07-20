@@ -44,10 +44,14 @@ class StartExcelWindowsDesktopPage(BaseWindowsDesktopPage):
                                                     timeout=StartExcelWindowsDesktopPage.CHECK_IF_MAXIMIZED_TIMEOUT):
             maximize = self.get_element_by_name(StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_ELEM)
 
+            # TODO not needed is_windows_desktop_workaround_enabled?
             if self.windows_desktop_workaround.is_windows_desktop_workaround_enabled():
                 maximize.click(
                     offset_x=StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_OFFSET_X,
                     offset_y=StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_OFFSET_Y
                 )
             else:
-                maximize.click()
+                maximize.click(
+                    offset_x=StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_OFFSET_X,
+                    offset_y=StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_OFFSET_Y
+                )

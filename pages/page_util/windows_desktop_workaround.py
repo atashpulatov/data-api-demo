@@ -15,6 +15,8 @@ class WindowsDesktopWorkaround:
     POPUP_WINDOW_ELEM = '//Window/Window'
 
     def setup_windows_desktop_workaround(self, enable_workaround):
+        Util.log_warning('Setting up Windows Desktop workaround to: %s' % enable_workaround)
+
         WindowsDesktopWorkaround.__windows_desktop_workaround_enabled = enable_workaround
 
     def is_windows_desktop_workaround_enabled(self):
