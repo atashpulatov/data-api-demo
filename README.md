@@ -245,6 +245,42 @@ Excel Add In should be started. Used in browsers.
 
 `-o folder/` specifies tests results output folder when formatting is configured for using Allure.  
 
+##### Run tests remotely on Windows Desktop
+
+##### GO TO YOUR WINDOWS MACHINE
+1. Install `PuTTY` you can use this [link] (https://www.putty.org/)
+2. Using PuTTY, configure connection to your Mac 
+    ```
+    Host Name (or IP adress) of yor Mac 
+     eg. knowak@192.168.1.19
+    port 22
+    Connection type: SSH
+    in Saved Session input type meaningful name and save
+    ```
+3. Double click on the saved connection to open the PuTTY console
+4. Insert the password for your Mac computer
+5. Run `WinAppDriver` from command line as Administrator with: 
+
+    ```
+    "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hu
+    ```
+    Tip: 
+
+    ```
+    If you can't connect please chcek your file path to the WinAppDriver.exe
+    ```
+##### GO TO YOUR MAC MACHINE
+
+6. In your IDE change in config.json
+   -  `"driver_path_windows_desktop":` to the one you have on your windows machine
+   - `"host_url_windows_desktop":` to  "http://127.0.0.1:4723/wd/hub" 
+   - `"excel_add_in_environment":` and `"excel_desktop_add_in_import_data_name": ` to the one you deployed on Excel Desktop for Windows
+7. Run TC as usual on your mac but for driver_type put 
+    ```
+    driver_type=windows_desktop
+    ```
+
+
 ### Developer environment
 
 #### Navigating from feature file to step definition in `Visual Studio Code`
