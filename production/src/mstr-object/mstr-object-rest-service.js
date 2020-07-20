@@ -39,8 +39,6 @@ function parseInstanceDefinition(res, attrforms) {
     columns,
     mstrTable,
     manipulationsXML: internal,
-    attributes: mstrTable.attributes,
-    metrics: mstrTable.metrics,
   };
 }
 
