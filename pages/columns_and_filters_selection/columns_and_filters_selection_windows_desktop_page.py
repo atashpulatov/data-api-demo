@@ -30,22 +30,14 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     def _click_list_item(self, selector):
         popup_main_element = self.get_popup_main_element()
 
-        element = self.find_element_by_xpath_from_parent(popup_main_element, selector)
+        element = popup_main_element.get_element_by_xpath(selector)
 
         element.click()
 
     def click_display_attributes_names_type(self, form_visualization_type):
         popup_main_element = self.get_popup_main_element()
 
-        self.find_element_by_xpath_from_parent(
-            popup_main_element,
-            ColumnsAndFiltersSelectionWindowsDesktopPage.DROPDOWN_ELEM
-        ).click()
-
-        self.find_element_by_xpath_from_parent(
-            popup_main_element,
-            ColumnsAndFiltersSelectionWindowsDesktopPage.ITEM_ELEM % form_visualization_type
-        ).click()
+        popup_main_element.get_element_by_xpath(ColumnsAndFiltersSelectionWindowsDesktopPage.DROPDOWN_ELEM).click()
 
     def select_all_attributes(self):
         self.get_element_by_name(
@@ -77,20 +69,17 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         popup_main_element = self.get_popup_main_element()
 
         for attribute_name, form_names in attributes_and_forms.items():
-            self.find_element_by_xpath_from_parent(
-                popup_main_element,
+            popup_main_element.get_element_by_xpath(
                 ColumnsAndFiltersSelectionWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
             ).click()
 
             if len(form_names) > 0:
-                self.find_element_by_xpath_from_parent(
-                    popup_main_element,
+                popup_main_element.get_element_by_xpath(
                     ColumnsAndFiltersSelectionWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM % attribute_name
                 ).click()
 
                 for form_name in form_names:
-                    self.find_element_by_xpath_from_parent(
-                        popup_main_element,
+                    popup_main_element.get_element_by_xpath(
                         ColumnsAndFiltersSelectionWindowsDesktopPage.ATTRIBUTE_FORM_ITEM_ELEM % form_name
                     ).click()
 

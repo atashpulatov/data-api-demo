@@ -51,17 +51,20 @@ class ImageElement(BaseElement):
     def get_attribute(self, attribute_name):
         raise MstrException('Invalid usage of ImageElement, get_attribute() is not allowed')
 
-    def find_element_by_xpath(self, selector):
-        raise MstrException('Invalid usage of ImageElement, find_element_by_xpath() is not allowed')
+    def get_name_by_attribute(self):
+        raise MstrException('Invalid usage of ImageElement, get_name_by_attribute() is not allowed')
 
-    def find_elements_by_css(self, selector):
-        raise MstrException('Invalid usage of ImageElement, find_elements_by_css() is not allowed')
+    def get_element_by_xpath(self, selector):
+        raise MstrException('Invalid usage of ImageElement, get_element_by_xpath() is not allowed')
 
-    def find_elements_by_xpath(self, selector):
-        raise MstrException('Invalid usage of ImageElement, find_elements_by_xpath() is not allowed')
+    def get_elements_by_css(self, selector):
+        raise MstrException('Invalid usage of ImageElement, get_elements_by_css() is not allowed')
 
-    def find_element(self, selector_type, selector):
-        raise MstrException('Invalid usage of ImageElement, find_element() is not allowed')
+    def get_elements_by_xpath(self, selector):
+        raise MstrException('Invalid usage of ImageElement, get_elements_by_xpath() is not allowed')
+
+    def get_element(self, selector_type, selector):
+        raise MstrException('Invalid usage of ImageElement, get_element() is not allowed')
 
     def value_of_css_property(self, property_name):
         raise MstrException('Invalid usage of ImageElement, value_of_css_property() is not allowed')

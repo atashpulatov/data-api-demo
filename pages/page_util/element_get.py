@@ -89,7 +89,7 @@ class ElementGet(ElementCheck):
         i = 0
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
             try:
-                return parent_element.find_element(selector_type, selector)
+                return parent_element.get_element(selector_type, selector)
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
                 Util.pause(5)
