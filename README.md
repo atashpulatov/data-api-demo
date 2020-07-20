@@ -9,6 +9,7 @@ Tests are written in [Gherkin](https://cucumber.io/docs/gherkin/reference/) (nat
 
 - Prerequisites and installation
 - Running tests
+- Run tests remotely on Windows Desktop
 - Developer environment
 - TODO
 
