@@ -51,6 +51,8 @@ class ElementCheck:
         if element_coordinates:
             return element_coordinates
 
+        self.driver.implicitly_wait(timeout)
+
         start_time = time.time()
 
         try:
@@ -76,6 +78,8 @@ class ElementCheck:
 
         except TimeoutException:
             pass
+
+        self.driver.implicitly_wait(DEFAULT_TIMEOUT)
 
         Util.log_warning(('check element, not found', selector, time.time() - start_time))
         return None

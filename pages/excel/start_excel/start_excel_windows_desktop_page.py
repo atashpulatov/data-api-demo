@@ -6,8 +6,11 @@ from pages.page_util.image_element import ImageElement
 class StartExcelWindowsDesktopPage(BaseWindowsDesktopPage):
     NEW_ELEM = 'New'
     FILE_TAB_ELEM = 'File Tab'
-    EXCEL_MAXIMIZE_CONTROL = 'Maximize'
-    EXCEL_RESTORE_DOWN_CONTROL = 'Restore Down'
+    EXCEL_MAXIMIZE_ELEM = 'Maximize'
+    EXCEL_MAXIMIZE_OFFSET_X = -17
+    EXCEL_MAXIMIZE_OFFSET_Y = 17
+
+    CHECK_IF_MAXIMIZED_TIMEOUT = 5
 
     def __init__(self):
         super().__init__()
@@ -16,6 +19,8 @@ class StartExcelWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def go_to_excel(self):
         ImageElement.reset_excel_root_element(self.driver)
+
+        self._maximize_excel_window()
 
         self.get_element_by_name(
             StartExcelWindowsDesktopPage.FILE_TAB_ELEM,
@@ -28,3 +33,13 @@ class StartExcelWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
         self.excel_main_windows_desktop_page.click_new_blank_workbook_elem()
+
+    def _maximize_excel_window(self):
+        if self.check_if_element_exists_by_name(StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_ELEM,
+                                                timeout=StartExcelWindowsDesktopPage.CHECK_IF_MAXIMIZED_TIMEOUT):
+            maximize = self.get_element_by_name(StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_ELEM)
+
+            maximize.click(
+                offset_x=StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_OFFSET_X,
+                offset_y=StartExcelWindowsDesktopPage.EXCEL_MAXIMIZE_OFFSET_Y
+            )
