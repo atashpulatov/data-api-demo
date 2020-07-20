@@ -251,7 +251,7 @@ Excel Add In should be started. Used in browsers.
 1. Install `PuTTY` you can use this [link](https://www.putty.org/)
 2. Using PuTTY, configure connection to your Mac 
     ```
-    Host Name (or IP adress) of yor Mac 
+    Host Name (or IP address) of your Mac 
      eg. knowak@192.168.1.19
     port 22
     Connection type: SSH
@@ -267,7 +267,7 @@ Excel Add In should be started. Used in browsers.
     Tip: 
 
     ```
-    If you can't connect please chcek your file path to the WinAppDriver.exe
+    If you can't connect please check your file path to the WinAppDriver.exe
     ```
 ##### GO TO YOUR MAC MACHINE
 
