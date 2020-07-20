@@ -14,6 +14,10 @@ class BaseElement:
         self.__element = raw_element
         self.__driver = driver
 
+    # TODO refactor and remove
+    def get_element(self):
+        return self.__element
+
     def click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
             try:
@@ -75,14 +79,6 @@ class BaseElement:
     def get_name_by_attribute(self):
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
 
-    @property
-    def location(self):
-        return self.__element.location
-
-    @property
-    def size(self):
-        return self.__element.size
-
     def get_element_by_xpath(self, selector):
         i = 0
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
@@ -96,6 +92,11 @@ class BaseElement:
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)
+
+    def get_elements_by_name(self, selector):
+        raw_elements = self.__element.find_elements_by_name(selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
 
     def get_elements_by_css(self, selector):
         raw_elements = self.__element.find_elements_by_css_selector(selector)
@@ -141,6 +142,10 @@ class BaseElement:
     @property
     def size(self):
         return self.__element.size
+
+    @property
+    def location(self):
+        return self.__element.location
 
     def send_keys_raw(self, special_key):
         self.__element.send_keys(special_key)

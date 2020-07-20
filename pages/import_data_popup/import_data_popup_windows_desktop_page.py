@@ -1,12 +1,17 @@
 from pages.base_windows_desktop_page import BaseWindowsDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
+from pages.page_util.windows_desktop_workaround import WindowsDesktopWorkaround
 from util.exception.MstrException import MstrException
 from util.util import Util
 
 
 class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
     MY_LIBRARY_SWITCH_ELEM = 'My Library'
+    FILTERS_BUTTON_ELEM = 'Filters'
+
+    SEARCH_ELEM_OFFSET_X = 100
+    SEARCH_ELEM_OFFSET_Y = 10
 
     ARIA_PROPERTIES_ATTRIBUTE = 'AriaProperties'
     ARIA_PROPERTIES_SEPARATOR = ';'
@@ -22,9 +27,13 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def __init__(self):
         super().__init__()
+
         self.columns_and_filters_selection_windows_desktop_page = ColumnsAndFiltersSelectionWindowsDesktopPage()
+        self.windows_desktop_workaround = WindowsDesktopWorkaround()
 
     def ensure_mylibrary_switch_is_off(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
         # TODO check if is on or ignore to have better performance?
         self.get_element_by_name(
             ImportDataPopupWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM,
@@ -47,23 +56,41 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
         return element.get_attribute(ImportDataPopupWindowsDesktopPage.ARIA_PROPERTIES_ATTRIBUTE)
 
     def find_and_select_object(self, object_name):
-        search_box = self.get_element_by_name(ImportDataPopupWindowsDesktopPage.SEARCH_BAR_ELEM)
-        search_box.send_keys(object_name)
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        # search_box = self.get_element_by_name(ImportDataPopupWindowsDesktopPage.SEARCH_BAR_ELEM)
+        # search_box.send_keys(object_name)
+
+        filters_elem = self.get_element_by_name(
+            ImportDataPopupWindowsDesktopPage.FILTERS_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.FILTERS_BUTTON_ELEM)
+        )
+        filters_elem.click(
+            offset_x=ImportDataPopupWindowsDesktopPage.SEARCH_ELEM_OFFSET_X,
+            offset_y=ImportDataPopupWindowsDesktopPage.SEARCH_ELEM_OFFSET_Y
+        )
+        self.send_keys_raw(object_name)
 
         Util.pause(4)  # TODO wait when ready
 
         self.get_element_by_name(object_name, image_name=self.prepare_image_name(object_name)).click()
 
     def click_import_button(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
         self.get_element_by_name(
             ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM)
         ).click()
 
+        self.windows_desktop_workaround.focus_on_right_side_panel()
+
         if not self.check_if_element_exists_by_name(ImportDataPopupWindowsDesktopPage.IMPORT_SUCCESSFUL_TEXT):
             raise MstrException('Error while importing')
 
     def click_import_button_to_open_import_dossier(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
         self.get_element_by_name(
             ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM)
@@ -72,6 +99,8 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
         self.pause(25)  # TODO check if loaded
 
     def click_prepare_data_button(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
         self.get_element_by_name(
             ImportDataPopupWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)

@@ -4,6 +4,7 @@ from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDeskt
 from pages.excel.excel_sheet.excel_sheet_mac_desktop_page import ExcelSheetMacDesktopPage
 from pages.excel.start_excel.start_excel_mac_desktop_page import StartExcelMacDesktopPage
 from pages.import_data_popup.import_data_popup_mac_desktop_page import ImportDataPopupMacDesktopPage
+from pages.not_logged_right_panel.not_logged_right_panel_mac_desktop_page import NotLoggedRightPanelMacDesktopPage
 from pages.right_panel.right_panel.right_panel_mac_desktop_page import RightPanelMacDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
 from pages_factory.abstract_pages import AbstractPages
@@ -21,6 +22,7 @@ class PagesMacDesktop(AbstractPages):
         self.right_panel_tile_mac_desktop_page = RightPanelTileMacDesktopPage()
         self.import_data_popup_mac_desktop_page = ImportDataPopupMacDesktopPage()
         self.excel_sheet_mac_desktop_page = ExcelSheetMacDesktopPage()
+        self.not_logged_right_panel_mac_desktop_page = NotLoggedRightPanelMacDesktopPage()
 
     def start_excel_page(self):
         return self.start_excel_mac_desktop_page
@@ -69,3 +71,6 @@ class PagesMacDesktop(AbstractPages):
 
     def import_dossier_show_data_page(self):
         pass
+
+    def not_logged_right_panel_page(self):
+        return self.not_logged_right_panel_mac_desktop_page

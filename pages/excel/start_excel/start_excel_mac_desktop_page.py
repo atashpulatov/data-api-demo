@@ -17,3 +17,7 @@ class StartExcelMacDesktopPage(BasePage):
         self.excel_main_mac_desktop_page.click_insert_tab_elem()
         self.excel_main_mac_desktop_page.click_add_in_drop_down_elem()
         self.excel_main_mac_desktop_page.click_first_add_in_to_import_elem()
+
+    def maximize_excel_window(self):
+        # TODO implement it?
+        pass

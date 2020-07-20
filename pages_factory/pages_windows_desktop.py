@@ -9,6 +9,8 @@ from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetW
 from pages.excel.start_excel.start_excel_windows_desktop_page import StartExcelWindowsDesktopPage
 from pages.import_data_popup.import_data_popup_windows_desktop_page import ImportDataPopupWindowsDesktopPage
 from pages.import_dossier.import_dossier.import_dossier_windows_desktop_page import ImportDossierWindowsDesktopPage
+from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
+    NotLoggedRightPanelWindowsDesktopPage
 from pages.right_panel.right_panel.right_panel_windows_desktop_page import RightPanelWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages_factory.abstract_pages import AbstractPages
@@ -29,6 +31,7 @@ class PagesWindowsDesktop(AbstractPages):
         self.duplicate_object_popup_windows_desktop_page = DuplicateObjectPopupWindowsDesktopPage()
         self.columns_and_filters_selection_browser_page = ColumnsAndFiltersSelectionWindowsDesktopPage()
         self.import_dossier_windows_desktop_page = ImportDossierWindowsDesktopPage()
+        self.not_logged_right_panel_windows_desktop_page = NotLoggedRightPanelWindowsDesktopPage()
 
     def start_excel_page(self):
         return self.start_excel_windows_desktop_page
@@ -77,3 +80,6 @@ class PagesWindowsDesktop(AbstractPages):
 
     def import_dossier_show_data_page(self):
         pass
+
+    def not_logged_right_panel_page(self):
+        return self.not_logged_right_panel_windows_desktop_page

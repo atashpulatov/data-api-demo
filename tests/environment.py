@@ -32,6 +32,9 @@ def before_scenario(context, scenario):
         context.pages.start_excel_page().go_to_excel()
 
         context.pages.excel_menu_page().click_add_in_elem()
+        context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()
+
+        context.pages.start_excel_page().maximize_excel_window()
 
 
 def before_step(context, step):

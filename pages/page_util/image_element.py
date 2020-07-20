@@ -57,14 +57,14 @@ class ImageElement(BaseElement):
     def get_element_by_xpath(self, selector):
         raise MstrException('Invalid usage of ImageElement, get_element_by_xpath() is not allowed')
 
+    def get_elements_by_name(self, selector):
+        raise MstrException('Invalid usage of ImageElement, get_elements_by_css() is not allowed')
+
     def get_elements_by_css(self, selector):
         raise MstrException('Invalid usage of ImageElement, get_elements_by_css() is not allowed')
 
     def get_elements_by_xpath(self, selector):
         raise MstrException('Invalid usage of ImageElement, get_elements_by_xpath() is not allowed')
-
-    def get_element(self, selector_type, selector):
-        raise MstrException('Invalid usage of ImageElement, get_element() is not allowed')
 
     def value_of_css_property(self, property_name):
         raise MstrException('Invalid usage of ImageElement, value_of_css_property() is not allowed')
@@ -75,6 +75,10 @@ class ImageElement(BaseElement):
     @property
     def size(self):
         raise MstrException('Invalid usage of ImageElement, size is not allowed')
+
+    @property
+    def location(self):
+        raise MstrException('Invalid usage of ImageElement, location is not allowed')
 
     def send_keys_raw(self, special_key):
         raise MstrException('Invalid usage of ImageElement, send_keys_raw() is not allowed')
