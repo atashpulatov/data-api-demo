@@ -7,7 +7,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     EDIT_BUTTON_ELEM = 'Edit button'
 
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
-    OBJECT_NAME_ELEM = '//Button/List/DataItem[%s]/Group/Button[5]/Text'
+    OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
     def close_all_notifications_on_hover(self):
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
