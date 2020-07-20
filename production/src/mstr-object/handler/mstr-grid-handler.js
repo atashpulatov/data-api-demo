@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import jsonHandler from './mstr-normalized-json-handler';
 import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
+import mstrAttributeMetricHelper from '../helper/mstr-attribute-metric-helper';
 /**
  * Handler to parse grids
  *
@@ -13,7 +14,7 @@ class GridHandler {
     const isCrosstabular = grid.metricsPosition && grid.metricsPosition.axis === 'rows' && grid.columns.length === 0;
     const columnInformation = this.getColumnInformation(response, isCrosstabular);
     const isCrosstab = !isCrosstabular && this.isCrosstab(response);
-
+    const { attributes, metrics } = mstrAttributeMetricHelper.extractAttributesMetrics(grid);
     return {
       tableSize: this.getTableSize(response, columnInformation, isCrosstab),
       columnInformation,
@@ -24,6 +25,8 @@ class GridHandler {
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
       attributesNames: this.getAttributesName(response.definition, response.attrforms),
+      attributes: attributes,
+      metrics: metrics
     };
   }
 
