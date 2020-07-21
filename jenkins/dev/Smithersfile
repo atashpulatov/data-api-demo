@@ -17,6 +17,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
+rake count_line_of_code
 export HATS=$HATS:rallytask
 rake generate_localization_strings upload_plugins 
 rake cloc
