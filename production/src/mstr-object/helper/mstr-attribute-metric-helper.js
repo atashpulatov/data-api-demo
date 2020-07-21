@@ -7,7 +7,8 @@ class MstrAttributeMetricHelper {
    * @returns {Object} object with two properties: attributes and metrics
    */
   extractAttributesMetricsCompoundGrid(grid) {
-    const columns = grid.columnSets.flatMap(columnSet => columnSet.columns);
+    // equivalent to grid.columnSets.flatMap(columnSet => columnSet.columns);
+    const columns = grid.columnSets.reduce((allColumns, currColumnSet) => allColumns.concat(currColumnSet.columns), []);
     const { rows } = grid;
     const attributes = this.extractAttributes(rows, columns);
     const metrics = this.extractMetrics(rows, columns);
@@ -54,7 +55,8 @@ class MstrAttributeMetricHelper {
   extractMetrics = (rows, columns) => columns
     .filter(({ type }) => type === 'templateMetrics')
     .concat(rows.filter(({ type }) => type === 'templateMetrics'))
-    .flatMap(({ elements }) => elements)
+    // equivalent to flatMap(({ elements }) => elements)
+    .reduce((allElements, { elements: currElements }) => allElements.concat(currElements), [])
     .map(({ id, name }) => ({ id, name }));
 }
 
