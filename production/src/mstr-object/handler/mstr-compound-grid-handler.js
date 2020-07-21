@@ -34,8 +34,8 @@ class CompoundGridHandler {
       rows: this.getRows(response),
       visualizationType: response.visualizationType,
       attributesNames: this.getAttributesName(definition, attrforms),
-      attributes: attributes,
-      metrics: metrics
+      attributes,
+      metrics
     };
   }
 

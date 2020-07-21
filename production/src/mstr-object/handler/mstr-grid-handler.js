@@ -25,8 +25,8 @@ class GridHandler {
       name: response.n || response.name,
       rows: this.getRows(response, isCrosstab),
       attributesNames: this.getAttributesName(response.definition, response.attrforms),
-      attributes: attributes,
-      metrics: metrics
+      attributes,
+      metrics
     };
   }
 
