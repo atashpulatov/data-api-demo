@@ -48,7 +48,6 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def _go_to_cell_single_check(self, cell_upper, element):
         try:
-            element.click()
             element.send_keys_raw((Keys.CONTROL, 'g', Keys.CONTROL, cell_upper, Keys.ENTER))
             return True
         except Exception as e:
