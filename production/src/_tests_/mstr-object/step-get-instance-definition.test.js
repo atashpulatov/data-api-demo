@@ -185,9 +185,9 @@ describe('StepGetInstanceDefinition', () => {
           crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
           isCrosstab: 'isCrossTabTest',
           manipulationsXML: manipulationsXMLParam,
+          attributes: ['some attributes'],
+          metrics: ['some metrics'],
         },
-        attributes: ['some attributes'],
-        metrics: ['some metrics'],
         rows: 'rowsModifyInstanceWithPromptTest',
       });
 
@@ -197,6 +197,8 @@ describe('StepGetInstanceDefinition', () => {
       insertNewWorksheet: 'insertNewWorksheetTest',
       crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
       isCrosstab: 'isCrossTabTest',
+      attributes: ['some attributes'],
+      metrics: ['some metrics'],
     };
 
     if (manipulationsXMLParam) {
@@ -275,8 +277,6 @@ describe('StepGetInstanceDefinition', () => {
     expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
       {
         mstrTable: expectedMstrTable,
-        attributes: ['some attributes'],
-        metrics: ['some metrics'],
         rows: 'rowsModifyInstanceWithPromptTest',
       },
       'crosstabHeaderDimensionsTest',
@@ -297,8 +297,6 @@ describe('StepGetInstanceDefinition', () => {
     expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       excelContext: 'excelContextTest',
       instanceDefinition: {
-        attributes: ['some attributes'],
-        metrics: ['some metrics'],
         mstrTable: expectedMstrTable,
         rows: 'rowsModifyInstanceWithPromptTest',
       },
@@ -398,9 +396,9 @@ describe('StepGetInstanceDefinition', () => {
         insertNewWorksheet: 'insertNewWorksheetTest',
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
         isCrosstab: 'isCrossTabTest',
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
       },
-      attributes: ['some attributes'],
-      metrics: ['some metrics'],
       rows: 'rowsModifyInstanceWithPromptTest',
     });
 
@@ -462,10 +460,10 @@ describe('StepGetInstanceDefinition', () => {
           insertNewWorksheet: 'insertNewWorksheetTest',
           crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
           isCrosstab: 'isCrossTabTest',
+          attributes: ['some attributes'],
+          metrics: ['some metrics'],
         },
         rows: 'rowsModifyInstanceWithPromptTest',
-        attributes: ['some attributes'],
-        metrics: ['some metrics'],
       },
       'crosstabHeaderDimensionsTest',
       'subtotalsAddressesTest',
@@ -485,9 +483,9 @@ describe('StepGetInstanceDefinition', () => {
     expect(operationStepDispatcher.updateOperation).toBeCalledWith({
       excelContext: 'excelContextTest',
       instanceDefinition: {
-        attributes: ['some attributes'],
-        metrics: ['some metrics'],
         mstrTable: {
+          attributes: ['some attributes'],
+          metrics: ['some metrics'],
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
           insertNewWorksheet: 'insertNewWorksheetTest',
