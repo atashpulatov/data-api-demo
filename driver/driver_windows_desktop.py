@@ -43,7 +43,7 @@ class DriverWindowsDesktop:
         }
 
         driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
-        driver.implicitly_wait(60)
+        driver.implicitly_wait(DEFAULT_TIMEOUT)
 
         return driver
 

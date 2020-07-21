@@ -34,7 +34,7 @@ README TODO:
 - reuse in different projects
 - running in different environments, e.g. executing Python code on Mac, driving Windows Desktop using VirtualBox  
 - how to check which test cases are tagged with a given tag (grep -ri '@mac_chrome' *) 
-- attach to open session, Chrome (Mac, Windows) and Excel (Windows Desktop) already described
+- attach to open session, Chrome (Mac, Windows) and Excel (Windows Desktop, Mac Desktop) already described
 
 ### Prerequisites and installation
 
@@ -360,6 +360,21 @@ To speed-up writing tests, it's possible to run tests using already open Excel s
    ```
    "windows_desktop_excel_root_element_name": "Book1 - Excel",
    ```
+
+1. Go to the application state you would like to continue work on. 
+
+1. Run the test you're working on starting from the step you need (comment out steps not needed now).
+
+##### Configuration for Mac Desktop
+
+1. In `config.json` set:
+
+    ```
+    "connect_to_existing_session_enabled": true,
+    "cleanup_after_test_enabled": false,
+    ```
+    
+1. Open Excel Desktop application.
 
 1. Go to the application state you would like to continue work on. 
 
