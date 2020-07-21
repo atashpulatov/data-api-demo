@@ -49,7 +49,7 @@ class StepModifyObject {
       }
 
       if (objectEditedData.filterDetails) {
-        updatedObject.filters = objectEditedData.filterDetails;
+        updatedObject.definition = { filters: objectEditedData.filterDetails, };
       }
 
       operationStepDispatcher.updateObject(updatedObject);
