@@ -1,3 +1,5 @@
+import MstrObjectType from '../mstr-object-type-enum';
+
 class MstrAttributeMetricHelper {
   /**
    * Extracts attributes and metrics for a compound grid
@@ -58,6 +60,15 @@ class MstrAttributeMetricHelper {
     // equivalent to flatMap(({ elements }) => elements)
     .reduce((allElements, { elements: currElements }) => allElements.concat(currElements), [])
     .map(({ id, name }) => ({ id, name }));
+  
+  extractMetricsInRows = (body) => {
+    const columns = body.visualizationType === MstrObjectType.visualizationType.COMPOUND_GRID ?
+      body.definition.grid.columnSets.reduce((allColumns, currColumnSet) => allColumns.concat(currColumnSet.columns), []) :
+      body.definition.grid.columns;
+    const { rows } = body.definition.grid;
+
+    return this.extractMetrics(rows, columns);
+  }
 }
 
 const mstrAttributeMetricHelper = new MstrAttributeMetricHelper();

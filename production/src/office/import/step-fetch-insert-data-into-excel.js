@@ -29,7 +29,7 @@ class StepFetchInsertDataIntoExcel {
    */
   fetchInsertDataIntoExcel = async (objectData, operationData) => {
     try {
-      const { objectWorkingId, subtotalsInfo, subtotalsInfo: { importSubtotal = true } } = objectData;
+      const { objectWorkingId, subtotalsInfo, subtotalsInfo: { importSubtotal = true }, definition } = objectData;
       const {
         operationType,
         tableChanged,
@@ -47,11 +47,11 @@ class StepFetchInsertDataIntoExcel {
       let rowIndex = 0;
       const contextPromises = [];
       const subtotalsAddresses = [];
-
+      let newDefinition = null;
 
       console.time('Fetch and insert into excel');
       console.time('Fetch data');
-      for await (const { row, header, subtotalAddress } of rowGenerator) {
+      for await (const { row, header, subtotalAddress, metricsInRows } of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
 
@@ -71,6 +71,13 @@ class StepFetchInsertDataIntoExcel {
 
         if (importSubtotal) {
           this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
+        }
+
+        if (!!metricsInRows) {
+          newDefinition = {
+            ...definition,
+            metrics: metricsInRows 
+          }
         }
 
         rowIndex += row.length;
@@ -95,6 +102,7 @@ class StepFetchInsertDataIntoExcel {
       const updatedObject = {
         objectWorkingId,
         subtotalsInfo: { ...subtotalsInfo, subtotalsAddresses, },
+        ...(!!newDefinition && { definition: newDefinition })
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);
