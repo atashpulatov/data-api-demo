@@ -88,8 +88,8 @@ class StepGetInstanceDefinition {
         manipulationsXML: instanceDefinition.manipulationsXML || false,
         definition: {
           ...definition,
-          attributes: instanceDefinition.attributes,
-          metrics: instanceDefinition.metrics,
+          attributes: mstrTable.attributes,
+          metrics: mstrTable.metrics,
         },
       };
 

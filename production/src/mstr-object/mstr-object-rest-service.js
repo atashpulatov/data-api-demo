@@ -14,7 +14,6 @@ export const DATA_LIMIT = 200000; // 200000 is around 1mb of MSTR JSON response
 export const IMPORT_ROW_LIMIT = 20000; // Maximum number of rows to fetch during data import.
 export const PROMISE_LIMIT = 10; // Number of concurrent excelContext.sync() promises during data import.
 
-
 function checkTableDimensions({ rows, columns }) {
   if (rows >= EXCEL_ROW_LIMIT || columns >= EXCEL_COLUMN_LIMIT) {
     throw new OutsideOfRangeError();
@@ -34,24 +33,12 @@ function parseInstanceDefinition(res, attrforms) {
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
 
-  const { grid } = body.definition;
-  const attributes = grid.columns.filter(({ type }) => type === 'attribute')
-    .concat(grid.rows.filter(({ type }) => type === 'attribute'))
-    .map(({ id, name }) => ({ id, name }));
-
-  const metrics = grid.columns.filter(({ type }) => type === 'templateMetrics')
-    .concat(grid.rows.filter(({ type }) => type === 'templateMetrics'))
-    .flatMap(({ elements }) => elements)
-    .map(({ id, name }) => ({ id, name }));
-
   return {
     instanceId,
     rows,
     columns,
     mstrTable,
     manipulationsXML: internal,
-    attributes,
-    metrics,
   };
 }
 

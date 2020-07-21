@@ -18,7 +18,10 @@ describe('Compound Grid Handler', () => {
       'name',
       'rows',
       'visualizationType',
-      'attributesNames'];
+      'attributesNames',
+      'attributes',
+      'metrics',
+    ];
 
     // when
     const table = mstrCompoundGridHandler.createTable(response);

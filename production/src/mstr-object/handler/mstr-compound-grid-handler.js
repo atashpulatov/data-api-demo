@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import mstrNormalizedJsonHandler from './mstr-normalized-json-handler';
 import mstrAttributeFormHelper from '../helper/mstr-attribute-form-helper';
+import mstrAttributeMetricHelper from '../helper/mstr-attribute-metric-helper';
 
 /**
  * Handler to parse compound grid
@@ -20,6 +21,8 @@ class CompoundGridHandler {
     const isCrosstabular = false;
     const columnInformation = this.getColumnInformation(definition, data, attrforms);
     const isCrosstab = true;
+    const { grid } = definition;
+    const { attributes, metrics } = mstrAttributeMetricHelper.extractAttributesMetricsCompoundGrid(grid);
     return {
       tableSize: this.getTableSize(data),
       columnInformation,
@@ -31,6 +34,8 @@ class CompoundGridHandler {
       rows: this.getRows(response),
       visualizationType: response.visualizationType,
       attributesNames: this.getAttributesName(definition, attrforms),
+      attributes,
+      metrics
     };
   }
 
