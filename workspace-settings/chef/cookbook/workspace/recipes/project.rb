@@ -6,6 +6,7 @@
 include_recipe 'chef_commons'
 include_recipe 'workspace::attributes_overrides'
 include_recipe 'nodejs'
+# include_recipe 'workspace::client_test_env'
 
 nodejs_npm 'yarn' do
   version '1.13.0'
@@ -43,5 +44,3 @@ when 'windows'
 else
 
 end
-
-include_recipe 'workspace::client_test_env'
