@@ -18,7 +18,7 @@ export const reportV2 = {
         {
           id: '9BC4691C11E97721AF570080EF55306C',
           name: 'Year',
-          type: 'Attribute',
+          type: 'attribute',
           forms: [
             {
               id: '45C11FA478E745FEA08D781CEA190FE5',
@@ -45,7 +45,7 @@ export const reportV2 = {
         {
           id: '9BC470B011E977217DA10080EF55306D',
           name: 'Month',
-          type: 'Attribute',
+          type: 'attribute',
           forms: [
             {
               id: '45C11FA478E745FEA08D781CEA190FE5',
@@ -87,7 +87,7 @@ export const reportV2 = {
         {
           id: '1D5F4A7811E97722F1050080EF65506C',
           name: 'Origin Airport',
-          type: 'Attribute',
+          type: 'attribute',
           forms: [
             {
               id: 'CCFBE2A5EADB4F50941FB879CCF1721C',
@@ -122,7 +122,7 @@ export const reportV2 = {
         {
           id: '00000000000000000000000000000000',
           name: 'Metrics',
-          type: 'Metrics',
+          type: 'templateMetrics',
           elements: [
             {
               id: '9BC486D611E977217DA10080EF55306D',
@@ -170,7 +170,7 @@ export const reportV2 = {
         {
           id: '9BC4544A11E97721AF570080EF55306C',
           name: 'Airline Name',
-          type: 'Attribute',
+          type: 'attribute',
           forms: [
             {
               id: '45C11FA478E745FEA08D781CEA190FE5',
@@ -197,7 +197,7 @@ export const reportV2 = {
         {
           id: '9BC4625A11E97721AF570080EF55306C',
           name: 'Day of Week',
-          type: 'Attribute',
+          type: 'attribute',
           forms: [
             {
               id: '45C11FA478E745FEA08D781CEA190FE5',
