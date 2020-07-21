@@ -38,12 +38,11 @@ describe('sessionHelper', () => {
   it('should call redirect logOutRedirect', () => {
     // given
     jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
-    sessionHelper.replaceWindowLocation = jest.fn();
-    jest.spyOn(sessionHelper, 'replaceWindowLocation');
+    global.location.replace = jest.fn();
     // when
     sessionHelper.logOutRedirect();
     // then
-    expect(sessionHelper.replaceWindowLocation).toBeCalled();
+    expect(global.location.replace).toBeCalled();
   });
   it('should disable loading for localhost in logOutRedirect', () => {
     // given
