@@ -19,6 +19,7 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
     IMPORT_SUCCESSFUL_TEXT = 'Import successful'
+    ERROR_MESSAGE_BUTTON_OK = 'OK'
 
     def __init__(self):
         super().__init__()
@@ -62,6 +63,20 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not self.check_if_element_exists_by_name(ImportDataPopupWindowsDesktopPage.IMPORT_SUCCESSFUL_TEXT):
             raise MstrException('Error while importing')
+
+    def click_import_button_to_import_with_error(self, error_message):
+        self.get_element_by_name(
+            ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+        ).click()
+
+        if not self.check_if_element_exists_by_name(error_message):
+            raise MstrException('Different notification displayed')
+
+        self.get_element_by_name(
+            ImportDataPopupWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK,
+            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK)
+        ).click()
 
     def click_import_button_to_open_import_dossier(self):
         self.get_element_by_name(
