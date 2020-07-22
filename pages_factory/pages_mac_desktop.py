@@ -76,3 +76,6 @@ class PagesMacDesktop(AbstractPages):
 
     def not_logged_right_panel_page(self):
         return self.not_logged_right_panel_mac_desktop_page
+
+    def range_taken_popup_page(self):
+        pass

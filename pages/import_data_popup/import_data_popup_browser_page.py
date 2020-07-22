@@ -48,6 +48,9 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
+    def click_import_button_only(self):
+        self.get_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM).click()
+
     def click_import_button_to_import_with_error(self, error_message):
         self.get_element_by_id(ImportDataPopupBrowserPage.IMPORT_BUTTON_ELEM).click()
 

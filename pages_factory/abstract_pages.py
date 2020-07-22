@@ -74,6 +74,10 @@ class AbstractPages(ABC):
     @abstractmethod
     def not_logged_right_panel_page(self):
         pass
+    
+    @abstractmethod
+    def range_taken_popup_page(self):
+        pass
 
     def development_page(self):
         return self.development_common_page

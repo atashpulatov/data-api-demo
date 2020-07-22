@@ -14,6 +14,11 @@ def step_impl(context, object_name):
 @step('I clicked Import button')
 def step_impl(context):
     context.pages.import_data_popup_page().click_import_button()
+    
+
+@step('I clicked Import button only')
+def step_impl(context):
+    context.pages.import_data_popup_page().click_import_button_only()
 
 
 @step('I clicked Import button to open Import Dossier')
