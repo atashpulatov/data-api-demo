@@ -66,11 +66,6 @@ function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = 
     .set('x-mstr-projectid', projectId)
     .withCredentials();
 }
-
-function getMetricsDifference(fetchedMetrics, currentMetrics) {
-  return fetchedMetrics.filter(fetchedMetric => !currentMetrics.some(currentMetric => currentMetric.id === fetchedMetric.id));
-}
-
 class MstrObjectRestService {
   constructor() {
     this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
@@ -100,7 +95,7 @@ class MstrObjectRestService {
 
     let fetchedRows = 0;
     let offset = 0;
-    let shouldExtractMetrics = true;
+    let shouldExtractMetricsInRows = true;
     let metricsInRows = [];
     const fullPath = getFullPath({
       dossierData,
@@ -127,12 +122,10 @@ class MstrObjectRestService {
       const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
       const { current } = response.body.data.paging;
       const { body } = response;
-      if (shouldExtractMetrics) {
-        const extractedMetrics = MstrAttributeMetricHelper.extractMetricsInRows(body);
-        const metricsDifference = getMetricsDifference(extractedMetrics, metricsInRows);
-        metricsInRows = metricsDifference;
-        shouldExtractMetrics = !!metricsDifference.length;
-      }
+      if (MstrAttributeMetricHelper.isMetricInRows(body) && shouldExtractMetricsInRows) {
+        metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
+        shouldExtractMetricsInRows = !!metricsInRows.length;
+      }      
       fetchedRows = current + offset;
       response.body.attrforms = attrforms;
       const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);

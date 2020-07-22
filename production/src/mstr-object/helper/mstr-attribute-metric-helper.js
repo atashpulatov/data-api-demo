@@ -69,6 +69,21 @@ class MstrAttributeMetricHelper {
 
     return this.extractMetrics(rows, columns);
   }
+
+  getMetricsDifference(fetchedMetrics, currentMetrics) {
+    return fetchedMetrics.filter(fetchedMetric => !currentMetrics.some(currentMetric => currentMetric.id === fetchedMetric.id));
+  }
+  
+  getMetricsInRows(body, metricsInRows) {
+    const extractedMetrics = this.extractMetricsInRows(body);
+    return this.getMetricsDifference(extractedMetrics, metricsInRows);
+  }
+
+  isMetricInRows(body) {
+    return !!body.definition.grid.metricsPosition ? 
+      body.definition.grid.metricsPosition.axis === 'rows' :
+      false;     
+  }
 }
 
 const mstrAttributeMetricHelper = new MstrAttributeMetricHelper();
