@@ -175,10 +175,17 @@ class CompoundGridHandler {
       return supportForms && e.value.length > 1 ? e.value.map((form) => `'${form}`) : `'${e.value.join(' ')}`;
     };
 
-    const onAttribute = (array) => (e, attributeIndex, colIndex) => {
+    const onAttribute = (array) => (e, numberOfForms, attributeIndex, colIndex) => {
       if (array && e.subtotal) { array.push({ attributeIndex, colIndex, axis: 'columns' }); } else {
         array.push(false);
       }
+
+      if (e.formValues) {
+        for (let index = e.formValues.length; index < numberOfForms; index++) {
+          e.formValues.unshift('');
+        }
+      }
+
       return supportForms ? e.formValues : [e.formValues[0]];
     };
 
@@ -270,13 +277,13 @@ class CompoundGridHandler {
             // -1 is for empty row
             parsedHeaders[colIndex].push('\'');
           } else {
-            const { type, elements } = columnsDefinition[k];
+            const { type, elements, forms } = columnsDefinition[k];
             const element = elements[elementIndex];
 
             switch (type) {
               case 'attribute':
               case 'consolidation':
-                parsedHeaders[colIndex].push(...onAttribute(element, j, colIndex));
+                parsedHeaders[colIndex].push(...onAttribute(element, forms.length, j, colIndex));
                 break;
               case 'templateMetrics':
                 parsedHeaders[colIndex].push(...onMetric(element));

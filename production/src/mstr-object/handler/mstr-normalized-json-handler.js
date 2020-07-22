@@ -24,6 +24,15 @@ class NormalizedJsonHandler {
     const { crossTab } = definition.grid;
     const rawElement = definition.grid[axis][attributeIndex].elements[elementIndex];
     const { name, formValues, subtotal } = rawElement;
+
+    if (formValues) {
+      const { forms } = definition.grid[axis][attributeIndex];
+      const numberOfForms = forms ? forms.length : 0;
+      for (let index = formValues.length; index < numberOfForms; index++) {
+        formValues.unshift('');
+      }
+    }
+
     if (!subtotal) {
       return { ...rawElement, value: formValues || [name], subtotalAddress: false, };
     }
