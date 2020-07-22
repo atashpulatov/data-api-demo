@@ -11,6 +11,8 @@ Tests are written in [Gherkin](https://cucumber.io/docs/gherkin/reference/) (nat
 - Running tests
 - Run tests remotely on Windows Desktop
 - Run tests using existing session
+- Adding a new test
+- Adding a new Page
 - Developer environment
 - TODO
 
@@ -263,9 +265,9 @@ or by configuring reversed tunnel, using e.g. PuTTy.
 
 1. Run `WinAppDriver` from command line (`cmd`) as Administrator with: 
 
-   ```
-   "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" IP_ADDRESS_IN_LOCAL_NETWORK 4723/wd/hub
-   ```
+    ```
+    "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" IP_ADDRESS_IN_LOCAL_NETWORK 4723/wd/hub
+    ```
 
 ##### Configure Windows Desktop using PuTTy
 
@@ -294,9 +296,9 @@ or by configuring reversed tunnel, using e.g. PuTTy.
 
 1. Run `WinAppDriver` from command line as Administrator with: 
 
-   ```
-   "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hub
-   ```
+    ```
+    "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hub
+    ```
 Tip: 
 
 ```
@@ -357,9 +359,9 @@ To speed-up writing tests, it's possible to run tests using already open Excel s
 1. Open Excel Desktop application.
 
 1. Make sure your Workbook is named as in `config.json`:
-   ```
-   "windows_desktop_excel_root_element_name": "Book1 - Excel",
-   ```
+    ```
+    "windows_desktop_excel_root_element_name": "Book1 - Excel",
+    ```
 
 1. Go to the application state you would like to continue work on. 
 
@@ -385,6 +387,113 @@ Tip:
 In our automation, all test cases start from the login step, make sure you prepared the Excel app to have 
 the AddIn opened. If you'd like to start from further step in the test, comment out steps you don't want to execute.
 ```
+
+### Adding a new test
+
+To add a new test:
+
+1. Add `.feature` test file written in [Gherkin](https://cucumber.io/docs/gherkin/reference/),
+e.g. `tests/F25931_duplicate_object/TC64607_duplicate_object.feature`:
+
+    ```
+    @windows_desktop
+    @windows_chrome
+    @mac_desktop
+    @mac_chrome
+    Feature: F25931 - Duplicate object
+    
+      Scenario: [TC64607] - Duplicate object
+        Given I logged in as default user
+          And I clicked Import Data button
+          And MyLibrary Switch is OFF
+    
+          And I found and selected object "100_report"
+          And I clicked Import button
+          And I closed all notifications
+          And number of worksheets should be 1
+    
+         When I clicked Duplicate on object 1
+          And I clicked Import button in Duplicate popup
+    
+         Then object number 1 should be called "100_report Copy"
+          And number of worksheets should be 2
+    
+          And I log out
+    ```
+
+1. Add all necessary Steps to steps files in `tests/steps`. Steps should correspond 1-1 to Pages, each set of steps
+is related to one Page in tested application. Example of Steps file: `tests/steps/right_side_panel_tile_steps.py`:
+
+    ```
+    from behave import *
+    
+    
+    @step('I closed last notification')
+    def step_impl(context):
+        context.pages.right_panel_tile_page().close_last_notification_on_hover()
+
+    ``` 
+
+1. Implement all methods in appropriate Pages (e.g. `close_last_notification_on_hover()` in
+`RightPanelTileWindowsDesktopPage`, `RightPanelTileBrowserPage` etc.) and ensure Pages are added to all Page Sets,
+see `Adding a new Page`.
+
+### Adding a new Page
+
+To add a new Page implementing Page Object Model:
+
+1. Implement the Page, e.g. `pages/right_panel/right_panel_tile/right_panel_tile_browser_page.py`:
+    ```
+    (...)
+    class RightPanelTileBrowserPage(BaseBrowserPage):
+        (...)
+        def close_last_notification_on_hover(self):
+            self.focus_on_add_in_frame()
+    
+            self._hover_over_tile(0)
+        (...)
+    ```
+
+1. Add information about the Page to all Page Sets to make it available:
+
+    - `pages_factory/abstract_pages.py` (abstract class implemented by all Page Sets, no implementation here), e.g.:
+        ```
+        @abstractmethod
+        def right_panel_tile_page(self):
+            pass
+        ```
+    - `pages_factory/pages_*.py` (it's necessary to add appropriate method definition to all Page Sets)
+       - when Page is implemented for a given Page Set:
+        ```
+        from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
+        (...)
+        class PagesBrowser(AbstractPages):
+            def __init__(self):
+                super().__init__()
+                (...)
+                self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
+                (...)
+    
+            def import_data_popup_page(self):
+                return self.import_data_popup_browser_page
+        ``` 
+       - when Page is not yet implemented for a given Page Set:
+        ```
+            def import_data_popup_page(self):
+                pass
+        ``` 
+
+1. Add Steps file corresponding to newly added Page to `tests/steps`, e.g. `tests/steps/right_side_panel_tile_steps.py`:
+
+    ```
+    from behave import *
+    
+    
+    @step('I closed last notification')
+    def step_impl(context):
+        context.pages.right_panel_tile_page().close_last_notification_on_hover()
+
+    ``` 
 
 ### Developer environment
 
