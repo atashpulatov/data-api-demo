@@ -9,9 +9,9 @@ Feature: F25933 - Range taken
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       And I found and selected object "100_report"
-      And I clicked Import button only
-
-      And I clicked OK button in Range Taken popup
-      And number of worksheets should be 2
+      
+      When I clicked Import button only
+       And I clicked OK button in Range Taken popup
+      Then number of worksheets should be 2
 
       And I log out
