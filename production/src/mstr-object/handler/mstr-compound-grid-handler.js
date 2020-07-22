@@ -139,13 +139,19 @@ class CompoundGridHandler {
    * @return {Array}
    */
   renderRows(data, valueMatrix = 'raw') {
-    const { metricValues: { columnSets }, paging } = data;
+    const { metricValues: { columnSets }, paging, headers } = data;
     const rowTable = [];
     for (let row = 0; row < paging.current; row++) {
       const rowValues = [];
       for (let colSet = 0; colSet < columnSets.length; colSet++) {
+        const headersColumnSetLength = headers.columnSets[colSet].length;
+
         if (columnSets[colSet][valueMatrix][row] && columnSets[colSet][valueMatrix][row].length) {
           rowValues.push(...columnSets[colSet][valueMatrix][row]);
+        } else if (headersColumnSetLength) {
+          // if we have no metric values, but we still have headers thats mean we have attributes only in column set,
+          // to display it properly we are creating an array filled with nulls
+          rowValues.push(...Array(headersColumnSetLength).fill(null));
         }
       }
       rowTable.push(rowValues);
