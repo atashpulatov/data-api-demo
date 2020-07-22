@@ -17,6 +17,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
+rake count_line_of_code
 export HATS=$HATS:rallytask
 rake generate_localization_strings upload_plugins 
 rake cloc
@@ -47,8 +48,6 @@ rake update_ready_for_pr
       job_short_names %w{
         stage-2-e2e-browser-test-mac
         stage-2-e2e-browser-test-win
-        stage-2-e2e-client-test-win-pre
-        stage-2-e2e-client-test-mac
       }
     end
   end

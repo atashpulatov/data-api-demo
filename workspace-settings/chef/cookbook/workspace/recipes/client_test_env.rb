@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: workspace
-# Recipe:: tomcat_windows
+# Recipe:: client_test_env
 #
 
 
