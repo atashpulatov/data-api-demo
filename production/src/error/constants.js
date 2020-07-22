@@ -88,6 +88,7 @@ export const SESSION_EXTENSION_FAILURE_MESSAGE = 'The user\'s session has expire
 export const DOSSIER_HAS_CHANGED = 'The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.';
 export const NOT_AVAILABLE_FOR_DOSSIER = 'This option is not available for dossier';
 export const CHECKING_SELECTION = 'Checking selection...';
+export const MISSING_ELEMENT_OBJECT_MESSAGE = 'This action cannot be performed. It appears that part of the data has been removed from the data source. Please click Edit to see the changes.';
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
@@ -106,32 +107,10 @@ const iServerErrorMessages = withDefaultValue({
 }, GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({
-  [errorTypes.ENV_NOT_FOUND_ERR]: ({ error }) => {
-    if (
-      error.response
-      && error.response.body
-      && (error.response.body.iServerCode === -2147216373)
-    ) {
-      if (error.mstrObjectType) {
-        return `This ${error.mstrObjectType} was deleted.`;
-      }
-      return NOT_IN_METADATA;
-    }
-    return ENDPOINT_NOT_REACHED;
-  },
+  [errorTypes.ENV_NOT_FOUND_ERR]: ({ error }) => handleEnvNotFoundError(error),
   [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
-  [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => {
-    const { ERR003 } = errorCodes;
-    if (
-      (error.response.body && error.response.body.code === ERR003)
-      && (error.response.body.iServerCode)
-      && (iServerErrorMessages(error.response.body.iServerCode) === LOGIN_FAILURE)
-    ) {
-      return WRONG_CREDENTIALS;
-    }
-    return SESSION_EXPIRED;
-  },
-  [errorTypes.BAD_REQUEST_ERR]: () => PROBLEM_WITH_REQUEST,
+  [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => handleUnauthorizedError(error),
+  [errorTypes.BAD_REQUEST_ERR]: ({ error }) => handleBadRequestError(error),
   [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages((error.response && error.response.body && error.response.body.iServerCode) || '-1'),
   [errorTypes.PROMPTED_REPORT_ERR]: () => NOT_SUPPORTED_PROMPTS_REFRESH,
   [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
@@ -154,5 +133,45 @@ export const httpStatusCodes = {
 
 export const errorCodes = {
   ERR003: 'ERR003',
+  ERR006: 'ERR006',
   ERR009: 'ERR009',
+};
+
+export const handleBadRequestError = (error) => {
+  const { ERR006 } = errorCodes;
+  if (error.response
+    && error.response.body
+    && error.response.body.code === ERR006
+    && error.response.body.message.includes('Failed to find the')
+    && error.response.body.message.includes('in the report or cube.')
+  ) {
+    return MISSING_ELEMENT_OBJECT_MESSAGE;
+  }
+  return PROBLEM_WITH_REQUEST;
+};
+
+export const handleUnauthorizedError = (error) => {
+  const { ERR003 } = errorCodes;
+  if (
+    (error.response.body && error.response.body.code === ERR003)
+    && (error.response.body.iServerCode)
+    && (iServerErrorMessages(error.response.body.iServerCode) === LOGIN_FAILURE)
+  ) {
+    return WRONG_CREDENTIALS;
+  }
+  return SESSION_EXPIRED;
+};
+
+export const handleEnvNotFoundError = (error) => {
+  if (
+    error.response
+    && error.response.body
+    && (error.response.body.iServerCode === -2147216373)
+  ) {
+    if (error.mstrObjectType) {
+      return `This ${error.mstrObjectType} was deleted.`;
+    }
+    return NOT_IN_METADATA;
+  }
+  return ENDPOINT_NOT_REACHED;
 };
