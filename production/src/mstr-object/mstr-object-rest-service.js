@@ -67,6 +67,9 @@ function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = 
     .withCredentials();
 }
 
+function getMetricsDifference(fetchedMetrics, currentMetrics) {
+  return fetchedMetrics.filter(fetchedMetric => !currentMetrics.some(currentMetric => currentMetric.id === fetchedMetric.id));
+}
 
 class MstrObjectRestService {
   constructor() {
@@ -97,6 +100,8 @@ class MstrObjectRestService {
 
     let fetchedRows = 0;
     let offset = 0;
+    let shouldExtractMetrics = true;
+    let metricsInRows = [];
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -119,12 +124,14 @@ class MstrObjectRestService {
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
       let header;
       let crosstabSubtotal;
-      let metricsInRows;
       const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
       const { current } = response.body.data.paging;
       const { body } = response;
-      if (offset === 0) {
-        metricsInRows = MstrAttributeMetricHelper.extractMetricsInRows(body);
+      if (shouldExtractMetrics) {
+        const extractedMetrics = MstrAttributeMetricHelper.extractMetricsInRows(body);
+        const metricsDifference = getMetricsDifference(extractedMetrics, metricsInRows);
+        metricsInRows = metricsDifference;
+        shouldExtractMetrics = !!metricsDifference.length;
       }
       fetchedRows = current + offset;
       response.body.attrforms = attrforms;

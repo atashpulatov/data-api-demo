@@ -73,11 +73,8 @@ class StepFetchInsertDataIntoExcel {
           this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
         }
 
-        if (!!metricsInRows) {
-          newDefinition = {
-            ...definition,
-            metrics: metricsInRows 
-          }
+        if (!!metricsInRows.length) {
+          newDefinition = this.createNewDefinition(definition, newDefinition, metricsInRows);
         }
 
         rowIndex += row.length;
@@ -129,6 +126,16 @@ class StepFetchInsertDataIntoExcel {
       }
     }
     console.timeEnd('Get subtotals coordinates');
+  };
+
+  createNewDefinition = (definition, newDefinition, newMetrics) => {
+    const metricsToAssign = !!newDefinition ?
+      newDefinition.metrics.concat(newMetrics) :
+      newMetrics;
+    return {
+      ...definition,
+      metrics: metricsToAssign
+    }
   };
 }
 
