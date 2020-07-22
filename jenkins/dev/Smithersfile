@@ -20,7 +20,7 @@ source .ecosystem
 rake count_line_of_code
 export HATS=$HATS:rallytask
 rake generate_localization_strings upload_plugins 
-rake cloc
+ 
 rake update_dep_db_from_file
 rake update_ready_for_pr
 '
