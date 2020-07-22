@@ -1,4 +1,5 @@
 from pages.base_page import BasePage
+from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
 from util.util import Util
 
 
@@ -27,6 +28,11 @@ class ImportDataPopupMacDesktopPage(BasePage):
     X_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT = 100
     Y_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT = 60
 
+    def __init__(self):
+        super().__init__()
+
+        self.right_panel_tile_mac_desktop_page = RightPanelTileMacDesktopPage()
+
     def ensure_mylibrary_switch_is_off(self):
         element = self.get_element_by_xpath(ImportDataPopupMacDesktopPage.MY_LIBRARY_SWITCH_ELEM)
 
@@ -52,3 +58,6 @@ class ImportDataPopupMacDesktopPage(BasePage):
 
     def click_import_button(self):
         self.get_element_by_xpath(ImportDataPopupMacDesktopPage.IMPORT_BUTTON_ELEM).click()
+
+        self.right_panel_tile_mac_desktop_page.wait_for_import_to_finish_successfully()
+

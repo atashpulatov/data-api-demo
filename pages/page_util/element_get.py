@@ -47,6 +47,11 @@ class ElementGet(ElementCheck):
 
         return BaseElement.wrap_raw_elements(raw_elements, self.driver)
 
+    def get_elements_by_xpath(self, selector):
+        raw_elements = self._get_raw_elements(By.XPATH, selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.driver)
+
     def get_elements_by_name(self, selector):
         raw_elements = self._get_raw_elements(By.NAME, selector)
 
@@ -80,7 +85,16 @@ class ElementGet(ElementCheck):
         return element
 
     def _get_raw_elements(self, selector_type, selector):
-        return self.driver.find_elements(selector_type, selector)
+        i = 0
+        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+            try:
+                return self.driver.find_elements(selector_type, selector)
+            except NoSuchElementException:
+                Util.log_warning('Element not found, try %s: %s' % (i, selector))
+                Util.pause(3)
+            i += 1
+
+        raise MstrException('Cannot find element: %s' % selector)
 
     def find_element_by_css_from_parent(self, parent_element, selector):
         return self._find_element_from_parent(By.CSS_SELECTOR, parent_element, selector)

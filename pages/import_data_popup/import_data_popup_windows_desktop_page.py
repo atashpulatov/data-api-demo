@@ -3,6 +3,7 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
     ColumnsAndFiltersSelectionWindowsDesktopPage
 from pages.page_util.windows_desktop_workaround import WindowsDesktopWorkaround
 from util.exception.MstrException import MstrException
+from util.message_const import MessageConst
 from util.util import Util
 
 
@@ -23,7 +24,6 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
     IMPORT_BUTTON_ELEM = 'Import'
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
-    IMPORT_SUCCESSFUL_TEXT = 'Import successful'
     ERROR_MESSAGE_BUTTON_OK = 'OK'
 
     def __init__(self):
@@ -86,7 +86,7 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.windows_desktop_workaround.focus_on_right_side_panel()
 
-        if not self.check_if_element_exists_by_name(ImportDataPopupWindowsDesktopPage.IMPORT_SUCCESSFUL_TEXT):
+        if not self.check_if_element_exists_by_name(MessageConst.IMPORT_SUCCESSFUL_TEXT):
             raise MstrException('Error while importing')
 
     def click_import_button_to_import_with_error(self, error_message):

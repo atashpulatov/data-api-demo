@@ -13,19 +13,19 @@ def step_impl(context):
     context.pages.right_panel_tile_page().close_all_notifications_on_hover()
 
 
-@step('I clicked Edit object {object_no}')
-def step_impl(context, object_no):
-    context.pages.right_panel_tile_page().click_edit(object_no)
+@step('I clicked Edit object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().click_edit(object_number)
 
 
-@step('I clicked Duplicate on object {object_no}')
-def step_impl(context, object_no):
-    context.pages.right_panel_tile_page().click_duplicate(object_no)
+@step('I clicked Duplicate on object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().click_duplicate(object_number)
 
 
-@step('I clicked Refresh on object {object_no}')
-def step_impl(context, object_no):
-    context.pages.right_panel_tile_page().click_refresh(object_no)
+@step('I clicked Refresh on object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().click_refresh(object_number)
 
 
 @step('object number {object_number} should be called "{expected_name}"')

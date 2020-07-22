@@ -34,6 +34,9 @@ class ElementCheck:
     def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return self.get_element_coordinates_by_css(selector, timeout) is not None
 
+    def check_if_element_exists_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT):
+        return self.get_element_coordinates_by_xpath(selector, timeout) is not None
+
     def get_element_coordinates_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_coordinates(By.NAME, selector, timeout, image_name)
 

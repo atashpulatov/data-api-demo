@@ -1,11 +1,11 @@
-from pages.base_page import BasePage
+from pages.base_mac_desktop_page import BaseMacDesktopPage
 
 
-class RightPanelMacDesktopPage(BasePage):
-    IMPORT_DATA_BUTTON_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/" \
-                              "AXSplitGroup[0]/AXGroup[@AXTitle='MicroStrategy']/AXGroup[0]/AXGroup[0]/AXGroup[0]/" \
-                              "AXScrollArea[0]/AXWebArea[0]/AXGroup[@AXDOMIdentifier='overlay']/AXGroup[6]/AXButton[0]"
+class RightPanelMacDesktopPage(BaseMacDesktopPage):
+    IMPORT_DATA_BUTTON_ELEM = "%s/AXGroup[6]/AXButton[0]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
 
     def click_import_data_button_element(self):
-        # TODO doesn't work after right panel refactoring
         self.get_element_by_xpath(RightPanelMacDesktopPage.IMPORT_DATA_BUTTON_ELEM).click()
+
+    def logout(self):
+        pass
