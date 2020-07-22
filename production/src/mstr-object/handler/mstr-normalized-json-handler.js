@@ -29,7 +29,7 @@ class NormalizedJsonHandler {
       const { forms } = definition.grid[axis][attributeIndex];
       const numberOfForms = forms ? forms.length : 0;
       for (let index = formValues.length; index < numberOfForms; index++) {
-        formValues.unshift('');
+        formValues.unshift('\'');
       }
     }
 

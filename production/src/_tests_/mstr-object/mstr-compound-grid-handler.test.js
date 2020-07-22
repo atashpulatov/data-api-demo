@@ -171,6 +171,45 @@ describe('Compound Grid Handler', () => {
     expect(headers.columns).toEqual(expectedColHeaders);
   });
 
+  it('should get compound grid headers with  different number of atrribute forms', () => {
+    // given
+    const response = JSON.parse(JSON.stringify(regularCompoundJSON));
+    response.attrforms = { supportForms: true };
+    response.definition.grid.columnSets[0].columns[0].forms.push(
+      {
+        id: 'id',
+        name: 'test',
+        type: 'nvarchar',
+        baseFormCategory: 'ID',
+        baseFormType: 'number'
+      }
+    );
+    const expectedProperties = ['rows', 'columns', 'subtotalAddress'];
+
+    const expectedColHeaders = [
+      ['\'', '\'', '\'', '\'', '\'', '\'', '\''],
+      ['Music', 'Movies', 'Electronics', 'Books', '\'', '\'', '\''],
+      ['4', '3', '2', '1', 'Cost', 'Cost', 'Cost'],
+      ['Profit', 'Profit', 'Profit', 'Profit', '2016', '2015', '2014']
+    ];
+    const expectedRowHeaders = [
+      ['\'Art & Architecture'],
+      ['\'Business'],
+      ['\'Cameras'],
+      ['\'Kids / Family'],
+      ['\'Special Interests'],
+      ['\'Alternative'],
+      ['\'Country']];
+
+    // when
+    const headers = mstrCompoundGridHandler.getHeaders(response);
+
+    // then
+    expect(Object.keys(headers)).toEqual(expectedProperties);
+    expect(headers.rows).toEqual(expectedRowHeaders);
+    expect(headers.columns).toEqual(expectedColHeaders);
+  });
+
   it('should render table titles', () => {
     // given
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));

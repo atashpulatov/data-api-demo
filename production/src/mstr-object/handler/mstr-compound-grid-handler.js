@@ -182,7 +182,7 @@ class CompoundGridHandler {
 
       if (e.formValues) {
         for (let index = e.formValues.length; index < numberOfForms; index++) {
-          e.formValues.unshift('');
+          e.formValues.unshift('\'');
         }
       }
 
