@@ -29,7 +29,9 @@ class StepFetchInsertDataIntoExcel {
    */
   fetchInsertDataIntoExcel = async (objectData, operationData) => {
     try {
-      const { objectWorkingId, subtotalsInfo, subtotalsInfo: { importSubtotal = true }, definition } = objectData;
+      const {
+        objectWorkingId, subtotalsInfo, subtotalsInfo: { importSubtotal = true }, definition
+      } = objectData;
       const {
         operationType,
         tableChanged,
@@ -51,7 +53,9 @@ class StepFetchInsertDataIntoExcel {
 
       console.time('Fetch and insert into excel');
       console.time('Fetch data');
-      for await (const { row, header, subtotalAddress, metricsInRows } of rowGenerator) {
+      for await (const {
+        row, header, subtotalAddress, metricsInRows
+      } of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
 
@@ -73,7 +77,7 @@ class StepFetchInsertDataIntoExcel {
           this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
         }
 
-        if (!!metricsInRows.length) {
+        if (metricsInRows.length) {
           newDefinition = this.createNewDefinition(definition, newDefinition, metricsInRows);
         }
 
@@ -129,24 +133,24 @@ class StepFetchInsertDataIntoExcel {
   };
 
   /**
-   * creates a new object definition based 
+   * creates a new object definition based
    * on the old one and new metrics
-   * 
+   *
    * @param {Object} definition previous version of object definition
    * @param {Object} newDefinition new object definition that will eventually be stored
-   * @param {Object[]} newMetrics array of metrics that will be 
+   * @param {Object[]} newMetrics array of metrics that will be
    * either assigned or appended to newDefinition.metrics
-   * 
+   *
    * @returns {Object} object definition with new metrics
    */
   createNewDefinition = (definition, newDefinition, newMetrics) => {
-    const metricsToAssign = !!newDefinition ?
-      newDefinition.metrics.concat(newMetrics) :
-      newMetrics;
+    const metricsToAssign = newDefinition
+      ? newDefinition.metrics.concat(newMetrics)
+      : newMetrics;
     return {
       ...definition,
       metrics: metricsToAssign
-    }
+    };
   };
 }
 

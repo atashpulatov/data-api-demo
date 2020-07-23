@@ -148,7 +148,7 @@ describe('MstrAttributeMetricHelper', () => {
       const expectedResult = [
         {
           id: '4C051DB611D3E877C000B3B2D86C964F',
-          "name": "Profit",
+          name: 'Profit',
         },
         {
           id: '4C05177011D3E877C000B3B2D86C964F',
@@ -186,7 +186,7 @@ describe('MstrAttributeMetricHelper', () => {
       const fetchedMetricsMock = [
         {
           id: '4C051DB611D3E877C000B3B2D86C964F',
-          "name": "Profit",
+          name: 'Profit',
         },
         {
           id: '4C05177011D3E877C000B3B2D86C964F',
@@ -201,7 +201,7 @@ describe('MstrAttributeMetricHelper', () => {
       const currentMetricsMock = [
         {
           id: '4C051DB611D3E877C000B3B2D86C964F',
-          "name": "Profit",
+          name: 'Profit',
         }
       ];
 
@@ -229,7 +229,7 @@ describe('MstrAttributeMetricHelper', () => {
       const currentMetricsMock = [
         {
           id: '4C051DB611D3E877C000B3B2D86C964F',
-          "name": "Profit",
+          name: 'Profit',
         }
       ];
 

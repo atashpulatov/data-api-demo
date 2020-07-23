@@ -125,7 +125,7 @@ class MstrObjectRestService {
       if (MstrAttributeMetricHelper.isMetricInRows(response.body) && shouldExtractMetricsInRows) {
         metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(response.body, metricsInRows);
         shouldExtractMetricsInRows = !!metricsInRows.length;
-      }      
+      }
       fetchedRows = current + offset;
       response.body.attrforms = attrforms;
       const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);

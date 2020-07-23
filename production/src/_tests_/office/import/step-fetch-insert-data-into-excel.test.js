@@ -422,8 +422,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
   it.each`
   definition | newDefinition | newMetrics | resultCreateNewDefinition
   
-  ${{name: 'testNameInDefinition'}}     | ${null}                                                                                               | ${[{id: 'testMetricId1', name: 'testMetricName1'}]}     | ${{name: 'testNameInDefinition', metrics: [{id: 'testMetricId1', name: 'testMetricName1'}]}}
-  ${{name: 'testNameInDefinition'}}     | ${{name: 'testNameInDefinition', metrics: [{id: 'testMetricId1', name: 'testMetricName1'}]}}          | ${[{id: 'testMetricId2', name: 'testMetricName2'}]}     | ${{name: 'testNameInDefinition', metrics: [{id: 'testMetricId1', name: 'testMetricName1'}, {id: 'testMetricId2', name: 'testMetricName2'}]}}
+  ${{ name: 'testNameInDefinition' }}     | ${null}                                                                                                   | ${[{ id: 'testMetricId1', name: 'testMetricName1' }]}     | ${{ name: 'testNameInDefinition', metrics: [{ id: 'testMetricId1', name: 'testMetricName1' }] }}
+  ${{ name: 'testNameInDefinition' }}     | ${{ name: 'testNameInDefinition', metrics: [{ id: 'testMetricId1', name: 'testMetricName1' }] }}          | ${[{ id: 'testMetricId2', name: 'testMetricName2' }]}     | ${{ name: 'testNameInDefinition', metrics: [{ id: 'testMetricId1', name: 'testMetricName1' }, { id: 'testMetricId2', name: 'testMetricName2' }] }}
   
   `('createNewDefinition should work as expected',
   ({ definition, newDefinition, newMetrics, resultCreateNewDefinition }) => {
