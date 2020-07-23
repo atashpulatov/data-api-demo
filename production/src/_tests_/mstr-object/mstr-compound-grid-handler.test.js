@@ -144,6 +144,24 @@ describe('Compound Grid Handler', () => {
     expect(rows.pop()).toEqual(expectedLastRow);
   });
 
+  it('should render rows for column set without metrics values', () => {
+    // given
+    const { data } = regularCompoundJSON;
+
+    data.metricValues.columnSets[0].raw = [];
+    data.metricValues.columnSets[1].raw = [];
+
+    const expected1stRow = Array(7).fill(null);
+    const expectedLastRow = Array(7).fill(null);
+
+    // when
+    const rows = mstrCompoundGridHandler.renderRows(data, 'raw');
+
+    // then
+    expect(rows[0]).toEqual(expected1stRow);
+    expect(rows.pop()).toEqual(expectedLastRow);
+  });
+
   it('should get compound grid headers', () => {
     // given
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));
