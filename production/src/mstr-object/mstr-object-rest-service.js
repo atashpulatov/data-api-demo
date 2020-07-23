@@ -3,6 +3,7 @@ import { NO_DATA_RETURNED } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
+import MstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -66,7 +67,6 @@ function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = 
     .withCredentials();
 }
 
-
 class MstrObjectRestService {
   constructor() {
     this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
@@ -96,6 +96,8 @@ class MstrObjectRestService {
 
     let fetchedRows = 0;
     let offset = 0;
+    let shouldExtractMetricsInRows = true;
+    let metricsInRows = [];
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -120,6 +122,10 @@ class MstrObjectRestService {
       let crosstabSubtotal;
       const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
       const { current } = response.body.data.paging;
+      if (MstrAttributeMetricHelper.isMetricInRows(response.body) && shouldExtractMetricsInRows) {
+        metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(response.body, metricsInRows);
+        shouldExtractMetricsInRows = !!metricsInRows.length;
+      }
       fetchedRows = current + offset;
       response.body.attrforms = attrforms;
       const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
@@ -135,6 +141,7 @@ class MstrObjectRestService {
         row,
         header,
         subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
+        metricsInRows
       };
     }
   }
