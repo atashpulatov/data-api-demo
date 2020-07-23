@@ -1,11 +1,12 @@
 from appium import webdriver
 from urllib3.exceptions import MaxRetryError
 
+from driver.abstract_driver import AbstractDriver
 from util.config_util import ConfigUtil
 from util.exception.MstrException import MstrException
 
 
-class DriverMacDesktop:
+class DriverMacDesktop(AbstractDriver):
     MICROSOFT_EXCEL_APP_NAME = 'Microsoft Excel'
 
     def get_driver(self):

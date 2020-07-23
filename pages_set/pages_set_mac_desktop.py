@@ -8,10 +8,10 @@ from pages.import_data_popup.import_data_popup_mac_desktop_page import ImportDat
 from pages.not_logged_right_panel.not_logged_right_panel_mac_desktop_page import NotLoggedRightPanelMacDesktopPage
 from pages.right_panel.right_panel.right_panel_mac_desktop_page import RightPanelMacDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
-from pages_factory.abstract_pages import AbstractPages
+from pages_set.abstract_pages_set import AbstractPagesSet
 
 
-class PagesMacDesktop(AbstractPages):
+class PagesSetMacDesktop(AbstractPagesSet):
     def __init__(self):
         super().__init__()
 

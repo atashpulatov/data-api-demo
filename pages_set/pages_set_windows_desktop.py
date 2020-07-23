@@ -13,10 +13,10 @@ from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page im
     NotLoggedRightPanelWindowsDesktopPage
 from pages.right_panel.right_panel.right_panel_windows_desktop_page import RightPanelWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
-from pages_factory.abstract_pages import AbstractPages
+from pages_set.abstract_pages_set import AbstractPagesSet
 
 
-class PagesWindowsDesktop(AbstractPages):
+class PagesSetWindowsDesktop(AbstractPagesSet):
     def __init__(self):
         super().__init__()
 
@@ -83,6 +83,6 @@ class PagesWindowsDesktop(AbstractPages):
 
     def not_logged_right_panel_page(self):
         return self.not_logged_right_panel_windows_desktop_page
-    
+
     def range_taken_popup_page(self):
         pass

@@ -1,13 +1,14 @@
 from appium import webdriver
 from urllib3.exceptions import MaxRetryError
 
+from driver.abstract_driver import AbstractDriver
 from util.config_util import ConfigUtil
 from util.const import DEFAULT_TIMEOUT
 from util.exception.MstrException import MstrException
 from util.util import Util
 
 
-class DriverWindowsDesktop:
+class DriverWindowsDesktop(AbstractDriver):
     DRIVER_INITIALIZATION_ATTEMPT_COUNT = 10
 
     def get_driver(self):

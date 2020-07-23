@@ -20,10 +20,10 @@ from pages.not_logged_right_panel.not_logged_right_panel_browser_page import Not
 from pages.right_panel.range_taken_popup.range_taken_popup_browser_page import RangeTakenPopupBrowserPage
 from pages.right_panel.right_panel.right_panel_browser_page import RightPanelBrowserPage
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
-from pages_factory.abstract_pages import AbstractPages
+from pages_set.abstract_pages_set import AbstractPagesSet
 
 
-class PagesBrowser(AbstractPages):
+class PagesSetBrowser(AbstractPagesSet):
     def __init__(self):
         super().__init__()
 
