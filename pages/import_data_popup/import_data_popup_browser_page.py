@@ -24,6 +24,8 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
 
     ADD_TO_LIBRARY_BUTTON = '.mstrd-PageNotification-buttonContainer > .mstrd-Button.mstrd-Button--primary'
     CLOSE_IMPORT_DATA_POPUP_BUTTON = '.popup-buttons > button'
+    FILTER_BUTTON = '.filter-button'
+    FILTER_CHECKBOX = '''.category-list-header[aria-label="%s"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for %s."] + span '''
 
     def __init__(self):
         super().__init__()
@@ -92,3 +94,6 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
 
     def close_import_data_popup(self):
         self.get_element_by_css(ImportDataPopupBrowserPage.CLOSE_IMPORT_DATA_POPUP_BUTTON).click()
+
+    def click_on_the_filter_button(self):
+        self.get_element_by_css(ImportDataPopupBrowserPage.FILTER_BUTTON).click()
