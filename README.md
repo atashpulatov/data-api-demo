@@ -1,18 +1,41 @@
 # python_test
 (python_test - name to be changed ;) )
 
-Tests are written in [Gherkin](https://cucumber.io/docs/gherkin/reference/) (natural-like language used by
-[Cucumber](https://cucumber.io/) framework). In Python Gherkin tests are executed using
-[behave](https://behave.readthedocs.io/en/latest/).
+**python_test** is a test automation framework and implementation of automated tests for **MicroStrategy
+Excel add-in**.
+
+It supports [behavior-driven development (BDD)](https://en.wikipedia.org/wiki/Behavior-driven_development) and tests 
+execution on different platforms. Thanks to modular architecture and use of Page Object Model pattern, tests
+definitions are common for all platforms and it's easy to write and maintain tests and add support for new platforms. 
+
+Tests are written in [Gherkin](https://cucumber.io/docs/gherkin/reference/), a natural-like language developed
+as part of [Cucumber](https://cucumber.io/) framework. Example:
+
+```
+Feature: FMMMM - Import object
+
+  Scenario: [TCNNNNN] - Simple import object
+    Given I logged in as default user
+      And I clicked Import Data button
+      And I found and selected object "report to be imported"
+      
+     When I clicked Import button
+     
+     Then number of worksheets should be 1
+      And cell "A42" should have value "42"
+```
+
+Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop, Mac Chrome.
 
 ### Content of this README:
 
 - Prerequisites and installation
 - Running tests
-- Run tests remotely on Windows Desktop
-- Run tests using existing session
+- Running tests remotely on Windows Desktop
+- Running tests using existing application session
 - Adding a new test
 - Adding a new Page
+- Adding support for a new platform
 - Developer environment
 - TODO
 
@@ -153,7 +176,10 @@ Examples of running tests:
 behave tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging:
-behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture  tests/F25931_duplicate_object/TC64607_duplicate_object.feature 2> log.err.txt |tee log.out.txt
+behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture  tests/F25931_duplicate_object/TC64607_duplicate_object.feature
+
+# test single feature, verbose logging, redircting logs to files:
+behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture  tests/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt
 
 # test single feature, no colors, verbose logging, all logs printed to console: 
 behave --tags=@mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
@@ -249,7 +275,7 @@ Excel Add In should be started. Used in browsers.
 
 `-o folder/` specifies tests results output folder when formatting is configured for using Allure.  
 
-#### Run tests remotely on Windows Desktop
+#### Running tests remotely on Windows Desktop
 
 To start test on one machine (e.g. Mac) and execute it on remote Windows Desktop, it's necessary to enable communication
 between those machines by ensuring port 4723 is open for incoming network traffic in Windows Desktop firewall 
@@ -317,7 +343,7 @@ If you can't connect, please check your file path to the WinAppDriver.exe.
    - `"driver_type": "windows_desktop"` (in `config.json`), or
    - `-D driver_type=windows_desktop` (in command line)
 
-#### Run tests using existing session
+#### Running tests using existing application session
 
 To speed-up writing tests, it's possible to run tests using already open Excel session. 
 
@@ -467,7 +493,7 @@ To add a new Page implementing Page Object Model:
         ```
         from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
         (...)
-        class PagesBrowser(AbstractPages):
+        class PagesSetBrowser(AbstractPagesSet):
             def __init__(self):
                 super().__init__()
                 (...)
@@ -495,6 +521,20 @@ To add a new Page implementing Page Object Model:
 
     ``` 
 
+### Adding support for a new platform
+
+To add support for a new platform it's necessary to configure a new driver and create and configure a new Pages Set.
+
+1. New driver:
+
+    - in `driver/driver_new_platform.py` add `DriverNewPlatform` class implementing `AbstractDriver`  
+    - add appropriate constants to `driver/driver_type.py`
+    - register new driver class in `DriverFactory` in `driver/driver_factory.py`
+   
+1. New Pages Set:
+    - in `pages_set/pages_set_new_platform.py` add `PagesSetNewPlatform` class implementing `AbstractPagesSet`
+    - register new Pages Set in `PagesSetFactory` in `pages_set/pages_set_factory.py` 
+
 ### Developer environment
 
 #### Navigating from feature file to step definition in `Visual Studio Code`
@@ -504,12 +544,14 @@ To add a new Page implementing Page Object Model:
 - search for `Cucumberautocomplete`
 - click on the `Edit` in `settings.json`
 - add following lines:
+
 ```
 "cucumberautocomplete.steps": [
     "tests/steps/*.py"
 ],
 "cucumberautocomplete.syncfeatures": "tests/*/*feature",
 ```
+
 - restart `Visual Studio Code`
 - open a feature file and right click a step and select `Go To Definition`
 
