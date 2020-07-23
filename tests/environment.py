@@ -1,7 +1,7 @@
 from driver.driver_factory import DriverFactory
 from driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
 from pages.page_util.image_element import ImageElement
-from pages_factory.pages_factory import PagesFactory
+from pages_set.pages_set_factory import PagesSetFactory
 from util.config_util import ConfigUtil
 from util.test_util import TestUtil
 
@@ -21,13 +21,13 @@ def before_scenario(context, scenario):
             excel_root_element_name = ConfigUtil.get_windows_desktop_excel_root_element_name()
             ImageElement.reset_excel_root_element(driver, excel_root_element_name)
 
-        context.pages = PagesFactory().get_pages()
+        context.pages = PagesSetFactory().get_pages_set()
 
     else:
         DriverFactory.reset_driver()
-        PagesFactory.reset_pages()
+        PagesSetFactory.reset_pages_set()
 
-        context.pages = PagesFactory().get_pages()
+        context.pages = PagesSetFactory().get_pages_set()
 
         context.pages.start_excel_page().go_to_excel()
 

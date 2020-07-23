@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from pages.development.development_page import DevelopmentPage
 
 
-class AbstractPages(ABC):
+class AbstractPagesSet(ABC):
     def __init__(self):
         self.development_common_page = DevelopmentPage()
 
@@ -74,7 +74,7 @@ class AbstractPages(ABC):
     @abstractmethod
     def not_logged_right_panel_page(self):
         pass
-    
+
     @abstractmethod
     def range_taken_popup_page(self):
         pass

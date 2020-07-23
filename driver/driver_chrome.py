@@ -1,15 +1,14 @@
-from abc import ABC
-
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webdriver import WebDriver
 
+from driver.abstract_driver import AbstractDriver
 from util.config_util import ConfigUtil
 from util.util import Util
 
 
-class DriverChrome(ABC):
+class DriverChrome(AbstractDriver):
     def get_driver(self):
         if ConfigUtil.is_attaching_to_existing_session_enabled():
             return self._prepare_driver_existing_session()
