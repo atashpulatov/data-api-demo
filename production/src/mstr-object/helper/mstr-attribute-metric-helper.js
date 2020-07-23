@@ -60,7 +60,14 @@ class MstrAttributeMetricHelper {
     // equivalent to flatMap(({ elements }) => elements)
     .reduce((allElements, { elements: currElements }) => allElements.concat(currElements), [])
     .map(({ id, name }) => ({ id, name }));
-  
+
+  /**
+   * Extracts metrics from body of the response we get from MSTR REST API
+   *
+   * @param {Object} body body of the response we get from MicroStrategy REST API
+   *
+   * @returns {Object[]} Array of metric objects with id and name properties
+   */  
   extractMetricsInRows = (body) => {
     const columns = body.visualizationType === MstrObjectType.visualizationType.COMPOUND_GRID ?
       body.definition.grid.columnSets.reduce((allColumns, currColumnSet) => allColumns.concat(currColumnSet.columns), []) :
@@ -70,15 +77,40 @@ class MstrAttributeMetricHelper {
     return this.extractMetrics(rows, columns);
   }
 
+  /**
+   * Compares two metric arrays and returns their difference
+   * 
+   * @param {Object[]} fetchedMetrics Array of metrics where new unique metrics will be searched
+   * @param {Object[]} currentMetrics Array of metrics based on which the difference will be calculated
+   * 
+   * @returns {Object[]} Array of unique metrics that are present in fetchedMetrics
+   * and not present in currentMetrics; Empty array if there are no such metrics
+   */
   getMetricsDifference(fetchedMetrics, currentMetrics) {
     return fetchedMetrics.filter(fetchedMetric => !currentMetrics.some(currentMetric => currentMetric.id === fetchedMetric.id));
   }
   
-  getMetricsInRows(body, metricsInRows) {
+  /**
+   * Extracts metrics from body and returns the difference
+   * between them and currentMetrics 
+   * 
+   * @param {Object} body body of the response we get from MicroStrategy REST API
+   * @param {Object[]} currentMetrics Array of metrics we currently store
+   * 
+   * @returns {Object[]} Array of unique metrics not present in current metrics
+   */
+  getMetricsInRows(body, currentMetrics) {
     const extractedMetrics = this.extractMetricsInRows(body);
-    return this.getMetricsDifference(extractedMetrics, metricsInRows);
+    return this.getMetricsDifference(extractedMetrics, currentMetrics);
   }
 
+  /**
+   * Returns boolean based on metric position
+   * 
+   * @param {Object} body response we get from the rest API
+   * 
+   * @returns {boolean} true if metrics are in rows false otherwise 
+   */
   isMetricInRows(body) {
     return !!body.definition.grid.metricsPosition ? 
       body.definition.grid.metricsPosition.axis === 'rows' :
