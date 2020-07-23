@@ -104,6 +104,10 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         return value
 
+    def write_value_in_cell(self, cell, value):
+        self.go_to_cell(cell)
+        self.send_keys_raw(value)
+
     def get_number_of_worksheets(self):
         self.focus_on_excel_frame()
 

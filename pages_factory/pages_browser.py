@@ -16,6 +16,8 @@ from pages.import_dossier.import_dossier_show_data.import_dossier_show_data_brow
     ImportDossierShowDataBrowserPage
 from pages.import_dossier.import_dossier_table_of_contents.import_dossier_table_of_contents_browser_page import \
     ImportDossierTableOfContentsBrowserPage
+from pages.not_logged_right_panel.not_logged_right_panel_browser_page import NotLoggedRightPanelBrowserPage
+from pages.right_panel.range_taken_popup.range_taken_popup_browser_page import RangeTakenPopupBrowserPage
 from pages.right_panel.right_panel.right_panel_browser_page import RightPanelBrowserPage
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 from pages_factory.abstract_pages import AbstractPages
@@ -41,6 +43,8 @@ class PagesBrowser(AbstractPages):
         self.import_dossier_table_of_contents_browser_page = ImportDossierTableOfContentsBrowserPage()
         self.import_dossier_context_menu_browser_page = ImportDossierContextMenuBrowserPage()
         self.import_dossier_show_data_browser_page = ImportDossierShowDataBrowserPage()
+        self.not_logged_right_panel_browser_page = NotLoggedRightPanelBrowserPage()
+        self.range_taken_popup_browser_page = RangeTakenPopupBrowserPage()
 
     def start_excel_page(self):
         return self.start_excel_browser_page
@@ -89,3 +93,9 @@ class PagesBrowser(AbstractPages):
 
     def import_dossier_show_data_page(self):
         return self.import_dossier_show_data_browser_page
+
+    def not_logged_right_panel_page(self):
+        return self.not_logged_right_panel_browser_page
+
+    def range_taken_popup_page(self):
+        return self.range_taken_popup_browser_page

@@ -71,5 +71,13 @@ class AbstractPages(ABC):
     def import_dossier_show_data_page(self):
         pass
 
+    @abstractmethod
+    def not_logged_right_panel_page(self):
+        pass
+    
+    @abstractmethod
+    def range_taken_popup_page(self):
+        pass
+
     def development_page(self):
         return self.development_common_page

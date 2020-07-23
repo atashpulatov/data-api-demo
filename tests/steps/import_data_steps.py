@@ -23,6 +23,11 @@ def step_impl(context):
     context.pages.import_data_popup_page().click_import_button()
 
 
+@step('I clicked Import button without checking results')
+def step_impl(context):
+    context.pages.import_data_popup_page().click_import_button_without_checking_results()
+
+
 @step('I clicked Import button to open Import Dossier')
 def step_impl(context):
     context.pages.import_data_popup_page().click_import_button_to_open_import_dossier()
@@ -58,3 +63,8 @@ def step_impl(context):
 @step('I clicked on the Filter Button')
 def step_impl(context):
     context.pages.import_data_popup_page().click_on_the_filter_button()
+
+    
+@step('I clicked Import button and see error "{error_message}"')
+def step_impl(context, error_message):
+    context.pages.import_data_popup_page().click_import_button_to_import_with_error(error_message)

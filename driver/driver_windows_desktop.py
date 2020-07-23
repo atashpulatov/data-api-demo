@@ -2,6 +2,7 @@ from appium import webdriver
 from urllib3.exceptions import MaxRetryError
 
 from util.config_util import ConfigUtil
+from util.const import DEFAULT_TIMEOUT
 from util.exception.MstrException import MstrException
 from util.util import Util
 
@@ -29,7 +30,8 @@ class DriverWindowsDesktop:
         tmp_driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
         tmp_driver.implicitly_wait(60)
 
-        excel_element = tmp_driver.find_element_by_name('Book1 - Excel')
+        excel_root_element_name = ConfigUtil.get_windows_desktop_excel_root_element_name()
+        excel_element = tmp_driver.find_element_by_name(excel_root_element_name)
         native_window_handle = hex(int(excel_element.get_attribute('NativeWindowHandle')))
 
         capabilities = {
@@ -41,7 +43,7 @@ class DriverWindowsDesktop:
         }
 
         driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
-        driver.implicitly_wait(60)
+        driver.implicitly_wait(DEFAULT_TIMEOUT)
 
         return driver
 
@@ -62,12 +64,12 @@ class DriverWindowsDesktop:
         for i in range(1, DriverWindowsDesktop.DRIVER_INITIALIZATION_ATTEMPT_COUNT):
             try:
                 driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
-                driver.implicitly_wait(60)
+                driver.implicitly_wait(DEFAULT_TIMEOUT)
                 Util.pause(4)
 
                 return driver
             except MaxRetryError:
-                raise MstrException('Error while starting test, ensure Appium or WinAppDriver is running')
+                raise MstrException('Error while starting test, ensure WinAppDriver is running')
 
     @staticmethod
     def driver_cleanup(driver):

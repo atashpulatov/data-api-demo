@@ -1,15 +1,22 @@
-from selenium.common.exceptions import ElementClickInterceptedException
+from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver import ActionChains
 
-from util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME
+from util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
+    ELEMENT_SEARCH_RETRY_NUMBER
 from util.exception.MstrException import MstrException
 from util.util import Util
 
 
 class BaseElement:
+    NAME_ATTRIBUTE = 'Name'
+
     def __init__(self, raw_element, driver):
         self.__element = raw_element
         self.__driver = driver
+
+    # TODO refactor and remove
+    def get_element(self):
+        return self.__element
 
     def click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
@@ -69,25 +76,50 @@ class BaseElement:
     def get_attribute(self, attribute_name):
         return self.__element.get_attribute(attribute_name)
 
-    def find_element_by_xpath(self, selector):
-        raw_element = self.__element.find_element_by_xpath(selector)
+    def get_name_by_attribute(self):
+        return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
 
-        return BaseElement(raw_element, self.__driver)
+    def get_element_by_xpath(self, selector):
+        i = 0
+        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+            try:
+                raw_element = self.__element.find_element_by_xpath(selector)
+                return BaseElement(raw_element, self.__driver)
+            except NoSuchElementException:
+                Util.log_warning('Element not found, try %s: %s' % (i, selector))
+                Util.pause(5)
+            i += 1
+
+        raise MstrException('Cannot find element: %s' % selector)
 
     def find_element_by_css(self, selector):
         raw_element = self.__element.find_element_by_css_selector(selector)
 
         return BaseElement(raw_element, self.__driver)
 
-    def find_elements_by_css(self, selector):
+    def get_elements_by_name(self, selector):
+        raw_elements = self.__element.find_elements_by_name(selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
+
+    def get_elements_by_css(self, selector):
         raw_elements = self.__element.find_elements_by_css_selector(selector)
 
         return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
 
-    def find_elements_by_xpath(self, selector):
-        raw_elements = self.__element.find_elements_by_xpath(selector)
+    def get_elements_by_xpath(self, selector):
+        i = 0
+        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+            try:
+                raw_elements = self.__element.find_elements_by_xpath(selector)
 
-        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
+                return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
+            except NoSuchElementException:
+                Util.log_warning('Element not found, try %s: %s' % (i, selector))
+                Util.pause(5)
+            i += 1
+
+        raise MstrException('Cannot find elements: %s' % selector)
 
     def find_element(self, selector_type, selector):
         raw_element = self.__element.find_element(selector_type, selector)
@@ -114,6 +146,10 @@ class BaseElement:
     @property
     def size(self):
         return self.__element.size
+
+    @property
+    def location(self):
+        return self.__element.location
 
     def send_keys_raw(self, special_key):
         self.__element.send_keys(special_key)

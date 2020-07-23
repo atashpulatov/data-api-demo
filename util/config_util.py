@@ -2,7 +2,7 @@ import json
 import os
 
 from driver.driver_type import DRIVER_TYPE_WINDOWS_DESKTOP, AVAILABLE_DRIVERS, DRIVER_TYPE_MAC_CHROME, \
-    DRIVERS_SUPPORTING_IMAGE_RECOGNITION
+    DRIVERS_SUPPORTING_IMAGE_RECOGNITION, DRIVER_TYPE_MAC_DESKTOP
 from util.exception.MstrException import MstrException
 from util.util import Util
 
@@ -12,14 +12,16 @@ class ConfigUtil:
 
     DRIVERS_SUPPORTING_ATTACHING_TO_EXISTING_SESSION = [
         DRIVER_TYPE_WINDOWS_DESKTOP,
-        DRIVER_TYPE_MAC_CHROME
+        DRIVER_TYPE_MAC_CHROME,
+        DRIVER_TYPE_MAC_DESKTOP
     ]
 
     PARAM_NAME_DRIVER_TYPE = 'driver_type'
     PARAM_NAME_IMAGE_RECOGNITION_ENABLED = 'image_recognition_enabled'
     PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED = 'connect_to_existing_session_enabled'
-    PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL = "browser_existing_session_executor_url"
-    PARAM_NAME_BROWSER_EXISTING_SESSION_ID = "browser_existing_session_id"
+    PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL = 'browser_existing_session_executor_url'
+    PARAM_NAME_BROWSER_EXISTING_SESSION_ID = 'browser_existing_session_id'
+    PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME = 'windows_desktop_excel_root_element_name'
     PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED = 'cleanup_after_test_enabled'
     PARAM_NAME_DRIVER_PATH_PREFIX = 'driver_path_'
     PARAM_NAME_HOST_URL_PREFIX = 'host_url_'
@@ -81,6 +83,10 @@ class ConfigUtil:
     @staticmethod
     def get_browser_existing_session_id():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_BROWSER_EXISTING_SESSION_ID)
+
+    @staticmethod
+    def get_windows_desktop_excel_root_element_name():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME)
 
     @staticmethod
     def get_desktop_host():

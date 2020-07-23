@@ -23,10 +23,7 @@ class ImportDossierWindowsDesktopPage(BaseWindowsDesktopPage):
     def _find_tile_by_name(self, visualization_name):
         popup_main_element = self.get_popup_main_element()
 
-        all_tiles = self.find_elements_by_xpath_from_parent(
-            popup_main_element,
-            ImportDossierWindowsDesktopPage.VISUALIZATION_TILE
-        )
+        all_tiles = popup_main_element.find_elements_by_xpath(ImportDossierWindowsDesktopPage.VISUALIZATION_TILE)
 
         for tile in all_tiles:
             if tile.text.startswith(visualization_name):

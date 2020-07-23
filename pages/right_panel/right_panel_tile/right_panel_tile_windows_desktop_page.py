@@ -7,7 +7,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     EDIT_BUTTON_ELEM = 'Edit button'
 
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
-    OBJECT_NAME_ELEM = '//Button/List/DataItem[%s]/Group/Button[5]/Text'
+    OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
     def close_all_notifications_on_hover(self):
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
@@ -49,8 +49,8 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def get_object_name(self, index):
         plugin_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
 
-        object_name_element = plugin_element.find_element_by_xpath(
+        object_name_element = plugin_element.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.OBJECT_NAME_ELEM % index
         )
 
-        return self.get_element_name(object_name_element)
+        return object_name_element.get_name_by_attribute()

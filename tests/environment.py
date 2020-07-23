@@ -5,8 +5,6 @@ from pages_factory.pages_factory import PagesFactory
 from util.config_util import ConfigUtil
 from util.test_util import TestUtil
 
-WINDOWS_DESKTOP_ATTACH_ELEMENT = 'Book1 - Excel'
-
 
 def before_all(context):
     context.config.setup_logging()
@@ -20,7 +18,8 @@ def before_scenario(context, scenario):
         driver = DriverFactory().get_driver(driver_type)
 
         if driver_type in DRIVERS_SUPPORTING_IMAGE_RECOGNITION:
-            ImageElement.reset_excel_root_element(driver, WINDOWS_DESKTOP_ATTACH_ELEMENT)
+            excel_root_element_name = ConfigUtil.get_windows_desktop_excel_root_element_name()
+            ImageElement.reset_excel_root_element(driver, excel_root_element_name)
 
         context.pages = PagesFactory().get_pages()
 
@@ -32,7 +31,10 @@ def before_scenario(context, scenario):
 
         context.pages.start_excel_page().go_to_excel()
 
+        context.pages.start_excel_page().maximize_excel_window()
+
         context.pages.excel_menu_page().click_add_in_elem()
+        context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()
 
 
 def before_step(context, step):

@@ -1,18 +1,12 @@
 from pages.base_browser_page import BaseBrowserPage
+from util.message_const import MessageConst
 
 
 class RightPanelTileBrowserPage(BaseBrowserPage):
     NOTIFICATION_TEXT_ELEM = '.notification-text'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
 
-    IMPORT_SUCCESSFUL_TEXT = 'Import successful'
-    DUPLICATE_OBJECT_SUCCESSFUL_TEXT = 'Object duplicated'
-    REFRESH_OBJECT_SUCCESSFUL_TEXT = 'Refresh complete'
-    REMOVE_OBJECT_SUCCESSFUL_TEXT = 'Object removed'
-
-    OBJECT_CONTAINER = '.object-tile-content'
-    OBJECT_CONTAINER_NTH = '.object-tile-content:nth-child(%s)'
-    NOTIFICATION_CONTAINER = '.notification-container'
+    TILES = '.object-tile-content'
 
     SIDE_PANEL_HEADER = '.side-panel > .header'
 
@@ -26,6 +20,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(5)'
     EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(3)'
     REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(6)'
+    NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' > div.object-tile-name-row > div.rename-input'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' > div.object-tile-name-row > input'
@@ -35,18 +30,23 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
 
     def wait_for_import_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelTileBrowserPage.IMPORT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT)
 
     def wait_for_duplicate_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelTileBrowserPage.DUPLICATE_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(MessageConst.DUPLICATE_OBJECT_SUCCESSFUL_TEXT)
 
     def wait_for_refresh_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelTileBrowserPage.REFRESH_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(MessageConst.REFRESH_OBJECT_SUCCESSFUL_TEXT)
 
     def wait_for_remove_object_to_finish_successfully(self):
-        self._wait_for_operation_successfully_completed(RightPanelTileBrowserPage.REMOVE_OBJECT_SUCCESSFUL_TEXT)
+        self._wait_for_operation_with_status(MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT)
 
-    def _wait_for_operation_successfully_completed(self, expected_message):
+    def wait_for_operation_error_and_accept(self, expected_message):
+        self._wait_for_operation_with_status(expected_message)
+
+        self.get_element_by_css(RightPanelTileBrowserPage.NOTIFICATION_BUTTON).click()
+
+    def _wait_for_operation_with_status(self, expected_message):
         self.focus_on_add_in_frame()
 
         self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
@@ -56,7 +56,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def close_all_notifications_on_hover(self):
         self.focus_on_add_in_frame()
 
-        tiles = self.get_elements_by_css(RightPanelTileBrowserPage.OBJECT_CONTAINER)
+        tiles = self.get_elements_by_css(RightPanelTileBrowserPage.TILES)
         other_container = self.get_element_by_css(RightPanelTileBrowserPage.SIDE_PANEL_HEADER)
 
         for tile in tiles:
@@ -88,7 +88,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         other_container = self.get_element_by_css(RightPanelTileBrowserPage.SIDE_PANEL_HEADER)
         other_container.move_to()
 
-        tiles = self.get_elements_by_css(RightPanelTileBrowserPage.OBJECT_CONTAINER)
+        tiles = self.get_elements_by_css(RightPanelTileBrowserPage.TILES)
         tiles[tile_no].move_to()
 
     def click_edit(self, object_no):
