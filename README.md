@@ -149,20 +149,20 @@ Run `AppiumForMac`.
 Examples of running tests:
 
 ```
-# test single feature, Windows Desktop, default logging:
-behave -D driver_type=windows_desktop tests/F25931_duplicate_object/TC64607_duplicate_object.feature
+# test single feature, default logging:
+behave tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
-# test single feature, Windows Desktop, verbose logging:
-behave -D driver_type=windows_desktop --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture  tests/F25931_duplicate_object/TC64607_duplicate_object.feature 2> log.err.txt |tee log.out.txt
+# test single feature, verbose logging:
+behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture  tests/F25931_duplicate_object/TC64607_duplicate_object.feature 2> log.err.txt |tee log.out.txt
 
-# test single feature, Mac Chrome, no colors, verbose logging, all logs printed to console: 
-behave -D driver_type=mac_chrome --tags=@mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
+# test single feature, no colors, verbose logging, all logs printed to console: 
+behave --tags=@mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test all features in F25931_duplicate_object directory, Mac Chrome, no colors, less verbose logging, all logs printed to console:
-behave -D driver_type=mac_chrome --tags=@mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/
+behave --tags=@mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/
 
-# test all features, Mac Chrome, no colors, only steps related information and errors logged, all logs printed to console:
-behave -D driver_type=mac_chrome --tags=@mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/
+# test all features, no colors, only steps related information and errors logged, all logs printed to console:
+behave --tags=@mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/
 ```
 
 ##### Test execution parameters
