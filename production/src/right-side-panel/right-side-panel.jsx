@@ -192,7 +192,7 @@ RightSidePanelNotConnected.propTypes = {
       mstrObjectType: PropTypes.shape({
         name: PropTypes.string,
         request: PropTypes.string,
-        subtypes: PropTypes.arrayOf(PropTypes.number),
+        subtypes: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
         type: PropTypes.number,
       }),
       refreshDate: PropTypes.number,
