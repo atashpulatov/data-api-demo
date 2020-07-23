@@ -13,37 +13,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MicroStrategy - Authenticating...</title>
-  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to login.</noscript>
-  <script>
-    setTimeout(() => {
-    var o = Office;
-    var m = {
-      type: "auth-token",
-      payload: "<%=authToken%>"
-    };
-
-    if (parent && parent !== window) {
-        parent.postMessage(m);
-      }
-      
-      if (opener && opener !== window) {
-        opener.postMessage(m);
-      }
-      
-      function p() {
-        if (o && o.context && o.context.ui && o.context.ui.messageParent) {
-          o.context.ui.messageParent(JSON.stringify(m));
-        }
-      }
-      
-      o.initialize = p;
-      o.onReady().then(p);
-    }, 2500);
-  </script>
+  <script>var m={type:"auth-token",payload:"<%=authToken%>"};function messageParent(){var e=Office;function t(){e&&e.context&&e.context.ui&&e.context.ui.messageParent&&e.context.ui.messageParent(JSON.stringify(m))}e?(e.initialize=t,e.onReady().then(t)):setTimeout(messageParent,1e3)}parent&&parent!==window&&parent.postMessage(m),opener&&opener!==window&&opener.postMessage(m),document.addEventListener("DOMContentLoaded",messageParent);</script>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 </body>
 
 </html>
