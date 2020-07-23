@@ -84,6 +84,7 @@ class BaseElement:
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
             try:
                 raw_element = self.__element.find_element_by_xpath(selector)
+                
                 return BaseElement(raw_element, self.__driver)
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
