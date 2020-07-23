@@ -22,6 +22,7 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(element).toEqual(expectedElement);
   });
+
   it('should lookup for row elemens by index', () => {
     // given
     const { definition } = reportV2;
@@ -38,6 +39,31 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(element).toEqual(expectedElement);
   });
+
+  it('should lookup for row elemens by index with different number of attribute forms', () => {
+    // given
+    const { definition } = JSON.parse(JSON.stringify(reportV2));
+    const axis = 'rows';
+    const attributeIndex = 0;
+    const elementIndex = 1;
+    definition.grid[axis][attributeIndex].forms.push({
+      id: 'test',
+      name: 'test',
+      dataType: 33,
+      baseFormType: 3,
+    });
+
+    const expectedElement = {
+      id: 'h2010;9BC4691C11E97721AF570080EF55306C', formValues: ['\'', '2010'], value: ['\'', '2010'], subtotalAddress: false,
+    };
+    // when
+    const element = jsonHandler.lookupElement({
+      definition, axis, attributeIndex, elementIndex,
+    });
+    // then
+    expect(element).toEqual(expectedElement);
+  });
+
   it('should map indices to elements', () => {
     // given
     const { definition } = reportV2;
@@ -51,6 +77,7 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(elements).toEqual(expectedElements);
   });
+
   it('should render tabular data', () => {
     // given
     const { definition, data } = reportV2;
@@ -74,6 +101,7 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(tabular).toEqual(expectedId);
   });
+
   it('should render metric values', () => {
     // given
     const { data } = reportV2;
@@ -83,6 +111,7 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(rows[0]).toEqual(expectedFirstRow);
   });
+
   it('should return empty array when there are no metrics', () => {
     // given
     const { data } = reportV2;
@@ -94,6 +123,7 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(rows).toEqual(expectedTable);
   });
+
   it('should render column headers', () => {
     // given
     const { definition, data } = reportV2;
@@ -109,6 +139,7 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(colHeaders).toEqual(expectedHeaders);
   });
+
   it('should render row headers', () => {
     // given
     const { definition, data } = reportV2;
@@ -129,6 +160,7 @@ describe('Normalized JSON Handler', () => {
     // then
     expect(colHeaders).toEqual(expectedHeaders);
   });
+
   it('should transpose 2D arrays', () => {
     // given
     const matrix = [[0, 1], [2, 3], [4, 5]];
