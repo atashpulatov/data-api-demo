@@ -27,7 +27,7 @@ describe('Home', () => {
     expect(componentWrapper.children().length).toBeGreaterThan(0);
   });
 
-  it('should trigger saveLoginValues and saveTokenFromStorage on mount', async () => {
+  it('should trigger saveLoginValues and getTokenFromStorage on mount', async () => {
     // given
     const props = {
       loading: false,
@@ -41,10 +41,10 @@ describe('Home', () => {
     // then
     await (tempPromise);
     expect(homeHelper.saveLoginValues).toBeCalled();
-    expect(homeHelper.saveTokenFromStorage).toBeCalled();
+    expect(homeHelper.getTokenFromStorage).toBeCalled();
   });
 
-  it('should trigger saveTokenFromStorage on update', async () => {
+  it('should trigger getTokenFromStorage on update', async () => {
     // given
     const props = {
       loading: false,
@@ -67,7 +67,7 @@ describe('Home', () => {
     });
     // then
     await (tempPromise);
-    expect(homeHelper.saveTokenFromStorage).toBeCalled();
+    expect(homeHelper.getTokenFromStorage).toBeCalled();
   });
 
   it('should contain 3 child nodes and should be child of content', () => {

@@ -46,7 +46,7 @@ export class HomeHelper {
 
   getStorageItem = (key = 'iSession') => window.localStorage.getItem(key);
 
-  saveTokenFromStorage = () => {
+  getTokenFromStorage = () => {
     const iSession = this.getStorageItem('iSession');
     if (iSession) {
       this.sessionActions.logIn(iSession);

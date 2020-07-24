@@ -63,14 +63,14 @@ describe('HomeHelper', () => {
       expect(resultCookieArray).toEqual(expectedCookieArray);
     });
   });
-  describe('saveTokenFromStorage', () => {
+  describe('getTokenFromStorage', () => {
     it('should not save when there is no iSession', () => {
       // given
       const iSession = null;
       jest.spyOn(homeHelper, 'getStorageItem')
         .mockReturnValueOnce(iSession);
       // when
-      homeHelper.saveTokenFromStorage();
+      homeHelper.getTokenFromStorage();
       // then
       expect(sessionActions.logIn).not.toBeCalled();
     });
@@ -80,7 +80,7 @@ describe('HomeHelper', () => {
       jest.spyOn(homeHelper, 'getStorageItem')
         .mockReturnValueOnce(iSession);
       // when
-      homeHelper.saveTokenFromStorage();
+      homeHelper.getTokenFromStorage();
       // then
       expect(sessionActions.logIn).toBeCalled();
       expect(sessionActions.logIn).toBeCalledWith(iSession);
