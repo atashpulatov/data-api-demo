@@ -123,7 +123,7 @@ class SessionHelper {
     const isDevelopment = this.isDevelopment();
     const { getState } = this.reduxStore;
     const envUrl = isDevelopment ? getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
-    const authToken = isDevelopment ? getState().sessionReducer.authToken : homeHelper.saveTokenFromCookies();
+    const authToken = isDevelopment ? getState().sessionReducer.authToken : homeHelper.getTokenFromStorage();
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionActions.saveUserInfo(userData);
@@ -144,7 +144,7 @@ class SessionHelper {
     const envUrl = isDevelopment ? reduxStore.getState().sessionReducer.envUrl : homeHelper.saveLoginValues();
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
-      : homeHelper.saveTokenFromCookies();
+      : homeHelper.getTokenFromStorage();
     try {
       canChooseAttrForm = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
       sessionActions.setAttrFormPrivilege(canChooseAttrForm);

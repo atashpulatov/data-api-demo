@@ -33,7 +33,11 @@ function onLogIn(action, state) {
     ...values,
   };
 }
+
+const removeStorageItem = (key = 'iSession') => window.localStorage.removeItem(key);
+
 function onLogOut(action, state) {
+  removeStorageItem('iSession');
   if (state.isRememberMeOn) {
     return {
       ...state,

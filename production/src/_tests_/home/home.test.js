@@ -27,7 +27,7 @@ describe('Home', () => {
     expect(componentWrapper.children().length).toBeGreaterThan(0);
   });
 
-  it('should trigger saveLoginValues and saveTokenFromCookies on mount', async () => {
+  it('should trigger saveLoginValues and getTokenFromStorage on mount', async () => {
     // given
     const props = {
       loading: false,
@@ -41,10 +41,10 @@ describe('Home', () => {
     // then
     await (tempPromise);
     expect(homeHelper.saveLoginValues).toBeCalled();
-    expect(homeHelper.saveTokenFromCookies).toBeCalled();
+    expect(homeHelper.getTokenFromStorage).toBeCalled();
   });
 
-  it('should trigger saveTokenFromCookies on update', async () => {
+  it('should trigger getTokenFromStorage on update', async () => {
     // given
     const props = {
       loading: false,
@@ -67,7 +67,7 @@ describe('Home', () => {
     });
     // then
     await (tempPromise);
-    expect(homeHelper.saveTokenFromCookies).toBeCalled();
+    expect(homeHelper.getTokenFromStorage).toBeCalled();
   });
 
   it('should contain 3 child nodes and should be child of content', () => {
@@ -115,7 +115,6 @@ describe('Home', () => {
 
     // then
     const overlayWrapper = wrappedComponent.find(overlayId).at(1);
-    expect(overlayWrapper.props().role).toEqual('button');
-    expect(overlayWrapper.props().tabIndex).toEqual('0');
+    expect(overlayWrapper.props().role).toEqual('none');
   });
 });
