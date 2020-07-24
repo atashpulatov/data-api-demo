@@ -45,8 +45,7 @@ describe('Popup.js', () => {
     const popupWrapper = wrappedComponent.find(popupWrapperId).at(1);
     expect(popupWrapper.props().onClick).toBeDefined();
     expect(popupWrapper.props().onKeyDown).toBeDefined();
-    expect(popupWrapper.props().role).toEqual('button');
-    expect(popupWrapper.props().tabIndex).toEqual('0');
+    expect(popupWrapper.props().role).toEqual('none');
   });
 
   it('should call libraryErrorController.initializeHttpErrorsHandling', () => {

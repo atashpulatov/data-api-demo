@@ -16,4 +16,4 @@ if [ "$2" == "" ]; then
 else
   iserver="$2"
 fi
-scp -r build/* mstr@$iserver:/opt/apache/tomcat/apache-tomcat-9.0.30/webapps/MicroStrategyLibrary/static/loader-mstr-office
+scp -r build/* mstr@$iserver:/opt/apache/tomcat/latest/webapps/MicroStrategyLibrary/static/loader-mstr-office

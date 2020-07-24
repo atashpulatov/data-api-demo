@@ -55,7 +55,7 @@ export const HomeNotConnected = (props) => {
     try {
       officeStoreRestoreObject.restoreObjectsFromExcelStore();
       homeHelper.saveLoginValues();
-      homeHelper.saveTokenFromCookies();
+      homeHelper.getTokenFromStorage();
       sessionActions.disableLoading();
     } catch (error) {
       console.error(error);
@@ -83,7 +83,7 @@ export const HomeNotConnected = (props) => {
 
 async function getUserData(authToken) {
   if (authToken) {
-    homeHelper.saveTokenFromCookies();
+    homeHelper.getTokenFromStorage();
     await sessionHelper.getUserInfo();
     await sessionHelper.getUserAttributeFormPrivilege();
   }

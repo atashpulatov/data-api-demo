@@ -30,6 +30,7 @@ export class HomeHelper {
   };
 
   getParsedCookies = () => {
+    // F25871: Unused method since all cookies are set as HttpOnly so we cannot access them with JS
     const cookieJar = this.getDocumentCookie();
     return cookieJar.split(';')
       .reduce((res, c) => {
@@ -43,11 +44,13 @@ export class HomeHelper {
       }, {});
   };
 
-  saveTokenFromCookies = () => {
-    const splittedCookiesJar = this.getParsedCookies();
-    if (splittedCookiesJar.iSession) {
-      this.sessionActions.logIn(splittedCookiesJar.iSession);
-      return splittedCookiesJar.iSession;
+  getStorageItem = (key = 'iSession') => window.localStorage.getItem(key);
+
+  getTokenFromStorage = () => {
+    const iSession = this.getStorageItem('iSession');
+    if (iSession) {
+      this.sessionActions.logIn(iSession);
+      return iSession;
     }
   };
 

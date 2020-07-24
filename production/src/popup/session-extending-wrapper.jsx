@@ -10,8 +10,7 @@ export const SessionExtendingWrapper = ({ children, id, onSessionExpire }) => {
       id={id}
       onClick={prolongSession}
       onKeyDown={prolongSession}
-      role="button"
-      tabIndex="0"
+      role="none"
     >
       {children}
     </div>
