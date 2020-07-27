@@ -53,7 +53,7 @@ class CompoundGridHandler {
     const supportForms = attrforms ? attrforms.supportForms : false;
 
     const commonColumns = this.renderCompoundGridRowTitles(headers, definition, onElement, supportForms);
-    const params = [headers, definition, onElement, onElement];
+    const params = [data, definition, onElement, onElement];
     const columnSetColumns = this.renderCompoundGridColumnHeaders(...params);
 
     const parsedColumnSetColumns = mstrNormalizedJsonHandler.getMetricsColumnsInformation(columnSetColumns);
@@ -100,6 +100,7 @@ class CompoundGridHandler {
    * @returns bounding height
    */
   calculateColumnHeaderHeight(columnSetsHeaders) {
+    console.log('columnSetsHeaders:', columnSetsHeaders);
     let boundingHeight = 0;
     columnSetsHeaders.forEach(columnSet => {
       if (columnSet.length !== 0) {
@@ -201,7 +202,7 @@ class CompoundGridHandler {
     const columnTotals = [];
 
     const rows = this.renderCompoundGridRowHeaders(headers, definition, onElement(rowTotals), supportForms);
-    const columns = this.renderCompoundGridColumnHeaders(headers, definition, onAttribute(columnTotals), onMetric);
+    const columns = this.renderCompoundGridColumnHeaders(data, definition, onAttribute(columnTotals), onMetric);
     const subtotalAddress = [...rowTotals, ...columnTotals];
 
     return { rows, columns, subtotalAddress };
@@ -238,15 +239,16 @@ class CompoundGridHandler {
   /**
    * Creates a 2D array with the column grid headers
    *
+   * @param {Object} data - contains data boaut  headers and values from response
    * @param {Object} definition - Dataset definition
-   * @param {string} axis - 'rows' or 'columns'
-   * @param {Array} headers - Header data from response
-   * @param {function} onElement - Callback function to process elements
+   * @param {function} onAttribute - Callback function to attributes
+   * @param {function} onMetric - Callback function to process metrics
    *
    * @return {Array}
    */
-  renderCompoundGridColumnHeaders(headers, definition, onAttribute, onMetric) {
-    const { columnSets: columnSetsHeaders } = headers;
+  renderCompoundGridColumnHeaders(data, definition, onAttribute, onMetric) {
+    const { headers: { columnSets: columnSetsHeaders }, metricValues: { columnSets: columnSetsMetricValues } } = data;
+
     const { columnSets: columnSetsDefinition } = definition.grid;
 
     let colIndex = 0;
@@ -254,6 +256,7 @@ class CompoundGridHandler {
     let attrFormsBoundingHeight = 0;
     const parsedHeaders = [];
 
+    this.populateEmptyColumnSetsHeaders(columnSetsHeaders, columnSetsMetricValues, columnSetsDefinition);
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders);
 
 
@@ -310,6 +313,7 @@ class CompoundGridHandler {
     return mstrNormalizedJsonHandler.transposeMatrix(parsedHeaders);
   }
 
+
   /**
    * Adds empty cells when we have different header height due to attribute forms
    *
@@ -322,6 +326,28 @@ class CompoundGridHandler {
       for (let i = 0; i < parsedHeaders.length; i++) {
         while (parsedHeaders[i].length < attrFormsBoundingHeight) {
           parsedHeaders[i].unshift('\'');
+        }
+      }
+    }
+  }
+
+  /**
+   * Adds placeholder for empty value for empty column set headers
+   *
+   * @param {Array} columnSetsHeaders  Contains headers indexes for each columnset
+   * @param {Array} columnSetsMetricValues  contains metric values for each columnset
+   * @param {Array} columnSetsDefinition  Contains headers values for each columnset
+   */
+  populateEmptyColumnSetsHeaders(columnSetsHeaders, columnSetsMetricValues, columnSetsDefinition) {
+    for (let i = 0; i < columnSetsHeaders.length; i++) {
+      const rawMetricValues = columnSetsMetricValues[i].raw;
+
+      if (columnSetsHeaders[i].length === 0 && rawMetricValues && rawMetricValues[0] && rawMetricValues[0].length > 0) {
+        for (let j = 0; j < rawMetricValues[0].length; j++) {
+          if (j === 0) {
+            columnSetsDefinition[i].columns.unshift({ type: null, elements: [] });
+          }
+          columnSetsHeaders[i].unshift([-1]);
         }
       }
     }
