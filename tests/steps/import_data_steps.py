@@ -43,28 +43,28 @@ def step_impl(context):
     context.pages.import_data_popup_page().add_dossier_to_library()
 
 
-@step('I expanded details for object number {object_number}')
+@step('I displayed details for object number {object_number}')
 def step_impl(context, object_number):
-    context.pages.import_data_popup_page().expand_object(object_number)
+    context.pages.import_data_popup_page().show_object_details(object_number)
 
 
 @step('I verify copying the details to clipboard works correctly')
 def step_impl(context):
-    compare_result = context.pages.import_data_popup_page().copy_to_clipboard_and_compare_all_details()
+    compare_result = context.pages.import_data_popup_page().copy_object_details_to_clipboard_and_verify_if_correct()
 
     AssertUtil.assert_simple(compare_result, True)
 
 
-@step('I close the Import Data popup')
+@step('I close Import Data popup')
 def step_impl(context):
     context.pages.import_data_popup_page().close_import_data_popup()
 
 
-@step('I clicked on the Filter Button')
+@step('I clicked Filters Button')
 def step_impl(context):
-    context.pages.import_data_popup_page().click_on_the_filter_button()
+    context.pages.import_data_popup_page().click_filters_button()
 
-    
+
 @step('I clicked Import button and see error "{error_message}"')
 def step_impl(context, error_message):
     context.pages.import_data_popup_page().click_import_button_to_import_with_error(error_message)

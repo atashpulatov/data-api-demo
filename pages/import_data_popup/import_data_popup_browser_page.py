@@ -12,8 +12,8 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
 
     NAME_OBJECT_ELEM = '''span[title='%s']'''
     EXPAND_DETAILS_ELEM = '.details-indicator'
-    EXPAND_DETAILS_TABLE = '.details-table > table tr'
-    EXPAND_DETAILS_VALUE = '.tooltip :last-child'
+    OBJECT_DETAILS_TABLE = '.details-table > table tr'
+    OBJECT_DETAILS_VALUE = '.tooltip :last-child'
 
     IMPORT_BUTTON_ELEM = 'import'
     PREPARE_BUTTON_ELEM = 'prepare'
@@ -24,8 +24,7 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
 
     ADD_TO_LIBRARY_BUTTON = '.mstrd-PageNotification-buttonContainer > .mstrd-Button.mstrd-Button--primary'
     CLOSE_IMPORT_DATA_POPUP_BUTTON = '.popup-buttons > button'
-    FILTER_BUTTON = '.filter-button'
-    FILTER_CHECKBOX = '''.category-list-header[aria-label="%s"] + .category-list-table > .category-list-row > .checkbox-cell > label > input[aria-label="Checkbox for %s."] + span '''
+    FILTERS_BUTTON = '.filter-button'
 
     def __init__(self):
         super().__init__()
@@ -85,14 +84,16 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
         if self.check_if_element_exists_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON, timeout=5):
             self.get_elements_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON).click()
 
-    def expand_object(self, object_number):
-        self.get_elements_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_ELEM)[int(object_number) - 1].click()
+    def show_object_details(self, object_number):
+        object_index = int(object_number) - 1
 
-    def copy_to_clipboard_and_compare_all_details(self):
-        details_rows = self.get_elements_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_TABLE)
+        self.get_elements_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_ELEM)[object_index].click()
+
+    def copy_object_details_to_clipboard_and_verify_if_correct(self):
+        details_rows = self.get_elements_by_css(ImportDataPopupBrowserPage.OBJECT_DETAILS_TABLE)
 
         for row in details_rows:
-            details_value = row.find_element_by_css(ImportDataPopupBrowserPage.EXPAND_DETAILS_VALUE)
+            details_value = row.find_element_by_css(ImportDataPopupBrowserPage.OBJECT_DETAILS_VALUE)
             details_value.click()
 
             if paste() != details_value.text:
@@ -103,5 +104,5 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def close_import_data_popup(self):
         self.get_element_by_css(ImportDataPopupBrowserPage.CLOSE_IMPORT_DATA_POPUP_BUTTON).click()
 
-    def click_on_the_filter_button(self):
-        self.get_element_by_css(ImportDataPopupBrowserPage.FILTER_BUTTON).click()
+    def click_filters_button(self):
+        self.get_element_by_css(ImportDataPopupBrowserPage.FILTERS_BUTTON).click()
