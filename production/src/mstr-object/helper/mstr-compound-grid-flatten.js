@@ -40,7 +40,7 @@ class MstrCompoundGridFlatten {
       for (let index = 0; index < columSetsNumber; index++) {
         const rowRawValues = data.metricValues.columnSets[index].raw;
 
-        if (rowRawValues.length) {
+        if (rowRawValues.length > 0) {
           rawValues.push(...rowRawValues[i]);
         }
       }
@@ -88,7 +88,7 @@ class MstrCompoundGridFlatten {
     for (let i = 0; i < columSetsNumber; i++) {
       const columnSetColumn = grid.columnSets[i].columns[0];
 
-      if (columnSetColumn && columnSetColumn.elements) {
+      if (columnSetColumn && columnSetColumn.elements > 0) {
         for (let index = 0; index < columnSetColumn.elements.length; index++) {
           gridColumns[0].elements.push(columnSetColumn.elements[index]);
         }
