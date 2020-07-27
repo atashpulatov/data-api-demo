@@ -263,7 +263,7 @@ describe('Compound Grid Handler', () => {
   it('should render column headers', () => {
     // given
     const response = JSON.parse(JSON.stringify(regularCompoundJSON));
-    const { data: { headers }, definition } = response;
+    const { data, definition } = response;
     const expectedLength = 2;
     const onElement = (e) => [e.name || e.formValues[0]];
 
@@ -273,12 +273,36 @@ describe('Compound Grid Handler', () => {
     ];
 
     // when
-    const titles = mstrCompoundGridHandler.renderCompoundGridColumnHeaders(headers, definition, onElement, onElement);
+    const titles = mstrCompoundGridHandler.renderCompoundGridColumnHeaders(data, definition, onElement, onElement);
 
     // then
     expect(titles).toHaveLength(expectedLength);
     expect(titles).toEqual(expectedColumnHeaders);
   });
+
+  it('should render column headers with empty column set', () => {
+    // given
+    const response = JSON.parse(JSON.stringify(regularCompoundJSON));
+    const { data, definition } = response;
+    definition.grid.columnSets.push({ columns: [] });
+    data.metricValues.columnSets.push({ raw: [[1]] });
+    data.headers.columnSets.push([]);
+    const expectedLength = 2;
+    const onElement = (e) => [e.name || e.formValues[0]];
+
+    const expectedColumnHeaders = [
+      ['Music', 'Movies', 'Electronics', 'Books', 'Cost', 'Cost', 'Cost', '\''],
+      ['Profit', 'Profit', 'Profit', 'Profit', '2016', '2015', '2014', '\'']
+    ];
+
+    // when
+    const titles = mstrCompoundGridHandler.renderCompoundGridColumnHeaders(data, definition, onElement, onElement);
+
+    // then
+    expect(titles).toHaveLength(expectedLength);
+    expect(titles).toEqual(expectedColumnHeaders);
+  });
+
 
   it('should handle attribute forms', () => {
     // given
