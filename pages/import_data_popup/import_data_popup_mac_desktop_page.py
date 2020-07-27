@@ -60,4 +60,3 @@ class ImportDataPopupMacDesktopPage(BasePage):
         self.get_element_by_xpath(ImportDataPopupMacDesktopPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_mac_desktop_page.wait_for_import_to_finish_successfully()
-

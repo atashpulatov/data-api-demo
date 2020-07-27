@@ -84,7 +84,7 @@ class BaseElement:
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
             try:
                 raw_element = self.__element.find_element_by_xpath(selector)
-
+                
                 return BaseElement(raw_element, self.__driver)
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
@@ -92,6 +92,11 @@ class BaseElement:
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)
+
+    def find_element_by_css(self, selector):
+        raw_element = self.__element.find_element_by_css_selector(selector)
+
+        return BaseElement(raw_element, self.__driver)
 
     def get_elements_by_name(self, selector):
         raw_elements = self.__element.find_elements_by_name(selector)
