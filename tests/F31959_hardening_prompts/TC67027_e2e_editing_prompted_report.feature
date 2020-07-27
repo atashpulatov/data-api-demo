@@ -10,5 +10,4 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
      When I clicked Prepare Data button
       And I ensure that Columns & Filters Selection is visible
 
-      And I clicked Run button
-
+      # TODO And I clicked Run button

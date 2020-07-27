@@ -70,7 +70,6 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     def click_prepare_data_button(self):
         self.get_element_by_id(ImportDataPopupBrowserPage.PREPARE_BUTTON_ELEM).click()
 
-
     def add_dossier_to_library(self):
         if self.check_if_element_exists_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON, timeout=5):
             self.get_elements_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON).click()
