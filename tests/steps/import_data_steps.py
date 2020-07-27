@@ -60,7 +60,7 @@ def step_impl(context):
     context.pages.import_data_popup_page().close_import_data_popup()
 
 
-@step('I clicked Filters Button')
+@step('I clicked Filters button')
 def step_impl(context):
     context.pages.import_data_popup_page().click_filters_button()
 
