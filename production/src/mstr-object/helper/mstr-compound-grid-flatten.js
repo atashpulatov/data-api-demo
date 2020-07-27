@@ -88,7 +88,7 @@ class MstrCompoundGridFlatten {
     for (let i = 0; i < columSetsNumber; i++) {
       const columnSetColumn = grid.columnSets[i].columns[0];
 
-      if (columnSetColumn && columnSetColumn.elements > 0) {
+      if (columnSetColumn && columnSetColumn.elements.length > 0) {
         for (let index = 0; index < columnSetColumn.elements.length; index++) {
           gridColumns[0].elements.push(columnSetColumn.elements[index]);
         }
