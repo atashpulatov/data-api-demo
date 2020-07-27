@@ -32,7 +32,7 @@ class ImportDossierBrowserPage(BaseBrowserPage):
 
         tile = self._find_tile_by_name(visualization_name)
 
-        tile.get_element_by_xpath(ImportDossierBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
+        tile.get_element_by_css(ImportDossierBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
 
         self.pause(5)  # TODO wait when ready
 

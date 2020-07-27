@@ -13,7 +13,8 @@ class BaseBrowserPage(BasePage):
 
     IMPORT_DATA_POPUP_FRAME_ELEM = '#WACDialogOuterContainer iframe'
 
-    IMPORT_DOSSIER_FRAME_ELEM = 'iframe[src*="app.embedded=true"]'
+    IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM = 'iframe[src*="popupType=navigation-tree&et="]'
+    IMPORT_DOSSIER_INTERNAL_FRAME_ELEM = '.dossier-window > div > iframe'
 
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
@@ -64,11 +65,15 @@ class BaseBrowserPage(BasePage):
         self._switch_to_frame(popup_frame_element)
 
     def focus_on_import_dossier_frame(self):
-        self.focus_on_add_in_frame()
+        self.focus_on_excel_frame()
 
-        dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.IMPORT_DOSSIER_FRAME_ELEM)
+        dossier_external_frame_element = self.get_frame_element_by_css(
+            BaseBrowserPage.IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM)
+        self._switch_to_frame(dossier_external_frame_element)
 
-        self._switch_to_frame(dossier_frame_element)
+        dossier_internal_frame_element = self.get_frame_element_by_css(
+            BaseBrowserPage.IMPORT_DOSSIER_INTERNAL_FRAME_ELEM)
+        self._switch_to_frame(dossier_internal_frame_element)
 
     def _switch_to_frame(self, frame):
         start_time = time.time()
@@ -95,6 +100,14 @@ class BaseBrowserPage(BasePage):
                 break
 
         raise MstrException(('Value not found', selector, attribute, expected_value))
+
+    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
+        try:
+            return self.find_element_by_text_in_elements_list_by_css(selector, expected_text, timeout)
+        except MstrException:
+            pass
+
+        return None
 
     def find_element_by_text_in_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
