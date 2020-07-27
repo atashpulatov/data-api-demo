@@ -32,7 +32,7 @@ class ImportDossierBrowserPage(BaseBrowserPage):
 
         tile = self._find_tile_by_name(visualization_name)
 
-        self.find_element_by_css_from_parent(tile, ImportDossierBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
+        tile.get_element_by_xpath(ImportDossierBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
 
         self.pause(5)  # TODO wait when ready
 
@@ -41,16 +41,18 @@ class ImportDossierBrowserPage(BaseBrowserPage):
 
         tile = self._find_tile_by_name(visualization_name)
 
-        self.find_element_by_css_from_parent(tile, ImportDossierBrowserPage.TILE_CONTEXT_MENU).move_to_and_click()
+        tile.get_element_by_css(ImportDossierBrowserPage.TILE_CONTEXT_MENU).move_to_and_click()
 
-        self.find_element_in_list_by_text(ImportDossierBrowserPage.CONTEXT_MENU_TEXT_ELEMENTS,
-                                          ImportDossierBrowserPage.CONTEXT_MENU_SHOW_DATA).click()
+        self.find_element_in_list_by_text(
+            ImportDossierBrowserPage.CONTEXT_MENU_TEXT_ELEMENTS,
+            ImportDossierBrowserPage.CONTEXT_MENU_SHOW_DATA
+        ).click()
 
     def _find_tile_by_name(self, visualization_name):
         all_tiles = self.get_elements_by_css(ImportDossierBrowserPage.VISUALIZATION_TILE)
 
         for tile in all_tiles:
-            label_element = self.find_element_by_css_from_parent(tile, ImportDossierBrowserPage.VISUALIZATION_LABEL)
+            label_element = tile.get_element_by_css(ImportDossierBrowserPage.VISUALIZATION_LABEL)
             if label_element.text == visualization_name:
                 return tile
 

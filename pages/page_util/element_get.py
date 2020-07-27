@@ -95,18 +95,3 @@ class ElementGet(ElementCheck):
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)
-
-    def find_element_by_css_from_parent(self, parent_element, selector):
-        return self._find_element_from_parent(By.CSS_SELECTOR, parent_element, selector)
-
-    def _find_element_from_parent(self, selector_type, parent_element, selector):
-        i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
-            try:
-                return parent_element.get_element(selector_type, selector)
-            except NoSuchElementException:
-                Util.log_warning('Element not found, try %s: %s' % (i, selector))
-                Util.pause(5)
-            i += 1
-
-        raise MstrException('Cannot find element: %s' % selector)

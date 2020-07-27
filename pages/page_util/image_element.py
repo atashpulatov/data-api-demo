@@ -54,6 +54,9 @@ class ImageElement(BaseElement):
     def get_name_by_attribute(self):
         raise MstrException('Invalid usage of ImageElement, get_name_by_attribute() is not allowed')
 
+    def get_element_by_css(self, selector):
+        raise MstrException('Invalid usage of ImageElement, get_element_by_css() is not allowed')
+
     def get_element_by_xpath(self, selector):
         raise MstrException('Invalid usage of ImageElement, get_element_by_xpath() is not allowed')
 
