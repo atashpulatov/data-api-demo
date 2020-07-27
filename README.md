@@ -348,16 +348,22 @@ If you can't connect, please check your file path to the WinAppDriver.exe.
 To speed-up writing tests, it's possible to run tests using already open Excel session. 
 
 ##### Configuration for Mac Chrome
- 
+
+###### I. Acquire execution url and session id
+
 1. In `config.json` set:
 
     ```
-    "connect_to_existing_session_enabled": true,
+    "connect_to_existing_session_enabled": false,
     "cleanup_after_test_enabled": false,
     ```
     
-1. Run first test with `--logging-level=WARNING`, e.g. `tests/debug_features/debug.feature`.
+1. Run first test with `--logging-level=WARNING` and no log capturing, e.g.:
 
+    ```
+    behave --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/debug_features/empty.feature
+    ```
+ 
 1. Copy `session_id` and `execution_url` (should look like this):
 
     ```
@@ -371,8 +377,22 @@ To speed-up writing tests, it's possible to run tests using already open Excel s
     "browser_existing_session_id": "d26e0c8f59db329bb2a75f9a85fbb93c",
     ```
 
-1. Run test you're working on.
-    
+1. New browser session should stay open. 
+
+###### II. Execute test
+
+1. In `config.json` set:
+
+    ```
+    "connect_to_existing_session_enabled": true,
+    "cleanup_after_test_enabled": false,
+    ```
+
+1. Using open browser session, go to the application state you would like to continue work on. 
+
+1. Run the test you're working on starting from the step you need (comment out steps not needed now). Ensure test
+starts from (perhaps artificial)`Given`, e.g. `Given I pass`.
+
 ##### Configuration for Windows Desktop
 
 1. In `config.json` set:
@@ -391,7 +411,8 @@ To speed-up writing tests, it's possible to run tests using already open Excel s
 
 1. Go to the application state you would like to continue work on. 
 
-1. Run the test you're working on starting from the step you need (comment out steps not needed now).
+1. Run the test you're working on starting from the step you need (comment out steps not needed now). Ensure test
+starts from (perhaps artificial)`Given`, e.g. `Given I pass`.
 
 ##### Configuration for Mac Desktop
 
@@ -406,12 +427,21 @@ To speed-up writing tests, it's possible to run tests using already open Excel s
 
 1. Go to the application state you would like to continue work on. 
 
-1. Run the test you're working on starting from the step you need (comment out steps not needed now).
+1. Run the test you're working on starting from the step you need (comment out steps not needed now). Ensure test
+starts from (perhaps artificial)`Given`, e.g. `Given I pass`.
 
-Tip:
+Tip 1:
 ```
 In our automation, all test cases start from the login step, make sure you prepared the Excel app to have 
 the AddIn opened. If you'd like to start from further step in the test, comment out steps you don't want to execute.
+```
+
+Tip 2:
+```
+Test Scenario must start with a 'Given' given step. When original first step is commented out
+(e.g. Given I logged in as default user), it's necessary to add artifical 'Given' step, e.g.:
+
+Given I pass
 ```
 
 ### Adding a new test
