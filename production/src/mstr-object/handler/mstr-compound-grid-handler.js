@@ -100,7 +100,6 @@ class CompoundGridHandler {
    * @returns bounding height
    */
   calculateColumnHeaderHeight(columnSetsHeaders) {
-    console.log('columnSetsHeaders:', columnSetsHeaders);
     let boundingHeight = 0;
     columnSetsHeaders.forEach(columnSet => {
       if (columnSet.length !== 0) {
