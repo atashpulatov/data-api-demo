@@ -38,9 +38,11 @@ class MstrCompoundGridFlatten {
       rawValues = [];
 
       for (let index = 0; index < columSetsNumber; index++) {
-        rawValues.push(...data.metricValues.columnSets[index].raw[i]);
-        // metricValues.formatted[i].push(...data.metricValues.columnSets[index].formatted[i]);
-        // metricValues.extras[i].push(...data.metricValues.columnSets[index].extras[i]);
+        const rowRawValues = data.metricValues.columnSets[index].raw;
+
+        if (rowRawValues.length > 0) {
+          rawValues.push(...rowRawValues[i]);
+        }
       }
       metricValues.raw.push(rawValues);
     }
@@ -84,8 +86,12 @@ class MstrCompoundGridFlatten {
     }];
 
     for (let i = 0; i < columSetsNumber; i++) {
-      for (let index = 0; index < grid.columnSets[i].columns[0].elements.length; index++) {
-        gridColumns[0].elements.push(grid.columnSets[i].columns[0].elements[index]);
+      const columnSetColumn = grid.columnSets[i].columns[0];
+
+      if (columnSetColumn && columnSetColumn.elements.length > 0) {
+        for (let index = 0; index < columnSetColumn.elements.length; index++) {
+          gridColumns[0].elements.push(columnSetColumn.elements[index]);
+        }
       }
     }
     return gridColumns;

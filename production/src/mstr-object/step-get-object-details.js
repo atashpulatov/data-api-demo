@@ -23,6 +23,7 @@ class StepGetObjectDetails {
    */
   getObjectDetails = async (objectData, operationData) => {
     try {
+      console.time('Get object details');
       const {
         objectWorkingId,
         objectId,
@@ -50,6 +51,8 @@ class StepGetObjectDetails {
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
+    } finally {
+      console.timeEnd('Get object details');
     }
   };
 }

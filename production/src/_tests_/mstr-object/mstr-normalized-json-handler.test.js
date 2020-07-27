@@ -54,7 +54,7 @@ describe('Normalized JSON Handler', () => {
     });
 
     const expectedElement = {
-      id: 'h2010;9BC4691C11E97721AF570080EF55306C', formValues: ['\'', '2010'], value: ['\'', '2010'], subtotalAddress: false,
+      id: 'h2010;9BC4691C11E97721AF570080EF55306C', formValues: ['', '2010'], value: ['', '2010'], subtotalAddress: false,
     };
     // when
     const element = jsonHandler.lookupElement({

@@ -69,7 +69,7 @@ describe('MstrCompoundGridFlatten', () => {
 
     // when
     const headerColumns = mstrCompoundGridFlatten.flattenColumnSetsMetricElemets(grid);
-    console.log('headerColumns:', headerColumns);
+
     // then
     expect(headerColumns[0].elements).toEqual(expectedValue);
   });
