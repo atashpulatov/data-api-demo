@@ -120,5 +120,3 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDataPopupWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
         ).click()
-
-        self.columns_and_filters_selection_windows_desktop_page.ensure_columns_and_filters_selection_is_visible()

@@ -1,6 +1,11 @@
 from behave import *
 
 
+@step('I ensure that Columns & Filters Selection is visible')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().ensure_columns_and_filters_selection_is_visible()
+
+
 @step('I clicked attribute "{attribute_name}"')
 def step_impl(context, attribute_name):
     context.pages.columns_and_filters_selection_page().click_attribute(attribute_name)

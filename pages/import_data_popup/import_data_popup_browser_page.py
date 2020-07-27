@@ -18,10 +18,6 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
     IMPORT_BUTTON_ELEM = 'import'
     PREPARE_BUTTON_ELEM = 'prepare'
 
-    NOTIFICATION_TEXT_ELEM = '.selection-title'
-    TEXT_CONTENT_ATTRIBUTE = 'textContent'
-    COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
-
     ADD_TO_LIBRARY_BUTTON = '.mstrd-PageNotification-buttonContainer > .mstrd-Button.mstrd-Button--primary'
     CLOSE_IMPORT_DATA_POPUP_BUTTON = '.popup-buttons > button'
     FILTERS_BUTTON = '.filter-button'
@@ -73,12 +69,6 @@ class ImportDataPopupBrowserPage(BaseBrowserPage):
 
     def click_prepare_data_button(self):
         self.get_element_by_id(ImportDataPopupBrowserPage.PREPARE_BUTTON_ELEM).click()
-
-        self.wait_for_element_to_have_attribute_value_by_css(
-            ImportDataPopupBrowserPage.NOTIFICATION_TEXT_ELEM,
-            ImportDataPopupBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-            ImportDataPopupBrowserPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
-        )
 
     def add_dossier_to_library(self):
         if self.check_if_element_exists_by_css(ImportDataPopupBrowserPage.ADD_TO_LIBRARY_BUTTON, timeout=5):
