@@ -1,6 +1,6 @@
-from pages.base_browser_page import BaseBrowserPage
 from pages.excel.excel_login.excel_login_browser_page import ExcelLoginBrowserPage
 from pages.excel.excel_main.excel_main_browser_page import ExcelMainBrowserPage
+from pages_base.base_browser_page import BaseBrowserPage
 
 
 class StartExcelBrowserPage(BaseBrowserPage):

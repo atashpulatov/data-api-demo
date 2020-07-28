@@ -1,5 +1,5 @@
-from pages.base_browser_page import BaseBrowserPage
 from pages.not_logged_right_panel.not_logged_right_panel_browser_page import NotLoggedRightPanelBrowserPage
+from pages_base.base_browser_page import BaseBrowserPage
 
 
 class AddInLoginBrowserPage(BaseBrowserPage):

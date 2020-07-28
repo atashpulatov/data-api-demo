@@ -1,7 +1,7 @@
-from pages.base_windows_desktop_page import BaseWindowsDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
-from pages.page_util.windows_desktop_workaround import WindowsDesktopWorkaround
+from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from util.exception.MstrException import MstrException
 from util.message_const import MessageConst
 from util.util import Util

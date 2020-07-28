@@ -1,5 +1,5 @@
-from pages.base_page import BasePage
 from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
+from pages_base.base_page import BasePage
 from util.util import Util
 
 

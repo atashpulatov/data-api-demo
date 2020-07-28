@@ -1,4 +1,4 @@
-from pages.base_page import BasePage
+from pages_base.base_page import BasePage
 
 
 class BaseMacDesktopPage(BasePage):

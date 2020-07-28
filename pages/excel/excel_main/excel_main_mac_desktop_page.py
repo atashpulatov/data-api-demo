@@ -1,4 +1,4 @@
-from pages.base_browser_page import BasePage
+from pages_base.base_browser_page import BasePage
 from util.util import Util
 
 
@@ -13,11 +13,12 @@ class ExcelMainMacDesktopPage(BasePage):
                       "'AXStandardWindow']/AXTabGroup[0]/AXRadioButton[@AXTitle='Insert']"
 
     ADD_IN_DROP_DOWN = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole=" \
-                      "'AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[3]/AXMenuButton[@AXTitle='My Add-ins']"
+                       "'AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[3]/AXMenuButton" \
+                       "[@AXTitle='My Add-ins']"
 
-    ADD_IN_TO_IMPORT_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='My Add-ins' and @AXSubrole=" \
-                           "'AXUnknown']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXRadioButton[@AXIdentifier=" \
-                           "'popover_gallery_OfficeExtensionsGallery2_Control_0_0']"
+    ADD_IN_TO_IMPORT_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='My Add-ins' and " \
+                            "@AXSubrole='AXUnknown']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXRadioButton[@AXIdentifier=" \
+                            "'popover_gallery_OfficeExtensionsGallery2_Control_0_0']"
 
     def click_new_blank_workbook_elem(self):
         element = self.get_element_by_xpath(ExcelMainMacDesktopPage.NEW_BLANK_WORKBOOK_ELEM)

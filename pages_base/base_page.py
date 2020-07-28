@@ -1,7 +1,7 @@
 from driver.driver_factory import DriverFactory
-from pages.page_util.driver_send_keys import DriverSendKeys
-from pages.page_util.element_check import ElementCheck
-from pages.page_util.element_get import ElementGet
+from pages_base.driver_send_keys import DriverSendKeys
+from pages_base.element_check import ElementCheck
+from pages_base.element_get import ElementGet
 from util.config_util import ConfigUtil
 from util.util import Util
 

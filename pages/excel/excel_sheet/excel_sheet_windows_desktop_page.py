@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 
-from pages.base_windows_desktop_page import BaseWindowsDesktopPage
-from pages.page_util.image_element import ImageElement
+from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from pages_base.image_element import ImageElement
 from util.const import ELEMENT_SEARCH_RETRY_NUMBER
 from util.exception.MstrException import MstrException
 

@@ -1,5 +1,5 @@
-from pages.base_page import BasePage
 from pages.excel.excel_main.excel_main_mac_desktop_page import ExcelMainMacDesktopPage
+from pages_base.base_page import BasePage
 
 
 class StartExcelMacDesktopPage(BasePage):
