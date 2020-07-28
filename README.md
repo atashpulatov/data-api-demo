@@ -178,10 +178,10 @@ Examples of running tests:
 behave tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging:
-behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture  tests/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging, redircting logs to files:
-behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture  tests/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt
+behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt
 
 # test single feature, no colors, verbose logging, all logs printed to console: 
 behave --tags=@mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
@@ -223,17 +223,17 @@ tests execution. Works only when implemented for selected driver (see `-D driver
 `windows_desktop`. 
 
 `-D connect_to_existing_session_enabled=True` enables (`True`) or disables (`False`) attaching to an existing Excel
-or session. Speeds up tests development allowing to e.g. skip first part of the test (TODO see attaching
-to existing Excel or browser session).
+or session. Speeds up tests development allowing to e.g. skip first part of the test (see: Running tests using existing
+application session).
 
 `-D browser_existing_session_executor_url=url` specifies `url` address used when attaching to an existing browser
-session (TODO see attaching to existing Excel or browser session).
+session (see: Running tests using existing application session).
 
 `-D browser_existing_session_id=session_id` specifies `session_id` address used when attaching to an existing browser
-session (TODO see attaching to existing Excel or browser session).
+session (see: Running tests using existing application session).
 
 `-D windows_desktop_excel_root_element_name=root_element_name` specifies Windows Desktop root Excel element name
-(e.g. `Book1 - Excel`) (TODO see attaching to existing Excel or browser session).
+(e.g. `Book1 - Excel`) (see: Running tests using existing application session).
 
 `-D cleanup_after_test_enabled=True` enables (`True`) or disables (`False`) cleaning up after test execution (closing
 Excel or browser). Useful for debug purposes when developing tests.

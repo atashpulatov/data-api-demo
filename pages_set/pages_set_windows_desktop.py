@@ -1,8 +1,6 @@
 from pages.add_in_login.add_in_login_windows_desktop_page import AddInLoginWindowsDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
-from pages.duplicate_object_popup.duplicate_object_popup_windows_desktop_page import \
-    DuplicateObjectPopupWindowsDesktopPage
 from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDesktopPage
 from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWindowsDesktopPage
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
@@ -11,6 +9,8 @@ from pages.import_data_popup.import_data_popup_windows_desktop_page import Impor
 from pages.import_dossier.import_dossier.import_dossier_windows_desktop_page import ImportDossierWindowsDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
+from pages.right_panel.duplicate_object_popup.duplicate_object_popup_windows_desktop_page import \
+    DuplicateObjectPopupWindowsDesktopPage
 from pages.right_panel.right_panel.right_panel_windows_desktop_page import RightPanelWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet

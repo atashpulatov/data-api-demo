@@ -59,9 +59,6 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
     def find_and_select_object(self, object_name):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        # search_box = self.get_element_by_name(ImportDataPopupWindowsDesktopPage.SEARCH_BAR_ELEM)
-        # search_box.send_keys(object_name)
-
         filters_elem = self.get_element_by_name(
             ImportDataPopupWindowsDesktopPage.FILTERS_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.FILTERS_BUTTON_ELEM)
