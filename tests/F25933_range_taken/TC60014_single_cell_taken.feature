@@ -10,11 +10,11 @@ Feature: F25933 - Range taken
       And MyLibrary Switch is OFF
       And I found and selected object "100_report"
 
-      When I clicked Import button without checking results
-       And I clicked OK button in Range Taken popup
-       And I waited for object to be refreshed successfully
-       And I closed all notifications
+     When I clicked Import button without checking results
+      And I clicked OK button in Range Taken popup
+      And I waited for object to be refreshed successfully
+      And I closed all notifications
 
-      Then number of worksheets should be 2
+     Then number of worksheets should be 2
 
       And I log out
