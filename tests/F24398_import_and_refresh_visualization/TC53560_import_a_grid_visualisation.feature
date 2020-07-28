@@ -34,6 +34,7 @@ Feature: F24398 - Import and refresh visualization
     Given I changed object 1 name to "Visualization-name" using icon
       And I changed object 1 name to "Modified-visualization-name" using context menu
      Then I clicked Refresh on object 1
+      And I waited for object to be refreshed successfully 
       And I closed last notification
 
     Given I selected cell "N1"

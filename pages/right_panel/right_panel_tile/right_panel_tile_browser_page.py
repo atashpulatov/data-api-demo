@@ -10,11 +10,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     SIDE_PANEL_HEADER = '.side-panel > .header'
 
-    RIGHT_PANEL_TILE = '#overlay > div.side-panel > div.object-tile-container > ' \
-                       'div.object-tile-list > article:nth-child(%s) > div > div'
+    RIGHT_PANEL_TILE = '#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(%s) > div'
 
-    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' > div.object-tile-header > span.icon-bar-container > ' \
-                                                        'span > '
+    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' > div.react-contextmenu-wrapper > div > div.object-tile-header > span.icon-bar-container > span > '
 
     DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(1)'
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(5)'
@@ -28,6 +26,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
+    #teraz: #overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(2) > div| > div.react-contextmenu-wrapper > div > div.object-tile-header > span.icon-bar-container > span >| button:nth-child(5)
+    #rysie: #overlay > div.side-panel > div.object-tile-container > div.object-tile-list > article:nth-child(2) > div > div| > div.object-tile-header > span.icon-bar-container > span >| button:nth-child(5)
 
     def wait_for_import_to_finish_successfully(self):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT)
@@ -81,8 +81,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self._hover_over_tile(int(object_no) - 1)
 
         self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % object_no).click()
-
-        self.wait_for_refresh_object_to_finish_successfully()
 
     def _hover_over_tile(self, tile_no):
         other_container = self.get_element_by_css(RightPanelTileBrowserPage.SIDE_PANEL_HEADER)
