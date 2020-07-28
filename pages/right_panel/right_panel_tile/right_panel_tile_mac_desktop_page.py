@@ -60,7 +60,9 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
 
     def get_object_name(self, object_no):
         object_index = int(object_no) - 1
+
         self._hover_over_tile(object_index)
+        
         title_button_element = self._get_title_buttons_for_all_tiles()[object_index]
 
         return title_button_element.get_attribute('AXTitle')
