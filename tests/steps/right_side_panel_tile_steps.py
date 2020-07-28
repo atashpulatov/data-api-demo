@@ -53,3 +53,7 @@ def step_impl(context, object_number):
 @step('I removed object {object_number} using context menu')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().remove_object_using_context_menu(object_number)
+
+@step('I waited for object to be refreshed successfully')
+def step_impl(contex):
+    contex.pages.right_panel_tile_page().wait_for_refresh_object_to_finish_successfully()

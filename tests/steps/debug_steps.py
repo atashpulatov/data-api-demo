@@ -15,9 +15,9 @@ def step_impl(context, secs):
 
 @step('I debug')
 def step_impl(context):
-    context.pages.development_page().execute_tmp_code()
+    context.pages.debug_page().execute_tmp_code()
 
 
 @step('I log source')
 def step_impl(context):
-    context.pages.development_page().log_page_source()
+    context.pages.debug_page().log_page_source()

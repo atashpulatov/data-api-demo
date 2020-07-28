@@ -18,8 +18,6 @@ class RangeTakenPopupBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RangeTakenPopupBrowserPage.RANGE_TAKEN_OK_BUTTON).click()
 
-        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
-
     def click_cancel(self):
         self.focus_on_add_in_frame()
 

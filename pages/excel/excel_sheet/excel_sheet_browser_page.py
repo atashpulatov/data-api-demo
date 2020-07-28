@@ -31,6 +31,12 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
     SELECT_SHEET_BUTTON = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > ' \
                           'li:nth-child(%s)'
 
+    COLUMN_HEADER = '.ewrch-col-nosel > .ewr-chc'
+
+    EXCEL_OPTION_MEDIUM_LABEL = '.cui-ctl-mediumlabel'
+
+    OPTION_DELETE_COLUMNS = 'Delete Columns'
+
     def get_cells_values(self, cells):
         result = []
 
@@ -124,3 +130,19 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         worksheet_number_int = int(worksheet_number) + 1
 
         self.get_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int).click()
+
+    def remove_columns(self, column_name, number_of_columns):
+        self.focus_on_excel_frame()
+
+        for i in range(0, int(number_of_columns)):
+            self.go_to_cell('%s1' % column_name)
+
+            self.press_tab()
+
+            self.find_element_by_text_in_elements_list_by_css(
+                ExcelSheetBrowserPage.COLUMN_HEADER, column_name).right_click()
+
+            self.find_element_by_text_in_elements_list_by_css(
+                ExcelSheetBrowserPage.EXCEL_OPTION_MEDIUM_LABEL,
+                ExcelSheetBrowserPage.OPTION_DELETE_COLUMNS
+            ).click()

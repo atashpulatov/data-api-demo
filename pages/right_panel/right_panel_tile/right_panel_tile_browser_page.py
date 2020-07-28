@@ -82,8 +82,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % object_no).click()
 
-        self.wait_for_refresh_object_to_finish_successfully()
-
     def _hover_over_tile(self, tile_no):
         other_container = self.get_element_by_css(RightPanelTileBrowserPage.SIDE_PANEL_HEADER)
         other_container.move_to()

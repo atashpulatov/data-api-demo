@@ -1,11 +1,14 @@
 from abc import ABC, abstractmethod
 
-from pages.development.development_page import DevelopmentPage
+from pages.debug.debug_page import DebugPage
 
 
 class AbstractPagesSet(ABC):
     def __init__(self):
-        self.development_common_page = DevelopmentPage()
+        self.debug_common_page = DebugPage()
+
+    def debug_page(self):
+        return self.debug_common_page
 
     @abstractmethod
     def start_excel_page(self):
@@ -78,6 +81,3 @@ class AbstractPagesSet(ABC):
     @abstractmethod
     def range_taken_popup_page(self):
         pass
-
-    def development_page(self):
-        return self.development_common_page
