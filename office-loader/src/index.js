@@ -87,7 +87,7 @@ function logout(libraryUrl) {
 }
 
 function openAuthDialog(url) {
-  const popupUrl = `${url}/auth/office-add-in.jsp?source=addin-mstr-office`;
+  const popupUrl = `${url}/apps/addin-mstr-office/auth/office-add-in.jsp?source=addin-mstr-office`;
   const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
   const openDialog = isOfficeOnline ? openPopup : openOfficeDialog;
   openDialog(popupUrl, onMessageReceived);
