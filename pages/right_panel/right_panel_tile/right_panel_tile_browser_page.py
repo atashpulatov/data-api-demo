@@ -26,8 +26,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
-    #teraz: #overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(2) > div| > div.react-contextmenu-wrapper > div > div.object-tile-header > span.icon-bar-container > span >| button:nth-child(5)
-    #rysie: #overlay > div.side-panel > div.object-tile-container > div.object-tile-list > article:nth-child(2) > div > div| > div.object-tile-header > span.icon-bar-container > span >| button:nth-child(5)
 
     def wait_for_import_to_finish_successfully(self):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT)
