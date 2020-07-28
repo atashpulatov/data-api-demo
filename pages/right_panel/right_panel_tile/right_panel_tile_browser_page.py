@@ -12,7 +12,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     RIGHT_PANEL_TILE = '#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(%s) > div'
 
-    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' > div.react-contextmenu-wrapper > div > div.object-tile-header > span.icon-bar-container > span > '
+    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' > div.react-contextmenu-wrapper > div > div.object-tile-header >' \
+                                                        ' span.icon-bar-container > span > '
 
     DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(1)'
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(5)'

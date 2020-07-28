@@ -57,8 +57,6 @@ def step_impl(context, worksheet_number):
     context.pages.excel_sheet_page().open_worksheet(worksheet_number)
 
 
-@step('I removed {n} columns in a row starting with "{column_name}" next to "{cell}"')
-def step_impl(context, n, column_name, cell):
-    for x in range(0, int(n)):
-        context.pages.excel_sheet_page().go_to_cell(cell)
-        context.pages.excel_sheet_page().remove_column(column_name)
+@step('I removed {n} columns in a row starting with "{column_name}"')
+def step_impl(context, column_name, n):
+    context.pages.excel_sheet_page().remove_columns(column_name, n)

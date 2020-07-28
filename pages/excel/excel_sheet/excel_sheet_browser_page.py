@@ -131,12 +131,18 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int).click()
 
-    def remove_column(self, column):
+    def remove_columns(self, column_name, n):
         self.focus_on_excel_frame()
 
-        self.find_element_by_text_in_elements_list_by_css(ExcelSheetBrowserPage.COLUMN_HEADER, column).right_click()
+        for i in range(0, int(n)):
+            self.go_to_cell(column_name + str(1))
 
-        self.find_element_by_text_in_elements_list_by_css(
-            ExcelSheetBrowserPage.EXCEL_OPTION_MEDIUM_LABEL,
-            ExcelSheetBrowserPage.OPTION_DELETE_COLUMNS
-        ).click()
+            self.press_tab()
+
+            self.find_element_by_text_in_elements_list_by_css(
+                ExcelSheetBrowserPage.COLUMN_HEADER, column_name).right_click()
+
+            self.find_element_by_text_in_elements_list_by_css(
+                ExcelSheetBrowserPage.EXCEL_OPTION_MEDIUM_LABEL,
+                ExcelSheetBrowserPage.OPTION_DELETE_COLUMNS
+            ).click()

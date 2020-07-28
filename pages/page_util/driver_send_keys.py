@@ -25,8 +25,12 @@ class DriverSendKeys:
 
     def press_enter(self):
         self.send_keys_raw(Keys.ENTER)
+    
+    def press_tab(self):
+        self.send_keys_raw(Keys.TAB)
 
     def send_keys_raw(self, keys):
         ActionChains(self.__driver).send_keys(keys).perform()
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
+
