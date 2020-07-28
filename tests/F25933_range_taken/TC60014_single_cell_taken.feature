@@ -12,6 +12,8 @@ Feature: F25933 - Range taken
 
      When I clicked Import button without checking results
       And I clicked OK button in Range Taken popup
+      And I waited for object to be refreshed successfully
+      And I closed all notifications
 
      Then number of worksheets should be 2
 
