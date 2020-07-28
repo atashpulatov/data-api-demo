@@ -68,9 +68,9 @@ function verifyToken(libraryUrl) {
         return true
       } else if (status === 403) {
         // No privileges
-        logout(url).finally(() => {
+        logout(libraryUrl).finally(() => {
           const locale = Office.context.displayLanguage || navigator.language;
-          window.location.replace(`${url}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
+          window.location.replace(`${libraryUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
         });
       }
       // Not valid token
