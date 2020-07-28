@@ -1,4 +1,4 @@
-import { objectNotificationTypes } from '@mstr/rc';
+import { objectNotificationTypes } from '@mstr/connector-components';
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED, FETCH_INSERT_DATA } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
 import { officeProperties } from '../office-reducer/office-properties';

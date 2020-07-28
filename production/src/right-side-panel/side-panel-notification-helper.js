@@ -1,4 +1,4 @@
-import { popupTypes } from '@mstr/rc';
+import { popupTypes } from '@mstr/connector-components';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { updateOperation } from '../redux-reducer/operation-reducer/operation-actions';

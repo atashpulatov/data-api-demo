@@ -6,7 +6,7 @@ import 'jest-localstorage-mock';
 import 'regenerator-runtime/runtime';
 import { diContainer } from './dependency-container';
 
-jest.mock('@mstr/rc', () => ({
+jest.mock('@mstr/connector-components', () => ({
   // eslint-disable-next-line react/react-in-jsx-scope
   ObjectTable: () => <div />,
   // eslint-disable-next-line react/react-in-jsx-scope,react/no-multi-comp

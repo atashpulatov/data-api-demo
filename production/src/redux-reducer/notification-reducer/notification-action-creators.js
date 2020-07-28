@@ -1,4 +1,4 @@
-import { globalNotificationTypes } from '@mstr/rc';
+import { globalNotificationTypes } from '@mstr/connector-components';
 import {
   CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION,
   DELETE_NOTIFICATION, DISPLAY_NOTIFICATION_WARNING, CLEAR_NOTIFICATIONS

@@ -1,4 +1,4 @@
-import { addNestedPropertiesToObjects } from '@mstr/rc';
+import { addNestedPropertiesToObjects } from '@mstr/connector-components';
 import DB from '../../cache/cache-db';
 import i18next from '../../i18n';
 import { mstrListRestService } from '../../mstr-object/mstr-list-rest-service';
