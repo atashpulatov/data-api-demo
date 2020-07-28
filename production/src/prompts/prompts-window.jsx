@@ -36,8 +36,7 @@ export class PromptsWindowNotConnected extends Component {
       isReprompt: popupState.isReprompt,
       givenPromptsAnswers: mstrData.promptsAnswers || editedObject.promptsAnswers,
       newPromptsAnswers: [],
-      // TODO: Restore when ON_PROMPT_LOADED is added
-      // isPromptLoading: true,
+      isPromptLoading: true,
     };
     const { installSessionProlongingHandler } = sessionHelper;
     this.prolongSession = installSessionProlongingHandler(this.closePopup);
@@ -100,8 +99,7 @@ export class PromptsWindowNotConnected extends Component {
   }
 
   promptAnsweredHandler = (newAnswer) => {
-    // TODO: Restore when ON_PROMPT_LOADED is added
-    // this.setState({ isPromptLoading: true });
+    this.setState({ isPromptLoading: true });
     const { newPromptsAnswers } = this.state;
     if (newPromptsAnswers.length > 0) {
       const newArray = [...newPromptsAnswers, newAnswer];
@@ -111,10 +109,9 @@ export class PromptsWindowNotConnected extends Component {
     }
   }
 
-  // TODO: Restore when ON_PROMPT_LOADED is added
-  // promptLoadedHandler = () => {
-  // this.setState({ isPromptLoading: false });
-  // }
+  promptLoadedHandler = () => {
+  this.setState({ isPromptLoading: false });
+  }
 
   loadEmbeddedDossier = async (container) => {
     const { loading, chosenObjectId, isReprompt } = this.state;
@@ -160,8 +157,7 @@ export class PromptsWindowNotConnected extends Component {
         onMsgRouterReadyHandler: ({ MsgRouter }) => {
           msgRouter = MsgRouter;
           msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
-          // TODO: Restore when ON_PROMPT_LOADED is added
-          // msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
+          msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
 
           // TODO: We should remember to unregister this handler once the page loads
         },
@@ -284,9 +280,7 @@ export class PromptsWindowNotConnected extends Component {
   }
 
   render() {
-    const { isReprompt } = this.state;
-    // TODO: Restore when ON_PROMPT_LOADED is added
-    // const { isReprompt, isPromptLoading } = this.state;
+    const { isReprompt, isPromptLoading } = this.state;
     return (
       <div
         style={{ position: 'relative' }}
@@ -300,8 +294,7 @@ export class PromptsWindowNotConnected extends Component {
           hideSecondary
           handleBack={!isReprompt && this.handleBack}
           useImportAsRunButton
-          // TODO: Restore when ON_PROMPT_LOADED is added
-          // disableActiveActions={isPromptLoading}
+          disableActiveActions={isPromptLoading}
         />
       </div>
     );
