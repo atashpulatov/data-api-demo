@@ -2,7 +2,7 @@ import time
 
 from selenium.common.exceptions import NoSuchFrameException, NoSuchWindowException
 
-from pages.base_page import BasePage
+from pages_base.base_page import BasePage
 from util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, DEFAULT_WAIT_AFTER_EXCEPTION
 from util.exception.MstrException import MstrException
 from util.util import Util

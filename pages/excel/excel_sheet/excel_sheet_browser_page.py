@@ -2,7 +2,7 @@ import re
 
 from selenium.webdriver.common.keys import Keys
 
-from pages.base_browser_page import BaseBrowserPage
+from pages_base.base_browser_page import BaseBrowserPage
 from util.const import DEFAULT_WAIT_AFTER_SEND_KEY
 
 

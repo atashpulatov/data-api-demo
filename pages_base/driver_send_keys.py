@@ -8,8 +8,6 @@ from util.util import Util
 
 
 class DriverSendKeys:
-    DEFAULT_IMAGE_TIMEOUT = 10
-
     def __init__(self):
         super().__init__()
 

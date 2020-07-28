@@ -10,15 +10,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from driver.driver_factory import DriverFactory
 from util.config_util import ConfigUtil
-from util.const import DEFAULT_TIMEOUT
+from util.const import DEFAULT_TIMEOUT, DEFAULT_IMAGE_TIMEOUT
 from util.const import DEFAULT_WAIT_BETWEEN_CHECKS
 from util.image_util import ImageUtil
 from util.util import Util
 
 
 class ElementCheck:
-    DEFAULT_IMAGE_TIMEOUT = 10
-
     def __init__(self):
         super().__init__()
 

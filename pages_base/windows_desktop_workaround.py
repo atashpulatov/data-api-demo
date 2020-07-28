@@ -1,4 +1,4 @@
-from pages.page_util.image_element import ImageElement
+from pages_base.image_element import ImageElement
 from util.config_util import ConfigUtil
 from util.exception.MstrException import MstrException
 from util.util import Util

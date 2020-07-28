@@ -1,7 +1,7 @@
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
-from pages.page_util.base_element import BaseElement
+from pages_base.base_element import BaseElement
 from util.const import AFTER_OPERATION_WAIT_TIME
 from util.exception.MstrException import MstrException
 from util.util import Util

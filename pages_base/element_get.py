@@ -6,9 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-from pages.page_util.base_element import BaseElement
-from pages.page_util.element_check import ElementCheck
-from pages.page_util.image_element import ImageElement
+from pages_base.base_element import BaseElement
+from pages_base.element_check import ElementCheck
+from pages_base.image_element import ImageElement
 from util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER
 from util.exception.MstrException import MstrException
 from util.util import Util

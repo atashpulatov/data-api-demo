@@ -1,7 +1,7 @@
-from pages.base_windows_desktop_page import BaseWindowsDesktopPage
 from pages.excel.excel_main.excel_main_windows_desktop_page import ExcelMainWindowsDesktopPage
-from pages.page_util.image_element import ImageElement
-from pages.page_util.windows_desktop_workaround import WindowsDesktopWorkaround
+from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from pages_base.image_element import ImageElement
+from pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 
 
 class StartExcelWindowsDesktopPage(BaseWindowsDesktopPage):

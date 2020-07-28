@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 
-from pages.base_page import BasePage
 from pages.not_logged_right_panel.not_logged_right_panel_mac_desktop_page import NotLoggedRightPanelMacDesktopPage
+from pages_base.base_page import BasePage
 
 
 class AddInLoginMacDesktopPage(BasePage):

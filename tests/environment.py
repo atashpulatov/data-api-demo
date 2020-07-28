@@ -1,6 +1,6 @@
 from driver.driver_factory import DriverFactory
 from driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
-from pages.page_util.image_element import ImageElement
+from pages_base.image_element import ImageElement
 from pages_set.pages_set_factory import PagesSetFactory
 from util.config_util import ConfigUtil
 from util.test_util import TestUtil
