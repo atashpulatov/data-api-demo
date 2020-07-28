@@ -2,6 +2,7 @@ import 'core-js/stable';
 import 'focus-visible/dist/focus-visible';
 import 'proxy-polyfill';
 import './index.css';
+import '@mstr/connector-components/dist/js/index.es.css';
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { authenticationService } from './authentication/auth-rest-service';

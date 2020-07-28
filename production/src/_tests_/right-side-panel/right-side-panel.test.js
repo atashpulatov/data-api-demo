@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { SidePanel } from '@mstr/rc/';
+import { SidePanel } from '@mstr/connector-components/';
 import { RightSidePanelNotConnected } from '../../right-side-panel/right-side-panel';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
