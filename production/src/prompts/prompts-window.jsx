@@ -110,7 +110,7 @@ export class PromptsWindowNotConnected extends Component {
   }
 
   promptLoadedHandler = () => {
-  this.setState({ isPromptLoading: false });
+    this.setState({ isPromptLoading: false });
   }
 
   loadEmbeddedDossier = async (container) => {
