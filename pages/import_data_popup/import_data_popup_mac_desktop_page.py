@@ -1,5 +1,5 @@
-from pages.base_page import BasePage
 from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
+from pages_base.base_page import BasePage
 from util.util import Util
 
 
@@ -60,4 +60,3 @@ class ImportDataPopupMacDesktopPage(BasePage):
         self.get_element_by_xpath(ImportDataPopupMacDesktopPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_mac_desktop_page.wait_for_import_to_finish_successfully()
-

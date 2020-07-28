@@ -6,9 +6,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-from pages.page_util.base_element import BaseElement
-from pages.page_util.element_check import ElementCheck
-from pages.page_util.image_element import ImageElement
+from pages_base.base_element import BaseElement
+from pages_base.element_check import ElementCheck
+from pages_base.image_element import ImageElement
 from util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER
 from util.exception.MstrException import MstrException
 from util.util import Util
@@ -92,21 +92,6 @@ class ElementGet(ElementCheck):
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
                 Util.pause(3)
-            i += 1
-
-        raise MstrException('Cannot find element: %s' % selector)
-
-    def find_element_by_css_from_parent(self, parent_element, selector):
-        return self._find_element_from_parent(By.CSS_SELECTOR, parent_element, selector)
-
-    def _find_element_from_parent(self, selector_type, parent_element, selector):
-        i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
-            try:
-                return parent_element.get_element(selector_type, selector)
-            except NoSuchElementException:
-                Util.log_warning('Element not found, try %s: %s' % (i, selector))
-                Util.pause(5)
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)

@@ -1,7 +1,7 @@
-from pages.base_windows_desktop_page import BaseWindowsDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
-from pages.page_util.windows_desktop_workaround import WindowsDesktopWorkaround
+from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from util.exception.MstrException import MstrException
 from util.message_const import MessageConst
 from util.util import Util
@@ -58,9 +58,6 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def find_and_select_object(self, object_name):
         self.windows_desktop_workaround.focus_on_popup_window()
-
-        # search_box = self.get_element_by_name(ImportDataPopupWindowsDesktopPage.SEARCH_BAR_ELEM)
-        # search_box.send_keys(object_name)
 
         filters_elem = self.get_element_by_name(
             ImportDataPopupWindowsDesktopPage.FILTERS_BUTTON_ELEM,
@@ -120,5 +117,3 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDataPopupWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
         ).click()
-
-        self.columns_and_filters_selection_windows_desktop_page.ensure_columns_and_filters_selection_is_visible()

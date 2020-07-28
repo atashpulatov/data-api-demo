@@ -1,6 +1,6 @@
 import json
 
-from pages.base_browser_page import BaseBrowserPage
+from pages_base.base_browser_page import BaseBrowserPage
 
 
 class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
@@ -23,6 +23,17 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTE_FORM_DROP_DOWN_ITEM = '.ant-select-dropdown-menu-item'
 
     IMPORT_BUTTON_ELEM = 'import'
+
+    NOTIFICATION_TEXT_ELEM = '.selection-title'
+    TEXT_CONTENT_ATTRIBUTE = 'textContent'
+    COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
+
+    def ensure_columns_and_filters_selection_is_visible(self):
+        self.wait_for_element_to_have_attribute_value_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.NOTIFICATION_TEXT_ELEM,
+            ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            ColumnsAndFiltersSelectionBrowserPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
+        )
 
     def click_attribute(self, attribute_name):
         self.focus_on_import_data_pop_up_frame()

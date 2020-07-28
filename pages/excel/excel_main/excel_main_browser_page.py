@@ -1,4 +1,4 @@
-from pages.base_browser_page import BasePage
+from pages_base.base_browser_page import BasePage
 from util.util import Util
 
 

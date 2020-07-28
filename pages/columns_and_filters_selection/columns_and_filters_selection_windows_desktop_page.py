@@ -1,6 +1,6 @@
 import json
 
-from pages.base_windows_desktop_page import BaseWindowsDesktopPage
+from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from util.exception.MstrException import MstrException
 
 

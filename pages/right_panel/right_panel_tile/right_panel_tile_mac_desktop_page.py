@@ -1,4 +1,4 @@
-from pages.base_mac_desktop_page import BaseMacDesktopPage
+from pages_base.base_mac_desktop_page import BaseMacDesktopPage
 from util.message_const import MessageConst
 
 
@@ -18,6 +18,8 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
 
     TITLE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]/" \
                                                                             "AXButton[4]"
+
+    TITLE_ATTRIBUTE = 'AXTitle'
 
     def wait_for_import_to_finish_successfully(self):
         self.check_if_element_exists_by_xpath(
@@ -65,4 +67,4 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
 
         title_button_element = self._get_title_buttons_for_all_tiles()[object_index]
 
-        return title_button_element.get_attribute('AXTitle')
+        return title_button_element.get_attribute(RightPanelTileMacDesktopPage.TITLE_ATTRIBUļTE)
