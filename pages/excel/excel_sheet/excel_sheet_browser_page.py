@@ -131,11 +131,11 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int).click()
 
-    def remove_columns(self, column_name, n):
+    def remove_columns(self, column_name, number_of_columns):
         self.focus_on_excel_frame()
 
-        for i in range(0, int(n)):
-            self.go_to_cell(column_name + str(1))
+        for i in range(0, int(number_of_columns)):
+            self.go_to_cell('%s1' % column_name)
 
             self.press_tab()
 

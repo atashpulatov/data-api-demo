@@ -11,7 +11,7 @@ Feature: F25933 - Range taken
       And I closed all notifications
      Then number of worksheets should be 1
 
-     When I removed 4 columns in a row starting with "K"
+     When I removed 4 columns starting from column "K"
       And I selected cell "L1"
       And I clicked Add Data button
       And I found and selected object "100_dataset"
@@ -21,7 +21,7 @@ Feature: F25933 - Range taken
 
      When I clicked Refresh on object 2
       And I clicked OK button in Range Taken popup
-      And I waited for object to be refreshed successfully 
+      And I waited for object to be refreshed successfully
       And I closed all notifications
 
      Then number of worksheets should be 2
