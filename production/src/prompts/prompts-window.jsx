@@ -196,8 +196,7 @@ export class PromptsWindowNotConnected extends Component {
           deleteDossierInstance(projectId, objectId, instanceId);
 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
-          // TODO: Restore when ON_PROMPT_LOADED is added
-          // msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
+          msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
 
           const { newPromptsAnswers } = this.state;
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
