@@ -1,7 +1,6 @@
 from pages.add_in_login.add_in_login_mac_desktop_page import AddInLoginMacDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_mac_desktop_page import \
     ColumnsAndFiltersSelectionMacDesktopPage
-from pages.duplicate_object_popup.duplicate_object_popup_mac_desktop_page import DuplicateObjectPopupMacDesktopPage
 from pages.excel.cleanup.cleanup_mac_desktop_page import CleanupMacDesktopPage
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 from pages.excel.excel_sheet.excel_sheet_mac_desktop_page import ExcelSheetMacDesktopPage

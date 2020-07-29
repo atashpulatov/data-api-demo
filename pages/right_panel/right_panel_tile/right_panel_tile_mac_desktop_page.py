@@ -67,4 +67,4 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
 
         title_button_element = self._get_title_buttons_for_all_tiles()[object_index]
 
-        return title_button_element.get_attribute(RightPanelTileMacDesktopPage.TITLE_ATTRIBUļTE)
+        return title_button_element.get_attribute(RightPanelTileMacDesktopPage.TITLE_ATTRIBUTE)
