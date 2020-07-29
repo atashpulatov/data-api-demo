@@ -30,14 +30,14 @@ Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop
 ### Content of this README:
 
 - [Prerequisites and installation](#prerequisites_and_installation)
-- Running tests
-- Running tests remotely on Windows Desktop
-- Running tests using existing application session
-- Adding a new test
-- Adding a new Page
-- Adding support for a new platform
-- Developer notes
-- [Developer environment](#developer_environment)
+- [Running tests](#running_tests)
+- [Running tests remotely on Windows Desktop](#running_tests_remotely_on_windows_desktop)
+- [Running tests using existing application session](#running_tests_using_existing_application_session)
+- [Adding a new test](#adding_a_new_test)
+- [Adding a new Page](#adding_a_new_page)
+- [Adding support for a new platform](#adding_support_for_a_new_platform)
+- [Developer's notes](#developers_notes)
+- [Developer's environment](#developers_environment)
 - TODO
 
 README TODO:
@@ -138,6 +138,7 @@ To change permission execute from shell:
 chmod a+rx resources/chromedriverNN
 ```
 
+<a name="running_tests"></a>
 ### Running tests
 
 #### Activate Python venv environment:
@@ -279,6 +280,7 @@ Excel Add In should be started. Used in browsers.
 
 `-o folder/` specifies tests results output folder when formatting is configured for using Allure.  
 
+<a name="running_tests_remotely_on_windows_desktop"></a>
 #### Running tests remotely on Windows Desktop
 
 To start test on one machine (e.g. Mac) and execute it on remote Windows Desktop, it's necessary to enable communication
@@ -347,6 +349,7 @@ If you can't connect, please check your file path to the WinAppDriver.exe.
    - `"driver_type": "windows_desktop"` (in `config.json`), or
    - `-D driver_type=windows_desktop` (in command line)
 
+<a name="running_tests_using_existing_application_session"></a>
 #### Running tests using existing application session
 
 To speed-up writing tests, it's possible to run tests using already open Excel session. 
@@ -448,6 +451,7 @@ Test Scenario must start with a 'Given' given step. When original first step is 
 Given I pass
 ```
 
+<a name="adding_a_new_test"></a>
 ### Adding a new test
 
 To add a new test:
@@ -498,6 +502,7 @@ is related to one Page in tested application. Example of Steps file: `tests/step
 `RightPanelTileWindowsDesktopPage`, `RightPanelTileBrowserPage` etc.) and ensure Pages are added to all Page Sets,
 see `Adding a new Page`.
 
+<a name="adding_a_new_page"></a>
 ### Adding a new Page
 
 To add a new Page implementing Page Object Model:
@@ -555,6 +560,7 @@ To add a new Page implementing Page Object Model:
 
     ``` 
 
+<a name="adding_support_for_a_new_platform"></a>
 ### Adding support for a new platform
 
 To add support for a new platform it's necessary to configure a new driver and create and configure a new Pages Set.
@@ -569,8 +575,11 @@ To add support for a new platform it's necessary to configure a new driver and c
     - in `pages_set/pages_set_new_platform.py` add `PagesSetNewPlatform` class implementing `AbstractPagesSet`
     - register new Pages Set in `PagesSetFactory` in `pages_set/pages_set_factory.py` 
 
-<a name="developer_environment"></a>
-### Developer environment
+<a name="developers_notes"></a>
+### Developer's notes
+
+<a name="developers_environment"></a>
+### Developer's environment
 
 #### Navigating from feature file to step definition in `Visual Studio Code`
 
