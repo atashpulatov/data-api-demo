@@ -72,7 +72,7 @@ README TODO:
 
 - Python venv environment created and activated:
 
-```console
+```cmd
 cd PROJECT_DIR
 python3 -m venv venv_win
 venv_win\Scripts\Activate
@@ -80,7 +80,7 @@ venv_win\Scripts\Activate
 
 - Python modules installed:
 
-```console
+```cmd
 pip install selenium
 pip install Appium-Python-Client
 pip install behave
@@ -98,7 +98,7 @@ pip install pyperclip
 
 - Python venv environment created and activated:
 
-```console
+```sh
 cd PROJECT_DIR
 python3 -m venv venv_mac
 source venv_mac/bin/activate
@@ -106,7 +106,7 @@ source venv_mac/bin/activate
 
 - Python modules installed:
 
-```console
+```sh
 pip install selenium
 pip install Appium-Python-Client
 pip install behave
@@ -174,7 +174,7 @@ Run `AppiumForMac`.
 
 Examples of running tests:
 
-```console
+```bash
 # test single feature, default logging:
 behave tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
