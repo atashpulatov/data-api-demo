@@ -11,7 +11,7 @@ definitions are common for all platforms and it's easy to write and maintain tes
 Tests are written in [Gherkin](https://cucumber.io/docs/gherkin/reference/), a natural-like language developed
 as part of [Cucumber](https://cucumber.io/) framework. Example:
 
-```
+```gherkin
 Feature: FMMMM - Import object
 
   Scenario: [TCNNNNN] - Simple import object
@@ -36,6 +36,7 @@ Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop
 - Adding a new test
 - Adding a new Page
 - Adding support for a new platform
+- Developer notes
 - Developer environment
 - TODO
 
@@ -71,7 +72,7 @@ README TODO:
 
 - Python venv environment created and activated:
 
-```
+```console
 cd PROJECT_DIR
 python3 -m venv venv_win
 venv_win\Scripts\Activate
@@ -79,7 +80,7 @@ venv_win\Scripts\Activate
 
 - Python modules installed:
 
-```
+```console
 pip install selenium
 pip install Appium-Python-Client
 pip install behave
@@ -97,7 +98,7 @@ pip install pyperclip
 
 - Python venv environment created and activated:
 
-```
+```console
 cd PROJECT_DIR
 python3 -m venv venv_mac
 source venv_mac/bin/activate
@@ -105,7 +106,7 @@ source venv_mac/bin/activate
 
 - Python modules installed:
 
-```
+```console
 pip install selenium
 pip install Appium-Python-Client
 pip install behave
@@ -126,13 +127,13 @@ pip install pyperclip
 Ensure version of **resources/chromedriverNN** is the same as Chrome browser installed (NN) and this file has proper
 permissions (-rwxr-xr-x):
 
-```
+```console
 -rwxr-xr-x  1 user  group  15093428 Jun 22 17:38 resources/chromedriverNN
 ```
 
 To change permission execute from shell:
 
-```
+```console
 chmod a+rx resources/chromedriverNN
 ```
 
@@ -142,14 +143,14 @@ chmod a+rx resources/chromedriverNN
 
 ##### Windows
 
-```
+```console
 cd PROJECT_DIR
 venv_win\Scripts\Activate
 ```
 
 ##### Mac
 
-```
+```console
 cd PROJECT_DIR
 source venv_mac/bin/activate
 ```
@@ -160,7 +161,7 @@ source venv_mac/bin/activate
 
 Run `WinAppDriver` from command line as Administrator, e.g.:
 
-```
+```console
 "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hub
 "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" EXTERNAL_IP 4723/wd/hub
 ```
@@ -173,7 +174,7 @@ Run `AppiumForMac`.
 
 Examples of running tests:
 
-```
+```console
 # test single feature, default logging:
 behave tests/F25931_duplicate_object/TC64607_duplicate_object.feature
 
@@ -324,7 +325,7 @@ or by configuring reversed tunnel, using e.g. PuTTy.
 
 1. Run `WinAppDriver` from command line as Administrator with: 
 
-    ```
+    ```console
     "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hub
     ```
 Tip: 
@@ -355,26 +356,26 @@ To speed-up writing tests, it's possible to run tests using already open Excel s
 
 1. In `config.json` set:
 
-    ```
+    ```json
     "connect_to_existing_session_enabled": false,
     "cleanup_after_test_enabled": false,
     ```
     
 1. Run first test with `--logging-level=WARNING` and no log capturing, e.g.:
 
-    ```
+    ```console
     behave --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/debug_features/empty.feature
     ```
  
 1. Copy `session_id` and `execution_url` (should look like this):
 
-    ```
+    ```console
     WARNING:root:Starting WebDriver, execution_url: [http://127.0.0.1:59498], session_id: [d26e0c8f59db329bb2a75f9a85fbb93c]
     ```
     
 1. Paste `session_id` and `execution_url` to `config.json`:
 
-    ```
+    ```json
     "browser_existing_session_executor_url": "http://127.0.0.1:59498",
     "browser_existing_session_id": "d26e0c8f59db329bb2a75f9a85fbb93c",
     ```
@@ -385,7 +386,7 @@ To speed-up writing tests, it's possible to run tests using already open Excel s
 
 1. In `config.json` set:
 
-    ```
+    ```json
     "connect_to_existing_session_enabled": true,
     "cleanup_after_test_enabled": false,
     ```
@@ -399,7 +400,7 @@ starts from (perhaps artificial)`Given`, e.g. `Given I pass`.
 
 1. In `config.json` set:
 
-    ```
+    ```json
     "connect_to_existing_session_enabled": true,
     "cleanup_after_test_enabled": false,
     ```
@@ -407,7 +408,7 @@ starts from (perhaps artificial)`Given`, e.g. `Given I pass`.
 1. Open Excel Desktop application.
 
 1. Make sure your Workbook is named as in `config.json`:
-    ```
+    ```json
     "windows_desktop_excel_root_element_name": "Book1 - Excel",
     ```
 
@@ -420,7 +421,7 @@ starts from (perhaps artificial)`Given`, e.g. `Given I pass`.
 
 1. In `config.json` set:
 
-    ```
+    ```json
     "connect_to_existing_session_enabled": true,
     "cleanup_after_test_enabled": false,
     ```
@@ -453,7 +454,7 @@ To add a new test:
 1. Add `.feature` test file written in [Gherkin](https://cucumber.io/docs/gherkin/reference/),
 e.g. `tests/F25931_duplicate_object/TC64607_duplicate_object.feature`:
 
-    ```
+    ```gherkin
     @windows_desktop
     @windows_chrome
     @mac_desktop
@@ -482,7 +483,7 @@ e.g. `tests/F25931_duplicate_object/TC64607_duplicate_object.feature`:
 1. Add all necessary Steps to steps files in `tests/steps`. Steps should correspond 1-1 to Pages, each set of steps
 is related to one Page in tested application. Example of Steps file: `tests/steps/right_side_panel_tile_steps.py`:
 
-    ```
+    ```python
     from behave import *
     
     
@@ -501,7 +502,7 @@ see `Adding a new Page`.
 To add a new Page implementing Page Object Model:
 
 1. Implement the Page, e.g. `pages/right_panel/right_panel_tile/right_panel_tile_browser_page.py`:
-    ```
+    ```python
     (...)
     class RightPanelTileBrowserPage(BaseBrowserPage):
         (...)
@@ -515,14 +516,14 @@ To add a new Page implementing Page Object Model:
 1. Add information about the Page to all Page Sets to make it available:
 
     - `pages_factory/abstract_pages.py` (abstract class implemented by all Page Sets, no implementation here), e.g.:
-        ```
+        ```python
         @abstractmethod
         def right_panel_tile_page(self):
             pass
         ```
     - `pages_factory/pages_*.py` (it's necessary to add appropriate method definition to all Page Sets)
        - when Page is implemented for a given Page Set:
-        ```
+        ```python
         from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
         (...)
         class PagesSetBrowser(AbstractPagesSet):
@@ -536,14 +537,14 @@ To add a new Page implementing Page Object Model:
                 return self.import_data_popup_browser_page
         ``` 
        - when Page is not yet implemented for a given Page Set:
-        ```
+        ```python
             def import_data_popup_page(self):
                 pass
         ``` 
 
 1. Add Steps file corresponding to newly added Page to `tests/steps`, e.g. `tests/steps/right_side_panel_tile_steps.py`:
 
-    ```
+    ```python
     from behave import *
     
     
@@ -577,7 +578,7 @@ To add support for a new platform it's necessary to configure a new driver and c
 - click on the `Edit` in `settings.json`
 - add following lines:
 
-```
+```json
 "cucumberautocomplete.steps": [
     "tests/steps/*.py"
 ],
