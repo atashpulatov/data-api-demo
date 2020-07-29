@@ -5,24 +5,16 @@ import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/if
 import { objectsList } from '../../../constants/objects-list';
 import { externalSelectors } from '../../../constants/selectors/external-selectors';
 
+const clipboardy = require('clipboardy');
+
 function copyPasteObjectDetailValue(index, pluginWindowHandle) {
   // Copy the objects detail value to clippboard
   const objectDetailValue = PluginPopup.copyToClipboardObjectDetails(index);
 
-  // Open new window with Bing
-  browser.newWindow('https://bing.com');
-  browser.pause(1000); // Wait for new window to be ready
+  const clipBoardContent = clipboardy.readSync();
 
-  // Paste string from clipboard to Bing search field
-  $(externalSelectors.bingSearchField).setValue(['Shift', 'Insert', 'Enter']);
-  browser.pause(1000); // Wait for Bing search to be executed
-
-  // Assertion - compare string from Bing with the object detail string
-  expect(objectDetailValue === $(externalSelectors.bingSearchBox).getAttribute('value')).toBe(true);
-
-  // close the Bing window and switch back to the plugin browser window
-  browser.closeWindow();
-  browser.switchToWindow(pluginWindowHandle);
+  // Assertion - compare string from clipboard with the object detail string
+  expect(objectDetailValue === clipBoardContent).toBe(true);
   switchToDialogFrame();
 }
 

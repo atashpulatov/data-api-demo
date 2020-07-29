@@ -42,6 +42,7 @@
     "@wdio/sync": "^5.16.5",
     "allure-commandline": "^2.13.0",
     "chromedriver": "^79.0.0",
+    "clipboardy": "^2.3.0",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0"
   }
