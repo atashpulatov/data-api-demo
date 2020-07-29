@@ -74,7 +74,7 @@ README TODO:
 - Python venv environment created and activated:
 
 ```console
-cd PROJECT_DIR
+cd PROJECT_DIR/tests/integration/python
 python3 -m venv venv_win
 venv_win\Scripts\Activate
 ```
@@ -92,15 +92,17 @@ pip install pyperclip
 
 ##### Windows Desktop
 
-- Excel Add-In installed ([see details](https://www2.microstrategy.com/producthelp/Current/Office/en-us/Content/install_manually.htm))
-- [WinAppDriver](https://github.com/Microsoft/WinAppDriver/releases) installed. TODO Enable developer mode
+- Excel Add-In installed
+([see details](https://www2.microstrategy.com/producthelp/Current/Office/en-us/Content/install_manually.htm))
+- [WinAppDriver](https://github.com/Microsoft/WinAppDriver/releases) installed and `Developer mode` in Windows enabled
+(see `Settings / Update & Security / For developers / Use developer features`)
 
 ##### General Mac
 
 - Python venv environment created and activated:
 
 ```console
-cd PROJECT_DIR
+cd PROJECT_DIR/tests/integration/python
 python3 -m venv venv_mac
 source venv_mac/bin/activate
 ```
@@ -146,18 +148,22 @@ chmod a+rx resources/chromedriverNN
 ##### Windows
 
 ```console
-cd PROJECT_DIR
+cd PROJECT_DIR/tests/integration/python
 venv_win\Scripts\Activate
 ```
 
 ##### Mac
 
 ```console
-cd PROJECT_DIR
+cd PROJECT_DIR/tests/integration/python
 source venv_mac/bin/activate
 ```
 
-#### Run driver software (for Desktop environments)
+#### Preparation for test execution for Chrome
+
+No additional preparation steps are necessary for `Mac Chrome` and `Windows Chrome`.
+
+#### Preparation for test execution for Desktop environments
 
 ##### Windows Desktop
 
@@ -343,7 +349,8 @@ If you can't connect, please check your file path to the WinAppDriver.exe.
    - `driver_path_windows_desktop` to path to Excel on your Windows machine
    - `host_url_windows_desktop` to `http://IP_ADDRESS_IN_LOCAL_NETWORK:4723/wd/hub` (firewall configuration), or
    - `host_url_windows_desktop` to `http://127.0.0.1:4723/wd/hub` (PuTTy configuration)
-   - `excel_add_in_environment` and `excel_desktop_add_in_import_data_name` to the ones you deployed on Excel Desktop for Windows
+   - `excel_add_in_environment` and `excel_desktop_add_in_import_data_name` to the ones you deployed on Excel Desktop
+   for Windows
    
 1. Run test as usual on your Mac, but for `driver_type` use `windows_desktop`: 
    - `"driver_type": "windows_desktop"` (in `config.json`), or
@@ -578,10 +585,32 @@ To add support for a new platform it's necessary to configure a new driver and c
 <a name="developers_notes"></a>
 ### Developer's notes
 
+##### Code formatting
+
+1. Python code should be formatted according to
+[PEP 8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/) with maximum line length
+of 120 characters.
+
+1. Gherking code should be formatted as follows (please notice steps indentation):
+
+```gherkin
+Feature: FMMMM - Import object
+
+  Scenario: [TCNNNNN] - Simple import object
+    Given I logged in as default user
+      And I clicked Import Data button
+      And I found and selected object "report to be imported"
+      
+     When I clicked Import button
+     
+     Then number of worksheets should be 1
+      And cell "A42" should have value "42"
+```
+
 <a name="developers_environment"></a>
 ### Developer's environment
 
-#### Navigating from feature file to step definition in `Visual Studio Code`
+##### Navigating from feature file to step definition in `Visual Studio Code`
 
 - install `Cucumber (Gherkin) Full Support` extension
 - go to `Settings` (Command/Control + ,)
