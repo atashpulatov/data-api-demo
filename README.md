@@ -29,7 +29,7 @@ Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop
 
 ### Content of this README:
 
-- Prerequisites and installation
+- [Prerequisites and installation](#prerequisites_and_installation)
 - Running tests
 - Running tests remotely on Windows Desktop
 - Running tests using existing application session
@@ -37,7 +37,7 @@ Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop
 - Adding a new Page
 - Adding support for a new platform
 - Developer notes
-- Developer environment
+- [Developer environment](#developer_environment)
 - TODO
 
 README TODO:
@@ -62,6 +62,7 @@ README TODO:
 - how to check which test cases are tagged with a given tag (grep -ri '@mac_chrome' *) 
 - attach to open session, Chrome (Mac, Windows) and Excel (Windows Desktop, Mac Desktop) already described
 
+<a name="prerequisites_and_installation"></a>
 ### Prerequisites and installation
 
 ##### General
@@ -568,6 +569,7 @@ To add support for a new platform it's necessary to configure a new driver and c
     - in `pages_set/pages_set_new_platform.py` add `PagesSetNewPlatform` class implementing `AbstractPagesSet`
     - register new Pages Set in `PagesSetFactory` in `pages_set/pages_set_factory.py` 
 
+<a name="developer_environment"></a>
 ### Developer environment
 
 #### Navigating from feature file to step definition in `Visual Studio Code`
