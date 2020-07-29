@@ -3,11 +3,10 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
-import { externalSelectors } from '../../../constants/selectors/external-selectors';
 
 const clipboardy = require('clipboardy');
 
-function copyPasteObjectDetailValue(index, pluginWindowHandle) {
+function copyAndCheckObjectDetailValue(index) {
   // Copy the objects detail value to clippboard
   const objectDetailValue = PluginPopup.copyToClipboardObjectDetails(index);
 
@@ -32,9 +31,6 @@ describe('F25946 - Object Details Panel', () => {
     PluginRightPanel.clickImportDataButton();
     switchToDialogFrame();
 
-    // Get handle for the plugin browser window
-    const pluginWindowHandle = browser.getWindowHandle();
-
     // Switching to non My Libray view
     PluginPopup.switchLibrary(false);
 
@@ -47,7 +43,7 @@ describe('F25946 - Object Details Panel', () => {
 
     // Copy object details values to clippboard, paste them in Bing and assert
     for (let i = 1; i < 6; i++) {
-      copyPasteObjectDetailValue(i, pluginWindowHandle);
+      copyAndCheckObjectDetailValue(i);
     }
   });
 });
