@@ -72,7 +72,7 @@ README TODO:
 
 - Python venv environment created and activated:
 
-```cmd
+```bash
 cd PROJECT_DIR
 python3 -m venv venv_win
 venv_win\Scripts\Activate
@@ -80,7 +80,7 @@ venv_win\Scripts\Activate
 
 - Python modules installed:
 
-```cmd
+```bash
 pip install selenium
 pip install Appium-Python-Client
 pip install behave
@@ -98,7 +98,7 @@ pip install pyperclip
 
 - Python venv environment created and activated:
 
-```sh
+```bash
 cd PROJECT_DIR
 python3 -m venv venv_mac
 source venv_mac/bin/activate
@@ -106,7 +106,7 @@ source venv_mac/bin/activate
 
 - Python modules installed:
 
-```sh
+```bash
 pip install selenium
 pip install Appium-Python-Client
 pip install behave
@@ -127,13 +127,13 @@ pip install pyperclip
 Ensure version of **resources/chromedriverNN** is the same as Chrome browser installed (NN) and this file has proper
 permissions (-rwxr-xr-x):
 
-```console
+```bash
 -rwxr-xr-x  1 user  group  15093428 Jun 22 17:38 resources/chromedriverNN
 ```
 
 To change permission execute from shell:
 
-```console
+```bash
 chmod a+rx resources/chromedriverNN
 ```
 
@@ -143,14 +143,14 @@ chmod a+rx resources/chromedriverNN
 
 ##### Windows
 
-```console
+```bash
 cd PROJECT_DIR
 venv_win\Scripts\Activate
 ```
 
 ##### Mac
 
-```console
+```bash
 cd PROJECT_DIR
 source venv_mac/bin/activate
 ```
@@ -161,7 +161,7 @@ source venv_mac/bin/activate
 
 Run `WinAppDriver` from command line as Administrator, e.g.:
 
-```console
+```bash
 "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hub
 "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" EXTERNAL_IP 4723/wd/hub
 ```
@@ -325,7 +325,7 @@ or by configuring reversed tunnel, using e.g. PuTTy.
 
 1. Run `WinAppDriver` from command line as Administrator with: 
 
-    ```console
+    ```bash
     "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hub
     ```
 Tip: 
@@ -363,13 +363,13 @@ To speed-up writing tests, it's possible to run tests using already open Excel s
     
 1. Run first test with `--logging-level=WARNING` and no log capturing, e.g.:
 
-    ```console
+    ```bash
     behave --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/debug_features/empty.feature
     ```
  
 1. Copy `session_id` and `execution_url` (should look like this):
 
-    ```console
+    ```bash
     WARNING:root:Starting WebDriver, execution_url: [http://127.0.0.1:59498], session_id: [d26e0c8f59db329bb2a75f9a85fbb93c]
     ```
     
