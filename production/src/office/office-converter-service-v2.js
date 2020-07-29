@@ -107,15 +107,15 @@ class OfficeConverterServiceV2 {
   getHandlerForCompoundGrid = (response) => {
     const { definition: { grid } } = response;
     const isCrosstab = grid.crossTab;
+    const notEmptyColumnSet = grid.columnSets.find(({ columns }) => columns.length > 0);
 
     // We are removing empty column sets only for non crosstab visualizatoins and
     // only when they have at least 1 non empty columnset
-    if (!isCrosstab && grid.columnSets.find(({ columns }) => columns.length > 0)) {
+    if (!isCrosstab && notEmptyColumnSet) {
       mstrCompoundGridFlatten.filterEmptyColumnSets(response);
     }
 
-    const { definition: { grid: { metricsPosition, columnSets } } } = response;
-
+    const { metricsPosition, columnSets } = grid;
     const isMetricsInRows = metricsPosition && metricsPosition.axis === 'rows';
     const columnSetsCondition = columnSets.length <= 1 && !columnSets[0].length && !columnSets[0].columns.length;
 
