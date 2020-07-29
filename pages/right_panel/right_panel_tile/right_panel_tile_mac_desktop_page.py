@@ -16,8 +16,8 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
     EDIT_BUTTON_ELEMS = "%s/AXList[@AXSubrole='AXContentList']/AXGroup[%%s]/" \
                         "AXButton[1]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
 
-    TITLE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]/" \
-                                                                            "AXButton[4]"
+    TITLE_BUTTON_ELEMS = "%s/AXList[@AXSubrole='AXContentList']/AXGroup[%%s]/" \
+                         "AXButton[4]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
 
     TITLE_ATTRIBUTE = 'AXTitle'
 
@@ -63,8 +63,9 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
     def get_object_name(self, object_no):
         object_index = int(object_no) - 1
 
-        self._hover_over_tile(object_index)
-
         title_button_element = self._get_title_buttons_for_all_tiles()[object_index]
 
         return title_button_element.get_attribute(RightPanelTileMacDesktopPage.TITLE_ATTRIBUTE)
+
+    def close_last_notification_on_hover(self):
+        self._hover_over_tile(0)

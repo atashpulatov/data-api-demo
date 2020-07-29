@@ -24,6 +24,7 @@ Feature: F25931 - Duplicate object
       And I clicked metric "Total Cost"
 
      When I clicked Import button in Columns and Filters Selection
+      And I closed last notification
 
      Then object number 1 should be called "100_report Copy"
       And number of worksheets should be 2
