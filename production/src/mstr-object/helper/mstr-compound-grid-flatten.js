@@ -1,8 +1,24 @@
 class MstrCompoundGridFlatten {
   /**
+   * Filters out empty column sets from response
+   *
+   * @param {JSON} response response containing information about object
+   */
+  filterEmptyColumnSets = (response) => {
+    const { data, definition } = response;
+    const { headers, metricValues } = data;
+    const { grid } = definition;
+
+    grid.columnSets = grid.columnSets.filter(({ columns }) => columns.length > 0);
+    headers.columnSets = headers.columnSets.filter((columnHeaders) => columnHeaders.length > 0);
+    metricValues.columnSets = metricValues.columnSets.filter(({ raw }) => raw.length > 0);
+  }
+
+
+  /**
    * Flatten compound grid column sets to structure compatible with grid handler
    *
-   * @param {Object} response response containing information about object
+   * @param {JSON} response response containing information about object
    */
   flattenColumnSets(response) {
     const { data, definition } = response;

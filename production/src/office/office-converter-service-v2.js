@@ -9,6 +9,12 @@ import mstrCompoundGridFlatten from '../mstr-object/helper/mstr-compound-grid-fl
  * @class OfficeConverterServiceV2
  */
 class OfficeConverterServiceV2 {
+  /**
+   * cretes mstrTable object containing information about structure of the object
+   *
+   * @param {JSON} response
+   * @return {number[]}
+   */
   createTable(response) {
     const handler = this.getHandler(response);
     const mstrTable = handler.createTable(response);
@@ -77,23 +83,48 @@ class OfficeConverterServiceV2 {
     }
   };
 
+  /**
+   * return reference to handler based on response structure
+   *
+   * @param {JSON} response
+   * @return {Class}
+   */
   getHandler = (response) => {
-    const { definition: { grid } } = response;
     switch (response.visualizationType) {
       case mstrObjectType.visualizationType.COMPOUND_GRID:
-        if (
-          grid.crossTab
-          && !(grid.metricsPosition && grid.metricsPosition.axis === 'rows'
-          && grid.columnSets.length <= 1 && !grid.columnSets[0].length && !grid.columnSets[0].columns.length)
-        ) {
-          return mstrCompoundGridHandler;
-        }
-
-        mstrCompoundGridFlatten.flattenColumnSets(response);
-        return mstrGridHandler;
+        return this.getHandlerForCompoundGrid(response);
       default:
         return mstrGridHandler;
     }
+  }
+
+  /**
+   * return reference to handler based on compound grid structure
+   *
+   * @param {JSON} response
+   * @return {Class}
+   */
+  getHandlerForCompoundGrid = (response) => {
+    const { definition: { grid } } = response;
+    const isCrosstab = grid.crossTab;
+
+    // We are removing empty column sets only for non crosstab visualizatoins and
+    // only when they have at least 1 non empty columnset
+    if (!isCrosstab && grid.columnSets.find(({ columns }) => columns.length > 0)) {
+      mstrCompoundGridFlatten.filterEmptyColumnSets(response);
+    }
+
+    const { definition: { grid: { metricsPosition, columnSets } } } = response;
+
+    const isMetricsInRows = metricsPosition && metricsPosition.axis === 'rows';
+    const columnSetsCondition = columnSets.length <= 1 && !columnSets[0].length && !columnSets[0].columns.length;
+
+    if (isCrosstab && !(isMetricsInRows && columnSetsCondition)) {
+      return mstrCompoundGridHandler;
+    }
+
+    mstrCompoundGridFlatten.flattenColumnSets(response);
+    return mstrGridHandler;
   }
 }
 

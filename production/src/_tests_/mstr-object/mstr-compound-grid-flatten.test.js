@@ -8,6 +8,28 @@ describe('MstrCompoundGridFlatten', () => {
     jest.restoreAllMocks();
   });
 
+  it('filterEmptyColumnSets should work correctly', () => {
+    // given
+    const response = { data: {
+      headers: { columnSets: [[]] },
+      metricValues: { columnSets: [{ raw: [] }] } },
+    definition: {
+      grid: { columnSets: [{ columns: [] }] } } };
+
+    const expectedValue = { data: {
+      headers: { columnSets: [] },
+      metricValues: { columnSets: [] } },
+    definition: {
+      grid: { columnSets: [] } } };
+
+    // when
+    mstrCompoundGridFlatten.filterEmptyColumnSets(response);
+
+    // then
+    expect(response).toEqual(expectedValue);
+  });
+
+
   it('flattenColumnSets should work correctly', () => {
     // given
     const response = { data: { headers: {} }, definition: { grid: { columnSets: [{ columns: [1] }] } } };
