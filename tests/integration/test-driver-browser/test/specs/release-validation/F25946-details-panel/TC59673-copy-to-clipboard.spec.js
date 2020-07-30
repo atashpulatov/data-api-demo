@@ -3,19 +3,8 @@ import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
 import { objectsList } from '../../../constants/objects-list';
+import { CheckClipboardContent } from '../../../helpers/utils/system-helper';
 
-const clipboardy = require('clipboardy');
-
-function copyAndCheckObjectDetailValue(index) {
-  // Copy the objects detail value to clippboard
-  const objectDetailValue = PluginPopup.copyToClipboardObjectDetails(index);
-
-  const clipBoardContent = clipboardy.readSync();
-
-  // Assertion - compare string from clipboard with the object detail string
-  expect(objectDetailValue === clipBoardContent).toBe(true);
-  switchToDialogFrame();
-}
 
 describe('F25946 - Object Details Panel', () => {
   beforeEach(() => {
@@ -43,7 +32,13 @@ describe('F25946 - Object Details Panel', () => {
 
     // Copy object details values to clippboard, paste them in Bing and assert
     for (let i = 1; i < 6; i++) {
-      copyAndCheckObjectDetailValue(i);
+      const objectDetailValue = PluginPopup.copyToClipboardObjectDetails(i);
+      const clipBoardContent = CheckClipboardContent();
+
+      // Assertion - compare string from clipboard with the object detail string
+      expect(objectDetailValue === clipBoardContent).toBe(true);
     }
+
+    switchToDialogFrame();
   });
 });
