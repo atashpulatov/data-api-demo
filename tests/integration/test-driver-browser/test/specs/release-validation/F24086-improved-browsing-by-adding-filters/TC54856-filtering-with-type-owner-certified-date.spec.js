@@ -20,6 +20,7 @@ describe('F24086 - Improved browsing by adding filters', () => {
     PluginRightPanel.clickImportDataButton();
 
     switchToDialogFrame();
+    PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
 
     /* Select some filters from the owner category */
