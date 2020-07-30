@@ -24,7 +24,7 @@ describe('F21411 - Selecting an object in the side panel highlights the data in 
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    PluginPopup.importObject(objectsList.reports.reportXML);
+    PluginPopup.importAnyObject(objectsList.reports.reportXML, 2);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();
@@ -32,7 +32,7 @@ describe('F21411 - Selecting an object in the side panel highlights the data in 
 
     // should import a report to a different worksheet
     OfficeWorksheet.openNewSheet();
-    OfficeWorksheet.selectCell('C1');
+    OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickAddDataButton();
     PluginPopup.switchLibrary(false);
     PluginPopup.importObject(objectsList.datasets.basicDataset);
@@ -42,7 +42,7 @@ describe('F21411 - Selecting an object in the side panel highlights the data in 
     console.log('Dataset is imported');
 
     // should click on the object imported to the first sheet in the right panel
-    PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'C1');
+    PluginRightPanel.clickObjectInRightPanelAndAssert(2, 'A1');
     console.log('Report\'s placeholder in the right panel is clicked');
 
     // should hover on the object imported to the second sheet in the right panel
@@ -52,7 +52,7 @@ describe('F21411 - Selecting an object in the side panel highlights the data in 
     console.log('Hovered overt the dataset\'s placeholder in the right panel is clicked');
 
     // should click on the object imported to the second sheet in the right panel
-    PluginRightPanel.clickObjectInRightPanelAndAssert(2, 'A1');
+    PluginRightPanel.clickObjectInRightPanelAndAssert(1, 'A1');
     console.log('Dataset\'s placeholder in the right panel is clicked');
 
     // should click on the object's name imported to the second sheet in the right panel
