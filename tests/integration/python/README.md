@@ -29,7 +29,7 @@ Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop
 
 ### Content of this README:
 
-- [Prerequisites and installation](#prerequisites_and_installation)
+- [Prerequisites and installation](docs/prerequisites_and_installation.md)
 - [Running tests](#running_tests)
 - [Running tests remotely on Windows Desktop](#running_tests_remotely_on_windows_desktop)
 - [Running tests using existing application session](#running_tests_using_existing_application_session)
