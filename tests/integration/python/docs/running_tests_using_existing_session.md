@@ -94,8 +94,9 @@ starts from `Given` step (perhaps artificial), e.g. `Given I pass`.
 
 Tip 1:
 ```
-All test cases start from the login step, make sure you prepared the Excel app to have the AddIn opened. If you'd like
-to start from further step in the test, comment out steps you don't want to execute.
+All test cases start from the login step, make sure you prepared the Excel app to have
+the AddIn opened. If you'd like to start from further step in the test, comment out steps
+you don't want to execute.
 ```
 
 Tip 2:

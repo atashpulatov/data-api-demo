@@ -24,7 +24,13 @@
     venv_win\Scripts\Activate
     ```
 
-1. Ensure `driver_type` is set to `windows_desktop` in `config.json` or as a command line parameter.
+1. Ensure in `config.json` (or as command line parameters) you have:
+
+   - `driver_type` set to `windows_desktop` 
+   - `driver_path_windows_desktop` set to path to `Excel`
+   - `host_url_windows_desktop` set to `http://127.0.0.1:4723/wd/hub`
+   - `excel_add_in_environment` and `excel_desktop_add_in_import_data_name` set to the ones you deployed on `Excel`
+   desktop for Windows
 
 1. Execute tests (in second window, see [Running tests](#running_tests))
 
@@ -106,6 +112,16 @@ and login into your Mac machine (no need to do it when using firewall configurat
     source venv_mac/bin/activate
     ```
 1. Ensure `driver_type` is set to `windows_desktop` in `config.json` or as a command line parameter.
+
+1. Ensure in `config.json` (or as command line parameters) you have:
+
+   - `driver_type` set to `windows_desktop` 
+   - `driver_path_windows_desktop` set to path to `Excel` on your Windows machine
+   - `host_url_windows_desktop` to `http://IP_ADDRESS_OF_WINDOWS_IN_LOCAL_NETWORK:4723/wd/hub`
+   (firewall configuration), or
+   - `host_url_windows_desktop` to `http://127.0.0.1:4723/wd/hub` (PuTTy configuration)
+   - `excel_add_in_environment` and `excel_desktop_add_in_import_data_name` set to the ones you deployed on `Excel`
+   desktop for Windows
 
 1. Execute tests (see [Running tests](#running_tests))
 
