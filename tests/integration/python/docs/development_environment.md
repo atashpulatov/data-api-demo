@@ -10,9 +10,9 @@
 
 ```json
 "cucumberautocomplete.steps": [
-    "tests/steps/*.py"
+    "tests/integration/python/tests/steps/*.py"
 ],
-"cucumberautocomplete.syncfeatures": "tests/*/*feature",
+"cucumberautocomplete.syncfeatures": "tests/integration/python/tests/*/*feature",
 ```
 
 - restart `Visual Studio Code`
