@@ -1,0 +1,6 @@
+{
+    "cucumberautocomplete.steps": ["tests/steps/*.py"],
+    "cucumberautocomplete.syncfeatures": "tests/*/*feature",
+    "cucumberautocomplete.smartSnippets": true,
+    "python.pythonPath": "/Users/dotreba/Documents/repo/mstr-office/tests/integration/python/venv_mac/bin/python3"
+}
