@@ -16,6 +16,7 @@ Feature: F25931 - Duplicate object
 
      When I clicked Duplicate on object 1
       And I clicked Import button in Duplicate popup
+      And I closed last notification
 
      Then object number 1 should be called "100_report Copy"
       And number of worksheets should be 2

@@ -29,6 +29,7 @@ Feature: F25931 - Duplicate object
       And I clicked Duplicate on object 3
       And I selected Active Cell option in Duplicate popup
       And I clicked Import button in Duplicate popup
+      And I closed last notification
 
      Then object number 1 should be called "Secure data - always working Copy"
 
@@ -37,6 +38,7 @@ Feature: F25931 - Duplicate object
       And I clicked Duplicate on object 3
       And I selected Active Cell option in Duplicate popup
       And I clicked Import button in Duplicate popup
+      And I closed last notification
 
      Then object number 1 should be called "1k Sales Records.csv Copy"
 
@@ -45,6 +47,7 @@ Feature: F25931 - Duplicate object
       And I clicked Duplicate on object 3
       And I selected Active Cell option in Duplicate popup
       And I clicked Import button in Duplicate popup
+      And I closed last notification
 
      Then object number 1 should be called "Bubble Chart Copy"
 
