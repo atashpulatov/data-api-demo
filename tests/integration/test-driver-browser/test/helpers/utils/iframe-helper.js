@@ -12,7 +12,7 @@ export function switchToDialogFrame() {
 
 export function switchToExcelFrame() {
   browser.switchToFrame(null);
-  $('#WebApplicationFrame').waitForDisplayed(19999);
+  $('#WebApplicationFrame').waitForDisplayed(30000);
   browser.switchToFrame($('#WebApplicationFrame'));
 }
 
