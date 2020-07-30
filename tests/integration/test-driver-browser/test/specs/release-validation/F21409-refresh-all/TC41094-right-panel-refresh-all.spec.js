@@ -19,34 +19,34 @@ describe('F21409 - Add "Refresh All" functionality', () => {
   it('[TC41094] - Refreshing at least 10 already imported objects with very long names', () => {
     const objects = [
       {
-        cellValue: 'A1', object: objectsList.reports.reportXML, message: 'First object should be imported', add: false
+        cellValue: 'A1', object: objectsList.reports.seasonalReport, message: 'First object should be imported', add: false
       },
       {
-        cellValue: 'I1', object: objectsList.reports.reportXML, message: 'Second object should be imported', add: true
+        cellValue: 'I1', object: objectsList.reports.seasonalReport, message: 'Second object should be imported', add: true
       },
       {
-        cellValue: 'Q1', object: objectsList.reports.reportXML, message: 'Third object should be imported', add: true
+        cellValue: 'Q1', object: objectsList.reports.seasonalReport, message: 'Third object should be imported', add: true
       },
       {
-        cellValue: 'A21', object: objectsList.datasets.basicDataset, message: 'Fourth object should be imported', add: true
+        cellValue: 'A50', object: objectsList.datasets.basicDataset, message: 'Fourth object should be imported', add: true
       },
       {
-        cellValue: 'Q21', object: objectsList.datasets.basicDataset, message: 'Fifth object should be imported', add: true
+        cellValue: 'Q50', object: objectsList.datasets.basicDataset, message: 'Fifth object should be imported', add: true
       },
       {
-        cellValue: 'AG21', object: objectsList.datasets.basicDataset, message: 'Sixth object should be imported', add: true
+        cellValue: 'AG50', object: objectsList.datasets.basicDataset, message: 'Sixth object should be imported', add: true
       },
       {
-        cellValue: 'A123', object: objectsList.reports.reportWithLongName, message: 'Seventh object should be imported', add: true
+        cellValue: 'A152', object: objectsList.reports.reportWithLongName, message: 'Seventh object should be imported', add: true
       },
       {
-        cellValue: 'F123', object: objectsList.reports.longReportWithInvalidCharacters.sourceName, message: 'Eighth object should be imported', add: true
+        cellValue: 'F152', object: objectsList.reports.longReportWithInvalidCharacters.sourceName, message: 'Eighth object should be imported', add: true
       },
       {
-        cellValue: 'L123', object: objectsList.reports.longReportWithInvalidCharacters.sourceName, message: 'Ninth object should be imported', add: true
+        cellValue: 'L152', object: objectsList.reports.longReportWithInvalidCharacters.sourceName, message: 'Ninth object should be imported', add: true
       },
       {
-        cellValue: 'S123', object: objectsList.reports.reportWithLongName, message: 'Tenth object should be imported', add: true
+        cellValue: 'S152', object: objectsList.reports.reportWithLongName, message: 'Tenth object should be imported', add: true
       }
     ];
 
