@@ -38,7 +38,5 @@ describe('F25946 - Object Details Panel', () => {
       // Assertion - compare string from clipboard with the object detail string
       expect(objectDetailValue === clipBoardContent).toBe(true);
     }
-
-    switchToDialogFrame();
   });
 });
