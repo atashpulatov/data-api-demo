@@ -1,4 +1,5 @@
 from pages_base.base_page import BasePage
+from util.exception.MstrException import MstrException
 
 
 class BaseMacDesktopPage(BasePage):
@@ -7,6 +8,8 @@ class BaseMacDesktopPage(BasePage):
     EXCEL_MENU_ELEM = "%s/AXMenuBar[0]" % EXCEL_APP_ELEM
 
     EXCEL_WINDOW_ELEM = "%s/AXWindow[@AXSubrole='AXStandardWindow']" % EXCEL_APP_ELEM
+
+    EXCEL_WINDOW_TOP_PART_ELEM = "%s/AXTabGroup[0]" % EXCEL_WINDOW_ELEM
 
     POPUP_WRAPPER_ELEM = "%s/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/" \
                          "AXGroup[@AXDOMIdentifier='popup-wrapper']" % EXCEL_WINDOW_ELEM
@@ -42,6 +45,7 @@ class BaseMacDesktopPage(BasePage):
         i = 0
         while True:
             selector_xpath = selector % i
+            self.log_error(selector_xpath)
 
             element_exists = self.check_if_element_exists_by_xpath(
                 selector_xpath,
@@ -58,3 +62,13 @@ class BaseMacDesktopPage(BasePage):
             i += 1
 
         return found_elements
+
+    def find_element_by_attribute_in_elements_list_by_xpath(self, selector, attribute_name, attribute_value):
+        found_elements = self.get_elements_by_xpath(selector)
+
+        for element in found_elements:
+            if element.get_attribute(attribute_name) == attribute_value:
+                return element
+
+        raise MstrException('Element not found, selector: [%s], attribute_name: [%s], '
+                            'attribute_value: [%s]' % (selector, attribute_name, attribute_value))

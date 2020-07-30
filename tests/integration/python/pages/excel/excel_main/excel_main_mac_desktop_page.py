@@ -1,24 +1,31 @@
-from pages_base.base_browser_page import BasePage
+from pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from util.config_util import ConfigUtil
+from util.const import DEFAULT_WAIT_BETWEEN_CHECKS
+from util.exception.MstrException import MstrException
 from util.util import Util
 
 
-class ExcelMainMacDesktopPage(BasePage):
-    NEW_BLANK_WORKBOOK_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='Open new and recent " \
+class ExcelMainMacDesktopPage(BaseMacDesktopPage):
+    NEW_BLANK_WORKBOOK_ELEM = "%s/AXWindow[@AXTitle='Open new and recent " \
                               "files' and @AXIdentifier='DocStage' and @AXSubrole='AXStandardWindow']/" \
                               "AXScrollArea[0]/AXList[@AXSubrole='AXCollectionList']/AXList[@AXSubrole=" \
                               "'AXSectionList']/AXGroup[@AXIdentifier='DocsUITemplate']/AXButton[@AXTitle=" \
-                              "'Blank Workbook']"
+                              "'Blank Workbook']" % BaseMacDesktopPage.EXCEL_APP_ELEM
 
-    INSERT_TAB_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole=" \
-                      "'AXStandardWindow']/AXTabGroup[0]/AXRadioButton[@AXTitle='Insert']"
+    INSERT_TAB_ELEM = "%s/AXRadioButton[@AXTitle='Insert']" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
 
-    ADD_IN_DROP_DOWN = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXIdentifier='_NS:16' and @AXSubrole=" \
-                       "'AXStandardWindow']/AXTabGroup[0]/AXScrollArea[0]/AXGroup[3]/AXMenuButton" \
-                       "[@AXTitle='My Add-ins']"
+    GROUPS_OF_MY_ADD_INS_DROP_DOWN = "%s/AXScrollArea[0]/AXGroup[%%s]" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
+    MY_ADD_INS_DROP_DOWN = "%s/AXScrollArea[0]/AXGroup[%%s]/" \
+                           "AXMenuButton" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
+    MY_ADD_INS_ITEM_ATTRIBUTE_NAME = 'AXTitle'
+    MY_ADD_INS_ITEM_TITLE = 'My Add-ins'
+    MY_ADD_INS_DROPDOWN_ARROW_OFFSET_X = 93
+    MY_ADD_INS_DROPDOWN_ARROW_OFFSET_Y = 20
 
-    ADD_IN_TO_IMPORT_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXTitle='My Add-ins' and " \
-                            "@AXSubrole='AXUnknown']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXRadioButton[@AXIdentifier=" \
-                            "'popover_gallery_OfficeExtensionsGallery2_Control_0_0']"
+    ADD_IN_MENU_ELEMS = "%s/AXWindow[@AXTitle='My Add-ins' and @AXSubrole='AXUnknown']/AXGroup[0]/AXGroup[0]/" \
+                        "AXGroup[0]/AXRadioButton[@AXIdentifier='" \
+                        "popover_gallery_OfficeExtensionsGallery2_Control_0_%%s']" % BaseMacDesktopPage.EXCEL_APP_ELEM
+    ADD_IN_MENU_ELEM_ATTRIBUTE_NAME = 'AXDescription'
 
     def click_new_blank_workbook_elem(self):
         element = self.get_element_by_xpath(ExcelMainMacDesktopPage.NEW_BLANK_WORKBOOK_ELEM)
@@ -29,7 +36,31 @@ class ExcelMainMacDesktopPage(BasePage):
         self.get_element_by_xpath(ExcelMainMacDesktopPage.INSERT_TAB_ELEM).click()
 
     def click_add_in_drop_down_elem(self):
-        self.get_element_by_xpath(ExcelMainMacDesktopPage.ADD_IN_DROP_DOWN).click(offset_x=93, offset_y=20)
+        self._find_my_add_ins_dropdown().click(
+            offset_x=self.MY_ADD_INS_DROPDOWN_ARROW_OFFSET_X,
+            offset_y=self.MY_ADD_INS_DROPDOWN_ARROW_OFFSET_Y
+        )
+
+    def _find_my_add_ins_dropdown(self):
+        groups_of_my_add_ins_drop_down_no = len(
+            self.get_elements_by_xpath(ExcelMainMacDesktopPage.GROUPS_OF_MY_ADD_INS_DROP_DOWN)
+        )
+
+        for i in range(groups_of_my_add_ins_drop_down_no):
+            element_candidate_xpath = ExcelMainMacDesktopPage.MY_ADD_INS_DROP_DOWN % i
+
+            if self.check_if_element_exists_by_xpath(element_candidate_xpath, timeout=DEFAULT_WAIT_BETWEEN_CHECKS):
+                element_candidate = self.get_element_by_xpath(element_candidate_xpath)
+
+                title = element_candidate.get_attribute(ExcelMainMacDesktopPage.MY_ADD_INS_ITEM_ATTRIBUTE_NAME)
+                if title == ExcelMainMacDesktopPage.MY_ADD_INS_ITEM_TITLE:
+                    return element_candidate
+
+        raise MstrException('My Add-ins dropdown not found.')
 
     def click_first_add_in_to_import_elem(self):
-        self.get_element_by_xpath(ExcelMainMacDesktopPage.ADD_IN_TO_IMPORT_ELEM).click()
+        self.find_element_by_attribute_in_elements_list_by_xpath(
+            ExcelMainMacDesktopPage.ADD_IN_MENU_ELEMS,
+            ExcelMainMacDesktopPage.ADD_IN_MENU_ELEM_ATTRIBUTE_NAME,
+            ConfigUtil.get_excel_desktop_add_in_import_data_name()
+        ).click()
