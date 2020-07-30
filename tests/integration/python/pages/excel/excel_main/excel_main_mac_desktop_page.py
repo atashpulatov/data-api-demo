@@ -12,8 +12,6 @@ class ExcelMainMacDesktopPage(BaseMacDesktopPage):
                               "'AXSectionList']/AXGroup[@AXIdentifier='DocsUITemplate']/AXButton[@AXTitle=" \
                               "'Blank Workbook']" % BaseMacDesktopPage.EXCEL_APP_ELEM
 
-    INSERT_TAB_ELEM = "%s/AXRadioButton[@AXTitle='Insert']" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
-
     GROUPS_OF_MY_ADD_INS_DROP_DOWN = "%s/AXScrollArea[0]/AXGroup[%%s]" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
     MY_ADD_INS_DROP_DOWN = "%s/AXScrollArea[0]/AXGroup[%%s]/" \
                            "AXMenuButton" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
@@ -31,9 +29,6 @@ class ExcelMainMacDesktopPage(BaseMacDesktopPage):
         element = self.get_element_by_xpath(ExcelMainMacDesktopPage.NEW_BLANK_WORKBOOK_ELEM)
         Util.pause(0.5)
         element.click()
-
-    def click_insert_tab_elem(self):
-        self.get_element_by_xpath(ExcelMainMacDesktopPage.INSERT_TAB_ELEM).click()
 
     def click_add_in_drop_down_elem(self):
         self._find_my_add_ins_dropdown().click(

@@ -1,32 +1,24 @@
 from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
-from pages_base.base_page import BasePage
+from pages_base.base_mac_desktop_page import BaseMacDesktopPage
 from util.util import Util
 
 
-class ImportDataPopupMacDesktopPage(BasePage):
-    MY_LIBRARY_SWITCH_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/" \
-                             "AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup" \
-                             "[@AXDOMIdentifier='popup-wrapper']/AXGroup[0]/AXGroup[0]/" \
-                             "AXCheckBox[@AXSubrole='AXSwitch']"
+class ImportDataPopupMacDesktopPage(BaseMacDesktopPage):
+    MY_LIBRARY_SWITCH_ELEM = "%s/AXGroup[0]/AXGroup[0]/" \
+                             "AXCheckBox[@AXSubrole='AXSwitch']" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
 
     MY_LIBRARY_SWITCH_VALUE_ATTR = 'AXValue'
     MY_LIBRARY_SWITCH_VALUE_ATTR_ON_VALUE = '1'
 
-    SEARCH_BAR_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/" \
-                      "AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup" \
-                      "[@AXDOMIdentifier='popup-wrapper']/AXGroup[0]/AXGroup[3]/AXTextField[0]"
+    SEARCH_BAR_ELEM = "%s/AXGroup[0]/AXGroup[3]/AXTextField[0]" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
 
-    NAME_HEADER_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/" \
-                       "AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup" \
-                       "[@AXDOMIdentifier='popup-wrapper']/AXGroup[2]/AXTable[0]/AXRow[0]/AXCell[1]/AXGroup[0]/" \
-                       "AXStaticText[@AXValue='Name']"
+    NAME_HEADER_ELEM = "%s/AXGroup[2]/AXTable[0]/AXRow[0]/AXCell[1]/AXGroup[0]/" \
+                       "AXStaticText[@AXValue='Name']" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
 
-    IMPORT_BUTTON_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXStandardWindow']/" \
-                         "AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup" \
-                         "[@AXDOMIdentifier='popup-wrapper']/AXGroup[3]/AXButton[@AXTitle='Import'"
+    IMPORT_BUTTON_ELEM = "%s/AXGroup[3]/AXButton[@AXTitle='Import'" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
 
-    X_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT = 100
-    Y_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT = 60
+    FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_X = 100
+    FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_Y = 60
 
     def __init__(self):
         super().__init__()
@@ -52,8 +44,8 @@ class ImportDataPopupMacDesktopPage(BasePage):
         self.get_element_by_xpath(
             ImportDataPopupMacDesktopPage.NAME_HEADER_ELEM
         ).click(
-            offset_x=ImportDataPopupMacDesktopPage.X_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT,
-            offset_y=ImportDataPopupMacDesktopPage.Y_OFFSET_FROM_NAME_START_TO_FIRST_OBJECT
+            offset_x=ImportDataPopupMacDesktopPage.FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_X,
+            offset_y=ImportDataPopupMacDesktopPage.FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_Y
         )
 
     def click_import_button(self):

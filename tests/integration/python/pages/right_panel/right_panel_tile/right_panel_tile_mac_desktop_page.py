@@ -1,11 +1,10 @@
+from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 from pages_base.base_mac_desktop_page import BaseMacDesktopPage
 from util.message_const import MessageConst
 
 
 class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
     TILES = "%s/AXList[@AXSubrole='AXContentList']/AXGroup[%%s]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
-
-    SIDE_PANEL_HEADER = "%s/AXGroup[0]/AXImage[0]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
 
     NOTIFICATION_ELEM = "%s/AXList/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXStaticText" \
                         "[@AXValue='%%s']" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
@@ -31,12 +30,12 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
 
     def close_all_notifications_on_hover(self):
         tiles = self.get_elements_by_xpath(RightPanelTileMacDesktopPage.TILES)
-        other_container = self.get_element_by_xpath(RightPanelTileMacDesktopPage.SIDE_PANEL_HEADER)
+        other_container = self.get_element_by_xpath(ExcelMenuMacDesktopPage.TABLE_TAB_ELEM)
 
         for tile in tiles:
             other_container.move_to()
             tile.move_to()
-    
+
     def close_last_notification_on_hover(self):
         self._hover_over_tile(0)
 
@@ -57,7 +56,7 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
         return self.get_elements_by_xpath(RightPanelTileMacDesktopPage.TITLE_BUTTON_ELEMS)
 
     def _hover_over_tile(self, tile_no):
-        other_container = self.get_element_by_xpath(RightPanelTileMacDesktopPage.SIDE_PANEL_HEADER)
+        other_container = self.get_element_by_xpath(ExcelMenuMacDesktopPage.TABLE_TAB_ELEM)
         other_container.move_to()
 
         tiles = self.get_elements_by_xpath(RightPanelTileMacDesktopPage.TILES)
