@@ -20,8 +20,6 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
             self.focus_on_excel_frame()
 
-            self.excel_sheet_browser_page.go_to_cell('A1')
-
             all_candidates = self.get_elements_by_css(ExcelMenuBrowserPage.ICON_ELEM)
             found_environment_elements = list(filter(lambda item: add_in_environment in item.text, all_candidates))
 
