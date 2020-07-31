@@ -8,10 +8,10 @@ class RightPanelBrowserPage(BaseBrowserPage):
     DOTS_MENU = '#overlay > div > div.header > div.settings > button > span > svg'
     DOTS_MENU_ITEM_LOG_OUT = 'logOut'
 
-    SELECT_ALL_TILE = 'div.object-tile-container-header > span > span > '
-    SELECT_ALL_TILE_CHECKBOX = '.checkmark'
-    REFRESH_ALL = SELECT_ALL_TILE + 'button:nth-child(5)'
-    REMOVE_ALL = SELECT_ALL_TILE + 'button:nth-child(6)'
+    SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
+    SELECT_ALL_TILES_CHECKBOX = '.checkmark'
+    REFRESH_ALL = SELECT_ALL_TILES + 'button:nth-child(5)'
+    REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -34,13 +34,13 @@ class RightPanelBrowserPage(BaseBrowserPage):
     def refresh_all(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelBrowserPage.SELECT_ALL_TILE_CHECKBOX).click()
+        self.get_element_by_css(RightPanelBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
         self.get_element_by_css(RightPanelBrowserPage.REFRESH_ALL).click()
 
     def remove_all(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelBrowserPage.SELECT_ALL_TILE_CHECKBOX).click()
+        self.get_element_by_css(RightPanelBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
         self.get_element_by_css(RightPanelBrowserPage.REMOVE_ALL).click()
