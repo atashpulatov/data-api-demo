@@ -174,12 +174,12 @@ function getStorageItem(key = 'iSession') {
   return window.localStorage.getItem(key);
 }
 function setStorageItem(value, key = 'iSession') {
-    window.localStorage.setItem(key, value);
+  window.localStorage.setItem(key, value);
 }
 function removeStorageItem(key = 'iSession') {
   window.localStorage.removeItem(key);
 }
-function setExcelSettingItem(value, key = 'iSession'){
+function setExcelSettingItem(value, key = 'iSession') {
   try {
     Office.context.document.settings.set(key, value);
     settings.saveAsync((saveAsync) => console.log(`Saving Excel settings ${saveAsync.status}`));
