@@ -57,7 +57,18 @@ describe('Smart Folder - IMPORT -', () => {
     PluginPopup.switchLibrary(false);
     PluginPopup.searchForObject(objectName);
     browser.pause(500);
-    PluginPopup.selectObject(2);
+
+    logStep('sort by name ascending');
+    PluginPopup.clickHeader('Name');
+    const names = PluginPopup.getColumnContents('columnName');
+    expect(PluginPopup.isSortedAsceding(names)).toBe(true);
+
+    logStep('select the application "UB-Platform-Analytics-2020"');
+    PluginPopup.clickFilterButton();
+    PluginPopup.clickAllButton('Application');
+    PluginPopup.clickAllPanelElement('UB-Platform-Analytics-2020.');
+
+    PluginPopup.selectObject(1);
     PluginPopup.clickPrepareData();
 
     // // selectObjectElementsInPrepareData(['Session', 'Account', 'Step Count', 'Execution Duration (ms)', 'Total Queue Duration (ms)', 'SQL Pass Count', 'Job CPU Duration (ms)', 'Initial Queue Duration (ms)', 'Prompt Answer Duration (ms)']);
