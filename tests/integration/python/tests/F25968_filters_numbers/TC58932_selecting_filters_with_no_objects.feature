@@ -8,6 +8,8 @@ Feature: F25968 - Filters numbers
 
       And I clicked Filters button
       And I opened owners all panel
+      And I selected all within all panel
+      And I clicked "Certified" from "Certified Status"
 
     #   And I found object "CategorySubCategoryQuarter"
 
