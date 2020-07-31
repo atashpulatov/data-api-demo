@@ -9,6 +9,11 @@ import {
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
+import officeWorksheet from '../../../helpers/office/office.worksheet';
+import {logStep} from '../../../helpers/utils/allure-helper';
+const A2 = '#gridRows > div:nth-child(1) > div:nth-child(2) > div > div';
+const E2 = '#gridRows > div:nth-child(5) > div:nth-child(2) > div > div';
+
 
 describe('F21526 - Secure data - clearing data', () => {
   beforeEach(() => {
@@ -20,25 +25,25 @@ describe('F21526 - Secure data - clearing data', () => {
   });
 
   it('[TC54263] - Clearing and viewing data for users with different privileges', () => {
-    console.log(`should import 'Revenue by Region and Category - secure data' report`);
+   logStep(`should import 'Revenue by Region and Category - secure data' report`);
     PluginPopup.importObjectToCellAndAssertSuccess('A1', objectsList.reports.secureDataFiltering, 'Report for clearing data should be imported', false);
 
-    console.log(`should import 'Secure data - always working' report`);
+    logStep(`should import 'Secure data - always working' report`);
     switchToExcelFrame();
     PluginPopup.importObjectToCellAndAssertSuccess('E1', objectsList.reports.secureDataAlwaysWorking, 'Report which will alway display all the data should be imported', true);
 
-    console.log(`should clear data`);
+    logStep(`should clear data`);
     switchToPluginFrame();
     PluginRightPanel.clickSettings();
     PluginRightPanel.clickClearData();
     PluginRightPanel.clickClearDataOk();
     browser.pause(4000);
 
-    console.log('should log out');
+    logStep('should log out');
     switchToPluginFrame();
     PluginRightPanel.logout();
 
-    console.log('should log in with Tim user');
+    logStep('should log in with Tim user');
     browser.pause(1000);
     switchToRightPanelFrame();
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
@@ -47,12 +52,16 @@ describe('F21526 - Secure data - clearing data', () => {
     PluginRightPanel.enterCredentialsAndPressLoginBtn('Tim', '');
     changeBrowserTab(1);
 
-    console.log('should assert A2 and E2 cells are empty');
+    logStep('should assert A2 and E2 cells are empty');
     switchToExcelFrame();
-    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('');
-    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('');
+    officeWorksheet.selectCell('A2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
+    officeWorksheet.selectCell('E2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
 
-    console.log(`should click "View Data"`);
+//
+
+    logStep(`should click "View Data"`);
     browser.pause(4000);
     switchToPluginFrame();
     PluginRightPanel.viewDataBtn();
@@ -62,29 +71,33 @@ describe('F21526 - Secure data - clearing data', () => {
     PluginRightPanel.waitAndCloseNotification(reportRefreshed);
 
 
-    console.log(`should assert data was refreshed`);
+    logStep(`should assert data was refreshed`);
     switchToExcelFrame();
-    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('Central');
-    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('Albania');
+    officeWorksheet.selectCell('A2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Central`);
+    officeWorksheet.selectCell('E2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Albania`);
 
-    console.log(`should clear data`);
+    logStep(`should clear data`);
     switchToPluginFrame();
     PluginRightPanel.clickSettings();
     PluginRightPanel.clickClearData();
     PluginRightPanel.clickClearDataOk();
     browser.pause(2000);
 
-    console.log('should assert A2 and E2 cells are empty');
+    logStep('should assert A2 and E2 cells are empty');
     switchToExcelFrame();
-    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('');
-    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('');
+    officeWorksheet.selectCell('A2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
+    officeWorksheet.selectCell('E2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
 
-    console.log('should log out');
+    logStep('should log out');
     browser.pause(2000);
     switchToPluginFrame();
     PluginRightPanel.logout();
 
-    console.log('should log in with Jeff user');
+    logStep('should log in with Jeff user');
     browser.pause(1000);
     switchToRightPanelFrame();
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
@@ -93,35 +106,39 @@ describe('F21526 - Secure data - clearing data', () => {
     PluginRightPanel.enterCredentialsAndPressLoginBtn('Jeff', '');
     changeBrowserTab(1);
 
-    console.log(`should click "View Data"`);
+    logStep(`should click "View Data"`);
     switchToPluginFrame();
     PluginRightPanel.viewDataBtn();
     PluginRightPanel.waitAndCloseNotification(reportRefreshed);
     PluginRightPanel.waitAndCloseNotification(reportRefreshed);
 
-    console.log(`should assert data was refreshed`);
+    logStep(`should assert data was refreshed`);
     switchToExcelFrame();
-    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('Mid-Atlantic');
-    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('Albania');
+    officeWorksheet.selectCell('A2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Mid-Atlantic`)
+    officeWorksheet.selectCell('E2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Albania`)
     browser.pause(2000);
 
-    console.log(`should clear data`);
+    logStep(`should clear data`);
     switchToPluginFrame();
     PluginRightPanel.clickSettings();
     PluginRightPanel.clickClearData();
     PluginRightPanel.clickClearDataOk();
     browser.pause(2000);
 
-    console.log('should assert A2 and E2 cells are empty');
+    logStep('should assert A2 and E2 cells are empty');
     switchToExcelFrame();
-    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('');
-    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('');
+    officeWorksheet.selectCell('A2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
+    officeWorksheet.selectCell('E2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
 
-    console.log('should log out');
+    logStep('should log out');
     switchToPluginFrame();
     PluginRightPanel.logout();
 
-    console.log('should log in with Martyna user');
+    logStep('should log in with Martyna user');
     browser.pause(1000);
     switchToRightPanelFrame();
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
@@ -130,7 +147,7 @@ describe('F21526 - Secure data - clearing data', () => {
     PluginRightPanel.enterCredentialsAndPressLoginBtn('Martyna', '');
     changeBrowserTab(1);
 
-    console.log(`should click "View Data"`);
+    logStep(`should click "View Data"`);
     switchToPluginFrame();
     PluginRightPanel.viewDataBtn();
     switchToPluginFrame();
@@ -139,9 +156,11 @@ describe('F21526 - Secure data - clearing data', () => {
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(emptyObject);
 
-    console.log(`should assert data was refreshed`);
+    logStep(`should assert data was refreshed`);
     switchToExcelFrame();
-    expect($(excelSelectors.getCell(1, 2)).getText()).toEqual('');
-    expect($(excelSelectors.getCell(5, 2)).getText()).toEqual('Albania');
+    officeWorksheet.selectCell('A2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
+    officeWorksheet.selectCell('E2')
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Albania`)
   });
 });
