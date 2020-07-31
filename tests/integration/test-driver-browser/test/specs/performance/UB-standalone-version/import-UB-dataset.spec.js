@@ -58,12 +58,12 @@ describe('Smart Folder - IMPORT -', () => {
     PluginPopup.searchForObject(objectName);
     browser.pause(500);
 
-    console.log('sort by name ascending');
+    logStep('sort by name ascending');
     PluginPopup.clickHeader('Name');
     const names = PluginPopup.getColumnContents('columnName');
     expect(PluginPopup.isSortedAsceding(names)).toBe(true);
 
-    console.log('select the application "UB-Platform-Analytics-2020"');
+    logStep('select the application "UB-Platform-Analytics-2020"');
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Application');
     PluginPopup.clickAllPanelElement('UB-Platform-Analytics-2020.');
