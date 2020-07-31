@@ -1,16 +1,16 @@
-from pages_base.base_page import BasePage
+from pages_base.base_mac_desktop_page import BaseMacDesktopPage
 from util.util import Util
 
 
-class CleanupMacDesktopPage(BasePage):
-    EXCEL_IN_DOCK = "/AXApplication[@AXTitle='Dock']/AXList[0]/AXDockItem[@AXTitle='Microsoft Excel' and " \
-                    "@AXSubrole='AXApplicationDockItem']"
+class CleanupMacDesktopPage(BaseMacDesktopPage):
+    MAC_DOCK = "/AXApplication[@AXTitle='Dock']/AXList[0]"
 
-    CONTEXT_MENU_QUIT_BUTTON = "/AXApplication[@AXTitle='Dock']/AXList[0]/AXDockItem/AXMenu[0]/AXMenuItem[@AXTitle=" \
-                               "'Quit' or @AXTitle='Force Quit']"
+    EXCEL_IN_DOCK = "%s/AXDockItem[@AXTitle='Microsoft Excel' and @AXSubrole='AXApplicationDockItem']" % MAC_DOCK
 
-    DONT_SAVE_BUTTON_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']/AXWindow[@AXSubrole='AXDialog']/AXButton" \
-                            "[@AXTitle='Don't Save']"
+    CONTEXT_MENU_QUIT_BUTTON = "%s/AXDockItem/AXMenu[0]/AXMenuItem[@AXTitle='Quit' or @AXTitle='Force Quit']" % MAC_DOCK
+
+    DONT_SAVE_BUTTON_ELEM = "%s/AXWindow[@AXSubrole='AXDialog']/AXButton" \
+                            "[@AXTitle='Don't Save']" % BaseMacDesktopPage.EXCEL_APP_ELEM
 
     def clean_up_after_each_test(self):
         self.get_element_by_xpath(CleanupMacDesktopPage.EXCEL_IN_DOCK).right_click()
