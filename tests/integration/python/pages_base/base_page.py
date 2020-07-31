@@ -1,12 +1,11 @@
 from driver.driver_factory import DriverFactory
 from pages_base.driver_send_keys import DriverSendKeys
-from pages_base.element_check import ElementCheck
 from pages_base.element_get import ElementGet
 from util.config_util import ConfigUtil
 from util.util import Util
 
 
-class BasePage(ElementGet, ElementCheck, DriverSendKeys):
+class BasePage(ElementGet, DriverSendKeys):
     def __init__(self):
         super().__init__()
         driver_type = ConfigUtil.get_driver_type()
