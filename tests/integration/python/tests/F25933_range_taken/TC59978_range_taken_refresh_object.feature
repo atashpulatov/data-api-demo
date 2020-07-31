@@ -9,6 +9,7 @@ Feature: F25933 - Range taken
       And I found and selected object "100_report"
       And I clicked Import button
       And I closed all notifications
+
      Then number of worksheets should be 1
 
      When I removed 4 columns starting from column "K"
@@ -17,6 +18,7 @@ Feature: F25933 - Range taken
       And I found and selected object "100_dataset"
       And I clicked Import button
       And I closed all notifications
+      
      Then number of worksheets should be 1
 
      When I clicked Refresh on object 2

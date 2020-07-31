@@ -9,6 +9,7 @@ Feature: F25933 - Range taken
       And I found and selected object "100_report"
       And I clicked Import button
       And I closed all notifications
+
      Then number of worksheets should be 1
 
      When I selected cell "P1"
@@ -16,6 +17,7 @@ Feature: F25933 - Range taken
       And I found and selected object "100_dataset"
       And I clicked Import button
       And I closed all notifications
+
      Then number of worksheets should be 1
 
      When I selected cell "AF1"
@@ -23,6 +25,7 @@ Feature: F25933 - Range taken
       And I found and selected object "100_report"
       And I clicked Import button
       And I closed all notifications
+
      Then number of worksheets should be 1
 
      When I removed 4 columns starting from column "AP"
@@ -31,13 +34,15 @@ Feature: F25933 - Range taken
       And I found and selected object "100_report"
       And I clicked Import button
       And I closed all notifications
+
      Then number of worksheets should be 1
 
-     When I refresh all objects
+     When I refreshed all objects
       And I selected Active Cell option in Range Taken popup
       And I selected cell "BF1"
-     Then I clicked OK button in Range Taken popup
+      And I clicked OK button in Range Taken popup
       And I closed all notifications
+
      Then number of worksheets should be 1
 
       And I log out

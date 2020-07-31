@@ -16,12 +16,12 @@ def step_impl(context):
     context.pages.right_panel_page().logout()
 
 
-@step('I refresh all objects')
+@step('I refreshed all objects')
 def step_impl(context):
     context.pages.right_panel_page().refresh_all()
 
 
-@step('I remove all objects')
+@step('I removed all objects')
 def step_impl(context):
     context.pages.right_panel_page().remove_all()
 
