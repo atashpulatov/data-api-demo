@@ -208,7 +208,7 @@ export const objectsList = {
     },
     promptedDossier: {
       name: 'Prompted dossier',
-      visualizations: { vis1: getVizAT(2) }
+      visualizations: { vis1: getVizAT(1) }
     },
     promptedDossier2: {
       name: 'Prompted dossier (display prompt and default answers)',
