@@ -16,7 +16,8 @@ class ImportDataPopupMacDesktopPage(BaseMacDesktopPage):
                        "AXStaticText[@AXValue='Name']" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
 
     IMPORT_BUTTON_ELEM = "%s/AXGroup[3]/AXButton[@AXTitle='Import'" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
-    PREPARE_BUTTON_ELEM = "%s/AXGroup[3]/AXButton[@AXTitle='Prepare Data']" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
+    PREPARE_BUTTON_ELEM = "%s/AXGroup[3]/AXButton[@AXTitle='Prepare Data']" \
+                          % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
     FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_X = 100
     FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_Y = 60
 
@@ -53,5 +54,5 @@ class ImportDataPopupMacDesktopPage(BaseMacDesktopPage):
 
         self.right_panel_tile_mac_desktop_page.wait_for_import_to_finish_successfully()
 
-    def click_prepare_data_button(self): 
+    def click_prepare_data_button(self):
         self.get_element_by_xpath(ImportDataPopupMacDesktopPage.PREPARE_BUTTON_ELEM).click()

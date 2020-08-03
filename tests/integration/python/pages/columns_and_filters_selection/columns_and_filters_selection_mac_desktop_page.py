@@ -7,7 +7,8 @@ from selenium.common.exceptions import TimeoutException
 class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
     ITEM_ALL_ATTRIBUTES = "%s/AXGroup[5]/AXGroup[0]" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
     ITEM_ALL_METRICS = "%s/AXGroup[7]/AXGroup[0]" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
-    ATTRIBUTE_CHECKBOX_UNCHECKED = "%s/AXOutline[0]/AXRow[@AXDescription='%%s']" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
+    ATTRIBUTE_CHECKBOX_UNCHECKED = "%s/AXOutline[0]/AXRow[@AXDescription='%%s']" \
+                                   % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
     ATTRIBUTE_CHECKBOX_CHECKED = "%s/AXOutline[0]/AXRow[@AXDescription='icon: caret-down %%s']" \
                                  % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
     METRIC_CHECKBOX = "%s/AXTable[0]/AXUnknown[0]/AXGroup/" \
