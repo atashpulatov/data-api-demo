@@ -10,11 +10,10 @@ Feature: F25968 - Filters numbers
       And I opened owners all panel
       And I selected all within all panel
       And I clicked "Certified" from "Certified Status"
+      Then the first empty element in all panel should be selected
 
-    #   And I found object "CategorySubCategoryQuarter"
+    Given I clicked first empty element in all panel
+      Then the first empty element in all panel should NOT be selected
 
-    #  When I displayed details for object number 1
-    #  Then I verify copying the details to clipboard works correctly
-
-    #   And I close Import Data popup
-    #   And I log out
+      Given I clicked first empty element in all panel
+      Then the first empty element in all panel should NOT be selected
