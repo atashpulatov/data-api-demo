@@ -2,7 +2,7 @@ import json
 
 from pages_base.base_mac_desktop_page import BaseMacDesktopPage
 from selenium.common.exceptions import TimeoutException
-
+from util.const import DEFAULT_WAIT_BETWEEN_CHECKS
 
 class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
     ITEM_ALL_ATTRIBUTES = "%s/AXGroup[5]/AXGroup[0]" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
@@ -42,12 +42,10 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
             ColumnsAndFiltersSelectionMacDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT)
 
     def click_attribute(self, attribute_name):
-        try:
-            self.get_element_by_xpath(
-                ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_UNCHECKED % attribute_name).click()
-        except TimeoutException:
-            self.get_element_by_xpath(
-                ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_CHECKED % attribute_name).click()
+        if self.check_if_element_exists_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_UNCHECKED % attribute_name, timeout=DEFAULT_WAIT_BETWEEN_CHECKS):
+          self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_UNCHECKED % attribute_name).click()
+        else:
+          self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_CHECKED % attribute_name).click()
 
     def click_metric(self, metric_name):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.METRIC_CHECKBOX % metric_name).click()
