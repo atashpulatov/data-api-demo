@@ -11,8 +11,7 @@ import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
 import officeWorksheet from '../../../helpers/office/office.worksheet';
 import {logStep} from '../../../helpers/utils/allure-helper';
-const A2 = '#gridRows > div:nth-child(1) > div:nth-child(2) > div > div';
-const E2 = '#gridRows > div:nth-child(5) > div:nth-child(2) > div > div';
+
 
 
 describe('F21526 - Secure data - clearing data', () => {
