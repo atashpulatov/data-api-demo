@@ -12,8 +12,6 @@ import { excelSelectors } from '../../../constants/selectors/office-selectors';
 import officeWorksheet from '../../../helpers/office/office.worksheet';
 import {logStep} from '../../../helpers/utils/allure-helper';
 
-
-
 describe('F21526 - Secure data - clearing data', () => {
   beforeEach(() => {
     officeLogin.openExcelAndLoginToPlugin();
