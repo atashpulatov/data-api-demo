@@ -11,9 +11,8 @@ export function switchToDialogFrame() {
 }
 
 export function switchToExcelFrame() {
-  const nowInSec = Math.floor(Date.now()/1000)
-  const endTime = nowInSec + 120;
-  while(Math.floor(Date.now()/1000) < endTime){
+  const endTime = Date.now() + 120 * 1000;
+  while(Date.now() < endTime){
     try {
       browser.switchToFrame(null);
       $('#WebApplicationFrame').waitForDisplayed(20000);
