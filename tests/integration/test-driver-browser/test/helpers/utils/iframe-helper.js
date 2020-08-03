@@ -21,7 +21,6 @@ export function switchToExcelFrame() {
       return;
     } catch(e) {
       console.log(`Element '#WebApplicationFrame' not found. Retrying for the ${++i} time.`)
-      continue;
     }
   } 
 }
