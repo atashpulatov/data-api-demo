@@ -11,9 +11,18 @@ export function switchToDialogFrame() {
 }
 
 export function switchToExcelFrame() {
-  browser.switchToFrame(null);
-  $('#WebApplicationFrame').waitForDisplayed(30000);
-  browser.switchToFrame($('#WebApplicationFrame'));
+  const nowInSec = Math.floor(Date.now()/1000)
+  const endTime = nowInSec + 120;
+  while(nowInSec < endTime){
+    try {
+      browser.switchToFrame(null);
+      $('#WebApplicationFrame').waitForDisplayed(20000);
+      browser.switchToFrame($('#WebApplicationFrame'));
+      return;
+    } catch(e) {
+    throw new Error(e)
+    }
+  } 
 }
 
 // This frame is used for report prompt window and visualizations window
@@ -25,7 +34,8 @@ export function switchToPromptFrame() {
 
 export function switchToPromptFrameForImportDossier() {
   switchToPluginFrame();
-  const editFrame = 'iframe[src*="message=true&ui"]';
+  // const editFrame = 'iframe[src*="message=true&ui"]';
+  const editFrame ='#popup-wrapper > div > div:nth-child(3) > iframe';
   $(editFrame).waitForExist(19999);
   browser.switchToFrame($(editFrame));
 }
