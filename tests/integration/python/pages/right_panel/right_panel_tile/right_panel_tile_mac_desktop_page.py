@@ -62,6 +62,13 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
         tiles = self.get_elements_by_xpath(RightPanelTileMacDesktopPage.TILES)
         tiles[tile_no].move_to()
 
+    def click_edit(self, object_no):
+        object_index = int(object_no) - 1
+
+        self._hover_over_tile(object_index)
+
+        self._get_edit_buttons_for_all_tiles()[object_index].click()
+
     def get_object_name(self, object_no):
         object_index = int(object_no) - 1
 
