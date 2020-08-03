@@ -38,7 +38,7 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ITEM_ALL_METRICS).click()
 
     def ensure_columns_and_filters_selection_is_visible(self):
-        columns_and_filters_selection_element = self.get_element_by_xpath(
+        self.get_element_by_xpath(
             ColumnsAndFiltersSelectionMacDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT)
 
     def click_attribute(self, attribute_name):
