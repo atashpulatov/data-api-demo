@@ -16,7 +16,7 @@ export function switchToExcelFrame() {
   while(Date.now() < endTime){
     try {
       browser.switchToFrame(null);
-      $('#WebApplicationFrame1').waitForDisplayed(20000);
+      $('#WebApplicationFrame').waitForDisplayed(20000);
       browser.switchToFrame($('#WebApplicationFrame'));
       return;
     } catch(e) {
