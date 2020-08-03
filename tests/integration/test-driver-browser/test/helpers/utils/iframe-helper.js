@@ -12,14 +12,16 @@ export function switchToDialogFrame() {
 
 export function switchToExcelFrame() {
   const endTime = Date.now() + 120 * 1000;
+  let i = 1;
   while(Date.now() < endTime){
     try {
       browser.switchToFrame(null);
-      $('#WebApplicationFrame').waitForDisplayed(20000);
+      $('#WebApplicationFrame1').waitForDisplayed(20000);
       browser.switchToFrame($('#WebApplicationFrame'));
       return;
     } catch(e) {
-    throw new Error(e)
+      console.log(`Element '#WebApplicationFrame' not found. Retrying for the ${++i} time.`)
+      continue;
     }
   } 
 }
