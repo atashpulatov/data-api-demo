@@ -24,3 +24,9 @@ def step_impl(context):
 @step('I clicked import dossier')
 def step_impl(context):
     context.pages.import_dossier_page().click_import_visualization()
+
+
+@step('I clicked import dossier without waiting for results')
+def step_impl(context):
+    context.pages.import_dossier_page().click_import_visualization_without_waiting_for_results()
+
