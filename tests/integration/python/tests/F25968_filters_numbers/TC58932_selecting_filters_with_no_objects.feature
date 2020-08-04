@@ -10,10 +10,10 @@ Feature: F25968 - Filters numbers
       And I opened owners all panel
       And I selected all within all panel
       And I clicked "Certified" from "Certified Status"
-      Then the first empty element in all panel should be selected
+     Then the first empty element in all panel should be selected
 
-    Given I clicked first empty element in all panel
-      Then the first empty element in all panel should NOT be selected
+     When I clicked first empty element in all panel
+     Then the first empty element in all panel should NOT be selected
 
-      Given I clicked first empty element in all panel
-      Then the first empty element in all panel should NOT be selected
+     When I clicked first empty element in all panel
+     Then the first empty element in all panel should NOT be selected

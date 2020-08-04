@@ -15,7 +15,7 @@ def step_impl(context):
 
 
 @step('I clicked "{element}" from "{category}"')
-def step_impl(context, category, element):
+def step_impl(context, element, category):
     context.pages.filter_panel_page().click_element_from_list(category, element)
 
 
@@ -26,13 +26,11 @@ def step_impl(context):
 
 @step('the first empty element in all panel should be selected')
 def step_impl(context):
-    element = context.pages.filter_panel_page().get_all_panel_first_empty_element()
-    is_checked = context.pages.filter_panel_page().examine_if_element_is_checked(element)
+    is_checked = context.pages.filter_panel_page().examine_if_first_empty_element_is_checked()
     AssertUtil.assert_simple(is_checked, True)
 
 
 @step('the first empty element in all panel should NOT be selected')
 def step_impl(context):
-    element = context.pages.filter_panel_page().get_all_panel_first_empty_element()
-    is_checked = context.pages.filter_panel_page().examine_if_element_is_checked(element)
+    is_checked = context.pages.filter_panel_page().examine_if_first_empty_element_is_checked()
     AssertUtil.assert_simple(is_checked, False)

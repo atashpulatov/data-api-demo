@@ -1,4 +1,3 @@
-from pyperclip import paste
 from selenium.common.exceptions import NoSuchElementException
 
 from pages_base.base_browser_page import BaseBrowserPage
@@ -22,9 +21,6 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     def click_element_from_list(self, category, element):
         self.get_element_by_css(FilterPanelBrowserPage.ELEMENT_FROM_CATEGORY % (category, element)).click()
 
-    def get_all_panel_first_empty_element(self):
-        return self.get_element_by_css(FilterPanelBrowserPage.ALL_PANEL_EMPTY_ELEMENT)
-
     def examine_if_element_is_checked(self, element):
         try:
             element.find_element_by_css('input:checked')
@@ -32,5 +28,12 @@ class FilterPanelBrowserPage(BaseBrowserPage):
         except NoSuchElementException:
             return False
 
+    def get_all_panel_first_empty_element(self):
+        return self.get_element_by_css(FilterPanelBrowserPage.ALL_PANEL_EMPTY_ELEMENT)
+
     def click_all_panel_first_empty_element(self):
         return self.get_all_panel_first_empty_element().click()
+
+    def examine_if_first_empty_element_is_checked(self, element):
+        element = self.get_all_panel_first_empty_element()
+        return self.examine_if_element_is_checked(element)
