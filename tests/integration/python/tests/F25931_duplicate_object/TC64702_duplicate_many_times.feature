@@ -1,4 +1,5 @@
 @mac_chrome
+@mac_desktop
 Feature: F25931 - Duplicate object
 
   Scenario: [TC64702] - Duplicate object
