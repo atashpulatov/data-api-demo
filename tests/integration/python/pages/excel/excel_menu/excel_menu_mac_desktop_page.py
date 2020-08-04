@@ -3,15 +3,15 @@ from util.config_util import ConfigUtil
 
 
 class ExcelMenuMacDesktopPage(BaseMacDesktopPage):
-    ADD_IN_IN_HOME_TAB_TEXT_ELEM = "%s/AXScrollArea[0]/AXGroup/AXButton" \
-                                   "[@AXTitle='%%s']" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
+    ADD_IN_IN_HOME_TAB_TEXT_ELEM = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup/" \
+                                                                                   "AXButton[@AXTitle='%s']"
 
-    PASTE_BUTTON = "%s/AXScrollArea[0]/AXGroup[0]/AXMenuButton" \
-                   "[@AXTitle='Paste']" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
+    PASTE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[0]/" \
+                                                                   "AXMenuButton[@AXTitle='Paste']"
 
-    HOME_TAB_ELEM = "%s/AXRadioButton[@AXTitle='Home']" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
-    INSERT_TAB_ELEM = "%s/AXRadioButton[@AXTitle='Insert']" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
-    TABLE_TAB_ELEM = "%s/AXRadioButton[@AXTitle='Table']" % BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM
+    HOME_TAB_ELEM = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Home']"
+    INSERT_TAB_ELEM = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Insert']"
+    TABLE_TAB_ELEM = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Table']"
 
     def click_add_in_elem(self):
         self._refocus_on_home_tab()

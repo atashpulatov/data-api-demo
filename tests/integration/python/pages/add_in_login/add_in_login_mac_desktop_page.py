@@ -5,12 +5,12 @@ from pages_base.base_mac_desktop_page import BaseMacDesktopPage
 
 
 class AddInLoginMacDesktopPage(BaseMacDesktopPage):
-    LOGIN_WINDOW = "%s/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]/AXGroup" \
-                   "[@AXSubrole='AXLandmarkMain']/AXGroup[1]" % BaseMacDesktopPage.EXCEL_WINDOW_ELEM
+    LOGIN_WINDOW = BaseMacDesktopPage.EXCEL_WINDOW_ELEM + "/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/" \
+                                                          "AXWebArea[0]/AXGroup[@AXSubrole='AXLandmarkMain']/AXGroup[1]"
 
-    USERNAME_INPUT_ELEM = "%s/AXTextField[@AXDOMIdentifier='username']" % LOGIN_WINDOW
+    USERNAME_INPUT_ELEM = LOGIN_WINDOW + "/AXTextField[@AXDOMIdentifier='username']"
 
-    PASSWORD_INPUT_ELEM = "%s/AXTextField[@AXDOMIdentifier='password']" % LOGIN_WINDOW
+    PASSWORD_INPUT_ELEM = LOGIN_WINDOW + "/AXTextField[@AXDOMIdentifier='password']"
 
     def __init__(self):
         super().__init__()
