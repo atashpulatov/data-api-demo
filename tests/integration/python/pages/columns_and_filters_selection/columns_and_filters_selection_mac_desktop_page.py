@@ -5,24 +5,23 @@ from util.const import DEFAULT_WAIT_BETWEEN_CHECKS
 
 
 class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
-    ITEM_ALL_ATTRIBUTES = "%s/AXGroup[5]/AXGroup[0]" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
-    ITEM_ALL_METRICS = "%s/AXGroup[7]/AXGroup[0]" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
+    ITEM_ALL_ATTRIBUTES = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[5]/AXGroup[0]"
+    ITEM_ALL_METRICS = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[7]/AXGroup[0]"
 
-    ATTRIBUTE_CHECKBOX_UNCHECKED = "%s/AXOutline[0]/AXRow[@AXDescription='%%s']" \
-                                   % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
-    ATTRIBUTE_CHECKBOX_CHECKED = "%s/AXOutline[0]/AXRow[@AXDescription='icon: caret-down %%s']" \
-                                 % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
-    METRIC_CHECKBOX = "%s/AXTable[0]/AXUnknown[0]/AXGroup/" \
-                      "AXGroup[@AXDescription='%%s']" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
+    ATTRIBUTE_CHECKBOX_UNCHECKED = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXOutline[0]/AXRow[@AXDescription='%s']"
+    ATTRIBUTE_CHECKBOX_CHECKED = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXOutline[0]/AXRow[@AXDescription=" \
+                                                                         "'icon: caret-down %s']"
+    METRIC_CHECKBOX = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXTable[0]/AXUnknown[0]/" \
+                                                              "AXGroup/AXGroup[@AXDescription='%s']"
 
-    IMPORT_BUTTON = "%s/AXGroup[13]/AXButton[@AXTitle='Import']" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
+    IMPORT_BUTTON = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[13]/AXButton[@AXTitle='Import']"
 
-    ATTRIBUTE_FORM_DROPDOWN = "%s/AXGroup[3]/AXComboBox/AXGroup[0]" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
-    ATTRIBUTE_FORM_DROPDOWN_ITEM = "%s/AXList[0]/AXStaticText[@AXTitle='%%s']" \
-                                   % BaseMacDesktopPage.DISPLAY_ATTRIBUTE_FORM_ELEM
+    ATTRIBUTE_FORM_DROPDOWN = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXComboBox/AXGroup[0]"
+    ATTRIBUTE_FORM_DROPDOWN_ITEM = BaseMacDesktopPage.DISPLAY_ATTRIBUTE_FORM_ELEM + "/AXList[0]/" \
+                                                                                    "AXStaticText[@AXTitle='%s']"
 
-    COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = "%s/AXGroup[2]/AXStaticText[@AXValue='Columns & Filters Selection']" \
-                                              % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
+    COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[2]/" \
+                                              "AXStaticText[@AXValue='Columns & Filters Selection']"
 
     ATTRIBUTE_FORM_TOGGLER_OFFSET_X = 7
     ATTRIBUTE_FORM_TOGGLER_OFFSET_Y = 16
@@ -62,7 +61,7 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
 
     def click_display_attributes_names_type(self, form_visualization_type):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN).click()
-        
+
         self.get_element_by_xpath(
             ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ITEM % form_visualization_type
         ).click()
@@ -75,14 +74,14 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
             self.get_element_by_xpath(
                 ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_UNCHECKED % attribute_name
             ).click()
-            
+
             self.get_element_by_xpath(
                 ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_CHECKED % attribute_name
             ).click(
                 ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_TOGGLER_OFFSET_X,
                 ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_TOGGLER_OFFSET_Y
             )
-            
+
             for attribute_form in attribute_forms:
                 self.get_element_by_xpath(
                     ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_UNCHECKED % attribute_form

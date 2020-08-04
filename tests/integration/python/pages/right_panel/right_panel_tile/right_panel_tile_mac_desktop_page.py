@@ -4,19 +4,19 @@ from util.message_const import MessageConst
 
 
 class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
-    TILES = "%s/AXList[@AXSubrole='AXContentList']/AXGroup[%%s]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
+    TILES = BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]"
 
-    NOTIFICATION_ELEM = "%s/AXList/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXStaticText" \
-                        "[@AXValue='%%s']" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
+    NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM + "/AXList/AXGroup[0]/AXGroup[0]/" \
+                                                                           "AXGroup[0]/AXStaticText[@AXValue='%s']"
 
-    DUPLICATE_BUTTON_ELEMS = "%s/AXList[@AXSubrole='AXContentList']/AXGroup[%%s]/" \
-                             "AXButton[0]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
+    DUPLICATE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM + "/AXList[@AXSubrole='AXContentList']/" \
+                                                                                "AXGroup[%s]/AXButton[0]"
 
-    EDIT_BUTTON_ELEMS = "%s/AXList[@AXSubrole='AXContentList']/AXGroup[%%s]/" \
-                        "AXButton[1]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
+    EDIT_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM + "/AXList[@AXSubrole='AXContentList']/" \
+                                                                           "AXGroup[%s]/AXButton[1]"
 
-    TITLE_BUTTON_ELEMS = "%s/AXList[@AXSubrole='AXContentList']/AXGroup[%%s]/" \
-                         "AXButton[4]" % BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM
+    TITLE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_OVERLAY_ELEM + "/AXList[@AXSubrole='AXContentList']/" \
+                                                                            "AXGroup[%s]/AXButton[4]"
 
     TITLE_ATTRIBUTE = 'AXTitle'
 

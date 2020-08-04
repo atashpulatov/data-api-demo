@@ -7,24 +7,24 @@ from util.util import Util
 
 
 class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
-    EDIT_MENU = "%s/AXMenuBarItem[@AXTitle='Edit']" % BaseMacDesktopPage.EXCEL_MENU_ELEM
+    EDIT_MENU = BaseMacDesktopPage.EXCEL_MENU_ELEM + "/AXMenuBarItem[@AXTitle='Edit']"
 
-    EDIT_FIND_MENU = "%s/AXMenu[0]/AXMenuItem[@AXTitle='Find']" % EDIT_MENU
-    EDIT_FIND_GO_TO_MENU = "%s/AXMenu[0]/AXMenuItem[@AXTitle='Go to...']" % EDIT_FIND_MENU
+    EDIT_FIND_MENU = EDIT_MENU + "/AXMenu[0]/AXMenuItem[@AXTitle='Find']"
+    EDIT_FIND_GO_TO_MENU = EDIT_FIND_MENU + "/AXMenu[0]/AXMenuItem[@AXTitle='Go to...']"
 
-    GO_TO_PROMPT_INPUT = "%s/AXWindow[@AXTitle='Go to' and @AXSubrole='AXDialog']/" \
-                         "AXTextField" % BaseMacDesktopPage.EXCEL_APP_ELEM
+    GO_TO_PROMPT_INPUT = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXTitle='Go to' and" \
+                                                             "@AXSubrole='AXDialog']/AXTextField"
 
-    FORMAT_MENU = "%s/AXMenuBarItem[@AXTitle='Format']" % BaseMacDesktopPage.EXCEL_MENU_ELEM
-    FORMAT_CELLS_MENU = "%s/AXMenu[0]/AXMenuItem[@AXTitle='Cells...']" % FORMAT_MENU
+    FORMAT_MENU = BaseMacDesktopPage.EXCEL_MENU_ELEM + "/AXMenuBarItem[@AXTitle='Format']"
+    FORMAT_CELLS_MENU = FORMAT_MENU + "/AXMenu[0]/AXMenuItem[@AXTitle='Cells...']"
 
-    FORMAT_CELLS_PROMPT_DIALOG = "%s/AXWindow[@AXTitle='Format Cells' and " \
-                                 "@AXSubrole='AXDialog']" % BaseMacDesktopPage.EXCEL_APP_ELEM
-    FORMAT_CELLS_PROMPT_SAMPLE = "%s/AXTabGroup/AXGroup/AXStaticText" % FORMAT_CELLS_PROMPT_DIALOG
-    FORMAT_CELLS_PROMPT_CANCEL_BUTTON = "%s/AXButton[@AXTitle='Cancel']" % FORMAT_CELLS_PROMPT_DIALOG
+    FORMAT_CELLS_PROMPT_DIALOG = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXTitle='Format Cells' " \
+                                                                     "and @AXSubrole='AXDialog']"
+    FORMAT_CELLS_PROMPT_SAMPLE = FORMAT_CELLS_PROMPT_DIALOG + "/AXTabGroup/AXGroup/AXStaticText"
+    FORMAT_CELLS_PROMPT_CANCEL_BUTTON = FORMAT_CELLS_PROMPT_DIALOG + "/AXButton[@AXTitle='Cancel']"
 
-    WORKSHEETS_TABS = "%s/AXWindow[@AXSubrole='AXStandardWindow']/AXSplitGroup[0]/AXLayoutArea" \
-                      "[@AXTitle='Content Area']/AXButton[%%s]" % BaseMacDesktopPage.EXCEL_APP_ELEM
+    WORKSHEETS_TABS = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXSubrole='AXStandardWindow']/AXSplitGroup[0]/" \
+                                                          "AXLayoutArea[@AXTitle='Content Area']/AXButton[%s]"
 
     WORKSHEET_ITEM_RE = re.compile('^sheetTab\d+$')
 

@@ -5,25 +5,25 @@ from util.exception.MstrException import MstrException
 class BaseMacDesktopPage(BasePage):
     EXCEL_APP_ELEM = "/AXApplication[@AXTitle='Microsoft Excel']"
 
-    EXCEL_MENU_ELEM = "%s/AXMenuBar[0]" % EXCEL_APP_ELEM
+    EXCEL_MENU_ELEM = EXCEL_APP_ELEM + "/AXMenuBar[0]"
 
-    EXCEL_WINDOW_ELEM = "%s/AXWindow[@AXSubrole='AXStandardWindow']" % EXCEL_APP_ELEM
+    EXCEL_WINDOW_ELEM = EXCEL_APP_ELEM + "/AXWindow[@AXSubrole='AXStandardWindow']"
 
-    EXCEL_WINDOW_TOP_PART_ELEM = "%s/AXTabGroup[0]" % EXCEL_WINDOW_ELEM
+    EXCEL_WINDOW_TOP_PART_ELEM = EXCEL_WINDOW_ELEM + "/AXTabGroup[0]"
 
-    POPUP_CONTAINER_ELEM = "%s/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/" \
-                           "AXWebArea[0]" % EXCEL_WINDOW_ELEM
+    POPUP_CONTAINER_ELEM = EXCEL_WINDOW_ELEM + "/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/" \
+                           "AXWebArea[0]"
 
-    DISPLAY_ATTRIBUTE_FORM_ELEM = "%s/AXGroup[2]" % POPUP_CONTAINER_ELEM
+    DISPLAY_ATTRIBUTE_FORM_ELEM = POPUP_CONTAINER_ELEM + "/AXGroup[2]"
 
-    POPUP_WRAPPER_ELEM = "%s/AXGroup[@AXDOMIdentifier='popup-wrapper']" % POPUP_CONTAINER_ELEM
+    POPUP_WRAPPER_ELEM = POPUP_CONTAINER_ELEM + "/AXGroup[@AXDOMIdentifier='popup-wrapper']"
 
-    RIGHT_SIDE_PANEL_ELEM = "%s/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/AXGroup[0]/" \
-                            "AXScrollArea[0]/AXWebArea[0]" % EXCEL_WINDOW_ELEM
+    RIGHT_SIDE_PANEL_ELEM = EXCEL_WINDOW_ELEM + "/AXSplitGroup[0]/AXGroup/AXGroup[0]/AXGroup[0]/" \
+                                                "AXGroup[0]/AXScrollArea[0]/AXWebArea[0]"
 
-    RIGHT_SIDE_PANEL_OVERLAY_ELEM = "%s/AXGroup[@AXDOMIdentifier='overlay']" % RIGHT_SIDE_PANEL_ELEM
+    RIGHT_SIDE_PANEL_OVERLAY_ELEM = RIGHT_SIDE_PANEL_ELEM + "/AXGroup[@AXDOMIdentifier='overlay']"
 
-    RIGHT_SIDE_PANEL_DIALOG_ELEM = "%s/AXGroup[@AXSubrole='AXApplicationDialog']" % RIGHT_SIDE_PANEL_ELEM
+    RIGHT_SIDE_PANEL_DIALOG_ELEM = RIGHT_SIDE_PANEL_ELEM + "/AXGroup[@AXSubrole='AXApplicationDialog']"
 
     SEARCH_ELEMENT_INTERVAL = 0.1
 
