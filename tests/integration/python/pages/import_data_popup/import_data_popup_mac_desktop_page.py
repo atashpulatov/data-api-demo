@@ -8,7 +8,6 @@ class ImportDataPopupMacDesktopPage(BaseMacDesktopPage):
                              "AXCheckBox[@AXSubrole='AXSwitch']" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
 
     MY_LIBRARY_SWITCH_VALUE_ATTR = 'AXValue'
-    
     MY_LIBRARY_SWITCH_VALUE_ATTR_ON_VALUE = '1'
 
     SEARCH_BAR_ELEM = "%s/AXGroup[0]/AXGroup[3]/AXTextField[0]" % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
@@ -22,7 +21,6 @@ class ImportDataPopupMacDesktopPage(BaseMacDesktopPage):
                           % BaseMacDesktopPage.POPUP_WRAPPER_ELEM
 
     FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_X = 100
-
     FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_Y = 60
 
     def __init__(self):
