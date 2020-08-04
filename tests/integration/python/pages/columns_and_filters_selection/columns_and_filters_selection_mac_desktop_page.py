@@ -20,8 +20,9 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
     ATTRIBUTE_FORM_DROPDOWN_ITEM = BaseMacDesktopPage.DISPLAY_ATTRIBUTE_FORM_ELEM + "/AXList[0]/" \
                                                                                     "AXStaticText[@AXTitle='%s']"
 
-    COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[2]/" \
-                                              "AXStaticText[@AXValue='Columns & Filters Selection']"
+    COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[2]/AXStaticText" \
+                                                                                      "[@AXValue=" \
+                                                                                      "'Columns & Filters Selection']"
 
     ATTRIBUTE_FORM_TOGGLER_OFFSET_X = 7
     ATTRIBUTE_FORM_TOGGLER_OFFSET_Y = 16

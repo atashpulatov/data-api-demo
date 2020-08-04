@@ -11,8 +11,7 @@ class BaseMacDesktopPage(BasePage):
 
     EXCEL_WINDOW_TOP_PART_ELEM = EXCEL_WINDOW_ELEM + "/AXTabGroup[0]"
 
-    POPUP_CONTAINER_ELEM = EXCEL_WINDOW_ELEM + "/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/" \
-                           "AXWebArea[0]"
+    POPUP_CONTAINER_ELEM = EXCEL_WINDOW_ELEM + "/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXScrollArea[0]/AXWebArea[0]"
 
     DISPLAY_ATTRIBUTE_FORM_ELEM = POPUP_CONTAINER_ELEM + "/AXGroup[2]"
 

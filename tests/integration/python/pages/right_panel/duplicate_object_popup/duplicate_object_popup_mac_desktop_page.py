@@ -7,7 +7,9 @@ class DuplicateObjectPopupMacDesktopPage(BaseMacDesktopPage):
     DUPLICATE_POPUP_EDIT_BUTTON = BaseMacDesktopPage.RIGHT_SIDE_PANEL_DIALOG_ELEM + "/AXButton[2]"
 
     DUPLICATE_POPUP_ACTIVE_CELL_OPTION = BaseMacDesktopPage.RIGHT_SIDE_PANEL_DIALOG_ELEM + "/AXGroup[2]/" \
-                                         "AXRadioButton[@AXDOMIdentifier='active_cell']"
+                                                                                           "AXRadioButton" \
+                                                                                           "[@AXDOMIdentifier=" \
+                                                                                           "'active_cell']"
 
     def __init__(self):
         super().__init__()

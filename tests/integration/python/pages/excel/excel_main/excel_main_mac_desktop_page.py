@@ -6,11 +6,13 @@ from util.util import Util
 
 
 class ExcelMainMacDesktopPage(BaseMacDesktopPage):
-    NEW_BLANK_WORKBOOK_ELEM = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXTitle='Open new and recent " \
-                              "files' and @AXIdentifier='DocStage' and @AXSubrole='AXStandardWindow']/" \
-                              "AXScrollArea[0]/AXList[@AXSubrole='AXCollectionList']/AXList[@AXSubrole=" \
-                              "'AXSectionList']/AXGroup[@AXIdentifier='DocsUITemplate']/AXButton[@AXTitle=" \
-                              "'Blank Workbook']"
+    NEW_BLANK_WORKBOOK_ELEM = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXTitle='Open new and recent files' " \
+                                                                  "and @AXIdentifier='DocStage' and @AXSubrole=" \
+                                                                  "'AXStandardWindow']/AXScrollArea[0]/AXList" \
+                                                                  "[@AXSubrole='AXCollectionList']/AXList[@AXSubrole=" \
+                                                                  "'AXSectionList']/AXGroup[@AXIdentifier=" \
+                                                                  "'DocsUITemplate']/AXButton[@AXTitle=" \
+                                                                  "'Blank Workbook']"
 
     GROUPS_OF_MY_ADD_INS_DROP_DOWN = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[%s]"
     MY_ADD_INS_DROP_DOWN = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[%s]/AXMenuButton"
@@ -19,9 +21,10 @@ class ExcelMainMacDesktopPage(BaseMacDesktopPage):
     MY_ADD_INS_DROPDOWN_ARROW_OFFSET_X = 93
     MY_ADD_INS_DROPDOWN_ARROW_OFFSET_Y = 20
 
-    ADD_IN_MENU_ELEMS = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXTitle='My Add-ins' and " \
-                        "@AXSubrole='AXUnknown']/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXRadioButton" \
-                        "[@AXIdentifier='popover_gallery_OfficeExtensionsGallery2_Control_0_%s']"
+    ADD_IN_MENU_ELEMS = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXTitle='My Add-ins' and @AXSubrole=" \
+                                                            "'AXUnknown']/AXGroup[0]/AXGroup[0]/AXGroup[0]" \
+                                                            "/AXRadioButton[@AXIdentifier=" \
+                                                            "'popover_gallery_OfficeExtensionsGallery2_Control_0_%s']"
     ADD_IN_MENU_ELEM_ATTRIBUTE_NAME = 'AXDescription'
 
     def click_new_blank_workbook_elem(self):
