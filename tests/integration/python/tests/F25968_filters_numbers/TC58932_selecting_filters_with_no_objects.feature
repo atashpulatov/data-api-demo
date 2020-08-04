@@ -7,13 +7,13 @@ Feature: F25968 - Filters numbers
       And MyLibrary Switch is OFF
 
       And I clicked Filters button
-      And I opened owners all panel
-      And I selected all within all panel
-      And I clicked "Certified" from "Certified Status"
-     Then the first empty element in all panel should be selected
+      And I opened All for Owner category
+      And I clicked Select All within All Panel
+      And I clicked "Certified" from "Certified Status" category
+     Then the first element with 0 objects in All Panel should be selected
 
-     When I clicked first empty element in all panel
-     Then the first empty element in all panel should NOT be selected
+     When I clicked first element with 0 objects in All Panel
+     Then the first element with 0 objects in All Panel should NOT be selected
 
-     When I clicked first empty element in all panel
-     Then the first empty element in all panel should NOT be selected
+     When I clicked first element with 0 objects in All Panel
+     Then the first element with 0 objects in All Panel should NOT be selected
