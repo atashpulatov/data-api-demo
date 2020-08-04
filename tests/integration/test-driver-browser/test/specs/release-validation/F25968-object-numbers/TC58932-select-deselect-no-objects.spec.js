@@ -26,7 +26,6 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Owner');
-    // div.category-list-wrapper:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > label:nth-child(1)
     PluginPopup.clickSelectAll();
     PluginPopup.tickFilterCheckBox('Certified Status', 'Certified');
 
