@@ -35,10 +35,6 @@ class AbstractPagesSet(ABC):
         pass
 
     @abstractmethod
-    def filter_panel_page(self):
-        pass
-
-    @abstractmethod
     def import_data_popup_page(self):
         pass
 
@@ -84,4 +80,8 @@ class AbstractPagesSet(ABC):
 
     @abstractmethod
     def range_taken_popup_page(self):
+        pass
+
+    @abstractmethod
+    def filter_panel_page(self):
         pass

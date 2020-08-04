@@ -67,9 +67,6 @@ class PagesSetBrowser(AbstractPagesSet):
     def right_panel_tile_page(self):
         return self.right_panel_tile_browser_page
 
-    def filter_panel_page(self):
-        return self.filter_panel_browser_page
-
     def import_data_popup_page(self):
         return self.import_data_popup_browser_page
 
@@ -105,3 +102,6 @@ class PagesSetBrowser(AbstractPagesSet):
 
     def range_taken_popup_page(self):
         return self.range_taken_popup_browser_page
+
+    def filter_panel_page(self):
+        return self.filter_panel_browser_page

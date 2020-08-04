@@ -21,13 +21,6 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     def click_element_from_list(self, category, element):
         self.get_element_by_css(FilterPanelBrowserPage.ELEMENT_FROM_CATEGORY % (category, element)).click()
 
-    def examine_if_element_is_checked(self, element):
-        try:
-            element.find_element_by_css('input:checked')
-            return True
-        except NoSuchElementException:
-            return False
-
     def get_all_panel_first_empty_element(self):
         return self.get_element_by_css(FilterPanelBrowserPage.ALL_PANEL_EMPTY_ELEMENT)
 
@@ -36,4 +29,12 @@ class FilterPanelBrowserPage(BaseBrowserPage):
 
     def examine_if_first_empty_element_is_checked(self):
         element = self.get_all_panel_first_empty_element()
-        return self.examine_if_element_is_checked(element)
+
+        return self._examine_if_element_is_checked(element)
+
+    def _examine_if_element_is_checked(self, element):
+        try:
+            element.find_element_by_css('input:checked')
+            return True
+        except NoSuchElementException:
+            return False

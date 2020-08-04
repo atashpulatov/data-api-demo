@@ -1,6 +1,5 @@
 from behave import *
 
-from util.util import Util
 from util.assert_util import AssertUtil
 
 
@@ -27,10 +26,12 @@ def step_impl(context):
 @step('the first element with 0 objects in All Panel should be selected')
 def step_impl(context):
     is_checked = context.pages.filter_panel_page().examine_if_first_empty_element_is_checked()
+
     AssertUtil.assert_simple(is_checked, True)
 
 
 @step('the first element with 0 objects in All Panel should NOT be selected')
 def step_impl(context):
     is_checked = context.pages.filter_panel_page().examine_if_first_empty_element_is_checked()
+
     AssertUtil.assert_simple(is_checked, False)
