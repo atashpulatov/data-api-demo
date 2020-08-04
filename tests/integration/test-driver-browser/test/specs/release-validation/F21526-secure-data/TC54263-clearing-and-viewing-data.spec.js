@@ -1,7 +1,6 @@
 import officeLogin from '../../../helpers/office/office.login';
 import PluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
 import PluginPopup from '../../../helpers/plugin/plugin.popup';
-import { waitForNotification } from '../../../helpers/utils/wait-helper';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import {
   switchToPluginFrame, switchToExcelFrame, changeBrowserTab, switchToRightPanelFrame
@@ -133,28 +132,26 @@ describe('F21526 - Secure data - clearing data', () => {
     switchToPluginFrame();
     PluginRightPanel.logout();
 
-    // COMMENTED OUT AS THERE'RE PROBLEMS WITH THE USER MARTYNA; IT'LL BE TESTED AFTER SOLVING THE ISSUE
-    // logStep('should log in with Martyna user');
-    // browser.pause(1000);
-    // switchToRightPanelFrame();
-    // $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
-    // PluginRightPanel.clickLoginRightPanelBtn();
-    // changeBrowserTab(2);
-    // PluginRightPanel.enterCredentialsAndPressLoginBtn('Martyna', '');
-    // changeBrowserTab(1);
+    logStep('should log in with Martyna user');
+    browser.pause(1000);
+    switchToRightPanelFrame();
+    $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(2000, false);
+    PluginRightPanel.clickLoginRightPanelBtn();
+    changeBrowserTab(2);
+    PluginRightPanel.enterCredentialsAndPressLoginBtn('Martyna', '');
+    changeBrowserTab(1);
 
-    // logStep(`should click "View Data"`);
-    // switchToPluginFrame();
-    // PluginRightPanel.viewDataBtn();
-    // waitForNotification();
-    // expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(emptyObject);
-    // PluginRightPanel.waitAndCloseNotification(reportRefreshed);
+    logStep(`should click "View Data"`);
+    switchToPluginFrame();
+    PluginRightPanel.viewDataBtn();
+    PluginRightPanel.waitAndCloseNotification(reportRefreshed);
+    PluginRightPanel.waitAndCloseNotification(emptyObject);
 
-    // logStep(`should assert data was refreshed`);
-    // switchToExcelFrame();
-    // officeWorksheet.selectCell('A2');
-    // expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
-    // officeWorksheet.selectCell('E2');
-    // expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Albania`);
+    logStep(`should assert data was refreshed`);
+    switchToExcelFrame();
+    officeWorksheet.selectCell('A2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
+    officeWorksheet.selectCell('E2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Albania`);
   });
 });
