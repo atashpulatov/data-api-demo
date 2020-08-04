@@ -82,3 +82,6 @@ class PagesSetMacDesktop(AbstractPagesSet):
 
     def range_taken_popup_page(self):
         pass
+
+    def filter_panel_page(self):
+        pass

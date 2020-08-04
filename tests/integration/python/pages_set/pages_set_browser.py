@@ -5,6 +5,7 @@ from pages.excel.cleanup.cleanup_browser_page import CleanupBrowserPage
 from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
 from pages.excel.start_excel.start_excel_browser_page import StartExcelBrowserPage
+from pages.filter_panel.filter_panel_browser_page import FilterPanelBrowserPage
 from pages.import_data_popup.import_data_popup_browser_page import ImportDataPopupBrowserPage
 from pages.import_dossier.import_dossier.import_dossier_browser_page import ImportDossierBrowserPage
 from pages.import_dossier.import_dossier_bookmarks.import_dossier_bookmarks_browser_page import \
@@ -34,6 +35,7 @@ class PagesSetBrowser(AbstractPagesSet):
         self.cleanup_browser_page = CleanupBrowserPage()
         self.right_panel_browser_page = RightPanelBrowserPage()
         self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
+        self.filter_panel_browser_page = FilterPanelBrowserPage()
         self.import_data_popup_browser_page = ImportDataPopupBrowserPage()
         self.excel_sheet_browser_page = ExcelSheetBrowserPage()
         self.columns_and_filters_selection_browser_page = ColumnsAndFiltersSelectionBrowserPage()
@@ -100,3 +102,6 @@ class PagesSetBrowser(AbstractPagesSet):
 
     def range_taken_popup_page(self):
         return self.range_taken_popup_browser_page
+
+    def filter_panel_page(self):
+        return self.filter_panel_browser_page

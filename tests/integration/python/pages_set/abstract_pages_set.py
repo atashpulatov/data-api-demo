@@ -81,3 +81,7 @@ class AbstractPagesSet(ABC):
     @abstractmethod
     def range_taken_popup_page(self):
         pass
+
+    @abstractmethod
+    def filter_panel_page(self):
+        pass
