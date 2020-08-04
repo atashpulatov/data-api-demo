@@ -19,9 +19,6 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     def click_select_all_within_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.SELECT_ALL_WITHIN_ALL_PANEL).click()
 
-    def click_select_all_within_all_panel(self):
-        self.get_element_by_css(FilterPanelBrowserPage.SELECT_ALL_WITHIN_ALL_PANEL).click()
-
     def click_element_from_list(self, category, element):
         self.get_element_by_css(FilterPanelBrowserPage.ELEMENT_FROM_CATEGORY % (category, element)).click()
 
