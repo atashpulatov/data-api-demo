@@ -34,6 +34,6 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     def click_all_panel_first_empty_element(self):
         return self.get_all_panel_first_empty_element().click()
 
-    def examine_if_first_empty_element_is_checked(self, element):
+    def examine_if_first_empty_element_is_checked(self):
         element = self.get_all_panel_first_empty_element()
         return self.examine_if_element_is_checked(element)
