@@ -11,18 +11,17 @@ export function switchToDialogFrame() {
 }
 
 export function switchToExcelFrame() {
-  const endTime = Date.now() + 120 * 1000;
-  let i = 1;
-  while(Date.now() < endTime){
-    try {
-      browser.switchToFrame(null);
-      $('#WebApplicationFrame').waitForDisplayed(20000);
-      browser.switchToFrame($('#WebApplicationFrame'));
+  browser.pause(2000);
+  for (let i = 0; i < 15; i++) {
+    browser.switchToFrame(null);
+    if($('#WebApplicationFrame').isDisplayed()) {
+      browser.switchToFrame($('#WebApplicationFrame')); 
       return;
-    } catch(e) {
-      console.log(`Element '#WebApplicationFrame' not found. Retrying for the ${++i} time.`)
-    }
-  } 
+    } 
+    console.log(`Element '#WebApplicationFrame' not found. Retrying`);
+    browser.pause(2000);
+  }
+  throw new Error(`Element '#WebApplicationFrame' could not be found.`)
 }
 
 // This frame is used for report prompt window and visualizations window
