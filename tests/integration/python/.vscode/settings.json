@@ -2,7 +2,7 @@
     "cucumberautocomplete.steps": [
         "tests/steps/*.py"
     ],
-    "cucumberautocomplete.syncfeatures": "tests/*/*feature",
+    "cucumberautocomplete.syncfeatures": "tests/features/*/*feature",
     "cucumberautocomplete.smartSnippets": true,
     "python.pythonPath": "venv_mac/bin/python3",
     "python.linting.enabled": true,

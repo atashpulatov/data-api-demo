@@ -12,7 +12,7 @@
 "cucumberautocomplete.steps": [
     "tests/integration/python/tests/steps/*.py"
 ],
-"cucumberautocomplete.syncfeatures": "tests/integration/python/tests/*/*feature",
+"cucumberautocomplete.syncfeatures": "tests/integration/python/tests/features/*/*feature",
 ```
 
 - restart `Visual Studio Code`

@@ -3,7 +3,7 @@
 To add a new test:
 
 1. Add `.feature` test file written in [Gherkin](https://cucumber.io/docs/gherkin/reference/),
-e.g. `tests/F25931_duplicate_object/TC64607_duplicate_object.feature`:
+e.g. `tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature`:
 
     ```gherkin
     @windows_desktop

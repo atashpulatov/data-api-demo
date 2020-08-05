@@ -60,7 +60,7 @@ starts from `Given` step (perhaps artificial), e.g. `Given I pass`.
 1. Run first test with `--logging-level=WARNING` and log capturing disabled, e.g.:
 
     ```console
-    behave --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/debug_features/empty.feature
+    behave --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/features/debug_features/empty.feature
     ```
  
 1. Copy `session_id` and `execution_url` (should look like this):

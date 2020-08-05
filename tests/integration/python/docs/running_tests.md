@@ -132,22 +132,22 @@ Examples of running tests (check [Test execution parameters](#test_executing_par
 
 ```bash
 # test single feature, default logging:
-behave tests/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging:
-behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging, redircting logs to files:
-behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt
+behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt
 
 # test single feature, no colors, verbose logging, all logs printed to console: 
-behave --tags=@mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave --tags=@mac_chrome --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test all features in F25931_duplicate_object directory, Mac Chrome, no colors, less verbose logging, all logs printed to console:
-behave --tags=@mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/F25931_duplicate_object/
+behave --tags=@mac_chrome --no-color --logging-level=WARNING --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/
 
 # test all features, no colors, only steps related information and errors logged, all logs printed to console:
-behave --tags=@mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/
+behave --tags=@mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/features/
 ```
 
 <a name="test_executing_parameters"></a>
