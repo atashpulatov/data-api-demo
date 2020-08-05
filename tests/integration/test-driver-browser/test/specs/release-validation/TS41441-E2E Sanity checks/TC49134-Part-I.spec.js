@@ -26,7 +26,7 @@ describe('TS41441 - Sanity checks', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
     PluginRightPanel.closeNotification();
 
-    // // should try to import a small report but placed in the last row of the excelsheet limits
+    // should try to import a small report but placed in the last row of the excelsheet limits
     OfficeWorksheet.selectCell('A1048575');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.importObject(objectsList.reports.seasonalReport);
@@ -34,7 +34,7 @@ describe('TS41441 - Sanity checks', () => {
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
     PluginRightPanel.closeNotification();
 
-    // // should try to import a small report but placed in the last column of the excelsheet limits
+    // should try to import a small report but placed in the last column of the excelsheet limits
     OfficeWorksheet.selectCell('XFD1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.importObject(objectsList.reports.seasonalReport);
