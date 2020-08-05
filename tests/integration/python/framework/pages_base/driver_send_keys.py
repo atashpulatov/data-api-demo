@@ -1,10 +1,10 @@
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 
-from driver.driver_factory import DriverFactory
-from util.config_util import ConfigUtil
-from util.const import AFTER_OPERATION_WAIT_TIME
-from util.util import Util
+from framework.driver.driver_factory import DriverFactory
+from framework.util.config_util import ConfigUtil
+from framework.util.const import AFTER_OPERATION_WAIT_TIME
+from framework.util.util import Util
 
 
 class DriverSendKeys:

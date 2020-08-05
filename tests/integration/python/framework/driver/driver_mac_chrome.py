@@ -1,4 +1,4 @@
-from driver.driver_chrome import DriverChrome
+from framework.driver.driver_chrome import DriverChrome
 
 
 class DriverMacChrome(DriverChrome):

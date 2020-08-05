@@ -1,9 +1,9 @@
-from driver.driver_factory import DriverFactory
-from driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
-from pages_base.image_element import ImageElement
+from framework.driver.driver_factory import DriverFactory
+from framework.driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
+from framework.pages_base.image_element import ImageElement
+from framework.util.config_util import ConfigUtil
+from framework.util.test_util import TestUtil
 from pages_set.pages_set_factory import PagesSetFactory
-from util.config_util import ConfigUtil
-from util.test_util import TestUtil
 
 
 def before_all(context):

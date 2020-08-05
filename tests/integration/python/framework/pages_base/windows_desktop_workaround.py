@@ -1,7 +1,7 @@
-from pages_base.image_element import ImageElement
-from util.config_util import ConfigUtil
-from util.exception.MstrException import MstrException
-from util.util import Util
+from framework.pages_base.image_element import ImageElement
+from framework.util.config_util import ConfigUtil
+from framework.util.exception.MstrException import MstrException
+from framework.util.util import Util
 
 
 class WindowsDesktopWorkaround:

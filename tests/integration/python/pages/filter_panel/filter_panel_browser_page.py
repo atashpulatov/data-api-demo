@@ -1,6 +1,6 @@
 from selenium.common.exceptions import NoSuchElementException
 
-from pages_base.base_browser_page import BaseBrowserPage
+from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
 class FilterPanelBrowserPage(BaseBrowserPage):

@@ -1,9 +1,9 @@
 from selenium.webdriver.common.keys import Keys
 
-from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from pages_base.image_element import ImageElement
-from util.const import ELEMENT_SEARCH_RETRY_NUMBER
-from util.exception.MstrException import MstrException
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.pages_base.image_element import ImageElement
+from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER
+from framework.util.exception.MstrException import MstrException
 
 
 class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):

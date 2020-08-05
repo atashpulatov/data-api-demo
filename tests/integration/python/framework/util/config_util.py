@@ -1,14 +1,14 @@
 import json
 import os
 
-from driver.driver_type import DRIVER_TYPE_WINDOWS_DESKTOP, AVAILABLE_DRIVERS, DRIVER_TYPE_MAC_CHROME, \
+from framework.driver.driver_type import DRIVER_TYPE_WINDOWS_DESKTOP, AVAILABLE_DRIVERS, DRIVER_TYPE_MAC_CHROME, \
     DRIVERS_SUPPORTING_IMAGE_RECOGNITION, DRIVER_TYPE_MAC_DESKTOP
-from util.exception.MstrException import MstrException
-from util.util import Util
+from framework.util.exception.MstrException import MstrException
+from framework.util.util import Util
 
 
 class ConfigUtil:
-    CONFIG_FILE_PATH = os.path.join('config', 'config.json')
+    CONFIG_FILE_PATH = os.path.join('framework', 'config', 'config.json')
 
     DRIVERS_SUPPORTING_ATTACHING_TO_EXISTING_SESSION = [
         DRIVER_TYPE_WINDOWS_DESKTOP,

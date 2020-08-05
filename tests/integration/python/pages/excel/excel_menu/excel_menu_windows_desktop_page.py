@@ -1,5 +1,5 @@
-from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from util.config_util import ConfigUtil
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.util.config_util import ConfigUtil
 
 
 class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):

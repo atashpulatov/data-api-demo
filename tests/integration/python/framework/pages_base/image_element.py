@@ -1,10 +1,10 @@
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
-from pages_base.base_element import BaseElement
-from util.const import AFTER_OPERATION_WAIT_TIME
-from util.exception.MstrException import MstrException
-from util.util import Util
+from framework.pages_base.base_element import BaseElement
+from framework.util.const import AFTER_OPERATION_WAIT_TIME
+from framework.util.exception.MstrException import MstrException
+from framework.util.util import Util
 
 
 class ImageElement(BaseElement):

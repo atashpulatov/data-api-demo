@@ -1,8 +1,8 @@
-from pages_base.base_mac_desktop_page import BaseMacDesktopPage
-from util.config_util import ConfigUtil
-from util.const import DEFAULT_WAIT_BETWEEN_CHECKS
-from util.exception.MstrException import MstrException
-from util.util import Util
+from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.config_util import ConfigUtil
+from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS
+from framework.util.exception.MstrException import MstrException
+from framework.util.util import Util
 
 
 class ExcelMainMacDesktopPage(BaseMacDesktopPage):

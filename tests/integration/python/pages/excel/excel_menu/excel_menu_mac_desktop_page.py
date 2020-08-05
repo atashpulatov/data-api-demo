@@ -1,5 +1,5 @@
-from pages_base.base_mac_desktop_page import BaseMacDesktopPage
-from util.config_util import ConfigUtil
+from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.config_util import ConfigUtil
 
 
 class ExcelMenuMacDesktopPage(BaseMacDesktopPage):

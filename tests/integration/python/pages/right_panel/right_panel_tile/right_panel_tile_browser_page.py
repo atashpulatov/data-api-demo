@@ -1,5 +1,5 @@
-from pages_base.base_browser_page import BaseBrowserPage
-from util.message_const import MessageConst
+from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.message_const import MessageConst
 
 
 class RightPanelTileBrowserPage(BaseBrowserPage):

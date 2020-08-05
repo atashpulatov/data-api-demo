@@ -8,12 +8,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-from driver.driver_factory import DriverFactory
-from util.config_util import ConfigUtil
-from util.const import DEFAULT_TIMEOUT, DEFAULT_IMAGE_TIMEOUT
-from util.const import DEFAULT_WAIT_BETWEEN_CHECKS
-from util.image_util import ImageUtil
-from util.util import Util
+from framework.driver.driver_factory import DriverFactory
+from framework.util.config_util import ConfigUtil
+from framework.util.const import DEFAULT_TIMEOUT, DEFAULT_IMAGE_TIMEOUT
+from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS
+from framework.util.image_util import ImageUtil
+from framework.util.util import Util
 
 
 class ElementCheck:

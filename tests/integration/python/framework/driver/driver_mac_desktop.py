@@ -1,9 +1,9 @@
 from appium import webdriver
 from urllib3.exceptions import MaxRetryError
 
-from driver.abstract_driver import AbstractDriver
-from util.config_util import ConfigUtil
-from util.exception.MstrException import MstrException
+from framework.driver.abstract_driver import AbstractDriver
+from framework.util.config_util import ConfigUtil
+from framework.util.exception.MstrException import MstrException
 
 
 class DriverMacDesktop(AbstractDriver):

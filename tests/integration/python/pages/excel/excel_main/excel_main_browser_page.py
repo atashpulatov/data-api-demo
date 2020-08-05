@@ -1,5 +1,5 @@
-from pages_base.base_browser_page import BasePage
-from util.util import Util
+from framework.pages_base.base_browser_page import BasePage
+from framework.util.util import Util
 
 
 class ExcelMainBrowserPage(BasePage):

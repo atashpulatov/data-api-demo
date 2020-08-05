@@ -1,11 +1,11 @@
 from appium import webdriver
 from urllib3.exceptions import MaxRetryError
 
-from driver.abstract_driver import AbstractDriver
-from util.config_util import ConfigUtil
-from util.const import DEFAULT_TIMEOUT
-from util.exception.MstrException import MstrException
-from util.util import Util
+from framework.driver.abstract_driver import AbstractDriver
+from framework.util.config_util import ConfigUtil
+from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.exception.MstrException import MstrException
+from framework.util.util import Util
 
 
 class DriverWindowsDesktop(AbstractDriver):

@@ -1,4 +1,4 @@
-from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 
 
 class DuplicateObjectPopupWindowsDesktopPage(BaseWindowsDesktopPage):

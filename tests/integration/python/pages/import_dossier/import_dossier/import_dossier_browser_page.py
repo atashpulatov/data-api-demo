@@ -1,6 +1,6 @@
+from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
-from pages_base.base_browser_page import BaseBrowserPage
-from util.exception.MstrException import MstrException
 
 
 class ImportDossierBrowserPage(BaseBrowserPage):

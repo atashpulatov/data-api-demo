@@ -8,6 +8,9 @@ from PIL import Image
 class ImageUtil:
     CURRENT_SCREENSHOT_FILE_NAME = 'current_screenshot'
 
+    SCREENSHOT_FOLDER = 'framework/screenshots'
+    SCREENSHOT_FILE_EXTENSION = '.png'
+
     TO_ALPHA_REGEX = re.compile('\W')
 
     def save_current_screenshot(self, driver):
@@ -44,7 +47,7 @@ class ImageUtil:
 
     def prepare_file_path(self, file_name_prefix):
         file_name_prefix_alpha = ImageUtil.TO_ALPHA_REGEX.sub('_', file_name_prefix)
-        file_name = ''.join((file_name_prefix_alpha.lower(), '.png'))
-        file_path = os.path.join('screenshots', file_name)
+        file_name = ''.join((file_name_prefix_alpha.lower(), ImageUtil.SCREENSHOT_FILE_EXTENSION))
+        file_path = os.path.join(ImageUtil.SCREENSHOT_FOLDER, file_name)
 
         return file_path

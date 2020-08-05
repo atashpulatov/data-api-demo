@@ -2,7 +2,7 @@ import json
 
 from behave import *
 
-from util.assert_util import AssertUtil
+from framework.util.assert_util import AssertUtil
 
 
 @step('I selected cell "{cell_name}"')

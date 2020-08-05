@@ -72,8 +72,8 @@ line parameter.
     pip install opencv-python-headless
     pip install pyperclip
 
-1. Ensure the version of `resources\chromedriverNN.exe` is the same as the version (NN) of Chrome browser installed
-in Windows.
+1. Ensure the version of `framework\resources\chromedriverNN.exe` is the same as the version (NN) of Chrome browser
+installed in Windows.
 
 1. Ensure `driver_path_windows_chrome` configuration variable is set correctly (in `config.json` or as a command
 line parameter).
@@ -132,17 +132,17 @@ line parameter).
     pip install pyperclip
     ```
 
-1. Ensure the version of `resources/chromedriverNN` is the same as the version (NN) of Chrome browser installed
-and this file has proper permissions (-rwxr-xr-x):
+1. Ensure the version of `framework/resources/chromedriverNN` is the same as the version (NN) of Chrome browser
+installed and this file has proper permissions (-rwxr-xr-x):
 
     ```console
-    -rwxr-xr-x  1 user  group  15093428 Jun 22 17:38 resources/chromedriverNN
+    -rwxr-xr-x  1 user  group  15093428 Jun 22 17:38 framework/resources/chromedriverNN
     ```
     
     To change permission execute from shell:
     
     ```console
-    chmod a+rx resources/chromedriverNN
+    chmod a+rx framework/resources/chromedriverNN
     ```
 
 1. Ensure `driver_path_mac_chrome` configuration variable is set correctly (in `config.json` or as a command

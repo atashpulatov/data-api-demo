@@ -1,5 +1,5 @@
-from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from util.exception.MstrException import MstrException
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.util.exception.MstrException import MstrException
 
 
 class ImportDossierWindowsDesktopPage(BaseWindowsDesktopPage):

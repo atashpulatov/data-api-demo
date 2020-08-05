@@ -1,4 +1,4 @@
-from pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
 
 
 class RightPanelMacDesktopPage(BaseMacDesktopPage):

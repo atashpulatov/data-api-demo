@@ -2,10 +2,10 @@ from selenium.common.exceptions import ElementClickInterceptedException, NoSuchE
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
-from util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
+from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
     ELEMENT_SEARCH_RETRY_NUMBER
-from util.exception.MstrException import MstrException
-from util.util import Util
+from framework.util.exception.MstrException import MstrException
+from framework.util.util import Util
 
 
 class BaseElement:

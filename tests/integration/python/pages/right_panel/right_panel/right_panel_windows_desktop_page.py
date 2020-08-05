@@ -1,5 +1,5 @@
-from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 
 
 class RightPanelWindowsDesktopPage(BaseWindowsDesktopPage):

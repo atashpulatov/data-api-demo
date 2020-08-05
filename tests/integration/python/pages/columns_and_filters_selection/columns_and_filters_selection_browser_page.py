@@ -1,6 +1,6 @@
 import json
 
-from pages_base.base_browser_page import BaseBrowserPage
+from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
 class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):

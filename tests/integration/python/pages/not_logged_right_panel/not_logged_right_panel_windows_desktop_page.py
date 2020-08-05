@@ -1,6 +1,6 @@
-from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from pages_base.image_element import ImageElement
-from pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.pages_base.image_element import ImageElement
+from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 
 
 class NotLoggedRightPanelWindowsDesktopPage(BaseWindowsDesktopPage):

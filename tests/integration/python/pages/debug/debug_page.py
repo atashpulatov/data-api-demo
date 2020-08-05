@@ -1,4 +1,4 @@
-from pages_base.base_page import BasePage
+from framework.pages_base.base_page import BasePage
 
 
 class DebugPage(BasePage):

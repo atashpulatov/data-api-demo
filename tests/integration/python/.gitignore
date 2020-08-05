@@ -135,4 +135,4 @@ dmypy.json
 *.iml
 
 # images used for image recognition
-screenshots/*.png
+framework/screenshots/*.png

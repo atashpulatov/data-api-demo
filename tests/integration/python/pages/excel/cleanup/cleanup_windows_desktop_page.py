@@ -1,5 +1,5 @@
-from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from util.util import Util
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.util.util import Util
 
 
 class CleanupWindowsDesktopPage(BaseWindowsDesktopPage):

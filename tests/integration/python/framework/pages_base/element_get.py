@@ -6,12 +6,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
-from pages_base.base_element import BaseElement
-from pages_base.element_check import ElementCheck
-from pages_base.image_element import ImageElement
-from util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER
-from util.exception.MstrException import MstrException
-from util.util import Util
+from framework.pages_base.base_element import BaseElement
+from framework.pages_base.element_check import ElementCheck
+from framework.pages_base.image_element import ImageElement
+from framework.util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER
+from framework.util.exception.MstrException import MstrException
+from framework.util.util import Util
 
 
 class ElementGet(ElementCheck):

@@ -1,5 +1,5 @@
-from pages_base.base_page import BasePage
-from util.exception.MstrException import MstrException
+from framework.pages_base.base_page import BasePage
+from framework.util.exception.MstrException import MstrException
 
 
 class BaseMacDesktopPage(BasePage):

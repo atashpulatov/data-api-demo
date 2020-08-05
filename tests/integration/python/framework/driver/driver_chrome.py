@@ -3,9 +3,9 @@ from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webdriver import WebDriver
 
-from driver.abstract_driver import AbstractDriver
-from util.config_util import ConfigUtil
-from util.util import Util
+from framework.driver.abstract_driver import AbstractDriver
+from framework.util.config_util import ConfigUtil
+from framework.util.util import Util
 
 
 class DriverChrome(AbstractDriver):

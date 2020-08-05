@@ -2,8 +2,8 @@ import re
 
 from selenium.webdriver.common.keys import Keys
 
-from pages_base.base_browser_page import BaseBrowserPage
-from util.const import DEFAULT_WAIT_AFTER_SEND_KEY
+from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY
 
 
 class ExcelSheetBrowserPage(BaseBrowserPage):

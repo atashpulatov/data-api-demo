@@ -1,8 +1,8 @@
-from driver.driver_factory import DriverFactory
-from pages_base.driver_send_keys import DriverSendKeys
-from pages_base.element_get import ElementGet
-from util.config_util import ConfigUtil
-from util.util import Util
+from framework.driver.driver_factory import DriverFactory
+from framework.pages_base.driver_send_keys import DriverSendKeys
+from framework.pages_base.element_get import ElementGet
+from framework.util.config_util import ConfigUtil
+from framework.util.util import Util
 
 
 class BasePage(ElementGet, DriverSendKeys):

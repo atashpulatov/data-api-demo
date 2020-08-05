@@ -1,5 +1,5 @@
-from driver.driver_factory import DriverFactory
-from util.config_util import ConfigUtil
+from framework.driver.driver_factory import DriverFactory
+from framework.util.config_util import ConfigUtil
 
 
 class TestUtil:

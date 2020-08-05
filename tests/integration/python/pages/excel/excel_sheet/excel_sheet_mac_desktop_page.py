@@ -2,8 +2,8 @@ import re
 
 from selenium.webdriver.common.keys import Keys
 
-from pages_base.base_mac_desktop_page import BaseMacDesktopPage
-from util.util import Util
+from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.util import Util
 
 
 class ExcelSheetMacDesktopPage(BaseMacDesktopPage):

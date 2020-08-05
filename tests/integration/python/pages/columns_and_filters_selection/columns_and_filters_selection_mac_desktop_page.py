@@ -1,7 +1,7 @@
 import json
 
-from pages_base.base_mac_desktop_page import BaseMacDesktopPage
-from util.const import DEFAULT_WAIT_BETWEEN_CHECKS
+from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS
 
 
 class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):

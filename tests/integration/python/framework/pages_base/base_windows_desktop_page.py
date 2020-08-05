@@ -1,6 +1,6 @@
-from pages_base.base_page import BasePage
-from util.const import ELEMENT_SEARCH_RETRY_NUMBER, DEFAULT_WAIT_AFTER_EXCEPTION
-from util.exception.MstrException import MstrException
+from framework.pages_base.base_page import BasePage
+from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER, DEFAULT_WAIT_AFTER_EXCEPTION
+from framework.util.exception.MstrException import MstrException
 
 
 class BaseWindowsDesktopPage(BasePage):

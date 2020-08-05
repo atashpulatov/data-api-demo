@@ -153,9 +153,9 @@ behave --tags=@mac_chrome --no-color --logging-level=ERROR --no-capture-stderr -
 <a name="test_executing_parameters"></a>
 ### 3. Test execution parameters
 
-All custom parameters values can be defined in [config.json](config/config.json) file or as `behave` command options
-(specified using `-D`, takes precedence over configuration file). For complete list of available custom parameters see
-[config.json](config/config.json).
+All custom parameters values can be defined in [config.json](../framework/config/config.json) file or as `behave` command 
+options (specified using `-D`, takes precedence over configuration file). For complete list of available custom
+parameters see [config.json](../framework/config/config.json).
 
 For `behave` options (no `-D` flag) see [behave documentation](https://behave.readthedocs.io/en/latest/).
 

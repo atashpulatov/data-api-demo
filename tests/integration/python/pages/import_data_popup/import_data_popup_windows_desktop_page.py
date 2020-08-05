@@ -1,10 +1,10 @@
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
+from framework.util.exception.MstrException import MstrException
+from framework.util.message_const import MessageConst
+from framework.util.util import Util
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
-from pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
-from util.exception.MstrException import MstrException
-from util.message_const import MessageConst
-from util.util import Util
 
 
 class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):

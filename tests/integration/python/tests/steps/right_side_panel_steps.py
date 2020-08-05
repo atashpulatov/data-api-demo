@@ -24,4 +24,3 @@ def step_impl(context):
 @step('I removed all objects')
 def step_impl(context):
     context.pages.right_panel_page().remove_all()
-

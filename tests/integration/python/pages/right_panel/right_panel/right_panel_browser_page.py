@@ -1,4 +1,4 @@
-from pages_base.base_browser_page import BaseBrowserPage
+from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
 class RightPanelBrowserPage(BaseBrowserPage):
@@ -30,7 +30,7 @@ class RightPanelBrowserPage(BaseBrowserPage):
             self.get_element_by_css(RightPanelBrowserPage.DOTS_MENU).click()
 
             self.get_element_by_id(RightPanelBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()
-    
+
     def refresh_all(self):
         self.focus_on_add_in_frame()
 

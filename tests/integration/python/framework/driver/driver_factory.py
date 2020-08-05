@@ -1,9 +1,9 @@
-from driver.driver_mac_chrome import DriverMacChrome
-from driver.driver_mac_desktop import DriverMacDesktop
-from driver.driver_type import DRIVER_TYPE_MAC_CHROME, DRIVER_TYPE_MAC_DESKTOP, DRIVER_TYPE_WINDOWS_DESKTOP, \
+from framework.driver.driver_mac_chrome import DriverMacChrome
+from framework.driver.driver_mac_desktop import DriverMacDesktop
+from framework.driver.driver_type import DRIVER_TYPE_MAC_CHROME, DRIVER_TYPE_MAC_DESKTOP, DRIVER_TYPE_WINDOWS_DESKTOP, \
     DRIVER_TYPE_WINDOWS_CHROME
-from driver.driver_windows_chrome import DriverWindowsChrome
-from driver.driver_windows_desktop import DriverWindowsDesktop
+from framework.driver.driver_windows_chrome import DriverWindowsChrome
+from framework.driver.driver_windows_desktop import DriverWindowsDesktop
 
 
 class DriverFactory:

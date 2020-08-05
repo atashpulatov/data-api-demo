@@ -1,6 +1,6 @@
+from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.message_const import MessageConst
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
-from pages_base.base_mac_desktop_page import BaseMacDesktopPage
-from util.message_const import MessageConst
 
 
 class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
