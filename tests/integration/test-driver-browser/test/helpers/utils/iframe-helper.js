@@ -11,15 +11,14 @@ export function switchToDialogFrame() {
 }
 
 export function switchToExcelFrame() {
-  browser.pause(2000);
   for (let i = 0; i < 15; i++) {
+    browser.pause(2000);
     browser.switchToFrame(null);
     if($('#WebApplicationFrame').isDisplayed()) {
       browser.switchToFrame($('#WebApplicationFrame')); 
       return;
     } 
     console.log(`Element '#WebApplicationFrame' not found. Retrying`);
-    browser.pause(2000);
   }
   throw new Error(`Element '#WebApplicationFrame' could not be found.`)
 }
