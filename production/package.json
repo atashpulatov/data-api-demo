@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@mstr/mstr-react-library": "^1.7.24",
-    "@mstr/connector-components": "^0.1.8",
+    "@mstr/connector-components": "^0.1.11",
     "@types/jest": "^25.1.3",
     "antd": "^3.26.2",
     "core-js": "^3.5.0",
