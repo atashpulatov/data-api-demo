@@ -2,7 +2,8 @@ from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.image_element import ImageElement
-from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER
+from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
+from framework.util.excel_util import ExcelUtil
 from framework.util.exception.MstrException import MstrException
 
 
@@ -43,7 +44,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         i = 0
         while i < ELEMENT_SEARCH_RETRY_NUMBER and not self._go_to_cell_single_check(cell_upper, root_element):
-            self.pause(5)
+            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
             i += 1
 
     def _go_to_cell_single_check(self, cell_upper, element):
@@ -63,7 +64,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         cell_value = cell_elem.get_attribute(ExcelSheetWindowsDesktopPage.VALUE_ATTRIBUTE)
 
-        return cell_value if cell_value else ''
+        formatted_cell_value = ExcelUtil.format_cell_value(cell_value) if cell_value else ''
+
+        return formatted_cell_value
 
     def _get_selector_name(self, cell):
         cell_upper = cell.upper()

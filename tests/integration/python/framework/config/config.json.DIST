@@ -1,5 +1,5 @@
 {
-  "driver_type": "mac_chrome",
+  "driver_type": "windows_desktop",
   "image_recognition_enabled": true,
   "connect_to_existing_session_enabled": false,
   "browser_existing_session_executor_url": "",

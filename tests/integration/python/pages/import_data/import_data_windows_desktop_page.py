@@ -7,7 +7,7 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
     ColumnsAndFiltersSelectionWindowsDesktopPage
 
 
-class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
+class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     MY_LIBRARY_SWITCH_ELEM = 'My Library'
     FILTERS_BUTTON_ELEM = 'Filters'
 
@@ -37,35 +37,35 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
 
         # TODO check if is on or ignore to have better performance?
         self.get_element_by_name(
-            ImportDataPopupWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM,
-            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
+            ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
         ).click()
 
     def _is_on(self, element):
         aria_properties_value = self._get_element_aria_properties(element)
 
-        aria_properties = aria_properties_value.split(ImportDataPopupWindowsDesktopPage.ARIA_PROPERTIES_SEPARATOR)
+        aria_properties = aria_properties_value.split(ImportDataWindowsDesktopPage.ARIA_PROPERTIES_SEPARATOR)
 
         for property_value in aria_properties:
-            property_on_off = property_value.split(ImportDataPopupWindowsDesktopPage.ARIA_PROPERTY_SEPARATOR)
-            if property_on_off[0] == ImportDataPopupWindowsDesktopPage.ARIA_PROPERTY_CHECKED:
+            property_on_off = property_value.split(ImportDataWindowsDesktopPage.ARIA_PROPERTY_SEPARATOR)
+            if property_on_off[0] == ImportDataWindowsDesktopPage.ARIA_PROPERTY_CHECKED:
                 return property_on_off[1]
 
         raise MstrException('Missing Aria property')
 
     def _get_element_aria_properties(self, element):
-        return element.get_attribute(ImportDataPopupWindowsDesktopPage.ARIA_PROPERTIES_ATTRIBUTE)
+        return element.get_attribute(ImportDataWindowsDesktopPage.ARIA_PROPERTIES_ATTRIBUTE)
 
     def find_and_select_object(self, object_name):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         filters_elem = self.get_element_by_name(
-            ImportDataPopupWindowsDesktopPage.FILTERS_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.FILTERS_BUTTON_ELEM)
+            ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
         )
         filters_elem.click(
-            offset_x=ImportDataPopupWindowsDesktopPage.SEARCH_ELEM_OFFSET_X,
-            offset_y=ImportDataPopupWindowsDesktopPage.SEARCH_ELEM_OFFSET_Y
+            offset_x=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_X,
+            offset_y=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_Y
         )
         self.send_keys_raw(object_name)
 
@@ -77,8 +77,8 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self.get_element_by_name(
-            ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+            ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
         ).click()
 
         self.windows_desktop_workaround.focus_on_right_side_panel()
@@ -88,24 +88,24 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def click_import_button_to_import_with_error(self, error_message):
         self.get_element_by_name(
-            ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+            ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
         ).click()
 
         if not self.check_if_element_exists_by_name(error_message):
             raise MstrException('Different notification displayed')
 
         self.get_element_by_name(
-            ImportDataPopupWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK,
-            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK)
+            ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK)
         ).click()
 
     def click_import_button_to_open_import_dossier(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self.get_element_by_name(
-            ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+            ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
         ).click()
 
         self.pause(25)  # TODO check if loaded
@@ -114,6 +114,6 @@ class ImportDataPopupWindowsDesktopPage(BaseWindowsDesktopPage):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self.get_element_by_name(
-            ImportDataPopupWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataPopupWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
+            ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
         ).click()

@@ -3,7 +3,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
-    ELEMENT_SEARCH_RETRY_NUMBER
+    ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -86,6 +86,13 @@ class BaseElement:
     def get_element_by_xpath(self, selector):
         return self._get_element(By.XPATH, selector)
 
+    def check_if_child_element_exists_by_css(self, selector):
+        try:
+            self._get_element(By.CSS_SELECTOR, selector)
+            return True
+        except MstrException:
+            return False
+
     def _get_element(self, selector_type, selector):
         i = 0
         while i < ELEMENT_SEARCH_RETRY_NUMBER:
@@ -95,15 +102,10 @@ class BaseElement:
                 return BaseElement(raw_element, self.__driver)
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
-                Util.pause(5)
+                Util.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)
-
-    def find_element_by_css(self, selector):
-        raw_element = self.__element.find_element_by_css_selector(selector)
-
-        return BaseElement(raw_element, self.__driver)
 
     def get_elements_by_name(self, selector):
         raw_elements = self.__element.find_elements_by_name(selector)
@@ -124,7 +126,7 @@ class BaseElement:
                 return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
-                Util.pause(5)
+                Util.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
             i += 1
 
         raise MstrException('Cannot find elements: %s' % selector)

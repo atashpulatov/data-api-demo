@@ -2,7 +2,7 @@ from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPag
 from framework.util.exception.MstrException import MstrException
 
 
-class ImportDossierWindowsDesktopPage(BaseWindowsDesktopPage):
+class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
     VISUALIZATION_TILE = '//Button/Pane/Pane/Group'
 
     IMPORT_BUTTON = 'Import'
@@ -14,8 +14,8 @@ class ImportDossierWindowsDesktopPage(BaseWindowsDesktopPage):
         self.pause(5)  # TODO wait when ready
 
         self.get_element_by_name(
-            ImportDossierWindowsDesktopPage.IMPORT_BUTTON,
-            image_name=self.prepare_image_name(ImportDossierWindowsDesktopPage.IMPORT_BUTTON)
+            ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON,
+            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON)
         ).click()
 
         self.pause(5)  # TODO wait when ready
@@ -23,7 +23,7 @@ class ImportDossierWindowsDesktopPage(BaseWindowsDesktopPage):
     def _find_tile_by_name(self, visualization_name):
         popup_main_element = self.get_popup_main_element()
 
-        all_tiles = popup_main_element.find_elements_by_xpath(ImportDossierWindowsDesktopPage.VISUALIZATION_TILE)
+        all_tiles = popup_main_element.find_elements_by_xpath(ImportDossierMainWindowsDesktopPage.VISUALIZATION_TILE)
 
         for tile in all_tiles:
             if tile.text.startswith(visualization_name):

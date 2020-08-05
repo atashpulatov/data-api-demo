@@ -3,6 +3,7 @@ import re
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.excel_util import ExcelUtil
 from framework.util.util import Util
 
 
@@ -12,8 +13,7 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
     EDIT_FIND_MENU = EDIT_MENU + "/AXMenu[0]/AXMenuItem[@AXTitle='Find']"
     EDIT_FIND_GO_TO_MENU = EDIT_FIND_MENU + "/AXMenu[0]/AXMenuItem[@AXTitle='Go to...']"
 
-    GO_TO_PROMPT_INPUT = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXTitle='Go to' and" \
-                                                             "@AXSubrole='AXDialog']/AXTextField"
+    GO_TO_PROMPT_INPUT = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXTitle='Go to']/AXTextField"
 
     FORMAT_MENU = BaseMacDesktopPage.EXCEL_MENU_ELEM + "/AXMenuBarItem[@AXTitle='Format']"
     FORMAT_CELLS_MENU = FORMAT_MENU + "/AXMenu[0]/AXMenuItem[@AXTitle='Cells...']"
@@ -72,9 +72,11 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
 
         result = sample_element_text if len(sample_element_text) > 0 else ''
 
+        formatted_result = ExcelUtil.format_cell_value(result)
+
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_CELLS_PROMPT_CANCEL_BUTTON).click()
 
-        return result
+        return formatted_result
 
     def get_number_of_worksheets(self):
         tabs_elements = self._get_worksheet_tabs()

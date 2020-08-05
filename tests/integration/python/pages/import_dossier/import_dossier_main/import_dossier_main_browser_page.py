@@ -3,7 +3,7 @@ from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
-class ImportDossierBrowserPage(BaseBrowserPage):
+class ImportDossierMainBrowserPage(BaseBrowserPage):
     VISUALIZATION_RADIO_BUTTON = '.mstrmojo-VizBox-selector'
     VISUALIZATION_LABEL = '.mstrmojo-EditableLabel'
     VISUALIZATION_TILE = '.mstrmojo-UnitContainer'
@@ -32,7 +32,7 @@ class ImportDossierBrowserPage(BaseBrowserPage):
 
         tile = self._find_tile_by_name(visualization_name)
 
-        tile.get_element_by_css(ImportDossierBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
+        tile.get_element_by_css(ImportDossierMainBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
 
         self.pause(5)  # TODO wait when ready
 
@@ -41,18 +41,18 @@ class ImportDossierBrowserPage(BaseBrowserPage):
 
         tile = self._find_tile_by_name(visualization_name)
 
-        tile.get_element_by_css(ImportDossierBrowserPage.TILE_CONTEXT_MENU).move_to_and_click()
+        tile.get_element_by_css(ImportDossierMainBrowserPage.TILE_CONTEXT_MENU).move_to_and_click()
 
         self.find_element_in_list_by_text(
-            ImportDossierBrowserPage.CONTEXT_MENU_TEXT_ELEMENTS,
-            ImportDossierBrowserPage.CONTEXT_MENU_SHOW_DATA
+            ImportDossierMainBrowserPage.CONTEXT_MENU_TEXT_ELEMENTS,
+            ImportDossierMainBrowserPage.CONTEXT_MENU_SHOW_DATA
         ).click()
 
     def _find_tile_by_name(self, visualization_name):
-        all_tiles = self.get_elements_by_css(ImportDossierBrowserPage.VISUALIZATION_TILE)
+        all_tiles = self.get_elements_by_css(ImportDossierMainBrowserPage.VISUALIZATION_TILE)
 
         for tile in all_tiles:
-            label_element = tile.get_element_by_css(ImportDossierBrowserPage.VISUALIZATION_LABEL)
+            label_element = tile.get_element_by_css(ImportDossierMainBrowserPage.VISUALIZATION_LABEL)
             if label_element.text == visualization_name:
                 return tile
 
@@ -61,18 +61,18 @@ class ImportDossierBrowserPage(BaseBrowserPage):
     def click_import_visualization(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_id(ImportDossierBrowserPage.IMPORT_BUTTON).click()
+        self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_BUTTON).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
     def click_import_visualization_without_waiting_for_results(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_id(ImportDossierBrowserPage.IMPORT_BUTTON).click()
+        self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_BUTTON).click()
 
     def reset_dossier(self):
         self.focus_on_import_dossier_frame()
 
-        self.get_element_by_css(ImportDossierBrowserPage.RESET_BUTTON).click()
+        self.get_element_by_css(ImportDossierMainBrowserPage.RESET_BUTTON).click()
 
-        self.get_element_by_css(ImportDossierBrowserPage.RESET_CONFIRMATION_YES).click()
+        self.get_element_by_css(ImportDossierMainBrowserPage.RESET_CONFIRMATION_YES).click()

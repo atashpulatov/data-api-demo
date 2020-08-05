@@ -1,7 +1,7 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
-class RightPanelBrowserPage(BaseBrowserPage):
+class RightPanelMainBrowserPage(BaseBrowserPage):
     IMPORT_DATA_BUTTON_ELEM = '#overlay > div.side-panel > div.import-data > button'
     ADD_DATA_BUTTON_ELEM = 'add-data-btn'
 
@@ -16,31 +16,31 @@ class RightPanelBrowserPage(BaseBrowserPage):
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelBrowserPage.IMPORT_DATA_BUTTON_ELEM).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.IMPORT_DATA_BUTTON_ELEM).click()
 
     def click_add_data_button_element(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_id(RightPanelBrowserPage.ADD_DATA_BUTTON_ELEM).click()
+        self.get_element_by_id(RightPanelMainBrowserPage.ADD_DATA_BUTTON_ELEM).click()
 
     def logout(self):
         self.focus_on_add_in_frame()
 
-        if self.check_if_element_exists_by_css(RightPanelBrowserPage.DOTS_MENU, timeout=5):
-            self.get_element_by_css(RightPanelBrowserPage.DOTS_MENU).click()
+        if self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=5):
+            self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
 
-            self.get_element_by_id(RightPanelBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()
+            self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()
 
     def refresh_all(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
-        self.get_element_by_css(RightPanelBrowserPage.REFRESH_ALL).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_ALL).click()
 
     def remove_all(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
-        self.get_element_by_css(RightPanelBrowserPage.REMOVE_ALL).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.REMOVE_ALL).click()

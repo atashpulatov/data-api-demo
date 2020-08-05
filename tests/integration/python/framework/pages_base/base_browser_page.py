@@ -3,7 +3,7 @@ import time
 from selenium.common.exceptions import NoSuchFrameException, NoSuchWindowException
 
 from framework.pages_base.base_page import BasePage
-from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, DEFAULT_WAIT_AFTER_EXCEPTION
+from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_INTERVAL
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -11,7 +11,7 @@ from framework.util.util import Util
 class BaseBrowserPage(BasePage):
     EXCEL_FRAME_ELEM = 'WebApplicationFrame'
 
-    IMPORT_DATA_POPUP_FRAME_ELEM = '#WACDialogOuterContainer iframe'
+    IMPORT_DATA_FRAME_ELEM = '#WACDialogOuterContainer iframe'
 
     IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM = 'iframe[src*="popupType=navigation-tree&et="]'
     IMPORT_DOSSIER_INTERNAL_FRAME_ELEM = '.dossier-window > div > iframe'
@@ -52,7 +52,7 @@ class BaseBrowserPage(BasePage):
             except NoSuchWindowException:
                 self.log('NoSuchWindowException while executing focus_on_excel_frame()')
 
-            self.pause(DEFAULT_WAIT_AFTER_EXCEPTION)
+            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
             if time.time() > end_time:
                 raise MstrException('Cannot focus on excel frame')
@@ -60,7 +60,7 @@ class BaseBrowserPage(BasePage):
     def focus_on_import_data_pop_up_frame(self):
         self.focus_on_excel_frame()
 
-        popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.IMPORT_DATA_POPUP_FRAME_ELEM)
+        popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.IMPORT_DATA_FRAME_ELEM)
 
         self._switch_to_frame(popup_frame_element)
 
@@ -144,7 +144,7 @@ class BaseBrowserPage(BasePage):
             except Exception as e:
                 Util.log(e)
 
-            self.pause(DEFAULT_WAIT_AFTER_EXCEPTION)
+            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
             if time.time() > end_time:
                 break

@@ -1,4 +1,5 @@
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.test_util import TestUtil
 from framework.util.util import Util
 
 
@@ -19,5 +20,7 @@ class CleanupMacDesktopPage(BaseMacDesktopPage):
 
         self.get_element_by_xpath(CleanupMacDesktopPage.CONTEXT_MENU_QUIT_BUTTON).click()
         self.get_element_by_xpath(CleanupMacDesktopPage.DONT_SAVE_BUTTON_ELEM).click()
+
+        TestUtil.global_test_cleanup()
 
         Util.pause(3)

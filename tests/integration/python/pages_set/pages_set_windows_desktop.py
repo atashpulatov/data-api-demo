@@ -5,13 +5,14 @@ from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDeskt
 from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWindowsDesktopPage
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
 from pages.excel.start_excel.start_excel_windows_desktop_page import StartExcelWindowsDesktopPage
-from pages.import_data_popup.import_data_popup_windows_desktop_page import ImportDataPopupWindowsDesktopPage
-from pages.import_dossier.import_dossier.import_dossier_windows_desktop_page import ImportDossierWindowsDesktopPage
+from pages.import_data.import_data_windows_desktop_page import ImportDataWindowsDesktopPage
+from pages.import_dossier.import_dossier_main.import_dossier_main_windows_desktop_page import \
+    ImportDossierMainWindowsDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
 from pages.right_panel.duplicate_object_popup.duplicate_object_popup_windows_desktop_page import \
     DuplicateObjectPopupWindowsDesktopPage
-from pages.right_panel.right_panel.right_panel_windows_desktop_page import RightPanelWindowsDesktopPage
+from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
 
@@ -24,13 +25,13 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.add_in_login_windows_desktop_page = AddInLoginWindowsDesktopPage()
         self.excel_menu_windows_desktop_page = ExcelMenuWindowsDesktopPage()
         self.cleanup_windows_desktop_page = CleanupWindowsDesktopPage()
-        self.right_panel_windows_desktop_page = RightPanelWindowsDesktopPage()
+        self.right_panel_windows_desktop_page = RightPanelMainWindowsDesktopPage()
         self.right_panel_tile_windows_desktop_page = RightPanelTileWindowsDesktopPage()
-        self.import_data_popup_windows_desktop_page = ImportDataPopupWindowsDesktopPage()
+        self.import_data_windows_desktop_page = ImportDataWindowsDesktopPage()
         self.excel_sheet_windows_desktop_page = ExcelSheetWindowsDesktopPage()
         self.duplicate_object_popup_windows_desktop_page = DuplicateObjectPopupWindowsDesktopPage()
         self.columns_and_filters_selection_browser_page = ColumnsAndFiltersSelectionWindowsDesktopPage()
-        self.import_dossier_windows_desktop_page = ImportDossierWindowsDesktopPage()
+        self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()
         self.not_logged_right_panel_windows_desktop_page = NotLoggedRightPanelWindowsDesktopPage()
 
     def start_excel_page(self):
@@ -51,8 +52,8 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
     def right_panel_tile_page(self):
         return self.right_panel_tile_windows_desktop_page
 
-    def import_data_popup_page(self):
-        return self.import_data_popup_windows_desktop_page
+    def import_data_page(self):
+        return self.import_data_windows_desktop_page
 
     def excel_sheet_page(self):
         return self.excel_sheet_windows_desktop_page

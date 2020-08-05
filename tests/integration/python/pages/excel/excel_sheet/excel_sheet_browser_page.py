@@ -1,9 +1,8 @@
-import re
-
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY
+from framework.util.excel_util import ExcelUtil
 
 
 class ExcelSheetBrowserPage(BaseBrowserPage):
@@ -21,10 +20,6 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     WORKSHEETS_TABS = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div.ewa-stb-tabarea > ' \
                       'ul.ewa-stb-tabs > li'
-
-    NUMBER_WITH_COMMA_RE = re.compile('^\d*\.*\d*$')
-    NUMBER_DELIMITER_COMMA = ','
-    NUMBER_DELIMITER_DOT = '.'
 
     ADD_SHEET_BUTTON = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-navareaextra > a:nth-child(2)'
 
@@ -85,30 +80,12 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         sample_input_elem_value = sample_input_elem.get_attribute(self.FORMAT_CELLS_PROMPT_SAMPLE_VALUE_ATTR)
 
-        formatted_value = self._format_value(sample_input_elem_value)
+        formatted_value = ExcelUtil.format_cell_value(sample_input_elem_value)
 
         value_elem = self.get_elements_by_css(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)[1]
         value_elem.click()
 
         return formatted_value if formatted_value else ''
-
-    def _format_value(self, value):
-        """
-        Formats value.
-
-        For number with comma as decimal delimiter: 42,42 -> 42.42.
-
-        For other values no changes.
-
-        :param value: value to format
-        :return: formatted value.
-        """
-
-        if value and ExcelSheetBrowserPage.NUMBER_WITH_COMMA_RE.search(value):
-            return value.replace(ExcelSheetBrowserPage.NUMBER_DELIMITER_COMMA,
-                                 ExcelSheetBrowserPage.NUMBER_DELIMITER_DOT)
-
-        return value
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)

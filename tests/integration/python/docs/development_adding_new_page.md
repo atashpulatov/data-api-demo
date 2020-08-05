@@ -34,12 +34,12 @@ To add a new Page implementing Page Object Model:
                 self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
                 (...)
     
-            def import_data_popup_page(self):
-                return self.import_data_popup_browser_page
+            def import_data_page(self):
+                return self.import_data_browser_page
         ``` 
        - when Page is not yet implemented for a given Page Set:
         ```python
-            def import_data_popup_page(self):
+            def import_data_page(self):
                 pass
         ``` 
 

@@ -20,7 +20,7 @@ class AddInLoginMacDesktopPage(BaseMacDesktopPage):
         self.not_logged_right_panel_page.click_open_login_pop_up_button()
 
         username_field = self.get_element_by_xpath(AddInLoginMacDesktopPage.USERNAME_INPUT_ELEM)
-        username_field.send_keys(username)
+        username_field.send_keys_raw(username)
 
         password_field = self.get_element_by_xpath(AddInLoginMacDesktopPage.PASSWORD_INPUT_ELEM)
         password_field.send_keys_raw(password)

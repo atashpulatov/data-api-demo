@@ -22,8 +22,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(6)'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
-    NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' > div.object-tile-name-row > div.rename-input'
-    NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' > div.object-tile-name-row > input'
+    NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > div.rename-input'
+    NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > input'
 
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'

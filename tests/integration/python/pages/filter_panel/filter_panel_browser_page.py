@@ -1,5 +1,3 @@
-from selenium.common.exceptions import NoSuchElementException
-
 from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
@@ -8,6 +6,8 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     SELECT_ALL_WITHIN_ALL_PANEL = 'button.all-panel__button:nth-child(1)'
     ELEMENT_FROM_CATEGORY = '.category-list-header[aria-label="%s"] + .category-list-table label[title="%s"]'
     ALL_PANEL_EMPTY_ELEMENT = '.all-panel__content .category-list-row.disabled .checkbox-cell'
+
+    ELEMENT_CHECKED = 'input:checked'
 
     def __init__(self):
         super().__init__()
@@ -33,8 +33,4 @@ class FilterPanelBrowserPage(BaseBrowserPage):
         return self._examine_if_element_is_checked(element)
 
     def _examine_if_element_is_checked(self, element):
-        try:
-            element.find_element_by_css('input:checked')
-            return True
-        except NoSuchElementException:
-            return False
+        return element.check_if_child_element_exists_by_css(FilterPanelBrowserPage.ELEMENT_CHECKED)

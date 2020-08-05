@@ -1,6 +1,6 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.config_util import ConfigUtil
-from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER
+from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
 from framework.util.exception.MstrException import MstrException
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
 
@@ -27,6 +27,6 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
                 found_environment_elements[0].click()
                 return
 
-            self.pause(5)
+            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
         raise MstrException('Cannot find AddIn element.')

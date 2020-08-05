@@ -1,5 +1,5 @@
 from framework.pages_base.base_page import BasePage
-from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER, DEFAULT_WAIT_AFTER_EXCEPTION
+from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
 from framework.util.exception.MstrException import MstrException
 
 
@@ -17,7 +17,7 @@ class BaseWindowsDesktopPage(BasePage):
             mstr_elems = self.get_elements_by_name(BaseWindowsDesktopPage.POPUP_MAIN_ELEMENT)
             if not mstr_elems:
                 self.log_warning('Element not found, try %s: %s' % (i, BaseWindowsDesktopPage.POPUP_MAIN_ELEMENT))
-                self.pause(DEFAULT_WAIT_AFTER_EXCEPTION)
+                self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
             i += 1
 

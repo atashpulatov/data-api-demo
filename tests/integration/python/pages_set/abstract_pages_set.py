@@ -35,7 +35,7 @@ class AbstractPagesSet(ABC):
         pass
 
     @abstractmethod
-    def import_data_popup_page(self):
+    def import_data_page(self):
         pass
 
     @abstractmethod

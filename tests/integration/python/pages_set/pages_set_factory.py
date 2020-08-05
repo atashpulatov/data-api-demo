@@ -17,7 +17,10 @@ class PagesSetFactory:
         DRIVER_TYPE_MAC_CHROME: PagesSetBrowser,
     }
 
-    DRIVERS_REQUIRING_RESET = [DRIVER_TYPE_WINDOWS_DESKTOP]
+    DRIVERS_REQUIRING_RESET = [
+        DRIVER_TYPE_WINDOWS_DESKTOP,
+        DRIVER_TYPE_MAC_DESKTOP
+    ]
 
     pages = None
 

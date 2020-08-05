@@ -6,11 +6,6 @@ class DuplicateObjectPopupWindowsDesktopPage(BaseWindowsDesktopPage):
     DUPLICATE_POPUP_EDIT_BUTTON = 'Edit button'
     DUPLICATE_POPUP_ACTIVE_CELL_RADIO_BUTTON = 'Active Cell'
 
-    def __init__(self):
-        super().__init__()
-
-        # self.right_panel_browser_page = RightPanelBrowserPage()
-
     def click_import(self):
         self.get_element_by_name(
             DuplicateObjectPopupWindowsDesktopPage.DUPLICATE_POPUP_IMPORT_BUTTON,

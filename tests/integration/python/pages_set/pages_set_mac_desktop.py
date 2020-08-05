@@ -5,11 +5,11 @@ from pages.excel.cleanup.cleanup_mac_desktop_page import CleanupMacDesktopPage
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 from pages.excel.excel_sheet.excel_sheet_mac_desktop_page import ExcelSheetMacDesktopPage
 from pages.excel.start_excel.start_excel_mac_desktop_page import StartExcelMacDesktopPage
-from pages.import_data_popup.import_data_popup_mac_desktop_page import ImportDataPopupMacDesktopPage
+from pages.import_data.import_data_mac_desktop_page import ImportDataMacDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_mac_desktop_page import NotLoggedRightPanelMacDesktopPage
 from pages.right_panel.duplicate_object_popup.duplicate_object_popup_mac_desktop_page import \
     DuplicateObjectPopupMacDesktopPage
-from pages.right_panel.right_panel.right_panel_mac_desktop_page import RightPanelMacDesktopPage
+from pages.right_panel.right_panel_main.right_panel_main_mac_desktop_page import RightPanelMainMacDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
 
@@ -21,9 +21,9 @@ class PagesSetMacDesktop(AbstractPagesSet):
         self.add_in_login_mac_desktop_page = AddInLoginMacDesktopPage()
         self.excel_menu_mac_desktop_page = ExcelMenuMacDesktopPage()
         self.cleanup_mac_desktop_page = CleanupMacDesktopPage()
-        self.right_panel_mac_desktop_page = RightPanelMacDesktopPage()
+        self.right_panel_mac_desktop_page = RightPanelMainMacDesktopPage()
         self.right_panel_tile_mac_desktop_page = RightPanelTileMacDesktopPage()
-        self.import_data_popup_mac_desktop_page = ImportDataPopupMacDesktopPage()
+        self.import_data_mac_desktop_page = ImportDataMacDesktopPage()
         self.excel_sheet_mac_desktop_page = ExcelSheetMacDesktopPage()
         self.duplicate_object_popup_mac_desktop_page = DuplicateObjectPopupMacDesktopPage()
         self.not_logged_right_panel_mac_desktop_page = NotLoggedRightPanelMacDesktopPage()
@@ -47,8 +47,8 @@ class PagesSetMacDesktop(AbstractPagesSet):
     def right_panel_tile_page(self):
         return self.right_panel_tile_mac_desktop_page
 
-    def import_data_popup_page(self):
-        return self.import_data_popup_mac_desktop_page
+    def import_data_page(self):
+        return self.import_data_mac_desktop_page
 
     def excel_sheet_page(self):
         return self.excel_sheet_mac_desktop_page

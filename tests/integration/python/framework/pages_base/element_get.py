@@ -9,7 +9,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from framework.pages_base.base_element import BaseElement
 from framework.pages_base.element_check import ElementCheck
 from framework.pages_base.image_element import ImageElement
-from framework.util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER
+from framework.util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -91,7 +91,7 @@ class ElementGet(ElementCheck):
                 return self.driver.find_elements(selector_type, selector)
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
-                Util.pause(3)
+                Util.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)

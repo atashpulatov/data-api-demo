@@ -9,7 +9,8 @@ execution on different platforms. Thanks to modular architecture and use of Page
 definitions are common for all platforms and it's easy to write and maintain tests and add support for new platforms. 
 
 Tests are written in [Gherkin](https://cucumber.io/docs/gherkin/reference/), a natural-like language developed
-as part of [Cucumber](https://cucumber.io/) framework. Example:
+as part of [Cucumber](https://cucumber.io/) framework and executed using
+[behave](https://behave.readthedocs.io/en/latest/) Python framework. Example:
 
 ```gherkin
 Feature: FMMMM - Import object

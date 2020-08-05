@@ -40,6 +40,9 @@ or virtual, e.g. using VirtualBox) - **remote tests execution**.
     pip install opencv-python-headless
     pip install pyperclip
     ```
+
+1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
+
 1. Ensure `driver_path_windows_desktop` is set to `Excel` location in `config.json` or as a command
 line parameter.
 
@@ -72,6 +75,8 @@ line parameter.
     pip install opencv-python-headless
     pip install pyperclip
 
+1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
+
 1. Ensure the version of `framework\resources\chromedriverNN.exe` is the same as the version (NN) of Chrome browser
 installed in Windows.
 
@@ -102,6 +107,8 @@ line parameter).
     pip install pyperclip
     ```
 
+1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
+
 1. Install Excel Add-In ([see details](https://microstrategy.atlassian.net/wiki/spaces/TECCLIENTS/pages/818920406/Guideline+-+How+to+create+a+new+environment+for+automation+and+manual+testing
 ))
 
@@ -131,6 +138,8 @@ line parameter).
     pip install opencv-python-headless
     pip install pyperclip
     ```
+
+1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
 
 1. Ensure the version of `framework/resources/chromedriverNN` is the same as the version (NN) of Chrome browser
 installed and this file has proper permissions (-rwxr-xr-x):
@@ -213,6 +222,8 @@ simpler firewall configuration:
     pip install opencv-python-headless
     pip install pyperclip
     ```
+
+1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
 
 1. When using **PuTTy** Windows Desktop configuration: enable `Remote Login` in `Preferences / Sharing` (no need to
 do it when using firewall configuration).
