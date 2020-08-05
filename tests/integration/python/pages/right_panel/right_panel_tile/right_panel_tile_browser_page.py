@@ -1,5 +1,8 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.message_const import MessageConst
+from pages_base.base_browser_page import BaseBrowserPage
+from util.message_const import MessageConst
+from util.const import DEFAULT_TIMEOUT
 
 
 class RightPanelTileBrowserPage(BaseBrowserPage):
@@ -29,29 +32,30 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
 
-    def wait_for_import_to_finish_successfully(self):
-        self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT)
+    def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+        self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_duplicate_object_to_finish_successfully(self):
-        self._wait_for_operation_with_status(MessageConst.DUPLICATE_OBJECT_SUCCESSFUL_TEXT)
+    def wait_for_duplicate_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+        self._wait_for_operation_with_status(MessageConst.DUPLICATE_OBJECT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_refresh_object_to_finish_successfully(self):
-        self._wait_for_operation_with_status(MessageConst.REFRESH_OBJECT_SUCCESSFUL_TEXT)
+    def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+        self._wait_for_operation_with_status(MessageConst.REFRESH_OBJECT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_remove_object_to_finish_successfully(self):
-        self._wait_for_operation_with_status(MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT)
+    def wait_for_remove_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+        self._wait_for_operation_with_status(MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_operation_error_and_accept(self, expected_message):
-        self._wait_for_operation_with_status(expected_message)
+    def wait_for_operation_error_and_accept(self, expected_message, timeout=DEFAULT_TIMEOUT):
+        self._wait_for_operation_with_status(expected_message, timeout)
 
         self.get_element_by_css(RightPanelTileBrowserPage.NOTIFICATION_BUTTON).click()
 
-    def _wait_for_operation_with_status(self, expected_message):
+    def _wait_for_operation_with_status(self, expected_message, timeout):
         self.focus_on_add_in_frame()
 
         self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
                                                              RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-                                                             expected_message)
+                                                             expected_message, 
+                                                             timeout=timeout)
 
     def close_all_notifications_on_hover(self):
         self.focus_on_add_in_frame()

@@ -1,5 +1,7 @@
 from behave import *
 
+from util.assert_util import AssertUtil
+
 
 @step('I ensure that Columns & Filters Selection is visible')
 def step_impl(context):
@@ -21,6 +23,11 @@ def step_impl(context, form_visualization_type):
     context.pages.columns_and_filters_selection_page().click_display_attributes_names_type(form_visualization_type)
 
 
+@step('I selected all attributes')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().select_all_attributes()
+
+
 @step('I unselected all attributes')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().unselect_all_attributes()
@@ -39,6 +46,107 @@ def step_impl(context):
 @step('I clicked attributes and forms {attributes_and_forms_json}')
 def step_impl(context, attributes_and_forms_json):
     context.pages.columns_and_filters_selection_page().click_attributes_and_forms(attributes_and_forms_json)
+
+
+@step('attribute number {object_number} should be called "{expected_name}"')
+def step_impl(context, object_number, expected_name):
+    result = context.pages.columns_and_filters_selection_page().get_attribute_name(object_number)
+
+    AssertUtil.assert_simple(result, expected_name)
+
+
+@step('metric number {object_number} should be called "{expected_name}"')
+def step_impl(context, object_number, expected_name):
+    result = context.pages.columns_and_filters_selection_page().get_metric_name(object_number)
+
+    AssertUtil.assert_simple(result, expected_name)
+
+
+@step('filter number {object_number} should be called "{expected_name}"')
+def step_impl(context, object_number, expected_name):
+    result = context.pages.columns_and_filters_selection_page().get_filter_name(object_number)
+
+    AssertUtil.assert_simple(result, expected_name)
+
+
+@step('I sort "{object_type}" to ascending order by click')
+def step_impl(context, object_type):
+    context.pages.columns_and_filters_selection_page().sort_elements_ascending(object_type)
+
+
+@step('I sort "{object_type}" to descending order by click')
+def step_impl(context, object_type):
+    context.pages.columns_and_filters_selection_page().sort_elements_descending(object_type)
+
+
+@step('I sort "{object_type}" to default order by click')
+def step_impl(context, object_type):
+    context.pages.columns_and_filters_selection_page().sort_elements_default(object_type)
+
+
+@step('I search for element called "{element_name}"')
+def step_impl(context, element_name):
+    context.pages.columns_and_filters_selection_page().search_for_element(element_name)
+
+
+@step('I clear the search for element')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().clear_search_element()
+
+
+@step('I clear the search for element with backspace')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().clear_element_search_with_backspace()
+
+
+@step('I press tab until sorting "{object_type}" is focused')
+def step_impl(context, object_type):
+    context.pages.columns_and_filters_selection_page().press_tab_until_object_type_focused(object_type)
+
+
+@step('I press Enter to sort "{object_type}" ascending order by keyboard')
+def step_impl(context, object_type):
+    context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_ascending(object_type)
+
+
+@step('I press Enter to sort "{object_type}" descending order by keyboard')
+def step_impl(context, object_type):
+    context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_descending(object_type)
+
+
+@step('I press Enter to sort "{object_type}" default order by keyboard')
+def step_impl(context, object_type):
+    context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_default(object_type)
+
+
+@step('I select "{object_type}" element number {object_number}')
+def step_impl(context, object_type, object_number):
+    context.pages.columns_and_filters_selection_page().select_element_at_index(object_type, object_number)
+
+
+@step('I deselect "{object_type}" element number {object_number}')
+def step_impl(context, object_type, object_number):
+    context.pages.columns_and_filters_selection_page().select_element_at_index(object_type, object_number)
+
+
+@step('I "{operation}" attribute forms of attribute number {object_number}')
+def step_impl(context, operation, object_number):
+    context.pages.columns_and_filters_selection_page().expand_or_collapse_attribute_form(operation, object_number)
+
+
+@step('attribute form number {attribute_form_number} of attribute number {attribute_number} '
+      'should be called "{expected_name}"')
+def step_impl(context, attribute_form_number, attribute_number, expected_name):
+    result = context.pages.columns_and_filters_selection_page().get_attribute_form_name(
+      attribute_form_number,
+      attribute_number
+      )
+    AssertUtil.assert_simple(result, expected_name)
+
+
+@step('I scroll into "{object_type}" element number {object_number}')
+def step_impl(context, object_number, object_type):
+    context.pages.columns_and_filters_selection_page().scroll_into_index(object_number, object_type)
 
 
 @when('I clicked Import button in Columns and Filters Selection')
