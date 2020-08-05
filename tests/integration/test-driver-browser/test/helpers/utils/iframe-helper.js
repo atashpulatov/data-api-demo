@@ -11,9 +11,16 @@ export function switchToDialogFrame() {
 }
 
 export function switchToExcelFrame() {
-  browser.switchToFrame(null);
-  $('#WebApplicationFrame').waitForDisplayed(30000);
-  browser.switchToFrame($('#WebApplicationFrame'));
+  for (let i = 0; i < 15; i++) {
+    browser.pause(2000);
+    browser.switchToFrame(null);
+    if($('#WebApplicationFrame').isDisplayed()) {
+      browser.switchToFrame($('#WebApplicationFrame')); 
+      return;
+    } 
+    console.log(`Element '#WebApplicationFrame' not found. Retrying`);
+  }
+  throw new Error(`Element '#WebApplicationFrame' could not be found.`)
 }
 
 // This frame is used for report prompt window and visualizations window
