@@ -4,8 +4,7 @@
 Feature: F30463 - Ability to sort on prepare data
 
   Scenario: [TC63802] - E2E Sort on prepare data
-    #Given I logged in as default user
-    Given I pass
+    Given I logged in as default user
       And I clicked Import Data button
       And MyLibrary Switch is OFF
 
@@ -76,8 +75,6 @@ Feature: F30463 - Ability to sort on prepare data
 
       And I selected all attributes
       And I selected all metrics
-
-      And I log source
       When I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
