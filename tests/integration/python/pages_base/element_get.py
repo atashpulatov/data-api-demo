@@ -24,6 +24,9 @@ class ElementGet(ElementCheck):
     def get_element_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.CSS_SELECTOR, selector, timeout), self.driver)
 
+    def get_element_by_css_no_visiblity_checked(self, selector, timeout=DEFAULT_TIMEOUT):
+        return BaseElement(self._get_raw_element_no_visibility_checked(By.CSS_SELECTOR, selector, timeout), self.driver)
+
     def get_element_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(self.get_element_coordinates_by_xpath(selector, timeout, image_name), self.driver)
@@ -81,6 +84,17 @@ class ElementGet(ElementCheck):
 
         diff_time = time.time() - start_time
         Util.log(('_get_raw_element', selector, diff_time))
+
+        return element
+
+    def _get_raw_element_no_visibility_checked(self, selector_type, selector, timeout):
+        start_time = time.time()
+        Util.log(('_get_raw_element_no_visibility_checked', selector))
+
+        element = self.driver.find_element(selector_type, selector)
+
+        diff_time = time.time() - start_time
+        Util.log(('_get_raw_element_no_visibility_checked', selector, diff_time))
 
         return element
 
