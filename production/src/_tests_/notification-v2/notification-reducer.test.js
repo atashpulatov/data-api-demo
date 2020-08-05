@@ -6,7 +6,7 @@ import { IMPORT_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION } from '../../
 import { MOVE_NOTIFICATION_TO_IN_PROGRESS, DISPLAY_NOTIFICATION_COMPLETED } from '../../operation/operation-steps';
 import { notificationService } from '../../notification-v2/notification-service';
 import * as notificationButtonsModule from '../../notification-v2/notification-buttons';
-import * as notificationTitleMapsModule from '../../redux-reducer/notification-reducer/notification-title-maps';
+import * as customTranslations from '../../customTranslation';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 describe('Notification reducer', () => {
@@ -366,7 +366,7 @@ describe('Notification reducer', () => {
       // given
         const mockedCallback = jest.fn();
         const mockedCustomT = jest.fn();
-        jest.spyOn(notificationTitleMapsModule, 'customT').mockImplementation((params) => mockedCustomT(params));
+        jest.spyOn(customTranslations, 'customT').mockImplementation((params) => mockedCustomT(params));
         const expectedDetails = 'some message';
         const someTitle = 'some title';
         const actionForImport = {
