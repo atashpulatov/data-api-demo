@@ -11,7 +11,7 @@ class ImageUtil:
     SCREENSHOT_FOLDER = 'framework/screenshots'
     SCREENSHOT_FILE_EXTENSION = '.png'
 
-    TO_ALPHA_REGEX = re.compile('\W')
+    TO_ALPHA_REGEX = re.compile(r'\W')
 
     def save_current_screenshot(self, driver):
         image = self._get_screenshot_image(driver)
