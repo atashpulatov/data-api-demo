@@ -1,6 +1,7 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import i18n from '../i18n';
 import operationErrorHandler from '../operation/operation-error-handler';
+import { customT } from '../customTranslation';
 
 class StepGetDuplicateName {
   init = (reduxStore) => {
@@ -28,7 +29,7 @@ class StepGetDuplicateName {
       if (!(objectEditedData && objectEditedData.visualizationInfo
         && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)) {
         const lang = i18n.language;
-        const translatedCopy = i18n.store.data[lang].common.Copy;
+        const translatedCopy = customT('Copy');
 
         const nameCandidate = this.prepareNewNameForDuplicatedObject(name, translatedCopy);
         const newName = this.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
