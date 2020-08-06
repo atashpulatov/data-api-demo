@@ -1,5 +1,6 @@
 export const popupSelectors = {
   // TODO group selectors based on location
+  promptFrameForDossier: '#popup-wrapper > div > div:nth-child(3) > iframe',
   tableOfObjects: '#WACDialogPanel',
   searchInput: '.search-field__input',
   prepareSearchInput: '#search-toolbar > div > span > input',

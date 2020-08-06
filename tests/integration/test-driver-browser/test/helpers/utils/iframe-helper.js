@@ -1,3 +1,5 @@
+import {popupSelectors} from '../../constants/selectors/popup-selectors';
+
 export function switchToPluginFrame() {
   switchToExcelFrame();
   $('.AddinIframe').waitForExist(9999);
@@ -32,9 +34,8 @@ export function switchToPromptFrame() {
 
 export function switchToPromptFrameForImportDossier() {
   switchToPluginFrame();
-  const editFrame = '#popup-wrapper > div > div:nth-child(3) > iframe';
-  $(editFrame).waitForExist(19999);
-  browser.switchToFrame($(editFrame));
+  $(popupSelectors.promptFrameForDossier).waitForExist(19999);
+  browser.switchToFrame($(popupSelectors.promptFrameForDossier));
 }
 
 export function switchToRightPanelFrame() {
