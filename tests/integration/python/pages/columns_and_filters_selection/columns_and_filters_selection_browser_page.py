@@ -161,7 +161,9 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         attribute_element_container = ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_ELEMENT_AT % attribute_number
         attribute_form_element = self.get_element_by_css(
-            attribute_element_container + ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ELEMENT_CONTAINER % attribute_form_number)
+            attribute_element_container +
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ELEMENT_CONTAINER % attribute_form_number
+            )
 
         return attribute_form_element.text
 
@@ -315,21 +317,31 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def _get_object_type_sort_element(self, object_type):
         return {
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE: ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_TITLE_SORT,
-            ColumnsAndFiltersSelectionBrowserPage.METRIC: ColumnsAndFiltersSelectionBrowserPage.METRICS_TITLE_SORT,
-            ColumnsAndFiltersSelectionBrowserPage.FILTER: ColumnsAndFiltersSelectionBrowserPage.FILTERS_TITLE_SORT,
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE:
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_TITLE_SORT,
+
+            ColumnsAndFiltersSelectionBrowserPage.METRIC:
+            ColumnsAndFiltersSelectionBrowserPage.METRICS_TITLE_SORT,
+
+            ColumnsAndFiltersSelectionBrowserPage.FILTER:
+            ColumnsAndFiltersSelectionBrowserPage.FILTERS_TITLE_SORT,
         }[object_type]
 
     def _get_element_container(self, object_type, object_number):
         return {
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE: ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_ELEMENT_AT % object_number,
-            ColumnsAndFiltersSelectionBrowserPage.METRIC: ColumnsAndFiltersSelectionBrowserPage.METRIC_ELEMENT_AT % object_number,
-            ColumnsAndFiltersSelectionBrowserPage.FILTER: ColumnsAndFiltersSelectionBrowserPage.FILTER_ELEMENT_AT % object_number,
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE:
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_ELEMENT_AT % object_number,
+
+            ColumnsAndFiltersSelectionBrowserPage.METRIC:
+            ColumnsAndFiltersSelectionBrowserPage.METRIC_ELEMENT_AT % object_number,
+
+            ColumnsAndFiltersSelectionBrowserPage.FILTER:
+            ColumnsAndFiltersSelectionBrowserPage.FILTER_ELEMENT_AT % object_number,
         }[object_type]
 
     def click_import_button(self):
         self.focus_on_import_data_pop_up_frame()
 
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
-        
+
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=LONG_TIMEOUT)

@@ -52,7 +52,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
                                                              RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-                                                             expected_message, 
+                                                             expected_message,
                                                              timeout=timeout)
 
     def close_all_notifications_on_hover(self):
