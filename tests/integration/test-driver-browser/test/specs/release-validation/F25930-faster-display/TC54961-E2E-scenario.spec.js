@@ -39,10 +39,10 @@ describe('F25930 - Faster display of data sources by caching object list', () =>
     let numberOfResults = 0;
     // if the string representing the number of results contains a comma, delete it and parse it to Int
     if (numberOfResultsString.includes(',')) {
-      numberOfResults = parseInt(filterResult.getText().replace(',', ""));
+      numberOfResults = parseInt(numberOfResultsString.replace(',', ""));
       console.log(numberOfResults)
     } else {
-      numberOfResults = parseInt(filterResult.getText());
+      numberOfResults = parseInt(numberOfResultsString);
     }
     expect(numberOfResults).toBeGreaterThan(1000);
 
