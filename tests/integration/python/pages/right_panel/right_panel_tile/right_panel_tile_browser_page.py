@@ -1,8 +1,6 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.message_const import MessageConst
-from pages_base.base_browser_page import BaseBrowserPage
-from util.message_const import MessageConst
-from util.const import DEFAULT_TIMEOUT
+from framework.util.const import DEFAULT_TIMEOUT
 
 
 class RightPanelTileBrowserPage(BaseBrowserPage):

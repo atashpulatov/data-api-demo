@@ -1,6 +1,6 @@
 from behave import *
 
-from util.assert_util import AssertUtil
+from framework.util.assert_util import AssertUtil
 
 
 @step('I ensure that Columns & Filters Selection is visible')
