@@ -33,5 +33,5 @@ class StartExcelBrowserPage(BaseBrowserPage):
             StartExcelBrowserPage.excel_not_started = False
 
     def maximize_excel_window(self):
-        # self.driver.maximize_window()
-        self.driver.set_window_size(1920, 1080)
+        self.driver.maximize_window()
+        # self.driver.set_window_size(1920, 1080)
