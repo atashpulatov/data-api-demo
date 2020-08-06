@@ -1,12 +1,12 @@
 
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
-import { switchToPluginFrame, changeBrowserTab, switchToDialogFrame } from '../../../helpers/utils/iframe-helper';
+import {switchToPluginFrame, changeBrowserTab, switchToDialogFrame} from '../../../helpers/utils/iframe-helper';
 import pluginPopup from '../../../helpers/plugin/plugin.popup';
 import officeLogin from '../../../helpers/office/office.login';
-import { objectsList } from '../../../constants/objects-list';
-import { popupSelectors } from '../../../constants/selectors/popup-selectors';
+import {objectsList} from '../../../constants/objects-list';
+import {popupSelectors} from '../../../constants/selectors/popup-selectors';
 import pluginRightPanel from '../../../helpers/plugin/plugin.right-panel';
-import { pressEscape } from '../../../helpers/utils/keyboard-actions';
+import {pressEscape} from '../../../helpers/utils/keyboard-actions';
 
 
 describe('F25930 - Faster display of data sources by caching object list', () => {
@@ -35,8 +35,16 @@ describe('F25930 - Faster display of data sources by caching object list', () =>
     switchToPluginFrame();
     const filterResult = $(popupSelectors.smartFolderTable.availableObjectNumber);
     filterResult.waitForDisplayed();
-    const onlyNumberObjects = (filterResult.getText()).replace(/(^\d+)(.+$)/i, '$1');
-    expect(onlyNumberObjects).toBeGreaterThan(1000);
+    const numberOfResultsString = filterResult.getText();
+    let numberOfResults = 0;
+    // if the string representing the number of results contains a comma, delete it and parse it to Int
+    if (numberOfResultsString.includes(',')) {
+      numberOfResults = parseInt(filterResult.getText().replace(',', ""));
+      console.log(numberOfResults)
+    } else {
+      numberOfResults = parseInt(filterResult.getText());
+    }
+    expect(numberOfResults).toBeGreaterThan(1000);
 
     switchToPluginFrame();
     pluginPopup.searchForObject(objectsList.datasets.salesRecords1k);
