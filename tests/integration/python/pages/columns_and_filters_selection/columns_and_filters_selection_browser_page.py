@@ -66,6 +66,18 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     TRY_LIMIT_FOR_SORT = 3
     TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 6
 
+    OBJECT_TO_TITLE_CONTAINER = {
+        ATTRIBUTE: ATTRIBUTES_TITLE_SORT,
+        METRIC: METRICS_TITLE_SORT,
+        FILTER: FILTERS_TITLE_SORT
+    }
+
+    OBJECT_TO_OBJECT_CONTAINER = {
+        ATTRIBUTE: ATTRIBUTE_ELEMENT_AT,
+        METRIC: METRIC_ELEMENT_AT,
+        FILTER: FILTER_ELEMENT_AT
+    }
+
     def __init__(self):
         super().__init__()
 
@@ -136,12 +148,12 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
                 for form_name in form_names:
                     self.click_attribute(form_name)
 
-    def select_element_at_index(self, object_type, object_number):
+    def select_element_by_number(self, object_type, object_number):
         self.focus_on_import_data_pop_up_frame()
 
-        element_to_select = self._get_element_container(object_type, object_number)
+        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
 
-        self.get_element_by_css(element_to_select).click()
+        self.get_element_by_css(element).click()
 
     def expand_or_collapse_attribute_form(self, operation, object_number):
         self.focus_on_import_data_pop_up_frame()
@@ -188,50 +200,29 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         return name_input.text
 
-    def sort_elements_ascending(self, object_type):
+    def sort_elements_ascending_by_click(self, object_type):
         self.focus_on_import_data_pop_up_frame()
 
-        sort_element = self.get_element_by_css(self._get_object_type_sort_element(object_type))
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        sort_element = self.get_element_by_css(object_type_sort_element)
+        sorting_type = ColumnsAndFiltersSelectionBrowserPage.SORT_ASCENDING
+        self._sort_elements_by_click(sort_element, sorting_type)
 
-        for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
-            aria_value = sort_element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
-
-            if aria_value == ColumnsAndFiltersSelectionBrowserPage.SORT_ASCENDING:
-                return
-
-            sort_element.click()
-
-        raise MstrException('Click limit is reached. Selector could not be found')
-
-    def sort_elements_descending(self, object_type):
+    def sort_elements_descending_by_click(self, object_type):
         self.focus_on_import_data_pop_up_frame()
 
-        sort_element = self.get_element_by_css(self._get_object_type_sort_element(object_type))
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        sort_element = self.get_element_by_css(object_type_sort_element)
+        sorting_type = ColumnsAndFiltersSelectionBrowserPage.SORT_DESCENDING
+        self._sort_elements_by_click(sort_element, sorting_type)
 
-        for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
-            aria_value = sort_element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
-
-            if aria_value == ColumnsAndFiltersSelectionBrowserPage.SORT_DESCENDING:
-                return
-
-            sort_element.click()
-
-        raise MstrException('Click limit is reached. Selector could not be found')
-
-    def sort_elements_default(self, object_type, limit=3):
+    def sort_elements_default_by_click(self, object_type):
         self.focus_on_import_data_pop_up_frame()
 
-        sort_element = self.get_element_by_css(self._get_object_type_sort_element(object_type))
-
-        for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
-            aria_value = sort_element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
-
-            if aria_value is None:
-                return
-
-            sort_element.click()
-
-        raise MstrException('Click limit is reached. Selector could not be found')
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        sort_element = self.get_element_by_css(object_type_sort_element)
+        sorting_type = None
+        self._sort_elements_by_click(sort_element, sorting_type)
 
     def search_for_element(self, element_name):
         self.focus_on_import_data_pop_up_frame()
@@ -258,7 +249,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def press_tab_until_object_type_focused(self, object_type):
         self.focus_on_import_data_pop_up_frame()
 
-        sort_element = self.get_element_by_css(self._get_object_type_sort_element(object_type))
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
             if sort_element == self.driver.switch_to.active_element:
@@ -271,73 +263,54 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def press_enter_to_sort_element_ascending(self, object_type):
         self.focus_on_import_data_pop_up_frame()
 
-        sort_element = self.get_element_by_css(self._get_object_type_sort_element(object_type))
-
-        for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
-            aria_value = sort_element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
-
-            if aria_value == ColumnsAndFiltersSelectionBrowserPage.SORT_ASCENDING:
-                return
-
-            self.press_enter()
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        sort_element = self.get_element_by_css(object_type_sort_element)
+        sorting_type = ColumnsAndFiltersSelectionBrowserPage.SORT_ASCENDING
+        self._sort_elements_by_keyboard(sort_element, sorting_type)
 
     def press_enter_to_sort_element_descending(self, object_type):
         self.focus_on_import_data_pop_up_frame()
 
-        sort_element = self.get_element_by_css(self._get_object_type_sort_element(object_type))
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        sort_element = self.get_element_by_css(object_type_sort_element)
+        sorting_type = ColumnsAndFiltersSelectionBrowserPage.SORT_DESCENDING
+        self._sort_elements_by_keyboard(sort_element, sorting_type)
 
+    def press_enter_to_sort_element_default(self, object_type, limit=3):
+        self.focus_on_import_data_pop_up_frame()
+
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        sort_element = self.get_element_by_css(object_type_sort_element)
+        sorting_type = None
+        self._sort_elements_by_keyboard(sort_element, sorting_type)
+
+    def scroll_into_object_by_number(self, object_number, object_type):
+        self.focus_on_import_data_pop_up_frame()
+
+        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
+        self.get_element_by_css_no_visiblity_checked(element).move_to()
+
+    def _sort_elements_by_click(self, element, sorting_type):
+        for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
+            aria_value = element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
+
+            if aria_value == sorting_type:
+                return
+
+            element.click()
+
+        raise MstrException('Click limit is reached. Selector could not be found')
+
+    def _sort_elements_by_keyboard(self, element, sorting_type):
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
-            aria_value = sort_element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
+            aria_value = element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
 
-            if aria_value == ColumnsAndFiltersSelectionBrowserPage.SORT_DESCENDING:
+            if aria_value == sorting_type:
                 return
 
             self.press_enter()
 
         raise MstrException('Tab limit is reached. Element could not be found')
-
-    def press_enter_to_sort_element_default(self, object_type, limit=3):
-        self.focus_on_import_data_pop_up_frame()
-
-        sort_element = self.get_element_by_css(self._get_object_type_sort_element(object_type))
-
-        for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
-            aria_value = sort_element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
-
-            if aria_value is None:
-                return
-
-            self.press_enter()
-
-    def scroll_into_index(self, object_number, object_type):
-        self.focus_on_import_data_pop_up_frame()
-
-        element_to_scroll = self._get_element_container(object_type, object_number)
-        self.get_element_by_css_no_visiblity_checked(element_to_scroll).move_to()
-
-    def _get_object_type_sort_element(self, object_type):
-        return {
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE:
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_TITLE_SORT,
-
-            ColumnsAndFiltersSelectionBrowserPage.METRIC:
-            ColumnsAndFiltersSelectionBrowserPage.METRICS_TITLE_SORT,
-
-            ColumnsAndFiltersSelectionBrowserPage.FILTER:
-            ColumnsAndFiltersSelectionBrowserPage.FILTERS_TITLE_SORT,
-        }[object_type]
-
-    def _get_element_container(self, object_type, object_number):
-        return {
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE:
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_ELEMENT_AT % object_number,
-
-            ColumnsAndFiltersSelectionBrowserPage.METRIC:
-            ColumnsAndFiltersSelectionBrowserPage.METRIC_ELEMENT_AT % object_number,
-
-            ColumnsAndFiltersSelectionBrowserPage.FILTER:
-            ColumnsAndFiltersSelectionBrowserPage.FILTER_ELEMENT_AT % object_number,
-        }[object_type]
 
     def click_import_button(self):
         self.focus_on_import_data_pop_up_frame()

@@ -69,64 +69,64 @@ def step_impl(context, object_number, expected_name):
     AssertUtil.assert_simple(result, expected_name)
 
 
-@step('I sort "{object_type}" to ascending order by click')
+@step('I sorted "{object_type}" to ascending order by click')
 def step_impl(context, object_type):
-    context.pages.columns_and_filters_selection_page().sort_elements_ascending(object_type)
+    context.pages.columns_and_filters_selection_page().sort_elements_ascending_by_click(object_type)
 
 
-@step('I sort "{object_type}" to descending order by click')
+@step('I sorted "{object_type}" to descending order by click')
 def step_impl(context, object_type):
-    context.pages.columns_and_filters_selection_page().sort_elements_descending(object_type)
+    context.pages.columns_and_filters_selection_page().sort_elements_descending_by_click(object_type)
 
 
-@step('I sort "{object_type}" to default order by click')
+@step('I sorted "{object_type}" to default order by click')
 def step_impl(context, object_type):
-    context.pages.columns_and_filters_selection_page().sort_elements_default(object_type)
+    context.pages.columns_and_filters_selection_page().sort_elements_default_by_click(object_type)
 
 
-@step('I search for element called "{element_name}"')
+@step('I searched for element called "{element_name}"')
 def step_impl(context, element_name):
     context.pages.columns_and_filters_selection_page().search_for_element(element_name)
 
 
-@step('I clear the search for element')
+@step('I cleared the search for element')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().clear_search_element()
 
 
-@step('I clear the search for element with backspace')
+@step('I cleared the search for element with backspace')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().clear_element_search_with_backspace()
 
 
-@step('I press tab until sorting "{object_type}" is focused')
+@step('I pressed tab until sorting "{object_type}" is focused')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().press_tab_until_object_type_focused(object_type)
 
 
-@step('I press Enter to sort "{object_type}" ascending order by keyboard')
+@step('I pressed Enter to sort "{object_type}" ascending order by keyboard')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_ascending(object_type)
 
 
-@step('I press Enter to sort "{object_type}" descending order by keyboard')
+@step('I pressed Enter to sort "{object_type}" descending order by keyboard')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_descending(object_type)
 
 
-@step('I press Enter to sort "{object_type}" default order by keyboard')
+@step('I pressed Enter to sort "{object_type}" default order by keyboard')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_default(object_type)
 
 
-@step('I select "{object_type}" element number {object_number}')
+@step('I selected "{object_type}" element number {object_number}')
 def step_impl(context, object_type, object_number):
-    context.pages.columns_and_filters_selection_page().select_element_at_index(object_type, object_number)
+    context.pages.columns_and_filters_selection_page().select_element_by_number(object_type, object_number)
 
 
-@step('I deselect "{object_type}" element number {object_number}')
+@step('I deselected "{object_type}" element number {object_number}')
 def step_impl(context, object_type, object_number):
-    context.pages.columns_and_filters_selection_page().select_element_at_index(object_type, object_number)
+    context.pages.columns_and_filters_selection_page().select_element_by_number(object_type, object_number)
 
 
 @step('I "{operation}" attribute forms of attribute number {object_number}')
@@ -144,9 +144,9 @@ def step_impl(context, attribute_form_number, attribute_number, expected_name):
     AssertUtil.assert_simple(result, expected_name)
 
 
-@step('I scroll into "{object_type}" element number {object_number}')
-def step_impl(context, object_number, object_type):
-    context.pages.columns_and_filters_selection_page().scroll_into_index(object_number, object_type)
+@step('I scrolled into "{object_type}" element number {object_number}')
+def step_impl(context, object_type, object_number):
+    context.pages.columns_and_filters_selection_page().scroll_into_object_by_number(object_number, object_type)
 
 
 @when('I clicked Import button in Columns and Filters Selection')
