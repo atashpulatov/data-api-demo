@@ -36,13 +36,7 @@ describe('F25930 - Faster display of data sources by caching object list', () =>
     const filterResult = $(popupSelectors.smartFolderTable.availableObjectNumber);
     filterResult.waitForDisplayed();
     const numberOfResultsString = filterResult.getText();
-    let numberOfResults = 0;
-    // if the string representing the number of results contains a comma, delete it and parse it to Int
-    if (numberOfResultsString.includes(',')) {
-      numberOfResults = parseInt(numberOfResultsString.replace(',', ""));
-    } else {
-      numberOfResults = parseInt(numberOfResultsString);
-    }
+    const numberOfResults = parseInt(numberOfResultsString.replace(',', ""));
     expect(numberOfResults).toBeGreaterThan(1000);
 
     switchToPluginFrame();
