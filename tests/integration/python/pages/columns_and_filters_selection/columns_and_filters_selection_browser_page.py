@@ -44,7 +44,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     COLLAPSE_ATTRIBUTE_FORMS = 'collapse'
 
     ROOT_METRIC_CONTAINER = 'div.ant-col.ant-col-6.metrics-col'
-    METRICS_CONTAINER = ROOT_METRIC_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div'
+    METRICS_CONTAINER = ROOT_METRIC_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > ' \
+                                                'div:nth-child(2) > div > div'
     METRIC_ELEMENT_AT = METRICS_CONTAINER + ' > div:nth-child(%s)'
     METRICS_TITLE_SORT = ROOT_METRIC_CONTAINER + ' > div > div.selector-title > div'
 
@@ -195,7 +196,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             aria_value = sort_element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
 
             if aria_value == ColumnsAndFiltersSelectionBrowserPage.SORT_ASCENDING:
-                return 
+                return
 
             sort_element.click()
 
