@@ -26,7 +26,8 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
     WORKSHEETS_TABS = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXSubrole='AXStandardWindow']/AXSplitGroup[0]/" \
                                                           "AXLayoutArea[@AXTitle='Content Area']/AXButton[%s]"
 
-    WORKSHEET_ITEM_RE = re.compile('^sheetTab\d+$')
+    WORKSHEET_ITEM_RE = re.compile(r'^sheetTab\d+$')
+    IDENTIFIER_ATTRIBUTE = 'AXIdentifier'
 
     def get_cells_values(self, cells):
         result = []
@@ -89,7 +90,7 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
         all_elements = self.get_elements_by_xpath(ExcelSheetMacDesktopPage.WORKSHEETS_TABS)
 
         for element in all_elements:
-            identifier = element.get_attribute('AXIdentifier')
+            identifier = element.get_attribute(ExcelSheetMacDesktopPage.IDENTIFIER_ATTRIBUTE)
             if ExcelSheetMacDesktopPage.WORKSHEET_ITEM_RE.search(identifier):
                 self.log(identifier)
                 found_elements.append(element)
