@@ -47,7 +47,7 @@ describe('F24087 - Improve performance of scrolling through the object list', ()
     };
 
     // Get date for the object 'Eastern Region Average Revenue per Customer' on MicroStrategy Tutorial
-    // Expected date format '8/12/2016 9:32 PM' on en-us locale
+    // Expected date format '8/12/2016 7:32 PM' on en-us locale
     PluginPopup.searchForObject('Eastern Region Average Revenue per Customer');
     browser.pause(999); // waiting for search to filter the ObjectTable
     PluginPopup.selectObject();
