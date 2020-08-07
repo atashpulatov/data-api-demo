@@ -26,5 +26,5 @@ class ExcelMenuMacDesktopPage(BaseMacDesktopPage):
     def _refocus_on_home_tab(self):
         try:
             self.get_element_by_xpath(ExcelMenuMacDesktopPage.PASTE_BUTTON)
-        except:
+        except Exception:
             self.get_element_by_xpath(ExcelMenuMacDesktopPage.HOME_TAB_ELEM)

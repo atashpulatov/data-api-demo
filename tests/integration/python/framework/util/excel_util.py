@@ -2,7 +2,7 @@ import re
 
 
 class ExcelUtil:
-    NUMBER_WITH_COMMA_RE = re.compile('^\d*,*\d*$')
+    NUMBER_WITH_COMMA_RE = re.compile(r'^\d*,*\d*$')
     NUMBER_DELIMITER_COMMA = ','
     NUMBER_DELIMITER_DOT = '.'
 
