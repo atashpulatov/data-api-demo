@@ -1,8 +1,8 @@
 import json
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.exception.MstrException import MstrException
 from framework.util.const import LONG_TIMEOUT
+from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -159,7 +159,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         attribute_form_arrow = self.get_element_by_css(
-                ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED % object_number)
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED % object_number)
 
         attribute_form_arrow.click()
 
@@ -167,7 +167,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         attribute_form_arrow = self.get_element_by_css(
-                ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED % object_number)
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED % object_number)
 
         attribute_form_arrow.click()
 
@@ -208,12 +208,12 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self._sort_elements_by_click(object_type, None)
 
     def _sort_elements_by_click(self, object_type, sorting_type):
-      self.focus_on_import_data_pop_up_frame()
+        self.focus_on_import_data_pop_up_frame()
 
-      object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
-      sort_element = self.get_element_by_css(object_type_sort_element)
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        sort_element = self.get_element_by_css(object_type_sort_element)
 
-      for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
+        for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
             aria_value = sort_element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.ARIA_SORT)
 
             if aria_value == sorting_type:
@@ -221,7 +221,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
             sort_element.click()
 
-      raise MstrException('Click limit is reached. Selector could not be found')
+        raise MstrException('Click limit is reached. Selector could not be found')
 
     def search_for_element(self, element_name):
         self.focus_on_import_data_pop_up_frame()

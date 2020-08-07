@@ -69,17 +69,17 @@ def step_impl(context, object_number, expected_name):
     AssertUtil.assert_simple(result, expected_name)
 
 
-@step('I sorted "{object_type}" to ascending order by click')
+@step('I changed sort order of "{object_type}" to ascending by click')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().sort_elements_ascending_by_click(object_type)
 
 
-@step('I sorted "{object_type}" to descending order by click')
+@step('I changed sort order of "{object_type}" to descending by click')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().sort_elements_descending_by_click(object_type)
 
 
-@step('I sorted "{object_type}" to default order by click')
+@step('I changed sort order of "{object_type}" to default by click')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().sort_elements_default_by_click(object_type)
 
@@ -104,17 +104,17 @@ def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().press_tab_until_object_type_focused(object_type)
 
 
-@step('I pressed Enter to sort "{object_type}" ascending order by keyboard')
+@step('I changed sort order of "{object_type}" to ascending by pressing Enter')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_ascending(object_type)
 
 
-@step('I pressed Enter to sort "{object_type}" descending order by keyboard')
+@step('I changed sort order of "{object_type}" to descending by pressing Enter')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_descending(object_type)
 
 
-@step('I pressed Enter to sort "{object_type}" default order by keyboard')
+@step('I changed sort order of "{object_type}" to default by pressing Enter')
 def step_impl(context, object_type):
     context.pages.columns_and_filters_selection_page().press_enter_to_sort_element_default(object_type)
 
