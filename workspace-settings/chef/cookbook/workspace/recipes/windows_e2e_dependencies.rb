@@ -22,7 +22,7 @@ when 'windows'
         :path => "#{ENV['TMP']}\\python-3.8.5-x64.exe",
         :checksum => '00123c4d6cabb2e07efc5848451dcd556a734cfa'
       })
-      not_if {::File.exist?('C:\\Program Files\\Python38\\python.exe')}
+      not_if {::File.exist?('C:\\Users\\jenkins\\AppData\\Local\\Programs\\Python\\Python38\\python.exe')}
   end
 
   execute "install dependencies" do
