@@ -129,18 +129,23 @@ def step_impl(context, object_type, object_number):
     context.pages.columns_and_filters_selection_page().select_element_by_number(object_type, object_number)
 
 
-@step('I "{operation}" attribute forms of attribute number {object_number}')
-def step_impl(context, operation, object_number):
-    context.pages.columns_and_filters_selection_page().expand_or_collapse_attribute_form(operation, object_number)
+@step('I expanded attribute forms of attribute number {object_number}')
+def step_impl(context, object_number):
+    context.pages.columns_and_filters_selection_page().expand_attribute_form(object_number)
+
+
+@step('I collapsed attribute forms of attribute number {object_number}')
+def step_impl(context, object_number):
+    context.pages.columns_and_filters_selection_page().collapse_attribute_form(object_number)
 
 
 @step('attribute form number {attribute_form_number} of attribute number {attribute_number} '
       'should be called "{expected_name}"')
 def step_impl(context, attribute_form_number, attribute_number, expected_name):
     result = context.pages.columns_and_filters_selection_page().get_attribute_form_name(
-      attribute_form_number,
-      attribute_number
-      )
+        attribute_form_number,
+        attribute_number
+    )
     AssertUtil.assert_simple(result, expected_name)
 
 
