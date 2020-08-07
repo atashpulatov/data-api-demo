@@ -41,6 +41,7 @@ when 'mac_os_x'
 when 'windows'
   include_recipe 'java_ecosystem'
   include_recipe 'workspace::tomcat_windows'
+  include_recipe 'workspace::windows_e2e_dependencies'
 else
 
 end
