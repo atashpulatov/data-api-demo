@@ -26,7 +26,7 @@ describe('F21411 - Selecting an object in the side panel highlights the data in 
     OfficeWorksheet.selectCell('A1');
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibrary(false);
-    PluginPopup.importAnyObject(objectsList.reports.reportXML, 2);
+    PluginPopup.importAnyObject(objectsList.reports.seasonalReport, 2);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toEqual(dictionary.en.importSuccess);
     PluginRightPanel.closeNotificationOnHover();

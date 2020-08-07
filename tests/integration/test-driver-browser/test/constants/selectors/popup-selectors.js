@@ -1,5 +1,6 @@
 export const popupSelectors = {
   // TODO group selectors based on location
+  promptFrameForDossier: '#popup-wrapper > div > div:nth-child(3) > iframe',
   tableOfObjects: '#WACDialogPanel',
   searchInput: '.search-field__input',
   prepareSearchInput: '#search-toolbar > div > span > input',
@@ -11,7 +12,7 @@ export const popupSelectors = {
   prepareBtn: '#prepare',
   cancelBtn: '#cancel',
   runBtn: '#run',
-  runBtnForPromptedDossier: '#id_mstr2 > tbody > tr:nth-child(3) > td > div > label.mstrPromptEditorButtonRun',
+  runBtnForPromptedDossier: 'label.mstrPromptEditorButtonRun',
   buttonLoading: 'button.loading',
   emptySearchResults: 'p=None of the objects matched your search.',
   firstObject: '#popup-wrapper > div > div.object-table > div.object-table-container > div:nth-child(1) > div > div.ReactVirtualized__Grid.ReactVirtualized__Table__Grid > div > div:nth-child(1) > div > div:nth-child(2)',
@@ -97,7 +98,7 @@ export const popupSelectors = {
   exportSpinner: $('.mstrd-spinner-export'),
   filterCostInput: 'mstrd-SliderSummary-right-input mstrd-MQInput-isBottom',
   prepareData: { getAttributeAt: (index) => `#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > div.ant-row.filter-panel-selectors > div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > div:nth-child(2) > div > div > div:nth-child(${index}) > label > span:nth-child(3)` },
-  smartFolderTable: { availableObjectNumber: '#popup-wrapper> div > div.object-table > div.FilterResult', // Contains string and number, e.g. 1280 results
+  smartFolderTable: { availableObjectNumber: 'div.FilterResult strong', 
   },
   dossierWindow: {
     getVizAT: (index) => `.mstrmojo-DocSubPanel-content.mstrmojo-scrollNode> div > div:nth-child(${index})`,
