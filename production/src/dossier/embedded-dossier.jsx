@@ -33,9 +33,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
   componentWillUnmount() {
     if (this.msgRouter) {
-      this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
-      this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
-      this.msgRouter.removeEventhandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
+      const { EventType } = microstrategy.dossier;
+      this.msgRouter.removeEventhandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
+      this.msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
+      this.msgRouter.removeEventhandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
     }
   }
 
@@ -123,7 +124,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       const { chapterKey, visualizationKey } = visualizationInfo;
       selectedVizChecked = `${chapterKey}:${visualizationKey}`;
     }
-    const { CustomAuthenticationType } = microstrategy.dossier;
+    const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
     const props = {
       instance,
@@ -182,9 +183,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       selectedViz: selectedVizChecked,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
-        this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
-        this.msgRouter.registerEventHandler('onPromptAnswered', this.promptsAnsweredHandler);
-        this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
       },
     };
     if (microstrategy && microstrategy.dossier) {
