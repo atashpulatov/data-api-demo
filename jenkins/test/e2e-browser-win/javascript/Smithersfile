@@ -1,5 +1,5 @@
-job 'stage-2-e2e-browser-test-win' do
-  description 'run browser based e2e test for excel plugin, on windows'
+job 'stage-2-e2e-browser-test-javascript-win' do
+  description 'run browser based e2e javascript test for excel plugin, on windows'
 
   configure_common_items{}
 
@@ -8,7 +8,7 @@ job 'stage-2-e2e-browser-test-win' do
       properties_content "MSYS=winsymlinks:nativestrict
         PATH=/usr/local/.rbenv/shims:/usr/local/ruby-install/bin:/usr/local/rbenv/libexec:/tools/msys/20160205-3/cmd:/tools/Sysinternals:/Users/vagrant/bin:/Users/vagrant/.rbenv/versions/2.2.4/bin:/cmd:/usr/local/bin:/mingw64/bin:/usr/bin:/Windows/system32:/Windows:/Windows/System32/Wbem:/Windows/System32/WindowsPowerShell/v1.0:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/c/Program\ Files/Amazon/AWSCLI"
     end
-    
+
     parameters do
       upstream_parameter do
         upstream_job_name 'stage-1-dev'
@@ -44,7 +44,7 @@ rake e2e_test_browser[$APPLICATION_VERSION]
 
   publishers do
     html do
-       report_name 'Browser e2e Test Report'
+       report_name 'Browser e2e JavaScript Test Report'
        report_directory_path "tests/integration/test-driver-browser/allure-report"
        index_file_name 'index.html'
     end
@@ -58,7 +58,7 @@ rake e2e_test_browser[$APPLICATION_VERSION]
     #  always_trigger 'true'
     #  always_trigger_recipients_list ''
     #end
-  
+
   end
 
 end

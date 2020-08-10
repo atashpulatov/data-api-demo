@@ -48,8 +48,8 @@ task :py_e2e_test_browser,[:build_no] do | t, args|
   test_dir = get_python_test_dir()
 
   shell_command! "python -m venv venv_win", cwd: test_dir
-  shell_command! "venv_win\Scripts\Activate", cwd: test_dir
-  shell_command! "behave --tags=@ci tests/", cwd: test_dir
+  shell_command! "venv_win\\Scripts\\Activate.bat", cwd: test_dir
+  shell_command! "python -m behave --tags=@ci --format allure_behave.formatter:AllureFormatter -o allure-report/ tests/", cwd: test_dir
 end
 
 desc "run browser based test"
