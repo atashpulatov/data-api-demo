@@ -119,11 +119,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
     let selectedVizChecked = selectedViz;
-    let activePage;
     if (selectedViz && visualizationInfo) {
-      const { chapterKey, pageKey, visualizationKey } = visualizationInfo;
+      const { chapterKey, visualizationKey } = visualizationInfo;
       selectedVizChecked = `${chapterKey}:${visualizationKey}`;
-      activePage = pageKey;
     }
     const { CustomAuthenticationType } = microstrategy.dossier;
 
@@ -132,7 +130,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       serverURL,
       applicationID: projectId,
       objectID: dossierId,
-      pageKey: activePage,
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
