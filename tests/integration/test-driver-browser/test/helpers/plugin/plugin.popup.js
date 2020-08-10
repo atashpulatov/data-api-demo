@@ -102,12 +102,12 @@ class PluginPopup {
 
   selectAllAttributes() {
     logStep(`Selecting all the attributes...    [${fileName} - selectAllAttributes()]`);
-    waitAndClick($(popupSelectors.allAttributes));
+    waitAndClick($(popupSelectors.allAttributesLabel));
   }
 
   selectAllMetrics() {
     logStep(`Selecting all the metrics...    [${fileName} - selectAllMetrics()]`);
-    waitAndClick($(popupSelectors.allMetrics));
+    waitAndClick($(popupSelectors.allMetricsLabel));
   }
 
   selectAllFilters() {
@@ -121,8 +121,11 @@ class PluginPopup {
   selectAllAttributesAndMetrics() {
     logStep(`Selecting all attributes and metrics...    [${fileName} - selectAllAttributesAndMetrics()]`);
     switchToDialogFrame();
-    this.selectAllAttributes();
-    this.selectAllMetrics();
+    if (!$(popupSelectors.allAttributesCheckbox).isSelected()
+      && !$(popupSelectors.allMetricsCheckbox).isSelected()) {
+      this.selectAllAttributes();
+      this.selectAllMetrics();
+    }
   }
 
   /**
@@ -836,14 +839,14 @@ class PluginPopup {
     const { filterBtn, sliderMinFilterPoint, sliderMaxFilterPoint, applyFilterBtn } = popupSelectors.dossierWindow;
     waitAndClick($(filterBtn));
     const sliderPoint = isInitialPoint ? sliderMinFilterPoint : sliderMaxFilterPoint;
-    switch(growth){
+    switch (growth) {
       case 'increase': {
         waitAndClick($(sliderPoint), 1000)
         pressRightArrow();
         waitAndClick($(applyFilterBtn));
         break;
       }
-      case 'decrease':{
+      case 'decrease': {
         waitAndClick($(sliderPoint), 1000)
         pressBackspace();
         waitAndClick($(applyFilterBtn));

@@ -46,7 +46,7 @@ export const rightPanelSelectors = {
   getRightClickRemoveBtn: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > nav > div:nth-child(4)`,
   notificationContainer: '.notification-container',
   progressBar: '.notification-container > div.notification-body > div.progress',
-  getNotificationAt: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container`,
+  getNotificationAt: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div > div.notification-container`,
   getProgressBarAt: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container > div.notification-body > div.progress`,
   getPendingNotificationCancelBtnAt: (index) => `#overlay > div > div.object-tile-container > div.object-tile-list > article:nth-child(${index}) > div.notification-container > div.notification-body > div.progress-bar-notification-button-container`,
   objectContainer: '.object-tile-content',

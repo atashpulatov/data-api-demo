@@ -345,6 +345,7 @@ class PluginRightPanel {
     switchToPluginFrame();
     const objectCount = $$(rightPanelSelectors.objectContainer).length;
     for (let index = 1; index <= objectCount; index++) {
+      browser.pause(3000);
       this.closeNotificationOnHover();
     }
   }
