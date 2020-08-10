@@ -6,7 +6,8 @@ Feature: F25949 - Display filters and prompts
       And I clicked Import Data button
       And MyLibrary Switch is OFF
 
-
+      And I found and selected object "Prompted report with subtotals"
+      And I clicked Prepare Data button
     
 
     #   And I clicked Filters button
