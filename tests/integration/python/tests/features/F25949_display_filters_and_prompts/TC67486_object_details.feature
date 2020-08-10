@@ -8,7 +8,14 @@ Feature: F25949 - Display filters and prompts
 
       And I found and selected object "Prompted report with subtotals"
       And I clicked Prepare Data button
-    
+
+      # TODO And I clicked Run button
+
+      And I ensure that Columns & Filters Selection is visible
+      And I selected all attributes
+      And I selected all metrics
+      And I clicked Import button in Columns and Filters Selection
+      And I closed last notification
 
     #   And I clicked Filters button
     #   And I opened All for Owner category
