@@ -189,9 +189,25 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       },
     };
     if (microstrategy && microstrategy.dossier) {
-      this.embeddedDossier = await microstrategy.dossier.create(props);
-      this.setState({ loadingFrame: false });
-      handleEmbeddedDossierLoad();
+      microstrategy.dossier
+        .create(props)
+        .then(dossier => {
+          if (selectedViz && visualizationInfo) {
+            const { pageKey, chapterKey } = visualizationInfo;
+
+            const selectedPageNodeKey = dossier
+              .getChapterList()
+              .find(chapter => chapter.nodeKey.includes(chapterKey))
+              .children
+              .find(page => page.nodeKey.includes(pageKey))
+              .nodeKey;
+
+            dossier.navigateToPage(dossier.getPageByNodeKey(selectedPageNodeKey));
+          }
+          this.embeddedDossier = dossier;
+          this.setState({ loadingFrame: false });
+          handleEmbeddedDossierLoad();
+        });
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
     }
