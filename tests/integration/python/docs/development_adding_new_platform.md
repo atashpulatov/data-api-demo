@@ -4,9 +4,9 @@ To add support for a new platform it's necessary to configure a new driver and c
 
 1. New driver:
 
-    - in `driver/driver_new_platform.py` add `DriverNewPlatform` class implementing `AbstractDriver`  
-    - add appropriate constants to `driver/driver_type.py`
-    - register new driver class in `DriverFactory` in `driver/driver_factory.py`
+    - in `framework/driver/driver_new_platform.py` add `DriverNewPlatform` class implementing `AbstractDriver`  
+    - add appropriate constants to `framework/driver/driver_type.py`
+    - register new driver class in `DriverFactory` in `framework/driver/driver_factory.py`
    
 1. New Pages Set:
     - in `pages_set/pages_set_new_platform.py` add `PagesSetNewPlatform` class implementing `AbstractPagesSet`
