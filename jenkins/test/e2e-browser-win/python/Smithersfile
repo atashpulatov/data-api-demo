@@ -62,3 +62,4 @@ rake py_e2e_test_browser[$APPLICATION_VERSION]
   end
 
 end
+
