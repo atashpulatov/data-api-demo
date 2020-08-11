@@ -8,7 +8,7 @@ Feature: F25933 - Range taken
 
       And I found and selected object "100_report"
       And I clicked Import button
-     
+
      Then I closed all notifications
 
      When I selected cell "E4"
@@ -29,7 +29,7 @@ Feature: F25933 - Range taken
       And I selected Active Cell option in Range Taken popup
       And I selected cell "W2"
       And I clicked OK button in Range Taken popup
-      
+
      Then I closed all notifications
 
      When I selected worksheet number 1
@@ -42,7 +42,7 @@ Feature: F25933 - Range taken
       And I selected Active Cell option in Range Taken popup
       And I selected cell "AN1"
       And I clicked OK button in Range Taken popup
-      
+
      Then I closed all notifications
 
       And I log out

@@ -16,13 +16,14 @@ To add a new Page implementing Page Object Model:
 
 1. Add information about the Page to all Page Sets to make it available:
 
-    - `pages_factory/abstract_pages.py` (abstract class implemented by all Page Sets, no implementation here), e.g.:
+    - `pages_set/abstract_pages.py` (abstract class implemented by all Page Sets, no implementation here),
+        e.g.:
         ```python
         @abstractmethod
         def right_panel_tile_page(self):
             pass
         ```
-    - `pages_factory/pages_*.py` (it's necessary to add appropriate method definition to all Page Sets)
+    - `pages_set/pages_*.py` (it's necessary to add appropriate method definition to all Page Sets)
        - when Page is implemented for a given Page Set:
         ```python
         from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage

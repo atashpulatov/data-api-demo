@@ -12,7 +12,7 @@ Feature: F25933 - Range taken
       And I clicked attribute "Country"
       And I clicked metric "Total Cost"
       And I clicked Import button in Columns and Filters Selection
-      
+
      Then I closed all notifications
 
      When I selected cell "C4"
