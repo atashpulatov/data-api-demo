@@ -16,6 +16,8 @@ class BaseBrowserPage(BasePage):
     IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM = 'iframe[src*="popupType=navigation-tree&et="]'
     IMPORT_DOSSIER_INTERNAL_FRAME_ELEM = '.dossier-window > div > iframe'
 
+    PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
+
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
 
@@ -77,6 +79,18 @@ class BaseBrowserPage(BasePage):
         dossier_internal_frame_element = self.get_frame_element_by_css(
             BaseBrowserPage.IMPORT_DOSSIER_INTERNAL_FRAME_ELEM)
         self._switch_to_frame(dossier_internal_frame_element)
+
+    def focus_on_prompt_frame(self):
+        self.focus_on_excel_frame()
+
+        dossier_external_frame_element = self.get_frame_element_by_css(
+            BaseBrowserPage.IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM)
+        self._switch_to_frame(dossier_external_frame_element)
+
+        prompt_frame = self.get_frame_element_by_css(
+            BaseBrowserPage.PROMPT_FRAME_ELEM)
+        self._switch_to_frame(prompt_frame)
+
 
     def _switch_to_frame(self, frame):
         start_time = time.time()

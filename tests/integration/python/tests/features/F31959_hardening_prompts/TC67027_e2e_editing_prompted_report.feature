@@ -8,7 +8,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
 
      When I clicked Prepare Data button
-      And I ensure that Prompt is visible
+      And I selected {index} prompt from the list
 
 
       # TODO And I clicked Run button
