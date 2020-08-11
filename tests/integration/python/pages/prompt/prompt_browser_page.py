@@ -1,5 +1,6 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 
+
 class PromptBrowserPage(BaseBrowserPage):
     PROMPT_RUN_BUTTON = '#run'
     PROMPT_INDEX_TABLE = '.mstrPromptTOCHeader'
@@ -14,3 +15,5 @@ class PromptBrowserPage(BaseBrowserPage):
             PromptBrowserPage.PROMPT_RUN_BUTTON,
         )
 
+    def click_run(self):
+        self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON).click()
