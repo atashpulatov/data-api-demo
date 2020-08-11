@@ -8,18 +8,14 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
     CONTEXT_MENU_SHOW_TOTALS = 'Show Totals'
     CONTEXT_MENU_DRILL = 'Drill'
-    CONTEXT_MENU_SORT_ASCENDING = 'Sort Ascending'
-    CONTEXT_MENU_SORT_DESCENDING = 'Sort Descending'
+    CONTEXT_MENU_ABSOLUTE_SORT = 'Absolute Sort'
     CONTEXT_MENU_TOTAL_ITEMS = '.mstrmojo-vi-subtotals > div > div > div > span'
     CONTEXT_MENU_BOX = '.mstrmojo-ui-Menu'
     CONTEXT_MENU_BUTTONS = '.mstrmojo-Button-text'
     CONTEXT_MENU_BUTTON_OK = 'OK'
     CONTEXT_MENU_TEXT_ELEMENTS = '.mtxt'
 
-    SORT_ORDER_MAPPING = {
-        'Ascending': CONTEXT_MENU_SORT_ASCENDING,
-        'Descending': CONTEXT_MENU_SORT_DESCENDING
-    }
+    ALLOWED_SORT_ORDER = ('Ascending', 'Descending')
 
     def select_show_totals_for_attribute(self, totals_to_select, attribute_name):
         self.focus_on_import_dossier_frame()
@@ -45,7 +41,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         ).click()
 
     def select_sort_order_for_metric(self, sort_order, metric_name):
-        if sort_order not in ImportDossierContextMenuBrowserPage.SORT_ORDER_MAPPING.keys():
+        if sort_order not in ImportDossierContextMenuBrowserPage.ALLOWED_SORT_ORDER:
             raise MstrException('Wrong sort order specified: %s.' % sort_order)
 
         self.focus_on_import_dossier_frame()
@@ -55,11 +51,14 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
             metric_name
         ).right_click()
 
-        context_menu_option = ImportDossierContextMenuBrowserPage.SORT_ORDER_MAPPING[sort_order]
+        self.find_element_in_list_by_text(
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
+            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_ABSOLUTE_SORT
+        ).click()
 
         self.find_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
-            context_menu_option
+            sort_order
         ).click()
 
     def select_drill_by_for_attribute(self, drill_by, attribute_name):
