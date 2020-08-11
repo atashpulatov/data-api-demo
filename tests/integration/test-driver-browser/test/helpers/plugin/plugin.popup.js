@@ -1169,7 +1169,7 @@ class PluginPopup {
        */
   clickAllPanelElement(checkboxTitle) {
     logStep(`Clicking the checkbox "${checkboxTitle}"...    [${fileName} - clickAllPanelElement()]`);
-    waitAndClick($(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)));
+    $(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)).click();
   }
 
   /**

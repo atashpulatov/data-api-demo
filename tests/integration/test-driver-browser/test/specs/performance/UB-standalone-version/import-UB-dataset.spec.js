@@ -66,7 +66,7 @@ describe('Smart Folder - IMPORT -', () => {
     logStep('select the application "UB-Platform-Analytics-2020"');
     PluginPopup.clickFilterButton();
     PluginPopup.clickAllButton('Application');
-    PluginPopup.clickAllPanelElement('UB-Platform-Analytics-2020.');
+    PluginPopup.clickAllPanelElement('UB-Platform-Analytics-2020');
 
     PluginPopup.selectObject(1);
     PluginPopup.clickPrepareData();
