@@ -36,5 +36,9 @@ class PromptBrowserPage(BaseBrowserPage):
 
         self._click_add_arrow()
 
+    def click_run_button(self):
+        self.focus_on_import_data_pop_up_frame()
 
-
+        button = self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON)
+        button.click()
+        # self._is_disabled()
