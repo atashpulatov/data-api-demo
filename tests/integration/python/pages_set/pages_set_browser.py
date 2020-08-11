@@ -18,6 +18,7 @@ from pages.import_dossier.import_dossier_show_data.import_dossier_show_data_brow
 from pages.import_dossier.import_dossier_table_of_contents.import_dossier_table_of_contents_browser_page import \
     ImportDossierTableOfContentsBrowserPage
 from pages.not_logged_right_panel.not_logged_right_panel_browser_page import NotLoggedRightPanelBrowserPage
+from pages.prompt.prompt_browser_page import PromptBrowserPage
 from pages.right_panel.duplicate_object_popup.duplicate_object_popup_browser_page import DuplicateObjectPopupBrowserPage
 from pages.right_panel.range_taken_popup.range_taken_popup_browser_page import RangeTakenPopupBrowserPage
 from pages.right_panel.right_panel_main.right_panel_main_browser_page import RightPanelMainBrowserPage
@@ -48,6 +49,7 @@ class PagesSetBrowser(AbstractPagesSet):
         self.import_dossier_show_data_browser_page = ImportDossierShowDataBrowserPage()
         self.not_logged_right_panel_browser_page = NotLoggedRightPanelBrowserPage()
         self.range_taken_popup_browser_page = RangeTakenPopupBrowserPage()
+        self.prompt_browser_page = PromptBrowserPage()
 
     def start_excel_page(self):
         return self.start_excel_browser_page
@@ -105,3 +107,6 @@ class PagesSetBrowser(AbstractPagesSet):
 
     def filter_panel_page(self):
         return self.filter_panel_browser_page
+
+    def prompt_page(self):
+        return self.prompt_browser_page

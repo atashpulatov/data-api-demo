@@ -5,9 +5,10 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
     Given I logged in as default user
       And I clicked Import Data button
       And MyLibrary Switch is OFF
-      And I found and selected object "Report with a subtotal & prompt"
+      And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
 
      When I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I ensure that Prompt is visible
+
 
       # TODO And I clicked Run button
