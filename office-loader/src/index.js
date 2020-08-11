@@ -171,7 +171,7 @@ function processDialogEvent(arg) {
 }
 
 function getStorageItem(key = 'iSession') {
-  return window.localStorage.getItem(key);
+  return window.localStorage.getItem(key) || getExcelSettingValue(key);
 }
 function setStorageItem(value, key = 'iSession') {
   window.localStorage.setItem(key, value);
@@ -179,6 +179,11 @@ function setStorageItem(value, key = 'iSession') {
 function removeStorageItem(key = 'iSession') {
   window.localStorage.removeItem(key);
 }
+function getExcelSettingValue(key) {
+  if (Office && Office.context && Office.context.document && Office.context.document.settings){
+    return Office.context.document.settings.get(key);
+  }
+};
 function setExcelSettingItem(value, key = 'iSession') {
   try {
     Office.context.document.settings.set(key, value);
