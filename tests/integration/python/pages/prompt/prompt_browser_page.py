@@ -1,16 +1,16 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 
+
 class PromptBrowserPage(BaseBrowserPage):
     PROMPT_RUN_BUTTON = '#run'
     PROMPT_INDEX_TABLE = '.mstrPromptTOCHeader'
 
+
+
     def __init__(self):
         super().__init__()
 
-    def ensure_prompt_is_visible(self):
-        self.focus_on_import_dossier_frame()
+    def select_prompt_from_list(self, index):
+        self.focus_on_prompt_frame()
 
-        self.wait_for_element_to_have_attribute_value_by_css(
-            PromptBrowserPage.PROMPT_RUN_BUTTON,
-        )
 
