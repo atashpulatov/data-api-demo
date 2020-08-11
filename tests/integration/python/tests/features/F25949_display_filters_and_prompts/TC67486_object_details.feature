@@ -9,6 +9,7 @@ Feature: F25949 - Display filters and prompts
       And I found and selected object "Prompted report with subtotals"
       And I clicked Prepare Data button
 
+      And I waited for Run button to be enabled
       And I clicked Run button
 
       And I ensure that Columns & Filters Selection is visible

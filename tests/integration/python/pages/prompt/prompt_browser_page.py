@@ -2,7 +2,7 @@ from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
 class PromptBrowserPage(BaseBrowserPage):
-    PROMPT_RUN_BUTTON = '#run'
+    PROMPT_RUN_BUTTON = 'div#popup-wrapper button#run'
     PROMPT_LIST_ELEM = '.mstrPromptTOCListItemIndex'
 
     def __init__(self):
@@ -17,5 +17,10 @@ class PromptBrowserPage(BaseBrowserPage):
         )
         prompt_list.click()
 
-    def click_run(self):
+    def wait_for_run_button(self):
+        self.wait_for_element_to_have_attribute_value_by_css(
+            PromptBrowserPage.PROMPT_RUN_BUTTON, 'disabled', None
+        )
+
+    def click_run_button(self):
         self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON).click()

@@ -3,14 +3,14 @@ from behave import *
 from framework.util.assert_util import AssertUtil
 
 
-@step('I ensure that Prompt is visible')
+@step('I waited for Run button to be enabled')
 def step_impl(context):
-    context.pages.prompt_page().ensure_prompt_is_visible()
+    context.pages.prompt_page().wait_for_run_button()
 
 
 @step('I clicked Run button')
 def step_impl(context):
-    context.pages.prompt_page().click_run()
+    context.pages.prompt_page().click_run_button()
 
 
 @step('I selected "{index}" prompt from the list')
