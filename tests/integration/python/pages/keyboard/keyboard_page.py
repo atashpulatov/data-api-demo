@@ -1,0 +1,15 @@
+from framework.pages_base.base_page import BasePage
+from selenium.webdriver.common.keys import Keys
+
+
+class KeyboardPage(BasePage):
+    MAP_NAME_TO_KEY = {
+      'Tab': Keys.TAB,
+      'Arrow Up': Keys.ARROW_UP,
+      'Arrow Right': Keys.ARROW_RIGHT,
+      'Arrow Down': Keys.ARROW_DOWN,
+      'Arrow Left': Keys.ARROW_LEFT,
+    }
+
+    def press_key(self, key_name):
+        self.send_keys_raw(KeyboardPage.MAP_NAME_TO_KEY[key_name])

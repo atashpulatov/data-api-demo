@@ -1,14 +1,19 @@
 from abc import ABC, abstractmethod
 
 from pages.debug.debug_page import DebugPage
+from pages.keyboard.keyboard_page import KeyboardPage
 
 
 class AbstractPagesSet(ABC):
     def __init__(self):
         self.debug_common_page = DebugPage()
+        self.keyboard_common_page = KeyboardPage()
 
     def debug_page(self):
         return self.debug_common_page
+
+    def keyboard_page(self):
+        return self.keyboard_common_page
 
     @abstractmethod
     def start_excel_page(self):
