@@ -30,7 +30,8 @@ class PromptBrowserPage(BaseBrowserPage):
         self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON).click()
 
     def click_run_button_for_prompted_dossier(self):
-        self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON).click()
+        self.focus_on_import_dossier_frame()
+        self.get_element_by_css(PromptBrowserPage.PROMPTED_DOSSIER_RUN_BUTTON).click()
 
     def _click_add_arrow(self):
         self.get_element_by_css(PromptBrowserPage.PROMPT_ADD_ARROW).click()
