@@ -128,8 +128,8 @@ def get_python_test_dir()
 end
 
 PY_WIN_TEST_PARAM = {
-  “chrome” => “windows_chrome”,
-  “desktop” => “windows_desktop”
+  "chrome" => "windows_chrome",
+  "desktop" => "windows_desktop"
 }
 
 ######################################common ci metrics code######################################
