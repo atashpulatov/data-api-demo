@@ -2,7 +2,8 @@ from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
 class PromptBrowserPage(BaseBrowserPage):
-    PROMPT_RUN_BUTTON = '#run'
+    PROMPT_RUN_BUTTON = 'div#popup-wrapper button#run'
+    PROMPTED_DOSSIER_RUN_BUTTON = '.mstrPromptEditorButtonRun'
     PROMPT_LIST_ELEM = '.mstrPromptTOCListItemIndex'
     PROMPT_OBJECT_ITEM = '.mstrListBlockItemName'
 
@@ -18,8 +19,19 @@ class PromptBrowserPage(BaseBrowserPage):
             PromptBrowserPage.PROMPT_LIST_ELEM,
             index,
         )
-
         prompt_list.click()
+
+    def wait_for_run_button(self):
+        self.wait_for_element_to_have_attribute_value_by_css(
+            PromptBrowserPage.PROMPT_RUN_BUTTON, 'disabled', None
+        )
+
+    def click_run_button(self):
+        self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON).click()
+
+    def click_run_button_for_prompted_dossier(self):
+        self.focus_on_import_dossier_frame()
+        self.get_element_by_css(PromptBrowserPage.PROMPTED_DOSSIER_RUN_BUTTON).click()
 
     def _click_add_arrow(self):
         self.get_element_by_css(PromptBrowserPage.PROMPT_ADD_ARROW).click()
@@ -35,10 +47,3 @@ class PromptBrowserPage(BaseBrowserPage):
         answer.click()
 
         self._click_add_arrow()
-
-    def click_run_button(self):
-        self.focus_on_import_data_pop_up_frame()
-
-        button = self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON)
-        button.click()
-        # self._is_disabled()

@@ -5,10 +5,9 @@ Feature: F25949 - Display filters and prompts
     Given I logged in as default user
       And I clicked Import Data button
       And MyLibrary Switch is OFF
-
+      
       And I found and selected object "Prompted report with subtotals"
       And I clicked Prepare Data button
-
       And I waited for Run button to be enabled
       And I clicked Run button
 
@@ -18,17 +17,16 @@ Feature: F25949 - Display filters and prompts
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
-    #   And I clicked Filters button
-    #   And I opened All for Owner category
-    #   And I clicked Select All within All Panel
-    #   And I clicked "Certified" from "Certified Status" category
-    #  Then the first element with 0 objects in All Panel should be selected
+    Given I added a new worksheet
+      And I clicked Add Data button
+      And MyLibrary Switch is OFF
 
-    #  When I clicked first element with 0 objects in All Panel
-    #  Then the first element with 0 objects in All Panel should NOT be selected
+      And I found and selected object "Prompted dossier"
+      And I clicked Import button to open Import Dossier
+      And I clicked Run button for prompted dossier
+      And I imported visualization "Visualization 1"
+      And I closed last notification
 
-    #  When I clicked first element with 0 objects in All Panel
-    #  Then the first element with 0 objects in All Panel should NOT be selected
+      And number of worksheets should be 2
 
-    #   And I close Import Data popup
-    #   And I log out
+      And I log out
