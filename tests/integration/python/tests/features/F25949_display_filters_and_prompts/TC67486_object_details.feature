@@ -5,7 +5,7 @@ Feature: F25949 - Display filters and prompts
     Given I logged in as default user
       And I clicked Import Data button
       And MyLibrary Switch is OFF
-
+      
       And I found and selected object "Prompted report with subtotals"
       And I clicked Prepare Data button
 
@@ -17,6 +17,16 @@ Feature: F25949 - Display filters and prompts
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
+
+    Given I added a new worksheet
+      And I clicked Add Data button
+      And MyLibrary Switch is OFF
+
+      And I found and selected object "Prompted dossier"
+      And I clicked Import button
+
+
+
 
     #   And I clicked Filters button
     #   And I opened All for Owner category
