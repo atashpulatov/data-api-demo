@@ -34,10 +34,10 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
      When I found object by ID "ABC9ACA2496777EE3FB81BA08A3CF9AD" and selected "Report with nested prompt"
       And I clicked Prepare Data button
       #      TODO And answer prompt
-      And I waited for Run button to be enabled
+#      And I waited for Run button to be enabled
       And I clicked Run button
       #      TODO And I ensure Run button is disabled after click
-      And I waited for Run button to be enabled
+#      And I waited for Run button to be enabled
       And I clicked Run button
       #      TODO And I ensure Run button is disabled after click
       And I selected all attributes
@@ -52,8 +52,6 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
        #       TODO When I closed the plugin
        #       TODO And I open the plugin
        And I clicked Edit object 1
-      Then And I clicked Run button
+      Then I clicked Run button
        #     TODO And I ensure that Columns & Filters Selection have proper UI
        #     TODO And I ensure that attributes {} metrics {} and filters {} are selected
-
-
