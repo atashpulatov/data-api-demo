@@ -1,5 +1,5 @@
-job 'stage-2-e2e-browser-test-python-win' do
-  description 'run browser based e2e python test for excel plugin, on windows'
+job 'stage-2-e2e-desktop-test-python-win' do
+  description 'run desktop based e2e python test for excel plugin, on windows'
 
   configure_common_items{}
 
@@ -37,15 +37,15 @@ source .ecosystem
 export HATS=pipeline:$HATS
 
 rake deploy_tester_server[$APPLICATION_VERSION]
-rake py_e2e_test_win[chrome]
+rake py_e2e_test_win[desktop]
 '
     end
   end
 
   publishers do
     html do
-       report_name 'Windows Browser e2e Python Test Report'
-       report_directory_path "tests/integration/python/allure-report/windows_chrome"
+       report_name 'Windows Desktop e2e Python Test Report'
+       report_directory_path "tests/integration/python/allure-report/windows_desktop"
        index_file_name 'index.html'
     end
 
