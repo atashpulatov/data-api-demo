@@ -12,9 +12,25 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
      And I selected "Electronics" as an answer for "1" prompt
      And I clicked Run button
      And I ensure that Columns & Filters Selection is visible
+#     TODO And I ensure that Columns & Filters Selection have proper UI
      And I clicked attribute "Month"
      And I clicked metric "Profit"
-#     And I selected filter "
+#     TODO And I selected filter {} with elements {}
      And I clicked Import button in Columns and Filters Selection
 
     Then I closed last notification
+
+    When I clicked Edit object 1
+     And I clicked Run button
+     And I ensure that Columns & Filters Selection is visible
+#     TODO And I ensure that Columns & Filters Selection have proper UI
+#     TODO And I ensure that attributes {} metrics {} and filters {} are selected
+     And I clicked Import button in Columns and Filters Selection
+
+    Then I closed last notification
+
+    Given I selected cell "H1"
+      And I clicked Add Data button
+      And I found object by ID "ABC9ACA2496777EE3FB81BA08A3CF9AD" and selected "Report with nested prompt"
+      And I clicked Prepare Data button
+
