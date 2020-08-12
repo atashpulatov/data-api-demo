@@ -44,3 +44,8 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
         self.get_element_by_css(RightPanelMainBrowserPage.REMOVE_ALL).click()
+
+    def check_if_right_panel_is_empty(self):
+        self.focus_on_add_in_frame()
+
+        return self.check_if_element_exists_by_css(RightPanelMainBrowserPage.IMPORT_DATA_BUTTON_ELEM)
