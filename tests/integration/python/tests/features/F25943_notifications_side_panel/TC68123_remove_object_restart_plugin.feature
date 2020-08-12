@@ -10,7 +10,6 @@ Feature: F25943 - Notifications side panel
       And I clicked Import button
       And I closed last notification
 
-
      When I removed object 1 using icon
       And I clicked close plugin button
       And I clicked plugin icon
