@@ -1,7 +1,7 @@
 @mac_chrome
-Feature: F25943 - Details panel
+Feature: F25943 - Notifications side panel
 
-  Scenario: [TC68123] - Copy to clipboard
+  Scenario: [TC68123] - Removing the object and restarting plugin without closing notification
     Given I logged in as default user
       And I clicked Import Data button
       And MyLibrary Switch is OFF
