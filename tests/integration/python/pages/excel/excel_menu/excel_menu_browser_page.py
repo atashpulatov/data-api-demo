@@ -7,7 +7,7 @@ from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPa
 
 class ExcelMenuBrowserPage(BaseBrowserPage):
     ICON_ELEM = '.cui-ctl-largelabel'
-    CLOSE_PLUGIN_BUTTON = 'AgaveTaskpaneCloseButtonId'
+    CLOSE_ADD_IN_BUTTON = 'AgaveTaskpaneCloseButtonId'
 
     def __init__(self):
         super().__init__()
@@ -32,7 +32,7 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
         raise MstrException('Cannot find AddIn element.')
 
-    def click_close_plugin_button(self):
+    def click_close_add_in_button(self):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelMenuBrowserPage.CLOSE_PLUGIN_BUTTON).click()
+        self.get_element_by_id(ExcelMenuBrowserPage.CLOSE_ADD_IN_BUTTON).click()

@@ -11,8 +11,9 @@ Feature: F25943 - Notifications side panel
       And I closed last notification
 
      When I removed object 1 using icon
-      And I clicked close plugin button
-      And I clicked plugin icon
-     Then Right panel is empty
+      And I clicked close Add-in button
+      And I clicked Add-in icon
+
+     Then Right Panel is empty
 
       And I log out

@@ -28,7 +28,7 @@ def step_impl(context):
     context.pages.right_panel_page().remove_all()
 
 
-@step('Right panel is empty')
+@step('Right Panel is empty')
 def step_impl(context):
     is_right_panel_empty = context.pages.right_panel_page().check_if_right_panel_is_empty()
 
