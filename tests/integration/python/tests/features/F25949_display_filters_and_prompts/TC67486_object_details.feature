@@ -8,7 +8,6 @@ Feature: F25949 - Display filters and prompts
       
       And I found and selected object "Prompted report with subtotals"
       And I clicked Prepare Data button
-
       And I waited for Run button to be enabled
       And I clicked Run button
 
@@ -23,7 +22,8 @@ Feature: F25949 - Display filters and prompts
       And MyLibrary Switch is OFF
 
       And I found and selected object "Prompted dossier"
-      And I clicked Import button
+      And I clicked Import button without checking results
+      And I clicked Run button for prompted dossier
 
 
 

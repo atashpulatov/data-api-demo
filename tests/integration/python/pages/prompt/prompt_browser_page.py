@@ -3,6 +3,7 @@ from framework.pages_base.base_browser_page import BaseBrowserPage
 
 class PromptBrowserPage(BaseBrowserPage):
     PROMPT_RUN_BUTTON = 'div#popup-wrapper button#run'
+    PROMPTED_DOSSIER_RUN_BUTTON = '.mstrPromptEditorButtonRun'
     PROMPT_LIST_ELEM = '.mstrPromptTOCListItemIndex'
     PROMPT_OBJECT_ITEM = '.mstrListBlockItemName'
 
@@ -26,6 +27,9 @@ class PromptBrowserPage(BaseBrowserPage):
         )
 
     def click_run_button(self):
+        self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON).click()
+
+    def click_run_button_for_prompted_dossier(self):
         self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON).click()
 
     def _click_add_arrow(self):

@@ -13,6 +13,11 @@ def step_impl(context):
     context.pages.prompt_page().click_run_button()
 
 
+@step('I clicked Run button for prompted dossier')
+def step_impl(context):
+    context.pages.prompt_page().click_run_button_for_prompted_dossier()
+
+
 @step('I selected "{index}" prompt from the list')
 def step_impl(context, index):
     context.pages.prompt_page().select_prompt_from_list(index)
