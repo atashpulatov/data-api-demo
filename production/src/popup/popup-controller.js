@@ -167,7 +167,7 @@ class PopupController {
       isPrompted: response.isPrompted,
       instanceId: response.instanceId,
       subtotalsInfo: response.subtotalsInfo,
-      displayAttrFormNames: response.displayAttrFormNames || officeProperties.displayAttrFormNames.automatic,
+      displayAttrFormNames: response.displayAttrFormNames,
       definition: { filters: response.filterDetails },
     };
     this.reduxStore.dispatch(importRequested(objectData));
@@ -187,7 +187,7 @@ class PopupController {
         visualizationInfo: response.visualizationInfo,
         preparedInstanceId: response.preparedInstanceId,
         definition: { filters: response.filterDetails, },
-        displayAttrFormNames: response.displayAttrFormNames || officeProperties.displayAttrFormNames.automatic,
+        displayAttrFormNames: response.displayAttrFormNames
       };
       this.reduxStore.dispatch(importRequested(objectData));
     }
