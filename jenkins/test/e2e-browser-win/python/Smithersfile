@@ -45,7 +45,7 @@ rake py_e2e_test_win[chrome]
   publishers do
     html do
        report_name 'Windows Browser e2e Python Test Report'
-       report_directory_path "tests/integration/python/allure-report/windows_chrome"
+       report_directory_path "tests/integration/python/allure-report"
        index_file_name 'index.html'
     end
 
