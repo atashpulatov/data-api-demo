@@ -57,5 +57,5 @@ class DriverChrome(AbstractDriver):
     def driver_cleanup(driver):
         try:
             driver.quit()
-        except:
+        except Exception:
             pass

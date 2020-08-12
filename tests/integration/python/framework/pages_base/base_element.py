@@ -37,7 +37,10 @@ class BaseElement:
 
     def move_to_and_click(self, offset_x=None, offset_y=None):
         self.move_to(offset_x, offset_y)
-        self.click()
+
+        ActionChains(self.__driver).click().perform()
+
+        Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     def double_click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:

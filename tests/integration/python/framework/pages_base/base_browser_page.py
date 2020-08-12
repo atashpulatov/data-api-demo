@@ -19,6 +19,9 @@ class BaseBrowserPage(BasePage):
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
 
+    def get_element_with_focus(self):
+        return self.driver.switch_to.active_element
+
     def switch_to_window_by_index(self, index):
         window_handles = self.driver.window_handles
 
