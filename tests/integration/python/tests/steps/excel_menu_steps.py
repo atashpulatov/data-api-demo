@@ -1,8 +1,4 @@
-import json
-
 from behave import *
-
-from framework.util.assert_util import AssertUtil
 
 
 @step('I clicked close plugin button')
