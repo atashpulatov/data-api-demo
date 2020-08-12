@@ -1167,9 +1167,16 @@ class PluginPopup {
        * Clicks a checkbox on all panel by given checkboxTitle
        * @param {String} checkboxTitle title of the checkbox on the allPanel
        */
-  clickAllPanelElement(checkboxTitle) {
+  clickAllPanelElement(checkboxTitle, isDelayRequired = true) {
     logStep(`Clicking the checkbox "${checkboxTitle}"...    [${fileName} - clickAllPanelElement()]`);
-    $(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle)).click();
+
+    const panelCheckbox = $(popupSelectors.filterPanel.getAllPanelCheckbox(checkboxTitle))
+
+    if (isDelayRequired) {
+      waitAndClick(panelCheckbox)
+    } else {
+      panelCheckbox.click();
+    }
   }
 
   /**

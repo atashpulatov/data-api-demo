@@ -28,8 +28,8 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     PluginPopup.clickFilterButton();
     PluginPopup.tickFilterCheckBox('Type', 'Dossier');
     PluginPopup.clickAllButton('Owner');
-    PluginPopup.clickAllPanelElement('a');
-    PluginPopup.clickAllPanelElement('Administrator');
+    PluginPopup.clickAllPanelElement('a', false);
+    PluginPopup.clickAllPanelElement('Administrator', false);
     PluginPopup.clickHeader('Name');
     PluginPopup.scrollTable(['End']);
     PluginPopup.selectLastObject();
@@ -52,7 +52,7 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     PluginPopup.clickFilterButton();
     PluginPopup.clearAll();
     PluginPopup.clickAllButton('Modified');
-    PluginPopup.clickAllPanelElement('Last Quarter');
+    PluginPopup.clickAllPanelElement('Last Quarter', false);
     PluginPopup.importObject(objectsList.reports.basicReport);
     waitForNotification();
 
