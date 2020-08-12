@@ -1,5 +1,3 @@
-@windows_desktop
-@windows_chrome
 @mac_chrome
 Feature: F30463 - Ability to sort on prepare data
 
@@ -25,7 +23,7 @@ Feature: F30463 - Ability to sort on prepare data
 
      Then metric number 1 should be called "Average Revenue"
      When I changed sort order of "metrics" to ascending by click
-      
+
      Then metric number 1 should be called "Average Revenue"
 
      When I changed sort order of "metrics" to descending by click
@@ -47,7 +45,7 @@ Feature: F30463 - Ability to sort on prepare data
      When I searched for element called "Age"
       And I pressed tab until sorting "attributes" is focused
       And I changed sort order of "attributes" to ascending by pressing Enter
-      
+
      Then attribute number 1 should be called "Age Range"
 
      When I changed sort order of "attributes" to descending by pressing Enter
@@ -56,7 +54,7 @@ Feature: F30463 - Ability to sort on prepare data
      When I changed sort order of "attributes" to default by pressing Enter
       And I pressed tab until sorting "metrics" is focused
       And I changed sort order of "metrics" to ascending by pressing Enter
-      
+
      Then metric number 1 should be called "Average Revenue"
 
      When I changed sort order of "metrics" to descending by pressing Enter
@@ -65,17 +63,17 @@ Feature: F30463 - Ability to sort on prepare data
      When I changed sort order of "metrics" to default by pressing Enter
       And I pressed tab until sorting "filters" is focused
       And I changed sort order of "filters" to ascending by pressing Enter
-      
+
      Then filter number 1 should be called "Age Range"
 
      When I changed sort order of "filters" to descending by pressing Enter
      Then filter number 1 should be called "Phone Usage"
-      
+
      When I changed sort order of "filters" to default by pressing Enter
       And I cleared the search for element with backspace
       And I selected "attributes" element number 1
       And I expanded attribute forms of attribute number 1
-      
+
      Then attribute form number 1 of attribute number 1 should be called "DESC"
 
      When I collapsed attribute forms of attribute number 1
@@ -84,7 +82,7 @@ Feature: F30463 - Ability to sort on prepare data
       And I scrolled into "attributes" element number 30
       And I selected "attributes" element number 30
       And I expanded attribute forms of attribute number 30
-      
+
      Then attribute form number 1 of attribute number 30 should be called "DESC"
 
      When I collapsed attribute forms of attribute number 30
@@ -92,7 +90,7 @@ Feature: F30463 - Ability to sort on prepare data
       And I changed sort order of "attributes" to default by click
       And I selected all attributes
       And I selected all metrics
-      
+
      When I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
