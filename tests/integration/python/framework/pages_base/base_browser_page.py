@@ -21,6 +21,8 @@ class BaseBrowserPage(BasePage):
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
 
+    DISABLED_BUTTON_ATTRIBUTE = 'disabled'
+
     def get_element_with_focus(self):
         return self.driver.switch_to.active_element
 
@@ -81,6 +83,8 @@ class BaseBrowserPage(BasePage):
         self._switch_to_frame(dossier_internal_frame_element)
 
     def focus_on_prompt_frame(self):
+        end_time = time.time() + DEFAULT_TIMEOUT
+
         self.focus_on_excel_frame()
 
         dossier_external_frame_element = self.get_frame_element_by_css(
@@ -91,6 +95,8 @@ class BaseBrowserPage(BasePage):
             BaseBrowserPage.PROMPT_FRAME_ELEM)
         self._switch_to_frame(prompt_frame)
 
+        if time.time() > end_time:
+            raise MstrException('Cannot focus on prompt frame')
 
     def _switch_to_frame(self, frame):
         start_time = time.time()
@@ -176,3 +182,6 @@ class BaseBrowserPage(BasePage):
                 return item
 
         raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+
+    def _is_disabled(self):
+        return button.get_attribute(BaseBrowserPage.DISABLED_BUTTON_ATTRIBUTE) == 'true'

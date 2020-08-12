@@ -7,8 +7,30 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And MyLibrary Switch is OFF
       And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
 
-     When I clicked Prepare Data button
-      And I selected "1" prompt from the list
+    When I clicked Prepare Data button
+#    TODO And I ensure Run button is disabled before loading prompted window
+     And I selected "Electronics" as an answer for "1" prompt
+     And I clicked Run button
+     And I ensure that Columns & Filters Selection is visible
+#     TODO And I ensure that Columns & Filters Selection have proper UI
+     And I clicked attribute "Month"
+     And I clicked metric "Profit"
+#     TODO And I selected filter {} with elements {}
+     And I clicked Import button in Columns and Filters Selection
 
+    Then I closed last notification
 
-      # TODO And I clicked Run button
+    When I clicked Edit object 1
+     And I clicked Run button
+     And I ensure that Columns & Filters Selection is visible
+#     TODO And I ensure that Columns & Filters Selection have proper UI
+#     TODO And I ensure that attributes {} metrics {} and filters {} are selected
+     And I clicked Import button in Columns and Filters Selection
+
+    Then I closed last notification
+
+    Given I selected cell "H1"
+      And I clicked Add Data button
+      And I found object by ID "ABC9ACA2496777EE3FB81BA08A3CF9AD" and selected "Report with nested prompt"
+      And I clicked Prepare Data button
+
