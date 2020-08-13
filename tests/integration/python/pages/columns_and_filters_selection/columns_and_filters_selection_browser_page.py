@@ -296,3 +296,10 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=LONG_TIMEOUT)
+
+    def click_import_button_to_duplicate(self):
+        self.focus_on_import_data_pop_up_frame()
+
+        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
+
+        self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=LONG_TIMEOUT)
