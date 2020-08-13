@@ -288,7 +288,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
-        self.get_element_by_css_no_visiblity_checked(element).move_to()
+        self.get_element_by_css_no_visibility_checked(element).move_to()
 
     def click_import_button(self):
         self.focus_on_import_data_pop_up_frame()
