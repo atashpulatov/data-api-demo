@@ -35,3 +35,10 @@ def step_impl(context):
     is_checked = context.pages.filter_panel_page().examine_if_first_empty_element_is_checked()
 
     AssertUtil.assert_simple(is_checked, False)
+
+
+@step('element "{element_name}" has focus')
+def step_impl(context, element_name):
+    has_focus = context.pages.filter_panel_page().examine_if_element_has_focus(element_name)
+
+    AssertUtil.assert_simple(has_focus, True)

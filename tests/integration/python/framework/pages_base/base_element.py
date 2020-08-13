@@ -15,6 +15,9 @@ class BaseElement:
         self.__element = raw_element
         self.__driver = driver
 
+    def __eq__(self, element_to_compare):
+        return self.id == element_to_compare.id
+
     # TODO refactor and remove
     def get_element(self):
         return self.__element
