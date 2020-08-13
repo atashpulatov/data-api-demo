@@ -157,3 +157,8 @@ def step_impl(context, object_type, object_number):
 @when('I clicked Import button in Columns and Filters Selection')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button()
+
+
+@when('I clicked Import button in Columns and Filters Selection to duplicate object')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_import_button_to_duplicate()
