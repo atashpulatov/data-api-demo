@@ -9,7 +9,7 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     ALL_PANEL_FIRST_CHECKBOX = '.all-panel .ReactVirtualized__Grid__innerScrollContainer > div:first-child input'
 
     APPLICATIONS_FIRST_CHECKBOX = '.filter-panel .category-list-wrapper:nth-child(1) ' \
-                                  '.category-list-row:nth-child(1) input:nth-of-type(1)'
+                                  '.category-list-row:nth-child(1) input'
     APPLICATIONS_ALL_PANEL = '.filter-panel div.category-list-wrapper:nth-child(1) > button:nth-child(2)'
 
     TYPES_REPORT_CHECKBOX = '.filter-panel .category-list-wrapper:nth-child(2) ' \
@@ -20,10 +20,10 @@ class FilterPanelBrowserPage(BaseBrowserPage):
                              '.category-list-row:nth-child(3) input'
 
     CERTIFIED_CHECKBOX = '.filter-panel .category-list-wrapper:nth-child(3) ' \
-                         '.category-list-row:nth-child(1) input:nth-of-type(1)'
+                         '.category-list-row:nth-child(1) input'
 
     OWNERS_FIRST_CHECKBOX = '.filter-panel .category-list-wrapper:nth-child(4) ' \
-                            '.category-list-row:nth-child(1) input:nth-of-type(1)'
+                            '.category-list-row:nth-child(1) input'
     OWNER_ALL_PANEL = '.filter-panel div.category-list-wrapper:nth-child(4) > button:nth-child(2)'
 
     ELEMENT_FROM_CATEGORY = '.category-list-header[aria-label="%s"] + .category-list-table label[title="%s"]'
