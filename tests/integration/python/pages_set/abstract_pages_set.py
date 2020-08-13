@@ -89,3 +89,7 @@ class AbstractPagesSet(ABC):
     @abstractmethod
     def prompt_page(self):
         pass
+
+    @abstractmethod
+    def right_panel_tile_details_page(self):
+        pass
