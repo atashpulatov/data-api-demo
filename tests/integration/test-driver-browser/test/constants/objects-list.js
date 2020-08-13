@@ -156,7 +156,7 @@ export const objectsList = {
         barChart: '#mstr271',
         lineChart: '#mstr444',
         areaChart: '#mstr421',
-        bubbleChart: popupSelectors.dossierWindow.getVizAT(16),
+        bubbleChart: popupSelectors.dossierWindow.getVizAT(15),
         pieChart: '#mstr310',
         comboChart: '#mstr557',
         geospatialService: '#mstr338',
