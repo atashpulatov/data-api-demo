@@ -71,6 +71,8 @@ class FilterPanelBrowserPage(BaseBrowserPage):
         return element.check_if_child_element_exists_by_css(FilterPanelBrowserPage.ELEMENT_CHECKED)
 
     def examine_if_element_has_focus(self, element_name):
-        return (self.get_element_by_css_no_visibility_checked(FilterPanelBrowserPage
-                .MAP_ELEMENT_NAME_TO_SELECTOR[element_name])
-                == self.get_element_with_focus())
+        element = self.get_element_by_css_no_visibility_checked(
+            FilterPanelBrowserPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]
+        )
+
+        return element == self.get_element_with_focus()
