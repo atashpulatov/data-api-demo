@@ -14,6 +14,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
-    Given I hovered over show details button on object 1
+    Given I hovered over toggle details button on object 1
+     Then Tooltip text for object 1 toggle details button is Show Details
 
       And I log out
