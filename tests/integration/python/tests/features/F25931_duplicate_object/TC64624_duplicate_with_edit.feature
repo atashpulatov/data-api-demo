@@ -24,7 +24,7 @@ Feature: F25931 - Duplicate object
       And I clicked attribute "Country"
       And I clicked metric "Total Cost"
 
-     When I clicked Import button in Columns and Filters Selection
+     When I clicked Import button in Columns and Filters Selection to duplicate object
       And I closed last notification
 
      Then object number 1 should be called "100_report Copy"
