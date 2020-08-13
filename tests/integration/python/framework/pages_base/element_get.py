@@ -24,7 +24,7 @@ class ElementGet(ElementCheck):
     def get_element_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.CSS_SELECTOR, selector, timeout), self.driver)
 
-    def get_element_by_css_no_visiblity_checked(self, selector, timeout=DEFAULT_TIMEOUT):
+    def get_element_by_css_no_visibility_checked(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element_no_visibility_checked(By.CSS_SELECTOR, selector, timeout), self.driver)
 
     def get_element_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
