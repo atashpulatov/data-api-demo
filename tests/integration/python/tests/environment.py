@@ -8,7 +8,7 @@ from pages_set.pages_set_factory import PagesSetFactory
 
 def before_all(context):
     context.config.setup_logging(
-        format='%(asctime)s %(levelname)-8s %(message)s',
+        format='%(asctime)s %(levelname)-7s %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S'
     )
     ConfigUtil.initialize(context)
