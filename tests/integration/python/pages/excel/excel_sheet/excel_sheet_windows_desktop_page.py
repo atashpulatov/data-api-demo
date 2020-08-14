@@ -2,7 +2,6 @@ from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.image_element import ImageElement
-from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
 from framework.util.excel_util import ExcelUtil
 from framework.util.exception.MstrException import MstrException
 
@@ -40,22 +39,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     def go_to_cell(self, cell):
         cell_upper = cell.upper()
 
-        root_element = ImageElement.excel_element
+        self.get_element_by_name(ExcelSheetWindowsDesktopPage.NAME_BOX_ELEM).click()
 
-        i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER and not self._go_to_cell_single_check(cell_upper, root_element):
-            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
-            i += 1
-
-    def _go_to_cell_single_check(self, cell_upper, element):
-        try:
-            element.send_keys_raw((Keys.CONTROL, 'g', Keys.CONTROL, cell_upper, Keys.ENTER))
-            return True
-        except Exception as e:
-            self.log_warning('Error while executing _go_to_cell_single_check()')
-            self.log_warning(e)
-
-        return False
+        ImageElement.excel_element.send_keys_raw((cell_upper, Keys.ENTER))
 
     def _get_selected_cell_value(self, cell):
         cell_selector_name = self._get_selector_name(cell)

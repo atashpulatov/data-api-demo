@@ -12,9 +12,9 @@ class ImageElement(BaseElement):
 
     excel_element = None
 
-    def __init__(self, coordinates, driver):
+    def __init__(self, center_coordinates, driver):
         super().__init__(None, driver)
-        self.__coordinates = coordinates
+        self.__center_coordinates = center_coordinates
         self.__driver = driver
 
     @classmethod
@@ -24,8 +24,8 @@ class ImageElement(BaseElement):
     def click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
-                                      self.__coordinates[0] + offset_x,
-                                      self.__coordinates[1] + offset_y)
+                                      self.__center_coordinates[0] + offset_x,
+                                      self.__center_coordinates[1] + offset_y)
          .click()
          .perform())
 
@@ -73,7 +73,13 @@ class ImageElement(BaseElement):
         raise MstrException('Invalid usage of ImageElement, value_of_css_property() is not allowed')
 
     def move_to(self, offset_x=0, offset_y=0):
-        raise MstrException('Invalid usage of ImageElement, move_to() is not allowed')
+        (ActionChains(self.__driver)
+         .move_to_element_with_offset(ImageElement.excel_element,
+                                      self.__center_coordinates[0] + offset_x,
+                                      self.__center_coordinates[1] + offset_y)
+         .perform())
+
+        Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     @property
     def size(self):

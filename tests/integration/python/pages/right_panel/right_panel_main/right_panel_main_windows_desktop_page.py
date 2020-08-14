@@ -6,6 +6,8 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
     IMPORT_DATA_BUTTON_ELEM = 'Import Data button'
     ADD_DATA_BUTTON_ELEM = 'Add Data'
 
+    MICROSTRATEGY_LOG_ELEM = 'microstrategy logo'
+
     def __init__(self):
         super().__init__()
 

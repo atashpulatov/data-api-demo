@@ -96,10 +96,11 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def ensure_columns_and_filters_selection_is_visible(self):
-        element_coordinates = self.get_element_coordinates_by_name(
+        element_coordinates = self.get_element_center_coordinates_by_name(
             ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT,
             image_name=self.prepare_image_name(
-                ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT))
+                ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT)
+        )
 
         if not element_coordinates:
             raise MstrException('Error while opening Attributes Metrics Filters')
