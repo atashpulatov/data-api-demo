@@ -51,7 +51,8 @@ line parameter.
 ([see details](https://www2.microstrategy.com/producthelp/Current/Office/en-us/Content/install_manually.htm)).
 
 1. Install [WinAppDriver](https://github.com/Microsoft/WinAppDriver/releases) and enable `Developer mode` in Windows 
-(see `Settings / Update & Security / For developers / Use developer features`).
+(see `Settings / Update & Security / For developers / Use developer features`). **Note: ensure `Developer mode` is
+on, warning message regarding remote deployment or Windows Device Portal can be ignored.**
 
 <a name="windows_chrome_browser"></a>
 ### Windows Chrome browser
@@ -171,7 +172,8 @@ line parameter).
 ([see details](https://www2.microstrategy.com/producthelp/Current/Office/en-us/Content/install_manually.htm)).
 
 1. Install [WinAppDriver](https://github.com/Microsoft/WinAppDriver/releases) and enable `Developer mode` in Windows 
-(see `Settings / Update & Security / For developers / Use developer features`).
+(see `Settings / Update & Security / For developers / Use developer features`). **Note: ensure `Developer mode` is
+on, warning message regarding remote deployment or Windows Device Portal can be ignored.** 
 
 1. Enable communication between Mac and Windows by ensuring port 4723 is open for incoming network traffic in
 Windows Desktop firewall or by configuring reversed tunnel, using e.g. PuTTy. Choose on option, preferably
