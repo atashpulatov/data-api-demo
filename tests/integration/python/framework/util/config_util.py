@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 from framework.driver.driver_type import DRIVER_TYPE_WINDOWS_DESKTOP, AVAILABLE_DRIVERS, DRIVER_TYPE_MAC_CHROME, \
     DRIVERS_SUPPORTING_IMAGE_RECOGNITION, DRIVER_TYPE_MAC_DESKTOP
@@ -8,13 +9,18 @@ from framework.util.util import Util
 
 
 class ConfigUtil:
-    CONFIG_FILE_PATH = os.path.join('framework', 'config', 'config.json')
+    CONFIG_DIR_PATH = os.path.join('framework', 'config')
+    CONFIG_DEFAULT_FILE_NAME = 'config.json'
+    CONFIG_FILE_NAME_PATTERN = r'^[a-zA-Z0-9-._]+$'
+    CONFIG_FILE_NAME_SEARCH = re.compile(CONFIG_FILE_NAME_PATTERN)
 
     DRIVERS_SUPPORTING_ATTACHING_TO_EXISTING_SESSION = [
         DRIVER_TYPE_WINDOWS_DESKTOP,
         DRIVER_TYPE_MAC_CHROME,
         DRIVER_TYPE_MAC_DESKTOP
     ]
+
+    PARAM_NAME_CONFIG_FILE_NAME = 'config_file'
 
     PARAM_NAME_DRIVER_TYPE = 'driver_type'
     PARAM_NAME_IMAGE_RECOGNITION_ENABLED = 'image_recognition_enabled'
@@ -159,10 +165,31 @@ class ConfigUtil:
 
     @staticmethod
     def _get_config():
+        config_file_full_path = ConfigUtil._prepare_full_config_path()
+
         if not ConfigUtil.config:
-            ConfigUtil.config = ConfigUtil.get_json_data(ConfigUtil.CONFIG_FILE_PATH)
+            ConfigUtil.config = ConfigUtil.get_json_data(config_file_full_path)
 
         return ConfigUtil.config
+
+    @staticmethod
+    def _prepare_full_config_path():
+        if ConfigUtil.PARAM_NAME_CONFIG_FILE_NAME in ConfigUtil.context.config.userdata:
+            config_file_name = ConfigUtil.context.config.userdata[ConfigUtil.PARAM_NAME_CONFIG_FILE_NAME]
+
+            if not ConfigUtil.CONFIG_FILE_NAME_SEARCH.match(config_file_name):
+                raise MstrException(
+                    'Invalid config file name, must match %s: %s' % (ConfigUtil.CONFIG_FILE_NAME_PATTERN,
+                                                                            config_file_name))
+        else:
+            config_file_name = ConfigUtil.CONFIG_DEFAULT_FILE_NAME
+
+        config_file_full_path = os.path.join(ConfigUtil.CONFIG_DIR_PATH, config_file_name)
+
+        if not os.path.exists(config_file_full_path):
+            raise MstrException('Invalid config file name, file does not exist: %s' % config_file_name)
+
+        return os.path.join(ConfigUtil.CONFIG_DIR_PATH, config_file_name)
 
     @staticmethod
     def get_json_data(file_path):
