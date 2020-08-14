@@ -89,8 +89,8 @@ class ImageElement(BaseElement):
     def location(self):
         raise MstrException('Invalid usage of ImageElement, location is not allowed')
 
-    def send_keys_raw(self, special_key):
-        raise MstrException('Invalid usage of ImageElement, send_keys_raw() is not allowed')
-
-    def send_keys(self, text):
+    def send_keys(self, special_key):
         raise MstrException('Invalid usage of ImageElement, send_keys() is not allowed')
+
+    def send_keys_with_check(self, text):
+        raise MstrException('Invalid usage of ImageElement, send_keys_with_check() is not allowed')

@@ -13,4 +13,4 @@ class KeyboardPage(BasePage):
     }
 
     def press_key(self, key_name):
-        self.send_keys_raw(KeyboardPage.MAP_NAME_TO_KEY[key_name])
+        self.send_keys(KeyboardPage.MAP_NAME_TO_KEY[key_name])

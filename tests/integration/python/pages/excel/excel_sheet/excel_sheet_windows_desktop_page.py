@@ -41,7 +41,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.get_element_by_name(ExcelSheetWindowsDesktopPage.NAME_BOX_ELEM).click()
 
-        ImageElement.excel_element.send_keys_raw((cell_upper, Keys.ENTER))
+        ImageElement.excel_element.send_keys((cell_upper, Keys.ENTER))
 
     def _get_selected_cell_value(self, cell):
         cell_selector_name = self._get_selector_name(cell)

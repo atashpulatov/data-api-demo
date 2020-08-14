@@ -60,7 +60,7 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
         cell_input.send_keys(cell_upper)
         Util.pause(0.1)
 
-        cell_input.send_keys_raw(Keys.ENTER)
+        cell_input.send_keys(Keys.ENTER)
         Util.pause(0.1)
 
     def _get_selected_cell_value(self):

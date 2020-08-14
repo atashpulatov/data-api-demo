@@ -58,9 +58,9 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         cell_input.click()
         self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
 
-        cell_input.send_keys_raw(cell_upper)
+        cell_input.send_keys(cell_upper)
 
-        cell_input.send_keys_raw(Keys.ENTER)
+        cell_input.send_keys(Keys.ENTER)
         self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
 
     def _get_selected_cell_value(self):
@@ -89,7 +89,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)
-        self.send_keys_raw(value)
+        self.send_keys(value)
 
     def get_number_of_worksheets(self):
         self.focus_on_excel_frame()
