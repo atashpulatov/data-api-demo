@@ -39,6 +39,7 @@ or virtual, e.g. using VirtualBox) - **remote tests execution**.
     pip install Pillow
     pip install opencv-python-headless
     pip install pyperclip
+    pip install allure-report
     ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
@@ -74,6 +75,8 @@ line parameter.
     pip install Pillow
     pip install opencv-python-headless
     pip install pyperclip
+    pip install allure-report
+    ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
 
@@ -105,6 +108,7 @@ line parameter).
     pip install Pillow
     pip install opencv-python-headless
     pip install pyperclip
+    pip install allure-report
     ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
@@ -137,6 +141,7 @@ line parameter).
     pip install Pillow
     pip install opencv-python-headless
     pip install pyperclip
+    pip install allure-report
     ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
@@ -221,6 +226,7 @@ simpler firewall configuration:
     pip install Pillow
     pip install opencv-python-headless
     pip install pyperclip
+    pip install allure-report
     ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
