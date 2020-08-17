@@ -9,7 +9,8 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTES_CHECKBOX = '.item-title'
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
-    FILTER_ITEM = 'filter-title'
+    FILTER_ITEM = '.filter-title'
+    SPAN = 'span'
     FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
                                            'div.attribute-forms > ul > ' \
                                            'li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > ' \
@@ -22,6 +23,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ALL_METRICS = '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > ' \
                   'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > ' \
                   'div.checkbox-list.all-showed > div > div > label'
+
+    ALL_FILTERS =  'div.filters-col > div > div:nth-child(2) > div > div.checkbox-list.all-showed > div > div > label > span.all-element'
 
     ATTRIBUTE_FORM_DROPDOWN = '.ant-select-selection--single'
     ATTRIBUTE_FORM_DROP_DOWN_ITEM = '.ant-select-dropdown-menu-item'
@@ -315,14 +318,36 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.CANCEL_BUTTON_ELEM).click()
 
-    def select_filters_elements(self, filter, elements):
+    def select_filter_elements(self, filter, elements):
+        """
+        Select checkbox for filter elements
+        :param filter: name of the filter.
+        :param elements: list of filter elements separated by "," without spaces eg.: "Books,Electronics".
+        """
         self.focus_on_import_data_pop_up_frame()
+        self._select_filter(filter)
 
-        filter_elem = self.find_element_by_text_in_elements_list_by_css(
+        elements_arr = elements.split(',')
+
+        print(elements_arr)
+
+        for item in elements_arr:
+            filter_elem = self.find_element_by_text_in_elements_list_by_css(
+                ColumnsAndFiltersSelectionBrowserPage.SPAN,
+                item
+            )
+            filter_elem.click()
+
+    def select_all_filter_elements(self, filter):
+        self.focus_on_import_data_pop_up_frame()
+        self._select_filter(filter)
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_FILTERS).click()
+
+    def _select_filter(self, filter):
+        filter_item = self.find_element_by_text_in_elements_list_by_css(
             ColumnsAndFiltersSelectionBrowserPage.FILTER_ITEM,
             filter
         )
 
-        filter_elem.click()
-
-        elements
+        filter_item.click()

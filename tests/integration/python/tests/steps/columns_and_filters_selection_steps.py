@@ -43,6 +43,11 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().unselect_all_metrics()
 
 
+@step('I selected filter "{filter}" with all elements')
+def step_impl(context, filter):
+    context.pages.columns_and_filters_selection_page().select_all_filter_elements(filter)
+
+
 @step('I clicked attributes and forms {attributes_and_forms_json}')
 def step_impl(context, attributes_and_forms_json):
     context.pages.columns_and_filters_selection_page().click_attributes_and_forms(attributes_and_forms_json)
@@ -174,6 +179,6 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_cancel_button()
 
 
-@step('And I selected filter "{filter}" with elements "{elements}"')
+@step('I selected filter "{filter}" and elements "{elements}"')
 def step_impl(context, filter, elements):
-    context.columns_and_filters_selection_page().select_filters_elements(filter, elements)
+    context.pages.columns_and_filters_selection_page().select_filter_elements(filter, elements)

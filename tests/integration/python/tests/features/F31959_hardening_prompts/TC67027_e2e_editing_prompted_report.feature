@@ -15,7 +15,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       #     TODO And I ensure that Columns & Filters Selection have proper UI
       And I clicked attribute "Month"
       And I clicked metric "Profit"
-      #     TODO And I selected filter {} with elements {}
+      And I selected filter "Subcategory" and elements "Audio Equipment,TV's"
       And I clicked Import button in Columns and Filters Selection
 
      Then I closed last notification
@@ -35,16 +35,16 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
      When I found object by ID "BA5C566011EAD58999B90080EF850206" and selected "simple report with nested prompt"
       And I clicked Prepare Data button
       #      TODO And answer prompt
-#      And I waited for Run button to be enabled
+      And I waited for Run button to be enabled
       And I clicked Run button
       #      TODO And I ensure Run button is disabled after click
-#      And I waited for Run button to be enabled
+      And I waited for Run button to be enabled
       And I clicked Run button
       #      TODO And I ensure Run button is disabled after click
       And I selected all attributes
       And I selected all metrics
-      #      TODO And I selected filter "Region" with all elements
-      #     TODO And I selected filter {} with elements {}
+      And I selected filter "Category" with all elements
+      And I selected filter "Category" and elements "Books,Electronics"
       And I clicked Import button in Columns and Filters Selection
 
      When I clicked Edit object 1
