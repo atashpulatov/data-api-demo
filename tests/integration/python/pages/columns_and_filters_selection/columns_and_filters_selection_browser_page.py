@@ -230,7 +230,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         search_box = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.SEARCH_INPUT)
-        search_box.send_keys(element_name)
+        search_box.send_keys_with_check(element_name)
 
     def clear_search_element(self):
         self.focus_on_import_data_pop_up_frame()
@@ -291,7 +291,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
-        self.get_element_by_css_no_visiblity_checked(element).move_to()
+        self.get_element_by_css_no_visibility_checked(element).move_to()
 
     def click_import_button(self):
         self.focus_on_import_data_pop_up_frame()
@@ -299,6 +299,13 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=LONG_TIMEOUT)
+
+    def click_import_button_to_duplicate(self):
+        self.focus_on_import_data_pop_up_frame()
+
+        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
+
+        self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=LONG_TIMEOUT)
 
     def click_back_button(self):
         self.focus_on_import_data_pop_up_frame()

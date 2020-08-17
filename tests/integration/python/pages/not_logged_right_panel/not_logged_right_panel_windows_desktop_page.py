@@ -12,7 +12,7 @@ class NotLoggedRightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         self.windows_desktop_workaround = WindowsDesktopWorkaround()
 
     def enable_windows_desktop_workaround_if_needed(self):
-        login_button_coordinates = self.get_element_coordinates_by_name(
+        login_button_coordinates = self.get_element_center_coordinates_by_name(
             NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_ELEM
         )
 

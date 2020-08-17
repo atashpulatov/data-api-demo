@@ -39,7 +39,7 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
 
     def find_and_select_object(self, object_name):
         search_box = self.get_element_by_xpath(ImportDataMacDesktopPage.SEARCH_BAR_ELEM)
-        search_box.send_keys(object_name)
+        search_box.send_keys_with_check(object_name)
 
         Util.pause(2)  # TODO wait when ready
 

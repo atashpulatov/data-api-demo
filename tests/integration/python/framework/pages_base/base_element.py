@@ -15,6 +15,9 @@ class BaseElement:
         self.__element = raw_element
         self.__driver = driver
 
+    def __eq__(self, element_to_compare):
+        return self.id == element_to_compare.id
+
     # TODO refactor and remove
     def get_element(self):
         return self.__element
@@ -159,10 +162,10 @@ class BaseElement:
     def location(self):
         return self.__element.location
 
-    def send_keys_raw(self, special_key):
+    def send_keys(self, special_key):
         self.__element.send_keys(special_key)
 
-    def send_keys(self, text):
+    def send_keys_with_check(self, text):
         """
         Sends text (keys) to this element and verifies it's correctness.
 

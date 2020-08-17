@@ -1,5 +1,6 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
+from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 
 
 class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -14,6 +15,18 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         for element in elements:
             element.move_to()
+
+    def close_last_notification_on_hover(self):
+        elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
+
+        if elements:
+            other_element = self.get_element_by_name(
+                RightPanelMainWindowsDesktopPage.MICROSTRATEGY_LOG_ELEM,
+                image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.MICROSTRATEGY_LOG_ELEM)
+            )
+            other_element.move_to()
+
+            elements[0].move_to()
 
     def click_duplicate(self, tile_no):
         self._click_button_on_tile(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM, tile_no)
@@ -47,9 +60,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         found_element.click()
 
     def get_object_name(self, index):
-        plugin_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
+        right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
 
-        object_name_element = plugin_element.get_element_by_xpath(
+        object_name_element = right_panel_element.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.OBJECT_NAME_ELEM % index
         )
 

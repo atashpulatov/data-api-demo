@@ -16,18 +16,18 @@ class DriverSendKeys:
         self.__driver = DriverFactory().get_driver(driver_type)
 
     def press_right_arrow(self):
-        self.send_keys_raw(Keys.ARROW_RIGHT)
+        self.send_keys(Keys.ARROW_RIGHT)
 
     def press_backspace(self):
-        self.send_keys_raw(Keys.BACKSPACE)
+        self.send_keys(Keys.BACKSPACE)
 
     def press_enter(self):
-        self.send_keys_raw(Keys.ENTER)
+        self.send_keys(Keys.ENTER)
 
     def press_tab(self):
-        self.send_keys_raw(Keys.TAB)
+        self.send_keys(Keys.TAB)
 
-    def send_keys_raw(self, keys):
+    def send_keys(self, keys):
         ActionChains(self.__driver).send_keys(keys).perform()
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
