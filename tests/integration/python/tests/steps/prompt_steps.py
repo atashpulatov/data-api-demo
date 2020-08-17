@@ -18,6 +18,11 @@ def step_impl(context):
     context.pages.prompt_page().click_run_button_for_prompted_dossier()
 
 
-@step('I selected "{index}" prompt from the list')
-def step_impl(context, index):
-    context.pages.prompt_page().select_prompt_from_list(index)
+@step('I selected "{item}" as an answer for "{index}" prompt - object prompt')
+def step_impl(context, item, index):
+    context.pages.prompt_page().select_answer_for_object_prompt(index, item)
+
+
+@step('I typed "{text}" for "{index}" prompt - value prompt')
+def step_impl(context, text, index):
+    context.pages.prompt_page().select_answer_for_value_prompt(index, text)

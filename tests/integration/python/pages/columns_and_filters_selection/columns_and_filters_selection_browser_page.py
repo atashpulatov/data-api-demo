@@ -9,6 +9,7 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTES_CHECKBOX = '.item-title'
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
+    FILTER_ITEM = 'filter-title'
     FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
                                            'div.attribute-forms > ul > ' \
                                            'li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > ' \
@@ -26,6 +27,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTE_FORM_DROP_DOWN_ITEM = '.ant-select-dropdown-menu-item'
 
     IMPORT_BUTTON_ELEM = 'import'
+    BACK_BUTTON_ELEM = 'back'
+    CANCEL_BUTTON_ELEM = 'cancel'
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
@@ -296,3 +299,23 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=LONG_TIMEOUT)
+
+    def click_back_button(self):
+        self.focus_on_import_data_pop_up_frame()
+        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_ELEM).click()
+
+    def click_cancel_button(self):
+        self.focus_on_import_data_pop_up_frame()
+        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.CANCEL_BUTTON_ELEM).click()
+
+    def select_filters_elements(self, filter, elements):
+        self.focus_on_import_data_pop_up_frame()
+
+        filter_elem = self.find_element_by_text_in_elements_list_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.FILTER_ITEM,
+            filter
+        )
+
+        filter_elem.click()
+
+        elements

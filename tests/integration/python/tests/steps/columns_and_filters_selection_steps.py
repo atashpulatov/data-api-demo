@@ -157,3 +157,18 @@ def step_impl(context, object_type, object_number):
 @when('I clicked Import button in Columns and Filters Selection')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button()
+
+
+@step('I clicked Back button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_back_button()
+
+
+@step('I clicked Cancel button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_cancel_button()
+
+
+@step('And I selected filter "{filter}" with elements "{elements}"')
+def step_impl(context, filter, elements):
+    context.columns_and_filters_selection_page().select_filters_elements(filter, elements)
