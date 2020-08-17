@@ -11,6 +11,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
     FILTER_ITEM = '.filter-title'
     SPAN = 'span'
+    CLOSE_POPUP = '.WACDialogCloseAnchor'
     FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
                                            'div.attribute-forms > ul > ' \
                                            'li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > ' \
@@ -36,6 +37,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
+    REPORT_TITLE = 'div.folder-browser-title > span:nth-child(2)'
 
     ROOT_ATTRIBUTE_CONTAINER = 'div.ant-col.ant-col-6.attributes-col'
     ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > div > ul'
@@ -62,6 +64,10 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ARIA_SORT = 'aria-sort'
     SORT_ASCENDING = 'ascending'
     SORT_DESCENDING = 'descending'
+
+    ATTRIBUTES_SORT_TITLE = '.attributes-col .sort-title-selection'
+    METRICS_SORT_TITLE = '.metrics-col .sort-title-selection'
+    FILTER_SORT_TITLE = '.filters-col .sort-title-selection'
 
     SEARCH_INPUT = '.ant-input.ant-input-sm'
 
@@ -94,6 +100,22 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionBrowserPage.NOTIFICATION_TEXT_ELEM,
             ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
             ColumnsAndFiltersSelectionBrowserPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
+        )
+
+    def ensure_report_title_is_correct(self, title):
+        self.wait_for_element_to_have_attribute_value_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.REPORT_TITLE,
+            ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            title
+        )
+
+    def ensure_metric_selection(self, number, of_number):
+        title = f'Metrics ({number}/{of_number})'
+
+        self.wait_for_element_to_have_attribute_value_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.METRICS_SORT_TITLE,
+            ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            title
         )
 
     def click_attribute(self, attribute_name):
@@ -351,3 +373,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         )
 
         filter_item.click()
+
+    def close_popup_window(self):
+        self.focus_on_import_data_pop_up_frame()
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()

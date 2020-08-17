@@ -8,6 +8,26 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().ensure_columns_and_filters_selection_is_visible()
 
 
+@step('I ensure title "{title}" is correct')
+def step_impl(context, title):
+    context.pages.columns_and_filters_selection_page().ensure_report_title_is_correct(title)
+
+
+@step('I ensure there are "{number}" of "{of_number}" metrics selected')
+def step_impl(context,  number, of_number):
+    context.pages.columns_and_filters_selection_page.ensure_metric_selection(number, of_number)
+
+
+@step('I ensure there are {number} of {of_number} attributes selected')
+def step_impl(context,  number, of_number):
+    context.pages.columns_and_filters_selection_page.ensure_metric_selection(number, of_number)
+
+
+@step('I ensure there are {number} of {of_number} filters selected')
+def step_impl(context,  number, of_number):
+    context.pages.columns_and_filters_selection_page.ensure_metric_selection(number, of_number)
+
+
 @step('I clicked attribute "{attribute_name}"')
 def step_impl(context, attribute_name):
     context.pages.columns_and_filters_selection_page().click_attribute(attribute_name)
@@ -182,3 +202,8 @@ def step_impl(context):
 @step('I selected filter "{filter}" and elements "{elements}"')
 def step_impl(context, filter, elements):
     context.pages.columns_and_filters_selection_page().select_filter_elements(filter, elements)
+
+
+@step('I closed popup window')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().close_popup_window()
