@@ -10,7 +10,8 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
     MY_LIBRARY_SWITCH_VALUE_ATTR = 'AXValue'
     MY_LIBRARY_SWITCH_VALUE_ATTR_ON_VALUE = '1'
 
-    SEARCH_BAR_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[0]/AXGroup[3]/AXTextField[0]"
+    SEARCH_BAR_ELEM_GROUPS = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[0]/AXGroup[%s]"
+    SEARCH_BAR_ELEM = SEARCH_BAR_ELEM_GROUPS + "/AXTextField[0]"
 
     NAME_HEADER_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[2]/AXTable[0]/AXRow[0]/AXCell[1]/" \
                                                                "AXGroup[0]/AXStaticText[@AXValue='Name']"
@@ -38,7 +39,12 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
         return value == ImportDataMacDesktopPage.MY_LIBRARY_SWITCH_VALUE_ATTR_ON_VALUE
 
     def find_and_select_object(self, object_name):
-        search_box = self.get_element_by_xpath(ImportDataMacDesktopPage.SEARCH_BAR_ELEM)
+        search_box_groups_no = self.get_elements_by_xpath(ImportDataMacDesktopPage.SEARCH_BAR_ELEM_GROUPS)
+
+        search_box = self.get_element_by_xpath_workaround(
+            ImportDataMacDesktopPage.SEARCH_BAR_ELEM,
+            len(search_box_groups_no)
+        )
         search_box.send_keys_with_check(object_name)
 
         Util.pause(2)  # TODO wait when ready
