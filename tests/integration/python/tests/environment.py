@@ -39,9 +39,9 @@ def _initialize_using_new_session(context):
 
     context.pages = PagesSetFactory().get_pages_set()
 
-    context.pages.start_excel_page().go_to_excel()
+    context.pages.excel_general_page().go_to_excel()
 
-    context.pages.start_excel_page().maximize_excel_window()
+    context.pages.excel_general_page().maximize_excel_window()
 
     context.pages.excel_menu_page().click_add_in_elem()
     context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()

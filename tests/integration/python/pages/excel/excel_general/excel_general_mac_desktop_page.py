@@ -3,7 +3,7 @@ from pages.excel.excel_main.excel_main_mac_desktop_page import ExcelMainMacDeskt
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 
 
-class StartExcelMacDesktopPage(BasePage):
+class ExcelGeneralMacDesktopPage(BasePage):
     def __init__(self):
         super().__init__()
 
