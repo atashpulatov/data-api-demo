@@ -29,6 +29,7 @@ class ConfigUtil:
     PARAM_NAME_BROWSER_EXISTING_SESSION_ID = 'browser_existing_session_id'
     PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME = 'windows_desktop_excel_root_element_name'
     PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED = 'cleanup_after_test_enabled'
+    PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED = 'run_win_app_driver_enabled'
     PARAM_NAME_DRIVER_PATH_PREFIX = 'driver_path_'
     PARAM_NAME_HOST_URL_PREFIX = 'host_url_'
     PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT = 'excel_add_in_environment'
@@ -39,7 +40,8 @@ class ConfigUtil:
     PARAM_BOOLEAN = [
         PARAM_NAME_IMAGE_RECOGNITION_ENABLED,
         PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED,
-        PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED
+        PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED,
+        PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED
     ]
 
     PARAM_VALUES_CACHE = {}
@@ -110,6 +112,10 @@ class ConfigUtil:
     @staticmethod
     def is_cleanup_after_tests_enabled():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED)
+
+    @staticmethod
+    def is_run_win_app_driver_enabled():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED)
 
     @staticmethod
     def is_image_recognition_enabled():

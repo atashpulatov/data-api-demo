@@ -1,0 +1,10 @@
+{
+  "driver_type": "windows_chrome",
+  "image_recognition_enabled": false,
+  "connect_to_existing_session_enabled": false,
+  "cleanup_after_test_enabled": true,
+  "driver_path_windows_chrome": "framework\\resources\\chromedriver83.exe",
+  "excel_desktop_add_in_import_data_name": "env-221120",
+  "excel_user_name": "testing.universal@mstrtesting.onmicrosoft.com",
+  "excel_user_password": "somePassword1"
+}
