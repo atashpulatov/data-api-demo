@@ -19,6 +19,8 @@ class StartExcelBrowserPage(BaseBrowserPage):
 
         self._login_to_excel()
 
+        self._go_to_excel_by_url()
+
         self.excel_main_browser_page.open_new_work_book()
 
         self.switch_to_excel_workbook_window()
