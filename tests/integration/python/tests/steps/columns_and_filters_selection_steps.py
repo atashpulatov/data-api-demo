@@ -8,7 +8,7 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().ensure_columns_and_filters_selection_is_visible()
 
 
-@step('I ensure title "{title}" is correct')
+@step('I ensure popup title is "{title}" is correct')
 def step_impl(context, title):
     context.pages.columns_and_filters_selection_page().ensure_report_title_is_correct(title)
 

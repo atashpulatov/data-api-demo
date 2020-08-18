@@ -9,6 +9,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
 
      When I clicked Prepare Data button
       And I waited for Run button to be enabled
+#   nazwa prompta po indexie
       And I selected "Electronics" as an answer for "1" prompt - object prompt
       And I clicked Run button
       And I ensure that Columns & Filters Selection is visible
@@ -23,7 +24,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I waited for Run button to be enabled
       And I clicked Run button
       And I ensure that Columns & Filters Selection is visible
-      And I ensure title "Report with a subtotal & prompt" is correct
+      And I ensure popup title is "Report with a subtotal & prompt"
       And I ensure there are "1" of "2" metrics selected
       #     TODO And I ensure that attributes {} metrics {} and filters {} are selected
       And I clicked Import button in Columns and Filters Selection
@@ -61,7 +62,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
 #      And I clicked Add-in icon
 #      And I clicked Edit object 1
 #     Then I clicked Run button
-       And I ensure title "simple report with nested prompt" is correct
+       And I ensure popup title is "simple report with nested prompt"
        #     TODO And I ensure that attributes {} metrics {} and filters {} are selected
 
 
