@@ -23,3 +23,6 @@ class BasePage(ElementGet, DriverSendKeys):
 
     def pause(self, secs):
         Util.pause(secs)
+
+    def log_page_source(self):
+        self.log_error(self.driver.page_source)
