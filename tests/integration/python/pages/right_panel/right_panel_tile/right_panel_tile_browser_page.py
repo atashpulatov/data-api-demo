@@ -110,7 +110,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         name_input.double_click()
 
         name_text = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_TEXT_FOR_OBJECT % object_number)
-        name_text.send_keys_raw(new_object_name)
+        name_text.send_keys(new_object_name)
 
         self.press_enter()
 
@@ -126,7 +126,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         ).move_to_and_click()
 
         name_text = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_TEXT_FOR_OBJECT % object_number)
-        name_text.send_keys_raw(new_object_name)
+        name_text.send_keys(new_object_name)
 
         self.press_enter()
 

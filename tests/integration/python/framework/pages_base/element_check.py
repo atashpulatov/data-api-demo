@@ -27,28 +27,29 @@ class ElementCheck:
         self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
 
     def check_if_element_exists_by_name(self, selector, timeout=DEFAULT_TIMEOUT):
-        return self.get_element_coordinates_by_name(selector, timeout) is not None
+        return self.get_element_center_coordinates_by_name(selector, timeout) is not None
 
     def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
-        return self.get_element_coordinates_by_css(selector, timeout) is not None
+        return self.get_element_center_coordinates_by_css(selector, timeout) is not None
 
     def check_if_element_exists_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT):
-        return self.get_element_coordinates_by_xpath(selector, timeout) is not None
+        return self.get_element_coordinates_coordinates_by_xpath(selector, timeout) is not None
 
-    def get_element_coordinates_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self._get_element_coordinates(By.NAME, selector, timeout, image_name)
+    def get_element_center_coordinates_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        return self._get_element_center_coordinates(By.NAME, selector, timeout, image_name)
 
-    def get_element_coordinates_by_css(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self._get_element_coordinates(By.CSS_SELECTOR, selector, timeout, image_name)
+    def get_element_center_coordinates_by_css(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        return self._get_element_center_coordinates(By.CSS_SELECTOR, selector, timeout, image_name)
 
-    def get_element_coordinates_by_mobile_accessibility_id(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self._get_element_coordinates(MobileBy.ACCESSIBILITY_ID, selector, timeout, image_name)
+    def get_element_center_coordinates_by_mobile_accessibility_id(self, selector, timeout=DEFAULT_TIMEOUT,
+                                                                  image_name=None):
+        return self._get_element_center_coordinates(MobileBy.ACCESSIBILITY_ID, selector, timeout, image_name)
 
-    def get_element_coordinates_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self._get_element_coordinates(By.XPATH, selector, timeout, image_name)
+    def get_element_coordinates_coordinates_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        return self._get_element_center_coordinates(By.XPATH, selector, timeout, image_name)
 
-    def _get_element_coordinates(self, selector_type, selector, timeout, image_name):
-        element_coordinates = self._get_element_coordinates_by_image(image_name)
+    def _get_element_center_coordinates(self, selector_type, selector, timeout, image_name):
+        element_coordinates = self._get_element_center_coordinates_by_image(image_name)
         if element_coordinates:
             return element_coordinates
 
@@ -85,7 +86,7 @@ class ElementCheck:
         Util.log_warning(('check element, not found', selector, time.time() - start_time))
         return None
 
-    def _get_element_coordinates_by_image(self, image_name):
+    def _get_element_center_coordinates_by_image(self, image_name):
         if image_name and self.image_recognition_enabled:
             start_time = time.time()
             element_coordinates = self._find_element_image_center(image_name)

@@ -67,7 +67,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             offset_x=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_X,
             offset_y=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_Y
         )
-        self.send_keys_raw(object_name)
+        self.send_keys(object_name)
 
         Util.pause(4)  # TODO wait when ready
 

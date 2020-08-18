@@ -227,7 +227,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         search_box = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.SEARCH_INPUT)
-        search_box.send_keys(element_name)
+        search_box.send_keys_with_check(element_name)
 
     def clear_search_element(self):
         self.focus_on_import_data_pop_up_frame()
