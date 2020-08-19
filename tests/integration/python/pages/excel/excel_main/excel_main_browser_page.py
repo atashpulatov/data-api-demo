@@ -1,11 +1,16 @@
 from framework.pages_base.base_browser_page import BasePage
-from framework.util.util import Util
 
 
 class ExcelMainBrowserPage(BasePage):
-    NEW_BLANK_WORKBOOK_ELEM = '''[title^='New blank workbook']'''
+    APP_LAUNCHER_ELEM = "[title^='App launcher']"
+
+    APP_LAUNCHER_EXCEL_ELEM = 'O365_AppTile_ExcelOnline'
+
+    NEW_BLANK_WORKBOOK_ELEM = "[title^='New blank workbook']"
 
     def open_new_work_book(self):
-        Util.pause(7)  # TODO check if present
+        self.get_element_by_css(ExcelMainBrowserPage.APP_LAUNCHER_ELEM).click()
+
+        self.get_element_by_id(ExcelMainBrowserPage.APP_LAUNCHER_EXCEL_ELEM).click()
 
         self.get_element_by_css(ExcelMainBrowserPage.NEW_BLANK_WORKBOOK_ELEM).click()

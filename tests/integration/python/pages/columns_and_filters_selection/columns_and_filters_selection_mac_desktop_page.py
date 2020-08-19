@@ -16,9 +16,9 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
 
     IMPORT_BUTTON = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[13]/AXButton[@AXTitle='Import']"
 
-    ATTRIBUTE_FORM_DROPDOWN = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXComboBox/AXGroup[0]"
-    ATTRIBUTE_FORM_DROPDOWN_ITEM = BaseMacDesktopPage.DISPLAY_ATTRIBUTE_FORM_ELEM + "/AXList[0]/" \
-                                                                                    "AXStaticText[@AXTitle='%s']"
+    ATTRIBUTE_FORM_DROPDOWN = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXComboBox/AXGroup[0]/AXGroup[0]"
+    ATTRIBUTE_FORM_DROPDOWN_GROUPS = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[%s]"
+    ATTRIBUTE_FORM_DROPDOWN_SUFFIX = "/AXList[0]/AXStaticText[@AXTitle='%s']"
 
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[2]/AXStaticText" \
                                                                                       "[@AXValue=" \
@@ -60,14 +60,22 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
     def click_metric(self, metric_name):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.METRIC_CHECKBOX % metric_name).click()
 
-    def click_display_attributes_names_type(self, form_visualization_type):
+    def click_display_attributes_names_type(self, visualization_type):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN).click()
 
-        self.get_element_by_xpath(
-            ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ITEM % form_visualization_type
+        groups_no = self.get_elements_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_GROUPS)
+
+        selector_suffix = ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_SUFFIX % visualization_type
+
+        self.get_element_by_xpath_workaround(
+            ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_GROUPS + selector_suffix,
+            expected_list_len=len(groups_no)
         ).click()
 
     def click_import_button(self):
+        self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.IMPORT_BUTTON).click()
+
+    def click_import_button_to_duplicate(self):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.IMPORT_BUTTON).click()
 
     def click_attributes_and_forms(self, attributes_and_forms_json):

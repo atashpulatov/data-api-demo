@@ -49,7 +49,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
-        search_box.send_keys(object_name)
+        search_box.send_keys_with_check(object_name)
 
     def find_and_select_object(self, object_name):
         self.find_object(object_name)

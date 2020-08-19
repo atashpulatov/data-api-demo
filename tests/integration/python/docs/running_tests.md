@@ -32,7 +32,7 @@
    - `excel_add_in_environment` and `excel_desktop_add_in_import_data_name` set to the ones you deployed on `Excel`
    desktop for Windows
 
-1. Execute tests (in second window, see [Running tests](#running_tests))
+1. Execute tests (in second window, see [Running tests](#running_tests)).
 
 ### Windows Chrome browser - single machine
 
@@ -45,7 +45,7 @@
 
 1. Ensure `driver_type` is set to `windows_chrome` in `config.json` or as a command line parameter.
 
-1. Execute tests (see [Running tests](#running_tests))
+1. Execute tests (see [Running tests](#running_tests)).
 
 ### Mac Desktop - single machine
 
@@ -60,7 +60,7 @@
 
 1. Ensure `driver_type` is set to `mac_desktop` in `config.json` or as a command line parameter.
 
-1. Execute tests (see [Running tests](#running_tests))
+1. Execute tests (see [Running tests](#running_tests)).
 
 ### Mac Chrome browser - single machine
 
@@ -73,14 +73,14 @@
 
 1. Ensure `driver_type` is set to `mac_chrome` in `config.json` or as a command line parameter.
 
-1. Execute tests (see [Running tests](#running_tests))
+1. Execute tests (see [Running tests](#running_tests)).
 
 ### Starting tests on Mac and executing them on remote Windows Desktop
 
 ##### On Windows:
 
 1. When using **PyTTy** configuration: open previously configured PuTTy session
-(see [Starting tests on Mac and executing them on remote Windows Desktop](installation#start_on_mac_execute_on_windows))
+(see [Starting tests on Mac and executing them on remote Windows Desktop](installation.md#start_on_mac_execute_on_windows))
 and login into your Mac machine (no need to do it when using firewall configuration).
 
 1. Open `cmd` window as Administrator and run `WinAppDriver`:
@@ -123,7 +123,7 @@ and login into your Mac machine (no need to do it when using firewall configurat
    - `excel_add_in_environment` and `excel_desktop_add_in_import_data_name` set to the ones you deployed on `Excel`
    desktop for Windows
 
-1. Execute tests (see [Running tests](#running_tests))
+1. Execute tests (see [Running tests](#running_tests)).
 
 <a name="#running_tests"></a>    
 ### 2. Running tests
@@ -153,9 +153,14 @@ behave --tags=@mac_chrome --no-color --logging-level=ERROR --no-capture-stderr -
 <a name="test_executing_parameters"></a>
 ### 3. Test execution parameters
 
-All custom parameters values can be defined in [config.json](../framework/config/config.json) file or as `behave` command 
-options (specified using `-D`, takes precedence over configuration file). For complete list of available custom
+All custom parameters values can be defined in [config.json](../framework/config/config.json) file or as `behave`
+command options (specified using `-D`, takes precedence over configuration file). For complete list of available custom
 parameters see [config.json](../framework/config/config.json).
+
+`config.json` is the default name of configuration file, but a different name can be specified when calling `behave`
+using `-D config_file=CONFIG_FILE_NAME.json`, where `CONFIG_FILE_NAME.json` must consists only of
+`CONFIG_FILE_NAME_PATTERN` chars and must be placed in the same directory as default `config.json`
+(`framework/config/config.json`).
 
 For `behave` options (no `-D` flag) see [behave documentation](https://behave.readthedocs.io/en/latest/).
 

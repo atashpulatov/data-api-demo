@@ -21,7 +21,7 @@ class AddInLoginWindowsDesktopPage(BasePage):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         username_field = self.get_element_by_accessibility_id(AddInLoginWindowsDesktopPage.USERNAME_INPUT_ELEM)
-        username_field.send_keys_raw(username)
+        username_field.send_keys(username)
 
         password_field = self.get_element_by_accessibility_id(AddInLoginWindowsDesktopPage.USERNAME_INPUT_ELEM)
         password_field.send_keys(password)

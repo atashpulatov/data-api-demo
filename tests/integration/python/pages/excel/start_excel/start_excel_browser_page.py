@@ -19,9 +19,13 @@ class StartExcelBrowserPage(BaseBrowserPage):
 
         self._login_to_excel()
 
+        self._go_to_excel_by_url()  # This solution is temporary TODO check if you are on excel page EXCEL_URL
+
         self.excel_main_browser_page.open_new_work_book()
 
         self.switch_to_excel_workbook_window()
+
+        # TODO check if you are on excel_workbook_window (sometimes it is switching to onedrive)
 
     def _go_to_excel_by_url(self):
         self.driver.get(StartExcelBrowserPage.EXCEL_URL)

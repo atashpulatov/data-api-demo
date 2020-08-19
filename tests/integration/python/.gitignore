@@ -139,3 +139,6 @@ framework/screenshots/*.png
 
 # framework's configuration
 framework/config.json
+
+# Allure reports
+allure-report

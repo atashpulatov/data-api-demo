@@ -24,24 +24,28 @@ class ElementGet(ElementCheck):
     def get_element_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.CSS_SELECTOR, selector, timeout), self.driver)
 
-    def get_element_by_css_no_visiblity_checked(self, selector, timeout=DEFAULT_TIMEOUT):
+    def get_element_by_css_no_visibility_checked(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element_no_visibility_checked(By.CSS_SELECTOR, selector, timeout), self.driver)
 
     def get_element_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
-            return ImageElement(self.get_element_coordinates_by_xpath(selector, timeout, image_name), self.driver)
+            return ImageElement(
+                self.get_element_coordinates_coordinates_by_xpath(selector, timeout, image_name), self.driver
+            )
         else:
             return BaseElement(self._get_raw_element(By.XPATH, selector, timeout), self.driver)
 
     def get_element_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
-            return ImageElement(self.get_element_coordinates_by_name(selector, timeout, image_name), self.driver)
+            return ImageElement(self.get_element_center_coordinates_by_name(selector, timeout, image_name), self.driver)
         else:
             return BaseElement(self._get_raw_element(By.NAME, selector, timeout), self.driver)
 
     def get_element_by_accessibility_id(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
-            return ImageElement(self.get_element_coordinates_by_mobile_accessibility_id(selector, timeout), self.driver)
+            return ImageElement(
+                self.get_element_center_coordinates_by_mobile_accessibility_id(selector, timeout), self.driver
+            )
         else:
             return BaseElement(self._get_raw_element(MobileBy.ACCESSIBILITY_ID, selector, timeout), self.driver)
 
