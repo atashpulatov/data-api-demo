@@ -1,3 +1,5 @@
+import subprocess
+
 from appium import webdriver
 from urllib3.exceptions import MaxRetryError
 
@@ -16,9 +18,14 @@ class DriverWindowsDesktop(AbstractDriver):
         'newCommandTimeout': 360
     }
 
+    WIN_APP_DRIVER_START = r'start "" "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe"'
+
     DRIVER_INITIALIZATION_ATTEMPT_COUNT = 10
 
     def get_driver(self):
+        if ConfigUtil.is_run_win_app_driver_enabled():
+            subprocess.Popen(DriverWindowsDesktop.WIN_APP_DRIVER_START, shell=True)
+
         if ConfigUtil.is_attaching_to_existing_session_enabled():
             return self._prepare_driver_existing_session()
         else:
