@@ -234,7 +234,7 @@ class OfficeTableRefresh {
      const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
      await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
      prevOfficeTable.showHeaders = true;
-     prevOfficeTable.load('name');
+     prevOfficeTable.load(['name', 'showTotals']);
      await excelContext.sync();
      return prevOfficeTable;
    }

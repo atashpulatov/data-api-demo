@@ -18,12 +18,13 @@ class StepBindOfficeTable {
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {Boolean} operationData.tableChanged Determines if columns number in Excel table has been changed
+   * @param {Boolean} operationData.isTotalsRowVisible Determines if totalRow should be visible after operation is finished
    */
   bindOfficeTable = async (objectData, operationData) => {
     try {
       const { bindId, objectWorkingId, isCrosstab } = objectData;
       const {
-        excelContext, officeTable, operationType, tableChanged,
+        excelContext, officeTable, operationType, tableChanged, isTotalsRowVisible = false
       } = operationData;
 
       if (tableChanged || operationType === DUPLICATE_OPERATION || operationType === IMPORT_OPERATION) {
@@ -33,9 +34,10 @@ class StepBindOfficeTable {
       }
       if (isCrosstab) {
         officeTable.showHeaders = false;
-        await excelContext.sync();
       }
 
+      officeTable.showTotals = isTotalsRowVisible;
+      await excelContext.sync();
 
       operationStepDispatcher.completeBindOfficeTable(objectWorkingId);
     } catch (error) {
