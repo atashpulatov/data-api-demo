@@ -10,7 +10,7 @@ class ExcelMainBrowserPage(BaseBrowserPage):
     APP_LAUNCHER_EXCEL_ELEM = 'O365_AppTile_ExcelOnline'
 
     NEW_BLANK_WORKBOOK_ELEM = "[title^='New blank workbook']"
-    NEW_BLANK_WORKBOOK_TITLE_SUFFIX = 'Book '
+    NEW_BLANK_WORKBOOK_TITLE_PREFIX = 'Book '
 
     def open_new_workbook(self):
         self._open_excel_page()
@@ -42,8 +42,8 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
             self.switch_to_excel_workbook_window()
 
-            if self.get_page_title().startswith(ExcelMainBrowserPage.NEW_BLANK_WORKBOOK_TITLE_SUFFIX):
-                break
+            if self.get_page_title().startswith(ExcelMainBrowserPage.NEW_BLANK_WORKBOOK_TITLE_PREFIX):
+                return
 
             self.close_current_tab()
 
@@ -51,4 +51,4 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
             self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
-        raise MstrException('Error while opening a new workbook.')
+        raise MstrException('Error while opening a new Workbook.')
