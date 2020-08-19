@@ -18,7 +18,7 @@ class StepBindOfficeTable {
    * @param {Office} operationData.officeTable Reference to Table created by Excel
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    * @param {Boolean} operationData.tableChanged Determines if columns number in Excel table has been changed
-   * @param {Boolean} operationData.isTotalsRowVisible Determines if totalRow should be visible after operation is finished
+   * @param {Boolean} operationData.isTotalsRowVisible Determines if totalRow should be visible
    */
   bindOfficeTable = async (objectData, operationData) => {
     try {
