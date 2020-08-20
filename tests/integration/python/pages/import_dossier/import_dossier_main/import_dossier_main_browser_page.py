@@ -28,7 +28,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.click_import_visualization()
 
     def select_visualization_by_name(self, visualization_name):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         tile = self._find_tile_by_name(visualization_name)
 
@@ -37,7 +37,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.pause(5)  # TODO wait when ready
 
     def open_show_data_panel(self, visualization_name):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         tile = self._find_tile_by_name(visualization_name)
 
@@ -71,7 +71,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_BUTTON).click()
 
     def reset_dossier(self):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         self.get_element_by_css(ImportDossierMainBrowserPage.RESET_BUTTON).click()
 

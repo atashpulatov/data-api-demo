@@ -23,7 +23,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
     ALLOWED_SORT_ORDER = ('Ascending', 'Descending')
 
     def select_show_totals_for_attribute(self, totals_to_select, attribute_name):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         self.find_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
@@ -49,7 +49,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         if sort_order not in ImportDossierContextMenuBrowserPage.ALLOWED_SORT_ORDER:
             raise MstrException('Wrong sort order specified: %s.' % sort_order)
 
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         self.find_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
@@ -90,7 +90,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
 
     def select_replace_with_for_attribute(self, replace_with, attribute_name):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         self.find_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
@@ -113,7 +113,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         # todo: add exception
         
     def select_exclude_for_attribute_element(self, exclude, attribute_name):         
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         index_of_column = self.find_index_of_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
