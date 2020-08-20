@@ -72,8 +72,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def click_import_button_to_open_import_dossier(self):
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
-        self.pause(25)  # TODO check if loaded
-
     def click_prepare_data_button(self):
         self.get_element_by_id(ImportDataBrowserPage.PREPARE_BUTTON_ELEM).click()
 

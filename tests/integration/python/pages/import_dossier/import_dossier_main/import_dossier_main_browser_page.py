@@ -76,3 +76,12 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDossierMainBrowserPage.RESET_BUTTON).click()
 
         self.get_element_by_css(ImportDossierMainBrowserPage.RESET_CONFIRMATION_YES).click()
+
+    def wait_for_dossier_to_load(self):
+        self.focus_on_excel_popup_frame()
+
+        dossier_information_text = 'span.dossier-window-information-text'
+        self.get_element_by_css(dossier_information_text)
+
+        # dossier object is ready when information text is visible, but it needs more time for final render of page content
+        self.pause(2)
