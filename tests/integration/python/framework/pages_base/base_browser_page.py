@@ -36,6 +36,12 @@ class BaseBrowserPage(BasePage):
     def switch_to_login_pop_up_window(self):
         self.switch_to_window_by_index(2)
 
+    def close_current_tab(self):
+        self.driver.close()
+
+    def get_page_title(self):
+        return self.driver.title
+
     def focus_on_excel_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
 
