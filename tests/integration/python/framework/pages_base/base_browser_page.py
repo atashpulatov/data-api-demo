@@ -13,7 +13,7 @@ class BaseBrowserPage(BasePage):
 
     IMPORT_DATA_FRAME_ELEM = '#WACDialogOuterContainer iframe'
 
-    IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM = 'iframe[src*="popupType=navigation-tree&et="]'
+    EXCEL_POPUP_FRAME_ELEM = '#WACDialogBodyPanel > iframe'
     IMPORT_DOSSIER_INTERNAL_FRAME_ELEM = '.dossier-window > div > iframe'
 
     ADD_IN_FRAME_ELEM = '.AddinIframe'
@@ -71,7 +71,7 @@ class BaseBrowserPage(BasePage):
         self.focus_on_excel_frame()
 
         dossier_external_frame_element = self.get_frame_element_by_css(
-            BaseBrowserPage.IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM)
+          BaseBrowserPage.EXCEL_POPUP_FRAME_ELEM)
         self._switch_to_frame(dossier_external_frame_element)
 
         dossier_internal_frame_element = self.get_frame_element_by_css(
@@ -162,3 +162,16 @@ class BaseBrowserPage(BasePage):
                 return item
 
         raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+
+    def find_index_of_element_in_list_by_text(self, selector, text):
+        elements = self.get_elements_by_css(selector)
+
+        # todo: get index of element with given text in elements in more optimal way
+        elements_names = []
+        for item in elements:
+            elements_names.append(item.text)
+
+        try:
+            return elements_names.index(text)
+        except ValueError:
+            raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))

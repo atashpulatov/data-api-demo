@@ -1,9 +1,12 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.exception.MstrException import MstrException
+from string import Template
 
 
 class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
-    VISUALIZATION_TABLE_HEADER_ITEMS = '.mstrmojo-XtabZone > table > tbody > tr:nth-child(1) > td'
+    VISUALIZATION_TABLE_ROW_X_ITEMS = Template('.mstrmojo-XtabZone > table > tbody > tr:nth-child($x) > td')
+    VISUALIZATION_TABLE_COLUMN_X_ITEMS = Template('.mstrmojo-XtabZone > table > tbody > tr > td:nth-child($x)')
+    VISUALIZATION_TABLE_HEADER_ROW_ITEMS = VISUALIZATION_TABLE_ROW_X_ITEMS.substitute(x='1')    
     VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS = '.mstrmojo-ui-Menu-item'
 
     CONTEXT_MENU_SHOW_TOTALS = 'Show Totals'
@@ -14,6 +17,8 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
     CONTEXT_MENU_BUTTONS = '.mstrmojo-Button-text'
     CONTEXT_MENU_BUTTON_OK = 'OK'
     CONTEXT_MENU_TEXT_ELEMENTS = '.mtxt'
+    CONTEXT_MENU_REPLACE_WITH = 'Replace With'
+    CONTEXT_MENU_EXCLUDE = 'Exclude'
 
     ALLOWED_SORT_ORDER = ('Ascending', 'Descending')
 
@@ -21,7 +26,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         self.focus_on_import_dossier_frame()
 
         self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ITEMS,
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
             attribute_name
         ).right_click()
 
@@ -47,7 +52,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         self.focus_on_import_dossier_frame()
 
         self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ITEMS,
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
             metric_name
         ).right_click()
 
@@ -63,7 +68,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
     def select_drill_by_for_attribute(self, drill_by, attribute_name):
         self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ITEMS,
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
             attribute_name
         ).right_click()
 
@@ -82,3 +87,51 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
         raise MstrException(
             'Item to drill by not present - attribute name: [%s], drill by: [%s].' % (attribute_name, drill_by))
+
+
+    def select_replace_with_for_attribute(self, replace_with, attribute_name):
+        self.focus_on_import_dossier_frame()
+
+        self.find_element_in_list_by_text(
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
+            attribute_name
+        ).right_click()
+
+        self.find_element_in_list_by_text(
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
+            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_REPLACE_WITH
+        ).click()
+        
+        # todo: move to const
+        menu_items = self.get_elements_by_css('.mstrmojo-ListBase > div > div > span')
+
+        for item in menu_items:
+          if item.text == replace_with:
+            item.click()
+            return
+
+        # todo: add exception
+        
+    def select_exclude_for_attribute_element(self, exclude, attribute_name):         
+        self.focus_on_import_dossier_frame()
+
+        index_of_column = self.find_index_of_element_in_list_by_text(
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
+            attribute_name
+        )
+
+        # index_of_column+1 because indexes of elements starts from 0 but css selector nth-child starts from 1
+        column_selector = ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_COLUMN_X_ITEMS.substitute(x=str(index_of_column+1))
+
+        self.find_element_in_list_by_text(
+            column_selector,
+            exclude
+        ).right_click()
+
+        self.find_element_in_list_by_text(
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
+            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_EXCLUDE
+        ).click()
+
+
+
