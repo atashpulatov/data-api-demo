@@ -174,6 +174,7 @@ class BaseBrowserPage(BasePage):
                 return item
 
         return None
+    
     def find_index_of_element_in_list_by_text(self, selector, text):
         elements = self.get_elements_by_css(selector)
         elements_names = [item.text for item in elements]
