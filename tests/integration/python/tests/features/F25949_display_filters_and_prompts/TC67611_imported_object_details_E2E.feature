@@ -20,5 +20,6 @@ Feature: F25949 - Display filters and prompts
     Given I clicked toggle details button on object 1
       And I clicked attributes list expand button on object 1
       And I clicked metrics list expand button on object 1
+      And I clicked object location expand button on object 1
 
       And I log out

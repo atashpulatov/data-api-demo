@@ -17,6 +17,8 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     )
     NAME_LIST_EXPAND_BUTTON = '.name-list-expand-button'
 
+    OBJECT_LOCATION_EXPAND_BUTTON = '.object-location-expand-button'
+
     def _get_name_list_expand_button_selector(self, name_list_index):
         selector = RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_index] + ' ' \
            + RightPanelTileDetailsBrowserPage.NAME_LIST_EXPAND_BUTTON
@@ -51,6 +53,13 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
             self._get_name_list_expand_button_selector(name_list_index)
         )
 
-        print(self._get_name_list_expand_button_selector(name_list_index))
-
         name_list_expand_buttons[int(object_number) - 1].click()
+
+    def click_object_location_expand_button(self, object_number):
+        self.focus_on_add_in_frame()
+
+        object_location_expand_buttons = self.get_elements_by_css(
+            RightPanelTileDetailsBrowserPage.OBJECT_LOCATION_EXPAND_BUTTON
+        )
+
+        object_location_expand_buttons[int(object_number) - 1].click()

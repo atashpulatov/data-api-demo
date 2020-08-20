@@ -38,3 +38,8 @@ def step_impl(context, object_number):
 @step('I clicked metrics list expand button on object {object_number}')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_details_page().click_name_list_expand_button(object_number, 3)
+
+
+@step('I clicked object location expand button on object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_details_page().click_object_location_expand_button(object_number)
