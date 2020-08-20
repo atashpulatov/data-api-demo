@@ -1,9 +1,8 @@
-from framework.driver.driver_factory import DriverFactory
-# from pages_set.pages_set_factory import PagesSetFactory
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.const import DEFAULT_LOCALE_NAME
+from framework.util.test_util import TestUtil
 from pages.excel.excel_login.excel_login_browser_page import ExcelLoginBrowserPage
 from pages.excel.excel_main.excel_main_browser_page import ExcelMainBrowserPage
-from framework.util.test_util import TestUtil
 
 
 class ExcelGeneralBrowserPage(BaseBrowserPage):
@@ -17,10 +16,10 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
 
     excel_not_started = True
 
-    def go_to_excel(self):
+    def go_to_excel(self, locale_name=DEFAULT_LOCALE_NAME):
         self._go_to_excel_by_url()
 
-        self._login_to_excel()
+        self._login_to_excel(locale_name)
 
         self.excel_main_browser_page.open_new_workbook()
 
@@ -29,9 +28,9 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
     def _go_to_excel_by_url(self):
         self.driver.get(ExcelGeneralBrowserPage.EXCEL_URL)
 
-    def _login_to_excel(self):
+    def _login_to_excel(self, locale_name):
         if ExcelGeneralBrowserPage.excel_not_started:
-            self.excel_login_browser_page.login_to_excel()
+            self.excel_login_browser_page.login_to_excel(locale_name)
 
             ExcelGeneralBrowserPage.excel_not_started = False
 
@@ -39,19 +38,7 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
         self.driver.maximize_window()
         # self.driver.set_window_size(1920, 1080)
 
-
     def close_excel(self):
         TestUtil.global_test_cleanup()
 
-
-    def open_excel_and_login(self, locale_name):
-        DriverFactory.reset_driver()
-        # PagesSetFactory.reset_pages_set()
-
-        self.go_to_excel()
-
-        self.maximize_excel_window()
-
-        self.excel_menu_browser_page.click_add_in_elem()
-
-
+        ExcelGeneralBrowserPage.excel_not_started = True
