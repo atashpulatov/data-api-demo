@@ -17,4 +17,8 @@ Feature: F25949 - Display filters and prompts
     Given I hovered over toggle details button on object 1
      Then Tooltip text for object 1 toggle details button is Show Details
 
+    Given I clicked toggle details button on object 1
+      And I clicked attributes list expand button on object 1
+      And I clicked metrics list expand button on object 1
+
       And I log out
