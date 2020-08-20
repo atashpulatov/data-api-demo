@@ -63,4 +63,4 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
             self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
-        raise MstrException('Error while opening a new workbook.')
+        raise MstrException('Error while opening a new Workbook.')
