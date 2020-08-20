@@ -30,6 +30,6 @@ def step_impl(context):
     context.pages.debug_page().execute_tmp_code()
 
 
-@step('I log source')
+@step('I log page source')
 def step_impl(context):
     context.pages.debug_page().log_page_source()

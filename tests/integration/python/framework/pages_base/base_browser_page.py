@@ -3,7 +3,8 @@ import time
 from selenium.common.exceptions import NoSuchFrameException, NoSuchWindowException
 
 from framework.pages_base.base_page import BasePage
-from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_INTERVAL
+from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_INTERVAL, \
+    SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -37,6 +38,9 @@ class BaseBrowserPage(BasePage):
 
     def get_page_title(self):
         return self.driver.title
+
+    def tab_contains_excel_frame(self):
+        return self.check_if_element_exists_by_id(BaseBrowserPage.EXCEL_FRAME_ELEM, timeout=SHORT_TIMEOUT)
 
     def focus_on_excel_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
@@ -155,14 +159,21 @@ class BaseBrowserPage(BasePage):
         raise MstrException('failed to focus on AddIn iframe')
 
     def find_element_in_list_by_text(self, selector, text):
+        element = self.find_element_in_list_by_text_safe(selector, text)
+
+        if element:
+            return element
+
+        raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+
+    def find_element_in_list_by_text_safe(self, selector, text):
         elements = self.get_elements_by_css(selector)
 
         for item in elements:
             if item.text == text:
                 return item
 
-        raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
-
+        return None
     def find_index_of_element_in_list_by_text(self, selector, text):
         elements = self.get_elements_by_css(selector)
         elements_names = [item.text for item in elements]

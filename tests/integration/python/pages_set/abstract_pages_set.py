@@ -16,7 +16,7 @@ class AbstractPagesSet(ABC):
         return self.keyboard_common_page
 
     @abstractmethod
-    def start_excel_page(self):
+    def excel_general_page(self):
         pass
 
     @abstractmethod
