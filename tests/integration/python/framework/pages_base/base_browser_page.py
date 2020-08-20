@@ -165,12 +165,7 @@ class BaseBrowserPage(BasePage):
 
     def find_index_of_element_in_list_by_text(self, selector, text):
         elements = self.get_elements_by_css(selector)
-
-        # todo: get index of element with given text in elements in more optimal way
-        elements_names = []
-        for item in elements:
-            elements_names.append(item.text)
-
+        elements_names = [item.text for item in elements]
         try:
             return elements_names.index(text)
         except ValueError:

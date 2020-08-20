@@ -8,6 +8,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
     VISUALIZATION_TABLE_COLUMN_X_ITEMS = Template('.mstrmojo-XtabZone > table > tbody > tr > td:nth-child($x)')
     VISUALIZATION_TABLE_HEADER_ROW_ITEMS = VISUALIZATION_TABLE_ROW_X_ITEMS.substitute(x='1')    
     VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS = '.mstrmojo-ui-Menu-item'
+    VISUALIZATION_TABLE_CONTEXT_MENU_LIST_ITEMS = '.mstrmojo-ListBase > div > div > span'
 
     CONTEXT_MENU_SHOW_TOTALS = 'Show Totals'
     CONTEXT_MENU_DRILL = 'Drill'
@@ -102,15 +103,15 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
             ImportDossierContextMenuBrowserPage.CONTEXT_MENU_REPLACE_WITH
         ).click()
         
-        # todo: move to const
-        menu_items = self.get_elements_by_css('.mstrmojo-ListBase > div > div > span')
+        menu_items = self.get_elements_by_css(ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_LIST_ITEMS)
 
         for item in menu_items:
           if item.text == replace_with:
             item.click()
             return
 
-        # todo: add exception
+        raise MstrException(
+            'Item to replace_with not present - attribute name: [%s], drill by: [%s].' % (attribute_name, drill_by))
         
     def select_exclude_for_attribute_element(self, exclude, attribute_name):         
         self.focus_on_dossier_frame()
