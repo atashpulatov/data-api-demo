@@ -17,11 +17,6 @@ class PagesSetFactory:
         DRIVER_TYPE_MAC_CHROME: PagesSetBrowser,
     }
 
-    DRIVERS_REQUIRING_RESET = [
-        DRIVER_TYPE_WINDOWS_DESKTOP,
-        DRIVER_TYPE_MAC_DESKTOP
-    ]
-
     pages = None
 
     def get_pages_set(self):
@@ -34,6 +29,4 @@ class PagesSetFactory:
 
     @classmethod
     def reset_pages_set(cls):
-        driver_type = ConfigUtil.get_driver_type()
-        if driver_type in PagesSetFactory.DRIVERS_REQUIRING_RESET:
-            PagesSetFactory.pages = None
+        PagesSetFactory.pages = None

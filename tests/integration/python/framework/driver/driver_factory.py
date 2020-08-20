@@ -46,6 +46,6 @@ class DriverFactory:
         return DriverFactory.DRIVER_CLEANUP_DEF[driver_type]
 
     @classmethod
-    def reset_driver(cls):
-        if DriverFactory.driver_type in DriverFactory.DRIVERS_REQUIRING_RESET:
+    def reset_driver(cls, force_reset_driver):
+        if force_reset_driver or DriverFactory.driver_type in DriverFactory.DRIVERS_REQUIRING_RESET:
             DriverFactory.driver = None

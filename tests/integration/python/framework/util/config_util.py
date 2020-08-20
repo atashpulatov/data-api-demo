@@ -77,14 +77,6 @@ class ConfigUtil:
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_DESKTOP_ADD_IN_IMPORT_DATA_NAME)
 
     @staticmethod
-    def get_default_excel_user_name():
-        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_USER_NAME)
-
-    @staticmethod
-    def get_default_excel_user_password():
-        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_USER_PASSWORD)
-
-    @staticmethod
     def get_browser_existing_session_executor_url():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL)
 
@@ -186,7 +178,7 @@ class ConfigUtil:
             if not ConfigUtil.CONFIG_FILE_NAME_SEARCH.match(config_file_name):
                 raise MstrException(
                     'Invalid config file name, must match %s: %s' % (ConfigUtil.CONFIG_FILE_NAME_PATTERN,
-                                                                            config_file_name))
+                                                                     config_file_name))
         else:
             config_file_name = ConfigUtil.CONFIG_DEFAULT_FILE_NAME
 

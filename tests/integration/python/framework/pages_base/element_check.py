@@ -32,6 +32,9 @@ class ElementCheck:
     def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return self.get_element_center_coordinates_by_css(selector, timeout) is not None
 
+    def check_if_element_exists_by_id(self, selector, timeout=DEFAULT_TIMEOUT):
+        return self.get_element_center_coordinates_by_id(selector, timeout) is not None
+
     def check_if_element_exists_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT):
         return self.get_element_coordinates_coordinates_by_xpath(selector, timeout) is not None
 
@@ -40,6 +43,9 @@ class ElementCheck:
 
     def get_element_center_coordinates_by_css(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_center_coordinates(By.CSS_SELECTOR, selector, timeout, image_name)
+
+    def get_element_center_coordinates_by_id(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        return self._get_element_center_coordinates(By.ID, selector, timeout, image_name)
 
     def get_element_center_coordinates_by_mobile_accessibility_id(self, selector, timeout=DEFAULT_TIMEOUT,
                                                                   image_name=None):
