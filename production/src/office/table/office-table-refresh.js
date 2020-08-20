@@ -235,6 +235,7 @@ class OfficeTableRefresh {
      await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
      prevOfficeTable.load(['name', 'showTotals']);
      prevOfficeTable.showHeaders = true;
+     // We can set showTotals value here, since the loaded value will not change until we load it again
      prevOfficeTable.showTotals = false;
      await excelContext.sync();
      return prevOfficeTable;
