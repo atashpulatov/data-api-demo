@@ -17,6 +17,8 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     CONTEXT_MENU_SHOW_DATA = 'Show Data'
     CONTEXT_MENU_TEXT_ELEMENTS = '.mtxt'
 
+    INFORMATION_TEXT = 'span.dossier-window-information-text'
+
     def __init__(self):
         super().__init__()
 
@@ -80,8 +82,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     def wait_for_dossier_to_load(self):
         self.focus_on_excel_popup_frame()
 
-        dossier_information_text = 'span.dossier-window-information-text'
-        self.get_element_by_css(dossier_information_text)
+        self.get_element_by_css(ImportDossierMainBrowserPage.INFORMATION_TEXT)
 
-        # dossier object is ready when information text is visible, but it needs more time for final render of page content
+        # dossier object is ready when information text is visible, needs more time for final render of page content
         self.pause(2)
