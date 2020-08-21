@@ -4,7 +4,7 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
 from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDesktopPage
 from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWindowsDesktopPage
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
-from pages.excel.start_excel.start_excel_windows_desktop_page import StartExcelWindowsDesktopPage
+from pages.excel.excel_general.excel_general_windows_desktop_page import ExcelGeneralWindowsDesktopPage
 from pages.import_data.import_data_windows_desktop_page import ImportDataWindowsDesktopPage
 from pages.import_dossier.import_dossier_main.import_dossier_main_windows_desktop_page import \
     ImportDossierMainWindowsDesktopPage
@@ -21,7 +21,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
     def __init__(self):
         super().__init__()
 
-        self.start_excel_windows_desktop_page = StartExcelWindowsDesktopPage()
+        self.excel_general_windows_desktop_page = ExcelGeneralWindowsDesktopPage()
         self.add_in_login_windows_desktop_page = AddInLoginWindowsDesktopPage()
         self.excel_menu_windows_desktop_page = ExcelMenuWindowsDesktopPage()
         self.cleanup_windows_desktop_page = CleanupWindowsDesktopPage()
@@ -34,8 +34,8 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()
         self.not_logged_right_panel_windows_desktop_page = NotLoggedRightPanelWindowsDesktopPage()
 
-    def start_excel_page(self):
-        return self.start_excel_windows_desktop_page
+    def excel_general_page(self):
+        return self.excel_general_windows_desktop_page
 
     def add_in_login_page(self):
         return self.add_in_login_windows_desktop_page

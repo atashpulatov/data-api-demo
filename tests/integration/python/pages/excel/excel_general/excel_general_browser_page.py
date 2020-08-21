@@ -1,9 +1,11 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.const import DEFAULT_LOCALE_NAME
+from framework.util.test_util import TestUtil
 from pages.excel.excel_login.excel_login_browser_page import ExcelLoginBrowserPage
 from pages.excel.excel_main.excel_main_browser_page import ExcelMainBrowserPage
 
 
-class StartExcelBrowserPage(BaseBrowserPage):
+class ExcelGeneralBrowserPage(BaseBrowserPage):
     def __init__(self):
         super().__init__()
 
@@ -14,28 +16,29 @@ class StartExcelBrowserPage(BaseBrowserPage):
 
     excel_not_started = True
 
-    def go_to_excel(self):
+    def go_to_excel(self, locale_name=DEFAULT_LOCALE_NAME):
         self._go_to_excel_by_url()
 
-        self._login_to_excel()
+        self._login_to_excel(locale_name)
 
-        self._go_to_excel_by_url()  # This solution is temporary TODO check if you are on excel page EXCEL_URL
-
-        self.excel_main_browser_page.open_new_work_book()
+        self.excel_main_browser_page.open_new_workbook()
 
         self.switch_to_excel_workbook_window()
 
-        # TODO check if you are on excel_workbook_window (sometimes it is switching to onedrive)
-
     def _go_to_excel_by_url(self):
-        self.driver.get(StartExcelBrowserPage.EXCEL_URL)
+        self.driver.get(ExcelGeneralBrowserPage.EXCEL_URL)
 
-    def _login_to_excel(self):
-        if StartExcelBrowserPage.excel_not_started:
-            self.excel_login_browser_page.login_to_excel()
+    def _login_to_excel(self, locale_name):
+        if ExcelGeneralBrowserPage.excel_not_started:
+            self.excel_login_browser_page.login_to_excel(locale_name)
 
-            StartExcelBrowserPage.excel_not_started = False
+            ExcelGeneralBrowserPage.excel_not_started = False
 
     def maximize_excel_window(self):
         self.driver.maximize_window()
         # self.driver.set_window_size(1920, 1080)
+
+    def close_excel(self):
+        TestUtil.global_test_cleanup()
+
+        ExcelGeneralBrowserPage.excel_not_started = True

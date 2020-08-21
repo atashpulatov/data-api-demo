@@ -29,6 +29,7 @@ class ConfigUtil:
     PARAM_NAME_BROWSER_EXISTING_SESSION_ID = 'browser_existing_session_id'
     PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME = 'windows_desktop_excel_root_element_name'
     PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED = 'cleanup_after_test_enabled'
+    PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED = 'run_win_app_driver_enabled'
     PARAM_NAME_DRIVER_PATH_PREFIX = 'driver_path_'
     PARAM_NAME_HOST_URL_PREFIX = 'host_url_'
     PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT = 'excel_add_in_environment'
@@ -39,7 +40,8 @@ class ConfigUtil:
     PARAM_BOOLEAN = [
         PARAM_NAME_IMAGE_RECOGNITION_ENABLED,
         PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED,
-        PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED
+        PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED,
+        PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED
     ]
 
     PARAM_VALUES_CACHE = {}
@@ -75,14 +77,6 @@ class ConfigUtil:
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_DESKTOP_ADD_IN_IMPORT_DATA_NAME)
 
     @staticmethod
-    def get_default_excel_user_name():
-        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_USER_NAME)
-
-    @staticmethod
-    def get_default_excel_user_password():
-        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_USER_PASSWORD)
-
-    @staticmethod
     def get_browser_existing_session_executor_url():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL)
 
@@ -110,6 +104,10 @@ class ConfigUtil:
     @staticmethod
     def is_cleanup_after_tests_enabled():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED)
+
+    @staticmethod
+    def is_run_win_app_driver_enabled():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED)
 
     @staticmethod
     def is_image_recognition_enabled():
@@ -180,7 +178,7 @@ class ConfigUtil:
             if not ConfigUtil.CONFIG_FILE_NAME_SEARCH.match(config_file_name):
                 raise MstrException(
                     'Invalid config file name, must match %s: %s' % (ConfigUtil.CONFIG_FILE_NAME_PATTERN,
-                                                                            config_file_name))
+                                                                     config_file_name))
         else:
             config_file_name = ConfigUtil.CONFIG_DEFAULT_FILE_NAME
 

@@ -1,0 +1,11 @@
+{
+  "driver_type": "windows_desktop",
+  "image_recognition_enabled": true,
+  "connect_to_existing_session_enabled": false,
+  "windows_desktop_excel_root_element_name": "Book1 - Excel",
+  "cleanup_after_test_enabled": true,
+  "run_win_app_driver_enabled": true,
+  "driver_path_windows_desktop": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
+  "host_url_windows_desktop": "http://localhost:4723/wd/hub",
+  "excel_add_in_environment": "221120"
+}

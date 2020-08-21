@@ -6,7 +6,7 @@
 [PEP 8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/) with maximum line length
 of 120 characters.
 
-1. Gherking code should be formatted as follows (please notice steps indentation):
+1. Gherking code should be formatted as follows (please notice **steps indentation**):
 
 ```gherkin
 Feature: FMMMM - Import object

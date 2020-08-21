@@ -4,7 +4,7 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_mac_deskt
 from pages.excel.cleanup.cleanup_mac_desktop_page import CleanupMacDesktopPage
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 from pages.excel.excel_sheet.excel_sheet_mac_desktop_page import ExcelSheetMacDesktopPage
-from pages.excel.start_excel.start_excel_mac_desktop_page import StartExcelMacDesktopPage
+from pages.excel.excel_general.excel_general_mac_desktop_page import ExcelGeneralMacDesktopPage
 from pages.import_data.import_data_mac_desktop_page import ImportDataMacDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_mac_desktop_page import NotLoggedRightPanelMacDesktopPage
 from pages.right_panel.duplicate_object_popup.duplicate_object_popup_mac_desktop_page import \
@@ -17,7 +17,7 @@ from pages_set.abstract_pages_set import AbstractPagesSet
 class PagesSetMacDesktop(AbstractPagesSet):
     def __init__(self):
         super().__init__()
-        self.start_excel_mac_desktop_page = StartExcelMacDesktopPage()
+        self.excel_general_mac_desktop_page = ExcelGeneralMacDesktopPage()
         self.add_in_login_mac_desktop_page = AddInLoginMacDesktopPage()
         self.excel_menu_mac_desktop_page = ExcelMenuMacDesktopPage()
         self.cleanup_mac_desktop_page = CleanupMacDesktopPage()
@@ -29,8 +29,8 @@ class PagesSetMacDesktop(AbstractPagesSet):
         self.not_logged_right_panel_mac_desktop_page = NotLoggedRightPanelMacDesktopPage()
         self.columns_and_filters_selection_mac_desktop_page = ColumnsAndFiltersSelectionMacDesktopPage()
 
-    def start_excel_page(self):
-        return self.start_excel_mac_desktop_page
+    def excel_general_page(self):
+        return self.excel_general_mac_desktop_page
 
     def add_in_login_page(self):
         return self.add_in_login_mac_desktop_page

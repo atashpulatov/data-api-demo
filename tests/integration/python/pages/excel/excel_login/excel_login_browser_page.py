@@ -1,5 +1,5 @@
 from framework.pages_base.base_page import BasePage
-from framework.util.config_util import ConfigUtil
+from framework.util.config_excel_users_util import ConfigExcelUsersUtil
 
 
 class ExcelLoginBrowserPage(BasePage):
@@ -9,14 +9,14 @@ class ExcelLoginBrowserPage(BasePage):
     SIGN_IN_BUTTON = 'idSIButton9'
     YES_BUTTON = 'idSIButton9'
 
-    def login_to_excel(self):
-        excel_user_name = ConfigUtil.get_default_excel_user_name()
+    def login_to_excel(self, locale_name):
+        excel_user_name = ConfigExcelUsersUtil.get_excel_user_name(locale_name)
         user_name_field = self.get_element_by_id(ExcelLoginBrowserPage.USERNAME_INPUT_FIELD)
         user_name_field.send_keys_with_check(excel_user_name)
 
         self.get_element_by_id(ExcelLoginBrowserPage.NEXT_BUTTON).click()
 
-        excel_user_password = ConfigUtil.get_default_excel_user_password()
+        excel_user_password = ConfigExcelUsersUtil.get_excel_user_password(locale_name)
         user_password_field = self.get_element_by_id(ExcelLoginBrowserPage.PASSWORD_FIELD)
         user_password_field.send_keys_with_check(excel_user_password)
 
