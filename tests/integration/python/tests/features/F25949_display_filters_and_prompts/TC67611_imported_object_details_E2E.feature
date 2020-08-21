@@ -22,4 +22,18 @@ Feature: F25949 - Display filters and prompts
       And I clicked metrics list expand button on object 1
       And I clicked object location expand button on object 1
 
+    Given I added a new worksheet
+      And I clicked Add Data button
+      And I found and selected object "Prompted report with subtotals"
+      And I clicked Prepare Data button
+      And I waited for Run button to be enabled
+      And I clicked Run button
+
+      And I selected all attributes
+      And I selected all metrics
+      And I clicked filter number 1
+      And I selected all filter elements
+      And I clicked filter number 4
+      And I selected all filter elements
+
       And I log out

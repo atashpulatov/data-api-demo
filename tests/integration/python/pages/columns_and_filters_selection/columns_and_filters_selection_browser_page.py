@@ -22,6 +22,10 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
                   'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > ' \
                   'div.checkbox-list.all-showed > div > div > label'
 
+    ALL_FILTERS = '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > ' \
+                  'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-12.filters-col > div > ' \
+                  'div:nth-child(2) > div > div.checkbox-list.all-showed > div > div > label'
+
     ATTRIBUTE_FORM_DROPDOWN = '.ant-select-selection--single'
     ATTRIBUTE_FORM_DROP_DOWN_ITEM = '.ant-select-dropdown-menu-item'
 
@@ -105,6 +109,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % metric_name).click()
 
+    def click_filter(self, filter_index):
+        self.focus_on_import_data_pop_up_frame()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FILTER_ELEMENT_AT % filter_index).click()
+
     def click_display_attributes_names_type(self, form_visualization_type):
         self.focus_on_import_data_pop_up_frame()
 
@@ -132,6 +141,16 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_import_data_pop_up_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_METRICS).click()
+
+    def select_all_filter_elements(self):
+        self.focus_on_import_data_pop_up_frame()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_FILTERS).click()
+
+    def unselect_all_filter_elements(self):
+        self.focus_on_import_data_pop_up_frame()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_FILTERS).click()
 
     def click_attributes_and_forms(self, attributes_and_forms_json):
         self.focus_on_import_data_pop_up_frame()

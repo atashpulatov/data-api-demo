@@ -18,6 +18,11 @@ def step_impl(context, metric_name):
     context.pages.columns_and_filters_selection_page().click_metric(metric_name)
 
 
+@step('I clicked filter number {filter_index}')
+def step_impl(context, filter_index):
+    context.pages.columns_and_filters_selection_page().click_filter(filter_index)
+
+
 @step('I set Display attribute form names to "{form_visualization_type}"')
 def step_impl(context, form_visualization_type):
     context.pages.columns_and_filters_selection_page().click_display_attributes_names_type(form_visualization_type)
@@ -41,6 +46,16 @@ def step_impl(context):
 @step('I unselected all metrics')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().unselect_all_metrics()
+
+
+@step('I selected all filter elements')
+def step_imp(context):
+    context.pages.columns_and_filters_selection_page().select_all_filter_elements()
+
+
+@step('I unselected all filter elements')
+def step_imp(context):
+    context.pages.columns_and_filters_selection_page().unselect_all_filter_elements()
 
 
 @step('I clicked attributes and forms {attributes_and_forms_json}')
