@@ -15,7 +15,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
      When I clicked Run button
       And I selected all attributes
       And I selected all metrics
-      And I selected filter "Category" and elements "Books,Electronics"
+      And I selected filters { "Category" : ["Books", "Electronics"] }
      Then I clicked Back button
 
     Given I clicked Import button without checking results

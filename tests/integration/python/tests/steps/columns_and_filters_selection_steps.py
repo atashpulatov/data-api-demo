@@ -8,24 +8,24 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().ensure_columns_and_filters_selection_is_visible()
 
 
-@step('I ensure popup title is "{title}" is correct')
+@step('I ensure popup title is "{title}"')
 def step_impl(context, title):
-    context.pages.columns_and_filters_selection_page().ensure_report_title_is_correct(title)
+    context.pages.columns_and_filters_selection_page().ensure_popup_title_is_correct(title)
 
 
-@step('I ensure there are "{number}" of "{of_number}" metrics selected')
+@step('I ensure that "{number}" of "{of_number}" metrics are selected')
 def step_impl(context,  number, of_number):
-    context.pages.columns_and_filters_selection_page.ensure_metric_selection(number, of_number)
+    context.pages.columns_and_filters_selection_page().ensure_metric_selection(number, of_number)
 
 
-@step('I ensure there are {number} of {of_number} attributes selected')
+@step('I ensure that "{number}" of "{of_number}" attributes are selected')
 def step_impl(context,  number, of_number):
-    context.pages.columns_and_filters_selection_page.ensure_metric_selection(number, of_number)
+    context.pages.columns_and_filters_selection_page().ensure_attribute_selection(number, of_number)
 
 
-@step('I ensure there are {number} of {of_number} filters selected')
+@step('I ensure that "{number}" of "{of_number}" filters are selected')
 def step_impl(context,  number, of_number):
-    context.pages.columns_and_filters_selection_page.ensure_metric_selection(number, of_number)
+    context.pages.columns_and_filters_selection_page().ensure_filters_selection(number, of_number)
 
 
 @step('I clicked attribute "{attribute_name}"')
@@ -199,9 +199,9 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_cancel_button()
 
 
-@step('I selected filter "{filter}" and elements "{elements}"')
-def step_impl(context, filter, elements):
-    context.pages.columns_and_filters_selection_page().select_filter_elements(filter, elements)
+@step('I selected filters {filters_and_elements_json}')
+def step_impl(context, filters_and_elements_json):
+    context.pages.columns_and_filters_selection_page().select_filter_elements(filters_and_elements_json)
 
 
 @step('I closed popup window')
