@@ -1,3 +1,4 @@
+@windows_chrome
 @mac_chrome
 Feature: F31959 - Hardening the workflows of importing data with prompts to Excel
 

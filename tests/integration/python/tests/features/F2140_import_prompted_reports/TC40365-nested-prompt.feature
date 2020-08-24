@@ -1,3 +1,4 @@
+@windows_chrome
 @mac_chrome
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 

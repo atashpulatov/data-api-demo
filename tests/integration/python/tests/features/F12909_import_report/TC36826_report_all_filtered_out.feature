@@ -1,3 +1,4 @@
+@windows_chrome
 @mac_chrome
 Feature: F12909 - Import report
 
