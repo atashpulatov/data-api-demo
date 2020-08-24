@@ -22,8 +22,6 @@ class BaseBrowserPage(BasePage):
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
 
-    DISABLED_BUTTON_ATTRIBUTE = 'disabled'
-
     def get_element_with_focus(self):
         return self.driver.switch_to.active_element
 
@@ -200,6 +198,3 @@ class BaseBrowserPage(BasePage):
                 return item
 
         return None
-
-    def _is_disabled(self):
-        return button.get_attribute(BaseBrowserPage.DISABLED_BUTTON_ATTRIBUTE) == 'true'
