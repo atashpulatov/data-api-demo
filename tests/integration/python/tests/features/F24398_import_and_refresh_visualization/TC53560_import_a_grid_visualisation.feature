@@ -8,6 +8,7 @@ Feature: F24398 - Import and refresh visualization
 
       And I found and selected object "Dossier with vis that can be moved to different pages / chapters"
       And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
       And I added dossier to Library if not yet added
       And I selected visualization "Visualization 1"
       And I selected dossier page or chapter 4
@@ -23,6 +24,7 @@ Feature: F24398 - Import and refresh visualization
       And I clicked Add Data button
       And I found and selected object "Visualization manipulation"
       And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
       And I selected visualization "Visualization 1"
       And I selected "Total" in Show Totals for "Year" attribute
       And I selected sort "Ascending" for "Profit" metric
@@ -41,6 +43,7 @@ Feature: F24398 - Import and refresh visualization
       And I clicked Add Data button
       And I found and selected object "Visualization manipulation"
       And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
       And I opened Show Data panel for "Visualization 1"
       And I closed Show Data panel
 
