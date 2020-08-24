@@ -60,9 +60,7 @@ function getFullPath({
 }
 
 function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1, visualizationType) {
-  console.log('visualizationType:', visualizationType);
-  const fields = getFetchObjectContentFields(visualizationType, fullPath, offset, limit);
-  console.log('fields:', fields);
+  const fields = getFetchObjectContentFields(visualizationType);
 
   return request
     .get(`${fullPath}?offset=${offset}&limit=${limit}&fields=${fields}`)
@@ -71,7 +69,12 @@ function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = 
     .withCredentials();
 }
 
-
+/**
+ * Returns fields query selector value based on type of the object
+ *
+ * @param {string} visualizationType Specifies type of the visualisation
+ * @returns {string} fields query selector
+ */
 function getFetchObjectContentFields(visualizationType) {
   switch (visualizationType) {
     case mstrObjectEnum.visualizationType.COMPOUND_GRID:
