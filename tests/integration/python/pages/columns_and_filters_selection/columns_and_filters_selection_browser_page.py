@@ -112,6 +112,13 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         )
 
     def ensure_metric_selection(self, number, of_number):
+        """
+        Ensure proper number of metrics is selected
+
+        :param number: number of selected metrics
+        :param of_number:number of all metrics
+        """
+
         title = f'METRICS ({number}/{of_number})'
 
         metric_col_name = self.get_sort_col_name(ColumnsAndFiltersSelectionBrowserPage.METRICS_SORT_TITLE)
@@ -122,6 +129,13 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         raise MstrException('Metric selection does not match - selector: [%s], text: [%s].' % (metric_col_name, title))
 
     def ensure_attribute_selection(self, number, of_number):
+        """
+        Ensure proper number of attributes is selected
+
+        :param number: number of selected attributes
+        :param of_number:number of all attributes
+        """
+
         title = f'ATTRIBUTES ({number}/{of_number})'
 
         attribute_col_name = self.get_sort_col_name(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_SORT_TITLE)
@@ -133,6 +147,12 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             'Attribute selection does not match - selector: [%s], text: [%s].' % (attribute_col_name, title))
 
     def ensure_filters_selection(self, number, of_number):
+        """
+        Ensure proper number of filters is selected
+
+        :param number: number of selected filters
+        :param of_number:number of all filters
+        """
         title = f'FILTERS ({number}/{of_number})'
 
         filter_col_name = self.get_sort_col_name(ColumnsAndFiltersSelectionBrowserPage.FILTER_SORT_TITLE)
