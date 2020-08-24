@@ -95,9 +95,7 @@ class BaseBrowserPage(BasePage):
 
         self.focus_on_excel_frame()
 
-        dossier_external_frame_element = self.get_frame_element_by_css(
-            BaseBrowserPage.IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM)
-        self._switch_to_frame(dossier_external_frame_element)
+        self.focus_on_import_data_pop_up_frame()
 
         prompt_frame = self.get_frame_element_by_css(
             BaseBrowserPage.PROMPT_FRAME_ELEM)
