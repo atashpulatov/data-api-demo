@@ -60,3 +60,49 @@ def step_impl(context, worksheet_number):
 @step('I removed {number_of_columns} columns starting from column "{column_name}"')
 def step_impl(context, number_of_columns, column_name):
     context.pages.excel_sheet_page().remove_columns(column_name, number_of_columns)
+
+
+@step('I clicked table design tab')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_table_design_tab()
+
+@step('I clicked green table style')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_green_table_style()
+
+@step('I clicked home tab')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_home_tab()
+
+@step('I clicked percentage button')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_percentage_button()
+
+@step('I clicked comma style button')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_comma_style_button()
+
+@step('I clicked align middle button')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_align_middle_button()
+
+@step('I clicked align left button')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_align_left_button()
+
+@step('I clicked bold button')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_bold_button()
+
+@step('I clicked font color button')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_font_color_button()
+
+@step('I clicked fill color button')
+def step_impl(context):
+    context.pages.excel_sheet_page().click_fill_color_button()
+
+@step('I changed cell "{cell_name}" font name to "{font_name}"')
+def step_impl(context, cell_name, font_name):
+    context.pages.excel_sheet_page().change_font_name_of_cell(cell_name, font_name)
+    

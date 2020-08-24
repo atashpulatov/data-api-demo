@@ -13,6 +13,10 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     REFRESH_ALL = SELECT_ALL_TILES + 'button:nth-child(5)'
     REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
 
+    CLEAR_DATA = '.no-trigger-close.clear-data.not-linked-list'
+    CONFIFRM_CLEAR_DATA = '#confirm-btn'
+    VIEW_DATA = '#overlay > div > div.object-tile-container > div.overlay-container > div > button'
+
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
 
@@ -49,3 +53,21 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         return self.check_if_element_exists_by_css(RightPanelMainBrowserPage.IMPORT_DATA_BUTTON_ELEM)
+
+
+    def clear_data(self):
+        self._open_dots_menu()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.CLEAR_DATA).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.CONFIFRM_CLEAR_DATA).click()
+
+    def view_data(self):
+      self.focus_on_add_in_frame()
+
+      self.get_element_by_css(RightPanelMainBrowserPage.VIEW_DATA).click()
+
+    def _open_dots_menu(self):
+        self.focus_on_add_in_frame()
+
+        if self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=5):
+            self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
