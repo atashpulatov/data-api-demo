@@ -91,7 +91,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         )
 
     def click_attribute(self, attribute_name):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         attribute = self.find_element_by_text_in_elements_list_by_css(
             ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX,
@@ -101,12 +101,12 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         attribute.click(offset_x=10, offset_y=5)
 
     def click_metric(self, metric_name):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % metric_name).click()
 
     def click_display_attributes_names_type(self, form_visualization_type):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
 
@@ -114,27 +114,27 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM, form_visualization_type)
 
     def select_all_attributes(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_ATTRIBUTES).click()
 
     def unselect_all_attributes(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_ATTRIBUTES).click()
 
     def select_all_metrics(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_METRICS).click()
 
     def unselect_all_metrics(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_METRICS).click()
 
     def click_attributes_and_forms(self, attributes_and_forms_json):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
@@ -149,14 +149,14 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
                     self.click_attribute(form_name)
 
     def select_element_by_number(self, object_type, object_number):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
 
         self.get_element_by_css(element).click()
 
     def expand_attribute_form(self, object_number):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         attribute_form_arrow = self.get_element_by_css(
             ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED % object_number)
@@ -164,7 +164,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         attribute_form_arrow.click()
 
     def collapse_attribute_form(self, object_number):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         attribute_form_arrow = self.get_element_by_css(
             ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED % object_number)
@@ -172,7 +172,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         attribute_form_arrow.click()
 
     def get_attribute_form_name(self, attribute_form_number, attribute_number):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         attribute_element_container = ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_ELEMENT_AT % attribute_number
         attribute_form_element = self.get_element_by_css(
@@ -192,7 +192,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         return self._get_object_name(ColumnsAndFiltersSelectionBrowserPage.FILTER_ELEMENT_AT % object_number)
 
     def _get_object_name(self, object_selector):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         name_input = self.get_element_by_css(object_selector)
 
@@ -208,7 +208,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self._sort_elements_by_click(object_type, None)
 
     def _sort_elements_by_click(self, object_type, sorting_type):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
@@ -224,19 +224,19 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         raise MstrException('Click limit is reached. Selector could not be found')
 
     def search_for_element(self, element_name):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         search_box = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.SEARCH_INPUT)
         search_box.send_keys_with_check(element_name)
 
     def clear_search_element(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         search_box = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.SEARCH_INPUT)
         search_box.clear()
 
     def clear_element_search_with_backspace(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         search_box = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.SEARCH_INPUT)
         search_box.click()
@@ -246,7 +246,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             self.press_backspace()
 
     def press_tab_until_object_type_focused(self, object_type):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
@@ -269,7 +269,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self._sort_elements_by_keyboard(object_type, None)
 
     def _sort_elements_by_keyboard(self, object_type, sorting_type):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
@@ -285,20 +285,20 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         raise MstrException('Tab limit is reached. Element could not be found')
 
     def scroll_into_object_by_number(self, object_number, object_type):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
         self.get_element_by_css_no_visibility_checked(element).move_to()
 
     def click_import_button(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=LONG_TIMEOUT)
 
     def click_import_button_to_duplicate(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
 

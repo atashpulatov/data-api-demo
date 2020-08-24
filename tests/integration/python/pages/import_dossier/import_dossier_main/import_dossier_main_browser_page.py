@@ -80,7 +80,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDossierMainBrowserPage.RESET_CONFIRMATION_YES).click()
 
     def wait_for_dossier_to_load(self):
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ImportDossierMainBrowserPage.INFORMATION_TEXT)
 

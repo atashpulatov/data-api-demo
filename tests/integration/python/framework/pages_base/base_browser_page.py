@@ -11,7 +11,7 @@ from framework.util.util import Util
 
 class BaseBrowserPage(BasePage):
     EXCEL_FRAME_ELEM = 'WebApplicationFrame'
-    EXCEL_POPUP_FRAME_ELEM = '#WACDialogBodyPanel > iframe'
+    ADD_IN_POPUP_FRAME_ELEM = '#WACDialogBodyPanel > iframe'
     DOSSIER_FRAME_ELEM = '.dossier-window > div > iframe'
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
@@ -66,17 +66,17 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 raise MstrException('Cannot focus on excel frame')
 
-    def focus_on_excel_popup_frame(self):
+    def focus_on_add_in_popup_frame(self):
         self.focus_on_excel_frame()
 
-        popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.EXCEL_POPUP_FRAME_ELEM)
+        add_in_popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.ADD_IN_POPUP_FRAME_ELEM)
 
-        self._switch_to_frame(popup_frame_element)
+        self._switch_to_frame(add_in_popup_frame_element)
 
     def focus_on_dossier_frame(self):
         self.focus_on_excel_frame()
 
-        self.focus_on_excel_popup_frame()
+        self.focus_on_add_in_popup_frame()
 
         dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.DOSSIER_FRAME_ELEM)
 
