@@ -179,7 +179,7 @@ def step_impl(context, object_type, object_number):
     context.pages.columns_and_filters_selection_page().scroll_into_object_by_number(object_number, object_type)
 
 
-@when('I clicked Import button in Columns and Filters Selection')
+@step('I clicked Import button in Columns and Filters Selection')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button()
 

@@ -92,7 +92,7 @@ class PromptBrowserPage(BaseBrowserPage):
             return
 
         raise MstrException('Prompt title does not match: [%s]. [%s], text: [%s]. [%s]' % (
-            title_index, title_name, prompt_number, prompt_name))
+            title_index, title_name, number, prompt_name))
 
     def _get_object_name_in_prompt(self, object_selector):
         self.focus_on_prompt_frame()

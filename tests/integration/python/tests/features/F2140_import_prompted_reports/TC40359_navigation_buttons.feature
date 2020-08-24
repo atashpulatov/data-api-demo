@@ -12,6 +12,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
 
     Given I clicked Prepare Data button
       And I waited for Run button to be enabled
+      And I unselected "Subcategory" as an answer for "1. Objects" prompt - object prompt
      When I clicked Run button
       And I selected all attributes
       And I selected all metrics
