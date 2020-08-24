@@ -30,3 +30,6 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
                 return tile
 
         raise MstrException('Visualization not found: %s.' % visualization_name)
+
+    def wait_for_dossier_to_load(self):
+        self.pause(25)  # TODO wait when ready

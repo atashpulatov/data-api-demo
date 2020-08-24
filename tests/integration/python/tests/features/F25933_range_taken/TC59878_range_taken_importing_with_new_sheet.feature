@@ -35,6 +35,7 @@ Feature: F25933 - Range taken
       And I clicked Add Data button
       And I found and selected object "Dossier with basic grid vis, vis with totals and vis with crosstabs"
       And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
       And I selected visualization "Grid visualisation with subtotals"
       And I clicked import dossier without waiting for results
       And I clicked OK button in Range Taken popup
