@@ -4,7 +4,7 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_browser_p
 from pages.excel.cleanup.cleanup_browser_page import CleanupBrowserPage
 from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
-from pages.excel.start_excel.start_excel_browser_page import StartExcelBrowserPage
+from pages.excel.excel_general.excel_general_browser_page import ExcelGeneralBrowserPage
 from pages.filter_panel.filter_panel_browser_page import FilterPanelBrowserPage
 from pages.import_data.import_data_browser_page import ImportDataBrowserPage
 from pages.import_dossier.import_dossier_bookmarks.import_dossier_bookmarks_browser_page import \
@@ -32,7 +32,7 @@ class PagesSetBrowser(AbstractPagesSet):
     def __init__(self):
         super().__init__()
 
-        self.start_excel_browser_page = StartExcelBrowserPage()
+        self.excel_general_browser_page = ExcelGeneralBrowserPage()
         self.add_in_login_browser_page = AddInLoginBrowserPage()
         self.excel_menu_browser_page = ExcelMenuBrowserPage()
         self.cleanup_browser_page = CleanupBrowserPage()
@@ -54,8 +54,8 @@ class PagesSetBrowser(AbstractPagesSet):
         self.prompt_browser_page = PromptBrowserPage()
         self.right_panel_tile_details_browser_page = RightPanelTileDetailsBrowserPage()
 
-    def start_excel_page(self):
-        return self.start_excel_browser_page
+    def excel_general_page(self):
+        return self.excel_general_browser_page
 
     def add_in_login_page(self):
         return self.add_in_login_browser_page
