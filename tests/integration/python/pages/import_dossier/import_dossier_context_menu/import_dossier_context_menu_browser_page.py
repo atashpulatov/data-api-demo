@@ -92,6 +92,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
     def select_replace_with_for_attribute(self, replace_with, attribute_name):
         """
         Replaces one attribute with new attribute from visualization context menu.
+
         :param replace_with(str): name of new attribute
         :param attribute_name(str): name of attribute which is going to be replaced
         """
@@ -125,6 +126,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
     def select_exclude_for_attribute_element(self, exclude, attribute_name):
         """
         Excludes given attribute element from visualization context menu.
+
         :param exclude(str): name of element to exlude
         :param attribute_name(str): name of attribute which contains element to exclude
         """

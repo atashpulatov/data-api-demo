@@ -177,7 +177,8 @@ class BaseBrowserPage(BasePage):
 
     def find_index_of_element_in_list_by_text(self, selector, text):
         """
-        Finds index of element with given text in list of elements returned by given css selector
+        Finds index of element with given text in list of elements returned by given css selector.
+
         :param selector(str): css selector
         :param text(str): text content of wanted element
         :returns (int): index of wanted element in list of elements with given css selector
