@@ -10,7 +10,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTES_CHECKBOX = '.item-title'
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
     FILTER_ITEM = '.filter-title'
-    SPAN = 'span'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
     FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
                                            'div.attribute-forms > ul > ' \
@@ -221,7 +220,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             if len(elements_names) > 0:
                 for element_name in elements_names:
                     self.find_element_by_text_in_elements_list_by_css(
-                        ColumnsAndFiltersSelectionBrowserPage.SPAN,
+                        'span',
                         element_name
                     ).click()
 
