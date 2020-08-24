@@ -58,3 +58,8 @@ def step_impl(context, object_number):
 @step('I waited for object to be refreshed successfully')
 def step_impl(contex):
     contex.pages.right_panel_tile_page().wait_for_refresh_object_to_finish_successfully()
+
+
+@step('I selected excel table for object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().select_excel_table(object_number)

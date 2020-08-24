@@ -29,6 +29,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
+    TILE_CONTEXT_MENU_WRAPPER = '.react-contextmenu-wrapper'
 
     def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
@@ -94,6 +95,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def click_edit(self, object_no):
         self.focus_on_add_in_frame()
 
+        self._hover_over_tile(int(object_no) - 1)
+
         self.get_element_by_css(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT % object_no).click()
 
     def get_object_name(self, index):
@@ -151,3 +154,12 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         ).move_to_and_click()
 
         self.wait_for_remove_object_to_finish_successfully()
+
+    def select_excel_table(self, object_number):
+        self.focus_on_add_in_frame()
+
+        tile_context_menu_wrappers = self.get_elements_by_css(
+          RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
+        )
+
+        tile_context_menu_wrappers[int(object_number) - 1].click()

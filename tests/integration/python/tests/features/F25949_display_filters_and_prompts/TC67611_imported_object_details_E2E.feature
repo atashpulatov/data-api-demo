@@ -35,5 +35,39 @@ Feature: F25949 - Display filters and prompts
       And I selected all filter elements
       And I clicked filter number 4
       And I selected all filter elements
+      And I clicked Import button in Columns and Filters Selection
+      And I closed last notification
+
+    Given I clicked toggle details button on object 1
+      And I clicked filters list expand button on object 1
+      And I clicked attributes list expand button on object 1
+      And I clicked object location expand button on object 1
+      
+    Given I added a new worksheet
+      And I clicked Add Data button
+      And I found and selected object "Prompted dossier"
+      And I clicked Import button to open Import Dossier
+      And I clicked Run button for prompted dossier
+      And I imported visualization "Visualization 1"
+      And I closed last notification
+
+    Given I clicked toggle details button on object 1
+      And I clicked object location expand button on object 1
+
+    Given I selected excel table for object 1
+
+    Given I hovered over toggle details button on object 1
+     Then Tooltip text for object 1 toggle details button is Hide Details
+
+    Given I clicked toggle details button on object 1
+
+    Given I clicked Edit object 3
+      And I unselected all metrics
+      And I clicked metric "survived"
+      And I clicked filter number 10
+      And I selected all filter elements
+      And I clicked Import button in Columns and Filters Selection
+      And I closed last notification
+
 
       And I log out
