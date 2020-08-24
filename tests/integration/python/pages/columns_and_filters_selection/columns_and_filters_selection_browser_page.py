@@ -177,7 +177,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % metric_name).click()
 
     def click_filter(self, filter_name):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % metric_name).click()
 
@@ -210,7 +210,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_METRICS).click()
 
     def select_filter_elements(self, filters_and_elements_json):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
 
         filters_and_elements = json.loads(filters_and_elements_json)
 
@@ -225,7 +225,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
                     ).click()
 
     def select_all_filter_elements(self, filter):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
         self._select_filter(filter)
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_FILTERS).click()
@@ -413,11 +413,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=LONG_TIMEOUT)
 
     def click_back_button(self):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_ELEM).click()
 
     def click_cancel_button(self):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.CANCEL_BUTTON_ELEM).click()
 
     def close_popup_window(self):

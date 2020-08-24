@@ -32,13 +32,13 @@ class PromptBrowserPage(BaseBrowserPage):
         prompt_list.click()
 
     def wait_for_run_button(self):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
         self.wait_for_element_to_have_attribute_value_by_css(
             PromptBrowserPage.PROMPT_RUN_BUTTON, 'disabled', None
         )
 
     def click_run_button(self):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON).click()
 
