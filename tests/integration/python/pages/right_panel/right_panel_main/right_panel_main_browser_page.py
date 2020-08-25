@@ -55,7 +55,6 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         return self.check_if_element_exists_by_css(RightPanelMainBrowserPage.IMPORT_DATA_BUTTON_ELEM)
 
-
     def clear_data(self):
         self._open_dots_menu()
 

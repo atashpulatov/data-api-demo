@@ -41,6 +41,7 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
 
     def find_and_select_object(self, object_name):
         search_box_groups_no = self.get_elements_by_xpath(ImportDataMacDesktopPage.SEARCH_BAR_ELEM_GROUPS)
+
         search_box = self.get_element_by_xpath_workaround(
             ImportDataMacDesktopPage.SEARCH_BAR_ELEM,
             len(search_box_groups_no)
@@ -48,6 +49,7 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
         search_box.send_keys_with_check(object_name)
 
         Util.pause(2)  # TODO wait when ready
+        
         self.get_element_by_xpath(
             ImportDataMacDesktopPage.NAME_HEADER_ELEM
         ).click(

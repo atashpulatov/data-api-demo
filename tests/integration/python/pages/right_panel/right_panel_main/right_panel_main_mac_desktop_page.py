@@ -19,7 +19,6 @@ class RightPanelMainMacDesktopPage(BaseMacDesktopPage):
         self.get_element_by_xpath(RightPanelMainMacDesktopPage.ADD_DATA_BUTTON_ELEM).click()
 
     def clear_data(self):
-        #TODO Implement the functions
         self._open_dots_menu()
 
         self.get_element_by_xpath(RightPanelMainMacDesktopPage.CLEAR_DATA).click()
@@ -29,6 +28,8 @@ class RightPanelMainMacDesktopPage(BaseMacDesktopPage):
         self.get_element_by_xpath(RightPanelMainMacDesktopPage.VIEW_DATA_BUTTON_ELEM).click()
     
     def _open_dots_menu(self):
+        #TODO: Function currently fails on the selector. This must be investigated
+        
         if self.check_if_element_exists_by_xpath(RightPanelMainMacDesktopPage.DOTS_MENU, timeout=5):
            self.get_element_by_xpath(RightPanelMainMacDesktopPage.DOTS_MENU).click()
 
