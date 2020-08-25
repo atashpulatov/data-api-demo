@@ -71,6 +71,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self._hover_over_tile(0)
 
+    def close_object_notification_on_hover(self, object_no):
+        self.focus_on_add_in_frame()
+
+        self._hover_over_tile(int(object_no) - 1)
+
     def click_duplicate(self, object_no):
         self.focus_on_add_in_frame()
 

@@ -8,6 +8,11 @@ def step_impl(context):
     context.pages.right_panel_tile_page().close_last_notification_on_hover()
 
 
+@step('I closed notification on object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().close_object_notification_on_hover(object_number)
+
+
 @step('I closed all notifications')
 def step_impl(context):
     context.pages.right_panel_tile_page().close_all_notifications_on_hover()
