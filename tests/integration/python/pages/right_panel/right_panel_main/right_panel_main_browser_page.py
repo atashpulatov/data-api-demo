@@ -16,7 +16,8 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     CLEAR_DATA = '.no-trigger-close.clear-data.not-linked-list'
     CONFIFRM_CLEAR_DATA = '#confirm-btn'
     
-    VIEW_DATA_BUTTON_ELEM = '#overlay > div > div.object-tile-container > div.overlay-container > div > button'
+    VIEW_DATA_BUTTON_ELEM = '#overlay > div > div.object-tile-container ' \
+                            '> div.overlay-container > div > button'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
