@@ -9,6 +9,12 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
     NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList/AXGroup[0]/AXGroup[0]/" \
                                                                    "AXGroup[0]/AXStaticText[@AXValue='%s']"
 
+    ERROR_NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[0]" \
+                                                                         "/AXGroup[0]/AXGroup[1]/AXStaticText[@AXValue='%s']"
+
+    ERROR_NOTIFICATION_OK_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[0]" \
+                                                                            "/AXGroup[0]/AXGroup[3]/AXButton[@AXTitle='OK']"
+
     DUPLICATE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/" \
                                                                         "AXGroup[%s]/AXButton[0]"
 
@@ -64,7 +70,7 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
 
     def click_edit(self, object_no):
         object_index = int(object_no) - 1
-
+ 
         self._hover_over_tile(object_index)
 
         self._get_edit_buttons_for_all_tiles()[object_index].click()

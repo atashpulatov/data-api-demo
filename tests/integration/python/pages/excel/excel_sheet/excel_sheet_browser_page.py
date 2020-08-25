@@ -42,7 +42,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
     ALIGN_MIDDLE_BUTTON = '#m_excelWebRenderer_ewaCtl_Alignment\\.AlignMiddle-Medium'
     ALIGN_LEFT_BUTTON = '#m_excelWebRenderer_ewaCtl_Alignment\\.AlignLeft-Medium'
 
-    EXCEL_FONT_NAME = '#m_excelWebRenderer_ewaCtl_Font\.FontName-Medium'
+    EXCEL_FONT_NAME_INPUT = '#m_excelWebRenderer_ewaCtl_Font\.FontName-Medium'
     BOLD_BUTTON = '#m_excelWebRenderer_ewaCtl_Font\\.Bold-Small'
     FONT_COLOR_BUTTON = '#m_excelWebRenderer_ewaCtl_Font\\.FontColorWithSplit-Small'
     FILL_COLOR_BOTTON = '#m_excelWebRenderer_ewaCtl_Font\\.FillColorWithSplit-Small'
@@ -192,7 +192,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)
 
-        self.get_element_by_css(ExcelSheetBrowserPage.EXCEL_FONT_NAME).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT).click()
         self.press_backspace()
         self.send_keys(font_name)
         self.press_enter()

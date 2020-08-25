@@ -15,7 +15,8 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     CLEAR_DATA = '.no-trigger-close.clear-data.not-linked-list'
     CONFIFRM_CLEAR_DATA = '#confirm-btn'
-    VIEW_DATA = '#overlay > div > div.object-tile-container > div.overlay-container > div > button'
+    
+    VIEW_DATA_BUTTON_ELEM = '#overlay > div > div.object-tile-container > div.overlay-container > div > button'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -64,7 +65,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     def view_data(self):
       self.focus_on_add_in_frame()
 
-      self.get_element_by_css(RightPanelMainBrowserPage.VIEW_DATA).click()
+      self.get_element_by_css(RightPanelMainBrowserPage.VIEW_DATA_BUTTON_ELEM).click()
 
     def _open_dots_menu(self):
         self.focus_on_add_in_frame()

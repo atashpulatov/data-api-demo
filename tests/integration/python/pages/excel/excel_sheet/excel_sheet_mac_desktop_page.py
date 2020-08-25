@@ -25,10 +25,31 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
 
     WORKSHEETS_TABS = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXSubrole='AXStandardWindow']/AXSplitGroup[0]/" \
                                                           "AXLayoutArea[@AXTitle='Content Area']/AXButton[%s]"
-
     WORKSHEET_ITEM_RE = re.compile(r'^sheetTab\d+$')
+    ADD_WORKSHEET_BUTTON_ELEM = BaseMacDesktopPage.EXCEL_WINDOW_ELEM + "/AXSplitGroup[0]/AXLayoutArea[@AXTitle='Content Area']/" \
+                                                                       "AXButton[@AXIdentifier='addSheetTabButton']"
     IDENTIFIER_ATTRIBUTE = 'AXIdentifier'
 
+    TABLE_HOME_TAB = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Home']"
+    TABLE_DESIGN_TAB = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Table']"
+    GREEN_TABLE_STYLE = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[4]/AXScrollArea[0]/" \
+                                                                        "AXRadioButton[@AXIdentifier='in_ribbon_gallery_XLGalTableStyles_Control_1_7']"
+
+    PERCENTAGE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[3]/AXButton[@AXTitle='Percentage Style']"
+    COMMA_STYLE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[3]/AXButton[@AXTitle='Comma Style']"
+    ALIGN_MIDDLE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[2]/" \
+                                                                          "AXCheckBox[@AXTitle='Align to Middle' and @AXSubrole='AXToggle']"
+    ALIGN_LEFT_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[2]/" \
+                                                                        "AXCheckBox[@AXTitle='Align to Left' and @AXSubrole='AXToggle']"
+
+    BOLD_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/AXCheckBox[@AXTitle='Bold' and @AXSubrole='AXToggle']"
+    FONT_COLOR_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
+                                                                        "AXMenuButton[@AXTitle='Font Colour' and @AXValue='RGB(255, 0, 0)']"
+    FILL_COLOR_BOTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
+                                                                        "AXMenuButton[@AXTitle='Shading' and @AXValue='RGB(255, 255, 0)']"
+
+    EXCEL_FONT_NAME_INPUT = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/AXComboBox[@AXValue='Calibri (Body)']"
+                            
     def get_cells_values(self, cells):
         result = []
 
@@ -38,13 +59,13 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
         return result
 
     def _get_cell_value(self, cell):
-        self._go_to_cell(cell)
+        self.go_to_cell(cell)
 
         value = self._get_selected_cell_value()
 
         return value.strip() if value else value
 
-    def _go_to_cell(self, cell):
+    def go_to_cell(self, cell):
         cell_upper = cell.upper()
 
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.EDIT_MENU).click()
@@ -84,6 +105,9 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
 
         return len(tabs_elements)
 
+    def add_worksheet(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.ADD_WORKSHEET_BUTTON_ELEM).click()
+
     def _get_worksheet_tabs(self):
         found_elements = []
 
@@ -96,3 +120,42 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
                 found_elements.append(element)
 
         return found_elements
+
+    def click_table_design_tab(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.TABLE_DESIGN_TAB).click()
+
+    def click_green_table_style(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.GREEN_TABLE_STYLE).click()
+
+    def click_home_tab(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.TABLE_HOME_TAB).click()
+
+    def click_percentage_button(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.PERCENTAGE_BUTTON).click()
+
+    def click_comma_style_button(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.COMMA_STYLE_BUTTON).click()
+
+    def click_align_middle_button(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.ALIGN_MIDDLE_BUTTON).click()
+
+    def click_align_left_button(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.ALIGN_LEFT_BUTTON).click()
+
+    def click_bold_button(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.BOLD_BUTTON).click()
+
+    def click_font_color_button(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.FONT_COLOR_BUTTON).click()
+
+    def click_fill_color_button(self):
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.FILL_COLOR_BOTTON).click()
+
+    def change_font_name_of_cell(self, cell_name, font_name):
+        self.go_to_cell(cell_name)
+
+        font_name_element = self.get_element_by_xpath(ExcelSheetMacDesktopPage.EXCEL_FONT_NAME_INPUT)
+        font_name_element.click(offset_x=20, offset_y=10)
+        font_name_element.send_keys(Keys.BACKSPACE)
+        font_name_element.send_keys_with_check(font_name)
+        self.press_enter()
