@@ -34,7 +34,8 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     TABLE_HOME_TAB = '#m_excelWebRenderer_ewaCtl_Ribbon\\.Home-title > a > span'
     TABLE_DESIGN_TAB = '#m_excelWebRenderer_ewaCtl_Ribbon\\.Table\\.Design-title > a > span'
-    GREEN_TABLE_STYLE = '#m_excelWebRenderer_ewaCtl_Ribbon\\.TableTools\\.TableStyles\\.Style6-Large > div > div > table'
+    GREEN_TABLE_STYLE = '#m_excelWebRenderer_ewaCtl_Ribbon\\.TableTools\\.TableStyles\\.Style6-Large >' \
+                        'div > div > table'
 
     PERCENTAGE_BUTTON = '#m_excelWebRenderer_ewaCtl_Number\\.Percentage-Medium'
     COMMA_STYLE_BUTTON = '#m_excelWebRenderer_ewaCtl_Number\\.NumberFormatComma-Medium'
@@ -42,7 +43,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
     ALIGN_MIDDLE_BUTTON = '#m_excelWebRenderer_ewaCtl_Alignment\\.AlignMiddle-Medium'
     ALIGN_LEFT_BUTTON = '#m_excelWebRenderer_ewaCtl_Alignment\\.AlignLeft-Medium'
 
-    EXCEL_FONT_NAME_INPUT = '#m_excelWebRenderer_ewaCtl_Font\.FontName-Medium'
+    EXCEL_FONT_NAME_INPUT = '#m_excelWebRenderer_ewaCtl_Font\\.FontName-Medium'
     BOLD_BUTTON = '#m_excelWebRenderer_ewaCtl_Font\\.Bold-Small'
     FONT_COLOR_BUTTON = '#m_excelWebRenderer_ewaCtl_Font\\.FontColorWithSplit-Small'
     FILL_COLOR_BOTTON = '#m_excelWebRenderer_ewaCtl_Font\\.FillColorWithSplit-Small'

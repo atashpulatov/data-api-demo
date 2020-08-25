@@ -26,30 +26,40 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
     WORKSHEETS_TABS = BaseMacDesktopPage.EXCEL_APP_ELEM + "/AXWindow[@AXSubrole='AXStandardWindow']/AXSplitGroup[0]/" \
                                                           "AXLayoutArea[@AXTitle='Content Area']/AXButton[%s]"
     WORKSHEET_ITEM_RE = re.compile(r'^sheetTab\d+$')
-    ADD_WORKSHEET_BUTTON_ELEM = BaseMacDesktopPage.EXCEL_WINDOW_ELEM + "/AXSplitGroup[0]/AXLayoutArea[@AXTitle='Content Area']/" \
+    ADD_WORKSHEET_BUTTON_ELEM = BaseMacDesktopPage.EXCEL_WINDOW_ELEM + "/AXSplitGroup[0]/" \
+                                                                       "AXLayoutArea[@AXTitle='Content Area']/" \
                                                                        "AXButton[@AXIdentifier='addSheetTabButton']"
     IDENTIFIER_ATTRIBUTE = 'AXIdentifier'
 
     TABLE_HOME_TAB = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Home']"
     TABLE_DESIGN_TAB = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Table']"
     GREEN_TABLE_STYLE = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[4]/AXScrollArea[0]/" \
-                                      "AXRadioButton[@AXIdentifier='in_ribbon_gallery_XLGalTableStyles_Control_1_7']"
+        "AXRadioButton[@AXIdentifier='in_ribbon_gallery_XLGalTableStyles_Control_1_7']"
 
-    PERCENTAGE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[3]/AXButton[@AXTitle='Percentage Style']"
-    COMMA_STYLE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[3]/AXButton[@AXTitle='Comma Style']"
+    PERCENTAGE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[3]/" \
+        "AXButton[@AXTitle='Percentage Style']"
+
+    COMMA_STYLE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/" \
+        "AXGroup[3]/AXButton[@AXTitle='Comma Style']"
+
     ALIGN_MIDDLE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[2]/" \
-                                      "AXCheckBox[@AXTitle='Align to Middle' and @AXSubrole='AXToggle']"
+        "AXCheckBox[@AXTitle='Align to Middle' and @AXSubrole='AXToggle']"
+
     ALIGN_LEFT_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[2]/" \
-                                                                        "AXCheckBox[@AXTitle='Align to Left' and @AXSubrole='AXToggle']"
+        "AXCheckBox[@AXTitle='Align to Left' and @AXSubrole='AXToggle']"
 
-    BOLD_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/AXCheckBox[@AXTitle='Bold' and @AXSubrole='AXToggle']"
+    BOLD_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/" \
+        "AXGroup[1]/AXCheckBox[@AXTitle='Bold' and @AXSubrole='AXToggle']"
+
     FONT_COLOR_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
-                                  "AXMenuButton[@AXTitle='Font Colour' and @AXValue='RGB(255, 0, 0)']"
-    FILL_COLOR_BOTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
-                                    "AXMenuButton[@AXTitle='Shading' and @AXValue='RGB(255, 255, 0)']"
+        "AXMenuButton[@AXTitle='Font Colour' and @AXValue='RGB(255, 0, 0)']"
 
-    EXCEL_FONT_NAME_INPUT = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/AXComboBox[@AXValue='Calibri (Body)']"
-                            
+    FILL_COLOR_BOTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
+        "AXMenuButton[@AXTitle='Shading' and @AXValue='RGB(255, 255, 0)']"
+
+    EXCEL_FONT_NAME_INPUT = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
+        "AXComboBox[@AXValue='Calibri (Body)']"
+
     def get_cells_values(self, cells):
         result = []
 
