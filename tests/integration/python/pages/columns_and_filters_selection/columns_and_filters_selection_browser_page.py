@@ -64,11 +64,9 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     SORT_ASCENDING = 'ascending'
     SORT_DESCENDING = 'descending'
 
-    SORT_TITLE = ' > div > span.sort-title-section'
-    ATTRIBUTES_SORT_TITLE = 'div.attributes-col > div > div.selector-title' + SORT_TITLE
-    METRICS_SORT_TITLE = 'div.metrics-col > div > div.selector-title' + SORT_TITLE
-    FILTER_SORT_TITLE = 'div.filters-col > div > div:nth-child(1) > div.selector-title.filter-selector-title' \
-                        + SORT_TITLE
+    ATTRIBUTES_SORT_TITLE = '.attributes-col .sort-title-section'
+    METRICS_SORT_TITLE = '.metrics-col .sort-title-section'
+    FILTER_SORT_TITLE = '.filters-col .sort-title-section'
 
     SEARCH_INPUT = '.ant-input.ant-input-sm'
 
