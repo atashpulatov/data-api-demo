@@ -17,16 +17,16 @@ resp = requests.post(
 authToken = resp.headers['X-MSTR-AuthToken']
 cookies = resp.cookies
 
-print(cookies)
+# print(cookies)
 
-print(authToken)
+# print(authToken)
 
 customHeaders = {
   "X-MSTR-AuthToken": authToken,
   "X-MSTR-ProjectID": "B7CA92F04B9FAE8D941C3E9B7E0CD754"
 }
 
-print(customHeaders)
+# print(customHeaders)
 
 response = requests.get(
   envUrl + '/objects/13CFD83A458A68655A13CBA8D7C62CD5?type=3',
@@ -34,4 +34,32 @@ response = requests.get(
   cookies=cookies
 )
 
-print(response.text)
+print(response.json()['certifiedInfo'])
+
+response = requests.put(
+  envUrl + '/objects/13CFD83A458A68655A13CBA8D7C62CD5/certify?type=3&certify=true',
+  headers=customHeaders,
+  cookies=cookies
+)
+
+response = requests.get(
+  envUrl + '/objects/13CFD83A458A68655A13CBA8D7C62CD5?type=3',
+  headers=customHeaders,
+  cookies=cookies
+)
+
+print(response.json()['certifiedInfo'])
+
+response = requests.put(
+  envUrl + '/objects/13CFD83A458A68655A13CBA8D7C62CD5/certify?type=3&certify=false',
+  headers=customHeaders,
+  cookies=cookies
+)
+
+response = requests.get(
+  envUrl + '/objects/13CFD83A458A68655A13CBA8D7C62CD5?type=3',
+  headers=customHeaders,
+  cookies=cookies
+)
+
+print(response.json()['certifiedInfo'])
