@@ -67,7 +67,20 @@ Feature: F25949 - Display filters and prompts
       And I clicked filter number 10
       And I selected all filter elements
       And I clicked Import button in Columns and Filters Selection
+      And I closed notification on object 3
+
+    Given I clicked toggle details button on object 3
+      And I clicked attributes list expand button on object 3
+      And I clicked filters list expand button on object 3
+      And I clicked object location expand button on object 3 
+
+    Given I clicked Duplicate on object 2
+      And I clicked Import button in Duplicate popup
       And I closed last notification
 
+    Given I clicked toggle details button on object 1
+      And I clicked filters list expand button on object 1
+      And I clicked attributes list expand button on object 1
+      And I clicked object location expand button on object 1
 
       And I log out

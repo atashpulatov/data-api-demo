@@ -2,6 +2,8 @@ from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
 class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
+    TILE_DETAILS_CONTAINER = 'div[id^="object-details-panel-container-"]'
+
     TOGGLE_DETAILS_BUTTONS = '.toggle-show-details-button'
     TOGGLE_DETAILS_TOOLTIPS = TOGGLE_DETAILS_BUTTONS + ' > .__react_component_tooltip.show.place-bottom.type-dark'
 
@@ -49,17 +51,23 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     def click_name_list_expand_button(self, object_number, name_list_index):
         self.focus_on_add_in_frame()
 
-        name_list_expand_buttons = self.get_elements_by_css(
+        tile_details_container = \
+            self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+
+        name_list_expand_button = tile_details_container.get_element_by_css(
             self._get_name_list_expand_button_selector(name_list_index)
         )
 
-        name_list_expand_buttons[int(object_number) - 1].click()
+        name_list_expand_button.click()
 
     def click_object_location_expand_button(self, object_number):
         self.focus_on_add_in_frame()
 
-        object_location_expand_buttons = self.get_elements_by_css(
+        tile_details_container = \
+            self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+
+        object_location_expand_button = tile_details_container.get_element_by_css(
             RightPanelTileDetailsBrowserPage.OBJECT_LOCATION_EXPAND_BUTTON
         )
 
-        object_location_expand_buttons[int(object_number) - 1].click()
+        object_location_expand_button.click()
