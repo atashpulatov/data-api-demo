@@ -24,8 +24,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
                   'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > ' \
                   'div.checkbox-list.all-showed > div > div > label'
 
-    ALL_FILTERS = 'div.filters-col > div > div:nth-child(2) > div > div.checkbox-list.all-showed' \
-                  ' > div > div > label > span.all-element'
+    ALL_FILTERS = '.filters-col .mstr-office-checkbox-all'
 
     ATTRIBUTE_FORM_DROPDOWN = '.ant-select-selection--single'
     ATTRIBUTE_FORM_DROP_DOWN_ITEM = '.ant-select-dropdown-menu-item'

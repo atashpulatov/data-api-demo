@@ -86,16 +86,22 @@ class BaseBrowserPage(BasePage):
     def focus_on_prompt_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
 
-        self.focus_on_excel_frame()
+        while True:
+            try:
+                self.focus_on_excel_frame()
+                self.focus_on_add_in_popup_frame()
+                prompt_frame = self.get_frame_element_by_css(
+                    BaseBrowserPage.PROMPT_FRAME_ELEM)
+                self._switch_to_frame(prompt_frame)
+                return
 
-        self.focus_on_add_in_popup_frame()
+            except Exception as e:
+                Util.log(e)
 
-        prompt_frame = self.get_frame_element_by_css(
-            BaseBrowserPage.PROMPT_FRAME_ELEM)
-        self._switch_to_frame(prompt_frame)
+            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
-        if time.time() > end_time:
-            raise MstrException('Cannot focus on prompt frame')
+            if time.time() > end_time:
+                raise MstrException('Cannot focus on prompt frame')
 
     def _switch_to_frame(self, frame):
         start_time = time.time()
