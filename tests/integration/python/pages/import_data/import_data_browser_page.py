@@ -58,7 +58,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def find_and_select_object_by_id(self, object_name, object_id):
         self.find_object(object_id)
-
         self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
 
     def click_import_button(self):

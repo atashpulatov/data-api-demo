@@ -68,7 +68,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     SORT_TITLE = ' > div > span.sort-title-section'
     ATTRIBUTES_SORT_TITLE = 'div.attributes-col > div > div.selector-title' + SORT_TITLE
     METRICS_SORT_TITLE = 'div.metrics-col > div > div.selector-title' + SORT_TITLE
-    FILTER_SORT_TITLE = 'div.filters-col > div > div:nth-child(1) > div.selector-title.filter-selector-title' + SORT_TITLE
+    FILTER_SORT_TITLE = 'div.filters-col > div > div:nth-child(1) > div.selector-title.filter-selector-title' \
+                        + SORT_TITLE
 
     SEARCH_INPUT = '.ant-input.ant-input-sm'
 
@@ -125,7 +126,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         if metric_col_name == title:
             return
 
-        raise MstrException('Metric selection does not match - selector: [%s], text: [%s].' % (metric_col_name, title))
+        raise MstrException(f'Metric selection does not match - selector: {metric_col_name}, text: {title}.')
 
     def ensure_attribute_selection(self, number, of_number):
         """
@@ -142,8 +143,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         if attribute_col_name == title:
             return
 
-        raise MstrException(
-            'Attribute selection does not match - selector: [%s], text: [%s].' % (attribute_col_name, title))
+        raise MstrException(f'Attribute selection does not match - selector: {attribute_col_name}, text: {title}.')
 
     def ensure_filters_selection(self, number, of_number):
         """
@@ -159,7 +159,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         if filter_col_name == title:
             return
 
-        raise MstrException('Filter selection does not match - selector: [%s], text: [%s].' % (filter_col_name, title))
+        raise MstrException(f'Filter selection does not match - selector: {filter_col_name}, text: {title}.')
 
     def click_attribute(self, attribute_name):
         self.focus_on_add_in_popup_frame()
@@ -422,5 +422,4 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def close_popup_window(self):
         self.focus_on_excel_frame()
-
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()

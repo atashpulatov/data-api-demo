@@ -66,7 +66,7 @@ class PromptBrowserPage(BaseBrowserPage):
         answer = self.find_element_by_text_in_elements_list_by_css_safe(
             PromptBrowserPage.PROMPT_OBJECT_SELECTED_ITEM,
             item,
-        ) # TODO select prompt for prompt_number
+        )  # TODO select prompt for prompt_number
 
         answer.double_click()
 

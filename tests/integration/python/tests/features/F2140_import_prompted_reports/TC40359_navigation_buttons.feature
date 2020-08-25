@@ -24,9 +24,3 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
      Then I clicked Cancel button
 
       And I log out
-
-
-
-
-
-
