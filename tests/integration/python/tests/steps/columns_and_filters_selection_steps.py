@@ -15,17 +15,17 @@ def step_impl(context, title):
 
 @step('I ensure that "{number}" of "{of_number}" metrics are selected')
 def step_impl(context,  number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_metric_selection(number, of_number)
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('metrics', number, of_number)
 
 
 @step('I ensure that "{number}" of "{of_number}" attributes are selected')
 def step_impl(context,  number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_attribute_selection(number, of_number)
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('attributes', number, of_number)
 
 
 @step('I ensure that "{number}" of "{of_number}" filters are selected')
 def step_impl(context,  number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_filters_selection(number, of_number)
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('filters', number, of_number)
 
 
 @step('I clicked attribute "{attribute_name}"')

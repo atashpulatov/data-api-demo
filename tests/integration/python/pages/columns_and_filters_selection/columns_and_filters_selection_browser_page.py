@@ -108,55 +108,31 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             title
         )
 
-    def ensure_metric_selection(self, number, of_number):
+    def ensure_item_selection(self, item_type, number, of_number):
         """
-        Ensure proper number of metrics is selected
+        Ensure proper number of given item type is selected
 
-        :param number: number of selected metrics
-        :param of_number:number of all metrics
+        :param item_type: type of item (metrics / attributes / filters)
+        :param number: number of selected items
+        :param of_number:number of all items
         """
 
-        title = f'METRICS ({number}/{of_number})'
+        if item_type == "metrics":
+            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.METRICS_SORT_TITLE
+        elif item_type == "attributes":
+            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_SORT_TITLE
+        elif item_type == "filters":
+            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.FILTER_SORT_TITLE
+        else:
+            raise MstrException("Wrong item_type argument passed to ensure_item_selection")
 
-        metric_col_name = self.get_sort_col_name(ColumnsAndFiltersSelectionBrowserPage.METRICS_SORT_TITLE)
+        title = f'{item_type.upper()} ({number}/{of_number})'
+        column_name = self.get_sort_col_name(SORT_TITLE)
 
-        if metric_col_name == title:
+        if column_name == title:
             return
 
-        raise MstrException(f'Metric selection does not match - selector: {metric_col_name}, text: {title}.')
-
-    def ensure_attribute_selection(self, number, of_number):
-        """
-        Ensure proper number of attributes is selected
-
-        :param number: number of selected attributes
-        :param of_number:number of all attributes
-        """
-
-        title = f'ATTRIBUTES ({number}/{of_number})'
-
-        attribute_col_name = self.get_sort_col_name(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_SORT_TITLE)
-
-        if attribute_col_name == title:
-            return
-
-        raise MstrException(f'Attribute selection does not match - selector: {attribute_col_name}, text: {title}.')
-
-    def ensure_filters_selection(self, number, of_number):
-        """
-        Ensure proper number of filters is selected
-
-        :param number: number of selected filters
-        :param of_number:number of all filters
-        """
-        title = f'FILTERS ({number}/{of_number})'
-
-        filter_col_name = self.get_sort_col_name(ColumnsAndFiltersSelectionBrowserPage.FILTER_SORT_TITLE)
-
-        if filter_col_name == title:
-            return
-
-        raise MstrException(f'Filter selection does not match - selector: {filter_col_name}, text: {title}.')
+        raise MstrException(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
 
     def click_attribute(self, attribute_name):
         self.focus_on_add_in_popup_frame()
