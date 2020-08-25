@@ -1,0 +1,37 @@
+import requests
+
+envUrl = 'https://env-224703.customer.cloud.microstrategy.com/MicroStrategyLibrary/api'
+
+payload = {
+  "username": "mstr",
+  "password": "S3H5j1OJXnqc",
+  "loginMode": 1
+}
+
+# print(envUrl + '/api/auth/login')
+resp = requests.post(
+  envUrl + '/auth/login',
+  data=payload
+  )
+
+authToken = resp.headers['X-MSTR-AuthToken']
+cookies = resp.cookies
+
+print(cookies)
+
+print(authToken)
+
+customHeaders = {
+  "X-MSTR-AuthToken": authToken,
+  "X-MSTR-ProjectID": "B7CA92F04B9FAE8D941C3E9B7E0CD754"
+}
+
+print(customHeaders)
+
+response = requests.get(
+  envUrl + '/objects/13CFD83A458A68655A13CBA8D7C62CD5?type=3',
+  headers=customHeaders,
+  cookies=cookies
+)
+
+print(response.text)
