@@ -108,8 +108,6 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
         ).click()
 
-        self.pause(25)  # TODO check if loaded
-
     def click_prepare_data_button(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 

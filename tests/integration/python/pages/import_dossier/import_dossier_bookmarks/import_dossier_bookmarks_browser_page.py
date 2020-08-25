@@ -7,7 +7,7 @@ class ImportDossierBookmarksBrowserPage(BaseBrowserPage):
     BOOKMARK_ITEMS = '.mstrd-BookmarkItem-nameText'
 
     def select_bookmark(self, bookmark_number):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         self.get_element_by_css(ImportDossierBookmarksBrowserPage.BOOKMARK_BUTTON).click()
 
