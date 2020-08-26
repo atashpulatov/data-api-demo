@@ -44,7 +44,7 @@ response = requests.get(
   cookies=cookies
 )
 
-print(response.json()['certifiedInfo'])
+print(response.json()['certifiedInfo']['certified'])
 
 response = requests.put(
   envUrl + '/objects/13CFD83A458A68655A13CBA8D7C62CD5/certify?type=3&certify=false',

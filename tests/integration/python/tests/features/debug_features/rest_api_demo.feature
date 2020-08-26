@@ -2,6 +2,10 @@
 Feature: Rest API demo feature
 
   Scenario: Certify object
-    Given I pass
+    Given Object 13CFD83A458A68655A13CBA8D7C62CD5 in Tutorial project is not certified
 
-      And I certified object 13CFD83A458A68655A13CBA8D7C62CD5 in Tutorial project
+      When I certify object 13CFD83A458A68655A13CBA8D7C62CD5 in Tutorial project
+      Then object 13CFD83A458A68655A13CBA8D7C62CD5 is certified in Tutorial project
+
+      When I decertify object 13CFD83A458A68655A13CBA8D7C62CD5 in Tutorial project
+      Then object 13CFD83A458A68655A13CBA8D7C62CD5 is not certified in Tutorial project

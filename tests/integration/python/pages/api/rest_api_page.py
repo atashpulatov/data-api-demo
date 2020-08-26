@@ -5,37 +5,60 @@ from framework.pages_base.base_page import BasePage
 
 
 class RestApiPage(BasePage):
-    add_in_environment = ConfigUtil.get_add_in_environment()
-    envUrl = 'https://env-' + add_in_environment + '.customer.cloud.microstrategy.com/MicroStrategyLibrary/api'
-    # envUrl = ''
-    userName = 'a'
-    password = ''
 
-    def _getAuthTokenAndCookies(self, userName, password):
+    def __init__(self):
+        super().__init__()
+        env_number = ConfigUtil.get_add_in_environment()
+        self.env_url = 'https://env-' + env_number + '.customer.cloud.microstrategy.com/MicroStrategyLibrary/api'
+
+    def _getAuthTokenAndCookies(self):
+        add_in_environment = ConfigUtil.get_add_in_environment()
         payload = {
-            "username": userName,
-            "password": password,
+            "username": 'a',
+            "password": '',
             "loginMode": 1
         }
         resp = requests.post(
-            envUrl + '/auth/login',
+            self.env_url + '/auth/login',
             data=payload
         )
-        authToken = resp.headers['X-MSTR-AuthToken']
+        auth_token = resp.headers['X-MSTR-AuthToken']
         cookies = resp.cookies
-        return authToken, cookies
+        return auth_token, cookies
 
-    def certify_object(self, objectId, projectId):
-        authToken, cookies = _getAuthTokenAndCookies(userName, password)
-        customHeaders = {
-          "X-MSTR-AuthToken": authToken,
-          "X-MSTR-ProjectID": "B7CA92F04B9FAE8D941C3E9B7E0CD754"
+    def certify_object(self, object_id, project_id):
+        auth_token, cookies = self._getAuthTokenAndCookies()
+        custom_headers = {
+          "X-MSTR-AuthToken": auth_token,
+          "X-MSTR-ProjectID": project_id,
         }
         response = requests.put(
-            envUrl + '/objects/' + objectId + '/certify?type=3&certify=true',
-            headers=customHeaders,
+            self.env_url + '/objects/' + object_id + '/certify?type=3&certify=true',
+            headers=custom_headers,
             cookies=cookies
         )
-    
-    # def decertify_object(self, objectId, projectId):
-        
+
+    def decertify_object(self, object_id, project_id):
+        auth_token, cookies = self._getAuthTokenAndCookies()
+        custom_headers = {
+          "X-MSTR-AuthToken": auth_token,
+          "X-MSTR-ProjectID": project_id,
+        }
+        response = requests.put(
+            self.env_url + '/objects/' + object_id + '/certify?type=3&certify=false',
+            headers=custom_headers,
+            cookies=cookies
+        )
+
+    def is_object_certified(self, object_id, project_id):
+        auth_token, cookies = self._getAuthTokenAndCookies()
+        custom_headers = {
+          "X-MSTR-AuthToken": auth_token,
+          "X-MSTR-ProjectID": project_id,
+        }
+        response = requests.get(
+            self.env_url + '/objects/' + object_id + '?type=3',
+            headers=custom_headers,
+            cookies=cookies
+        )
+        return response.json()['certifiedInfo']['certified']
