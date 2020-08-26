@@ -83,13 +83,10 @@ def step_impl(context):
 @step('I selected the first object from the list')
 def step_impl(context): 
     context.pages.import_data_page().select_first_object_from_list()
-    
+
 
 @step('I verify if the background color of the first object is equal to "{color}"')
 def step_impl(context, color):
     found_color = context.pages.import_data_page().find_the_color_of_first_object_in_list()
     AssertUtil.assert_simple(found_color , color)
-
-
-
 
