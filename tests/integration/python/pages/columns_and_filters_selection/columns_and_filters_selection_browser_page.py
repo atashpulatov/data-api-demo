@@ -8,6 +8,7 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 
 class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTES_CHECKBOX = '.item-title'
+    ATTRIBUTES_IN_DATASET_CHECKBOX = '.ant-checkbox-wrapper'
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
     FILTER_ITEM = '.filter-title'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
@@ -139,6 +140,16 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         attribute = self.find_element_by_text_in_elements_list_by_css(
             ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX,
+            attribute_name
+        )
+
+        attribute.click(offset_x=10, offset_y=5)
+
+    def click_attribute_for_dataset(self, attribute_name):
+        self.focus_on_add_in_popup_frame()
+
+        attribute = self.find_element_by_text_in_elements_list_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_IN_DATASET_CHECKBOX,
             attribute_name
         )
 
@@ -380,7 +391,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def click_import_button_to_duplicate(self):
         self.focus_on_add_in_popup_frame()
-
+        
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=LONG_TIMEOUT)
