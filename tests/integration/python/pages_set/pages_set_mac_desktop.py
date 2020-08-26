@@ -14,6 +14,7 @@ from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import
 from pages_set.abstract_pages_set import AbstractPagesSet
 from pages.right_panel.range_taken_popup.range_taken_popup_mac_desktop_page import RangeTakenPopupMacDesktopPage
 
+
 class PagesSetMacDesktop(AbstractPagesSet):
     def __init__(self):
         super().__init__()

@@ -6,23 +6,23 @@ from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDeskt
 class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
     TILES = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]"
 
-    NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList/AXGroup[0]/AXGroup[0]/" \
-                                                                   "AXGroup[0]/AXStaticText[@AXValue='%s']"
+    NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
+        "/AXList/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXStaticText[@AXValue='%s']"
 
-    ERROR_NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[0]" \
-                                                                         "/AXGroup[0]/AXGroup[1]/AXStaticText[@AXValue='%s']"
+    ERROR_NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
+        "/AXList[@AXSubrole='AXContentList']/AXGroup[0]/AXGroup[0]/AXGroup[1]/AXStaticText[@AXValue='%s']"
 
-    ERROR_NOTIFICATION_OK_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[0]" \
-                                                                            "/AXGroup[0]/AXGroup[3]/AXButton[@AXTitle='OK']"
+    ERROR_NOTIFICATION_OK_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
+        "/AXList[@AXSubrole='AXContentList']/AXGroup[0]/AXGroup[0]/AXGroup[3]/AXButton[@AXTitle='OK']"
 
-    DUPLICATE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/" \
-                                                                        "AXGroup[%s]/AXButton[0]"
+    DUPLICATE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
+        "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]/AXButton[0]"
 
-    EDIT_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/" \
-                                                                   "AXGroup[%s]/AXButton[1]"
+    EDIT_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
+        "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]/AXButton[1]"
 
-    TITLE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/" \
-                                                                    "AXGroup[%s]/AXButton[4]"
+    TITLE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
+        "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]/AXButton[4]"
 
     TITLE_ATTRIBUTE = 'AXTitle'
 

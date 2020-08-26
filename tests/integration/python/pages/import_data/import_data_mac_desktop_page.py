@@ -49,7 +49,7 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
         search_box.send_keys_with_check(object_name)
 
         Util.pause(2)  # TODO wait when ready
-        
+
         self.get_element_by_xpath(
             ImportDataMacDesktopPage.NAME_HEADER_ELEM
         ).click(
@@ -69,8 +69,8 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
         self.get_element_by_xpath(ImportDataMacDesktopPage.IMPORT_BUTTON_ELEM).click()
 
         if not self.check_if_element_exists_by_xpath(
-            self.right_panel_tile_mac_desktop_page.ERROR_NOTIFICATION_ELEM % error_message):
-              raise MstrException('Different notification displayed')
+          self.right_panel_tile_mac_desktop_page.ERROR_NOTIFICATION_ELEM % error_message):
+            raise MstrException('Different notification displayed')
 
         self.get_element_by_xpath(self.right_panel_tile_mac_desktop_page.ERROR_NOTIFICATION_OK_ELEM).click()
 

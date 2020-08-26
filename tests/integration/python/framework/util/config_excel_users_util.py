@@ -3,6 +3,8 @@ import os
 from framework.util.config_util import ConfigUtil
 
 # TODO update docs
+
+
 class ConfigExcelUsersUtil:
     CONFIG_EXCEL_USERS_FILE_PATH = os.path.join('framework', 'config', 'config_excel_users.json')
 
