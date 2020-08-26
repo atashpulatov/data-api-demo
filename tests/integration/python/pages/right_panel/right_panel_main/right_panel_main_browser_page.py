@@ -13,11 +13,11 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     REFRESH_ALL = SELECT_ALL_TILES + 'button:nth-child(5)'
     REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
 
-    CLEAR_DATA = '.no-trigger-close.clear-data.not-linked-list'
+    CLEAR_DATA = '.clear-data'
+
     CONFIFRM_CLEAR_DATA = '#confirm-btn'
 
-    VIEW_DATA_BUTTON_ELEM = '#overlay > div > div.object-tile-container ' \
-                            '> div.overlay-container > div > button'
+    VIEW_DATA_BUTTON_ELEM = '.data-cleared > button'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
