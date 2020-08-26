@@ -396,3 +396,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def close_popup_window(self):
         self.focus_on_excel_frame()
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()
+ 
+    def click_attribute_for_dataset(self, attribute_name):
+        self.focus_on_add_in_popup_frame()
+        attribute = self.find_element_by_text_in_elements_list_by_css(
+            'span',
+            attribute_name
+        )
+        attribute.click()
