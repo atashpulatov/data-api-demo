@@ -1,10 +1,10 @@
 import requests
 
-envUrl = 'https://env-224703.customer.cloud.microstrategy.com/MicroStrategyLibrary/api'
+envUrl = 'https://env-224087.customer.cloud.microstrategy.com/MicroStrategyLibrary/api'
 
 payload = {
-  "username": "mstr",
-  "password": "S3H5j1OJXnqc",
+  "username": "a",
+  "password": "",
   "loginMode": 1
 }
 
@@ -16,10 +16,6 @@ resp = requests.post(
 
 authToken = resp.headers['X-MSTR-AuthToken']
 cookies = resp.cookies
-
-# print(cookies)
-
-# print(authToken)
 
 customHeaders = {
   "X-MSTR-AuthToken": authToken,
