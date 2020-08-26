@@ -90,3 +90,7 @@ class AbstractPagesSet(ABC):
     @abstractmethod
     def filter_panel_page(self):
         pass
+
+    @abstractmethod
+    def prompt_page(self):
+        pass
