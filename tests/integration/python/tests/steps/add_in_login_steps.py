@@ -8,4 +8,5 @@ def step_impl(context):
 
 @step('I logged in with username "{user_name}" and password "{password}"')
 def step_impl(context, user_name, password):
-    context.pages.add_in_login_page().login(user_name, password)
+    password_string = "" if password == 'empty_password_special_string' else password
+    context.pages.add_in_login_page().login(user_name, password_string)
