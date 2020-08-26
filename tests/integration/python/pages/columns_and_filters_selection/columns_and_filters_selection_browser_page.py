@@ -136,24 +136,24 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         raise MstrException(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
 
     def click_attribute(self, attribute_name):
-        self.focus_on_add_in_popup_frame()
-
-        attribute = self.find_element_by_text_in_elements_list_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX,
-            attribute_name
-        )
-
+        attribute = self._get_attribute_checkbox(attribute_name,
+                                                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX
+                                                 )
         attribute.click(offset_x=10, offset_y=5)
 
     def click_attribute_for_dataset(self, attribute_name):
+        attribute = self._get_attribute_checkbox(attribute_name,
+                                                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_IN_DATASET_CHECKBOX
+                                                 )
+        attribute.click(offset_x=10, offset_y=5)
+
+    def _get_attribute_checkbox(self, attribute_name, attribute_selector):
         self.focus_on_add_in_popup_frame()
 
-        attribute = self.find_element_by_text_in_elements_list_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_IN_DATASET_CHECKBOX,
+        return self.find_element_by_text_in_elements_list_by_css(
+            attribute_selector,
             attribute_name
         )
-
-        attribute.click(offset_x=10, offset_y=5)
 
     def click_metric(self, metric_name):
         self.focus_on_add_in_popup_frame()
@@ -163,7 +163,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def click_filter(self, filter_name):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % metric_name).click()
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % filter_name).click()
 
     def click_display_attributes_names_type(self, form_visualization_type):
         self.focus_on_add_in_popup_frame()
@@ -391,7 +391,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def click_import_button_to_duplicate(self):
         self.focus_on_add_in_popup_frame()
-        
+
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=LONG_TIMEOUT)
