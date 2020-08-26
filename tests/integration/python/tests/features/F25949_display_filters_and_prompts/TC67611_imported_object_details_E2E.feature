@@ -83,4 +83,8 @@ Feature: F25949 - Display filters and prompts
       And I clicked attributes list expand button on object 1
       And I clicked object location expand button on object 1
 
+    Given I refreshed all objects
+      And I waited for all progress notifications to disappear
+      And I closed all notifications
+
       And I log out
