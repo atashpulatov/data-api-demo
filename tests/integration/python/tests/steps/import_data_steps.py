@@ -18,6 +18,11 @@ def step_impl(context, object_name):
     context.pages.import_data_page().find_and_select_object(object_name)
 
 
+@step('I found object by ID "{object_id}" and selected "{object_name}"')
+def step_impl(context, object_name, object_id):
+    context.pages.import_data_page().find_and_select_object_by_id(object_name, object_id)
+
+
 @step('I clicked Import button')
 def step_impl(context):
     context.pages.import_data_page().click_import_button()

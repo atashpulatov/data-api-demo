@@ -9,6 +9,8 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTES_CHECKBOX = '.item-title'
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
+    FILTER_ITEM = '.filter-title'
+    CLOSE_POPUP = '#WACDialogTitlePanel > a'
     FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
                                            'div.attribute-forms > ul > ' \
                                            'li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > ' \
@@ -22,14 +24,19 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
                   'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > ' \
                   'div.checkbox-list.all-showed > div > div > label'
 
+    ALL_FILTERS = '.filters-col .mstr-office-checkbox-all'
+
     ATTRIBUTE_FORM_DROPDOWN = '.ant-select-selection--single'
     ATTRIBUTE_FORM_DROP_DOWN_ITEM = '.ant-select-dropdown-menu-item'
 
     IMPORT_BUTTON_ELEM = 'import'
+    BACK_BUTTON_ELEM = 'back'
+    CANCEL_BUTTON_ELEM = 'cancel'
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
+    REPORT_TITLE = 'div.folder-browser-title > span:nth-child(2)'
 
     ROOT_ATTRIBUTE_CONTAINER = 'div.ant-col.ant-col-6.attributes-col'
     ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > div > ul'
@@ -56,6 +63,10 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ARIA_SORT = 'aria-sort'
     SORT_ASCENDING = 'ascending'
     SORT_DESCENDING = 'descending'
+
+    ATTRIBUTES_SORT_TITLE = '.attributes-col .sort-title-section'
+    METRICS_SORT_TITLE = '.metrics-col .sort-title-section'
+    FILTER_SORT_TITLE = '.filters-col .sort-title-section'
 
     SEARCH_INPUT = '.ant-input.ant-input-sm'
 
@@ -90,6 +101,39 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionBrowserPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
         )
 
+    def ensure_popup_title_is_correct(self, title):
+        self.wait_for_element_to_have_attribute_value_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.REPORT_TITLE,
+            ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            title
+        )
+
+    def ensure_item_selection(self, item_type, number, of_number):
+        """
+        Ensure proper number of given item type is selected
+
+        :param item_type: type of item (metrics / attributes / filters)
+        :param number: number of selected items
+        :param of_number:number of all items
+        """
+
+        if item_type == "metrics":
+            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.METRICS_SORT_TITLE
+        elif item_type == "attributes":
+            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_SORT_TITLE
+        elif item_type == "filters":
+            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.FILTER_SORT_TITLE
+        else:
+            raise MstrException("Wrong item_type argument passed to ensure_item_selection")
+
+        title = f'{item_type.upper()} ({number}/{of_number})'
+        column_name = self.get_sort_col_name(SORT_TITLE)
+
+        if column_name == title:
+            return
+
+        raise MstrException(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
+
     def click_attribute(self, attribute_name):
         self.focus_on_add_in_popup_frame()
 
@@ -101,6 +145,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         attribute.click(offset_x=10, offset_y=5)
 
     def click_metric(self, metric_name):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % metric_name).click()
+
+    def click_filter(self, filter_name):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % metric_name).click()
@@ -132,6 +181,35 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_METRICS).click()
+
+    def select_filter_elements(self, filters_and_elements_json):
+        self.focus_on_add_in_popup_frame()
+
+        filters_and_elements = json.loads(filters_and_elements_json)
+
+        for filter_name, elements_names in filters_and_elements.items():
+            self._select_filter(filter_name)
+
+            if len(elements_names) > 0:
+                for element_name in elements_names:
+                    self.find_element_by_text_in_elements_list_by_css(
+                        'span',
+                        element_name
+                    ).click()
+
+    def select_all_filter_elements(self, filter):
+        self.focus_on_add_in_popup_frame()
+        self._select_filter(filter)
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ALL_FILTERS).click()
+
+    def _select_filter(self, filter):
+        filter_item = self.find_element_by_text_in_elements_list_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.FILTER_ITEM,
+            filter
+        )
+
+        filter_item.click()
 
     def click_attributes_and_forms(self, attributes_and_forms_json):
         self.focus_on_add_in_popup_frame()
@@ -190,6 +268,9 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def get_filter_name(self, object_number):
         return self._get_object_name(ColumnsAndFiltersSelectionBrowserPage.FILTER_ELEMENT_AT % object_number)
+
+    def get_sort_col_name(self, selector):
+        return self._get_object_name(selector)
 
     def _get_object_name(self, object_selector):
         self.focus_on_add_in_popup_frame()
@@ -303,3 +384,15 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=LONG_TIMEOUT)
+
+    def click_back_button(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_ELEM).click()
+
+    def click_cancel_button(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.CANCEL_BUTTON_ELEM).click()
+
+    def close_popup_window(self):
+        self.focus_on_excel_frame()
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()
