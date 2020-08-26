@@ -35,7 +35,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
 
     def ensure_mylibrary_switch_is_off(self):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
 
         element = self.get_element_by_css(ImportDataBrowserPage.MY_LIBRARY_SWITCH_ELEM)
 
@@ -46,7 +46,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return element.get_attribute(ImportDataBrowserPage.ARIA_CHECKED_ATTRIBUTE) == 'true'
 
     def find_object(self, object_name):
-        self.focus_on_import_data_pop_up_frame()
+        self.focus_on_add_in_popup_frame()
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.send_keys_with_check(object_name)
@@ -58,7 +58,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def find_and_select_object_by_id(self, object_name, object_id):
         self.find_object(object_id)
-
         self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
 
     def click_import_button(self):
@@ -76,8 +75,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def click_import_button_to_open_import_dossier(self):
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
-
-        self.pause(25)  # TODO check if loaded
 
     def click_prepare_data_button(self):
         self.get_element_by_id(ImportDataBrowserPage.PREPARE_BUTTON_ELEM).click()

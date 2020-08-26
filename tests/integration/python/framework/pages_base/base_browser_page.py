@@ -11,18 +11,11 @@ from framework.util.util import Util
 
 class BaseBrowserPage(BasePage):
     EXCEL_FRAME_ELEM = 'WebApplicationFrame'
-
-    IMPORT_DATA_FRAME_ELEM = '#WACDialogOuterContainer iframe'
-
-    IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM = 'iframe[src*="popupType=navigation-tree&et="]'
-    IMPORT_DOSSIER_INTERNAL_FRAME_ELEM = '.dossier-window > div > iframe'
-
-    PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
-
+    ADD_IN_POPUP_FRAME_ELEM = '#WACDialogBodyPanel > iframe'
+    DOSSIER_FRAME_ELEM = '.dossier-window > div > iframe'
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
-
-    DISABLED_BUTTON_ATTRIBUTE = 'disabled'
+    PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
 
     def get_element_with_focus(self):
         return self.driver.switch_to.active_element
@@ -74,39 +67,41 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 raise MstrException('Cannot focus on excel frame')
 
-    def focus_on_import_data_pop_up_frame(self):
+    def focus_on_add_in_popup_frame(self):
         self.focus_on_excel_frame()
 
-        popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.IMPORT_DATA_FRAME_ELEM)
+        add_in_popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.ADD_IN_POPUP_FRAME_ELEM)
 
-        self._switch_to_frame(popup_frame_element)
+        self._switch_to_frame(add_in_popup_frame_element)
 
-    def focus_on_import_dossier_frame(self):
+    def focus_on_dossier_frame(self):
         self.focus_on_excel_frame()
 
-        dossier_external_frame_element = self.get_frame_element_by_css(
-            BaseBrowserPage.IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM)
-        self._switch_to_frame(dossier_external_frame_element)
+        self.focus_on_add_in_popup_frame()
 
-        dossier_internal_frame_element = self.get_frame_element_by_css(
-            BaseBrowserPage.IMPORT_DOSSIER_INTERNAL_FRAME_ELEM)
-        self._switch_to_frame(dossier_internal_frame_element)
+        dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.DOSSIER_FRAME_ELEM)
+
+        self._switch_to_frame(dossier_frame_element)
 
     def focus_on_prompt_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
 
-        self.focus_on_excel_frame()
+        while True:
+            try:
+                self.focus_on_excel_frame()
+                self.focus_on_add_in_popup_frame()
+                prompt_frame = self.get_frame_element_by_css(
+                    BaseBrowserPage.PROMPT_FRAME_ELEM)
+                self._switch_to_frame(prompt_frame)
+                return
 
-        dossier_external_frame_element = self.get_frame_element_by_css(
-            BaseBrowserPage.IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM)
-        self._switch_to_frame(dossier_external_frame_element)
+            except Exception as e:
+                Util.log(e)
 
-        prompt_frame = self.get_frame_element_by_css(
-            BaseBrowserPage.PROMPT_FRAME_ELEM)
-        self._switch_to_frame(prompt_frame)
+            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
-        if time.time() > end_time:
-            raise MstrException('Cannot focus on prompt frame')
+            if time.time() > end_time:
+                raise MstrException('Cannot focus on prompt frame')
 
     def _switch_to_frame(self, frame):
         start_time = time.time()
@@ -212,3 +207,19 @@ class BaseBrowserPage(BasePage):
                 return item
 
         return None
+
+    def find_index_of_element_in_list_by_text(self, selector, text):
+        """
+        Finds index of element with given text in list of elements returned by given css selector.
+
+        :param selector(str): css selector
+        :param text(str): text content of wanted element
+        :returns (int): index of wanted element in list of elements with given css selector
+        :raises Element not present(MstrException): if there is no element with given text
+        """
+        elements = self.get_elements_by_css(selector)
+        elements_names = [item.text for item in elements]
+        try:
+            return elements_names.index(text)
+        except ValueError:
+            raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))

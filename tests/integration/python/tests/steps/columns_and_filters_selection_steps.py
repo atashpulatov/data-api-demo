@@ -8,6 +8,26 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().ensure_columns_and_filters_selection_is_visible()
 
 
+@step('I ensure popup title is "{title}"')
+def step_impl(context, title):
+    context.pages.columns_and_filters_selection_page().ensure_popup_title_is_correct(title)
+
+
+@step('I ensure that "{number}" of "{of_number}" metrics are selected')
+def step_impl(context,  number, of_number):
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('metrics', number, of_number)
+
+
+@step('I ensure that "{number}" of "{of_number}" attributes are selected')
+def step_impl(context,  number, of_number):
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('attributes', number, of_number)
+
+
+@step('I ensure that "{number}" of "{of_number}" filters are selected')
+def step_impl(context,  number, of_number):
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('filters', number, of_number)
+
+
 @step('I clicked attribute "{attribute_name}"')
 def step_impl(context, attribute_name):
     context.pages.columns_and_filters_selection_page().click_attribute(attribute_name)
@@ -16,11 +36,6 @@ def step_impl(context, attribute_name):
 @step('I clicked metric "{metric_name}"')
 def step_impl(context, metric_name):
     context.pages.columns_and_filters_selection_page().click_metric(metric_name)
-
-
-@step('I clicked filter number {filter_index}')
-def step_impl(context, filter_index):
-    context.pages.columns_and_filters_selection_page().click_filter(filter_index)
 
 
 @step('I set Display attribute form names to "{form_visualization_type}"')
@@ -48,14 +63,9 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().unselect_all_metrics()
 
 
-@step('I selected all filter elements')
-def step_imp(context):
-    context.pages.columns_and_filters_selection_page().select_all_filter_elements()
-
-
-@step('I unselected all filter elements')
-def step_imp(context):
-    context.pages.columns_and_filters_selection_page().unselect_all_filter_elements()
+@step('I selected filter "{filter}" with all elements')
+def step_impl(context, filter):
+    context.pages.columns_and_filters_selection_page().select_all_filter_elements(filter)
 
 
 @step('I clicked attributes and forms {attributes_and_forms_json}')
@@ -177,3 +187,23 @@ def step_impl(context):
 @when('I clicked Import button in Columns and Filters Selection to duplicate object')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button_to_duplicate()
+
+
+@step('I clicked Back button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_back_button()
+
+
+@step('I clicked Cancel button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_cancel_button()
+
+
+@step('I selected filters {filters_and_elements_json}')
+def step_impl(context, filters_and_elements_json):
+    context.pages.columns_and_filters_selection_page().select_filter_elements(filters_and_elements_json)
+
+
+@step('I closed popup window')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().close_popup_window()

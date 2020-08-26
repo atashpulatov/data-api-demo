@@ -29,3 +29,8 @@ def step_impl(context):
 @step('I clicked import dossier without waiting for results')
 def step_impl(context):
     context.pages.import_dossier_page().click_import_visualization_without_waiting_for_results()
+
+
+@step('I waited for dossier to load successfully')
+def step_impl(context):
+    context.pages.import_dossier_page().wait_for_dossier_to_load()
