@@ -134,6 +134,18 @@ class BaseBrowserPage(BasePage):
 
         raise MstrException(('Value not found', selector, attribute, expected_value))
 
+    def wait_for_elements_to_disappear_from_dom(self, selector, timeout=DEFAULT_TIMEOUT):
+        end_time = time.time() + timeout
+        while True:
+            elements_to_disappear = self.get_elements_by_css(selector)
+
+            self.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+            if len(elements_to_disappear) == 0:
+                break
+            elif time.time() > end_time:
+                break
+
     def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         try:
             return self.find_element_by_text_in_elements_list_by_css(selector, expected_text, timeout)

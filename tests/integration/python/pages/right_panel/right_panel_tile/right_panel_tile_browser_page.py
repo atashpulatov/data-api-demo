@@ -6,6 +6,7 @@ from framework.util.const import DEFAULT_TIMEOUT
 class RightPanelTileBrowserPage(BaseBrowserPage):
     NOTIFICATION_TEXT_ELEM = '.notification-text'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
+    PROGRESS_BAR = '.progress-bar'
 
     TILES = '.object-tile-content'
 
@@ -55,6 +56,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
                                                              RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
                                                              expected_message,
                                                              timeout=timeout)
+
+    def wait_for_progress_notifications_to_disappear(self, timeout=DEFAULT_TIMEOUT):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_elements_to_disappear_from_dom(RightPanelTileBrowserPage.PROGRESS_BAR, timeout=timeout)
 
     def close_all_notifications_on_hover(self):
         self.focus_on_add_in_frame()

@@ -68,3 +68,8 @@ def step_impl(contex):
 @step('I selected excel table for object {object_number}')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().select_excel_table(object_number)
+
+
+@step('I waited for all progress notifications to disappear')
+def step_impl(context):
+    context.pages.right_panel_tile_page().wait_for_progress_notifications_to_disappear()
