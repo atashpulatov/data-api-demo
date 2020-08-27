@@ -30,8 +30,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
 
-    WARNING_NOTIFICATION_OK_BUTTON = 'div.warning-notification-button-container > button'
-
     def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
@@ -76,7 +74,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         warnings_notifications_ok_buttons = self.get_elements_by_css(
-          RightPanelTileBrowserPage.WARNING_NOTIFICATION_OK_BUTTON
+          RightPanelTileBrowserPage.NOTIFICATION_BUTTON
         )
 
         for button in warnings_notifications_ok_buttons:
