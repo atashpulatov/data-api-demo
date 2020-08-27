@@ -67,6 +67,13 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
+    def click_import_visualization_to_duplicate(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_BUTTON).click()
+
+        self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully()
+
     def click_import_visualization_without_waiting_for_results(self):
         self.focus_on_add_in_frame()
 
