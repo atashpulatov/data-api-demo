@@ -1,5 +1,7 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 
+from framework.util.assert_util import AssertUtil
+
 
 class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     TILE_DETAILS_CONTAINER = 'div[id^="object-details-panel-container-"]'
@@ -18,16 +20,21 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         METRICS_LIST
     )
     NAME_LIST_EXPAND_BUTTON = '.name-list-expand-button'
-
     OBJECT_LOCATION_EXPAND_BUTTON = '.object-location-expand-button'
 
     CERTIFIED = 'div[id^="certified-object-property-"]'
+    OBJECT_ID_CONTAINER = 'div[id^="id-object-property-"]'
+    OBJECT_PROPERTY_VALUE = '.object-property-value'
+    OBJECT_ID_VALUE = OBJECT_ID_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
 
     def _get_name_list_expand_button_selector(self, name_list_index):
         selector = RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_index] + ' ' \
            + RightPanelTileDetailsBrowserPage.NAME_LIST_EXPAND_BUTTON
 
         return selector
+
+    def _get_tile_details_container(self, object_number):
+        return self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
 
     def click_toggle_details_button(self, object_number):
         self.focus_on_add_in_frame()
@@ -53,8 +60,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     def click_name_list_expand_button(self, object_number, name_list_index):
         self.focus_on_add_in_frame()
 
-        tile_details_container = \
-            self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+        tile_details_container = self._get_tile_details_container(object_number)
 
         name_list_expand_button = tile_details_container.get_element_by_css(
             self._get_name_list_expand_button_selector(name_list_index)
@@ -65,8 +71,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     def click_object_location_expand_button(self, object_number):
         self.focus_on_add_in_frame()
 
-        tile_details_container = \
-            self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+        tile_details_container = self._get_tile_details_container(object_number)
 
         object_location_expand_button = tile_details_container.get_element_by_css(
             RightPanelTileDetailsBrowserPage.OBJECT_LOCATION_EXPAND_BUTTON
@@ -77,17 +82,26 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     def check_if_object_is_certified(self, object_number):
         self.focus_on_add_in_frame()
 
-        tile_details_container = \
-            self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+        tile_details_container = self._get_tile_details_container(object_number)
 
         return tile_details_container.check_if_child_element_exists_by_css(RightPanelTileDetailsBrowserPage.CERTIFIED)
 
-    def check_if_name_list_exists(self, object_number, name_list_index):
+    def check_if_name_list_exists_on_object(self, object_number, name_list_index):
         self.focus_on_add_in_frame()
 
-        tile_details_container = \
-            self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+        tile_details_container = self._get_tile_details_container(object_number)
 
         return tile_details_container.check_if_child_element_exists_by_css(
             RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_index]
         )
+
+    def check_if_object_id_is_correct(self, object_number, object_id):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+
+        tested_object_id = tile_details_container.get_element_by_css(
+            RightPanelTileDetailsBrowserPage.OBJECT_ID_VALUE
+        ).text
+
+        AssertUtil.assert_simple(tested_object_id, object_id)
