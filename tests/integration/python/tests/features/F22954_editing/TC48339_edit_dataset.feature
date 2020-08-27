@@ -5,7 +5,7 @@ Feature: F22954 - Edit dataset
     Given I logged in as default user
       And I clicked Import Data button
       And MyLibrary Switch is OFF
-      And I found and selected object "100_dataset"
+      And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"
 
      When I clicked Import button
       And I closed last notification
