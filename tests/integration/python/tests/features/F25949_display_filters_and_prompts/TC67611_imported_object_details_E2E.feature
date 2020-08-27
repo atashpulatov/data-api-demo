@@ -18,7 +18,11 @@ Feature: F25949 - Display filters and prompts
      Then Tooltip text for object 1 toggle details button is Show Details
 
     Given I clicked toggle details button on object 1
-      And I clicked attributes list expand button on object 1
+     Then Object 1 is certified
+      And Object 1 has attributes list displayed
+      And Object 1 has metrics list displayed
+ 
+    Given I clicked attributes list expand button on object 1
       And I clicked metrics list expand button on object 1
       And I clicked object location expand button on object 1
 
@@ -37,7 +41,12 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
 
     Given I clicked toggle details button on object 1
-      And I clicked filters list expand button on object 1
+     Then Object 1 has prompts list displayed
+      And Object 1 has filters list displayed
+      And Object 1 has attributes list displayed
+      And Object 1 has metrics list displayed
+
+    Given I clicked filters list expand button on object 1
       And I clicked attributes list expand button on object 1
       And I clicked object location expand button on object 1
       
@@ -50,7 +59,11 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
 
     Given I clicked toggle details button on object 1
-      And I clicked object location expand button on object 1
+     Then Object 1 has prompts list displayed
+      And Object 1 has attributes list displayed
+      And Object 1 has metrics list displayed
+
+    Given I clicked object location expand button on object 1
 
     Given I selected excel table for object 1
 
@@ -67,8 +80,13 @@ Feature: F25949 - Display filters and prompts
       And I closed notification on object 3
 
     Given I clicked toggle details button on object 3
-      And I clicked attributes list expand button on object 3
+     Then Object 3 is certified
+      And Object 3 has filters list displayed
+      And Object 3 has attributes list displayed
+      And Object 3 has metrics list displayed
+
       And I clicked filters list expand button on object 3
+      And I clicked attributes list expand button on object 3
       And I clicked object location expand button on object 3 
 
     Given I clicked Duplicate on object 2
@@ -76,7 +94,12 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
 
     Given I clicked toggle details button on object 1
-      And I clicked filters list expand button on object 1
+     Then Object 1 has prompts list displayed
+      And Object 1 has filters list displayed
+      And Object 1 has attributes list displayed
+      And Object 1 has metrics list displayed
+
+    Given I clicked filters list expand button on object 1
       And I clicked attributes list expand button on object 1
       And I clicked object location expand button on object 1
 
