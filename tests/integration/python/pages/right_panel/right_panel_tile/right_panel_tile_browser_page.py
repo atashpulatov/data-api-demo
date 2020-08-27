@@ -30,8 +30,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
 
-    WARNING_NOTIFICATION_OK_BUTTON = 'div.notification-container > div.notification-body >' + \
-        'div.warning-notification-button-container > button'
+    WARNING_NOTIFICATION_OK_BUTTON = 'div.warning-notification-button-container > button'
 
     def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)

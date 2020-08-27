@@ -7,13 +7,13 @@ Feature: F21526 - Secure data
 
      When I clicked Import Data button
       And MyLibrary Switch is OFF
-      And I found and selected object "Revenue by Region and Category - secure data"
+      And I found object by ID "778ECA4C11E990F800000080EFA56C55" and selected "Revenue by Region and Category - secure data"
       And I clicked Import button
      Then I closed last notification
 
      When I selected cell "E1"
       And I clicked Add Data button
-      And I found and selected object "Secure data - always working"
+      And I found object by ID "DA3AE08611E9919D00000080EFF597FB" and selected "Secure data - always working"
       And I clicked Import button
      Then I closed all notifications
       And cells ["A1", "B33", "E1", "F77"] should have values ["Region", "Music", "Country", "Sub-Saharan Africa"]
