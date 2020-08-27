@@ -21,6 +21,8 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
 
     OBJECT_LOCATION_EXPAND_BUTTON = '.object-location-expand-button'
 
+    CERTIFIED = 'div[id^="certified-object-property-"]'
+
     def _get_name_list_expand_button_selector(self, name_list_index):
         selector = RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_index] + ' ' \
            + RightPanelTileDetailsBrowserPage.NAME_LIST_EXPAND_BUTTON
@@ -71,3 +73,21 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         )
 
         object_location_expand_button.click()
+
+    def check_if_object_is_certified(self, object_number):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = \
+            self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+
+        return tile_details_container.check_if_child_element_exists_by_css(RightPanelTileDetailsBrowserPage.CERTIFIED)
+
+    def check_if_name_list_exists(self, object_number, name_list_index):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = \
+            self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+
+        return tile_details_container.check_if_child_element_exists_by_css(
+            RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_index]
+        )

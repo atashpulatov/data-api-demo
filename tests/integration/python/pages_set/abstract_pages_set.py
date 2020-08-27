@@ -2,18 +2,23 @@ from abc import ABC, abstractmethod
 
 from pages.debug.debug_page import DebugPage
 from pages.keyboard.keyboard_page import KeyboardPage
+from pages.api.rest_api_page import RestApiPage
 
 
 class AbstractPagesSet(ABC):
     def __init__(self):
         self.debug_common_page = DebugPage()
         self.keyboard_common_page = KeyboardPage()
+        self.rest_api_common_page = RestApiPage()
 
     def debug_page(self):
         return self.debug_common_page
 
     def keyboard_page(self):
         return self.keyboard_common_page
+
+    def rest_api_page(self):
+        return self.rest_api_common_page
 
     @abstractmethod
     def excel_general_page(self):
