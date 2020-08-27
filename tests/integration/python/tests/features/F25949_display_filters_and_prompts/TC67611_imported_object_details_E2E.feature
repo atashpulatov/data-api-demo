@@ -31,10 +31,8 @@ Feature: F25949 - Display filters and prompts
 
       And I selected all attributes
       And I selected all metrics
-      And I clicked filter number 1
-      And I selected all filter elements
-      And I clicked filter number 4
-      And I selected all filter elements
+      And I selected filter "Call Center" with all elements
+      And I selected filter "Employee" with all elements
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
@@ -64,8 +62,7 @@ Feature: F25949 - Display filters and prompts
     Given I clicked Edit object 3
       And I unselected all metrics
       And I clicked metric "survived"
-      And I clicked filter number 10
-      And I selected all filter elements
+      And I selected filter "age" with all elements
       And I clicked Import button in Columns and Filters Selection
       And I closed notification on object 3
 
