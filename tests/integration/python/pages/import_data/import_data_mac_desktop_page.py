@@ -1,6 +1,7 @@
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
 from framework.util.util import Util
 from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
+from framework.util.exception.MstrException import MstrException
 
 
 class ImportDataMacDesktopPage(BaseMacDesktopPage):
@@ -60,6 +61,18 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
         self.get_element_by_xpath(ImportDataMacDesktopPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_mac_desktop_page.wait_for_import_to_finish_successfully()
+
+    def click_import_button_without_checking_results(self):
+        self.get_element_by_xpath(ImportDataMacDesktopPage.IMPORT_BUTTON_ELEM).click()
+
+    def click_import_button_to_import_with_error(self, error_message):
+        self.get_element_by_xpath(ImportDataMacDesktopPage.IMPORT_BUTTON_ELEM).click()
+
+        if not self.check_if_element_exists_by_xpath(
+          self.right_panel_tile_mac_desktop_page.ERROR_NOTIFICATION_ELEM % error_message):
+            raise MstrException('Different notification displayed')
+
+        self.get_element_by_xpath(self.right_panel_tile_mac_desktop_page.ERROR_NOTIFICATION_OK_ELEM).click()
 
     def click_prepare_data_button(self):
         self.get_element_by_xpath(ImportDataMacDesktopPage.PREPARE_BUTTON_ELEM).click()

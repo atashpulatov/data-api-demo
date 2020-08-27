@@ -12,6 +12,7 @@ from pages.right_panel.duplicate_object_popup.duplicate_object_popup_mac_desktop
 from pages.right_panel.right_panel_main.right_panel_main_mac_desktop_page import RightPanelMainMacDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_mac_desktop_page import RightPanelTileMacDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
+from pages.right_panel.range_taken_popup.range_taken_popup_mac_desktop_page import RangeTakenPopupMacDesktopPage
 
 
 class PagesSetMacDesktop(AbstractPagesSet):
@@ -28,6 +29,7 @@ class PagesSetMacDesktop(AbstractPagesSet):
         self.duplicate_object_popup_mac_desktop_page = DuplicateObjectPopupMacDesktopPage()
         self.not_logged_right_panel_mac_desktop_page = NotLoggedRightPanelMacDesktopPage()
         self.columns_and_filters_selection_mac_desktop_page = ColumnsAndFiltersSelectionMacDesktopPage()
+        self.range_taken_popup_mac_desktop_page = RangeTakenPopupMacDesktopPage()
 
     def excel_general_page(self):
         return self.excel_general_mac_desktop_page
@@ -81,7 +83,10 @@ class PagesSetMacDesktop(AbstractPagesSet):
         return self.not_logged_right_panel_mac_desktop_page
 
     def range_taken_popup_page(self):
-        pass
+        return self.range_taken_popup_mac_desktop_page
 
     def filter_panel_page(self):
+        pass
+
+    def prompt_page(self):
         pass

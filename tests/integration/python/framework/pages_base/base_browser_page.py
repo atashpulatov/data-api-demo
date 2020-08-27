@@ -15,6 +15,7 @@ class BaseBrowserPage(BasePage):
     DOSSIER_FRAME_ELEM = '.dossier-window > div > iframe'
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
+    PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
 
     def get_element_with_focus(self):
         return self.driver.switch_to.active_element
@@ -81,6 +82,26 @@ class BaseBrowserPage(BasePage):
         dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.DOSSIER_FRAME_ELEM)
 
         self._switch_to_frame(dossier_frame_element)
+
+    def focus_on_prompt_frame(self):
+        end_time = time.time() + DEFAULT_TIMEOUT
+
+        while True:
+            try:
+                self.focus_on_excel_frame()
+                self.focus_on_add_in_popup_frame()
+                prompt_frame = self.get_frame_element_by_css(
+                    BaseBrowserPage.PROMPT_FRAME_ELEM)
+                self._switch_to_frame(prompt_frame)
+                return
+
+            except Exception as e:
+                Util.log(e)
+
+            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+
+            if time.time() > end_time:
+                raise MstrException('Cannot focus on prompt frame')
 
     def _switch_to_frame(self, frame):
         start_time = time.time()
