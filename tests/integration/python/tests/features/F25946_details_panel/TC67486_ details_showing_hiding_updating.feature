@@ -8,12 +8,35 @@ Feature: F25946 - Display filters and prompts
       
       And I found and selected object "Prompted report with subtotals"
       And I clicked Prepare Data button
-      And I clicked Run button for prompted dossier
+      And I waited for Run button to be enabled
+      And I clicked Run button
       And I ensure that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
+
+    Given I added a new worksheet
+      And I clicked Add Data button
+      And MyLibrary Switch is OFF
+      
+      And I found and selected object "Prompted dossier"
+      And I clicked Import button to open Import Dossier
+      And I clicked Run button for prompted dossier
+      And I selected visualization "Visualization 1"
+      And I clicked import dossier
+      And I closed last notification
+      And I hovered over toggle details button on object 1
+      Then Tooltip text for object 1 toggle details button is Show Details
+
+    Given I clicked toggle details button on object 1
+      And Object 1 has prompts list displayed
+      And Object 1 has attributes list displayed
+      And Object 1 has metrics list displayed
+      # TODO: Object 1 has Owner Administrator
+      # TODO: Object 1 has ID 
+      # TODO: Object 1 has field {field} with some text
+
 
     # Given I hovered over toggle details button on object 1
     #  Then Tooltip text for object 1 toggle details button is Show Details
