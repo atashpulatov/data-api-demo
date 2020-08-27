@@ -210,7 +210,7 @@ function showLoginBtn() {
 
 
 function canSaveCookies() {
-  const TEMP_COOKIE = 'content_security_check=true';
+  const TEMP_COOKIE = 'content_security_check=true; SameSite=None; Secure';
   try {
     document.cookie = TEMP_COOKIE;
     return document.cookie.indexOf(TEMP_COOKIE) !== -1;
