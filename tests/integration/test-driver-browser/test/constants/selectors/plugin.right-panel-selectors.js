@@ -56,4 +56,5 @@ export const rightPanelSelectors = {
   duplicatePopupImportBtn: '#overlay > div.side-panel > div.object-tile-container > div.overlay-container > div.duplicate-popup > div.duplicate-popup-footer > div > button:nth-child(1)',
   duplicatePopupEditBtn: '#overlay > div > div.object-tile-container > div.overlay-container > div > div.duplicate-popup-footer > div > button:nth-child(2)',
   importedData: '.imported-data',
+  loadingSpinner: '.loading-spinner',
 };
