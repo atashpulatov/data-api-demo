@@ -2,15 +2,14 @@
 Feature: F22954 - Edit dataset
 
   Scenario: [TC48339] Editing dataset
-    # Given I wait 0
     Given I logged in as default user
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       And I found and selected object "100_dataset"
 
-    When I clicked Import button
+     When I clicked Import button
       And I closed last notification
-      Then cells ["A1", "B2"] should have values ["Country", "Clothes"]
+     Then cells ["A1", "B2"] should have values ["Country", "Clothes"]
 
       And I clicked Edit object 1
       And I unselected all attributes
@@ -20,8 +19,8 @@ Feature: F22954 - Edit dataset
       And I selected filters { "Region" : ["Asia", "Europe", "North America"] }
 
 
-    When I clicked Import button in Columns and Filters Selection
+     When I clicked Import button in Columns and Filters Selection
       And I closed last notification
-      Then cells ["A1", "B2"] should have values ["Region", "15233245.15"]
+     Then cells ["A1", "B2"] should have values ["Region", "15233245.15"]
 
       And I log out
