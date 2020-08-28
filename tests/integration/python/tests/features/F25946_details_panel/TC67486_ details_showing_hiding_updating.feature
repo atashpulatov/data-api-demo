@@ -39,7 +39,13 @@ Feature: F25946 - Display filters and prompts
     Given I selected excel table for object 1
       # TODO: Should check if object is highlighted
 
-      
+    Given I hovered over toggle details button on object 1
+     Then Tooltip text for object 1 toggle details button is Hide Details
+
+    Given I clicked toggle details button on object 1
+     # TODO: Then Object number 1 has actions visible
+
+     
 
     # Given I hovered over toggle details button on object 1
     #  Then Tooltip text for object 1 toggle details button is Show Details
