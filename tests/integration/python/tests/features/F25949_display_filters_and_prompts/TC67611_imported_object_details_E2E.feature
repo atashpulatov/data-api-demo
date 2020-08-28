@@ -139,23 +139,23 @@ Feature: F25949 - Display filters and prompts
 
       And I log out
 
-     Given I certify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
-       And I certify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
-       And I logged in as default user
-       And I refreshed all objects
-       And I waited for all progress notifications to disappear
-       And I closed all notifications
+    Given I certify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
+      And I certify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
+      And I logged in as default user
+      And I refreshed all objects
+      And I waited for all progress notifications to disappear
+      And I closed all notifications
 
-      When I clicked toggle details button on object 1
-      Then Object 1 is certified
+     When I clicked toggle details button on object 1
+     Then Object 1 is certified
 
-      When I clicked toggle details button on object 2
-      Then Object 2 is certified
+     When I clicked toggle details button on object 2
+     Then Object 2 is certified
 
-      When I clicked toggle details button on object 3
-      Then Object 3 is certified
+     When I clicked toggle details button on object 3
+     Then Object 3 is certified
 
-       And I decertify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
-       And I decertify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
+      And I decertify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
+      And I decertify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
 
-       And I log out
+      And I log out
