@@ -1,5 +1,5 @@
 {
-  "driver_type": "mac_chrome",
+  "driver_type": "windows_desktop",
   "image_recognition_enabled": true,
   "connect_to_existing_session_enabled": false,
   "browser_existing_session_executor_url": "",
@@ -12,8 +12,8 @@
   "driver_path_mac_chrome": "framework/resources/chromedriver84",
   "host_url_mac_desktop": "http://localhost:4622/wd/hub",
   "host_url_windows_desktop": "http://localhost:4723/wd/hub",
-  "excel_add_in_environment": "224087",
-  "excel_desktop_add_in_import_data_name": "env-224087",
+  "excel_add_in_environment": "224691",
+  "excel_desktop_add_in_import_data_name": "env-224691",
   "excel_user_name": "testing.universal@mstrtesting.onmicrosoft.com",
   "excel_user_password": "somePassword1"
 }

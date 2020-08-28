@@ -3,6 +3,8 @@ import requests
 from framework.util.config_util import ConfigUtil
 from framework.pages_base.base_page import BasePage
 
+TUTORIAL_PROJECT_ID = "B7CA92F04B9FAE8D941C3E9B7E0CD754"
+
 
 class RestApiPage(BasePage):
 
@@ -26,7 +28,7 @@ class RestApiPage(BasePage):
         cookies = resp.cookies
         return auth_token, cookies
 
-    def certify_object(self, object_id, project_id):
+    def certify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         auth_token, cookies = self._getAuthTokenAndCookies()
         custom_headers = {
           "X-MSTR-AuthToken": auth_token,
@@ -38,7 +40,7 @@ class RestApiPage(BasePage):
             cookies=cookies
         )
 
-    def decertify_object(self, object_id, project_id):
+    def decertify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         auth_token, cookies = self._getAuthTokenAndCookies()
         custom_headers = {
           "X-MSTR-AuthToken": auth_token,
@@ -50,7 +52,7 @@ class RestApiPage(BasePage):
             cookies=cookies
         )
 
-    def is_object_certified(self, object_id, project_id):
+    def is_object_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         auth_token, cookies = self._getAuthTokenAndCookies()
         custom_headers = {
           "X-MSTR-AuthToken": auth_token,
