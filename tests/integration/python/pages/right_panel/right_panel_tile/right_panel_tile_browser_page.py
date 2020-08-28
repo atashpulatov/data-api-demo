@@ -82,6 +82,16 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self._hover_over_tile(int(object_no) - 1)
 
+    def close_all_warning_notifications(self):
+        self.focus_on_add_in_frame()
+
+        warnings_notifications_ok_buttons = self.get_elements_by_css(
+          RightPanelTileBrowserPage.NOTIFICATION_BUTTON
+        )
+
+        for button in warnings_notifications_ok_buttons:
+            button.click()
+
     def click_duplicate(self, object_no):
         self.focus_on_add_in_frame()
 

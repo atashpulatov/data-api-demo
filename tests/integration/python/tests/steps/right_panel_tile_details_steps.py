@@ -13,7 +13,7 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_details_page().hover_over_toggle_details_button(object_number)
 
 
-@step('Tooltip text for object {object_number} toggle details button is {expected_tooltip_text}')
+@step('Tooltip text for object {object_number} toggle details button is "{expected_tooltip_text}"')
 def step_impl(context, object_number, expected_tooltip_text):
     tooltip_text = context.pages.right_panel_tile_details_page().get_toggle_details_tooltip_text(object_number)
 
@@ -84,7 +84,7 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_name_list_displayed, True)
 
 
-@step('Object {object_number} has id {object_id}')
+@step('Object {object_number} has id "{object_id}"')
 def step_impl(context, object_number, object_id):
     context.pages.right_panel_tile_details_page().check_if_object_id_is_correct(
         object_number, object_id)

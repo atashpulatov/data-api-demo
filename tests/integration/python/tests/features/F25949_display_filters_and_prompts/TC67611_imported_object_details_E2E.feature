@@ -15,13 +15,13 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
 
      When I hovered over toggle details button on object 1
-     Then Tooltip text for object 1 toggle details button is Show Details
+     Then Tooltip text for object 1 toggle details button is "Show Details"
 
      When I clicked toggle details button on object 1
      Then Object 1 is certified
       And Object 1 has attributes list displayed
       And Object 1 has metrics list displayed
-      And Object 1 has id 3633950911EAA96889F00080EF25F8A4
+      And Object 1 has id "3633950911EAA96889F00080EF25F8A4"
  
     Given I clicked attributes list expand button on object 1
       And I clicked metrics list expand button on object 1
@@ -46,7 +46,7 @@ Feature: F25949 - Display filters and prompts
       And Object 1 has filters list displayed
       And Object 1 has attributes list displayed
       And Object 1 has metrics list displayed
-      And Object 1 has id 4BF6385A11EA638B25610080EFC58CB1
+      And Object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
 
     Given I clicked filters list expand button on object 1
       And I clicked attributes list expand button on object 1
@@ -64,14 +64,14 @@ Feature: F25949 - Display filters and prompts
      Then Object 1 has prompts list displayed
       And Object 1 has attributes list displayed
       And Object 1 has metrics list displayed
-      And Object 1 has id 5902C03A11E9FEF1DC670080EF856919
+      And Object 1 has id "5902C03A11E9FEF1DC670080EF856919"
 
     Given I clicked object location expand button on object 1
 
     Given I selected excel table for object 1
 
      When I hovered over toggle details button on object 1
-     Then Tooltip text for object 1 toggle details button is Hide Details
+     Then Tooltip text for object 1 toggle details button is "Hide Details"
 
     Given I clicked toggle details button on object 1
 
@@ -101,7 +101,7 @@ Feature: F25949 - Display filters and prompts
       And Object 1 has filters list displayed
       And Object 1 has attributes list displayed
       And Object 1 has metrics list displayed
-      And Object 1 has id 4BF6385A11EA638B25610080EFC58CB1
+      And Object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
 
     Given I clicked filters list expand button on object 1
       And I clicked attributes list expand button on object 1
@@ -116,46 +116,46 @@ Feature: F25949 - Display filters and prompts
       And Object 1 has filters list displayed
       And Object 1 has attributes list displayed
       And Object 1 has metrics list displayed
-      And Object 1 has id 4BF6385A11EA638B25610080EFC58CB1
+      And Object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
 
      When I clicked toggle details button on object 2
      Then Object 2 has prompts list displayed
       And Object 2 has attributes list displayed
       And Object 2 has metrics list displayed
-      And Object 2 has id 5902C03A11E9FEF1DC670080EF856919
+      And Object 2 has id "5902C03A11E9FEF1DC670080EF856919"
 
      When I clicked toggle details button on object 3
      Then Object 3 has prompts list displayed
       And Object 3 has filters list displayed
       And Object 3 has attributes list displayed
       And Object 3 has metrics list displayed
-      And Object 3 has id 4BF6385A11EA638B25610080EFC58CB1
+      And Object 3 has id "4BF6385A11EA638B25610080EFC58CB1"
 
      When I clicked toggle details button on object 4
      Then Object 4 is certified
       And Object 4 has attributes list displayed
       And Object 4 has metrics list displayed
-      And Object 4 has id 3633950911EAA96889F00080EF25F8A4
+      And Object 4 has id "3633950911EAA96889F00080EF25F8A4"
 
       And I log out
 
-     Given I certify object 4BF6385A11EA638B25610080EFC58CB1 in Tutorial project
-       And I certify object 5902C03A11E9FEF1DC670080EF856919 in Tutorial project
-       And I logged in as default user
-       And I refreshed all objects
-       And I waited for all progress notifications to disappear
-       And I closed all notifications
+    Given I certify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
+      And I certify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
+      And I logged in as default user
+      And I refreshed all objects
+      And I waited for all progress notifications to disappear
+      And I closed all notifications
 
-      When I clicked toggle details button on object 1
-      Then Object 1 is certified
+     When I clicked toggle details button on object 1
+     Then Object 1 is certified
 
-      When I clicked toggle details button on object 2
-      Then Object 2 is certified
+     When I clicked toggle details button on object 2
+     Then Object 2 is certified
 
-      When I clicked toggle details button on object 3
-      Then Object 3 is certified
+     When I clicked toggle details button on object 3
+     Then Object 3 is certified
 
-       And I decertify object 4BF6385A11EA638B25610080EFC58CB1 in Tutorial project
-       And I decertify object 5902C03A11E9FEF1DC670080EF856919 in Tutorial project
+      And I decertify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
+      And I decertify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
 
-       And I log out
+      And I log out
