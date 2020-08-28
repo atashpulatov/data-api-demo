@@ -35,11 +35,11 @@ Feature: F25946 - Display filters and prompts
       And Object 1 has metrics list displayed
       And Object 1 has id 5902C03A11E9FEF1DC670080EF856919
       And Object 1 has owner Administrator
-      
-      # TODO: Object 1 has Owner Administrator
-      # TODO: Object 1 has ID 
-      # TODO: Object 1 has field {field} with some text
 
+    Given I selected excel table for object 1
+      # TODO: Should check if object is highlighted
+
+      
 
     # Given I hovered over toggle details button on object 1
     #  Then Tooltip text for object 1 toggle details button is Show Details
