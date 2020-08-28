@@ -60,5 +60,8 @@ Feature: F25946 - Display filters and prompts
       And Object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
       And Object 2 has owner Administrator
       
+    Given I changed Excel window size to 1920 x 600
+      Then Right panel has scrollbar
+      And I maximixed Excel window
 
       And I log out

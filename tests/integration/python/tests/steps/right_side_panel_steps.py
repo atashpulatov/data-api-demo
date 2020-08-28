@@ -43,3 +43,10 @@ def step_impl(context):
 @step('I clicked view data')
 def step_impl(context):
     context.pages.right_panel_page().view_data()
+
+
+@step('Right panel has scrollbar')
+def step_impl(context):
+    is_scrollbar_visible = context.pages.right_panel_page().is_scrollbar_visible()
+
+    AssertUtil.assert_simple(is_scrollbar_visible, True)

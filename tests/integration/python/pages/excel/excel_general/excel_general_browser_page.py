@@ -38,6 +38,9 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
         self.driver.maximize_window()
         # self.driver.set_window_size(1920, 1080)
 
+    def change_excel_window_size(self, height, width):
+        self.driver.set_window_size(height, width)
+
     def close_excel(self):
         TestUtil.global_test_cleanup()
 
