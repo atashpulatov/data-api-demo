@@ -98,11 +98,12 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         )
         AssertUtil.assert_simple(name_list_exists, True)
 
-    def get_object_list_property_value(self, object_number, property_name):
+    def get_object_list_property_value(self, object_number, name_list_type):
         self.focus_on_add_in_frame()
 
         tile_details_container = self._get_tile_details_container(object_number)
-        css_selector = getattr(self, property_name)
+        css_selector = RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_type]
+
         return tile_details_container.get_element_by_css(css_selector).text
 
     def check_if_object_id_is_correct(self, object_number, object_id):

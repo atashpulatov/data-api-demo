@@ -37,45 +37,15 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, True)
 
 
-@step('Object {object_number} has prompts list displayed')
-def step_impl(context, object_number):
-    is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, 0)
-
-    AssertUtil.assert_simple(is_name_list_displayed, True)
-
-
-@step('Object {object_number} has filters list displayed')
-def step_impl(context, object_number):
-    is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, 1)
-
-    AssertUtil.assert_simple(is_name_list_displayed, True)
-
-
-@step('Object {object_number} has attributes list displayed')
-def step_impl(context, object_number):
-    is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, 2)
-
-    AssertUtil.assert_simple(is_name_list_displayed, True)
-
-
-@step('Object {object_number} has "{property_name}" with value "{expected_value}"')
-def step_impl(context, object_number, property_name, expected_value):
+@step('Object {object_number} has "{name_list_type}" with value "{expected_value}"')
+def step_impl(context, object_number, name_list_type, expected_value):
     attributes = context.pages.right_panel_tile_details_page().get_object_list_property_value(
-      object_number, property_name
+      object_number, name_list_type
     )
 
     AssertUtil.assert_strings_only_printable_characters(attributes, expected_value)
 
 
-@step('Object {object_number} has metrics list displayed')
-def step_impl(context, object_number):
-    is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, 3)
-
-    AssertUtil.assert_simple(is_name_list_displayed, True)
 @step('Object {object_number} has "{name_list_type}" list displayed')
 def step_impl(context, object_number, name_list_type):
     context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
@@ -86,6 +56,7 @@ def step_impl(context, object_number, name_list_type):
 def step_impl(context, object_number, object_id):
     context.pages.right_panel_tile_details_page().check_if_object_id_is_correct(
         object_number, object_id)
+
 
 @step('Object {object_number} has owner {owner}')
 def step_impl(context, object_number, owner):
