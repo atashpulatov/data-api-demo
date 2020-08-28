@@ -13,6 +13,11 @@ def step_impl(context):
     context.pages.right_panel_tile_page().close_all_notifications_on_hover()
 
 
+@step('I closed all warning notifications')
+def step_impl(context):
+    context.pages.right_panel_tile_page().close_all_warning_notifications()
+
+
 @step('I clicked Edit object {object_number}')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_edit(object_number)

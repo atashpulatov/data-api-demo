@@ -85,6 +85,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.get_element_by_id(ImportDataBrowserPage.PREPARE_BUTTON_ELEM).click()
 
     def add_dossier_to_library(self):
+        self.focus_on_dossier_frame()
         add_to_library_button = self.find_element_by_text_in_elements_list_by_css_safe(
             ImportDataBrowserPage.ADD_TO_LIBRARY_BUTTON,
             ImportDataBrowserPage.ADD_TO_LIBRARY_BUTTON_TEXT,
