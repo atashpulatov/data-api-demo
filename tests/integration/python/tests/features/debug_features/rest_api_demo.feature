@@ -1,6 +1,7 @@
 @mac_chrome
 @mac_desktop
 @windows_chrome
+@windows_desktop
 
 Feature: Rest API demo feature
 
