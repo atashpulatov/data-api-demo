@@ -88,3 +88,8 @@ def step_impl(context, object_number):
 def step_impl(context, object_number, object_id):
     context.pages.right_panel_tile_details_page().check_if_object_id_is_correct(
         object_number, object_id)
+
+@step('Object {object_number} has owner {owner}')
+def step_impl(context, object_number, owner):
+    context.pages.right_panel_tile_details_page().check_if_object_owner_is_correct(
+        object_number, owner)

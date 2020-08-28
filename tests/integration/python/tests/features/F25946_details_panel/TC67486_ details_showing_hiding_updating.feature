@@ -33,6 +33,9 @@ Feature: F25946 - Display filters and prompts
       And Object 1 has prompts list displayed
       And Object 1 has attributes list displayed
       And Object 1 has metrics list displayed
+      And Object 1 has id 5902C03A11E9FEF1DC670080EF856919
+      And Object 1 has owner Administrator
+      
       # TODO: Object 1 has Owner Administrator
       # TODO: Object 1 has ID 
       # TODO: Object 1 has field {field} with some text

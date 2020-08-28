@@ -24,8 +24,10 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
 
     CERTIFIED = 'div[id^="certified-object-property-"]'
     OBJECT_ID_CONTAINER = 'div[id^="id-object-property-"]'
+    OBJECT_OWNER_CONTAINER = 'div[id^="owner-object-property-"]'
     OBJECT_PROPERTY_VALUE = '.object-property-value'
     OBJECT_ID_VALUE = OBJECT_ID_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
+    OBJECT_OWNER_VALUE = OBJECT_OWNER_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
 
     def _get_name_list_expand_button_selector(self, name_list_index):
         selector = RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_index] + ' ' \
@@ -105,3 +107,14 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         ).text
 
         AssertUtil.assert_simple(tested_object_id, object_id)
+
+    def check_if_object_owner_is_correct(self, object_number, owner):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+
+        tested_object_owner = tile_details_container.get_element_by_css(
+            RightPanelTileDetailsBrowserPage.OBJECT_OWNER_VALUE
+        ).text
+
+        AssertUtil.assert_simple(tested_object_owner, owner)
