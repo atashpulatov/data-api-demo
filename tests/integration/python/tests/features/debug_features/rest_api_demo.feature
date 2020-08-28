@@ -1,5 +1,4 @@
 @mac_chrome
-@windows_desktop
 @mac_desktop
 @windows_chrome
 
