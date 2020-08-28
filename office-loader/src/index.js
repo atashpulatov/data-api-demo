@@ -29,6 +29,8 @@ function startAuthentication() {
         goToReact(libraryUrl);
       } else {
         showLoginBtn();
+        removeStorageItem();
+        logout(libraryUrl);
       }
     })
     .catch((e) => {
@@ -210,9 +212,9 @@ function showLoginBtn() {
 
 
 function canSaveCookies() {
-  const TEMP_COOKIE = 'content_security_check=true; SameSite=None; Secure';
+  const TEMP_COOKIE = 'content_security_check=true';
   try {
-    document.cookie = TEMP_COOKIE;
+    document.cookie = `${TEMP_COOKIE}; SameSite=None; Secure';`;
     return document.cookie.indexOf(TEMP_COOKIE) !== -1;
   } catch (e) {
     return false;
