@@ -76,6 +76,15 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_name_list_displayed, True)
 
 
+@step('Object {object_number} has "{property_name}" with value "{expected_value}"')
+def step_impl(context, object_number, property_name, expected_value):
+    attributes = context.pages.right_panel_tile_details_page().get_object_list_property_value(
+      object_number, property_name
+    )
+
+    AssertUtil.assert_strings_only_printable_characters(attributes, expected_value)
+
+
 @step('Object {object_number} has metrics list displayed')
 def step_impl(context, object_number):
     is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
