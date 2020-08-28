@@ -15,7 +15,7 @@ Feature: F22954 - Edit dataset
       And I unselected all attributes
       And I unselected all metrics      
       And I clicked metric "Total Cost"
-      And I clicked attribute for dataset "Region"
+      And I clicked attribute "Region" for dataset
       And I selected filters { "Region" : ["Asia", "Europe", "North America"] }
 
 

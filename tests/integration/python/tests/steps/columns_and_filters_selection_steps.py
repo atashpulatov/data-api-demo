@@ -214,6 +214,3 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().close_popup_window()
 
 
-@step('I clicked attribute for dataset "{attribute_name}"')
-def step_impl(context, attribute_name):
-    context.pages.columns_and_filters_selection_page().click_attribute_for_dataset(attribute_name)
