@@ -19,12 +19,12 @@ Feature: F25949 - Display filters and prompts
 
      When I clicked toggle details button on object 1
      Then Object 1 is certified
-      And Object 1 has attributes list displayed
-      And Object 1 has metrics list displayed
+      And Object 1 has "ATTRIBUTE" list displayed
+      And Object 1 has "METRIC" list displayed
       And Object 1 has id "3633950911EAA96889F00080EF25F8A4"
  
-    Given I clicked attributes list expand button on object 1
-      And I clicked metrics list expand button on object 1
+    Given I clicked "ATTRIBUTE" list expand button on object 1
+      And I clicked "METRIC" list expand button on object 1
       And I clicked object location expand button on object 1
 
     Given I added a new worksheet
@@ -42,14 +42,14 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
 
      When I clicked toggle details button on object 1
-     Then Object 1 has prompts list displayed
-      And Object 1 has filters list displayed
-      And Object 1 has attributes list displayed
-      And Object 1 has metrics list displayed
+     Then Object 1 has "PROMPT" list displayed
+      And Object 1 has "FILTER" list displayed
+      And Object 1 has "ATTRIBUTE" list displayed
+      And Object 1 has "METRIC" list displayed
       And Object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
 
-    Given I clicked filters list expand button on object 1
-      And I clicked attributes list expand button on object 1
+    Given I clicked "FILTER" list expand button on object 1
+      And I clicked "ATTRIBUTE" list expand button on object 1
       And I clicked object location expand button on object 1
       
     Given I added a new worksheet
@@ -61,9 +61,9 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
 
      When I clicked toggle details button on object 1
-     Then Object 1 has prompts list displayed
-      And Object 1 has attributes list displayed
-      And Object 1 has metrics list displayed
+     Then Object 1 has "PROMPT" list displayed
+      And Object 1 has "ATTRIBUTE" list displayed
+      And Object 1 has "METRIC" list displayed
       And Object 1 has id "5902C03A11E9FEF1DC670080EF856919"
 
     Given I clicked object location expand button on object 1
@@ -84,12 +84,12 @@ Feature: F25949 - Display filters and prompts
 
      When I clicked toggle details button on object 3
      Then Object 3 is certified
-      And Object 3 has filters list displayed
-      And Object 3 has attributes list displayed
-      And Object 3 has metrics list displayed
+      And Object 3 has "FILTER" list displayed
+      And Object 3 has "ATTRIBUTE" list displayed
+      And Object 3 has "METRIC" list displayed
 
-      And I clicked filters list expand button on object 3
-      And I clicked attributes list expand button on object 3
+      And I clicked "FILTER" list expand button on object 3
+      And I clicked "ATTRIBUTE" list expand button on object 3
       And I clicked object location expand button on object 3 
 
     Given I clicked Duplicate on object 2
@@ -97,14 +97,14 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
 
     Given I clicked toggle details button on object 1
-     Then Object 1 has prompts list displayed
-      And Object 1 has filters list displayed
-      And Object 1 has attributes list displayed
-      And Object 1 has metrics list displayed
+     Then Object 1 has "PROMPT" list displayed
+      And Object 1 has "FILTER" list displayed
+      And Object 1 has "ATTRIBUTE" list displayed
+      And Object 1 has "METRIC" list displayed
       And Object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
 
-    Given I clicked filters list expand button on object 1
-      And I clicked attributes list expand button on object 1
+    Given I clicked "FILTER" list expand button on object 1
+      And I clicked "ATTRIBUTE" list expand button on object 1
       And I clicked object location expand button on object 1
 
     Given I refreshed all objects
@@ -112,29 +112,29 @@ Feature: F25949 - Display filters and prompts
       And I closed all notifications
 
      When I clicked toggle details button on object 1
-     Then Object 1 has prompts list displayed
-      And Object 1 has filters list displayed
-      And Object 1 has attributes list displayed
-      And Object 1 has metrics list displayed
+     Then Object 1 has "PROMPT" list displayed
+      And Object 1 has "FILTER" list displayed
+      And Object 1 has "ATTRIBUTE" list displayed
+      And Object 1 has "METRIC" list displayed
       And Object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
 
      When I clicked toggle details button on object 2
-     Then Object 2 has prompts list displayed
-      And Object 2 has attributes list displayed
-      And Object 2 has metrics list displayed
+     Then Object 2 has "PROMPT" list displayed
+      And Object 2 has "ATTRIBUTE" list displayed
+      And Object 2 has "METRIC" list displayed
       And Object 2 has id "5902C03A11E9FEF1DC670080EF856919"
 
      When I clicked toggle details button on object 3
-     Then Object 3 has prompts list displayed
-      And Object 3 has filters list displayed
-      And Object 3 has attributes list displayed
-      And Object 3 has metrics list displayed
+     Then Object 3 has "PROMPT" list displayed
+      And Object 3 has "FILTER" list displayed
+      And Object 3 has "ATTRIBUTE" list displayed
+      And Object 3 has "METRIC" list displayed
       And Object 3 has id "4BF6385A11EA638B25610080EFC58CB1"
 
      When I clicked toggle details button on object 4
      Then Object 4 is certified
-      And Object 4 has attributes list displayed
-      And Object 4 has metrics list displayed
+      And Object 4 has "ATTRIBUTE" list displayed
+      And Object 4 has "METRIC" list displayed
       And Object 4 has id "3633950911EAA96889F00080EF25F8A4"
 
       And I log out

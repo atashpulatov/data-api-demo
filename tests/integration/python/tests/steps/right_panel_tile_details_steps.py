@@ -20,24 +20,9 @@ def step_impl(context, object_number, expected_tooltip_text):
     AssertUtil.assert_simple(tooltip_text, expected_tooltip_text)
 
 
-@step('I clicked prompts list expand button on object {object_number}')
-def step_impl(context, object_number):
-    context.pages.right_panel_tile_details_page().click_name_list_expand_button(object_number, 0)
-
-
-@step('I clicked filters list expand button on object {object_number}')
-def step_impl(context, object_number):
-    context.pages.right_panel_tile_details_page().click_name_list_expand_button(object_number, 1)
-
-
-@step('I clicked attributes list expand button on object {object_number}')
-def step_impl(context, object_number):
-    context.pages.right_panel_tile_details_page().click_name_list_expand_button(object_number, 2)
-
-
-@step('I clicked metrics list expand button on object {object_number}')
-def step_impl(context, object_number):
-    context.pages.right_panel_tile_details_page().click_name_list_expand_button(object_number, 3)
+@step('I clicked "{name_list_type}" list expand button on object {object_number}')
+def step_impl(context, object_number, name_list_type):
+    context.pages.right_panel_tile_details_page().click_name_list_expand_button(object_number, name_list_type)
 
 
 @step('I clicked object location expand button on object {object_number}')
@@ -52,36 +37,10 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, True)
 
 
-@step('Object {object_number} has prompts list displayed')
-def step_impl(context, object_number):
-    is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, 0)
-
-    AssertUtil.assert_simple(is_name_list_displayed, True)
-
-
-@step('Object {object_number} has filters list displayed')
-def step_impl(context, object_number):
-    is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, 1)
-
-    AssertUtil.assert_simple(is_name_list_displayed, True)
-
-
-@step('Object {object_number} has attributes list displayed')
-def step_impl(context, object_number):
-    is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, 2)
-
-    AssertUtil.assert_simple(is_name_list_displayed, True)
-
-
-@step('Object {object_number} has metrics list displayed')
-def step_impl(context, object_number):
-    is_name_list_displayed = context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, 3)
-
-    AssertUtil.assert_simple(is_name_list_displayed, True)
+@step('Object {object_number} has "{name_list_type}" list displayed')
+def step_impl(context, object_number, name_list_type):
+    context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
+        object_number, name_list_type)
 
 
 @step('Object {object_number} has id "{object_id}"')
