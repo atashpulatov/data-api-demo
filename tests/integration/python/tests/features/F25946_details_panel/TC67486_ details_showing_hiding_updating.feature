@@ -64,4 +64,54 @@ Feature: F25946 - Display filters and prompts
       Then Right panel has scrollbar
       And I maximixed Excel window
 
-      And I log out
+    Given I clicked Edit object 2
+      And I waited for Run button to be enabled
+      And I clicked Run button
+      And I ensure that Columns & Filters Selection is visible
+      And I unselected all metrics
+      And I unselected all attributes
+      And I clicked attribute "Region"
+      And I clicked attribute "Country"
+      And I clicked metric "Cost"
+      And I clicked metric "Revenue"
+      And I clicked Import button in Columns and Filters Selection
+      And I closed notification on object 2
+      # And I hovered over toggle details button on object 2
+
+    Given I clicked toggle details button on object 2
+      And Object 2 has "PROMPT" with value "Books"
+      And Object 2 has "ATTRIBUTE" with value "Country‎, Region"
+      And Object 2 has "METRIC" with value "Cost‎, Revenue"
+      And Object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
+      And Object 2 has owner Administrator
+
+    Given I certify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
+      And I certify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
+    # TODO: Selector based on seperate items?
+
+    Given I refreshed all objects
+      And I closed all notifications
+
+    Given I clicked toggle details button on object 1
+     Then Object 1 is certified
+      And Object 1 has "PROMPT" with value "Northeast‎, 1/1/2014"
+      And Object 1 has "ATTRIBUTE" with value "Quarter‎, Distribution Center"
+      And Object 1 has "METRIC" with value "Profit‎, Revenue"
+      And Object 1 has id "5902C03A11E9FEF1DC670080EF856919"
+      And Object 1 has owner Administrator
+      
+    Given I clicked toggle details button on object 2
+      And Object 2 is certified
+      And Object 2 has "PROMPT" with value "Books"
+      And Object 2 has "ATTRIBUTE" with value "Country‎, Region"
+      And Object 2 has "METRIC" with value "Cost‎, Revenue"
+      And Object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
+      And Object 2 has owner Administrator
+
+     Then I decertify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
+      And I decertify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
+
+    # TODO: And I log out 
+    # TODO: Given I logged in with username "" and password ""
+
+    And I log out
