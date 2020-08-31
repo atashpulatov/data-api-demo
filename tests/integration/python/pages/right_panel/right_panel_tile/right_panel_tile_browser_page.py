@@ -1,6 +1,6 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.message_const import MessageConst
 from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.message_const import MessageConst
 
 
 class RightPanelTileBrowserPage(BaseBrowserPage):
@@ -74,7 +74,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         warnings_notifications_ok_buttons = self.get_elements_by_css(
-          RightPanelTileBrowserPage.NOTIFICATION_BUTTON
+            RightPanelTileBrowserPage.NOTIFICATION_BUTTON
         )
 
         for button in warnings_notifications_ok_buttons:

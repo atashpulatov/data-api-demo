@@ -202,11 +202,14 @@ class BaseBrowserPage(BasePage):
 
         :param selector(str): css selector
         :param text(str): text content of wanted element
+
         :returns (int): index of wanted element in list of elements with given css selector
+
         :raises Element not present(MstrException): if there is no element with given text
         """
         elements = self.get_elements_by_css(selector)
         elements_names = [item.text for item in elements]
+
         try:
             return elements_names.index(text)
         except ValueError:
