@@ -71,6 +71,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     SEARCH_INPUT = '.ant-input.ant-input-sm'
 
+    TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
+
     ATTRIBUTE = 'attributes'
     METRIC = 'metrics'
     FILTER = 'filters'
@@ -407,3 +409,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def close_popup_window(self):
         self.focus_on_excel_frame()
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()
+
+    def click_include_totals_and_subtotals(self):
+        self.focus_on_add_in_popup_frame()
+
+        totals_and_subtotals_switch = self.get_element_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH
+        )
+        totals_and_subtotals_switch.click()

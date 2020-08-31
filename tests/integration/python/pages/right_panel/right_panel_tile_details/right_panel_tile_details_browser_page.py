@@ -19,15 +19,24 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         "ATTRIBUTE": ATTRIBUTES_LIST,
         "METRIC": METRICS_LIST
     }
+    NAME_LIST_ITEM = 'span.name-list-item'
+    NAME_LIST_ITEM_PREFIX = ', '
     NAME_LIST_EXPAND_BUTTON = '.name-list-expand-button'
     OBJECT_LOCATION_EXPAND_BUTTON = '.object-location-expand-button'
+
+    ATTRIBUTES_LIST_ITEMS = ATTRIBUTES_LIST + ' ' + NAME_LIST_ITEM
+    METRICS_LIST_ITEMS = METRICS_LIST + ' ' + NAME_LIST_ITEM
 
     CERTIFIED = 'div[id^="certified-object-property-"]'
     OBJECT_ID_CONTAINER = 'div[id^="id-object-property-"]'
     OBJECT_OWNER_CONTAINER = 'div[id^="owner-object-property-"]'
+    OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER = 'div[id^="subtotals-object-property-"]'
     OBJECT_PROPERTY_VALUE = '.object-property-value'
     OBJECT_ID_VALUE = OBJECT_ID_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
     OBJECT_OWNER_VALUE = OBJECT_OWNER_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
+    OBJECT_TOTALS_AND_SUBTOTALS_VALUE = OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
+
+    TOTALS_AND_SUBTOTALS_ON = 'ON'
 
     def _get_name_list_expand_button_selector(self, name_list_type):
         selector = RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_type] + ' ' \
@@ -37,6 +46,11 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
 
     def _get_tile_details_container(self, object_number):
         return self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[int(object_number) - 1]
+
+    def _remove_name_list_item_whitespace(self, name):
+        if name.startswith(RightPanelTileDetailsBrowserPage.NAME_LIST_ITEM_PREFIX):
+            return name[len(RightPanelTileDetailsBrowserPage.NAME_LIST_ITEM_PREFIX):]
+        return name
 
     def click_toggle_details_button(self, object_number):
         self.focus_on_add_in_frame()
@@ -127,3 +141,32 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         ).text
 
         AssertUtil.assert_simple(tested_object_owner, owner)
+
+    def check_if_totals_and_subtotals_are_on(self, object_number):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+        tested_object_totals_and_subtotals = tile_details_container.get_element_by_css(
+            RightPanelTileDetailsBrowserPage.OBJECT_TOTALS_AND_SUBTOTALS_VALUE
+        ).text
+
+        return tested_object_totals_and_subtotals == RightPanelTileDetailsBrowserPage.TOTALS_AND_SUBTOTALS_ON
+
+    def _check_if_items_list_contains_item(self, list_items_selector, object_number, item_name):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+        list_items = tile_details_container.get_elements_by_css(list_items_selector)
+        items = map(lambda item: self._remove_name_list_item_whitespace(item.text), list_items)
+
+        return item_name in items
+
+    def check_if_attributes_list_contains_attribute(self, object_number, attribute_name):
+        return self._check_if_items_list_contains_item(
+          RightPanelTileDetailsBrowserPage.ATTRIBUTES_LIST_ITEMS, object_number, attribute_name
+        )
+
+    def check_if_metrics_list_contains_metric(self, object_number, metric_name):
+        return self._check_if_items_list_contains_item(
+            RightPanelTileDetailsBrowserPage.METRICS_LIST_ITEMS, object_number, metric_name
+        )

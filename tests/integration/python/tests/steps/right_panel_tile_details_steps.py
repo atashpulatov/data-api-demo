@@ -37,6 +37,13 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, True)
 
 
+@step('Object {object_number} is NOT certified')
+def step_impl(context, object_number):
+    is_certified = context.pages.right_panel_tile_details_page().check_if_object_is_certified(object_number)
+
+    AssertUtil.assert_simple(is_certified, False)
+
+
 @step('Object {object_number} has "{name_list_type}" with value "{expected_value}"')
 def step_impl(context, object_number, name_list_type, expected_value):
     attributes = context.pages.right_panel_tile_details_page().get_object_list_property_value(
@@ -62,3 +69,47 @@ def step_impl(context, object_number, object_id):
 def step_impl(context, object_number, owner):
     context.pages.right_panel_tile_details_page().check_if_object_owner_is_correct(
         object_number, owner)
+
+
+@step('totals and subtotals for object {object_number} are turned ON')
+def step_impl(context, object_number):
+    result = context.pages.right_panel_tile_details_page().check_if_totals_and_subtotals_are_on(object_number)
+
+    AssertUtil.assert_simple(result, True)
+
+
+@step('totals and subtotals for object {object_number} are turned OFF')
+def step_impl(context, object_number):
+    result = context.pages.right_panel_tile_details_page().check_if_totals_and_subtotals_are_on(object_number)
+
+    AssertUtil.assert_simple(result, False)
+
+
+@step('attributes list for object {object_number} contains attribute "{attribute_name}"')
+def step_impl(context, object_number, attribute_name):
+    result = context.pages.right_panel_tile_details_page().check_if_attributes_list_contains_attribute(
+        object_number, attribute_name)
+
+    AssertUtil.assert_simple(result, True)
+
+@step('attributes list for object {object_number} does NOT contain attribute "{attribute_name}"')
+def step_impl(context, object_number, attribute_name):
+    result = context.pages.right_panel_tile_details_page().check_if_attributes_list_contains_attribute(
+        object_number, attribute_name)
+
+    AssertUtil.assert_simple(result, False)
+
+
+@step('metrics list for object {object_number} contains metric "{metric_name}"')
+def step_impl(context, object_number, metric_name):
+    result = context.pages.right_panel_tile_details_page().check_if_metrics_list_contains_metric(
+        object_number, metric_name)
+
+    AssertUtil.assert_simple(result, True)
+
+@step('metrics list for object {object_number} does NOT contain metric "{metric_name}"')
+def step_impl(context, object_number, metric_name):
+    result = context.pages.right_panel_tile_details_page().check_if_metrics_list_contains_metric(
+        object_number, metric_name)
+
+    AssertUtil.assert_simple(result, False)
