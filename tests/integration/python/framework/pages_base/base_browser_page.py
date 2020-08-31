@@ -139,7 +139,7 @@ class BaseBrowserPage(BasePage):
             if len(elements_to_disappear) == 0:
                 break
             elif time.time() > end_time:
-                break
+                raise MstrException(('Element still in DOM', selector))
 
     def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         try:
