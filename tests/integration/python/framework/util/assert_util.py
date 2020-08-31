@@ -30,7 +30,11 @@ class AssertUtil:
         value2_only_printable_characters = ''.join(filter(lambda x: x in printable, value2))
 
         if value1_only_printable_characters != value2_only_printable_characters:
-            Util.log_error("Assertion error, values: [%s], [%s]" % (value1, value2))
+            Util.log_error(
+              "Assertion error, values: [%s], [%s]" % (
+                value1_only_printable_characters, value2_only_printable_characters
+              )
+            )
             # Util.pause(120)  # wait for debug purposes
 
         assert value1_only_printable_characters == value2_only_printable_characters

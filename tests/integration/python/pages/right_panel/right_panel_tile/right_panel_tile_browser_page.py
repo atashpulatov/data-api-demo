@@ -32,6 +32,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
     TILE_CONTEXT_MENU_WRAPPER = '.react-contextmenu-wrapper'
 
+    OBJECT_TILE_ACTIONS = '.icon-bar'
+
     def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
@@ -184,3 +186,18 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         )
 
         tile_context_menu_wrappers[int(object_number) - 1].click()
+
+    def is_icon_bar_visible(self, object_number):
+        self.focus_on_add_in_frame()
+
+        tile_context_menu_wrappers = self.get_elements_by_css(
+          RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
+        )
+
+        icon_bar = tile_context_menu_wrappers[int(object_number) - 1].get_element_by_css(
+          RightPanelTileBrowserPage.OBJECT_TILE_ACTIONS
+        )
+        print(icon_bar)
+        print(icon_bar.value_of_css_property('opacity'))
+
+        return int(icon_bar.value_of_css_property('opacity')) > 0

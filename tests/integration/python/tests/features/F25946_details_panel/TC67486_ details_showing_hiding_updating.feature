@@ -39,15 +39,14 @@ Feature: F25946 - Display filters and prompts
       And Object 1 has id "5902C03A11E9FEF1DC670080EF856919"
       And Object 1 has owner Administrator
       
-
     Given I selected excel table for object 1
-      # TODO: Should check if object is highlighted
+    # TODO: Should check if object is highlighted
 
     Given I hovered over toggle details button on object 1
      Then Tooltip text for object 1 toggle details button is "Hide Details"
 
     Given I clicked toggle details button on object 1
-     # TODO: Then Object number 1 has actions visible
+      And Object 1 actions are visible
 
     Given I clicked toggle details button on object 2
       And Object 2 has "PROMPT" list displayed
@@ -76,7 +75,6 @@ Feature: F25946 - Display filters and prompts
       And I clicked metric "Revenue"
       And I clicked Import button in Columns and Filters Selection
       And I closed notification on object 2
-      # And I hovered over toggle details button on object 2
 
     Given I clicked toggle details button on object 2
       And Object 2 has "PROMPT" with value "Books"
@@ -85,11 +83,27 @@ Feature: F25946 - Display filters and prompts
       And Object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
       And Object 2 has owner Administrator
 
+      And I log out
+
     Given I certify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
       And I certify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
-    # TODO: Selector based on seperate items?
 
-    Given I refreshed all objects
+    Given I logged in with username "user2" and password "user2"
+      And I clicked toggle details button on object 2
+      And Object 2 has "PROMPT" with value "Books"
+      And Object 2 has "ATTRIBUTE" with value "Country‎, Region"
+      And Object 2 has "METRIC" with value "Cost‎, Revenue"
+      And Object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
+      And Object 2 has owner Administrator
+
+    Given I clicked toggle details button on object 1
+      And Object 1 has "PROMPT" with value "Northeast‎, 1/1/2014"
+      And Object 1 has "ATTRIBUTE" with value "Quarter‎, Distribution Center"
+      And Object 1 has "METRIC" with value "Profit‎, Revenue"
+      And Object 1 has id "5902C03A11E9FEF1DC670080EF856919"
+      And Object 1 has owner Administrator
+
+      And I refreshed all objects
       And I closed all notifications
 
     Given I clicked toggle details button on object 1
@@ -110,8 +124,5 @@ Feature: F25946 - Display filters and prompts
 
      Then I decertify object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
       And I decertify object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
-
-    # TODO: And I log out 
-    # TODO: Given I logged in with username "" and password ""
 
     And I log out
