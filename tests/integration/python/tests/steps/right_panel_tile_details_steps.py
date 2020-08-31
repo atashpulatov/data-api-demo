@@ -62,3 +62,8 @@ def step_impl(context, object_number, object_id):
 def step_impl(context, object_number, owner):
     context.pages.right_panel_tile_details_page().check_if_object_owner_is_correct(
         object_number, owner)
+
+
+@step('Object {object_number} has details panel displayed')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_details_page().check_if_details_panel_exists_on_object(object_number)

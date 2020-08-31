@@ -5,6 +5,7 @@ from framework.util.assert_util import AssertUtil
 
 class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     TILE_DETAILS_CONTAINER = 'div[id^="object-details-panel-container-"]'
+    OBJECT_DETAILS_PANEL = '.object-details-panel'
 
     TOGGLE_DETAILS_BUTTONS = '.toggle-show-details-button'
     TOGGLE_DETAILS_TOOLTIPS = TOGGLE_DETAILS_BUTTONS + ' > .__react_component_tooltip.show.place-bottom.type-dark'
@@ -127,3 +128,14 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         ).text
 
         AssertUtil.assert_simple(tested_object_owner, owner)
+
+    def check_if_details_panel_exists_on_object(self, object_number):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+
+        details_panel_exists = tile_details_container.check_if_child_element_exists_by_css(
+            RightPanelTileDetailsBrowserPage.OBJECT_DETAILS_PANEL
+        )
+
+        AssertUtil.assert_simple(details_panel_exists, True)
