@@ -12,7 +12,6 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
      Then I closed last notification
       And cells ["A1", "B2", "D3"] should have values ["Year","Central", "$159,339"]
 
-
      When I clicked Edit object 1
       And I waited for Run button to be enabled
       And I clicked Run button
