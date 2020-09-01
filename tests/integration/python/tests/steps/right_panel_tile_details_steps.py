@@ -52,6 +52,12 @@ def step_impl(context, object_number, name_list_type):
         object_number, name_list_type)
 
 
+@step('Object {object_number} has collapsed "{name_list_type}" list displayed')
+def step_impl(context, object_number, name_list_type):
+    context.pages.right_panel_tile_details_page().check_if_collapsed_name_list_exists_on_object(
+        object_number, name_list_type)
+
+
 @step('Object {object_number} has id "{object_id}"')
 def step_impl(context, object_number, object_id):
     context.pages.right_panel_tile_details_page().check_if_object_id_is_correct(
@@ -66,4 +72,27 @@ def step_impl(context, object_number, owner):
 
 @step('Object {object_number} has details panel displayed')
 def step_impl(context, object_number):
-    context.pages.right_panel_tile_details_page().check_if_details_panel_exists_on_object(object_number)
+    is_details_panel_displayed = \
+      context.pages.right_panel_tile_details_page().is_details_panel_displayed_on_object(object_number)
+
+    AssertUtil.assert_simple(is_details_panel_displayed, True)
+
+
+@step('Object {object_number} has NO details panel displayed')
+def step_impl(context, object_number):
+    is_details_panel_displayed = \
+      context.pages.right_panel_tile_details_page().is_details_panel_displayed_on_object(object_number)
+
+    AssertUtil.assert_simple(is_details_panel_displayed, False)
+
+
+@step('Object {object_number} has full location "{object_location}" displayed')
+def step_impl(context, object_number, object_location):
+    context.pages.right_panel_tile_details_page().check_if_object_location_is_correct(
+        object_number, object_location)
+
+
+@step('Object {object_number} has collapsed location displayed')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_details_page().check_if_collapsed_location_exists_on_object(
+        object_number)

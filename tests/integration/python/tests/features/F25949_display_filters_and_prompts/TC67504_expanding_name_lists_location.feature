@@ -18,8 +18,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Run button
       And I selected all attributes
       And I selected all metrics
-      And I selected filter "Call Center" with all elements
-      And I selected filter "Employee" with all elements
+      And I selected filter "Region" with all elements
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
       
@@ -36,54 +35,93 @@ Feature: F25949 - Display filters and prompts
 
      When I clicked toggle details button on object 1
      Then Object 1 has details panel displayed
-      And Object 1 has "PROMPT" list displayed
-      And Object 1 has "ATTRIBUTE" list displayed
-      And Object 1 has "METRIC" list displayed
+      And Object 1 has collapsed "PROMPT" list displayed
+      And Object 1 has collapsed "ATTRIBUTE" list displayed
+      And Object 1 has collapsed "METRIC" list displayed
       And Object 1 has id "5902C03A11E9FEF1DC670080EF856919"
 
      When I hovered over toggle details button on object 2
      Then Tooltip text for object 2 toggle details button is "Show Details"
 
      When I clicked toggle details button on object 2
-     Then Object 2 has "PROMPT" list displayed
-      And Object 2 has "FILTER" list displayed
-      And Object 2 has "ATTRIBUTE" list displayed
-      And Object 2 has "METRIC" list displayed
+     Then Object 2 has details panel displayed
+      And Object 2 has collapsed "PROMPT" list displayed
+      And Object 2 has collapsed "FILTER" list displayed
+      And Object 2 has collapsed "ATTRIBUTE" list displayed
+      And Object 2 has collapsed "METRIC" list displayed
       And Object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
 
      When I hovered over toggle details button on object 3
      Then Tooltip text for object 3 toggle details button is "Show Details"
 
      When I clicked toggle details button on object 3
-     Then Object 3 has "ATTRIBUTE" list displayed
-      And Object 3 has "METRIC" list displayed
+     Then Object 3 has details panel displayed
+      And Object 3 has collapsed "ATTRIBUTE" list displayed
+      And Object 3 has collapsed "METRIC" list displayed
       And Object 3 is certified
       And Object 3 has id "3633950911EAA96889F00080EF25F8A4"
 
-    Given I clicked "FILTER" list expand button on object 2
+     When I clicked "FILTER" list expand button on object 2
       And I clicked "ATTRIBUTE" list expand button on object 2
+     Then Object 2 has "FILTER" with value "Region (Central, Mid-Atlantic, Northeast, Northwest, South, Southeast, Southwest, Web)"
+      And Object 2 has "ATTRIBUTE" with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
 
-    Given I clicked "ATTRIBUTE" list expand button on object 3
+     When I clicked "ATTRIBUTE" list expand button on object 3
       And I clicked "METRIC" list expand button on object 3
+     Then Object 3 has "ATTRIBUTE" with value "adult male‎, age‎, alive‎, alone‎, class‎, deck‎, embark town‎, embarked‎, sex‎, who"
+      And Object 3 has "METRIC" with value "fare‎, parch‎, pclass‎, Row Count - titanic_df‎, sibsp‎, survived"
 
-    Given I clicked object location expand button on object 1
-      And I clicked object location expand button on object 2
-      And I clicked object location expand button on object 3
+     When I clicked object location expand button on object 1
+     Then Object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted dossier" displayed
+     
+     When I clicked object location expand button on object 2
+     Then Object 2 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted report with subtotals" displayed
+     
+     When I clicked object location expand button on object 3
+     Then Object 3 has full location "MicroStrategy Tutorial > Public Objects > Reports > DS Objects > Cubes for Create Testing > testing_folder_wiblgjlprj > titanic_wiblgjlprj" displayed
 
      When I hovered over toggle details button on object 1
      Then Tooltip text for object 1 toggle details button is "Hide Details"
 
      When I clicked toggle details button on object 1
+     Then Object 1 has NO details panel displayed
 
      When I hovered over toggle details button on object 2
      Then Tooltip text for object 2 toggle details button is "Hide Details"
 
      When I clicked toggle details button on object 2
+     Then Object 2 has NO details panel displayed
 
      When I hovered over toggle details button on object 3
      Then Tooltip text for object 3 toggle details button is "Hide Details"
 
      When I clicked toggle details button on object 3
+     Then Object 3 has NO details panel displayed
+
+     When I clicked toggle details button on object 1
+     Then Object 1 has details panel displayed
+      And Object 1 has collapsed "PROMPT" list displayed
+      And Object 1 has collapsed "ATTRIBUTE" list displayed
+      And Object 1 has collapsed "METRIC" list displayed
+      And Object 1 has id "5902C03A11E9FEF1DC670080EF856919"
+      And Object 1 has collapsed location displayed
+
+     When I clicked toggle details button on object 2
+     Then Object 2 has details panel displayed
+      And Object 2 has collapsed "PROMPT" list displayed
+      And Object 2 has collapsed "FILTER" list displayed
+      And Object 2 has collapsed "ATTRIBUTE" list displayed
+      And Object 2 has collapsed "METRIC" list displayed
+      And Object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
+      And Object 1 has collapsed location displayed
+
+     When I clicked toggle details button on object 3
+     Then Object 3 has details panel displayed
+      And Object 3 has collapsed "ATTRIBUTE" list displayed
+      And Object 3 has collapsed "METRIC" list displayed
+      And Object 3 is certified
+      And Object 3 has id "3633950911EAA96889F00080EF25F8A4"
+      And Object 3 has collapsed location displayed
     
 
       And I log out
