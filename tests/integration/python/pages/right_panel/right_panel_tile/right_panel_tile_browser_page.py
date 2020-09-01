@@ -25,7 +25,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > div.rename-input'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > input'
 
-    RIGHT_PANEL_TILE_TOOLTIP = RIGHT_PANEL_TILE + ' > div > div.object-tile-name-row div.__react_component_tooltip'
+    RIGHT_PANEL_TILE_TOOLTIP = RIGHT_PANEL_TILE + ' .object-tile-name-row .__react_component_tooltip'
 
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
