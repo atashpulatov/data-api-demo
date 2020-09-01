@@ -34,7 +34,7 @@ def step_impl(context, object_number):
 
 @step('I clicked on object {object_number}')
 def step_impl(context, object_number):
-    context.pages.right_panel_tile_page().click_highlight(object_number)
+    context.pages.right_panel_tile_page().click_object_number(object_number)
 
 
 @step('object number {object_number} should be called "{expected_name}"')

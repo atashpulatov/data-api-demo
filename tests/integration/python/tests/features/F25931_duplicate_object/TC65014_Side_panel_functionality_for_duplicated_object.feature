@@ -1,3 +1,4 @@
+@windows_chrome
 @mac_chrome
 @ci
 Feature: F25931 - Duplicate object

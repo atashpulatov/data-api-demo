@@ -20,7 +20,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(5)'
     EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(3)'
     REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(6)'
-    BUTTON_FOR_OBJECT_AT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(%s)'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > div.rename-input'
@@ -108,7 +107,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT % object_no).click()
 
-    def click_highlight(self, object_no):
+    def click_object_number(self, object_no):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_no).click()
@@ -176,8 +175,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def get_object_name_from_tooltip(self, object_number):
       self.focus_on_add_in_frame()
 
-      other_container = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % object_number)
-      other_container.move_to()
+      name_container = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % object_number)
+      name_container.move_to()
 
       object_name = self._get_name_tooltip_text(object_number)
 
