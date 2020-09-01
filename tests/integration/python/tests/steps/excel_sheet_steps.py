@@ -92,14 +92,35 @@ def step_impl(context):
     context.pages.excel_sheet_page().click_align_middle_button()
 
 
+@step('align middle button should be clicked')
+def step_impl(context):
+    clicked = context.pages.excel_sheet_page().is_align_middle_button_clicked()
+
+    AssertUtil.assert_simple(clicked, "true")
+
+
 @step('I clicked align left button')
 def step_impl(context):
     context.pages.excel_sheet_page().click_align_left_button()
 
 
+@step('align left button should be clicked')
+def step_impl(context):
+    clicked = context.pages.excel_sheet_page().is_align_left_button_clicked()
+
+    AssertUtil.assert_simple(clicked, "true")
+
+
 @step('I clicked bold button')
 def step_impl(context):
     context.pages.excel_sheet_page().click_bold_button()
+
+
+@step('bold button should be clicked')
+def step_impl(context):
+    clicked = context.pages.excel_sheet_page().is_bold_button_clicked()
+
+    AssertUtil.assert_simple(clicked, "true")
 
 
 @step('I clicked font color button')

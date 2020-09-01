@@ -116,7 +116,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDataBrowserPage.FILTERS_BUTTON).click()
 
     def hover_over_first_object_in_list(self):
-     self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW).move_to()
+        self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW).move_to()
 
     def select_first_object_from_list(self):
         self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW).click()
