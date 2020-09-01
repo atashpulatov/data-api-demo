@@ -86,6 +86,8 @@ Feature: TS41441 - Sanity checks
       And I clicked fill color button
       And I changed cell "G2" font name to "Arial Black"
 
+     # TODO Then check styles
+
      When I clicked clear data
       And I log out
       And I logged in with username "user2" and password "user2"

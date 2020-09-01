@@ -1,4 +1,5 @@
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.exception.MstrException import MstrException
 from framework.util.message_const import MessageConst
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 
@@ -74,3 +75,12 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
         title_button_element = self._get_title_buttons_for_all_tiles()[object_index]
 
         return title_button_element.get_attribute(RightPanelTileMacDesktopPage.TITLE_ATTRIBUTE)
+
+    def check_if_error_message_is_correct(self, error_message):
+        error_message_selector = RightPanelTileMacDesktopPage.ERROR_NOTIFICATION_ELEM % error_message
+
+        if not self.check_if_element_exists_by_xpath(error_message_selector):
+            raise MstrException(f'Different notification displayed, expected: {error_message}')
+
+    def close_error_notification(self):
+        self.get_element_by_xpath(RightPanelTileMacDesktopPage.ERROR_NOTIFICATION_OK_ELEM).click()

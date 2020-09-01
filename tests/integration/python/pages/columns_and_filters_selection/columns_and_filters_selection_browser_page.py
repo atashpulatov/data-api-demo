@@ -138,15 +138,17 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         raise MstrException(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
 
     def click_attribute(self, attribute_name):
-        attribute = self._get_attribute_checkbox(attribute_name,
-                                                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX
-                                                 )
+        attribute = self._get_attribute_checkbox(
+            attribute_name,
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX
+        )
         attribute.click(offset_x=10, offset_y=5)
 
     def click_attribute_for_dataset(self, attribute_name):
-        attribute = self._get_attribute_checkbox(attribute_name,
-                                                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_IN_DATASET_CHECKBOX
-                                                 )
+        attribute = self._get_attribute_checkbox(
+            attribute_name,
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_IN_DATASET_CHECKBOX
+        )
         attribute.click(offset_x=10, offset_y=5)
 
     def _get_attribute_checkbox(self, attribute_name, attribute_selector):
@@ -409,5 +411,3 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def close_popup_window(self):
         self.focus_on_excel_frame()
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()
- 
-
