@@ -76,7 +76,6 @@ class BaseBrowserPage(BasePage):
 
     def focus_on_dossier_frame(self):
         self.focus_on_excel_frame()
-
         self.focus_on_add_in_popup_frame()
 
         dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.DOSSIER_FRAME_ELEM)
@@ -90,9 +89,10 @@ class BaseBrowserPage(BasePage):
             try:
                 self.focus_on_excel_frame()
                 self.focus_on_add_in_popup_frame()
-                prompt_frame = self.get_frame_element_by_css(
-                    BaseBrowserPage.PROMPT_FRAME_ELEM)
+
+                prompt_frame = self.get_frame_element_by_css(BaseBrowserPage.PROMPT_FRAME_ELEM)
                 self._switch_to_frame(prompt_frame)
+
                 return
 
             except Exception as e:
