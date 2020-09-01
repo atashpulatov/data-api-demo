@@ -94,6 +94,7 @@ export default class DossierWindowNotConnected extends React.Component {
             visualizationInfo: { chapterKey, visualizationKey }
           });
         } catch (error) {
+          console.error(error);
           const { ERR009 } = errorCodes;
           if (error.response && error.response.body.code === ERR009) {
           // Close popup if session expired
