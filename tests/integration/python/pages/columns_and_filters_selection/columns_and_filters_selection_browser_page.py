@@ -407,3 +407,5 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def close_popup_window(self):
         self.focus_on_excel_frame()
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()
+ 
+
