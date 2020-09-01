@@ -50,17 +50,19 @@ Feature: F25949 - Imported object details
 
      Then totals and subtotals for object 1 are turned OFF
 
-    Given attributes list for object 1 contains attribute "Region"
+    Given attributes list for object 1 contains attribute "Employee"
       And metrics list for object 1 contains metric "Revenue"
 
      When I clicked Edit object 1
-      And I clicked attribute "Region"
+      And I clicked attribute "Employee"
       And I clicked metric "Revenue"
+      # And I selected filters { "Region" : ["Central", "Northwest"] }
       And I clicked Import button
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then attributes list for object 1 does NOT contain attribute "Region"
+     Then attributes list for object 1 does NOT contain attribute "Employee"
       And metrics list for object 1 does NOT contain metric "Revenue"
+      # And filters list for object 1 contains filter "Region"
 
       And I log out

@@ -26,6 +26,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
 
     ATTRIBUTES_LIST_ITEMS = ATTRIBUTES_LIST + ' ' + NAME_LIST_ITEM
     METRICS_LIST_ITEMS = METRICS_LIST + ' ' + NAME_LIST_ITEM
+    FILTERS_LIST_ITEMS = FILTERS_LIST + ' ' + NAME_LIST_ITEM
 
     CERTIFIED = 'div[id^="certified-object-property-"]'
     OBJECT_ID_CONTAINER = 'div[id^="id-object-property-"]'
@@ -169,4 +170,9 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     def check_if_metrics_list_contains_metric(self, object_number, metric_name):
         return self._check_if_items_list_contains_item(
             RightPanelTileDetailsBrowserPage.METRICS_LIST_ITEMS, object_number, metric_name
+        )
+
+    def check_if_filter_list_contains_filter(self, object_number, filter_name):
+        return self._check_if_items_list_contains_item(
+            RightPanelTileDetailsBrowserPage.FILTERS_LIST_ITEMS, object_number, filter_name
         )

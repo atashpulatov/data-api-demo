@@ -92,6 +92,7 @@ def step_impl(context, object_number, attribute_name):
 
     AssertUtil.assert_simple(result, True)
 
+
 @step('attributes list for object {object_number} does NOT contain attribute "{attribute_name}"')
 def step_impl(context, object_number, attribute_name):
     result = context.pages.right_panel_tile_details_page().check_if_attributes_list_contains_attribute(
@@ -107,9 +108,26 @@ def step_impl(context, object_number, metric_name):
 
     AssertUtil.assert_simple(result, True)
 
+
 @step('metrics list for object {object_number} does NOT contain metric "{metric_name}"')
 def step_impl(context, object_number, metric_name):
     result = context.pages.right_panel_tile_details_page().check_if_metrics_list_contains_metric(
         object_number, metric_name)
+
+    AssertUtil.assert_simple(result, False)
+
+
+@step('filters list for object {object_number} contains filter "{filter_name}"')
+def step_impl(context, object_number, filter_name):
+    result = context.pages.right_panel_tile_details_page().check_if_filter_list_contains_filter(
+        object_number, filter_name)
+
+    AssertUtil.assert_simple(result, True)
+
+
+@step('filters list for object {object_number} does NOT contain filter "{filter_name}"')
+def step_impl(context, object_number, filter_name):
+    result = context.pages.right_panel_tile_details_page().check_if_filter_list_contains_filter(
+        object_number, filter_name)
 
     AssertUtil.assert_simple(result, False)
