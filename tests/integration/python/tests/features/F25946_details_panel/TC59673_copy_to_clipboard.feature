@@ -9,7 +9,7 @@ Feature: F25932 - Details panel
       And I found object "CategorySubCategoryQuarter"
 
      When I displayed details for object number 1
-     Then I verify copying the details to clipboard works correctly
+     Then I verified that copying the details to clipboard works correctly
 
       And I close Import Data popup
       And I log out

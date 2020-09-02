@@ -7,25 +7,25 @@ Feature: TS41441 - Sanity checks
       And MyLibrary Switch is OFF
 
       And I found and selected object "1,5M Sales Records.csv"
-     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1048576"
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       And I found and selected object "Report accessing XML file"
-     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "XFD1"
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       And I found and selected object "Report accessing XML file"
-     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1"
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       And I found and selected object "110k Sales Records.csv"
-     Then I clicked Import button and see error "This object exceeds the MicroStrategy project row limit. Please contact your administrator."
+     Then I clicked Import button and saw error "This object exceeds the MicroStrategy project row limit. Please contact your administrator."
 
      When I selected cell "A1"
       And I clicked Import Data button

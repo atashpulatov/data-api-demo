@@ -29,7 +29,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     CLOSE_IMPORT_DATA_BUTTON = '.popup-buttons > button'
     FILTERS_BUTTON = '.filter-button'
 
-    OBJECT_ROW = '.ReactVirtualized__Table__row'
+    FIRST_OBJECT_ROW = '.ReactVirtualized__Table__row'
 
     def __init__(self):
         super().__init__()
@@ -116,11 +116,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDataBrowserPage.FILTERS_BUTTON).click()
 
     def hover_over_first_object_in_list(self):
-     self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW).move_to()
+        self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW).move_to()
 
     def select_first_object_from_list(self):
-        self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW).click()
+        self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW).click()
 
     def find_the_color_of_first_object_in_list(self):
-        element = self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW)
-        return element.value_of_css_property('background-color')
+        element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
+
+        return element.get_background_color()

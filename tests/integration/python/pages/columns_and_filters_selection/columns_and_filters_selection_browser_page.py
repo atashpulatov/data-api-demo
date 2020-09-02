@@ -402,12 +402,15 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def click_back_button(self):
         self.focus_on_add_in_popup_frame()
+
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_ELEM).click()
 
     def click_cancel_button(self):
         self.focus_on_add_in_popup_frame()
+
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.CANCEL_BUTTON_ELEM).click()
 
     def close_popup_window(self):
         self.focus_on_excel_frame()
+
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()

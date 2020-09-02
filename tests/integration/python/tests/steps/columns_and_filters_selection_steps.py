@@ -14,17 +14,17 @@ def step_impl(context, title):
 
 
 @step('I ensure that "{number}" of "{of_number}" metrics are selected')
-def step_impl(context,  number, of_number):
+def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('metrics', number, of_number)
 
 
 @step('I ensure that "{number}" of "{of_number}" attributes are selected')
-def step_impl(context,  number, of_number):
+def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('attributes', number, of_number)
 
 
 @step('I ensure that "{number}" of "{of_number}" filters are selected')
-def step_impl(context,  number, of_number):
+def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('filters', number, of_number)
 
 
@@ -212,5 +212,3 @@ def step_impl(context, filters_and_elements_json):
 @step('I closed popup window')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().close_popup_window()
-
-
