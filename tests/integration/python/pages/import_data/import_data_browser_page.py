@@ -9,6 +9,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ARIA_CHECKED_ATTRIBUTE = 'aria-checked'
 
     SEARCH_BAR_ELEM = '.search-field__input'
+    CLEAR_SEARCH_BAR = 'div.search-field.search-field--clearable > button'
 
     NAME_OBJECT_ELEM = '''span[title='%s']'''
     EXPAND_DETAILS_ELEM = '.details-indicator'
@@ -124,3 +125,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def find_the_color_of_first_object_in_list(self):
         element = self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW)
         return element.value_of_css_property('background-color')
+    
+    def clear_serach_objects_field(self):
+        self.get_element_by_css(ImportDataBrowserPage.CLEAR_SEARCH_BAR).click()
+        
+
