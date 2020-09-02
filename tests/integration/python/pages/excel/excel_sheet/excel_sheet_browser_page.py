@@ -214,3 +214,9 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         self.press_backspace()
         self.send_keys(font_name)
         self.press_enter()
+
+    def get_font_name_of_cell(self, cell_name):
+        self.go_to_cell(cell_name)
+
+        self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_SPAN).click()
+        return self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT).get_attribute('value')

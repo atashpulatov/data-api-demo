@@ -89,8 +89,10 @@ Feature: TS41441 - Sanity checks
      When I selected cell "E2"
       And I clicked font color button
       And I selected cell "G2"
-      And I clicked fill color button
-     Then I changed cell "G2" font name to "Arial Black"
+     Then I clicked fill color button
+
+     When I changed cell "G2" font name to "Arial Black"
+     Then cell "G2" font name should be "Arial Black"
 
      When I clicked clear data
       And I log out

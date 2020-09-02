@@ -136,3 +136,10 @@ def step_impl(context):
 @step('I changed cell "{cell_name}" font name to "{font_name}"')
 def step_impl(context, cell_name, font_name):
     context.pages.excel_sheet_page().change_font_name_of_cell(cell_name, font_name)
+
+
+@step('cell "{cell_name}" font name should be "{expected_name}"')
+def step_impl(context, cell_name, expected_name):
+    result = context.pages.excel_sheet_page().get_font_name_of_cell(cell_name)
+
+    AssertUtil.assert_simple(result, expected_name)
