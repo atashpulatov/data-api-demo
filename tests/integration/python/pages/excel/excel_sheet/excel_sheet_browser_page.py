@@ -45,7 +45,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     EXCEL_FONT_NAME_SPAN = 'm_excelWebRenderer_ewaCtl_Font.FontName-Medium'
     EXCEL_FONT_NAME_INPUT = 'm_excelWebRenderer_ewaCtl_Font.FontName'
-    
+
     BOLD_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.Bold-Small'
     FONT_COLOR_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.FontColorWithSplit-Small'
     FILL_COLOR_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.FillColorWithSplit-Small'
