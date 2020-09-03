@@ -6,7 +6,6 @@ Feature: F25946 - Display filters and prompts
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       
-      # And I found and selected object "Prompted report with subtotals"
       And I found object by ID "4BF6385A11EA638B25610080EFC58CB1" and selected "Prompted report with subtotals"
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
@@ -15,12 +14,12 @@ Feature: F25946 - Display filters and prompts
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
+      And Object 1 has NO details panel displayed
 
     Given I added a new worksheet
       And I clicked Add Data button
       And MyLibrary Switch is OFF
       
-      # And I found and selected object "Prompted dossier"
       And I found object by ID "5902C03A11E9FEF1DC670080EF856919" and selected "Prompted dossier"
       And I clicked Import button to open Import Dossier
       And I clicked Run button for prompted dossier
@@ -28,6 +27,7 @@ Feature: F25946 - Display filters and prompts
       And I clicked import dossier
       And I closed last notification
       And I hovered over toggle details button on object 1
+      And Object 1 has NO details panel displayed
       Then Tooltip text for object 1 toggle details button is "Show Details"
 
     Given I clicked toggle details button on object 1
@@ -106,6 +106,8 @@ Feature: F25946 - Display filters and prompts
 
       And I refreshed all objects
       And I closed all notifications
+      And Object 1 has NO details panel displayed
+      And Object 2 has NO details panel displayed
 
     Given I clicked toggle details button on object 1
      Then Object 1 is certified
