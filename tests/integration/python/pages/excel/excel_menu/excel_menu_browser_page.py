@@ -44,6 +44,6 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ExcelMenuBrowserPage.NAME_BOX).click()
 
         for i in range(int(object_number)):
-          self.press_tab()
+            self.press_tab()
         
         self.press_enter()
