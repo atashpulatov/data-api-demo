@@ -1,7 +1,7 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
-
+import time
 
 class ImportDossierMainBrowserPage(BaseBrowserPage):
     VISUALIZATION_RADIO_BUTTON = '.mstrmojo-VizBox-selector'
@@ -28,6 +28,17 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.select_visualization_by_name(visualization_name)
 
         self.click_import_visualization()
+
+    def import_visualization_by_name_with_time_measure(self, visualization_name):
+        self.select_visualization_by_name(visualization_name)
+
+        start_time = time.time()
+
+        self.click_import_visualization()
+
+        diff_time = time.time() - start_time
+        return diff_time
+
 
     def select_visualization_by_name(self, visualization_name):
         self.focus_on_dossier_frame()
