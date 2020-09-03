@@ -92,35 +92,14 @@ def step_impl(context):
     context.pages.excel_sheet_page().click_align_middle_button()
 
 
-@step('align middle button should be clicked')
-def step_impl(context):
-    clicked = context.pages.excel_sheet_page().is_align_middle_button_clicked()
-
-    AssertUtil.assert_simple(clicked, "true")
-
-
 @step('I clicked align left button')
 def step_impl(context):
     context.pages.excel_sheet_page().click_align_left_button()
 
 
-@step('align left button should be clicked')
-def step_impl(context):
-    clicked = context.pages.excel_sheet_page().is_align_left_button_clicked()
-
-    AssertUtil.assert_simple(clicked, "true")
-
-
 @step('I clicked bold button')
 def step_impl(context):
     context.pages.excel_sheet_page().click_bold_button()
-
-
-@step('bold button should be clicked')
-def step_impl(context):
-    clicked = context.pages.excel_sheet_page().is_bold_button_clicked()
-
-    AssertUtil.assert_simple(clicked, "true")
 
 
 @step('I clicked font color button')
@@ -138,7 +117,28 @@ def step_impl(context, cell_name, font_name):
     context.pages.excel_sheet_page().change_font_name_of_cell(cell_name, font_name)
 
 
-@step('cell "{cell_name}" font name should be "{expected_name}"')
+@step('for cell "{cell_name}" align middle button should be selected')
+def step_impl(context, cell_name):
+    clicked = context.pages.excel_sheet_page().is_align_middle_button_selected(cell_name)
+
+    AssertUtil.assert_simple(clicked, True)
+
+
+@step('for cell "{cell_name}" align left button should be selected')
+def step_impl(context, cell_name):
+    clicked = context.pages.excel_sheet_page().is_align_left_button_selected(cell_name)
+
+    AssertUtil.assert_simple(clicked, True)
+
+
+@step('for cell "{cell_name}" bold button should be selected')
+def step_impl(context, cell_name):
+    clicked = context.pages.excel_sheet_page().is_bold_button_selected(cell_name)
+
+    AssertUtil.assert_simple(clicked, True)
+
+
+@step('for cell "{cell_name}" font name should be "{expected_name}"')
 def step_impl(context, cell_name, expected_name):
     result = context.pages.excel_sheet_page().get_font_name_of_cell(cell_name)
 

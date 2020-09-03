@@ -6,6 +6,9 @@ from framework.util.excel_util import ExcelUtil
 
 
 class ExcelSheetBrowserPage(BaseBrowserPage):
+    ATTRIBUTE_NAME_VALUE = 'value'
+    ATTRIBUTE_NAME_ARIA_PRESSED = 'aria-pressed'
+
     CELL_TRAVERSAL_INPUT_ELEM = 'm_excelWebRenderer_ewaCtl_NameBox'
 
     CELL_FORMATTING_MENU_DROP_DOWN_ELEM = '''//span[contains(@id,'m_excelWebRenderer_ewaCtl_Number')]/a'''
@@ -13,8 +16,6 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
     CELL_FORMATTING_MENU_MORE_NUMBER_FORMATS_OPTION_ELEM = 'm_excelWebRenderer_ewaCtl_Number.NumberFormatDialog-Menu32'
 
     FORMAT_CELLS_PROMPT_SAMPLE = 'sample'
-
-    FORMAT_CELLS_PROMPT_SAMPLE_VALUE_ATTR = 'value'
 
     FORMAT_CELLS_PROMPT_BUTTON_ELEM = '#buttonarea > .ewa-dlg-button'
 
@@ -49,6 +50,8 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
     BOLD_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.Bold-Small'
     FONT_COLOR_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.FontColorWithSplit-Small'
     FILL_COLOR_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.FillColorWithSplit-Small'
+
+    BUTTON_SELECTED_ARIA_VALUE = 'true'
 
     def get_cells_values(self, cells):
         result = []
@@ -96,7 +99,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         sample_input_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_SAMPLE)
 
-        sample_input_elem_value = sample_input_elem.get_attribute(self.FORMAT_CELLS_PROMPT_SAMPLE_VALUE_ATTR)
+        sample_input_elem_value = sample_input_elem.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_VALUE)
 
         formatted_value = ExcelUtil.format_cell_value(sample_input_elem_value)
 
@@ -172,30 +175,15 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         self.get_element_by_id(ExcelSheetBrowserPage.ALIGN_MIDDLE_BUTTON).click()
 
-    def is_align_middle_button_clicked(self):
-        self.focus_on_excel_frame()
-
-        return self.get_element_by_id(ExcelSheetBrowserPage.ALIGN_MIDDLE_BUTTON).get_attribute('aria-pressed')
-
     def click_align_left_button(self):
         self.focus_on_excel_frame()
 
         self.get_element_by_id(ExcelSheetBrowserPage.ALIGN_LEFT_BUTTON).click()
 
-    def is_align_left_button_clicked(self):
-        self.focus_on_excel_frame()
-
-        return self.get_element_by_id(ExcelSheetBrowserPage.ALIGN_LEFT_BUTTON).get_attribute('aria-pressed')
-
     def click_bold_button(self):
         self.focus_on_excel_frame()
 
         self.get_element_by_id(ExcelSheetBrowserPage.BOLD_BUTTON).click()
-
-    def is_bold_button_clicked(self):
-        self.focus_on_excel_frame()
-
-        return self.get_element_by_id(ExcelSheetBrowserPage.BOLD_BUTTON).get_attribute('aria-pressed')
 
     def click_font_color_button(self):
         self.focus_on_excel_frame()
@@ -215,8 +203,28 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         self.send_keys(font_name)
         self.press_enter()
 
+    def is_align_middle_button_selected(self, cell_name):
+        return self._is_button_selected(cell_name, ExcelSheetBrowserPage.ALIGN_MIDDLE_BUTTON)
+
+    def is_align_left_button_selected(self, cell_name):
+        return self._is_button_selected(cell_name, ExcelSheetBrowserPage.ALIGN_LEFT_BUTTON)
+
+    def is_bold_button_selected(self, cell_name):
+        return self._is_button_selected(cell_name, ExcelSheetBrowserPage.BOLD_BUTTON)
+
+    def _is_button_selected(self, cell_name, selector):
+        self.go_to_cell(cell_name)
+
+        formatting_button = self.get_element_by_id(selector)
+        aria_attribute_value = formatting_button.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_ARIA_PRESSED)
+
+        return aria_attribute_value == ExcelSheetBrowserPage.BUTTON_SELECTED_ARIA_VALUE
+
     def get_font_name_of_cell(self, cell_name):
         self.go_to_cell(cell_name)
 
         self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_SPAN).click()
-        return self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT).get_attribute('value')
+
+        font_input = self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT)
+
+        return font_input.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_VALUE)
