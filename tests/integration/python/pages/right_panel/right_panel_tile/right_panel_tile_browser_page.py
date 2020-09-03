@@ -1,6 +1,7 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.message_const import MessageConst
 from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.message_const import MessageConst
+
 
 class RightPanelTileBrowserPage(BaseBrowserPage):
     NOTIFICATION_TEXT_ELEM = '.notification-text'
@@ -75,7 +76,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         warnings_notifications_ok_buttons = self.get_elements_by_css(
-          RightPanelTileBrowserPage.NOTIFICATION_BUTTON
+            RightPanelTileBrowserPage.NOTIFICATION_BUTTON
         )
 
         for button in warnings_notifications_ok_buttons:
@@ -168,16 +169,17 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_remove_object_to_finish_successfully()
 
-    def _get_name_tooltip_text(self,object_number):
-      name_tooltip = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_TOOLTIP % object_number) 
-      return name_tooltip.text
-
     def get_object_name_from_tooltip(self, object_number):
-      self.focus_on_add_in_frame()
+        self.focus_on_add_in_frame()
 
-      name_container = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % object_number)
-      name_container.move_to()
+        name_container = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % object_number)
+        name_container.move_to()
 
-      object_name = self._get_name_tooltip_text(object_number)
+        object_name = self._get_name_tooltip_text(object_number)
 
-      return object_name
+        return object_name
+
+    def _get_name_tooltip_text(self, object_number):
+        name_tooltip = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_TOOLTIP % object_number)
+
+        return name_tooltip.text
