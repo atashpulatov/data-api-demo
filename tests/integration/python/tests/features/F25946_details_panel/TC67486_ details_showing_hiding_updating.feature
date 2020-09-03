@@ -6,7 +6,8 @@ Feature: F25946 - Display filters and prompts
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       
-      And I found and selected object "Prompted report with subtotals"
+      # And I found and selected object "Prompted report with subtotals"
+      And I found object by ID "4BF6385A11EA638B25610080EFC58CB1" and selected "Prompted report with subtotals"
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I clicked Run button
@@ -14,13 +15,13 @@ Feature: F25946 - Display filters and prompts
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
-      And I closed last notification
 
     Given I added a new worksheet
       And I clicked Add Data button
       And MyLibrary Switch is OFF
       
-      And I found and selected object "Prompted dossier"
+      # And I found and selected object "Prompted dossier"
+      And I found object by ID "5902C03A11E9FEF1DC670080EF856919" and selected "Prompted dossier"
       And I clicked Import button to open Import Dossier
       And I clicked Run button for prompted dossier
       And I selected visualization "Visualization 1"
