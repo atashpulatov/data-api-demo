@@ -5,6 +5,7 @@ from framework.util.assert_util import AssertUtil
 
 class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     TILE_DETAILS_CONTAINER = 'div[id^="object-details-panel-container-"]'
+    OBJECT_DETAILS_PANEL = '.object-details-panel'
 
     TOGGLE_DETAILS_BUTTONS = '.toggle-show-details-button'
     TOGGLE_DETAILS_TOOLTIPS = TOGGLE_DETAILS_BUTTONS + ' > .__react_component_tooltip.show.place-bottom.type-dark'
@@ -21,6 +22,8 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     }
     NAME_LIST_EXPAND_BUTTON = '.name-list-expand-button'
     OBJECT_LOCATION_EXPAND_BUTTON = '.object-location-expand-button'
+    OBJECT_LOCATION = '.object-location'
+    COLLAPSED = '.collapsed'
 
     CERTIFIED = 'div[id^="certified-object-property-"]'
     OBJECT_ID_CONTAINER = 'div[id^="id-object-property-"]'
@@ -55,9 +58,12 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     def get_toggle_details_tooltip_text(self, object_number):
         self.focus_on_add_in_frame()
 
-        toggle_details_tooltips = self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TOGGLE_DETAILS_TOOLTIPS)
+        tile_details_container = self._get_tile_details_container(object_number)
 
-        return toggle_details_tooltips[int(object_number) - 1].text
+        toggle_details_tooltip = tile_details_container.get_element_by_css(
+          RightPanelTileDetailsBrowserPage.TOGGLE_DETAILS_TOOLTIPS)
+
+        return toggle_details_tooltip.text
 
     def click_name_list_expand_button(self, object_number, name_list_type):
         self.focus_on_add_in_frame()
@@ -96,6 +102,18 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         name_list_exists = tile_details_container.check_if_child_element_exists_by_css(
             RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_type]
         )
+
+        AssertUtil.assert_simple(name_list_exists, True)
+
+    def check_if_collapsed_name_list_exists_on_object(self, object_number, name_list_type):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+
+        name_list_exists = tile_details_container.check_if_child_element_exists_by_css(
+            RightPanelTileDetailsBrowserPage.NAME_LISTS[name_list_type] + RightPanelTileDetailsBrowserPage.COLLAPSED
+        )
+
         AssertUtil.assert_simple(name_list_exists, True)
 
     def get_object_list_property_value(self, object_number, name_list_type):
@@ -127,3 +145,34 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         ).text
 
         AssertUtil.assert_simple(tested_object_owner, owner)
+
+    def is_details_panel_displayed_on_object(self, object_number):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+
+        return len(tile_details_container.get_elements_by_css(
+            RightPanelTileDetailsBrowserPage.OBJECT_DETAILS_PANEL
+        )) == 1
+
+    def check_if_object_location_is_correct(self, object_number, object_location):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+
+        tested_object_location = tile_details_container.get_element_by_css(
+            RightPanelTileDetailsBrowserPage.OBJECT_LOCATION
+        ).text
+
+        AssertUtil.assert_simple(tested_object_location, object_location)
+
+    def check_if_collapsed_location_exists_on_object(self, object_number):
+        self.focus_on_add_in_frame()
+
+        tile_details_container = self._get_tile_details_container(object_number)
+
+        collapsed_location_exists = tile_details_container.check_if_child_element_exists_by_css(
+            RightPanelTileDetailsBrowserPage.OBJECT_LOCATION + RightPanelTileDetailsBrowserPage.COLLAPSED
+        )
+
+        AssertUtil.assert_simple(collapsed_location_exists, True)
