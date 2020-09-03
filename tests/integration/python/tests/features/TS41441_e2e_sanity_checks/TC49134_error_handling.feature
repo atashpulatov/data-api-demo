@@ -76,17 +76,25 @@ Feature: TS41441 - Sanity checks
 
      When I selected cell "B2"
       And I clicked align middle button
+
       And I selected cell "C2"
       And I clicked align left button
+
       And I selected cell "D2"
       And I clicked bold button
+
       And I selected cell "E2"
       And I clicked font color button
+
       And I selected cell "G2"
       And I clicked fill color button
+
       And I changed cell "G2" font name to "Arial Black"
 
-     # TODO Then check styles
+     Then for cell "B2" align middle button should be selected
+      And for cell "C2" align left button should be selected
+      And for cell "D2" bold button should be selected
+      And for cell "G2" font name should be "Arial Black"
 
      When I clicked clear data
       And I log out
