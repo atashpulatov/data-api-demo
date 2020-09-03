@@ -5,6 +5,8 @@
   "cleanup_after_test_enabled": true,
   "driver_path_windows_chrome": "framework\\resources\\chromedriver83.exe",
   "excel_add_in_environment": "221120",
+  "excel_add_in_environment_default_username": "a",
+  "excel_add_in_environment_default_password": "",
   "excel_desktop_add_in_import_data_name": "env-221120",
   "excel_user_name": "testing.universal@mstrtesting.onmicrosoft.com",
   "excel_user_password": "somePassword1"
