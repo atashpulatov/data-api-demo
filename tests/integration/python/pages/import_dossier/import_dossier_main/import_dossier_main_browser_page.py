@@ -92,4 +92,5 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDossierMainBrowserPage.INFORMATION_TEXT)
 
         # dossier object is ready when information text is visible, needs more time for final render of page content
+        # TODO check if page loaded fully
         self.pause(2)

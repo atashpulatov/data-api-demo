@@ -27,6 +27,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > div.rename-input'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > input'
 
+    RIGHT_PANEL_TILE_TOOLTIP = RIGHT_PANEL_TILE + ' .object-tile-name-row .__react_component_tooltip'
+
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
@@ -86,7 +88,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         warnings_notifications_ok_buttons = self.get_elements_by_css(
-          RightPanelTileBrowserPage.NOTIFICATION_BUTTON
+            RightPanelTileBrowserPage.NOTIFICATION_BUTTON
         )
 
         for button in warnings_notifications_ok_buttons:
@@ -119,6 +121,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self._hover_over_tile(int(object_no) - 1)
 
         self.get_element_by_css(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT % object_no).click()
+
+    def click_object_number(self, object_no):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_no).click()
 
     def get_object_name(self, index):
         self.focus_on_add_in_frame()
@@ -176,11 +183,27 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_remove_object_to_finish_successfully()
 
+    def get_object_name_from_tooltip(self, object_number):
+        self.focus_on_add_in_frame()
+
+        name_container = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % object_number)
+        name_container.move_to()
+
+        object_name = self._get_name_tooltip_text(object_number)
+
+        return object_name
+
+    def _get_name_tooltip_text(self, object_number):
+        name_tooltip = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_TOOLTIP % object_number)
+
+        return name_tooltip.text
+
+
     def select_excel_table(self, object_number):
         self.focus_on_add_in_frame()
 
         tile_context_menu_wrappers = self.get_elements_by_css(
-          RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
+            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
         )
 
         tile_context_menu_wrappers[int(object_number) - 1].click()

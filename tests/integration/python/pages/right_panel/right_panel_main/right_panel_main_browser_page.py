@@ -1,4 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.const import SHORT_TIMEOUT
 
 
 class RightPanelMainBrowserPage(BaseBrowserPage):
@@ -14,8 +15,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
 
     CLEAR_DATA = '.clear-data'
-
-    CONFIFRM_CLEAR_DATA = '#confirm-btn'
+    CONFIRM_CLEAR_DATA = '#confirm-btn'
 
     VIEW_DATA_BUTTON_ELEM = '.data-cleared > button'
 
@@ -28,14 +28,6 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         self.get_element_by_id(RightPanelMainBrowserPage.ADD_DATA_BUTTON_ELEM).click()
-
-    def logout(self):
-        self.focus_on_add_in_frame()
-
-        if self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=5):
-            self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
-
-            self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()
 
     def refresh_all(self):
         self.focus_on_add_in_frame()
@@ -60,15 +52,23 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self._open_dots_menu()
 
         self.get_element_by_css(RightPanelMainBrowserPage.CLEAR_DATA).click()
-        self.get_element_by_css(RightPanelMainBrowserPage.CONFIFRM_CLEAR_DATA).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.CONFIRM_CLEAR_DATA).click()
+
+    def _open_dots_menu(self):
+        self.focus_on_add_in_frame()
+
+        if self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=SHORT_TIMEOUT):
+            self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
 
     def view_data(self):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelMainBrowserPage.VIEW_DATA_BUTTON_ELEM).click()
 
-    def _open_dots_menu(self):
+    def logout(self):
         self.focus_on_add_in_frame()
 
-        if self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=5):
+        if self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=SHORT_TIMEOUT):
             self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
+
+            self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()

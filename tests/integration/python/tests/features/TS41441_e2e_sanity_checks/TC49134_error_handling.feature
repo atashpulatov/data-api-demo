@@ -7,25 +7,25 @@ Feature: TS41441 - Sanity checks
       And MyLibrary Switch is OFF
 
       And I found and selected object "1,5M Sales Records.csv"
-     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1048576"
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       And I found and selected object "Report accessing XML file"
-     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "XFD1"
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       And I found and selected object "Report accessing XML file"
-     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1"
       And I clicked Import Data button
       And MyLibrary Switch is OFF
       And I found and selected object "110k Sales Records.csv"
-     Then I clicked Import button and see error "This object exceeds the MicroStrategy project row limit. Please contact your administrator."
+     Then I clicked Import button and saw error "This object exceeds the MicroStrategy project row limit. Please contact your administrator."
 
      When I selected cell "A1"
       And I clicked Import Data button
@@ -76,15 +76,27 @@ Feature: TS41441 - Sanity checks
 
      When I selected cell "B2"
       And I clicked align middle button
+
       And I selected cell "C2"
       And I clicked align left button
+
       And I selected cell "D2"
       And I clicked bold button
+
+   # TODO select a specific color and later verify it if it's ok
       And I selected cell "E2"
       And I clicked font color button
+
+   # TODO select a specific color and later verify it if it's ok
       And I selected cell "G2"
       And I clicked fill color button
+
       And I changed cell "G2" font name to "Arial Black"
+
+     Then for cell "B2" align middle button should be selected
+      And for cell "C2" align left button should be selected
+      And for cell "D2" bold button should be selected
+      And for cell "G2" font name should be "Arial Black"
 
      When I clicked clear data
       And I log out

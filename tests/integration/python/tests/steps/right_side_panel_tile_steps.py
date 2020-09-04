@@ -38,9 +38,21 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_refresh(object_number)
 
 
+@step('I clicked on object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().click_object_number(object_number)
+
+
 @step('object number {object_number} should be called "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.right_panel_tile_page().get_object_name(object_number)
+
+    AssertUtil.assert_simple(result, expected_name)
+
+
+@step('name tooltip for object number {object_number} should display "{expected_name}"')
+def step_impl(context, object_number, expected_name):
+    result = context.pages.right_panel_tile_page().get_object_name_from_tooltip(object_number)
 
     AssertUtil.assert_simple(result, expected_name)
 
