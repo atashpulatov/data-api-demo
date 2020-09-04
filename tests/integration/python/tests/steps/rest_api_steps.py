@@ -1,18 +1,14 @@
 from behave import *
+
 from framework.util.assert_util import AssertUtil
 
 
-@step('Object "{object_id}" in Tutorial project is not certified')
-def step_impl(context, object_id):
-    context.pages.rest_api_page().decertify_object(object_id)
-
-
-@step('I certify object "{object_id}" in Tutorial project')
+@step('I certified object "{object_id}" in Tutorial project')
 def step_impl(context, object_id):
     context.pages.rest_api_page().certify_object(object_id)
 
 
-@step('I decertify object "{object_id}" in Tutorial project')
+@step('I decertified object "{object_id}" in Tutorial project')
 def step_impl(context, object_id):
     context.pages.rest_api_page().decertify_object(object_id)
 
