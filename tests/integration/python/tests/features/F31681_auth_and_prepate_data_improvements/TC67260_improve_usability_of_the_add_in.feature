@@ -6,7 +6,7 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
       And I clicked Import Data button
       And MyLibrary Switch is OFF
 
-     When I found object by ID "269229C511EAD56AFBC20080EFE59C70" and selected "cube unpublished"
+     When I found object by ID "C437801F11EA82FBF70F0080EFC55790" and selected "Unpublished cube"
      Then I verified that Import Data button is disabled
 
      When I switched My Library toggle on

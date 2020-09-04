@@ -2,6 +2,7 @@ from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
+
 class ImportDossierMainBrowserPage(BaseBrowserPage):
     VISUALIZATION_RADIO_BUTTON = '.mstrmojo-VizBox-selector'
     VISUALIZATION_LABEL = '.mstrmojo-EditableLabel'
