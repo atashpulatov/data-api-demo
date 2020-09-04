@@ -6,6 +6,7 @@ from framework.util.message_const import MessageConst
 class RightPanelTileBrowserPage(BaseBrowserPage):
     NOTIFICATION_TEXT_ELEM = '.notification-text'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
+    PROGRESS_BAR = '.progress-bar'
 
     TILES = '.object-tile-content'
 
@@ -31,6 +32,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
+    TILE_CONTEXT_MENU_WRAPPER = '.react-contextmenu-wrapper'
 
     def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
@@ -57,6 +59,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
                                                              expected_message,
                                                              timeout=timeout)
 
+    def wait_for_progress_notifications_to_disappear(self, timeout=DEFAULT_TIMEOUT):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_elements_to_disappear_from_dom(RightPanelTileBrowserPage.PROGRESS_BAR, timeout=timeout)
+
     def close_all_notifications_on_hover(self):
         self.focus_on_add_in_frame()
 
@@ -71,6 +78,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         self._hover_over_tile(0)
+
+    def close_object_notification_on_hover(self, object_no):
+        self.focus_on_add_in_frame()
+
+        self._hover_over_tile(int(object_no) - 1)
 
     def close_all_warning_notifications(self):
         self.focus_on_add_in_frame()
@@ -106,12 +118,16 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def click_edit(self, object_no):
         self.focus_on_add_in_frame()
 
+        self._hover_over_tile(int(object_no) - 1)
+
         self.get_element_by_css(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT % object_no).click()
 
     def click_object_number(self, object_no):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_no).click()
+        object_index = int(object_no) - 1
+
+        self.get_element_by_css(RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER % object_index).click()
 
     def get_object_name(self, index):
         self.focus_on_add_in_frame()
