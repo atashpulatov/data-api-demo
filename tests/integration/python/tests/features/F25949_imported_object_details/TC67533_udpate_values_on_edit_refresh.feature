@@ -6,28 +6,28 @@ Feature: F25949 - Imported object details
       And I clicked Import Data button
       And MyLibrary Switch is OFF
 
-      And I found and selected object "100_report"
+      And I found and selected object "Simple Report"
       And I clicked Import button
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then Object 1 has id "B7743F5A11E97AED00000080EF257000"
+     Then object 1 has id "E659E86811E58C918D6F0080EF453539"
 
-    Given I decertify object "B7743F5A11E97AED00000080EF257000" in Tutorial project
+    Given I decertified object "E659E86811E58C918D6F0080EF453539" in Tutorial project
       And I clicked Refresh on object 1
       And I closed last notification
       And I clicked toggle details button on object 1
       And Object 1 is NOT certified
 
-     When I certify object "B7743F5A11E97AED00000080EF257000" in Tutorial project
+     When I certified object "E659E86811E58C918D6F0080EF453539" in Tutorial project
       And I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then Object 1 is certified
+     Then object 1 is certified
 
-     When I decertify object "B7743F5A11E97AED00000080EF257000" in Tutorial project
+     When I decertified object "E659E86811E58C918D6F0080EF453539" in Tutorial project
       And I clicked Refresh on object 1
       And I closed last notification
       And I clicked toggle details button on object 1
@@ -40,7 +40,7 @@ Feature: F25949 - Imported object details
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then totals and subtotals for object 1 are turned ON
+     Then object 1 has totals and subtotals turned ON
 
      When I clicked Edit object 1
       And I clicked Include Subtotals and Totals switch
@@ -48,21 +48,23 @@ Feature: F25949 - Imported object details
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then totals and subtotals for object 1 are turned OFF
+     Then object 1 has totals and subtotals turned OFF
 
-    Given attributes list for object 1 contains attribute "Employee"
-      And metrics list for object 1 contains metric "Revenue"
+    Given object 1 has "Attribute" list displayed
+      And object 1 has "Attribute" with value "Quarter‎, Region, Employee"
+      And object 1 has "Metric" list displayed
+      And object 1 has "Metric" with value "Revenue, Cost, Profit"
 
      When I clicked Edit object 1
       And I clicked attribute "Employee"
       And I clicked metric "Revenue"
-      And I selected filters { "Region" : ["Asia", "Europe"] }
+      And I selected filters { "Region" : ["Central", "Northwest"] }
       And I clicked Import button
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then attributes list for object 1 does NOT contain attribute "Employee"
-      And metrics list for object 1 does NOT contain metric "Revenue"
-      And filters list for object 1 contains filter "Region"
+     Then object 1 has "Attribute" with value "Quarter‎, Region"
+      And object 1 has "Metric" with value "Cost, Profit"
+      And object 1 has "Filter" with value "Region (Central, Northwest)"
 
       And I log out
