@@ -42,8 +42,6 @@ export const filterReducer = (state = initialState, action) => {
     case SWITCH_MY_LIBRARY: {
       const newState = { ...state };
       newState.myLibrary = !state.myLibrary;
-      const filter = newState.myLibrary ? newState.myLibraryFilter : newState.envFilter;
-      newState.numberOfFiltersActive = calculateNumberOfFiltersActive(filter, newState.myLibrary);
       return newState;
     }
 
@@ -66,10 +64,12 @@ export const filterReducer = (state = initialState, action) => {
     }
 
     case LOAD_BROWSING_STATE_CONST: {
-      return {
+      const newState= {
         ...initialState,
         ...data,
       };
+      newState.numberOfFiltersActive = calculateNumberOfFiltersActive(newState.envFilter, newState.myLibrary);
+      return newState;
     }
 
     case CLEAR_FILTER: {
