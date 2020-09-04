@@ -119,23 +119,23 @@ def step_impl(context, cell_name, font_name):
 
 @step('for cell "{cell_name}" align middle button should be selected')
 def step_impl(context, cell_name):
-    clicked = context.pages.excel_sheet_page().is_align_middle_button_selected(cell_name)
+    button_selected = context.pages.excel_sheet_page().is_align_middle_button_selected(cell_name)
 
-    AssertUtil.assert_simple(clicked, True)
+    AssertUtil.assert_simple(button_selected, True)
 
 
 @step('for cell "{cell_name}" align left button should be selected')
 def step_impl(context, cell_name):
-    clicked = context.pages.excel_sheet_page().is_align_left_button_selected(cell_name)
+    button_selected = context.pages.excel_sheet_page().is_align_left_button_selected(cell_name)
 
-    AssertUtil.assert_simple(clicked, True)
+    AssertUtil.assert_simple(button_selected, True)
 
 
 @step('for cell "{cell_name}" bold button should be selected')
 def step_impl(context, cell_name):
-    clicked = context.pages.excel_sheet_page().is_bold_button_selected(cell_name)
+    button_selected = context.pages.excel_sheet_page().is_bold_button_selected(cell_name)
 
-    AssertUtil.assert_simple(clicked, True)
+    AssertUtil.assert_simple(button_selected, True)
 
 
 @step('for cell "{cell_name}" font name should be "{expected_name}"')
