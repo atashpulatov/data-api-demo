@@ -16,8 +16,9 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         FILTER_SIDE_RIGHT: FILTER_SLIDER_MAX_POINT
     }
 
-    YEAR_SEARCH_BOX = '.search-box'
-    YEAR_CHECK_BOX = '.mstrd-Checkbox'
+    DOSSIER_FILTER_NAME = '.mstrd-FilterItemTitle-filterTitle'
+    DOSSIER_FILTER_VALUE = '.mstrd-Checkbox-body[aria-label="%s"]'
+    APPLY_FILTER_BUTTON = '.mstr-apply-button'
 
     def increase_year_filter_value(self, filter_change, filter_side):
         if filter_change not in (
@@ -46,26 +47,16 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
     def _open_filter_menu(self):
         self.get_element_by_css(ImportDossierFilterBrowserPage.FILTERS_BUTTON).click()
 
-    def open_year_filter(self, year_value):
+    def open_year_filter(self):
         self._open_filter_menu()
-        self.find_element_by_text_in_elements_list_by_css('mstrd-FilterItemTitle-filterTitle', 'Year').click()
-        search_box = self.get_element_by_css(ImportDossierFilterBrowserPage.YEAR_SEARCH_BOX)
-        search_box.send_keys_with_check(year_value)
+        self.find_element_by_text_in_elements_list_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_NAME, 'Year').click()
 
-    def select_first_year_filter_checkbox(self):
-        year_check_box = self.get_element_by_css(ImportDossierFilterBrowserPage.YEAR_CHECK_BOX)
+
+    def select_year_filter_checkbox(self, year_value):
+        year_check_box =  self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % year_value)
         year_check_box.click()
 
     def select_year_in_year_filter(self, year): 
-        self.open_year_filter(2014)
-        self.select_first_year_filter_checkbox()
-
-    # def get_element_by_css_containing_text(self, css, text):
-    #     elements = self.get_elements_by_css(css)
-        
-    #     for element in elements:
-    #       text_in_element = element.value_of_css_property('textContent')
-
-    #       if text_in_element == text:
-    #         return element
-
+        self.open_year_filter()
+        self.select_year_filter_checkbox(year)
+        self.get_element_by_css(ImportDossierFilterBrowserPage.APPLY_FILTER_BUTTON).click()
