@@ -1,6 +1,6 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.message_const import MessageConst
 from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.message_const import MessageConst
 
 
 class RightPanelTileBrowserPage(BaseBrowserPage):
@@ -125,7 +125,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def click_object_number(self, object_no):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_no).click()
+        object_index = int(object_no) - 1
+
+        self.get_element_by_css(RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER % object_index).click()
 
     def get_object_name(self, index):
         self.focus_on_add_in_frame()
@@ -197,13 +199,3 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         name_tooltip = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_TOOLTIP % object_number)
 
         return name_tooltip.text
-
-
-    def select_excel_table(self, object_number):
-        self.focus_on_add_in_frame()
-
-        tile_context_menu_wrappers = self.get_elements_by_css(
-            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
-        )
-
-        tile_context_menu_wrappers[int(object_number) - 1].click()
