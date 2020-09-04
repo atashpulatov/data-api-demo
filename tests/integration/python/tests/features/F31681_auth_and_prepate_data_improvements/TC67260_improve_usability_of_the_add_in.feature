@@ -45,6 +45,3 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
       
       And I clicked three dots settings menu
       And I log out
-
-
-   
