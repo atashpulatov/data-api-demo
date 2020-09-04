@@ -3,8 +3,6 @@ from pyperclip import paste
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 from framework.util.exception.MstrException import MstrException
-from selenium.webdriver.common.keys import Keys
-
 
 
 class ImportDataBrowserPage(BaseBrowserPage):
@@ -155,5 +153,4 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.clear()
-        search_box.send_keys(Keys.ENTER)
-        
+        self.press_enter()        
