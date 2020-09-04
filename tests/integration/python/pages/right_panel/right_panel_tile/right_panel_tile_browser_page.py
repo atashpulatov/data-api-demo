@@ -129,7 +129,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         object_index = int(object_no) - 1
 
-        self.get_element_by_css(RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER % object_index).click()
+        tile_context_menu_wrappers = self.get_elements_by_css(
+            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
+        )
+
+        tile_context_menu_wrappers[object_index].click()
 
     def get_object_name(self, index):
         self.focus_on_add_in_frame()
@@ -205,14 +209,16 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def is_icon_bar_visible(self, object_number):
         self.focus_on_add_in_frame()
 
+        object_index = int(object_number) - 1
+
         tile_context_menu_wrappers = self.get_elements_by_css(
             RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
         )
 
-        icon_bar = tile_context_menu_wrappers[int(object_number) - 1].get_element_by_css(
+        icon_bar = tile_context_menu_wrappers[object_index].get_element_by_css(
             RightPanelTileBrowserPage.OBJECT_TILE_ACTIONS
         )
-        print(icon_bar)
-        print(icon_bar.value_of_css_property('opacity'))
 
-        return int(icon_bar.value_of_css_property('opacity')) > 0
+        opacity_value = icon_bar.get_opacity()
+
+        return int(opacity_value) > 0

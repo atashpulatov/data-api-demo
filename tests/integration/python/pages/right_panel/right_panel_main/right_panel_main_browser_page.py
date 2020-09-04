@@ -21,6 +21,9 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     RIGHT_PANEL_OBJECT_LIST = '.object-tile-container .object-tile-list'
 
+    ATTRIBUTE_NAME_CLIENT_HEIGHT = 'clientHeight'
+    ATTRIBUTE_NAME_SCROLL_HEIGHT = 'scrollHeight'
+
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
 
@@ -54,8 +57,9 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         side_panel_content = self.get_element_by_css(RightPanelMainBrowserPage.RIGHT_PANEL_OBJECT_LIST)
-        client_height = side_panel_content.get_attribute('clientHeight')
-        scroll_height = side_panel_content.get_attribute('scrollHeight')
+
+        client_height = side_panel_content.get_attribute(RightPanelMainBrowserPage.ATTRIBUTE_NAME_CLIENT_HEIGHT)
+        scroll_height = side_panel_content.get_attribute(RightPanelMainBrowserPage.ATTRIBUTE_NAME_SCROLL_HEIGHT)
 
         return int(scroll_height) > int(client_height)
 
