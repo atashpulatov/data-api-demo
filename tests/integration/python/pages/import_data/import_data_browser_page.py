@@ -131,9 +131,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         return element.get_background_color()
 
-    def verify_if_button_enabled(self, element):
-        return element.is_enabled()
-
     def verify_if_import_button_is_disabled(self):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)           
        
@@ -153,7 +150,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
         if not self._is_on(element):
             element.click()
 
-    
     def clear_search_box(self):
         self.focus_on_add_in_popup_frame()
 

@@ -241,7 +241,3 @@ def step_impl(context, color):
     found_color = context.pages.columns_and_filters_selection_page().find_background_color_of_first_filter()
 
     AssertUtil.assert_simple(found_color, color)
-
-
-
-

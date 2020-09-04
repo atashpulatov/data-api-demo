@@ -29,16 +29,6 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
 
         self.click_import_visualization()
 
-    def import_visualization_by_name_with_time_measure(self, visualization_name):
-        self.select_visualization_by_name(visualization_name)
-
-        start_time = time.time()
-
-        self.click_import_visualization()
-
-        diff_time = time.time() - start_time
-        return diff_time
-
     def select_visualization_by_name(self, visualization_name):
         self.focus_on_dossier_frame()
 
