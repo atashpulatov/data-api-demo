@@ -19,6 +19,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         'Attribute': ATTRIBUTES_LIST,
         'Metric': METRICS_LIST
     }
+
     NAME_LIST_EXPAND_BUTTON = '.name-list-expand-button'
     OBJECT_LOCATION_EXPAND_BUTTON = '.object-location-expand-button'
     OBJECT_LOCATION = '.object-location'

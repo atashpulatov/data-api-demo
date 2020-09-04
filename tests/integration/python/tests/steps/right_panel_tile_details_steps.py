@@ -37,9 +37,9 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, True)
 
 
-@step('Object {object_number} is NOT certified')
+@step('object {object_number} is NOT certified')
 def step_impl(context, object_number):
-    is_certified = context.pages.right_panel_tile_details_page().check_if_object_is_certified(object_number)
+    is_certified = context.pages.right_panel_tile_details_page().is_object_is_certified(object_number)
 
     AssertUtil.assert_simple(is_certified, False)
 
