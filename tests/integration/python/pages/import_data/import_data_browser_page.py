@@ -2,6 +2,9 @@ from pyperclip import paste
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
+from framework.util.exception.MstrException import MstrException
+from selenium.webdriver.common.keys import Keys
+
 
 
 class ImportDataBrowserPage(BaseBrowserPage):
@@ -30,6 +33,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     FILTERS_BUTTON = '.filter-button'
 
     FIRST_OBJECT_ROW = '.ReactVirtualized__Table__row'
+    DISABLED_BUTTON_TOOLTIP = '.ant-popover-inner-content'
+    UNPUBLISHED_CUBE_MESSAGE = 'You cannot import an unpublished cube.'
 
     def __init__(self):
         super().__init__()
@@ -125,3 +130,34 @@ class ImportDataBrowserPage(BaseBrowserPage):
         element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
 
         return element.get_background_color()
+
+    def verify_if_button_enabled(self, element):
+        return element.is_enabled()
+
+    def verify_if_import_button_is_disabled(self):
+        element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)           
+       
+        element.move_to()
+
+        self.wait_for_element_to_have_attribute_value_by_css(
+            ImportDataBrowserPage.DISABLED_BUTTON_TOOLTIP,
+            ImportDataBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            ImportDataBrowserPage.UNPUBLISHED_CUBE_MESSAGE
+        )
+
+    def switch_my_library_on(self):
+        self.focus_on_add_in_popup_frame()
+
+        element = self.get_element_by_css(ImportDataBrowserPage.MY_LIBRARY_SWITCH_ELEM)
+        
+        if not self._is_on(element):
+            element.click()
+
+    
+    def clear_search_box(self):
+        self.focus_on_add_in_popup_frame()
+
+        search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
+        search_box.clear()
+        search_box.send_keys(Keys.ENTER)
+        

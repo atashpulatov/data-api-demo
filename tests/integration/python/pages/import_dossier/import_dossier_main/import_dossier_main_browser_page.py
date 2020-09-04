@@ -39,7 +39,6 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         diff_time = time.time() - start_time
         return diff_time
 
-
     def select_visualization_by_name(self, visualization_name):
         self.focus_on_dossier_frame()
 

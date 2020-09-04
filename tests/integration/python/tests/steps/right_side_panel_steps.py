@@ -43,3 +43,19 @@ def step_impl(context):
 @step('I clicked view data')
 def step_impl(context):
     context.pages.right_panel_page().view_data()
+
+
+@step('I hovered over Log out')
+def step_impl(context):
+    context.pages.right_panel_page().hover_over_logout()
+ 
+
+@step('I verified that the background color of the logout is "{color}"')
+def step_impl(context, color):
+    found_color = context.pages.right_panel_page().find_background_color_of_logout()
+
+    AssertUtil.assert_simple(found_color, color)
+
+@step('I clicked three dots settings menu')
+def step_impl(context):
+    context.pages.right_panel_page().click_three_dots_menu()

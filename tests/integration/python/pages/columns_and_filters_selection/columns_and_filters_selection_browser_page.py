@@ -96,6 +96,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         FILTERS: FILTER_SORT_TITLE
     }
 
+    FIRST_FILTER = '.ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal'
+
     def __init__(self):
         super().__init__()
 
@@ -414,3 +416,27 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_excel_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()
+
+    def hover_over_first_filter(self):
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_FILTER).move_to()
+
+    def select_first_filter(self):
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_FILTER).click()
+
+    def find_background_color_of_first_filter(self):
+        element = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_FILTER)
+
+        return element.get_background_color()
+
+    def select_first_attribute_form_name(self):
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
+
+        first_attribute_name_type =  self.get_element_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM)
+        first_attribute_name_type.click()
+
+    def find_background_color_of_first_attribute_name_type(self): 
+        element = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM)
+
+        return element.get_background_color()
+        

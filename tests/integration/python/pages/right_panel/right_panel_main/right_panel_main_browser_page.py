@@ -72,3 +72,16 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
             self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
 
             self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()
+
+    def hover_over_logout(self):
+        self._open_dots_menu()
+
+        self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT).move_to()
+    
+    def find_background_color_of_logout(self):
+        element = self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT)
+
+        return element.get_background_color()
+    
+    def click_three_dots_menu(self):
+        self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
