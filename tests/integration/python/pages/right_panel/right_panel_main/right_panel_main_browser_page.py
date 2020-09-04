@@ -19,6 +19,11 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     VIEW_DATA_BUTTON_ELEM = '.data-cleared > button'
 
+    RIGHT_PANEL_OBJECT_LIST = '.object-tile-container .object-tile-list'
+
+    ATTRIBUTE_NAME_CLIENT_HEIGHT = 'clientHeight'
+    ATTRIBUTE_NAME_SCROLL_HEIGHT = 'scrollHeight'
+
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
 
@@ -47,6 +52,16 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         return self.check_if_element_exists_by_css(RightPanelMainBrowserPage.IMPORT_DATA_BUTTON_ELEM)
+
+    def is_scrollbar_visible(self):
+        self.focus_on_add_in_frame()
+
+        side_panel_content = self.get_element_by_css(RightPanelMainBrowserPage.RIGHT_PANEL_OBJECT_LIST)
+
+        client_height = side_panel_content.get_attribute(RightPanelMainBrowserPage.ATTRIBUTE_NAME_CLIENT_HEIGHT)
+        scroll_height = side_panel_content.get_attribute(RightPanelMainBrowserPage.ATTRIBUTE_NAME_SCROLL_HEIGHT)
+
+        return int(scroll_height) > int(client_height)
 
     def clear_data(self):
         self._open_dots_menu()

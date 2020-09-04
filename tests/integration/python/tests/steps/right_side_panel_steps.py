@@ -56,6 +56,14 @@ def step_impl(context, color):
 
     AssertUtil.assert_simple(found_color, color)
 
+
 @step('I clicked three dots settings menu')
 def step_impl(context):
     context.pages.right_panel_page().click_three_dots_menu()
+
+
+@step('Right panel has scrollbar')
+def step_impl(context):
+    is_scrollbar_visible = context.pages.right_panel_page().is_scrollbar_visible()
+
+    AssertUtil.assert_simple(is_scrollbar_visible, True)

@@ -14,6 +14,8 @@
   "host_url_windows_desktop": "http://localhost:4723/wd/hub",
   "excel_add_in_environment": "221120",
   "excel_desktop_add_in_import_data_name": "env-221120",
+  "excel_add_in_environment_default_user_name": "a",
+  "excel_add_in_environment_default_password": "",
   "excel_user_name": "testing.universal@mstrtesting.onmicrosoft.com",
   "excel_user_password": "somePassword1"
 }

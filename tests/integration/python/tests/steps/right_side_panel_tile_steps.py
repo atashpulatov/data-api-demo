@@ -8,6 +8,11 @@ def step_impl(context):
     context.pages.right_panel_tile_page().close_last_notification_on_hover()
 
 
+@step('I closed notification on object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().close_object_notification_on_hover(object_number)
+
+
 @step('I closed all notifications')
 def step_impl(context):
     context.pages.right_panel_tile_page().close_all_notifications_on_hover()
@@ -75,3 +80,15 @@ def step_impl(context, object_number):
 @step('I waited for object to be refreshed successfully')
 def step_impl(contex):
     contex.pages.right_panel_tile_page().wait_for_refresh_object_to_finish_successfully()
+
+
+@step('I waited for all progress notifications to disappear')
+def step_impl(context):
+    context.pages.right_panel_tile_page().wait_for_progress_notifications_to_disappear()
+
+
+@step('object {object_number} icon bar is visible')
+def step_impl(context, object_number):
+    is_icon_bar_visible = context.pages.right_panel_tile_page().is_icon_bar_visible(object_number)
+
+    AssertUtil.assert_simple(is_icon_bar_visible, True)

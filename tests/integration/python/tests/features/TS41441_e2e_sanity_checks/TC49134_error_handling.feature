@@ -83,9 +83,11 @@ Feature: TS41441 - Sanity checks
       And I selected cell "D2"
       And I clicked bold button
 
+   # TODO select a specific color and later verify it if it's ok
       And I selected cell "E2"
       And I clicked font color button
 
+   # TODO select a specific color and later verify it if it's ok
       And I selected cell "G2"
       And I clicked fill color button
 
