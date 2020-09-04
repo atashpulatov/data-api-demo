@@ -37,9 +37,29 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, True)
 
 
+@step('object {object_number} has "{name_list_type}" with value "{expected_value}"')
+def step_impl(context, object_number, name_list_type, expected_value):
+    attributes = context.pages.right_panel_tile_details_page().get_object_list_property_value(
+        object_number,
+        name_list_type
+    )
+
+    AssertUtil.assert_strings_only_printable_characters(attributes, expected_value)
+
+
 @step('object {object_number} has "{name_list_type}" list displayed')
 def step_impl(context, object_number, name_list_type):
     name_list_exists = context.pages.right_panel_tile_details_page().name_list_exists_on_object(
+        object_number,
+        name_list_type
+    )
+
+    AssertUtil.assert_simple(name_list_exists, True)
+
+
+@step('object {object_number} has collapsed "{name_list_type}" list displayed')
+def step_impl(context, object_number, name_list_type):
+    name_list_exists = context.pages.right_panel_tile_details_page().collapsed_name_list_exists_on_object(
         object_number,
         name_list_type
     )
@@ -52,3 +72,42 @@ def step_impl(context, object_number, expected_object_id):
     object_id = context.pages.right_panel_tile_details_page().get_object_id(object_number)
 
     AssertUtil.assert_simple(expected_object_id, object_id)
+
+
+@step('object {object_number} has owner "{expected_owner_name}"')
+def step_impl(context, object_number, expected_owner_name):
+    owner_name = context.pages.right_panel_tile_details_page().get_object_owner(object_number)
+
+    AssertUtil.assert_simple(expected_owner_name, owner_name)
+
+
+@step('Object {object_number} has details panel displayed')
+def step_impl(context, object_number):
+    is_details_panel_displayed = \
+        context.pages.right_panel_tile_details_page().is_details_panel_displayed_on_object(object_number)
+
+    AssertUtil.assert_simple(is_details_panel_displayed, True)
+
+
+@step('Object {object_number} has NO details panel displayed')
+def step_impl(context, object_number):
+    is_details_panel_displayed = \
+        context.pages.right_panel_tile_details_page().is_details_panel_displayed_on_object(object_number)
+
+    AssertUtil.assert_simple(is_details_panel_displayed, False)
+
+
+@step('object {object_number} has full location "{expected_object_location}" displayed')
+def step_impl(context, object_number, expected_object_location):
+    object_location = context.pages.right_panel_tile_details_page().get_object_location(object_number)
+
+    AssertUtil.assert_simple(expected_object_location, object_location)
+
+
+@step('object {object_number} has collapsed location displayed')
+def step_impl(context, object_number):
+    collapsed_location_exists = context.pages.right_panel_tile_details_page().collapsed_location_exists_on_object(
+        object_number
+    )
+
+    AssertUtil.assert_simple(collapsed_location_exists, True)

@@ -34,6 +34,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
     TILE_CONTEXT_MENU_WRAPPER = '.react-contextmenu-wrapper'
 
+    OBJECT_TILE_ACTIONS = '.icon-bar'
+
     def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
@@ -127,7 +129,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         object_index = int(object_no) - 1
 
-        self.get_element_by_css(RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER % object_index).click()
+        tile_context_menu_wrappers = self.get_elements_by_css(
+            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
+        )
+
+        tile_context_menu_wrappers[object_index].click()
 
     def get_object_name(self, index):
         self.focus_on_add_in_frame()
@@ -199,3 +205,20 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         name_tooltip = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_TOOLTIP % object_number)
 
         return name_tooltip.text
+
+    def is_icon_bar_visible(self, object_number):
+        self.focus_on_add_in_frame()
+
+        object_index = int(object_number) - 1
+
+        tile_context_menu_wrappers = self.get_elements_by_css(
+            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
+        )
+
+        icon_bar = tile_context_menu_wrappers[object_index].get_element_by_css(
+            RightPanelTileBrowserPage.OBJECT_TILE_ACTIONS
+        )
+
+        opacity_value = icon_bar.get_opacity()
+
+        return int(opacity_value) > 0
