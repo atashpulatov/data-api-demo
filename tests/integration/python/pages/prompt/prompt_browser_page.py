@@ -33,6 +33,7 @@ class PromptBrowserPage(BaseBrowserPage):
 
     def wait_for_run_button(self):
         self.focus_on_add_in_popup_frame()
+
         self.wait_for_element_to_have_attribute_value_by_css(
             PromptBrowserPage.PROMPT_RUN_BUTTON, 'disabled', None
         )
@@ -44,6 +45,7 @@ class PromptBrowserPage(BaseBrowserPage):
 
     def click_run_button_for_prompted_dossier(self):
         self.focus_on_dossier_frame()
+
         self.get_element_by_css(PromptBrowserPage.PROMPTED_DOSSIER_RUN_BUTTON).click()
 
     def select_answer_for_object_prompt(self, prompt_number, prompt_name, item):

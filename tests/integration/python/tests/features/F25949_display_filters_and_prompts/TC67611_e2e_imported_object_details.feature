@@ -1,0 +1,182 @@
+@mac_chrome
+Feature: F25949 - Display filters and prompts
+
+  Scenario: [TC67611] - Imported object details E2E
+    Given I logged in as default user
+      And I clicked Import Data button
+      And MyLibrary Switch is OFF
+
+      And I found object by ID "3633950911EAA96889F00080EF25F8A4" and selected "titanic_wiblgjlprj"
+      And I clicked Prepare Data button
+      And I ensure that Columns & Filters Selection is visible
+      And I selected all attributes
+      And I selected all metrics
+      And I clicked Import button in Columns and Filters Selection
+      And I closed last notification
+
+     When I hovered over toggle details button on object 1
+     Then tooltip text for object 1 toggle details button is "Show Details"
+
+     When I clicked toggle details button on object 1
+     Then object 1 is certified
+      And object 1 has "Attribute" list displayed
+      And object 1 has "Metric" list displayed
+      And object 1 has id "3633950911EAA96889F00080EF25F8A4"
+
+     When I clicked "Attribute" list expand button on object 1
+      And I clicked "Metric" list expand button on object 1
+      And I clicked Object Location expand button on object 1
+
+    # TODO Then
+
+     When I added a new worksheet
+      And I clicked Add Data button
+      And I found object by ID "4BF6385A11EA638B25610080EFC58CB1" and selected "Prompted report with subtotals"
+      And I clicked Prepare Data button
+      And I waited for Run button to be enabled
+      And I clicked Run button
+
+      And I selected all attributes
+      And I selected all metrics
+      And I selected filter "Call Center" with all elements
+      And I selected filter "Employee" with all elements
+      And I clicked Import button in Columns and Filters Selection
+      And I closed last notification
+
+      And I clicked toggle details button on object 1
+
+     Then object 1 has "Prompt" list displayed
+      And object 1 has "Filter" list displayed
+      And object 1 has "Attribute" list displayed
+      And object 1 has "Metric" list displayed
+      And object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
+
+     When I clicked "Filter" list expand button on object 1
+      And I clicked "Attribute" list expand button on object 1
+      And I clicked Object Location expand button on object 1
+
+    # TODO Then
+
+     When I added a new worksheet
+      And I clicked Add Data button
+      And I found object by ID "5902C03A11E9FEF1DC670080EF856919" and selected "Prompted dossier"
+      And I clicked Import button to open Import Dossier
+      And I clicked Run button for prompted dossier
+      And I imported visualization "Visualization 1"
+      And I closed last notification
+
+      And I clicked toggle details button on object 1
+
+     Then object 1 has "Prompt" list displayed
+      And object 1 has "Attribute" list displayed
+      And object 1 has "Metric" list displayed
+      And object 1 has id "5902C03A11E9FEF1DC670080EF856919"
+
+     When I clicked Object Location expand button on object 1
+
+   # TODO Then
+
+     When I clicked on object 1
+
+   # TODO Then
+
+     When I hovered over toggle details button on object 1
+     Then tooltip text for object 1 toggle details button is "Hide Details"
+
+     When I clicked toggle details button on object 1
+
+   # TODO Then
+
+     When I clicked Edit object 3
+      And I unselected all metrics
+      And I clicked metric "survived"
+      And I selected filter "age" with all elements
+      And I clicked Import button in Columns and Filters Selection
+      And I closed notification on object 3
+
+      And I clicked toggle details button on object 3
+
+     Then object 3 is certified
+      And object 3 has "Filter" list displayed
+      And object 3 has "Attribute" list displayed
+      And object 3 has "Metric" list displayed
+
+     When I clicked "Filter" list expand button on object 3
+      And I clicked "Attribute" list expand button on object 3
+      And I clicked Object Location expand button on object 3
+
+   # TODO Then
+
+     When I clicked Duplicate on object 2
+      And I clicked Import button in Duplicate popup
+      And I closed last notification
+
+      And I clicked toggle details button on object 1
+
+     Then object 1 has "Prompt" list displayed
+      And object 1 has "Filter" list displayed
+      And object 1 has "Attribute" list displayed
+      And object 1 has "Metric" list displayed
+      And object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
+
+     When I clicked "Filter" list expand button on object 1
+      And I clicked "Attribute" list expand button on object 1
+      And I clicked Object Location expand button on object 1
+
+   # TODO Then
+
+     When I refreshed all objects
+      And I waited for all progress notifications to disappear
+      And I closed all notifications
+
+   # TODO Then - if not - change When below to And
+
+     When I clicked toggle details button on object 1
+     Then object 1 has "Prompt" list displayed
+      And object 1 has "Filter" list displayed
+      And object 1 has "Attribute" list displayed
+      And object 1 has "Metric" list displayed
+      And object 1 has id "4BF6385A11EA638B25610080EFC58CB1"
+
+     When I clicked toggle details button on object 2
+     Then object 2 has "Prompt" list displayed
+      And object 2 has "Attribute" list displayed
+      And object 2 has "Metric" list displayed
+      And object 2 has id "5902C03A11E9FEF1DC670080EF856919"
+
+     When I clicked toggle details button on object 3
+     Then object 3 has "Prompt" list displayed
+      And object 3 has "Filter" list displayed
+      And object 3 has "Attribute" list displayed
+      And object 3 has "Metric" list displayed
+      And object 3 has id "4BF6385A11EA638B25610080EFC58CB1"
+
+     When I clicked toggle details button on object 4
+     Then object 4 is certified
+      And object 4 has "Attribute" list displayed
+      And object 4 has "Metric" list displayed
+      And object 4 has id "3633950911EAA96889F00080EF25F8A4"
+
+      And I log out
+
+    Given I certified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
+      And I certified object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
+
+      And I logged in as default user
+      And I refreshed all objects
+      And I waited for all progress notifications to disappear
+      And I closed all notifications
+
+     When I clicked toggle details button on object 1
+     Then object 1 is certified
+
+     When I clicked toggle details button on object 2
+     Then object 2 is certified
+
+     When I clicked toggle details button on object 3
+     Then object 3 is certified
+
+      And I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
+      And I decertified object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
+
+      And I log out

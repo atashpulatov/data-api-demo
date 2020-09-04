@@ -127,7 +127,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def click_object_number(self, object_no):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_no).click()
+        object_index = int(object_no) - 1
+
+        self.get_element_by_css(RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER % object_index).click()
 
     def get_object_name(self, index):
         self.focus_on_add_in_frame()
@@ -200,24 +202,15 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         return name_tooltip.text
 
-    def select_excel_table(self, object_number):
-        self.focus_on_add_in_frame()
-
-        tile_context_menu_wrappers = self.get_elements_by_css(
-          RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
-        )
-
-        tile_context_menu_wrappers[int(object_number) - 1].click()
-
     def is_icon_bar_visible(self, object_number):
         self.focus_on_add_in_frame()
 
         tile_context_menu_wrappers = self.get_elements_by_css(
-          RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
+            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_WRAPPER
         )
 
         icon_bar = tile_context_menu_wrappers[int(object_number) - 1].get_element_by_css(
-          RightPanelTileBrowserPage.OBJECT_TILE_ACTIONS
+            RightPanelTileBrowserPage.OBJECT_TILE_ACTIONS
         )
         print(icon_bar)
         print(icon_bar.value_of_css_property('opacity'))
