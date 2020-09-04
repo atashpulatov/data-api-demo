@@ -56,13 +56,13 @@ Feature: F25949 - Imported object details
      When I clicked Edit object 1
       And I clicked attribute "Employee"
       And I clicked metric "Revenue"
-      # And I selected filters { "Region" : ["Central", "Northwest"] }
+      And I selected filters { "Region" : ["Asia", "Europe"] }
       And I clicked Import button
       And I closed last notification
       And I clicked toggle details button on object 1
 
      Then attributes list for object 1 does NOT contain attribute "Employee"
       And metrics list for object 1 does NOT contain metric "Revenue"
-      # And filters list for object 1 contains filter "Region"
+      And filters list for object 1 contains filter "Region"
 
       And I log out

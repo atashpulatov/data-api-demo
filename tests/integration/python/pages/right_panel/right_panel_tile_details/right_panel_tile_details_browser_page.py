@@ -20,6 +20,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         "METRIC": METRICS_LIST
     }
     NAME_LIST_ITEM = 'span.name-list-item'
+    NAME_LIST_ITEM_OPTIONS = 'span.name-list-item-options'
     NAME_LIST_ITEM_PREFIX = ', '
     NAME_LIST_EXPAND_BUTTON = '.name-list-expand-button'
     OBJECT_LOCATION_EXPAND_BUTTON = '.object-location-expand-button'
@@ -52,6 +53,19 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         if name.startswith(RightPanelTileDetailsBrowserPage.NAME_LIST_ITEM_PREFIX):
             return name[len(RightPanelTileDetailsBrowserPage.NAME_LIST_ITEM_PREFIX):]
         return name
+
+    def _extract_list_item_name(self, list_item):
+        self.log_error('HELLO')
+        list_item_options_text = list_item.get_element_by_css(
+            RightPanelTileDetailsBrowserPage.NAME_LIST_ITEM_OPTIONS
+        ).text
+        self.log_error(list_item_options_text)
+        list_item_name = self._remove_name_list_item_whitespace(list_item.text).replace(
+            list_item_options_text, 
+            ''
+        )
+        self.log_error(list_item_name)
+        return list_item_name
 
     def click_toggle_details_button(self, object_number):
         self.focus_on_add_in_frame()
@@ -157,8 +171,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         tile_details_container = self._get_tile_details_container(object_number)
-        list_items = tile_details_container.get_elements_by_css(list_items_selector)
-        items = map(lambda item: self._remove_name_list_item_whitespace(item.text), list_items)
+        items = map(self._extract_list_item_name, tile_details_container.get_elements_by_css(list_items_selector))
 
         return item_name in items
 
