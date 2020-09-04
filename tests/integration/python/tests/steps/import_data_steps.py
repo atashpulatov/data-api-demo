@@ -19,7 +19,7 @@ def step_impl(context, object_name):
 
 
 @step('I found object by ID "{object_id}" and selected "{object_name}"')
-def step_impl(context, object_name, object_id):
+def step_impl(context, object_id, object_name):
     context.pages.import_data_page().find_and_select_object_by_id(object_name, object_id)
 
 
@@ -53,7 +53,7 @@ def step_impl(context, object_number):
     context.pages.import_data_page().show_object_details(object_number)
 
 
-@step('I verify copying the details to clipboard works correctly')
+@step('I verified that copying the details to clipboard works correctly')
 def step_impl(context):
     compare_result = context.pages.import_data_page().copy_object_details_to_clipboard_and_verify_if_correct()
 
@@ -70,6 +70,23 @@ def step_impl(context):
     context.pages.import_data_page().click_filters_button()
 
 
-@step('I clicked Import button and see error "{error_message}"')
+@step('I clicked Import button and saw error "{error_message}"')
 def step_impl(context, error_message):
     context.pages.import_data_page().click_import_button_to_import_with_error(error_message)
+
+
+@step('I hovered over the first object in the list')
+def step_impl(context):
+    context.pages.import_data_page().hover_over_first_object_in_list()
+
+
+@step('I selected the first object from the list')
+def step_impl(context):
+    context.pages.import_data_page().select_first_object_from_list()
+
+
+@step('I verified that the background color of the first object is "{color}"')
+def step_impl(context, color):
+    found_color = context.pages.import_data_page().find_the_color_of_first_object_in_list()
+
+    AssertUtil.assert_simple(found_color, color)
