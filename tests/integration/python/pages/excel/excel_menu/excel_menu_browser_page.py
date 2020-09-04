@@ -38,7 +38,7 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
         self.get_element_by_id(ExcelMenuBrowserPage.CLOSE_ADD_IN_BUTTON).click()
 
-    def open_name_box_and_select_object(self, object_number):
+    def select_object_from_name_box(self, object_number):
         self.focus_on_excel_frame()
 
         self.get_element_by_css(ExcelMenuBrowserPage.NAME_BOX).click()

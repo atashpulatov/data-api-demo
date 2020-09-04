@@ -90,3 +90,8 @@ def step_impl(context, color):
     found_color = context.pages.import_data_page().find_the_color_of_first_object_in_list()
 
     AssertUtil.assert_simple(found_color, color)
+
+
+@step('I found object with complex name and select it by ID "{object_id}"')
+def step_impl(context, object_id):
+    context.pages.import_data_page().find_and_select_complex_object_by_id(object_id)
