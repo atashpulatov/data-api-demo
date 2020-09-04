@@ -218,6 +218,12 @@ started. Used on Windows Desktop and Mac Desktop.
 `-D excel_desktop_add_in_import_data_name=import_name` specifies `import_name` string used when choosing which
 Excel Add In should be started. Used in browsers.
 
+`-D excel_add_in_environment_default_user_name=user_name` specifies default `user_name` used when logging in to
+Excel Add In.
+
+`-D excel_add_in_environment_default_passowrd=password` specifies default `password` used when logging in to
+Excel Add In.
+
 `-D excel_user_name=user_name` specifies `user_name` used when logging in to Excel in browser.
  
 `-D excel_user_password=user_password` specifies `user_password` used when logging in to Excel in browser. 

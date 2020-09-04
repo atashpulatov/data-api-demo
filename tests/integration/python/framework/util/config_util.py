@@ -34,6 +34,8 @@ class ConfigUtil:
     PARAM_NAME_HOST_URL_PREFIX = 'host_url_'
     PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT = 'excel_add_in_environment'
     PARAM_NAME_EXCEL_DESKTOP_ADD_IN_IMPORT_DATA_NAME = 'excel_desktop_add_in_import_data_name'
+    PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT_DEFAULT_USER_NAME = 'excel_add_in_environment_default_user_name'
+    PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT_DEFAULT_PASSWORD = 'excel_add_in_environment_default_password'
     PARAM_NAME_EXCEL_USER_NAME = 'excel_user_name'
     PARAM_NAME_EXCEL_USER_PASSWORD = 'excel_user_password'
 
@@ -71,6 +73,21 @@ class ConfigUtil:
     @staticmethod
     def get_add_in_environment():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT)
+
+    @staticmethod
+    def get_add_in_environment_default_credentials():
+        username = ConfigUtil._get_add_in_environment_default_username()
+        password = ConfigUtil._get_add_in_environment_default_password()
+
+        return username, password
+
+    @staticmethod
+    def _get_add_in_environment_default_username():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT_DEFAULT_USER_NAME)
+
+    @staticmethod
+    def _get_add_in_environment_default_password():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT_DEFAULT_PASSWORD)
 
     @staticmethod
     def get_excel_desktop_add_in_import_data_name():
