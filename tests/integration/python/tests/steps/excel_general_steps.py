@@ -8,12 +8,12 @@ def step_impl(context):
     context.pages.excel_general_page().close_excel()
 
 
-@step('I changed Excel window size to {height} x {width}')
-def step_impl(context, height, width):
-    context.pages.excel_general_page().change_excel_window_size(height, width)
+@step('I changed Excel window size to {width} x {height}')
+def step_impl(context, width, height):
+    context.pages.excel_general_page().change_excel_window_size(width, height)
 
 
-@step('I maximixed Excel window')
+@step('I maximized Excel window')
 def step_impl(context):
     context.pages.excel_general_page().maximize_excel_window()
 

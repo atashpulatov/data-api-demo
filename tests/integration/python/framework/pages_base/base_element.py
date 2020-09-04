@@ -10,6 +10,8 @@ from framework.util.util import Util
 
 class BaseElement:
     NAME_ATTRIBUTE = 'Name'
+    BACKGROUND_COLOR_PROPERTY = 'background-color'
+    OPACITY_PROPERTY = 'opacity'
 
     def __init__(self, raw_element, driver):
         self.__element = raw_element
@@ -137,7 +139,13 @@ class BaseElement:
 
         raise MstrException('Cannot find elements: %s' % selector)
 
-    def value_of_css_property(self, property_name):
+    def get_background_color(self):
+        return self._value_of_css_property(BaseElement.BACKGROUND_COLOR_PROPERTY)
+
+    def get_opacity(self):
+        return self._value_of_css_property(BaseElement.OPACITY_PROPERTY)
+
+    def _value_of_css_property(self, property_name):
         return self.__element.value_of_css_property(property_name)
 
     def move_to(self, offset_x=None, offset_y=None):

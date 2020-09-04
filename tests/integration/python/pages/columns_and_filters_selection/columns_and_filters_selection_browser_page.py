@@ -71,25 +71,31 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     SEARCH_INPUT = '.ant-input.ant-input-sm'
 
-    TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
+    ATTRIBUTES = 'attributes'
+    METRICS = 'metrics'
+    FILTERS = 'filters'
 
-    ATTRIBUTE = 'attributes'
-    METRIC = 'metrics'
-    FILTER = 'filters'
+    TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
 
     TRY_LIMIT_FOR_SORT = 3
     TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 6
 
     OBJECT_TO_TITLE_CONTAINER = {
-        ATTRIBUTE: ATTRIBUTES_TITLE_SORT,
-        METRIC: METRICS_TITLE_SORT,
-        FILTER: FILTERS_TITLE_SORT
+        ATTRIBUTES: ATTRIBUTES_TITLE_SORT,
+        METRICS: METRICS_TITLE_SORT,
+        FILTERS: FILTERS_TITLE_SORT
     }
 
     OBJECT_TO_OBJECT_CONTAINER = {
-        ATTRIBUTE: ATTRIBUTE_ELEMENT_AT,
-        METRIC: METRIC_ELEMENT_AT,
-        FILTER: FILTER_ELEMENT_AT
+        ATTRIBUTES: ATTRIBUTE_ELEMENT_AT,
+        METRICS: METRIC_ELEMENT_AT,
+        FILTERS: FILTER_ELEMENT_AT
+    }
+
+    OBJECT_TO_COLUMN_TITLE = {
+        ATTRIBUTES: ATTRIBUTES_SORT_TITLE,
+        METRICS: METRICS_SORT_TITLE,
+        FILTERS: FILTER_SORT_TITLE
     }
 
     def __init__(self):
@@ -113,24 +119,20 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def ensure_item_selection(self, item_type, number, of_number):
         """
-        Ensure proper number of given item type is selected
+        Ensures proper number of given item type is selected.
 
         :param item_type: type of item (metrics / attributes / filters)
         :param number: number of selected items
-        :param of_number:number of all items
+        :param of_number: number of all items
         """
 
-        if item_type == "metrics":
-            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.METRICS_SORT_TITLE
-        elif item_type == "attributes":
-            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_SORT_TITLE
-        elif item_type == "filters":
-            SORT_TITLE = ColumnsAndFiltersSelectionBrowserPage.FILTER_SORT_TITLE
-        else:
-            raise MstrException("Wrong item_type argument passed to ensure_item_selection")
+        if item_type not in ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_COLUMN_TITLE:
+            raise MstrException(f'Wrong item_type [{item_type}] argument passed to ensure_item_selection')
+
+        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_COLUMN_TITLE[item_type]
 
         title = f'{item_type.upper()} ({number}/{of_number})'
-        column_name = self.get_sort_col_name(SORT_TITLE)
+        column_name = self.get_sort_column_name(sort_title_selector)
 
         if column_name == title:
             return
@@ -138,15 +140,17 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         raise MstrException(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
 
     def click_attribute(self, attribute_name):
-        attribute = self._get_attribute_checkbox(attribute_name,
-                                                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX
-                                                 )
+        attribute = self._get_attribute_checkbox(
+            attribute_name,
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_CHECKBOX
+        )
         attribute.click(offset_x=10, offset_y=5)
 
     def click_attribute_for_dataset(self, attribute_name):
-        attribute = self._get_attribute_checkbox(attribute_name,
-                                                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_IN_DATASET_CHECKBOX
-                                                 )
+        attribute = self._get_attribute_checkbox(
+            attribute_name,
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTES_IN_DATASET_CHECKBOX
+        )
         attribute.click(offset_x=10, offset_y=5)
 
     def _get_attribute_checkbox(self, attribute_name, attribute_selector):
@@ -282,7 +286,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def get_filter_name(self, object_number):
         return self._get_object_name(ColumnsAndFiltersSelectionBrowserPage.FILTER_ELEMENT_AT % object_number)
 
-    def get_sort_col_name(self, selector):
+    def get_sort_column_name(self, selector):
         return self._get_object_name(selector)
 
     def _get_object_name(self, object_selector):
@@ -400,14 +404,17 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def click_back_button(self):
         self.focus_on_add_in_popup_frame()
+
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_ELEM).click()
 
     def click_cancel_button(self):
         self.focus_on_add_in_popup_frame()
+
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.CANCEL_BUTTON_ELEM).click()
 
     def close_popup_window(self):
         self.focus_on_excel_frame()
+
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()
 
     def click_include_totals_and_subtotals(self):

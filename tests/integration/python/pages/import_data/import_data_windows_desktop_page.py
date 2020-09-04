@@ -76,21 +76,22 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def click_import_button(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        self.get_element_by_name(
-            ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
-        ).click()
+        self._click_import_button()
 
         self.windows_desktop_workaround.focus_on_right_side_panel()
 
         if not self.check_if_element_exists_by_name(MessageConst.IMPORT_SUCCESSFUL_TEXT):
             raise MstrException('Error while importing')
 
+    def click_import_button_without_checking_results(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        self._click_import_button()
+
     def click_import_button_to_import_with_error(self, error_message):
-        self.get_element_by_name(
-            ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
-        ).click()
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        self._click_import_button()
 
         if not self.check_if_element_exists_by_name(error_message):
             raise MstrException('Different notification displayed')
@@ -103,6 +104,11 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def click_import_button_to_open_import_dossier(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
+        self._click_import_button()
+
+        # TODO check if dossier is opened
+
+    def _click_import_button(self):
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)

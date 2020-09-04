@@ -9,11 +9,11 @@ Feature: F12909 - Import report
       And MyLibrary Switch is OFF
 
      When I found object by ID "C97D02A611E9554DBFC00080EF353F8E" and selected "1k report"
-     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
     Given I selected cell "XFD1"
       And I clicked Import Data button
      When I found and selected object "1k report"
-     Then I clicked Import button and see error "The table you try to import exceeds the worksheet limits."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
       And I log out

@@ -33,6 +33,7 @@ class PromptBrowserPage(BaseBrowserPage):
 
     def wait_for_run_button(self):
         self.focus_on_add_in_popup_frame()
+
         self.wait_for_element_to_have_attribute_value_by_css(
             PromptBrowserPage.PROMPT_RUN_BUTTON, 'disabled', None
         )
@@ -44,27 +45,32 @@ class PromptBrowserPage(BaseBrowserPage):
 
     def click_run_button_for_prompted_dossier(self):
         self.focus_on_dossier_frame()
+
         self.get_element_by_css(PromptBrowserPage.PROMPTED_DOSSIER_RUN_BUTTON).click()
 
     def select_answer_for_object_prompt(self, prompt_number, prompt_name, item):
-        self._select_prompt_from_list(prompt_number)
-
-        self._get_prompt_name(prompt_number, prompt_name)
-
-        answer = self.find_element_by_text_in_elements_list_by_css(
+        self._change_answer_for_object_prompt(
             PromptBrowserPage.PROMPT_OBJECT_AVAILABLE_ITEM,
-            item,
+            prompt_number,
+            prompt_name,
+            item
         )
 
-        answer.double_click()
-
     def unselect_answer_for_object_prompt(self, prompt_number, prompt_name, item):
+        self._change_answer_for_object_prompt(
+            PromptBrowserPage.PROMPT_OBJECT_SELECTED_ITEM,
+            prompt_number,
+            prompt_name,
+            item
+        )
+
+    def _change_answer_for_object_prompt(self, selector, prompt_number, prompt_name, item):
         self._select_prompt_from_list(prompt_number)
 
-        self._get_prompt_name(prompt_number, prompt_name)
+        self._check_prompt_name(prompt_number, prompt_name)
 
         answer = self.find_element_by_text_in_elements_list_by_css_safe(
-            PromptBrowserPage.PROMPT_OBJECT_SELECTED_ITEM,
+            selector,
             item,
         )  # TODO select prompt for prompt_number
 
@@ -80,19 +86,16 @@ class PromptBrowserPage(BaseBrowserPage):
         self.press_tab()
         self.press_tab()
 
-    def _get_prompt_name(self, prompt_number, prompt_name):
-        title_index = self._get_object_name_in_prompt(
-            PromptBrowserPage.PROMPT_QUESTION_TITLE_INDEX)
-        title_name = self._get_object_name_in_prompt(
-            PromptBrowserPage.PROMPT_QUESTION_TITLTE_NAME)
+    def _check_prompt_name(self, prompt_number, prompt_name):
+        title_index = self._get_object_name_in_prompt(PromptBrowserPage.PROMPT_QUESTION_TITLE_INDEX)
+
+        title_name = self._get_object_name_in_prompt(PromptBrowserPage.PROMPT_QUESTION_TITLTE_NAME)
 
         number = prompt_number + '.'
 
-        if (title_index == number) & (title_name == prompt_name):
-            return
-
-        raise MstrException('Prompt title does not match: [%s]. [%s], text: [%s]. [%s]' % (
-            title_index, title_name, number, prompt_name))
+        if title_index != number or title_name != prompt_name:
+            raise MstrException(f'Prompt title does not match: [{title_index}]. '
+                                f'[{title_name}], text: [{number}]. [{prompt_name}]')
 
     def _get_object_name_in_prompt(self, object_selector):
         self.focus_on_prompt_frame()

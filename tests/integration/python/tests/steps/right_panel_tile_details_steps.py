@@ -13,7 +13,7 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_details_page().hover_over_toggle_details_button(object_number)
 
 
-@step('Tooltip text for object {object_number} toggle details button is "{expected_tooltip_text}"')
+@step('tooltip text for object {object_number} toggle details button is "{expected_tooltip_text}"')
 def step_impl(context, object_number, expected_tooltip_text):
     tooltip_text = context.pages.right_panel_tile_details_page().get_toggle_details_tooltip_text(object_number)
 
@@ -21,7 +21,7 @@ def step_impl(context, object_number, expected_tooltip_text):
 
 
 @step('I clicked "{name_list_type}" list expand button on object {object_number}')
-def step_impl(context, object_number, name_list_type):
+def step_impl(context, name_list_type, object_number):
     context.pages.right_panel_tile_details_page().click_name_list_expand_button(object_number, name_list_type)
 
 
@@ -30,9 +30,9 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_details_page().click_object_location_expand_button(object_number)
 
 
-@step('Object {object_number} is certified')
+@step('object {object_number} is certified')
 def step_impl(context, object_number):
-    is_certified = context.pages.right_panel_tile_details_page().check_if_object_is_certified(object_number)
+    is_certified = context.pages.right_panel_tile_details_page().is_object_is_certified(object_number)
 
     AssertUtil.assert_simple(is_certified, True)
 
@@ -44,90 +44,91 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, False)
 
 
-@step('Object {object_number} has "{name_list_type}" with value "{expected_value}"')
+@step('object {object_number} has "{name_list_type}" with value "{expected_value}"')
 def step_impl(context, object_number, name_list_type, expected_value):
     attributes = context.pages.right_panel_tile_details_page().get_object_list_property_value(
-      object_number, name_list_type
+        object_number,
+        name_list_type
     )
 
     AssertUtil.assert_strings_only_printable_characters(attributes, expected_value)
 
 
-@step('Object {object_number} has "{name_list_type}" list displayed')
+@step('object {object_number} has "{name_list_type}" list displayed')
 def step_impl(context, object_number, name_list_type):
-    context.pages.right_panel_tile_details_page().check_if_name_list_exists_on_object(
-        object_number, name_list_type)
+    name_list_exists = context.pages.right_panel_tile_details_page().name_list_exists_on_object(
+        object_number,
+        name_list_type
+    )
+
+    AssertUtil.assert_simple(name_list_exists, True)
 
 
-@step('Object {object_number} has id "{object_id}"')
-def step_impl(context, object_number, object_id):
-    context.pages.right_panel_tile_details_page().check_if_object_id_is_correct(
-        object_number, object_id)
+@step('object {object_number} has collapsed "{name_list_type}" list displayed')
+def step_impl(context, object_number, name_list_type):
+    name_list_exists = context.pages.right_panel_tile_details_page().collapsed_name_list_exists_on_object(
+        object_number,
+        name_list_type
+    )
+
+    AssertUtil.assert_simple(name_list_exists, True)
 
 
-@step('Object {object_number} has owner {owner}')
-def step_impl(context, object_number, owner):
-    context.pages.right_panel_tile_details_page().check_if_object_owner_is_correct(
-        object_number, owner)
+@step('object {object_number} has id "{expected_object_id}"')
+def step_impl(context, object_number, expected_object_id):
+    object_id = context.pages.right_panel_tile_details_page().get_object_id(object_number)
+
+    AssertUtil.assert_simple(expected_object_id, object_id)
 
 
-@step('totals and subtotals for object {object_number} are turned ON')
+@step('object {object_number} has owner "{expected_owner_name}"')
+def step_impl(context, object_number, expected_owner_name):
+    owner_name = context.pages.right_panel_tile_details_page().get_object_owner(object_number)
+
+    AssertUtil.assert_simple(expected_owner_name, owner_name)
+
+
+@step('Object {object_number} has details panel displayed')
+def step_impl(context, object_number):
+    is_details_panel_displayed = \
+        context.pages.right_panel_tile_details_page().is_details_panel_displayed_on_object(object_number)
+
+    AssertUtil.assert_simple(is_details_panel_displayed, True)
+
+
+@step('Object {object_number} has NO details panel displayed')
+def step_impl(context, object_number):
+    is_details_panel_displayed = \
+        context.pages.right_panel_tile_details_page().is_details_panel_displayed_on_object(object_number)
+
+    AssertUtil.assert_simple(is_details_panel_displayed, False)
+
+
+@step('object {object_number} has full location "{expected_object_location}" displayed')
+def step_impl(context, object_number, expected_object_location):
+    object_location = context.pages.right_panel_tile_details_page().get_object_location(object_number)
+
+    AssertUtil.assert_simple(expected_object_location, object_location)
+
+
+@step('object {object_number} has collapsed location displayed')
+def step_impl(context, object_number):
+    collapsed_location_exists = context.pages.right_panel_tile_details_page().collapsed_location_exists_on_object(
+        object_number
+    )
+
+    AssertUtil.assert_simple(collapsed_location_exists, True)
+
+
+@step('object {object_number} has totals and subtotals turned ON')
 def step_impl(context, object_number):
     result = context.pages.right_panel_tile_details_page().check_if_totals_and_subtotals_are_on(object_number)
 
     AssertUtil.assert_simple(result, True)
 
 
-@step('totals and subtotals for object {object_number} are turned OFF')
+@step('object {object_number} has totals and subtotals for turned OFF')
 def step_impl(context, object_number):
     result = context.pages.right_panel_tile_details_page().check_if_totals_and_subtotals_are_on(object_number)
-
-    AssertUtil.assert_simple(result, False)
-
-
-@step('attributes list for object {object_number} contains attribute "{attribute_name}"')
-def step_impl(context, object_number, attribute_name):
-    result = context.pages.right_panel_tile_details_page().check_if_attributes_list_contains_attribute(
-        object_number, attribute_name)
-
-    AssertUtil.assert_simple(result, True)
-
-
-@step('attributes list for object {object_number} does NOT contain attribute "{attribute_name}"')
-def step_impl(context, object_number, attribute_name):
-    result = context.pages.right_panel_tile_details_page().check_if_attributes_list_contains_attribute(
-        object_number, attribute_name)
-
-    AssertUtil.assert_simple(result, False)
-
-
-@step('metrics list for object {object_number} contains metric "{metric_name}"')
-def step_impl(context, object_number, metric_name):
-    result = context.pages.right_panel_tile_details_page().check_if_metrics_list_contains_metric(
-        object_number, metric_name)
-
-    AssertUtil.assert_simple(result, True)
-
-
-@step('metrics list for object {object_number} does NOT contain metric "{metric_name}"')
-def step_impl(context, object_number, metric_name):
-    result = context.pages.right_panel_tile_details_page().check_if_metrics_list_contains_metric(
-        object_number, metric_name)
-
-    AssertUtil.assert_simple(result, False)
-
-
-@step('filters list for object {object_number} contains filter "{filter_name}"')
-def step_impl(context, object_number, filter_name):
-    result = context.pages.right_panel_tile_details_page().check_if_filter_list_contains_filter(
-        object_number, filter_name)
-
-    AssertUtil.assert_simple(result, True)
-
-
-@step('filters list for object {object_number} does NOT contain filter "{filter_name}"')
-def step_impl(context, object_number, filter_name):
-    result = context.pages.right_panel_tile_details_page().check_if_filter_list_contains_filter(
-        object_number, filter_name)
 
     AssertUtil.assert_simple(result, False)

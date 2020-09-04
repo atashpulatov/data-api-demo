@@ -76,7 +76,6 @@ class BaseBrowserPage(BasePage):
 
     def focus_on_dossier_frame(self):
         self.focus_on_excel_frame()
-
         self.focus_on_add_in_popup_frame()
 
         dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.DOSSIER_FRAME_ELEM)
@@ -90,9 +89,10 @@ class BaseBrowserPage(BasePage):
             try:
                 self.focus_on_excel_frame()
                 self.focus_on_add_in_popup_frame()
-                prompt_frame = self.get_frame_element_by_css(
-                    BaseBrowserPage.PROMPT_FRAME_ELEM)
+
+                prompt_frame = self.get_frame_element_by_css(BaseBrowserPage.PROMPT_FRAME_ELEM)
                 self._switch_to_frame(prompt_frame)
+
                 return
 
             except Exception as e:
@@ -131,15 +131,19 @@ class BaseBrowserPage(BasePage):
 
     def wait_for_elements_to_disappear_from_dom(self, selector, timeout=DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
+
         while True:
             elements_to_disappear = self.get_elements_by_css(selector)
 
+            if len(elements_to_disappear) == 0:
+                return
+
             self.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
 
-            if len(elements_to_disappear) == 0:
+            if time.time() > end_time:
                 break
-            elif time.time() > end_time:
-                break
+
+        raise MstrException(('Element still in DOM', selector))
 
     def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         try:
@@ -214,11 +218,14 @@ class BaseBrowserPage(BasePage):
 
         :param selector(str): css selector
         :param text(str): text content of wanted element
+
         :returns (int): index of wanted element in list of elements with given css selector
+
         :raises Element not present(MstrException): if there is no element with given text
         """
         elements = self.get_elements_by_css(selector)
         elements_names = [item.text for item in elements]
+
         try:
             return elements_names.index(text)
         except ValueError:
