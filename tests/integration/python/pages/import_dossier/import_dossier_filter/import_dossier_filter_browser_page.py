@@ -42,5 +42,4 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
 
     def _open_filter_menu(self):
         self.get_element_by_css(ImportDossierFilterBrowserPage.FILTERS_BUTTON).click()
-
   
