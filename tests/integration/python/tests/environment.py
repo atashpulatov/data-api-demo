@@ -48,10 +48,6 @@ def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME, force
     context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()
 
 
-def before_step(context, step):
-    pass
-
-
 def after_scenario(context, scenario):
     if ConfigUtil.is_cleanup_after_tests_enabled():
         context.pages.cleanup_page().clean_up_after_each_test()

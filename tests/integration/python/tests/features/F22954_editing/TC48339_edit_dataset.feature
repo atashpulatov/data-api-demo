@@ -17,7 +17,7 @@ Feature: F22954 - Edit dataset
       And I unselected all metrics
       And I clicked metric "Total Cost"
       And I clicked attribute "Region" for dataset
-      And I selected filters { "Region" : ["Asia", "Europe", "North America"] }
+      And I selected filters { "Region": ["Asia", "Europe", "North America"] }
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
