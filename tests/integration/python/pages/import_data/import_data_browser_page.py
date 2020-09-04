@@ -152,4 +152,3 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.clear()
-        self.press_enter()        
