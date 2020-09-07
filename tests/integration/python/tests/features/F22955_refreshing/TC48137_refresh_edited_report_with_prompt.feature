@@ -21,7 +21,7 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
       And I unselected all metrics
       And I clicked attribute "Region"
       And I clicked metric "Profit"
-      And I selected filters { "Category" : ["Books"] }
+      And I selected filters { "Category": ["Books"] }
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
