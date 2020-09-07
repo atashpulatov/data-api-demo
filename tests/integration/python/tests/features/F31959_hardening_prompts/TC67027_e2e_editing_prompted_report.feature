@@ -1,6 +1,5 @@
 @windows_chrome
 @mac_chrome
-@ci
 Feature: F31959 - Hardening the workflows of importing data with prompts to Excel
 
   Scenario: [TC67027] - E2E Editing Prompted reports | Nested
@@ -17,7 +16,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I ensure that Columns & Filters Selection is visible
       And I clicked attribute "Month"
       And I clicked metric "Profit"
-      And I selected filters { "Subcategory" : ["Audio Equipment", "TV's"] }
+      And I selected filters { "Subcategory": ["Audio Equipment", "TV's"] }
       And I clicked Import button in Columns and Filters Selection
 
      Then I closed last notification
@@ -45,7 +44,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Year" with all elements
-      And I selected filters { "Region" : ["Central", "South"] }
+      And I selected filters { "Region": ["Central", "South"] }
       And I clicked Import button in Columns and Filters Selection
 
      Then I closed last notification
@@ -71,5 +70,3 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
      Then I clicked Cancel button
 
       And I log out
-
-

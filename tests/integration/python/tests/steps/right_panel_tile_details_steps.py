@@ -81,7 +81,7 @@ def step_impl(context, object_number, expected_owner_name):
     AssertUtil.assert_simple(expected_owner_name, owner_name)
 
 
-@step('Object {object_number} has details panel displayed')
+@step('object {object_number} has details panel displayed')
 def step_impl(context, object_number):
     is_details_panel_displayed = \
         context.pages.right_panel_tile_details_page().is_details_panel_displayed_on_object(object_number)
@@ -89,7 +89,7 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_details_panel_displayed, True)
 
 
-@step('Object {object_number} has NO details panel displayed')
+@step('object {object_number} has details panel hidden')
 def step_impl(context, object_number):
     is_details_panel_displayed = \
         context.pages.right_panel_tile_details_page().is_details_panel_displayed_on_object(object_number)
