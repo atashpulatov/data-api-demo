@@ -34,11 +34,11 @@ Feature: F25946 - Display filters and prompts
      When I clicked toggle details button on object 1
 
      Then object 1 has "Prompt" list displayed
-      And object 1 has "Prompt" with value "Northeast‎, 1/1/2014"
+      And object 1 has "Prompt" list with value "Northeast‎, 1/1/2014"
       And object 1 has "Attribute" list displayed
-      And object 1 has "Attribute" with value "Quarter‎, Distribution Center"
+      And object 1 has "Attribute" list with value "Quarter‎, Distribution Center"
       And object 1 has "Metric" list displayed
-      And object 1 has "Metric" with value "Profit‎, Revenue"
+      And object 1 has "Metric" list with value "Profit‎, Revenue"
       And object 1 has id "5902C03A11E9FEF1DC670080EF856919"
       And object 1 has owner "Administrator"
 
@@ -54,12 +54,12 @@ Feature: F25946 - Display filters and prompts
      When I clicked toggle details button on object 2
 
      Then object 2 has "Prompt" list displayed
-      And object 2 has "Prompt" with value "Books"
+      And object 2 has "Prompt" list with value "Books"
       And object 2 has "Attribute" list displayed
       And I clicked "Attribute" list expand button on object 2
-      And object 2 has "Attribute" with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
+      And object 2 has "Attribute" list with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
       And object 2 has "Metric" list displayed
-      And object 2 has "Metric" with value "Cost‎, Profit‎, Profit Margin‎, Revenue‎, Units Sold"
+      And object 2 has "Metric" list with value "Cost‎, Profit‎, Profit Margin‎, Revenue‎, Units Sold"
       And object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
       And object 2 has owner "Administrator"
 
@@ -82,9 +82,9 @@ Feature: F25946 - Display filters and prompts
 
       And I clicked toggle details button on object 2
 
-     Then object 2 has "Prompt" with value "Books"
-      And object 2 has "Attribute" with value "Country‎, Region"
-      And object 2 has "Metric" with value "Cost‎, Revenue"
+     Then object 2 has "Prompt" list with value "Books"
+      And object 2 has "Attribute" list with value "Country‎, Region"
+      And object 2 has "Metric" list with value "Cost‎, Revenue"
       And object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
       And object 2 has owner "Administrator"
 
@@ -95,16 +95,16 @@ Feature: F25946 - Display filters and prompts
 
      When I logged in with username "user2" and password "user2"
       And I clicked toggle details button on object 2
-      And object 2 has "Prompt" with value "Books"
-      And object 2 has "Attribute" with value "Country‎, Region"
-      And object 2 has "Metric" with value "Cost‎, Revenue"
+      And object 2 has "Prompt" list with value "Books"
+      And object 2 has "Attribute" list with value "Country‎, Region"
+      And object 2 has "Metric" list with value "Cost‎, Revenue"
       And object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
       And object 2 has owner "Administrator"
 
      When I clicked toggle details button on object 1
-      And object 1 has "Prompt" with value "Northeast‎, 1/1/2014"
-      And object 1 has "Attribute" with value "Quarter‎, Distribution Center"
-      And object 1 has "Metric" with value "Profit‎, Revenue"
+      And object 1 has "Prompt" list with value "Northeast‎, 1/1/2014"
+      And object 1 has "Attribute" list with value "Quarter‎, Distribution Center"
+      And object 1 has "Metric" list with value "Profit‎, Revenue"
       And object 1 has id "5902C03A11E9FEF1DC670080EF856919"
       And object 1 has owner "Administrator"
 
@@ -117,18 +117,18 @@ Feature: F25946 - Display filters and prompts
      When I clicked toggle details button on object 1
 
      Then object 1 is certified
-      And object 1 has "Prompt" with value "Northeast‎, 1/1/2014"
-      And object 1 has "Attribute" with value "Quarter‎, Distribution Center"
-      And object 1 has "Metric" with value "Profit‎, Revenue"
+      And object 1 has "Prompt" list with value "Northeast‎, 1/1/2014"
+      And object 1 has "Attribute" list with value "Quarter‎, Distribution Center"
+      And object 1 has "Metric" list with value "Profit‎, Revenue"
       And object 1 has id "5902C03A11E9FEF1DC670080EF856919"
       And object 1 has owner "Administrator"
 
      When I clicked toggle details button on object 2
 
      Then object 2 is certified
-      And object 2 has "Prompt" with value "Books"
-      And object 2 has "Attribute" with value "Country‎, Region"
-      And object 2 has "Metric" with value "Cost‎, Revenue"
+      And object 2 has "Prompt" list with value "Books"
+      And object 2 has "Attribute" list with value "Country‎, Region"
+      And object 2 has "Metric" list with value "Cost‎, Revenue"
       And object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
       And object 2 has owner "Administrator"
 
