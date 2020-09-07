@@ -57,9 +57,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     def _click_expand_button(self, object_number, selector):
         self.focus_on_add_in_frame()
 
-        object_index = int(object_number) - 1
-
-        tile_details_container = self._get_tile_details_container(object_index)
+        tile_details_container = self._get_tile_details_container(object_number)
 
         tile_details_container.get_element_by_css(selector).click()
 
@@ -118,11 +116,12 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     def get_toggle_details_tooltip_text(self, object_number):
         self.focus_on_add_in_frame()
 
-        object_index = int(object_number) - 1
+        tile_details_container = self._get_tile_details_container(object_number)
 
-        toggle_details_tooltips = self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TOGGLE_DETAILS_TOOLTIPS)
+        toggle_details_tooltip = tile_details_container.get_element_by_css(
+          RightPanelTileDetailsBrowserPage.TOGGLE_DETAILS_TOOLTIPS)
 
-        return toggle_details_tooltips[object_index].text
+        return toggle_details_tooltip.text
 
     def get_object_id(self, object_number):
         return self._get_object_detail(object_number, RightPanelTileDetailsBrowserPage.OBJECT_ID_VALUE)
