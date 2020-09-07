@@ -37,7 +37,7 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, True)
 
 
-@step('object {object_number} has "{name_list_type}" with value "{expected_value}"')
+@step('object {object_number} has "{name_list_type}" list with value "{expected_value}"')
 def step_impl(context, object_number, name_list_type, expected_value):
     attributes = context.pages.right_panel_tile_details_page().get_object_list_property_value(
         object_number,
