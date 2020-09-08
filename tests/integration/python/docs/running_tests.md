@@ -227,10 +227,6 @@ Excel Add In.
 `-D excel_add_in_environment_default_passowrd=password` specifies default `password` used when logging in to
 Excel Add In.
 
-`-D excel_user_name=user_name` specifies `user_name` used when logging in to Excel in browser.
- 
-`-D excel_user_password=user_password` specifies `user_password` used when logging in to Excel in browser. 
-
 `--logging_level=level` specifies logging level, where `level` is:
 
 - DEBUG _(the most verbose)_

@@ -36,8 +36,6 @@ class ConfigUtil:
     PARAM_NAME_EXCEL_DESKTOP_ADD_IN_IMPORT_DATA_NAME = 'excel_desktop_add_in_import_data_name'
     PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT_DEFAULT_USER_NAME = 'excel_add_in_environment_default_user_name'
     PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT_DEFAULT_PASSWORD = 'excel_add_in_environment_default_password'
-    PARAM_NAME_EXCEL_USER_NAME = 'excel_user_name'
-    PARAM_NAME_EXCEL_USER_PASSWORD = 'excel_user_password'
 
     PARAM_BOOLEAN = [
         PARAM_NAME_IMAGE_RECOGNITION_ENABLED,
