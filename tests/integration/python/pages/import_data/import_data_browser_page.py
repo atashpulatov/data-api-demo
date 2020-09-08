@@ -12,6 +12,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     CLEAR_SEARCH_BAR = 'div.search-field.search-field--clearable > button'
 
     NAME_OBJECT_ELEM = '''span[title='%s']'''
+    NAME_OBJECT_ID_PREFIX = '#name-column-'
+
     EXPAND_DETAILS_ELEM = '.details-indicator'
     OBJECT_DETAILS_TABLE = '.details-table > table tr'
     OBJECT_DETAILS_VALUE = '.tooltip :last-child'
@@ -30,7 +32,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     CLOSE_IMPORT_DATA_BUTTON = '.popup-buttons > button'
     FILTERS_BUTTON = '.filter-button'
 
-    OBJECT_ROW = '.ReactVirtualized__Table__row'
+    FIRST_OBJECT_ROW = '.ReactVirtualized__Table__row'
 
     def __init__(self):
         super().__init__()
@@ -55,13 +57,35 @@ class ImportDataBrowserPage(BaseBrowserPage):
         search_box.send_keys_with_check(object_name)
 
     def find_and_select_object(self, object_name):
+        """
+        Finds object by name and selects it. This method does not verify ids and cannot handle all special characters.
+
+        This method will be removed, please use find_and_select_object_by_id() instead.
+
+        :param object_name: object name to search for
+        """
         self.find_object(object_name)
 
         self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
 
     def find_and_select_object_by_id(self, object_name, object_id):
+        """
+        Finds object by id and selects it.
+
+        object_id is used for searching and object_name is used for verification if id is valid, if not MstrException
+        is being raised (element not present).
+
+        Searching for text (element.text) ensures special characters compatibility.
+
+        :param object_name: object name to verify if object_id is valid
+        :param object_id: object id to search for
+        """
         self.find_object(object_id)
-        self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
+
+        name_object_selector = ImportDataBrowserPage.NAME_OBJECT_ID_PREFIX + object_id
+
+        name_object = self.find_element_in_list_by_text(name_object_selector, object_name)
+        name_object.click()
 
     def click_import_button(self):
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
@@ -117,16 +141,14 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDataBrowserPage.FILTERS_BUTTON).click()
 
     def hover_over_first_object_in_list(self):
-     self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW).move_to()
+        self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW).move_to()
 
     def select_first_object_from_list(self):
-        self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW).click()
+        self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW).click()
 
     def find_the_color_of_first_object_in_list(self):
-        element = self.get_element_by_css(ImportDataBrowserPage.OBJECT_ROW)
-        return element.value_of_css_property('background-color')
-    
+        element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
+        return element.get_background_color()
+
     def clear_serach_objects_field(self):
         self.get_element_by_css(ImportDataBrowserPage.CLEAR_SEARCH_BAR).click()
-        
-

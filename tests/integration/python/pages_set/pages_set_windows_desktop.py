@@ -95,3 +95,6 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
 
     def prompt_page(self):
         pass
+
+    def right_panel_tile_details_page(self):
+        pass
