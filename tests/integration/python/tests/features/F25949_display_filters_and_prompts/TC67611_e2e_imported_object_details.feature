@@ -78,8 +78,8 @@ Feature: F25949 - Display filters and prompts
      Then object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted dossier" displayed
 
      When I clicked on object 1
-
-   # TODO Then
+     Then columns ["A", "B", "C", "D"] are selected
+      And rows ["1", "2", "3", "4", "5", "6", "7", "8", "9"] are selected
 
      When I hovered over toggle details button on object 1
      Then tooltip text for object 1 toggle details button is "Hide Details"
@@ -104,9 +104,9 @@ Feature: F25949 - Display filters and prompts
      When I clicked "Filter" list expand button on object 3
       And I clicked "Attribute" list expand button on object 3
       And I clicked object location expand button on object 3
-     Then object 1 has "Filter" list with value "age (0.42, 0.67, 0.75, 0.83, 0.92, 1, 10, 11, 12, 13, 14, 14.5, 15, 16, 17, 18, 19, 2, 20, 20.5, 21, 22, 23, 23.5, 24, 24.5, 25, 26, 27, 28, 28.5, 29, 3, 30, 30.5, 31, 32, 32.5, 33, 34, 34.5, 35, 36, 36.5, 37, 38, 39, 4, 40, 40.5, 41, 42, 43, 44, 45, 45.5, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 55.5, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 7, 70, 70.5, 71, 74, 8, 80, 9, NA)"
-      And object 1 has "Attribute" list with value "alive‎, who‎, alone‎, deck‎, class‎, adult male‎, embarked‎, embark town‎, sex‎, age"
-      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > DS Objects > Cubes for Create Testing > testing_folder_wiblgjlprj > titanic_wiblgjlprj" displayed
+     Then object 3 has "Filter" list with value "age (0.42, 0.67, 0.75, 0.83, 0.92, 1, 10, 11, 12, 13, 14, 14.5, 15, 16, 17, 18, 19, 2, 20, 20.5, 21, 22, 23, 23.5, 24, 24.5, 25, 26, 27, 28, 28.5, 29, 3, 30, 30.5, 31, 32, 32.5, 33, 34, 34.5, 35, 36, 36.5, 37, 38, 39, 4, 40, 40.5, 41, 42, 43, 44, 45, 45.5, 46, 47, 48, 49, 5, 50, 51, 52, 53, 54, 55, 55.5, 56, 57, 58, 59, 6, 60, 61, 62, 63, 64, 65, 66, 7, 70, 70.5, 71, 74, 8, 80, 9, NA)"
+      And object 3 has "Attribute" list with value "alive‎, who‎, alone‎, deck‎, class‎, adult male‎, embarked‎, embark town‎, sex‎, age"
+      And object 3 has full location "MicroStrategy Tutorial > Public Objects > Reports > DS Objects > Cubes for Create Testing > testing_folder_wiblgjlprj > titanic_wiblgjlprj" displayed
 
      When I clicked Duplicate on object 2
       And I clicked Import button in Duplicate popup
