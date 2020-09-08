@@ -53,6 +53,9 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     BUTTON_SELECTED_ARIA_VALUE = 'true'
 
+    EXCEL_SELECTED_COLUMN_HEADER = '.ewrch-col-cellsel > .ewr-chc'
+    EXCEL_SELECTED_ROW_HEADER = '.ewrch-row-cellsel > .ewr-rhc'
+
     def get_cells_values(self, cells):
         result = []
 
@@ -228,3 +231,31 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         font_input = self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT)
 
         return font_input.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_VALUE)
+
+    def is_column_range_selected(self, column_names):
+        self.focus_on_excel_frame()
+
+        for column_name in column_names:
+
+            try:
+                self.find_element_by_text_in_elements_list_by_css(
+                    ExcelSheetBrowserPage.EXCEL_SELECTED_COLUMN_HEADER,
+                    column_name)
+            except Exception:
+                return False
+
+        return True
+
+    def is_row_range_selected(self, row_names):
+        self.focus_on_excel_frame()
+
+        for row_name in row_names:
+
+            try:
+                self.find_element_by_text_in_elements_list_by_css(
+                    ExcelSheetBrowserPage.EXCEL_SELECTED_ROW_HEADER,
+                    row_name)
+            except Exception:
+                return False
+
+        return True
