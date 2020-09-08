@@ -17,7 +17,7 @@ e.g. `tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature`:
           And I clicked Import Data button
           And MyLibrary Switch is OFF
     
-          And I found and selected object "100_report"
+          And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
           And I clicked Import button
           And I closed all notifications
           And number of worksheets should be 1

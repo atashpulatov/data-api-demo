@@ -86,19 +86,19 @@ Feature: F25949 - Display filters and prompts
      Then tooltip text for object 1 toggle details button is "Hide Details"
 
      When I clicked toggle details button on object 1
-     Then object 1 has NO details panel displayed
+     Then object 1 has details panel hidden
 
      When I hovered over toggle details button on object 2
      Then tooltip text for object 2 toggle details button is "Hide Details"
 
      When I clicked toggle details button on object 2
-     Then object 2 has NO details panel displayed
+     Then object 2 has details panel hidden
 
      When I hovered over toggle details button on object 3
      Then tooltip text for object 3 toggle details button is "Hide Details"
 
      When I clicked toggle details button on object 3
-     Then object 3 has NO details panel displayed
+     Then object 3 has details panel hidden
 
      When I clicked toggle details button on object 1
      Then object 1 has details panel displayed

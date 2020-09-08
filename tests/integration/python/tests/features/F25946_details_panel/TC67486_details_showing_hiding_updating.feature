@@ -15,7 +15,7 @@ Feature: F25946 - Display filters and prompts
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
 
-     Then object 1 has NO details panel displayed
+     Then object 1 has details panel hidden
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -28,7 +28,7 @@ Feature: F25946 - Display filters and prompts
       And I closed last notification
       And I hovered over toggle details button on object 1
 
-     Then object 1 has NO details panel displayed
+     Then object 1 has details panel hidden
       And tooltip text for object 1 toggle details button is "Show Details"
 
      When I clicked toggle details button on object 1
@@ -111,8 +111,8 @@ Feature: F25946 - Display filters and prompts
      When I refreshed all objects
       And I closed all notifications
 
-     Then object 1 has NO details panel displayed
-      And object 2 has NO details panel displayed
+     Then object 1 has details panel hidden
+      And object 2 has details panel hidden
 
      When I clicked toggle details button on object 1
 

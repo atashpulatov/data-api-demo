@@ -8,6 +8,16 @@ def step_impl(context):
     context.pages.import_data_page().ensure_mylibrary_switch_is_off()
 
 
+@step('I switched on MyLibrary')
+def step_impl(context):
+    context.pages.import_data_page().ensure_mylibrary_switch_is_on()
+
+
+@step('I switched off MyLibrary')
+def step_impl(context):
+    context.pages.import_data_page().ensure_mylibrary_switch_is_off()
+
+
 @step('I found object "{object_name}"')
 def step_impl(context, object_name):
     context.pages.import_data_page().find_object(object_name)
@@ -90,3 +100,13 @@ def step_impl(context, color):
     found_color = context.pages.import_data_page().find_the_color_of_first_object_in_list()
 
     AssertUtil.assert_simple(found_color, color)
+
+
+@step('I verified that Import Data button is disabled')
+def step_impl(context):
+    context.pages.import_data_page().verify_if_import_button_is_disabled()
+
+
+@step('I cleared search box')
+def step_impl(context):
+    context.pages.import_data_page().clear_search_box()

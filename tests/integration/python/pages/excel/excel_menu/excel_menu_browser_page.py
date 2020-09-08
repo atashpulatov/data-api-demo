@@ -8,6 +8,7 @@ from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPa
 class ExcelMenuBrowserPage(BaseBrowserPage):
     ICON_ELEM = '.cui-ctl-largelabel'
     CLOSE_ADD_IN_BUTTON = 'AgaveTaskpaneCloseButtonId'
+    NAME_BOX = '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a'
 
     def __init__(self):
         super().__init__()
@@ -36,3 +37,13 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
         self.focus_on_excel_frame()
 
         self.get_element_by_id(ExcelMenuBrowserPage.CLOSE_ADD_IN_BUTTON).click()
+
+    def select_object_from_name_box(self, object_number):
+        self.focus_on_excel_frame()
+
+        self.get_element_by_css(ExcelMenuBrowserPage.NAME_BOX).click()
+
+        for i in range(int(object_number)):
+            self.press_tab()
+
+        self.press_enter()

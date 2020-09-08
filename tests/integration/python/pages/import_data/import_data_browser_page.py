@@ -1,6 +1,9 @@
 from pyperclip import paste
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.const import SHORT_TIMEOUT
+from framework.util.exception.MstrException import MstrException
+from framework.util.message_const import MessageConst
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -11,6 +14,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     SEARCH_BAR_ELEM = '.search-field__input'
 
     NAME_OBJECT_ELEM = '''span[title='%s']'''
+    NAME_OBJECT_ID_PREFIX = '#name-column-'
+
     EXPAND_DETAILS_ELEM = '.details-indicator'
     OBJECT_DETAILS_TABLE = '.details-table > table tr'
     OBJECT_DETAILS_VALUE = '.tooltip :last-child'
@@ -30,6 +35,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     FILTERS_BUTTON = '.filter-button'
 
     FIRST_OBJECT_ROW = '.ReactVirtualized__Table__row'
+    FIRST_OBJECT_ROW_SELECTED = '.ReactVirtualized__Table__row.selected-object'
+    DISABLED_BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
     def __init__(self):
         super().__init__()
@@ -44,6 +51,14 @@ class ImportDataBrowserPage(BaseBrowserPage):
         if self._is_on(element):
             element.click()
 
+    def ensure_mylibrary_switch_is_on(self):
+        self.focus_on_add_in_popup_frame()
+
+        element = self.get_element_by_css(ImportDataBrowserPage.MY_LIBRARY_SWITCH_ELEM)
+
+        if not self._is_on(element):
+            element.click()
+
     def _is_on(self, element):
         return element.get_attribute(ImportDataBrowserPage.ARIA_CHECKED_ATTRIBUTE) == 'true'
 
@@ -54,13 +69,35 @@ class ImportDataBrowserPage(BaseBrowserPage):
         search_box.send_keys_with_check(object_name)
 
     def find_and_select_object(self, object_name):
+        """
+        Finds object by name and selects it. This method does not verify ids and cannot handle all special characters.
+
+        This method will be removed, please use find_and_select_object_by_id() instead.
+
+        :param object_name: object name to search for
+        """
         self.find_object(object_name)
 
         self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
 
     def find_and_select_object_by_id(self, object_name, object_id):
+        """
+        Finds object by id and selects it.
+
+        object_id is used for searching and object_name is used for verification if id is valid, if not MstrException
+        is being raised (element not present).
+
+        Searching for text (element.text) ensures special characters compatibility.
+
+        :param object_name: object name to verify if object_id is valid
+        :param object_id: object id to search for
+        """
         self.find_object(object_id)
-        self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
+
+        name_object_selector = ImportDataBrowserPage.NAME_OBJECT_ID_PREFIX + object_id
+
+        name_object = self.find_element_in_list_by_text(name_object_selector, object_name)
+        name_object.click()
 
     def click_import_button(self):
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
@@ -121,7 +158,32 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def select_first_object_from_list(self):
         self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW).click()
 
+        first_object_selected = self.check_if_element_exists_by_css(
+            ImportDataBrowserPage.FIRST_OBJECT_ROW_SELECTED,
+            timeout=SHORT_TIMEOUT
+        )
+
+        if not first_object_selected:
+            raise MstrException('Error while selecting first object in the list.')
+
     def find_the_color_of_first_object_in_list(self):
         element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
 
         return element.get_background_color()
+
+    def verify_if_import_button_is_disabled(self):
+        element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
+
+        element.move_to()
+
+        self.wait_for_element_to_have_attribute_value_by_css(
+            ImportDataBrowserPage.DISABLED_BUTTON_TOOLTIP,
+            ImportDataBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            MessageConst.UNPUBLISHED_CUBE_CANNOT_BE_IMPORTED
+        )
+
+    def clear_search_box(self):
+        self.focus_on_add_in_popup_frame()
+
+        search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
+        search_box.clear()
