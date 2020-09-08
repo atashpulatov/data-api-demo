@@ -445,8 +445,4 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def click_include_totals_and_subtotals(self):
         self.focus_on_add_in_popup_frame()
 
-        totals_and_subtotals_switch = self.get_element_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH
-        )
-
-        totals_and_subtotals_switch.click()
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH).click()

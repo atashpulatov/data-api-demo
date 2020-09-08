@@ -120,15 +120,15 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(collapsed_location_exists, True)
 
 
-@step('object {object_number} has totals and subtotals turned ON')
+@step('for object {object_number} Totals and Subtotals is ON')
 def step_impl(context, object_number):
-    result = context.pages.right_panel_tile_details_page().is_totals_and_subtotals_turned_on(object_number)
+    result = context.pages.right_panel_tile_details_page().is_totals_and_subtotals_on(object_number)
 
     AssertUtil.assert_simple(result, True)
 
 
-@step('object {object_number} has totals and subtotals turned OFF')
+@step('for object {object_number} Totals and Subtotals is OFF')
 def step_impl(context, object_number):
-    result = context.pages.right_panel_tile_details_page().is_totals_and_subtotals_turned_on(object_number)
+    result = context.pages.right_panel_tile_details_page().is_totals_and_subtotals_on(object_number)
 
     AssertUtil.assert_simple(result, False)
