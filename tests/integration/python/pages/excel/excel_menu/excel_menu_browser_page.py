@@ -45,5 +45,5 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
         for i in range(int(object_number)):
             self.press_tab()
-        
+
         self.press_enter()
