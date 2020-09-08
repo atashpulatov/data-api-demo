@@ -448,4 +448,5 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         totals_and_subtotals_switch = self.get_element_by_css(
             ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH
         )
+
         totals_and_subtotals_switch.click()

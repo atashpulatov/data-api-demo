@@ -1,5 +1,5 @@
 @mac_chrome
-Feature: F25949 - Imported object details
+Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67533] - Update values on edit and refresh
     Given I logged in as default user
@@ -17,7 +17,8 @@ Feature: F25949 - Imported object details
       And I clicked Refresh on object 1
       And I closed last notification
       And I clicked toggle details button on object 1
-      And object 1 is NOT certified
+
+     Then object 1 is NOT certified
 
      When I certified object "E659E86811E58C918D6F0080EF453539" in Tutorial project
       And I clicked Refresh on object 1

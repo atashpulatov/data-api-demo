@@ -149,12 +149,12 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
 
         return self.get_elements_by_css(RightPanelTileDetailsBrowserPage.TILE_DETAILS_CONTAINER)[object_index]
 
-    def check_if_totals_and_subtotals_are_on(self, object_number):
+    def is_totals_and_subtotals_turned_on(self, object_number):
         self.focus_on_add_in_frame()
 
         tile_details_container = self._get_tile_details_container(object_number)
-        tested_object_totals_and_subtotals = tile_details_container.get_element_by_css(
+        totals_and_subtotals_value = tile_details_container.get_element_by_css(
             RightPanelTileDetailsBrowserPage.OBJECT_TOTALS_AND_SUBTOTALS_VALUE
         ).text
 
-        return tested_object_totals_and_subtotals == RightPanelTileDetailsBrowserPage.TOTALS_AND_SUBTOTALS_ON
+        return totals_and_subtotals_value == RightPanelTileDetailsBrowserPage.TOTALS_AND_SUBTOTALS_ON
