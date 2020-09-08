@@ -45,7 +45,22 @@ def step_impl(context, metric_name):
 
 @step('I set Display attribute form names to "{form_visualization_type}"')
 def step_impl(context, form_visualization_type):
-    context.pages.columns_and_filters_selection_page().click_display_attributes_names_type(form_visualization_type)
+    context.pages.columns_and_filters_selection_page().select_display_attributes_form_names_element(
+        form_visualization_type
+    )
+
+
+@step('I selected the first option from Display attribute form names')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().select_first_display_attributes_form_names_element()
+
+
+@step('I verified that the background color of the first option in Display attribute form names is "{color}"')
+def step_impl(context, color):
+    found_color = context.pages.columns_and_filters_selection_page(). \
+        get_background_color_of_first_attribute_form_names_element()
+
+    AssertUtil.assert_simple(found_color, color)
 
 
 @step('I selected all attributes')
@@ -226,18 +241,6 @@ def step_impl(context):
 
 @step('I verified that the background color of the first filter is "{color}"')
 def step_impl(context, color):
-    found_color = context.pages.columns_and_filters_selection_page().find_background_color_of_first_filter()
-
-    AssertUtil.assert_simple(found_color, color)
-
-
-@step('I selected the first attribute form name')
-def step_impl(context):
-    context.pages.columns_and_filters_selection_page().select_first_attribute_form_name()
-
-
-@step('I verified that the background color of the first attribute form name is "{color}"')
-def step_impl(context, color):
-    found_color = context.pages.columns_and_filters_selection_page().find_background_color_of_first_filter()
+    found_color = context.pages.columns_and_filters_selection_page().get_background_color_of_first_filter()
 
     AssertUtil.assert_simple(found_color, color)

@@ -9,8 +9,8 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
      When I found object by ID "C437801F11EA82FBF70F0080EFC55790" and selected "Unpublished cube"
      Then I verified that Import Data button is disabled
 
-     When I switched My Library toggle on
-      And MyLibrary Switch is OFF
+     When I switched on MyLibrary
+      And I switched off MyLibrary
 
      Then I verified that Import Data button is disabled
 
@@ -35,13 +35,12 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
      When I selected the first filter
      Then I verified that the background color of the first filter is "rgba(240, 247, 254, 1)"
 
-     When I selected the first attribute form name
-     Then I verified that the background color of the first attribute form name is "rgba(240, 247, 254, 1)"
+     When I selected the first option from Display attribute form names
+     Then I verified that the background color of the first option in Display attribute form names is "rgba(240, 247, 254, 1)"
 
      When I clicked Cancel button
-      And I hovered over Log out
+      And I hovered over Log Out in Dots Menu
 
-     Then I verified that the background color of the logout is "rgba(247, 247, 247, 1)"
-      
-      And I clicked three dots settings menu
+     Then I verified that the background color of Log Out is "rgba(247, 247, 247, 1)"
+
       And I log out

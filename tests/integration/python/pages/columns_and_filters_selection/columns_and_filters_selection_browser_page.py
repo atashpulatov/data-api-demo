@@ -171,7 +171,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % filter_name).click()
 
-    def click_display_attributes_names_type(self, form_visualization_type):
+    def select_display_attributes_form_names_element(self, form_visualization_type):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
@@ -423,20 +423,19 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def select_first_filter(self):
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_FILTER).click()
 
-    def find_background_color_of_first_filter(self):
+    def get_background_color_of_first_filter(self):
         element = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_FILTER)
 
         return element.get_background_color()
 
-    def select_first_attribute_form_name(self):
+    def select_first_display_attributes_form_names_element(self):
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
 
-        first_attribute_name_type =  self.get_element_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM)
-        first_attribute_name_type.click()
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM).click()
 
-    def find_background_color_of_first_attribute_name_type(self): 
+    def get_background_color_of_first_attribute_form_names_element(self):
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
+
         element = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM)
 
         return element.get_background_color()
-        

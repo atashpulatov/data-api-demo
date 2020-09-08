@@ -34,7 +34,8 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         element.click()
 
-    def click_display_attributes_names_type(self, form_visualization_type):
+    # TODO use form_visualization_type
+    def select_display_attributes_form_names_element(self, form_visualization_type):
         popup_main_element = self.get_popup_main_element()
 
         popup_main_element.get_element_by_xpath(ColumnsAndFiltersSelectionWindowsDesktopPage.DROPDOWN_ELEM).click()
