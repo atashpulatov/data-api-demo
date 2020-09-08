@@ -60,7 +60,7 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
     def click_metric(self, metric_name):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.METRIC_CHECKBOX % metric_name).click()
 
-    def click_display_attributes_names_type(self, visualization_type):
+    def select_display_attributes_form_names_element(self, visualization_type):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN).click()
 
         groups_no = self.get_elements_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_GROUPS)
