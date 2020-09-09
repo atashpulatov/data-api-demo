@@ -1,6 +1,5 @@
 @windows_chrome
 @mac_chrome
-
 Feature: F25931 - Duplicate object
 
   Scenario: [TC64700] - Duplicating and editing all types of objects
@@ -9,15 +8,17 @@ Feature: F25931 - Duplicate object
       And MyLibrary Switch is OFF
       And I found object by ID "0DEF0B3346F3CE89858B41BFA5BD4915" and selected "Merged Header Report"
       And I clicked Import button
-     Then I closed last notification
+      And I closed last notification
+     Then cell "A2" should have value "Books"
 
      When I added a new worksheet
       And I clicked Add Data button
       And MyLibrary Switch is OFF
       And I found object by ID "33978C7811E5B89504850080EF25B4FF" and selected "DATA_IMPORT_SQL_STATEMENT"
       And I clicked Import button
-     Then I closed last notification
-      
+      And I closed last notification
+     Then cell "A2" should have value "Atlanta"
+
      When I added a new worksheet
       And I clicked Add Data button
       And MyLibrary Switch is OFF
@@ -27,7 +28,8 @@ Feature: F25931 - Duplicate object
       And I selected dossier page or chapter 2
       And I selected visualization "Visualization 1"
       And I clicked import dossier
-     Then I closed last notification
+      And I closed last notification
+     Then cell "A2" should have value "Atlanta"
 
      When I selected worksheet number 1
       And I selected cell "E1"
@@ -39,8 +41,9 @@ Feature: F25931 - Duplicate object
       And I clicked attribute "Category"
       And I clicked metric "Cost"
       And I clicked Import button in Columns and Filters Selection to duplicate object
-     Then I closed last notification
-      
+      And I closed last notification
+     Then cell "E2" should have value "Books"
+
      When I selected worksheet number 2
       And I selected cell "H1"
       And I clicked Duplicate on object 3
@@ -51,7 +54,8 @@ Feature: F25931 - Duplicate object
       And I clicked attribute "Region" for dataset
       And I clicked metric "Avg Call Time"
       And I clicked Import button in Columns and Filters Selection to duplicate object
-     Then I closed last notification
+      And I closed last notification
+     Then cell "H2" should have value "Northeast"
 
      When I selected worksheet number 3
       And I selected cell "G1"
@@ -61,4 +65,7 @@ Feature: F25931 - Duplicate object
       And I waited for dossier to load successfully
       And I selected visualization "Visualization 2"
       And I clicked import dossier to duplicate
-     Then I closed last notification
+      And I closed last notification
+     Then cell "H4" should have value "$471,477"
+
+      And I log out

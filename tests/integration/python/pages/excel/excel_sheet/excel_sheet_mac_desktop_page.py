@@ -33,32 +33,28 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
 
     TABLE_HOME_TAB = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Home']"
     TABLE_DESIGN_TAB = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXRadioButton[@AXTitle='Table']"
-    GREEN_TABLE_STYLE = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[4]/AXScrollArea[0]/" \
-        "AXRadioButton[@AXIdentifier='in_ribbon_gallery_XLGalTableStyles_Control_1_7']"
 
-    PERCENTAGE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[3]/" \
-        "AXButton[@AXTitle='Percentage Style']"
+    EXCEL_WINDOW_TOP_PANE_ELEM = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + '/AXScrollArea[0]'
 
-    COMMA_STYLE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/" \
-        "AXGroup[3]/AXButton[@AXTitle='Comma Style']"
+    GREEN_TABLE_STYLE = EXCEL_WINDOW_TOP_PANE_ELEM + "/AXGroup[4]/AXScrollArea[0]/AXRadioButton[@AXIdentifier=" \
+                                                     "'in_ribbon_gallery_XLGalTableStyles_Control_1_7']"
 
-    ALIGN_MIDDLE_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[2]/" \
-        "AXCheckBox[@AXTitle='Align to Middle' and @AXSubrole='AXToggle']"
+    EXCEL_WINDOW_TOP_FORMAT_PANE_ELEM = EXCEL_WINDOW_TOP_PANE_ELEM + "/AXGroup[3]"
 
-    ALIGN_LEFT_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[2]/" \
-        "AXCheckBox[@AXTitle='Align to Left' and @AXSubrole='AXToggle']"
+    PERCENTAGE_BUTTON = EXCEL_WINDOW_TOP_FORMAT_PANE_ELEM + "/AXButton[@AXTitle='Percentage Style']"
+    COMMA_STYLE_BUTTON = EXCEL_WINDOW_TOP_FORMAT_PANE_ELEM + "/AXButton[@AXTitle='Comma Style']"
 
-    BOLD_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/" \
-        "AXGroup[1]/AXCheckBox[@AXTitle='Bold' and @AXSubrole='AXToggle']"
+    EXCEL_WINDOW_TOP_ALIGN_PANE_ELEM = EXCEL_WINDOW_TOP_PANE_ELEM + "/AXGroup[2]"
 
-    FONT_COLOR_BUTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
-        "AXMenuButton[@AXTitle='Font Colour' and @AXValue='RGB(255, 0, 0)']"
+    ALIGN_MIDDLE_BUTTON = EXCEL_WINDOW_TOP_ALIGN_PANE_ELEM + "/AXCheckBox[@AXTitle='Align to Middle']"
+    ALIGN_LEFT_BUTTON = EXCEL_WINDOW_TOP_ALIGN_PANE_ELEM + "/AXCheckBox[@AXTitle='Align to Left']"
 
-    FILL_COLOR_BOTTON = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
-        "AXMenuButton[@AXTitle='Shading' and @AXValue='RGB(255, 255, 0)']"
+    EXCEL_WINDOW_TOP_FONT_PANE_ELEM = EXCEL_WINDOW_TOP_PANE_ELEM + "/AXGroup[1]"
 
-    EXCEL_FONT_NAME_INPUT = BaseMacDesktopPage.EXCEL_WINDOW_TOP_PART_ELEM + "/AXScrollArea[0]/AXGroup[1]/" \
-        "AXComboBox[@AXValue='Calibri (Body)']"
+    BOLD_BUTTON = EXCEL_WINDOW_TOP_FONT_PANE_ELEM + "/AXCheckBox[@AXTitle='Bold']"
+    FONT_COLOR_BUTTON = EXCEL_WINDOW_TOP_FONT_PANE_ELEM + "/AXMenuButton[@AXTitle='Font Colour']"
+    FILL_COLOR_BUTTON = EXCEL_WINDOW_TOP_FONT_PANE_ELEM + "/AXMenuButton[@AXTitle='Shading']"
+    EXCEL_FONT_NAME_INPUT = EXCEL_WINDOW_TOP_FONT_PANE_ELEM + "/AXComboBox[@AXValue='Calibri (Body)']"
 
     def get_cells_values(self, cells):
         result = []
@@ -159,13 +155,16 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.FONT_COLOR_BUTTON).click()
 
     def click_fill_color_button(self):
-        self.get_element_by_xpath(ExcelSheetMacDesktopPage.FILL_COLOR_BOTTON).click()
+        self.get_element_by_xpath(ExcelSheetMacDesktopPage.FILL_COLOR_BUTTON).click()
 
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)
 
         font_name_element = self.get_element_by_xpath(ExcelSheetMacDesktopPage.EXCEL_FONT_NAME_INPUT)
+
         font_name_element.click(offset_x=20, offset_y=10)
+
         font_name_element.send_keys(Keys.BACKSPACE)
         font_name_element.send_keys_with_check(font_name)
+
         self.press_enter()

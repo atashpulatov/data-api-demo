@@ -1,12 +1,13 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.exception.MstrException import MstrException
-from string import Template
 
 
 class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
-    VISUALIZATION_TABLE_ROW_X_ITEMS = Template('.mstrmojo-XtabZone > table > tbody > tr:nth-child($x) > td')
-    VISUALIZATION_TABLE_COLUMN_X_ITEMS = Template('.mstrmojo-XtabZone > table > tbody > tr > td:nth-child($x)')
-    VISUALIZATION_TABLE_HEADER_ROW_ITEMS = VISUALIZATION_TABLE_ROW_X_ITEMS.substitute(x='1')
+    VISUALIZATION_TABLE = '.mstrmojo-XtabZone > table > tbody'
+    VISUALIZATION_TABLE_ROW_X_ITEMS = VISUALIZATION_TABLE + ' > tr:nth-child(%s) > td'
+    VISUALIZATION_TABLE_COLUMN_X_ITEMS = VISUALIZATION_TABLE + ' > tr > td:nth-child(%s)'
+    VISUALIZATION_TABLE_HEADER_ROW_ITEMS = VISUALIZATION_TABLE_ROW_X_ITEMS % '1'
+
     VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS = '.mstrmojo-ui-Menu-item'
     VISUALIZATION_TABLE_CONTEXT_MENU_LIST_ITEMS = '.mstrmojo-ListBase > div > div > span'
 
@@ -98,13 +99,11 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         """
         self.focus_on_dossier_frame()
 
-        # find given attribute header and right click to open context menu
         self.find_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
             attribute_name
         ).right_click()
 
-        # find replace with option in context menu
         self.find_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
             ImportDossierContextMenuBrowserPage.CONTEXT_MENU_REPLACE_WITH
@@ -114,14 +113,15 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_LIST_ITEMS
         )
 
-        # find given new attribute in opened list of context menu and click it
         for item in menu_items:
             if item.text == replace_with:
                 item.click()
                 return
 
         raise MstrException(
-            'Item to replace_with not present - attribute name: [%s], drill by: [%s].' % (attribute_name, drill_by))
+            'Item to replace_with not present - attribute name: [%s], replace with: [%s].' % (
+                attribute_name, replace_with)
+        )
 
     def select_exclude_for_attribute_element(self, exclude, attribute_name):
         """
@@ -132,24 +132,19 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         """
         self.focus_on_dossier_frame()
 
-        # find index of column which contains elements of given attribute
         index_of_column = self.find_index_of_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
             attribute_name
         )
 
-        # index_of_column+1 because indexes of elements starts from 0 but css selector nth-child starts from 1
-        column_selector = ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_COLUMN_X_ITEMS.substitute(
-            x=str(index_of_column+1)
-        )
+        # index_of_column + 1 because indices of elements starts from 0 but css selector nth-child starts from 1
+        column_selector = ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_COLUMN_X_ITEMS % (index_of_column + 1)
 
-        # find given attribute element to exclude in selected column and open context menu by right click
         self.find_element_in_list_by_text(
             column_selector,
             exclude
         ).right_click()
 
-        # find exclude option in opened context menu and click it
         self.find_element_in_list_by_text(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
             ImportDossierContextMenuBrowserPage.CONTEXT_MENU_EXCLUDE

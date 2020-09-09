@@ -1,4 +1,5 @@
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
+from framework.util.exception.MstrException import MstrException
 from framework.util.message_const import MessageConst
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 
@@ -6,23 +7,17 @@ from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDeskt
 class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
     TILES = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]"
 
-    NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
-        "/AXList/AXGroup[0]/AXGroup[0]/AXGroup[0]/AXStaticText[@AXValue='%s']"
+    NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList/AXGroup[0]/AXGroup[0]" \
+                                                                   "/AXGroup[0]/AXStaticText[@AXValue='%s']"
 
-    ERROR_NOTIFICATION_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
-        "/AXList[@AXSubrole='AXContentList']/AXGroup[0]/AXGroup[0]/AXGroup[1]/AXStaticText[@AXValue='%s']"
+    TILE_OBJECT_LIST = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + "/AXList[@AXSubrole='AXContentList']"
 
-    ERROR_NOTIFICATION_OK_ELEM = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
-        "/AXList[@AXSubrole='AXContentList']/AXGroup[0]/AXGroup[0]/AXGroup[3]/AXButton[@AXTitle='OK']"
+    ERROR_NOTIFICATION_ELEM = TILE_OBJECT_LIST + "/AXGroup[0]/AXGroup[0]/AXGroup[1]/AXStaticText[@AXValue='%s']"
+    ERROR_NOTIFICATION_OK_ELEM = TILE_OBJECT_LIST + "/AXGroup[0]/AXGroup[0]/AXGroup[3]/AXButton[@AXTitle='OK']"
 
-    DUPLICATE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
-        "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]/AXButton[0]"
-
-    EDIT_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
-        "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]/AXButton[1]"
-
-    TITLE_BUTTON_ELEMS = BaseMacDesktopPage.RIGHT_SIDE_PANEL_ELEM + \
-        "/AXList[@AXSubrole='AXContentList']/AXGroup[%s]/AXButton[4]"
+    DUPLICATE_BUTTON_ELEMS = TILE_OBJECT_LIST + "/AXGroup[%s]/AXButton[0]"
+    EDIT_BUTTON_ELEMS = TILE_OBJECT_LIST + "/AXGroup[%s]/AXButton[1]"
+    TITLE_BUTTON_ELEMS = TILE_OBJECT_LIST + "/AXGroup[%s]/AXButton[4]"
 
     TITLE_ATTRIBUTE = 'AXTitle'
 
@@ -70,6 +65,7 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
 
     def click_edit(self, object_no):
         object_index = int(object_no) - 1
+
         self._hover_over_tile(object_index)
 
         self._get_edit_buttons_for_all_tiles()[object_index].click()
@@ -80,3 +76,12 @@ class RightPanelTileMacDesktopPage(BaseMacDesktopPage):
         title_button_element = self._get_title_buttons_for_all_tiles()[object_index]
 
         return title_button_element.get_attribute(RightPanelTileMacDesktopPage.TITLE_ATTRIBUTE)
+
+    def check_if_error_message_is_correct(self, error_message):
+        error_message_selector = RightPanelTileMacDesktopPage.ERROR_NOTIFICATION_ELEM % error_message
+
+        if not self.check_if_element_exists_by_xpath(error_message_selector):
+            raise MstrException(f'Different notification displayed, expected: {error_message}')
+
+    def close_error_notification(self):
+        self.get_element_by_xpath(RightPanelTileMacDesktopPage.ERROR_NOTIFICATION_OK_ELEM).click()

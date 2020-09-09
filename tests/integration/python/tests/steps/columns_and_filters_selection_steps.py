@@ -14,17 +14,17 @@ def step_impl(context, title):
 
 
 @step('I ensure that "{number}" of "{of_number}" metrics are selected')
-def step_impl(context,  number, of_number):
+def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('metrics', number, of_number)
 
 
 @step('I ensure that "{number}" of "{of_number}" attributes are selected')
-def step_impl(context,  number, of_number):
+def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('attributes', number, of_number)
 
 
 @step('I ensure that "{number}" of "{of_number}" filters are selected')
-def step_impl(context,  number, of_number):
+def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('filters', number, of_number)
 
 
@@ -45,7 +45,22 @@ def step_impl(context, metric_name):
 
 @step('I set Display attribute form names to "{form_visualization_type}"')
 def step_impl(context, form_visualization_type):
-    context.pages.columns_and_filters_selection_page().click_display_attributes_names_type(form_visualization_type)
+    context.pages.columns_and_filters_selection_page().select_display_attributes_form_names_element(
+        form_visualization_type
+    )
+
+
+@step('I selected the first option from Display attribute form names')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().select_first_display_attributes_form_names_element()
+
+
+@step('I verified that the background color of the first option in Display attribute form names is "{color}"')
+def step_impl(context, color):
+    found_color = context.pages.columns_and_filters_selection_page(). \
+        get_background_color_of_first_attribute_form_names_element()
+
+    AssertUtil.assert_simple(found_color, color)
 
 
 @step('I selected all attributes')
@@ -212,3 +227,25 @@ def step_impl(context, filters_and_elements_json):
 @step('I closed popup window')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().close_popup_window()
+
+
+@step('I hovered over first filter')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().hover_over_first_filter()
+
+
+@step('I selected the first filter')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().select_first_filter()
+
+
+@step('I verified that the background color of the first filter is "{color}"')
+def step_impl(context, color):
+    found_color = context.pages.columns_and_filters_selection_page().get_background_color_of_first_filter()
+
+    AssertUtil.assert_simple(found_color, color)
+
+
+@step('I clicked Include Subtotals and Totals switch')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_include_totals_and_subtotals()

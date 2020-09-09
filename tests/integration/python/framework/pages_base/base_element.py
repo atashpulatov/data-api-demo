@@ -1,15 +1,19 @@
+import time
+
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
-    ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
+    ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
 
 class BaseElement:
     NAME_ATTRIBUTE = 'Name'
+    BACKGROUND_COLOR_PROPERTY = 'background-color'
+    OPACITY_PROPERTY = 'opacity'
 
     def __init__(self, raw_element, driver):
         self.__element = raw_element
@@ -87,31 +91,34 @@ class BaseElement:
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
 
     def get_element_by_css(self, selector):
-        return self._get_element(By.CSS_SELECTOR, selector)
+        return self._get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
 
     def get_element_by_xpath(self, selector):
-        return self._get_element(By.XPATH, selector)
+        return self._get_element(By.XPATH, selector, timeout=DEFAULT_TIMEOUT)
 
-    def check_if_child_element_exists_by_css(self, selector):
+    def check_if_child_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         try:
-            self._get_element(By.CSS_SELECTOR, selector)
+            self._get_element(By.CSS_SELECTOR, selector, timeout)
             return True
         except MstrException:
             return False
 
-    def _get_element(self, selector_type, selector):
-        i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+    def _get_element(self, selector_type, selector, timeout):
+        end_time = time.time() + timeout
+        while True:
             try:
                 raw_element = self.__element.find_element(by=selector_type, value=selector)
 
                 return BaseElement(raw_element, self.__driver)
             except NoSuchElementException:
-                Util.log_warning('Element not found, try %s: %s' % (i, selector))
-                Util.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
-            i += 1
+                pass
 
-        raise MstrException('Cannot find element: %s' % selector)
+            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+            if time.time() > end_time:
+                break
+
+        raise MstrException(('Element not found', selector))
 
     def get_elements_by_name(self, selector):
         raw_elements = self.__element.find_elements_by_name(selector)
@@ -137,7 +144,13 @@ class BaseElement:
 
         raise MstrException('Cannot find elements: %s' % selector)
 
-    def value_of_css_property(self, property_name):
+    def get_background_color(self):
+        return self._value_of_css_property(BaseElement.BACKGROUND_COLOR_PROPERTY)
+
+    def get_opacity(self):
+        return self._value_of_css_property(BaseElement.OPACITY_PROPERTY)
+
+    def _value_of_css_property(self, property_name):
         return self.__element.value_of_css_property(property_name)
 
     def move_to(self, offset_x=None, offset_y=None):

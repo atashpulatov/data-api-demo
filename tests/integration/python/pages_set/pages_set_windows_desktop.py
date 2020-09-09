@@ -15,6 +15,7 @@ from pages.right_panel.duplicate_object_popup.duplicate_object_popup_windows_des
 from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
+from pages.right_panel.range_taken_popup.range_taken_popup_windows_desktop_page import RangeTakenPopupWindowsDesktopPage
 
 
 class PagesSetWindowsDesktop(AbstractPagesSet):
@@ -33,6 +34,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.columns_and_filters_selection_browser_page = ColumnsAndFiltersSelectionWindowsDesktopPage()
         self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()
         self.not_logged_right_panel_windows_desktop_page = NotLoggedRightPanelWindowsDesktopPage()
+        self.range_taken_popup_windows_desktop_page = RangeTakenPopupWindowsDesktopPage()
 
     def excel_general_page(self):
         return self.excel_general_windows_desktop_page
@@ -86,10 +88,13 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         return self.not_logged_right_panel_windows_desktop_page
 
     def range_taken_popup_page(self):
-        pass
+        return self.range_taken_popup_windows_desktop_page
 
     def filter_panel_page(self):
         pass
 
     def prompt_page(self):
+        pass
+
+    def right_panel_tile_details_page(self):
         pass
