@@ -23,6 +23,8 @@ from pages.right_panel.duplicate_object_popup.duplicate_object_popup_browser_pag
 from pages.right_panel.range_taken_popup.range_taken_popup_browser_page import RangeTakenPopupBrowserPage
 from pages.right_panel.right_panel_main.right_panel_main_browser_page import RightPanelMainBrowserPage
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
+from pages.right_panel.right_panel_tile_details.right_panel_tile_details_browser_page import \
+     RightPanelTileDetailsBrowserPage
 from pages_set.abstract_pages_set import AbstractPagesSet
 
 
@@ -50,6 +52,7 @@ class PagesSetBrowser(AbstractPagesSet):
         self.not_logged_right_panel_browser_page = NotLoggedRightPanelBrowserPage()
         self.range_taken_popup_browser_page = RangeTakenPopupBrowserPage()
         self.prompt_browser_page = PromptBrowserPage()
+        self.right_panel_tile_details_browser_page = RightPanelTileDetailsBrowserPage()
 
     def excel_general_page(self):
         return self.excel_general_browser_page
@@ -110,3 +113,6 @@ class PagesSetBrowser(AbstractPagesSet):
 
     def prompt_page(self):
         return self.prompt_browser_page
+
+    def right_panel_tile_details_page(self):
+        return self.right_panel_tile_details_browser_page

@@ -6,7 +6,7 @@ Feature: F25933 - Range taken
       And I clicked Import Data button
       And MyLibrary Switch is OFF
 
-      And I found and selected object "100_report"
+      And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
       And I clicked Import button
       And I closed all notifications
 
@@ -22,7 +22,7 @@ Feature: F25933 - Range taken
 
      When I selected cell "AF1"
       And I clicked Add Data button
-      And I found and selected object "100_report"
+      And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
       And I clicked Import button
       And I closed all notifications
 
@@ -31,7 +31,7 @@ Feature: F25933 - Range taken
      When I removed 4 columns starting from column "AP"
       And I selected cell "AQ1"
       And I clicked Add Data button
-      And I found and selected object "100_report"
+      And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
       And I clicked Import button
       And I closed all notifications
 
