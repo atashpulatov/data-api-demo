@@ -11,8 +11,9 @@ Feature: F29365 - Import compound grid
       And I selected dossier page or chapter 1
       And I selected visualization "Kind of Subtotals | total, minimum, count, mode"
       And I clicked import dossier
+      And I closed last notification
 
-     Then I closed last notification
+     Then cell "C6" should have value "$3"
 
      When I selected cell "G1"
       And I clicked Add Data button
@@ -22,8 +23,9 @@ Feature: F29365 - Import compound grid
       And I selected dossier page or chapter 2
       And I selected visualization "Position of subtotal | left - bottom"
       And I clicked import dossier
+      And I closed last notification
 
-     Then I closed last notification
+     Then cell "I5" should have value "$1,410,402"
 
      When I selected cell "G12"
       And I clicked Add Data button
@@ -32,8 +34,8 @@ Feature: F29365 - Import compound grid
       And I waited for dossier to load successfully
       And I selected visualization "Position of subtotal | right - top"
       And I clicked import dossier
+      And I closed last notification
 
-     Then I closed last notification
+     Then cell "H20" should have value "$187,027"
 
       And I log out
-      
