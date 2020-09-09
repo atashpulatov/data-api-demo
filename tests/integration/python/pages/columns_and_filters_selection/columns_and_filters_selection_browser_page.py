@@ -75,6 +75,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRICS = 'metrics'
     FILTERS = 'filters'
 
+    TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
+
     TRY_LIMIT_FOR_SORT = 3
     TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 6
 
@@ -95,6 +97,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         METRICS: METRICS_SORT_TITLE,
         FILTERS: FILTER_SORT_TITLE
     }
+
+    FIRST_FILTER = '.ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal'
 
     def __init__(self):
         super().__init__()
@@ -169,7 +173,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.METRIC_ITEM % filter_name).click()
 
-    def click_display_attributes_names_type(self, form_visualization_type):
+    def select_display_attributes_form_names_element(self, form_visualization_type):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
@@ -414,3 +418,31 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_excel_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.CLOSE_POPUP).click()
+
+    def hover_over_first_filter(self):
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_FILTER).move_to()
+
+    def select_first_filter(self):
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_FILTER).click()
+
+    def get_background_color_of_first_filter(self):
+        element = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.FIRST_FILTER)
+
+        return element.get_background_color()
+
+    def select_first_display_attributes_form_names_element(self):
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM).click()
+
+    def get_background_color_of_first_attribute_form_names_element(self):
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
+
+        element = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM)
+
+        return element.get_background_color()
+
+    def click_include_totals_and_subtotals(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH).click()
