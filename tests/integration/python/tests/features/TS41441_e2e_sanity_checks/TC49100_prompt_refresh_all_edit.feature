@@ -11,12 +11,13 @@ Feature: TS41441 - Sanity checks
     And I waited for Run button to be enabled
     And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
     And I clicked Run button
+    And I clicked attribute "Year"
     And I clicked attribute "Region"
     And I clicked metric "Revenue"
-    And I clicked attributes and forms { "Category": ["ID"] }
-    And I selected filters { "Region" : ["Central", "South"] }
-#     TODO And I clicked Data Preview button
-#      TODO And I closed Data Preview
+#    And I clicked attributes and forms { "Category": ["ID"] }
+    And I selected filters { "Year" : ["2014", "2015"] }
+    And I clicked Data Preview button
+    And I Clicked Close Data Preview
     And I clicked Import button in Columns and Filters Selection
 
     Then I closed last notification

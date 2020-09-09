@@ -12,6 +12,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
     FILTER_ITEM = '.filter-title'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
+    DATA_PREVIEW_BUTTON = '#data-preview'
     FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
                                            'div.attribute-forms > ul > ' \
                                            'li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > ' \
@@ -446,3 +447,18 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH).click()
+
+    def click_data_preview(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.DATA_PREVIEW_BUTTON).click()
+
+    def click_close_data_preview(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.find_element_by_text_in_elements_list_by_css(
+            'span',
+            'Close Preview'
+        ).click()
+
+

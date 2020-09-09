@@ -249,3 +249,13 @@ def step_impl(context, color):
 @step('I clicked Include Subtotals and Totals switch')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_include_totals_and_subtotals()
+
+
+@step('I clicked Data Preview button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_data_preview()
+
+
+@step('I Clicked Close Data Preview')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_close_data_preview()
