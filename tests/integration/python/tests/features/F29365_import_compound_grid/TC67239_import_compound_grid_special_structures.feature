@@ -40,7 +40,6 @@ Feature: F29365 - Import compound grid
 
      Then cell "L10" should have value "$3,149,663"
 
-
      When I selected cell "P1"
       And I clicked Add Data button
       And I found object by ID "3901187911EAC1E161F30080EFF54765" and selected "Kind of compound grids - Special structure"
