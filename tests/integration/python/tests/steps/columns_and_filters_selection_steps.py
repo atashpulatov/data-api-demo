@@ -244,3 +244,8 @@ def step_impl(context, color):
     found_color = context.pages.columns_and_filters_selection_page().get_background_color_of_first_filter()
 
     AssertUtil.assert_simple(found_color, color)
+
+
+@step('I clicked Include Subtotals and Totals switch')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_include_totals_and_subtotals()

@@ -75,6 +75,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRICS = 'metrics'
     FILTERS = 'filters'
 
+    TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
+
     TRY_LIMIT_FOR_SORT = 3
     TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 6
 
@@ -439,3 +441,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         element = self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM)
 
         return element.get_background_color()
+
+    def click_include_totals_and_subtotals(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH).click()
