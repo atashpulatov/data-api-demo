@@ -3,6 +3,7 @@ import requests
 from framework.pages_base.base_page import BasePage
 from framework.util.config_util import ConfigUtil
 from framework.util.const import TUTORIAL_PROJECT_ID
+from framework.util.exception.MstrException import MstrException
 
 
 class RestApiPage(BasePage):
@@ -15,6 +16,8 @@ class RestApiPage(BasePage):
 
     REST_API_OBJECT_INFO_ENDPOINT = '/object/%s/type=3'
     REST_API_OBJECT_CERTIFY_ENDPOINT = '/object/%s/certify?type=3&certify=%s'
+
+    HTTP_RESPONSE_CODE_OK = 200
 
     def __init__(self):
         super().__init__()
@@ -30,20 +33,32 @@ class RestApiPage(BasePage):
     def _change_certification_state(self, object_id, certify, project_id=TUTORIAL_PROJECT_ID):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
 
-        requests.put(
-            self.__env_url + RestApiPage.REST_API_OBJECT_CERTIFY_ENDPOINT % (object_id, str(certify).lower()),
+        url = self.__env_url + RestApiPage.REST_API_OBJECT_CERTIFY_ENDPOINT % (object_id, str(certify).lower())
+
+        response = requests.put(
+            url,
             headers=custom_headers,
             cookies=cookies
         )
+
+        if response.status_code != RestApiPage.HTTP_RESPONSE_CODE_OK:
+            raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, '
+                                f'cookies: {cookies}, status: {response.status_code}')
 
     def is_object_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
 
+        url = self.__env_url + RestApiPage.REST_API_OBJECT_INFO_ENDPOINT % object_id
+
         response = requests.get(
-            self.__env_url + RestApiPage.REST_API_OBJECT_INFO_ENDPOINT % object_id,
+            url,
             headers=custom_headers,
             cookies=cookies
         )
+
+        if response.status_code != RestApiPage.HTTP_RESPONSE_CODE_OK:
+            raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, '
+                                f'cookies: {cookies}, status: {response.status_code}')
 
         return response.json()['certifiedInfo']['certified']
 
@@ -66,10 +81,15 @@ class RestApiPage(BasePage):
             'loginMode': 1
         }
 
+        url = self.__env_url + RestApiPage.REST_API_LOGIN_ENDPOINT
+
         response = requests.post(
-            self.__env_url + RestApiPage.REST_API_LOGIN_ENDPOINT,
+            url,
             data=payload
         )
+
+        if response.status_code != RestApiPage.HTTP_RESPONSE_CODE_OK:
+            raise MstrException(f'Error while accessing url: {url}, payload: {payload}, status: {response.status_code}')
 
         auth_token = response.headers[RestApiPage.HEADER_NAME_AUTH_TOKEN]
         cookies = response.cookies

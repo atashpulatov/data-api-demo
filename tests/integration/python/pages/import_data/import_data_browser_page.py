@@ -1,6 +1,9 @@
 from pyperclip import paste
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.const import SHORT_TIMEOUT
+from framework.util.exception.MstrException import MstrException
+from framework.util.message_const import MessageConst
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -32,6 +35,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     FILTERS_BUTTON = '.filter-button'
 
     FIRST_OBJECT_ROW = '.ReactVirtualized__Table__row'
+    FIRST_OBJECT_ROW_SELECTED = '.ReactVirtualized__Table__row.selected-object'
+    DISABLED_BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
     def __init__(self):
         super().__init__()
@@ -44,6 +49,14 @@ class ImportDataBrowserPage(BaseBrowserPage):
         element = self.get_element_by_css(ImportDataBrowserPage.MY_LIBRARY_SWITCH_ELEM)
 
         if self._is_on(element):
+            element.click()
+
+    def ensure_mylibrary_switch_is_on(self):
+        self.focus_on_add_in_popup_frame()
+
+        element = self.get_element_by_css(ImportDataBrowserPage.MY_LIBRARY_SWITCH_ELEM)
+
+        if not self._is_on(element):
             element.click()
 
     def _is_on(self, element):
@@ -145,7 +158,32 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def select_first_object_from_list(self):
         self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW).click()
 
+        first_object_selected = self.check_if_element_exists_by_css(
+            ImportDataBrowserPage.FIRST_OBJECT_ROW_SELECTED,
+            timeout=SHORT_TIMEOUT
+        )
+
+        if not first_object_selected:
+            raise MstrException('Error while selecting first object in the list.')
+
     def find_the_color_of_first_object_in_list(self):
         element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
 
         return element.get_background_color()
+
+    def verify_if_import_button_is_disabled(self):
+        element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
+
+        element.move_to()
+
+        self.wait_for_element_to_have_attribute_value_by_css(
+            ImportDataBrowserPage.DISABLED_BUTTON_TOOLTIP,
+            ImportDataBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            MessageConst.UNPUBLISHED_CUBE_CANNOT_BE_IMPORTED
+        )
+
+    def clear_search_box(self):
+        self.focus_on_add_in_popup_frame()
+
+        search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
+        search_box.clear()

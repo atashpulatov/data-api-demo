@@ -37,6 +37,13 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, True)
 
 
+@step('object {object_number} is NOT certified')
+def step_impl(context, object_number):
+    is_certified = context.pages.right_panel_tile_details_page().is_object_is_certified(object_number)
+
+    AssertUtil.assert_simple(is_certified, False)
+
+
 @step('object {object_number} has "{name_list_type}" list with value "{expected_value}"')
 def step_impl(context, object_number, name_list_type, expected_value):
     attributes = context.pages.right_panel_tile_details_page().get_object_list_property_value(
@@ -111,3 +118,17 @@ def step_impl(context, object_number):
     )
 
     AssertUtil.assert_simple(collapsed_location_exists, True)
+
+
+@step('for object {object_number} Totals and Subtotals is ON')
+def step_impl(context, object_number):
+    result = context.pages.right_panel_tile_details_page().is_totals_and_subtotals_on(object_number)
+
+    AssertUtil.assert_simple(result, True)
+
+
+@step('for object {object_number} Totals and Subtotals is OFF')
+def step_impl(context, object_number):
+    result = context.pages.right_panel_tile_details_page().is_totals_and_subtotals_on(object_number)
+
+    AssertUtil.assert_simple(result, False)
