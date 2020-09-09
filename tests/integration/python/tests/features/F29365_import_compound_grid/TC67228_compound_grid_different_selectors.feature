@@ -50,4 +50,4 @@ Feature: F29365 - Import compound grid
 
      Then cell "AC4" should have value "$480,173"
 
-     And I log out
+      And I log out
