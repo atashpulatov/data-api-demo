@@ -14,6 +14,7 @@ Feature: F25946 - Display filters and prompts
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
+      And I closed last notification
 
      Then object 1 has details panel hidden
 

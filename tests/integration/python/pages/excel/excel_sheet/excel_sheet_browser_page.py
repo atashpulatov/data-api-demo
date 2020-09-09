@@ -236,12 +236,12 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         self.focus_on_excel_frame()
 
         for column_name in column_names:
+            element = self.find_element_by_text_in_elements_list_by_css_safe(
+                ExcelSheetBrowserPage.EXCEL_SELECTED_COLUMN_HEADER,
+                column_name
+            )
 
-            try:
-                self.find_element_by_text_in_elements_list_by_css(
-                    ExcelSheetBrowserPage.EXCEL_SELECTED_COLUMN_HEADER,
-                    column_name)
-            except Exception:
+            if not element:
                 return False
 
         return True
@@ -250,12 +250,12 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         self.focus_on_excel_frame()
 
         for row_name in row_names:
+            element = self.find_element_by_text_in_elements_list_by_css_safe(
+                ExcelSheetBrowserPage.EXCEL_SELECTED_ROW_HEADER,
+                row_name
+            )
 
-            try:
-                self.find_element_by_text_in_elements_list_by_css(
-                    ExcelSheetBrowserPage.EXCEL_SELECTED_ROW_HEADER,
-                    row_name)
-            except Exception:
+            if not element:
                 return False
 
         return True

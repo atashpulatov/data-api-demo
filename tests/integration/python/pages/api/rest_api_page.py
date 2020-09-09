@@ -31,7 +31,7 @@ class RestApiPage(BasePage):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
 
         requests.put(
-            self.__env_url + RestApiPage.REST_API_OBJECT_INFO_ENDPOINT % (object_id, str(certify).lower()),
+            self.__env_url + RestApiPage.REST_API_OBJECT_CERTIFY_ENDPOINT % (object_id, str(certify).lower()),
             headers=custom_headers,
             cookies=cookies
         )

@@ -114,14 +114,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         return len(object_detail_panel) == 1
 
     def get_toggle_details_tooltip_text(self, object_number):
-        self.focus_on_add_in_frame()
-
-        tile_details_container = self._get_tile_details_container(object_number)
-
-        toggle_details_tooltip = tile_details_container.get_element_by_css(
-          RightPanelTileDetailsBrowserPage.TOGGLE_DETAILS_TOOLTIPS)
-
-        return toggle_details_tooltip.text
+        return self._get_object_detail(object_number, RightPanelTileDetailsBrowserPage.TOGGLE_DETAILS_TOOLTIPS)
 
     def get_object_id(self, object_number):
         return self._get_object_detail(object_number, RightPanelTileDetailsBrowserPage.OBJECT_ID_VALUE)
