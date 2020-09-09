@@ -7,7 +7,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     IMPORT_DATA_BUTTON_ELEM = '#overlay > div.side-panel > div.import-data > button'
     ADD_DATA_BUTTON_ELEM = 'add-data-btn'
 
-    DOTS_MENU = '#overlay > div > div.header > div.settings > button > span > svg'
+    DOTS_MENU = '.settings-button'
     DOTS_MENU_BOX = '.settings-list'
     DOTS_MENU_ITEM_LOG_OUT = 'logOut'
 
@@ -77,6 +77,11 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self.get_element_by_css(RightPanelMainBrowserPage.CONFIRM_CLEAR_DATA).click()
 
     def logout(self):
+        self.focus_on_add_in_frame()
+
+        if not self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=SHORT_TIMEOUT):
+            return
+
         self._open_dots_menu()
 
         self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()
