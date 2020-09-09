@@ -1,4 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.const import SHORT_TIMEOUT
 
 
 class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
@@ -28,9 +29,13 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     CERTIFIED = 'div[id^="certified-object-property-"]'
     OBJECT_ID_CONTAINER = 'div[id^="id-object-property-"]'
     OBJECT_OWNER_CONTAINER = 'div[id^="owner-object-property-"]'
+    OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER = 'div[id^="subtotals-object-property-"]'
     OBJECT_PROPERTY_VALUE = '.object-property-value'
     OBJECT_ID_VALUE = OBJECT_ID_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
     OBJECT_OWNER_VALUE = OBJECT_OWNER_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
+    OBJECT_TOTALS_AND_SUBTOTALS_VALUE = OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
+
+    TOTALS_AND_SUBTOTALS_ON = 'ON'
 
     def click_toggle_details_button(self, object_number):
         self._get_toggle_details_button(object_number).click()
@@ -88,12 +93,12 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
             RightPanelTileDetailsBrowserPage.OBJECT_LOCATION + RightPanelTileDetailsBrowserPage.COLLAPSED
         )
 
-    def _details_element_exists(self, object_number, selector):
+    def _details_element_exists(self, object_number, selector, timeout=SHORT_TIMEOUT):
         self.focus_on_add_in_frame()
 
         tile_details_container = self._get_tile_details_container(object_number)
 
-        return tile_details_container.check_if_child_element_exists_by_css(selector)
+        return tile_details_container.check_if_child_element_exists_by_css(selector, timeout=timeout)
 
     def get_object_list_property_value(self, object_number, name_list_type):
         self.focus_on_add_in_frame()
@@ -132,6 +137,14 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
 
     def get_object_location(self, object_number):
         return self._get_object_detail(object_number, RightPanelTileDetailsBrowserPage.OBJECT_LOCATION)
+
+    def is_totals_and_subtotals_on(self, object_number):
+        totals_and_subtotals_value = self._get_object_detail(
+            object_number,
+            RightPanelTileDetailsBrowserPage.OBJECT_TOTALS_AND_SUBTOTALS_VALUE
+        )
+
+        return totals_and_subtotals_value == RightPanelTileDetailsBrowserPage.TOTALS_AND_SUBTOTALS_ON
 
     def _get_object_detail(self, object_number, selector):
         self.focus_on_add_in_frame()
