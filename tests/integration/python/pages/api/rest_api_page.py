@@ -41,7 +41,7 @@ class RestApiPage(BasePage):
 
         if not response.ok:
             raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, '
-                                f'cookies: {cookies}, response: {response.status_code}')
+                                f'cookies: {cookies}, status: {response.status_code}')
 
     def is_object_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
