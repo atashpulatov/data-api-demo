@@ -17,10 +17,10 @@ class NotLoggedRightPanelBrowserPage(BaseBrowserPage):
         self.get_element_by_id(NotLoggedRightPanelBrowserPage.OPEN_LOGIN_POPUP_BUTTON_ELEM).click()
 
     def _enable_accept_cookies(self):
-        login_button_exists = self.check_if_element_exists_by_id(
-            NotLoggedRightPanelBrowserPage.OPEN_LOGIN_POPUP_BUTTON_ELEM,
+        accept_cookies_button_exists = self.check_if_element_exists_by_id(
+            NotLoggedRightPanelBrowserPage.ACCEPT_COOKIES_BUTTON_ELEM,
             timeout=SHORT_TIMEOUT
         )
 
-        if not login_button_exists:
+        if accept_cookies_button_exists:
             self.get_element_by_id(NotLoggedRightPanelBrowserPage.ACCEPT_COOKIES_BUTTON_ELEM).click()

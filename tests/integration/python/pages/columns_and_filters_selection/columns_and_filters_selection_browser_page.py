@@ -1,7 +1,7 @@
 import json
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import LONG_TIMEOUT
+from framework.util.const import LONG_TIMEOUT, SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
@@ -12,10 +12,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
     FILTER_ITEM = '.filter-title'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
-    FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
-                                           'div.attribute-forms > ul > ' \
-                                           'li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > ' \
-                                           'span.ant-tree-switcher'
 
     ALL_ATTRIBUTES = '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > ' \
                      'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > ' \
@@ -39,12 +35,22 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
     REPORT_TITLE = 'div.folder-browser-title > span:nth-child(2)'
 
+    PARENT_ATTRIBUTE_ELEMENTS = '.attribute-forms li'
+    CHILD_ATTRIBUTE_ELEMENT = 'span > span > .item-title'
+    ATTRIBUTE_FORMS = 'ul li[role="treeitem"] .item-title'
+    ATTRIBUTE_FORM_ARROW_COLLAPSED = '.ant-tree-switcher_close'
+    ATTRIBUTE_FORM_ARROW_EXPANDED = '.ant-tree-switcher_open'
+
     ROOT_ATTRIBUTE_CONTAINER = 'div.ant-col.ant-col-6.attributes-col'
     ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > div > ul'
     ATTRIBUTE_ELEMENT_AT = ATTRIBUTES_CONTAINER + ' > li:nth-child(%s)'
     ATTRIBUTES_TITLE_SORT = ROOT_ATTRIBUTE_CONTAINER + ' > div > div.selector-title > div'
-    ATTRIBUTE_FORM_ARROW_COLLAPSED = ATTRIBUTE_ELEMENT_AT + ' > span.ant-tree-switcher.ant-tree-switcher_close'
-    ATTRIBUTE_FORM_ARROW_EXPANDED = ATTRIBUTE_ELEMENT_AT + ' > span.ant-tree-switcher.ant-tree-switcher_open'
+    ATTRIBUTE_FORM_ARROW_COLLAPSED_ELEMENT_AT = (
+            ATTRIBUTE_ELEMENT_AT + ' > span.ant-tree-switcher' + ATTRIBUTE_FORM_ARROW_COLLAPSED
+    )
+    ATTRIBUTE_FORM_ARROW_EXPANDED_ELEMENT_AT = (
+            ATTRIBUTE_ELEMENT_AT + ' > span.ant-tree-switcher' + ATTRIBUTE_FORM_ARROW_EXPANDED
+    )
     ATTRIBUTE_FORM_ELEMENT_CONTAINER = ' > ul > li:nth-child(%s)'
 
     EXPAND_ATTRIBUTE_FORMS = 'expand'
@@ -236,14 +242,37 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
         for attribute_name, form_names in attributes_and_forms.items():
-            self.click_attribute(attribute_name)
+            attribute_element = self.get_parent_element_by_child_text_from_parent_elements_list_by_css(
+                ColumnsAndFiltersSelectionBrowserPage.PARENT_ATTRIBUTE_ELEMENTS,
+                ColumnsAndFiltersSelectionBrowserPage.CHILD_ATTRIBUTE_ELEMENT,
+                attribute_name
+            )
+
+            attribute_element.click()
 
             if len(form_names) > 0:
-                self.get_element_by_css(
-                    ColumnsAndFiltersSelectionBrowserPage.FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER).click()
+                self._ensure_attributes_forms_are_expanded(attribute_element)
 
                 for form_name in form_names:
-                    self.click_attribute(form_name)
+                    attribute_form_element = attribute_element.get_element_by_text_from_elements_list_by_css(
+                        ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORMS,
+                        form_name
+                    )
+
+                    attribute_form_element.move_to_and_click(offset_x=2, offset_y=2)
+
+    def _ensure_attributes_forms_are_expanded(selfm, attribute_element):
+        if attribute_element.check_if_child_element_exists_by_css(
+                ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED,
+                timeout=SHORT_TIMEOUT):
+            attribute_element.get_element_by_css(
+                ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED
+            ).click()
+
+        if not attribute_element.check_if_child_element_exists_by_css(
+                ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED,
+                timeout=SHORT_TIMEOUT):
+            raise MstrException(f'Error while expanding attributes forms.')
 
     def select_element_by_number(self, object_type, object_number):
         self.focus_on_add_in_popup_frame()
@@ -256,7 +285,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         attribute_form_arrow = self.get_element_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED % object_number)
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED_ELEMENT_AT % object_number)
 
         attribute_form_arrow.click()
 
@@ -264,7 +293,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         attribute_form_arrow = self.get_element_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED % object_number)
+            ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED_ELEMENT_AT % object_number)
 
         attribute_form_arrow.click()
 
