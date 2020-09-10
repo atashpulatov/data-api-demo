@@ -230,3 +230,34 @@ class BaseBrowserPage(BasePage):
             return elements_names.index(text)
         except ValueError:
             raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+
+    def get_parent_element_by_child_text_from_parent_elements_list_by_css(self, parents_selector, child_selector,
+                                                                          expected_text, timeout=DEFAULT_TIMEOUT):
+        """
+        Gets parent element from parent elements list found by a selector that contains a child element
+        having expected text.
+
+        :param parents_selector: selector used to find list of parent elements
+        :param child_selector: selector used to find a child element, starting from subsequent parent elements
+        :param expected_text: expected text that child element has
+        :param timeout: optional timeout
+
+        :raises MstrException: when no element found.
+        """
+        end_time = time.time() + timeout
+        while True:
+            parent_elements = self.get_elements_by_css(parents_selector)
+
+            for parent_element in parent_elements:
+                child_element = parent_element.get_element_by_css(child_selector)
+
+                if child_element.text == expected_text:
+                    return parent_element
+
+            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+            if time.time() > end_time:
+                break
+
+        raise MstrException(f'No element found, parents selector: {parents_selector}, '
+                            f'child selector: {child_selector}, text: {expected_text}')
