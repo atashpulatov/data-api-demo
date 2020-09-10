@@ -167,7 +167,7 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 break
 
-        raise MstrException('No Attribute found: %s' % expected_text)
+        raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')
 
     def focus_on_add_in_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
