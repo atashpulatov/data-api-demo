@@ -3,6 +3,11 @@ from behave import *
 from framework.util.assert_util import AssertUtil
 
 
+@step('I ensured object "{object_id}" in Tutorial project is decertified')
+def step_impl(context, object_id):
+    context.pages.rest_api_page().ensure_object_is_decertified(object_id)
+
+
 @step('I certified object "{object_id}" in Tutorial project')
 def step_impl(context, object_id):
     context.pages.rest_api_page().certify_object(object_id)

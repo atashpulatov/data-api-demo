@@ -28,6 +28,10 @@ class RestApiPage(BasePage):
     def decertify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         self._change_certification_state(object_id, False, project_id)
 
+    def ensure_object_is_decertified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+        if self.is_object_certified(object_id, project_id):
+            self.decertify_object(object_id, project_id)
+
     def _change_certification_state(self, object_id, certify, project_id=TUTORIAL_PROJECT_ID):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
 
