@@ -96,15 +96,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         for button in warnings_notifications_ok_buttons:
             button.click()
 
-    def click_tile(self, object_no):
-        self.focus_on_add_in_frame()
-
-        other_container = self.get_element_by_css(RightPanelTileBrowserPage.SIDE_PANEL_HEADER)
-        other_container.move_to()
-
-        tiles = self.get_elements_by_css(RightPanelTileBrowserPage.TILES)
-        tiles[int(object_no) - 1].click()
-    
     def click_duplicate(self, object_no):
         self.focus_on_add_in_frame()
 
