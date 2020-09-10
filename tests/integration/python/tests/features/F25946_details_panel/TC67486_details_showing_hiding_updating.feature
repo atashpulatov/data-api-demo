@@ -91,8 +91,8 @@ Feature: F25946 - Display filters and prompts
 
       And I log out
 
-    Given I certified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
-      And I certified object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
+    Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
+      And I ensured object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project is certified
 
      When I logged in with username "user2" and password "user2"
       And I clicked toggle details button on object 2

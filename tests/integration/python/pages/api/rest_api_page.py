@@ -28,6 +28,10 @@ class RestApiPage(BasePage):
     def decertify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         self._change_certification_state(object_id, False, project_id)
 
+    def ensure_object_is_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+        if not self.is_object_certified(object_id, project_id):
+            self.certify_object(object_id, project_id)
+
     def ensure_object_is_decertified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         if self.is_object_certified(object_id, project_id):
             self.decertify_object(object_id, project_id)
