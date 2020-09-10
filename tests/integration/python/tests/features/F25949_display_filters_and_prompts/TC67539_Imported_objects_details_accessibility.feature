@@ -30,7 +30,7 @@ Feature: F25949 - Display filters and prompts
       And I ensure that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
-      And I selected filter "Order Date" with all elements
+      And I selected filter "Item Type" with all elements
       And I clicked Import button in Columns and Filters Selection
      Then I closed last notification
 
@@ -53,30 +53,17 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Tab
-     Then I pressed key Enter
-
-     When I pressed key Tab
-      And I pressed key Tab
-     Then I pressed key Enter
-
-     When I pressed key Tab
-      And I pressed key Tab
-      And I pressed key Tab
-      And I pressed key Tab
-      And I pressed key Tab
-      And I pressed key Tab
-      And I pressed key Tab
-      And I pressed key Tab
-      And I pressed key Tab
-     Then I pressed key Enter
-
-     When I pressed key Tab
-      And I pressed key Tab
-     Then I pressed key Enter
-
+     Then tooltip text for object 1 toggle details button is "Show Details"
      When I pressed key Enter
+     Then object 1 has details panel displayed
+      And object 1 has "Attribute" with value "Salary"
+      And object 1 has "Metric" with value "Count of Customers"
+      And object 1 has id "69CC877E11E9FEEDDC670080EFD50918"
+      And object 1 has collapsed location displayed
+     When I pressed key Tab
+      And I pressed key Tab
       And I pressed key Enter
-     Then I pressed key Enter
+     Then object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Dossier with many visualisations and pages" displayed
 
      When I pressed key Tab
       And I pressed key Tab
@@ -87,12 +74,47 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Tab
-     Then I pressed key Enter
-
+      And I pressed key Enter
+     Then object 2 has details panel displayed
+      And object 2 has collapsed "Filter" list displayed
+      And object 2 has collapsed "Attribute" list displayed
+      And object 2 has collapsed "Metric" list displayed
+      And object 2 has id "5BBA2D6911EA906EE92E0080EF1515C7"
+      And object 2 has collapsed location displayed
      When I pressed key Tab
       And I pressed key Tab
       And I pressed key Enter
-     Then I pressed key Enter
+     Then object 2 has "Filter" with value "Item Type (Baby Food, Beverages, Cereal, Clothes, Cosmetics, Fruits, Household, Meat, Office Supplies, Personal Care, Snacks, Vegetables)"
+     When I pressed key Enter
+     Then object 2 has "Attribute" with value "Item Type‎, Order Date‎, Order ID‎, Order Priority‎, Region‎, Sales Channel‎, Ship Date"
+     When I pressed key Enter
+     Then object 2 has "Metric" with value "Country‎, Row Count - 100 Sales Records.csv‎, Total Cost‎, Total Profit‎, Total Revenue‎, Unit Cost‎, Unit Price‎, Units Sold"
+     When I pressed key Enter
+     Then object 2 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > 100 Sales Records.csv" displayed
+
+     When I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Enter
+     Then object 3 has details panel displayed
+      And object 3 has "Prompt" with value "Books‎, Electronics‎, Movies‎, Music"
+      And object 3 has collapsed "Filter" list displayed
+      And object 3 has "Attribute" with value "Month‎, Subcategory"
+      And object 3 has "Metric" with value "Profit‎, Profit Forecast‎, Revenue‎, Revenue Forecast"
+      And object 3 has id "300DBAFA4A1D8EC546AC6AB8CDE7834E"
+      And object 3 has collapsed location displayed
+     When I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Enter
+     Then object 3 has "Filter" with value "Subcategory (Art & Architecture, Business, Literature, Books - Miscellaneous, Science & Technology, Sports & Health, Audio Equipment, Cameras, Computers, Electronics - Miscellaneous, TV's, Video Equipment, Action, Comedy, Drama, Horror, Kids / Family, Special Interests, Alternative, Country, Music - Miscellaneous, Pop, Rock, Soul / R&B)"
+     When I pressed key Enter
+     Then object 3 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Report with a subtotal & prompt" displayed
 
     #Hidding imported objects details
      When I clicked on object 1
@@ -103,7 +125,9 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Tab
-     Then I pressed key Enter
+     Then tooltip text for object 1 toggle details button is "Hide Details"
+     When I pressed key Enter
+     Then object 1 has details panel hidden
 
      When I pressed key Tab
       And I pressed key Tab
@@ -113,7 +137,8 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Tab
-     Then I pressed key Enter
+      And I pressed key Enter
+     Then object 2 has details panel hidden
 
      When I pressed key Tab
       And I pressed key Tab
@@ -123,7 +148,8 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Tab
-     Then I pressed key Enter
+      And I pressed key Enter
+     Then object 3 has details panel hidden
 
     #Executing actions on objects with keyboard navigation
      When I clicked on object 2
@@ -135,7 +161,9 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Enter
-     Then I closed last notification
+      And I closed last notification
+     Then object number 1 should be called "100 Sales Records.csv Copy"
+      And number of worksheets should be 2
 
      When I clicked on object 1
       And I pressed key Tab
@@ -156,6 +184,7 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Enter
-     Then I closed last notification
+      And I closed last notification
+     Then object number 1 should be called "Visualization 1"
 
       And I log out
