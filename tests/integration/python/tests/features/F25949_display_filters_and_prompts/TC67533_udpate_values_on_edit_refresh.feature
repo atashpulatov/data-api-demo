@@ -13,7 +13,7 @@ Feature: F25949 - Display filters and prompts
 
      Then object 1 has id "E659E86811E58C918D6F0080EF453539"
 
-     When I decertified object "E659E86811E58C918D6F0080EF453539" in Tutorial project
+     When I ensured object "E659E86811E58C918D6F0080EF453539" in Tutorial project is decertified
       And I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
