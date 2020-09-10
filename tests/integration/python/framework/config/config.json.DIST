@@ -1,5 +1,5 @@
 {
-  "driver_type": "windows_desktop",
+  "driver_type": "windows_chrome",
   "image_recognition_enabled": true,
   "connect_to_existing_session_enabled": false,
   "browser_existing_session_executor_url": "",
@@ -8,12 +8,12 @@
   "cleanup_after_test_enabled": true,
   "run_win_app_driver_enabled": false,
   "driver_path_windows_desktop": "C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
-  "driver_path_windows_chrome": "framework\\resources\\chromedriver83.exe",
+  "driver_path_windows_chrome": "framework\\resources\\chromedriver85_win32.exe",
   "driver_path_mac_chrome": "framework/resources/chromedriver83",
   "host_url_mac_desktop": "http://localhost:4622/wd/hub",
   "host_url_windows_desktop": "http://localhost:4723/wd/hub",
-  "excel_add_in_environment": "221120",
-  "excel_desktop_add_in_import_data_name": "env-221120",
+  "excel_add_in_environment": "225720",
+  "excel_desktop_add_in_import_data_name": "env-225720",
   "excel_add_in_environment_default_user_name": "a",
   "excel_add_in_environment_default_password": ""
 }
