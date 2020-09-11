@@ -1,4 +1,5 @@
 @mac_chrome
+@windows_chrome
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67228] - Import compound grid visualization with different selectors
@@ -37,7 +38,7 @@ Feature: F29365 - Import compound grid
       And I closed last notification
 
      Then cell "Q4" should have value "$370,161"
-    
+
      When I selected cell "X1"
       And I clicked Add Data button
       And I found object by ID "376200B311EABC4754C30080EF65034E" and selected "Kind of compound grids - Selector relationship"
