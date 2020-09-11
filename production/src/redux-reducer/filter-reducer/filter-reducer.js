@@ -64,7 +64,7 @@ export const filterReducer = (state = initialState, action) => {
     }
 
     case LOAD_BROWSING_STATE_CONST: {
-      const newState= {
+      const newState = {
         ...initialState,
         ...data,
       };
