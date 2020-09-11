@@ -26,6 +26,7 @@ Feature: F25949 - Display filters and prompts
      When I clicked "Attribute" list expand button on object 1
       And I clicked "Metric" list expand button on object 1
       And I clicked object location expand button on object 1
+
      Then object 1 has "Attribute" list with value "adult male‎, age‎, alive‎, alone‎, class‎, deck‎, embark town‎, embarked‎, sex‎, who"
       And object 1 has "Metric" list with value "fare‎, parch‎, pclass‎, Row Count - titanic_df‎, sibsp‎, survived"
       And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > DS Objects > Cubes for Create Testing > testing_folder_wiblgjlprj > titanic_wiblgjlprj" displayed
@@ -55,6 +56,7 @@ Feature: F25949 - Display filters and prompts
      When I clicked "Filter" list expand button on object 1
       And I clicked "Attribute" list expand button on object 1
       And I clicked object location expand button on object 1
+
      Then object 1 has "Filter" list with value "Call Center (Atlanta, San Diego, San Francisco, Washington, DC, Salt Lake City, Miami, Milwaukee, New Orleans, Seattle, Boston, New York, Fargo, Memphis, Charleston, Web)‎, Employee (Bates, Becker, Bell, Benner, Bernstein, Brown, Conner, Corcoran, De Le Torre, Ellerkamp, Folks, Gale, Gedot, Hall, Hollywood, Hunt, Ingles, Johnson, Kelly, Kieferson, Lynch, McClain, Nelson, Pierce, Sawyer, Schafer, Smith, Sonder, Strome, Torrison, Yager, Young, Zemlicka, Walker)"
       And object 1 has "Attribute" list with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
       And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Supporting Objects > Excel - Objects for Testing > Reports > Prompted report with subtotals" displayed
@@ -130,8 +132,7 @@ Feature: F25949 - Display filters and prompts
      When I refreshed all objects
       And I waited for all progress notifications to disappear
       And I closed all notifications
-
-     And I clicked toggle details button on object 1
+      And I clicked toggle details button on object 1
 
      Then object 1 has collapsed "Prompt" list displayed
       And object 1 has collapsed "Filter" list displayed
@@ -165,7 +166,6 @@ Feature: F25949 - Display filters and prompts
       And I log out
 
     Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
-      And I ensured object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project is certified
 
       And I logged in as default user
       And I refreshed all objects
@@ -178,10 +178,9 @@ Feature: F25949 - Display filters and prompts
      When I clicked toggle details button on object 2
      Then object 2 is certified
 
-     When I clicked toggle details button on object 3
-     Then object 3 is certified
+     When I clicked toggle details button on object 4
+     Then object 4 is certified
 
       And I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
-      And I decertified object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
 
       And I log out

@@ -92,7 +92,6 @@ Feature: F25946 - Display filters and prompts
       And I log out
 
     Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
-      And I ensured object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project is certified
 
      When I logged in with username "user2" and password "user2"
       And I clicked toggle details button on object 2
@@ -117,8 +116,7 @@ Feature: F25946 - Display filters and prompts
 
      When I clicked toggle details button on object 1
 
-     Then object 1 is certified
-      And object 1 has "Prompt" list with value "Northeast‎, 1/1/2014"
+     Then object 1 has "Prompt" list with value "Northeast‎, 1/1/2014"
       And object 1 has "Attribute" list with value "Quarter‎, Distribution Center"
       And object 1 has "Metric" list with value "Profit‎, Revenue"
       And object 1 has id "5902C03A11E9FEF1DC670080EF856919"
@@ -134,6 +132,5 @@ Feature: F25946 - Display filters and prompts
       And object 2 has owner "Administrator"
 
     Then I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
-     And I decertified object "5902C03A11E9FEF1DC670080EF856919" in Tutorial project
 
      And I log out
