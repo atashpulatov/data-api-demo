@@ -63,8 +63,8 @@ Feature: F25949 - Display filters and prompts
 
      When I pressed key Enter
      Then object 1 has details panel displayed
-      And object 1 has "Attribute" with value "Salary"
-      And object 1 has "Metric" with value "Count of Customers"
+      And object 1 has "Attribute" list with value "Salary"
+      And object 1 has "Metric" list with value "Count of Customers"
       And object 1 has id "69CC877E11E9FEEDDC670080EFD50918"
       And object 1 has collapsed location displayed
 
@@ -96,13 +96,13 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Enter
 
-     Then object 2 has "Filter" with value "Item Type (Baby Food, Beverages, Cereal, Clothes, Cosmetics, Fruits, Household, Meat, Office Supplies, Personal Care, Snacks, Vegetables)"
+     Then object 2 has "Filter" list with value "Item Type (Baby Food, Beverages, Cereal, Clothes, Cosmetics, Fruits, Household, Meat, Office Supplies, Personal Care, Snacks, Vegetables)"
 
      When I pressed key Enter
-     Then object 2 has "Attribute" with value "Item Type‎, Order Date‎, Order ID‎, Order Priority‎, Region‎, Sales Channel‎, Ship Date"
+     Then object 2 has "Attribute" list with value "Item Type‎, Order Date‎, Order ID‎, Order Priority‎, Region‎, Sales Channel‎, Ship Date"
 
      When I pressed key Enter
-     Then object 2 has "Metric" with value "Country‎, Row Count - 100 Sales Records.csv‎, Total Cost‎, Total Profit‎, Total Revenue‎, Unit Cost‎, Unit Price‎, Units Sold"
+     Then object 2 has "Metric" list with value "Country‎, Row Count - 100 Sales Records.csv‎, Total Cost‎, Total Profit‎, Total Revenue‎, Unit Cost‎, Unit Price‎, Units Sold"
 
      When I pressed key Enter
      Then object 2 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > 100 Sales Records.csv" displayed
@@ -119,17 +119,17 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Enter
 
      Then object 3 has details panel displayed
-      And object 3 has "Prompt" with value "Books‎, Electronics‎, Movies‎, Music"
+      And object 3 has "Prompt" list with value "Books‎, Electronics‎, Movies‎, Music"
       And object 3 has collapsed "Filter" list displayed
-      And object 3 has "Attribute" with value "Month‎, Subcategory"
-      And object 3 has "Metric" with value "Profit‎, Profit Forecast‎, Revenue‎, Revenue Forecast"
+      And object 3 has "Attribute" list with value "Month‎, Subcategory"
+      And object 3 has "Metric" list with value "Profit‎, Profit Forecast‎, Revenue‎, Revenue Forecast"
       And object 3 has id "300DBAFA4A1D8EC546AC6AB8CDE7834E"
       And object 3 has collapsed location displayed
 
      When I pressed key Tab
       And I pressed key Tab
       And I pressed key Enter
-     Then object 3 has "Filter" with value "Subcategory (Art & Architecture, Business, Literature, Books - Miscellaneous, Science & Technology, Sports & Health, Audio Equipment, Cameras, Computers, Electronics - Miscellaneous, TV's, Video Equipment, Action, Comedy, Drama, Horror, Kids / Family, Special Interests, Alternative, Country, Music - Miscellaneous, Pop, Rock, Soul / R&B)"
+     Then object 3 has "Filter" list with value "Subcategory (Art & Architecture, Business, Literature, Books - Miscellaneous, Science & Technology, Sports & Health, Audio Equipment, Cameras, Computers, Electronics - Miscellaneous, TV's, Video Equipment, Action, Comedy, Drama, Horror, Kids / Family, Special Interests, Alternative, Country, Music - Miscellaneous, Pop, Rock, Soul / R&B)"
 
      When I pressed key Enter
      Then object 3 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Report with a subtotal & prompt" displayed
