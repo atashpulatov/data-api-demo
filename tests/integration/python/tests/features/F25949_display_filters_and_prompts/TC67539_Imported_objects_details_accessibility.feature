@@ -192,7 +192,6 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Enter
-      # And I pressed key Tab
 
      Then I ensure that "8" of "8" metrics are selected
       And I ensure that "7" of "7" attributes are selected
