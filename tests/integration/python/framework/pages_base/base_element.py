@@ -247,3 +247,28 @@ class BaseElement:
             wrapped_elements.append(BaseElement(raw_element, driver))
 
         return wrapped_elements
+
+    def get_element_by_text_from_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
+        """
+        Gets element from elements list found by a selector (starting from this element) that contains expected text.
+
+        :param selector: selector used to find list of elements, starting from this element
+        :param expected_text: expected text
+        :param timeout: optional timeout
+
+        :raises MstrException: when no element found.
+        """
+        end_time = time.time() + timeout
+        while True:
+            elements = self.get_elements_by_css(selector)
+
+            element = next((item for item in elements if item.text == expected_text), None)
+            if element:
+                return element
+
+            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+            if time.time() > end_time:
+                break
+
+        raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')

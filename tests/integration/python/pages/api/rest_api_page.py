@@ -14,10 +14,8 @@ class RestApiPage(BasePage):
 
     REST_API_LOGIN_ENDPOINT = '/auth/login'
 
-    REST_API_OBJECT_INFO_ENDPOINT = '/object/%s/type=3'
-    REST_API_OBJECT_CERTIFY_ENDPOINT = '/object/%s/certify?type=3&certify=%s'
-
-    HTTP_RESPONSE_CODE_OK = 200
+    REST_API_OBJECT_INFO_ENDPOINT = '/objects/%s/?type=3'
+    REST_API_OBJECT_CERTIFY_ENDPOINT = '/objects/%s/certify?type=3&certify=%s'
 
     def __init__(self):
         super().__init__()
@@ -30,6 +28,14 @@ class RestApiPage(BasePage):
     def decertify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         self._change_certification_state(object_id, False, project_id)
 
+    def ensure_object_is_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+        if not self.is_object_certified(object_id, project_id):
+            self.certify_object(object_id, project_id)
+
+    def ensure_object_is_decertified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+        if self.is_object_certified(object_id, project_id):
+            self.decertify_object(object_id, project_id)
+
     def _change_certification_state(self, object_id, certify, project_id=TUTORIAL_PROJECT_ID):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
 
@@ -41,9 +47,9 @@ class RestApiPage(BasePage):
             cookies=cookies
         )
 
-        if response.status_code != RestApiPage.HTTP_RESPONSE_CODE_OK:
-            raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, '
-                                f'cookies: {cookies}, status: {response.status_code}')
+        if not response.ok:
+            raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, cookies: {cookies}, '
+                                f'status: {response.status_code}, response content: {response.content}')
 
     def is_object_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
@@ -56,9 +62,10 @@ class RestApiPage(BasePage):
             cookies=cookies
         )
 
-        if response.status_code != RestApiPage.HTTP_RESPONSE_CODE_OK:
-            raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, '
-                                f'cookies: {cookies}, status: {response.status_code}')
+        if not response.ok:
+            self.log_error(response._content)
+            raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, cookies: {cookies}, '
+                                f'status: {response.status_code}, response content: {response.content}')
 
         return response.json()['certifiedInfo']['certified']
 
@@ -88,8 +95,9 @@ class RestApiPage(BasePage):
             data=payload
         )
 
-        if response.status_code != RestApiPage.HTTP_RESPONSE_CODE_OK:
-            raise MstrException(f'Error while accessing url: {url}, payload: {payload}, status: {response.status_code}')
+        if not response.ok:
+            raise MstrException(f'Error while accessing url: {url}, payload: {payload}, status: '
+                                f'{response.status_code}, response content: {response.content}')
 
         auth_token = response.headers[RestApiPage.HEADER_NAME_AUTH_TOKEN]
         cookies = response.cookies

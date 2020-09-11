@@ -10,6 +10,8 @@ class KeyboardPage(BasePage):
         'Arrow Right': Keys.ARROW_RIGHT,
         'Arrow Down': Keys.ARROW_DOWN,
         'Arrow Left': Keys.ARROW_LEFT,
+        'Enter': Keys.ENTER,
+        'Esc': Keys.ESCAPE,
     }
 
     def press_key(self, key_name):
