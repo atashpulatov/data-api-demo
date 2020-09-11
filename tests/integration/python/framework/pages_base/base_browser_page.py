@@ -145,16 +145,17 @@ class BaseBrowserPage(BasePage):
 
         raise MstrException(('Element still in DOM', selector))
 
-    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
-        try:
-            return self.find_element_by_text_in_elements_list_by_css(selector, expected_text, timeout)
-        except MstrException:
-            pass
-
-        return None
-
     def find_element_by_text_in_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
+        element = self.find_element_by_text_in_elements_list_by_css_safe(selector, expected_text, timeout)
+
+        if element:
+            return element
+
+        raise MstrException(f'Element not found, selector: {selector}, expected text: {expected_text}')
+
+    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
+
         while True:
             elements = self.get_elements_by_css(selector)
 
@@ -167,7 +168,9 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 break
 
-        raise MstrException('No Attribute found: %s' % expected_text)
+        self.log(f'Element not found, selector: {selector}, expected text: {expected_text}')
+
+        return None
 
     def focus_on_add_in_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
@@ -230,3 +233,34 @@ class BaseBrowserPage(BasePage):
             return elements_names.index(text)
         except ValueError:
             raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+
+    def get_parent_element_by_child_text_from_parent_elements_list_by_css(self, parents_selector, child_selector,
+                                                                          expected_text, timeout=DEFAULT_TIMEOUT):
+        """
+        Gets parent element from parent elements list found by a selector that contains a child element
+        having expected text.
+
+        :param parents_selector: selector used to find list of parent elements
+        :param child_selector: selector used to find a child element, starting from subsequent parent elements
+        :param expected_text: expected text that child element has
+        :param timeout: optional timeout
+
+        :raises MstrException: when no element found.
+        """
+        end_time = time.time() + timeout
+        while True:
+            parent_elements = self.get_elements_by_css(parents_selector)
+
+            for parent_element in parent_elements:
+                child_element = parent_element.get_element_by_css(child_selector)
+
+                if child_element.text == expected_text:
+                    return parent_element
+
+            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+            if time.time() > end_time:
+                break
+
+        raise MstrException(f'No element found, parents selector: {parents_selector}, '
+                            f'child selector: {child_selector}, text: {expected_text}')
