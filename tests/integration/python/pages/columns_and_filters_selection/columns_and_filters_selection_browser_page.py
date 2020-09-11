@@ -261,7 +261,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
                     attribute_form_element.move_to_and_click(offset_x=2, offset_y=2)
 
-    def _ensure_attributes_forms_are_expanded(selfm, attribute_element):
+    def _ensure_attributes_forms_are_expanded(self, attribute_element):
         if attribute_element.check_if_child_element_exists_by_css(
                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED,
                 timeout=SHORT_TIMEOUT):
