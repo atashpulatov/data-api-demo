@@ -1,4 +1,5 @@
 @mac_chrome
+@windows_chrome
 Feature: F25932 - Details panel
 
   Scenario: [TC59673] - Copy to clipboard

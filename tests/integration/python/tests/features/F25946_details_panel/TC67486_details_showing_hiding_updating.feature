@@ -1,4 +1,5 @@
 @mac_chrome
+@windows_chrome
 Feature: F25946 - Display filters and prompts
 
   Scenario: [TC67486] - Imported objects details showing, hiding and updating
