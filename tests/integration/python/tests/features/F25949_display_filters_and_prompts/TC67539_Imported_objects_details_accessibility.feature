@@ -183,6 +183,7 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Enter
+      And I waited for all progress notifications to disappear
       And I closed last notification
 
      Then object number 1 should be called "100 Sales Records.csv Copy"
@@ -203,7 +204,8 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Enter
 
-     Then I closed last notification
+     Then I waited for object to be refreshed successfully
+      And I closed last notification
 
      When I clicked on object 1
       And I pressed key Tab
