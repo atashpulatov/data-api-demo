@@ -145,16 +145,17 @@ class BaseBrowserPage(BasePage):
 
         raise MstrException(('Element still in DOM', selector))
 
-    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
-        try:
-            return self.find_element_by_text_in_elements_list_by_css(selector, expected_text, timeout)
-        except MstrException:
-            pass
-
-        return None
-
     def find_element_by_text_in_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
+        element = self.find_element_by_text_in_elements_list_by_css_safe(selector, expected_text, timeout)
+
+        if element:
+            return element
+
+        raise MstrException(f'Element not found, selector: {selector}, expected text: {expected_text}')
+
+    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
+
         while True:
             elements = self.get_elements_by_css(selector)
 
@@ -167,7 +168,9 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 break
 
-        raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')
+        self.log(f'Element not found, selector: {selector}, expected text: {expected_text}')
+
+        return None
 
     def focus_on_add_in_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
