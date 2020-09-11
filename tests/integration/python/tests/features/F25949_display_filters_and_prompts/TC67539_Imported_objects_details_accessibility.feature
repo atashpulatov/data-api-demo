@@ -25,7 +25,6 @@ Feature: F25949 - Display filters and prompts
 
      When I selected cell "H1"
       And I clicked Add Data button
-      And MyLibrary Switch is OFF
       And I found object by ID "5BBA2D6911EA906EE92E0080EF1515C7" and selected "100 Sales Records.csv"
       And I clicked Prepare Data button
       And I ensure that Columns & Filters Selection is visible
@@ -39,7 +38,6 @@ Feature: F25949 - Display filters and prompts
 
      When I selected cell "X1"
       And I clicked Add Data button
-      And MyLibrary Switch is OFF
       And I found object by ID "69CC877E11E9FEEDDC670080EFD50918" and selected "Dossier with many visualisations and pages"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
