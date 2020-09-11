@@ -21,7 +21,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
- # Then TODO check a cell
+     Then cells ["A10", "B10", "C10", "D10"] should have values ["Jan 2014", "Computers", "$6,530", "$5,347"]
 
      When I selected cell "H1"
       And I clicked Add Data button
@@ -35,7 +35,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
- # Then TODO check a cell
+     Then cells ["J15", "K15", "L15", "M15"] should have values ["519820964", "C", "Sub-Saharan Africa", "Offline"]
 
      When I selected cell "X1"
       And I clicked Add Data button
@@ -47,7 +47,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked import dossier
       And I closed last notification
 
-# Then TODO check a cell
+     Then cells ["X5", "X9"] should have values ["27000", "42000"]
 
      # expanding details on imported objects with keyboard navigation
      When I clicked on object 1
@@ -192,8 +192,10 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Tab
       And I pressed key Enter
+      # And I pressed key Tab
 
-# Then TODO check prepare data window is open
+     Then I ensure that "8" of "8" metrics are selected
+      And I ensure that "7" of "7" attributes are selected
       And I pressed key Esc
 
      When I clicked on object 1
