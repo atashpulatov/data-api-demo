@@ -7,12 +7,12 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
       And I ensured that MyLibrary Switch is OFF
 
      When I found object by ID "C437801F11EA82FBF70F0080EFC55790" and selected "Unpublished cube"
-     Then I verified that Import Data button is disabled
+     Then I verified that Import button is disabled
 
      When I switched on MyLibrary
       And I switched off MyLibrary
 
-     Then I verified that Import Data button is disabled
+     Then I verified that Import button is disabled
 
      When I cleared search box
       And I found object "report"

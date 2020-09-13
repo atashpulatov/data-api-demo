@@ -102,7 +102,7 @@ def step_impl(context, color):
     AssertUtil.assert_simple(found_color, color)
 
 
-@step('I verified that Import Data button is disabled')
+@step('I verified that Import button is disabled')
 def step_impl(context):
     context.pages.import_data_page().verify_if_import_button_is_disabled()
 
