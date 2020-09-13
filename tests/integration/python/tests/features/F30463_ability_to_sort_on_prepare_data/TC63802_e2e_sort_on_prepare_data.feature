@@ -4,7 +4,7 @@ Feature: F30463 - Ability to sort on prepare data
   Scenario: [TC63802] - E2E Sort on prepare data
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found and selected object "Report with attributes and metrics to sort"
       And I clicked Prepare Data button

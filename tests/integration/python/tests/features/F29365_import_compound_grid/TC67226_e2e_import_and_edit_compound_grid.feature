@@ -5,7 +5,7 @@ Feature: F29365 - Import compound grid
   Scenario: [TC67226] - Import and edit compound grid
     Given I logged in as default user
      When I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Dossier with compound grid"
 
       # todo: use different dossier

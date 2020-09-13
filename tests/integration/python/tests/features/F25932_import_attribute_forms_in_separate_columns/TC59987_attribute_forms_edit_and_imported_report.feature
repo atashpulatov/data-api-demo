@@ -7,7 +7,7 @@ Feature: F25932 - Import attribute forms in separate columns
   Scenario: [TC59987] [Attribute forms] Edit an imported report
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found and selected object "06 Sort by Revenue Rank - Month Report Filter"
       And I clicked Prepare Data button

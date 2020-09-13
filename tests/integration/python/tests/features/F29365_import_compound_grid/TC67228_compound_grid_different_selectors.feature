@@ -5,7 +5,7 @@ Feature: F29365 - Import compound grid
   Scenario: [TC67228] - Import compound grid visualization with different selectors
     Given I logged in as default user
      When I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "376200B311EABC4754C30080EF65034E" and selected "Kind of compound grids - Selector relationship"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully

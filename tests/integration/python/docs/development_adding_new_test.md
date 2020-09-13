@@ -15,7 +15,7 @@ e.g. `tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature`:
       Scenario: [TC64607] - Duplicate object
         Given I logged in as default user
           And I clicked Import Data button
-          And MyLibrary Switch is OFF
+          And I ensured that MyLibrary Switch is OFF
     
           And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
           And I clicked Import button

@@ -4,7 +4,7 @@ Feature: F25968 - Filters numbers
   Scenario: [TC58932] - Deselecting/selecting filters with no objects
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I clicked Filters button
       And I opened All for Owner category

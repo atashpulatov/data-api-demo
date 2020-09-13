@@ -4,7 +4,7 @@ Feature: F25949 - Display filters and prompts
   Scenario: [TC67533] - Update values on edit and refresh
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
      When I found object by ID "E659E86811E58C918D6F0080EF453539" and selected "Simple Report"
       And I clicked Import button

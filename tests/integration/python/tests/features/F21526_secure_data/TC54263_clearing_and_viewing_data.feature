@@ -6,7 +6,7 @@ Feature: F21526 - Secure data
     Given I logged in as default user
 
      When I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "778ECA4C11E990F800000080EFA56C55" and selected "Revenue by Region and Category - secure data"
       And I clicked Import button
      Then I closed last notification

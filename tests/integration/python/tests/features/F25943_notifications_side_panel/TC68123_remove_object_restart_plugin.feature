@@ -4,7 +4,7 @@ Feature: F25943 - Notifications side panel
   Scenario: [TC68123] - Removing the object and restarting plugin without closing notification
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
       And I clicked Import button

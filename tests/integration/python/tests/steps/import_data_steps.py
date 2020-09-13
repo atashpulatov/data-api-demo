@@ -3,7 +3,7 @@ from behave import *
 from framework.util.assert_util import AssertUtil
 
 
-@step('MyLibrary Switch is OFF')
+@step('I ensured that MyLibrary Switch is OFF')
 def step_impl(context):
     context.pages.import_data_page().ensure_mylibrary_switch_is_off()
 

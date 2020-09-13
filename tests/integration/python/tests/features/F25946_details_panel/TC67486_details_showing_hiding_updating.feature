@@ -4,7 +4,7 @@ Feature: F25946 - Display filters and prompts
   Scenario: [TC67486] - Imported objects details showing, hiding and updating
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "4BF6385A11EA638B25610080EFC58CB1" and selected "Prompted report with subtotals"
       And I clicked Prepare Data button

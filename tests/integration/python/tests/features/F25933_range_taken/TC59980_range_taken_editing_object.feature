@@ -4,7 +4,7 @@ Feature: F25933 - Range taken
   Scenario: [TC59980] - Editing object
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
      When I found and selected object "100_report"
       And I clicked Prepare Data button

@@ -4,7 +4,7 @@ Feature: F25949 - Display filters and prompts
   Scenario: [TC67539] - Imported objects details showing, hiding  and coping with keyboard navigation - accessibility
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
      When I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
       And I clicked Prepare Data button

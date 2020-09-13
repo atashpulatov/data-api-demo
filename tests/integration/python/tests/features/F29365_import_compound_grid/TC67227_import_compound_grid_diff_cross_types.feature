@@ -4,7 +4,7 @@ Feature: F29365 - Import compound grid
   Scenario: [TC67227] - Import compound grid visualization with different cross type
     Given I logged in as default user
      When I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "DD7D695411EABC3E93B50080EF65835E" and selected "Kind of compound grids - Cross type"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
