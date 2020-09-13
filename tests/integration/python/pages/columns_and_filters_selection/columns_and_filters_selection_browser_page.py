@@ -13,13 +13,9 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     FILTER_ITEM = '.filter-title'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
 
-    ALL_ATTRIBUTES = '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > ' \
-                     'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > ' \
-                     'div.checkbox-list.all-showed > div > div > label.mstr-office-checkbox-all'
+    ALL_ATTRIBUTES = '.attributes-col .mstr-office-checkbox-all'
 
-    ALL_METRICS = '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > ' \
-                  'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > ' \
-                  'div.checkbox-list.all-showed > div > div > label'
+    ALL_METRICS = '.metrics-col .mstr-office-checkbox-all'
 
     ALL_FILTERS = '.filters-col .mstr-office-checkbox-all'
 
@@ -33,7 +29,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
-    REPORT_TITLE = 'div.folder-browser-title > span:nth-child(2)'
+    REPORT_TITLE = '.folder-browser-title > span:nth-child(2)'
 
     PARENT_ATTRIBUTE_ELEMENTS = '.attribute-forms li'
     CHILD_ATTRIBUTE_ELEMENT = 'span > span > .item-title'
@@ -41,10 +37,10 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTE_FORM_ARROW_COLLAPSED = '.ant-tree-switcher_close'
     ATTRIBUTE_FORM_ARROW_EXPANDED = '.ant-tree-switcher_open'
 
-    ROOT_ATTRIBUTE_CONTAINER = 'div.ant-col.ant-col-6.attributes-col'
-    ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > div > ul'
+    ROOT_ATTRIBUTE_CONTAINER = '.attributes-col'
+    ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > .checkbox-list.all-showed > div > div > div > ul'
     ATTRIBUTE_ELEMENT_AT = ATTRIBUTES_CONTAINER + ' > li:nth-child(%s)'
-    ATTRIBUTES_TITLE_SORT = ROOT_ATTRIBUTE_CONTAINER + ' > div > div.selector-title > div'
+    ATTRIBUTES_TITLE_SORT = ROOT_ATTRIBUTE_CONTAINER + ' > div > .selector-title > div'
     ATTRIBUTE_FORM_ARROW_COLLAPSED_ELEMENT_AT = (
             ATTRIBUTE_ELEMENT_AT + ' > span.ant-tree-switcher' + ATTRIBUTE_FORM_ARROW_COLLAPSED
     )
@@ -56,16 +52,16 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     EXPAND_ATTRIBUTE_FORMS = 'expand'
     COLLAPSE_ATTRIBUTE_FORMS = 'collapse'
 
-    ROOT_METRIC_CONTAINER = 'div.ant-col.ant-col-6.metrics-col'
-    METRICS_CONTAINER = ROOT_METRIC_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > ' \
+    ROOT_METRIC_CONTAINER = '.metrics-col'
+    METRICS_CONTAINER = ROOT_METRIC_CONTAINER + ' > div > .checkbox-list.all-showed > div > div > ' \
                                                 'div:nth-child(2) > div > div'
     METRIC_ELEMENT_AT = METRICS_CONTAINER + ' > div:nth-child(%s)'
-    METRICS_TITLE_SORT = ROOT_METRIC_CONTAINER + ' > div > div.selector-title > div'
+    METRICS_TITLE_SORT = ROOT_METRIC_CONTAINER + ' > div > .selector-title > div'
 
-    ROOT_FILTER_CONTAINER = 'div.ant-col.ant-col-12.filters-col > div > div:nth-child(1)'
-    FILTERS_CONTAINER = ROOT_FILTER_CONTAINER + ' > div.filter-list.ant-list > div > div > ul'
+    ROOT_FILTER_CONTAINER = '.filters-col > div > div:nth-child(1)'
+    FILTERS_CONTAINER = ROOT_FILTER_CONTAINER + ' > .filter-list > div > div > ul'
     FILTER_ELEMENT_AT = FILTERS_CONTAINER + ' > li:nth-child(%s)'
-    FILTERS_TITLE_SORT = ROOT_FILTER_CONTAINER + ' > div.selector-title.filter-selector-title > div'
+    FILTERS_TITLE_SORT = ROOT_FILTER_CONTAINER + ' > .filter-selector-title > div'
 
     ARIA_SORT = 'aria-sort'
     SORT_ASCENDING = 'ascending'
@@ -75,7 +71,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRICS_SORT_TITLE = '.metrics-col .sort-title-section'
     FILTER_SORT_TITLE = '.filters-col .sort-title-section'
 
-    SEARCH_INPUT = '.ant-input.ant-input-sm'
+    SEARCH_INPUT = '.search-input > input'
 
     ATTRIBUTES = 'attributes'
     METRICS = 'metrics'
