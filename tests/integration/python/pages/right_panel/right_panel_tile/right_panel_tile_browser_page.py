@@ -12,10 +12,10 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     SIDE_PANEL_HEADER = '.side-panel > .header'
 
-    RIGHT_PANEL_TILE = '#overlay > div > div.object-tile-container > ' \
-                       'div.object-tile-list > article:nth-child(%s) > div > div.react-contextmenu-wrapper'
+    RIGHT_PANEL_TILE = '#overlay > div > .object-tile-container > ' \
+                       '.object-tile-list > article:nth-child(%s) > div > .react-contextmenu-wrapper'
 
-    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' > div > div.object-tile-header > span.icon-bar-container > ' \
+    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' > div > .object-tile-header > .icon-bar-container > ' \
                                                         'span > '
 
     DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(1)'
@@ -24,8 +24,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(6)'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
-    NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > div.rename-input'
-    NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' div.object-tile-name-row > input'
+    NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .object-tile-name-row > .rename-input'
+    NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .object-tile-name-row > input'
 
     RIGHT_PANEL_TILE_TOOLTIP = RIGHT_PANEL_TILE + ' .object-tile-name-row .__react_component_tooltip'
 
