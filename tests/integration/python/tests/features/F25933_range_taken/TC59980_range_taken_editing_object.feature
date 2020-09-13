@@ -8,7 +8,7 @@ Feature: F25933 - Range taken
 
      When I found and selected object "100_report"
       And I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I clicked attribute "Country"
       And I clicked metric "Total Cost"
       And I clicked Import button in Columns and Filters Selection

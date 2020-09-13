@@ -11,7 +11,7 @@ Feature: F25932 - Import attribute forms in separate columns
 
       And I found and selected object "06 Sort by Revenue Rank - Month Report Filter"
       And I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
 
       And I selected all metrics
       And I clicked attributes and forms { "Region": ["ID"] }

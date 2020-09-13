@@ -8,7 +8,7 @@ Feature: F30463 - Ability to sort on prepare data
 
       And I found and selected object "Report with attributes and metrics to sort"
       And I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
 
      Then attribute number 1 should be called "Age Range"
 

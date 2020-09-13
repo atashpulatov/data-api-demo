@@ -14,7 +14,7 @@ Feature: F25949 - Display filters and prompts
       And I selected "Movies" as an answer for "1. Category" prompt - object prompt
       And I selected "Music" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Subcategory" with all elements
@@ -27,7 +27,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Add Data button
       And I found object by ID "5BBA2D6911EA906EE92E0080EF1515C7" and selected "100 Sales Records.csv"
       And I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Item Type" with all elements
@@ -192,8 +192,8 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Enter
 
-     Then I ensure that "8" of "8" metrics are selected
-      And I ensure that "7" of "7" attributes are selected
+     Then I verified that "8" of "8" metrics are selected
+      And I verified that "7" of "7" attributes are selected
       And I pressed key Esc
 
      When I clicked on object 1

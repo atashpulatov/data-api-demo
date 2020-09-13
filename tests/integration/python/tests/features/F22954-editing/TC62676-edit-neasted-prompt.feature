@@ -19,7 +19,7 @@ Feature: F22954 - Ability to edit data already imported to the workbook
       And I waited for Run button to be enabled
       And I clicked Run button
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I clicked attribute "Region"
       And I clicked metric "Revenue"
       And I selected filters { "Region": ["Central", "South"] }

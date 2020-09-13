@@ -3,27 +3,27 @@ from behave import *
 from framework.util.assert_util import AssertUtil
 
 
-@step('I ensure that Columns & Filters Selection is visible')
+@step('I verified that Columns & Filters Selection is visible')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().ensure_columns_and_filters_selection_is_visible()
 
 
-@step('I ensure popup title is "{title}"')
+@step('I verified popup title is "{title}"')
 def step_impl(context, title):
     context.pages.columns_and_filters_selection_page().ensure_popup_title_is_correct(title)
 
 
-@step('I ensure that "{number}" of "{of_number}" metrics are selected')
+@step('I verified that "{number}" of "{of_number}" metrics are selected')
 def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('metrics', number, of_number)
 
 
-@step('I ensure that "{number}" of "{of_number}" attributes are selected')
+@step('I verified that "{number}" of "{of_number}" attributes are selected')
 def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('attributes', number, of_number)
 
 
-@step('I ensure that "{number}" of "{of_number}" filters are selected')
+@step('I verified that "{number}" of "{of_number}" filters are selected')
 def step_impl(context, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection('filters', number, of_number)
 

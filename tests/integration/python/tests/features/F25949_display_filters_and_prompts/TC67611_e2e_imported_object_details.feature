@@ -8,7 +8,7 @@ Feature: F25949 - Display filters and prompts
 
       And I found object by ID "3633950911EAA96889F00080EF25F8A4" and selected "titanic_wiblgjlprj"
       And I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection

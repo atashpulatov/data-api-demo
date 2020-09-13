@@ -10,7 +10,7 @@ Feature: F25946 - Display filters and prompts
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
@@ -71,7 +71,7 @@ Feature: F25946 - Display filters and prompts
      When I clicked Edit object 2
       And I waited for Run button to be enabled
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I unselected all metrics
       And I unselected all attributes
       And I clicked attribute "Region"
