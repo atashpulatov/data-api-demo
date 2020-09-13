@@ -192,8 +192,8 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Enter
 
-     Then I verified that "8" of "8" metrics are selected
-      And I verified that "7" of "7" attributes are selected
+     Then I verified that counter of "metrics" shows "8" of "8" selected
+      And I verified that counter of "attributes" shows "7" of "7" selected
       And I pressed key Esc
 
      When I clicked on object 1

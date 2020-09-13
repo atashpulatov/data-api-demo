@@ -13,19 +13,9 @@ def step_impl(context, title):
     context.pages.columns_and_filters_selection_page().ensure_popup_title_is_correct(title)
 
 
-@step('I verified that "{number}" of "{of_number}" metrics are selected')
-def step_impl(context, number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_item_selection('metrics', number, of_number)
-
-
-@step('I verified that "{number}" of "{of_number}" attributes are selected')
-def step_impl(context, number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_item_selection('attributes', number, of_number)
-
-
-@step('I verified that "{number}" of "{of_number}" filters are selected')
-def step_impl(context, number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_item_selection('filters', number, of_number)
+@step('I verified that counter of "{item_type}" shows "{number}" of "{of_number}" selected')
+def step_impl(context, number, of_number, item_type):
+    context.pages.columns_and_filters_selection_page().ensure_item_selection(item_type, number, of_number)
 
 
 @step('I clicked attribute "{attribute_name}"')
