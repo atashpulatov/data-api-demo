@@ -4,20 +4,20 @@ from framework.util.exception.MstrException import MstrException
 
 
 class RightPanelMainBrowserPage(BaseBrowserPage):
-    IMPORT_DATA_BUTTON_ELEM = '#overlay > div.side-panel > div.import-data > button'
-    ADD_DATA_BUTTON_ELEM = 'add-data-btn'
+    IMPORT_DATA_BUTTON_ELEM = '.import-data > button'
+    ADD_DATA_BUTTON_ELEM_ID = 'add-data-btn'
 
     DOTS_MENU = '.settings-button'
     DOTS_MENU_BOX = '.settings-list'
-    DOTS_MENU_ITEM_LOG_OUT = 'logOut'
+    DOTS_MENU_ITEM_LOG_OUT_ID = 'logOut'
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
-    SELECT_ALL_TILES_CHECKBOX = '.checkbox-cell'
+    SELECT_ALL_TILES_CHECKBOX_ID = 'master-checkbox'
     REFRESH_ALL = SELECT_ALL_TILES + 'button:nth-child(5)'
     REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
 
     CLEAR_DATA = '.clear-data'
-    CONFIRM_CLEAR_DATA = '#confirm-btn'
+    CONFIRM_CLEAR_DATA_ID = 'confirm-btn'
 
     VIEW_DATA_BUTTON_ELEM = '.data-cleared > button'
 
@@ -34,19 +34,19 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     def click_add_data_button_element(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_id(RightPanelMainBrowserPage.ADD_DATA_BUTTON_ELEM).click()
+        self.get_element_by_id(RightPanelMainBrowserPage.ADD_DATA_BUTTON_ELEM_ID).click()
 
     def refresh_all(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
+        self.get_element_by_id(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX_ID).click()
 
         self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_ALL).click()
 
     def remove_all(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
+        self.get_element_by_id(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX_ID).click()
 
         self.get_element_by_css(RightPanelMainBrowserPage.REMOVE_ALL).click()
 
@@ -74,7 +74,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self._open_dots_menu()
 
         self.get_element_by_css(RightPanelMainBrowserPage.CLEAR_DATA).click()
-        self.get_element_by_css(RightPanelMainBrowserPage.CONFIRM_CLEAR_DATA).click()
+        self.get_element_by_id(RightPanelMainBrowserPage._ID).click()
 
     def logout(self):
         self.focus_on_add_in_frame()
@@ -84,12 +84,12 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         self._open_dots_menu()
 
-        self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT).click()
+        self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT_ID).click()
 
     def hover_over_logout(self):
         self._open_dots_menu()
 
-        self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT).move_to()
+        self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT_ID).move_to()
 
     def _open_dots_menu(self):
         self.focus_on_add_in_frame()
@@ -102,6 +102,6 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
             self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
 
     def get_background_color_of_logout(self):
-        element = self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT)
+        element = self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT_ID)
 
         return element.get_background_color()
