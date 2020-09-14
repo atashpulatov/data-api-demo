@@ -184,6 +184,9 @@ multiple times:
 
 `--tags=@windows --tags=@release_validation`.
 
+we have:
+- release_validation - TC with this tag are in scope of Release Validation Test Set
+
 `-D image_recognition_enabled=True` enables (`True`) or disables (`False`) usage of image recognition to speed up
 tests execution. Works only when implemented for selected driver (see `-D driver_type`), currently only
 `windows_desktop`. 

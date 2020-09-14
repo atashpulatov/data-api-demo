@@ -256,6 +256,6 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_data_preview()
 
 
-@step('I Clicked Close Data Preview')
+@step('I clicked Close Data Preview')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_close_data_preview()

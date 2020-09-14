@@ -266,7 +266,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
                     attribute_form_element.move_to_and_click(offset_x=2, offset_y=2)
 
-    def _ensure_attributes_forms_are_expanded(selfm, attribute_element):
+    def _ensure_attributes_forms_are_expanded(self, attribute_element):
         if attribute_element.check_if_child_element_exists_by_css(
                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED,
                 timeout=SHORT_TIMEOUT):
@@ -277,7 +277,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         if not attribute_element.check_if_child_element_exists_by_css(
                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED,
                 timeout=SHORT_TIMEOUT):
-            raise MstrException(f'Error while expanding attributes forms.')
+            raise MstrException('Error while expanding attributes forms.')
 
     def select_element_by_number(self, object_type, object_number):
         self.focus_on_add_in_popup_frame()
@@ -490,7 +490,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.find_element_by_text_in_elements_list_by_css(
-            'span',
+            '.ant-btn',
             'Close Preview'
         ).click()
 
