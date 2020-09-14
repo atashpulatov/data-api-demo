@@ -97,6 +97,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         FILTERS: FILTER_ELEMENT_AT
     }
 
+    CHECKED_CHECKBOX_CLASS = '.ant-tree-checkbox.ant-tree-checkbox-checked'
 
     FIRST_FILTER = '.filters-col .ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal'
 
@@ -242,7 +243,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
                 attribute_name
             )
 
-            attribute_element.click()
+            #if attribute was already selected then prevents click, function name is no longer accurate
+            if not attribute_element.check_if_child_element_exists_by_css(
+                    ColumnsAndFiltersSelectionBrowserPage.CHECKED_CHECKBOX_CLASS, 
+                    timeout=SHORT_TIMEOUT):
+                attribute_element.click()
 
             if len(form_names) > 0:
                 self._ensure_attributes_forms_are_expanded(attribute_element)
