@@ -14,9 +14,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
 
     ALL_ATTRIBUTES = '.attributes-col .mstr-office-checkbox-all'
-
     ALL_METRICS = '.metrics-col .mstr-office-checkbox-all'
-
     ALL_FILTERS = '.filters-col .mstr-office-checkbox-all'
 
     ATTRIBUTE_FORM_DROPDOWN = '.ant-select-selection--single'
@@ -38,7 +36,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTE_FORM_ARROW_EXPANDED = '.ant-tree-switcher_open'
 
     ROOT_ATTRIBUTE_CONTAINER = '.attributes-col'
-    ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > .checkbox-list.all-showed > div > div > div > ul'
+    ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > .checkbox-list.all-showed > div > div > div > ul' #might not work for datasets
     ATTRIBUTE_ELEMENT_AT = ATTRIBUTES_CONTAINER + ' > li:nth-child(%s)'
     ATTRIBUTES_TITLE_SORT = ROOT_ATTRIBUTE_CONTAINER + ' > div > .selector-title > div'
     ATTRIBUTE_FORM_ARROW_COLLAPSED_ELEMENT_AT = (
@@ -53,8 +51,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     COLLAPSE_ATTRIBUTE_FORMS = 'collapse'
 
     ROOT_METRIC_CONTAINER = '.metrics-col'
-    METRICS_CONTAINER = ROOT_METRIC_CONTAINER + ' > div > .checkbox-list.all-showed > div > div > ' \
-                                                'div:nth-child(2) > div > div'
+    METRICS_CONTAINER = ROOT_METRIC_CONTAINER + ' .selector-list > div'
     METRIC_ELEMENT_AT = METRICS_CONTAINER + ' > div:nth-child(%s)'
     METRICS_TITLE_SORT = ROOT_METRIC_CONTAINER + ' > div > .selector-title > div'
 
@@ -73,34 +70,35 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     SEARCH_INPUT = '.search-input > input'
 
-    ATTRIBUTES = 'attributes'
-    METRICS = 'metrics'
-    FILTERS = 'filters'
-
     TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
 
     TRY_LIMIT_FOR_SORT = 3
     TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 6
 
-    OBJECT_TO_TITLE_CONTAINER = {
+    ATTRIBUTES = 'attributes'
+    METRICS = 'metrics'
+    FILTERS = 'filters'
+
+    OBJECT_TYPE_TO_TITLE_GROUP = {
         ATTRIBUTES: ATTRIBUTES_TITLE_SORT,
         METRICS: METRICS_TITLE_SORT,
         FILTERS: FILTERS_TITLE_SORT
     }
 
-    OBJECT_TO_OBJECT_CONTAINER = {
+    OBJECTS_TYPE_TO_OBJECT_COLUMN_TITLE_GROUP = {
+        ATTRIBUTES: ATTRIBUTES_SORT_TITLE,
+        METRICS: METRICS_SORT_TITLE,
+        FILTERS: FILTER_SORT_TITLE
+    }
+    
+    OBJECT_TYPE_TO_OBJECTS_GROUP = {
         ATTRIBUTES: ATTRIBUTE_ELEMENT_AT,
         METRICS: METRIC_ELEMENT_AT,
         FILTERS: FILTER_ELEMENT_AT
     }
 
-    OBJECT_TO_COLUMN_TITLE = {
-        ATTRIBUTES: ATTRIBUTES_SORT_TITLE,
-        METRICS: METRICS_SORT_TITLE,
-        FILTERS: FILTER_SORT_TITLE
-    }
 
-    FIRST_FILTER = '.ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal'
+    FIRST_FILTER = '.filters-col .ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal'
 
     def __init__(self):
         super().__init__()
@@ -130,10 +128,10 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         :param of_number: number of all items
         """
 
-        if item_type not in ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_COLUMN_TITLE:
+        if item_type not in ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECT_COLUMN_TITLE_GROUP:
             raise MstrException(f'Wrong item_type [{item_type}] argument passed to ensure_item_selection')
 
-        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_COLUMN_TITLE[item_type]
+        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECT_COLUMN_TITLE_GROUP[item_type]
 
         title = f'{item_type.upper()} ({number}/{of_number})'
         column_name = self.get_sort_column_name(sort_title_selector)
@@ -273,7 +271,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def select_element_by_number(self, object_type, object_number):
         self.focus_on_add_in_popup_frame()
 
-        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
+        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
 
         self.get_element_by_css(element).click()
 
@@ -335,7 +333,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def _sort_elements_by_click(self, object_type, sorting_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
@@ -373,7 +371,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def press_tab_until_object_type_focused(self, object_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
@@ -396,7 +394,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def _sort_elements_by_keyboard(self, object_type, sorting_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
@@ -412,7 +410,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def scroll_into_object_by_number(self, object_number, object_type):
         self.focus_on_add_in_popup_frame()
 
-        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
+        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
         self.get_element_by_css_no_visibility_checked(element).move_to()
 
     def click_import_button(self):
