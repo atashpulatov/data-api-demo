@@ -1,4 +1,5 @@
 @mac_chrome
+@windows_chrome
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC59464] - Binding
