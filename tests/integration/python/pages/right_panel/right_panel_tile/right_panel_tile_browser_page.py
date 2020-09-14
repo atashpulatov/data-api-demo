@@ -12,20 +12,18 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     SIDE_PANEL_HEADER = '.side-panel > .header'
 
-    RIGHT_PANEL_TILE = '#overlay > div > .object-tile-container > ' \
-                       '.object-tile-list > article:nth-child(%s) > div > .react-contextmenu-wrapper'
+    RIGHT_PANEL_TILE = '.object-tile-list > article:nth-child(%s) > div > .react-contextmenu-wrapper'
 
-    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' > div > .object-tile-header > .icon-bar-container > ' \
-                                                        'span > '
+    RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' .icon-bar '
 
-    DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(1)'
-    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(5)'
-    EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(3)'
-    REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-child(6)'
+    DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
+    EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
+    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(3)'
+    REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(4)'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
-    NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .object-tile-name-row > .rename-input'
-    NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .object-tile-name-row > input'
+    NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
+    NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.editable'
 
     RIGHT_PANEL_TILE_TOOLTIP = RIGHT_PANEL_TILE + ' .object-tile-name-row .__react_component_tooltip'
 
