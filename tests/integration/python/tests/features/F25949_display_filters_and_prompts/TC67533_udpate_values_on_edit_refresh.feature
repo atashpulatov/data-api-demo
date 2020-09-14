@@ -1,4 +1,5 @@
 @mac_chrome
+@windows_chrome
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67533] - Update values on edit and refresh
@@ -13,7 +14,7 @@ Feature: F25949 - Display filters and prompts
 
      Then object 1 has id "E659E86811E58C918D6F0080EF453539"
 
-     When I decertified object "E659E86811E58C918D6F0080EF453539" in Tutorial project
+     When I ensured object "E659E86811E58C918D6F0080EF453539" in Tutorial project is decertified
       And I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
@@ -55,9 +56,9 @@ Feature: F25949 - Display filters and prompts
      Then for object 1 Totals and Subtotals is OFF
 
     Given object 1 has "Attribute" list displayed
-      And object 1 has "Attribute" with value "Quarter‎, Region, Employee"
+      And object 1 has "Attribute" list with value "Quarter‎, Region, Employee"
       And object 1 has "Metric" list displayed
-      And object 1 has "Metric" with value "Revenue, Cost, Profit"
+      And object 1 has "Metric" list with value "Revenue, Cost, Profit"
 
      When I clicked Edit object 1
       And I clicked attribute "Employee"
@@ -67,8 +68,8 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then object 1 has "Attribute" with value "Quarter‎, Region"
-      And object 1 has "Metric" with value "Cost, Profit"
-      And object 1 has "Filter" with value "Region (Central, Northwest)"
+     Then object 1 has "Attribute" list with value "Quarter‎, Region"
+      And object 1 has "Metric" list with value "Cost, Profit"
+      And object 1 has "Filter" list with value "Region (Central, Northwest)"
 
       And I log out

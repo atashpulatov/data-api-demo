@@ -143,3 +143,21 @@ def step_impl(context, cell_name, expected_name):
     result = context.pages.excel_sheet_page().get_font_name_of_cell(cell_name)
 
     AssertUtil.assert_simple(result, expected_name)
+
+
+@step('columns {column_names} are selected')
+def step_impl(context, column_names):
+    param_column_names = json.loads(column_names)
+
+    result = context.pages.excel_sheet_page().is_column_range_selected(param_column_names)
+
+    AssertUtil.assert_simple(result, True)
+
+
+@step('rows {row_names} are selected')
+def step_impl(context, row_names):
+    param_row_names = json.loads(row_names)
+
+    result = context.pages.excel_sheet_page().is_row_range_selected(param_row_names)
+
+    AssertUtil.assert_simple(result, True)

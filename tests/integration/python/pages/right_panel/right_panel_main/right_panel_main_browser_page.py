@@ -12,7 +12,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     DOTS_MENU_ITEM_LOG_OUT = 'logOut'
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
-    SELECT_ALL_TILES_CHECKBOX = '#master-checkbox'
+    SELECT_ALL_TILES_CHECKBOX = '.checkbox-cell'
     REFRESH_ALL = SELECT_ALL_TILES + 'button:nth-child(5)'
     REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
 
