@@ -132,7 +132,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         if item_type not in ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP:
             raise MstrException(f'Wrong item_type [{item_type}] argument passed to ensure_item_selection')
 
-        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP[item_type]
+        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP[
+            item_type]
 
         title = f'{item_type.upper()} ({number}/{of_number})'
         column_name = self.get_sort_column_name(sort_title_selector)
