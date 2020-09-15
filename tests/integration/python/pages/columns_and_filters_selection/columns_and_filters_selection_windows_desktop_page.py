@@ -64,7 +64,8 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name('unselect_all_metrics')
         ).click()
 
-    def click_attributes_and_forms(self, attributes_and_forms_json):
+    # TODO change implementation to ensure attribute is selected (not only clicking without checking)
+    def ensure_attribute_is_selected_and_click_forms(self, attributes_and_forms_json):
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
         popup_main_element = self.get_popup_main_element()

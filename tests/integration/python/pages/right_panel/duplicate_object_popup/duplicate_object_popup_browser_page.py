@@ -3,15 +3,11 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 
 
 class DuplicateObjectPopupBrowserPage(BaseBrowserPage):
-    DUPLICATE_POPUP_IMPORT_BUTTON = '#overlay > div.side-panel > div.object-tile-container > div.overlay-container > ' \
-                                    'div.duplicate-popup > div.duplicate-popup-footer > div > button:nth-child(1)'
+    DUPLICATE_POPUP_IMPORT_BUTTON = '.duplicate-popup-footer-buttons > button:nth-child(1)'
 
-    DUPLICATE_POPUP_EDIT_BUTTON = '#overlay > div > div.object-tile-container > div.overlay-container > div > ' \
-                                  'div.duplicate-popup-footer > div > button:nth-child(2)'
+    DUPLICATE_POPUP_EDIT_BUTTON = '.duplicate-popup-footer-buttons > button:nth-child(2)'
 
-    DUPLICATE_POPUP_ACTIVE_CELL_OPTION = '#overlay > div.side-panel > div.object-tile-container > ' \
-                                         'div.overlay-container > div.duplicate-popup > div.duplicate-popup-body > ' \
-                                         'div.duplicate-popup-body-options > label:nth-child(1)'
+    DUPLICATE_POPUP_ACTIVE_CELL_OPTION = 'active_cell'
 
     def __init__(self):
         super().__init__()
@@ -29,4 +25,4 @@ class DuplicateObjectPopupBrowserPage(BaseBrowserPage):
     def select_active_cell(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_ACTIVE_CELL_OPTION).click()
+        self.get_element_by_id(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_ACTIVE_CELL_OPTION).click()

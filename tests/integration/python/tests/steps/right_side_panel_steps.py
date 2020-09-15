@@ -13,7 +13,7 @@ def step_impl(context):
     context.pages.right_panel_page().click_add_data_button_element()
 
 
-@step('I log out')
+@step('I logged out')
 def step_impl(context):
     context.pages.right_panel_page().logout()
 

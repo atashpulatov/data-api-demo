@@ -6,7 +6,7 @@ Feature: F22954 - Ability to edit data already imported to the workbook
             prompts imported without Prepare Data
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
      When I found object by ID "ABC9ACA2496777EE3FB81BA08A3CF9AD" and selected "Report with nested prompt"
       And I clicked Import button without checking results
       And I waited for Run button to be enabled
@@ -19,7 +19,7 @@ Feature: F22954 - Ability to edit data already imported to the workbook
       And I waited for Run button to be enabled
       And I clicked Run button
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I clicked attribute "Region"
       And I clicked metric "Revenue"
       And I selected filters { "Region": ["Central", "South"] }
@@ -28,4 +28,4 @@ Feature: F22954 - Ability to edit data already imported to the workbook
 
      Then I closed last notification
 
-      And I log out
+      And I logged out

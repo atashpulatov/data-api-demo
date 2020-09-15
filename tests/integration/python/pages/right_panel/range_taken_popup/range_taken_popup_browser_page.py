@@ -3,8 +3,8 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 
 
 class RangeTakenPopupBrowserPage(BaseBrowserPage):
-    RANGE_TAKEN_OK_BUTTON = 'div.range-taken-popup-footer > div > button.button.primary'
-    RANGE_TAKEN_CANCEL_BUTTON = 'div.range-taken-popup-footer > div > button.button.basic'
+    RANGE_TAKEN_OK_BUTTON = '.range-taken-popup-footer-buttons .primary'
+    RANGE_TAKEN_CANCEL_BUTTON = '.range-taken-popup-footer-buttons .basic'
     RANGE_TAKEN_ACTIVE_CELL_OPTION = 'active_cell'
 
     def __init__(self):

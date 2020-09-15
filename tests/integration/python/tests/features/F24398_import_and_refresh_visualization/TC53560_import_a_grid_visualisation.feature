@@ -4,7 +4,7 @@ Feature: F24398 - Import and refresh visualization
   Scenario: [TC53560] - Importing grid visualisations - basic scenario
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found and selected object "Dossier with vis that can be moved to different pages / chapters"
       And I clicked Import button to open Import Dossier
@@ -54,4 +54,4 @@ Feature: F24398 - Import and refresh visualization
       And I removed object 1 using context menu
       And I closed last notification
 
-      And I log out
+      And I logged out
