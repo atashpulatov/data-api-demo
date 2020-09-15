@@ -34,8 +34,8 @@ def _initialize_using_existing_session(context):
     context.pages = PagesSetFactory().get_pages_set()
 
 
-def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME, force_reset_driver=False):
-    DriverFactory.reset_driver(force_reset_driver)
+def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME):
+    DriverFactory.reset_driver()
     PagesSetFactory.reset_pages_set()
 
     context.pages = PagesSetFactory().get_pages_set()
