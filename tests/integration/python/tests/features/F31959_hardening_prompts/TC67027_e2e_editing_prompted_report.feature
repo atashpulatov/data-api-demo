@@ -69,4 +69,4 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I verified that counter of "filters" shows "2" of "3" selected
      Then I clicked Cancel button
 
-      And I log out
+      And I logged out

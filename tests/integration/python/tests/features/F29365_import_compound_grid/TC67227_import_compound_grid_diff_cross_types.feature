@@ -39,4 +39,4 @@ Feature: F29365 - Import compound grid
 
      Then cells ["AG3", "AH2", "AL4"] should have values ["Subcategory", "Cost", "$480,173"]
 
-      And I log out
+      And I logged out

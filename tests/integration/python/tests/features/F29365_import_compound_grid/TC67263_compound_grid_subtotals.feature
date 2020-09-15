@@ -38,4 +38,4 @@ Feature: F29365 - Import compound grid
 
      Then cell "H20" should have value "$187,027"
 
-      And I log out
+      And I logged out

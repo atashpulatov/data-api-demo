@@ -89,7 +89,7 @@ Feature: F25946 - Display filters and prompts
       And object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
       And object 2 has owner "Administrator"
 
-      And I log out
+      And I logged out
 
     Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
 
@@ -133,4 +133,4 @@ Feature: F25946 - Display filters and prompts
 
     Then I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
 
-     And I log out
+     And I logged out

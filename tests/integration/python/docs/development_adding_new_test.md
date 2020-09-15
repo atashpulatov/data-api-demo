@@ -29,7 +29,7 @@ e.g. `tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature`:
          Then object number 1 should be called "100_report Copy"
           And number of worksheets should be 2
     
-          And I log out
+          And I logged out
     ```
 
 1. Add all necessary Steps to steps files in `tests/steps`. Steps should correspond 1-1 to Pages, each set of steps

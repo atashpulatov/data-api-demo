@@ -12,4 +12,4 @@ Feature: F25932 - Details panel
      Then I verified that copying the details to clipboard works correctly
 
       And I close Import Data popup
-      And I log out
+      And I logged out

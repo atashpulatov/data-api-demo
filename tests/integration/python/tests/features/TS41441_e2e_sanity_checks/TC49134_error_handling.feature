@@ -99,10 +99,10 @@ Feature: TS41441 - Sanity checks
       And for cell "G2" font name should be "Arial Black"
 
      When I clicked clear data
-      And I log out
+      And I logged out
       And I logged in with username "user2" and password "user2"
       And I clicked view data
       And I closed all notifications
      Then cell "L4" should have value "245,677 PLN"
 
-      And I log out
+      And I logged out

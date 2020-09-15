@@ -14,4 +14,4 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
 
      Then I closed last notification
 
-      And I log out
+      And I logged out

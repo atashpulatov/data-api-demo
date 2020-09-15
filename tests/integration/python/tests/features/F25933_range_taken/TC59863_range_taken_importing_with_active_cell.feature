@@ -46,4 +46,4 @@ Feature: F25933 - Range taken
 
      Then I closed all notifications
 
-      And I log out
+      And I logged out

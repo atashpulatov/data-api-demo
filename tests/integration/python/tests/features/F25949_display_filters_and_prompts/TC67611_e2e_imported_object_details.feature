@@ -163,7 +163,7 @@ Feature: F25949 - Display filters and prompts
       And object 4 has collapsed location displayed
       And object 4 has id "3633950911EAA96889F00080EF25F8A4"
 
-      And I log out
+      And I logged out
 
     Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
 
@@ -183,4 +183,4 @@ Feature: F25949 - Display filters and prompts
 
       And I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
 
-      And I log out
+      And I logged out

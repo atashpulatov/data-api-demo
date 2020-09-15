@@ -22,4 +22,4 @@ Feature: F25931 - Duplicate object
      Then object number 1 should be called "100_report Copy"
       And number of worksheets should be 2
 
-      And I log out
+      And I logged out

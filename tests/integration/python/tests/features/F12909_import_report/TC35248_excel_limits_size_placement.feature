@@ -16,4 +16,4 @@ Feature: F12909 - Import report
      When I found and selected object "1k report"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
-      And I log out
+      And I logged out

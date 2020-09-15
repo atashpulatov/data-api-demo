@@ -68,4 +68,4 @@ Feature: F25931 - Duplicate object
       And I closed last notification
      Then cell "H4" should have value "$471,477"
 
-      And I log out
+      And I logged out

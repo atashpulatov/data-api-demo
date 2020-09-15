@@ -10,4 +10,4 @@ Feature: F12909 - Import report
       And I found object by ID "B570032611E94B25B9810080EF95B252" and selected "Report with All data filtered out"
      Then I clicked Import button and saw error "This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty."
 
-      And I log out
+      And I logged out

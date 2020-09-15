@@ -28,4 +28,4 @@ Feature: F22954 - Ability to edit data already imported to the workbook
 
      Then I closed last notification
 
-      And I log out
+      And I logged out

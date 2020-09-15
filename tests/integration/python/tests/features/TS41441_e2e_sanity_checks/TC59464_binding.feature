@@ -21,4 +21,4 @@ Feature: TS41441 - Sanity checks
 
      Then object number 1 should be called "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`testtestteskaj"
 
-      And I log out
+      And I logged out

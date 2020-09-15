@@ -33,4 +33,4 @@ Feature: F25931 - Duplicate object
       And cell "B77" should have value "398042.4"
       And cells ["C77", "A78", "B78", "C78"] should have values ["", "", "", ""]
 
-      And I log out
+      And I logged out

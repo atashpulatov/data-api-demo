@@ -29,4 +29,4 @@ Feature: F25931 - Duplicate object
       And I removed object 1 using icon
       And I closed last notification
 
-      And I log out
+      And I logged out

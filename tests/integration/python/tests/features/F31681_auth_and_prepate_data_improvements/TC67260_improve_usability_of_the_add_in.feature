@@ -43,4 +43,4 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
 
      Then I verified that the background color of Log Out is "rgba(247, 247, 247, 1)"
 
-      And I log out
+      And I logged out
