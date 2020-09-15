@@ -1,4 +1,5 @@
 @mac_chrome
+@release_validation
 Feature: F25933 - Range taken
 
   Scenario: [TC60014] - Single cell is taken

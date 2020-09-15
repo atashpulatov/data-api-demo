@@ -135,7 +135,7 @@ Examples of running tests (check [Test execution parameters](#test_executing_par
 behave tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging:
-behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave --no-color --logging-level=DEBUG --tags=@release_validation --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging, redircting logs to files, stdout also to console:
 behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt

@@ -1,5 +1,6 @@
 @windows_chrome
 @mac_chrome
+@release_validation
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC40359] - Navigation while importing prompted reports (Run, Back and Cancel buttons)

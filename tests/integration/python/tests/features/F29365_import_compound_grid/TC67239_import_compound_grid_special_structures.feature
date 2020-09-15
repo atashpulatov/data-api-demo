@@ -1,8 +1,9 @@
 @mac_chrome
 @windows_chrome
+@release_validation
 Feature: F29365 - Import compound grid
 
-  Scenario: [TC67263] - Import Compound Grid visualization with special structures
+  Scenario: [TC67239] - Import Compound Grid visualization with special structures
     Given I logged in as default user
      When I clicked Import Data button
       And MyLibrary Switch is OFF

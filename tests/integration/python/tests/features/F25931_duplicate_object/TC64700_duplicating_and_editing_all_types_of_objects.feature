@@ -1,5 +1,6 @@
 @windows_chrome
 @mac_chrome
+@release_validation
 Feature: F25931 - Duplicate object
 
   Scenario: [TC64700] - Duplicating and editing all types of objects

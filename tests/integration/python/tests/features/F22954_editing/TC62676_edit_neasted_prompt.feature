@@ -1,5 +1,6 @@
 @windows_chrome
 @mac_chrome
+@release_validation
 Feature: F22954 - Ability to edit data already imported to the workbook
 
   Scenario: [TC62676] Editing prompted reports functionality while report contains nested \
