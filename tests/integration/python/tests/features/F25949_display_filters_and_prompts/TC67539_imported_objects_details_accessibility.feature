@@ -215,4 +215,4 @@ Feature: F25949 - Display filters and prompts
 
      Then object number 1 should be called "Visualization 1"
 
-      And I log out
+      And I logged out

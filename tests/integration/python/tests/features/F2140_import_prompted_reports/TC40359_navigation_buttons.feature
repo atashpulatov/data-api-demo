@@ -23,4 +23,4 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
     Given I clicked Import button without checking results
      Then I clicked Cancel button
 
-      And I log out
+      And I logged out

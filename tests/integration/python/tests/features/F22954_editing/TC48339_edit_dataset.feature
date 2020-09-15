@@ -23,4 +23,4 @@ Feature: F22954 - Edit dataset
 
      Then cells ["A1", "B2"] should have values ["Region", "15233245.15"]
 
-      And I log out
+      And I logged out

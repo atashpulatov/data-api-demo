@@ -58,4 +58,4 @@ Feature: F32725 - Data source browsing and management improvements
      When I pressed key Arrow Left
      Then element "View Selected switch" has focus
 
-      And I log out
+      And I logged out

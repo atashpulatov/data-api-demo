@@ -54,4 +54,4 @@ Feature: F25931 - Duplicate object
 
       And number of worksheets should be 3
 
-      And I log out
+      And I logged out

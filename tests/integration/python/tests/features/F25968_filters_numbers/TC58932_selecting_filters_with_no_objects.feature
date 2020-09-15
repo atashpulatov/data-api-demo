@@ -19,4 +19,4 @@ Feature: F25968 - Filters numbers
      Then the first element with 0 objects in All Panel should NOT be selected
 
       And I close Import Data popup
-      And I log out
+      And I logged out

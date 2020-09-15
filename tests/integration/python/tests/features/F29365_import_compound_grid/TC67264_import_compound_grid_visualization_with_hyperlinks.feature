@@ -15,4 +15,4 @@ Feature: F29365 - Import compound grid from dossier to Excel
      
      Then cells ["C2", "C9", "C16"] should have values ["CICE, S.A.", "Viesgo", "Grupo Printeos"]
 
-      And I log out
+      And I logged out

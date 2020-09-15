@@ -54,4 +54,4 @@ Feature: F24398 - Import and refresh visualization
       And I removed object 1 using context menu
       And I closed last notification
 
-      And I log out
+      And I logged out

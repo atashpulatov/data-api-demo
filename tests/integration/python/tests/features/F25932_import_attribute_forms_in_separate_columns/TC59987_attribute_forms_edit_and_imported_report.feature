@@ -29,4 +29,4 @@ Feature: F25932 - Import attribute forms in separate columns
       And I closed all notifications
      Then cell "A4" should have value "Laura"
 
-      And I log out
+      And I logged out

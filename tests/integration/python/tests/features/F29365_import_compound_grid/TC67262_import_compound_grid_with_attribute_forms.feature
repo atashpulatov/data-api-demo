@@ -52,4 +52,4 @@ Feature: F29365 - Import compound grid
 
      Then cells ["V1", "W3", "Y1"] should have values ["", "Country Latitude", "Asia"]
 
-      And I log out
+      And I logged out

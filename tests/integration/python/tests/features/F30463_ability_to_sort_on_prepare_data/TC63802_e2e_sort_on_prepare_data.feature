@@ -94,4 +94,4 @@ Feature: F30463 - Ability to sort on prepare data
      When I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
-      And I log out
+      And I logged out

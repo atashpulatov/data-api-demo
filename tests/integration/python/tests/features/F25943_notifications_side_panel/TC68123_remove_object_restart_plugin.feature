@@ -16,4 +16,4 @@ Feature: F25943 - Notifications side panel
 
      Then Right Panel is empty
 
-      And I log out
+      And I logged out

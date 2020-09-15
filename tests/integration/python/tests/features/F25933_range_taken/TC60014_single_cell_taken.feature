@@ -17,4 +17,4 @@ Feature: F25933 - Range taken
 
      Then number of worksheets should be 2
 
-      And I log out
+      And I logged out

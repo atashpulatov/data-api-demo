@@ -20,7 +20,7 @@ Feature: F21526 - Secure data
 
      When I clicked clear data
      Then cells ["A1", "B33", "E1", "F77"] should have values ["Region", "", "Country", ""]
-      And I log out
+      And I logged out
 
      When I logged in with username "Tim" and empty password
       And I clicked view data
@@ -28,7 +28,7 @@ Feature: F21526 - Secure data
      Then cells ["B33", "F77"] should have values ["Music", "Sub-Saharan Africa"]
 
      When I clicked clear data
-     Then I log out
+     Then I logged out
 
      When I logged in with username "Jeff" and empty password
       And I clicked view data
@@ -36,7 +36,7 @@ Feature: F21526 - Secure data
      Then cells ["B33", "F77", "B3"] should have values ["", "Sub-Saharan Africa", "Books"]
 
      When I clicked clear data
-     Then I log out
+     Then I logged out
 
     When I logged in with username "Martyna" and empty password
      And I clicked view data
@@ -48,4 +48,4 @@ Feature: F21526 - Secure data
      And I removed object 1 using icon
      And I closed all notifications
 
-    Then I log out
+    Then I logged out

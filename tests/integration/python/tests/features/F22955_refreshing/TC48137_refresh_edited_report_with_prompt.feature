@@ -33,4 +33,4 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
 
      Then cells ["A1", "B2", "D3"] should have values ["Region", "$21,190", ""]
 
-      And I log out
+      And I logged out

@@ -71,4 +71,4 @@ Feature: F25949 - Display filters and prompts
       And object 1 has "Metric" list with value "Cost, Profit"
       And object 1 has "Filter" list with value "Region (Central, Northwest)"
 
-      And I log out
+      And I logged out

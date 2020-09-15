@@ -47,4 +47,4 @@ Feature: F29365 - Import compound grid
      When I removed object 1 using icon
      Then I closed last notification
 
-      And I log out
+      And I logged out
