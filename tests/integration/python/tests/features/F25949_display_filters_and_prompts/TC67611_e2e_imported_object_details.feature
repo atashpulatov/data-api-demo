@@ -4,11 +4,11 @@ Feature: F25949 - Display filters and prompts
   Scenario: [TC67611] - Imported object details E2E
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "3633950911EAA96889F00080EF25F8A4" and selected "titanic_wiblgjlprj"
       And I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
@@ -163,7 +163,7 @@ Feature: F25949 - Display filters and prompts
       And object 4 has collapsed location displayed
       And object 4 has id "3633950911EAA96889F00080EF25F8A4"
 
-      And I log out
+      And I logged out
 
     Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
 
@@ -183,4 +183,4 @@ Feature: F25949 - Display filters and prompts
 
       And I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
 
-      And I log out
+      And I logged out

@@ -5,7 +5,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
   Scenario: [TC40359] - Navigation while importing prompted reports (Run, Back and Cancel buttons)
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
      When I found object by ID "6D70D06949B83CD9DBFAC0AF5FE0010E" and selected "Report with prompt - Object prompt | Required | Default answer"
       And I clicked Import button without checking results
       And I waited for Run button to be enabled
@@ -23,4 +23,4 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
     Given I clicked Import button without checking results
      Then I clicked Cancel button
 
-      And I log out
+      And I logged out

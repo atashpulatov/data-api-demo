@@ -6,7 +6,7 @@ Feature: F12909 - Import report
     Given I logged in as default user
       And I selected cell "A1048576"
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
      When I found object by ID "C97D02A611E9554DBFC00080EF353F8E" and selected "1k report"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
@@ -16,4 +16,4 @@ Feature: F12909 - Import report
      When I found and selected object "1k report"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
-      And I log out
+      And I logged out
