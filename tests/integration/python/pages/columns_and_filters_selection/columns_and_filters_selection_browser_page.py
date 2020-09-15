@@ -79,19 +79,19 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRICS = 'metrics'
     FILTERS = 'filters'
 
-    OBJECT_TYPE_TO_TITLE_GROUP = {
+    OBJECTS_TYPE_TO_TITLE_GROUP = {
         ATTRIBUTES: ATTRIBUTES_TITLE_SORT,
         METRICS: METRICS_TITLE_SORT,
         FILTERS: FILTERS_TITLE_SORT
     }
 
-    OBJECTS_TYPE_TO_OBJECT_COLUMN_TITLE_GROUP = {
+    OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP = {
         ATTRIBUTES: ATTRIBUTES_SORT_TITLE,
         METRICS: METRICS_SORT_TITLE,
         FILTERS: FILTER_SORT_TITLE
     }
 
-    OBJECT_TYPE_TO_OBJECTS_GROUP = {
+    OBJECTS_TYPE_TO_OBJECTS_GROUP = {
         ATTRIBUTES: ATTRIBUTE_ELEMENT_AT,
         METRICS: METRIC_ELEMENT_AT,
         FILTERS: FILTER_ELEMENT_AT
@@ -129,10 +129,10 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         :param of_number: number of all items
         """
 
-        if item_type not in ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECT_COLUMN_TITLE_GROUP:
+        if item_type not in ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP:
             raise MstrException(f'Wrong item_type [{item_type}] argument passed to ensure_item_selection')
 
-        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECT_COLUMN_TITLE_GROUP[item_type]
+        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP[item_type]
 
         title = f'{item_type.upper()} ({number}/{of_number})'
         column_name = self.get_sort_column_name(sort_title_selector)
@@ -284,7 +284,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def select_element_by_number(self, object_type, object_number):
         self.focus_on_add_in_popup_frame()
 
-        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
+        element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
 
         self.get_element_by_css(element).click()
 
@@ -346,7 +346,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def _sort_elements_by_click(self, object_type, sorting_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_TITLE_GROUP[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
@@ -384,7 +384,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def press_tab_until_object_type_focused(self, object_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_TITLE_GROUP[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
@@ -407,7 +407,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def _sort_elements_by_keyboard(self, object_type, sorting_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_TITLE_GROUP[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
@@ -423,7 +423,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def scroll_into_object_by_number(self, object_number, object_type):
         self.focus_on_add_in_popup_frame()
 
-        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
+        element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
         self.get_element_by_css_no_visibility_checked(element).move_to()
 
     def click_import_button(self):
