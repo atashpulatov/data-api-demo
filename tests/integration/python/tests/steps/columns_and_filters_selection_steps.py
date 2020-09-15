@@ -78,9 +78,11 @@ def step_impl(context, filter):
     context.pages.columns_and_filters_selection_page().select_all_filter_elements(filter)
 
 
-@step('I clicked attributes and forms {attributes_and_forms_json}')
+@step('I ensured attribute is selected and I clicked forms {attributes_and_forms_json}')
 def step_impl(context, attributes_and_forms_json):
-    context.pages.columns_and_filters_selection_page().click_attributes_and_forms(attributes_and_forms_json)
+    context.pages.columns_and_filters_selection_page().ensure_attribute_is_selected_and_click_forms(
+        attributes_and_forms_json
+    )
 
 
 @step('attribute number {object_number} should be called "{expected_name}"')

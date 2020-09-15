@@ -14,7 +14,7 @@ Feature: F25932 - Import attribute forms in separate columns
       And I verified that Columns & Filters Selection is visible
 
       And I selected all metrics
-      And I clicked attributes and forms { "Region": ["ID"] }
+      And I ensured attribute is selected and I clicked forms { "Region": ["ID"] }
       And I set Display attribute form names to "On"
 
      When I clicked Import button in Columns and Filters Selection
@@ -23,7 +23,7 @@ Feature: F25932 - Import attribute forms in separate columns
 
     Given I clicked Edit object 1
       And I clicked attribute "Region"
-      And I clicked attributes and forms { "Employee": ["Last Name", "ID"] }
+      And I ensured attribute is selected and I clicked forms { "Employee": ["Last Name", "ID"] }
       And I set Display attribute form names to "Show attribute name once"
      When I clicked Import button in Columns and Filters Selection
       And I closed all notifications

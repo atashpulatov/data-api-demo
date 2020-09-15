@@ -36,7 +36,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTE_FORM_ARROW_EXPANDED = '.ant-tree-switcher_open'
 
     ROOT_ATTRIBUTE_CONTAINER = '.attributes-col'
-    ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > .checkbox-list.all-showed > div > div > div > ul' #might not work for datasets
+    ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > .checkbox-list.all-showed > div > div > div > ul'  # might not work for datasets
     ATTRIBUTE_ELEMENT_AT = ATTRIBUTES_CONTAINER + ' > li:nth-child(%s)'
     ATTRIBUTES_TITLE_SORT = ROOT_ATTRIBUTE_CONTAINER + ' > div > .selector-title > div'
     ATTRIBUTE_FORM_ARROW_COLLAPSED_ELEMENT_AT = (
@@ -90,7 +90,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         METRICS: METRICS_SORT_TITLE,
         FILTERS: FILTER_SORT_TITLE
     }
-    
+
     OBJECT_TYPE_TO_OBJECTS_GROUP = {
         ATTRIBUTES: ATTRIBUTE_ELEMENT_AT,
         METRICS: METRIC_ELEMENT_AT,
@@ -231,34 +231,42 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         filter_item.click()
 
-    def click_attributes_and_forms(self, attributes_and_forms_json):
+    def ensure_attribute_is_selected_and_click_forms(self, attributes_and_forms_json):
         self.focus_on_add_in_popup_frame()
 
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
         for attribute_name, form_names in attributes_and_forms.items():
-            attribute_element = self.get_parent_element_by_child_text_from_parent_elements_list_by_css(
-                ColumnsAndFiltersSelectionBrowserPage.PARENT_ATTRIBUTE_ELEMENTS,
-                ColumnsAndFiltersSelectionBrowserPage.CHILD_ATTRIBUTE_ELEMENT,
-                attribute_name
-            )
+            attribute_element = self._get_attribute_element(attribute_name)
 
-            #if attribute was already selected then prevents click, function name is no longer accurate
-            if not attribute_element.check_if_child_element_exists_by_css(
-                    ColumnsAndFiltersSelectionBrowserPage.CHECKED_CHECKBOX_CLASS, 
-                    timeout=SHORT_TIMEOUT):
-                attribute_element.click()
+            self._ensure_attribute_is_selected(attribute_element)
 
-            if len(form_names) > 0:
-                self._ensure_attributes_forms_are_expanded(attribute_element)
+            self._click_forms(attribute_element, form_names)
 
-                for form_name in form_names:
-                    attribute_form_element = attribute_element.get_element_by_text_from_elements_list_by_css(
-                        ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORMS,
-                        form_name
-                    )
+    def _get_attribute_element(self, attribute_name):
+        return self.get_parent_element_by_child_text_from_parent_elements_list_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.PARENT_ATTRIBUTE_ELEMENTS,
+            ColumnsAndFiltersSelectionBrowserPage.CHILD_ATTRIBUTE_ELEMENT,
+            attribute_name
+        )
 
-                    attribute_form_element.move_to_and_click(offset_x=2, offset_y=2)
+    def _ensure_attribute_is_selected(self, attribute_element):
+        if not attribute_element.check_if_child_element_exists_by_css(
+                ColumnsAndFiltersSelectionBrowserPage.CHECKED_CHECKBOX_CLASS,
+                timeout=SHORT_TIMEOUT):
+            attribute_element.click()
+
+    def _click_forms(self, attribute_element, form_names):
+        if len(form_names) > 0:
+            self._ensure_attributes_forms_are_expanded(attribute_element)
+
+            for form_name in form_names:
+                attribute_form_element = attribute_element.get_element_by_text_from_elements_list_by_css(
+                    ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORMS,
+                    form_name
+                )
+
+                attribute_form_element.move_to_and_click(offset_x=2, offset_y=2)
 
     def _ensure_attributes_forms_are_expanded(self, attribute_element):
         if attribute_element.check_if_child_element_exists_by_css(

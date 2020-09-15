@@ -78,7 +78,8 @@ class ColumnsAndFiltersSelectionMacDesktopPage(BaseMacDesktopPage):
     def click_import_button_to_duplicate(self):
         self.get_element_by_xpath(ColumnsAndFiltersSelectionMacDesktopPage.IMPORT_BUTTON).click()
 
-    def click_attributes_and_forms(self, attributes_and_forms_json):
+    # TODO change implementation to ensure attribute is selected (not only clicking without checking)
+    def ensure_attribute_is_selected_and_click_forms(self, attributes_and_forms_json):
         for attribute_name, attribute_forms in json.loads(attributes_and_forms_json).items():
             self.get_element_by_xpath(
                 ColumnsAndFiltersSelectionMacDesktopPage.ATTRIBUTE_CHECKBOX_UNCHECKED % attribute_name
