@@ -3,21 +3,19 @@ import time
 from selenium.common.exceptions import NoSuchFrameException, NoSuchWindowException
 
 from framework.pages_base.base_page import BasePage
-from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_INTERVAL
+from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_INTERVAL, \
+    SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
 
 class BaseBrowserPage(BasePage):
     EXCEL_FRAME_ELEM = 'WebApplicationFrame'
-
-    IMPORT_DATA_FRAME_ELEM = '#WACDialogOuterContainer iframe'
-
-    IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM = 'iframe[src*="popupType=navigation-tree&et="]'
-    IMPORT_DOSSIER_INTERNAL_FRAME_ELEM = '.dossier-window > div > iframe'
-
+    ADD_IN_POPUP_FRAME_ELEM = '#WACDialogBodyPanel > iframe'
+    DOSSIER_FRAME_ELEM = '.dossier-window > div > iframe'
     ADD_IN_FRAME_ELEM = '.AddinIframe'
     ADD_IN_ROOT_ELEM = 'root'
+    PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
 
     def get_element_with_focus(self):
         return self.driver.switch_to.active_element
@@ -41,6 +39,9 @@ class BaseBrowserPage(BasePage):
 
     def get_page_title(self):
         return self.driver.title
+
+    def tab_contains_excel_frame(self):
+        return self.check_if_element_exists_by_id(BaseBrowserPage.EXCEL_FRAME_ELEM, timeout=SHORT_TIMEOUT)
 
     def focus_on_excel_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
@@ -66,23 +67,41 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 raise MstrException('Cannot focus on excel frame')
 
-    def focus_on_import_data_pop_up_frame(self):
+    def focus_on_add_in_popup_frame(self):
         self.focus_on_excel_frame()
 
-        popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.IMPORT_DATA_FRAME_ELEM)
+        add_in_popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.ADD_IN_POPUP_FRAME_ELEM)
 
-        self._switch_to_frame(popup_frame_element)
+        self._switch_to_frame(add_in_popup_frame_element)
 
-    def focus_on_import_dossier_frame(self):
+    def focus_on_dossier_frame(self):
         self.focus_on_excel_frame()
+        self.focus_on_add_in_popup_frame()
 
-        dossier_external_frame_element = self.get_frame_element_by_css(
-            BaseBrowserPage.IMPORT_DOSSIER_EXTERNAL_FRAME_ELEM)
-        self._switch_to_frame(dossier_external_frame_element)
+        dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.DOSSIER_FRAME_ELEM)
 
-        dossier_internal_frame_element = self.get_frame_element_by_css(
-            BaseBrowserPage.IMPORT_DOSSIER_INTERNAL_FRAME_ELEM)
-        self._switch_to_frame(dossier_internal_frame_element)
+        self._switch_to_frame(dossier_frame_element)
+
+    def focus_on_prompt_frame(self):
+        end_time = time.time() + DEFAULT_TIMEOUT
+
+        while True:
+            try:
+                self.focus_on_excel_frame()
+                self.focus_on_add_in_popup_frame()
+
+                prompt_frame = self.get_frame_element_by_css(BaseBrowserPage.PROMPT_FRAME_ELEM)
+                self._switch_to_frame(prompt_frame)
+
+                return
+
+            except Exception as e:
+                Util.log(e)
+
+            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+
+            if time.time() > end_time:
+                raise MstrException('Cannot focus on prompt frame')
 
     def _switch_to_frame(self, frame):
         start_time = time.time()
@@ -110,16 +129,33 @@ class BaseBrowserPage(BasePage):
 
         raise MstrException(('Value not found', selector, attribute, expected_value))
 
-    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
-        try:
-            return self.find_element_by_text_in_elements_list_by_css(selector, expected_text, timeout)
-        except MstrException:
-            pass
+    def wait_for_elements_to_disappear_from_dom(self, selector, timeout=DEFAULT_TIMEOUT):
+        end_time = time.time() + timeout
 
-        return None
+        while True:
+            elements_to_disappear = self.get_elements_by_css(selector)
+
+            if len(elements_to_disappear) == 0:
+                return
+
+            self.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+            if time.time() > end_time:
+                break
+
+        raise MstrException(('Element still in DOM', selector))
 
     def find_element_by_text_in_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
+        element = self.find_element_by_text_in_elements_list_by_css_safe(selector, expected_text, timeout)
+
+        if element:
+            return element
+
+        raise MstrException(f'Element not found, selector: {selector}, expected text: {expected_text}')
+
+    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
+
         while True:
             elements = self.get_elements_by_css(selector)
 
@@ -132,7 +168,9 @@ class BaseBrowserPage(BasePage):
             if time.time() > end_time:
                 break
 
-        raise MstrException('No Attribute found: %s' % expected_text)
+        self.log(f'Element not found, selector: {selector}, expected text: {expected_text}')
+
+        return None
 
     def focus_on_add_in_frame(self):
         end_time = time.time() + DEFAULT_TIMEOUT
@@ -161,10 +199,68 @@ class BaseBrowserPage(BasePage):
         raise MstrException('failed to focus on AddIn iframe')
 
     def find_element_in_list_by_text(self, selector, text):
+        element = self.find_element_in_list_by_text_safe(selector, text)
+
+        if element:
+            return element
+
+        raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+
+    def find_element_in_list_by_text_safe(self, selector, text):
         elements = self.get_elements_by_css(selector)
 
         for item in elements:
             if item.text == text:
                 return item
 
-        raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+        return None
+
+    def find_index_of_element_in_list_by_text(self, selector, text):
+        """
+        Finds index of element with given text in list of elements returned by given css selector.
+
+        :param selector(str): css selector
+        :param text(str): text content of wanted element
+
+        :returns (int): index of wanted element in list of elements with given css selector
+
+        :raises Element not present(MstrException): if there is no element with given text
+        """
+        elements = self.get_elements_by_css(selector)
+        elements_names = [item.text for item in elements]
+
+        try:
+            return elements_names.index(text)
+        except ValueError:
+            raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+
+    def get_parent_element_by_child_text_from_parent_elements_list_by_css(self, parents_selector, child_selector,
+                                                                          expected_text, timeout=DEFAULT_TIMEOUT):
+        """
+        Gets parent element from parent elements list found by a selector that contains a child element
+        having expected text.
+
+        :param parents_selector: selector used to find list of parent elements
+        :param child_selector: selector used to find a child element, starting from subsequent parent elements
+        :param expected_text: expected text that child element has
+        :param timeout: optional timeout
+
+        :raises MstrException: when no element found.
+        """
+        end_time = time.time() + timeout
+        while True:
+            parent_elements = self.get_elements_by_css(parents_selector)
+
+            for parent_element in parent_elements:
+                child_element = parent_element.get_element_by_css(child_selector)
+
+                if child_element.text == expected_text:
+                    return parent_element
+
+            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+            if time.time() > end_time:
+                break
+
+        raise MstrException(f'No element found, parents selector: {parents_selector}, '
+                            f'child selector: {child_selector}, text: {expected_text}')

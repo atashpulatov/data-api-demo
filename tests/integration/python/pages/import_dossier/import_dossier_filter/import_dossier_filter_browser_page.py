@@ -25,7 +25,7 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         if filter_side not in ImportDossierFilterBrowserPage.SLIDER_POINT_MAPPING.keys():
             raise MstrException('Invalid filter side selected: %s' % filter_side)
 
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         self._open_filter_menu()
 
@@ -42,3 +42,4 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
 
     def _open_filter_menu(self):
         self.get_element_by_css(ImportDossierFilterBrowserPage.FILTERS_BUTTON).click()
+  

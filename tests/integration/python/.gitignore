@@ -138,7 +138,7 @@ dmypy.json
 framework/screenshots/*.png
 
 # framework's configuration
-framework/config.json
+framework/config/config.json
 
 # Allure reports
 allure-report

@@ -7,7 +7,7 @@ class ImportDossierTableOfContentsBrowserPage(BaseBrowserPage):
     TABLE_OF_CONTENT_ITEMS = '.mstrd-ToCDropdownMenuContainer-menuText'
 
     def select_table_of_content_option(self, option_number):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         self.get_element_by_css(ImportDossierTableOfContentsBrowserPage.TABLE_OF_CONTENT_BUTTON).click()
 

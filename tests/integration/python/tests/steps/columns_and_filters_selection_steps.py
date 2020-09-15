@@ -8,9 +8,34 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().ensure_columns_and_filters_selection_is_visible()
 
 
+@step('I ensure popup title is "{title}"')
+def step_impl(context, title):
+    context.pages.columns_and_filters_selection_page().ensure_popup_title_is_correct(title)
+
+
+@step('I ensure that "{number}" of "{of_number}" metrics are selected')
+def step_impl(context, number, of_number):
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('metrics', number, of_number)
+
+
+@step('I ensure that "{number}" of "{of_number}" attributes are selected')
+def step_impl(context, number, of_number):
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('attributes', number, of_number)
+
+
+@step('I ensure that "{number}" of "{of_number}" filters are selected')
+def step_impl(context, number, of_number):
+    context.pages.columns_and_filters_selection_page().ensure_item_selection('filters', number, of_number)
+
+
 @step('I clicked attribute "{attribute_name}"')
 def step_impl(context, attribute_name):
     context.pages.columns_and_filters_selection_page().click_attribute(attribute_name)
+
+
+@step('I clicked attribute "{attribute_name}" for dataset')
+def step_impl(context, attribute_name):
+    context.pages.columns_and_filters_selection_page().click_attribute_for_dataset(attribute_name)
 
 
 @step('I clicked metric "{metric_name}"')
@@ -20,7 +45,22 @@ def step_impl(context, metric_name):
 
 @step('I set Display attribute form names to "{form_visualization_type}"')
 def step_impl(context, form_visualization_type):
-    context.pages.columns_and_filters_selection_page().click_display_attributes_names_type(form_visualization_type)
+    context.pages.columns_and_filters_selection_page().select_display_attributes_form_names_element(
+        form_visualization_type
+    )
+
+
+@step('I selected the first option from Display attribute form names')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().select_first_display_attributes_form_names_element()
+
+
+@step('I verified that the background color of the first option in Display attribute form names is "{color}"')
+def step_impl(context, color):
+    found_color = context.pages.columns_and_filters_selection_page(). \
+        get_background_color_of_first_attribute_form_names_element()
+
+    AssertUtil.assert_simple(found_color, color)
 
 
 @step('I selected all attributes')
@@ -41,6 +81,11 @@ def step_impl(context):
 @step('I unselected all metrics')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().unselect_all_metrics()
+
+
+@step('I selected filter "{filter}" with all elements')
+def step_impl(context, filter):
+    context.pages.columns_and_filters_selection_page().select_all_filter_elements(filter)
 
 
 @step('I clicked attributes and forms {attributes_and_forms_json}')
@@ -154,11 +199,53 @@ def step_impl(context, object_type, object_number):
     context.pages.columns_and_filters_selection_page().scroll_into_object_by_number(object_number, object_type)
 
 
-@when('I clicked Import button in Columns and Filters Selection')
+@step('I clicked Import button in Columns and Filters Selection')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button()
 
 
-@when('I clicked Import button in Columns and Filters Selection to duplicate object')
+@step('I clicked Import button in Columns and Filters Selection to duplicate object')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button_to_duplicate()
+
+
+@step('I clicked Back button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_back_button()
+
+
+@step('I clicked Cancel button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_cancel_button()
+
+
+@step('I selected filters {filters_and_elements_json}')
+def step_impl(context, filters_and_elements_json):
+    context.pages.columns_and_filters_selection_page().select_filter_elements(filters_and_elements_json)
+
+
+@step('I closed popup window')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().close_popup_window()
+
+
+@step('I hovered over first filter')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().hover_over_first_filter()
+
+
+@step('I selected the first filter')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().select_first_filter()
+
+
+@step('I verified that the background color of the first filter is "{color}"')
+def step_impl(context, color):
+    found_color = context.pages.columns_and_filters_selection_page().get_background_color_of_first_filter()
+
+    AssertUtil.assert_simple(found_color, color)
+
+
+@step('I clicked Include Subtotals and Totals switch')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_include_totals_and_subtotals()

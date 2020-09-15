@@ -17,11 +17,6 @@ class DriverFactory:
         DRIVER_TYPE_MAC_CHROME: DriverMacChrome,
     }
 
-    DRIVERS_REQUIRING_RESET = [
-        DRIVER_TYPE_WINDOWS_DESKTOP,
-        DRIVER_TYPE_MAC_DESKTOP
-    ]
-
     DRIVER_DEF = {}
     DRIVER_CLEANUP_DEF = {}
 
@@ -47,5 +42,4 @@ class DriverFactory:
 
     @classmethod
     def reset_driver(cls):
-        if DriverFactory.driver_type in DriverFactory.DRIVERS_REQUIRING_RESET:
-            DriverFactory.driver = None
+        DriverFactory.driver = None

@@ -17,6 +17,8 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     CONTEXT_MENU_SHOW_DATA = 'Show Data'
     CONTEXT_MENU_TEXT_ELEMENTS = '.mtxt'
 
+    INFORMATION_TEXT = 'span.dossier-window-information-text'
+
     def __init__(self):
         super().__init__()
 
@@ -28,7 +30,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.click_import_visualization()
 
     def select_visualization_by_name(self, visualization_name):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         tile = self._find_tile_by_name(visualization_name)
 
@@ -37,7 +39,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         self.pause(5)  # TODO wait when ready
 
     def open_show_data_panel(self, visualization_name):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         tile = self._find_tile_by_name(visualization_name)
 
@@ -65,14 +67,30 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
+    def click_import_visualization_to_duplicate(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_BUTTON).click()
+
+        self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully()
+
     def click_import_visualization_without_waiting_for_results(self):
         self.focus_on_add_in_frame()
 
         self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_BUTTON).click()
 
     def reset_dossier(self):
-        self.focus_on_import_dossier_frame()
+        self.focus_on_dossier_frame()
 
         self.get_element_by_css(ImportDossierMainBrowserPage.RESET_BUTTON).click()
 
         self.get_element_by_css(ImportDossierMainBrowserPage.RESET_CONFIRMATION_YES).click()
+
+    def wait_for_dossier_to_load(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_css(ImportDossierMainBrowserPage.INFORMATION_TEXT)
+
+        # dossier object is ready when information text is visible, needs more time for final render of page content
+        # TODO check if page loaded fully
+        self.pause(2)

@@ -1,4 +1,5 @@
 @mac_chrome
+@windows_chrome
 Feature: F25933 - Range taken
 
   Scenario: [TC59863] - Importing objects with active cell
@@ -6,7 +7,7 @@ Feature: F25933 - Range taken
       And I clicked Import Data button
       And MyLibrary Switch is OFF
 
-      And I found and selected object "100_report"
+      And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
       And I clicked Import button
 
      Then I closed all notifications
@@ -37,6 +38,7 @@ Feature: F25933 - Range taken
       And I clicked Add Data button
       And I found and selected object "Dossier with basic grid vis, vis with totals and vis with crosstabs"
       And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
       And I selected visualization "Grid visualisation with subtotals"
       And I clicked import dossier without waiting for results
       And I selected Active Cell option in Range Taken popup
