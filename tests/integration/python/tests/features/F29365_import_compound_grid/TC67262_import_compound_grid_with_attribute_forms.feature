@@ -6,7 +6,7 @@ Feature: F29365 - Import compound grid
   Scenario: [TC67262] - Import compound grid visualization with Attribute forms
     Given I logged in as default user
      When I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "2F1922D211EABF0355790080EFD509F0" and selected "Objects in compound grids - Attribute forms"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
@@ -53,4 +53,4 @@ Feature: F29365 - Import compound grid
 
      Then cells ["V1", "W3", "Y1"] should have values ["", "Country Latitude", "Asia"]
 
-      And I log out
+      And I logged out

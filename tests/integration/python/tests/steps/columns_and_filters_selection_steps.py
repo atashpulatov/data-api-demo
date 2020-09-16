@@ -3,29 +3,19 @@ from behave import *
 from framework.util.assert_util import AssertUtil
 
 
-@step('I ensure that Columns & Filters Selection is visible')
+@step('I verified that Columns & Filters Selection is visible')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().ensure_columns_and_filters_selection_is_visible()
 
 
-@step('I ensure popup title is "{title}"')
+@step('I verified popup title is "{title}"')
 def step_impl(context, title):
     context.pages.columns_and_filters_selection_page().ensure_popup_title_is_correct(title)
 
 
-@step('I ensure that "{number}" of "{of_number}" metrics are selected')
-def step_impl(context, number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_item_selection('metrics', number, of_number)
-
-
-@step('I ensure that "{number}" of "{of_number}" attributes are selected')
-def step_impl(context, number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_item_selection('attributes', number, of_number)
-
-
-@step('I ensure that "{number}" of "{of_number}" filters are selected')
-def step_impl(context, number, of_number):
-    context.pages.columns_and_filters_selection_page().ensure_item_selection('filters', number, of_number)
+@step('I verified that counter of "{item_type}" shows "{number}" of "{of_number}" selected')
+def step_impl(context, number, of_number, item_type):
+    context.pages.columns_and_filters_selection_page().ensure_item_selection(item_type, number, of_number)
 
 
 @step('I clicked attribute "{attribute_name}"')
@@ -88,9 +78,11 @@ def step_impl(context, filter):
     context.pages.columns_and_filters_selection_page().select_all_filter_elements(filter)
 
 
-@step('I clicked attributes and forms {attributes_and_forms_json}')
+@step('I ensured attribute is selected and I clicked forms {attributes_and_forms_json}')
 def step_impl(context, attributes_and_forms_json):
-    context.pages.columns_and_filters_selection_page().click_attributes_and_forms(attributes_and_forms_json)
+    context.pages.columns_and_filters_selection_page().ensure_attribute_is_selected_and_click_forms(
+        attributes_and_forms_json
+    )
 
 
 @step('attribute number {object_number} should be called "{expected_name}"')

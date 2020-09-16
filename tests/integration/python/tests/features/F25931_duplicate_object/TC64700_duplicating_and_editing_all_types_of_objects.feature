@@ -6,7 +6,7 @@ Feature: F25931 - Duplicate object
   Scenario: [TC64700] - Duplicating and editing all types of objects
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "0DEF0B3346F3CE89858B41BFA5BD4915" and selected "Merged Header Report"
       And I clicked Import button
       And I closed last notification
@@ -14,7 +14,7 @@ Feature: F25931 - Duplicate object
 
      When I added a new worksheet
       And I clicked Add Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "33978C7811E5B89504850080EF25B4FF" and selected "DATA_IMPORT_SQL_STATEMENT"
       And I clicked Import button
       And I closed last notification
@@ -22,7 +22,7 @@ Feature: F25931 - Duplicate object
 
      When I added a new worksheet
       And I clicked Add Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "E247019211E9DF8176990080EFB5ACD2" and selected "Dossier for interactive components"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
@@ -69,4 +69,4 @@ Feature: F25931 - Duplicate object
       And I closed last notification
      Then cell "H4" should have value "$471,477"
 
-      And I log out
+      And I logged out

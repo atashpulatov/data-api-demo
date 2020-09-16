@@ -7,7 +7,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
   Scenario: [TC67027] - E2E Editing Prompted reports | Nested
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
 
      When I clicked Prepare Data button
@@ -15,7 +15,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
 
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I clicked attribute "Month"
       And I clicked metric "Profit"
       And I selected filters { "Subcategory": ["Audio Equipment", "TV's"] }
@@ -26,11 +26,11 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
      When I clicked Edit object 1
       And I waited for Run button to be enabled
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
-      And I ensure popup title is "Report with a subtotal & prompt"
-      And I ensure that "1" of "4" metrics are selected
-      And I ensure that "1" of "2" attributes are selected
-      And I ensure that "1" of "2" filters are selected
+      And I verified that Columns & Filters Selection is visible
+      And I verified popup title is "Report with a subtotal & prompt"
+      And I verified that counter of "metrics" shows "1" of "4" selected
+      And I verified that counter of "attributes" shows "1" of "2" selected
+      And I verified that counter of "filters" shows "1" of "2" selected
       And I clicked Import button in Columns and Filters Selection
 
      Then I closed last notification
@@ -56,7 +56,7 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I clicked Run button
       And I waited for Run button to be enabled
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I closed popup window
       And I clicked close Add-in button
       And I clicked Add-in icon
@@ -65,10 +65,10 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I waited for Run button to be enabled
      Then I clicked Run button
       And I clicked Run button
-      And I ensure popup title is "Report with nested prompt"
-      And I ensure that "3" of "3" metrics are selected
-      And I ensure that "3" of "3" attributes are selected
-      And I ensure that "2" of "3" filters are selected
+      And I verified popup title is "Report with nested prompt"
+      And I verified that counter of "metrics" shows "3" of "3" selected
+      And I verified that counter of "attributes" shows "3" of "3" selected
+      And I verified that counter of "filters" shows "2" of "3" selected
      Then I clicked Cancel button
 
-      And I log out
+      And I logged out

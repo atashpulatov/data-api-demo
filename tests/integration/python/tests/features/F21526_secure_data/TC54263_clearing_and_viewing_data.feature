@@ -7,7 +7,7 @@ Feature: F21526 - Secure data
     Given I logged in as default user
 
      When I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "778ECA4C11E990F800000080EFA56C55" and selected "Revenue by Region and Category - secure data"
       And I clicked Import button
      Then I closed last notification
@@ -21,7 +21,7 @@ Feature: F21526 - Secure data
 
      When I clicked clear data
      Then cells ["A1", "B33", "E1", "F77"] should have values ["Region", "", "Country", ""]
-      And I log out
+      And I logged out
 
      When I logged in with username "Tim" and empty password
       And I clicked view data
@@ -29,7 +29,7 @@ Feature: F21526 - Secure data
      Then cells ["B33", "F77"] should have values ["Music", "Sub-Saharan Africa"]
 
      When I clicked clear data
-     Then I log out
+     Then I logged out
 
      When I logged in with username "Jeff" and empty password
       And I clicked view data
@@ -37,7 +37,7 @@ Feature: F21526 - Secure data
      Then cells ["B33", "F77", "B3"] should have values ["", "Sub-Saharan Africa", "Books"]
 
      When I clicked clear data
-     Then I log out
+     Then I logged out
 
     When I logged in with username "Martyna" and empty password
      And I clicked view data
@@ -49,4 +49,4 @@ Feature: F21526 - Secure data
      And I removed object 1 using icon
      And I closed all notifications
 
-    Then I log out
+    Then I logged out
