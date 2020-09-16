@@ -26,7 +26,7 @@ when 'windows'
   end
 
   execute "install dependencies" do
-    command "python -m pip install selenium Appium-Python-Client behave Pillow opencv-python-headless pyperclip allure-behave"
+    command "python -m pip install selenium Appium-Python-Client behave Pillow opencv-python-headless pyperclip allure-behave requests"
   end
 
 end
