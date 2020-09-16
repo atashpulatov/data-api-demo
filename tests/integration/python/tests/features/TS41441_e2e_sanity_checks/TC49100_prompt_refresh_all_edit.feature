@@ -4,8 +4,7 @@
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49100] Import Prompted Reports | Import multiple objects | Refresh All | Refresh | Edit - Prompts)
-    Given I pass
-#    Given I logged in as default user
+    Given I logged in as default user
     And I clicked Import Data button
     And MyLibrary Switch is OFF
     And I found object by ID "24F3C9804D8FCA7194F1A48D1B8F1C17" and selected "Report with prompt - Attribute element prompt of Category | Required | Not default"
@@ -16,7 +15,7 @@ Feature: TS41441 - Sanity checks
     And I clicked Run button
     And I clicked attribute "Year"
     And I clicked attribute "Region"
-    And I clicked attributes and forms { "Category": ["ID"] }
+    And I ensured attribute is selected and I clicked forms { "Subcategory": ["ID"] }
     And I clicked metric "Revenue"
     And I selected filter "Year" with all elements
     And I selected filters { "Region" : ["Central", "Southwest", "South", "Northeast"] }
@@ -52,8 +51,7 @@ Feature: TS41441 - Sanity checks
     And I ensure that "0" of "2" filters are selected
     And I clicked attribute "Month"
     And I clicked metric "Profit"
-    And I clicked attribute "Subcategory"
-    And I clicked attribute "Subcategory"
+    And I ensured attribute is selected and I clicked forms { "Subcategory": ["ID"] }
     And I selected filters { "Subcategory" : ["Alternative", "Pop"] }
     And I ensure that "3" of "4" metrics are selected
     And I ensure that "1" of "2" attributes are selected
@@ -61,7 +59,7 @@ Feature: TS41441 - Sanity checks
     And I clicked Import button in Columns and Filters Selection
 
     And I closed all notifications
-    Then cells ["G4", "H4", "I8", "K4"] should have values ["", "Total", "", "$ 1,197,222"]
+    Then cells ["G4", "H4", "I8", "K4"] should have values ["Total", "$23,307", "", ""]
 
     Given I selected cell "M1"
     And I clicked Add Data button
@@ -97,8 +95,8 @@ Feature: TS41441 - Sanity checks
     And I waited for all progress notifications to disappear
     And I closed all notifications
 
-    When I removed object 6 using icon
-    And I removed object 7 using icon
+    When I removed object 1 using icon
+    And I removed object 8 using icon
     And I closed all notifications
 
     Then I log out
