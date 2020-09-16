@@ -57,6 +57,18 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         return element.get_attribute(ImportDataWindowsDesktopPage.ARIA_PROPERTIES_ATTRIBUTE)
 
     def find_and_select_object(self, object_name):
+        """
+        Finds object by name and selects it. See ImportDataBrowserPage#find_and_select_object.
+        """
+
+        self.find_and_select_object_by_id(object_name, object_name)
+
+    def find_and_select_object_by_id(self, object_name, object_id):
+        """
+        Finds object by id and selects it.
+
+        This method will be removed, see ImportDataBrowserPage#find_and_select_object_by_id.
+        """
         self.windows_desktop_workaround.focus_on_popup_window()
 
         filters_elem = self.get_element_by_name(
@@ -67,7 +79,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             offset_x=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_X,
             offset_y=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_Y
         )
-        self.send_keys(object_name)
+        self.send_keys(object_id)
 
         Util.pause(4)  # TODO wait when ready
 
