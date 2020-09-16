@@ -1,3 +1,5 @@
+from behave.contrib.scenario_autoretry import patch_scenario_with_autoretry
+
 from framework.driver.driver_factory import DriverFactory
 from framework.driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
 from framework.pages_base.image_element import ImageElement
@@ -13,6 +15,13 @@ def before_all(context):
         datefmt='%Y-%m-%d %H:%M:%S'
     )
     ConfigUtil.initialize(context)
+
+
+def before_feature(context, feature):
+    max_attempts = ConfigUtil.get_max_test_retry_attempts()
+
+    for scenario in feature.scenarios:
+        patch_scenario_with_autoretry(scenario, max_attempts=max_attempts)
 
 
 def before_scenario(context, scenario):

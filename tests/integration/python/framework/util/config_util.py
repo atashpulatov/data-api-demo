@@ -28,6 +28,7 @@ class ConfigUtil:
     PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL = 'browser_existing_session_executor_url'
     PARAM_NAME_BROWSER_EXISTING_SESSION_ID = 'browser_existing_session_id'
     PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME = 'windows_desktop_excel_root_element_name'
+    PARAM_MAX_TEST_RETRY_ATTEMPTS = 'max_test_retry_attempts'
     PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED = 'cleanup_after_test_enabled'
     PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED = 'run_win_app_driver_enabled'
     PARAM_NAME_DRIVER_PATH_PREFIX = 'driver_path_'
@@ -102,6 +103,10 @@ class ConfigUtil:
     @staticmethod
     def get_windows_desktop_excel_root_element_name():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME)
+
+    @staticmethod
+    def get_max_test_retry_attempts():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_MAX_TEST_RETRY_ATTEMPTS)
 
     @staticmethod
     def get_desktop_host():
