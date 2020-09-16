@@ -5,7 +5,7 @@ Feature: TS41441 - Sanity checks
   Scenario: [TC59464] - Binding
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "28185E364F4B1CA6E8FA178214FDC3AE" and selected "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@/`testtesttes/km123456"
       And I clicked Import button
       And I closed all notifications
@@ -22,4 +22,4 @@ Feature: TS41441 - Sanity checks
 
      Then object number 1 should be called "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`testtestteskaj"
 
-      And I log out
+      And I logged out

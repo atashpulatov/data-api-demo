@@ -4,7 +4,7 @@ Feature: F25949 - Display filters and prompts
   Scenario: [TC67539] - Imported objects details showing, hiding  and coping with keyboard navigation - accessibility
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
      When I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
       And I clicked Prepare Data button
@@ -14,7 +14,7 @@ Feature: F25949 - Display filters and prompts
       And I selected "Movies" as an answer for "1. Category" prompt - object prompt
       And I selected "Music" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Subcategory" with all elements
@@ -27,7 +27,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Add Data button
       And I found object by ID "5BBA2D6911EA906EE92E0080EF1515C7" and selected "100 Sales Records.csv"
       And I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I selected filter "Item Type" with all elements
@@ -192,8 +192,8 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Tab
       And I pressed key Enter
 
-     Then I ensure that "8" of "8" metrics are selected
-      And I ensure that "7" of "7" attributes are selected
+     Then I verified that counter of "metrics" shows "8" of "8" selected
+      And I verified that counter of "attributes" shows "7" of "7" selected
       And I pressed key Esc
 
      When I clicked on object 1
@@ -215,4 +215,4 @@ Feature: F25949 - Display filters and prompts
 
      Then object number 1 should be called "Visualization 1"
 
-      And I log out
+      And I logged out

@@ -4,7 +4,7 @@ Feature: F25949 - Display filters and prompts
   Scenario: [TC67504] - expanding name lists, location
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "3633950911EAA96889F00080EF25F8A4" and selected "titanic_wiblgjlprj"
       And I clicked Import button
@@ -125,4 +125,4 @@ Feature: F25949 - Display filters and prompts
       And object 3 has id "3633950911EAA96889F00080EF25F8A4"
       And object 3 has collapsed location displayed
 
-      And I log out
+      And I logged out

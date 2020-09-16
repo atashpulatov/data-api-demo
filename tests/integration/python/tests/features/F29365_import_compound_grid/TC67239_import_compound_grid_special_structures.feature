@@ -5,7 +5,7 @@ Feature: F29365 - Import compound grid
   Scenario: [TC67263] - Import Compound Grid visualization with special structures
     Given I logged in as default user
      When I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "3901187911EAC1E161F30080EFF54765" and selected "Kind of compound grids - Special structure"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
@@ -52,4 +52,4 @@ Feature: F29365 - Import compound grid
 
      Then cells ["Q1", "T1", "R6"] should have values ["Subcategory", "Cost", "$811,787"]
 
-      And I log out
+      And I logged out

@@ -4,59 +4,59 @@ Feature: TS41441 - Sanity checks
   Scenario: [TC49134] - Error Handling
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found and selected object "1,5M Sales Records.csv"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1048576"
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Report accessing XML file"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "XFD1"
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Report accessing XML file"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1"
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "110k Sales Records.csv"
      Then I clicked Import button and saw error "This object exceeds the MicroStrategy project row limit. Please contact your administrator."
 
      When I selected cell "A1"
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes"
       And I clicked Import button
       Then I closed all notifications
 
      When I clicked Add Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Report accessing XML file"
       And I clicked Import button without checking results
      Then I clicked Cancel button in Range Taken popup
 
      When I selected cell "H1"
       And I clicked Add Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Report with Totals and Subtotals"
       And I clicked Import button
      Then I closed all notifications
 
      When I added a new worksheet
       And I clicked Add Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Report with crosstab 123"
       And I clicked Import button
      Then I closed all notifications
 
      When I added a new worksheet
       And I clicked Add Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
       And I found and selected object "Number Formatting"
       And I clicked Import button
       And I closed all notifications
@@ -99,10 +99,10 @@ Feature: TS41441 - Sanity checks
       And for cell "G2" font name should be "Arial Black"
 
      When I clicked clear data
-      And I log out
+      And I logged out
       And I logged in with username "user2" and password "user2"
       And I clicked view data
       And I closed all notifications
      Then cell "L4" should have value "245,677 PLN"
 
-      And I log out
+      And I logged out

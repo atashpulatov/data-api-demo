@@ -13,14 +13,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     FILTER_ITEM = '.filter-title'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
 
-    ALL_ATTRIBUTES = '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > ' \
-                     'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.attributes-col > div > ' \
-                     'div.checkbox-list.all-showed > div > div > label.mstr-office-checkbox-all'
-
-    ALL_METRICS = '#popup-wrapper > div > div:nth-child(1) > div.ant-row.full-height.filter-panel-container > ' \
-                  'div.ant-row.filter-panel-selectors > div.ant-col.ant-col-6.metrics-col > div > ' \
-                  'div.checkbox-list.all-showed > div > div > label'
-
+    ALL_ATTRIBUTES = '.attributes-col .mstr-office-checkbox-all'
+    ALL_METRICS = '.metrics-col .mstr-office-checkbox-all'
     ALL_FILTERS = '.filters-col .mstr-office-checkbox-all'
 
     ATTRIBUTE_FORM_DROPDOWN = '.ant-select-selection--single'
@@ -33,7 +27,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
-    REPORT_TITLE = 'div.folder-browser-title > span:nth-child(2)'
+    REPORT_TITLE = '.folder-browser-title > span:nth-child(2)'
 
     PARENT_ATTRIBUTE_ELEMENTS = '.attribute-forms li'
     CHILD_ATTRIBUTE_ELEMENT = 'span > span > .item-title'
@@ -41,10 +35,10 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     ATTRIBUTE_FORM_ARROW_COLLAPSED = '.ant-tree-switcher_close'
     ATTRIBUTE_FORM_ARROW_EXPANDED = '.ant-tree-switcher_open'
 
-    ROOT_ATTRIBUTE_CONTAINER = 'div.ant-col.ant-col-6.attributes-col'
-    ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > div > ul'
+    ROOT_ATTRIBUTE_CONTAINER = '.attributes-col'
+    ATTRIBUTES_CONTAINER = ROOT_ATTRIBUTE_CONTAINER + ' > div > .checkbox-list.all-showed > div > div > div > ul'  # might not work for datasets
     ATTRIBUTE_ELEMENT_AT = ATTRIBUTES_CONTAINER + ' > li:nth-child(%s)'
-    ATTRIBUTES_TITLE_SORT = ROOT_ATTRIBUTE_CONTAINER + ' > div > div.selector-title > div'
+    ATTRIBUTES_TITLE_SORT = ROOT_ATTRIBUTE_CONTAINER + ' > div > .selector-title > div'
     ATTRIBUTE_FORM_ARROW_COLLAPSED_ELEMENT_AT = (
             ATTRIBUTE_ELEMENT_AT + ' > span.ant-tree-switcher' + ATTRIBUTE_FORM_ARROW_COLLAPSED
     )
@@ -56,16 +50,15 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     EXPAND_ATTRIBUTE_FORMS = 'expand'
     COLLAPSE_ATTRIBUTE_FORMS = 'collapse'
 
-    ROOT_METRIC_CONTAINER = 'div.ant-col.ant-col-6.metrics-col'
-    METRICS_CONTAINER = ROOT_METRIC_CONTAINER + ' > div > div.checkbox-list.all-showed > div > div > ' \
-                                                'div:nth-child(2) > div > div'
+    ROOT_METRIC_CONTAINER = '.metrics-col'
+    METRICS_CONTAINER = ROOT_METRIC_CONTAINER + ' .selector-list > div'
     METRIC_ELEMENT_AT = METRICS_CONTAINER + ' > div:nth-child(%s)'
-    METRICS_TITLE_SORT = ROOT_METRIC_CONTAINER + ' > div > div.selector-title > div'
+    METRICS_TITLE_SORT = ROOT_METRIC_CONTAINER + ' > div > .selector-title > div'
 
-    ROOT_FILTER_CONTAINER = 'div.ant-col.ant-col-12.filters-col > div > div:nth-child(1)'
-    FILTERS_CONTAINER = ROOT_FILTER_CONTAINER + ' > div.filter-list.ant-list > div > div > ul'
+    ROOT_FILTER_CONTAINER = '.filters-col > div > div:nth-child(1)'
+    FILTERS_CONTAINER = ROOT_FILTER_CONTAINER + ' > .filter-list > div > div > ul'
     FILTER_ELEMENT_AT = FILTERS_CONTAINER + ' > li:nth-child(%s)'
-    FILTERS_TITLE_SORT = ROOT_FILTER_CONTAINER + ' > div.selector-title.filter-selector-title > div'
+    FILTERS_TITLE_SORT = ROOT_FILTER_CONTAINER + ' > .filter-selector-title > div'
 
     ARIA_SORT = 'aria-sort'
     SORT_ASCENDING = 'ascending'
@@ -75,36 +68,38 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRICS_SORT_TITLE = '.metrics-col .sort-title-section'
     FILTER_SORT_TITLE = '.filters-col .sort-title-section'
 
-    SEARCH_INPUT = '.ant-input.ant-input-sm'
-
-    ATTRIBUTES = 'attributes'
-    METRICS = 'metrics'
-    FILTERS = 'filters'
+    SEARCH_INPUT = '.search-input > input'
 
     TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
 
     TRY_LIMIT_FOR_SORT = 3
     TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 6
 
-    OBJECT_TO_TITLE_CONTAINER = {
+    ATTRIBUTES = 'attributes'
+    METRICS = 'metrics'
+    FILTERS = 'filters'
+
+    OBJECTS_TYPE_TO_TITLE_GROUP = {
         ATTRIBUTES: ATTRIBUTES_TITLE_SORT,
         METRICS: METRICS_TITLE_SORT,
         FILTERS: FILTERS_TITLE_SORT
     }
 
-    OBJECT_TO_OBJECT_CONTAINER = {
-        ATTRIBUTES: ATTRIBUTE_ELEMENT_AT,
-        METRICS: METRIC_ELEMENT_AT,
-        FILTERS: FILTER_ELEMENT_AT
-    }
-
-    OBJECT_TO_COLUMN_TITLE = {
+    OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP = {
         ATTRIBUTES: ATTRIBUTES_SORT_TITLE,
         METRICS: METRICS_SORT_TITLE,
         FILTERS: FILTER_SORT_TITLE
     }
 
-    FIRST_FILTER = '.ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal'
+    OBJECTS_TYPE_TO_OBJECTS_GROUP = {
+        ATTRIBUTES: ATTRIBUTE_ELEMENT_AT,
+        METRICS: METRIC_ELEMENT_AT,
+        FILTERS: FILTER_ELEMENT_AT
+    }
+
+    CHECKED_CHECKBOX_CLASS = '.ant-tree-checkbox.ant-tree-checkbox-checked'
+
+    FIRST_FILTER = '.filters-col .ant-tree-node-content-wrapper.ant-tree-node-content-wrapper-normal'
 
     def __init__(self):
         super().__init__()
@@ -134,10 +129,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         :param of_number: number of all items
         """
 
-        if item_type not in ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_COLUMN_TITLE:
+        if item_type not in ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP:
             raise MstrException(f'Wrong item_type [{item_type}] argument passed to ensure_item_selection')
 
-        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_COLUMN_TITLE[item_type]
+        sort_title_selector = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP[
+            item_type]
 
         title = f'{item_type.upper()} ({number}/{of_number})'
         column_name = self.get_sort_column_name(sort_title_selector)
@@ -236,30 +232,42 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         filter_item.click()
 
-    def click_attributes_and_forms(self, attributes_and_forms_json):
+    def ensure_attribute_is_selected_and_click_forms(self, attributes_and_forms_json):
         self.focus_on_add_in_popup_frame()
 
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
         for attribute_name, form_names in attributes_and_forms.items():
-            attribute_element = self.get_parent_element_by_child_text_from_parent_elements_list_by_css(
-                ColumnsAndFiltersSelectionBrowserPage.PARENT_ATTRIBUTE_ELEMENTS,
-                ColumnsAndFiltersSelectionBrowserPage.CHILD_ATTRIBUTE_ELEMENT,
-                attribute_name
-            )
+            attribute_element = self._get_attribute_element(attribute_name)
 
+            self._ensure_attribute_is_selected(attribute_element)
+
+            self._click_forms(attribute_element, form_names)
+
+    def _get_attribute_element(self, attribute_name):
+        return self.get_parent_element_by_child_text_from_parent_elements_list_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.PARENT_ATTRIBUTE_ELEMENTS,
+            ColumnsAndFiltersSelectionBrowserPage.CHILD_ATTRIBUTE_ELEMENT,
+            attribute_name
+        )
+
+    def _ensure_attribute_is_selected(self, attribute_element):
+        if not attribute_element.check_if_child_element_exists_by_css(
+                ColumnsAndFiltersSelectionBrowserPage.CHECKED_CHECKBOX_CLASS,
+                timeout=SHORT_TIMEOUT):
             attribute_element.click()
 
-            if len(form_names) > 0:
-                self._ensure_attributes_forms_are_expanded(attribute_element)
+    def _click_forms(self, attribute_element, form_names):
+        if len(form_names) > 0:
+            self._ensure_attributes_forms_are_expanded(attribute_element)
 
-                for form_name in form_names:
-                    attribute_form_element = attribute_element.get_element_by_text_from_elements_list_by_css(
-                        ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORMS,
-                        form_name
-                    )
+            for form_name in form_names:
+                attribute_form_element = attribute_element.get_element_by_text_from_elements_list_by_css(
+                    ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORMS,
+                    form_name
+                )
 
-                    attribute_form_element.move_to_and_click(offset_x=2, offset_y=2)
+                attribute_form_element.move_to_and_click(offset_x=2, offset_y=2)
 
     def _ensure_attributes_forms_are_expanded(self, attribute_element):
         if attribute_element.check_if_child_element_exists_by_css(
@@ -277,7 +285,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def select_element_by_number(self, object_type, object_number):
         self.focus_on_add_in_popup_frame()
 
-        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
+        element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
 
         self.get_element_by_css(element).click()
 
@@ -339,7 +347,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def _sort_elements_by_click(self, object_type, sorting_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT):
@@ -377,7 +385,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def press_tab_until_object_type_focused(self, object_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
@@ -400,7 +408,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def _sort_elements_by_keyboard(self, object_type, sorting_type):
         self.focus_on_add_in_popup_frame()
 
-        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_TITLE_CONTAINER[object_type]
+        object_type_sort_element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_TITLE_GROUP[object_type]
         sort_element = self.get_element_by_css(object_type_sort_element)
 
         for i in range(0, ColumnsAndFiltersSelectionBrowserPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
@@ -416,7 +424,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def scroll_into_object_by_number(self, object_number, object_type):
         self.focus_on_add_in_popup_frame()
 
-        element = ColumnsAndFiltersSelectionBrowserPage.OBJECT_TO_OBJECT_CONTAINER[object_type] % object_number
+        element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
         self.get_element_by_css_no_visibility_checked(element).move_to()
 
     def click_import_button(self):

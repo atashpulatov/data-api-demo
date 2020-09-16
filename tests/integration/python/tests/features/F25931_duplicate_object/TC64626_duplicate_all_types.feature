@@ -6,7 +6,7 @@ Feature: F25931 - Duplicate object
   Scenario: [TC64626] - Duplicate all types of objects
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found and selected object "Secure data - always working"
       And I clicked Import button
@@ -54,4 +54,4 @@ Feature: F25931 - Duplicate object
 
       And number of worksheets should be 3
 
-      And I log out
+      And I logged out
