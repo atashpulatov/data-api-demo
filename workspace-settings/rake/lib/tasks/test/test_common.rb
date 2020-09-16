@@ -53,7 +53,7 @@ task :py_e2e_test_win,[:tag_name] do | t, args|
 
   shell_command! "python -m venv venv_win", cwd: test_dir
   shell_command! "venv_win\\Scripts\\Activate.bat", cwd: test_dir
-  shell_command! "python -m behave --tags=@#{PY_WIN_TEST_PARAM[tag_name]} --tags=@ci --logging-level=ERROR --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
+  shell_command! "python -m behave --tags=@ci --tags=@#{PY_WIN_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_WIN_TEST_PARAM[tag_name]}.json --logging-level=ERROR --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
 end
 
 desc "run browser based test"
