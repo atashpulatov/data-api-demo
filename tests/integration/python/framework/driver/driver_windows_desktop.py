@@ -18,13 +18,17 @@ class DriverWindowsDesktop(AbstractDriver):
         'newCommandTimeout': 360
     }
 
-    WIN_APP_DRIVER_START = r'start "" "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe"'
+    WIN_APP_DRIVER = 'WinAppDriver.exe'
+    WIN_APP_DRIVER_START = r'start "" "C:\Program Files (x86)\Windows Application Driver\%s" ' \
+                           r'127.0.0.1 4723/wd/hub' % WIN_APP_DRIVER
+    WIN_APP_DRIVER_STOP = r'taskkill /f /t /im %s' % WIN_APP_DRIVER
 
     DRIVER_INITIALIZATION_ATTEMPT_COUNT = 10
 
+    win_app_driver_process = None
+
     def get_driver(self):
-        if ConfigUtil.is_run_win_app_driver_enabled():
-            subprocess.Popen(DriverWindowsDesktop.WIN_APP_DRIVER_START, shell=True)
+        self._start_win_app_driver()
 
         if ConfigUtil.is_attaching_to_existing_session_enabled():
             return self._prepare_driver_existing_session()
@@ -79,4 +83,16 @@ class DriverWindowsDesktop(AbstractDriver):
 
     @staticmethod
     def driver_cleanup(driver):
-        pass
+        DriverWindowsDesktop._stop_win_app_driver()
+
+    def _start_win_app_driver(self):
+        if not DriverWindowsDesktop.win_app_driver_process and ConfigUtil.is_run_win_app_driver_enabled():
+            DriverWindowsDesktop.win_app_driver_process = subprocess.Popen(
+                DriverWindowsDesktop.WIN_APP_DRIVER_START,
+                shell=True
+            )
+
+    @staticmethod
+    def _stop_win_app_driver():
+        if DriverWindowsDesktop.win_app_driver_process:
+            subprocess.run(DriverWindowsDesktop.WIN_APP_DRIVER_STOP)
