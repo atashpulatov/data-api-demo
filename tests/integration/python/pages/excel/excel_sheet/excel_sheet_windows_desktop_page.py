@@ -16,7 +16,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     VALUE_ATTRIBUTE = 'Value.Value'
 
     BOOK_ELEM = 'Book1'
-    BOOK_CHILDREN_ELEMS = '//TabItem]'
+    BOOK_CHILDREN_ELEMS = '//TabItem'
     NAME_ATTRIBUTE = 'Name'
     SHEET_TAB_NAME = 'Sheet Tab'
     ADD_SHEET_BUTTON = 'Sheet Tab Add Sheet'
