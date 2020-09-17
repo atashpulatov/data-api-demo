@@ -2,7 +2,7 @@
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67230] - Import compound grid visualization (other cases)
-    Given I wait 0
+    Given I logged in as default user
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "E52F04E111EABC6C58230080EF75D638" and selected "Kind of compound grids - Other cases"
