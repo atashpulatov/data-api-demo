@@ -30,16 +30,18 @@ when 'windows'
   end
 
 when 'mac_os_x'
-  remote_file "/opt/appium_for_mac_0.3.0" do
-    source "https://nexus.internal.microstrategy.com/repository/filerepo/io/appium/appium-for-mac/0.3.0/appium-for-mac-0.3.0.zip"
-    action :create_if_missing
-  end
-  execute 'unzip files' do
-    command <<-EOH
-    unzip appium_for_mac_0.3.0
-    cp -r AppiumForMac.app /Applications
-    EOH
-    cwd "/opt"
+  unless Dir.exists? "/Applications/AppiumForMac.app"
+    remote_file "/opt/appium_for_mac_0.3.0" do
+      source "https://nexus.internal.microstrategy.com/repository/filerepo/io/appium/appium-for-mac/0.3.0/appium-for-mac-0.3.0.zip"
+      action :create_if_missing
+    end
+    execute 'unzip files' do
+      command <<-EOH
+      unzip appium_for_mac_0.3.0
+      cp -r AppiumForMac.app /Applications
+      EOH
+      cwd "/opt"
+    end
   end
 
   execute "install dependencies" do
