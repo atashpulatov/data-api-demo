@@ -38,11 +38,11 @@ when 'mac_os_x'
   include_recipe 'docker'
   include_recipe 'maven'
   include_recipe 'java_ecosystem'
-  include_recipe 'workspace::mac_os_x_e2e_dependencies'
+  include_recipe 'workspace::prepare_e2e_dependencies'
 when 'windows'
   include_recipe 'java_ecosystem'
   include_recipe 'workspace::tomcat_windows'
-  include_recipe 'workspace::windows_e2e_dependencies'
+  include_recipe 'workspace::prepare_e2e_dependencies'
 else
 
 end
