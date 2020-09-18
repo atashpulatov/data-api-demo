@@ -20,6 +20,7 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
     DOSSIER_FILTER_NAME = '.mstrd-FilterItemTitle-filterTitle'
     DOSSIER_FILTER_VALUE = '.mstrd-Checkbox-body[aria-label="%s"]'
     APPLY_FILTER_BUTTON = '.mstr-apply-button'
+    YEAR_STRING = 'Year'
 
     def increase_year_filter_value(self, filter_change, filter_side):
         if filter_change not in (
@@ -51,7 +52,7 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
     def open_year_filter(self):
         self.focus_on_dossier_frame()
         self._open_filter_menu()
-        self.find_element_by_text_in_elements_list_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_NAME, 'Year').click()
+        self.find_element_by_text_in_elements_list_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_NAME, YEAR_STRING).click()
 
     def select_year_filter_checkbox(self, year_value):
         year_check_box = self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % year_value)
