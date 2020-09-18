@@ -59,7 +59,7 @@ Feature: F25949 - Display filters and prompts
 
      Then object 1 has "Filter" list with value "Call Center (Atlanta, San Diego, San Francisco, Washington, DC, Salt Lake City, Miami, Milwaukee, New Orleans, Seattle, Boston, New York, Fargo, Memphis, Charleston, Web)‎, Employee (Bates, Becker, Bell, Benner, Bernstein, Brown, Conner, Corcoran, De Le Torre, Ellerkamp, Folks, Gale, Gedot, Hall, Hollywood, Hunt, Ingles, Johnson, Kelly, Kieferson, Lynch, McClain, Nelson, Pierce, Sawyer, Schafer, Smith, Sonder, Strome, Torrison, Yager, Young, Zemlicka, Walker)"
       And object 1 has "Attribute" list with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
-      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Supporting Objects > Excel - Objects for Testing > Reports > Prompted report with subtotals" displayed
+      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted report with subtotals" displayed
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -127,7 +127,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked object location expand button on object 1
      Then object 1 has "Filter" list with value "Call Center (Atlanta, San Diego, San Francisco, Washington, DC, Salt Lake City, Miami, Milwaukee, New Orleans, Seattle, Boston, New York, Fargo, Memphis, Charleston, Web)‎, Employee (Bates, Becker, Bell, Benner, Bernstein, Brown, Conner, Corcoran, De Le Torre, Ellerkamp, Folks, Gale, Gedot, Hall, Hollywood, Hunt, Ingles, Johnson, Kelly, Kieferson, Lynch, McClain, Nelson, Pierce, Sawyer, Schafer, Smith, Sonder, Strome, Torrison, Yager, Young, Zemlicka, Walker)"
       And object 1 has "Attribute" list with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
-      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Supporting Objects > Excel - Objects for Testing > Reports > Prompted report with subtotals" displayed
+      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted report with subtotals" displayed
 
      When I refreshed all objects
       And I waited for all progress notifications to disappear
