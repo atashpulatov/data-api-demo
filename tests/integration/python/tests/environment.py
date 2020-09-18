@@ -16,6 +16,8 @@ def before_all(context):
     )
     ConfigUtil.initialize(context)
 
+    TestUtil.global_test_startup()
+
 
 def before_feature(context, feature):
     max_attempts = ConfigUtil.get_max_test_retry_attempts()

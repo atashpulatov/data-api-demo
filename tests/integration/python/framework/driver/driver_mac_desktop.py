@@ -24,8 +24,6 @@ class DriverMacDesktop(AbstractDriver):
     appium_for_mac_process = None
 
     def get_driver(self):
-        self._start_appium_for_mac()
-
         host = ConfigUtil.get_desktop_host()
 
         try:
@@ -39,12 +37,17 @@ class DriverMacDesktop(AbstractDriver):
             raise MstrException('Error while starting test, ensure AppiumForMac is running or change driver_type.')
 
     @staticmethod
+    def before_driver_startup():
+        DriverMacDesktop._stop_appium_for_mac()
+
+        DriverMacDesktop._start_appium_for_mac()
+
+    @staticmethod
     def driver_cleanup(driver):
         DriverMacDesktop._stop_appium_for_mac()
 
-    def _start_appium_for_mac(self):
-        DriverMacDesktop._stop_appium_for_mac()
-
+    @staticmethod
+    def _start_appium_for_mac():
         if not DriverMacDesktop.appium_for_mac_process and ConfigUtil.is_run_appium_for_mac_enabled():
             DriverMacDesktop.appium_for_mac_process = subprocess.Popen(
                 DriverMacDesktop.APPIUM_FOR_MAC_START,
@@ -55,3 +58,5 @@ class DriverMacDesktop(AbstractDriver):
     @staticmethod
     def _stop_appium_for_mac():
         subprocess.run(DriverMacDesktop.APPIUM_FOR_MAC_STOP)
+
+        DriverMacDesktop.appium_for_mac_process = None
