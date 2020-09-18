@@ -31,6 +31,7 @@ class ConfigUtil:
     PARAM_MAX_TEST_RETRY_ATTEMPTS = 'max_test_retry_attempts'
     PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED = 'cleanup_after_test_enabled'
     PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED = 'run_win_app_driver_enabled'
+    PARAM_NAME_RUN_APPIUM_FOR_MAC_ENABLED = 'run_appium_for_mac_enabled'
     PARAM_NAME_DRIVER_PATH_PREFIX = 'driver_path_'
     PARAM_NAME_HOST_URL_PREFIX = 'host_url_'
     PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT = 'excel_add_in_environment'
@@ -128,6 +129,10 @@ class ConfigUtil:
     @staticmethod
     def is_run_win_app_driver_enabled():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED)
+
+    @staticmethod
+    def is_run_appium_for_mac_enabled():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_RUN_APPIUM_FOR_MAC_ENABLED)
 
     @staticmethod
     def is_image_recognition_enabled():

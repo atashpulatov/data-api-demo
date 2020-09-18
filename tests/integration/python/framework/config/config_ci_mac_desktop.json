@@ -1,0 +1,12 @@
+{
+  "driver_type": "mac_desktop",
+  "connect_to_existing_session_enabled": false,
+  "max_test_retry_attempts": 2,
+  "cleanup_after_test_enabled": true,
+  "run_appium_for_mac_enabled": true,
+  "host_url_mac_desktop": "http://localhost:4622/wd/hub",
+  "excel_add_in_environment": "225720",
+  "excel_desktop_add_in_import_data_name": "env-225720",
+  "excel_add_in_environment_default_user_name": "a",
+  "excel_add_in_environment_default_password": ""
+}

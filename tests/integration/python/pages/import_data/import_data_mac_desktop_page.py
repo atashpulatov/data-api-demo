@@ -56,6 +56,11 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
             offset_y=ImportDataMacDesktopPage.FROM_NAME_START_TO_FIRST_OBJECT_OFFSET_Y
         )
 
+    def find_and_select_object_by_id(self, object_name, object_id):
+        # TODO no object list items in page source; investigate
+
+        self.find_and_select_object(object_id)
+
     def click_import_button(self):
         self.get_element_by_xpath(ImportDataMacDesktopPage.IMPORT_BUTTON_ELEM).click()
 
