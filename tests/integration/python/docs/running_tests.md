@@ -135,7 +135,7 @@ Examples of running tests (check [Test execution parameters](#test_executing_par
 behave tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging:
-behave --no-color --logging-level=DEBUG --tags=@release_validation --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
+behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
 # test single feature, verbose logging, redircting logs to files, stdout also to console:
 behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt
@@ -178,14 +178,14 @@ where `driver_name` is one of available driver types (see [driver_type.py](drive
 `--tags=@tag_name`, specifies which tests to execute (only those tagged `@tag_name`), for simplicity use the same 
 values as for `driver_name` (`@windows_desktop`, `@windows_chrome`, `@mac_desktop`, `@mac_chrome`).
 
-Tags related to selecting tests for different tasks (e.g. release or GA validation, CI execution) are going to be
-added, e.g. @release_validation. To execute only tests tagged @windows_desktop AND @release_validation use `--tags`
-multiple times:
+Tags related to selecting tests for different tasks:
+
+- `@release_validation` - this tag we use for running the release validation test set (test cases with this tag should 
+be reviewed before each release validation).
+- `@ci` - this tag we use for test cases which will be executed on the CI pipeline after each build.
+ To execute only tests tagged @windows_desktop AND @release_validation use `--tags` multiple times:
 
 `--tags=@windows --tags=@release_validation`.
-
-we have:
-- release_validation - TC with this tag are in scope of Release Validation Test Set
 
 `-D image_recognition_enabled=True` enables (`True`) or disables (`False`) usage of image recognition to speed up
 tests execution. Works only when implemented for selected driver (see `-D driver_type`), currently only

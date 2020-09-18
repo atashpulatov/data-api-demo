@@ -13,10 +13,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     FILTER_ITEM = '.filter-title'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
     DATA_PREVIEW_BUTTON = '#data-preview'
-    FIRST_CLOSED_ATTRIBUTE_FORM_SWITCHER = 'div:nth-child(1) > div > div.checkbox-list.all-showed > div > div > ' \
-                                           'div.attribute-forms > ul > ' \
-                                           'li.ant-tree-treenode-switcher-close.ant-tree-treenode-checkbox-checked > ' \
-                                           'span.ant-tree-switcher'
 
     ALL_ATTRIBUTES = '.attributes-col .mstr-office-checkbox-all'
     ALL_METRICS = '.metrics-col .mstr-office-checkbox-all'
