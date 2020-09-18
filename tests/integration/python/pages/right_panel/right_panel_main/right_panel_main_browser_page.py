@@ -12,7 +12,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     DOTS_MENU_ITEM_LOG_OUT_ID = 'logOut'
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
-    SELECT_ALL_TILES_CHECKBOX_ID = 'master-checkbox'
+    SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .checkbox-cell'
     REFRESH_ALL = SELECT_ALL_TILES + 'button:nth-child(5)'
     REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
 
@@ -39,14 +39,14 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     def refresh_all(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_id(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX_ID).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
         self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_ALL).click()
 
     def remove_all(self):
         self.focus_on_add_in_frame()
 
-        self.get_element_by_id(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX_ID).click()
+        self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
         self.get_element_by_css(RightPanelMainBrowserPage.REMOVE_ALL).click()
 
@@ -74,7 +74,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self._open_dots_menu()
 
         self.get_element_by_css(RightPanelMainBrowserPage.CLEAR_DATA).click()
-        self.get_element_by_id(RightPanelMainBrowserPage._ID).click()
+        self.get_element_by_id(RightPanelMainBrowserPage.CONFIRM_CLEAR_DATA_ID).click()
 
     def logout(self):
         self.focus_on_add_in_frame()
