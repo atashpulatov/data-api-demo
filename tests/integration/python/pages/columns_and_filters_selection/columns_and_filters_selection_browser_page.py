@@ -434,6 +434,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=LONG_TIMEOUT)
 
+    def click_import_button_without_success_check(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
+
     def click_import_button_to_duplicate(self):
         self.focus_on_add_in_popup_frame()
 
