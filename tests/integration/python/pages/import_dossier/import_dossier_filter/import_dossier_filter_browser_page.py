@@ -16,6 +16,11 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         FILTER_SIDE_RIGHT: FILTER_SLIDER_MAX_POINT
     }
 
+
+    DOSSIER_FILTER_NAME = '.mstrd-FilterItemTitle-filterTitle'
+    DOSSIER_FILTER_VALUE = '.mstrd-Checkbox-body[aria-label="%s"]'
+    APPLY_FILTER_BUTTON = '.mstr-apply-button'
+
     def increase_year_filter_value(self, filter_change, filter_side):
         if filter_change not in (
                 ImportDossierFilterBrowserPage.FILTER_CHANGE_INCREASE,
