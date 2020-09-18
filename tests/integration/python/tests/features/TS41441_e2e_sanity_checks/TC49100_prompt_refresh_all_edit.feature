@@ -106,19 +106,3 @@ Feature: TS41441 - Sanity checks
     Then cells ["A1", "BG1"] should have values ["", ""]
 
     And I logged out
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
