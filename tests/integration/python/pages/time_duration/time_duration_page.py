@@ -43,3 +43,12 @@ class TimeDurationPage(BasePage):
         
         if TimeDurationPage.KEY_DURATION not in TimeDurationPage.TIMERS[timer_name]:
             raise MstrException(f'Timer not stoped: {timer_name}')
+
+    def is_execution_time_not_bigger_than(self, shorter_timer_name, longer_timer_name):
+        self._validate_timer(shorter_timer_name)
+        self._validate_timer(longer_timer_name)
+
+        shorter_timer_duration = TimeDurationPage.TIMERS[shorter_timer_name][TimeDurationPage.KEY_DURATION] 
+        longer_timer_duration =TimeDurationPage.TIMERS[longer_timer_name][TimeDurationPage.KEY_DURATION]
+        
+        return longer_timer_duration >= shorter_timer_duration

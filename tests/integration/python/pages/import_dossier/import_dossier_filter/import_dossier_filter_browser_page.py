@@ -49,6 +49,7 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDossierFilterBrowserPage.FILTERS_BUTTON).click()
   
     def open_year_filter(self):
+        self.focus_on_dossier_frame()
         self._open_filter_menu()
         self.find_element_by_text_in_elements_list_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_NAME, 'Year').click()
 
