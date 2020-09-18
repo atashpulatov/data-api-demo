@@ -23,3 +23,13 @@ def step_impl(context, first_timer_name, second_timer_name, threshold):
     )
 
     AssertUtil.assert_simple(result, True)
+
+
+@step('I verified that execution time "{shorter_timer_name}" is not bigger than "{longer_timer_name}"')
+def step_impl(context, shorter_timer_name, longer_timer_name):
+    result = context.pages.time_duration_page().is_execution_time_not_bigger_than(
+        shorter_timer_name, 
+        longer_timer_name,
+    )
+
+    AssertUtil.assert_simple(result, True)
