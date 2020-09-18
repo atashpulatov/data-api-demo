@@ -2,7 +2,6 @@ from behave import *
 
 from framework.util.assert_util import AssertUtil
 
-
 @step('I saved execution start time to "{timer_name}"')
 def step_impl(context, timer_name):
     context.pages.time_duration_page().save_execution_start(timer_name)
