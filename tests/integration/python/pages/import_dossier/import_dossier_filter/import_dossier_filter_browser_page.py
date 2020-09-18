@@ -43,3 +43,15 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
     def _open_filter_menu(self):
         self.get_element_by_css(ImportDossierFilterBrowserPage.FILTERS_BUTTON).click()
   
+    def open_year_filter(self):
+        self._open_filter_menu()
+        self.find_element_by_text_in_elements_list_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_NAME, 'Year').click()
+
+    def select_year_filter_checkbox(self, year_value):
+        year_check_box = self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % year_value)
+        year_check_box.click()
+
+    def select_year_in_year_filter(self, year):
+        self.open_year_filter()
+        self.select_year_filter_checkbox(year)
+        self.get_element_by_css(ImportDossierFilterBrowserPage.APPLY_FILTER_BUTTON).click()
