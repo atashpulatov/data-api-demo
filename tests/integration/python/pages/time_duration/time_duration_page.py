@@ -20,7 +20,7 @@ class TimeDurationPage(BasePage):
             TimeDurationPage.KEY_START_TIME: time.time()
         }
 
-    def save_execution_end(self, timer_name):
+    def save_duration(self, timer_name):
         if timer_name not in TimeDurationPage.TIMERS:
             raise MstrException(f'Timer not started: {timer_name}')
 
@@ -52,4 +52,4 @@ class TimeDurationPage(BasePage):
             raise MstrException(f'Timer not started: {timer_name}')
 
         if TimeDurationPage.KEY_DURATION not in TimeDurationPage.TIMERS[timer_name]:
-            raise MstrException(f'Timer not stoped: {timer_name}')
+            raise MstrException(f'Timer not stopped: {timer_name}')
