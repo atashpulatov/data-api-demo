@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from pages.debug.debug_page import DebugPage
 from pages.keyboard.keyboard_page import KeyboardPage
 from pages.api.rest_api_page import RestApiPage
+from pages.time_duration.time_duration_page import TimeDurationPage
 
 
 class AbstractPagesSet(ABC):
@@ -10,6 +11,7 @@ class AbstractPagesSet(ABC):
         self.debug_common_page = DebugPage()
         self.keyboard_common_page = KeyboardPage()
         self.rest_api_common_page = RestApiPage()
+        self.time_duration_common_page = TimeDurationPage()
 
     def debug_page(self):
         return self.debug_common_page
@@ -19,6 +21,9 @@ class AbstractPagesSet(ABC):
 
     def rest_api_page(self):
         return self.rest_api_common_page
+    
+    def time_duration_page(self):
+        return self.time_duration_common_page
 
     @abstractmethod
     def excel_general_page(self):

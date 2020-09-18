@@ -18,10 +18,13 @@ Feature: F25931 - Duplicate object
      Then object number 1 should be called "100_report Copy"
 
      When I clicked on object 1
-      # TODO check if table in Excel is highlighted
-      And I changed object 1 name to "Incredible very long name of imported object" using icon
 
-     Then name tooltip for object number 1 should display "Incredible very long name of imported object"
+  # TODO Add scrolling or zooming of Excel sheet to check whole range of selection
+     Then columns ["A", "B"] are selected
+      And rows ["1", "2"] are selected
+
+     When I changed object 1 name to "Incredible very long name of imported object Incredible very long name of imported object" using icon
+     Then name tooltip for object number 1 should display "Incredible very long name of imported object Incredible very long name of imported object"
 
      When I clicked Refresh on object 1
       And I closed last notification

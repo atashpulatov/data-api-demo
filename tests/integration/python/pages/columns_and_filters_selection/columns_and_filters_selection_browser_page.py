@@ -432,17 +432,18 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         element = ColumnsAndFiltersSelectionBrowserPage.OBJECTS_TYPE_TO_OBJECTS_GROUP[object_type] % object_number
         self.get_element_by_css_no_visibility_checked(element).move_to()
 
-    def click_import_button(self):
+    def click_import_button_without_success_check(self):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
+
+    def click_import_button(self):
+        self.click_import_button_without_success_check()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=LONG_TIMEOUT)
 
     def click_import_button_to_duplicate(self):
-        self.focus_on_add_in_popup_frame()
-
-        self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM).click()
+        self.click_import_button_without_success_check()
 
         self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=LONG_TIMEOUT)
 
