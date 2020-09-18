@@ -24,7 +24,7 @@ Feature: F25946 - Display filters and prompts
 
       And I found object by ID "5902C03A11E9FEF1DC670080EF856919" and selected "Prompted dossier"
       And I clicked Import button to open Import Dossier
-      And I clicked Run button for prompted dossier
+      And I clicked Run button for prompted dossier if prompts not already answered
       And I selected visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification

@@ -43,6 +43,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.REFRESH_OBJECT_SUCCESSFUL_TEXT, timeout)
 
+    def wait_for_import_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+        self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
+
     def wait_for_remove_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT, timeout)
 

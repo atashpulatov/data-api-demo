@@ -24,7 +24,7 @@ Feature: F25933 - Range taken
 
      When I clicked Edit object 2
       And I clicked attribute "Region"
-      And I clicked Import button in Columns and Filters Selection
+      And I clicked Import button in Columns and Filters Selection without success check
       And I selected cell "J1"
       And I selected Active Cell option in Range Taken popup
       And I clicked OK button in Range Taken popup

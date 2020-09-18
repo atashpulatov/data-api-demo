@@ -13,9 +13,9 @@ def step_impl(context):
     context.pages.prompt_page().click_run_button()
 
 
-@step('I clicked Run button for prompted dossier')
+@step('I clicked Run button for prompted dossier if prompts not already answered')
 def step_impl(context):
-    context.pages.prompt_page().click_run_button_for_prompted_dossier()
+    context.pages.prompt_page().click_run_button_for_prompted_dossier_if_not_answered()
 
 
 @step('I selected "{item}" as an answer for "{prompt_number}. {prompt_name}" prompt - object prompt')
