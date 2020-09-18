@@ -125,7 +125,7 @@ Feature: F25946 - Display filters and prompts
 
      When I clicked toggle details button on object 2
 
-     Then object 2 is certified
+     Then object 2 is NOT certified
       And object 2 has "Prompt" list with value "Books"
       And object 2 has "Attribute" list with value "Country‎, Region"
       And object 2 has "Metric" list with value "Cost‎, Revenue"
