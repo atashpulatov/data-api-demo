@@ -68,7 +68,7 @@ Feature: TS41441 - Sanity checks
      When I clicked home tab
       And I selected cell "B4"
       And I clicked percentage button
-     Then cell "B4" should have value "890700.00%"
+     Then cell "B4" should have value "890700%"
 
      When I selected cell "C4"
       And I clicked comma style button
