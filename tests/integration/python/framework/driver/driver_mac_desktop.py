@@ -17,8 +17,9 @@ class DriverMacDesktop(AbstractDriver):
         'app': 'Root'
     }
 
-    APPIUM_FOR_MAC_START = 'open -g -F -a AppiumForMac'
-    APPIUM_FOR_MAC_STOP = 'killall AppiumForMac'
+    APPIUM_FOR_MAC = 'AppiumForMac'
+    APPIUM_FOR_MAC_START = 'open -g -F -a %s' % APPIUM_FOR_MAC
+    APPIUM_FOR_MAC_STOP = ['killall', APPIUM_FOR_MAC]
 
     appium_for_mac_process = None
 
@@ -45,7 +46,7 @@ class DriverMacDesktop(AbstractDriver):
         DriverMacDesktop._stop_appium_for_mac()
 
         if not DriverMacDesktop.appium_for_mac_process and ConfigUtil.is_run_appium_for_mac_enabled():
-            DriverMacDesktop.win_app_driver_process = subprocess.Popen(
+            DriverMacDesktop.appium_for_mac_process = subprocess.Popen(
                 DriverMacDesktop.APPIUM_FOR_MAC_START,
                 shell=True
             )
@@ -53,5 +54,4 @@ class DriverMacDesktop(AbstractDriver):
 
     @staticmethod
     def _stop_appium_for_mac():
-        if DriverMacDesktop.appium_for_mac_process:
-            subprocess.run(DriverMacDesktop.APPIUM_FOR_MAC_STOP)
+        subprocess.run(DriverMacDesktop.APPIUM_FOR_MAC_STOP)
