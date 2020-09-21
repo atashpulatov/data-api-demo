@@ -112,6 +112,7 @@ class DriverWindowsDesktop(AbstractDriver):
 
     @staticmethod
     def _stop_win_app_driver():
-        subprocess.run(DriverWindowsDesktop.WIN_APP_DRIVER_STOP)
+        if ConfigUtil.is_run_win_app_driver_enabled():
+            subprocess.run(DriverWindowsDesktop.WIN_APP_DRIVER_STOP)
 
-        DriverWindowsDesktop.win_app_driver_process = None
+            DriverWindowsDesktop.win_app_driver_process = None
