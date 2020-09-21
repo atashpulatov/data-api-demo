@@ -69,7 +69,7 @@ class DriverWindowsDesktop(AbstractDriver):
         for i in range(1, DriverWindowsDesktop.DRIVER_INITIALIZATION_ATTEMPT_COUNT):
             try:
                 driver = self._initialize_driver(host, capabilities)
-                Util.pause(4)
+                Util.pause(10)
 
                 return driver
             except MaxRetryError:
