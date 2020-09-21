@@ -24,6 +24,7 @@ class ConfigUtil:
 
     PARAM_NAME_DRIVER_TYPE = 'driver_type'
     PARAM_NAME_IMAGE_RECOGNITION_ENABLED = 'image_recognition_enabled'
+    PARAM_NAME_IMAGE_RECOGNITION_SCREENSHOTS_FOLDER = 'image_recognition_screenshots_folder'
     PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED = 'connect_to_existing_session_enabled'
     PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL = 'browser_existing_session_executor_url'
     PARAM_NAME_BROWSER_EXISTING_SESSION_ID = 'browser_existing_session_id'
@@ -156,6 +157,10 @@ class ConfigUtil:
         return ConfigUtil.PARAM_VALUES_CACHE[ConfigUtil.PARAM_NAME_IMAGE_RECOGNITION_ENABLED]
 
     @staticmethod
+    def get_image_recognition_screenshots_folder():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_IMAGE_RECOGNITION_SCREENSHOTS_FOLDER)
+
+    @staticmethod
     def get_driver_executable_path():
         driver_path_variable_name = '%s%s' % (ConfigUtil.PARAM_NAME_DRIVER_PATH_PREFIX, ConfigUtil.get_driver_type())
 
@@ -210,7 +215,9 @@ class ConfigUtil:
         config_file_full_path = os.path.join(ConfigUtil.CONFIG_DIR_PATH, config_file_name)
 
         if not os.path.exists(config_file_full_path):
-            raise MstrException('Invalid config file name, file does not exist: %s' % config_file_name)
+            raise MstrException(
+                'Invalid config file name, file does not exist or has wrong permissions: %s' % config_file_name
+            )
 
         return os.path.join(ConfigUtil.CONFIG_DIR_PATH, config_file_name)
 

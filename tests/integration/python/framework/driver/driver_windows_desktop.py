@@ -1,7 +1,7 @@
 import subprocess
 
 from appium import webdriver
-from urllib3.exceptions import MaxRetryError
+from selenium.common.exceptions import WebDriverException
 
 from framework.driver.abstract_driver import AbstractDriver
 from framework.util.config_util import ConfigUtil
@@ -23,13 +23,11 @@ class DriverWindowsDesktop(AbstractDriver):
                            r'127.0.0.1 4723/wd/hub' % WIN_APP_DRIVER
     WIN_APP_DRIVER_STOP = r'taskkill /f /t /im %s' % WIN_APP_DRIVER
 
-    DRIVER_INITIALIZATION_ATTEMPT_COUNT = 10
+    DRIVER_INITIALIZATION_ATTEMPT_COUNT = 5
 
     win_app_driver_process = None
 
     def get_driver(self):
-        self._start_win_app_driver()
-
         if ConfigUtil.is_attaching_to_existing_session_enabled():
             return self._prepare_driver_existing_session()
         else:
@@ -67,29 +65,45 @@ class DriverWindowsDesktop(AbstractDriver):
         capabilities['appArguments'] = '/e'  # disable splash screen
 
         for i in range(1, DriverWindowsDesktop.DRIVER_INITIALIZATION_ATTEMPT_COUNT):
-            try:
-                driver = self._initialize_driver(host, capabilities)
-                Util.pause(10)
+            driver = self._initialize_driver(host, capabilities)
 
+            if driver:
                 return driver
-            except MaxRetryError:
-                raise MstrException('Error while starting test, ensure WinAppDriver is running or change driver_type.')
+
+        raise MstrException(
+            'Error while starting tests for Windows Desktop. '
+            'Ensure WinAppDriver is running and configuration is correct (e.g. path to EXCEL.EXE).'
+        )
 
     def _initialize_driver(self, host, capabilities):
-        driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
-        driver.implicitly_wait(DEFAULT_TIMEOUT)
+        try:
+            driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
+            driver.implicitly_wait(DEFAULT_TIMEOUT)
 
-        return driver
+            Util.pause(4)
+
+            return driver
+
+        except WebDriverException as e:
+            Util.log_error(
+                'Error while starting tests for Windows Desktop. '
+                'Ensure WinAppDriver is running and configuration is correct (e.g. path to EXCEL.EXE): %s' % e
+            )
+
+        return None
 
     @staticmethod
     def before_driver_startup():
-        pass
+        DriverWindowsDesktop._stop_win_app_driver()
+
+        DriverWindowsDesktop._start_win_app_driver()
 
     @staticmethod
     def driver_cleanup(driver):
         DriverWindowsDesktop._stop_win_app_driver()
 
-    def _start_win_app_driver(self):
+    @staticmethod
+    def _start_win_app_driver():
         if not DriverWindowsDesktop.win_app_driver_process and ConfigUtil.is_run_win_app_driver_enabled():
             DriverWindowsDesktop.win_app_driver_process = subprocess.Popen(
                 DriverWindowsDesktop.WIN_APP_DRIVER_START,
@@ -98,5 +112,6 @@ class DriverWindowsDesktop(AbstractDriver):
 
     @staticmethod
     def _stop_win_app_driver():
-        if DriverWindowsDesktop.win_app_driver_process:
-            subprocess.run(DriverWindowsDesktop.WIN_APP_DRIVER_STOP)
+        subprocess.run(DriverWindowsDesktop.WIN_APP_DRIVER_STOP)
+
+        DriverWindowsDesktop.win_app_driver_process = None
