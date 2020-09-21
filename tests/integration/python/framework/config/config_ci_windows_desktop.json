@@ -9,7 +9,8 @@
   "run_win_app_driver_enabled": true,
   "driver_path_windows_desktop": "C:\\Program Files\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
   "host_url_windows_desktop": "http://localhost:4723/wd/hub",
-  "excel_add_in_environment": "221120",
+  "excel_add_in_environment": "227052",
+  "excel_desktop_add_in_import_data_name": "env-227052",
   "excel_add_in_environment_default_user_name": "a",
   "excel_add_in_environment_default_password": ""
 }
