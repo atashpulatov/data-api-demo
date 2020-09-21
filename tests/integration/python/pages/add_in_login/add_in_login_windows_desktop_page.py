@@ -23,7 +23,8 @@ class AddInLoginWindowsDesktopPage(BasePage):
         username_field = self.get_element_by_accessibility_id(AddInLoginWindowsDesktopPage.USERNAME_INPUT_ELEM)
         username_field.send_keys(username)
 
-        password_field = self.get_element_by_accessibility_id(AddInLoginWindowsDesktopPage.USERNAME_INPUT_ELEM)
-        password_field.send_keys(password)
+        if password:
+            password_field = self.get_element_by_accessibility_id(AddInLoginWindowsDesktopPage.PASSWORD_INPUT_ELEM)
+            password_field.send_keys(password)
 
         self.get_element_by_accessibility_id(AddInLoginWindowsDesktopPage.LOGIN_BUTTON_ELEM).click()
