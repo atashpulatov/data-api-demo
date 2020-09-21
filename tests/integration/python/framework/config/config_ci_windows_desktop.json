@@ -1,6 +1,6 @@
 {
   "driver_type": "windows_desktop",
-  "image_recognition_enabled": false,
+  "image_recognition_enabled": true,
   "connect_to_existing_session_enabled": false,
   "windows_desktop_excel_root_element_name": "Book1 - Excel",
   "max_test_retry_attempts": 2,
