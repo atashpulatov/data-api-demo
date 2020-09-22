@@ -19,7 +19,7 @@ job 'stage-2-e2e-desktop-test-python-mac' do
     end
   end
 
-  assigned_node_string 'mac-wgc-devops1'
+  assigned_node_string 'mstr-office-test'
 
   builders do
     bash do
