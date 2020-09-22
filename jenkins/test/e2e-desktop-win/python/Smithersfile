@@ -33,8 +33,6 @@ set +xe
 export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=windows_test
 
-export ENABLE_BASELINE_WORKSPACE_CHEF=false
-
 source .ecosystem
 export HATS=pipeline:$HATS
 
