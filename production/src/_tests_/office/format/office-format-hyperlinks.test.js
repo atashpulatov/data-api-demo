@@ -1,4 +1,3 @@
-// @ts-nocheck
 import officeFormatHyperlinks from '../../../office/format/office-format-hyperlinks';
 
 describe('OfficeFormatHyperlinks', () => {
