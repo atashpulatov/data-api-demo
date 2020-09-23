@@ -192,6 +192,11 @@ To execute only tests tagged @windows_desktop AND @release_validation use `--tag
 tests execution. Works only when implemented for selected driver (see `-D driver_type`), currently only
 `windows_desktop`. 
 
+`-D image_recognition_screenshots_folder=PATH\\TO\\SCREENSHOTS` specifies path to a folder where images used by
+image recognition are stored. For local test execution use relative path (e.g. `framework\\screenshots`) and for
+Jenkins triggered execution use absolute path to avoid removing already cached images before each test execution
+(e.g. `C:\\Users\\jenkins\\python_screenshots`).
+
 `-D connect_to_existing_session_enabled=True` enables (`True`) or disables (`False`) attaching to an existing Excel
 or session. Speeds up tests development allowing to e.g. skip first part of the test (see: Running tests using existing
 application session).
