@@ -50,8 +50,6 @@ describe('OfficeFormatHyperlinks', () => {
   ${'<a data="te < xt" href="https://example.com">text</a>'}   | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'text' }}
   ${'<a data="te < > xt" href="https://example.com">text</a>'} | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'text' }}
 
-  ${`<a data='TS45878 - Upload Cubes >1.5K rows - Apache Tomcat 9.0.30 - MicroStrategy for RStudio (RStudio) (Karolina)' href='https://rally1.rallydev.com/#/279050476740d/detail/testset/376208075008' target='_blank'>TS45878 - Upload Cubes >1.5K rows - Apache Tomcat 9.0.30 - MicroStrategy for RStudio (RStudio) (Karolina)</a>`} | ${'HTMLTag'} | ${{ address: 'https://rally1.rallydev.com/#/279050476740d/detail/testset/376208075008', textToDisplay: 'TS45878 - Upload Cubes >1.5K rows - Apache Tomcat 9.0.30 - MicroStrategy for RStudio (RStudio) (Karolina)' }}
-
   ${'invalid'}                                                 | ${'HTMLTag'} | ${null}
   
   `('parseHTMLTag should work for $string with form $baseFormType',
