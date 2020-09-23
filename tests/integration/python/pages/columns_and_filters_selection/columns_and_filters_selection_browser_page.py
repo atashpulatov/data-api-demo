@@ -12,7 +12,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     METRIC_ITEM = 'label.checkbox[aria-label="%s"]'
     FILTER_ITEM = '.filter-title'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
+
     DATA_PREVIEW_BUTTON = '#data-preview'
+    CLOSE_PREVIEW_TEXT = 'Close Preview'
+
+    ANT_BUTTON = '.ant-btn'
 
     ALL_ATTRIBUTES = '.attributes-col .mstr-office-checkbox-all'
     ALL_METRICS = '.metrics-col .mstr-office-checkbox-all'
@@ -495,8 +499,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.find_element_by_text_in_elements_list_by_css(
-            '.ant-btn',
-            'Close Preview'
+            ColumnsAndFiltersSelectionBrowserPage.ANT_BUTTON,
+            ColumnsAndFiltersSelectionBrowserPage.CLOSE_PREVIEW_TEXT
         ).click()
-
-

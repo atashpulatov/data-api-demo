@@ -180,12 +180,13 @@ values as for `driver_name` (`@windows_desktop`, `@windows_chrome`, `@mac_deskto
 
 Tags related to selecting tests for different tasks:
 
-- `@release_validation` - this tag we use for running the release validation test set (test cases with this tag should 
-be reviewed before each release validation).
-- `@ci` - this tag we use for test cases which will be executed on the CI pipeline after each build.
- To execute only tests tagged @windows_desktop AND @release_validation use `--tags` multiple times:
+- `@release_validation` - tag used for running the release validation test set (test cases with this tag should 
+be reviewed before each release validation),
+- `@ci` - tag used for test cases which will be executed on the CI pipeline after each build.
 
-`--tags=@windows --tags=@release_validation`.
+To execute only tests tagged @windows_desktop AND @release_validation use `--tags` multiple times:
+
+`--tags=@windows_desktop --tags=@release_validation`.
 
 `-D image_recognition_enabled=True` enables (`True`) or disables (`False`) usage of image recognition to speed up
 tests execution. Works only when implemented for selected driver (see `-D driver_type`), currently only

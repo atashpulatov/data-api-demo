@@ -14,8 +14,8 @@
   "driver_path_mac_chrome": "framework/resources/chromedriver83",
   "host_url_mac_desktop": "http://localhost:4622/wd/hub",
   "host_url_windows_desktop": "http://localhost:4723/wd/hub",
-  "excel_add_in_environment": "225720",
-  "excel_desktop_add_in_import_data_name": "env-225720",
+  "excel_add_in_environment": "227052",
+  "excel_desktop_add_in_import_data_name": "env-227052",
   "excel_add_in_environment_default_user_name": "a",
   "excel_add_in_environment_default_password": ""
 }
