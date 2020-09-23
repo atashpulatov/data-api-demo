@@ -14,7 +14,7 @@ def step_impl(context, title):
 
 
 @step('I verified that counter of "{item_type}" shows "{number}" of "{of_number}" selected')
-def step_impl(context, number, of_number, item_type):
+def step_impl(context, item_type, number, of_number):
     context.pages.columns_and_filters_selection_page().ensure_item_selection(item_type, number, of_number)
 
 
