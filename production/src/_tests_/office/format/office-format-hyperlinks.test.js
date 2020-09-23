@@ -34,11 +34,11 @@ describe('OfficeFormatHyperlinks', () => {
   ${'ftp://example.com'}                                       | ${'url'}     | ${{ address: 'ftp://example.com', textToDisplay: 'ftp://example.com' }}
   ${'<a href="https://example.com">link</a>'}                  | ${'url'}     | ${null}
   ${'invalid'}                                                 | ${'url'}     | ${null}
-​
+
   ${'<a href="https://example.com">link</a>'}                  | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'link' }}
   ${'<a href="https://example.com"></a>'}                      | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'https://example.com' }}
   ${'<a data="text" href="https://example.com">text</a>'}      | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'text' }}
-​
+
   ${'<a href="https://example.com">li > nk</a>'}               | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'li > nk' }}
   ${'<a href="https://example.com">l < i > nk</a>'}            | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'l < i > nk' }}
   ${'<a href="https://example.com"> > </a>'}                   | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: ' > ' }}
@@ -51,7 +51,7 @@ describe('OfficeFormatHyperlinks', () => {
   ${'<a data="te < > xt" href="https://example.com">text</a>'} | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'text' }}
 
   ${`<a data='TS45878 - Upload Cubes >1.5K rows - Apache Tomcat 9.0.30 - MicroStrategy for RStudio (RStudio) (Karolina)' href='https://rally1.rallydev.com/#/279050476740d/detail/testset/376208075008' target='_blank'>TS45878 - Upload Cubes >1.5K rows - Apache Tomcat 9.0.30 - MicroStrategy for RStudio (RStudio) (Karolina)</a>`} | ${'HTMLTag'} | ${{ address: 'https://rally1.rallydev.com/#/279050476740d/detail/testset/376208075008', textToDisplay: 'TS45878 - Upload Cubes >1.5K rows - Apache Tomcat 9.0.30 - MicroStrategy for RStudio (RStudio) (Karolina)' }}
-​
+
   ${'invalid'}                                                 | ${'HTMLTag'} | ${null}
   
   `('parseHTMLTag should work for $string with form $baseFormType',
