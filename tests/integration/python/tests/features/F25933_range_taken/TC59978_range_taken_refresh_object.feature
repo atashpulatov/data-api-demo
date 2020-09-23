@@ -1,5 +1,6 @@
 @mac_chrome
 @windows_chrome
+@release_validation
 Feature: F25933 - Range taken
 
   Scenario: [TC59978] - Refresh object

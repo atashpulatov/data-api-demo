@@ -1,4 +1,5 @@
 @mac_chrome
+@release_validation
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49134] - Error Handling

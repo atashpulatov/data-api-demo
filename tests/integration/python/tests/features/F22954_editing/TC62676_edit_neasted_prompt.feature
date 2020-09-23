@@ -1,5 +1,6 @@
 @windows_chrome
 @mac_chrome
+@release_validation
 Feature: F22954 - Ability to edit data already imported to the workbook
 
   Scenario: [TC62676] Editing prompted reports functionality while report contains nested \
@@ -26,6 +27,6 @@ Feature: F22954 - Ability to edit data already imported to the workbook
       And I clicked Import button in Columns and Filters Selection
       And cells ["C5", "A7", "B7", "C25"] should have values ["$14,215", "2015", "Electronics", ""]
 
-     Then I closed last notification
+     Then I closed all notifications
 
       And I logged out

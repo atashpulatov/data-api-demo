@@ -13,6 +13,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     FILTER_ITEM = '.filter-title'
     CLOSE_POPUP = '#WACDialogTitlePanel > a'
 
+    DATA_PREVIEW_BUTTON = '#data-preview'
+    CLOSE_PREVIEW_TEXT = 'Close Preview'
+
+    ANT_BUTTON = '.ant-btn'
+
     ALL_ATTRIBUTES = '.attributes-col .mstr-office-checkbox-all'
     ALL_METRICS = '.metrics-col .mstr-office-checkbox-all'
     ALL_FILTERS = '.filters-col .mstr-office-checkbox-all'
@@ -280,7 +285,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         if not attribute_element.check_if_child_element_exists_by_css(
                 ColumnsAndFiltersSelectionBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED,
                 timeout=SHORT_TIMEOUT):
-            raise MstrException(f'Error while expanding attributes forms.')
+            raise MstrException('Error while expanding attributes forms.')
 
     def select_element_by_number(self, object_type, object_number):
         self.focus_on_add_in_popup_frame()
@@ -484,3 +489,16 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH).click()
+
+    def click_data_preview(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.DATA_PREVIEW_BUTTON).click()
+
+    def click_close_data_preview(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.find_element_by_text_in_elements_list_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.ANT_BUTTON,
+            ColumnsAndFiltersSelectionBrowserPage.CLOSE_PREVIEW_TEXT
+        ).click()
