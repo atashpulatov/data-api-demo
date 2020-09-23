@@ -195,6 +195,7 @@ def step_impl(context, object_type, object_number):
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button()
 
+
 @step('I clicked Import button in Columns and Filters Selection without success check')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_import_button_without_success_check()
@@ -245,3 +246,13 @@ def step_impl(context, color):
 @step('I clicked Include Subtotals and Totals switch')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_include_totals_and_subtotals()
+
+
+@step('I clicked Data Preview button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_data_preview()
+
+
+@step('I clicked Close Data Preview')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_close_data_preview()

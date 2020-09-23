@@ -1,5 +1,6 @@
 @mac_chrome
 @windows_chrome
+@release_validation
 Feature: F29365 - Import compound grid from dossier to Excel
 
   Scenario: [TC67264] - Import compound grid visualization with Hyperlinks

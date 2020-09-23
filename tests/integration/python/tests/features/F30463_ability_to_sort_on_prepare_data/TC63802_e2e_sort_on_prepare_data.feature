@@ -1,4 +1,5 @@
 @disabled_mac_chrome
+@release_validation
 Feature: F30463 - Ability to sort on prepare data
 
   Scenario: [TC63802] - E2E Sort on prepare data
