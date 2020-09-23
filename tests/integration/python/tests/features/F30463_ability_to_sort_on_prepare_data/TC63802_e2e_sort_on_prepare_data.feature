@@ -72,22 +72,22 @@ Feature: F30463 - Ability to sort on prepare data
 
      When I changed sort order of "filters" to default by pressing Enter
       And I cleared the search for element with backspace
-      And I selected "attributes" element number 1
+      And I selected attribute element number 1
       And I expanded attribute forms of attribute number 1
 
      Then attribute form number 1 of attribute number 1 should be called "DESC"
 
      When I collapsed attribute forms of attribute number 1
-      And I deselected "attributes" element number 1
+      And I deselected attribute element number 1
       And I changed sort order of "attributes" to descending by click
-      And I scrolled into "attributes" element number 30
-      And I selected "attributes" element number 30
+      And I scrolled into attribute element number 30
+      And I selected attribute element number 30
       And I expanded attribute forms of attribute number 30
 
      Then attribute form number 1 of attribute number 30 should be called "DESC"
 
      When I collapsed attribute forms of attribute number 30
-      And I deselected "attributes" element number 30
+      And I deselected attribute element number 30
       And I changed sort order of "attributes" to default by click
       And I selected all attributes
       And I selected all metrics

@@ -20,7 +20,7 @@ Feature: TS41441 - Sanity checks
       And I selected filter "Year" with all elements
       And I selected filters { "Region" : ["Central", "Southwest", "South", "Northeast"] }
       And I clicked Data Preview button
-      And I clicked Close Data Preview
+      And I clicked Close Preview button
       And I clicked Import button in Columns and Filters Selection
 
      Then I closed last notification
