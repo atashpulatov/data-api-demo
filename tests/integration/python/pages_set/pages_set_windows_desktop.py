@@ -3,6 +3,8 @@ from pages.columns_and_filters_selection.attributes.columns_and_filters_selectio
     import ColumnsAndFiltersSelectionAttributesWindowsDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
+from pages.columns_and_filters_selection.display_attribute_form_names.display_attribute_form_names_windows_desktop_page \
+    import DisplayAttributeFormNamesWindowsDesktopPage
 from pages.columns_and_filters_selection.metrics.columns_and_filters_selection_metrics_windows_desktop_page import \
     ColumnsAndFiltersSelectionMetricsWindowsDesktopPage
 from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDesktopPage
@@ -50,7 +52,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage()
         self.columns_and_filters_selection_filters_windows_desktop_page = None
         self.columns_and_filters_selection_list_header_windows_desktop_page = None
-        self.display_attribute_form_names_windows_desktop_page = None
+        self.display_attribute_form_names_windows_desktop_page = DisplayAttributeFormNamesWindowsDesktopPage()
 
         self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()
         self.import_dossier_filter_windows_desktop_page = None

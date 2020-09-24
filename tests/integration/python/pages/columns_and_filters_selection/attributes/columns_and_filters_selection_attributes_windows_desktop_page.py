@@ -6,8 +6,6 @@ from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPag
 class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopPage):
     ITEM_ALL_ATTRIBUTES = '(All)'
 
-    DROPDOWN_ELEM = '//Button/ComboBox'
-
     ATTRIBUTE_ELEM = '//Text[@Name="%s"]'
     ATTRIBUTE_FORM_DROPDOWN_ELEM = '//TreeItem[@Name="%s"]/Text[@Name="icon: caret-down"]'
     ATTRIBUTE_FORM_ITEM_ELEM = '//Group[@Name="%s"]'
@@ -17,14 +15,6 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
         popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
-        ).click()
-
-    # TODO use form_visualization_type
-    def select_display_attributes_form_names_element(self, form_visualization_type):
-        popup_main_element = self.get_popup_main_element()
-
-        popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.DROPDOWN_ELEM
         ).click()
 
     def select_all_attributes(self):

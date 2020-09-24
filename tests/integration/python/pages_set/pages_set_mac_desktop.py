@@ -3,6 +3,8 @@ from pages.columns_and_filters_selection.attributes.columns_and_filters_selectio
     ColumnsAndFiltersSelectionAttributesMacDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_mac_desktop_page import \
     ColumnsAndFiltersSelectionMacDesktopPage
+from pages.columns_and_filters_selection.display_attribute_form_names.display_attribute_form_names_mac_desktop_page \
+    import DisplayAttributeFormNamesMacDesktopPage
 from pages.columns_and_filters_selection.metrics.columns_and_filters_selection_metrics_mac_desktop_page import \
     ColumnsAndFiltersSelectionMetricsMacDesktopPage
 from pages.excel.cleanup.cleanup_mac_desktop_page import CleanupMacDesktopPage
@@ -46,7 +48,7 @@ class PagesSetMacDesktop(AbstractPagesSet):
         self.columns_and_filters_selection_metrics_mac_desktop_page = ColumnsAndFiltersSelectionMetricsMacDesktopPage()
         self.columns_and_filters_selection_filters_mac_desktop_page = None
         self.columns_and_filters_selection_list_header_mac_desktop_page = None
-        self.display_attribute_form_names_mac_desktop_page = None
+        self.display_attribute_form_names_mac_desktop_page = DisplayAttributeFormNamesMacDesktopPage()
 
         self.import_dossier_mac_desktop_page = None
         self.import_dossier_filter_mac_desktop_page = None

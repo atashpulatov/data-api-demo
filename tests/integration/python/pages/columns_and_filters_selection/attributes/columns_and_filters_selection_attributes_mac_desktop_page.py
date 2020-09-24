@@ -11,10 +11,6 @@ class ColumnsAndFiltersSelectionAttributesMacDesktopPage(BaseMacDesktopPage):
     ATTRIBUTE_CHECKBOX_CHECKED = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXOutline[0]/AXRow[@AXDescription=" \
                                                                          "'icon: caret-down %s']"
 
-    ATTRIBUTE_FORM_DROPDOWN = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXComboBox/AXGroup[0]/AXGroup[0]"
-    ATTRIBUTE_FORM_DROPDOWN_GROUPS = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[%s]"
-    ATTRIBUTE_FORM_DROPDOWN_SUFFIX = "/AXList[0]/AXStaticText[@AXTitle='%s']"
-
     ATTRIBUTE_FORM_TOGGLER_OFFSET_X = 7
     ATTRIBUTE_FORM_TOGGLER_OFFSET_Y = 16
 
@@ -34,21 +30,6 @@ class ColumnsAndFiltersSelectionAttributesMacDesktopPage(BaseMacDesktopPage):
             self.get_element_by_xpath(
                 ColumnsAndFiltersSelectionAttributesMacDesktopPage.ATTRIBUTE_CHECKBOX_CHECKED % attribute_name
             ).click()
-
-    def select_display_attributes_form_names_element(self, visualization_type):
-        self.get_element_by_xpath(ColumnsAndFiltersSelectionAttributesMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN).click()
-
-        groups_no = self.get_elements_by_xpath(
-            ColumnsAndFiltersSelectionAttributesMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_GROUPS
-        )
-
-        selector_suffix = \
-            ColumnsAndFiltersSelectionAttributesMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_SUFFIX % visualization_type
-
-        self.get_element_by_xpath_workaround(
-            ColumnsAndFiltersSelectionAttributesMacDesktopPage.ATTRIBUTE_FORM_DROPDOWN_GROUPS + selector_suffix,
-            expected_list_len=len(groups_no)
-        ).click()
 
     # TODO change implementation to ensure attribute is selected (not only clicking without checking)
     def ensure_attribute_is_selected_and_click_forms(self, attributes_and_forms_json):
