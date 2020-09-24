@@ -67,3 +67,6 @@ def after_scenario(context, scenario):
 def after_all(context):
     if ConfigUtil.is_cleanup_after_tests_enabled():
         TestUtil.global_test_cleanup()
+
+def start_plugin_from_icon(context):
+  context.pages.excel_menu_page().click_add_in_elem()
