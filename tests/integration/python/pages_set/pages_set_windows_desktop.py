@@ -1,6 +1,10 @@
 from pages.add_in_login.add_in_login_windows_desktop_page import AddInLoginWindowsDesktopPage
+from pages.columns_and_filters_selection.attributes.columns_and_filters_selection_attributes_windows_desktop_page \
+    import ColumnsAndFiltersSelectionAttributesWindowsDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
+from pages.columns_and_filters_selection.metrics.columns_and_filters_selection_metrics_windows_desktop_page import \
+    ColumnsAndFiltersSelectionMetricsWindowsDesktopPage
 from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDesktopPage
 from pages.excel.excel_general.excel_general_windows_desktop_page import ExcelGeneralWindowsDesktopPage
 from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWindowsDesktopPage
@@ -40,8 +44,10 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.right_panel_tile_details_windows_desktop_page = None
 
         self.columns_and_filters_selection_windows_desktop_page = ColumnsAndFiltersSelectionWindowsDesktopPage()
-        self.columns_and_filters_selection_attributes_windows_desktop_page = None
-        self.columns_and_filters_selection_metrics_windows_desktop_page = None
+        self.columns_and_filters_selection_attributes_windows_desktop_page = \
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage()
+        self.columns_and_filters_selection_metrics_windows_desktop_page = \
+            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage()
         self.columns_and_filters_selection_filters_windows_desktop_page = None
         self.columns_and_filters_selection_list_header_windows_desktop_page = None
         self.display_attribute_form_names_windows_desktop_page = None

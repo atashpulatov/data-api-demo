@@ -1,6 +1,10 @@
 from pages.add_in_login.add_in_login_mac_desktop_page import AddInLoginMacDesktopPage
+from pages.columns_and_filters_selection.attributes.columns_and_filters_selection_attributes_mac_desktop_page import \
+    ColumnsAndFiltersSelectionAttributesMacDesktopPage
 from pages.columns_and_filters_selection.columns_and_filters_selection_mac_desktop_page import \
     ColumnsAndFiltersSelectionMacDesktopPage
+from pages.columns_and_filters_selection.metrics.columns_and_filters_selection_metrics_mac_desktop_page import \
+    ColumnsAndFiltersSelectionMetricsMacDesktopPage
 from pages.excel.cleanup.cleanup_mac_desktop_page import CleanupMacDesktopPage
 from pages.excel.excel_general.excel_general_mac_desktop_page import ExcelGeneralMacDesktopPage
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
@@ -37,8 +41,9 @@ class PagesSetMacDesktop(AbstractPagesSet):
         self.right_panel_tile_details_mac_desktop_page = None
 
         self.columns_and_filters_selection_mac_desktop_page = ColumnsAndFiltersSelectionMacDesktopPage()
-        self.columns_and_filters_selection_attributes_mac_desktop_page = None
-        self.columns_and_filters_selection_metrics_mac_desktop_page = None
+        self.columns_and_filters_selection_attributes_mac_desktop_page = \
+            ColumnsAndFiltersSelectionAttributesMacDesktopPage()
+        self.columns_and_filters_selection_metrics_mac_desktop_page = ColumnsAndFiltersSelectionMetricsMacDesktopPage()
         self.columns_and_filters_selection_filters_mac_desktop_page = None
         self.columns_and_filters_selection_list_header_mac_desktop_page = None
         self.display_attribute_form_names_mac_desktop_page = None
