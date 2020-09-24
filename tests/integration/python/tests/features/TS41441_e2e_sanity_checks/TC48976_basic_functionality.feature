@@ -4,14 +4,14 @@ Feature: TS41441 - Sanity checks
   Scenario: [TC48976] - E2E Basic Functionality
     Given I pass
 
-    When I logged in with username "wrong_user_name" and password "wrong_password"
-    Then I verified that I see an authentication error and clicked OK
+   When I logged in with username "wrong_user_name" and password "wrong_password"
+   Then I verified that I see an authentication error and clicked OK
 
-    When I closed Log In popup
+   When I closed Log In popup
     And I logged in with username "b" and empty password
-    Then I verified that I see a "No MicroStrategy for Office privileges" message and I click Try Again
+   Then I verified that I see a "No MicroStrategy for Office privileges" message and I click Try Again
 
-    When I logged in as default user
+   When I logged in as default user
     And I clicked Import Data button
     And I ensured that MyLibrary Switch is OFF
     And I found object "Seasonal"
@@ -20,23 +20,23 @@ Feature: TS41441 - Sanity checks
     And I cleared search box
     And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
     And I clicked Prepare Data button
-    Then I verified that Columns & Filters Selection is visible
+   Then I verified that Columns & Filters Selection is visible
     And I verified popup title is "01 Basic Report"
     And I verified that counter of "attributes" shows "0" of "2" selected
     And I verified that counter of "metrics" shows "0" of "3" selected
     And I verified that counter of "filters" shows "0" of "2" selected
 
-    When I selected all attributes
+   When I selected all attributes
     And I clicked attribute "Employee"
-    Then I verified that counter of "attributes" shows "1" of "2" selected
+   Then I verified that counter of "attributes" shows "1" of "2" selected
 
-    When I selected all metrics
+   When I selected all metrics
     And I clicked metric "Profit"
     And I clicked metric "Cost"
-    Then I verified that counter of "metrics" shows "1" of "3" selected
+   Then I verified that counter of "metrics" shows "1" of "3" selected
     And I verified that counter of "filters" shows "0" of "2" selected
 
-    When I selected filter "Region" with all elements
+   When I selected filter "Region" with all elements
     And I verified that counter of "filters" shows "1" of "2" selected
     And I searched for element called "c"
     And I searched for element called "cc"
@@ -68,11 +68,11 @@ Feature: TS41441 - Sanity checks
     And metric number 2 should be called "Cost"
     And metric number 3 should be called "Profit"
     And filter number 2 should be called "Employee"
-    Then I verified that counter of "attributes" shows "1" of "2" selected
+   Then I verified that counter of "attributes" shows "1" of "2" selected
     And I verified that counter of "metrics" shows "1" of "3" selected
     And I verified that counter of "filters" shows "1" of "2" selected
 
-    When I selected all attributes
+   When I selected all attributes
     And I selected all metrics
     And I selected filter "Region" with all elements
     And I clicked Data Preview button
@@ -85,71 +85,71 @@ Feature: TS41441 - Sanity checks
     And I found object "100_report"
     And I cleared search box
     And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"
-    Then I verified that the background color of the first object is "rgba(240, 247, 254, 1)"
+   Then I verified that the background color of the first object is "rgba(240, 247, 254, 1)"
 
-    When I clicked Prepare Data button
-    Then I verified that Columns & Filters Selection is visible
+   When I clicked Prepare Data button
+   Then I verified that Columns & Filters Selection is visible
     And I verified popup title is "100_dataset"
     And I verified that counter of "attributes" shows "0" of "8" selected
     And I verified that counter of "metrics" shows "0" of "7" selected
     And I verified that counter of "filters" shows "0" of "8" selected
 
-    When I selected all metrics
+   When I selected all metrics
     And I clicked metric "Row Count - 100 Sales Records.csv"
     And I clicked metric "Total Profit"
     And I clicked metric "Total Cost"
     And I clicked metric "Total Revenue"
-    Then I verified that counter of "metrics" shows "3" of "7" selected
+   Then I verified that counter of "metrics" shows "3" of "7" selected
 
-    When I selected all attributes
+   When I selected all attributes
     And I clicked attribute "Ship Date" for dataset
     And I clicked attribute "Order ID" for dataset
     And I clicked attribute "Order Date" for dataset
     And I clicked attribute "Order Priority" for dataset
     And I clicked attribute "Sales Channel" for dataset
-    Then I verified that counter of "attributes" shows "3" of "8" selected
+   Then I verified that counter of "attributes" shows "3" of "8" selected
     And I verified that counter of "filters" shows "0" of "8" selected
 
-    When I selected filter "Region" with all elements
-    Then I verified that counter of "filters" shows "1" of "8" selected
+   When I selected filter "Region" with all elements
+   Then I verified that counter of "filters" shows "1" of "8" selected
 
-    When I searched for element called "f"
+   When I searched for element called "f"
     And I searched for element called "ff"
     And I cleared the search for element with backspace
-    Then I verified that counter of "attributes" shows "3" of "8" selected
+   Then I verified that counter of "attributes" shows "3" of "8" selected
     And I verified that counter of "metrics" shows "3" of "7" selected
     And I verified that counter of "filters" shows "1" of "8" selected
 
-    When I clicked Data Preview button
+   When I clicked Data Preview button
     And I clicked Close Preview button
     And I clicked Import button in Columns and Filters Selection
     And I closed last notification
     And I clicked on object 2
-    Then columns ["A", "B", "C"] are selected
+   Then columns ["A", "B", "C"] are selected
     And rows ["1", "2", "3"] are selected
 
-    When I clicked Refresh on object 2
+   When I clicked Refresh on object 2
     And I closed last notification
     And I clicked on object 1
-    Then columns ["H", "I", "J"] are selected
+   Then columns ["H", "I", "J"] are selected
     And rows ["1", "2", "3"] are selected
 
-    When I clicked Edit object 1
-    Then I verified that Columns & Filters Selection is visible
+   When I clicked Edit object 1
+   Then I verified that Columns & Filters Selection is visible
     And I verified popup title is "100_dataset"
     And I verified that counter of "attributes" shows "3" of "8" selected
     And I verified that counter of "metrics" shows "3" of "7" selected
     And I verified that counter of "filters" shows "1" of "8" selected
 
-    When I clicked attribute "Item Type" for dataset
+   When I clicked attribute "Item Type" for dataset
     And I clicked metric "Unit Cost"
     And I clicked Import button in Columns and Filters Selection
     And I closed last notification
     And I clicked on object 1
-    Then columns ["H", "I", "J"] are selected
+   Then columns ["H", "I", "J"] are selected
     And rows ["1", "2", "3"] are selected
 
-    When I removed object 2 using icon
+   When I removed object 2 using icon
     And I closed last notification
     And I removed object 1 using icon
     And I closed all notifications
