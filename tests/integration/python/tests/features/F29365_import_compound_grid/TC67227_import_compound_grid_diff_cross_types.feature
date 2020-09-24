@@ -1,5 +1,6 @@
 @mac_chrome
 @windows_chrome
+@release_validation
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - Import compound grid visualization with different cross type

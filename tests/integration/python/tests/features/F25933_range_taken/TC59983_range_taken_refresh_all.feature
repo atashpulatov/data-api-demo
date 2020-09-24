@@ -1,4 +1,5 @@
 @mac_chrome
+@release_validation
 Feature: F25933 - Range taken
 
   Scenario: [TC59983] - Refresh all objects
