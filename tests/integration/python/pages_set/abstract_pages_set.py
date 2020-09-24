@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
+from pages.api.rest_api_page import RestApiPage
 from pages.debug.debug_page import DebugPage
 from pages.keyboard.keyboard_page import KeyboardPage
-from pages.api.rest_api_page import RestApiPage
 from pages.time_duration.time_duration_page import TimeDurationPage
 
 
@@ -21,7 +21,7 @@ class AbstractPagesSet(ABC):
 
     def rest_api_page(self):
         return self.rest_api_common_page
-    
+
     def time_duration_page(self):
         return self.time_duration_common_page
 
@@ -59,6 +59,26 @@ class AbstractPagesSet(ABC):
 
     @abstractmethod
     def columns_and_filters_selection_page(self):
+        pass
+
+    @abstractmethod
+    def columns_and_filters_selection_attributes_page(self):
+        pass
+
+    @abstractmethod
+    def columns_and_filters_selection_metrics_page(self):
+        pass
+
+    @abstractmethod
+    def columns_and_filters_selection_filters_page(self):
+        pass
+
+    @abstractmethod
+    def columns_and_filters_selection_list_header_page(self):
+        pass
+
+    @abstractmethod
+    def display_attribute_form_names_page(self):
         pass
 
     @abstractmethod
