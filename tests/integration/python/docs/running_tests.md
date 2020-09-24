@@ -178,15 +178,24 @@ where `driver_name` is one of available driver types (see [driver_type.py](drive
 `--tags=@tag_name`, specifies which tests to execute (only those tagged `@tag_name`), for simplicity use the same 
 values as for `driver_name` (`@windows_desktop`, `@windows_chrome`, `@mac_desktop`, `@mac_chrome`).
 
-Tags related to selecting tests for different tasks (e.g. release or GA validation, CI execution) are going to be
-added, e.g. @release_validation. To execute only tests tagged @windows_desktop AND @release_validation use `--tags`
-multiple times:
+Tags related to selecting tests for different tasks:
 
-`--tags=@windows --tags=@release_validation`.
+- `@release_validation` - tag used for running the release validation test set (test cases with this tag should 
+be reviewed before each release validation),
+- `@ci` - tag used for test cases which will be executed on the CI pipeline after each build.
+
+To execute only tests tagged @windows_desktop AND @release_validation use `--tags` multiple times:
+
+`--tags=@windows_desktop --tags=@release_validation`.
 
 `-D image_recognition_enabled=True` enables (`True`) or disables (`False`) usage of image recognition to speed up
 tests execution. Works only when implemented for selected driver (see `-D driver_type`), currently only
 `windows_desktop`. 
+
+`-D image_recognition_screenshots_folder=PATH\\TO\\SCREENSHOTS` specifies path to a folder where images used by
+image recognition are stored. For local test execution use relative path (e.g. `framework\\screenshots`) and for
+Jenkins triggered execution use absolute path to avoid removing already cached images before each test execution
+(e.g. `C:\\Users\\jenkins\\python_screenshots`).
 
 `-D connect_to_existing_session_enabled=True` enables (`True`) or disables (`False`) attaching to an existing Excel
 or session. Speeds up tests development allowing to e.g. skip first part of the test (see: Running tests using existing
@@ -200,6 +209,9 @@ session (see: Running tests using existing application session).
 
 `-D windows_desktop_excel_root_element_name=root_element_name` specifies Windows Desktop root Excel element name
 (e.g. `Book1 - Excel`) (see: Running tests using existing application session).
+
+`-D max_test_retry_attempts=max_attempts` specifies `max_attempts` maximum number of each scenario's executions before
+its failure is accepted.
 
 `-D cleanup_after_test_enabled=True` enables (`True`) or disables (`False`) cleaning up after test execution (closing
 Excel or browser). Useful for debug purposes when developing tests.

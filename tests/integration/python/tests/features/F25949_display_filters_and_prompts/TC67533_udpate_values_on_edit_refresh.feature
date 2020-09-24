@@ -1,10 +1,11 @@
 @mac_chrome
+@windows_chrome
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67533] - Update values on edit and refresh
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
      When I found object by ID "E659E86811E58C918D6F0080EF453539" and selected "Simple Report"
       And I clicked Import button
@@ -71,4 +72,4 @@ Feature: F25949 - Display filters and prompts
       And object 1 has "Metric" list with value "Cost, Profit"
       And object 1 has "Filter" list with value "Region (Central, Northwest)"
 
-      And I log out
+      And I logged out

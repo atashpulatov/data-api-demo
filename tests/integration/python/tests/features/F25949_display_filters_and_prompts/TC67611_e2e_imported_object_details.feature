@@ -4,11 +4,11 @@ Feature: F25949 - Display filters and prompts
   Scenario: [TC67611] - Imported object details E2E
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "3633950911EAA96889F00080EF25F8A4" and selected "titanic_wiblgjlprj"
       And I clicked Prepare Data button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
@@ -59,13 +59,13 @@ Feature: F25949 - Display filters and prompts
 
      Then object 1 has "Filter" list with value "Call Center (Atlanta, San Diego, San Francisco, Washington, DC, Salt Lake City, Miami, Milwaukee, New Orleans, Seattle, Boston, New York, Fargo, Memphis, Charleston, Web)‎, Employee (Bates, Becker, Bell, Benner, Bernstein, Brown, Conner, Corcoran, De Le Torre, Ellerkamp, Folks, Gale, Gedot, Hall, Hollywood, Hunt, Ingles, Johnson, Kelly, Kieferson, Lynch, McClain, Nelson, Pierce, Sawyer, Schafer, Smith, Sonder, Strome, Torrison, Yager, Young, Zemlicka, Walker)"
       And object 1 has "Attribute" list with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
-      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Supporting Objects > Excel - Objects for Testing > Reports > Prompted report with subtotals" displayed
+      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted report with subtotals" displayed
 
      When I added a new worksheet
       And I clicked Add Data button
       And I found object by ID "5902C03A11E9FEF1DC670080EF856919" and selected "Prompted dossier"
       And I clicked Import button to open Import Dossier
-      And I clicked Run button for prompted dossier
+      And I clicked Run button for prompted dossier if prompts not already answered
       And I imported visualization "Visualization 1"
       And I closed last notification
 
@@ -127,7 +127,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked object location expand button on object 1
      Then object 1 has "Filter" list with value "Call Center (Atlanta, San Diego, San Francisco, Washington, DC, Salt Lake City, Miami, Milwaukee, New Orleans, Seattle, Boston, New York, Fargo, Memphis, Charleston, Web)‎, Employee (Bates, Becker, Bell, Benner, Bernstein, Brown, Conner, Corcoran, De Le Torre, Ellerkamp, Folks, Gale, Gedot, Hall, Hollywood, Hunt, Ingles, Johnson, Kelly, Kieferson, Lynch, McClain, Nelson, Pierce, Sawyer, Schafer, Smith, Sonder, Strome, Torrison, Yager, Young, Zemlicka, Walker)"
       And object 1 has "Attribute" list with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
-      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Supporting Objects > Excel - Objects for Testing > Reports > Prompted report with subtotals" displayed
+      And object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted report with subtotals" displayed
 
      When I refreshed all objects
       And I waited for all progress notifications to disappear
@@ -163,7 +163,7 @@ Feature: F25949 - Display filters and prompts
       And object 4 has collapsed location displayed
       And object 4 has id "3633950911EAA96889F00080EF25F8A4"
 
-      And I log out
+      And I logged out
 
     Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
 
@@ -183,4 +183,4 @@ Feature: F25949 - Display filters and prompts
 
       And I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
 
-      And I log out
+      And I logged out

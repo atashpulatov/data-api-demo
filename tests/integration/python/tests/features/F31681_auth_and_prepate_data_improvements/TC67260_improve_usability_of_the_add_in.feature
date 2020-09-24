@@ -1,18 +1,19 @@
 @mac_chrome
+@release_validation
 Feature: F31681 - Authentication and Prepare Data workflow improvements
 
   Scenario: [TC67260] Improve usability of the add-in
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
      When I found object by ID "C437801F11EA82FBF70F0080EFC55790" and selected "Unpublished cube"
-     Then I verified that Import Data button is disabled
+     Then I verified that Import button is disabled
 
      When I switched on MyLibrary
       And I switched off MyLibrary
 
-     Then I verified that Import Data button is disabled
+     Then I verified that Import button is disabled
 
      When I cleared search box
       And I found object "report"
@@ -43,4 +44,4 @@ Feature: F31681 - Authentication and Prepare Data workflow improvements
 
      Then I verified that the background color of Log Out is "rgba(247, 247, 247, 1)"
 
-      And I log out
+      And I logged out

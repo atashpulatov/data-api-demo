@@ -24,12 +24,15 @@ class ConfigUtil:
 
     PARAM_NAME_DRIVER_TYPE = 'driver_type'
     PARAM_NAME_IMAGE_RECOGNITION_ENABLED = 'image_recognition_enabled'
+    PARAM_NAME_IMAGE_RECOGNITION_SCREENSHOTS_FOLDER = 'image_recognition_screenshots_folder'
     PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED = 'connect_to_existing_session_enabled'
     PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL = 'browser_existing_session_executor_url'
     PARAM_NAME_BROWSER_EXISTING_SESSION_ID = 'browser_existing_session_id'
     PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME = 'windows_desktop_excel_root_element_name'
+    PARAM_MAX_TEST_RETRY_ATTEMPTS = 'max_test_retry_attempts'
     PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED = 'cleanup_after_test_enabled'
     PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED = 'run_win_app_driver_enabled'
+    PARAM_NAME_RUN_APPIUM_FOR_MAC_ENABLED = 'run_appium_for_mac_enabled'
     PARAM_NAME_DRIVER_PATH_PREFIX = 'driver_path_'
     PARAM_NAME_HOST_URL_PREFIX = 'host_url_'
     PARAM_NAME_EXCEL_ADD_IN_ENVIRONMENT = 'excel_add_in_environment'
@@ -104,6 +107,10 @@ class ConfigUtil:
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME)
 
     @staticmethod
+    def get_max_test_retry_attempts():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_MAX_TEST_RETRY_ATTEMPTS)
+
+    @staticmethod
     def get_desktop_host():
         host_url_variable_name = '%s%s' % (ConfigUtil.PARAM_NAME_HOST_URL_PREFIX, ConfigUtil.get_driver_type())
 
@@ -125,6 +132,10 @@ class ConfigUtil:
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED)
 
     @staticmethod
+    def is_run_appium_for_mac_enabled():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_RUN_APPIUM_FOR_MAC_ENABLED)
+
+    @staticmethod
     def is_image_recognition_enabled():
         if ConfigUtil.PARAM_NAME_IMAGE_RECOGNITION_ENABLED in ConfigUtil.PARAM_VALUES_CACHE:
             return ConfigUtil.PARAM_VALUES_CACHE[ConfigUtil.PARAM_NAME_IMAGE_RECOGNITION_ENABLED]
@@ -144,6 +155,10 @@ class ConfigUtil:
         ConfigUtil.PARAM_VALUES_CACHE[ConfigUtil.PARAM_NAME_IMAGE_RECOGNITION_ENABLED] = image_recognition_enabled
 
         return ConfigUtil.PARAM_VALUES_CACHE[ConfigUtil.PARAM_NAME_IMAGE_RECOGNITION_ENABLED]
+
+    @staticmethod
+    def get_image_recognition_screenshots_folder():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_IMAGE_RECOGNITION_SCREENSHOTS_FOLDER)
 
     @staticmethod
     def get_driver_executable_path():
@@ -200,7 +215,9 @@ class ConfigUtil:
         config_file_full_path = os.path.join(ConfigUtil.CONFIG_DIR_PATH, config_file_name)
 
         if not os.path.exists(config_file_full_path):
-            raise MstrException('Invalid config file name, file does not exist: %s' % config_file_name)
+            raise MstrException(
+                'Invalid config file name, file does not exist or has wrong permissions: %s' % config_file_name
+            )
 
         return os.path.join(ConfigUtil.CONFIG_DIR_PATH, config_file_name)
 

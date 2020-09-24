@@ -20,4 +20,4 @@ def step_impl(context):
 
 @step('I opened Excel and logged in to Excel using locale "{locale_name}"')
 def step_impl(context, locale_name):
-    initialize_using_new_session(context, locale_name=locale_name, force_reset_driver=True)
+    initialize_using_new_session(context, locale_name=locale_name)

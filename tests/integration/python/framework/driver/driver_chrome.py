@@ -54,6 +54,10 @@ class DriverChrome(AbstractDriver):
         return driver
 
     @staticmethod
+    def before_driver_startup():
+        pass
+
+    @staticmethod
     def driver_cleanup(driver):
         try:
             driver.quit()

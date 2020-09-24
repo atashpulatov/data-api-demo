@@ -1,16 +1,17 @@
 @mac_chrome
+@windows_chrome
 Feature: F25946 - Display filters and prompts
 
   Scenario: [TC67486] - Imported objects details showing, hiding and updating
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "4BF6385A11EA638B25610080EFC58CB1" and selected "Prompted report with subtotals"
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
@@ -23,7 +24,7 @@ Feature: F25946 - Display filters and prompts
 
       And I found object by ID "5902C03A11E9FEF1DC670080EF856919" and selected "Prompted dossier"
       And I clicked Import button to open Import Dossier
-      And I clicked Run button for prompted dossier
+      And I clicked Run button for prompted dossier if prompts not already answered
       And I selected visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
@@ -71,7 +72,7 @@ Feature: F25946 - Display filters and prompts
      When I clicked Edit object 2
       And I waited for Run button to be enabled
       And I clicked Run button
-      And I ensure that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I unselected all metrics
       And I unselected all attributes
       And I clicked attribute "Region"
@@ -89,7 +90,7 @@ Feature: F25946 - Display filters and prompts
       And object 2 has id "4BF6385A11EA638B25610080EFC58CB1"
       And object 2 has owner "Administrator"
 
-      And I log out
+      And I logged out
 
     Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
 
@@ -133,4 +134,4 @@ Feature: F25946 - Display filters and prompts
 
     Then I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
 
-     And I log out
+     And I logged out

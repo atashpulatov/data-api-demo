@@ -16,6 +16,13 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         FILTER_SIDE_RIGHT: FILTER_SLIDER_MAX_POINT
     }
 
+    DOSSIER_FILTER_NAME = '.mstrd-FilterItemTitle-filterTitle'
+    DOSSIER_FILTER_VALUE = '.mstrd-Checkbox-body[aria-label="%s"]'
+
+    DOSSIER_FILTER_YEAR = 'Year'
+
+    APPLY_FILTER_BUTTON = '.mstr-apply-button'
+
     def increase_year_filter_value(self, filter_change, filter_side):
         if filter_change not in (
                 ImportDossierFilterBrowserPage.FILTER_CHANGE_INCREASE,
@@ -38,8 +45,30 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         elif filter_change == ImportDossierFilterBrowserPage.FILTER_CHANGE_DECREASE:
             self.press_backspace()
 
-        self.get_element_by_css(ImportDossierFilterBrowserPage.FILTER_APPLY_BUTTON).click()
+        self._apply_filter()
+
+    def select_year_in_year_filter(self, year):
+        self._open_year_filter()
+
+        self._select_filter_checkbox(year)
+
+        self._apply_filter()
+
+    def _apply_filter(self):
+        self.get_element_by_css(ImportDossierFilterBrowserPage.APPLY_FILTER_BUTTON).click()
+
+    def _open_year_filter(self):
+        self.focus_on_dossier_frame()
+
+        self._open_filter_menu()
+
+        self.find_element_by_text_in_elements_list_by_css(
+            ImportDossierFilterBrowserPage.DOSSIER_FILTER_NAME,
+            ImportDossierFilterBrowserPage.DOSSIER_FILTER_YEAR
+        ).click()
 
     def _open_filter_menu(self):
         self.get_element_by_css(ImportDossierFilterBrowserPage.FILTERS_BUTTON).click()
-  
+
+    def _select_filter_checkbox(self, filter_name):
+        self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % filter_name).click()

@@ -17,20 +17,17 @@ class DriverFactory:
         DRIVER_TYPE_MAC_CHROME: DriverMacChrome,
     }
 
-    DRIVERS_REQUIRING_RESET = [
-        DRIVER_TYPE_WINDOWS_DESKTOP,
-        DRIVER_TYPE_MAC_DESKTOP
-    ]
-
     DRIVER_DEF = {}
-    DRIVER_CLEANUP_DEF = {}
+    DRIVER_STARTUP_DEF = {}
+    BEFORE_DRIVER_CLEANUP_DEF = {}
 
     def __init__(self):
         for driver_type in DriverFactory.DRIVER_CLASS_DEF:
             driver_class = DriverFactory.DRIVER_CLASS_DEF[driver_type]
 
             DriverFactory.DRIVER_DEF[driver_type] = driver_class().get_driver
-            DriverFactory.DRIVER_CLEANUP_DEF[driver_type] = driver_class.driver_cleanup
+            DriverFactory.DRIVER_STARTUP_DEF[driver_type] = driver_class.before_driver_startup
+            DriverFactory.BEFORE_DRIVER_CLEANUP_DEF[driver_type] = driver_class.driver_cleanup
 
     driver = None
     driver_type = None
@@ -42,10 +39,12 @@ class DriverFactory:
 
         return DriverFactory.driver
 
+    def get_before_driver_startup(self, driver_type):
+        return DriverFactory.DRIVER_STARTUP_DEF[driver_type]
+
     def get_driver_cleanup(self, driver_type):
-        return DriverFactory.DRIVER_CLEANUP_DEF[driver_type]
+        return DriverFactory.BEFORE_DRIVER_CLEANUP_DEF[driver_type]
 
     @classmethod
-    def reset_driver(cls, force_reset_driver):
-        if force_reset_driver or DriverFactory.driver_type in DriverFactory.DRIVERS_REQUIRING_RESET:
-            DriverFactory.driver = None
+    def reset_driver(cls):
+        DriverFactory.driver = None

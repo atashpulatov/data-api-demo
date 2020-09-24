@@ -1,15 +1,13 @@
 @windows_chrome
 @mac_chrome
+@release_validation
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67226] - Import and edit compound grid
     Given I logged in as default user
      When I clicked Import Data button
-      And MyLibrary Switch is OFF
-      And I found and selected object "Dossier with compound grid"
-
-      # todo: use different dossier
-      # And I found and selected object "Dossier with Compound Grid - Exclude/Keep Only"
+      And I ensured that MyLibrary Switch is OFF
+      And I found object by ID "169D6C564AEFA0FAB707F59B2A74A8B8" and selected "Dossier with Compound Grid - Exclude/Keep Only"
 
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
@@ -17,34 +15,25 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-      # todo: change for different dossier
-
-     Then cells ["A2", "A9", "A16"] should have values ["Atlanta", "New Orleans", "Web"]
+     Then cells ["A2", "A9", "C11"] should have values ["", "May", "$31,681"]
 
      When I clicked Edit object 1
       And I waited for dossier to load successfully
-      And I selected "Region" in Replace With for "Call Center" attribute
-      And I selected Exclude for "South" element in "Region" attribute
-      And I selected "Total" in Show Totals for "Region" attribute
-
-      # todo: use different dossier
-      # And I selected "Subcategory" in Replace With for "Month of Year" attribute
-      # And I selected Exclude for "Art & Architecture" element in "Subcategory" attribute
-      # And I selected "Total" in Show Totals for "Subcategory" attribute
+      And I selected "Subcategory" in Replace With for "Month of Year" attribute
+      And I selected Exclude for "Art & Architecture" element in "Subcategory" attribute
+      And I selected "Total" in Show Totals for "Subcategory" attribute
       And I clicked import dossier
       And I closed last notification
 
-      # todo: change for different dossier
-
-     Then cells ["A2", "A7", "A9"] should have values ["Total", "Southeast", "Web"]
+     Then cells ["A2", "A9", "C11"] should have values ["", "Science & Technology", ""]
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
 
-     Then cells ["A2", "A7", "A9"] should have values ["Total", "Southeast", "Web"]
+     Then cells ["A2", "A9", "C11"] should have values ["", "Science & Technology", ""]
 
      When I removed object 1 using icon
      Then I closed last notification
 
-      And I log out
+      And I logged out

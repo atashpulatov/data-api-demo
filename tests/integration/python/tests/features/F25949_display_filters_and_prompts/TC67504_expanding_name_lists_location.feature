@@ -4,7 +4,7 @@ Feature: F25949 - Display filters and prompts
   Scenario: [TC67504] - expanding name lists, location
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "3633950911EAA96889F00080EF25F8A4" and selected "titanic_wiblgjlprj"
       And I clicked Import button
@@ -26,7 +26,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Add Data button
       And I found object by ID "5902C03A11E9FEF1DC670080EF856919" and selected "Prompted dossier"
       And I clicked Import button to open Import Dossier
-      And I clicked Run button for prompted dossier
+      And I clicked Run button for prompted dossier if prompts not already answered
       And I imported visualization "Visualization 1"
       And I closed last notification
 
@@ -77,7 +77,7 @@ Feature: F25949 - Display filters and prompts
      Then object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted dossier" displayed
 
      When I clicked object location expand button on object 2
-     Then object 2 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Supporting Objects > Excel - Objects for Testing > Reports > Prompted report with subtotals" displayed
+     Then object 2 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted report with subtotals" displayed
 
      When I clicked object location expand button on object 3
      Then object 3 has full location "MicroStrategy Tutorial > Public Objects > Reports > DS Objects > Cubes for Create Testing > testing_folder_wiblgjlprj > titanic_wiblgjlprj" displayed
@@ -125,4 +125,4 @@ Feature: F25949 - Display filters and prompts
       And object 3 has id "3633950911EAA96889F00080EF25F8A4"
       And object 3 has collapsed location displayed
 
-      And I log out
+      And I logged out

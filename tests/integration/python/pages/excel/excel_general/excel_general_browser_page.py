@@ -14,8 +14,6 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
 
     EXCEL_URL = 'https://www.office.com/launch/excel'
 
-    excel_not_started = True
-
     def go_to_excel(self, locale_name=DEFAULT_LOCALE_NAME):
         self._go_to_excel_by_url()
 
@@ -29,10 +27,7 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
         self.driver.get(ExcelGeneralBrowserPage.EXCEL_URL)
 
     def _login_to_excel(self, locale_name):
-        if ExcelGeneralBrowserPage.excel_not_started:
-            self.excel_login_browser_page.login_to_excel(locale_name)
-
-            ExcelGeneralBrowserPage.excel_not_started = False
+        self.excel_login_browser_page.login_to_excel(locale_name)
 
     def maximize_excel_window(self):
         self.driver.maximize_window()
@@ -43,5 +38,3 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
 
     def close_excel(self):
         TestUtil.global_test_cleanup()
-
-        ExcelGeneralBrowserPage.excel_not_started = True

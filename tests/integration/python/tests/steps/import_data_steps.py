@@ -3,7 +3,7 @@ from behave import *
 from framework.util.assert_util import AssertUtil
 
 
-@step('MyLibrary Switch is OFF')
+@step('I ensured that MyLibrary Switch is OFF')
 def step_impl(context):
     context.pages.import_data_page().ensure_mylibrary_switch_is_off()
 
@@ -101,10 +101,7 @@ def step_impl(context, color):
     AssertUtil.assert_simple(found_color, color)
 
 
-@step('I cleared Search objects... field')
-def step_impl(context): 
-    context.pages.import_data_page().clear_serach_objects_field()
-@step('I verified that Import Data button is disabled')
+@step('I verified that Import button is disabled')
 def step_impl(context):
     context.pages.import_data_page().verify_if_import_button_is_disabled()
 

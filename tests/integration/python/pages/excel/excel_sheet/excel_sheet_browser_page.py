@@ -29,7 +29,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     COLUMN_HEADER = '.ewrch-col-nosel > .ewr-chc'
 
-    EXCEL_OPTION_MEDIUM_LABEL = '.cui-ctl-mediumlabel'
+    EXCEL_COLUMN_OPTION_CSS = '.item-125 > button > div > span'
 
     OPTION_DELETE_COLUMNS = 'Delete Columns'
 
@@ -144,7 +144,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
                 ExcelSheetBrowserPage.COLUMN_HEADER, column_name).right_click()
 
             self.find_element_by_text_in_elements_list_by_css(
-                ExcelSheetBrowserPage.EXCEL_OPTION_MEDIUM_LABEL,
+                ExcelSheetBrowserPage.EXCEL_COLUMN_OPTION_CSS,
                 ExcelSheetBrowserPage.OPTION_DELETE_COLUMNS
             ).click()
 

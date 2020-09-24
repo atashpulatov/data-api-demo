@@ -1,10 +1,11 @@
 @mac_chrome
+@windows_chrome
 Feature: F25932 - Details panel
 
   Scenario: [TC59673] - Copy to clipboard
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object "CategorySubCategoryQuarter"
 
@@ -12,4 +13,4 @@ Feature: F25932 - Details panel
      Then I verified that copying the details to clipboard works correctly
 
       And I close Import Data popup
-      And I log out
+      And I logged out

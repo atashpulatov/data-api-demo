@@ -1,10 +1,12 @@
 @mac_chrome
+@windows_chrome
+@release_validation
 Feature: F25933 - Range taken
 
   Scenario: [TC59863] - Importing objects with active cell
     Given I logged in as default user
       And I clicked Import Data button
-      And MyLibrary Switch is OFF
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
       And I clicked Import button
@@ -46,4 +48,4 @@ Feature: F25933 - Range taken
 
      Then I closed all notifications
 
-      And I log out
+      And I logged out
