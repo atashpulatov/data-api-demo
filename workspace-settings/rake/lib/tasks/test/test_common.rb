@@ -64,9 +64,6 @@ task :py_e2e_test_mac,[:tag_name] do | t, args|
 
   FileUtils.rm_rf report_dir if Dir.exist? report_dir
 
-#  shell_command! "python -m venv venv_mac", cwd: test_dir
-#  shell_command! "source venv_mac/bin/activate", cwd: test_dir
-#  shell_command! "python -m behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
   shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
 end
 
