@@ -171,8 +171,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
         element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
         return element.get_background_color()
 
-    def clear_serach_objects_field(self):
-        self.get_element_by_css(ImportDataBrowserPage.CLEAR_SEARCH_BAR).click()
     def verify_if_import_button_is_disabled(self):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
 
