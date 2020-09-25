@@ -33,4 +33,3 @@ def step_impl(context):
 @step('I closed Log In popup')
 def step_impl(context):
     context.pages.add_in_login_page().close_login_pop_up()
-    
