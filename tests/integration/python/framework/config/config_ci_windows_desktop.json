@@ -1,7 +1,7 @@
 {
   "driver_type": "windows_desktop",
   "image_recognition_enabled": true,
-  "image_recognition_screenshots_folder": "C:\\Users\\jenkins\\python_screenshots",
+  "image_recognition_screenshots_folder": "framework\\screenshots",
   "connect_to_existing_session_enabled": false,
   "windows_desktop_excel_root_element_name": "Book1 - Excel",
   "max_test_retry_attempts": 2,

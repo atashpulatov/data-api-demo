@@ -6,7 +6,7 @@
   "browser_existing_session_executor_url": "",
   "browser_existing_session_id": "",
   "windows_desktop_excel_root_element_name": "Book1 - Excel",
-  "max_test_retry_attempts": 0,
+  "max_test_retry_attempts": 1,
   "cleanup_after_test_enabled": true,
   "run_win_app_driver_enabled": false,
   "run_appium_for_mac_enabled": false,

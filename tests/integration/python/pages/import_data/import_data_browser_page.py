@@ -12,6 +12,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ARIA_CHECKED_ATTRIBUTE = 'aria-checked'
 
     SEARCH_BAR_ELEM = '.search-field__input'
+    CLEAR_SEARCH_BAR = '.search-field__clear-button'
 
     NAME_OBJECT_ELEM = '''span[title='%s']'''
     NAME_OBJECT_ID_PREFIX = '#name-column-'
@@ -168,7 +169,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def find_the_color_of_first_object_in_list(self):
         element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
-
         return element.get_background_color()
 
     def verify_if_import_button_is_disabled(self):

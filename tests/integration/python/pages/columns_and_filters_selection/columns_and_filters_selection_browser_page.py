@@ -30,6 +30,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
 
     def ensure_columns_and_filters_selection_is_visible(self):
+        self.focus_on_add_in_frame()
+        
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.NOTIFICATION_TEXT_ELEM,
             ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
