@@ -239,7 +239,7 @@ Excel Add In.
 `-D excel_add_in_environment_default_passowrd=password` specifies default `password` used when logging in to
 Excel Add In.
 
-`--logging_level=level` specifies logging level, where `level` is:
+`--logging-level=level` specifies logging level, where `level` is:
 
 - DEBUG _(the most verbose)_
 - WARNING _(somehow verbose)_
