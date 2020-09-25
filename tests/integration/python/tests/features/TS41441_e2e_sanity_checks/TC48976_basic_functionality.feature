@@ -5,11 +5,11 @@ Feature: TS41441 - Sanity checks
     Given I pass
 
    When I logged in with username "wrong_user_name" and password "wrong_password"
-   Then I verified that I see an authentication error and clicked OK
+   Then I verified that I saw authentication error and I clicked OK
 
    When I closed Log In popup
     And I logged in with username "b" and empty password
-   Then I verified that I see a "No MicroStrategy for Office privileges" message and I click Try Again
+   Then I verified that I saw "No MicroStrategy for Office privileges" message and I clicked Try Again
 
    When I logged in as default user
     And I clicked Import Data button
