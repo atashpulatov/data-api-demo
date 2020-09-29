@@ -325,6 +325,11 @@ class PluginRightPanel {
     waitAndClick($('.warning-notification-button-container'));
   }
 
+  clickAcceptCookiesBtn() {
+    logStep(`Clicking "Enable cookies" button in the right panel...    [${fileName} - clickAcceptCookiesBtn()]`);
+    waitAndClick($(rightPanelSelectors.acceptCookiesBtn));
+  }
+
   clickLoginRightPanelBtn() {
     logStep(`Clicking "Log in" button in the right panel...    [${fileName} - clickLoginRightPanelBtn()]`);
     waitAndClick($(rightPanelSelectors.loginRightPanelBtn));
@@ -366,9 +371,14 @@ class PluginRightPanel {
   loginToPlugin(username, password, isValidCredentials) {
     logStep(`+ Loging into the Add-in...    [${fileName} - loginToPlugin()]`);
     switchToPluginFrame();
+    $(rightPanelSelectors.acceptCookiesBtn).waitForDisplayed(17777);
+    if ($(rightPanelSelectors.acceptCookiesBtn).isExisting()) {
+      this.clickAcceptCookiesBtn();
+    }
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(17777);
     if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
       this.clickLoginRightPanelBtn();
+      switchToPluginFrame();
       changeBrowserTab(2);
       this.enterCredentialsAndPressLoginBtn(username, password);
       if (isValidCredentials) {
