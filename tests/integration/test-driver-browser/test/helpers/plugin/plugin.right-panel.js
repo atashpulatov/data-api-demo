@@ -325,11 +325,6 @@ class PluginRightPanel {
     waitAndClick($('.warning-notification-button-container'));
   }
 
-  clickAcceptCookiesBtn() {
-    logStep(`Clicking "Enable cookies" button in the right panel...    [${fileName} - clickAcceptCookiesBtn()]`);
-    waitAndClick($(rightPanelSelectors.acceptCookiesBtn));
-  }
-
   clickLoginRightPanelBtn() {
     logStep(`Clicking "Log in" button in the right panel...    [${fileName} - clickLoginRightPanelBtn()]`);
     waitAndClick($(rightPanelSelectors.loginRightPanelBtn));

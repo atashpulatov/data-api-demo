@@ -57,5 +57,4 @@ export const rightPanelSelectors = {
   duplicatePopupEditBtn: '#overlay > div > div.object-tile-container > div.overlay-container > div > div.duplicate-popup-footer > div > button:nth-child(2)',
   importedData: '.imported-data',
   loadingSpinner: '.loading-spinner',
-  acceptCookiesBtn: '#accept-cookies-btn',
 };
