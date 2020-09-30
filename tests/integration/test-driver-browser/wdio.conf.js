@@ -217,7 +217,7 @@ exports.config = {
       // to run chrome headless the following flags are required
       // (see https://developers.google.com/web/updates/2017/04/headless-chrome)
       // args: ['--headless', '--disable-gpu', 'window-size=2880,1800'],
-      args: ['--allow-insecure-localhost'],
+      args: ['--allow-insecure-localhost', '--disable-features=SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure'],
     }
   }],
   // {
