@@ -371,10 +371,6 @@ class PluginRightPanel {
   loginToPlugin(username, password, isValidCredentials) {
     logStep(`+ Loging into the Add-in...    [${fileName} - loginToPlugin()]`);
     switchToPluginFrame();
-    $(rightPanelSelectors.acceptCookiesBtn).waitForDisplayed(17777);
-    if ($(rightPanelSelectors.acceptCookiesBtn).isExisting()) {
-      this.clickAcceptCookiesBtn();
-    }
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(17777);
     if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
       this.clickLoginRightPanelBtn();
