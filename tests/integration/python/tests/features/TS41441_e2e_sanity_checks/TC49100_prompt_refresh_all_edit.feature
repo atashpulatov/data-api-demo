@@ -1,6 +1,7 @@
 @mac_chrome
 @windows_chrome
 @release_validation
+@ga_validation
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49100] Import Prompted Reports | Import multiple objects | Refresh All | Refresh | Edit - Prompts)
