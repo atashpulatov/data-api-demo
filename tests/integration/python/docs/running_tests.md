@@ -182,9 +182,9 @@ Tags related to selecting tests for different tasks:
 
 - `@release_validation` - tag used for running the release validation test set (test cases with this tag should 
 be reviewed before each release validation),
+- `@ga_validation` - tag used for running the GA validation test set (test cases with this tag should be reviewed
+before each GA validation),
 - `@ci` - tag used for test cases which will be executed on the CI pipeline after each build.
-- `@ga_validation` - tag used for running the GA validation test set (test cases with this tag should 
-be reviewed before each GA validation)
 
 To execute only tests tagged @windows_desktop AND @release_validation use `--tags` multiple times:
 
