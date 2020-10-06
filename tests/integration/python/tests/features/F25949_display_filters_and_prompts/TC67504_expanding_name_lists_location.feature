@@ -65,13 +65,13 @@ Feature: F25949 - Display filters and prompts
       And I clicked "Attribute" list expand button on object 2
 
      Then object 2 has "Filter" list with value "Region (Central, Mid-Atlantic, Northeast, Northwest, South, Southeast, Southwest, Web)"
-      And object 2 has "Attribute" list with value "Call Center‎, Country‎, Distribution Center‎, Employee‎, Region"
+      And object 2 has "Attribute" list with value "Call Center, Country, Distribution Center, Employee, Region"
 
      When I clicked "Attribute" list expand button on object 3
       And I clicked "Metric" list expand button on object 3
 
-     Then object 3 has "Attribute" list with value "adult male‎, age‎, alive‎, alone‎, class‎, deck‎, embark town‎, embarked‎, sex‎, who"
-      And object 3 has "Metric" list with value "fare‎, parch‎, pclass‎, Row Count - titanic_df‎, sibsp‎, survived"
+     Then object 3 has "Attribute" list with value "adult male, age, alive, alone, class, deck, embark town, embarked, sex, who"
+      And object 3 has "Metric" list with value "fare, parch, pclass, Row Count - titanic_df, sibsp, survived"
 
      When I clicked object location expand button on object 1
      Then object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted dossier" displayed

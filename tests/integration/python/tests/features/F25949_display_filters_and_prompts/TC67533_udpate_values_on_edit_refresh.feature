@@ -56,7 +56,7 @@ Feature: F25949 - Display filters and prompts
      Then for object 1 Totals and Subtotals is OFF
 
     Given object 1 has "Attribute" list displayed
-      And object 1 has "Attribute" list with value "Quarter‎, Region, Employee"
+      And object 1 has "Attribute" list with value "Quarter, Region, Employee"
       And object 1 has "Metric" list displayed
       And object 1 has "Metric" list with value "Revenue, Cost, Profit"
 
@@ -68,7 +68,7 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then object 1 has "Attribute" list with value "Quarter‎, Region"
+     Then object 1 has "Attribute" list with value "Quarter, Region"
       And object 1 has "Metric" list with value "Cost, Profit"
       And object 1 has "Filter" list with value "Region (Central, Northwest)"
 
