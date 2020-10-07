@@ -20,7 +20,7 @@ def before_all(context):
 
 
 def before_feature(context, feature):
-    max_attempts = ConfigUtil.get_max_test_retry_attempts()
+    max_attempts = ConfigUtil.get_max_no_of_test_executions()
 
     for scenario in feature.scenarios:
         patch_scenario_with_autoretry(scenario, max_attempts=max_attempts)

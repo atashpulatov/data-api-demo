@@ -1,7 +1,7 @@
 {
   "driver_type": "mac_desktop",
   "connect_to_existing_session_enabled": false,
-  "max_test_retry_attempts": 2,
+  "max_no_of_test_executions": 2,
   "cleanup_after_test_enabled": true,
   "run_appium_for_mac_enabled": true,
   "host_url_mac_desktop": "http://localhost:4622/wd/hub",

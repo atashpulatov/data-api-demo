@@ -212,8 +212,8 @@ session (see: Running tests using existing application session).
 `-D windows_desktop_excel_root_element_name=root_element_name` specifies Windows Desktop root Excel element name
 (e.g. `Book1 - Excel`) (see: Running tests using existing application session).
 
-`-D max_test_retry_attempts=max_attempts` specifies `max_attempts` maximum number of each scenario's executions before
-its failure is accepted.
+`-D max_no_of_test_executions=max_no_of_test_executions` specifies `max_no_of_test_executions` maximum number of each
+scenario's executions before its failure is accepted.
 
 `-D cleanup_after_test_enabled=True` enables (`True`) or disables (`False`) cleaning up after test execution (closing
 Excel or browser). Useful for debug purposes when developing tests.
