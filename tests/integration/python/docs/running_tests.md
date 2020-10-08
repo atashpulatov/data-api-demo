@@ -137,10 +137,10 @@ behave tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 # test single feature, verbose logging:
 behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
-# test single feature, verbose logging, redircting logs to files, stdout also to console:
+# test single feature, verbose logging, redirecting logs to files, stdout also to console:
 behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt
 
-# test single feature, verbose logging, redircting logs to files:
+# test single feature, verbose logging, redirecting logs to files:
 behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature >> log.out.txt 2>> log.err.txt
 
 # test single feature, no colors, verbose logging, all logs printed to console: 
