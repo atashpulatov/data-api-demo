@@ -3,7 +3,8 @@
 """
 Simple utility script for cleaning up XML representing Windows Desktop application (page source).
 
-It splits single line XML into multiple lines containing one XML tag each, and removes tags specified in TAGS_TO_REMOVE.
+It splits single line XML into multiple lines containing one XML tag each, and removes attributes specified
+in ATTRIBUTES_TO_REMOVE.
 
 Usage:
 
@@ -64,7 +65,7 @@ and after:
 import fileinput
 import re
 
-TAGS_TO_REMOVE = [
+ATTRIBUTES_TO_REMOVE = [
     ' AcceleratorKey=".*?"'
     ' AccessKey=\"\"',
     ' AutomationId=\"\"',
@@ -103,8 +104,8 @@ TAGS_TO_REMOVE = [
 
 def print_cleaned(single_tag_lines):
     for line in single_tag_lines:
-        for tag_to_remove in TAGS_TO_REMOVE:
-            line = re.sub(tag_to_remove, '', line)
+        for attribute_to_remove in ATTRIBUTES_TO_REMOVE:
+            line = re.sub(attribute_to_remove, '', line)
 
         print(line)
 
