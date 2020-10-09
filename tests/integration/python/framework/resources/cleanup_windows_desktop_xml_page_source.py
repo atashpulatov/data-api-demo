@@ -29,7 +29,7 @@ b) it's executable (chmod a+x cleanup_windows_desktop_xml_page_source.py).
 
 4. Open page_source_cleaned.xml in your favorite XML viewer and format it.
 
-For example, before:
+For example (when formatted by your favorite XML viewer), before:
 
 <?xml version="1.0" encoding="utf-16"?>
 <Window AcceleratorKey="" AccessKey="" AutomationId="" ClassName="XLMAIN" FrameworkId="Win32" HasKeyboardFocus="False"
