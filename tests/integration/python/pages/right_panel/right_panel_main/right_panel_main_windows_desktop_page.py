@@ -1,4 +1,5 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 
 
@@ -14,6 +15,8 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         self.windows_desktop_workaround = WindowsDesktopWorkaround()
 
     def click_import_data_button_element(self):
+        WindowsDesktopMainAddInElementCache.invalidate_cache()
+
         self.windows_desktop_workaround.focus_on_right_side_panel()
 
         self.get_element_by_name(
@@ -22,6 +25,8 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def click_add_data_button_element(self):
+        WindowsDesktopMainAddInElementCache.invalidate_cache()
+
         self.windows_desktop_workaround.focus_on_right_side_panel()
 
         self.get_element_by_name(

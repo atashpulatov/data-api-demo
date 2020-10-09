@@ -20,9 +20,9 @@ Feature: F29365 - Import compound grid
 
      When I clicked Edit object 1
       And I waited for dossier to load successfully
-      And I selected "Subcategory" in Replace With for "Month of Year" attribute
-      And I selected Exclude for "Art & Architecture" element in "Subcategory" attribute
-      And I selected "Total" in Show Totals for "Subcategory" attribute
+      And I selected "Subcategory" in Replace With for "Month of Year" attribute for visualization "Visualization 1"
+      And I selected Exclude for "Art & Architecture" element in "Subcategory" attribute for visualization "Visualization 1"
+      And I selected "Total" in Show Totals for "Subcategory" attribute for visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
 
