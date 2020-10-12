@@ -1,5 +1,6 @@
 @windows_chrome
 @mac_chrome
+@windows_desktop
 @release_validation
 Feature: F21526 - Secure data
 
