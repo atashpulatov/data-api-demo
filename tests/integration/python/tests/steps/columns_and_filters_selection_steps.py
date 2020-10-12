@@ -69,3 +69,7 @@ def step_impl(context):
 @step('I clicked Close Preview button')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_close_preview()
+
+@step('I verified that tooltip for Import button shows message "{message}"')
+def step_impl(context, message):
+    context.pages.columns_and_filters_selection_page().verify_tooltip_message_import_button(message)
