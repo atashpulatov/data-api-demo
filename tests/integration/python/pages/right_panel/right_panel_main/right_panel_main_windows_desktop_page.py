@@ -64,7 +64,6 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def view_data(self):
-
       WindowsDesktopMainAddInElementCache.invalidate_cache()
 
       self.windows_desktop_workaround.focus_on_right_side_panel()
