@@ -29,8 +29,6 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.move_to()
 
     def close_all_warning_notifications(self):
-        WindowsDesktopMainAddInElementCache.invalidate_cache()
-
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.BUTTON_OK)
 
         for element in elements:
