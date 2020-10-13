@@ -72,7 +72,6 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
               image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.VIEW_DATA)
           ).click()
 
-
     def clear_data(self):
         self._open_dots_menu()
 
