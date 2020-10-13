@@ -58,16 +58,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def find_and_select_object(self, object_name):
         """
-        Finds object by name and selects it. See ImportDataBrowserPage#find_and_select_object.
+        Finds object by name and selects it.
+
+        This method will be removed, see ImportDataBrowserPage#find_and_select_object.
         """
 
         self.find_and_select_object_by_id(object_name, object_name)
 
     def find_and_select_object_by_id(self, object_name, object_id):
         """
-        Finds object by id and selects it.
-
-        This method will be removed, see ImportDataBrowserPage#find_and_select_object_by_id.
+        Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
         """
         self.windows_desktop_workaround.focus_on_popup_window()
 
