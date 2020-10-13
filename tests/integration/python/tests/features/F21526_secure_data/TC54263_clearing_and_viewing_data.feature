@@ -1,6 +1,6 @@
+@windows_desktop
 @windows_chrome
 @mac_chrome
-@windows_desktop
 @release_validation
 Feature: F21526 - Secure data
 
@@ -40,14 +40,14 @@ Feature: F21526 - Secure data
      When I clicked clear data
      Then I logged out
 
-    When I logged in with username "Martyna" and empty password
-     And I clicked view data
-     And I closed last notification
-     And I closed all warning notifications
-    Then cells ["F77", "B3" ] should have values ["Sub-Saharan Africa", ""]
+     When I logged in with username "Martyna" and empty password
+      And I clicked view data
+      And I closed last notification
+      And I closed all warning notifications
+     Then cells ["F77", "B3" ] should have values ["Sub-Saharan Africa", ""]
 
-    When I removed object 2 using icon
-     And I removed object 1 using icon
-     And I closed all notifications
+     When I removed object 2 using icon
+      And I removed object 1 using icon
+      And I closed all notifications
 
-    Then I logged out
+     Then I logged out
