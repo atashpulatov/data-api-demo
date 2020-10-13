@@ -23,6 +23,7 @@ from pages.right_panel.duplicate_object_popup.duplicate_object_popup_windows_des
 from pages.right_panel.range_taken_popup.range_taken_popup_windows_desktop_page import RangeTakenPopupWindowsDesktopPage
 from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
+from pages.prompt.prompt_windows_desktop_page import PromptWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
 
 
@@ -39,7 +40,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.duplicate_object_popup_windows_desktop_page = DuplicateObjectPopupWindowsDesktopPage()
         self.filter_panel_windows_desktop_page = None
         self.import_data_windows_desktop_page = ImportDataWindowsDesktopPage()
-        self.prompt_windows_desktop_page = None
+        self.prompt_windows_desktop_page = PromptWindowsDesktopPage()
         self.range_taken_popup_windows_desktop_page = RangeTakenPopupWindowsDesktopPage()
 
         self.not_logged_right_panel_windows_desktop_page = NotLoggedRightPanelWindowsDesktopPage()
