@@ -1,5 +1,6 @@
 @windows_desktop
 @windows_chrome
+@mac_desktop
 @mac_chrome
 @release_validation
 @ga_validation

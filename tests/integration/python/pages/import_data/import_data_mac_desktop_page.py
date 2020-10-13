@@ -76,5 +76,8 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
 
         self.right_panel_tile_mac_desktop_page.close_error_notification()
 
+    def click_import_button_to_open_import_dossier(self):
+        self.get_element_by_xpath(ImportDataMacDesktopPage.IMPORT_BUTTON_ELEM).click()
+
     def click_prepare_data_button(self):
         self.get_element_by_xpath(ImportDataMacDesktopPage.PREPARE_BUTTON_ELEM).click()
