@@ -45,7 +45,6 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def logout(self):
-
         self._open_dots_menu()
 
         self.get_element_by_accessibility_id(
