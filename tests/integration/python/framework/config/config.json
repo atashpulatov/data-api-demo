@@ -1,0 +1,22 @@
+{
+  "driver_type": "mac_chrome",
+  "image_recognition_enabled": true,
+  "image_recognition_screenshots_folder": "framework\\screenshots",
+  "connect_to_existing_session_enabled": false,
+  "browser_existing_session_executor_url": "",
+  "browser_existing_session_id": "",
+  "windows_desktop_excel_root_element_name": "Book1 - Excel",
+  "max_no_of_test_executions": 1,
+  "cleanup_after_test_enabled": true,
+  "run_win_app_driver_enabled": false,
+  "run_appium_for_mac_enabled": false,
+  "driver_path_windows_desktop": "C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\EXCEL.EXE",
+  "driver_path_windows_chrome": "framework\\resources\\chromedriver85_win32.exe",
+  "driver_path_mac_chrome": "framework/resources/chromedriver84",
+  "host_url_mac_desktop": "http://localhost:4622/wd/hub",
+  "host_url_windows_desktop": "http://localhost:4723/wd/hub",
+  "excel_add_in_environment": "228690",
+  "excel_desktop_add_in_import_data_name": "env-228690",
+  "excel_add_in_environment_default_user_name": "a",
+  "excel_add_in_environment_default_password": ""
+}
