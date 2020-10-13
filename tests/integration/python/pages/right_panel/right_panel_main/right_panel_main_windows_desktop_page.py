@@ -63,14 +63,14 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def view_data(self):
-      WindowsDesktopMainAddInElementCache.invalidate_cache()
+        WindowsDesktopMainAddInElementCache.invalidate_cache()
 
-      self.windows_desktop_workaround.focus_on_right_side_panel()
+        self.windows_desktop_workaround.focus_on_right_side_panel()
 
-      self.get_element_by_name(
-            RightPanelMainWindowsDesktopPage.VIEW_DATA,
-            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.VIEW_DATA)
-        ).click()
+        self.get_element_by_name(
+              RightPanelMainWindowsDesktopPage.VIEW_DATA,
+              image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.VIEW_DATA)
+          ).click()
 
 
     def clear_data(self):
