@@ -16,7 +16,7 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
     NAME_HEADER_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[2]/AXTable[0]/AXRow[0]/AXCell[1]/" \
                                                                "AXGroup[0]/AXStaticText[@AXValue='Name']"
 
-    IMPORT_BUTTON_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXButton[@AXTitle='Import'"
+    IMPORT_BUTTON_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXButton[@AXTitle='Import']"
 
     PREPARE_BUTTON_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXButton[@AXTitle='Prepare Data']"
 
@@ -75,6 +75,9 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
         self.right_panel_tile_mac_desktop_page.check_if_error_message_is_correct(error_message)
 
         self.right_panel_tile_mac_desktop_page.close_error_notification()
+
+    def click_import_button_to_open_import_dossier(self):
+        self.get_element_by_xpath(ImportDataMacDesktopPage.IMPORT_BUTTON_ELEM).click()
 
     def click_prepare_data_button(self):
         self.get_element_by_xpath(ImportDataMacDesktopPage.PREPARE_BUTTON_ELEM).click()

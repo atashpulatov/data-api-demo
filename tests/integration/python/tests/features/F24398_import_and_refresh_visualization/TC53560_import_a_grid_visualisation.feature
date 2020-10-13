@@ -1,4 +1,6 @@
 @mac_chrome
+@release_validation
+@ga_validation
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC53560] - Importing grid visualisations - basic scenario

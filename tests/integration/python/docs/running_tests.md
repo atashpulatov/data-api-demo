@@ -137,10 +137,10 @@ behave tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 # test single feature, verbose logging:
 behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature
 
-# test single feature, verbose logging, redircting logs to files, stdout also to console:
+# test single feature, verbose logging, redirecting logs to files, stdout also to console:
 behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature 2>> log.err.txt | tee log.out.txt
 
-# test single feature, verbose logging, redircting logs to files:
+# test single feature, verbose logging, redirecting logs to files:
 behave --no-color --logging-level=DEBUG --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature >> log.out.txt 2>> log.err.txt
 
 # test single feature, no colors, verbose logging, all logs printed to console: 
@@ -182,6 +182,8 @@ Tags related to selecting tests for different tasks:
 
 - `@release_validation` - tag used for running the release validation test set (test cases with this tag should 
 be reviewed before each release validation),
+- `@ga_validation` - tag used for running the GA validation test set (test cases with this tag should be reviewed
+before each GA validation),
 - `@ci` - tag used for test cases which will be executed on the CI pipeline after each build.
 
 To execute only tests tagged @windows_desktop AND @release_validation use `--tags` multiple times:
@@ -210,8 +212,8 @@ session (see: Running tests using existing application session).
 `-D windows_desktop_excel_root_element_name=root_element_name` specifies Windows Desktop root Excel element name
 (e.g. `Book1 - Excel`) (see: Running tests using existing application session).
 
-`-D max_test_retry_attempts=max_attempts` specifies `max_attempts` maximum number of each scenario's executions before
-its failure is accepted.
+`-D max_no_of_test_executions=max_no_of_test_executions` specifies `max_no_of_test_executions` maximum number of each
+scenario's executions before its failure is accepted.
 
 `-D cleanup_after_test_enabled=True` enables (`True`) or disables (`False`) cleaning up after test execution (closing
 Excel or browser). Useful for debug purposes when developing tests.

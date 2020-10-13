@@ -163,6 +163,13 @@ const OfficeWorksheet = function () {
     browser.keys(['Backspace']);
   };
 
+  this.selectCellAndAssertValue = (cellId, value) => {
+    switchToExcelFrame();
+    this.selectCell(cellId);
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`${value}`);
+    browser.pause(1000);
+  };
+
   /**
    * Applies the first available table formatting to the selected table
    * Table should be selected prior to calling this function

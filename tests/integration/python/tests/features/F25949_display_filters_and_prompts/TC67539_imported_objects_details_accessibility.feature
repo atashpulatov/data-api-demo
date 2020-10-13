@@ -97,10 +97,10 @@ Feature: F25949 - Display filters and prompts
      Then object 2 has "Filter" list with value "Item Type (Baby Food, Beverages, Cereal, Clothes, Cosmetics, Fruits, Household, Meat, Office Supplies, Personal Care, Snacks, Vegetables)"
 
      When I pressed key Enter
-     Then object 2 has "Attribute" list with value "Item Type‎, Order Date‎, Order ID‎, Order Priority‎, Region‎, Sales Channel‎, Ship Date"
+     Then object 2 has "Attribute" list with value "Item Type, Order Date, Order ID, Order Priority, Region, Sales Channel, Ship Date"
 
      When I pressed key Enter
-     Then object 2 has "Metric" list with value "Country‎, Row Count - 100 Sales Records.csv‎, Total Cost‎, Total Profit‎, Total Revenue‎, Unit Cost‎, Unit Price‎, Units Sold"
+     Then object 2 has "Metric" list with value "Country, Row Count - 100 Sales Records.csv, Total Cost, Total Profit, Total Revenue, Unit Cost, Unit Price, Units Sold"
 
      When I pressed key Enter
      Then object 2 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > 100 Sales Records.csv" displayed
@@ -117,10 +117,10 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Enter
 
      Then object 3 has details panel displayed
-      And object 3 has "Prompt" list with value "Books‎, Electronics‎, Movies‎, Music"
+      And object 3 has "Prompt" list with value "Books, Electronics, Movies, Music"
       And object 3 has collapsed "Filter" list displayed
-      And object 3 has "Attribute" list with value "Month‎, Subcategory"
-      And object 3 has "Metric" list with value "Profit‎, Profit Forecast‎, Revenue‎, Revenue Forecast"
+      And object 3 has "Attribute" list with value "Month, Subcategory"
+      And object 3 has "Metric" list with value "Profit, Profit Forecast, Revenue, Revenue Forecast"
       And object 3 has id "300DBAFA4A1D8EC546AC6AB8CDE7834E"
       And object 3 has collapsed location displayed
 

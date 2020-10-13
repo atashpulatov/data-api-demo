@@ -2,8 +2,7 @@ import json
 import os
 import re
 
-from framework.driver.driver_type import DRIVER_TYPE_WINDOWS_DESKTOP, AVAILABLE_DRIVERS, DRIVER_TYPE_MAC_CHROME, \
-    DRIVERS_SUPPORTING_IMAGE_RECOGNITION, DRIVER_TYPE_MAC_DESKTOP
+from framework.driver.driver_type import AVAILABLE_DRIVERS, DRIVERS_SUPPORTING_IMAGE_RECOGNITION
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -14,12 +13,6 @@ class ConfigUtil:
     CONFIG_FILE_NAME_PATTERN = r'^[a-zA-Z0-9-._]+$'
     CONFIG_FILE_NAME_SEARCH = re.compile(CONFIG_FILE_NAME_PATTERN)
 
-    DRIVERS_SUPPORTING_ATTACHING_TO_EXISTING_SESSION = [
-        DRIVER_TYPE_WINDOWS_DESKTOP,
-        DRIVER_TYPE_MAC_CHROME,
-        DRIVER_TYPE_MAC_DESKTOP
-    ]
-
     PARAM_NAME_CONFIG_FILE_NAME = 'config_file'
 
     PARAM_NAME_DRIVER_TYPE = 'driver_type'
@@ -29,7 +22,7 @@ class ConfigUtil:
     PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL = 'browser_existing_session_executor_url'
     PARAM_NAME_BROWSER_EXISTING_SESSION_ID = 'browser_existing_session_id'
     PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME = 'windows_desktop_excel_root_element_name'
-    PARAM_MAX_TEST_RETRY_ATTEMPTS = 'max_test_retry_attempts'
+    PARAM_MAX_NO_OF_TEST_EXECUTIONS = 'max_no_of_test_executions'
     PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED = 'cleanup_after_test_enabled'
     PARAM_NAME_RUN_WIN_APP_DRIVER_ENABLED = 'run_win_app_driver_enabled'
     PARAM_NAME_RUN_APPIUM_FOR_MAC_ENABLED = 'run_appium_for_mac_enabled'
@@ -107,8 +100,8 @@ class ConfigUtil:
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME)
 
     @staticmethod
-    def get_max_test_retry_attempts():
-        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_MAX_TEST_RETRY_ATTEMPTS)
+    def get_max_no_of_test_executions():
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_MAX_NO_OF_TEST_EXECUTIONS)
 
     @staticmethod
     def get_desktop_host():
@@ -118,10 +111,7 @@ class ConfigUtil:
 
     @staticmethod
     def is_attaching_to_existing_session_enabled():
-        if ConfigUtil.get_driver_type() in ConfigUtil.DRIVERS_SUPPORTING_ATTACHING_TO_EXISTING_SESSION:
-            return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED)
-
-        return False
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED)
 
     @staticmethod
     def is_cleanup_after_tests_enabled():

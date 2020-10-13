@@ -2,11 +2,11 @@
   "driver_type": "windows_chrome",
   "image_recognition_enabled": false,
   "connect_to_existing_session_enabled": false,
-  "max_test_retry_attempts": 2,
+  "max_no_of_test_executions": 2,
   "cleanup_after_test_enabled": true,
   "driver_path_windows_chrome": "framework\\resources\\chromedriver85_win32.exe",
-  "excel_add_in_environment": "227052",
-  "excel_desktop_add_in_import_data_name": "env-227052",
+  "excel_add_in_environment": "228690",
+  "excel_desktop_add_in_import_data_name": "env-228690",
   "excel_add_in_environment_default_user_name": "a",
   "excel_add_in_environment_default_password": ""
 }

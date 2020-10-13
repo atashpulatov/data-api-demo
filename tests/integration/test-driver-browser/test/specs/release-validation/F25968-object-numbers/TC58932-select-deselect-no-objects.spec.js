@@ -34,11 +34,11 @@ describe('F25968 - Dynamically update numbers of objects displayed next to categ
     expect(someEmptyElement.$('input').isSelected()).toBe(true);
 
     // deselect empty owner
-    someEmptyElement.$('.checkmark').click();
+    someEmptyElement.$('input').click();
     expect(someEmptyElement.$('input').isSelected()).toBe(false);
 
     // try to select it again
-    someEmptyElement.$('.checkmark').click();
+    someEmptyElement.$('input').click();
     expect(someEmptyElement.$('input').isSelected()).toBe(false);
   });
 });

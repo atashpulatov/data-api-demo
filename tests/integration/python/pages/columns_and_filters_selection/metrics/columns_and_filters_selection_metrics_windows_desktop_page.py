@@ -7,7 +7,7 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
     METRIC_ELEM = '//Text[@Name="%s"]'
 
     def click_metric(self, metric_name):
-        popup_main_element = self.get_popup_main_element()
+        popup_main_element = self.get_add_in_main_element()
 
         popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_ELEM % metric_name

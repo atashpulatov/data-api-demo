@@ -24,7 +24,7 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
 
     ALLOWED_SORT_ORDER = ('Ascending', 'Descending')
 
-    def select_show_totals_for_attribute(self, totals_to_select, attribute_name):
+    def select_show_totals_for_attribute(self, totals_to_select, attribute_name, visualization_name):
         self.focus_on_dossier_frame()
 
         self.find_element_in_list_by_text(
@@ -90,12 +90,13 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
         raise MstrException(
             'Item to drill by not present - attribute name: [%s], drill by: [%s].' % (attribute_name, drill_by))
 
-    def select_replace_with_for_attribute(self, replace_with, attribute_name):
+    def select_replace_with_for_attribute(self, replace_with, attribute_name, visualization_name):
         """
         Replaces one attribute with new attribute from visualization context menu.
 
         :param replace_with(str): name of new attribute
         :param attribute_name(str): name of attribute which is going to be replaced
+        :param visualization_name(str): visualization name, currently used only by Windows Desktop
         """
         self.focus_on_dossier_frame()
 
@@ -123,12 +124,13 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
                 attribute_name, replace_with)
         )
 
-    def select_exclude_for_attribute_element(self, exclude, attribute_name):
+    def select_exclude_for_attribute_element(self, exclude, attribute_name, visualization_name):
         """
         Excludes given attribute element from visualization context menu.
 
         :param exclude(str): name of element to exlude
         :param attribute_name(str): name of attribute which contains element to exclude
+        :param visualization_name(str): visualization name, currently used only by Windows Desktop
         """
         self.focus_on_dossier_frame()
 

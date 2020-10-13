@@ -151,7 +151,7 @@
   "Are you sure you want to <span>Clear Data</span>?": "<span>データをクリアー</span>してもよろしいですか?",
   "Clear Data": "データをクリアー",
   "Import report": "レポートをインポート",
-  "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again.": "ブックから MicroStrategy のデータを削除しました。[データを表示] をクリックして再度インポートしてください。",
+  "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again.": "ワークブックから MicroStrategy のデータを削除しました。[データを表示] をクリックして再度インポートしてください。",
   "Unsuccessful HTTP response": "HTTP応答の失敗",
   "This object binding is no longer valid due to previous updates.": "以前のアップデートによってオブジェクト バインディングは無効です。",
   "An internal error has occurred.": "内部エラーが発生しました。",

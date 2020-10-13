@@ -175,6 +175,14 @@ class BaseElement:
     def location(self):
         return self.__element.location
 
+    @property
+    def x(self):
+        return self.location['x']
+
+    @property
+    def y(self):
+        return self.location['y']
+
     def send_keys(self, special_key):
         self.__element.send_keys(special_key)
 
