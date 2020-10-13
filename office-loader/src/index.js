@@ -29,6 +29,8 @@ function startAuthentication() {
         goToReact(libraryUrl);
       } else {
         showLoginBtn();
+        removeStorageItem();
+        logout(libraryUrl);
       }
     })
     .catch((e) => {
@@ -96,6 +98,7 @@ function openAuthDialog(url) {
 function onMessageReceived(payload) {
   popup.close();
   setStorageItem(payload);
+  setExcelSettingItem(payload);
   startAuthentication();
 }
 
@@ -170,13 +173,26 @@ function processDialogEvent(arg) {
 }
 
 function getStorageItem(key = 'iSession') {
-  return window.localStorage.getItem(key);
+  return window.localStorage.getItem(key) || getExcelSettingValue(key);
 }
 function setStorageItem(value, key = 'iSession') {
   window.localStorage.setItem(key, value);
 }
 function removeStorageItem(key = 'iSession') {
   window.localStorage.removeItem(key);
+}
+function getExcelSettingValue(key) {
+  if (Office && Office.context && Office.context.document && Office.context.document.settings){
+    return Office.context.document.settings.get(key);
+  }
+};
+function setExcelSettingItem(value, key = 'iSession') {
+  try {
+    Office.context.document.settings.set(key, value);
+    settings.saveAsync((saveAsync) => console.log(`Saving Excel settings ${saveAsync.status}`));
+  } catch (error) {
+    console.log('Cannot save value in Excel settings');
+  }
 }
 
 function showCookieWarning() {
@@ -198,7 +214,7 @@ function showLoginBtn() {
 function canSaveCookies() {
   const TEMP_COOKIE = 'content_security_check=true';
   try {
-    document.cookie = TEMP_COOKIE;
+    document.cookie = `${TEMP_COOKIE}; SameSite=None; Secure';`;
     return document.cookie.indexOf(TEMP_COOKIE) !== -1;
   } catch (e) {
     return false;

@@ -20,6 +20,7 @@ describe('F24086 - Improved browsing by adding filters', () => {
     PluginRightPanel.clickImportDataButton();
 
     switchToDialogFrame();
+    PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
 
     /* Select some filters from the owner category */
@@ -30,7 +31,7 @@ describe('F24086 - Improved browsing by adding filters', () => {
     expect($(popupSelectors.columnOwner).getAttribute('Title')).toEqual('Administrator');
 
     PluginPopup.scrollTable(['End']);
-    browser.pause(2222); // made to assure the table has been scrolled to the bottom
+    browser.pause(4000); // made to assure the table has been scrolled to the bottom
     PluginPopup.selectLastObject();
 
     /* Open filters and select some filters from the Modified category */
@@ -44,10 +45,9 @@ describe('F24086 - Improved browsing by adding filters', () => {
     PluginPopup.clickHeader('Modified');
     expect(PluginPopup.assertFirstObjectDateIsInTheRange(dateFrom, dateTo)).toBe(true);
     PluginPopup.selectLastObject();
-    PluginPopup.switchLibrary(false);
     PluginPopup.clickFilterButton();
     PluginPopup.scrollTable(['End']);
-    browser.pause(2222); // made to assure the table has been scrolled to the bottom
+    browser.pause(4000); // made to assure the table has been scrolled to the bottom
     PluginPopup.selectLastObject();
     PluginPopup.clickHeader('Owner');
     /* Open the filter panel and select some filters for 'Application', 'Type', 'Owner' */

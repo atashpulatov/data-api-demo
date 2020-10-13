@@ -1,6 +1,6 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { getNotificationButtons } from '../notification-v2/notification-buttons';
-import { customT } from '../redux-reducer/notification-reducer/notification-title-maps';
+import { customT } from '../customTranslation';
 import {
   errorTypes,
   httpStatusToErrorType,

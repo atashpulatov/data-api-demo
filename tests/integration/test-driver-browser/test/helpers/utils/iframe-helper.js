@@ -1,3 +1,5 @@
+import {popupSelectors} from '../../constants/selectors/popup-selectors';
+
 export function switchToPluginFrame() {
   switchToExcelFrame();
   $('.AddinIframe').waitForExist(9999);
@@ -11,9 +13,16 @@ export function switchToDialogFrame() {
 }
 
 export function switchToExcelFrame() {
-  browser.switchToFrame(null);
-  $('#WebApplicationFrame').waitForDisplayed(19999);
-  browser.switchToFrame($('#WebApplicationFrame'));
+  for (let i = 0; i < 15; i++) {
+    browser.pause(2000);
+    browser.switchToFrame(null);
+    if($('#WebApplicationFrame').isDisplayed()) {
+      browser.switchToFrame($('#WebApplicationFrame')); 
+      return;
+    } 
+    console.log(`Element '#WebApplicationFrame' not found. Retrying`);
+  }
+  throw new Error(`Element '#WebApplicationFrame' could not be found.`)
 }
 
 // This frame is used for report prompt window and visualizations window
@@ -25,9 +34,8 @@ export function switchToPromptFrame() {
 
 export function switchToPromptFrameForImportDossier() {
   switchToPluginFrame();
-  const editFrame = 'iframe[src*="message=true&ui"]';
-  $(editFrame).waitForExist(19999);
-  browser.switchToFrame($(editFrame));
+  $(popupSelectors.promptFrameForDossier).waitForExist(19999);
+  browser.switchToFrame($(popupSelectors.promptFrameForDossier));
 }
 
 export function switchToRightPanelFrame() {

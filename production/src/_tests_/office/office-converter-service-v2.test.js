@@ -12,7 +12,7 @@ describe('Office converter service v2', () => {
     // given
     const attrforms = { supportForms: false, displayAttrFormNames: 'Automatic' };
     const crosstabsResponse = { ...response, attrforms };
-    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'isCrosstabular', 'name', 'rows', 'attributesNames', 'attributes', 'metrics', 'subtotalsInfo'];
+    const expecteObjectKeys = ['tableSize', 'columnInformation', 'headers', 'id', 'isCrosstab', 'isCrosstabular', 'name', 'rows', 'visualizationType', 'attributesNames', 'attributes', 'metrics', 'subtotalsInfo'];
     // when
     const table = officeConverter.createTable(crosstabsResponse);
     // then

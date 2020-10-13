@@ -59,12 +59,29 @@ function getFullPath({
   return path;
 }
 
-function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1) {
+function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1, visualizationType) {
+  const fields = getFetchObjectContentFields(visualizationType);
+
   return request
-    .get(`${fullPath}?offset=${offset}&limit=${limit}&fields=-data.metricValues.extras,-data.metricValues.formatted`)
+    .get(`${fullPath}?offset=${offset}&limit=${limit}&fields=${fields}`)
     .set('x-mstr-authtoken', authToken)
     .set('x-mstr-projectid', projectId)
     .withCredentials();
+}
+
+/**
+ * Returns fields query selector value based on type of the object
+ *
+ * @param {string} visualizationType Specifies type of the visualisation
+ * @returns {string} fields query selector
+ */
+function getFetchObjectContentFields(visualizationType) {
+  switch (visualizationType) {
+    case mstrObjectEnum.visualizationType.COMPOUND_GRID:
+      return `-data.metricValues.columnSets.extras,-data.metricValues.columnSets.formatted`;
+    default:
+      return `-data.metricValues.extras,-data.metricValues.formatted`;
+  }
 }
 
 class MstrObjectRestService {
@@ -88,7 +105,7 @@ class MstrObjectRestService {
     displayAttrFormNames
   }) {
     const totalRows = instanceDefinition.rows;
-    const { instanceId, mstrTable: { isCrosstab } } = instanceDefinition;
+    const { instanceId, mstrTable: { isCrosstab, visualizationType } } = instanceDefinition;
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
@@ -120,15 +137,20 @@ class MstrObjectRestService {
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
       let header;
       let crosstabSubtotal;
-      const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit);
+
+      const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit, visualizationType);
+
+
       const { current } = response.body.data.paging;
       if (MstrAttributeMetricHelper.isMetricInRows(response.body) && shouldExtractMetricsInRows) {
         metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(response.body, metricsInRows);
         shouldExtractMetricsInRows = !!metricsInRows.length;
       }
+
       fetchedRows = current + offset;
       response.body.attrforms = attrforms;
       const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
+
       if (isCrosstab) {
         header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
         crosstabSubtotal = header.subtotalAddress;
@@ -137,6 +159,7 @@ class MstrObjectRestService {
         rowTotals.map(offsetSubtotal);
       }
       offset += current;
+
       yield {
         row,
         header,

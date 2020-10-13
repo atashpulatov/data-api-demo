@@ -36,7 +36,7 @@ describe('F25931 - Duplicate object', () => {
     PluginRightPanel.clickAddDataButton();
     const dossierObject = objectsList.dossiers.complexDossier;
     const { bubbleChart } = dossierObject.visualizations;
-    PluginPopup.openDossier(dossierObject.name, null, false);
+    PluginPopup.openDossier(dossierObject.name, null, false, 2);
     PluginPopup.selectAndImportVisualization(bubbleChart);
     PluginRightPanel.waitAndCloseNotification(dictionary.en.importSuccess);
 
