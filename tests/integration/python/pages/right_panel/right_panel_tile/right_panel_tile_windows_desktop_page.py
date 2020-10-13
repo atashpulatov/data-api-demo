@@ -11,6 +11,8 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     REFRESH_BUTTON_ELEM = 'Refresh button'
     REMOVE_BUTTON_ELEM = 'Remove button'
 
+    BUTTON_OK = 'OK'
+
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
@@ -25,6 +27,12 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         for element in elements:
             element.move_to()
+
+    def close_all_warning_notifications(self):
+        elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.BUTTON_OK)
+
+        for element in elements:
+            element.click()
 
     def close_last_notification_on_hover(self):
         self._hover_over_tile(0)
