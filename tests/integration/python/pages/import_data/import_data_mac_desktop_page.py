@@ -16,7 +16,7 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
     NAME_HEADER_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[2]/AXTable[0]/AXRow[0]/AXCell[1]/" \
                                                                "AXGroup[0]/AXStaticText[@AXValue='Name']"
 
-    IMPORT_BUTTON_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXButton[@AXTitle='Import'"
+    IMPORT_BUTTON_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXButton[@AXTitle='Import']"
 
     PREPARE_BUTTON_ELEM = BaseMacDesktopPage.POPUP_WRAPPER_ELEM + "/AXGroup[3]/AXButton[@AXTitle='Prepare Data']"
 
