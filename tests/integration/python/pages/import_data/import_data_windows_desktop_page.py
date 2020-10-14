@@ -66,7 +66,9 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def find_object(self, object_name):
         """
-        Finds object by name. Name can be any identifying characteristic of the object (ie. id, name)
+        Finds object by name. Name can be any identifying characteristic of the object (i.e. id, name).
+
+        :param object_name: Object name or id.
         """
 
         self.windows_desktop_workaround.focus_on_popup_window()
