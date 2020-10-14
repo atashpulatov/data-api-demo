@@ -1,0 +1,44 @@
+job 'stage-2-e2e-client-test-win-pre' do		
+   description 'this is a job that only starts the slave with ec2-plugin, no actual test inside this job'		
+
+    configure_common_items{}		
+
+    properties do		
+     inject do		
+       properties_content "MSYS=winsymlinks:nativestrict		
+         PATH=/usr/local/.rbenv/shims:/usr/local/ruby-install/bin:/usr/local/rbenv/libexec:/tools/msys/20160205-3/cmd:/tools/Sysinternals:/Users/vagrant/bin:/Users/vagrant/.rbenv/versions/2.2.4/bin:/cmd:/usr/local/bin:/mingw64/bin:/usr/bin:/Windows/system32:/Windows:/Windows/System32/Wbem:/Windows/System32/WindowsPowerShell/v1.0:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/c/Program\ Files/Amazon/AWSCLI"		
+     end		
+
+      parameters do		
+       upstream_parameter do		
+         upstream_job_name 'stage-1-dev'		
+         name 'APPLICATION_VERSION'		
+         description 'the version of the application to deploy and test'		
+       end		
+
+      end		
+   end		
+
+ 
+    assigned_node_string 'windows2019_t3medium'		
+
+    builders do		
+   bash do		
+       script '#!/usr/bin/env bash		
+ echo APPLICATION_VERSION=$APPLICATION_VERSION		
+ echo APPLICATION_COMMIT_HASH=xxx		
+ '		
+     end		
+     parameterized_builder do		
+       job_names "mstr-office-.-#{Environment.branch_name}-.-stage-2-e2e-desktop-test-python-win"		
+       parameters "APPLICATION_VERSION=$APPLICATION_VERSION"		
+       block_and_sync_status true		
+     end		
+
+ 
+    end		
+
+ 
+ 
+  end
+  
