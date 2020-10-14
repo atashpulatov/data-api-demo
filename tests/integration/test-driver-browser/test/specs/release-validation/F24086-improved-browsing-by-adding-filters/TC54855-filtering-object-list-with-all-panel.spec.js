@@ -24,9 +24,9 @@ describe('F24086 - Improved browsing by adding filters', () => {
     PluginPopup.clickAllButton('Owner');
 
     console.log('Select 3 owners from the list');
-    PluginPopup.clickAllPanelElement('Administrator.');
-    PluginPopup.clickAllPanelElement('MSTR User.');
-    PluginPopup.clickAllPanelElement('a.');
+    PluginPopup.clickAllPanelElement('Administrator', false);
+    PluginPopup.clickAllPanelElement('MSTR User', false);
+    PluginPopup.clickAllPanelElement('a', false);
     PluginPopup.clickViewSelectedInAllPanel();
 
     console.log('Scroll to the end, select object and sort by name');
@@ -39,7 +39,7 @@ describe('F24086 - Improved browsing by adding filters', () => {
     PluginPopup.clickFilterButton();
     PluginPopup.filterByDate('02/04/2008', '05/13/2020');
     PluginPopup.clickAllButton('Modified');
-    PluginPopup.clickAllPanelElement('Last Quarter.');
+    PluginPopup.clickAllPanelElement('Last Quarter', false);
 
     console.log('Select all owners');
     PluginPopup.clickAllButton('Owner');

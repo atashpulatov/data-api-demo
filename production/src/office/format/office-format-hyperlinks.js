@@ -80,6 +80,7 @@ class OfficeFormatHyperlinks {
       throw error;
     }
 
+    excelContext.workbook.application.suspendApiCalculationUntilNextSync();
     for (let i = 0; i < range.values.length; i++) {
       const cellRange = range.getCell(i, 0);
       const cellText = range.values[i][0];
@@ -91,6 +92,7 @@ class OfficeFormatHyperlinks {
       // Sync after a batch of 5000 to avoid errors and performance issues
       if (i % 5000 === 0) {
         await excelContext.sync();
+        excelContext.workbook.application.suspendApiCalculationUntilNextSync();
       }
     }
 

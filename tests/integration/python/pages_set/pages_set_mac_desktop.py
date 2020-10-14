@@ -12,6 +12,10 @@ from pages.excel.excel_general.excel_general_mac_desktop_page import ExcelGenera
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 from pages.excel.excel_sheet.excel_sheet_mac_desktop_page import ExcelSheetMacDesktopPage
 from pages.import_data.import_data_mac_desktop_page import ImportDataMacDesktopPage
+from pages.import_dossier.import_dossier_context_menu.import_dossier_context_menu_mac_desktop_page import \
+    ImportDossierContextMenuMacDesktopPage
+from pages.import_dossier.import_dossier_main.import_dossier_main_mac_desktop_page import \
+    ImportDossierMainMacDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_mac_desktop_page import NotLoggedRightPanelMacDesktopPage
 from pages.right_panel.duplicate_object_popup.duplicate_object_popup_mac_desktop_page import \
     DuplicateObjectPopupMacDesktopPage
@@ -50,11 +54,11 @@ class PagesSetMacDesktop(AbstractPagesSet):
         self.columns_and_filters_selection_list_header_mac_desktop_page = None
         self.display_attribute_form_names_mac_desktop_page = DisplayAttributeFormNamesMacDesktopPage()
 
-        self.import_dossier_mac_desktop_page = None
+        self.import_dossier_mac_desktop_page = ImportDossierMainMacDesktopPage()
         self.import_dossier_filter_mac_desktop_page = None
         self.import_dossier_bookmarks_mac_desktop_page = None
         self.import_dossier_table_of_contents_mac_desktop_page = None
-        self.import_dossier_context_menu_mac_desktop_page = None
+        self.import_dossier_context_menu_mac_desktop_page = ImportDossierContextMenuMacDesktopPage()
         self.import_dossier_show_data_mac_desktop_page = None
 
     def excel_general_page(self):

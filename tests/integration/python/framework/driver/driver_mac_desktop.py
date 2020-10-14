@@ -57,6 +57,7 @@ class DriverMacDesktop(AbstractDriver):
 
     @staticmethod
     def _stop_appium_for_mac():
-        subprocess.run(DriverMacDesktop.APPIUM_FOR_MAC_STOP)
+        if ConfigUtil.is_run_appium_for_mac_enabled():
+            subprocess.run(DriverMacDesktop.APPIUM_FOR_MAC_STOP)
 
-        DriverMacDesktop.appium_for_mac_process = None
+            DriverMacDesktop.appium_for_mac_process = None

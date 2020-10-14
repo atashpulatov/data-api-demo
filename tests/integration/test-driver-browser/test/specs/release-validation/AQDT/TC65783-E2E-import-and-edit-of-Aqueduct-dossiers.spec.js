@@ -5,6 +5,7 @@ import PluginPopup from '../../../helpers/plugin/plugin.popup';
 import { dictionary } from '../../../constants/dictionaries/dictionary';
 import { objectsList } from '../../../constants/objects-list';
 import { waitForNotification, waitForPopup } from '../../../helpers/utils/wait-helper';
+import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
 import {
   switchToPluginFrame, switchToExcelFrame, changeBrowserTab, switchToPopupFrame, switchToDialogFrame, switchToPromptFrame
 } from '../../../helpers/utils/iframe-helper';
@@ -46,6 +47,7 @@ describe('US262640: E2E Test Case Automation for AQDT Environment', () => {
 
     logStep('+ should edit imported TEC.QA visualization');
     PluginRightPanel.editObject(1);
+    expect($(rightPanelSelectors.loadingSpinner).isDisplayed()).toBe(true);
     browser.pause(2000);
     PluginPopup.goToDossierPageOrChapter(15);
     PluginPopup.selectVisualizationOnPage(qaPage2, vis2);

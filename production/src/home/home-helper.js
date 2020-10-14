@@ -4,6 +4,7 @@ import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 
 export class HomeHelper {
   init = (reduxStore, sessionActions, sessionHelper) => {
@@ -46,13 +47,19 @@ export class HomeHelper {
 
   getStorageItem = (key = 'iSession') => window.localStorage.getItem(key);
 
-  getTokenFromStorage = () => {
-    const iSession = this.getStorageItem('iSession');
-    if (iSession) {
-      this.sessionActions.logIn(iSession);
-      return iSession;
-    }
-  };
+/**
+ * With the introduction of http-only we cannot get the iSession token from the cookies
+ * Retrieve the stored token from localstorage or Excel settings and save in redux store
+ *
+ * @returns {String} iSession token
+ */
+getTokenFromStorage = () => {
+  const iSession = this.getStorageItem('iSession') || officeStoreRestoreObject.getExcelSettingValue('iSession');
+  if (iSession) {
+    this.sessionActions.logIn(iSession);
+    return iSession;
+  }
+};
 
   getWindowLocation = () => window.location
 

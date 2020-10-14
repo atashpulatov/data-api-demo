@@ -44,33 +44,15 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.ADD_DATA_BUTTON_ELEM)
         ).click()
 
-    def logout(self):
-        self._open_dots_menu()
-
-        self.get_element_by_accessibility_id(
-            RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID,
-            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID)
-        ).click()
-
-    def _open_dots_menu(self):
-        WindowsDesktopMainAddInElementCache.invalidate_cache()
-
-        self.windows_desktop_workaround.focus_on_right_side_panel()
-
-        self.get_element_by_name(
-            RightPanelMainWindowsDesktopPage.DOTS_MENU_NAME,
-            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.DOTS_MENU_NAME)
-        ).click()
-
     def view_data(self):
         WindowsDesktopMainAddInElementCache.invalidate_cache()
 
         self.windows_desktop_workaround.focus_on_right_side_panel()
 
         self.get_element_by_name(
-              RightPanelMainWindowsDesktopPage.VIEW_DATA,
-              image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.VIEW_DATA)
-          ).click()
+            RightPanelMainWindowsDesktopPage.VIEW_DATA,
+            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.VIEW_DATA)
+        ).click()
 
     def clear_data(self):
         self._open_dots_menu()
@@ -83,4 +65,20 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         self.get_element_by_accessibility_id(
             RightPanelMainWindowsDesktopPage.CONFIRM_CLEAR_DATA_ACCESSIBILITY_ID,
             image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.CONFIRM_CLEAR_DATA_ACCESSIBILITY_ID)
+        ).click()
+
+    def logout(self):
+        self._open_dots_menu()
+
+        self.get_element_by_accessibility_id(
+            RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID,
+            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID)
+        ).click()
+
+    def _open_dots_menu(self):
+        self.windows_desktop_workaround.focus_on_right_side_panel()
+
+        self.get_element_by_name(
+            RightPanelMainWindowsDesktopPage.DOTS_MENU_NAME,
+            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.DOTS_MENU_NAME)
         ).click()

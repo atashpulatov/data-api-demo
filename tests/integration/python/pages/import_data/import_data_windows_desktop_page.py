@@ -68,9 +68,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Finds object by name. Name can be any identifying characteristic of the object (i.e. id, name).
 
-        :param object_name: Object name or id.
+        :param object_name: Object identified, e.g. name or id.
         """
-
         self.windows_desktop_workaround.focus_on_popup_window()
 
         filters_elem = self.get_element_by_name(
@@ -86,16 +85,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def find_and_select_object(self, object_name):
         """
-        Finds object by name and selects it. See ImportDataBrowserPage#find_and_select_object.
+        Finds object by name and selects it.
+
+        This method will be removed, see ImportDataBrowserPage#find_and_select_object.
         """
 
         self.find_and_select_object_by_id(object_name, object_name)
 
     def find_and_select_object_by_id(self, object_name, object_id):
         """
-        Finds object by id and selects it.
-
-        This method will be removed, see ImportDataBrowserPage#find_and_select_object_by_id.
+        Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
         """
 
         self.find_object(object_id)

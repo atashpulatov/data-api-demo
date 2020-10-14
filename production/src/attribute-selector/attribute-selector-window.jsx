@@ -7,6 +7,7 @@ import { AttributeSelector } from './attribute-selector';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
+import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export class AttributeSelectorWindowNotConnected extends Component {
@@ -49,7 +50,8 @@ export class AttributeSelectorWindowNotConnected extends Component {
         ? editedObject.subtotalsInfo.importSubtotal
         : importSubtotal
     };
-    const displayAttrFormNamesSet = (editedObject && editedObject.displayAttrFormNames) || displayAttrFormNames;
+    const displayAttrFormNamesSet = (editedObject && editedObject.displayAttrFormNames) || displayAttrFormNames
+    || officeProperties.displayAttrFormNames.automatic;
 
     const message = {
       command: selectorProperties.commandOnUpdate,
