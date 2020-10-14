@@ -1,5 +1,3 @@
-from pyperclip import paste
-
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from framework.util.exception.MstrException import MstrException
@@ -7,6 +5,7 @@ from framework.util.message_const import MessageConst
 from framework.util.util import Util
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
+from pyperclip import paste
 
 
 class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -31,7 +30,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     ERROR_MESSAGE_BUTTON_OK = 'OK'
 
     SHOW_DETAILS = 'show details'
-    TABLE_DATAITEM_XPATH = '//Group/DataGrid/Group/Group/Table/DataItem'
+    TABLE_DATAITEM_XPATH = '//Group/DataGrid/Group/Group/Table/DataItem/Text'
 
     ALLOW_ACCESS = 'Allow access'
 
@@ -160,22 +159,27 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def copy_object_details_to_clipboard_and_verify_if_correct(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        details_items = self.get_add_in_main_element().get_elements_by_xpath(ImportDataWindowsDesktopPage.TABLE_DATAITEM_XPATH)
-        
+        details_items = self.get_add_in_main_element().get_elements_by_xpath(
+            ImportDataWindowsDesktopPage.TABLE_DATAITEM_XPATH
+        )
+
         # details_items returns one item for the title and one item for the value.
         # Each value is at an odd-numbered index
         for details_value in details_items[1::2]:
-          details_value.click()
+            details_value.move_to_and_click()
+            self.get_add_in_main_element().move_to()
 
-          if paste() != details_value.text:
-              return False
-        
+            clipboard_content = paste()
+            expected_value = details_value.text
+
+            if clipboard_content != expected_value:
+                self.log_warning(f'Error while checking Clipboard content, expected value: [{expected_value}], '
+                                 f'Clipboard content: [{clipboard_content}]')
+                return False
+
         return True
 
     def close_import_data_popup(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self.get_elements_by_name(ImportDataWindowsDesktopPage.CLOSE)[1].click()
-
-
-

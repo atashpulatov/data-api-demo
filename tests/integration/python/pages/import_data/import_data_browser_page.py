@@ -142,7 +142,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
             details_value = row.get_element_by_css(ImportDataBrowserPage.OBJECT_DETAILS_VALUE)
             details_value.click()
 
+            clipboard_content = paste()
+            expected_value = details_value.text
+
             if paste() != details_value.text:
+                self.log_warning(f'Error while checking Clipboard content, expected value: [{expected_value}], '
+                                 f'Clipboard content: [{clipboard_content}]')
                 return False
 
         return True
