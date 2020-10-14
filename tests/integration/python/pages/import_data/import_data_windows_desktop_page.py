@@ -33,8 +33,6 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     SHOW_DETAILS = 'show details'
     TABLE_DATAITEM_XPATH = '//Group/DataGrid/Group/Group/Table/DataItem'
 
-    # CLOSE_BUTTON_XPATH = '//TitleBar/Button[@Name="Close"]'
-
     ALLOW_ACCESS = 'Allow access'
 
     def __init__(self):
