@@ -64,6 +64,10 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return element.get_attribute(ImportDataBrowserPage.ARIA_CHECKED_ATTRIBUTE) == 'true'
 
     def find_object(self, object_name):
+        """
+        Finds object by name. Name can be any identifying characteristic of the object (ie. id, name)
+        """
+
         self.focus_on_add_in_popup_frame()
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)

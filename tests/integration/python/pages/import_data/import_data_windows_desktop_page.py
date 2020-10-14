@@ -65,6 +65,10 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         return element.get_attribute(ImportDataWindowsDesktopPage.ARIA_PROPERTIES_ATTRIBUTE)
 
     def find_object(self, object_name):
+        """
+        Finds object by name. Name can be any identifying characteristic of the object (ie. id, name)
+        """
+
         self.windows_desktop_workaround.focus_on_popup_window()
 
         filters_elem = self.get_element_by_name(
