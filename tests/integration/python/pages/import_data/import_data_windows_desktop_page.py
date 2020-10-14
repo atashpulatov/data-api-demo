@@ -1,3 +1,5 @@
+from pyperclip import paste
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from framework.util.exception.MstrException import MstrException
@@ -5,7 +7,6 @@ from framework.util.message_const import MessageConst
 from framework.util.util import Util
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \
     ColumnsAndFiltersSelectionWindowsDesktopPage
-from pyperclip import paste
 
 
 class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -68,7 +69,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Finds object by name. Name can be any identifying characteristic of the object (i.e. id, name).
 
-        :param object_name: Object identified, e.g. name or id.
+        :param object_name: Object identifier, e.g. name or id.
         """
         self.windows_desktop_workaround.focus_on_popup_window()
 
