@@ -189,3 +189,9 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self.get_elements_by_name(ImportDataWindowsDesktopPage.CLOSE)[1].click()
+
+    def click_filters_button(self):
+        self.get_element_by_name(
+            ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
+        ).click()
