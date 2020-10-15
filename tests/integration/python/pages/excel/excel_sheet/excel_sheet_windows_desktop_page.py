@@ -67,6 +67,10 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return ''.join(result)
 
+    def write_value_in_cell(self, cell, value):
+        self.go_to_cell(cell)
+        self.send_keys((value, Keys.ENTER))
+
     def get_number_of_worksheets(self):
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
         book_children_elements = book_element.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
