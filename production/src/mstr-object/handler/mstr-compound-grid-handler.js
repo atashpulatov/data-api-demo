@@ -287,11 +287,13 @@ class CompoundGridHandler {
           } else {
             const { type, elements, forms } = columnsDefinition[k];
             const element = elements[elementIndex];
+            // consolidation does not have forms field in this case we set 1 as forms length
+            const formsLength = forms ? forms.length : 1;
 
             switch (type) {
               case 'attribute':
               case 'consolidation':
-                parsedHeaders[colIndex].push(...onAttribute(element, forms.length, j, colIndex));
+                parsedHeaders[colIndex].push(...onAttribute(element, formsLength, j, colIndex));
                 break;
               case 'templateMetrics':
                 parsedHeaders[colIndex].push(...onMetric(element));

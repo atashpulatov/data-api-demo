@@ -1,3 +1,5 @@
+import { customT } from '../customTranslation';
+
 const withDefaultValue = (obj, defaultValue) => (value) => {
   if (value in obj) {
     return obj[value];
@@ -118,8 +120,7 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
   [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: () => OBJ_REMOVED_FROM_EXCEL,
   [errorTypes.SHEET_HIDDEN_ERR]: () => SHEET_HIDDEN,
-  [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `Excel returned error: ${error.message}`,
-  [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `An error has occurred in Excel. ${error.message}`,
+  [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `${customT('An error has occurred in Excel.')} ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
   [errorTypes.INVALID_VIZ_KEY]: () => INVALID_VIZ_KEY_MESSAGE,
   [errorTypes.EXCEEDS_EXCEL_API_LIMITS]: () => EXCEEDS_EXCEL_API_LIMITS,

@@ -156,7 +156,7 @@ export const objectsList = {
         barChart: '#mstr271',
         lineChart: '#mstr444',
         areaChart: '#mstr421',
-        bubbleChart: popupSelectors.dossierWindow.getVizAT(16),
+        bubbleChart: popupSelectors.dossierWindow.getVizAT(15),
         pieChart: '#mstr310',
         comboChart: '#mstr557',
         geospatialService: '#mstr338',
@@ -208,7 +208,7 @@ export const objectsList = {
     },
     promptedDossier: {
       name: 'Prompted dossier',
-      visualizations: { vis1: getVizAT(2) }
+      visualizations: { vis1: getVizAT(1) }
     },
     promptedDossier2: {
       name: 'Prompted dossier (display prompt and default answers)',

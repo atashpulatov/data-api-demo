@@ -93,6 +93,7 @@ class StepGetOfficeTableEditRefresh {
         tableChanged,
         instanceDefinition,
         startCell,
+        isTotalsRowVisible: prevOfficeTable.showTotals,
       };
 
       const updatedObject = {

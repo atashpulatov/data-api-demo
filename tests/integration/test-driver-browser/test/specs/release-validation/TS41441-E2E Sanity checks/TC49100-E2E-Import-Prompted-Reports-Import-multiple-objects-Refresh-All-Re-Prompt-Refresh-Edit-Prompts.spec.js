@@ -105,8 +105,6 @@ describe('TS41441 - Sanity checks', () => {
     PluginPopup.promptSelectObjectForEdit('Year');
     PluginPopup.clickRun();
     browser.pause(3000);
-    PluginPopup.selectAttributesAndAttributeForms({ Year: [] });
-    PluginPopup.selectAllMetrics();
     switchToPluginFrame();
     PluginPopup.clickImport();
     waitForNotification();

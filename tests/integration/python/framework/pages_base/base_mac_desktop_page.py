@@ -20,7 +20,19 @@ class BaseMacDesktopPage(BasePage):
 
     SEARCH_ELEMENT_INTERVAL = 0.1
 
-    def get_elements_by_xpath(self, selector, expected_list_len=None):
+    MAX_SOURCE_LIST_NO = 50
+
+    def get_elements_by_xpath(self, selector, expected_list_len=None, max_source_list_no=MAX_SOURCE_LIST_NO):
+        elements_with_indices = self.get_elements_by_xpath_with_indices(selector, expected_list_len, max_source_list_no)
+
+        elements = [item.element for item in elements_with_indices]
+
+        return elements
+
+    def get_elements_by_xpath_with_indices(self,
+                                           selector,
+                                           expected_list_len=None,
+                                           max_source_list_no=MAX_SOURCE_LIST_NO):
         """
         Getting list of elements implementation specific for AppiumForMac, which allows only for finding
         single elements.
@@ -58,7 +70,7 @@ class BaseMacDesktopPage(BasePage):
 
         Example:
 
-        For selector '/SOME_PATH/AXList/AXGroup[0]/AXGroup[%s]/AXGroup[0]', expected_list_len=3 and document structure:
+        For selector '/SOME_PATH/AXList/AXGroup[0]/AXGroup[%s]/AXGroup[0]', expected_list_len=2 and document structure:
 
         '/SOME_PATH/AXList/AXGroup[0]/AXGroup[0]/AXGroup[0]'
         '/SOME_PATH/AXList/AXGroup[0]/AXGroup[1]/AXStaticText[0]'
@@ -70,8 +82,9 @@ class BaseMacDesktopPage(BasePage):
         '/SOME_PATH/AXList/AXGroup[0]/AXGroup[2]/AXGroup[0]'
 
         :param selector: Selector to search for elements.
-        :param expected_list_len: Expected length of elements list (maximum number of elements)
+        :param expected_list_len: Expected length of returned elements list (maximum number of elements to be found)
                or None to stop searching on first not found element.
+        :param max_source_list_no: Maximum number of elements to be checked, when no expected_list_len elements found.
         :return: List of found elements, empty list when no element found.
         """
         found_elements = []
@@ -90,28 +103,46 @@ class BaseMacDesktopPage(BasePage):
             if element_exists:
                 element = self.get_element_by_xpath(selector_xpath)
 
-                found_elements.append(element)
+                found_elements.append(ElementWithIndex(element, i))
             else:
                 if expected_list_len is None:
                     break
 
             i += 1
 
-            if expected_list_len is not None and i > expected_list_len - 1:
+            if expected_list_len is not None and len(found_elements) == expected_list_len:
                 break
+
+            if i == max_source_list_no:
+                return found_elements
 
         return found_elements
 
-    def get_element_by_xpath_workaround(self, selector, expected_list_len=None):
+    def get_element_by_xpath_workaround(self, selector, max_source_list_no=MAX_SOURCE_LIST_NO):
         """
         Gets first element by xpath using get_elements_by_xpath().
 
         :param selector: Selector to search for elements.
-        :param expected_list_len: Expected length of elements list (maximum number of elements)
-               or None to stop searching on first not found element.
+        :param max_source_list_no: Maximum number of elements to be checked, when no expected_list_len elements found.
         :return: First found element or raises MstrException when no element found.
         """
-        elements = self.get_elements_by_xpath(selector, expected_list_len=expected_list_len)
+        elements = self.get_elements_by_xpath(selector, expected_list_len=1, max_source_list_no=max_source_list_no)
+
+        if elements:
+            return elements[0]
+
+        raise MstrException('No element found by selector: [%s]' % selector)
+
+    def get_element_by_xpath_workaround_with_index(self, selector, max_source_list_no=MAX_SOURCE_LIST_NO):
+        """
+        Gets first element by xpath using get_elements_by_xpath().
+
+        :param selector: Selector to search for elements.
+        :param max_source_list_no: Maximum number of elements to be checked, when no expected_list_len elements found.
+        :return: First found element or raises MstrException when no element found.
+        """
+        elements = self.get_elements_by_xpath_with_indices(selector, expected_list_len=1,
+                                                           max_source_list_no=max_source_list_no)
 
         if elements:
             return elements[0]
@@ -127,3 +158,16 @@ class BaseMacDesktopPage(BasePage):
 
         raise MstrException('Element not found, selector: [%s], attribute_name: [%s], '
                             'attribute_value: [%s]' % (selector, attribute_name, attribute_value))
+
+
+class ElementWithIndex:
+    """
+    Element wrapper used when getting elements with index.
+    """
+
+    element = None
+    index = None
+
+    def __init__(self, element, index):
+        self.element = element
+        self.index = index

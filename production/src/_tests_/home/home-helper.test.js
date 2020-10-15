@@ -2,6 +2,7 @@ import { sessionHelper } from '../../storage/session-helper';
 import { homeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
+import officeStoreRestoreObject from '../../office/store/office-store-restore-object';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../redux-reducer/session-reducer/session-actions');
@@ -69,10 +70,25 @@ describe('HomeHelper', () => {
       const iSession = null;
       jest.spyOn(homeHelper, 'getStorageItem')
         .mockReturnValueOnce(iSession);
+      jest.spyOn(officeStoreRestoreObject, 'getExcelSettingValue')
+        .mockReturnValueOnce(iSession);
       // when
       homeHelper.getTokenFromStorage();
       // then
       expect(sessionActions.logIn).not.toBeCalled();
+    });
+    it('should save authToken when there is iSession in Excel settings', () => {
+      // given
+      const iSession = 'token';
+      jest.spyOn(homeHelper, 'getStorageItem')
+        .mockReturnValueOnce(null);
+      jest.spyOn(officeStoreRestoreObject, 'getExcelSettingValue')
+        .mockReturnValueOnce(iSession);
+      // when
+      homeHelper.getTokenFromStorage();
+      // then
+      expect(sessionActions.logIn).toBeCalled();
+      expect(sessionActions.logIn).toBeCalledWith(iSession);
     });
     it('should save authToken when there is iSession in storage', () => {
       // given

@@ -3,7 +3,7 @@ import officeApiDataLoader from '../../../office/api/office-api-data-loader';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../../operation/operation-error-handler';
-import { EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION } from '../../../operation/operation-type-names';
+import { EDIT_OPERATION, REFRESH_OPERATION } from '../../../operation/operation-type-names';
 
 describe('StepBindOfficeTable', () => {
   afterEach(() => {
@@ -38,10 +38,12 @@ describe('StepBindOfficeTable', () => {
     const objectData = {
       bindId: 'bindIdTest',
       objectWorkingId: 'objectWorkingIdTest',
+      isCrosstab: true,
     };
+    const excelContext = { sync: jest.fn() };
     const operationData = {
-      excelContext: 'excelContextTest',
-      officeTable: 'officeTableTest',
+      excelContext,
+      officeTable: {},
       tableChanged: true,
     };
 
@@ -56,7 +58,7 @@ describe('StepBindOfficeTable', () => {
 
     // then
     expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', 'officeTableTest', 'name');
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith(excelContext, { showHeaders: false, showTotals: false }, 'name');
 
     expect(officeApiHelper.bindNamedItem).toBeCalledTimes(1);
     expect(officeApiHelper.bindNamedItem).toBeCalledWith('tableNameTest', 'bindIdTest');
@@ -75,10 +77,12 @@ describe('StepBindOfficeTable', () => {
   const objectData = {
     bindId: 'bindIdTest',
     objectWorkingId: 'objectWorkingIdTest',
+    isCrosstab: true,
   };
+  const excelContext = { sync: jest.fn() };
   const operationData = {
-    excelContext: 'excelContextTest',
-    officeTable: 'officeTableTest',
+    excelContext,
+    officeTable: {},
     operationType,
     tableChanged: false,
   };
