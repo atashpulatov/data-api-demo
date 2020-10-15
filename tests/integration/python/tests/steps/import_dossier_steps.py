@@ -5,6 +5,9 @@ from behave import *
 def step_impl(context, visualization_name):
     context.pages.import_dossier_page().select_visualization_by_name(visualization_name)
 
+@step('I selected any visualization')
+def step_impl(context):
+    context.pages.import_dossier_page().select_any_visualization()
 
 @step('I imported visualization "{visualization_name}"')
 def step_impl(context, visualization_name):

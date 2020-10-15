@@ -39,6 +39,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     FIRST_OBJECT_ROW_SELECTED = '.ReactVirtualized__Table__row.selected-object'
     DISABLED_BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
+    COLUMN_HEADER = '''div[aria-label='%s']'''
+
     def __init__(self):
         super().__init__()
 
@@ -187,3 +189,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.clear()
+    
+    def click_column_header(self, header):
+        self.get_element_by_css(ImportDataBrowserPage.COLUMN_HEADER % header).click()

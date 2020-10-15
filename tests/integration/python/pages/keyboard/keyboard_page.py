@@ -12,6 +12,8 @@ class KeyboardPage(BasePage):
         'Arrow Left': Keys.ARROW_LEFT,
         'Enter': Keys.ENTER,
         'Esc': Keys.ESCAPE,
+        'Page Down': Keys.PAGE_DOWN,
+        'End': Keys.END,
     }
 
     def press_key(self, key_name):

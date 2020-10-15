@@ -7,11 +7,25 @@ from framework.util.assert_util import AssertUtil
 def step_impl(context):
     context.pages.filter_panel_page().click_owner_all_panel()
 
+@step('I opened All for Modified category')
+def step_impl(context):
+    context.pages.filter_panel_page().click_modified_all_panel()
 
 @step('I clicked Select All within All Panel')
 def step_impl(context):
     context.pages.filter_panel_page().click_select_all_within_all_panel()
 
+@step('I clicked Last Quarter within Modified All Panel')
+def step_impl(context):
+    context.pages.filter_panel_page().click_modified_last_quarter_element()
+
+@step('I clicked type "{object_type}"')
+def step_impl(context, object_type):
+    context.pages.filter_panel_page().click_element_from_list('Type', object_type)
+
+@step('I clicked application "{application}"')
+def step_impl(context, application):
+    context.pages.filter_panel_page().click_element_from_list('Application', application)
 
 @step('I clicked "{element}" from "{category}" category')
 def step_impl(context, element, category):

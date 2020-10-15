@@ -26,6 +26,9 @@ class FilterPanelBrowserPage(BaseBrowserPage):
                             '.category-list-row:nth-child(1) input'
     OWNER_ALL_PANEL = '.filter-panel div.category-list-wrapper:nth-child(4) > button:nth-child(2)'
 
+    MODIFIED_ALL_PANEL = '.filter-panel .mstr-date-range-selector-container > button:nth-child(2)'
+    MODIFIED_LAST_QUARTER_CHECKBOX = '.all-panel .ReactVirtualized__Grid__innerScrollContainer > div:nth-child(5)'
+
     ELEMENT_FROM_CATEGORY = '.category-list-header[aria-label="%s"] + .category-list-table label[title="%s"]'
     ELEMENT_CHECKED = 'input:checked'
 
@@ -42,6 +45,8 @@ class FilterPanelBrowserPage(BaseBrowserPage):
         'checkbox for Certified': CERTIFIED_CHECKBOX,
         'first checkbox in Owners': OWNERS_FIRST_CHECKBOX,
         'Owners All button': OWNER_ALL_PANEL,
+        'Modified All button': MODIFIED_ALL_PANEL,
+        'Modified Last Quarter Checkbox': MODIFIED_LAST_QUARTER_CHECKBOX,
     }
 
     def __init__(self):
@@ -49,6 +54,12 @@ class FilterPanelBrowserPage(BaseBrowserPage):
 
     def click_owner_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.OWNER_ALL_PANEL).click()
+    
+    def click_modified_all_panel(self):
+        self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_ALL_PANEL).click()
+
+    def click_modified_last_quarter_element(self):
+        self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_LAST_QUARTER_CHECKBOX).click()
 
     def click_select_all_within_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.SELECT_ALL_WITHIN_ALL_PANEL).click()

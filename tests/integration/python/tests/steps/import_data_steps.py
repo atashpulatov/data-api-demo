@@ -109,3 +109,18 @@ def step_impl(context):
 @step('I cleared search box')
 def step_impl(context):
     context.pages.import_data_page().clear_search_box()
+
+@step('I clicked header on column "{header}"')
+def step_impl(context, header):
+    context.pages.import_data_page().click_column_header(header)
+
+@step('I scrolled down list of objects by {number} pages')
+def step_impl(context, number):
+    # context.pages.import_data_page().select_first_object_from_list()
+    for i in range(0, int(number)):
+      context.pages.keyboard_page().press_key('Page Down')
+
+@step('I scrolled down list of objects to end')
+def step_impl(context):
+    # context.pages.import_data_page().select_first_object_from_list()
+    context.pages.keyboard_page().press_key('End')
