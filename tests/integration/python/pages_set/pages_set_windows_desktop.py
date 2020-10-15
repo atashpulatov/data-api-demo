@@ -25,6 +25,7 @@ from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page im
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages.prompt.prompt_windows_desktop_page import PromptWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
+from pages.columns_and_filters_selection.filters.columns_and_filters_selection_filters_windows_desktop_page import ColumnsAndFiltersSelectionFiltersWindowsDesktopPage
 
 
 class PagesSetWindowsDesktop(AbstractPagesSet):
@@ -53,7 +54,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage()
         self.columns_and_filters_selection_metrics_windows_desktop_page = \
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage()
-        self.columns_and_filters_selection_filters_windows_desktop_page = None
+        self.columns_and_filters_selection_filters_windows_desktop_page = ColumnsAndFiltersSelectionFiltersWindowsDesktopPage()
         self.columns_and_filters_selection_list_header_windows_desktop_page = None
         self.display_attribute_form_names_windows_desktop_page = DisplayAttributeFormNamesWindowsDesktopPage()
 
