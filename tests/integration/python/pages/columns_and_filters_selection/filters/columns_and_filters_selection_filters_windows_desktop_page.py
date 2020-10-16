@@ -14,10 +14,12 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
 
             if len(elements_names) > 0:
                 for element_name in elements_names:
-                    self.get_element_by_xpath(
+                    el = self.get_element_by_xpath(
                         ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_VALUE.format(element_name),
                         image_name=self.prepare_image_name(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_VALUE.format(element_name))
-                    ).click()
+                    )
+                    el.click()
+                    el.move_to(offset_x=2, offset_y=-1000) # moving cursor out from element - tooltip can block click on desired element
 
     def _select_filter(self, filter):
         self.get_element_by_xpath(
