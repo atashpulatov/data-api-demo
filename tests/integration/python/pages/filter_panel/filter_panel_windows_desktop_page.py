@@ -56,9 +56,16 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def click_element_from_list(self, category, element):
         add_in_main_element = self.get_add_in_main_element()
-        add_in_main_element.get_element_by_xpath(
+        element = add_in_main_element.get_element_by_xpath(
             FilterPanelWindowsDesktopPage.ELEMENT_FROM_CATEGORY % (category, element)
-        ).click()
+        )
+
+        if element is not None:
+            element.click()
+            return
+
+        raise MstrException(f'No element found for category: {category} and element: {element}, '
+                            f'selector: {FilterPanelWindowsDesktopPage.ELEMENT_FROM_CATEGORY % (category, element)}')
 
     def get_all_panel_first_empty_element(self):
         return self.get_element_by_xpath(FilterPanelWindowsDesktopPage.ALL_PANEL_EMPTY_ELEMENT)
@@ -67,17 +74,22 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         return self.get_all_panel_first_empty_element().click()
 
     def examine_if_first_empty_element_is_checked(self):
-        try:
-            element = self.get_element_by_xpath(
-                FilterPanelWindowsDesktopPage.ALL_PANEL_EMPTY_ELEMENT
-            )
+        element = self.get_element_by_xpath(
+            FilterPanelWindowsDesktopPage.ALL_PANEL_EMPTY_ELEMENT
+        )
+
+        if element is not None:
             return element.check_if_element_is_selected()
-        except MstrException:
-            return False
+
+        raise MstrException(f'No element found for selector: {FilterPanelWindowsDesktopPage.ALL_PANEL_EMPTY_ELEMENT}')
 
     def examine_if_element_has_focus(self, element_name):
         element = self.get_element_by_xpath(
             FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]
         )
 
-        return element == self.get_element_with_focus()
+        if element is not None:
+            return element == self.get_element_with_focus()
+
+        raise MstrException(f'No element found for {element_name}, '
+                            f'selector: {FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]}')
