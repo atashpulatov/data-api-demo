@@ -2,6 +2,7 @@ from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPag
 from framework.util.const import SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
+
 class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_MAIN_CONTAINER = "//Group[@AutomationId=\"mstrdossierPromptEditor\"]"
     PROMPT_RUN_BUTTON = '//Button[@Name="Run"][@IsEnabled="True"]'

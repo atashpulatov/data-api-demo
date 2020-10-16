@@ -2,6 +2,7 @@ import json
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 
+
 class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage):
     FILTER_TITLE_ITEM = '//TreeItem[starts-with(@Name,"icon_filter_blue")]/Group[@Name="{0}"]'
     FILTER_VALUE = '//DataGrid[@Name="grid"]/Group[contains(@Name,"{0}")]/Text[@Name="{0}"]'
