@@ -16,7 +16,10 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     SHEET_TAB_NAME = 'Sheet Tab'
     ADD_SHEET_BUTTON = 'Sheet Tab Add Sheet'
 
-    GREEN_TABLE_STYLE_XPATH = 'Window/Pane/ToolBar/Pane/Pane/Pane/Pane/Pane/Group/Group/Group/MenuItem/Pane/DataGrid/ListItem[@Name="Light Green, Table Style Light 21"]'
+    TABLE_STYLE_XPATH = '//DataGrid[@Name="Quick Styles"]/Group/ListItem[@Name="{}"]'
+
+    FONT_COLOR_XPATH = '//DataGrid[@Name="Font Color"]/Group/ListItem[@Name="{}"]'
+    FILL_COLOR_XPATH = '//DataGrid[@Name="Fill Color"]/Group/ListItem[@Name="{}"]'
 
     def get_cells_values(self, cells):
         result = []
@@ -141,8 +144,13 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_green_table_style(self):
-        self.get_elements_by_xpath(
-            ExcelSheetWindowsDesktopPage.GREEN_TABLE_STYLE_XPATH)[0].click()
+
+        ImageElement.excel_element.send_keys(Keys.ALT)
+
+        ImageElement.excel_element.send_keys(("J", "T", "S"))
+
+        self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.TABLE_STYLE_XPATH.format("Light Green, Table Style Light 21")).click()
 
     def click_home_tab(self):
         self._navigate_to_home_tab_using_accessibility_keys()
@@ -190,7 +198,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         # TODO Select a specific font color. For now, just select the first
         self._navigate_to_home_tab_using_accessibility_keys()
 
-        ImageElement.excel_element.send_keys(("F", "C", Keys.ENTER))
+        ImageElement.excel_element.send_keys(("F", "C"))
+
+        self.get_element_by_xpath(ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH.format("Light Green")).click()
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
@@ -198,7 +208,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         # TODO Select a specific fill color. For now, just select the first
         self._navigate_to_home_tab_using_accessibility_keys()
 
-        ImageElement.excel_element.send_keys(("H", Keys.ENTER))
+        ImageElement.excel_element.send_keys(("H"))
+
+        self.get_element_by_xpath(ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH.format("Light Green")).click()
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
