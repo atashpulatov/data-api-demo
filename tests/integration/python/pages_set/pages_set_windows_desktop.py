@@ -24,6 +24,7 @@ from pages.right_panel.range_taken_popup.range_taken_popup_windows_desktop_page 
 from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
+from pages.filter_panel.filter_panel_windows_desktop_page import FilterPanelWindowsDesktopPage
 
 
 class PagesSetWindowsDesktop(AbstractPagesSet):
@@ -37,7 +38,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.add_in_login_windows_desktop_page = AddInLoginWindowsDesktopPage()
         self.cleanup_windows_desktop_page = CleanupWindowsDesktopPage()
         self.duplicate_object_popup_windows_desktop_page = DuplicateObjectPopupWindowsDesktopPage()
-        self.filter_panel_windows_desktop_page = None
+        self.filter_panel_windows_desktop_page = FilterPanelWindowsDesktopPage()
         self.import_data_windows_desktop_page = ImportDataWindowsDesktopPage()
         self.prompt_windows_desktop_page = None
         self.range_taken_popup_windows_desktop_page = RangeTakenPopupWindowsDesktopPage()
