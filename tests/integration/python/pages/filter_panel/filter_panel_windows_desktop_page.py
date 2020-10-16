@@ -79,7 +79,7 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         )
 
         if element is not None:
-            return element.check_if_element_is_selected()
+            return element.is_selected()
 
         raise MstrException(f'No element found for selector: {FilterPanelWindowsDesktopPage.ALL_PANEL_EMPTY_ELEMENT}')
 
