@@ -1,6 +1,6 @@
+@windows_desktop
 @mac_chrome
 @windows_chrome
-@windows_desktop
 Feature: F25968 - Filters numbers
 
   Scenario: [TC58932] - Deselecting/selecting filters with no objects
