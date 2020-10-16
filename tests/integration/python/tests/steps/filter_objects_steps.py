@@ -56,3 +56,38 @@ def step_impl(context, element_name):
     has_focus = context.pages.filter_panel_page().examine_if_element_has_focus(element_name)
 
     AssertUtil.assert_simple(has_focus, True)
+
+@step('Certified Status category header on My Library has title "{title}"')
+def step_impl(context, title):
+    element_title = context.pages.filter_panel_page().get_certified_header_on_mylibrary_title()
+    AssertUtil.assert_simple(element_title, title)
+
+@step('Certified Status element on My Library has title "{title}"')
+def step_impl(context, title):
+    element_title = context.pages.filter_panel_page().get_certified_element_on_mylibrary_title()
+    AssertUtil.assert_simple(element_title, title)
+
+@step('Owner category header on My Library has title "{title}"')
+def step_impl(context, title):
+    element_title = context.pages.filter_panel_page().get_owner_header_on_mylibrary_title()
+    AssertUtil.assert_simple(element_title, title)
+
+@step('Modified category header on My Library has title "{title}"')
+def step_impl(context, title):
+    element_title = context.pages.filter_panel_page().get_modified_header_on_mylibrary_title()
+    AssertUtil.assert_simple(element_title, title)
+
+@step('Modified category on My Library has From field')
+def step_impl(context):
+    element_title = context.pages.filter_panel_page().get_modified_from_field_on_mylibrary_title()
+    AssertUtil.assert_simple(element_title, 'From')
+
+@step('Modified category on My Library has To field')
+def step_impl(context):
+    element_title = context.pages.filter_panel_page().get_modified_to_field_on_mylibrary_title()
+    AssertUtil.assert_simple(element_title, 'To')
+
+@step('Clear All on My Library has correct title')
+def step_impl(context):
+    element_title = context.pages.filter_panel_page().get_clear_all_on_mylibrary_title()
+    AssertUtil.assert_simple(element_title, 'Clear All')

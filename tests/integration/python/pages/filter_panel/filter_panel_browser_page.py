@@ -21,16 +21,24 @@ class FilterPanelBrowserPage(BaseBrowserPage):
 
     CERTIFIED_CHECKBOX = '.filter-panel .category-list-wrapper:nth-child(3) ' \
                          '.category-list-row:nth-child(1) input'
+    CERTIFIED_HEADER_ON_MYLIBRARY = '.filter-panel .category-list-wrapper:nth-child(1) .category-list-header'
+    CERTIFIED_ELEMENT_ON_MYLIBRARY = '.filter-panel .category-list-wrapper:nth-child(1) .name-cell'
 
     OWNERS_FIRST_CHECKBOX = '.filter-panel .category-list-wrapper:nth-child(4) ' \
                             '.category-list-row:nth-child(1) input'
     OWNER_ALL_PANEL = '.filter-panel div.category-list-wrapper:nth-child(4) > button:nth-child(2)'
+    OWNER_HEADER_ON_MYLIBRARY = '.filter-panel .category-list-wrapper:nth-child(2) .category-list-header'
 
     MODIFIED_ALL_PANEL = '.filter-panel .mstr-date-range-selector-container > button:nth-child(2)'
     MODIFIED_LAST_QUARTER_CHECKBOX = '.all-panel .ReactVirtualized__Grid__innerScrollContainer > div:nth-child(5)'
+    MODIFIED_HEADER_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-header'
+    MODIFIED_FROM_FIELD_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-container .mstr-date-selector:nth-child(1)'
+    MODIFIED_TO_FIELD_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-container .mstr-date-selector:nth-child(2)'
 
     ELEMENT_FROM_CATEGORY = '.category-list-header[aria-label="%s"] + .category-list-table label[title="%s"]'
     ELEMENT_CHECKED = 'input:checked'
+
+    CLEAR_ALL = '.filter-panel .filter-panel__button'
 
     MAP_ELEMENT_NAME_TO_SELECTOR = {
         'View Selected switch': VIEW_SELECTED_SWITCH_ALL_PANEL,
@@ -87,3 +95,31 @@ class FilterPanelBrowserPage(BaseBrowserPage):
         )
 
         return element == self.get_element_with_focus()
+    
+    def get_certified_header_on_mylibrary_title(self):
+        title = self.get_element_by_css(FilterPanelBrowserPage.CERTIFIED_HEADER_ON_MYLIBRARY)
+        return title.text
+    
+    def get_certified_element_on_mylibrary_title(self):
+        title = self.get_element_by_css(FilterPanelBrowserPage.CERTIFIED_ELEMENT_ON_MYLIBRARY)
+        return title.text
+
+    def get_owner_header_on_mylibrary_title(self):
+        title = self.get_element_by_css(FilterPanelBrowserPage.OWNER_HEADER_ON_MYLIBRARY)
+        return title.text
+
+    def get_modified_header_on_mylibrary_title(self):
+        title = self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_HEADER_ON_MYLIBRARY)
+        return title.text
+
+    def get_modified_from_field_on_mylibrary_title(self):
+        title = self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_FROM_FIELD_ON_MYLIBRARY)
+        return title.text
+    
+    def get_modified_to_field_on_mylibrary_title(self):
+        title = self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_TO_FIELD_ON_MYLIBRARY)
+        return title.text
+
+    def get_clear_all_on_mylibrary_title(self):
+        title = self.get_element_by_css(FilterPanelBrowserPage.CLEAR_ALL)
+        return title.text

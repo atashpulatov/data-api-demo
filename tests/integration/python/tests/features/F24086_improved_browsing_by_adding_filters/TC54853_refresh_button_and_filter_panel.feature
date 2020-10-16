@@ -6,7 +6,14 @@ Feature: F24086 - Improved browsing by adding filters
       And I clicked Import Data button
       And I switched on MyLibrary
       And I clicked Filters button
-      
+     Then Certified Status category header on My Library has title "Certified Status"
+      And Certified Status element on My Library has title "Certified"
+      And Owner category header on My Library has title "Owner"
+      And Modified category header on My Library has title "Modified"
+      And Modified category on My Library has From field
+      And Modified category on My Library has To field
+      And Clear All on My Library has correct title
+     
      When I clicked "Administrator" from "Owner" category
       And I clicked "MSTR User" from "Owner" category
      
