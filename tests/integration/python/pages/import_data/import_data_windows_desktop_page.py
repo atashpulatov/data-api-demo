@@ -35,6 +35,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     ALLOW_ACCESS = 'Allow access'
 
+    FIRST_OBJECT_ROW = '//Pane/Group/DataGrid/Group[2]/Group/ListItem[1]'
+
     def __init__(self):
         super().__init__()
 
@@ -195,3 +197,9 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
         ).click()
+
+    def hover_over_first_object_in_list(self):
+        self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).move_to()
+
+    def select_first_object_from_list(self):
+        self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).click()
