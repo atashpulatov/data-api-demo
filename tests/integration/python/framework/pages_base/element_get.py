@@ -113,3 +113,6 @@ class ElementGet(ElementCheck):
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)
+
+    def get_element_with_focus(self):
+        return self.driver.switch_to.active_element
