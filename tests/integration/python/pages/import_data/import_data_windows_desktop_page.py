@@ -45,7 +45,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         # TODO check if is on or ignore to have better performance?
-        library_switch = self.get_element_by_name(
+        self.get_element_by_name(
             ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM,
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
         ).click()
