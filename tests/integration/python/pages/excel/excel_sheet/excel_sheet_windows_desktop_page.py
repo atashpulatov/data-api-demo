@@ -4,6 +4,7 @@ from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPag
 from framework.pages_base.image_element import ImageElement
 from framework.util.excel_util import ExcelUtil
 from framework.util.exception.MstrException import MstrException
+from framework.util.const import AFTER_OPERATION_WAIT_TIME
 
 
 class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -16,8 +17,6 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     ADD_SHEET_BUTTON = 'Sheet Tab Add Sheet'
 
     GREEN_TABLE_STYLE_XPATH = 'Window/Pane/ToolBar/Pane/Pane/Pane/Pane/Pane/Group/Group/Group/MenuItem/Pane/DataGrid/ListItem[@Name="Light Green, Table Style Light 21"]'
-
-    PAUSE_IN_SECONDS = 2
 
     def get_cells_values(self, cells):
         result = []
@@ -42,15 +41,15 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         ImageElement.excel_element.send_keys(("F", "D", "G"))
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
         ImageElement.excel_element.send_keys(cell_upper)
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
         ImageElement.excel_element.send_keys(Keys.ENTER)
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def _get_selected_cell_value(self, cell):
         cell_selector_name = self._get_selector_name(cell)
@@ -83,12 +82,12 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         ImageElement.excel_element.send_keys("H")
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def _navigate_using_accessibility_keys(self):
         ImageElement.excel_element.send_keys(Keys.ALT)
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def get_number_of_worksheets(self):
         book_element = self.get_element_by_name(
@@ -139,7 +138,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         ImageElement.excel_element.send_keys(Keys.ALT)
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_green_table_style(self):
         self.get_elements_by_xpath(
@@ -150,42 +149,42 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         # Turn off accessibility selectors
         ImageElement.excel_element.send_keys(Keys.ALT)
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_percentage_button(self):
         self._navigate_to_home_tab_using_accessibility_keys()
 
         ImageElement.excel_element.send_keys("P")
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_comma_style_button(self):
         self._navigate_to_home_tab_using_accessibility_keys()
 
         ImageElement.excel_element.send_keys("K")
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_align_middle_button(self):
         self._navigate_to_home_tab_using_accessibility_keys()
 
         ImageElement.excel_element.send_keys(("A", "M"))
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_align_left_button(self):
         self._navigate_to_home_tab_using_accessibility_keys()
 
         ImageElement.excel_element.send_keys(("A", "L"))
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_bold_button(self):
         self._navigate_to_home_tab_using_accessibility_keys()
 
         ImageElement.excel_element.send_keys("1")
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_font_color_button(self):
         # TODO Select a specific font color. For now, just select the first
@@ -193,7 +192,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         ImageElement.excel_element.send_keys(("F", "C", Keys.ENTER))
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_fill_color_button(self):
         # TODO Select a specific fill color. For now, just select the first
@@ -201,7 +200,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         ImageElement.excel_element.send_keys(("H", Keys.ENTER))
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)
@@ -210,12 +209,12 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         ImageElement.excel_element.send_keys(("F", "F"))
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
         ImageElement.excel_element.send_keys(font_name)
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
         ImageElement.excel_element.send_keys(Keys.ENTER)
 
-        self.pause(ExcelSheetWindowsDesktopPage.PAUSE_IN_SECONDS)
+        self.pause(AFTER_OPERATION_WAIT_TIME)
