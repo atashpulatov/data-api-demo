@@ -39,7 +39,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     def go_to_cell(self, cell):
         cell_upper = cell.upper()
 
-        self.get_element_by_name(ExcelSheetWindowsDesktopPage.NAME_BOX_ELEM).click()
+        self.get_elements_by_name(ExcelSheetWindowsDesktopPage.NAME_BOX_ELEM)[1].click()
 
         ImageElement.excel_element.send_keys((cell_upper, Keys.ENTER))
 
