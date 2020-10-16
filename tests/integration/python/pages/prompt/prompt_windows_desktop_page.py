@@ -8,7 +8,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_RUN_BUTTON_NAME = 'Run'
     PROMPTED_DOSSIER_RUN_BUTTON = 'Run'
     PROMPT_LIST_ELEM = '//Group[contains(@Name,"{}")]/DataItem[@Name="{}"]'
-    PROMPT_OBJECT_BOX = '//Group[starts-with(@AutomationId,\"ListBlockContents_id_mstr\")]' #prompt boxes can't be unique
+    PROMPT_OBJECT_BOX = '(//DataItem[@Name="{}.{}"]/../following-sibling::Table[starts-with(@AutomationId, "id_mstr")][1]//Group[starts-with(@AutomationId,"ListBlockContents")])[{}]' # selecting specific prompt box
     PROMPT_VALUE_ELEM = '//Edit[starts-with(@AutomationId,"id_mstr") and contains(@AutomationId,"_txt")]'
 
     def __init__(self):
@@ -16,8 +16,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def wait_for_run_button(self):
         if not self.check_if_element_exists_by_xpath(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON, image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)):
-            self.pause(1)
-            self.wait_for_run_button()
+            raise MstrException(f'Wait button is not enabled')
 
     def click_run_button(self):
         self.get_element_by_name(
@@ -46,10 +45,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._select_prompt_from_list(prompt_number, prompt_name)
         self._check_prompt_name(prompt_number, prompt_name)
-        # TODO select value from specific prompt
         el = self.get_element_by_xpath(
-            PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]',
-            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]')
+            PromptWindowsDesktopPage.PROMPT_OBJECT_BOX.format(prompt_number, prompt_name, 1)+'/Group[@Name=\"'+item+'\"]' # can't capture image because it could be in conflict with other prompt boxes
         )
         el.click()
         el.double_click()
@@ -65,10 +62,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._select_prompt_from_list(prompt_number, prompt_name)
         self._check_prompt_name(prompt_number, prompt_name)
-        # TODO unselect value from specific prompt
         el = self.get_element_by_xpath(
-            PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]',
-            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]')
+            PromptWindowsDesktopPage.PROMPT_OBJECT_BOX.format(prompt_number, prompt_name, 2)+'/Group[@Name=\"'+item+'\"]' # can't capture image because it could be in conflict with other prompt boxes
         )
         el.click()
         el.double_click()
