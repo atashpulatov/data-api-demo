@@ -8,9 +8,7 @@ import { dictionary } from '../../../constants/dictionaries/dictionary';
 import {
   switchToPluginFrame, switchToRightPanelFrame, switchToExcelFrame, changeBrowserTab
 } from '../../../helpers/utils/iframe-helper';
-import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { waitAndClick } from '../../../helpers/utils/click-helper';
-import { excelSelectors } from '../../../constants/selectors/office-selectors';
 import OfficeWorksheet from '../../../helpers/office/office.worksheet';
 import { pressBackspace, pressEnter } from '../../../helpers/utils/keyboard-actions';
 
@@ -40,21 +38,17 @@ describe('TS41441 - Sanity checks', () => {
     const user2 = { username: 'user2', password: 'user2' };
     const cellL4 = '#gridRows > div:nth-child(4) > div:nth-child(12)';
 
+    OfficeWorksheet.selectCell('A1');
     // should open a new sheet & import a report with number formatting
     PluginRightPanel.clickImportDataButton();
     PluginPopup.switchLibraryAndImportObject(objectsList.reports.numberFormating, false);
+
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
+    PluginRightPanel.closeNotificationOnHover();
 
     // Assert the values of imported report "Number Formatting" are correct
-    switchToExcelFrame();
-    const arrayWithValuesOfThirdRow = [];
-    const arrayWithExpectedValues = ['$3,456.00', '678.00%', '14/07/2098', '7:21:55 PM', '34/12', '1.35E+17', '123.45', '23,456,789,123', '-3', '23146', '7,896,434 PLN '];
-    for (let i = 2; i < 13; i++) {
-      const textFromCell = $(`#gridRows > div:nth-child(3) > div:nth-child(${i}) > div > div`).getText();
-      arrayWithValuesOfThirdRow.push(textFromCell);
-      expect(textFromCell).toEqual(arrayWithExpectedValues[i - 2]);
-    }
+    OfficeWorksheet.selectCellAndAssertValue('B2', '4560');
 
     switchToExcelFrame();
     // applying table formatting
@@ -71,14 +65,12 @@ describe('TS41441 - Sanity checks', () => {
     const percentageButton = '#m_excelWebRenderer_ewaCtl_Number\\.Percentage-Medium';
     waitAndClick($(percentageButton));
     browser.pause(500);
-    const b4 = '#gridRows > div:nth-child(4) > div:nth-child(2) > div > div';
-    expect($(b4).getText()).toEqual('890700.00%');
+    OfficeWorksheet.selectCellAndAssertValue('B4', '890700%');
     OfficeWorksheet.selectCell('C4');
     const numberFormatCommaButton = '#m_excelWebRenderer_ewaCtl_Number\\.NumberFormatComma-Medium';
     waitAndClick($(numberFormatCommaButton));
     browser.pause(500);
-    const c4 = '#gridRows > div:nth-child(4) > div:nth-child(3) > div > div';
-    expect($(c4).getText()).toEqual('                   2.46 ');
+    OfficeWorksheet.selectCellAndAssertValue('C4', '2.459');
 
     // cell content alignment and fonts
     OfficeWorksheet.selectCell('B2');
@@ -109,10 +101,7 @@ describe('TS41441 - Sanity checks', () => {
 
     // should assert data was cleared
     switchToExcelFrame();
-    OfficeWorksheet.selectCell('L4');
-    browser.pause(1000);
-    let cellL4value = $(cellL4).getText();
-    expect(cellL4value).toBe('');
+    OfficeWorksheet.selectCellAndAssertValue('L4', '');
 
     // should log out
     switchToPluginFrame();
@@ -138,9 +127,6 @@ describe('TS41441 - Sanity checks', () => {
 
     // should assert data was refreshed
     switchToExcelFrame();
-    OfficeWorksheet.selectCell('L4');
-    browser.pause(1000);
-    cellL4value = $(cellL4).getText();
-    expect(cellL4value).toBe('245,677 PLN ');
+    OfficeWorksheet.selectCellAndAssertValue('L4', '245677');
   });
 });

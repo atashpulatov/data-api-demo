@@ -369,6 +369,7 @@ class PluginRightPanel {
     $(rightPanelSelectors.loginRightPanelBtn).waitForDisplayed(17777);
     if ($(rightPanelSelectors.loginRightPanelBtn).isExisting()) {
       this.clickLoginRightPanelBtn();
+      switchToPluginFrame();
       changeBrowserTab(2);
       this.enterCredentialsAndPressLoginBtn(username, password);
       if (isValidCredentials) {

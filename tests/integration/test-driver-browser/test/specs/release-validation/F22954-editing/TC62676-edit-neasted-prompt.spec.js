@@ -31,8 +31,7 @@ describe('F22954 - Ability to edit data already imported to the workbook', () =>
     PluginPopup.editPromptDefaultNested(1);
     browser.pause(1000);
     switchToPluginFrame();
-    PluginPopup.selectAllAttributes();
-    PluginPopup.selectAllMetrics();
+    PluginPopup.selectObjectElements(['Year', 'Region', 'Revenue']);
     PluginPopup.clickImport();
     console.log('Attributes metrics and filters are selected');
     waitForNotification();

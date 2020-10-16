@@ -66,11 +66,12 @@ class OperationErrorHandler {
    */
   handleRefreshOperationError = async (objectData, operationData) => {
     const { objectWorkingId, isCrosstab } = objectData;
-    const { officeTable, backupObjectData } = operationData;
+    const { officeTable, backupObjectData, isTotalsRowVisible = false } = operationData;
     if (officeTable) {
       if (isCrosstab) {
         officeTable.showHeaders = false; // hides table headers for crosstab if we fail on refresh
       }
+      officeTable.showTotals = isTotalsRowVisible; // display totals rows if we fail on refresh
     }
     if (backupObjectData) { this.reduxStore.dispatch(restoreObjectBackup(backupObjectData)); }
 

@@ -19,9 +19,8 @@ import {
   DISPLAY_NOTIFICATION_WARNING,
   CLEAR_NOTIFICATIONS
 } from './notification-actions';
-import {
-  titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap, customT
-} from './notification-title-maps';
+import { titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap } from './notification-title-maps';
+import { customT } from '../../customTranslation';
 import { GENERIC_SERVER_ERR } from '../../error/constants';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };

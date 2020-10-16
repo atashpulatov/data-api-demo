@@ -29,7 +29,7 @@ describe('TS41441 - Sanity checks', () => {
     // should try to import a small report but placed in the last row of the excelsheet limits
     OfficeWorksheet.selectCell('A1048575');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(objectsList.reports.reportXML);
+    PluginPopup.importObject(objectsList.reports.seasonalReport);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
     PluginRightPanel.closeNotification();
@@ -37,7 +37,7 @@ describe('TS41441 - Sanity checks', () => {
     // should try to import a small report but placed in the last column of the excelsheet limits
     OfficeWorksheet.selectCell('XFD1');
     PluginRightPanel.clickImportDataButton();
-    PluginPopup.importObject(objectsList.reports.reportXML);
+    PluginPopup.importObject(objectsList.reports.seasonalReport);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.excelLimit);
     PluginRightPanel.closeNotification();
@@ -55,12 +55,5 @@ describe('TS41441 - Sanity checks', () => {
     PluginPopup.importObject(objectsList.reports.notSupportedFeatures);
     waitForNotification();
     expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.importSuccess);
-
-    // should try to import a report in a non empty range
-    PluginRightPanel.clickAddDataButton();
-    PluginPopup.importObject(objectsList.reports.reportXML);
-    waitForNotification();
-    expect($(rightPanelSelectors.notificationPopUp).getAttribute('textContent')).toContain(dictionary.en.rangeNotEmpty);
-    PluginRightPanel.closeNotification();
   });
 });

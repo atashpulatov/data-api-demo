@@ -90,6 +90,17 @@ class OfficeStoreRestoreObject {
       errorService.handleError(error);
     }
   };
+
+  /**
+  * Retrieves one setting from Excel,
+  * @param {String} key
+  * @return {Any} Contains settings value
+  * @throws Error on failed execution of Office api function
+  */
+  getExcelSettingValue = (key) => {
+    const settings = officeStoreHelper.getOfficeSettings();
+    return settings.get(key);
+  };
 }
 
 const officeStoreRestoreObject = new OfficeStoreRestoreObject();

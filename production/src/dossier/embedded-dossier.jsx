@@ -33,9 +33,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
   componentWillUnmount() {
     if (this.msgRouter) {
-      this.msgRouter.removeEventhandler('onVizSelectionChanged', this.onVizSelectionHandler);
-      this.msgRouter.removeEventhandler('onPromptAnswered', this.promptsAnsweredHandler);
-      this.msgRouter.removeEventhandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
+      const { EventType } = microstrategy.dossier;
+      this.msgRouter.removeEventhandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
+      this.msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
+      this.msgRouter.removeEventhandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
     }
   }
 
@@ -119,20 +120,17 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
     let selectedVizChecked = selectedViz;
-    let activePage;
     if (selectedViz && visualizationInfo) {
-      const { chapterKey, pageKey, visualizationKey } = visualizationInfo;
+      const { chapterKey, visualizationKey } = visualizationInfo;
       selectedVizChecked = `${chapterKey}:${visualizationKey}`;
-      activePage = pageKey;
     }
-    const { CustomAuthenticationType } = microstrategy.dossier;
+    const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
     const props = {
       instance,
       serverURL,
       applicationID: projectId,
       objectID: dossierId,
-      pageKey: activePage,
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
@@ -185,15 +183,31 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       selectedViz: selectedVizChecked,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
-        this.msgRouter.registerEventHandler('onVizSelectionChanged', this.onVizSelectionHandler);
-        this.msgRouter.registerEventHandler('onPromptAnswered', this.promptsAnsweredHandler);
-        this.msgRouter.registerEventHandler('onDossierInstanceIDChange', this.instanceIdChangeHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
       },
     };
     if (microstrategy && microstrategy.dossier) {
-      this.embeddedDossier = await microstrategy.dossier.create(props);
-      this.setState({ loadingFrame: false });
-      handleEmbeddedDossierLoad();
+      microstrategy.dossier
+        .create(props)
+        .then(dossier => {
+          if (selectedViz && visualizationInfo) {
+            const { pageKey, chapterKey } = visualizationInfo;
+
+            const selectedPageNodeKey = dossier
+              .getChapterList()
+              .find(chapter => chapter.nodeKey.includes(chapterKey))
+              .children
+              .find(page => page.nodeKey.includes(pageKey))
+              .nodeKey;
+
+            dossier.navigateToPage(dossier.getPageByNodeKey(selectedPageNodeKey));
+          }
+          this.embeddedDossier = dossier;
+          this.setState({ loadingFrame: false });
+          handleEmbeddedDossierLoad();
+        });
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
     }
