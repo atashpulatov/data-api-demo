@@ -41,7 +41,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
 
         el = self.get_element_by_xpath(
             PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]',
-            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_OBJECT_BOX.format(item)+'/Group[@Name=\"'+item+'\"]')
+            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]')
         )
         el.click()
         el.double_click()
@@ -51,8 +51,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         self._check_prompt_name(prompt_number, prompt_name)
 
         el = self.get_element_by_xpath(
-            PromptWindowsDesktopPage.PROMPT_OBJECT_BOX.format(item)+'/Group[@Name=\"'+item+'\"]',
-            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_OBJECT_BOX.format(item)+'/Group[@Name=\"'+item+'\"]')
+            PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]',
+            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]')
         )
         el.click()
         el.double_click()
