@@ -7,6 +7,11 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     FILTER_VALUE = '//DataGrid[@Name="grid"]/Group[contains(@Name,"{0}")]/Text[@Name="{0}"]'
 
     def select_filter_elements(self, filters_and_elements_json):
+        """
+        Select specified filter and filter values on 'Prepare data' window.
+
+        :param filters_and_elements_json: JSON object that specify filter and its values to be selected. (eg. { "Category": ["Books", "Electronics"] })
+        """
         filters_and_elements = json.loads(filters_and_elements_json)
 
         for filter_name, elements_names in filters_and_elements.items():

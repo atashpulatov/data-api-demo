@@ -36,9 +36,17 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         return self.check_if_element_exists_by_xpath(PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER, timeout=SHORT_TIMEOUT, image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER))
 
     def select_answer_for_object_prompt(self, prompt_number, prompt_name, item):
+        """
+        Select answer for prompt.
+
+        :param prompt_number: Number that specify prompt to be answered
+        :param prompt_name: Name of prompt to be answered
+        :param item: String - name of element that needs to be selected
+        """
+
         self._select_prompt_from_list(prompt_number, prompt_name)
         self._check_prompt_name(prompt_number, prompt_name)
-
+        # TODO select value from specific prompt
         el = self.get_element_by_xpath(
             PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]',
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]')
@@ -47,9 +55,17 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         el.double_click()
 
     def unselect_answer_for_object_prompt(self, prompt_number, prompt_name, item):
+        """
+        Unselect answer for prompt.
+
+        :param prompt_number: Number that specify prompt to be answered
+        :param prompt_name: Name of prompt to be answered
+        :param item: String - name of element that needs to be unselected
+        """
+
         self._select_prompt_from_list(prompt_number, prompt_name)
         self._check_prompt_name(prompt_number, prompt_name)
-
+        # TODO unselect value from specific prompt
         el = self.get_element_by_xpath(
             PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]',
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_OBJECT_BOX+'/Group[@Name=\"'+item+'\"]')
