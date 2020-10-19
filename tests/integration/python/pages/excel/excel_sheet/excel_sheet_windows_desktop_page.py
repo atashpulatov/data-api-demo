@@ -205,7 +205,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         ImageElement.excel_element.send_keys(("F", "C"))
 
-        self.get_element_by_xpath(ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH.format("Light Green")).click()
+        self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH.format("Light Green")).click()
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
@@ -215,7 +216,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         ImageElement.excel_element.send_keys(("H"))
 
-        self.get_element_by_xpath(ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH.format("Light Green")).click()
+        self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH.format("Light Green")).click()
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
@@ -261,6 +263,3 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         ImageElement.excel_element.send_keys(Keys.CONTROL + "c")
 
         return paste()
-
-
-
