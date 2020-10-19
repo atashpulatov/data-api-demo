@@ -29,7 +29,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         )
 
         if not run_button_exists:
-            raise MstrException(f'Run button not exists or is not enabled')
+            raise MstrException(f'Run button not exists or is not enabled.')
 
     def click_run_button(self):
         self.get_element_by_name(
