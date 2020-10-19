@@ -4,7 +4,7 @@ from framework.util.exception.MstrException import MstrException
 
 
 class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
-    PROMPT_MAIN_CONTAINER = '//Group[@AutomationId="mstrdossierPromptEditor"]'  # TODO maybe just AutomationId? if not - separate name for image file
+    PROMPT_MAIN_CONTAINER = 'mstrdossierPromptEditor'
 
     PROMPT_RUN_BUTTON = '//Button[@Name="Run"][@IsEnabled="True"]'
     PROMPT_RUN_BUTTON_NAME = 'Run'
@@ -45,7 +45,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             ).click()
 
     def _check_if_prompts_answer_window_is_open(self):
-        return self.check_if_element_exists_by_xpath(
+        return self.check_if_element_exists_by_accessibility_id(
             PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER,
             timeout=SHORT_TIMEOUT,
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER)
