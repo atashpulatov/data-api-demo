@@ -3,7 +3,7 @@ from framework.util.exception.MstrException import MstrException
 
 
 class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
-    OWNER_ALL_PANEL = '//Button[@AutomationId=\"owners-expand-btn\"]'
+    OWNER_ALL_PANEL = 'owners-expand-btn'
 
     ELEMENT_FROM_CATEGORY = '//Text[@Name=\"%s\"]/following-sibling::Button[1]' \
                             '//CheckBox[@AutomationId=\"%s\"]'
@@ -17,12 +17,12 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
     SEARCH_INPUT = '//Edit[@Name=\"Search...\"]'
 
     APPLICATIONS_FIRST_CHECKBOX = '//Button[starts-with(@Name, \"Filters\")]/Button[2]/Text[1]/CheckBox'
-    APPLICATIONS_ALL_PANEL = '//Button[@AutomationId=\"applications-expand-btn\"]'
+    APPLICATIONS_ALL_PANEL = 'applications-expand-btn'
 
-    TYPES_REPORT_CHECKBOX = '//CheckBox[@AutomationId=\"Report\"]'
-    TYPES_DATASET_CHECKBOX = '//CheckBox[@AutomationId=\"Dataset\"]'
-    TYPES_DOSSIER_CHECKBOX = '//CheckBox[@AutomationId=\"Dossier\"]'
-    CERTIFIED_CHECKBOX = '//CheckBox[@AutomationId=\"Certified\"]'
+    TYPES_REPORT_CHECKBOX = 'Report'
+    TYPES_DATASET_CHECKBOX = 'Dataset'
+    TYPES_DOSSIER_CHECKBOX = 'Dossier'
+    CERTIFIED_CHECKBOX = 'Certified'
 
     OWNERS_FIRST_CHECKBOX = '//Button[starts-with(@Name,\"Administrator\")]/Text/CheckBox'
 
@@ -45,8 +45,7 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         super().__init__()
 
     def click_owner_all_panel(self):
-        add_in_main_element = self.get_add_in_main_element()
-        add_in_main_element.get_element_by_xpath(self.OWNER_ALL_PANEL).click()
+        self.get_element_by_accessibility_id(self.OWNER_ALL_PANEL).click()
 
     def click_select_all_within_all_panel(self):
         self.get_element_by_xpath(
@@ -84,12 +83,15 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         raise MstrException(f'No element found for selector: {FilterPanelWindowsDesktopPage.ALL_PANEL_EMPTY_ELEMENT}')
 
     def examine_if_element_has_focus(self, element_name):
-        element = self.get_element_by_xpath(
-            FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]
-        )
+        mapped_element = FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]
+        get_element = self.get_element_by_accessibility_id
+
+        if mapped_element.startswith('/'):
+            get_element = self.get_element_by_xpath
+
+        element = get_element(mapped_element)
 
         if element is not None:
             return element == self.get_element_with_focus()
 
-        raise MstrException(f'No element found for {element_name}, '
-                            f'selector: {FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]}')
+        raise MstrException(f'No element found for {element_name}, selector: {mapped_element}')
