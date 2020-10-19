@@ -45,7 +45,7 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         super().__init__()
 
     def click_owner_all_panel(self):
-        self.get_element_by_accessibility_id(self.OWNER_ALL_PANEL).click()
+        self.get_element_by_accessibility_id(FilterPanelWindowsDesktopPage.OWNER_ALL_PANEL).click()
 
     def click_select_all_within_all_panel(self):
         self.get_element_by_xpath(
