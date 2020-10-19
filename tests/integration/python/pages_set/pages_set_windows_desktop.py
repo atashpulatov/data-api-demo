@@ -11,6 +11,7 @@ from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDeskt
 from pages.excel.excel_general.excel_general_windows_desktop_page import ExcelGeneralWindowsDesktopPage
 from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWindowsDesktopPage
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
+from pages.filter_panel.filter_panel_windows_desktop_page import FilterPanelWindowsDesktopPage
 from pages.import_data.import_data_windows_desktop_page import ImportDataWindowsDesktopPage
 from pages.import_dossier.import_dossier_context_menu.import_dossier_context_menu_windows_desktop_page import \
     ImportDossierContextMenuWindowsDesktopPage
@@ -37,7 +38,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.add_in_login_windows_desktop_page = AddInLoginWindowsDesktopPage()
         self.cleanup_windows_desktop_page = CleanupWindowsDesktopPage()
         self.duplicate_object_popup_windows_desktop_page = DuplicateObjectPopupWindowsDesktopPage()
-        self.filter_panel_windows_desktop_page = None
+        self.filter_panel_windows_desktop_page = FilterPanelWindowsDesktopPage()
         self.import_data_windows_desktop_page = ImportDataWindowsDesktopPage()
         self.prompt_windows_desktop_page = None
         self.range_taken_popup_windows_desktop_page = RangeTakenPopupWindowsDesktopPage()
