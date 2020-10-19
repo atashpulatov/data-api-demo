@@ -1,4 +1,5 @@
 from selenium.webdriver.common.keys import Keys
+from pyperclip import paste
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.image_element import ImageElement
@@ -20,6 +21,10 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
     FONT_COLOR_XPATH = '//DataGrid[@Name="Font Color"]/Group/ListItem[@Name="{}"]'
     FILL_COLOR_XPATH = '//DataGrid[@Name="Fill Color"]/Group/ListItem[@Name="{}"]'
+
+    ALIGN_MIDDLE_BUTTON = "Middle Align"
+    ALIGN_LEFT_BUTTON = "Align Left"
+    BOLD_BUTTON = "Bold"
 
     def get_cells_values(self, cells):
         result = []
@@ -214,14 +219,17 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
-    def change_font_name_of_cell(self, cell_name, font_name):
-        self.go_to_cell(cell_name)
-
+    def _select_font_name_combo_box(self):
         self._navigate_to_home_tab_using_accessibility_keys()
 
         ImageElement.excel_element.send_keys(("F", "F"))
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
+
+    def change_font_name_of_cell(self, cell_name, font_name):
+        self.go_to_cell(cell_name)
+
+        self._select_font_name_combo_box()
 
         ImageElement.excel_element.send_keys(font_name)
 
@@ -230,3 +238,29 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         ImageElement.excel_element.send_keys(Keys.ENTER)
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
+
+    def is_align_middle_button_selected(self, cell_name):
+        return self._is_button_selected(cell_name, ExcelSheetWindowsDesktopPage.ALIGN_MIDDLE_BUTTON)
+
+    def is_align_left_button_selected(self, cell_name):
+        return self._is_button_selected(cell_name, ExcelSheetWindowsDesktopPage.ALIGN_LEFT_BUTTON)
+
+    def is_bold_button_selected(self, cell_name):
+        return self._is_button_selected(cell_name, ExcelSheetWindowsDesktopPage.BOLD_BUTTON)
+
+    def _is_button_selected(self, cell_name, name):
+        self.go_to_cell(cell_name)
+
+        return self.get_element_by_name(name).is_selected()
+
+    def get_font_name_of_cell(self, cell_name):
+        self.go_to_cell(cell_name)
+
+        self._select_font_name_combo_box()
+
+        ImageElement.excel_element.send_keys(Keys.CONTROL + "c")
+
+        return paste()
+
+
+
