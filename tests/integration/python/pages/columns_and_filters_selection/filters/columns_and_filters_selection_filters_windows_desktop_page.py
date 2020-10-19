@@ -30,10 +30,9 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
                 )
 
                 for element_name in elements_names:
-                    element = parent_element.get_element_by_xpath(
+                    parent_element.get_element_by_xpath(
                         ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_VALUE_SELECTOR % element_name
-                    )
-                    element.click()
+                    ).click()
 
                     # Move cursor out of element - tooltip can block click on desired element.
                     parent_element.move_to(
