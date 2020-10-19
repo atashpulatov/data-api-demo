@@ -61,4 +61,5 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         self.get_element_by_xpath(
             ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS_SWITCH,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS_SWITCH)
-        ).move_to_and_click(offset_x=90, offset_y=2) # need to move and click beacuse switch element xpath is the same like for View selected switch
+        ).move_to_and_click(offset_x=90, offset_y=2)
+        # need to move and click beacuse switch element xpath is the same like for View selected switch
