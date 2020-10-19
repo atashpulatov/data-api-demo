@@ -97,19 +97,26 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         for button in warnings_notifications_ok_buttons:
             button.click()
 
-    def click_duplicate(self, object_no):
+    def click_duplicate(self, tile_no):
+        self._click_tile_button(RightPanelTileBrowserPage.DUPLICATE_BUTTON_FOR_OBJECT, tile_no)
+
+    def click_refresh(self, tile_no):
+        self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
+
+    def click_edit(self, tile_no):
+        self._click_tile_button(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT, tile_no)
+
+    def remove_object_using_icon(self, tile_no):
+        self._click_tile_button(RightPanelTileBrowserPage.REMOVE_BUTTON_FOR_OBJECT, tile_no)
+
+        self.wait_for_remove_object_to_finish_successfully()
+
+    def _click_tile_button(self, selector, tile_no):
         self.focus_on_add_in_frame()
 
-        self._hover_over_tile(int(object_no) - 1)
+        self._hover_over_tile(int(tile_no) - 1)
 
-        self.get_element_by_css(RightPanelTileBrowserPage.DUPLICATE_BUTTON_FOR_OBJECT % object_no).click()
-
-    def click_refresh(self, object_no):
-        self.focus_on_add_in_frame()
-
-        self._hover_over_tile(int(object_no) - 1)
-
-        self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % object_no).click()
+        self.get_element_by_css(selector % tile_no).click()
 
     def _hover_over_tile(self, tile_no):
         other_container = self.get_element_by_css(RightPanelTileBrowserPage.SIDE_PANEL_HEADER)
@@ -117,13 +124,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         tiles = self.get_elements_by_css(RightPanelTileBrowserPage.TILES)
         tiles[tile_no].move_to()
-
-    def click_edit(self, object_no):
-        self.focus_on_add_in_frame()
-
-        self._hover_over_tile(int(object_no) - 1)
-
-        self.get_element_by_css(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT % object_no).click()
 
     def click_object_number(self, object_no):
         self.focus_on_add_in_frame()
@@ -169,15 +169,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         name_text.send_keys(new_object_name)
 
         self.press_enter()
-
-    def remove_object_using_icon(self, object_no):
-        self.focus_on_add_in_frame()
-
-        self._hover_over_tile(int(object_no) - 1)
-
-        self.get_element_by_css(RightPanelTileBrowserPage.REMOVE_BUTTON_FOR_OBJECT % object_no).click()
-
-        self.wait_for_remove_object_to_finish_successfully()
 
     def remove_object_using_context_menu(self, object_number):
         self.focus_on_add_in_frame()

@@ -122,7 +122,6 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
         for element in all_elements:
             identifier = element.get_attribute(ExcelSheetMacDesktopPage.IDENTIFIER_ATTRIBUTE)
             if ExcelSheetMacDesktopPage.WORKSHEET_ITEM_RE.search(identifier):
-                self.log(identifier)
                 found_elements.append(element)
 
         return found_elements

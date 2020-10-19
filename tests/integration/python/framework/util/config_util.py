@@ -2,8 +2,7 @@ import json
 import os
 import re
 
-from framework.driver.driver_type import DRIVER_TYPE_WINDOWS_DESKTOP, AVAILABLE_DRIVERS, DRIVER_TYPE_MAC_CHROME, \
-    DRIVERS_SUPPORTING_IMAGE_RECOGNITION, DRIVER_TYPE_MAC_DESKTOP
+from framework.driver.driver_type import AVAILABLE_DRIVERS, DRIVERS_SUPPORTING_IMAGE_RECOGNITION
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -13,12 +12,6 @@ class ConfigUtil:
     CONFIG_DEFAULT_FILE_NAME = 'config.json'
     CONFIG_FILE_NAME_PATTERN = r'^[a-zA-Z0-9-._]+$'
     CONFIG_FILE_NAME_SEARCH = re.compile(CONFIG_FILE_NAME_PATTERN)
-
-    DRIVERS_SUPPORTING_ATTACHING_TO_EXISTING_SESSION = [
-        DRIVER_TYPE_WINDOWS_DESKTOP,
-        DRIVER_TYPE_MAC_CHROME,
-        DRIVER_TYPE_MAC_DESKTOP
-    ]
 
     PARAM_NAME_CONFIG_FILE_NAME = 'config_file'
 
@@ -118,10 +111,7 @@ class ConfigUtil:
 
     @staticmethod
     def is_attaching_to_existing_session_enabled():
-        if ConfigUtil.get_driver_type() in ConfigUtil.DRIVERS_SUPPORTING_ATTACHING_TO_EXISTING_SESSION:
-            return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED)
-
-        return False
+        return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED)
 
     @staticmethod
     def is_cleanup_after_tests_enabled():

@@ -66,6 +66,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return element.get_attribute(ImportDataBrowserPage.ARIA_CHECKED_ATTRIBUTE) == 'true'
 
     def find_object(self, object_name):
+        """
+        Finds object by name. Name can be any identifying characteristic of the object (i.e. id, name).
+
+        :param object_name: Object name or id.
+        """
+
         self.focus_on_add_in_popup_frame()
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
@@ -149,7 +155,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
             details_value = row.get_element_by_css(ImportDataBrowserPage.OBJECT_DETAILS_VALUE)
             details_value.click()
 
+            clipboard_content = paste()
+            expected_value = details_value.text
+
             if paste() != details_value.text:
+                self.log_warning(f'Error while checking Clipboard content, expected value: [{expected_value}], '
+                                 f'Clipboard content: [{clipboard_content}]')
                 return False
 
         return True
