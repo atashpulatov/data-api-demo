@@ -39,6 +39,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     FIRST_OBJECT_ROW_SELECTED = '.ReactVirtualized__Table__row.selected-object'
     DISABLED_BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
+    BUTTON_TOOLTIP = '.ant-popover-inner-content'
+
     def __init__(self):
         super().__init__()
 
@@ -112,6 +114,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_operation_error_and_accept(error_message)
+
+    def click_import_button_for_report_unpublished_cube(self, error_message):
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+
+        self.right_panel_tile_browser_page.wait_for_error_unpublished_cube_and_accept(error_message)
 
     def click_import_button_to_open_import_dossier(self):
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
@@ -187,3 +194,10 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.clear()
+
+    def hover_over_import_button(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
+
+    def get_tooltip_message_for_button(self):
+        return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text
