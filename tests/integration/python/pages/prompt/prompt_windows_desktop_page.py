@@ -10,14 +10,20 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPTED_DOSSIER_RUN_BUTTON = 'Run'
     PROMPT_LIST_ELEM = '//Group[contains(@Name,"{}")]/DataItem[@Name="{}"]'
     # selecting specific prompt box
-    PROMPT_OBJECT_BOX = '(//DataItem[@Name="{}.{}"]/../following-sibling::Table[starts-with(@AutomationId, "id_mstr")][1]//Group[starts-with(@AutomationId,"ListBlockContents")])[{}]'
-    PROMPT_VALUE_ELEM = '//Edit[starts-with(@AutomationId,"id_mstr") and contains(@AutomationId,"_txt")]'
+    PROMPT_OBJECT_BOX = '(//DataItem[@Name="{}.{}"]/../following-sibling::\
+      Table[starts-with(@AutomationId, "id_mstr")][1]\
+      //Group[starts-with(@AutomationId, "ListBlockContents")])[{}]'
+    PROMPT_VALUE_ELEM = '//Edit[starts-with(@AutomationId,"id_mstr") and contains(@AutomationId, "_txt")]'
 
     def __init__(self):
         super().__init__()
 
     def wait_for_run_button(self):
-        if not self.check_if_element_exists_by_xpath(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON, image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)):
+        if not self.check_if_element_exists_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_RUN_BUTTON,
+            image_name=self.prepare_image_name(
+                PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
+        ):
             raise MstrException(f'Wait button is not enabled')
 
     def click_run_button(self):
@@ -36,7 +42,12 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             ).click()
 
     def _check_if_prompts_answer_window_is_open(self):
-        return self.check_if_element_exists_by_xpath(PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER, timeout=SHORT_TIMEOUT, image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER))
+        return self.check_if_element_exists_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER,
+            timeout=SHORT_TIMEOUT,
+            image_name=self.prepare_image_name(
+                PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER)
+        )
 
     def select_answer_for_object_prompt(self, prompt_number, prompt_name, item):
         """

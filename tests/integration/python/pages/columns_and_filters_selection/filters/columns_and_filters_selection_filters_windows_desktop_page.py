@@ -11,7 +11,8 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
         """
         Select specified filter and filter values on 'Prepare data' window.
 
-        :param filters_and_elements_json: JSON object that specify filter and its values to be selected. (eg. { "Category": ["Books", "Electronics"] })
+        :param filters_and_elements_json: JSON object that specify filter and 
+        its values to be selected. (eg. { "Category": ["Books", "Electronics"] })
         """
         filters_and_elements = json.loads(filters_and_elements_json)
 
