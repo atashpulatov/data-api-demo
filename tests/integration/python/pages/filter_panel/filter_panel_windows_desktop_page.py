@@ -84,10 +84,8 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def examine_if_element_has_focus(self, element_name):
         mapped_element = FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]
-        get_element = self.get_element_by_accessibility_id
 
-        if mapped_element.startswith('/'):
-            get_element = self.get_element_by_xpath
+        get_element = self._select_get_element_method(mapped_element)
 
         element = get_element(mapped_element)
 
@@ -95,3 +93,9 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
             return element == self.get_element_with_focus()
 
         raise MstrException(f'No element found for {element_name}, selector: {mapped_element}')
+
+    def _select_get_element_method(self, mapped_element):
+        if mapped_element.startswith('/'):
+            return self.get_element_by_xpath
+
+        return self.get_element_by_accessibility_id
