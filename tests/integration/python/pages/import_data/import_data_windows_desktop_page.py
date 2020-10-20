@@ -103,8 +103,10 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         self.find_object(object_id)
 
         Util.pause(4)  # TODO wait when ready
+        if len(object_name) > 150:
+          object_name_hashed = object_name[0:131] + '_' + str(hash(object_name))
 
-        self.get_element_by_name(object_name, image_name=self.prepare_image_name(object_name)).click()
+        self.get_element_by_name(object_name, image_name=self.prepare_image_name(object_name_hashed)).click()
 
     def click_import_button(self):
         self.windows_desktop_workaround.focus_on_popup_window()
