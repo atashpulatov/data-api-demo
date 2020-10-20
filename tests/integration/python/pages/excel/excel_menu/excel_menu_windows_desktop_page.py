@@ -10,3 +10,16 @@ class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
             import_data_name,
             image_name=self.prepare_image_name(import_data_name)
         ).click()
+
+    def select_object_from_name_box(self, object_number):
+        NAME_BOX_ELEM = 'Name Box'
+
+        self.get_element_by_name(
+          NAME_BOX_ELEM,
+          image_name=self.prepare_image_name(NAME_BOX_ELEM)
+        ).click()
+
+        for i in range(int(object_number)):
+            self.press_down_arrow()
+
+        self.press_enter()
