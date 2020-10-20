@@ -1,3 +1,4 @@
+@windows_desktop
 @mac_chrome
 @windows_chrome
 @release_validation
