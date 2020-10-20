@@ -25,6 +25,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     ALIGN_MIDDLE_BUTTON = "Middle Align"
     ALIGN_LEFT_BUTTON = "Align Left"
     BOLD_BUTTON = "Bold"
+    LIGHT_GREEN_TABLE = "Light Green, Table Style Light 21"
+    LIGHT_GREEN = "Light Green"
 
     def get_cells_values(self, cells):
         result = []
@@ -155,7 +157,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         ImageElement.excel_element.send_keys(("J", "T", "S"))
 
         self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.TABLE_STYLE_XPATH.format("Light Green, Table Style Light 21")).click()
+            ExcelSheetWindowsDesktopPage.TABLE_STYLE_XPATH.format(ExcelSheetWindowsDesktopPage.LIGHT_GREEN_TABLE)).click()
+
+        self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_home_tab(self):
         self._navigate_to_home_tab_using_accessibility_keys()
@@ -200,24 +204,24 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_font_color_button(self):
-        # TODO Select a specific font color. For now, just select the first
+        # TODO Select a specific font color. For now, hardcode
         self._navigate_to_home_tab_using_accessibility_keys()
 
         ImageElement.excel_element.send_keys(("F", "C"))
 
         self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH.format("Light Green")).click()
+            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH.format(ExcelSheetWindowsDesktopPage.LIGHT_GREEN)).click()
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
     def click_fill_color_button(self):
-        # TODO Select a specific fill color. For now, just select the first
+        # TODO Select a specific fill color. For now, hardcode
         self._navigate_to_home_tab_using_accessibility_keys()
 
         ImageElement.excel_element.send_keys(("H"))
 
         self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH.format("Light Green")).click()
+            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH.format(ExcelSheetWindowsDesktopPage.LIGHT_GREEN)).click()
 
         self.pause(AFTER_OPERATION_WAIT_TIME)
 
@@ -254,6 +258,32 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.go_to_cell(cell_name)
 
         return self.get_element_by_name(name).is_selected()
+
+    def is_green_table_selected(self):
+        ImageElement.excel_element.send_keys(Keys.ALT)
+
+        ImageElement.excel_element.send_keys(("J", "T", "S"))
+
+        return self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.TABLE_STYLE_XPATH.format(ExcelSheetWindowsDesktopPage.LIGHT_GREEN_TABLE)).is_selected
+
+    def is_font_color_selected(self):
+      # TODO Select a specific font color. For now, hardcode
+        self._navigate_to_home_tab_using_accessibility_keys()
+
+        ImageElement.excel_element.send_keys(("F", "C"))
+
+        return self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH.format(ExcelSheetWindowsDesktopPage.LIGHT_GREEN)).is_selected()
+
+    def is_fill_color_selected(self):
+      # TODO Select a specific fill color. For now, hardcode
+        self._navigate_to_home_tab_using_accessibility_keys()
+
+        ImageElement.excel_element.send_keys(("H"))
+
+        return self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH.format(ExcelSheetWindowsDesktopPage.LIGHT_GREEN)).is_selected()
 
     def get_font_name_of_cell(self, cell_name):
         self.go_to_cell(cell_name)

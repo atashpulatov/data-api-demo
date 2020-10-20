@@ -21,8 +21,6 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     ARIA_PROPERTY_SEPARATOR = '='
     ARIA_PROPERTY_CHECKED = 'checked'
 
-    SEARCH_BAR_ELEM = 'Search...'
-
     IMPORT_BUTTON_ELEM = 'Import'
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
@@ -37,6 +35,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     FIRST_OBJECT_ROW = '//Pane/Group/DataGrid/Group[2]/Group/ListItem[1]'
 
+    TOOLTIP_XPATH = '//ToolTip[@Name]'
+
     def __init__(self):
         super().__init__()
 
@@ -49,16 +49,19 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         # TODO check if is on or ignore to have better performance?
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
+            image_name=self.prepare_image_name(
+                ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
         ).click()
 
     def _is_on(self, element):
         aria_properties_value = self._get_element_aria_properties(element)
 
-        aria_properties = aria_properties_value.split(ImportDataWindowsDesktopPage.ARIA_PROPERTIES_SEPARATOR)
+        aria_properties = aria_properties_value.split(
+            ImportDataWindowsDesktopPage.ARIA_PROPERTIES_SEPARATOR)
 
         for property_value in aria_properties:
-            property_on_off = property_value.split(ImportDataWindowsDesktopPage.ARIA_PROPERTY_SEPARATOR)
+            property_on_off = property_value.split(
+                ImportDataWindowsDesktopPage.ARIA_PROPERTY_SEPARATOR)
             if property_on_off[0] == ImportDataWindowsDesktopPage.ARIA_PROPERTY_CHECKED:
                 return property_on_off[1]
 
@@ -77,7 +80,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         filters_elem = self.get_element_by_name(
             ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
+            image_name=self.prepare_image_name(
+                ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
         )
         filters_elem.click(
             offset_x=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_X,
@@ -104,7 +108,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         Util.pause(4)  # TODO wait when ready
 
-        self.get_element_by_name(object_name, image_name=self.prepare_image_name(object_name)).click()
+        self.get_element_by_name(
+            object_name, image_name=self.prepare_image_name(object_name)).click()
 
     def click_import_button(self):
         self.windows_desktop_workaround.focus_on_popup_window()
@@ -131,7 +136,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK)
+            image_name=self.prepare_image_name(
+                ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK)
         ).click()
 
     def click_import_button_to_open_import_dossier(self):
@@ -144,7 +150,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def _click_import_button(self):
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+            image_name=self.prepare_image_name(
+                ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
         ).click()
 
     def click_prepare_data_button(self):
@@ -152,7 +159,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
+            image_name=self.prepare_image_name(
+                ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
         ).click()
 
     def show_object_details(self, object_number):
@@ -160,7 +168,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         object_index = int(object_number) - 1
 
-        elements = self.get_elements_by_name(ImportDataWindowsDesktopPage.SHOW_DETAILS)
+        elements = self.get_elements_by_name(
+            ImportDataWindowsDesktopPage.SHOW_DETAILS)
 
         elements[object_index].click()
 
@@ -190,16 +199,33 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def close_import_data_popup(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        self.get_elements_by_name(ImportDataWindowsDesktopPage.CLOSE)[1].click()
+        self.get_elements_by_name(
+            ImportDataWindowsDesktopPage.CLOSE)[1].click()
 
     def click_filters_button(self):
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
+            image_name=self.prepare_image_name(
+                ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
         ).click()
 
     def hover_over_first_object_in_list(self):
-        self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).move_to()
+        self.get_add_in_main_element().get_element_by_xpath(
+            ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).move_to()
 
     def select_first_object_from_list(self):
-        self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).click()
+        self.get_add_in_main_element().get_element_by_xpath(
+            ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).click()
+
+    def clear_search_box(self):
+        self.find_object("")
+
+    def hover_over_import_button(self):
+        self.get_element_by_name(
+            ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
+            image_name=self.prepare_image_name(
+                ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+        ).move_to()
+
+    def get_tooltip_message_for_button(self):
+        return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_attribute("Name")
