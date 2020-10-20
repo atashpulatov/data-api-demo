@@ -1,6 +1,6 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
-from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.const import DEFAULT_TIMEOUT, SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 
@@ -12,15 +12,40 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     REMOVE_BUTTON_ELEM = 'Remove button'
 
     BUTTON_OK = 'OK'
+    REFRESHING_TEXT_ELEM = 'Refreshing'
+    IMPORTING_TEXT_ELEM = 'Importing'
 
+    PROGRESS_BAR_TAG_NAME = 'ProgressBar'
+
+    POPUP_WINDOW_ELEM = 'NUIDialog'
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
     def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
-        self.pause(20)  # TODO implement
+        refreshing_element = self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM)
+
+        if refreshing_element:
+            self.wait_for_refresh_object_to_finish_successfully()
+
+    def wait_for_import_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+        importing_element = self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM)
+
+        if importing_element:
+            self.wait_for_import_object_to_finish_successfully()
 
     def wait_for_remove_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self.pause(20)  # TODO implement
+
+    def wait_for_progress_notifications_to_disappear(self, timeout=DEFAULT_TIMEOUT):
+        right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
+        self.check_if_progress_bar_is_visible(right_panel_element)
+
+    def check_if_progress_bar_is_visible(self, right_panel_element):
+        while right_panel_element.check_if_element_exists_by_tag_name(
+            RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME,
+            timeout=SHORT_TIMEOUT
+        ):
+            self.check_if_progress_bar_is_visible(right_panel_element)
 
     def close_all_notifications_on_hover(self):
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
@@ -36,6 +61,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def close_last_notification_on_hover(self):
         self._hover_over_tile(0)
+
+    def close_object_notification_on_hover(self, object_no):
+        self._hover_over_tile(int(object_no) - 1)
 
     def click_duplicate(self, tile_no):
         WindowsDesktopMainAddInElementCache.invalidate_cache()
@@ -54,7 +82,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._click_button_on_tile(RightPanelTileWindowsDesktopPage.EDIT_BUTTON_ELEM, tile_no)
 
-        self.pause(3)  # TODO check visibility
+        plugin_window = self.check_if_element_exists_by_class_name(RightPanelTileWindowsDesktopPage.POPUP_WINDOW_ELEM)
+
+        if not plugin_window:
+            raise MstrException('MicroStrategy for office is not visible')
 
     def remove_object_using_icon(self, tile_no):
         self._click_button_on_tile(RightPanelTileWindowsDesktopPage.REMOVE_BUTTON_ELEM, tile_no)

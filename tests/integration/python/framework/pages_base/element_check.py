@@ -41,6 +41,12 @@ class ElementCheck:
     def check_if_element_exists_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         return self.get_element_coordinates_coordinates_by_xpath(selector, timeout, image_name) is not None
 
+    def check_if_element_exists_by_class_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        return self.get_element_coordinates_coordinates_by_class_name(selector, timeout, image_name) is not None
+
+    def check_if_element_exists_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        return self.get_element_coordinates_coordinates_by_tag_name(selector, timeout, image_name) is not None
+
     def get_element_center_coordinates_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_center_coordinates(By.NAME, selector, timeout, image_name)
 
@@ -56,6 +62,12 @@ class ElementCheck:
 
     def get_element_coordinates_coordinates_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_center_coordinates(By.XPATH, selector, timeout, image_name)
+
+    def get_element_coordinates_coordinates_by_class_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        return self._get_element_center_coordinates(By.CLASS_NAME, selector, timeout, image_name)
+
+    def get_element_coordinates_coordinates_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        return self._get_element_center_coordinates(By.TAG_NAME, selector, timeout, image_name)
 
     def _get_element_center_coordinates(self, selector_type, selector, timeout, image_name):
         element_coordinates = self._get_element_center_coordinates_by_image(image_name)
