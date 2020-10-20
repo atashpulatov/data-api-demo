@@ -99,14 +99,20 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
         """
-
+        MAX_LENGH_OF_OBJECT_NAME = 222
         self.find_object(object_id)
 
         Util.pause(4)  # TODO wait when ready
-        if len(object_name) > 150:
-          object_name_hashed = object_name[0:131] + '_' + str(hash(object_name))
 
-        self.get_element_by_name(object_name, image_name=self.prepare_image_name(object_name_hashed)).click()
+        if len(object_name) > MAX_LENGH_OF_OBJECT_NAME:
+            object_name_hashed = '_' + str(hash(object_name))
+            object_name_trimmed = object_name[0:(MAX_LENGH_OF_OBJECT_NAME-len(object_name_hashed))]
+            object_name_with_hashed_ending = object_name_trimmed + object_name_hashed
+
+        self.get_element_by_name(
+            object_name,
+            image_name=self.prepare_image_name(object_name_with_hashed_ending)
+        ).click()
 
     def click_import_button(self):
         self.windows_desktop_workaround.focus_on_popup_window()
