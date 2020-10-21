@@ -21,6 +21,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
+    TILES_WRAPPER = '//Group[starts-with(@Name,"Imported Data")]/List'
+    TILE_ELEM = '//DataItem'
+
     def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         refreshing_element = self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM)
 
@@ -135,3 +138,12 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             other_element.move_to()
 
             elements[tile_no].move_to()
+
+    def click_object_number(self, object_no):
+        tiles_wrapper = self.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
+
+        tiles = tiles_wrapper.get_elements_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM)
+
+        object_index = int(object_no) - 1
+
+        tiles[object_index].click()
