@@ -10,6 +10,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     EDIT_BUTTON_ELEM = 'Edit button'
     REFRESH_BUTTON_ELEM = 'Refresh button'
     REMOVE_BUTTON_ELEM = 'Remove button'
+    NOTIFICATION_ICON = 'successful_fill'
 
     BUTTON_OK = 'OK'
 
@@ -35,8 +36,12 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.click()
 
     def close_last_notification_on_hover(self):
-        # Wait some time for import to finish
-        self.pause(10)
+        import_ended = self.get_element_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON)
+
+        if not import_ended:
+            raise MstrException(f'Notification could not be closed, '
+                                f'selector not found: {RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON}')
+        
         self._hover_over_tile(0)
 
     def click_duplicate(self, tile_no):
