@@ -14,6 +14,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     BUTTON_OK = 'OK'
     REFRESHING_TEXT_ELEM = 'Refreshing'
     IMPORTING_TEXT_ELEM = 'Importing'
+    REMOVING_TEXT_ELEM = 'Removing'
 
     PROGRESS_BAR_TAG_NAME = 'ProgressBar'
 
@@ -27,7 +28,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     NAME_INPUT_FOR_OBJECT = '//Button/Text'
     TEXT_INPUT_TAG_NAME = 'Edit'
     TOOLTIP_TEXT = '//ToolTip/Text'
+
     RENAME_MENU_ITEM = 'Rename'
+    REMOVE_MENU_ITEM = 'Remove'
 
     def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         refreshing_element = self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM)
@@ -41,15 +44,26 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         if importing_element:
             self.wait_for_import_object_to_finish_successfully()
 
-    def wait_for_remove_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
-        self.pause(20)  # TODO implement
+    def wait_for_remove_object_to_finish_successfully(self, parent=None):
+        if parent:
+            if parent.check_if_element_exists_by_name(
+                RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM,
+                timeout=SHORT_TIMEOUT
+            ):
+                self.wait_for_remove_object_to_finish_successfully(parent=parent)
+        else:
+            if self.check_if_element_exists_by_name(
+                RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM,
+                timeout=SHORT_TIMEOUT
+            ):
+                self.wait_for_remove_object_to_finish_successfully()
 
     def wait_for_progress_notifications_to_disappear(self, timeout=DEFAULT_TIMEOUT):
         right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
         self.check_if_progress_bar_is_visible(right_panel_element)
 
     def check_if_progress_bar_is_visible(self, right_panel_element):
-        while right_panel_element.check_if_element_exists_by_tag_name(
+        if right_panel_element.check_if_element_exists_by_tag_name(
             RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME,
             timeout=SHORT_TIMEOUT
         ):
@@ -193,3 +207,16 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         name_text.send_keys(new_object_name)
 
         self.press_enter()
+
+    def remove_object_using_context_menu(self, object_no):
+        object_tile_elem = self.get_object_by_index(object_no)
+
+        name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
+        name_container.move_to()
+        name_container.right_click()
+
+        object_tile_elem.get_element_by_name(
+            RightPanelTileWindowsDesktopPage.REMOVE_MENU_ITEM
+        ).click()
+
+        self.wait_for_remove_object_to_finish_successfully(parent=object_tile_elem)

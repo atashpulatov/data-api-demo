@@ -112,6 +112,13 @@ class BaseElement:
         except MstrException:
             return False
 
+    def check_if_element_exists_by_name(self, selector, timeout=DEFAULT_TIMEOUT):
+        try:
+            self._get_element(By.NAME, selector, timeout)
+            return True
+        except MstrException:
+            return False
+
     def check_if_child_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         try:
             self._get_element(By.CSS_SELECTOR, selector, timeout)
