@@ -26,10 +26,19 @@ class ExcelGeneralWindowsDesktopPage(BaseWindowsDesktopPage):
     def go_to_excel(self, locale_name=DEFAULT_LOCALE_NAME):
         ImageElement.reset_excel_root_element(self.driver)
 
-        self.get_element_by_name(
+        self.log_error(('1 go_to_excel',))
+
+        file_tab_element = self.get_element_by_name(
             ExcelGeneralWindowsDesktopPage.FILE_TAB_ELEM,
             image_name=self.prepare_image_name(ExcelGeneralWindowsDesktopPage.FILE_TAB_ELEM)
-        ).click()
+        )
+        self.log_error(('2 go_to_excel', file_tab_element))
+        self.log_error(('2 go_to_excel', file_tab_element.size))
+        self.log_error(('2 go_to_excel', file_tab_element.location))
+
+        file_tab_element.click()
+
+        self.log_error(('3 go_to_excel',))
 
         self.get_element_by_name(
             ExcelGeneralWindowsDesktopPage.NEW_ELEM,
