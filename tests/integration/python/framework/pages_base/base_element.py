@@ -99,6 +99,9 @@ class BaseElement:
     def get_element_by_xpath(self, selector):
         return self._get_element(By.XPATH, selector, timeout=DEFAULT_TIMEOUT)
 
+    def get_element_by_name(self, selector):
+        return self._get_element(By.NAME, selector, timeout=DEFAULT_TIMEOUT)
+
     def get_element_by_tag_name(self, selector):
         return self._get_element(By.TAG_NAME, selector, timeout=DEFAULT_TIMEOUT)
 
