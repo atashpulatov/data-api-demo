@@ -32,16 +32,18 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     RENAME_MENU_ITEM = 'Rename'
     REMOVE_MENU_ITEM = 'Remove'
 
-    def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
-        refreshing_element = self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM)
-
-        if refreshing_element:
+    def wait_for_refresh_object_to_finish_successfully(self):
+        if self.check_if_element_exists_by_name(
+            RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM,
+            timeout=SHORT_TIMEOUT
+        ):
             self.wait_for_refresh_object_to_finish_successfully()
 
-    def wait_for_import_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
-        importing_element = self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM)
-
-        if importing_element:
+    def wait_for_import_object_to_finish_successfully(self):
+        if self.check_if_element_exists_by_name(
+            RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM,
+            timeout=SHORT_TIMEOUT
+        ):
             self.wait_for_import_object_to_finish_successfully()
 
     def wait_for_remove_object_to_finish_successfully(self, parent=None):
@@ -58,7 +60,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             ):
                 self.wait_for_remove_object_to_finish_successfully()
 
-    def wait_for_progress_notifications_to_disappear(self, timeout=DEFAULT_TIMEOUT):
+    def wait_for_progress_notifications_to_disappear(self):
         right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
         self.check_if_progress_bar_is_visible(right_panel_element)
 
@@ -146,18 +148,6 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return object_name_element.get_name_by_attribute()
 
-    def _hover_over_tile(self, tile_no):
-        elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
-
-        if elements:
-            other_element = self.get_element_by_name(
-                RightPanelMainWindowsDesktopPage.MICROSTRATEGY_LOG_ELEM,
-                image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.MICROSTRATEGY_LOG_ELEM)
-            )
-            other_element.move_to()
-
-            elements[tile_no].move_to()
-
     def get_object_by_index(self, object_no):
         tiles_wrapper = self.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
 
@@ -166,6 +156,11 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         object_index = int(object_no) - 1
 
         return tiles[object_index]
+
+    def _hover_over_tile(self, tile_no):
+        self.get_object_by_index(
+          tile_no
+        ).move_to()
 
     def click_object_number(self, object_no):
         self.get_object_by_index(object_no).click()
