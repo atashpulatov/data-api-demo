@@ -11,6 +11,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I clicked Import button without checking results
       And I waited for Run button to be enabled
       And I clicked Run button
+      And I waited for Run button to be enabled
       And I clicked Run button
 
      Then I closed last notification
