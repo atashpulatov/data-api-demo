@@ -23,6 +23,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_NAME_IMAGE_PREFIX = 'prompt_title_'
 
     def wait_for_run_button(self):
+        self.pause(5)
+
         run_button_exists = self.check_if_element_exists_by_xpath(
             PromptWindowsDesktopPage.PROMPT_RUN_BUTTON,
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
@@ -32,7 +34,6 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             raise MstrException(f'Run button not exists or is not enabled.')
 
     def click_run_button(self):
-        self.pause(5)
         self.get_element_by_name(
             PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME,
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
