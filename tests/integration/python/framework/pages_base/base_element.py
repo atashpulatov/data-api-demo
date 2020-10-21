@@ -90,6 +90,9 @@ class BaseElement:
     def is_selected(self):
         return self.__element.is_selected()
 
+    def is_displayed(self):
+        return self.__element.is_displayed()
+
     def get_name_by_attribute(self):
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
 

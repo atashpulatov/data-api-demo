@@ -220,3 +220,14 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
         self.wait_for_remove_object_to_finish_successfully(parent=object_tile_elem)
+
+    def is_icon_bar_visible(self, object_no):
+        object_tile_elem = self.get_object_by_index(object_no)
+
+        icon = object_tile_elem.get_element_by_name(
+            RightPanelTileWindowsDesktopPage.REMOVE_BUTTON_ELEM
+        )
+
+        # TODO: There is no way for now to recognize if bar is visible. This method should be updated when there will
+        #       be distinctive element attribute.
+        return icon.is_displayed()
