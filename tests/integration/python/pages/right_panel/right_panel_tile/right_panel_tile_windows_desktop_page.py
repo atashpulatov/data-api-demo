@@ -24,6 +24,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     TILES_WRAPPER = '//Group[starts-with(@Name,"Imported Data")]/List'
     TILE_ELEM = '//DataItem'
 
+    NAME_INPUT_FOR_OBJECT = '//Button/Text'
+    TOOLTIP_TEXT = '//ToolTip/Text'
+
     def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         refreshing_element = self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM)
 
@@ -139,11 +142,24 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
             elements[tile_no].move_to()
 
-    def click_object_number(self, object_no):
+    def get_object_by_index(self, object_no):
         tiles_wrapper = self.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
 
         tiles = tiles_wrapper.get_elements_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM)
 
         object_index = int(object_no) - 1
 
-        tiles[object_index].click()
+        return tiles[object_index]
+
+    def click_object_number(self, object_no):
+        self.get_object_by_index(object_no).click()
+
+    def get_object_name_from_tooltip(self, object_no):
+        object_tile_elem = self.get_object_by_index(object_no)
+
+        name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
+        name_container.move_to()
+
+        tooltip_text_elem = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TOOLTIP_TEXT)
+
+        return tooltip_text_elem.text
