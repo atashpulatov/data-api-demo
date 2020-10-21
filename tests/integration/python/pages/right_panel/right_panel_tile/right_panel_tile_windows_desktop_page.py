@@ -25,6 +25,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     TILE_ELEM = '//DataItem'
 
     NAME_INPUT_FOR_OBJECT = '//Button/Text'
+    TEXT_INPUT_TAG_NAME = 'Edit'
     TOOLTIP_TEXT = '//ToolTip/Text'
 
     def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
@@ -163,3 +164,15 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         tooltip_text_elem = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TOOLTIP_TEXT)
 
         return tooltip_text_elem.text
+
+    def change_object_name_using_icon(self, object_no, new_object_name):
+        object_tile_elem = self.get_object_by_index(object_no)
+
+        name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
+        name_container.move_to()
+        name_container.double_click()
+
+        name_text = object_tile_elem.get_element_by_tag_name(RightPanelTileWindowsDesktopPage.TEXT_INPUT_TAG_NAME)
+        name_text.send_keys(new_object_name)
+
+        self.press_enter()
