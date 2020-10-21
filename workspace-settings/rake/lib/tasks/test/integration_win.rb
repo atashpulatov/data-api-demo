@@ -46,7 +46,7 @@ end
 
 desc "start web application driver on widnows"
 task :start_web_application_driver do
-  start_web_application_dirver
+  # start_web_application_dirver
 end
 
 def start_web_application_dirver()
