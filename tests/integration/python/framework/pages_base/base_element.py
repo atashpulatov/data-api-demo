@@ -29,7 +29,9 @@ class BaseElement:
     def click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
             try:
+                Util.log_error('1 click before')
                 self.__element.click()
+                Util.log_error('1 click after')
             except ElementClickInterceptedException as e:
                 Util.log_error(e)
                 Util.pause(120)  # wait for debug purposes
