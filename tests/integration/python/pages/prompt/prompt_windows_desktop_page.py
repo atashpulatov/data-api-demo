@@ -32,6 +32,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             raise MstrException(f'Run button not exists or is not enabled.')
 
     def click_run_button(self):
+        self.pause(5)
         self.get_element_by_name(
             PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME,
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)

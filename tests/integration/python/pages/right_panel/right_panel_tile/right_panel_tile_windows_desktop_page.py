@@ -35,6 +35,8 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.click()
 
     def close_last_notification_on_hover(self):
+        # Wait some time for import to finish
+        self.pause(10)
         self._hover_over_tile(0)
 
     def click_duplicate(self, tile_no):
