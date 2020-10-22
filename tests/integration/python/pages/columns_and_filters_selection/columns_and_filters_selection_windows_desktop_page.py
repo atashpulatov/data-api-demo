@@ -7,7 +7,9 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     BACK_BUTTON = 'back'
     DATA_PREVIEW_BUTTON = 'data-preview'
     CANCEL_BUTTON = 'cancel'
-    CLOSE_PREVIEW_BUTTON = 'Close Preview'
+
+    POPUP_WINDOW_ELEM = 'NUIDialog'
+    POPUP_CLOSE_BUTTON = 'Close'
 
     TOTALS_AND_SUBTOTALS = 'Include Subtotals and Totals'
     TOTALS_AND_SUBTOTALS_SWITCH = '//Text[@Name="%s"]' % TOTALS_AND_SUBTOTALS
@@ -67,3 +69,9 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS_SWITCH,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS)
         ).move_to_and_click(offset_x=90, offset_y=2)
+
+    def close_popup_window(self):
+        popup_element = self.get_element_by_class_name(ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_ELEM)
+        popup_element.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_CLOSE_BUTTON
+        ).click()

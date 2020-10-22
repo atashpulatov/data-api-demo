@@ -35,6 +35,9 @@ class ElementGet(ElementCheck):
         else:
             return BaseElement(self._get_raw_element(By.XPATH, selector, timeout), self.driver)
 
+    def get_element_by_class_name(self, selector, timeout=DEFAULT_TIMEOUT):
+        return BaseElement(self._get_raw_element(By.CLASS_NAME, selector, timeout), self.driver)
+
     def get_element_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(self.get_element_center_coordinates_by_name(selector, timeout, image_name), self.driver)
@@ -65,6 +68,11 @@ class ElementGet(ElementCheck):
 
     def get_elements_by_xpath(self, selector):
         raw_elements = self._get_raw_elements(By.XPATH, selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.driver)
+
+    def get_elements_by_class_name(self, selector):
+        raw_elements = self._get_raw_elements(By.CLASS_NAME, selector)
 
         return BaseElement.wrap_raw_elements(raw_elements, self.driver)
 

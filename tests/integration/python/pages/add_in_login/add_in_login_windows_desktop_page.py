@@ -9,6 +9,9 @@ class AddInLoginWindowsDesktopPage(BasePage):
     PASSWORD_INPUT_ELEM = 'password'
     LOGIN_BUTTON_ELEM = 'loginButton'
 
+    POPUP_WINDOW_ELEM = 'NUIDialog'
+    POPUP_CLOSE_BUTTON = 'Close'
+
     def __init__(self):
         super().__init__()
 
@@ -28,3 +31,9 @@ class AddInLoginWindowsDesktopPage(BasePage):
             password_field.send_keys(password)
 
         self.get_element_by_accessibility_id(AddInLoginWindowsDesktopPage.LOGIN_BUTTON_ELEM).click()
+
+    def close_login_pop_up(self):
+        popup_element = self.get_element_by_class_name(AddInLoginWindowsDesktopPage.POPUP_WINDOW_ELEM)
+        popup_element.get_element_by_name(
+            AddInLoginWindowsDesktopPage.POPUP_CLOSE_BUTTON
+        ).click()
