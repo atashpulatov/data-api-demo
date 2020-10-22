@@ -16,9 +16,6 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     SHEET_TAB_NAME = 'Sheet Tab'
     ADD_SHEET_BUTTON = 'Sheet Tab Add Sheet'
 
-    CONTEXT_MENU_OPTION_DELETE = 'Delete'
-    CONTEXT_MENU_OPTION_DELETE_COLUMNS = 'Table Columns'
-
     TABLE_STYLE_XPATH = '//DataGrid[@Name="Quick Styles"]/Group/ListItem[@Name="%s"]'
 
     FONT_COLOR_XPATH = '//DataGrid[@Name="Font Color"]/Group/ListItem[@Name="%s"]'
@@ -125,9 +122,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.go_to_cell(f'{column_name}1')
 
         for i in range(0, int(number_of_columns)):
-            self.get_element_by_name(f'"{column_name}" 1').right_click()
-            self.get_element_by_name(ExcelSheetWindowsDesktopPage.CONTEXT_MENU_OPTION_DELETE).click()
-            self.get_element_by_name(ExcelSheetWindowsDesktopPage.CONTEXT_MENU_OPTION_DELETE_COLUMNS).click()
+            self.send_keys_using_excel_element(Keys.CONTROL + Keys.SPACE)
+            self.send_keys_using_excel_element(Keys.CONTROL + Keys.SUBTRACT)
 
     def click_table_design_tab(self):
         self.send_keys_using_excel_element(Keys.ALT)
