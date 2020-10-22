@@ -34,49 +34,52 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
     }
 
     def _sort_elements_ascending(self, object_type, event_to_trigger):
-        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_TITLE_GROUP[
+        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_AUTOMATION_ID_GROUP[
             object_type]
 
         sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
 
-        triangles = sort_element.get_elements_by_xpath(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
+        triangles = sort_element.get_elements_by_xpath(
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
 
-        #only the element containing gray triangles exists, default state
+        # only the element containing gray triangles exists, default state
         if(len(triangles) is 1):
             getattr(sort_element, event_to_trigger)()
         elif top_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_DEFAULT and bottom_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_DESCENDING:
             getattr(sort_element, event_to_trigger)()
             getattr(sort_element, event_to_trigger)()
             getattr(sort_element, event_to_trigger)()
-        
-        #Otherwise, we are already in ascending state
+
+        # Otherwise, we are already in ascending state
 
     def _sort_elements_descending(self, object_type):
-        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_TITLE_GROUP[
+        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_AUTOMATION_ID_GROUP[
             object_type]
 
         sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
 
-        triangles = sort_element.get_elements_by_xpath(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
+        triangles = sort_element.get_elements_by_xpath(
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
 
-        #only the element containing gray triangles exists, default state
+        # only the element containing gray triangles exists, default state
         if(len(triangles) is 1):
             getattr(sort_element, event_to_trigger)()
             getattr(sort_element, event_to_trigger)()
         elif top_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_ASCENDING and bottom_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_DEFAULT:
             getattr(sort_element, event_to_trigger)()
-        
-        #Otherwise, we are already in descending state
+
+        # Otherwise, we are already in descending state
 
     def _sort_elements_default(self, object_type):
-        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_TITLE_GROUP[
+        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_AUTOMATION_ID_GROUP[
             object_type]
 
         sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
 
-        triangles = sort_element.get_elements_by_xpath(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
+        triangles = sort_element.get_elements_by_xpath(
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
 
-        #only the element containing gray triangles exists, default state
+        # only the element containing gray triangles exists, default state
         if(len(triangles) is 1):
             return
         elif top_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_ASCENDING and bottom_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_DEFAULT:
@@ -112,10 +115,9 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
     def press_enter_to_sort_element_ascending(self, object_type):
         self._sort_elements_ascending(object_type, "press_enter")
 
-        #Otherwise, we are already in ascending state
+        # Otherwise, we are already in ascending state
     def press_enter_to_sort_element_descending(self, object_type):
         self._sort_elements_descending(object_type, "press_enter")
 
     def press_enter_to_sort_element_default(self, object_type):
         self._sort_elements_default(object_type, "press_enter")
-
