@@ -11,6 +11,9 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_X = 0
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_Y = -100
 
+    FILTER_TREE_XPATH = '//Tree'
+    FILTER_TREE_ITEM_XPATH = '//TreeItem'
+
     def select_filter_elements(self, filters_and_elements_json):
         """
         Selects specified filter and filter values on 'Prepare Data' window.
@@ -45,3 +48,12 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TITLE_ITEM % filter_name,
             image_name=self.prepare_image_name(filter_name)
         ).click()
+
+    def get_filter_name(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        filter_tree = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_XPATH)[1]
+
+        filter_tree_item = filter_tree.get_elements_by_xpath(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_XPATH)[int(object_number) - 1]
+
+        return filter_tree_item.get_name_by_attribute()
