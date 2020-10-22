@@ -110,9 +110,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         raise MstrException('Cannot open worksheet number: %s.' % worksheet_number)
 
     def remove_columns(self, column_name, number_of_columns):
-        self.go_to_cell('{}1'.format(column_name))
+        self.go_to_cell(f'{column_name}1')
 
         for i in range(0, int(number_of_columns)):
-            self.get_element_by_name('"{}" 1'.format(column_name)).right_click()
+            self.get_element_by_name(f'"{column_name}" 1').right_click()
             self.get_element_by_name(ExcelSheetWindowsDesktopPage.CONTEXT_MENU_OPTION_DELETE).click()
             self.get_element_by_name(ExcelSheetWindowsDesktopPage.CONTEXT_MENU_OPTION_DELETE_COLUMNS).click()
