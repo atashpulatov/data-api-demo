@@ -52,6 +52,13 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
                         ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_ITEM_ELEM % form_name
                     ).click()
 
+    def select_attribute_by_number(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        popup_main_element.get_element_by_xpath(
+            f"{ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH}[{object_number}]"
+        ).move_to_and_click()
+
     def get_attribute_name(self, object_number):
         popup_main_element = self.get_add_in_main_element()
         attribute_elements = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH)
