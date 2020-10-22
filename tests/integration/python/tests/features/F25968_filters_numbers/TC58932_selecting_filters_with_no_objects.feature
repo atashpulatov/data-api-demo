@@ -1,3 +1,4 @@
+@windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: F25968 - Filters numbers

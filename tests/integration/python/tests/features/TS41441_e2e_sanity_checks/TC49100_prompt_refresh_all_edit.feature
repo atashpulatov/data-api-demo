@@ -83,7 +83,7 @@ Feature: TS41441 - Sanity checks
 
      And I selected cell "AB1"
      And I clicked Add Data button
-     And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"
+     And I found object by ID "8738171C11E97AED00000080EF155102" and selected "this name is so long that it has ellipsis when it is displayed and in fact it is more than 100 chara"
      And I clicked Import button
 
      And I selected cell "AR1"

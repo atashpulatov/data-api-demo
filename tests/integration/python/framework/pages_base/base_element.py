@@ -87,6 +87,9 @@ class BaseElement:
     def get_attribute(self, attribute_name):
         return self.__element.get_attribute(attribute_name)
 
+    def is_selected(self):
+        return self.__element.is_selected()
+
     def get_name_by_attribute(self):
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
 
