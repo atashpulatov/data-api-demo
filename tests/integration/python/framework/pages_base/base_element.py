@@ -146,6 +146,11 @@ class BaseElement:
 
         return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
 
+    def get_elements_by_tag_name(self, selector):
+        raw_elements = self.__element.find_elements_by_tag_name(selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
+
     def get_elements_by_css(self, selector):
         raw_elements = self.__element.find_elements_by_css_selector(selector)
 
