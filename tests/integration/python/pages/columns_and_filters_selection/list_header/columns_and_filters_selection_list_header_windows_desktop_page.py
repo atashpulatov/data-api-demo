@@ -27,7 +27,7 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
 
     AUTOMATION_ID = "AutomationId"
 
-    OBJECTS_TYPE_TO_AUTOMATION_ID_GROUP = {
+    OBJECTS_TYPE_TO_ELEMENT_NAME = {
         ATTRIBUTES: SORT_ATTRIBUTES,
         METRICS: SORT_METRICS,
         FILTERS: SORT_FILTERS
@@ -36,7 +36,7 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
     TOGGLE_ORDER = [SORT_DEFAULT, SORT_ASCENDING, SORT_DESCENDING]
 
     def _toggle_sort_elements(self, object_type, final_sort_type, event_to_trigger):
-        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_AUTOMATION_ID_GROUP[
+        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[
             object_type]
 
         sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
@@ -74,11 +74,11 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
 
     def press_tab_until_object_type_focused(self, object_type):
 
-        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_TITLE_GROUP[
+        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[
             object_type]
 
         sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
-
+        
         for i in range(0, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
             if sort_element == self.get_element_with_focus():
                 return

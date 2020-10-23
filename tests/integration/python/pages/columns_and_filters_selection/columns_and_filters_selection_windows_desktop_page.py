@@ -78,6 +78,6 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         search_input.click()
 
-        search_input.send_keys((element_name, Keys.ENTER))
+        search_input.send_keys(element_name)
 
 
