@@ -96,7 +96,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
 
         tile_details_container = self._get_tile_details_container(object_number)
 
-        return tile_details_container.check_if_child_element_exists_by_css(selector, timeout=timeout)
+        return tile_details_container.check_if_element_exists_by_css(selector, timeout=timeout)
 
     def get_object_list_property_value(self, object_number, name_list_type):
         self.focus_on_add_in_frame()
