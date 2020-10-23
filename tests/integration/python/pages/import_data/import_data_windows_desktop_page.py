@@ -38,6 +38,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     TOOLTIP_XPATH = '//ToolTip[@Name]'
 
+    ADD_TO_LIBRARY_BUTTON = '//Button[starts-with(@Name, \"Add to library\")]'
+
     def __init__(self):
         super().__init__()
 
@@ -222,3 +224,13 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def get_tooltip_message_for_button(self):
         return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_name_by_attribute()
+
+    def add_dossier_to_library(self):
+        try:
+            self.get_element_by_xpath(
+                ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
+                image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
+            ).click()
+
+        except Exception:
+            pass
