@@ -109,22 +109,17 @@ class BaseElement:
         return self._get_element(By.TAG_NAME, selector, timeout=DEFAULT_TIMEOUT)
 
     def check_if_element_exists_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT):
-        try:
-            self._get_element(By.TAG_NAME, selector, timeout)
-            return True
-        except MstrException:
-            return False
+        return self._check_if_element_exists(By.TAG_NAME, selector, timeout)
 
     def check_if_element_exists_by_name(self, selector, timeout=DEFAULT_TIMEOUT):
-        try:
-            self._get_element(By.NAME, selector, timeout)
-            return True
-        except MstrException:
-            return False
+        return self._check_if_element_exists(By.NAME, selector, timeout)
 
-    def check_if_child_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
+    def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
+        return self._check_if_element_exists(By.CSS_SELECTOR, selector, timeout)
+
+    def _check_if_element_exists(self, selector_type, selector, timeout=DEFAULT_TIMEOUT):
         try:
-            self._get_element(By.CSS_SELECTOR, selector, timeout)
+            self._get_element(selector_type, selector, timeout)
             return True
         except MstrException:
             return False
