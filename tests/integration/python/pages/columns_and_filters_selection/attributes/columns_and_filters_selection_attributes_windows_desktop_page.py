@@ -8,9 +8,11 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
     ATTRIBUTE_ELEM = '//Text[@Name="%s"]'
     ATTRIBUTE_FORM_DROPDOWN_ELEM = '//TreeItem[@Name="%s"]/Text[@Name="icon: caret-down"]'
+    ATTRIBUTE_FORM_DROPDOWN_ELEM_AT = '//TreeItem[%s]/Text[@Name="icon: caret-down"]'
     ATTRIBUTE_FORM_ITEM_ELEM = '//Group[@Name="%s"]'
 
     ATTRIBUTE_ELEM_XPATH = '//Group/Tree/TreeItem'
+    ATTRIBUTE_ELEM_XPATH_AT = '//Group/Tree/TreeItem[%s]'
 
     def click_attribute(self, attribute_name):
         popup_main_element = self.get_add_in_main_element()
@@ -56,8 +58,20 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         popup_main_element = self.get_add_in_main_element()
 
         popup_main_element.get_element_by_xpath(
-            f"{ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH}[{object_number}]"
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % object_number
         ).move_to_and_click()
+
+        popup_main_element.move_to()  # needed when selecting many attributes consecutively
+
+    def expand_attribute_form(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM_AT % object_number
+        ).click()
+
+    def collapse_attribute_form(self, object_number):
+        self.expand_attribute_form(object_number)
 
     def get_attribute_name(self, object_number):
         popup_main_element = self.get_add_in_main_element()
