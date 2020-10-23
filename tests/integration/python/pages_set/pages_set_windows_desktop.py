@@ -17,6 +17,8 @@ from pages.filter_panel.filter_panel_windows_desktop_page import FilterPanelWind
 from pages.import_data.import_data_windows_desktop_page import ImportDataWindowsDesktopPage
 from pages.import_dossier.import_dossier_context_menu.import_dossier_context_menu_windows_desktop_page import \
     ImportDossierContextMenuWindowsDesktopPage
+from pages.import_dossier.import_dossier_filter.import_dossier_filter_windows_desktop_page import \
+    ImportDossierFilterWindowsDesktopPage
 from pages.import_dossier.import_dossier_main.import_dossier_main_windows_desktop_page import \
     ImportDossierMainWindowsDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
@@ -62,7 +64,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.display_attribute_form_names_windows_desktop_page = DisplayAttributeFormNamesWindowsDesktopPage()
 
         self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()
-        self.import_dossier_filter_windows_desktop_page = None
+        self.import_dossier_filter_windows_desktop_page = ImportDossierFilterWindowsDesktopPage()
         self.import_dossier_bookmarks_windows_desktop_page = None
         self.import_dossier_table_of_contents_windows_desktop_page = None
         self.import_dossier_context_menu_windows_desktop_page = ImportDossierContextMenuWindowsDesktopPage()
