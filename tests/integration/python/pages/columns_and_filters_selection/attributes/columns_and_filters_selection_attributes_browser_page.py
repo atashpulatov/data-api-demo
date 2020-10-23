@@ -117,7 +117,7 @@ class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
                 timeout=SHORT_TIMEOUT):
             raise MstrException('Error while expanding attributes forms.')
 
-    def select_attribute_by_number(self, object_type, object_number):
+    def select_attribute_by_number(self, object_number):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css(
