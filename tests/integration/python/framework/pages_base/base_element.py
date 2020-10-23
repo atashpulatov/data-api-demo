@@ -90,6 +90,9 @@ class BaseElement:
     def is_selected(self):
         return self.__element.is_selected()
 
+    def is_displayed(self):
+        return self.__element.is_displayed()
+
     def get_name_by_attribute(self):
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
 
@@ -98,6 +101,26 @@ class BaseElement:
 
     def get_element_by_xpath(self, selector):
         return self._get_element(By.XPATH, selector, timeout=DEFAULT_TIMEOUT)
+
+    def get_element_by_name(self, selector):
+        return self._get_element(By.NAME, selector, timeout=DEFAULT_TIMEOUT)
+
+    def get_element_by_tag_name(self, selector):
+        return self._get_element(By.TAG_NAME, selector, timeout=DEFAULT_TIMEOUT)
+
+    def check_if_element_exists_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT):
+        try:
+            self._get_element(By.TAG_NAME, selector, timeout)
+            return True
+        except MstrException:
+            return False
+
+    def check_if_element_exists_by_name(self, selector, timeout=DEFAULT_TIMEOUT):
+        try:
+            self._get_element(By.NAME, selector, timeout)
+            return True
+        except MstrException:
+            return False
 
     def check_if_child_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         try:
