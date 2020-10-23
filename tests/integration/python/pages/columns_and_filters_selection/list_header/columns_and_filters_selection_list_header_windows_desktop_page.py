@@ -39,7 +39,7 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
         object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[
             object_type]
 
-        sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
+        sort_element = self.get_element_by_name(object_type_sort_element)
 
         triangle = sort_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
@@ -78,14 +78,10 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
             object_type]
 
         sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
-        
-        for i in range(0, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRY_LIMIT_FOR_SORT_BY_KEYBOARD):
-            if sort_element == self.get_element_with_focus():
-                return
 
-            self.press_tab()
+        sort_element.move_to_and_click(-2)
 
-        raise MstrException('Tab limit is reached. Element not found')
+        self.press_tab()
 
     def press_enter_to_sort_element_ascending(self, object_type):
         self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ASCENDING, "press_enter")
