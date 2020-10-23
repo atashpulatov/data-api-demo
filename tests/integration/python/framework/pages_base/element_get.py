@@ -30,7 +30,7 @@ class ElementGet(ElementCheck):
     def get_element_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(
-                self.get_element_coordinates_coordinates_by_xpath(selector, timeout, image_name), self.driver
+                self.get_element_center_coordinates_by_xpath(selector, timeout, image_name), self.driver
             )
         else:
             return BaseElement(self._get_raw_element(By.XPATH, selector, timeout), self.driver)
@@ -48,6 +48,15 @@ class ElementGet(ElementCheck):
             )
         else:
             return BaseElement(self._get_raw_element(MobileBy.ACCESSIBILITY_ID, selector, timeout), self.driver)
+
+    def get_element_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        if image_name and self.image_recognition_enabled:
+            return ImageElement(
+                self.get_element_center_coordinates_by_tag_name(selector, timeout, image_name),
+                self.driver
+            )
+        else:
+            return BaseElement(self._get_raw_element(By.TAG_NAME, selector, timeout), self.driver)
 
     def get_elements_by_css(self, selector):
         raw_elements = self._get_raw_elements(By.CSS_SELECTOR, selector)
