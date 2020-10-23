@@ -14,6 +14,8 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
 
+    SEARCH_INPUT = "Search..."
+
     def click_import_button(self):
         self.get_element_by_accessibility_id(
             ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON,
@@ -67,3 +69,15 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS_SWITCH,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS)
         ).move_to_and_click(offset_x=90, offset_y=2)
+
+    def search_for_element(self, element_name):
+        search_input = self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT)
+        )
+
+        search_input.click()
+
+        search_input.send_keys(element_name)
+
+
