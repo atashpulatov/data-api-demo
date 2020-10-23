@@ -6,7 +6,7 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
     METRIC_ELEM = '//Text[@Name="%s"]'
 
-    METRICS_XPATH = '//DataGrid/Group/Text'
+    METRICS_XPATH = '//Group/DataGrid/Group/Text'
 
     def click_metric(self, metric_name):
         popup_main_element = self.get_add_in_main_element()
@@ -36,7 +36,6 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
     def get_metric_name(self, object_number):
         popup_main_element = self.get_add_in_main_element()
-
-        metric = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH)[int(object_number) - 1]
+        metric_elements = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH)
         
-        return metric.get_name_by_attribute()
+        return metric_elements[int(object_number) - 1].get_name_by_attribute()

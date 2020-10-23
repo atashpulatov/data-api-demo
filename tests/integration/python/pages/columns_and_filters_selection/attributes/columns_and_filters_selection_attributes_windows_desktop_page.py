@@ -10,7 +10,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     ATTRIBUTE_FORM_DROPDOWN_ELEM = '//TreeItem[@Name="%s"]/Text[@Name="icon: caret-down"]'
     ATTRIBUTE_FORM_ITEM_ELEM = '//Group[@Name="%s"]'
 
-    ATTRIBUTE_ELEM_XPATH = '//Tree/TreeItem'
+    ATTRIBUTE_ELEM_XPATH = '//Group/Tree/TreeItem'
 
     def click_attribute(self, attribute_name):
         popup_main_element = self.get_add_in_main_element()
@@ -61,7 +61,6 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
     def get_attribute_name(self, object_number):
         popup_main_element = self.get_add_in_main_element()
-
-        attribute_element = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH)[int(object_number) - 1]
+        attribute_elements = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH)
         
-        return attribute_element.get_name_by_attribute()
+        return attribute_elements[int(object_number) - 1].get_name_by_attribute()

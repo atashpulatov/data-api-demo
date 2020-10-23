@@ -11,8 +11,8 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_X = 0
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_Y = -100
 
-    FILTER_TREE_XPATH = '//Tree'
-    FILTER_TREE_ITEM_XPATH = '//TreeItem'
+    FILTER_TREE_XPATH = '//Group/Tree'
+    FILTER_TREE_ITEM_XPATH = '//Group/Tree/TreeItem'
 
     def select_filter_elements(self, filters_and_elements_json):
         """
@@ -52,8 +52,10 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     def get_filter_name(self, object_number):
         popup_main_element = self.get_add_in_main_element()
 
-        filter_tree = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_XPATH)[1]
+        filter_tree = popup_main_element.get_elements_by_xpath(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_XPATH)[1]
+            
+        filter_tree_items = filter_tree.get_elements_by_xpath(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_XPATH)
 
-        filter_tree_item = filter_tree.get_elements_by_xpath(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_XPATH)[int(object_number) - 1]
-
-        return filter_tree_item.get_name_by_attribute()
+        return filter_tree_items[int(object_number) - 1].get_name_by_attribute()
