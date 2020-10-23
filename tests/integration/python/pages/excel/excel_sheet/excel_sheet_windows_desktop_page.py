@@ -76,6 +76,10 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return ''.join(result)
 
+    def write_value_in_cell(self, cell, value):
+        self.go_to_cell(cell)
+        self.send_keys((value, Keys.ENTER))
+
     def get_number_of_worksheets(self):
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
         book_children_elements = book_element.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
@@ -113,6 +117,13 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
                     return
 
         raise MstrException('Cannot open worksheet number: %s.' % worksheet_number)
+
+    def remove_columns(self, column_name, number_of_columns):
+        self.go_to_cell(f'{column_name}1')
+
+        for i in range(0, int(number_of_columns)):
+            self.send_keys_using_excel_element(Keys.CONTROL + Keys.SPACE)
+            self.send_keys_using_excel_element(Keys.CONTROL + Keys.SUBTRACT)
 
     def click_table_design_tab(self):
         self.send_keys_using_excel_element(Keys.ALT)
