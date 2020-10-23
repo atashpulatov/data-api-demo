@@ -5,7 +5,7 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
 
     SORT_ASCENDING = "icon_sort_triangle_up_blue"
 
-    SORT_DESCENDING = "icon_sort_triangle_down_blue"
+    SORT_DESCENDING = "icon_sort_triangle_bottom_blue"
 
     SORT_DEFAULT = "icon_sort_triangle_gray"
 
@@ -13,7 +13,7 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
 
     TRY_LIMIT_FOR_SORT = 3
 
-    TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 30
+    TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 6
 
     SORT_ATTRIBUTES = "sort-toggle-attributes"
 
@@ -33,69 +33,44 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
         FILTERS: SORT_FILTERS
     }
 
-    def _sort_elements_ascending(self, object_type, event_to_trigger):
+    TOGGLE_ORDER = [SORT_DEFAULT, SORT_ASCENDING, SORT_DESCENDING]
+
+    def _toggle_sort_elements(self, object_type, final_sort_type, event_to_trigger):
         object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_AUTOMATION_ID_GROUP[
             object_type]
 
         sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
 
-        triangles = sort_element.get_elements_by_xpath(
+        triangle = sort_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
 
-        # only the element containing gray triangles exists, default state
-        if(len(triangles) is 1):
-            getattr(sort_element, event_to_trigger)()
-        elif top_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_DEFAULT and bottom_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_DESCENDING:
-            getattr(sort_element, event_to_trigger)()
-            getattr(sort_element, event_to_trigger)()
-            getattr(sort_element, event_to_trigger)()
+        states = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TOGGLE_ORDER
 
-        # Otherwise, we are already in ascending state
+        current_state = triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID)
 
-    def _sort_elements_descending(self, object_type):
-        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_AUTOMATION_ID_GROUP[
-            object_type]
+        current_state_position = states.index(current_state)
 
-        sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
+        final_state_position = states.index(final_sort_type)
 
-        triangles = sort_element.get_elements_by_xpath(
-            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
+        number_of_states = len(states)
 
-        # only the element containing gray triangles exists, default state
-        if(len(triangles) is 1):
-            getattr(sort_element, event_to_trigger)()
-            getattr(sort_element, event_to_trigger)()
-        elif top_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_ASCENDING and bottom_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_DEFAULT:
-            getattr(sort_element, event_to_trigger)()
-
-        # Otherwise, we are already in descending state
-
-    def _sort_elements_default(self, object_type):
-        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_AUTOMATION_ID_GROUP[
-            object_type]
-
-        sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
-
-        triangles = sort_element.get_elements_by_xpath(
-            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.TRIANGLE_IMAGE_XPATH)
-
-        # only the element containing gray triangles exists, default state
-        if(len(triangles) is 1):
+        for i in range(0, number_of_states):
+          if current_state_position is not final_state_position:
+              getattr(sort_element, event_to_trigger)()
+              current_state_position = (current_state_position + 1) % number_of_states
+          else:
             return
-        elif top_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_ASCENDING and bottom_triangle.get_attribute(ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.AUTOMATION_ID) is SORT_DEFAULT:
-            getattr(sort_element, event_to_trigger)()
-            getattr(sort_element, event_to_trigger)()
-        else:
-            getattr(sort_element, event_to_trigger)()
+
+        raise MstrException('sort toggle states length limit is reached. Element not found')
 
     def sort_elements_ascending_by_click(self, object_type):
-        self._sort_elements_ascending(object_type, "click")
+        self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ASCENDING, "click")
 
     def sort_elements_descending_by_click(self, object_type):
-        self._sort_elements_descending(object_type, "click")
+        self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DESCENDING, "click")
 
     def sort_elements_default_by_click(self, object_type):
-        self._sort_elements_default(self, "click")
+        self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DEFAULT, "click")
 
     def press_tab_until_object_type_focused(self, object_type):
 
@@ -113,11 +88,11 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
         raise MstrException('Tab limit is reached. Element not found')
 
     def press_enter_to_sort_element_ascending(self, object_type):
-        self._sort_elements_ascending(object_type, "press_enter")
+        self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ASCENDING, "press_enter")
 
         # Otherwise, we are already in ascending state
     def press_enter_to_sort_element_descending(self, object_type):
-        self._sort_elements_descending(object_type, "press_enter")
+        self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DESCENDING, "press_enter")
 
     def press_enter_to_sort_element_default(self, object_type):
-        self._sort_elements_default(object_type, "press_enter")
+        self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DEFAULT, "press_enter")
