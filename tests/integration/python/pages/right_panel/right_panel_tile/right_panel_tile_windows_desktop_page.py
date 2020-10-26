@@ -60,8 +60,8 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             pass
 
     def wait_for_notification_to_finish_successfully(self):
-        while self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
-                                                               timeout=SHORT_TIMEOUT) is False:
+        while not self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
+                                                                   timeout=SHORT_TIMEOUT):
             pass
 
     def close_all_notifications_on_hover(self):
