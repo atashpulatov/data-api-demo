@@ -59,6 +59,11 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
                 RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME, timeout=SHORT_TIMEOUT):
             pass
 
+    def wait_for_notification_to_finish_successfully(self):
+        while self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
+                                                               timeout=SHORT_TIMEOUT) is False:
+            pass
+
     def close_all_notifications_on_hover(self):
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
 
@@ -72,12 +77,8 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.click()
 
     def close_last_notification_on_hover(self):
-        import_ended = self.get_element_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON)
+        self.wait_for_notification_to_finish_successfully()
 
-        if not import_ended:
-            raise MstrException(f'Notification could not be closed, '
-                                f'selector not found: {RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON}')
-        
         self._hover_over_tile(0)
 
     def close_object_notification_on_hover(self, object_no):
