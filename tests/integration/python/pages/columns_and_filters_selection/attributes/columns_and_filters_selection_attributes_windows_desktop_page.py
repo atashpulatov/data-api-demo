@@ -1,5 +1,6 @@
 import json
 
+from selenium.webdriver.common.keys import Keys
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 
 
@@ -89,3 +90,24 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         attribute_elements = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH)
         
         return attribute_elements[int(object_number) - 1].get_name_by_attribute()
+
+    # Workaround for the defect in WinAppDriver's moveto command, which does not scroll to non-visible element
+    def scroll_into_attribute_by_number(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        attribute = popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % object_number
+        )
+
+        # Focus on the attributes list
+        popup_main_element.get_element_by_xpath('//Group/Tree').click()
+
+        while attribute.get_attribute('IsOffscreen'):
+            self.send_keys(Keys.ARROW_DOWN)
+            attribute = popup_main_element.get_element_by_xpath(
+                ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % object_number
+            )
+            popup_main_element.get_element_by_xpath('//Group/Tree').click()
+
+        print(attribute.text)
+        attribute.move_to()
