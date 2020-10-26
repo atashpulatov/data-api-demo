@@ -31,7 +31,7 @@ Feature: F24398 - Import and refresh visualization
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected visualization "Visualization 1"
-      And I selected "Total" in Show Totals for "Year" attribute
+      And I selected "Total" in Show Totals for "Year" attribute for visualization "Visualization 1"
       # TODO FIX And I selected sort "Ascending" for "Profit" metric
       # TODO FIX And I selected sort "Descending" for "Revenue" metric
       And I selected Drill by "Category" for "Year" attribute
