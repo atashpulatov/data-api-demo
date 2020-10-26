@@ -1,3 +1,5 @@
+from selenium.webdriver.common.keys import Keys
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
 
@@ -80,4 +82,14 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         search_input.send_keys(element_name)
 
+    def clear_element_search_with_backspace(self):
+        search_input = self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT)
+        )
 
+        search_input.click()
+
+        search_input.send_keys(Keys.CONTROL + 'a')
+        search_input.send_keys(Keys.CONTROL)
+        search_input.send_keys(Keys.BACKSPACE)
