@@ -6,6 +6,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     IMPORT_BUTTON = 'import'
     BACK_BUTTON = 'back'
     DATA_PREVIEW_BUTTON = 'data-preview'
+    CLOSE_PREVIEW_BUTTON = 'Close Preview'
     CANCEL_BUTTON = 'cancel'
 
     POPUP_WINDOW_ELEM = 'NUIDialog'

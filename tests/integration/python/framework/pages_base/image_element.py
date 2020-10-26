@@ -31,6 +31,12 @@ class ImageElement(BaseElement):
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
+    def move_to_and_click(self, offset_x=None, offset_y=None):
+        self.move_to(offset_x, offset_y)
+        ActionChains(self.__driver).click().perform()
+
+        Util.pause(AFTER_OPERATION_WAIT_TIME)
+
     def double_click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
