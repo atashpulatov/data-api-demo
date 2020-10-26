@@ -1,5 +1,4 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.exception.MstrException import MstrException
 
 
 class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
