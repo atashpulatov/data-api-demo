@@ -14,8 +14,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     MY_LIBRARY_SWITCH_ELEM = 'My Library'
     FILTERS_BUTTON_ELEM = 'Filters'
 
-    SEARCH_ELEM_OFFSET_X = 100
-    SEARCH_ELEM_OFFSET_Y = 10
+    SEARCH_ELEM = '//Group/Edit'
 
     ARIA_PROPERTIES_ATTRIBUTE = 'AriaProperties'
     ARIA_PROPERTIES_SEPARATOR = ';'
@@ -77,21 +76,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        filters_elem = self.get_element_by_name(
-            ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
-        )
-        filters_elem.click(
-            offset_x=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_X,
-            offset_y=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_Y
-        )
+        popup_main_element = self.get_add_in_main_element()
+
+        search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM)
 
         # Remove search box content.
-        self.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
+        search_element.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
 
         if object_name:
             # Enter object_name.
-            self.send_keys(object_name)
+            search_element.send_keys_with_check(object_name)
 
     def find_and_select_object(self, object_name):
         """
