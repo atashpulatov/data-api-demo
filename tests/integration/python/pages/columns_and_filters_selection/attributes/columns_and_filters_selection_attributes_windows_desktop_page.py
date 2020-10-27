@@ -16,6 +16,8 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     ATTRIBUTE_ELEM_XPATH = '//Group/Tree/TreeItem'
     ATTRIBUTE_ELEM_XPATH_AT = f'{ATTRIBUTE_ELEM_XPATH}[%s]'
 
+    ATTRIBUTES_CONTAINER = '//Group/Tree'
+
     def click_attribute(self, attribute_name):
         popup_main_element = self.get_add_in_main_element()
 
@@ -59,11 +61,16 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def select_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
 
-        popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % object_number
-        ).move_to_and_click()
+        self._find_element_by_number(object_number).move_to_and_click()
 
         popup_main_element.move_to()  # needed when selecting many attributes consecutively
+
+    def _find_element_by_number(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        return popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % object_number
+        )
 
     def expand_attribute_form(self, object_number):
         popup_main_element = self.get_add_in_main_element()
@@ -87,7 +94,9 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
     def get_attribute_name(self, object_number):
         popup_main_element = self.get_add_in_main_element()
-        attribute_elements = popup_main_element.get_elements_by_xpath(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH)
+        attribute_elements = popup_main_element.get_elements_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH
+        )
         
         return attribute_elements[int(object_number) - 1].get_name_by_attribute()
 
@@ -95,19 +104,16 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def scroll_into_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
 
-        attribute = popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % object_number
+        attribute = self._find_element_by_number(object_number)
+
+        attributes_container = popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTES_CONTAINER
         )
 
-        # Focus on the attributes list
-        popup_main_element.get_element_by_xpath('//Group/Tree').click()
+        while attribute.get_attribute('IsOffscreen') == 'true':
+            for i in range(4):  # Scroll at least 4 times before checking if attribute is visible
+                attributes_container.click(attributes_container.size['width'], attributes_container.size['height'])
 
-        while attribute.get_attribute('IsOffscreen'):
-            self.send_keys(Keys.ARROW_DOWN)
-            attribute = popup_main_element.get_element_by_xpath(
-                ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % object_number
-            )
-            popup_main_element.get_element_by_xpath('//Group/Tree').click()
+            attribute = self._find_element_by_number(object_number)
 
-        print(attribute.text)
         attribute.move_to()
