@@ -70,8 +70,6 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def open_show_data_panel(self, visualization_name):
-        self.mov
-
         self.get_element_by_name(
             ImportDossierMainWindowsDesktopPage.VISUALIZATION_MENU_BUTTON % visualization_name
         ).click()
