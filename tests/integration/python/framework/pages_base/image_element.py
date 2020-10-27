@@ -42,7 +42,12 @@ class ImageElement(BaseElement):
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     def right_click(self):
-        raise MstrException('Implement when needed')
+        (ActionChains(self.__driver)
+         .move_to_element_with_offset(ImageElement.excel_element,
+                                      self.__center_coordinates[0],
+                                      self.__center_coordinates[1])
+         .context_click()
+         .perform())
 
     @property
     def id(self):
