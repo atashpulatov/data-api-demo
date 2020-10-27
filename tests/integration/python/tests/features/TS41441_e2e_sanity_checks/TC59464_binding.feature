@@ -11,9 +11,9 @@ Feature: TS41441 - Sanity checks
       And I found object by ID "28185E364F4B1CA6E8FA178214FDC3AE" and selected "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@/`testtesttes/km123456"
       And I clicked Import button
       And I closed all notifications
-      And I selected object number 1 from Name Box
 
-     Then object number 1 should be called "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@/`testtesttes/km123456"
+     Then item number 1 in Name Box, ignoring timestamp at the end, should be called "_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_"
+      And I selected object number 1 from Name Box
 
      When I selected cell "K1"
       And I clicked Add Data button
@@ -22,6 +22,9 @@ Feature: TS41441 - Sanity checks
       And I closed all notifications
       And I selected object number 2 from Name Box
 
-     Then object number 1 should be called "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`testtestteskaj"
+     Then item number 2 in Name Box, ignoring timestamp at the end, should be called "_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_"
+      And I selected object number 2 from Name Box
+
+     Then object number 1 and object number 2 in Name Box had different timestamps
 
       And I logged out
