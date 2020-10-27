@@ -62,9 +62,16 @@ class StepGetInstanceDefinition {
         instanceDefinition = await mstrObjectRestService.createInstance(objectData);
       }
 
+      // TODO check if dossierData is still needed
       instanceDefinition = await this.modifyInstanceWithPrompt({ instanceDefinition, ...objectData });
 
-      this.savePreviousObjectData(instanceDefinition, crosstabHeaderDimensions, subtotalsInfo.subtotalsAddresses);
+      this.savePreviousObjectData(
+        instanceDefinition,
+        crosstabHeaderDimensions,
+        subtotalsInfo.subtotalsAddresses,
+        futureStep
+      );
+
 
       // FIXME: below flow should not be part of this step
       if (futureStep === GET_OFFICE_TABLE_IMPORT) {
@@ -73,7 +80,6 @@ class StepGetInstanceDefinition {
       if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;
       }
-
 
       const { mstrTable } = instanceDefinition;
       const updatedObject = {
@@ -134,9 +140,9 @@ class StepGetInstanceDefinition {
   /**
    * Answers prompts and modify instance of the object.
    *
-   * @param {Object} instanceDefinition
-   * @param {String} objectId
-   * @param {String} projectId
+   * @param {Object} instanceDefinition Object containing information about MSTR object
+   * @param {String} objectId Id object neing currentrly imported
+   * @param {String} projectId Id of the Mstr project which object is part of
    * @param {Object} promptsAnswers Stored prompt answers
    * @param {Object} dossierData
    * @param {Object} body Contains requested objects and filters.
@@ -190,9 +196,22 @@ class StepGetInstanceDefinition {
     }
   };
 
-  savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses) => {
+  /**
+   * Answers prompts and modify instance of the object.
+   *
+   * @param {Object} instanceDefinition Object containing information about MSTR object
+   * @param {Object} crosstabHeaderDimensions Contains information about crosstab headers dimensions
+   * @param {Object[]} subtotalsAddresses Contains adresses of subtotals from first import
+   * @param {String} futureStep Specifies which step wuill be used to create Excel table
+   */
+  savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses, futureStep) => {
     const { mstrTable } = instanceDefinition;
-    mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions || false;
+
+    if (crosstabHeaderDimensions && futureStep !== GET_OFFICE_TABLE_IMPORT) {
+      mstrTable.prevCrosstabDimensions = crosstabHeaderDimensions;
+    } else {
+      mstrTable.prevCrosstabDimensions = false;
+    }
     mstrTable.crosstabHeaderDimensions = mstrTable.isCrosstab
       ? officeApiCrosstabHelper.getCrosstabHeaderDimensions(instanceDefinition)
       : false;

@@ -30,6 +30,9 @@ class DriverSendKeys:
     def press_tab(self):
         self.send_keys(Keys.TAB)
 
+    def press_escape(self):
+        self.send_keys(Keys.ESCAPE)
+
     def send_keys(self, keys):
         ActionChains(self.__driver).send_keys(keys).perform()
 

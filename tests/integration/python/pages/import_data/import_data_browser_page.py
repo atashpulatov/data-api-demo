@@ -39,6 +39,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     FIRST_OBJECT_ROW_SELECTED = '.ReactVirtualized__Table__row.selected-object'
     DISABLED_BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
+    BUTTON_TOOLTIP = '.ant-popover-inner-content'
+
     def __init__(self):
         super().__init__()
 
@@ -198,3 +200,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.clear()
+
+    def hover_over_import_button(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
+
+    def get_tooltip_message_for_button(self):
+        self.focus_on_add_in_popup_frame()
+        return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text
