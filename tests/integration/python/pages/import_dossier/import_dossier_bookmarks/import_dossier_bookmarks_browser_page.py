@@ -20,3 +20,7 @@ class ImportDossierBookmarksBrowserPage(BaseBrowserPage):
                 ('Not possible to click bookmark item, given object index is too big', bookmark_index, bookmark_items))
 
         bookmark_items[bookmark_index].click()
+
+    def create_bookmark(self, bookmark_name):
+        # TODO: Implement
+        self.log('Missing step implementation.')

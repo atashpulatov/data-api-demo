@@ -37,6 +37,10 @@ class ImportDossierContextMenuMacDesktopPage(BaseMacDesktopPage):
         self._select_totals_item(totals_to_select, submenu_group_selector)
         self._press_ok_in_totals_submenu(submenu_group_selector)
 
+    def select_sort_order_for_metric(self, sort_order, metric_name):
+        # TODO: Implement.
+        self.log('Missing step implementation.')
+
     def _select_totals_item(self, totals_to_select, submenu_group_selector):
         totals_selector_suffix = ImportDossierContextMenuMacDesktopPage.MENU_ITEM % totals_to_select
         totals_selector = submenu_group_selector + totals_selector_suffix
