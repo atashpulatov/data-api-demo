@@ -23,6 +23,8 @@ from pages.import_dossier.import_dossier_filter.import_dossier_filter_windows_de
     ImportDossierFilterWindowsDesktopPage
 from pages.import_dossier.import_dossier_main.import_dossier_main_windows_desktop_page import \
     ImportDossierMainWindowsDesktopPage
+from pages.import_dossier.import_dossier_show_data.import_dossier_show_data_windows_desktop_page import \
+    ImportDossierShowDataWindowsDesktopPage
 from pages.import_dossier.import_dossier_table_of_contents.import_dossier_table_of_contents_windows_desktop_page import \
     ImportDossierTableOfContentsWindowsDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
@@ -34,7 +36,6 @@ from pages.right_panel.range_taken_popup.range_taken_popup_windows_desktop_page 
 from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
-
 
 class PagesSetWindowsDesktop(AbstractPagesSet):
     def __init__(self):
@@ -72,7 +73,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.import_dossier_bookmarks_windows_desktop_page = ImportDossierBookmarksWindowsDesktopPage()
         self.import_dossier_table_of_contents_windows_desktop_page = ImportDossierTableOfContentsWindowsDesktopPage()
         self.import_dossier_context_menu_windows_desktop_page = ImportDossierContextMenuWindowsDesktopPage()
-        self.import_dossier_show_data_windows_desktop_page = None
+        self.import_dossier_show_data_windows_desktop_page = ImportDossierShowDataWindowsDesktopPage()
 
     def excel_general_page(self):
         return self.excel_general_windows_desktop_page
