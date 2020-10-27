@@ -22,10 +22,6 @@ class BaseElement:
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
 
-    # TODO refactor and remove
-    def get_element(self):
-        return self.__element
-
     def click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
             try:
@@ -84,6 +80,10 @@ class BaseElement:
     def text(self):
         return self.__element.text
 
+    @property
+    def tag_name(self):
+        return self.__element.tag_name
+
     def get_attribute(self, attribute_name):
         return self.__element.get_attribute(attribute_name)
 
@@ -97,16 +97,16 @@ class BaseElement:
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
 
     def get_element_by_css(self, selector):
-        return self._get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
+        return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
 
     def get_element_by_xpath(self, selector):
-        return self._get_element(By.XPATH, selector, timeout=DEFAULT_TIMEOUT)
+        return self.get_element(By.XPATH, selector, timeout=DEFAULT_TIMEOUT)
 
     def get_element_by_name(self, selector):
-        return self._get_element(By.NAME, selector, timeout=DEFAULT_TIMEOUT)
+        return self.get_element(By.NAME, selector, timeout=DEFAULT_TIMEOUT)
 
     def get_element_by_tag_name(self, selector):
-        return self._get_element(By.TAG_NAME, selector, timeout=DEFAULT_TIMEOUT)
+        return self.get_element(By.TAG_NAME, selector, timeout=DEFAULT_TIMEOUT)
 
     def check_if_element_exists_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.TAG_NAME, selector, timeout)
@@ -119,12 +119,26 @@ class BaseElement:
 
     def _check_if_element_exists(self, selector_type, selector, timeout=DEFAULT_TIMEOUT):
         try:
-            self._get_element(selector_type, selector, timeout)
+            self.get_element(selector_type, selector, timeout)
             return True
         except MstrException:
             return False
 
-    def _get_element(self, selector_type, selector, timeout):
+    def get_element(self, selector_type, selector, timeout=DEFAULT_TIMEOUT):
+        """
+        Gets element which is a child of this base element.
+
+        This is a generic method used by framework classes. In Pages implementation, for code clarity,
+        please use get_element_by_* if possible.
+
+        :param selector_type: Selector type to be used when searching for element (e.g. By.NAME).
+        :param selector: Selector to be used when searching for element (e.g. 'Close').
+        :param timeout: Timeout threshold in seconds, when reached MstrException is raised.
+
+        :raises MstrException when timeout's threshold is reached.
+
+        :return: BaseElement found using selector_type and selector.
+        """
         end_time = time.time() + timeout
         while True:
             try:
