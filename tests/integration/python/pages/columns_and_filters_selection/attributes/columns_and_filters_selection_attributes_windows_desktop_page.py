@@ -61,11 +61,11 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def select_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
 
-        self._find_element_by_number(object_number).move_to_and_click()
+        self._find_attribute_by_number(object_number).move_to_and_click()
 
         popup_main_element.move_to()  # needed when selecting many attributes consecutively
 
-    def _find_element_by_number(self, object_number):
+    def _find_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
 
         return popup_main_element.get_element_by_xpath(
@@ -104,7 +104,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def scroll_into_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
 
-        attribute = self._find_element_by_number(object_number)
+        attribute = self._find_attribute_by_number(object_number)
 
         attributes_container = popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTES_CONTAINER
@@ -114,6 +114,6 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
             for i in range(4):  # Scroll at least 4 times before checking if attribute is visible
                 attributes_container.click(attributes_container.size['width'], attributes_container.size['height'])
 
-            attribute = self._find_element_by_number(object_number)
+            attribute = self._find_attribute_by_number(object_number)
 
         attribute.move_to()
