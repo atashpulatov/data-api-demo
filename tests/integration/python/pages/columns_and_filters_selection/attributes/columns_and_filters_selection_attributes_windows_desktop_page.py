@@ -17,6 +17,9 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
         ).click()
 
+    def click_attribute_for_dataset(self, attribute_name):
+        self.click_attribute(attribute_name)
+
     def select_all_attributes(self):
         self.get_element_by_name(
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ITEM_ALL_ATTRIBUTES,
