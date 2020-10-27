@@ -25,7 +25,12 @@ class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     def is_object_name_in_name_box_correct(self, object_number, object_name):
         """
         Navigates to the Name Box element and picks ListItem number object_number.
-        Gets the name string and removes trailing digits from the name string and compares the result with object_name.
+        Gets the name string and removes trailing digits from the name string.
+        If the object_name string starts and ends with double quote removes quotations and
+        return true if the name_from_namebox_without_timestamp is equal to object_name_without_quotes.
+
+        If the object_name string doesn't starts and ends with double quote
+        return true if the name_from_namebox_without_timestamp is equal to object_name
 
         :param object_number(int): Number of element from Name Box dropdown
         :param object_name(string): Name of object that we expect
@@ -36,10 +41,14 @@ class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         self._go_to_object_from_name_box(object_number)
 
         name_from_namebox = self._get_highlighted_string()
-        object_name_without_quotes = object_name[1:-1]
+
         name_from_namebox_without_timestamp = re.sub(r'\d+$', '', name_from_namebox)
 
-        return object_name_without_quotes == name_from_namebox_without_timestamp
+        if object_name.startswith('"') and object_name.endswith('"'):
+            object_name_without_quotes = object_name[1:-1]
+            return object_name_without_quotes == name_from_namebox_without_timestamp
+
+        return object_name == name_from_namebox_without_timestamp
 
     def are_timstamps_different(self, object_number_1, object_number_2):
         """
