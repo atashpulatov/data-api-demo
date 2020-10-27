@@ -6,6 +6,11 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
     VISUALIZATION_TILE = '//Group/Pane/Pane/Group'
 
     IMPORT_BUTTON = 'Import'
+    RESET_DSSIER = 'Reset'
+    RESET_DSSIER_CONFIRM = 'Yes'
+
+    VISUALIZATION_MENU_BUTTON = 'Menu for %s'
+    SHOW_DATA = 'Show Data'
 
     def import_visualization_by_name(self, visualization_name):
         self.select_visualization_by_name(visualization_name)
@@ -39,3 +44,26 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def wait_for_dossier_to_load(self):
         self.pause(30)  # TODO wait when ready
+
+    def reset_dossier(self):
+        self.get_element_by_name(
+            ImportDossierMainWindowsDesktopPage.RESET_DSSIER,
+            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.RESET_DSSIER)
+        ).click()
+
+        self.get_element_by_name(
+            ImportDossierMainWindowsDesktopPage.RESET_DSSIER_CONFIRM,
+            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.RESET_DSSIER_CONFIRM)
+        ).click()
+
+    def open_show_data_panel(self, visualization_name):
+        self.mov
+
+        self.get_element_by_name(
+            ImportDossierMainWindowsDesktopPage.VISUALIZATION_MENU_BUTTON % visualization_name
+        ).click()
+
+        self.get_element_by_name(
+            ImportDossierMainWindowsDesktopPage.SHOW_DATA,
+            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.SHOW_DATA)
+        ).click()
