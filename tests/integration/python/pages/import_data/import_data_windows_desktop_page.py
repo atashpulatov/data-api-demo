@@ -99,6 +99,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
         """
+
         self.find_object(object_id)
 
         Util.pause(4)  # TODO wait when ready
