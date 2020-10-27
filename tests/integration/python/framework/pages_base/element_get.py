@@ -6,9 +6,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
+from framework.driver.driver_factory import DriverFactory
 from framework.pages_base.base_element import BaseElement
 from framework.pages_base.element_check import ElementCheck
 from framework.pages_base.image_element import ImageElement
+from framework.util.config_util import ConfigUtil
 from framework.util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
@@ -17,6 +19,11 @@ from framework.util.util import Util
 class ElementGet(ElementCheck):
     def __init__(self):
         super().__init__()
+
+        driver_type = ConfigUtil.get_driver_type()
+        self.driver = DriverFactory().get_driver(driver_type)
+
+        self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
 
     def get_element_by_id(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.ID, selector, timeout), self.driver)
