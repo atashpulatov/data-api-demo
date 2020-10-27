@@ -102,7 +102,7 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return self.get_element_by_accessibility_id
 
-    def press_key_until_focused(self, element_name):
+    def press_tab_until_focused(self, element_name):
         mapped_element = FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]
 
         get_element = self._select_get_element_method(mapped_element)

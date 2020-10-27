@@ -46,4 +46,4 @@ def step_impl(context, element_name):
 
 @step('I pressed key Tab until element "{element_name}" has focus')
 def step_impl(context, element_name):
-    context.pages.filter_panel_page().press_key_until_focused(element_name)
+    context.pages.filter_panel_page().press_tab_until_focused(element_name)
