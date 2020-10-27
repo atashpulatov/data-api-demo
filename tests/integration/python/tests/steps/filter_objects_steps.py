@@ -91,3 +91,8 @@ def step_impl(context):
 def step_impl(context):
     element_title = context.pages.filter_panel_page().get_clear_all_on_mylibrary_title()
     AssertUtil.assert_simple(element_title, 'Clear All')
+
+@step('Application category header has title "{title}"')
+def step_impl(context, title):
+    element_title = context.pages.filter_panel_page().get_application_header_title()
+    AssertUtil.assert_simple(element_title, title)

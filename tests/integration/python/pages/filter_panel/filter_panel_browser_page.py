@@ -11,6 +11,7 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     APPLICATIONS_FIRST_CHECKBOX = '.filter-panel .category-list-wrapper:nth-child(1) ' \
                                   '.category-list-row:nth-child(1) input'
     APPLICATIONS_ALL_PANEL = '.filter-panel div.category-list-wrapper:nth-child(1) > button:nth-child(2)'
+    APPLICATION_HEADER = '.filter-panel .category-list-wrapper:nth-child(1) .category-list-header'
 
     TYPES_REPORT_CHECKBOX = '.filter-panel .category-list-wrapper:nth-child(2) ' \
                             '.category-list-row:nth-child(1) input'
@@ -122,4 +123,8 @@ class FilterPanelBrowserPage(BaseBrowserPage):
 
     def get_clear_all_on_mylibrary_title(self):
         title = self.get_element_by_css(FilterPanelBrowserPage.CLEAR_ALL)
+        return title.text
+    
+    def get_application_header_title(self):
+        title = self.get_element_by_css(FilterPanelBrowserPage.APPLICATION_HEADER)
         return title.text

@@ -114,6 +114,11 @@ def step_impl(context):
 def step_impl(context, header):
     context.pages.import_data_page().click_column_header(header)
 
+@step('Objects are sorted "{sorted}" on column "{header}"')
+def step_impl(context, header, sorted):
+    sorted_status = context.pages.import_data_page().column_header_sorted(header)
+    AssertUtil.assert_simple(sorted_status, sorted)
+
 @step('I scrolled down list of objects by {number} pages')
 def step_impl(context, number):
     # context.pages.import_data_page().select_first_object_from_list()
