@@ -11,6 +11,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     REMOVE_BUTTON_ELEM = 'Remove button'
 
     BUTTON_OK = 'OK'
+    DUPLICATING_TEXT_ELEM = 'Duplicating'
     REFRESHING_TEXT_ELEM = 'Refreshing'
     IMPORTING_TEXT_ELEM = 'Importing'
     REMOVING_TEXT_ELEM = 'Removing'
@@ -43,6 +44,11 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def wait_for_remove_object_to_finish_successfully(self):
         while self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM,
+                                                   timeout=SHORT_TIMEOUT):
+            pass
+
+    def wait_for_duplicate_object_to_finish_successfully(self):
+        while self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM,
                                                    timeout=SHORT_TIMEOUT):
             pass
 
