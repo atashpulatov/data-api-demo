@@ -1,3 +1,5 @@
+from selenium.common.exceptions import NoSuchElementException
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
 from pages.import_dossier.import_dossier_main.import_dossier_main_windows_desktop_page import \
@@ -12,6 +14,9 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
     CONTEXT_MENU_ITEM_EXCLUDE = 'Exclude'
     CONTEXT_MENU_ITEM_OK = 'OK'
+    CONTEXT_MENU_ITEM_DRILL = 'Drill'
+
+    DRILL_SUB_MENU_ITEM = '//HyperLink[@Name = "%s"]'
 
     CONTEXT_SUB_MENU_ITEM = '//Group/Pane/Pane/Text[@Name="%s"]'
 
@@ -56,6 +61,23 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ImportDossierContextMenuWindowsDesktopPage.SORTING_ICON_PREFIX +
                                                sort_order)
         ).click()
+
+    def select_drill_by_for_attribute(self, drill_by, attribute_name):
+        self.get_element_by_xpath(
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name,
+            image_name=self.prepare_image_name(
+                ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL_FILE % attribute_name)
+        ).right_click()
+
+        try:
+            self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_DRILL)
+            self.get_element_by_xpath(ImportDossierContextMenuWindowsDesktopPage.DRILL_SUB_MENU_ITEM % drill_by
+                                      ).click()
+            pass
+        except NoSuchElementException:
+            raise MstrException(
+              'Item to drill by not present - attribute name: [%s], drill by: [%s].' % (attribute_name, drill_by))
+            pass
 
     def select_replace_with_for_attribute(self, replace_with, attribute_name, visualization_name):
         visualization = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
