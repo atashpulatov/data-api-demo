@@ -41,6 +41,8 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         'Owners All button': OWNER_ALL_PANEL,
     }
 
+    KEY_PRESS_RETRIES = 20
+
     def __init__(self):
         super().__init__()
 
@@ -99,3 +101,18 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
             return self.get_element_by_xpath
 
         return self.get_element_by_accessibility_id
+
+    def press_key_until_focused(self, element_name):
+        mapped_element = FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]
+
+        get_element = self._select_get_element_method(mapped_element)
+
+        element = get_element(mapped_element)
+
+        for i in range(0, FilterPanelWindowsDesktopPage.KEY_PRESS_RETRIES):
+            if element == self.get_element_with_focus():
+                return
+
+            self.press_tab()
+
+        raise MstrException('Tab limit is reached. Element not found')
