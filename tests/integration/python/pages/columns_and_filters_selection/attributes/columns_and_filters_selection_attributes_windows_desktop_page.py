@@ -14,7 +14,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     ATTRIBUTE_FORM_ITEM_ELEM = '//Group[@Name="%s"]'
 
     ATTRIBUTE_ELEM_XPATH = '//Group/Tree/TreeItem'
-    ATTRIBUTE_ELEM_XPATH_AT = f'{ATTRIBUTE_ELEM_XPATH}[%s]'
+    ATTRIBUTE_ELEM_XPATH_AT = f'({ATTRIBUTE_ELEM_XPATH})[%s]'
 
     ATTRIBUTES_CONTAINER = '//Group/Tree'
 
@@ -93,12 +93,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         return attribute_form_element.text
 
     def get_attribute_name(self, object_number):
-        popup_main_element = self.get_add_in_main_element()
-        attribute_elements = popup_main_element.get_elements_by_xpath(
-            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH
-        )
-        
-        return attribute_elements[int(object_number) - 1].get_name_by_attribute()
+        return self._find_attribute_by_number(object_number).get_name_by_attribute()
 
     # Workaround for the defect in WinAppDriver's moveto command, which does not scroll to non-visible element
     def scroll_into_attribute_by_number(self, object_number):
