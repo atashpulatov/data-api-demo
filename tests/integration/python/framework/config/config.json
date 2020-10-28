@@ -1,5 +1,5 @@
 {
-  "driver_type": "windows_chrome",
+  "driver_type": "mac_chrome",
   "image_recognition_enabled": true,
   "image_recognition_screenshots_folder": "framework\\screenshots",
   "connect_to_existing_session_enabled": false,
