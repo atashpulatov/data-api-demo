@@ -16,7 +16,10 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
         self._apply_filter()
 
     def _apply_filter(self):
-        self.get_element_by_name(ImportDossierFilterWindowsDesktopPage.APPLY_FILTER_BUTTON).click()
+        self.get_element_by_name(
+            ImportDossierFilterWindowsDesktopPage.APPLY_FILTER_BUTTON,
+            image_name=self.prepare_image_name(ImportDossierFilterWindowsDesktopPage.APPLY_FILTER_BUTTON)
+        ).click()
 
     def _open_year_filter(self):
         self._open_filter_menu()
