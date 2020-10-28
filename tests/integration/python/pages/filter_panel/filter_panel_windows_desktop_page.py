@@ -41,7 +41,7 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         'Owners All button': OWNER_ALL_PANEL,
     }
 
-    KEY_PRESS_RETRIES = 20
+    KEY_PRESS_RETRIES = 40
 
     def __init__(self):
         super().__init__()
@@ -94,13 +94,7 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         if element is not None:
             return element == self.get_element_with_focus()
 
-        raise MstrException(f'No element found for {element_name}, selector: {mapped_element}')
-
-    def _select_get_element_method(self, mapped_element):
-        if mapped_element.startswith('/'):
-            return self.get_element_by_xpath
-
-        return self.get_element_by_accessibility_id
+        raise MstrException(f'No element found for element: [{element_name}], selector: [{mapped_element}]')
 
     def press_tab_until_focused(self, element_name):
         mapped_element = FilterPanelWindowsDesktopPage.MAP_ELEMENT_NAME_TO_SELECTOR[element_name]
@@ -109,10 +103,18 @@ class FilterPanelWindowsDesktopPage(BaseWindowsDesktopPage):
 
         element = get_element(mapped_element)
 
-        for i in range(0, FilterPanelWindowsDesktopPage.KEY_PRESS_RETRIES):
+        for i in range(FilterPanelWindowsDesktopPage.KEY_PRESS_RETRIES):
             if element == self.get_element_with_focus():
                 return
 
             self.press_tab()
 
-        raise MstrException('Tab limit is reached. Element not found')
+        raise MstrException(f'No element having focus found for element: [{element_name}], '
+                            f'selector: [{mapped_element}], '
+                            f'Tab key pressed {FilterPanelWindowsDesktopPage.KEY_PRESS_RETRIES} times.')
+
+    def _select_get_element_method(self, mapped_element):
+        if mapped_element.startswith('/'):
+            return self.get_element_by_xpath
+
+        return self.get_element_by_accessibility_id
