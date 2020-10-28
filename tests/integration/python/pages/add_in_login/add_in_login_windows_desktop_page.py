@@ -1,10 +1,10 @@
-from framework.pages_base.base_page import BasePage
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
 
 
-class AddInLoginWindowsDesktopPage(BasePage):
+class AddInLoginWindowsDesktopPage(BaseWindowsDesktopPage):
     USERNAME_INPUT_ELEM = 'username'
     PASSWORD_INPUT_ELEM = 'password'
     LOGIN_BUTTON_ELEM = 'loginButton'
