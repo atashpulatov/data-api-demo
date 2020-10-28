@@ -25,7 +25,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     TABLE_CELL_FILE = 'Cell %s'
 
     # Using index inside xpath selector allow us to create screenshot of this element
-    SORTING_METRIC_ICONS = '(//HyperLink[((@width > 60 and @width < 70) and (@height > 30 and @height < 35))])[%s]'
+    SORTING_METRIC_ICONS = '(//HyperLink[(@height > 5)])[%s]'
     SORTING_ICON_PREFIX = 'sort_icon_'
 
     def __init__(self):
