@@ -47,3 +47,9 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
             self.press_tab()
 
         self.press_enter()
+
+    def is_object_name_in_name_box_correct(self, object_number, expected_name):
+        raise MstrException('TODO implement')
+
+    def are_timestamps_different(self, object_number_1, object_number_2):
+        raise MstrException('TODO implement')

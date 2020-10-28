@@ -87,7 +87,7 @@ class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
         )
 
     def _ensure_attribute_is_selected(self, attribute_element):
-        if not attribute_element.check_if_child_element_exists_by_css(
+        if not attribute_element.check_if_element_exists_by_css(
                 ColumnsAndFiltersSelectionAttributesBrowserPage.CHECKED_CHECKBOX_CLASS,
                 timeout=SHORT_TIMEOUT):
             attribute_element.click()
@@ -105,14 +105,14 @@ class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
                 attribute_form_element.move_to_and_click(offset_x=2, offset_y=2)
 
     def _ensure_attributes_forms_are_expanded(self, attribute_element):
-        if attribute_element.check_if_child_element_exists_by_css(
+        if attribute_element.check_if_element_exists_by_css(
                 ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED,
                 timeout=SHORT_TIMEOUT):
             attribute_element.get_element_by_css(
                 ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED
             ).click()
 
-        if not attribute_element.check_if_child_element_exists_by_css(
+        if not attribute_element.check_if_element_exists_by_css(
                 ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED,
                 timeout=SHORT_TIMEOUT):
             raise MstrException('Error while expanding attributes forms.')
