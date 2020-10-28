@@ -1,6 +1,5 @@
 import json
 
-from selenium.webdriver.common.keys import Keys
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 
 
