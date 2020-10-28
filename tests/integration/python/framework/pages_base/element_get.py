@@ -144,4 +144,4 @@ class ElementGet(ElementCheck):
         raise MstrException('Cannot find element: %s' % selector)
 
     def get_element_with_focus(self):
-        return self.driver.switch_to.active_element
+        return BaseElement(self.driver.switch_to.active_element, self.driver)

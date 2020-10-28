@@ -1,3 +1,4 @@
+import hashlib
 import os
 import re
 import time
@@ -36,6 +37,8 @@ class ImageUtil:
     SCREENSHOT_FILE_EXTENSION = '.png'
 
     TO_ALPHA_REGEX = re.compile(r'\W')
+    FILE_NAME_MAX_LENGTH = 100
+    FILE_NAME_SEPARATOR = '_'
 
     def get_element_center_coordinates_by_image(self, image_name):
         """
@@ -231,7 +234,8 @@ class ImageUtil:
         screenshots_folder = self._get_screenshots_folder()
 
         file_name_prefix_alpha = ImageUtil.TO_ALPHA_REGEX.sub('_', file_name_prefix)
-        file_name = ''.join((file_name_prefix_alpha.lower(), ImageUtil.SCREENSHOT_FILE_EXTENSION))
+        file_name_shortend = self._shorten_file_name(file_name_prefix_alpha)
+        file_name = ''.join((file_name_shortend.lower(), ImageUtil.SCREENSHOT_FILE_EXTENSION))
 
         file_path = os.path.join(screenshots_folder, file_name)
 
@@ -247,3 +251,24 @@ class ImageUtil:
             'Invalid image recognition screenshots folder name, folder does not exist '
             f'or has wrong permissions: [{screenshots_folder}].'
         )
+
+    def _shorten_file_name(self, file_name):
+        """
+        Ensures the file name is no longer than FILE_NAME_MAX_LENGTH.
+
+        If the file name is shorter or equals to FILE_NAME_MAX_LENGTH, it returns the file_name.
+        Otherwise it returns the trimmed file name with added hashed file_name.
+
+        :param file_name(str): String containing the file name.
+
+        :returns (str): Original file name or file name of limited length with added hashed file_name.
+        """
+
+        if len(file_name) <= ImageUtil.FILE_NAME_MAX_LENGTH:
+            return file_name
+
+        file_name_suffix = ImageUtil.FILE_NAME_SEPARATOR + hashlib.md5(file_name.encode()).hexdigest()
+        file_name_prefix_length = ImageUtil.FILE_NAME_MAX_LENGTH - len(file_name_suffix)
+        file_name_prefix = file_name[0:file_name_prefix_length]
+
+        return file_name_prefix + file_name_suffix
