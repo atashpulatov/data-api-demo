@@ -251,13 +251,12 @@ class ImageUtil:
             'Invalid image recognition screenshots folder name, folder does not exist '
             f'or has wrong permissions: [{screenshots_folder}].'
         )
-        return screenshots_folder
 
     def _shorten_file_name(self, file_name):
         """
         Ensures the file name is no longer than FILE_NAME_MAX_LENGTH.
 
-        If the file name is shorter or equals to FILE_NAME_MAX_LENGTH it returns the file_name.
+        If the file name is shorter or equals to FILE_NAME_MAX_LENGTH, it returns the file_name.
         Otherwise it returns the trimmed file name with added hashed file_name.
 
         :param file_name(str): String containing the file name.
@@ -270,6 +269,6 @@ class ImageUtil:
 
         file_name_suffix = ImageUtil.FILE_NAME_SEPARATOR + hashlib.md5(file_name.encode()).hexdigest()
         file_name_prefix_length = ImageUtil.FILE_NAME_MAX_LENGTH - len(file_name_suffix)
-        file_name_trimmed = file_name[0:file_name_prefix_length]
+        file_name_prefix = file_name[0:file_name_prefix_length]
 
-        return file_name_trimmed + file_name_suffix
+        return file_name_prefix + file_name_suffix

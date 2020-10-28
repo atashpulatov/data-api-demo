@@ -1,4 +1,5 @@
 from behave import *
+
 from framework.util.assert_util import AssertUtil
 
 
@@ -17,9 +18,9 @@ def step_impl(context, object_number):
     context.pages.excel_menu_page().select_object_from_name_box(object_number)
 
 
-@step('item number {object_number} in Name Box, ignoring timestamp at the end, should be called {object_name}')
-def step_impl(context, object_number, object_name):
-    result = context.pages.excel_menu_page().is_object_name_in_name_box_correct(object_number, object_name)
+@step('item number "{object_number}" in Name Box, ignoring timestamp at the end, was called "{expected_name}"')
+def step_impl(context, object_number, expected_name):
+    result = context.pages.excel_menu_page().is_object_name_in_name_box_correct(object_number, expected_name)
 
     AssertUtil.assert_simple(result, True)
 
