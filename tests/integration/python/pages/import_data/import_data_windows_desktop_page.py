@@ -191,9 +191,10 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def close_import_data_popup(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        popup_element = self.get_element_by_class_name(ImportDataWindowsDesktopPage.POPUP_WINDOW_ELEM)
-        popup_element.get_element_by_name(
-            ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON
+        self.get_element_by_name_using_parent(
+            self.get_element_by_class_name, ImportDataWindowsDesktopPage.POPUP_WINDOW_ELEM,
+            ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON)
         ).click()
 
     def click_filters_button(self):

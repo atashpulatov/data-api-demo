@@ -33,7 +33,8 @@ class AddInLoginWindowsDesktopPage(BasePage):
         self.get_element_by_accessibility_id(AddInLoginWindowsDesktopPage.LOGIN_BUTTON_ELEM).click()
 
     def close_login_pop_up(self):
-        popup_element = self.get_element_by_class_name(AddInLoginWindowsDesktopPage.POPUP_WINDOW_ELEM)
-        popup_element.get_element_by_name(
-            AddInLoginWindowsDesktopPage.POPUP_CLOSE_BUTTON
+        self.get_element_by_name_using_parent(
+            self.get_element_by_class_name, AddInLoginWindowsDesktopPage.POPUP_WINDOW_ELEM,
+            AddInLoginWindowsDesktopPage.POPUP_CLOSE_BUTTON,
+            image_name=self.prepare_image_name(AddInLoginWindowsDesktopPage.POPUP_CLOSE_BUTTON)
         ).click()
