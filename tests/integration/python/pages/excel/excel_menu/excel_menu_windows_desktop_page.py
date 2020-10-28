@@ -50,7 +50,7 @@ class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return object_name == name_from_namebox_without_timestamp
 
-    def are_timstamps_different(self, object_number_1, object_number_2):
+    def are_timestamps_different(self, object_number_1, object_number_2):
         """
         Navigates to the Name Box element number object_number_1 and gets the name string.
         Repeats this step for element number object_number_2.
@@ -60,7 +60,7 @@ class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         :param object_number_1(int): Number of first element from Name Box dropdown
         :param object_number_2(int): Number of second element from Name Box dropdown
 
-        :returns (bloean): Returns true if names of objects are different
+        :returns (bolean): Returns true if names of objects are different
         """
 
         self._go_to_object_from_name_box(object_number_1)

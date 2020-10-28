@@ -26,6 +26,6 @@ def step_impl(context, object_number, object_name):
 
 @step('object number {object_number_1} and object number {object_number_2} in Name Box had different timestamps')
 def step_impl(context, object_number_1, object_number_2):
-    result = context.pages.excel_menu_page().are_timstamps_different(object_number_1, object_number_2)
+    result = context.pages.excel_menu_page().are_timestamps_different(object_number_1, object_number_2)
 
     AssertUtil.assert_simple(result, True)
