@@ -2,30 +2,21 @@ from framework.pages_base.base_browser_page import BaseBrowserPage
 
 
 class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
-
-    SORT_ASCENDING = "icon_sort_triangle_up_blue"
-
-    SORT_DESCENDING = "icon_sort_triangle_bottom_blue"
-
-    SORT_DEFAULT = "icon_sort_triangle_gray"
-
     TRIANGLE_IMAGE_XPATH = "//Image/Image/Image"
 
-    TRY_LIMIT_FOR_SORT = 3
-
-    TRY_LIMIT_FOR_SORT_BY_KEYBOARD = 6
+    SORT_ASCENDING = "icon_sort_triangle_up_blue"
+    SORT_DESCENDING = "icon_sort_triangle_bottom_blue"
+    SORT_DEFAULT = "icon_sort_triangle_gray"
 
     SORT_ATTRIBUTES = "sort-toggle-attributes"
-
     SORT_METRICS = "sort-toggle-metrics"
-
     SORT_FILTERS = "sort-toggle-filters"
-
-    SORT_ELEMENT_OFFSET = 100
 
     ATTRIBUTES = 'attributes'
     METRICS = 'metrics'
     FILTERS = 'filters'
+
+    SORT_ELEMENT_OFFSET = 100
 
     AUTOMATION_ID = "AutomationId"
 
@@ -106,7 +97,6 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
         self._toggle_sort_elements(
             object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ASCENDING, self.press_enter)
 
-        # Otherwise, we are already in ascending state
     def press_enter_to_sort_element_descending(self, object_type):
         self._toggle_sort_elements(
             object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DESCENDING, self.press_enter)
