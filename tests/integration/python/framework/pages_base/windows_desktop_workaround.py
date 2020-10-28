@@ -28,17 +28,16 @@ class WindowsDesktopWorkaround:
     def focus_on_right_side_panel(self):
         if self.is_windows_desktop_workaround_enabled():
             add_in_name = ConfigUtil.get_excel_desktop_add_in_import_data_name()
-            elems = ImageElement.excel_element.get_elements_by_name(add_in_name)
+            elements = ImageElement.excel_element.get_elements_by_name(add_in_name)
 
-            location = self._find_frame_location(elems)
+            location = self._find_frame_location(elements)
 
             ImageElement.excel_element.click(offset_x=location['x'] + 160, offset_y=location['y'] + 20)
 
     def _find_frame_location(self, elements):
-        for e in elements:
-            raw_element = e.get_element()
-            if raw_element.tag_name == WindowsDesktopWorkaround.RIGHT_PANEL_ELEM_TYPE:
-                return e.location
+        for element in elements:
+            if element.tag_name == WindowsDesktopWorkaround.RIGHT_PANEL_ELEM_TYPE:
+                return element.location
 
         raise MstrException('No custom element')
 
