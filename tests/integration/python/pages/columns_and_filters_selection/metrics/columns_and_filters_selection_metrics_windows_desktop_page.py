@@ -16,13 +16,15 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
     all_metrics = []
 
-    # TODO: refactor in case metric is not visible
     def click_metric(self, metric_name):
         popup_main_element = self.get_add_in_main_element()
 
-        popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_ELEM % metric_name
-        ).click()
+        try:
+            popup_main_element.get_element_by_xpath(
+                ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_ELEM % metric_name
+            ).click()
+        except MstrException:
+            list(filter(lambda m: m.text == metric_name, self._get_all_metrics()))[0].click()
 
     def select_all_metrics(self):
         self.get_element_by_name(
