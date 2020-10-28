@@ -37,14 +37,13 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
             image_name=self.prepare_image_name('unselect_all_attributes')
         ).click()
 
-    # TODO change implementation to ensure attribute is selected (not only clicking without checking)
     def ensure_attribute_is_selected_and_click_forms(self, attributes_and_forms_json):
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
         popup_main_element = self.get_add_in_main_element()
 
         for attribute_name, form_names in attributes_and_forms.items():
-            popup_main_element.get_element_by_xpath(
+            attribute_element = popup_main_element.get_element_by_xpath(
                 ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
             ).click()
 
@@ -106,7 +105,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         )
 
         while attribute.get_attribute('IsOffscreen') == 'true':
-            for i in range(4):  # Scroll at least 4 times before checking if attribute is visible
+            for i in range(5):  # Scroll at least 5 times before checking if attribute is visible
                 attributes_container.click(attributes_container.size['width'], attributes_container.size['height'])
 
             attribute = self._find_attribute_by_number(object_number)

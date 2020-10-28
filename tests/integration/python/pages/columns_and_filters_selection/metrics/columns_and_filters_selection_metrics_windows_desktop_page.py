@@ -20,11 +20,17 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         popup_main_element = self.get_add_in_main_element()
 
         try:
-            popup_main_element.get_element_by_xpath(
+            metric_to_click = popup_main_element.get_element_by_xpath(
                 ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_ELEM % metric_name
-            ).click()
+            )
         except MstrException:
-            list(filter(lambda m: m.text == metric_name, self._get_all_metrics()))[0].click()
+            self.log("Metric with metric name %s not found in visible elements" % metric_name)
+            [metric_to_click] = [metric for metric in self._get_all_metrics() if metric.get_name_by_attribute() is metric_name]
+
+        if metric_to_click:
+          metric_to_click.click()
+
+        raise MstrException("Metric with metric name %s not found" % metric_name)
 
     def select_all_metrics(self):
         self.get_element_by_name(
