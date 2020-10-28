@@ -14,7 +14,8 @@ class ImportDossierShowDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def close_show_data(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        show_data_window = self.get_element_by_xpath(ImportDossierShowDataWindowsDesktopPage.SHOW_DATA_WINDOW)
-        show_data_window.get_element_by_name(
-            ImportDossierShowDataWindowsDesktopPage.CLOSE_SHOW_DATA_BUTTON
+        self.get_element_by_name_using_parent(
+            self.get_element_by_xpath, ImportDossierShowDataWindowsDesktopPage.SHOW_DATA_WINDOW,
+            ImportDossierShowDataWindowsDesktopPage.CLOSE_SHOW_DATA_BUTTON,
+            image_name=self.prepare_image_name(ImportDossierShowDataWindowsDesktopPage.CLOSE_SHOW_DATA_BUTTON)
         ).click()

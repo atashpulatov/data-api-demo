@@ -52,9 +52,10 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def close_popup_window(self):
-        popup_element = self.get_element_by_class_name(ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_ELEM)
-        popup_element.get_element_by_name(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_CLOSE_BUTTON
+        self.get_element_by_name_using_parent(
+            self.get_element_by_class_name, ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_ELEM,
+            ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_CLOSE_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_CLOSE_BUTTON)
         ).click()
 
     def click_include_totals_and_subtotals(self):
