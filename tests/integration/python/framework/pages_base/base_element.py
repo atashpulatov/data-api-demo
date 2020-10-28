@@ -5,7 +5,8 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
-    ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS
+    ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS, \
+    MEDIUM_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -301,3 +302,15 @@ class BaseElement:
                 break
 
         raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')
+
+    def wait_until_disappears(self, timeout=MEDIUM_TIMEOUT):
+        """
+        Waits until this element disappears.
+
+        :raises MstrException: when element is still visible after timeout (in seconds).
+        """
+        start_time = time.time()
+
+        while self.is_displayed():
+            if time.time() - start_time > timeout:
+                raise MstrException(f'Element is still displayed after {timeout} seconds.')

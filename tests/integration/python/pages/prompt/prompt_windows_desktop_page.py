@@ -1,7 +1,6 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.const import SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
-import time
 
 
 class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -44,11 +43,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
         ).click()
 
-        start_time = time.time()
-
-        while prompt_field_label.is_displayed():
-            if time.time() - start_time > 10:
-                raise MstrException('Prompt did not unload in an expected time range')
+        prompt_field_label.wait_until_disappears()
 
     def click_run_button_for_prompted_dossier_if_not_answered(self):
         if self._check_if_prompts_answer_window_is_open():
