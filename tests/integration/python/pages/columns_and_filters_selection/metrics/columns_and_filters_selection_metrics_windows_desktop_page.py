@@ -40,16 +40,18 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         self._find_metric_by_number(object_number).click()
 
     def _find_metric_by_number(self, object_number):
+        object_index = int(object_number) - 1
+        
         popup_main_element = self.get_add_in_main_element()
 
         visible_metrics = popup_main_element.get_elements_by_xpath(
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
         )
 
-        if int(object_number) <= len(visible_metrics):
-            return visible_metrics[int(object_number) - 1]
+        if object_index < len(visible_metrics):
+            return visible_metrics[object_index]
         else:
-            return self._get_all_metrics()[int(object_number) - 1]
+            return self._get_all_metrics()[object_index]
 
     #  Workaround as non-visible metrics are not in page source
     def _get_all_metrics(self):
@@ -59,8 +61,8 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         popup_main_element = self.get_add_in_main_element()
 
         metrics_container = popup_main_element.get_element_by_xpath(
-                ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
-            )
+            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
+        )
 
         all_metrics = []
 
@@ -82,7 +84,7 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         raise MstrException('There are too many metrics in this dataset, search has been capped.')
 
     def get_metric_name(self, object_number):
-        self._find_metric_by_number(object_number).get_name_by_attribute()
+        return self._find_metric_by_number(object_number).get_name_by_attribute()
 
     def scroll_into_metric_by_number(self, object_number):
         self._get_all_metrics()[int(object_number) - 1].move_to()
