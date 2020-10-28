@@ -49,3 +49,6 @@ class ExcelGeneralWindowsDesktopPage(BaseWindowsDesktopPage):
                 offset_x=ExcelGeneralWindowsDesktopPage.EXCEL_MAXIMIZE_OFFSET_X,
                 offset_y=ExcelGeneralWindowsDesktopPage.EXCEL_MAXIMIZE_OFFSET_Y
             )
+
+    def change_excel_window_size(self, width, height):
+        self.driver.set_window_size(width, height)
