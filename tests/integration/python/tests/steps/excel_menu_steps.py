@@ -18,7 +18,7 @@ def step_impl(context, object_number):
     context.pages.excel_menu_page().select_object_from_name_box(object_number)
 
 
-@step('item number "{object_number}" in Name Box, ignoring timestamp at the end, was called "{expected_name}"')
+@step('item number {object_number} in Name Box, ignoring timestamp at the end, was called "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.excel_menu_page().is_object_name_in_name_box_correct(object_number, expected_name)
 
