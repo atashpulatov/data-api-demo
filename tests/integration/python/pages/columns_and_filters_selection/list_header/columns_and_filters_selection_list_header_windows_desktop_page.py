@@ -28,6 +28,42 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
 
     TOGGLE_ORDER = [SORT_DEFAULT, SORT_ASCENDING, SORT_DESCENDING]
 
+    def sort_elements_ascending_by_click(self, object_type):
+        self._toggle_sort_elements(
+            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ASCENDING, "click")
+
+    def sort_elements_descending_by_click(self, object_type):
+        self._toggle_sort_elements(
+            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DESCENDING, "click")
+
+    def sort_elements_default_by_click(self, object_type):
+        self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DEFAULT, "click")
+
+    def press_tab_until_object_type_focused(self, object_type):
+        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[
+            object_type]
+
+        sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
+
+        offset_x = sort_element.size['width'] + ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ELEMENT_OFFSET
+        # Click slightly to the right of the sort element so focus is set but no click event is registered
+        # offset_y is 10 to workaround a selenium bug where the click wasn't occurring where expected
+        sort_element.click(offset_x=offset_x, offset_y=10)
+
+        self.press_tab()
+
+    def press_enter_to_sort_element_ascending(self, object_type):
+        self._toggle_sort_elements(
+            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ASCENDING, self.press_enter)
+
+    def press_enter_to_sort_element_descending(self, object_type):
+        self._toggle_sort_elements(
+            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DESCENDING, self.press_enter)
+
+    def press_enter_to_sort_element_default(self, object_type):
+        self._toggle_sort_elements(
+            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DEFAULT, self.press_enter)
+
     def _toggle_sort_elements(self, object_type, final_sort_type, event_to_trigger):
         """
         Cycle through sort element states until the final_sort_type is found.
@@ -68,39 +104,3 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
                 return
 
         raise MstrException('sort toggle states length limit is reached. Element not found')
-
-    def sort_elements_ascending_by_click(self, object_type):
-        self._toggle_sort_elements(
-            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ASCENDING, "click")
-
-    def sort_elements_descending_by_click(self, object_type):
-        self._toggle_sort_elements(
-            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DESCENDING, "click")
-
-    def sort_elements_default_by_click(self, object_type):
-        self._toggle_sort_elements(object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DEFAULT, "click")
-
-    def press_tab_until_object_type_focused(self, object_type):
-        object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[
-            object_type]
-
-        sort_element = self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
-
-        offset_x = sort_element.size['width'] + ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ELEMENT_OFFSET
-        # Click slightly to the right of the sort element so focus is set but no click event is registered
-        # offset_y is 10 to workaround a selenium bug where the click wasn't occurring where expected
-        sort_element.click(offset_x=offset_x, offset_y=10)
-
-        self.press_tab()
-
-    def press_enter_to_sort_element_ascending(self, object_type):
-        self._toggle_sort_elements(
-            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_ASCENDING, self.press_enter)
-
-    def press_enter_to_sort_element_descending(self, object_type):
-        self._toggle_sort_elements(
-            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DESCENDING, self.press_enter)
-
-    def press_enter_to_sort_element_default(self, object_type):
-        self._toggle_sort_elements(
-            object_type, ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.SORT_DEFAULT, self.press_enter)
