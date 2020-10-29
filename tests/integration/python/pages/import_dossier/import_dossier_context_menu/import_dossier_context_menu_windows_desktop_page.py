@@ -25,7 +25,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     TABLE_CELL_FILE = 'Cell %s'
 
     # Using index inside xpath selector allow us to create screenshot of this element
-    SORTING_METRIC_ICONS = '(//HyperLink[(@height > 5)])[%s]'
+    SORTING_METRIC_ICONS = '//Group[starts-with(@Name, "%s")]/following-sibling::HyperLink[%s]'
     SORTING_ICON_PREFIX = 'sort_icon_'
 
     def __init__(self):
@@ -46,7 +46,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._click_context_sub_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_OK)
 
-    def select_sort_order_for_metric(self, sort_order, metric_name):
+    def select_sort_order_for_metric(self, sort_order, metric_name, visualization_name):
         if sort_order not in ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER:
             raise MstrException('Wrong sort order specified: %s.' % sort_order)
 
@@ -57,7 +57,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
         icon_index = ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER.index(sort_order) + 1
         self.get_element_by_xpath(
-            ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS % icon_index,
+            ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS % (visualization_name, icon_index),
             image_name=self.prepare_image_name(ImportDossierContextMenuWindowsDesktopPage.SORTING_ICON_PREFIX +
                                                sort_order)
         ).click()
