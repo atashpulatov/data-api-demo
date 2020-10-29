@@ -1,3 +1,6 @@
+from pyperclip import paste
+from selenium.webdriver.common.keys import Keys
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from framework.util.exception.MstrException import MstrException
@@ -11,20 +14,29 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     MY_LIBRARY_SWITCH_ELEM = 'My Library'
     FILTERS_BUTTON_ELEM = 'Filters'
 
-    SEARCH_ELEM_OFFSET_X = 100
-    SEARCH_ELEM_OFFSET_Y = 10
+    SEARCH_ELEM = '//Group/Edit'
 
     ARIA_PROPERTIES_ATTRIBUTE = 'AriaProperties'
     ARIA_PROPERTIES_SEPARATOR = ';'
     ARIA_PROPERTY_SEPARATOR = '='
     ARIA_PROPERTY_CHECKED = 'checked'
 
-    SEARCH_BAR_ELEM = 'Search...'
-
     IMPORT_BUTTON_ELEM = 'Import'
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
     ERROR_MESSAGE_BUTTON_OK = 'OK'
+
+    SHOW_DETAILS = 'show details'
+    TABLE_DATAITEM_XPATH = '//Group/DataGrid/Group/Group/Table/DataItem/Text'
+
+    ALLOW_ACCESS = 'Allow access'
+
+    FIRST_OBJECT_ROW = '//Pane/Group/DataGrid/Group[2]/Group/ListItem[1]'
+
+    TOOLTIP_XPATH = '//ToolTip[@Name]'
+
+    POPUP_WINDOW_ELEM = 'NUIDialog'
+    POPUP_CLOSE_BUTTON = 'Close'
 
     def __init__(self):
         super().__init__()
@@ -56,6 +68,25 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def _get_element_aria_properties(self, element):
         return element.get_attribute(ImportDataWindowsDesktopPage.ARIA_PROPERTIES_ATTRIBUTE)
 
+    def find_object(self, object_name):
+        """
+        Finds object by name. Name can be any identifying characteristic of the object (i.e. id, name).
+
+        :param object_name: Object identifier, e.g. name or id.
+        """
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        popup_main_element = self.get_add_in_main_element()
+
+        search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM)
+
+        # Remove search box content.
+        search_element.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
+
+        if object_name:
+            # Enter object_name.
+            search_element.send_keys_with_check(object_name)
+
     def find_and_select_object(self, object_name):
         """
         Finds object by name and selects it.
@@ -69,21 +100,15 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
         """
-        self.windows_desktop_workaround.focus_on_popup_window()
 
-        filters_elem = self.get_element_by_name(
-            ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
-        )
-        filters_elem.click(
-            offset_x=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_X,
-            offset_y=ImportDataWindowsDesktopPage.SEARCH_ELEM_OFFSET_Y
-        )
-        self.send_keys(object_id)
+        self.find_object(object_id)
 
         Util.pause(4)  # TODO wait when ready
 
-        self.get_element_by_name(object_name, image_name=self.prepare_image_name(object_name)).click()
+        self.get_element_by_name(
+            object_name,
+            image_name=self.prepare_image_name(object_name)
+        ).click()
 
     def click_import_button(self):
         self.windows_desktop_workaround.focus_on_popup_window()
@@ -133,3 +158,68 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
         ).click()
+
+    def show_object_details(self, object_number):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        object_index = int(object_number) - 1
+
+        elements = self.get_elements_by_name(ImportDataWindowsDesktopPage.SHOW_DETAILS)
+
+        elements[object_index].click()
+
+    def copy_object_details_to_clipboard_and_verify_if_correct(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        details_items = self.get_add_in_main_element().get_elements_by_xpath(
+            ImportDataWindowsDesktopPage.TABLE_DATAITEM_XPATH
+        )
+
+        # details_items returns one item for the title and one item for the value.
+        # Each value is at an odd-numbered index
+        for details_value in details_items[1::2]:
+            details_value.move_to_and_click()
+            self.get_add_in_main_element().move_to()
+
+            clipboard_content = paste()
+            expected_value = details_value.text
+
+            if clipboard_content != expected_value:
+                self.log_warning(f'Error while checking Clipboard content, expected value: [{expected_value}], '
+                                 f'Clipboard content: [{clipboard_content}]')
+                return False
+
+        return True
+
+    def close_import_data_popup(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        self.get_element_by_name_using_parent(
+            self.get_element_by_class_name, ImportDataWindowsDesktopPage.POPUP_WINDOW_ELEM,
+            ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON)
+        ).click()
+
+    def click_filters_button(self):
+        self.get_element_by_name(
+            ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.FILTERS_BUTTON_ELEM)
+        ).click()
+
+    def hover_over_first_object_in_list(self):
+        self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).move_to()
+
+    def select_first_object_from_list(self):
+        self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).click()
+
+    def clear_search_box(self):
+        self.find_object('')
+
+    def hover_over_import_button(self):
+        self.get_element_by_name(
+            ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+        ).move_to()
+
+    def get_tooltip_message_for_button(self):
+        return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_name_by_attribute()

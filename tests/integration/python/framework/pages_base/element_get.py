@@ -6,9 +6,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
+from framework.driver.driver_factory import DriverFactory
 from framework.pages_base.base_element import BaseElement
 from framework.pages_base.element_check import ElementCheck
 from framework.pages_base.image_element import ImageElement
+from framework.util.config_util import ConfigUtil
 from framework.util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
@@ -17,6 +19,11 @@ from framework.util.util import Util
 class ElementGet(ElementCheck):
     def __init__(self):
         super().__init__()
+
+        driver_type = ConfigUtil.get_driver_type()
+        self.driver = DriverFactory().get_driver(driver_type)
+
+        self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
 
     def get_element_by_id(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.ID, selector, timeout), self.driver)
@@ -30,10 +37,18 @@ class ElementGet(ElementCheck):
     def get_element_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(
-                self.get_element_coordinates_coordinates_by_xpath(selector, timeout, image_name), self.driver
+                self.get_element_center_coordinates_by_xpath(selector, timeout, image_name), self.driver
             )
         else:
             return BaseElement(self._get_raw_element(By.XPATH, selector, timeout), self.driver)
+
+    def get_element_by_class_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        if image_name and self.image_recognition_enabled:
+            return ImageElement(
+                self.get_element_center_coordinates_by_class_name(selector, timeout, image_name), self.driver
+            )
+        else:
+            return BaseElement(self._get_raw_element(By.CLASS_NAME, selector, timeout), self.driver)
 
     def get_element_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
@@ -49,6 +64,15 @@ class ElementGet(ElementCheck):
         else:
             return BaseElement(self._get_raw_element(MobileBy.ACCESSIBILITY_ID, selector, timeout), self.driver)
 
+    def get_element_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+        if image_name and self.image_recognition_enabled:
+            return ImageElement(
+                self.get_element_center_coordinates_by_tag_name(selector, timeout, image_name),
+                self.driver
+            )
+        else:
+            return BaseElement(self._get_raw_element(By.TAG_NAME, selector, timeout), self.driver)
+
     def get_elements_by_css(self, selector):
         raw_elements = self._get_raw_elements(By.CSS_SELECTOR, selector)
 
@@ -56,6 +80,11 @@ class ElementGet(ElementCheck):
 
     def get_elements_by_xpath(self, selector):
         raw_elements = self._get_raw_elements(By.XPATH, selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.driver)
+
+    def get_elements_by_class_name(self, selector):
+        raw_elements = self._get_raw_elements(By.CLASS_NAME, selector)
 
         return BaseElement.wrap_raw_elements(raw_elements, self.driver)
 
@@ -113,3 +142,6 @@ class ElementGet(ElementCheck):
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)
+
+    def get_element_with_focus(self):
+        return BaseElement(self.driver.switch_to.active_element, self.driver)

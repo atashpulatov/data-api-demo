@@ -41,6 +41,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     DISABLED_BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
     COLUMN_HEADER = '''div[aria-label='%s']'''
+    BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
     def __init__(self):
         super().__init__()
@@ -67,6 +68,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return element.get_attribute(ImportDataBrowserPage.ARIA_CHECKED_ATTRIBUTE) == 'true'
 
     def find_object(self, object_name):
+        """
+        Finds object by name. Name can be any identifying characteristic of the object (i.e. id, name).
+
+        :param object_name: Object name or id.
+        """
+
         self.focus_on_add_in_popup_frame()
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
@@ -145,7 +152,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
             details_value = row.get_element_by_css(ImportDataBrowserPage.OBJECT_DETAILS_VALUE)
             details_value.click()
 
+            clipboard_content = paste()
+            expected_value = details_value.text
+
             if paste() != details_value.text:
+                self.log_warning(f'Error while checking Clipboard content, expected value: [{expected_value}], '
+                                 f'Clipboard content: [{clipboard_content}]')
                 return False
 
         return True
@@ -201,3 +213,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def get_filters_number(self):
         element = self.get_element_by_css(ImportDataBrowserPage.FILTERS_SELECTED_NUMBER)
         return element.text
+
+    def hover_over_import_button(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
+
+    def get_tooltip_message_for_button(self):
+        self.focus_on_add_in_popup_frame()
+        return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text

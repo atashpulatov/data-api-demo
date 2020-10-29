@@ -88,7 +88,7 @@ class FilterPanelBrowserPage(BaseBrowserPage):
         return self._examine_if_element_is_checked(element)
 
     def _examine_if_element_is_checked(self, element):
-        return element.check_if_child_element_exists_by_css(FilterPanelBrowserPage.ELEMENT_CHECKED)
+        return element.check_if_element_exists_by_css(FilterPanelBrowserPage.ELEMENT_CHECKED)
 
     def examine_if_element_has_focus(self, element_name):
         element = self.get_element_by_css_no_visibility_checked(

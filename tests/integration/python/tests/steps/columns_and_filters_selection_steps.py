@@ -69,3 +69,4 @@ def step_impl(context):
 @step('I clicked Close Preview button')
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_close_preview()
+

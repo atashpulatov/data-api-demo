@@ -6,7 +6,7 @@ import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instan
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-helper';
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
-import { GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
+import { GET_OFFICE_TABLE_EDIT_REFRESH, GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
 import { authenticationHelper } from '../../authentication/authentication-helper';
@@ -109,17 +109,17 @@ describe('StepGetInstanceDefinition', () => {
   it.each`
   expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                    | manipulationsXMLParam
 
-  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${'not GET_OFFICE_TABLE_IMPORT'} | ${undefined}
-  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${'not GET_OFFICE_TABLE_IMPORT'} | ${undefined}
-  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${'not GET_OFFICE_TABLE_IMPORT'} | ${undefined}
+  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
+  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${undefined}
 
   ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
   ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
   ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${undefined}
 
-  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${'not GET_OFFICE_TABLE_IMPORT'} | ${'manipulationsXMLTest'}
-  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${'not GET_OFFICE_TABLE_IMPORT'} | ${'manipulationsXMLTest'}
-  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${'not GET_OFFICE_TABLE_IMPORT'} | ${'manipulationsXMLTest'}
+  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
+  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH} | ${'manipulationsXMLTest'}
 
   ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
   ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
@@ -281,6 +281,7 @@ describe('StepGetInstanceDefinition', () => {
       },
       'crosstabHeaderDimensionsTest',
       'subtotalsAddressesTest',
+      nextStepParam,
     );
 
     expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
@@ -335,9 +336,9 @@ describe('StepGetInstanceDefinition', () => {
   it.each`
   expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
 
-  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${'not GET_OFFICE_TABLE_IMPORT'}
-  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${'not GET_OFFICE_TABLE_IMPORT'}
-  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${'not GET_OFFICE_TABLE_IMPORT'}
+  ${false}                          | ${undefined}       | ${0}                        | ${undefined}                      | ${GET_OFFICE_TABLE_EDIT_REFRESH}
+  ${false}                          | ${undefined}       | ${0}                        | ${false}                          | ${GET_OFFICE_TABLE_EDIT_REFRESH}
+  ${'visualizationInfoDossierTest'} | ${undefined}       | ${0}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_EDIT_REFRESH}
 
   ${false}                          | ${'startCellTest'} | ${1}                        | ${undefined}                      | ${GET_OFFICE_TABLE_IMPORT}
   ${false}                          | ${'startCellTest'} | ${1}                        | ${false}                          | ${GET_OFFICE_TABLE_IMPORT}
@@ -467,6 +468,7 @@ describe('StepGetInstanceDefinition', () => {
       },
       'crosstabHeaderDimensionsTest',
       'subtotalsAddressesTest',
+      nextStepParam,
     );
 
     expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
@@ -692,15 +694,14 @@ describe('StepGetInstanceDefinition', () => {
   });
 
   it.each`
-  expectedPrevCrosstabDimensions | expectedCrosstabHeaderDimensions | callNo | isCrosstab | crosstabHeaderDimensions
+  expectedPrevCrosstabDimensions    | expectedCrosstabHeaderDimensions  | callNo | isCrosstab | crosstabHeaderDimensions
   
-  ${false} | ${'crosstabHeaderDimensionsTest'} | ${1} | ${true} | ${undefined}    
-  ${false} | ${'crosstabHeaderDimensionsTest'} | ${1} | ${true} | ${false}      
-  ${'crosstabHeaderDimensionsTest'} | ${'crosstabHeaderDimensionsTest'} | ${1} | ${true} | ${'crosstabHeaderDimensionsTest'}      
-
-  ${false} | ${false} | ${0} | ${false} | ${undefined}    
-  ${false} | ${false} | ${0} | ${false} | ${false}      
-  ${'crosstabHeaderDimensionsTest'} | ${false} | ${0} | ${false} | ${'crosstabHeaderDimensionsTest'}      
+  ${false}                          | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${undefined}    
+  ${false}                          | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${false}      
+  ${'crosstabHeaderDimensionsTest'} | ${'crosstabHeaderDimensionsTest'} | ${1}   | ${true}    | ${'crosstabHeaderDimensionsTest'}      
+  ${false}                          | ${false}                          | ${0}   | ${false}   | ${undefined}    
+  ${false}                          | ${false}                          | ${0}   | ${false}   | ${false}      
+  ${'crosstabHeaderDimensionsTest'} | ${false}                          | ${0}   | ${false}   | ${'crosstabHeaderDimensionsTest'}      
 
   `('savePreviousObjectData should work as expected',
   ({

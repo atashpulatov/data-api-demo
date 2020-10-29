@@ -44,6 +44,9 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.ADD_DATA_BUTTON_ELEM)
         ).click()
 
+    def check_if_right_panel_is_empty(self):
+        return self.check_if_element_exists_by_name(RightPanelMainWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM)
+
     def view_data(self):
         WindowsDesktopMainAddInElementCache.invalidate_cache()
 
