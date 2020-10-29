@@ -16,6 +16,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     TOTALS_AND_SUBTOTALS_SWITCH = '//Text[@Name="%s"]' % TOTALS_AND_SUBTOTALS
 
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
+    POPUP_WINDOW_TITLE = '//Group[@AutomationId=\"popup-wrapper\"]/Text[@Name=\"%s\"]'
 
     def click_import_button(self):
         self.get_element_by_accessibility_id(
@@ -77,3 +78,11 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
         ).click()
+
+    def ensure_popup_title_is_correct(self, title):
+        popup_title = self.get_element_by_xpath(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_TITLE % title
+        )
+
+        if not popup_title:
+            raise MstrException('Popup title does not match given title.')
