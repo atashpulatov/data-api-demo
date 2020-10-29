@@ -33,7 +33,12 @@ job 'stage-2-e2e-client-test-win-pre' do
        job_names "mstr-office-.-#{Environment.branch_name}-.-stage-2-e2e-desktop-test-python-win"		
        parameters "APPLICATION_VERSION=$APPLICATION_VERSION"		
        block_and_sync_status true		
-     end		
+     end
+      parameterized_builder do		
+       job_names "mstr-office-.-#{Environment.branch_name}-.-stage-2-e2e-browser-test-python-win"		
+       parameters "APPLICATION_VERSION=$APPLICATION_VERSION"		
+       block_and_sync_status true		
+     end				
 
  
     end		
