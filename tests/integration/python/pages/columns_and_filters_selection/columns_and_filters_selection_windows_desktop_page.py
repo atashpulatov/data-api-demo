@@ -1,3 +1,5 @@
+from selenium.webdriver.common.keys import Keys
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
 
@@ -17,6 +19,8 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
     POPUP_WINDOW_TITLE = '//Group[@AutomationId=\"popup-wrapper\"]/Text[@Name=\"%s\"]'
+
+    SEARCH_INPUT = "Search..."
 
     def click_import_button(self):
         self.get_element_by_accessibility_id(
@@ -85,3 +89,25 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not popup_title:
             raise MstrException('Popup title does not match given title.')
+
+    def search_for_element(self, element_name):
+        search_input = self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT)
+        )
+
+        search_input.click()
+
+        search_input.send_keys(element_name)
+
+    def clear_element_search_with_backspace(self):
+        search_input = self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT)
+        )
+
+        search_input.click()
+
+        search_input.send_keys(Keys.CONTROL + 'a')
+        search_input.send_keys(Keys.CONTROL)
+        search_input.send_keys(Keys.BACKSPACE)

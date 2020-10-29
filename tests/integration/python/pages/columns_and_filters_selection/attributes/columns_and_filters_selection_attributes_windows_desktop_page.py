@@ -7,8 +7,16 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     ITEM_ALL_ATTRIBUTES = '(All)'
 
     ATTRIBUTE_ELEM = '//Text[@Name="%s"]'
+    ATTRIBUTE_ELEM_AT = '(//Group/Tree/TreeItem)[%s]'
+
     ATTRIBUTE_FORM_DROPDOWN_ELEM = '//TreeItem[@Name="%s"]/Text[@Name="icon: caret-down"]'
+    ATTRIBUTE_FORM_DROPDOWN_ELEM_AT = '//TreeItem[%s]/Text[@Name="icon: caret-down"]'
+    ATTRIBUTE_FORM_ELEMENT_AT = '/Group/TreeItem[%s]/Group/Text'
     ATTRIBUTE_FORM_ITEM_ELEM = '//Group[@Name="%s"]'
+
+    ATTRIBUTES_CONTAINER = '//Group/Tree'
+
+    CLICKS_TO_SCROLL = 5
 
     def click_attribute(self, attribute_name):
         popup_main_element = self.get_add_in_main_element()
@@ -49,3 +57,58 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
                     popup_main_element.get_element_by_xpath(
                         ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_ITEM_ELEM % form_name
                     ).click()
+
+    def select_attribute_by_number(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        self._find_attribute_by_number(object_number).move_to_and_click()
+
+        popup_main_element.move_to()  # needed when selecting many attributes consecutively
+
+    def _find_attribute_by_number(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        return popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_AT % object_number
+        )
+
+    def expand_attribute_form(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM_AT % object_number
+        ).click()
+
+    def collapse_attribute_form(self, object_number):
+        self.expand_attribute_form(object_number)
+
+    def get_attribute_form_name(self, attribute_form_number, attribute_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        attribute_form_element = popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_AT % attribute_number +
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_ELEMENT_AT % attribute_form_number
+        )
+
+        return attribute_form_element.text
+
+    def get_attribute_name(self, object_number):
+        return self._find_attribute_by_number(object_number).get_name_by_attribute()
+
+    # Workaround for the defect in WinAppDriver's moveto command, which does not scroll to non-visible element
+    def scroll_into_attribute_by_number(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        attribute = self._find_attribute_by_number(object_number)
+
+        attributes_container = popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTES_CONTAINER
+        )
+
+        while attribute.get_attribute('IsOffscreen') == 'true':
+            for i in range(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.CLICKS_TO_SCROLL):
+                attributes_container.click(attributes_container.size['width'], attributes_container.size['height'])
+
+            attribute = self._find_attribute_by_number(object_number)
+
+        attribute.move_to()
