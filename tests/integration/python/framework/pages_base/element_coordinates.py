@@ -2,6 +2,7 @@ from appium.webdriver.common.mobileby import MobileBy
 from selenium.webdriver.common.by import By
 
 from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.exception.MstrException import MstrException
 from framework.util.image_util import ImageUtil
 
 
@@ -24,6 +25,8 @@ class ElementCoordinates:
     providing a parent element, usage example:
 
     element = self.get_element_center_coordinates_by_name_using_parent(parent_element, selector)
+
+    All methods raise MstrException when element is not present.
     """
 
     def __init__(self):
@@ -58,48 +61,56 @@ class ElementCoordinates:
         if element_coordinates:
             return element_coordinates
 
-        return self.image_util.get_element_coordinates_and_save_image(selector_type, selector, image_name, timeout)
+        return self._get_element_center_coordinates_using_parent(selector_type, selector, timeout, image_name, None)
 
     def get_element_center_coordinates_by_name_using_parent(self, parent_element, selector,
                                                             timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self.image_util.get_element_coordinates_and_save_image(
-            By.NAME, selector, image_name, timeout, parent_element
-        )
+        return self._get_element_center_coordinates_using_parent(By.NAME, selector, timeout, image_name, parent_element)
 
     def get_element_center_coordinates_by_css_using_parent(self, parent_element, selector,
                                                            timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self.image_util.get_element_coordinates_and_save_image(
-            By.CSS_SELECTOR, selector, image_name, timeout, parent_element
+        return self._get_element_center_coordinates_using_parent(
+            By.CSS_SELECTOR, selector, timeout, image_name, parent_element
         )
 
     def get_element_center_coordinates_by_id_using_parent(self, parent_element, selector,
                                                           timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self.image_util.get_element_coordinates_and_save_image(
-            By.ID, selector, image_name, timeout, parent_element
-        )
+        return self._get_element_center_coordinates_using_parent(By.ID, selector, timeout, image_name, parent_element)
 
     def get_element_center_coordinates_by_mobile_accessibility_id_using_parent(self, parent_element, selector,
                                                                                timeout=DEFAULT_TIMEOUT,
                                                                                image_name=None):
-        return self.image_util.get_element_coordinates_and_save_image(
-            MobileBy.ACCESSIBILITY_ID, selector, image_name, timeout, parent_element
+        return self._get_element_center_coordinates_using_parent(
+            By.ACCESSIBILITY_ID, selector, timeout, image_name, parent_element
         )
 
     def get_element_center_coordinates_by_xpath_using_parent(self, parent_element, selector,
                                                              timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self.image_util.get_element_coordinates_and_save_image(
-            By.XPATH, selector, image_name, timeout, parent_element
+        return self._get_element_center_coordinates_using_parent(
+            By.XPATH, selector, timeout, image_name, parent_element
         )
 
     def get_element_center_coordinates_by_class_name_using_parent(self, parent_element, selector,
                                                                   timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self.image_util.get_element_coordinates_and_save_image(
-            By.CLASS_NAME, selector, image_name, timeout, parent_element
+        return self._get_element_center_coordinates_using_parent(
+            By.CLASS_NAME, selector, timeout, image_name, parent_element
         )
 
     def get_element_center_coordinates_by_tag_name_using_parent(self, parent_element, selector,
                                                                 timeout=DEFAULT_TIMEOUT, image_name=None):
-        return self.image_util.get_element_coordinates_and_save_image(
-            By.TAG_NAME, selector, image_name, timeout,
-            parent_element
+        return self._get_element_center_coordinates_using_parent(
+            By.TAG_NAME, selector, timeout, image_name, parent_element
         )
+
+    def _get_element_center_coordinates_using_parent(self, selector_type, selector,
+                                                     timeout, image_name, parent_element):
+        element_center_coordinates = self.image_util.get_element_center_coordinates_and_save_image(
+            selector_type, selector, timeout, image_name, parent_element
+        )
+
+        if element_center_coordinates is None:
+            raise MstrException(f'No element found using selector_type: [{selector_type}], selector: [{selector}], '
+                                f'image_name: [{image_name}], timeout: [{timeout}], '
+                                f'parent_element: [{parent_element}].')
+
+        return element_center_coordinates
