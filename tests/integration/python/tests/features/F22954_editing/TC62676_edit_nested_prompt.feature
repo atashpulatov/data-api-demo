@@ -1,3 +1,4 @@
+@windows_desktop
 @windows_chrome
 @mac_chrome
 @release_validation
@@ -12,6 +13,7 @@ Feature: F22954 - Ability to edit data already imported to the workbook
       And I clicked Import button without checking results
       And I waited for Run button to be enabled
       And I clicked Run button
+      And I waited for Run button to be enabled
       And I clicked Run button
 
      Then I closed last notification
@@ -19,6 +21,7 @@ Feature: F22954 - Ability to edit data already imported to the workbook
      When I clicked Edit object 1
       And I waited for Run button to be enabled
       And I clicked Run button
+      And I waited for Run button to be enabled
       And I clicked Run button
       And I verified that Columns & Filters Selection is visible
       And I clicked attribute "Region"

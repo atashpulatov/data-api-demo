@@ -1,3 +1,4 @@
+@windows_desktop
 @mac_chrome
 Feature: F30479 - Hardening of importing data from Dossier to Excel
 
