@@ -43,6 +43,21 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_object_number(object_number)
 
 
+@step('I clicked twice on the name of object {object_number}')  # click twice == double click ?
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().double_click_on_name_of_object_number(object_number)
+
+
+@step('I hovered over object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().hover_over_object_number(object_number)
+
+
+@step('I hovered over the name of object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().hover_over_name_of_object_number(object_number)
+
+
 @step('object number {object_number} should be called "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.right_panel_tile_page().get_object_name(object_number)

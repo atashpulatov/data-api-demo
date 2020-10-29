@@ -143,6 +143,19 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def click_object_number(self, object_no):
         self._get_object_by_index(object_no).click()
 
+    def double_click_on_name_of_object_number(self, object_no):
+        self._get_object_by_index(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
+        ).double_click()
+
+    def hover_over_object_number(self, object_no):
+        self._hover_over_tile(object_no)
+
+    def hover_over_name_of_object_number(self, object_no):
+        self._get_object_by_index(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
+        ).move_to()
+
     def change_object_name_using_icon(self, object_no, new_object_name):
         object_tile_elem = self._get_object_by_index(object_no)
 
