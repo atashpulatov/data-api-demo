@@ -129,3 +129,8 @@ def step_impl(context, number):
 def step_impl(context):
     # context.pages.import_data_page().select_first_object_from_list()
     context.pages.keyboard_page().press_key('End')
+
+@step('Filters has "{number}" categories selected')
+def step_impl(context, number):
+    filters_number = context.pages.import_data_page().get_filters_number()
+    AssertUtil.assert_simple(filters_number, number)

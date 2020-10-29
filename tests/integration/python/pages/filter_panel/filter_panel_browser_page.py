@@ -31,7 +31,7 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     OWNER_HEADER_ON_MYLIBRARY = '.filter-panel .category-list-wrapper:nth-child(2) .category-list-header'
 
     MODIFIED_ALL_PANEL = '.filter-panel .mstr-date-range-selector-container > button:nth-child(2)'
-    MODIFIED_LAST_QUARTER_CHECKBOX = '.all-panel .ReactVirtualized__Grid__innerScrollContainer > div:nth-child(5)'
+    MODIFIED_LAST_QUARTER_CHECKBOX = '.all-panel__content .ReactVirtualized__Grid__innerScrollContainer div:nth-child(5) .checkbox-cell'
     MODIFIED_HEADER_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-header'
     MODIFIED_FROM_FIELD_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-container .mstr-date-selector:nth-child(1)'
     MODIFIED_TO_FIELD_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-container .mstr-date-selector:nth-child(2)'

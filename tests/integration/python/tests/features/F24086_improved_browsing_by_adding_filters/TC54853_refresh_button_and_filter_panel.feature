@@ -17,6 +17,7 @@ Feature: F24086 - Improved browsing by adding filters
      When I clicked "Administrator" from "Owner" category
       And I clicked "MSTR User" from "Owner" category
      Then Owner category header on My Library has title "Owner (2)"
+      And Filters has "1" categories selected
      
      When I clicked header on column "Name"
      Then Objects are sorted "ascending" on column "Name"
@@ -28,10 +29,10 @@ Feature: F24086 - Improved browsing by adding filters
       And I pressed key Arrow Down
       And I pressed key Arrow Down
       And I pressed key Arrow Down
+      And I found object by ID "147F272E11EB016AE2890080EF15EE7D" and selected "Dossier with prompt - Value prompt - Text (Category) | Not required | Default answer"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      And I selected any visualization
-      And I clicked import dossier
+      And I imported visualization "Visualization 1"
      Then I closed last notification
       And cell "A1" should have value "Region"
 
@@ -45,15 +46,18 @@ Feature: F24086 - Improved browsing by adding filters
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I ensured that MyLibrary Switch is OFF
+      And I switched off MyLibrary
       And I clicked Filters button
       And I clicked application "MicroStrategy Tutorial"
       And I clicked type "Dataset"
      Then Application category header has title "Application (1)"
+      And Filters has "3" categories selected
 
      When I opened All for Modified category
       And I clicked Last Quarter within Modified All Panel
-      And I found object by ID "94A1482F11EA8E01B50F0080EF05D782" and selected "ABCD_update"
+     Then Filters has "4" categories selected
+      
+     When I found object by ID "94A1482F11EA8E01B50F0080EF05D782" and selected "ABCD_update"
       And I clicked Import button
       And I closed last notification
      Then cells ["A1", "A2"] should have values ["A", "a"]

@@ -34,6 +34,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     CLOSE_IMPORT_DATA_BUTTON = '.popup-buttons > button'
     FILTERS_BUTTON = '.filter-button'
+    FILTERS_SELECTED_NUMBER = '.filters-selected'
 
     FIRST_OBJECT_ROW = '.ReactVirtualized__Table__row'
     FIRST_OBJECT_ROW_SELECTED = '.ReactVirtualized__Table__row.selected-object'
@@ -196,3 +197,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def column_header_sorted(self, header):
         element = self.get_element_by_css(ImportDataBrowserPage.COLUMN_HEADER % header)
         return element.get_attribute('aria-sort')
+
+    def get_filters_number(self):
+        element = self.get_element_by_css(ImportDataBrowserPage.FILTERS_SELECTED_NUMBER)
+        return element.text
