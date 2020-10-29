@@ -24,8 +24,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def wait_for_run_button(self):
         run_button_exists = self.check_if_element_exists_by_xpath(
-            PromptWindowsDesktopPage.PROMPT_RUN_BUTTON,
-            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
+            PromptWindowsDesktopPage.PROMPT_RUN_BUTTON
         )
 
         if not run_button_exists:
