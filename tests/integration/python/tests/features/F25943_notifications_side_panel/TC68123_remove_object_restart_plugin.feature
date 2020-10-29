@@ -1,5 +1,6 @@
-@mac_chrome
+@windows_desktop
 @windows_chrome
+@mac_chrome
 Feature: F25943 - Notifications side panel
 
   Scenario: [TC68123] - Removing the object and restarting plugin without closing notification
