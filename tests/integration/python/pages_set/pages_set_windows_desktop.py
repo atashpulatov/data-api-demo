@@ -21,6 +21,8 @@ from pages.import_dossier.import_dossier_filter.import_dossier_filter_windows_de
     ImportDossierFilterWindowsDesktopPage
 from pages.import_dossier.import_dossier_main.import_dossier_main_windows_desktop_page import \
     ImportDossierMainWindowsDesktopPage
+from pages.import_dossier.import_dossier_show_data.import_dossier_show_data_windows_desktop_page import \
+    ImportDossierShowDataWindowsDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
 from pages.prompt.prompt_windows_desktop_page import PromptWindowsDesktopPage
@@ -68,7 +70,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.import_dossier_bookmarks_windows_desktop_page = None
         self.import_dossier_table_of_contents_windows_desktop_page = None
         self.import_dossier_context_menu_windows_desktop_page = ImportDossierContextMenuWindowsDesktopPage()
-        self.import_dossier_show_data_windows_desktop_page = None
+        self.import_dossier_show_data_windows_desktop_page = ImportDossierShowDataWindowsDesktopPage()
 
     def excel_general_page(self):
         return self.excel_general_windows_desktop_page
