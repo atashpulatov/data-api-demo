@@ -46,7 +46,7 @@ end
 
 desc "start web application driver on widnows"
 task :start_web_application_driver do
-  start_web_application_dirver
+  # start_web_application_dirver
 end
 
 def start_web_application_dirver()
@@ -54,7 +54,7 @@ def start_web_application_dirver()
   system("taskkill /F /IM WinAppDriver.exe")
   sleep(3)
   Dir.chdir("C:\\Program Files (x86)\\Windows Application Driver"){
-    system("start WinAppDriver.exe localhost 6007/wd/hub")
+    system("start WinAppDriver.exe localhost 4723/wd/hub")
   }
 end
 

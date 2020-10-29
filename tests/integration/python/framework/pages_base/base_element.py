@@ -28,7 +28,7 @@ class BaseElement:
                 self.__element.click()
             except ElementClickInterceptedException as e:
                 Util.log_error(e)
-                Util.pause(120)  # wait for debug purposes
+                raise MstrException('Error while clicking an element.')
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
