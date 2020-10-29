@@ -24,8 +24,6 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     IMPORT_BUTTON_ELEM = 'Import'
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
-    CLOSE = "Close"
-
     ERROR_MESSAGE_BUTTON_OK = 'OK'
 
     SHOW_DETAILS = 'show details'
@@ -38,6 +36,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     TOOLTIP_XPATH = '//ToolTip[@Name]'
 
     ADD_TO_LIBRARY_BUTTON = '//Button[starts-with(@Name, \"Add to library\")]'
+    POPUP_WINDOW_ELEM = 'NUIDialog'
+    POPUP_CLOSE_BUTTON = 'Close'
 
     def __init__(self):
         super().__init__()
@@ -195,8 +195,11 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def close_import_data_popup(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        self.get_elements_by_name(
-            ImportDataWindowsDesktopPage.CLOSE)[1].click()
+        self.get_element_by_name_using_parent(
+            self.get_element_by_class_name, ImportDataWindowsDesktopPage.POPUP_WINDOW_ELEM,
+            ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON)
+        ).click()
 
     def click_filters_button(self):
         self.get_element_by_name(
