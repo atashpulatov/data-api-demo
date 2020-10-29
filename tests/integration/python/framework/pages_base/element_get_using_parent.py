@@ -36,6 +36,7 @@ class ElementGetUsingParent(ElementCoordinates):
         image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON)
     )
 
+    self.get_element_center_coordinates_by_*_using_parent methods should raise MstrException when element not present.
     """
 
     def __init__(self):
@@ -67,8 +68,8 @@ class ElementGetUsingParent(ElementCoordinates):
 
         parent_element = parent_selection_method(parent_selector, timeout=timeout)
 
-        element_coordinates = element_selection_method_image(
+        element_center_coordinates = element_selection_method_image(
             parent_element, element_selector, timeout, image_name
         )
 
-        return ImageElement(element_coordinates, self.driver)
+        return ImageElement(element_center_coordinates, self.driver)

@@ -68,9 +68,10 @@ class ImageUtil:
 
         return None
 
-    def get_element_coordinates_and_save_image(self, selector_type, selector, image_name, timeout, parent_element=None):
+    def get_element_center_coordinates_and_save_image(self, selector_type, selector,
+                                                      timeout, image_name, parent_element=None):
         """
-        Gets element coordinates and saves its image (if image recognition is enabled).
+        Gets element center coordinates and saves its image (if image recognition is enabled).
 
         Supports relative search when parent_element is provided.
 
@@ -79,11 +80,11 @@ class ImageUtil:
 
         :param selector_type: Selector type to be used when searching for an element, e.g. By.NAME.
         :param selector: Selector to be used when searching for an element, e.g. 'Close'.
-        :param image_name: Image name to store element's screenshot as.
         :param timeout: Timeout threshold in seconds, when reached None is returned.
+        :param image_name: Image name to store element's screenshot as.
         :param parent_element: Parent element to start relative search from, if not provided - use absolute search.
 
-        :return: Raw element found using selector_type and selector.
+        :return: Raw element found using selector_type and selector or None if not found.
         """
 
         self.driver.implicitly_wait(timeout)
@@ -100,21 +101,23 @@ class ImageUtil:
             else:
                 element = self.driver.find_element(selector_type, selector)
 
-            element_coordinates = self._calculate_found_element_center_coordinates(element)
+            element_center_coordinates = self._calculate_found_element_center_coordinates(element)
 
             self._save_element_image(element, image_name)
 
-            Util.log(f'Element found by selector: [{selector}], coordinates: [{element_coordinates}], '
+            Util.log(f'Element found by selector: [{selector}], coordinates: [{element_center_coordinates}], '
                      f'time: [{time.time() - start_time}]')
 
-            return element_coordinates
+            return element_center_coordinates
 
         except TimeoutException:
             pass
 
         self.driver.implicitly_wait(DEFAULT_TIMEOUT)
 
-        raise MstrException(f'Element not found by selector: [{selector}], time: [{time.time() - start_time}]')
+        Util.log(f'Element not found by selector: [{selector}], time: [{time.time() - start_time}]')
+
+        return None
 
     def _find_element_image_center(self, image_name, timeout=DEFAULT_IMAGE_TIMEOUT):
         element_gray_image = self._get_element_gray_image(image_name)

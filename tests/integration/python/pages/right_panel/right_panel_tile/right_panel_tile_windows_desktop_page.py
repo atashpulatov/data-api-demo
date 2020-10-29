@@ -1,6 +1,8 @@
+import time
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import SHORT_TIMEOUT, LONG_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -33,19 +35,22 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     REMOVE_MENU_ITEM = 'Remove'
 
     def wait_for_import_object_to_finish_successfully(self):
-        while self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM,
-                                                   timeout=SHORT_TIMEOUT):
-            pass
+        self._wait_until_element_disappears(
+            self.check_if_element_exists_by_name,
+            RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM
+        )
 
     def wait_for_refresh_object_to_finish_successfully(self):
-        while self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM,
-                                                   timeout=SHORT_TIMEOUT):
-            pass
+        self._wait_until_element_disappears(
+            self.check_if_element_exists_by_name,
+            RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM
+        )
 
     def wait_for_remove_object_to_finish_successfully(self):
-        while self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM,
-                                                   timeout=SHORT_TIMEOUT):
-            pass
+        self._wait_until_element_disappears(
+            self.check_if_element_exists_by_name,
+            RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM
+        )
 
     def wait_for_duplicate_object_to_finish_successfully(self):
         while self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM,
@@ -53,16 +58,26 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             pass
 
     def wait_using_parent_for_remove_object_to_finish_successfully(self, parent):
-        while parent.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM,
-                                                     timeout=SHORT_TIMEOUT):
-            pass
+        self._wait_until_element_disappears(
+            parent.check_if_element_exists_by_name,
+            RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM
+        )
 
     def wait_for_progress_notifications_to_disappear(self):
         right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
 
-        while right_panel_element.check_if_element_exists_by_tag_name(
-                RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME, timeout=SHORT_TIMEOUT):
-            pass
+        self._wait_until_element_disappears(
+            right_panel_element.check_if_element_exists_by_tag_name,
+            RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME
+        )
+
+    def _wait_until_element_disappears(self, check_if_element_exists_method, selector):
+        end_time = time.time() + LONG_TIMEOUT
+
+        while check_if_element_exists_method(selector, timeout=SHORT_TIMEOUT):
+            if time.time() > end_time:
+                raise MstrException(f'Error while waiting for operation [{check_if_element_exists_method}] to finish, '
+                                    f'element still visible: [{selector}].')
 
     def close_all_notifications_on_hover(self):
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
