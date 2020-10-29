@@ -18,6 +18,9 @@ class DriverSendKeys:
     def press_right_arrow(self):
         self.send_keys(Keys.ARROW_RIGHT)
 
+    def press_down_arrow(self):
+        self.send_keys(Keys.ARROW_DOWN)
+
     def press_backspace(self):
         self.send_keys(Keys.BACKSPACE)
 
