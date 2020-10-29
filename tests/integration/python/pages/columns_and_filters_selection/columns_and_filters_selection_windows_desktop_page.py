@@ -8,8 +8,11 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     IMPORT_BUTTON = 'import'
     BACK_BUTTON = 'back'
     DATA_PREVIEW_BUTTON = 'data-preview'
-    CANCEL_BUTTON = 'cancel'
     CLOSE_PREVIEW_BUTTON = 'Close Preview'
+    CANCEL_BUTTON = 'cancel'
+
+    POPUP_WINDOW_ELEM = 'NUIDialog'
+    POPUP_CLOSE_BUTTON = 'Close'
 
     TOTALS_AND_SUBTOTALS = 'Include Subtotals and Totals'
     TOTALS_AND_SUBTOTALS_SWITCH = '//Text[@Name="%s"]' % TOTALS_AND_SUBTOTALS
@@ -31,25 +34,18 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def ensure_columns_and_filters_selection_is_visible(self):
-        element_coordinates = self.get_element_center_coordinates_by_name(
+        is_visible = self.check_if_element_exists_by_name(
             ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT,
             image_name=self.prepare_image_name(
-                ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT)
-        )
+                ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT))
 
-        if not element_coordinates:
-            raise MstrException('Error while opening Attributes Metrics Filters')
+        if not is_visible:
+            raise MstrException('Error while opening Attributes Metrics Filters.')
 
     def click_back_button(self):
         self.get_element_by_accessibility_id(
             ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON)
-        ).click()
-
-    def click_data_preview(self):
-        self.get_element_by_accessibility_id(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON)
         ).click()
 
     def click_cancel_button(self):
@@ -58,10 +54,11 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CANCEL_BUTTON)
         ).click()
 
-    def click_close_preview(self):
-        self.get_element_by_name(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
+    def close_popup_window(self):
+        self.get_element_by_name_using_parent(
+            self.get_element_by_class_name, ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_ELEM,
+            ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_CLOSE_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_CLOSE_BUTTON)
         ).click()
 
     def click_include_totals_and_subtotals(self):
@@ -93,3 +90,16 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         search_input.send_keys(Keys.CONTROL + 'a')
         search_input.send_keys(Keys.CONTROL)
         search_input.send_keys(Keys.BACKSPACE)
+
+    def click_data_preview(self):
+        self.get_element_by_accessibility_id(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON)
+        ).click()
+
+    def click_close_preview(self):
+        self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
+        ).click()
+
