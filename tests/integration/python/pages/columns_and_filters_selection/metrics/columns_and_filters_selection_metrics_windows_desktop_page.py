@@ -1,8 +1,6 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
 
-from selenium.webdriver.common.keys import Keys
-
 
 class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage):
     ITEM_ALL_METRICS = 'metric(All)'
@@ -13,6 +11,9 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
     METRICS_XPATH_AT = '//Group/DataGrid/Group/Text[%s]'
 
     METRICS_CONTAINER = '//Group/DataGrid'
+
+    CLICKS_TO_SCROLL = 5
+    METRIC_SEARCH_RANGE = 10
 
     all_metrics = []
 
@@ -74,7 +75,7 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
         all_metrics = []
 
-        for i in range(10):  # Cap the search for 10 loops
+        for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_SEARCH_RANGE):
             visible_metrics = popup_main_element.get_elements_by_xpath(
                 ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
             )
@@ -86,10 +87,10 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
             else:
                 all_metrics = updated_metrics
 
-            for j in range(4):  # Scroll at least 4 times before checking if attribute is visible
+            for j in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.CLICKS_TO_SCROLL):
                 metrics_container.click(metrics_container.size['width'], metrics_container.size['height'])
 
-        raise MstrException('There are too many metrics in this dataset, search has been capped.')
+        raise MstrException('Search limit has been exceeded. There are too many metrics in this dataset.')
 
     def get_metric_name(self, object_number):
         return self._find_metric_by_number(object_number).get_name_by_attribute()

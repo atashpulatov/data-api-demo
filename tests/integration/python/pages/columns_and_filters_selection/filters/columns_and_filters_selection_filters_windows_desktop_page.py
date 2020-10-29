@@ -11,9 +11,11 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_X = 0
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_Y = -100
 
-    FILTER_TREE_XPATH = '(//Group/Tree)[2]'
+    FILTER_TREE = '(//Group/Tree)[2]'
 
-    FILTER_TREE_ITEM_XPATH_AT = f'({FILTER_TREE_XPATH}/TreeItem/Group/Text)[%s]'
+    FILTER_TREE_ITEM_AT = f'({FILTER_TREE}/TreeItem/Group/Text)[%s]'
+
+    CLICKS_TO_SCROLL = 5
 
     def select_filter_elements(self, filters_and_elements_json):
         """
@@ -54,7 +56,7 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
         popup_main_element = self.get_add_in_main_element()
 
         return popup_main_element.get_element_by_xpath(
-             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_XPATH_AT % object_number)
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_AT % object_number)
 
     def get_filter_name(self, object_number):
         return self._find_filter_by_number(object_number).get_name_by_attribute()
@@ -66,10 +68,10 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
         filter_element = self._find_filter_by_number(object_number)
 
         filters_container = popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_XPATH)
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE)
 
         while filter_element.get_attribute('IsOffscreen') == 'true':
-            for i in range(4):  # Scroll at least 4 times before checking if attribute is visible
+            for i in range(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.CLICKS_TO_SCROLL):
                 filters_container.click(filters_container.size['width'], filters_container.size['height'])
 
             filter_element = self._find_filter_by_number(object_number)

@@ -7,15 +7,16 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     ITEM_ALL_ATTRIBUTES = '(All)'
 
     ATTRIBUTE_ELEM = '//Text[@Name="%s"]'
+    ATTRIBUTE_ELEM_AT = '(//Group/Tree/TreeItem)[%s]'
+
     ATTRIBUTE_FORM_DROPDOWN_ELEM = '//TreeItem[@Name="%s"]/Text[@Name="icon: caret-down"]'
     ATTRIBUTE_FORM_DROPDOWN_ELEM_AT = '//TreeItem[%s]/Text[@Name="icon: caret-down"]'
     ATTRIBUTE_FORM_ELEMENT_AT = '/Group/TreeItem[%s]/Group/Text'
     ATTRIBUTE_FORM_ITEM_ELEM = '//Group[@Name="%s"]'
 
-    ATTRIBUTE_ELEM_XPATH = '//Group/Tree/TreeItem'
-    ATTRIBUTE_ELEM_XPATH_AT = f'({ATTRIBUTE_ELEM_XPATH})[%s]'
-
     ATTRIBUTES_CONTAINER = '//Group/Tree'
+
+    CLICKS_TO_SCROLL = 5
 
     def click_attribute(self, attribute_name):
         popup_main_element = self.get_add_in_main_element()
@@ -68,7 +69,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         popup_main_element = self.get_add_in_main_element()
 
         return popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % object_number
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_AT % object_number
         )
 
     def expand_attribute_form(self, object_number):
@@ -85,7 +86,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         popup_main_element = self.get_add_in_main_element()
 
         attribute_form_element = popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_XPATH_AT % attribute_number +
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_AT % attribute_number +
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_ELEMENT_AT % attribute_form_number
         )
 
@@ -105,7 +106,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         )
 
         while attribute.get_attribute('IsOffscreen') == 'true':
-            for i in range(5):  # Scroll at least 5 times before checking if attribute is visible
+            for i in range(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.CLICKS_TO_SCROLL):
                 attributes_container.click(attributes_container.size['width'], attributes_container.size['height'])
 
             attribute = self._find_attribute_by_number(object_number)
