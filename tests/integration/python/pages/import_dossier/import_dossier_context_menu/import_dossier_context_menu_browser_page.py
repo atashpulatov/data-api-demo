@@ -8,6 +8,9 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
     VISUALIZATION_TABLE_COLUMN_X_ITEMS = VISUALIZATION_TABLE + ' > tr > td:nth-child(%s)'
     VISUALIZATION_TABLE_HEADER_ROW_ITEMS = VISUALIZATION_TABLE_ROW_X_ITEMS % '1'
 
+    DOSSIER_VISUALIZATIONS_LIST = '.mstrmojo-DocSubPanel-containerNode > div'
+    VISUALIZATION_TITLE_CONTAINER = '.title-text'
+
     VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS = '.mstrmojo-ui-Menu-item'
     VISUALIZATION_TABLE_CONTEXT_MENU_LIST_ITEMS = '.mstrmojo-ListBase > div > div > span'
 
@@ -23,6 +26,9 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
     CONTEXT_MENU_EXCLUDE = 'Exclude'
 
     ALLOWED_SORT_ORDER = ('Ascending', 'Descending')
+
+    SORT_ICONS = ('div.mstrmojo-ui-Menu-item-container.mstrmojo-scrollNode > a.item.xt.btn.asc.mstrmojo-ui-Menu-item',
+                  'div.mstrmojo-ui-Menu-item-container.mstrmojo-scrollNode > a.item.xt.btn.desc.mstrmojo-ui-Menu-item')
 
     def select_show_totals_for_attribute(self, totals_to_select, attribute_name, visualization_name):
         self.focus_on_dossier_frame()
@@ -47,25 +53,27 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
             ImportDossierContextMenuBrowserPage.CONTEXT_MENU_BUTTON_OK
         ).click()
 
-    def select_sort_order_for_metric(self, sort_order, metric_name):
+    def select_sort_order_for_metric(self, sort_order, metric_name, visualization_name):
         if sort_order not in ImportDossierContextMenuBrowserPage.ALLOWED_SORT_ORDER:
             raise MstrException('Wrong sort order specified: %s.' % sort_order)
 
         self.focus_on_dossier_frame()
 
-        self.find_element_in_list_by_text(
+        visualization_element = self.get_parent_element_by_child_text_from_parent_elements_list_by_css(
+            ImportDossierContextMenuBrowserPage.DOSSIER_VISUALIZATIONS_LIST,
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TITLE_CONTAINER,
+            visualization_name
+        )
+
+        visualization_element.get_element_by_text_from_elements_list_by_css(
             ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
             metric_name
         ).right_click()
 
-        self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
-            ImportDossierContextMenuBrowserPage.CONTEXT_MENU_ABSOLUTE_SORT
-        ).click()
+        selector_index = ImportDossierContextMenuBrowserPage.ALLOWED_SORT_ORDER.index(sort_order)
 
-        self.find_element_in_list_by_text(
-            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_CONTEXT_MENU_ITEMS,
-            sort_order
+        self.get_element_by_css(
+            ImportDossierContextMenuBrowserPage.SORT_ICONS[selector_index]
         ).click()
 
     def select_drill_by_for_attribute(self, drill_by, attribute_name):
