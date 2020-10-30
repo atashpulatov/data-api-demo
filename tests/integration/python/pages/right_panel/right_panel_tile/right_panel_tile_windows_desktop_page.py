@@ -78,7 +78,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
 
         for element in elements:
-            element.move_to()
+            element.move_to(offset_x=-20, offset_y=0)
 
     def close_all_warning_notifications(self):
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.BUTTON_OK)
