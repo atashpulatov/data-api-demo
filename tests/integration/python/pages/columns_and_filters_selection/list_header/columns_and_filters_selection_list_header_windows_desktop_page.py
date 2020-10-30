@@ -1,4 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.exception.MstrException import MstrException
 
 
 class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
