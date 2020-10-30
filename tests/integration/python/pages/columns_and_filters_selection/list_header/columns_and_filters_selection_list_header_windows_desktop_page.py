@@ -3,23 +3,13 @@ from framework.util.exception.MstrException import MstrException
 
 
 class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
-    TRIANGLE_IMAGE_XPATH = "//Image/Image/Image"
-
-    SORT_ASCENDING = "icon_sort_triangle_up_blue"
-    SORT_DESCENDING = "icon_sort_triangle_bottom_blue"
-    SORT_DEFAULT = "icon_sort_triangle_gray"
-
-    SORT_ATTRIBUTES = "sort-toggle-attributes"
-    SORT_METRICS = "sort-toggle-metrics"
-    SORT_FILTERS = "sort-toggle-filters"
-
     ATTRIBUTES = 'attributes'
     METRICS = 'metrics'
     FILTERS = 'filters'
 
-    SORT_ELEMENT_OFFSET = 100
-
-    AUTOMATION_ID = "AutomationId"
+    SORT_ATTRIBUTES = "sort-toggle-attributes"
+    SORT_METRICS = "sort-toggle-metrics"
+    SORT_FILTERS = "sort-toggle-filters"
 
     OBJECTS_TYPE_TO_ELEMENT_NAME = {
         ATTRIBUTES: SORT_ATTRIBUTES,
@@ -27,7 +17,44 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
         FILTERS: SORT_FILTERS
     }
 
+    COLUMN_TITLE_TEXT = '//Group/Button[@Name="%s"]/Text'
+
+    TRIANGLE_IMAGE_XPATH = "//Image/Image/Image"
+
+    SORT_ASCENDING = "icon_sort_triangle_up_blue"
+    SORT_DESCENDING = "icon_sort_triangle_bottom_blue"
+    SORT_DEFAULT = "icon_sort_triangle_gray"
+
+    SORT_ELEMENT_OFFSET = 100
+
+    AUTOMATION_ID = "AutomationId"
+
     TOGGLE_ORDER = [SORT_DEFAULT, SORT_ASCENDING, SORT_DESCENDING]
+
+    def ensure_item_selection(self, item_type, number, of_number):
+        """
+        Ensures proper number of given item type is selected.
+
+        :param item_type: type of item (metrics / attributes / filters)
+        :param number: number of selected items
+        :param of_number: number of all items
+        """
+
+        if item_type not in ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME:
+            raise MstrException(f'Wrong item_type [{item_type}] argument passed to ensure_item_selection')
+
+        sort_title_name = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[item_type]
+
+        title = f'{item_type.capitalize()} ({number}/{of_number})'
+
+        column_title_text = self.get_element_by_xpath(
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.COLUMN_TITLE_TEXT % sort_title_name
+        ).text
+
+        if column_title_text == title:
+            return
+
+        raise MstrException(f'{item_type} selection does not match - selector: {column_title_text}, text: {title}.')
 
     def sort_elements_ascending_by_click(self, object_type):
         self._toggle_sort_elements(
