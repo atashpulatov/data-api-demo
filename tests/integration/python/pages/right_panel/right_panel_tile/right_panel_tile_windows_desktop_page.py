@@ -2,7 +2,7 @@ import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
-from framework.util.const import SHORT_TIMEOUT, LONG_TIMEOUT
+from framework.util.const import SHORT_TIMEOUT, LONG_TIMEOUT, DEFAULT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -54,9 +54,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         )
 
     def wait_for_duplicate_object_to_finish_successfully(self):
-        while self.check_if_element_exists_by_name(RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM,
-                                                   timeout=SHORT_TIMEOUT):
-            pass
+        self._wait_until_element_disappears(
+            self.check_if_element_exists_by_name,
+            RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM
+        )
 
     def wait_using_parent_for_remove_object_to_finish_successfully(self, parent):
         self._wait_until_element_disappears(
@@ -95,11 +96,19 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def close_last_notification_on_hover(self):
         self._wait_for_last_operation_to_finish_successfully()
 
-        self._hover_over_tile(0)
+        self._hover_over_tile(1)
 
     def _wait_for_last_operation_to_finish_successfully(self):
-        while not self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
-                                                                   timeout=SHORT_TIMEOUT):
+        try:
+            start_time = time.time()
+
+            while not self.check_if_element_exists_by_accessibility_id(
+                RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON, timeout=SHORT_TIMEOUT
+            ):
+                if time.time() - start_time > DEFAULT_TIMEOUT:
+                    raise
+
+        except Exception:
             pass
 
     def close_object_notification_on_hover(self, object_no):

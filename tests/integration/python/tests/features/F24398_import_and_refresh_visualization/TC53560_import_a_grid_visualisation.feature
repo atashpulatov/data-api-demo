@@ -54,6 +54,7 @@ Feature: F24398 - Import and refresh visualization
       And I closed Show Data panel
 
       And I imported visualization "Visualization 1"
+      And I closed last notification
 
      Then I removed object 1 using icon
       And I closed last notification
