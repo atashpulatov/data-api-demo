@@ -22,6 +22,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_NAME_SEPARATOR = '.'
     PROMPT_NAME_IMAGE_PREFIX = 'prompt_title_'
 
+    PROMPT_FIELD_LABEL = '//Group[@AutomationId=\"mstrdossierPromptEditor\"]/Table[1]/DataItem[3]/Table[1]/DataItem[2]'
+
     def wait_for_run_button(self):
         run_button_exists = self.check_if_element_exists_by_xpath(
             PromptWindowsDesktopPage.PROMPT_RUN_BUTTON,
@@ -32,10 +34,16 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             raise MstrException(f'Run button not exists or is not enabled.')
 
     def click_run_button(self):
+        prompt_field_label = self.get_add_in_main_element().get_element_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_FIELD_LABEL
+        )
+
         self.get_element_by_name(
             PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME,
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
         ).click()
+
+        prompt_field_label.wait_until_disappears()
 
     def click_run_button_for_prompted_dossier_if_not_answered(self):
         if self._check_if_prompts_answer_window_is_open():
