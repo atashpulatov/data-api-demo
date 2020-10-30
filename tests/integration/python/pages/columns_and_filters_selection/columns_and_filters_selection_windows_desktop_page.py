@@ -70,18 +70,6 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS)
         ).move_to_and_click(offset_x=90, offset_y=2)
 
-    def click_data_preview(self):
-        self.get_element_by_accessibility_id(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON)
-        ).click()
-
-    def click_close_preview(self):
-        self.get_element_by_name(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
-        ).click()
-
     def ensure_popup_title_is_correct(self, title):
         popup_title = self.get_element_by_xpath(
             ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_TITLE % title
@@ -99,6 +87,18 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         search_input.click()
 
         search_input.send_keys(element_name)
+
+    def click_data_preview(self):
+        self.get_element_by_accessibility_id(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON)
+        ).click()
+
+    def click_close_preview(self):
+        self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
+        ).click()
 
     def clear_element_search_with_backspace(self):
         search_input = self.get_element_by_name(
