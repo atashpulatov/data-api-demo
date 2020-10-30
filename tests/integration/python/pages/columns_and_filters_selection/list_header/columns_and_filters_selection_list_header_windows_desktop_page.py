@@ -17,7 +17,7 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
         FILTERS: SORT_FILTERS
     }
 
-    COLUMN_TITLE_TEXT = '//Group/Button[@Name="%s"]/Text'
+    COLUMN_NAME = '//Group/Button[@Name="%s"]/Text'
 
     TRIANGLE_IMAGE_XPATH = "//Image/Image/Image"
 
@@ -47,14 +47,14 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
 
         title = f'{item_type.capitalize()} ({number}/{of_number})'
 
-        column_title_text = self.get_element_by_xpath(
-            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.COLUMN_TITLE_TEXT % sort_title_name
+        column_name = self.get_element_by_xpath(
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.COLUMN_NAME % sort_title_name
         ).text
 
-        if column_title_text == title:
-            return
+        if column_name != title:
+            self.log_warning(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
 
-        raise MstrException(f'{item_type} selection does not match - selector: {column_title_text}, text: {title}.')
+        return column_name
 
     def sort_elements_ascending_by_click(self, object_type):
         self._toggle_sort_elements(

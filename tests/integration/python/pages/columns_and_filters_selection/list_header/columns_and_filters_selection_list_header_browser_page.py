@@ -60,10 +60,10 @@ class ColumnsAndFiltersSelectionListHeaderBrowserPage(BaseBrowserPage):
 
         column_name = self.get_element_by_css(sort_title_selector).text
 
-        if column_name == title:
-            return
+        if column_name != title:
+            self.log_warning(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
 
-        raise MstrException(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
+        return column_name
 
     def sort_elements_ascending_by_click(self, object_type):
         self._sort_elements_by_click(object_type, ColumnsAndFiltersSelectionListHeaderBrowserPage.SORT_ASCENDING)
