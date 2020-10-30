@@ -1,6 +1,5 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
-from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 
 
 class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -15,7 +14,6 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def __init__(self):
         super().__init__()
-        self.right_panel_tile_windows_desktop_page = RightPanelTileWindowsDesktopPage()
 
     def import_visualization_by_name(self, visualization_name):
         self.select_visualization_by_name(visualization_name)
@@ -29,9 +27,10 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
         self.pause(5)  # TODO wait when ready
 
     def click_import_visualization(self):
-        self.click_import_visualization_without_waiting_for_results()
-
-        self.right_panel_tile_windows_desktop_page.wait_for_import_object_to_finish_successfully()
+        self.get_element_by_name(
+            ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON,
+            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON)
+        ).click()
 
     def click_import_visualization_without_waiting_for_results(self):
         self.get_element_by_name(
@@ -40,9 +39,10 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def click_import_visualization_to_duplicate(self):
-        self.click_import_visualization_without_waiting_for_results()
-
-        self.right_panel_tile_windows_desktop_page.wait_for_duplicate_object_to_finish_successfully()
+        self.get_element_by_name(
+            ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON,
+            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON)
+        ).click()
 
     def find_tile_by_name(self, visualization_name):
         popup_main_element = self.get_add_in_main_element()
