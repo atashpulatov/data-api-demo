@@ -50,6 +50,9 @@ describe('OfficeFormatHyperlinks', () => {
   ${'<a data="te < xt" href="https://example.com">text</a>'}   | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'text' }}
   ${'<a data="te < > xt" href="https://example.com">text</a>'} | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'text' }}
 
+  ${`<a data="text
+  " href="https://example.com">text</a>`}                      | ${'HTMLTag'} | ${{ address: 'https://example.com', textToDisplay: 'text' }}
+
   ${'invalid'}                                                 | ${'HTMLTag'} | ${null}
   
   `('parseHTMLTag should work for $string with form $baseFormType',
