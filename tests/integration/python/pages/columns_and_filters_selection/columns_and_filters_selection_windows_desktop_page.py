@@ -88,18 +88,6 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         search_input.send_keys(element_name)
 
-    def click_data_preview(self):
-        self.get_element_by_accessibility_id(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON)
-        ).click()
-
-    def click_close_preview(self):
-        self.get_element_by_name(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
-        ).click()
-
     def clear_element_search_with_backspace(self):
         search_input = self.get_element_by_name(
             ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT,
@@ -111,3 +99,15 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         search_input.send_keys(Keys.CONTROL + 'a')
         search_input.send_keys(Keys.CONTROL)
         search_input.send_keys(Keys.BACKSPACE)
+
+    def click_data_preview(self):
+        self.get_element_by_accessibility_id(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON)
+        ).click()
+
+    def click_close_preview(self):
+        self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
+        ).click()
