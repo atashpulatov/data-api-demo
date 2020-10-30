@@ -11,6 +11,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     EDIT_BUTTON_ELEM = 'Edit button'
     REFRESH_BUTTON_ELEM = 'Refresh button'
     REMOVE_BUTTON_ELEM = 'Remove button'
+    NOTIFICATION_ICON = 'successful_fill'
 
     BUTTON_OK = 'OK'
     DUPLICATING_TEXT_ELEM = 'Duplicating'
@@ -92,7 +93,14 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.click()
 
     def close_last_notification_on_hover(self):
+        self._wait_for_last_operation_to_finish_successfully()
+
         self._hover_over_tile(0)
+
+    def _wait_for_last_operation_to_finish_successfully(self):
+        while not self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
+                                                                   timeout=SHORT_TIMEOUT):
+            pass
 
     def close_object_notification_on_hover(self, object_no):
         self._hover_over_tile(int(object_no) - 1)

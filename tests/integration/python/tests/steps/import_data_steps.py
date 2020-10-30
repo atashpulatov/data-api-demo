@@ -70,7 +70,7 @@ def step_impl(context):
     AssertUtil.assert_simple(compare_result, True)
 
 
-@step('I close Import Data popup')
+@step('I closed Import Data popup')
 def step_impl(context):
     context.pages.import_data_page().close_import_data_popup()
 
