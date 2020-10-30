@@ -35,13 +35,13 @@ class OfficeFormatHyperlinks {
     // HTMLTag
     if (baseFormType === FORM_TYPE_HTML) {
       // stores value of href in capture group 1
-      const hrefRegExp = /<a\s.*?\s?href=['"](.*?)['"].*>/;
+      const hrefRegExp = /<a\s[^]*?\s?href=['"]([^]*?)['"][^]*>/;
 
       // stores value of data in capture group 1
-      const dataRegExp = /<a\s.*?\s?data=['"](.*?)['"].*>/;
+      const dataRegExp = /<a\s[^]*?\s?data=['"]([^]*?)['"][^]*>/;
 
       // stores text content in capture group 1
-      const textRegExp = /<a.+['"]>(.+)<\/a>/;
+      const textRegExp = /<a[^]+['"]>([^]+)<\/a>/;
 
       const hrefMatch = string.match(hrefRegExp);
       let dataMatch = string.match(dataRegExp);
