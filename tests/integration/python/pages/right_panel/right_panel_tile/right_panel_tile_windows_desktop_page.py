@@ -89,7 +89,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def close_last_notification_on_hover(self):
         self._wait_for_last_operation_to_finish_successfully()
 
-        self._hover_over_tile(0)
+        self._hover_over_tile('1')
 
     def _wait_for_last_operation_to_finish_successfully(self):
         while not self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
