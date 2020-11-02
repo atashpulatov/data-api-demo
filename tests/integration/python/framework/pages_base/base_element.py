@@ -1,4 +1,6 @@
 import time
+from io import BytesIO
+from PIL import Image
 
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver import ActionChains
@@ -19,6 +21,7 @@ class BaseElement:
     def __init__(self, raw_element, driver):
         self.__element = raw_element
         self.__driver = driver
+        self.__image = None
 
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
@@ -328,3 +331,38 @@ class BaseElement:
         while self.is_displayed():
             if time.time() - start_time > timeout:
                 raise MstrException(f'Element is still displayed after {timeout} seconds.')
+
+    def pick_color(self, offset_x=0, offset_y=0, force_new_screenshot=False):
+        """
+        Pick color from coordinates relative to element position
+        """
+        image = self.__image
+
+        if image is None or force_new_screenshot:
+            image = self._get_screenshot()
+
+        image_rgb = image.convert('RGB')
+
+        return image_rgb.getpixel((offset_x, offset_y))
+
+    def _get_screenshot(self):
+
+        screenshot = self.__driver.get_screenshot_as_png()
+        screenshot_image = Image.open(BytesIO(screenshot))
+
+        coordinates = self._calculate_element_coordinates()
+
+        self.__image = screenshot_image.crop(coordinates)
+
+        return self.__image
+
+    def _calculate_element_coordinates(self):
+        element_location = self.__element.location
+        element_size = self.__element.size
+
+        left = element_location['x']
+        top = element_location['y']
+        right = left + element_size['width']
+        bottom = top + element_size['height']
+
+        return left, top, right, bottom
