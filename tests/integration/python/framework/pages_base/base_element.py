@@ -341,7 +341,7 @@ class BaseElement:
         if image is None or force_new_screenshot:
             image = self._get_screenshot()
 
-        image_rgb = image.convert('RGBA')
+        image_rgb = image.convert('RGB')
 
         return image_rgb.getpixel((offset_x, offset_y))
 
