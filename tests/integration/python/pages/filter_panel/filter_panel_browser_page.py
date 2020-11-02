@@ -63,11 +63,13 @@ class FilterPanelBrowserPage(BaseBrowserPage):
 
     def click_owner_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.OWNER_ALL_PANEL).click()
-    
+
     def click_modified_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_ALL_PANEL).click()
 
     def click_modified_last_quarter_element(self):
+        # TODO should be more general, Last Quarter should be a param
+        # TODO see self.find_index_of_element_in_list_by_text()
         self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_LAST_QUARTER_CHECKBOX).click()
 
     def click_select_all_within_all_panel(self):
@@ -96,35 +98,27 @@ class FilterPanelBrowserPage(BaseBrowserPage):
         )
 
         return element == self.get_element_with_focus()
-    
+
     def get_certified_header_on_mylibrary_title(self):
-        title = self.get_element_by_css(FilterPanelBrowserPage.CERTIFIED_HEADER_ON_MYLIBRARY)
-        return title.text
-    
+        return self.get_element_by_css(FilterPanelBrowserPage.CERTIFIED_HEADER_ON_MYLIBRARY).text
+
     def get_certified_element_on_mylibrary_title(self):
-        title = self.get_element_by_css(FilterPanelBrowserPage.CERTIFIED_ELEMENT_ON_MYLIBRARY)
-        return title.text
+        return self.get_element_by_css(FilterPanelBrowserPage.CERTIFIED_ELEMENT_ON_MYLIBRARY).text
 
     def get_owner_header_on_mylibrary_title(self):
-        title = self.get_element_by_css(FilterPanelBrowserPage.OWNER_HEADER_ON_MYLIBRARY)
-        return title.text
+        return self.get_element_by_css(FilterPanelBrowserPage.OWNER_HEADER_ON_MYLIBRARY).text
 
     def get_modified_header_on_mylibrary_title(self):
-        title = self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_HEADER_ON_MYLIBRARY)
-        return title.text
+        return self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_HEADER_ON_MYLIBRARY).text
 
     def get_modified_from_field_on_mylibrary_title(self):
-        title = self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_FROM_FIELD_ON_MYLIBRARY)
-        return title.text
-    
+        return self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_FROM_FIELD_ON_MYLIBRARY).text
+
     def get_modified_to_field_on_mylibrary_title(self):
-        title = self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_TO_FIELD_ON_MYLIBRARY)
-        return title.text
+        return self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_TO_FIELD_ON_MYLIBRARY).text
 
     def get_clear_all_on_mylibrary_title(self):
-        title = self.get_element_by_css(FilterPanelBrowserPage.CLEAR_ALL)
-        return title.text
-    
+        return self.get_element_by_css(FilterPanelBrowserPage.CLEAR_ALL).text
+
     def get_application_header_title(self):
-        title = self.get_element_by_css(FilterPanelBrowserPage.APPLICATION_HEADER)
-        return title.text
+        return self.get_element_by_css(FilterPanelBrowserPage.APPLICATION_HEADER).text

@@ -98,6 +98,7 @@ def step_impl(context):
 @step('I verified that the background color of the first object is "{color}"')
 def step_impl(context, color):
     found_color = context.pages.import_data_page().find_the_color_of_first_object_in_list()
+
     AssertUtil.assert_simple(found_color, color)
 
 
@@ -110,30 +111,42 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().clear_search_box()
 
+
 @step('I clicked header on column "{header}"')
 def step_impl(context, header):
     context.pages.import_data_page().click_column_header(header)
 
-@step('Objects are sorted "{sorted}" on column "{header}"')
-def step_impl(context, header, sorted):
-    sorted_status = context.pages.import_data_page().column_header_sorted(header)
-    AssertUtil.assert_simple(sorted_status, sorted)
 
-@step('I scrolled down list of objects by {number} pages')
+@step('verified that objects are sorted "{expected_sort_order}" on column "{header}"')
+def step_impl(context, expected_sort_order, header):  # TODO name sorted shadows build in sorted()
+    sort_order = context.pages.import_data_page().get_column_header_sort_order(header)
+
+    AssertUtil.assert_simple(sort_order, expected_sort_order)
+
+
+@step('I scrolled down list of objects by {number} page(s)')
 def step_impl(context, number):
+    # TODO comment should be removed
     # context.pages.import_data_page().select_first_object_from_list()
+    # TODO no implementation in steps, should be moved to Page
     for i in range(0, int(number)):
-      context.pages.keyboard_page().press_key('Page Down')
+        context.pages.keyboard_page().press_key('Page Down')
+
 
 @step('I scrolled down list of objects to end')
 def step_impl(context):
+    # TODO comment should be removed
     # context.pages.import_data_page().select_first_object_from_list()
+    # TODO no implementation in steps, should be moved to Page
     context.pages.keyboard_page().press_key('End')
 
-@step('Filters has "{number}" categories selected')
+
+@step('verified that Filters has "{number}" categories selected')
 def step_impl(context, number):
     filters_number = context.pages.import_data_page().get_filters_number()
+
     AssertUtil.assert_simple(filters_number, number)
+
 
 @step('I hover over Import button')
 def step_impl(context):

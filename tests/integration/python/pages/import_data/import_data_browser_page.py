@@ -202,11 +202,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.clear()
-    
+
     def click_column_header(self, header):
         self.get_element_by_css(ImportDataBrowserPage.COLUMN_HEADER % header).click()
 
-    def column_header_sorted(self, header):
+    def get_column_header_sort_order(self, header):
         element = self.get_element_by_css(ImportDataBrowserPage.COLUMN_HEADER % header)
         return element.get_attribute('aria-sort')
 

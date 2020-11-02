@@ -37,13 +37,6 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         tile.get_element_by_css(ImportDossierMainBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
 
         self.pause(5)  # TODO wait when ready
-    
-    def select_any_visualization(self):
-        self.focus_on_dossier_frame()
-
-        self.get_element_by_css(ImportDossierMainBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
-
-        self.pause(5)  # TODO wait when ready
 
     def open_show_data_panel(self, visualization_name):
         self.focus_on_dossier_frame()
