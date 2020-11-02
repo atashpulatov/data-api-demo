@@ -63,14 +63,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
         self._find_attribute_by_number(object_number).move_to_and_click()
 
-        popup_main_element.move_to()  # needed when selecting many attributes consecutively
-
-    def _find_attribute_by_number(self, object_number):
-        popup_main_element = self.get_add_in_main_element()
-
-        return popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_AT % object_number
-        )
+        popup_main_element.move_to()  # Needed when selecting many attributes consecutively.
 
     def expand_attribute_form(self, object_number):
         popup_main_element = self.get_add_in_main_element()
@@ -95,8 +88,13 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def get_attribute_name(self, object_number):
         return self._find_attribute_by_number(object_number).get_name_by_attribute()
 
-    # Workaround for the defect in WinAppDriver's moveto command, which does not scroll to non-visible element
     def scroll_into_attribute_by_number(self, object_number):
+        """
+        Scrolls into attribute number object_number using a workaround for the defect in WinAppDriver's moveto command,
+        which does not scroll to non-visible element.
+
+        :param object_number: Number of object to scroll to.
+        """
         popup_main_element = self.get_add_in_main_element()
 
         attribute = self._find_attribute_by_number(object_number)
@@ -105,10 +103,16 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTES_CONTAINER
         )
 
-        while attribute.get_attribute('IsOffscreen') == 'true':
+        while attribute.is_offscreen_by_attribute():
             for i in range(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.CLICKS_TO_SCROLL):
-                attributes_container.click(attributes_container.size['width'], attributes_container.size['height'])
+                attributes_container_size = attributes_container.size
+                attributes_container.click(attributes_container_size['width'], attributes_container_size['height'])
 
             attribute = self._find_attribute_by_number(object_number)
 
-        attribute.move_to()
+    def _find_attribute_by_number(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        return popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_AT % object_number
+        )

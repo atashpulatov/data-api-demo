@@ -12,6 +12,11 @@ from framework.util.util import Util
 
 class BaseElement:
     NAME_ATTRIBUTE = 'Name'
+    AUTOMATION_ID_ATTRIBUTE = 'AutomationId'
+    IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
+
+    ATTRIBUTE_VALUE_TRUE = 'true'
+
     BACKGROUND_COLOR_PROPERTY = 'background-color'
     OPACITY_PROPERTY = 'opacity'
 
@@ -95,6 +100,12 @@ class BaseElement:
 
     def get_name_by_attribute(self):
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
+
+    def get_automation_id_by_attribute(self):
+        return self.get_attribute(BaseElement.AUTOMATION_ID_ATTRIBUTE)
+
+    def is_offscreen_by_attribute(self):
+        return self.get_attribute(BaseElement.IS_OFFSCREEN_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector):
         return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
