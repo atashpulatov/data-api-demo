@@ -12,8 +12,8 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
 
 class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     MY_LIBRARY_SWITCH_ELEM = 'mstr-switch-toggle'
-    MY_LIBRARY_SWITCH_ELEM_ON = (28, 145, 220, 255)
-    MY_LIBRARY_SWITCH_ELEM_OFF = (255, 255, 255, 255)
+    MY_LIBRARY_SWITCH_ELEM_ON = (28, 145, 220)
+    MY_LIBRARY_SWITCH_ELEM_OFF = (255, 255, 255)
 
     FILTERS_BUTTON_ELEM = 'Filters'
 
@@ -25,7 +25,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     ARIA_PROPERTY_CHECKED = 'checked'
 
     IMPORT_BUTTON_ELEM = 'Import'
-    IMPORT_BUTTON_DISABLED_BORDER_COLOR = (233, 233, 233, 255)
+    IMPORT_BUTTON_DISABLED_BORDER_COLOR = (233, 233, 233)
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
     ERROR_MESSAGE_BUTTON_OK = 'OK'
@@ -247,3 +247,21 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             raise MstrException(f'Import button is enabled, expected border color: '
                                 f'{ImportDataWindowsDesktopPage.IMPORT_BUTTON_DISABLED_BORDER_COLOR}, instead got: '
                                 f'{border_color}')
+
+    def find_the_color_of_first_object_in_list(self):
+        element = self.get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW)
+
+        element_color = element.pick_color(5, 5)
+
+        return self._convert_to_match_step_format(element_color)
+
+    def _convert_to_match_step_format(self, pixel_color):
+        converted_rgb = []
+
+        for channel in pixel_color:
+            converted_rgb.append(channel)
+
+        # Add alpha channel to match the test case format
+        converted_rgb.append(1)
+
+        return 'rgba(' + str(converted_rgb).strip('[]') + ')'
