@@ -12,8 +12,8 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
 
 class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     MY_LIBRARY_SWITCH_ELEM = 'mstr-switch-toggle'
-    MY_LIBRARY_SWITCH_ELEM_ON = (28, 145, 220)
-    MY_LIBRARY_SWITCH_ELEM_OFF = (255, 255, 255)
+    MY_LIBRARY_SWITCH_ELEM_ON = (28, 145, 220, 255)
+    MY_LIBRARY_SWITCH_ELEM_OFF = (255, 255, 255, 255)
 
     FILTERS_BUTTON_ELEM = 'Filters'
 
@@ -25,6 +25,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     ARIA_PROPERTY_CHECKED = 'checked'
 
     IMPORT_BUTTON_ELEM = 'Import'
+    IMPORT_BUTTON_DISABLED_BORDER_COLOR = (233, 233, 233, 255)
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
     ERROR_MESSAGE_BUTTON_OK = 'OK'
@@ -235,3 +236,14 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def get_tooltip_message_for_button(self):
         return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_name_by_attribute()
+
+    def verify_if_import_button_is_disabled(self):
+        element = self.get_element_by_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+
+        border_color = element.pick_color(20, 0)
+        self.log_error(border_color)
+
+        if border_color != ImportDataWindowsDesktopPage.IMPORT_BUTTON_DISABLED_BORDER_COLOR:
+            raise MstrException(f'Import button is enabled, expected border color: '
+                                f'{ImportDataWindowsDesktopPage.IMPORT_BUTTON_DISABLED_BORDER_COLOR}, instead got: '
+                                f'{border_color}')
