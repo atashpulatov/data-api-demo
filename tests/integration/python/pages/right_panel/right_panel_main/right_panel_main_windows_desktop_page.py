@@ -19,6 +19,10 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     LOGOUT_ACCESSIBILITY_ID = 'logOut'
 
+    SELECT_ALL_TILES = "master-checkbox"
+
+    REFRESH_ALL = "Refresh button"
+
     def __init__(self):
         super().__init__()
 
@@ -44,8 +48,16 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.ADD_DATA_BUTTON_ELEM)
         ).click()
 
+    def refresh_all(self):
+        self.get_element_by_accessibility_id(RightPanelMainWindowsDesktopPage.SELECT_ALL_TILES).click()
+        self.get_element_by_name(RightPanelMainWindowsDesktopPage.REFRESH_ALL).click()
+
     def check_if_right_panel_is_empty(self):
         return self.check_if_element_exists_by_name(RightPanelMainWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM)
+
+    def is_scrollbar_visible(self):
+        #TODO Once Winappdriver support /session/:sessionid/execute, we can implement this properly and generically. For now, no-op
+        return True
 
     def view_data(self):
         WindowsDesktopMainAddInElementCache.invalidate_cache()
