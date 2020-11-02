@@ -11,7 +11,10 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
 
 
 class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
-    MY_LIBRARY_SWITCH_ELEM = 'My Library'
+    MY_LIBRARY_SWITCH_ELEM = 'mstr-switch-toggle'
+    MY_LIBRARY_SWITCH_ELEM_ON = (28, 145, 220)
+    MY_LIBRARY_SWITCH_ELEM_OFF = (255, 255, 255)
+
     FILTERS_BUTTON_ELEM = 'Filters'
 
     SEARCH_ELEM = '//Group/Edit'
@@ -47,11 +50,20 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def ensure_mylibrary_switch_is_off(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        # TODO check if is on or ignore to have better performance?
-        self.get_element_by_name(
-            ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
-        ).click()
+        self._change_mylibrary_switch(False)
+
+    def ensure_mylibrary_switch_is_on(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        self._change_mylibrary_switch(True)
+
+    def _change_mylibrary_switch(self, expected_state):
+        element = self.get_element_by_accessibility_id(ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
+
+        switch_state = element.pick_color(10, 10) == ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM_ON
+
+        if switch_state != expected_state:
+            element.click()
 
     def _is_on(self, element):
         aria_properties_value = self._get_element_aria_properties(element)
