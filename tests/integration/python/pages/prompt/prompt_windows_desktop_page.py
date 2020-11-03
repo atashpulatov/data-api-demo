@@ -12,15 +12,14 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPTED_DOSSIER_RUN_BUTTON = 'Run'
     PROMPTED_DOSSIER_RUN_DOSSIER_BUTTON_IMAGE = PROMPTED_DOSSIER_RUN_BUTTON + 'Dossier'
 
-    PROMPT_LIST_ELEM = '//Group[contains(@Name,"%s")]/DataItem[@Name="%s"]'
+    PROMPT_LIST_ELEM = '//Group[starts-with(@Name,"%s")]/DataItem[@Name="%s"]'
     PROMPT_OBJECT_BOX = '(//DataItem[@Name="%s.%s"]/../following-sibling::Table' \
                         '[starts-with(@AutomationId, "id_mstr")][1]' \
                         '//Group[starts-with(@AutomationId, "ListBlockContents")])[%s]/Group[@Name="%s"]'
 
-    PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../following-sibling::Table' \
-                        '[starts-with(@AutomationId, "id_mstr")][1]' \
-                        '//Edit[starts-with(@AutomationId,"id_mstr") and contains(@AutomationId, "_txt")]'
-
+    PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../' \
+                        'following-sibling::Table/DataItem/Table/DataItem/Edit'
+   
     PROMPT_NAME_SEPARATOR = '.'
     PROMPT_NAME_IMAGE_PREFIX = 'prompt_title_'
 
@@ -123,8 +122,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         prompt = self.get_element_by_xpath(
             PromptWindowsDesktopPage.PROMPT_VALUE_ELEM % (prompt_number, prompt_name)
         )
-        self.log(type(text))
-        prompt.double_click()
+
+        prompt.click()
         prompt.send_keys(text)
 
         self.press_tab()
