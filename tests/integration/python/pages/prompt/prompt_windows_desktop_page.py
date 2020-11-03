@@ -124,11 +124,11 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             PromptWindowsDesktopPage.PROMPT_VALUE_ELEM % (prompt_number, prompt_name)
         )
         self.log(type(text))
-        # prompt.double_click()
-        # prompt.send_keys(text)
+        prompt.double_click()
+        prompt.send_keys(text)
 
-        # self.press_tab()
-        # self.press_tab()
+        self.press_tab()
+        self.press_tab()
 
     def _select_prompt_from_list(self, prompt_number, prompt_name):
         self.get_element_by_xpath(
