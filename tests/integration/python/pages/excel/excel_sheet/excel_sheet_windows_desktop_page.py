@@ -27,6 +27,11 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     LIGHT_GREEN_TABLE = "Light Green, Table Style Light 21"
     LIGHT_GREEN = "Light Green"
 
+    COLUMN_ROW_SELECTED_COLORS = [(210, 210, 210), (205, 243, 223)]
+    COLUMN_CELL = '//HeaderItem[@Name="%s"]'
+    COLUMN_CELL_IMAGE = '_column_%s'
+    ROW_CELL_IMAGE = '_row_%s'
+
     def get_cells_values(self, cells):
         result = []
 
@@ -228,6 +233,28 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.press_escape()
 
         return paste()
+
+    def is_column_range_selected(self, column_names):
+        for column_name in column_names:
+            elementColor = self.get_element_by_xpath(
+                ExcelSheetWindowsDesktopPage.COLUMN_CELL % column_name
+            ).pick_color(10, 2)
+
+            if elementColor not in ExcelSheetWindowsDesktopPage.COLUMN_ROW_SELECTED_COLORS:
+                return False
+
+        return True
+
+    def is_row_range_selected(self, row_names):
+        for row_name in row_names:
+            elementColor = self.get_element_by_xpath(
+                ExcelSheetWindowsDesktopPage.COLUMN_CELL % row_name
+            ).pick_color(10, 2)
+
+            if elementColor not in ExcelSheetWindowsDesktopPage.COLUMN_ROW_SELECTED_COLORS:
+                return False
+
+        return True
 
     def _select_font_name_combo_box(self):
         self._navigate_to_home_tab_and_press('ff')
