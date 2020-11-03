@@ -17,7 +17,9 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
                         '[starts-with(@AutomationId, "id_mstr")][1]' \
                         '//Group[starts-with(@AutomationId, "ListBlockContents")])[%s]/Group[@Name="%s"]'
 
-    PROMPT_VALUE_ELEM = '//Edit[starts-with(@AutomationId,"id_mstr") and contains(@AutomationId, "_txt")]'
+    PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../following-sibling::Table' \
+                        '[starts-with(@AutomationId, "id_mstr")][1]' \
+                        '//Edit[starts-with(@AutomationId,"id_mstr") and contains(@AutomationId, "_txt")]'
 
     PROMPT_NAME_SEPARATOR = '.'
     PROMPT_NAME_IMAGE_PREFIX = 'prompt_title_'
@@ -118,13 +120,15 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     def select_answer_for_value_prompt(self, prompt_number, prompt_name, text):
         self._select_prompt_from_list(prompt_number, prompt_name)
 
-        prompt = self.get_element_by_xpath(PromptWindowsDesktopPage.PROMPT_VALUE_ELEM)
+        prompt = self.get_element_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_VALUE_ELEM % (prompt_number, prompt_name)
+        )
+        self.log(type(text))
+        # prompt.double_click()
+        # prompt.send_keys(text)
 
-        prompt.double_click()
-        prompt.send_keys(text)
-
-        self.press_tab()
-        self.press_tab()
+        # self.press_tab()
+        # self.press_tab()
 
     def _select_prompt_from_list(self, prompt_number, prompt_name):
         self.get_element_by_xpath(
