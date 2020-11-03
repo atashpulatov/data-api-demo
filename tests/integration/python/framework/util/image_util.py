@@ -40,6 +40,8 @@ class ImageUtil:
     FILE_NAME_MAX_LENGTH = 100
     FILE_NAME_SEPARATOR = '_'
 
+    RGB_TO_HEX_PATTERN = '#{:x}{:x}{:x}'
+
     def get_element_center_coordinates_by_image(self, image_name):
         """
         Gets element center's coordinates using image recognition.
@@ -179,7 +181,7 @@ class ImageUtil:
     def _save_current_full_screen(self):
         current_full_screen_file_path = self._prepare_image_file_path(ImageUtil.CURRENT_SCREENSHOT_FILE_NAME)
 
-        image = self._get_screenshot_image(self.driver)
+        image = self._get_full_screen_image()
         image.save(current_full_screen_file_path)
 
         return current_full_screen_file_path
@@ -210,15 +212,19 @@ class ImageUtil:
     def _save_element_image(self, element, file_name_prefix):
         if file_name_prefix and self.image_recognition_enabled:
             element_file_name = self._prepare_image_file_path(file_name_prefix)
-            coordinates = self._calculate_element_coordinates(element)
 
-            image = self._get_screenshot_image(self.driver)
-
-            element_image = image.crop(coordinates)
+            element_image = self.get_element_image(element)
             element_image.save(element_file_name)
 
-    def _get_screenshot_image(self, driver):
-        screenshot_png = driver.get_screenshot_as_png()
+    def get_element_image(self, element):
+        screenshot_image = self._get_full_screen_image()
+
+        coordinates = self._calculate_element_coordinates(element)
+
+        return screenshot_image.crop(coordinates)
+
+    def _get_full_screen_image(self):
+        screenshot_png = self.driver.get_screenshot_as_png()
 
         return Image.open(BytesIO(screenshot_png))
 
@@ -275,3 +281,18 @@ class ImageUtil:
         file_name_prefix = file_name[0:file_name_prefix_length]
 
         return file_name_prefix + file_name_suffix
+
+    def get_color_from_image(self, image, offset_x, offset_y):
+        """
+        Gets color from image, using coordinates relative to left top corner (0, 0).
+        :param image: Image to check color in.
+        :param offset_x: X coordinate to pick color from.
+        :param offset_y: Y coordinate to pick color from.
+
+        :return: Color as a hex string, e.g. '#ffaac1'.
+        """
+        color = image.getpixel((offset_x, offset_y))
+
+        hex_color = ImageUtil.RGB_TO_HEX_PATTERN.format(*color)
+
+        return hex_color

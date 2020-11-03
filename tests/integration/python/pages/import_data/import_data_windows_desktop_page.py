@@ -12,8 +12,8 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
 
 class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     MY_LIBRARY_SWITCH_ELEM = 'mstr-switch-toggle'
-    MY_LIBRARY_SWITCH_ELEM_ON = (28, 145, 220)
-    MY_LIBRARY_SWITCH_ELEM_OFF = (255, 255, 255)
+    MY_LIBRARY_SWITCH_ELEM_ON_COLOR = '#1c91dc'
+    MY_LIBRARY_SWITCH_ELEM_OFF_COLOR = '#ffffff'
 
     FILTERS_BUTTON_ELEM = 'Filters'
 
@@ -25,7 +25,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     ARIA_PROPERTY_CHECKED = 'checked'
 
     IMPORT_BUTTON_ELEM = 'Import'
-    IMPORT_BUTTON_DISABLED_BORDER_COLOR = (233, 233, 233)
+    IMPORT_BUTTON_DISABLED_BORDER_COLOR = '#e9e9e9'
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
     ERROR_MESSAGE_BUTTON_OK = 'OK'
@@ -61,7 +61,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def _change_mylibrary_switch(self, expected_state):
         element = self.get_element_by_accessibility_id(ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
 
-        switch_state = element.pick_color(10, 10) == ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM_ON
+        switch_state = element.pick_color(10, 10) == ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM_ON_COLOR
 
         if switch_state != expected_state:
             element.click()
@@ -237,31 +237,17 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def get_tooltip_message_for_button(self):
         return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_name_by_attribute()
 
+    def find_the_color_of_first_object_in_list(self):
+        element = self.get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW)
+
+        return element.pick_color(5, 5)
+
     def verify_if_import_button_is_disabled(self):
         element = self.get_element_by_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
 
         border_color = element.pick_color(20, 0)
-        self.log_error(border_color)
 
         if border_color != ImportDataWindowsDesktopPage.IMPORT_BUTTON_DISABLED_BORDER_COLOR:
             raise MstrException(f'Import button is enabled, expected border color: '
                                 f'{ImportDataWindowsDesktopPage.IMPORT_BUTTON_DISABLED_BORDER_COLOR}, instead got: '
                                 f'{border_color}')
-
-    def find_the_color_of_first_object_in_list(self):
-        element = self.get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW)
-
-        element_color = element.pick_color(5, 5)
-
-        return self._convert_to_match_step_format(element_color)
-
-    def _convert_to_match_step_format(self, pixel_color):
-        converted_rgb = []
-
-        for channel in pixel_color:
-            converted_rgb.append(channel)
-
-        # Add alpha channel to match the test case format
-        converted_rgb.append(1)
-
-        return 'rgba(' + str(converted_rgb).strip('[]') + ')'

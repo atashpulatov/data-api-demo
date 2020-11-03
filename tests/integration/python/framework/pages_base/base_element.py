@@ -1,15 +1,15 @@
 import time
-from io import BytesIO
-from PIL import Image
 
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.color import Color
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
     ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS, \
     MEDIUM_TIMEOUT
 from framework.util.exception.MstrException import MstrException
+from framework.util.image_util import ImageUtil
 from framework.util.util import Util
 
 
@@ -22,6 +22,8 @@ class BaseElement:
         self.__element = raw_element
         self.__driver = driver
         self.__image = None
+
+        self.image_util = ImageUtil()
 
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
@@ -184,7 +186,16 @@ class BaseElement:
         raise MstrException('Cannot find elements: %s' % selector)
 
     def get_background_color(self):
-        return self._value_of_css_property(BaseElement.BACKGROUND_COLOR_PROPERTY)
+        """
+        Gets background color of this element using CSS property 'background-color'.
+
+        Works only for Browsers.
+
+        :return: Background color as a hex string, e.g. '#ffaac1'.
+        """
+        css_color_property = self._value_of_css_property(BaseElement.BACKGROUND_COLOR_PROPERTY)
+
+        return Color.from_string(css_color_property).hex
 
     def get_opacity(self):
         return self._value_of_css_property(BaseElement.OPACITY_PROPERTY)
@@ -334,35 +345,29 @@ class BaseElement:
 
     def pick_color(self, offset_x=0, offset_y=0, force_new_screenshot=False):
         """
-        Pick color from coordinates relative to element position
+        Picks color from coordinates relative to element left top corner (0, 0).
+
+        It uses this element image screenshot to check the color.
+
+        :param offset_x: X coordinate to pick color from.
+        :param offset_y: Y coordinate to pick color from.
+        :param force_new_screenshot: Flag indicating if element screenshot should be taken even if
+        cached image already exists.
+
+        :return: Color as a hex string, e.g. '#ffaac1'.
         """
-        image = self.__image
+        self._store_element_image(force_new_screenshot)
 
-        if image is None or force_new_screenshot:
-            image = self._get_screenshot()
+        return self.image_util.get_color_from_image(self.__image, offset_x, offset_y)
 
-        image_rgb = image.convert('RGB')
+    def _store_element_image(self, force_new_screenshot=False):
+        """
+        Stores this element screenshot image in this object.
 
-        return image_rgb.getpixel((offset_x, offset_y))
+        New image is stored in self.__image if it doesn't already exist or force_new_screenshot flag is True.
 
-    def _get_screenshot(self):
-
-        screenshot = self.__driver.get_screenshot_as_png()
-        screenshot_image = Image.open(BytesIO(screenshot))
-
-        coordinates = self._calculate_element_coordinates()
-
-        self.__image = screenshot_image.crop(coordinates)
-
-        return self.__image
-
-    def _calculate_element_coordinates(self):
-        element_location = self.__element.location
-        element_size = self.__element.size
-
-        left = element_location['x']
-        top = element_location['y']
-        right = left + element_size['width']
-        bottom = top + element_size['height']
-
-        return left, top, right, bottom
+        :param force_new_screenshot: Flag indicating if element screenshot should be taken even if
+        cached image already exists.
+        """
+        if self.__image is None or force_new_screenshot:
+            self.__image = self.image_util.get_element_image(self)
