@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 from framework.pages_base.base_element import BaseElement
 from framework.util.const import AFTER_OPERATION_WAIT_TIME
 from framework.util.exception.MstrException import MstrException
-from framework.util.image_util import ImageUtil
 from framework.util.util import Util
 
 
@@ -13,13 +12,10 @@ class ImageElement(BaseElement):
 
     excel_element = None
 
-    def __init__(self, center_coordinates, driver, image_name):
+    def __init__(self, center_coordinates, driver):
         super().__init__(None, driver)
         self.__center_coordinates = center_coordinates
         self.__driver = driver
-        self.__image_name = image_name
-
-        self.image_util = ImageUtil()
 
     @classmethod
     def reset_excel_root_element(cls, driver, root_element=EXCEL_ROOT_ELEMENT):
@@ -105,11 +101,3 @@ class ImageElement(BaseElement):
 
     def send_keys_with_check(self, text):
         raise MstrException('Invalid usage of ImageElement, send_keys_with_check() is not allowed')
-
-    def _calculate_element_coordinates(self):
-        coordinates = self.image_util.get_element_all_coordinates_by_image(self.__image_name)
-
-        if coordinates is None:
-            raise MstrException(f'Coordinates of the image were not found, searched image: {self.__image_name}')
-
-        return coordinates

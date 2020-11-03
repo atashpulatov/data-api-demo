@@ -119,19 +119,7 @@ class ImageUtil:
 
         return None
 
-    def get_element_all_coordinates_by_image(self, image_name):
-        if image_name and self.image_recognition_enabled:
-            start_time = time.time()
-            element_coordinates = self._find_element_image_all_coordinates(image_name)
-            if element_coordinates:
-                Util.log(f'Element found by image: [{image_name}], coordinates: [{element_coordinates}], '
-                         f'time: [{time.time() - start_time}]')
-
-                return element_coordinates
-
-        return None
-
-    def _find_element_image_all_coordinates(self, image_name, timeout=DEFAULT_IMAGE_TIMEOUT):
+    def _find_element_image_center(self, image_name, timeout=DEFAULT_IMAGE_TIMEOUT):
         element_gray_image = self._get_element_gray_image(image_name)
 
         if element_gray_image is None:
@@ -161,15 +149,6 @@ class ImageUtil:
 
             Util.log(f'Looking for image, name: [{image_name}], try: {i}.')
 
-    def _find_element_image_center(self, image_name, timeout=DEFAULT_IMAGE_TIMEOUT):
-        top_left_x, top_left_y, \
-            bottom_right_x, bottom_right_y = self._find_element_image_all_coordinates(image_name, timeout)
-
-        return self._calculate_center_coordinates(
-            top_left_x, top_left_y,
-            top_left_x - bottom_right_x, top_left_y - bottom_right_y
-        )
-
     def _get_element_gray_image(self, element_image_name):
         element_image_file_path = self._prepare_image_file_path(element_image_name)
 
@@ -193,12 +172,7 @@ class ImageUtil:
         _, max_val, _, max_loc = cv2.minMaxLoc(result)
 
         if max_val > 0.99:
-            return (
-                max_loc[0],  # x
-                max_loc[1],  # y
-                max_loc[0] + element_gray_image.shape[0],  # x + width
-                max_loc[1] + element_gray_image.shape[1]   # y + height
-            )    
+            return self._calculate_image_center_coordinates(element_gray_image, max_loc)
 
         return None
 
@@ -209,6 +183,14 @@ class ImageUtil:
         image.save(current_full_screen_file_path)
 
         return current_full_screen_file_path
+
+    def _calculate_image_center_coordinates(self, image, left_top_location):
+        height, width = image.shape
+
+        return self._calculate_center_coordinates(
+            left_top_location[0], left_top_location[1],
+            width, height
+        )
 
     def _calculate_found_element_center_coordinates(self, element):
         element_location = element.location

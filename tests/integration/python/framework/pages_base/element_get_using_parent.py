@@ -64,7 +64,7 @@ class ElementGetUsingParent(ElementCoordinates):
                                         image_name=None, timeout=DEFAULT_TIMEOUT):
         cached_element_coordinates = self.image_util.get_element_center_coordinates_by_image(image_name)
         if cached_element_coordinates:
-            return ImageElement(cached_element_coordinates, self.driver, image_name)
+            return ImageElement(cached_element_coordinates, self.driver)
 
         parent_element = parent_selection_method(parent_selector, timeout=timeout)
 
@@ -72,4 +72,4 @@ class ElementGetUsingParent(ElementCoordinates):
             parent_element, element_selector, timeout, image_name
         )
 
-        return ImageElement(element_center_coordinates, self.driver, image_name)
+        return ImageElement(element_center_coordinates, self.driver)
