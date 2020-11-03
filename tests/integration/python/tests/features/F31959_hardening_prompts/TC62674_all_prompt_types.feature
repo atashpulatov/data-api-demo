@@ -13,3 +13,5 @@ Feature: F31959 - Hardening the workflows of importing data with prompts to Exce
       And I selected "Item" as an answer for "1. Objects" prompt - object prompt
       And I selected "Books" as an answer for "3. Category" prompt - object prompt
       And I typed "2014" for "4. Year" prompt - value prompt
+
+    #TODO Rest of the TC steps
