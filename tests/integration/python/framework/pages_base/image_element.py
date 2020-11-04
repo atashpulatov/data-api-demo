@@ -12,10 +12,11 @@ class ImageElement(BaseElement):
 
     excel_element = None
 
-    def __init__(self, center_coordinates, driver):
+    def __init__(self, center_coordinates, driver, image_name):
         super().__init__(None, driver)
         self.__center_coordinates = center_coordinates
         self.__driver = driver
+        self.__image_name = image_name
 
     @classmethod
     def reset_excel_root_element(cls, driver, root_element=EXCEL_ROOT_ELEMENT):
@@ -95,6 +96,10 @@ class ImageElement(BaseElement):
     @property
     def location(self):
         raise MstrException('Invalid usage of ImageElement, location is not allowed')
+
+    @property
+    def image_name(self):
+        return self.__image_name
 
     def send_keys(self, special_key):
         raise MstrException('Invalid usage of ImageElement, send_keys() is not allowed')
