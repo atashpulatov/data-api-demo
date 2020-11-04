@@ -56,7 +56,14 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         return self.check_if_element_exists_by_name(RightPanelMainWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM)
 
     def is_scrollbar_visible(self):
-        #TODO Once Winappdriver support /session/:sessionid/execute, we can implement this properly and generically. For now, no-op
+        """
+        Checks if scrollbar is visible, currently for Windows Desktop always returns True.
+
+        There is no information about scrollbar visibility in page source. As a workaround, once WinAppDriver supports
+        /session/:sessionid/execute, checking it could be implement using JavaScript injecting.
+
+        :return: True
+        """
         return True
 
     def view_data(self):
