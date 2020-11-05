@@ -1,6 +1,7 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.const import MEDIUM_TIMEOUT
 from framework.util.exception.MstrException import MstrException
+from selenium.webdriver.common.keys import Keys
 
 
 class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -15,8 +16,6 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
     CLICKS_TO_SCROLL = 5
     METRIC_SEARCH_RANGE = 10
-
-    all_metrics = []  # TODO will it be cleaned between opening this window?
 
     def click_metric(self, metric_name):
         metric_to_click = self._prepare_metric_to_click(metric_name)
@@ -34,12 +33,8 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
                 timeout=MEDIUM_TIMEOUT
             )
         except MstrException:
-            self.log(f'Metric with metric name [{metric_name}] not found in visible elements, checking all metrics.')
-            all_metrics_by_name = [metric for metric in self._get_all_metrics() if
-                                   metric.get_name_by_attribute() is metric_name]
-
-            if len(all_metrics_by_name) == 1:
-                return all_metrics_by_name[0]
+            self.log(f'Metric with metric name [{metric_name}] not found in visible elements, '
+                     'scroll into it before selecting it.')
 
         return None
 
@@ -73,19 +68,11 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         if object_index < len(visible_metrics):
             return visible_metrics[object_index]
         else:
-            return self._get_all_metrics()[object_index]
+            raise MstrException(f'Metric number {object_number} is not visible. Scroll into it before selecting it.')
 
     def scroll_into_metric_by_number(self, object_number):
-        self._get_all_metrics()[int(object_number) - 1].move_to()
-
-    # TODO we need to ensure that when using this method caller makes sure needed metric is visible
-    # TODO  before clicking or moving to
-    def _get_all_metrics(self):
-        # TODO we assume metrics are scrolled to top before calling _get_all_metrics(), is this assumption ok?
-
-        # TODO should callers of _get_all_metrics() assume metrics are scrolled down when it finishes?
         """
-        Gets all metrics.
+        Scrolls into metric by number, starting from top.
 
         Uses workaround as non-visible metrics are not present in page source. Scrolling down in metrics box causes
         loading and adding to page source subsequent metrics, but metrics that disappear at the top of the box are
@@ -94,16 +81,55 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         Workaround builds list of all metrics by scrolling down bit by bit and appending newly
         added metrics to the list.
 
-        :return: List of all metrics.
+        :return: Metric that was searched for.
         """
-        if self.all_metrics:
-            return self.all_metrics
-
         popup_main_element = self.get_add_in_main_element()
 
         metrics_container = popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
         )
+
+        metrics_container.send_keys(Keys.HOME)
+
+        all_metrics = []
+        object_index = int(object_number) - 1
+
+        for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_SEARCH_RANGE):
+            visible_metrics = popup_main_element.get_elements_by_xpath(
+                ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
+            )
+
+            updated_metrics = all_metrics + list(filter(lambda metric: metric not in all_metrics, visible_metrics))
+
+            if len(updated_metrics) > int(object_index):
+                return updated_metrics[object_index]
+            else:
+                all_metrics = updated_metrics
+
+            self._scroll_metrics_down(metrics_container)
+
+        raise MstrException('Search limit has been exceeded. There are too many metrics in this dataset.')
+
+    def scroll_into_metric_by_name(self, metric_name):
+        """
+        Scrolls into metric by name, starting from top.
+
+        Uses workaround as non-visible metrics are not present in page source. Scrolling down in metrics box causes
+        loading and adding to page source subsequent metrics, but metrics that disappear at the top of the box are
+        removed from page source. When scrolling up behaviour is the same.
+
+        Workaround builds list of all metrics by scrolling down bit by bit and appending newly
+        added metrics to the list.
+
+        :return: Metric that was searched for.
+        """
+        popup_main_element = self.get_add_in_main_element()
+
+        metrics_container = popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
+        )
+
+        metrics_container.send_keys(Keys.HOME)
 
         all_metrics = []
 
@@ -112,10 +138,10 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
                 ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
             )
             updated_metrics = all_metrics + list(filter(lambda metric: metric not in all_metrics, visible_metrics))
+            updated_metrics_filtered_by_name = [metric for metric in updated_metrics if metric.text == metric_name]
 
-            if updated_metrics == all_metrics:
-                self.all_metrics = all_metrics
-                return all_metrics
+            if len(updated_metrics_filtered_by_name) == 1:
+                return updated_metrics_filtered_by_name[0]
             else:
                 all_metrics = updated_metrics
 
@@ -127,6 +153,3 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.CLICKS_TO_SCROLL):
             metrics_container_size = metrics_container.size
             metrics_container.click(metrics_container_size['width'], metrics_container_size['height'])
-
-
-me
