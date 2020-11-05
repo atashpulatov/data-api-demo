@@ -88,7 +88,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def get_attribute_name(self, object_number):
         return self._find_attribute_by_number(object_number).get_name_by_attribute()
 
-    def scroll_into_attribute_by_number(self, object_number):
+    def scroll_into_and_select_attribute_by_number(self, object_number):
         """
         Scrolls into attribute number object_number using a workaround for the defect in WinAppDriver's moveto command,
         which does not scroll to non-visible element.
@@ -110,7 +110,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
             attribute = self._find_attribute_by_number(object_number)
 
-        return attribute
+        attribute.move_to_and_click()
 
     def _find_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()

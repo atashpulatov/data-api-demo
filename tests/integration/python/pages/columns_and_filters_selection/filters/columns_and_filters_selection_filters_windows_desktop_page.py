@@ -55,7 +55,7 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     def get_filter_name(self, object_number):
         return self._find_filter_by_number(object_number).get_name_by_attribute()
 
-    def scroll_into_filter_by_number(self, object_number):
+    def scroll_into_and_select_filter_by_number(self, object_number):
         """
         Scrolls into filter number object_number using a workaround for the defect in WinAppDriver's moveto command,
         which does not scroll to non-visible element.
@@ -77,7 +77,7 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
 
             filter_element = self._find_filter_by_number(object_number)
 
-        return filter_element
+        filter_element.click()
 
     def _find_filter_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()

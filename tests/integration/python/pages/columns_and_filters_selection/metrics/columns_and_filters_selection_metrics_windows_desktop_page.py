@@ -70,9 +70,9 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         else:
             raise MstrException(f'Metric number {object_number} is not visible. Scroll into it before selecting it.')
 
-    def scroll_into_metric_by_number(self, object_number):
+    def scroll_into_and_select_metric_by_number(self, object_number):
         """
-        Scrolls into metric by number, starting from top.
+        Scrolls into metric by number, starting from top, and selects it.
 
         Uses workaround as non-visible metrics are not present in page source. Scrolling down in metrics box causes
         loading and adding to page source subsequent metrics, but metrics that disappear at the top of the box are
@@ -80,8 +80,6 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
         Workaround builds list of all metrics by scrolling down bit by bit and appending newly
         added metrics to the list.
-
-        :return: Metric that was searched for.
         """
         popup_main_element = self.get_add_in_main_element()
 
@@ -102,7 +100,8 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
             updated_metrics = all_metrics + list(filter(lambda metric: metric not in all_metrics, visible_metrics))
 
             if len(updated_metrics) > int(object_index):
-                return updated_metrics[object_index]
+                updated_metrics[object_index].click()
+                return
             else:
                 all_metrics = updated_metrics
 
@@ -110,7 +109,7 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
         raise MstrException('Search limit has been exceeded. There are too many metrics in this dataset.')
 
-    def scroll_into_metric_by_name(self, metric_name):
+    def scroll_into_and_select_metric_by_name(self, metric_name):
         """
         Scrolls into metric by name, starting from top.
 
@@ -141,7 +140,8 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
             updated_metrics_filtered_by_name = [metric for metric in updated_metrics if metric.text == metric_name]
 
             if len(updated_metrics_filtered_by_name) == 1:
-                return updated_metrics_filtered_by_name[0]
+                updated_metrics_filtered_by_name[0].click()
+                return
             else:
                 all_metrics = updated_metrics
 
