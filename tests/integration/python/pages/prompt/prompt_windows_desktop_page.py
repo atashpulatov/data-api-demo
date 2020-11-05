@@ -17,9 +17,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
                         '[starts-with(@AutomationId, "id_mstr")][1]' \
                         '//Group[starts-with(@AutomationId, "ListBlockContents")])[%s]/Group[@Name="%s"]'
 
-    PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../' \
-                        'following-sibling::Table/DataItem/Table/DataItem/Edit'
-   
+    PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem/Table/DataItem/Edit'
+
     PROMPT_NAME_SEPARATOR = '.'
     PROMPT_NAME_IMAGE_PREFIX = 'prompt_title_'
 
