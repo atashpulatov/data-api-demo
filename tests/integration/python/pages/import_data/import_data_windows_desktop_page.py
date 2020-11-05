@@ -232,5 +232,5 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
                 image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
             ).click()
 
-        except Exception:
+        except MstrException:
             pass
