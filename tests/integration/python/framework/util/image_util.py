@@ -59,23 +59,23 @@ class ImageUtil:
         :param image_name: Name of image stored in images cache.
         :return: Element's coordinates (x, y) or None.
         """
-        coordinates = self.get_element_corner_coordinates_by_image(image_name)
+        corners_coordinates = self._get_element_corners_coordinates_by_image(image_name)
 
-        if coordinates is None:
+        if corners_coordinates is None:
             return None
 
-        left, top, right, bottom = coordinates
+        left, top, right, bottom = corners_coordinates
 
         width = right - left
         height = bottom - top
 
         return self._calculate_center_coordinates(left, top, width, height)
 
-    def get_element_corner_coordinates_by_image(self, image_name):
+    def _get_element_corners_coordinates_by_image(self, image_name):
         """
-        Gets element corner coordinates using image recognition
+        Gets element corners coordinates using image recognition.
 
-        Returns element corner coordinates (left, top, right, bottom) when image recognition is globally enabled,
+        Returns element corners coordinates (left, top, right, bottom) when image recognition is globally enabled,
         image given by image_name is present in cache, and is currently visible on screen
 
         or
@@ -84,7 +84,7 @@ class ImageUtil:
         present on screen.
 
         :param: image_name: Name of image stored in images cache.
-        :return: Element's corners coordinates (left, top, right, bottom) or None
+        :return: Element's corners coordinates (left, top, right, bottom) or None.
         """
         if image_name and self.image_recognition_enabled:
             start_time = time.time()
@@ -259,7 +259,7 @@ class ImageUtil:
 
     def _calculate_element_coordinates(self, element):
         if hasattr(element, 'image_name'):
-            return self.get_element_corner_coordinates_by_image(element.image_name)
+            return self._get_element_corners_coordinates_by_image(element.image_name)
 
         element_location = element.location
         element_size = element.size
