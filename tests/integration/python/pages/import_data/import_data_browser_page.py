@@ -166,6 +166,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDataBrowserPage.CLOSE_IMPORT_DATA_BUTTON).click()
 
     def click_filters_button(self):
+        self.focus_on_add_in_popup_frame()
+        
         self.get_element_by_css(ImportDataBrowserPage.FILTERS_BUTTON).click()
 
     def hover_over_first_object_in_list(self):
@@ -221,3 +223,10 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def get_tooltip_message_for_button(self):
         self.focus_on_add_in_popup_frame()
         return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text
+
+    def scroll_objects_by_number_of_pages(self, number):
+        for i in range(int(number)):
+            self.press_page_down()
+    
+    def scroll_objects_to_end(self):
+        self.press_end()

@@ -32,12 +32,6 @@ Feature: F24086 - Improved browsing by adding filters
       And I scrolled down list of objects to end
    # TODO according to TC description - select any object at the end and check if it's selected
 
-   # TODO remove arrow steps?
-      And I pressed key Arrow Down
-      And I pressed key Arrow Down
-      And I pressed key Arrow Down
-      And I pressed key Arrow Down
-
       And I found object by ID "147F272E11EB016AE2890080EF15EE7D" and selected "Dossier with prompt - Value prompt - Text (Category) | Not required | Default answer"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully

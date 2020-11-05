@@ -126,19 +126,12 @@ def step_impl(context, expected_sort_order, header):  # TODO name sorted shadows
 
 @step('I scrolled down list of objects by {number} page(s)')
 def step_impl(context, number):
-    # TODO comment should be removed
-    # context.pages.import_data_page().select_first_object_from_list()
-    # TODO no implementation in steps, should be moved to Page
-    for i in range(0, int(number)):
-        context.pages.keyboard_page().press_key('Page Down')
+    context.pages.import_data_page().scroll_objects_by_number_of_pages(number)
 
 
 @step('I scrolled down list of objects to end')
 def step_impl(context):
-    # TODO comment should be removed
-    # context.pages.import_data_page().select_first_object_from_list()
-    # TODO no implementation in steps, should be moved to Page
-    context.pages.keyboard_page().press_key('End')
+    context.pages.import_data_page().scroll_objects_to_end()
 
 
 @step('verified that Filters has "{number}" categories selected')
