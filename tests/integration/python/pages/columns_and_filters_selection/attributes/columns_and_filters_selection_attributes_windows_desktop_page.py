@@ -110,6 +110,8 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
             attribute = self._find_attribute_by_number(object_number)
 
+        return attribute
+
     def _find_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
 

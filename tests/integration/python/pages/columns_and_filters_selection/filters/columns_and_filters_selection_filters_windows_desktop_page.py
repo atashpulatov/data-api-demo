@@ -77,6 +77,8 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
 
             filter_element = self._find_filter_by_number(object_number)
 
+        return filter_element
+
     def _find_filter_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
 

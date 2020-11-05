@@ -67,6 +67,7 @@ def step_impl(context, attribute_form_number, attribute_number, expected_name):
     AssertUtil.assert_simple(result, expected_name)
 
 
-@step('I scrolled into attribute element number {object_number}')
+@step('I scrolled into attribute element number {object_number} and selected it')
 def step_impl(context, object_number):
-    context.pages.columns_and_filters_selection_attributes_page().scroll_into_attribute_by_number(object_number)
+    context.pages.columns_and_filters_selection_attributes_page().scroll_into_attribute_by_number(object_number)\
+        .move_to_and_click()
