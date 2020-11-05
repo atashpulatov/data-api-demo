@@ -27,18 +27,12 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
         self.pause(5)  # TODO wait when ready
 
     def click_import_visualization(self):
-        self.get_element_by_name(
-            ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON,
-            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON)
-        ).click()
-
-    def click_import_visualization_without_waiting_for_results(self):
-        self.get_element_by_name(
-            ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON,
-            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON)
-        ).click()
+        self.click_import_visualization_without_waiting_for_results()
 
     def click_import_visualization_to_duplicate(self):
+        self.click_import_visualization_without_waiting_for_results()
+
+    def click_import_visualization_without_waiting_for_results(self):
         self.get_element_by_name(
             ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON,
             image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON)
