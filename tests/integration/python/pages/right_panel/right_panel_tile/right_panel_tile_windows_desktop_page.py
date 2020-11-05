@@ -96,22 +96,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.click()
 
     def close_last_notification_on_hover(self):
-        self._wait_for_last_operation_to_finish_successfully()
+        self.wait_for_progress_notifications_to_disappear()
 
         self._hover_over_tile(RightPanelTileWindowsDesktopPage.XML_FIRST_ELEMENT_INDEX)
-
-    def _wait_for_last_operation_to_finish_successfully(self):
-        try:
-            start_time = time.time()
-
-            while not self.check_if_element_exists_by_accessibility_id(
-                RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON, timeout=SHORT_TIMEOUT
-            ):
-                if time.time() - start_time > DEFAULT_TIMEOUT:
-                    raise
-
-        except Exception:
-            pass
 
     def close_object_notification_on_hover(self, object_no):
         self._hover_over_tile(object_no)
