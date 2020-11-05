@@ -121,7 +121,7 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
         object_type_sort_element = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[
             object_type]
 
-        return self.get_element_by_name(object_type_sort_element, image_name=object_type_sort_element)
+        return self.get_element_by_name(object_type_sort_element)
 
     def _prepare_trigger(self, sort_element, event_to_trigger):
         if isinstance(event_to_trigger, str) and hasattr(sort_element, event_to_trigger):

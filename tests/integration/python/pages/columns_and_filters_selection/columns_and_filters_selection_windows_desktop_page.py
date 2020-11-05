@@ -34,8 +34,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def search_for_element(self, element_name):
         search_input = self.get_element_by_name(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT)
+            ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT
         )
 
         search_input.click()
