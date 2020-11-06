@@ -12,9 +12,9 @@ class NotLoggedRightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         self.windows_desktop_workaround = WindowsDesktopWorkaround()
 
     def enable_windows_desktop_workaround_if_needed(self):
-        login_button_coordinates = self.get_element_center_coordinates_by_name(
+        login_button_coordinates = self.get_element_info_by_name(
             NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_ELEM
-        )
+        )[1]
 
         excel_windows_size = ImageElement.excel_element.size
 

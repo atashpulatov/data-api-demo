@@ -12,11 +12,12 @@ class ImageElement(BaseElement):
 
     excel_element = None
 
-    def __init__(self, center_coordinates, driver, image_name):
+    def __init__(self, image_name, corners_coordinates, image, driver):
         super().__init__(None, driver)
-        self.__center_coordinates = center_coordinates
-        self.__driver = driver
         self.__image_name = image_name
+        self.__corners_coordinates = corners_coordinates
+        self.__image = image
+        self.__driver = driver
 
     @classmethod
     def reset_excel_root_element(cls, driver, root_element=EXCEL_ROOT_ELEMENT):
@@ -25,8 +26,8 @@ class ImageElement(BaseElement):
     def click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
-                                      self.__center_coordinates[0] + offset_x,
-                                      self.__center_coordinates[1] + offset_y)
+                                      self.center_coordinates[0] + offset_x,
+                                      self.center_coordinates[1] + offset_y)
          .click()
          .perform())
 
@@ -35,8 +36,8 @@ class ImageElement(BaseElement):
     def double_click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
-                                      self.__center_coordinates[0] + offset_x,
-                                      self.__center_coordinates[1] + offset_y)
+                                      self.center_coordinates[0] + offset_x,
+                                      self.center_coordinates[1] + offset_y)
          .double_click()
          .perform())
 
@@ -83,19 +84,48 @@ class ImageElement(BaseElement):
     def move_to(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
-                                      self.__center_coordinates[0] + offset_x,
-                                      self.__center_coordinates[1] + offset_y)
+                                      self.center_coordinates[0] + offset_x,
+                                      self.center_coordinates[1] + offset_y)
          .perform())
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     @property
     def size(self):
-        raise MstrException('Invalid usage of ImageElement, size is not allowed')
+        left, top, right, bottom = self.corners_coordinates
+
+        width = right - left
+        height = bottom - top
+
+        return {
+            'width': width,
+            'height': height
+        }
 
     @property
     def location(self):
-        raise MstrException('Invalid usage of ImageElement, location is not allowed')
+        left, top, _, _ = self.corners_coordinates
+
+        return {
+            'x': left,
+            'y': top
+        }
+
+    @property
+    def center_coordinates(self):
+        left = self.location['x']
+        top = self.location['y']
+        width = self.size['height']
+        height = self.size['height']
+
+        return (
+            left + int(width / 2),
+            top + int(height / 2)
+        )
+
+    @property
+    def corners_coordinates(self):
+        return self.__corners_coordinates
 
     @property
     def image_name(self):

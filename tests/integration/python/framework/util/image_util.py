@@ -42,8 +42,9 @@ class ImageUtil:
 
     RGB_TO_HEX_PATTERN = '#{:x}{:x}{:x}'
 
-    def get_element_center_coordinates_by_image(self, image_name):
+    def get_element_info_by_image(self, image_name):
         """
+        TODO: UPDATE
         Gets element center's coordinates using image recognition.
 
         Returns element center's coordinates (x, y) when image recognition is globally enabled, image given by
@@ -59,47 +60,18 @@ class ImageUtil:
         :param image_name: Name of image stored in images cache.
         :return: Element's coordinates (x, y) or None.
         """
-        corners_coordinates = self._get_element_corners_coordinates_by_image(image_name)
-
-        if corners_coordinates is None:
-            return None
-
-        left, top, right, bottom = corners_coordinates
-
-        width = right - left
-        height = bottom - top
-
-        return self._calculate_center_coordinates(left, top, width, height)
-
-    def _get_element_corners_coordinates_by_image(self, image_name):
-        """
-        Gets element corners coordinates using image recognition.
-
-        Returns element corners coordinates (left, top, right, bottom) when image recognition is globally enabled,
-        image given by image_name is present in cache, and is currently visible on screen
-
-        or
-
-        None when image recognition is disabled globally, image_name is empty, or image is currently not
-        present on screen.
-
-        :param: image_name: Name of image stored in images cache.
-        :return: Element's corners coordinates (left, top, right, bottom) or None.
-        """
         if image_name and self.image_recognition_enabled:
-            start_time = time.time()
-            element_coordinates = self._find_element_image_corners_coordinates(image_name)
-            if element_coordinates:
-                Util.log(f'Element found by image: [{image_name}], coordinates: [{element_coordinates}], '
-                         f'time: [{time.time() - start_time}]')
+            image = self._get_element_gray_image(image_name)
+            coordinates = self._get_element_corners_coordinates_by_image(image)
 
-                return element_coordinates
+            return image_name, coordinates, image
 
         return None
 
-    def get_element_center_coordinates_and_save_image(self, selector_type, selector,
-                                                      timeout, image_name, parent_element=None):
+    def get_element_info_and_save_image(self, selector_type, selector,
+                                        timeout, image_name, parent_element=None):
         """
+        TODO: UPDATE
         Gets element center coordinates and saves its image (if image recognition is enabled).
 
         Supports relative search when parent_element is provided.
@@ -130,14 +102,14 @@ class ImageUtil:
             else:
                 element = self.driver.find_element(selector_type, selector)
 
-            element_center_coordinates = self._calculate_found_element_center_coordinates(element)
+            element_coordinates = self._calculate_element_coordinates(element)
 
-            self._save_element_image(element, image_name)
+            image = self._save_element_image(element, image_name)
 
-            Util.log(f'Element found by selector: [{selector}], coordinates: [{element_center_coordinates}], '
+            Util.log(f'Element found by selector: [{selector}], coordinates: [{element_coordinates}], '
                      f'time: [{time.time() - start_time}]')
 
-            return element_center_coordinates
+            return image_name, element_coordinates, image
 
         except TimeoutException:
             pass
@@ -148,10 +120,34 @@ class ImageUtil:
 
         return None
 
-    def _find_element_image_corners_coordinates(self, image_name, timeout=DEFAULT_IMAGE_TIMEOUT):
-        element_gray_image = self._get_element_gray_image(image_name)
+    def _get_element_corners_coordinates_by_image(self, image):
+        """
+        Gets element corners coordinates using image recognition.
 
-        if element_gray_image is None:
+        Returns element corners coordinates (left, top, right, bottom) when image recognition is globally enabled,
+        image given by image_name is present in cache, and is currently visible on screen
+
+        or
+
+        None when image recognition is disabled globally, image_name is empty, or image is currently not
+        present on screen.
+
+        :param: image_name: Name of image stored in images cache.
+        :return: Element's corners coordinates (left, top, right, bottom) or None.
+        """
+        if image is not None and self.image_recognition_enabled:
+            start_time = time.time()
+            element_coordinates = self._find_element_image_corners_coordinates(image)
+            if element_coordinates:
+                Util.log(f'Element found by image, coordinates: [{element_coordinates}], '
+                         f'time: [{time.time() - start_time}]')
+
+                return element_coordinates
+
+        return None
+
+    def _find_element_image_corners_coordinates(self, image, timeout=DEFAULT_IMAGE_TIMEOUT):
+        if image is None:
             return None
 
         end_time = time.time() + timeout
@@ -162,7 +158,7 @@ class ImageUtil:
 
             coordinates = self._search_for_element_image_in_full_screen(
                 current_full_screen_gray_image,
-                element_gray_image
+                image
             )
 
             if coordinates:
@@ -172,11 +168,11 @@ class ImageUtil:
             i += 1
 
             if time.time() > end_time:
-                Util.log(f'Image not found, name: [{image_name}], try: {i}, timeout: [{timeout}].')
+                Util.log(f'Image not found, try: {i}, timeout: [{timeout}].')
 
                 return None
 
-            Util.log(f'Looking for image, name: [{image_name}], try: {i}.')
+            Util.log(f'Looking for image, try: {i}.')
 
     def _get_element_gray_image(self, element_image_name):
         element_image_file_path = self._prepare_image_file_path(element_image_name)
@@ -223,27 +219,16 @@ class ImageUtil:
 
         return current_full_screen_file_path
 
-    def _calculate_found_element_center_coordinates(self, element):
-        element_location = element.location
-        element_size = element.size
-
-        return self._calculate_center_coordinates(
-            element_location['x'], element_location['y'],
-            element_size['width'], element_size['height']
-        )
-
-    def _calculate_center_coordinates(self, left, top, width, height):
-        center_x = left + int(width / 2)
-        center_y = top + int(height / 2)
-
-        return center_x, center_y
-
     def _save_element_image(self, element, file_name_prefix):
         if file_name_prefix and self.image_recognition_enabled:
             element_file_name = self._prepare_image_file_path(file_name_prefix)
 
             element_image = self.get_element_image(element)
             element_image.save(element_file_name)
+
+            return element_image
+
+        return None
 
     def get_element_image(self, element):
         screenshot_image = self._get_full_screen_image()
@@ -258,9 +243,6 @@ class ImageUtil:
         return Image.open(BytesIO(screenshot_png))
 
     def _calculate_element_coordinates(self, element):
-        if hasattr(element, 'image_name'):
-            return self._get_element_corners_coordinates_by_image(element.image_name)
-
         element_location = element.location
         element_size = element.size
 
