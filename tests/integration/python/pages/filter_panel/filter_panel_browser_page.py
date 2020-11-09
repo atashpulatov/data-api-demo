@@ -31,7 +31,7 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     OWNER_HEADER_ON_MYLIBRARY = '.filter-panel .category-list-wrapper:nth-child(2) .category-list-header'
 
     MODIFIED_ALL_PANEL = '.filter-panel .mstr-date-range-selector-container > button:nth-child(2)'
-    MODIFIED_LAST_QUARTER_CHECKBOX = '.all-panel__content .ReactVirtualized__Grid__innerScrollContainer div:nth-child(5) .checkbox-cell'
+    MODIFIED_ALL_PANEL_CHECKBOX = '.all-panel__content .ReactVirtualized__Grid__innerScrollContainer [title="%s"]'
     MODIFIED_HEADER_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-header'
     MODIFIED_FROM_FIELD_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-container .mstr-date-selector:nth-child(1)'
     MODIFIED_TO_FIELD_ON_MYLIBRARY = '.filter-panel .mstr-date-range-selector-container .mstr-date-selector:nth-child(2)'
@@ -67,10 +67,8 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     def click_modified_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_ALL_PANEL).click()
 
-    def click_modified_last_quarter_element(self):
-        # TODO should be more general, Last Quarter should be a param
-        # TODO see self.find_index_of_element_in_list_by_text()
-        self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_LAST_QUARTER_CHECKBOX).click()
+    def click_modified_all_panel_element(self, modified_element):
+        self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_ALL_PANEL_CHECKBOX % modified_element).click()
 
     def click_select_all_within_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.SELECT_ALL_WITHIN_ALL_PANEL).click()

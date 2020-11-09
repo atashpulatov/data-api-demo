@@ -18,9 +18,9 @@ def step_impl(context):
     context.pages.filter_panel_page().click_select_all_within_all_panel()
 
 
-@step('I clicked Last Quarter within Modified All Panel')  # TODO should be more general, Last Quater should be a param
-def step_impl(context):
-    context.pages.filter_panel_page().click_modified_last_quarter_element()
+@step('I clicked "{modified_element}" within Modified All Panel')  
+def step_impl(context,modified_element):
+    context.pages.filter_panel_page().click_modified_all_panel_element(modified_element)
 
 
 @step('I clicked Type "{object_type}"')

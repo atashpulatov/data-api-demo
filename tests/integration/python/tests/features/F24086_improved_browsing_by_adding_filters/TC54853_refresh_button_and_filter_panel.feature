@@ -64,7 +64,7 @@ Feature: F24086 - Improved browsing by adding filters
       And verified that Filters has "3" categories selected
 
      When I opened All for Modified category
-      And I clicked Last Quarter within Modified All Panel
+      And I clicked "Last Quarter" within Modified All Panel
      Then verified that Filters has "4" categories selected
 
      When I found object by ID "94A1482F11EA8E01B50F0080EF05D782" and selected "ABCD_update"
