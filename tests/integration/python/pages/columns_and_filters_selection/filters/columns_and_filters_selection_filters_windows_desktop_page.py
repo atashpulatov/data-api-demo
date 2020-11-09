@@ -8,6 +8,8 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     FILTER_VALUES_BOX = '//DataGrid[@Name="grid"]/Group[contains(@Name,"%s")]'
     FILTER_VALUE_SELECTOR = '//Text[@Name="%s"]'
 
+    FIRST_FILTER = '//Tree[starts-with(@Name, \"icon_filter_blue\")]/TreeItem[1]'
+
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_X = 0
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_Y = -100
 
@@ -45,3 +47,20 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TITLE_ITEM % filter_name,
             image_name=self.prepare_image_name(filter_name)
         ).click()
+
+    def hover_over_first_filter(self):
+        self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FIRST_FILTER
+        ).move_to()
+
+    def select_first_filter(self):
+        self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FIRST_FILTER
+        ).click(10, 10)
+
+    def get_background_color_of_first_filter(self):
+        element = self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FIRST_FILTER
+        )
+
+        return element.pick_color(2, 2)
