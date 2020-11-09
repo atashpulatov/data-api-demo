@@ -3,7 +3,6 @@ from pyperclip import paste
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.const import SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
-from framework.util.message_const import MessageConst
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -90,11 +89,12 @@ class ImportDataBrowserPage(BaseBrowserPage):
         """
         self.find_object(object_name)
 
-        self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
-    
+        self.select_object_by_name(object_name)
+
     def select_object_by_name(self, object_name):
         """
-        Select object by name on the displayed objects list. This method does not verify ids and cannot handle all special characters.
+        Select object by name on the displayed objects list. This method does not verify ids and cannot handle
+        all special characters.
 
         :param object_name: object name to search for
         """
@@ -198,12 +198,9 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return element.get_background_color()
 
     def verify_if_import_button_is_enabled(self):
-        return self._return_import_button_enabled_state() is None
-
-    def _return_import_button_enabled_state(self):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
-        return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED)
-    
+        return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
+
     def clear_search_box(self):
         self.focus_on_add_in_popup_frame()
 
@@ -229,9 +226,9 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
         return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text
 
-    def scroll_objects_by_number_of_pages(self, number):
+    def scroll_objects_list_by_number_of_pages(self, number):
         for i in range(int(number)):
             self.press_page_down()
-    
-    def scroll_objects_to_end(self):
+
+    def scroll_objects_list_to_end(self):
         self.press_end()

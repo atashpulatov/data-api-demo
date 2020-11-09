@@ -27,6 +27,7 @@ def step_impl(context, object_name):
 def step_impl(context, object_name):
     context.pages.import_data_page().find_and_select_object(object_name)
 
+
 @step('I selected object "{object_name}"')
 def step_impl(context, object_name):
     context.pages.import_data_page().select_object_by_name(object_name)
@@ -109,12 +110,16 @@ def step_impl(context, color):
 @step('I verified that Import button is disabled')
 def step_impl(context):
     is_disabled = context.pages.import_data_page().verify_if_import_button_is_enabled()
+
     AssertUtil.assert_simple(is_disabled, False)
+
 
 @step('I verified that Import button is enabled')
 def step_impl(context):
     is_disabled = context.pages.import_data_page().verify_if_import_button_is_enabled()
+
     AssertUtil.assert_simple(is_disabled, True)
+
 
 @step('I cleared search box')
 def step_impl(context):
@@ -135,12 +140,12 @@ def step_impl(context, expected_sort_order, header):  # TODO name sorted shadows
 
 @step('I scrolled down list of objects by {number} page(s)')
 def step_impl(context, number):
-    context.pages.import_data_page().scroll_objects_by_number_of_pages(number)
+    context.pages.import_data_page().scroll_objects_list_by_number_of_pages(number)
 
 
 @step('I scrolled down list of objects to end')
 def step_impl(context):
-    context.pages.import_data_page().scroll_objects_to_end()
+    context.pages.import_data_page().scroll_objects_list_to_end()
 
 
 @step('verified that Filters has "{number}" categories selected')
