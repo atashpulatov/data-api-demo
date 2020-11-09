@@ -116,11 +116,6 @@ def step_impl(context):
     is_disabled = context.pages.import_data_page().verify_if_import_button_is_enabled()
     AssertUtil.assert_simple(is_disabled, True)
 
-@step('verified that Import button is disabled when no object is selected')
-def step_impl(context):
-    context.pages.import_data_page().verify_if_import_button_is_disabled_nothing_selected()
-
-
 @step('I cleared search box')
 def step_impl(context):
     context.pages.import_data_page().clear_search_box()
