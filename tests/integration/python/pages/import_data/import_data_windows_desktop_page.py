@@ -35,12 +35,15 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     ALLOW_ACCESS = 'Allow access'
 
-    FIRST_OBJECT_ROW = '//Pane/Group/DataGrid/Group[2]/Group/ListItem[1]'
+    OBJECT_LIST = '//Pane/Group/DataGrid/Group[2]'
+    FIRST_OBJECT_ROW = '//DataGrid/Group[2]/Group/ListItem[1]'
 
     TOOLTIP_XPATH = '//ToolTip[@Name]'
 
     POPUP_WINDOW_ELEM = 'NUIDialog'
     POPUP_CLOSE_BUTTON = 'Close'
+
+    MAXIMUM_SCROLLS = 100
 
     def __init__(self):
         super().__init__()
@@ -220,7 +223,45 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def hover_over_first_object_in_list(self):
+        self._scroll_up_until_first_object_doesnt_chage()
+
         self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).move_to()
+
+    def _scroll_up_until_first_object_doesnt_chage(self):
+        object_list = self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.OBJECT_LIST)
+
+        object_list.click(object_list.size['width'] - 10, 10)
+
+        first_element = self.get_add_in_main_element().get_element_by_xpath(
+            ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW
+        )
+
+        object_list.send_keys((
+            Keys.PAGE_UP,
+            Keys.PAGE_UP,
+            Keys.PAGE_UP,
+            Keys.PAGE_UP,
+            Keys.PAGE_UP
+        ))
+
+        for i in range(ImportDataWindowsDesktopPage.MAXIMUM_SCROLLS):
+            new_first_element = self.get_add_in_main_element().get_element_by_xpath(
+                ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW
+            )
+
+            if new_first_element != first_element:
+                object_list.send_keys((
+                    Keys.PAGE_UP,
+                    Keys.PAGE_UP,
+                    Keys.PAGE_UP,
+                    Keys.PAGE_UP,
+                    Keys.PAGE_UP
+                ))
+
+                first_element = new_first_element
+
+            else:
+                break
 
     def select_first_object_from_list(self):
         self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).click()
