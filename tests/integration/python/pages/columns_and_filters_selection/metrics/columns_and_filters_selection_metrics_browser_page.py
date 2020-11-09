@@ -47,6 +47,10 @@ class ColumnsAndFiltersSelectionMetricsBrowserPage(BaseBrowserPage):
     def scroll_into_and_select_metric_by_number(self, object_number):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css_no_visibility_checked(
+        metric = self.get_element_by_css_no_visibility_checked(
             ColumnsAndFiltersSelectionMetricsBrowserPage.METRIC_ELEMENT_AT % object_number
-        ).move_to_and_click()
+        )
+
+        metric.move_to()
+
+        self.click_metric(metric.text)
