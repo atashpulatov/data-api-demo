@@ -20,9 +20,11 @@ Feature: F24398 - Import and refresh visualization
       # And I selected dossier bookmark 1
 
       And I "increased" year filter value on dossier from "left" side
+      # TODO I verified value for filter "Year" is "(2014-2015)
       And I reset dossier
       And I selected visualization "Visualization 1"
      Then I clicked import dossier
+
       And I closed last notification
 
     Given I selected cell "H1"
