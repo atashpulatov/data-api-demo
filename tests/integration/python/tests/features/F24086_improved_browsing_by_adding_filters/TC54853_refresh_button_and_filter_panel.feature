@@ -26,27 +26,32 @@ Feature: F24086 - Improved browsing by adding filters
 
      When I clicked header on column "Name"
      Then verified that objects are sorted "ascending" on column "Name"
+      And I verified that Import button is disabled
+    
+     When I hover over Import button
+     Then I verified that tooltip for Import button shows message "This button is currently disabled because you didn’t select any data"
 
      When I selected the first object from the list
       And I scrolled down list of objects by 1 page(s)
       And I scrolled down list of objects to end
-   # TODO according to TC description - select any object at the end and check if it's selected
 
-      And I found object by ID "147F272E11EB016AE2890080EF15EE7D" and selected "Dossier with prompt - Value prompt - Text (Category) | Not required | Default answer"
-      And I clicked Import button to open Import Dossier
+     Then I selected object "Visualization manipulation"
+      And I verified that Import button is enabled
+
+     When I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I imported visualization "Visualization 1"
 
      Then I closed last notification
-      And cell "A1" should have value "Region"
+      And cell "A1" should have value "Year"
 
      When I removed 1 columns starting from column "A"
-     Then cell "A1" should have value "Category"
+     Then cell "A1" should have value "Catalog"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
      Then I closed all notifications
-      And cell "A1" should have value "Region"
+      And cell "A1" should have value "Year"
 
      When I added a new worksheet
       And I clicked Add Data button

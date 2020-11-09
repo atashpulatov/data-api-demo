@@ -22,6 +22,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     OBJECT_DETAILS_VALUE = '.tooltip :last-child'
 
     IMPORT_BUTTON_ELEM = 'import'
+    IMPORT_BUTTON_DISABLED = 'disabled'
     PREPARE_BUTTON_ELEM = 'prepare'
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
@@ -89,6 +90,14 @@ class ImportDataBrowserPage(BaseBrowserPage):
         """
         self.find_object(object_name)
 
+        self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
+    
+    def select_object_by_name(self, object_name):
+        """
+        Select object by name on the displayed objects list. This method does not verify ids and cannot handle all special characters.
+
+        :param object_name: object name to search for
+        """
         self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
 
     def find_and_select_object_by_id(self, object_name, object_id):
@@ -167,7 +176,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def click_filters_button(self):
         self.focus_on_add_in_popup_frame()
-        
+
         self.get_element_by_css(ImportDataBrowserPage.FILTERS_BUTTON).click()
 
     def hover_over_first_object_in_list(self):
@@ -188,17 +197,13 @@ class ImportDataBrowserPage(BaseBrowserPage):
         element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
         return element.get_background_color()
 
-    def verify_if_import_button_is_disabled(self):
+    def verify_if_import_button_is_enabled(self):
+        return self._return_import_button_enabled_state() is None
+
+    def _return_import_button_enabled_state(self):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
-
-        element.move_to()
-
-        self.wait_for_element_to_have_attribute_value_by_css(
-            ImportDataBrowserPage.DISABLED_BUTTON_TOOLTIP,
-            ImportDataBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-            MessageConst.UNPUBLISHED_CUBE_CANNOT_BE_IMPORTED
-        )
-
+        return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED)
+    
     def clear_search_box(self):
         self.focus_on_add_in_popup_frame()
 

@@ -27,6 +27,10 @@ def step_impl(context, object_name):
 def step_impl(context, object_name):
     context.pages.import_data_page().find_and_select_object(object_name)
 
+@step('I selected object "{object_name}"')
+def step_impl(context, object_name):
+    context.pages.import_data_page().select_object_by_name(object_name)
+
 
 @step('I found object by ID "{object_id}" and selected "{object_name}"')
 def step_impl(context, object_id, object_name):
@@ -104,7 +108,17 @@ def step_impl(context, color):
 
 @step('I verified that Import button is disabled')
 def step_impl(context):
-    context.pages.import_data_page().verify_if_import_button_is_disabled()
+    is_disabled = context.pages.import_data_page().verify_if_import_button_is_enabled()
+    AssertUtil.assert_simple(is_disabled, False)
+
+@step('I verified that Import button is enabled')
+def step_impl(context):
+    is_disabled = context.pages.import_data_page().verify_if_import_button_is_enabled()
+    AssertUtil.assert_simple(is_disabled, True)
+
+@step('verified that Import button is disabled when no object is selected')
+def step_impl(context):
+    context.pages.import_data_page().verify_if_import_button_is_disabled_nothing_selected()
 
 
 @step('I cleared search box')
