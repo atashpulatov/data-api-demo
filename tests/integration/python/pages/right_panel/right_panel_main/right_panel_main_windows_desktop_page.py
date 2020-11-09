@@ -19,6 +19,10 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     LOGOUT_ACCESSIBILITY_ID = 'logOut'
 
+    SELECT_ALL_TILES = "master-checkbox"
+
+    REFRESH_ALL = "Refresh button"
+
     def __init__(self):
         super().__init__()
 
@@ -44,8 +48,23 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.ADD_DATA_BUTTON_ELEM)
         ).click()
 
+    def refresh_all(self):
+        self.get_element_by_accessibility_id(RightPanelMainWindowsDesktopPage.SELECT_ALL_TILES).click()
+        self.get_element_by_name(RightPanelMainWindowsDesktopPage.REFRESH_ALL).click()
+
     def check_if_right_panel_is_empty(self):
         return self.check_if_element_exists_by_name(RightPanelMainWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM)
+
+    def is_scrollbar_visible(self):
+        """
+        Checks if scrollbar is visible, currently for Windows Desktop always returns True.
+
+        There is no information about scrollbar visibility in page source. As a workaround, once WinAppDriver supports
+        /session/:sessionid/execute, checking it could be implement using JavaScript injecting.
+
+        :return: True
+        """
+        return True
 
     def view_data(self):
         WindowsDesktopMainAddInElementCache.invalidate_cache()
