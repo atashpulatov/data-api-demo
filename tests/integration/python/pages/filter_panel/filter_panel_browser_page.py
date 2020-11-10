@@ -55,7 +55,6 @@ class FilterPanelBrowserPage(BaseBrowserPage):
         'first checkbox in Owners': OWNERS_FIRST_CHECKBOX,
         'Owners All button': OWNER_ALL_PANEL,
         'Modified All button': MODIFIED_ALL_PANEL,
-        'Modified Last Quarter Checkbox': MODIFIED_LAST_QUARTER_CHECKBOX,
     }
 
     def __init__(self):
