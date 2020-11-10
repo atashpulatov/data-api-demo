@@ -118,3 +118,6 @@ def step_impl(context, title):
     element_title = context.pages.filter_panel_page().get_application_header_title()
 
     AssertUtil.assert_simple(element_title, title)
+@step('I pressed Tab key until element "{element_name}" has focus')
+def step_impl(context, element_name):
+    context.pages.filter_panel_page().press_tab_until_focused(element_name)

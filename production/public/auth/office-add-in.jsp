@@ -1,4 +1,6 @@
-<!-- <%@ page language="Java" import="com.microstrategy.auth.sessionmgr.SessionManager" %>
+<!-- 
+<%@ page language="Java" import="org.owasp.encoder.Encode" %>  
+<%@ page language="Java" import="com.microstrategy.auth.sessionmgr.SessionManager" %>
 <%@ page language="Java" import="com.microstrategy.auth.rest.ParamNames" %>
 <%
   SessionManager sessionManager = (SessionManager)session.getAttribute(ParamNames.SESSION_MANAGER);
@@ -19,7 +21,7 @@
   <script>
     var message = {
       type: 'auth-token',
-      payload: '<%=authToken%>'
+      payload: '<%=Encode.forJavaScript(authToken)%>'
     };
 
     var origin = location.origin || '*';

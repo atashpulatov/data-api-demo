@@ -29,6 +29,8 @@ if uname -a | grep -q "Darwin"; then
   export PATH=$MAVEN_HOME/bin:$PATH
 elif uname -a | grep -q "MSYS"; then
   export JAVA_HOME=/c/java/$jdk_version
+  export PYTHON_HOME=/c/Users/jenkins/AppData/Local/Programs/Python/Python38
+  export PATH=$PYTHON_HOME:$PIP_HOME:$PATH
   export DOCKER_HOME=/C/Program\ Files/Docker/Docker/Resources/
   export MAVEN_HOME=/c/apache/apache-maven-3.6.3
   export PATH=/c/node/node-v10.16.3-win-x64:$JAVA_HOME/bin:$DOCKER_HOME/bin:$MAVEN_HOME/bin:$PATH

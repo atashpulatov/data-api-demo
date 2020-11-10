@@ -24,10 +24,16 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
     def _open_year_filter(self):
         self._open_filter_menu()
 
-        self.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_YEAR).click()
+        popup_main_element = self.get_add_in_main_element()
+
+        popup_main_element.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_YEAR).click()
 
     def _open_filter_menu(self):
         self.get_element_by_name(ImportDossierFilterWindowsDesktopPage.FILTERS_BUTTON).click()
 
     def _select_filter_checkbox(self, filter_name):
-        self.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_VALUE % filter_name).click()
+        popup_main_element = self.get_add_in_main_element()
+
+        popup_main_element.get_element_by_xpath(
+            ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_VALUE % filter_name
+        ).click()
