@@ -3,6 +3,7 @@ from behave.contrib.scenario_autoretry import patch_scenario_with_autoretry
 from framework.driver.driver_factory import DriverFactory
 from framework.driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
 from framework.pages_base.image_element import ImageElement
+from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.config_util import ConfigUtil
 from framework.util.const import DEFAULT_LOCALE_NAME
 from framework.util.test_util import TestUtil
@@ -24,6 +25,8 @@ def before_feature(context, feature):
 
     for scenario in feature.scenarios:
         patch_scenario_with_autoretry(scenario, max_attempts=max_attempts)
+
+    WindowsDesktopMainAddInElementCache.invalidate_right_panel_cache()
 
 
 def before_scenario(context, scenario):

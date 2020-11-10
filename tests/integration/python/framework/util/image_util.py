@@ -6,8 +6,8 @@ from io import BytesIO
 
 import cv2
 from PIL import Image
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support import expected_conditions as ec
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+# from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
 
 from framework.driver.driver_factory import DriverFactory
@@ -94,7 +94,8 @@ class ImageUtil:
         wait = WebDriverWait(self.driver, timeout)
 
         try:
-            wait.until(ec.visibility_of_element_located((selector_type, selector)))
+            # TODO to be removed if not needed
+            # wait.until(ec.visibility_of_element_located((selector_type, selector)))
 
             if parent_element:
                 element = parent_element.get_element(selector_type, selector, timeout)
@@ -109,6 +110,9 @@ class ImageUtil:
                      f'time: [{time.time() - start_time}]')
 
             return element_center_coordinates
+
+        except NoSuchElementException:
+            pass
 
         except TimeoutException:
             pass

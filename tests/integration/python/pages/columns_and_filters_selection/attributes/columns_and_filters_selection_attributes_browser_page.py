@@ -160,9 +160,9 @@ class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_ELEMENT_AT % object_number
         ).text
 
-    def scroll_into_attribute_by_number(self, object_number):
+    def scroll_into_and_select_attribute_by_number(self, object_number):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css_no_visibility_checked(
             ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_ELEMENT_AT % object_number
-        ).move_to()
+        ).move_to_and_click()

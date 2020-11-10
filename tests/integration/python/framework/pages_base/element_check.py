@@ -7,7 +7,7 @@ class ElementCheck(ElementCoordinates):
         return self.get_element_center_coordinates_by_name(selector, timeout, image_name, safe=True) is not None
 
     def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
-        return self.get_element_center_coordinates_by_css(selector, timeout) is not None
+        return self.get_element_center_coordinates_by_css(selector, timeout, safe=True) is not None
 
     def check_if_element_exists_by_id(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         return self.get_element_center_coordinates_by_id(selector, timeout, image_name, safe=True) is not None

@@ -43,6 +43,30 @@ task :browser_e2e_push_results,[:build_no] do | t, args|
   end
 end
 
+desc "run test in python on Windows"
+task :py_e2e_test_win,[:tag_name] do | t, args|
+  test_dir = get_python_test_dir()
+  tag_name = args['tag_name']
+  report_dir = 'allure-report'
+
+  FileUtils.rm_rf report_dir if Dir.exist? report_dir
+
+  shell_command! "python -m venv venv_win", cwd: test_dir
+  shell_command! "venv_win\\Scripts\\Activate.bat", cwd: test_dir
+  shell_command! "python -m behave --tags=@ci --tags=@#{PY_WIN_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_WIN_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
+end
+
+desc "run test in python on Mac"
+task :py_e2e_test_mac,[:tag_name] do | t, args|
+  test_dir = get_python_test_dir()
+  tag_name = args['tag_name']
+  report_dir = 'allure-report'
+
+  FileUtils.rm_rf report_dir if Dir.exist? report_dir
+
+  shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
+end
+
 desc "run browser based test"
 task :e2e_test_browser,[:build_no] do | t, args|
   test_dir = get_browser_test_dir()
@@ -110,7 +134,19 @@ def get_browser_test_dir()
   "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/test-driver-browser"
 end
 
+def get_python_test_dir()
+  "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/integration/python"
+end
 
+PY_WIN_TEST_PARAM = {
+  "chrome" => "windows_chrome",
+  "desktop" => "windows_desktop"
+}
+
+PY_MAC_TEST_PARAM = {
+  "chrome" => "mac_chrome",
+  "desktop" => "mac_desktop"
+}
 
 ######################################common ci metrics code######################################
 def ci_metrics_system_test()

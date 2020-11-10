@@ -7,10 +7,10 @@ from pages.columns_and_filters_selection.display_attribute_form_names.display_at
     import DisplayAttributeFormNamesWindowsDesktopPage
 from pages.columns_and_filters_selection.filters.columns_and_filters_selection_filters_windows_desktop_page import \
     ColumnsAndFiltersSelectionFiltersWindowsDesktopPage
-from pages.columns_and_filters_selection.metrics.columns_and_filters_selection_metrics_windows_desktop_page import \
-    ColumnsAndFiltersSelectionMetricsWindowsDesktopPage
 from pages.columns_and_filters_selection.list_header.columns_and_filters_selection_list_header_windows_desktop_page \
     import ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage
+from pages.columns_and_filters_selection.metrics.columns_and_filters_selection_metrics_windows_desktop_page import \
+    ColumnsAndFiltersSelectionMetricsWindowsDesktopPage
 from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDesktopPage
 from pages.excel.excel_general.excel_general_windows_desktop_page import ExcelGeneralWindowsDesktopPage
 from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWindowsDesktopPage
@@ -33,6 +33,8 @@ from pages.right_panel.duplicate_object_popup.duplicate_object_popup_windows_des
 from pages.right_panel.range_taken_popup.range_taken_popup_windows_desktop_page import RangeTakenPopupWindowsDesktopPage
 from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
+from pages.right_panel.right_panel_tile_details.right_panel_tile_details_windows_desktop_page import \
+    RightPanelTileDetailsWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
 
 
@@ -55,7 +57,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.not_logged_right_panel_windows_desktop_page = NotLoggedRightPanelWindowsDesktopPage()
         self.right_panel_windows_desktop_page = RightPanelMainWindowsDesktopPage()
         self.right_panel_tile_windows_desktop_page = RightPanelTileWindowsDesktopPage()
-        self.right_panel_tile_details_windows_desktop_page = None
+        self.right_panel_tile_details_windows_desktop_page = RightPanelTileDetailsWindowsDesktopPage()
 
         self.columns_and_filters_selection_windows_desktop_page = ColumnsAndFiltersSelectionWindowsDesktopPage()
         self.columns_and_filters_selection_attributes_windows_desktop_page = \
@@ -64,7 +66,8 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage()
         self.columns_and_filters_selection_filters_windows_desktop_page = \
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage()
-        self.columns_and_filters_selection_list_header_windows_desktop_page = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage()
+        self.columns_and_filters_selection_list_header_windows_desktop_page = \
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage()
         self.display_attribute_form_names_windows_desktop_page = DisplayAttributeFormNamesWindowsDesktopPage()
 
         self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()

@@ -31,6 +31,8 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
             self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
 
+            i += 1
+
         raise MstrException('Cannot find AddIn element.')
 
     def click_close_add_in_button(self):

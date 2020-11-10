@@ -1,6 +1,9 @@
 import json
+import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.util.const import LONG_TIMEOUT
+from framework.util.exception.MstrException import MstrException
 
 
 class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -17,7 +20,7 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
 
     FILTER_TREE_ITEM_AT = f'({FILTER_TREE}/TreeItem/Group/Text)[%s]'
 
-    CLICKS_TO_SCROLL = 5
+    CLICKS_TO_SCROLL = 4
 
     def select_filter_elements(self, filters_and_elements_json):
         """
@@ -59,28 +62,50 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
             image_name=self.prepare_image_name(filter_name)
         ).click()
 
-    def _find_filter_by_number(self, object_number):
-        popup_main_element = self.get_add_in_main_element()
-
-        return popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_AT % object_number)
-
     def get_filter_name(self, object_number):
         return self._find_filter_by_number(object_number).get_name_by_attribute()
 
-    # Workaround for the defect in WinAppDriver's moveto command, which does not scroll to non-visible element
-    def scroll_into_filter_by_number(self, object_number):
+    def scroll_into_and_select_filter_by_number(self, object_number):
+        """
+        Scrolls into filter number object_number using a workaround for the defect in WinAppDriver's moveto command,
+        which does not scroll to non-visible element.
+
+        After selecting the element, we scroll back to the top by pressing the HOME key. It's done to ensure scrolling
+        always starts at the top. It would be ideal to ensure this before starting to scroll, but not feasible as we
+        don't have focus before selecting an element.
+
+        :param object_number: Number of object to scroll to.
+        """
         popup_main_element = self.get_add_in_main_element()
 
         filter_element = self._find_filter_by_number(object_number)
 
         filters_container = popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE)
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE
+        )
 
-        while filter_element.get_attribute('IsOffscreen') == 'true':
-            for i in range(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.CLICKS_TO_SCROLL):
-                filters_container.click(filters_container.size['width'], filters_container.size['height'])
+        end_time = time.time() + LONG_TIMEOUT
+        while filter_element.is_offscreen_by_attribute():
+            if time.time() > end_time:
+                raise MstrException(f'Timeout while scrolling to filter number {object_number} called '
+                                    f'{filter_element.text}, element is still not visible on screen.')
 
+            self._scroll_filters_down(filters_container)
             filter_element = self._find_filter_by_number(object_number)
 
-        filter_element.move_to()
+        self._scroll_filters_down(filters_container)
+        filter_element.click()
+
+        self.press_home()
+
+    def _find_filter_by_number(self, object_number):
+        popup_main_element = self.get_add_in_main_element()
+
+        return popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_AT % object_number
+        )
+
+    def _scroll_filters_down(self, filters_container):
+        for i in range(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.CLICKS_TO_SCROLL):
+            filters_container_size = filters_container.size
+            filters_container.click(filters_container_size['width'], filters_container_size['height'])

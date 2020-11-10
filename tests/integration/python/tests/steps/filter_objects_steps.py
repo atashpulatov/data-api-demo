@@ -42,3 +42,8 @@ def step_impl(context, element_name):
     has_focus = context.pages.filter_panel_page().examine_if_element_has_focus(element_name)
 
     AssertUtil.assert_simple(has_focus, True)
+
+
+@step('I pressed Tab key until element "{element_name}" has focus')
+def step_impl(context, element_name):
+    context.pages.filter_panel_page().press_tab_until_focused(element_name)

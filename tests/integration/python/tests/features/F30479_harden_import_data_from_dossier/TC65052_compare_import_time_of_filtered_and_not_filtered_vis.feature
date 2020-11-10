@@ -12,12 +12,21 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
       And I waited for dossier to load successfully
       And I selected visualization "Visualization 1"
 
-     When I saved execution start time to "visualisation_not_filtered_import_timer"
+      # Additional import Dossier before a proper test is necessary as a workaround for Windows Desktop, where first
+      # element check might be significantly longer than subsequent checks, which causes second import to be shorter
+      # even if data loads quicker.
+      And I clicked import dossier
+      And I closed last notification
+
+     When I clicked Edit object 1
+      And I selected visualization "Visualization 1"
+      And I saved execution start time to "visualisation_not_filtered_import_timer"
       And I clicked import dossier
       And I saved execution duration to "visualisation_not_filtered_import_timer"
       And I closed last notification
 
       And I clicked Edit object 1
+      And I selected visualization "Visualization 1"
       And I selected year "2014" in Year filter
       And I saved execution start time to "visualisation_only_2014_import_timer"
       And I clicked import dossier

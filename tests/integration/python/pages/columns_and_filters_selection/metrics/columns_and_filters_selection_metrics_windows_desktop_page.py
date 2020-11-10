@@ -1,4 +1,7 @@
+import time
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
+from framework.util.const import LONG_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -12,26 +15,14 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
     METRICS_CONTAINER = '//Group/DataGrid'
 
-    CLICKS_TO_SCROLL = 5
-    METRIC_SEARCH_RANGE = 10
-
-    all_metrics = []
+    CLICKS_TO_SCROLL = 4
 
     def click_metric(self, metric_name):
         popup_main_element = self.get_add_in_main_element()
 
-        try:
-            metric_to_click = popup_main_element.get_element_by_xpath(
-                ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_ELEM % metric_name
-            )
-        except MstrException:
-            self.log("Metric with metric name %s not found in visible elements" % metric_name)
-            [metric_to_click] = [metric for metric in self._get_all_metrics() if metric.get_name_by_attribute() is metric_name]
-
-        if metric_to_click:
-          metric_to_click.click()
-
-        raise MstrException("Metric with metric name %s not found" % metric_name)
+        popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_ELEM % metric_name
+        ).click()
 
     def select_all_metrics(self):
         self.get_element_by_name(
@@ -48,52 +39,50 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
     def select_metric_by_number(self, object_number):
         self._find_metric_by_number(object_number).click()
 
+    def get_metric_name(self, object_number):
+        return self._find_metric_by_number(object_number).get_name_by_attribute()
+
     def _find_metric_by_number(self, object_number):
-        object_index = int(object_number) - 1
-        
         popup_main_element = self.get_add_in_main_element()
 
-        visible_metrics = popup_main_element.get_elements_by_xpath(
-            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
+        return popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH_AT % object_number
         )
 
-        if object_index < len(visible_metrics):
-            return visible_metrics[object_index]
-        else:
-            return self._get_all_metrics()[object_index]
+    def scroll_into_and_select_metric_by_number(self, object_number):
+        """
+        Scrolls into metric number object_number using a workaround for the defect in WinAppDriver's moveto command,
+        which does not scroll to non-visible element.
 
-    #  Workaround as non-visible metrics are not in page source
-    def _get_all_metrics(self):
-        if self.all_metrics:
-            return self.all_metrics
+        After selecting the element, we scroll back to the top by pressing the HOME key. It's done to ensure scrolling
+        always starts at the top. It would be ideal to ensure this before starting to scroll, but not feasible as we
+        don't have focus before selecting an element.
 
+        :param object_number: Number of object to scroll to.
+        """
         popup_main_element = self.get_add_in_main_element()
+
+        metric_element = self._find_metric_by_number(object_number)
 
         metrics_container = popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
         )
 
-        all_metrics = []
+        end_time = time.time() + LONG_TIMEOUT
+        while metric_element.is_offscreen_by_attribute():
+            if time.time() > end_time:
+                raise MstrException(f'Timeout while scrolling to metric number {object_number} called '
+                                    f'{metric_element.text}, element is still not visible on screen.')
 
-        for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_SEARCH_RANGE):
-            visible_metrics = popup_main_element.get_elements_by_xpath(
-                ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
-            )
-            updated_metrics = all_metrics + list(filter(lambda m: m not in all_metrics, visible_metrics))
+            self._scroll_metrics_down(metrics_container)
+            metric_element = self._find_metric_by_number(object_number)
 
-            if updated_metrics == all_metrics:
-                self.all_metrics = all_metrics
-                return all_metrics
-            else:
-                all_metrics = updated_metrics
+        self._scroll_metrics_down(metrics_container)
+        metric_element.move_to_and_click()
 
-            for j in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.CLICKS_TO_SCROLL):
-                metrics_container.click(metrics_container.size['width'], metrics_container.size['height'])
+        self.press_home()
 
-        raise MstrException('Search limit has been exceeded. There are too many metrics in this dataset.')
-
-    def get_metric_name(self, object_number):
-        return self._find_metric_by_number(object_number).get_name_by_attribute()
-
-    def scroll_into_metric_by_number(self, object_number):
-        self._get_all_metrics()[int(object_number) - 1].move_to()
+    def _scroll_metrics_down(self, metrics_container):
+        for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.CLICKS_TO_SCROLL):
+            metrics_container_size = metrics_container.size
+            metrics_container.click(metrics_container_size['width'], metrics_container_size['height'])
