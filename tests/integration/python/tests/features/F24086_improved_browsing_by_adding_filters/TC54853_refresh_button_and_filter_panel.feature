@@ -1,3 +1,4 @@
+@windows_chrome
 @mac_chrome
 Feature: F24086 - Improved browsing by adding filters
 
@@ -27,7 +28,7 @@ Feature: F24086 - Improved browsing by adding filters
      When I clicked header on column "Name"
      Then verified that objects are sorted "ascending" on column "Name"
       And I verified that Import button is disabled
-    
+
      When I hover over Import button
      Then I verified that tooltip for Import button shows message "This button is currently disabled because you didn’t select any data"
 
