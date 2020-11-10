@@ -1,7 +1,7 @@
 import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import MEDIUM_TIMEOUT, LONG_TIMEOUT
+from framework.util.const import LONG_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -16,7 +16,6 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
     METRICS_CONTAINER = '//Group/DataGrid'
 
     CLICKS_TO_SCROLL = 4
-    METRIC_SEARCH_RANGE = 10
 
     def click_metric(self, metric_name):
         popup_main_element = self.get_add_in_main_element()
@@ -61,25 +60,25 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
         :param object_number: Number of object to scroll to.
         """
-        end_time = time.time() + LONG_TIMEOUT
         popup_main_element = self.get_add_in_main_element()
 
-        metric = self._find_metric_by_number(object_number)
+        metric_element = self._find_metric_by_number(object_number)
 
         metrics_container = popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
         )
 
-        while metric.is_offscreen_by_attribute():
+        end_time = time.time() + LONG_TIMEOUT
+        while metric_element.is_offscreen_by_attribute():
             if time.time() > end_time:
-                raise MstrException(f'Timeout while scrolling to metric number {object_number} called {metric.text}'
-                                    f', element is still not visible on screen.')
+                raise MstrException(f'Timeout while scrolling to metric number {object_number} called '
+                                    f'{metric_element.text}, element is still not visible on screen.')
 
             self._scroll_metrics_down(metrics_container)
-            metric = self._find_metric_by_number(object_number)
+            metric_element = self._find_metric_by_number(object_number)
 
         self._scroll_metrics_down(metrics_container)
-        metric.move_to_and_click()
+        metric_element.move_to_and_click()
 
         self.press_home()
 

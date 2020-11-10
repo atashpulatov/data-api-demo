@@ -69,7 +69,6 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
 
         :param object_number: Number of object to scroll to.
         """
-        end_time = time.time() + LONG_TIMEOUT
         popup_main_element = self.get_add_in_main_element()
 
         filter_element = self._find_filter_by_number(object_number)
@@ -78,10 +77,11 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE
         )
 
+        end_time = time.time() + LONG_TIMEOUT
         while filter_element.is_offscreen_by_attribute():
             if time.time() > end_time:
-                raise MstrException(f'Timeout while scrolling to filter number {object_number} called {filter_element.text}'
-                                    f', element is still not visible on screen.')
+                raise MstrException(f'Timeout while scrolling to filter number {object_number} called '
+                                    f'{filter_element.text}, element is still not visible on screen.')
 
             self._scroll_filters_down(filters_container)
             filter_element = self._find_filter_by_number(object_number)
@@ -102,4 +102,3 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
         for i in range(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.CLICKS_TO_SCROLL):
             filters_container_size = filters_container.size
             filters_container.click(filters_container_size['width'], filters_container_size['height'])
-

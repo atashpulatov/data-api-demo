@@ -64,7 +64,8 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage()
         self.columns_and_filters_selection_filters_windows_desktop_page = \
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage()
-        self.columns_and_filters_selection_list_header_windows_desktop_page = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage()
+        self.columns_and_filters_selection_list_header_windows_desktop_page = \
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage()
         self.display_attribute_form_names_windows_desktop_page = DisplayAttributeFormNamesWindowsDesktopPage()
 
         self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()

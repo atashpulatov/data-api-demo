@@ -69,4 +69,6 @@ def step_impl(context, attribute_form_number, attribute_number, expected_name):
 
 @step('I scrolled into attribute element number {object_number} and selected it')
 def step_impl(context, object_number):
-    context.pages.columns_and_filters_selection_attributes_page().scroll_into_and_select_attribute_by_number(object_number)
+    context.pages.columns_and_filters_selection_attributes_page().scroll_into_and_select_attribute_by_number(
+        object_number
+    )

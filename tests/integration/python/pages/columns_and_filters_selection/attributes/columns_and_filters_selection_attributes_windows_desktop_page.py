@@ -102,25 +102,25 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
         :param object_number: Number of object to scroll to.
         """
-        end_time = time.time() + LONG_TIMEOUT
         popup_main_element = self.get_add_in_main_element()
 
-        attribute = self._find_attribute_by_number(object_number)
+        attribute_element = self._find_attribute_by_number(object_number)
 
         attributes_container = popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTES_CONTAINER
         )
 
-        while attribute.is_offscreen_by_attribute():
+        end_time = time.time() + LONG_TIMEOUT
+        while attribute_element.is_offscreen_by_attribute():
             if time.time() > end_time:
-                raise MstrException(f'Timeout while scrolling to attribute number {object_number} called {attribute.text}'
-                                    f', element is still not visible on screen.')
+                raise MstrException(f'Timeout while scrolling to attribute number {object_number} called '
+                                    f'{attribute_element.text}, element is still not visible on screen.')
 
             self._scroll_attributes_down(attributes_container)
-            attribute = self._find_attribute_by_number(object_number)
+            attribute_element = self._find_attribute_by_number(object_number)
 
         self._scroll_attributes_down(attributes_container)
-        attribute.move_to_and_click()
+        attribute_element.move_to_and_click()
 
         self.press_home()
 
