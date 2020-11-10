@@ -1,15 +1,16 @@
 import json
+import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-
-from selenium.webdriver.common.keys import Keys
+from framework.util.const import LONG_TIMEOUT
+from framework.util.exception.MstrException import MstrException
 
 
 class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopPage):
     ITEM_ALL_ATTRIBUTES = '(All)'
 
     ATTRIBUTE_ELEM = '//Text[@Name="%s"]'
-    ATTRIBUTE_ELEM_AT = '(//Group/Tree/TreeItem)[%s]'
+    ATTRIBUTE_ELEM_AT = '//Group/Tree/TreeItem[%s]'
 
     ATTRIBUTE_FORM_DROPDOWN_ELEM = '//TreeItem[@Name="%s"]/Text[@Name="icon: caret-down"]'
     ATTRIBUTE_FORM_DROPDOWN_ELEM_AT = '//TreeItem[%s]/Text[@Name="icon: caret-down"]'
@@ -95,8 +96,13 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         Scrolls into attribute number object_number using a workaround for the defect in WinAppDriver's moveto command,
         which does not scroll to non-visible element.
 
+        After selecting the element, we scroll back to the top by pressing the HOME key. It's done to ensure scrolling
+        always starts at the top. It would be ideal to ensure this before starting to scroll, but not feasible as we
+        don't have focus before selecting an element.
+
         :param object_number: Number of object to scroll to.
         """
+        end_time = time.time() + LONG_TIMEOUT
         popup_main_element = self.get_add_in_main_element()
 
         attribute = self._find_attribute_by_number(object_number)
@@ -106,13 +112,17 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         )
 
         while attribute.is_offscreen_by_attribute():
+            if time.time() > end_time:
+                raise MstrException(f'Timeout while scrolling to attribute number {object_number} called {attribute.text}'
+                                    f', element is still not visible on screen.')
+
             self._scroll_attributes_down(attributes_container)
             attribute = self._find_attribute_by_number(object_number)
 
         self._scroll_attributes_down(attributes_container)
         attribute.move_to_and_click()
 
-        self.send_keys(Keys.HOME)
+        self.press_home()
 
     def _find_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()

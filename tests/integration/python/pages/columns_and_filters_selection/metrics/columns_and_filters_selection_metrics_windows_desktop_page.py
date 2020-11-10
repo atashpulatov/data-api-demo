@@ -1,7 +1,8 @@
+import time
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import MEDIUM_TIMEOUT
+from framework.util.const import MEDIUM_TIMEOUT, LONG_TIMEOUT
 from framework.util.exception.MstrException import MstrException
-from selenium.webdriver.common.keys import Keys
 
 
 class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -18,25 +19,11 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
     METRIC_SEARCH_RANGE = 10
 
     def click_metric(self, metric_name):
-        metric_to_click = self._prepare_metric_to_click(metric_name)
-
-        if metric_to_click:
-            metric_to_click.click()
-
-        raise MstrException("Metric with metric name %s not found" % metric_name)
-
-    def _prepare_metric_to_click(self, metric_name):
         popup_main_element = self.get_add_in_main_element()
-        try:
-            return popup_main_element.get_element_by_xpath(
-                ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_ELEM % metric_name,
-                timeout=MEDIUM_TIMEOUT
-            )
-        except MstrException:
-            self.log(f'Metric with metric name [{metric_name}] not found in visible elements, '
-                     'scroll into it before selecting it.')
 
-        return None
+        popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_ELEM % metric_name
+        ).click()
 
     def select_all_metrics(self):
         self.get_element_by_name(
@@ -57,20 +44,24 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         return self._find_metric_by_number(object_number).get_name_by_attribute()
 
     def _find_metric_by_number(self, object_number):
-        object_index = int(object_number) - 1
-
         popup_main_element = self.get_add_in_main_element()
 
-        visible_metrics = popup_main_element.get_elements_by_xpath(
-            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
+        return popup_main_element.get_element_by_xpath(
+            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH_AT % object_number
         )
 
-        if object_index < len(visible_metrics):
-            return visible_metrics[object_index]
-        else:
-            raise MstrException(f'Metric number {object_number} is not visible. Scroll into it before selecting it.')
-
     def scroll_into_and_select_metric_by_number(self, object_number):
+        """
+        Scrolls into metric number object_number using a workaround for the defect in WinAppDriver's moveto command,
+        which does not scroll to non-visible element.
+
+        After selecting the element, we scroll back to the top by pressing the HOME key. It's done to ensure scrolling
+        always starts at the top. It would be ideal to ensure this before starting to scroll, but not feasible as we
+        don't have focus before selecting an element.
+
+        :param object_number: Number of object to scroll to.
+        """
+        end_time = time.time() + LONG_TIMEOUT
         popup_main_element = self.get_add_in_main_element()
 
         metric = self._find_metric_by_number(object_number)
@@ -80,13 +71,17 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
         )
 
         while metric.is_offscreen_by_attribute():
+            if time.time() > end_time:
+                raise MstrException(f'Timeout while scrolling to metric number {object_number} called {metric.text}'
+                                    f', element is still not visible on screen.')
+
             self._scroll_metrics_down(metrics_container)
-            metric = self._find_metric_by_number()
+            metric = self._find_metric_by_number(object_number)
 
         self._scroll_metrics_down(metrics_container)
         metric.move_to_and_click()
 
-        self.send_keys(Keys.HOME)
+        self.press_home()
 
     def _scroll_metrics_down(self, metrics_container):
         for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.CLICKS_TO_SCROLL):
