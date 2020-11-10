@@ -25,7 +25,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
-    TILES_WRAPPER = '//Group[starts-with(@Name,"Imported Data")]/List'
+    TILES_WRAPPER = '//Group[starts-with(@Name, "Imported Data")]/List'
     TILE_ELEM = '//DataItem'
 
     NAME_INPUT_FOR_OBJECT = '//Button/Text'
@@ -68,7 +68,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         )
 
     def wait_for_progress_notifications_to_disappear(self):
-        right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
+        right_panel_element = self.get_add_in_right_panel_element()
 
         self._wait_until_element_disappears(
             right_panel_element.check_if_element_exists_by_tag_name,
@@ -159,7 +159,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         ).move_to()
 
     def get_object_name(self, index):
-        right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
+        right_panel_element = self.get_add_in_right_panel_element()
 
         object_name_element = right_panel_element.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.OBJECT_NAME_ELEM % index
@@ -222,7 +222,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         return tooltip_text_elem.text
 
     def _get_object_by_number(self, object_no):
-        tiles_wrapper = self.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
+        right_panel_element = self.get_add_in_right_panel_element()
+
+        tiles_wrapper = right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
 
         tiles = tiles_wrapper.get_elements_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM)
 
