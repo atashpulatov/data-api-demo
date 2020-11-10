@@ -14,7 +14,7 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
 
     METRICS_CONTAINER = '//Group/DataGrid'
 
-    CLICKS_TO_SCROLL = 5
+    CLICKS_TO_SCROLL = 4
     METRIC_SEARCH_RANGE = 10
 
     def click_metric(self, metric_name):
@@ -71,83 +71,22 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
             raise MstrException(f'Metric number {object_number} is not visible. Scroll into it before selecting it.')
 
     def scroll_into_and_select_metric_by_number(self, object_number):
-        """
-        Scrolls into metric by number, starting from top, and selects it.
-
-        Uses workaround as non-visible metrics are not present in page source. Scrolling down in metrics box causes
-        loading and adding to page source subsequent metrics, but metrics that disappear at the top of the box are
-        removed from page source. When scrolling up behaviour is the same.
-
-        Workaround builds list of all metrics by scrolling down bit by bit and appending newly
-        added metrics to the list.
-        """
         popup_main_element = self.get_add_in_main_element()
+
+        metric = self._find_metric_by_number(object_number)
 
         metrics_container = popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
         )
 
-        metrics_container.send_keys(Keys.HOME)
-
-        all_metrics = []
-        object_index = int(object_number) - 1
-
-        for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_SEARCH_RANGE):
-            visible_metrics = popup_main_element.get_elements_by_xpath(
-                ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
-            )
-
-            updated_metrics = all_metrics + list(filter(lambda metric: metric not in all_metrics, visible_metrics))
-
-            if len(updated_metrics) > int(object_index):
-                updated_metrics[object_index].click()
-                return
-            else:
-                all_metrics = updated_metrics
-
+        while metric.is_offscreen_by_attribute():
             self._scroll_metrics_down(metrics_container)
+            metric = self._find_metric_by_number()
 
-        raise MstrException('Search limit has been exceeded. There are too many metrics in this dataset.')
+        self._scroll_metrics_down(metrics_container)
+        metric.move_to_and_click()
 
-    def scroll_into_and_select_metric_by_name(self, metric_name):
-        """
-        Scrolls into metric by name, starting from top.
-
-        Uses workaround as non-visible metrics are not present in page source. Scrolling down in metrics box causes
-        loading and adding to page source subsequent metrics, but metrics that disappear at the top of the box are
-        removed from page source. When scrolling up behaviour is the same.
-
-        Workaround builds list of all metrics by scrolling down bit by bit and appending newly
-        added metrics to the list.
-
-        :return: Metric that was searched for.
-        """
-        popup_main_element = self.get_add_in_main_element()
-
-        metrics_container = popup_main_element.get_element_by_xpath(
-            ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
-        )
-
-        metrics_container.send_keys(Keys.HOME)
-
-        all_metrics = []
-
-        for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRIC_SEARCH_RANGE):
-            visible_metrics = popup_main_element.get_elements_by_xpath(
-                ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_XPATH
-            )
-            updated_metrics = all_metrics + list(filter(lambda metric: metric not in all_metrics, visible_metrics))
-            updated_metrics_filtered_by_name = [metric for metric in updated_metrics if metric.text == metric_name]
-
-            if len(updated_metrics_filtered_by_name) == 1:
-                updated_metrics_filtered_by_name[0].click()
-                return
-            else:
-                all_metrics = updated_metrics
-
-            self._scroll_metrics_down(metrics_container)
-
-        raise MstrException('Search limit has been exceeded. There are too many metrics in this dataset.')
+        self.send_keys(Keys.HOME)
 
     def _scroll_metrics_down(self, metrics_container):
         for i in range(ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.CLICKS_TO_SCROLL):

@@ -2,6 +2,8 @@ import json
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 
+from selenium.webdriver.common.keys import Keys
+
 
 class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopPage):
     ITEM_ALL_ATTRIBUTES = '(All)'
@@ -16,7 +18,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
 
     ATTRIBUTES_CONTAINER = '//Group/Tree'
 
-    CLICKS_TO_SCROLL = 5
+    CLICKS_TO_SCROLL = 4
 
     def click_attribute(self, attribute_name):
         popup_main_element = self.get_add_in_main_element()
@@ -104,14 +106,13 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         )
 
         while attribute.is_offscreen_by_attribute():
-            for i in range(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.CLICKS_TO_SCROLL):
-                attributes_container_size = attributes_container.size
-                attributes_container.click(attributes_container_size['width'], attributes_container_size['height'])
-
+            self._scroll_attributes_down(attributes_container)
             attribute = self._find_attribute_by_number(object_number)
 
-        attribute_size = attribute.size
-        attribute.click(attribute_size['width'] / 2, attribute_size['height'] / 2)
+        self._scroll_attributes_down(attributes_container)
+        attribute.move_to_and_click()
+
+        self.send_keys(Keys.HOME)
 
     def _find_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
@@ -119,3 +120,8 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
         return popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_AT % object_number
         )
+
+    def _scroll_attributes_down(self, attributes_container):
+        for i in range(ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.CLICKS_TO_SCROLL):
+            attributes_container_size = attributes_container.size
+            attributes_container.click(attributes_container_size['width'], attributes_container_size['height'])

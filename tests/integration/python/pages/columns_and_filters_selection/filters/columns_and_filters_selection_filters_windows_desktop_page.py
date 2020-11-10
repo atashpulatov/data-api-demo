@@ -2,6 +2,8 @@ import json
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 
+from selenium.webdriver.common.keys import Keys
+
 
 class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage):
     FILTER_TITLE_ITEM = '//TreeItem[starts-with(@Name,"icon_filter_blue")]/Group[@Name="%s"]/..'
@@ -15,7 +17,7 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
 
     FILTER_TREE_ITEM_AT = f'({FILTER_TREE}/TreeItem/Group/Text)[%s]'
 
-    CLICKS_TO_SCROLL = 5
+    CLICKS_TO_SCROLL = 4
 
     def select_filter_elements(self, filters_and_elements_json):
         """
@@ -71,13 +73,13 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
         )
 
         while filter_element.is_offscreen_by_attribute():
-            for i in range(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.CLICKS_TO_SCROLL):
-                filters_container_size = filters_container.size
-                filters_container.click(filters_container_size['width'], filters_container_size['height'])
-
+            self._scroll_filters_down(filters_container)
             filter_element = self._find_filter_by_number(object_number)
 
+        self._scroll_filters_down(filters_container)
         filter_element.click()
+
+        self.send_keys(Keys.HOME)
 
     def _find_filter_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
@@ -85,3 +87,9 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
         return popup_main_element.get_element_by_xpath(
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_AT % object_number
         )
+
+    def _scroll_filters_down(self, filters_container):
+        for i in range(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.CLICKS_TO_SCROLL):
+            filters_container_size = filters_container.size
+            filters_container.click(filters_container_size['width'], filters_container_size['height'])
+
