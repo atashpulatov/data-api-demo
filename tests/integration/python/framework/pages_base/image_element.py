@@ -41,6 +41,7 @@ class ImageElement(BaseElement):
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
+    # TODO maybe add possibility of using offsets?
     def right_click(self):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,

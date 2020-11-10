@@ -9,7 +9,7 @@ Feature: F24398 - Import and refresh visualization
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
-      And I found and selected object "Dossier with vis that can be moved to different pages / chapters"
+      And I found object by ID "78ECDBD411E9FEF0DC670080EFD50918" and selected "Dossier with vis that can be moved to different pages / chapters"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I added dossier to Library if not yet added
@@ -28,7 +28,7 @@ Feature: F24398 - Import and refresh visualization
 
     Given I selected cell "H1"
       And I clicked Add Data button
-      And I found and selected object "Visualization manipulation"
+      And I found object by ID "7908177211E9DF8E76990080EFB5ACD2" and selected "Visualization manipulation"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected visualization "Visualization 1"
@@ -47,7 +47,7 @@ Feature: F24398 - Import and refresh visualization
 
     Given I selected cell "N1"
       And I clicked Add Data button
-      And I found and selected object "Visualization manipulation"
+      And I found object by ID "7908177211E9DF8E76990080EFB5ACD2" and selected "Visualization manipulation"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I opened Show Data panel for "Visualization 1"

@@ -4,6 +4,7 @@ from framework.util.exception.MstrException import MstrException
 
 class ImportDossierTableOfContentsWindowsDesktopPage(BaseWindowsDesktopPage):
     TABLE_OF_CONTENT_BUTTON = 'Table of Contents'
+    # TODO please add parent if possible
     TABLE_OF_CONTENT_ITEMS = '//Button[@Name="Table of Contents"]/following-sibling::List[1]//ListItem'
 
     def select_table_of_content_option(self, option_number):

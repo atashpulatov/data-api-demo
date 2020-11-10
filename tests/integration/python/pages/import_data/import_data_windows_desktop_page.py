@@ -27,15 +27,15 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     ERROR_MESSAGE_BUTTON_OK = 'OK'
 
     SHOW_DETAILS = 'show details'
-    TABLE_DATAITEM_XPATH = '//Group/DataGrid/Group/Group/Table/DataItem/Text'
+    TABLE_DATAITEM_XPATH = '//Group/DataGrid/Group/Group/Table/DataItem/Text'  # TODO please add parent if possible
 
     ALLOW_ACCESS = 'Allow access'
 
     FIRST_OBJECT_ROW = '//Pane/Group/DataGrid/Group[2]/Group/ListItem[1]'
 
-    TOOLTIP_XPATH = '//ToolTip[@Name]'
+    TOOLTIP_XPATH = '//ToolTip[@Name]'  # TODO please add parent if possible
 
-    ADD_TO_LIBRARY_BUTTON = '//Button[starts-with(@Name, \"Add to library\")]'
+    ADD_TO_LIBRARY_BUTTON = '//Button[starts-with(@Name, \"Add to library\")]'  # TODO please add parent if possible
     POPUP_WINDOW_ELEM = 'NUIDialog'
     POPUP_CLOSE_BUTTON = 'Close'
 
@@ -160,6 +160,17 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
         ).click()
 
+    def add_dossier_to_library(self):
+        # TODO use check_element if possible, when element not present get_element waits at least 60s
+        try:
+            self.get_element_by_xpath(
+                ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
+                image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
+            ).click()
+
+        except MstrException:
+            pass
+
     def show_object_details(self, object_number):
         self.windows_desktop_workaround.focus_on_popup_window()
 
@@ -224,13 +235,3 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def get_tooltip_message_for_button(self):
         return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_name_by_attribute()
-
-    def add_dossier_to_library(self):
-        try:
-            self.get_element_by_xpath(
-                ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
-                image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
-            ).click()
-
-        except MstrException:
-            pass

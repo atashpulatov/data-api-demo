@@ -37,6 +37,7 @@ from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page im
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
 
+
 class PagesSetWindowsDesktop(AbstractPagesSet):
     def __init__(self):
         super().__init__()

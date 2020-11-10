@@ -16,7 +16,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     CONTEXT_MENU_ITEM_OK = 'OK'
     CONTEXT_MENU_ITEM_DRILL = 'Drill'
 
-    DRILL_SUB_MENU_ITEM = '//HyperLink[@Name = "%s"]'
+    DRILL_SUB_MENU_ITEM = '//HyperLink[@Name = "%s"]'  # TODO please add parent if possible
 
     CONTEXT_SUB_MENU_ITEM = '//Group/Pane/Pane/Text[@Name="%s"]'
 
@@ -24,7 +24,8 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
     TABLE_CELL_FILE = 'Cell %s'
 
-    # Using index inside xpath selector allow us to create screenshot of this element
+    # Using index inside xpath selector allow us to create screenshot of this element.
+    # TODO please add parent if possible
     SORTING_METRIC_ICONS = '//Group[starts-with(@Name, "%s")]/following-sibling::HyperLink[%s]'
     SORTING_ICON_PREFIX = 'sort_icon_'
 
@@ -66,17 +67,19 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         self.get_element_by_xpath(
             ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name,
             image_name=self.prepare_image_name(
-                ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL_FILE % attribute_name)
+                ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL_FILE % attribute_name
+            )
         ).right_click()
 
         try:
             self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_DRILL)
-            self.get_element_by_xpath(ImportDossierContextMenuWindowsDesktopPage.DRILL_SUB_MENU_ITEM % drill_by
-                                      ).click()
-            pass
+            self.get_element_by_xpath(
+                ImportDossierContextMenuWindowsDesktopPage.DRILL_SUB_MENU_ITEM % drill_by
+            ).click()
+
         except NoSuchElementException:
             raise MstrException(
-              'Item to drill by not present - attribute name: [%s], drill by: [%s].' % (attribute_name, drill_by))
+                'Item to drill by not present - attribute name: [%s], drill by: [%s].' % (attribute_name, drill_by))
             pass
 
     def select_replace_with_for_attribute(self, replace_with, attribute_name, visualization_name):

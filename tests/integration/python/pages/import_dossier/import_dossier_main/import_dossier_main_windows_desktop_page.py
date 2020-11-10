@@ -6,14 +6,15 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
     VISUALIZATION_TILE = '//Group/Pane/Pane/Group'
 
     IMPORT_BUTTON = 'Import'
-    RESET_DSSIER = 'Reset'
-    RESET_DSSIER_CONFIRM = 'Yes'
+    RESET_DOSSIER = 'Reset'
+    RESET_DOSSIER_CONFIRM = 'Yes'
 
     VISUALIZATION_MENU_BUTTON = 'Menu for %s'
     SHOW_DATA = 'Show Data'
 
     def __init__(self):
         super().__init__()
+        # TODO please remove if not used; or leave it if introducing waiting for import to finish, see below
 
     def import_visualization_by_name(self, visualization_name):
         self.select_visualization_by_name(visualization_name)
@@ -38,6 +39,10 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON)
         ).click()
 
+        # TODO please add wait until ready, e.g.:
+        # self.right_panel_tile_windows_desktop_page.wait_for_import_object_to_finish_successfully()
+        # TODO might be different method, depending on if it's duplicating or not
+
     def find_tile_by_name(self, visualization_name):
         popup_main_element = self.get_add_in_main_element()
 
@@ -54,13 +59,13 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def reset_dossier(self):
         self.get_element_by_name(
-            ImportDossierMainWindowsDesktopPage.RESET_DSSIER,
-            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.RESET_DSSIER)
+            ImportDossierMainWindowsDesktopPage.RESET_DOSSIER,
+            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.RESET_DOSSIER)
         ).click()
 
         self.get_element_by_name(
-            ImportDossierMainWindowsDesktopPage.RESET_DSSIER_CONFIRM,
-            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.RESET_DSSIER_CONFIRM)
+            ImportDossierMainWindowsDesktopPage.RESET_DOSSIER_CONFIRM,
+            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.RESET_DOSSIER_CONFIRM)
         ).click()
 
     def open_show_data_panel(self, visualization_name):
