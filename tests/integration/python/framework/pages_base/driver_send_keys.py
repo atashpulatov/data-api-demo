@@ -33,6 +33,9 @@ class DriverSendKeys:
     def press_escape(self):
         self.send_keys(Keys.ESCAPE)
 
+    def press_home(self):
+        self.send_keys(Keys.HOME)
+
     def send_keys(self, keys):
         ActionChains(self.__driver).send_keys(keys).perform()
 

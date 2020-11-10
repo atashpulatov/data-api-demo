@@ -1,3 +1,4 @@
+@windows_desktop
 @disabled_mac_chrome
 @release_validation
 Feature: F30463 - Ability to sort on prepare data
@@ -80,8 +81,7 @@ Feature: F30463 - Ability to sort on prepare data
      When I collapsed attribute forms of attribute number 1
       And I deselected attribute element number 1
       And I changed sort order of "attributes" to descending by click
-      And I scrolled into attribute element number 30
-      And I selected attribute element number 30
+      And I scrolled into attribute element number 30 and selected it
       And I expanded attribute forms of attribute number 30
 
      Then attribute form number 1 of attribute number 30 should be called "DESC"

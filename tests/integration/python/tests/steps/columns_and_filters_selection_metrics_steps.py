@@ -35,6 +35,6 @@ def step_impl(context, object_number):
     context.pages.columns_and_filters_selection_metrics_page().select_metric_by_number(object_number)
 
 
-@step('I scrolled into metric element number {object_number}')
+@step('I scrolled into metric element number {object_number} and selected it')
 def step_impl(context, object_number):
-    context.pages.columns_and_filters_selection_metrics_page().scroll_into_metric_by_number(object_number)
+    context.pages.columns_and_filters_selection_metrics_page().scroll_into_and_select_metric_by_number(object_number)

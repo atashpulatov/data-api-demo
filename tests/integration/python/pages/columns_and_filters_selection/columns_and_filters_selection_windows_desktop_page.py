@@ -1,3 +1,5 @@
+from selenium.webdriver.common.keys import Keys
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
 
@@ -17,6 +19,39 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
 
+    SEARCH_INPUT = "Search..."
+
+    def ensure_columns_and_filters_selection_is_visible(self):
+        is_visible = self.check_if_element_exists_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT,
+            image_name=self.prepare_image_name(
+                ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
+            )
+        )
+
+        if not is_visible:
+            raise MstrException('Error while opening Attributes Metrics Filters.')
+
+    def search_for_element(self, element_name):
+        search_input = self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT
+        )
+
+        search_input.click()
+
+        search_input.send_keys(element_name)
+
+    def clear_element_search_with_backspace(self):
+        search_input = self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.SEARCH_INPUT
+        )
+
+        search_input.click()
+
+        search_input.send_keys(Keys.CONTROL + 'a')
+        search_input.send_keys(Keys.CONTROL)
+        search_input.send_keys(Keys.BACKSPACE)
+
     def click_import_button(self):
         self.get_element_by_accessibility_id(
             ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON,
@@ -28,15 +63,6 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON)
         ).click()
-
-    def ensure_columns_and_filters_selection_is_visible(self):
-        is_visible = self.check_if_element_exists_by_name(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT,
-            image_name=self.prepare_image_name(
-                ColumnsAndFiltersSelectionWindowsDesktopPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT))
-
-        if not is_visible:
-            raise MstrException('Error while opening Attributes Metrics Filters.')
 
     def click_back_button(self):
         self.get_element_by_accessibility_id(
