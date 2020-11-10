@@ -132,7 +132,7 @@ def step_impl(context, header):
 
 
 @step('verified that objects are sorted "{expected_sort_order}" on column "{header}"')
-def step_impl(context, expected_sort_order, header):  # TODO name sorted shadows build in sorted()
+def step_impl(context, expected_sort_order, header):
     sort_order = context.pages.import_data_page().get_column_header_sort_order(header)
 
     AssertUtil.assert_simple(sort_order, expected_sort_order)

@@ -9,6 +9,7 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 class ImportDataBrowserPage(BaseBrowserPage):
     MY_LIBRARY_SWITCH_ELEM = '''div[aria-label='My Library']'''
     ARIA_CHECKED_ATTRIBUTE = 'aria-checked'
+    ARIA_SORT_ATTRIBUTE = 'aria-sort'
 
     SEARCH_BAR_ELEM = '.search-field__input'
     CLEAR_SEARCH_BAR = '.search-field__clear-button'
@@ -194,8 +195,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
             raise MstrException('Error while selecting first object in the list.')
 
     def find_the_color_of_first_object_in_list(self):
-        element = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW)
-        return element.get_background_color()
+        return self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW).get_background_color
 
     def verify_if_import_button_is_enabled(self):
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
@@ -212,18 +212,19 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def get_column_header_sort_order(self, header):
         element = self.get_element_by_css(ImportDataBrowserPage.COLUMN_HEADER % header)
-        return element.get_attribute('aria-sort')
+        return element.get_attribute(ImportDataBrowserPage.ARIA_SORT_ATTRIBUTE)
 
     def get_filters_number(self):
-        element = self.get_element_by_css(ImportDataBrowserPage.FILTERS_SELECTED_NUMBER)
-        return element.text
+        return self.get_element_by_css(ImportDataBrowserPage.FILTERS_SELECTED_NUMBER).text
 
     def hover_over_import_button(self):
         self.focus_on_add_in_popup_frame()
+
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
 
     def get_tooltip_message_for_button(self):
         self.focus_on_add_in_popup_frame()
+
         return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text
 
     def scroll_objects_list_by_number_of_pages(self, number):

@@ -18,8 +18,8 @@ def step_impl(context):
     context.pages.filter_panel_page().click_select_all_within_all_panel()
 
 
-@step('I clicked "{modified_element}" within Modified All Panel')  
-def step_impl(context,modified_element):
+@step('I clicked "{modified_element}" within Modified All Panel')
+def step_impl(context, modified_element):
     context.pages.filter_panel_page().click_modified_all_panel_element(modified_element)
 
 
@@ -118,6 +118,8 @@ def step_impl(context, title):
     element_title = context.pages.filter_panel_page().get_application_header_title()
 
     AssertUtil.assert_simple(element_title, title)
+
+
 @step('I pressed Tab key until element "{element_name}" has focus')
 def step_impl(context, element_name):
     context.pages.filter_panel_page().press_tab_until_focused(element_name)
