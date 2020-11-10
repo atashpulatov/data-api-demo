@@ -3,7 +3,7 @@
 @release_validation
 Feature: F29365 - Import compound grid
 
-  Scenario: [TC67263] - Import compound grid visualization with totals/subtotals
+  Scenario: [TC67227] - part 6 - Import compound grid visualization with totals/subtotals
     Given I logged in as default user
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF

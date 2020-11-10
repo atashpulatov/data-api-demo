@@ -3,7 +3,7 @@
 @release_validation
 Feature: F29365 - Import compound grid
 
-  Scenario: [TC67239] - Import Compound Grid visualization with special structures
+  Scenario: [TC67227] - part 4 - Import Compound Grid visualization with special structures
     Given I logged in as default user
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
