@@ -67,6 +67,12 @@ class ImageElement(BaseElement):
     def get_name_by_attribute(self):
         raise MstrException('Invalid usage of ImageElement, get_name_by_attribute() is not allowed')
 
+    def get_automation_id_by_attribute(self):
+        raise MstrException('Invalid usage of ImageElement, get_automation_id_by_attribute() is not allowed')
+
+    def is_offscreen_by_attribute(self):
+        raise MstrException('Invalid usage of ImageElement, is_offscreen_by_attribute() is not allowed')
+
     def get_element_by_css(self, selector):
         raise MstrException('Invalid usage of ImageElement, get_element_by_css() is not allowed')
 
