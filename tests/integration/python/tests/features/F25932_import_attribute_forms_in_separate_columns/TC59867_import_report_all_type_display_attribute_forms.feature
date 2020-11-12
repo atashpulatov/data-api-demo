@@ -16,6 +16,7 @@ Feature: F25932 - Import attribute forms in separate columns
 
       And I selected all metrics
       And I selected all attributes
+      And I clicked attribute "Country"
       And I ensured attribute is selected and I clicked forms { "Country": ["ID"] }
 
      When I set Display attribute form names to "Off"
