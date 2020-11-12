@@ -11,7 +11,7 @@ class DisplayAttributeFormNamesBrowserPage(BaseBrowserPage):
         self.get_element_by_css(DisplayAttributeFormNamesBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()
 
         self.find_element_by_text_in_elements_list_by_css(
-            DisplayAttributeFormNamesBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM, form_visualization_type)
+            DisplayAttributeFormNamesBrowserPage.ATTRIBUTE_FORM_DROP_DOWN_ITEM, form_visualization_type).click()
 
     def select_first_display_attributes_form_names_element(self):
         self.get_element_by_css(DisplayAttributeFormNamesBrowserPage.ATTRIBUTE_FORM_DROPDOWN).click()

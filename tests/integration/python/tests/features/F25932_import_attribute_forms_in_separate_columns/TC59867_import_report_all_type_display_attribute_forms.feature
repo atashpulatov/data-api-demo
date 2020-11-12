@@ -1,6 +1,6 @@
 #@windows_desktop
 #@windows_chrome
-#@mac_chrome
+@mac_chrome
 #@mac_desktop
 @release_validation
 Feature: F25932 - Import attribute forms in separate columns
