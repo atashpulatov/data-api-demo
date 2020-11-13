@@ -13,8 +13,8 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
     SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .checkbox-cell'
-    REFRESH_ALL = SELECT_ALL_TILES + 'button:nth-child(5)'
-    REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
+    REFRESH_SELECTED = SELECT_ALL_TILES + 'button:nth-child(5)'
+    REMOVE_SELECTED = SELECT_ALL_TILES + 'button:nth-child(6)'
 
     CLEAR_DATA = '.clear-data'
     CONFIRM_CLEAR_DATA_ID = 'confirm-btn'
@@ -41,14 +41,24 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
-        self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_ALL).click()
+        self.refresh_selected()
+    
+    def refresh_selected(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_SELECTED).click()
 
     def remove_all(self):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
-        self.get_element_by_css(RightPanelMainBrowserPage.REMOVE_ALL).click()
+        self.remove_selected()
+
+    def remove_selected(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.REMOVE_SELECTED).click()
 
     def check_if_right_panel_is_empty(self):
         self.focus_on_add_in_frame()

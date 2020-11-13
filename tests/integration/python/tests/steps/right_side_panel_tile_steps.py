@@ -97,3 +97,13 @@ def step_impl(context, object_number):
     is_icon_bar_visible = context.pages.right_panel_tile_page().is_icon_bar_visible(object_number)
 
     AssertUtil.assert_simple(is_icon_bar_visible, True)
+
+
+@step('I selected {object_number} using object checkbox')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().click_checkbox_for_object_selection(object_number)
+
+
+@step('I canceled object {object_number} pending action')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().click_cancel_on_pending_action(object_number)

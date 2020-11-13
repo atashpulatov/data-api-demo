@@ -13,13 +13,17 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     SIDE_PANEL_HEADER = '.side-panel > .header'
 
     RIGHT_PANEL_TILE = '.object-tile-list > article:nth-child(%s) > div > .react-contextmenu-wrapper'
+    RIGHT_PANEL_TILE_NOTIFICATION = '.object-tile-list > article:nth-child(%s) > div > .notification-container'
 
     RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' .icon-bar '
+
+    RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON = RIGHT_PANEL_TILE_NOTIFICATION + ' .progress-bar-notification-button-container > button'
 
     DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
     EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(3)'
     REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(4)'
+    CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .checkbox-cell'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
@@ -110,6 +114,16 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self._click_tile_button(RightPanelTileBrowserPage.REMOVE_BUTTON_FOR_OBJECT, tile_no)
 
         self.wait_for_remove_object_to_finish_successfully()
+    
+    def click_checkbox_for_object_selection(self, tile_no):
+        self.focus_on_add_in_frame()
+        
+        self.get_element_by_css(RightPanelTileBrowserPage.CHECKBOX_FOR_OBJECT % tile_no).click()
+
+    def click_cancel_on_pending_action(self, tile_no):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON % tile_no).click()
 
     def _click_tile_button(self, selector, tile_no):
         self.focus_on_add_in_frame()

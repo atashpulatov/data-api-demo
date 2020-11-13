@@ -62,3 +62,13 @@ def step_impl(context):
     is_scrollbar_visible = context.pages.right_panel_page().is_scrollbar_visible()
 
     AssertUtil.assert_simple(is_scrollbar_visible, True)
+
+
+@step('I refreshed selected objects')
+def step_impl(context):
+    context.pages.right_panel_page().refresh_selected()
+
+
+@step('I removed selected objects')
+def step_impl(context):
+    context.pages.right_panel_page().remove_selected()
