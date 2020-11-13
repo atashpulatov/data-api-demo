@@ -3,7 +3,7 @@
 @release_validation
 Feature: F29365 - Import compound grid
 
-  Scenario: [TC67262] - Import compound grid visualization with Attribute forms
+  Scenario: [TC67227] - part 5 - Import compound grid visualization with Attribute forms
     Given I logged in as default user
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
