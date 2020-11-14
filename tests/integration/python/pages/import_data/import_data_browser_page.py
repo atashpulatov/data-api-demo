@@ -133,6 +133,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         self.right_panel_tile_browser_page.wait_for_operation_error_and_accept(error_message)
 
+    def click_import_button_to_import_with_global_error(self, error_message):
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
+
+        self.right_panel_tile_browser_page.wait_for_operation_global_error_and_accept(error_message)
+
     def click_import_button_to_open_import_dossier(self):
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 

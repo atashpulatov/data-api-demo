@@ -40,13 +40,13 @@ Feature: TS41441 - Sanity checks
       And I hover over Import button
      Then I verified that tooltip for Import button shows message "You cannot import an unpublished cube."
 
-# TODO Waiting for fix for defect xxxxxxxx
-     When I cleared search box
+#    TODO Uncomment when step is created for windows_desktop
+  #     When I cleared search box
 #      And I found object by ID "D796E92211EA434C28680080EF753F73" and selected "Report unpublished cube"
-#     Then I clicked Import button and saw errors "You cannot import an unpublished cube."
+#     Then I clicked Import button and saw global error "You cannot import an unpublished cube."
 
-#     When I selected cell "A1"
-#      And I clicked Import Data button
+     When I selected cell "A1"
+      And I clicked Import Data button
       And I found object by ID "6A626B0C11E94AF4A45E0080EF95FFD5" and selected "Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes"
       And I clicked Import button
      Then I closed all notifications
@@ -104,7 +104,7 @@ Feature: TS41441 - Sanity checks
       And I selected cell "G2"
       And I clicked fill color button
 
-      And I changed cell "G2" font name to "Arial Black"
+#      TODO And I changed cell "G2" font name to "Arial Black"  // uncomment when step is fixed
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
@@ -114,7 +114,7 @@ Feature: TS41441 - Sanity checks
       And for cell "B2" align middle button should be selected
       And for cell "C2" align left button should be selected
       And for cell "D2" bold button should be selected
-      And for cell "G2" font name should be "Arial Black"
+#      TODO  And for cell "G2" font name should be "Arial Black" //// uncomment when step is fixed
       And cell "B4" should have value "$8,907.00"
       And cell "B2" should have value "$4,560.00"
       And cell "C4" should have value "245.90%"
@@ -126,15 +126,13 @@ Feature: TS41441 - Sanity checks
       And I closed all notifications
      Then cell "C3" should have value "$3,506,062"
 
-     When I clicked clear data
-      And I logged out
-      And I logged in with username "Martyna" and empty password
-      And I clicked view data
-   #TODO Create step for accepting error for specific object
-      And I closed all warning notifications
-      And I closed all warning notifications
-      And I closed all warning notifications
-      And I closed all warning notifications
-     Then cells ["A2", "C3"] should have values ["", ""]
+#   TODO Uncomment then fix for logging in is fixed
+  #     When I clicked clear data
+#      And I logged out
+#      And I logged in with username "Jeff" and empty password
+#      And I clicked view data
+#      And I closed all warning notifications
+#      And I selected worksheet number 4
+#     Then cells ["A2", "C3"] should have values ["Mid-Atlantic", "$646,421"]
 
       And I logged out
