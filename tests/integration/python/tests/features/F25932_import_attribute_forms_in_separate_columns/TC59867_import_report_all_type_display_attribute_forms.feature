@@ -1,5 +1,5 @@
-#@windows_desktop
-#@windows_chrome
+#@windows_desktop / step for selecting attribute forms is not working
+@windows_chrome
 @mac_chrome
 #@mac_desktop
 @release_validation
