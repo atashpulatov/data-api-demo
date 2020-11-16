@@ -10,7 +10,7 @@ Feature: TS41441 - Sanity checks
      Then I verified that I saw authentication error and I clicked OK
 
      When I closed Log In popup
-      And I logged in with username "b" and empty password
+      And I logged in with username "b" and password "b"
      Then I verified that I saw "No MicroStrategy for Office privileges" message and I clicked Try Again
 
      When I logged in as default user
@@ -90,7 +90,7 @@ Feature: TS41441 - Sanity checks
       And I found object "100_report"
       And I cleared search box
       And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"
-     Then I verified that the background color of the first object is "rgba(240, 247, 254, 1)"
+#     Then I verified that the background color of the first object is "#f0f7fe!important"
 
      When I clicked Prepare Data button
      Then I verified that Columns & Filters Selection is visible

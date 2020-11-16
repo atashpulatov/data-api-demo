@@ -27,7 +27,7 @@ Feature: TS41441 - Sanity checks
 
      When I logged in as default user
       And I added a new worksheet
-      And I clicked Import Data button
+      And I clicked Add Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "32765C5C11E79D5927C10080EF753106" and selected "Multinational Bank Dossier"
       And I clicked Import button to open Import Dossier
