@@ -3,7 +3,7 @@
 @release_validation
 Feature: F29365 - Import compound grid
 
-  Scenario: [TC67228] - Import compound grid visualization with different selectors
+  Scenario: [TC67227] - part2 - Import compound grid visualization with different selectors
     Given I logged in as default user
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF

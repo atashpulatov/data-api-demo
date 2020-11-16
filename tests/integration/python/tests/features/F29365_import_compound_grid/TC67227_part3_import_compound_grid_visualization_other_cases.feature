@@ -1,7 +1,7 @@
 @mac_chrome
 Feature: F29365 - Import compound grid
 
-  Scenario: [TC67230] - Import compound grid visualization (other cases)
+  Scenario: [TC67227] - part 3 -Import compound grid visualization (other cases)
     Given I logged in as default user
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
