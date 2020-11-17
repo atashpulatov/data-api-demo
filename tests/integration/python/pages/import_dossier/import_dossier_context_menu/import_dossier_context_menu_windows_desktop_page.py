@@ -16,7 +16,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     CONTEXT_MENU_ITEM_OK = 'OK'
     CONTEXT_MENU_ITEM_DRILL = 'Drill'
 
-    DRILL_SUB_MENU_ITEM = '//HyperLink[@Name = "%s"]'  # TODO please add parent if possible
+    DRILL_SUB_MENU_ITEM = '//HyperLink[@Name = "%s"]'
 
     CONTEXT_SUB_MENU_ITEM = '//Group/Pane/Pane/Text[@Name="%s"]'
 
@@ -25,7 +25,6 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     TABLE_CELL_FILE = 'Cell %s'
 
     # Using index inside xpath selector allow us to create screenshot of this element.
-    # TODO please add parent if possible
     SORTING_METRIC_ICONS = '//Group[starts-with(@Name, "%s")]/following-sibling::HyperLink[%s]'
     SORTING_ICON_PREFIX = 'sort_icon_'
 
