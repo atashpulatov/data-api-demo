@@ -17,8 +17,8 @@ Feature: F24398 - Import and refresh visualization
       And I selected visualization "Visualization 1"
       And I selected dossier page or chapter 2
       And I selected visualization "Chart vis"
-      # TODO Add step for creating bookmark
-      # And I selected dossier bookmark 1
+      And I created dossier bookmark "Test bookmark"
+      And I selected dossier bookmark 1
 
       And I "increased" year filter value on dossier from "left" side
       # TODO I verified value for filter "Year" is "2015-2016"
@@ -38,8 +38,8 @@ Feature: F24398 - Import and refresh visualization
       And I selected Drill by "Item" for "Catalog" attribute
       And I selected Exclude for "2014" element in "Year" attribute for visualization "Visualization 1"
       And I selected "Year" in Replace With for "Item" attribute for visualization "Visualization 1"
-      # TODO FIX And I selected sort "Ascending" for "Profit" metric
-      # TODO FIX And I selected sort "Descending" for "Revenue" metric
+      And I selected sort "Ascending" for "Profit" metric for visualization "Visualization 1"
+      And I selected sort "Descending" for "Revenue" metric for visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
      Then cells ["A2", "A3"] should have values ["Total", "2015"]

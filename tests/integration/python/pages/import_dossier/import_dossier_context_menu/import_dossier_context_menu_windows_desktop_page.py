@@ -58,9 +58,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
         icon_index = ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER.index(sort_order) + 1
         self.get_add_in_main_element().get_element_by_xpath(
-            ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS % (visualization_name, icon_index),
-            image_name=self.prepare_image_name(ImportDossierContextMenuWindowsDesktopPage.SORTING_ICON_PREFIX +
-                                               sort_order)
+            ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS % (visualization_name, icon_index)
         ).click()
 
     def select_drill_by_for_attribute(self, drill_by, attribute_name):

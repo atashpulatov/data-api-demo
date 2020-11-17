@@ -6,13 +6,13 @@ from framework.util.exception.MstrException import MstrException
 class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
     BOOKMARK_BUTTON = 'Bookmarks'
 
-    BOOKMARKS_FRAME = '//Pane[starts-with(@Name, "Bookmarks dialog")]'  # TODO please add parent if possible
+    BOOKMARKS_FRAME = '//Pane[starts-with(@Name, "Bookmarks dialog")]'
     BOOKMARKS_FRAME_CLOSE = 'Close'
 
-    BOOKMARK_WRAPPER = '//Text[@Name="MY BOOKMARKS"]/../List'  # TODO please add parent if possible
+    BOOKMARK_WRAPPER = '//Text[@Name="MY BOOKMARKS"]/../List'
     BOOKMARK_ITEM_TAG = 'ListItem'
 
-    ADD_BOOKMARK_BUTTON = 'Add Bookmark'
+    ADD_BOOKMARK_BUTTON = 'Add New'
     BOOKMARK_NAME_INPUT = 'Bookmark name required'
     SAVE_BOOKMARK_BUTTON = 'Save'
 
@@ -21,7 +21,8 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
     def select_bookmark(self, bookmark_number):
         self._open_bookmarks_window()
 
-        bookmark_wrapper = self.get_element_by_xpath(
+        add_in_main_element = self.get_add_in_main_element()
+        bookmark_wrapper = add_in_main_element.get_element_by_xpath(
             ImportDossierBookmarksWindowsDesktopPage.BOOKMARK_WRAPPER
         )
 
@@ -34,7 +35,8 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
     def create_bookmark(self, bookmark_name):
         self._open_bookmarks_window()
 
-        bookmarks_frame = self.get_element_by_xpath(
+        add_in_main_element = self.get_add_in_main_element()
+        bookmarks_frame = add_in_main_element.get_element_by_xpath(
             ImportDossierBookmarksWindowsDesktopPage.BOOKMARKS_FRAME
         )
 
