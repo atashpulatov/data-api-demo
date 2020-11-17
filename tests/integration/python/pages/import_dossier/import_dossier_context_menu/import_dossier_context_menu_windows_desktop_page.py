@@ -57,7 +57,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         ).right_click()
 
         icon_index = ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER.index(sort_order) + 1
-        self.get_element_by_xpath(
+        self.get_add_in_main_element().get_element_by_xpath(
             ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS % (visualization_name, icon_index),
             image_name=self.prepare_image_name(ImportDossierContextMenuWindowsDesktopPage.SORTING_ICON_PREFIX +
                                                sort_order)
@@ -73,7 +73,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
         try:
             self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_DRILL)
-            self.get_element_by_xpath(
+            self.get_add_in_main_element().get_element_by_xpath(
                 ImportDossierContextMenuWindowsDesktopPage.DRILL_SUB_MENU_ITEM % drill_by
             ).click()
 
@@ -87,7 +87,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
         visualization.get_element_by_xpath(
             ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name
-        ).right_click()
+        ).right_click(5, 5)
 
         self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_REPLACE_WITH)
 
@@ -97,7 +97,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         tile = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
 
         item = self._get_first_item_in_attribute_column(tile, attribute_name, exclude)
-        item.right_click()
+        item.right_click(10, 10)
 
         self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_EXCLUDE)
 

@@ -202,8 +202,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
-        name_container.move_to()
-        name_container.right_click()
+        name_container.right_click(5, 5)  # Added small offset to ensure that right click occurs within searched element
 
         object_tile_elem.get_element_by_name(
             RightPanelTileWindowsDesktopPage.REMOVE_MENU_ITEM
