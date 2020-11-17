@@ -161,15 +161,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def add_dossier_to_library(self):
-        # TODO use check_element if possible, when element not present get_element waits at least 60s
-        try:
-            self.get_element_by_xpath(
+        add_to_library = self.check_if_element_exists_by_xpath(
+            ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
+        )
+
+        if add_to_library:
+            self.get_add_in_main_element().get_element_by_xpath(
                 ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
                 image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
             ).click()
-
-        except MstrException:
-            pass
 
     def show_object_details(self, object_number):
         self.windows_desktop_workaround.focus_on_popup_window()
@@ -234,4 +235,6 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).move_to()
 
     def get_tooltip_message_for_button(self):
-        return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_name_by_attribute()
+        return self.get_add_in_main_element().get_element_by_xpath(
+            ImportDataWindowsDesktopPage.TOOLTIP_XPATH
+        ).get_name_by_attribute()
