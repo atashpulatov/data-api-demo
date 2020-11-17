@@ -36,17 +36,17 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def click_import_visualization(self):
         self.click_import_visualization_without_waiting_for_results()
+        self.right_panel_tile_windows_desktop_page.wait_for_import_object_to_finish_successfully()
 
     def click_import_visualization_to_duplicate(self):
         self.click_import_visualization_without_waiting_for_results()
+        self.right_panel_tile_windows_desktop_page.wait_for_duplicate_object_to_finish_successfully()
 
     def click_import_visualization_without_waiting_for_results(self):
         self.get_element_by_name(
             ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON,
             image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON)
         ).click()
-
-        self.right_panel_tile_windows_desktop_page.wait_for_import_object_to_finish_successfully()
 
     def find_tile_by_name(self, visualization_name):
         popup_main_element = self.get_add_in_main_element()

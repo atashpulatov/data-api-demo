@@ -2,6 +2,7 @@ from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
+from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 
 
 class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -20,6 +21,11 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
 
     SEARCH_INPUT = "Search..."
+
+    def __init__(self):
+        super().__init__()
+
+        self.right_panel_tile_windows_desktop_page = RightPanelTileWindowsDesktopPage()
 
     def ensure_columns_and_filters_selection_is_visible(self):
         is_visible = self.check_if_element_exists_by_name(
@@ -53,12 +59,14 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         search_input.send_keys(Keys.BACKSPACE)
 
     def click_import_button(self):
-        self.get_element_by_accessibility_id(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON)
-        ).click()
+        self.click_import_button_without_success_check()
+        self.right_panel_tile_windows_desktop_page.wait_for_duplicate_object_to_finish_successfully()
 
     def click_import_button_to_duplicate(self):
+        self.click_import_button_without_success_check()
+        self.right_panel_tile_windows_desktop_page.wait_for_duplicate_object_to_finish_successfully()
+
+    def click_import_button_without_success_check(self):
         self.get_element_by_accessibility_id(
             ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON)
