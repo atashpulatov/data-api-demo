@@ -4,9 +4,7 @@
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC62630] - [Privileges] Log in with different users with different permissions (Office, Library, Web)
-    Given I pass
-
-     When I logged in with username "b" and password "b"
+    Given I logged in with username "b" and password "b"
      Then I verified that I saw "No MicroStrategy for Office privileges" message and I clicked Try Again
 
      When I logged in with username "No library" and empty password
@@ -49,13 +47,10 @@ Feature: TS41441 - Sanity checks
      Then cells ["B1", "D2"] should have values ["Subcategory", "$1,419"]
       And object number 1 should be called "Report with a subtotal & prompt"
 
-
      When I added a new worksheet
       And I clicked Add Data button
       And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
       And I clicked Import button
      Then cells ["A2", "C3"] should have values ["Central", "Loren"]
+
       And I logged out
-
-
-
