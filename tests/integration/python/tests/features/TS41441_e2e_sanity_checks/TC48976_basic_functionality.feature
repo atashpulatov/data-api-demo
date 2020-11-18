@@ -90,7 +90,7 @@ Feature: TS41441 - Sanity checks
       And I found object "100_report"
       And I cleared search box
       And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"
-#     Then I verified that the background color of the first object is "#f0f7fe!important"
+     Then I verified that the background color of the first object is "rgba(240, 247, 254, 1)"
 
      When I clicked Prepare Data button
      Then I verified that Columns & Filters Selection is visible
