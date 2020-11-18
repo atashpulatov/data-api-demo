@@ -6,19 +6,18 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
     FILTERS_BUTTON = 'Filter'
     APPLY_FILTER_BUTTON = 'Apply'
 
-    DOSSIER_FILTER_VALUE = '//Pane[@Name=\"Filter Data\"]//CheckBox[@Name=\"%s\"]'  # TODO please add parent if possible
-    # TODO please add parent if possible
+    DOSSIER_FILTER_VALUE = '//Pane[@Name=\"Filter Data\"]//CheckBox[@Name=\"%s\"]'
     DOSSIER_FILTER_YEAR = '//Pane[@Name=\"Filter Data\"]//MenuItem[starts-with(@Name, \"Year\")]'
 
     FILTER_CHANGE_INCREASE = 'increased'
     FILTER_CHANGE_DECREASE = 'decreased'
     FILTER_SIDE_LEFT = 'left'
     FILTER_SIDE_RIGHT = 'right'
-    SLIDER = '//Pane[@Name=\"Filter Data\"]//Slider'  # TODO please add parent if possible
+    SLIDER = '//Pane[@Name=\"Filter Data\"]//Slider[%s]'
 
     SLIDER_POINT_MAPPING = {
-        FILTER_SIDE_LEFT: 0,
-        FILTER_SIDE_RIGHT: 1
+        FILTER_SIDE_LEFT: 1,
+        FILTER_SIDE_RIGHT: 2
     }
 
     def increase_year_filter_value(self, filter_change, filter_side):
@@ -34,10 +33,12 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
 
         slider_point = ImportDossierFilterWindowsDesktopPage.SLIDER_POINT_MAPPING[filter_side]
 
-        self.get_elements_by_xpath(ImportDossierFilterWindowsDesktopPage.SLIDER)[slider_point].click()
+        add_in_main_element = self.get_add_in_main_element()
+        add_in_main_element.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.SLIDER % slider_point).click()
 
         if filter_change == ImportDossierFilterWindowsDesktopPage.FILTER_CHANGE_INCREASE:
             self.press_right_arrow()
+
         elif filter_change == ImportDossierFilterWindowsDesktopPage.FILTER_CHANGE_DECREASE:
             self.press_backspace()
 
@@ -53,10 +54,15 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
     def _open_year_filter(self):
         self._open_filter_menu()
 
-        self.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_YEAR).click()
+        add_in_main_element = self.get_add_in_main_element()
+        add_in_main_element.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_YEAR).click()
 
     def _select_filter_checkbox(self, filter_name):
-        self.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_VALUE % filter_name).click()
+        add_in_main_element = self.get_add_in_main_element()
+
+        add_in_main_element.get_element_by_xpath(
+            ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_VALUE % filter_name
+        ).click()
 
     def _apply_filter(self):
         self.get_element_by_name(
@@ -64,19 +70,6 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ImportDossierFilterWindowsDesktopPage.APPLY_FILTER_BUTTON)
         ).click()
 
-    def _open_year_filter(self):
-        self._open_filter_menu()
-
-        popup_main_element = self.get_add_in_main_element()
-
-        popup_main_element.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_YEAR).click()
-
     def _open_filter_menu(self):
-        self.get_element_by_name(ImportDossierFilterWindowsDesktopPage.FILTERS_BUTTON).click()
-
-    def _select_filter_checkbox(self, filter_name):
-        popup_main_element = self.get_add_in_main_element()
-
-        popup_main_element.get_element_by_xpath(
-            ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_VALUE % filter_name
-        ).click()
+        add_in_main_element = self.get_add_in_main_element()
+        add_in_main_element.get_element_by_name(ImportDossierFilterWindowsDesktopPage.FILTERS_BUTTON).click()
