@@ -3,7 +3,7 @@ from framework.util.exception.MstrException import MstrException
 
 
 class ImportDossierBookmarksBrowserPage(BaseBrowserPage):
-    BOOKMARK_BUTTON = '.icon-bookmark'
+    BOOKMARK_BUTTON = '.icon-tb_bookmark'
     BOOKMARK_ITEMS = '.mstrd-BookmarkItem-nameText'
 
     def select_bookmark(self, bookmark_number):
