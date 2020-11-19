@@ -17,7 +17,7 @@ Feature: F24398 - Import and refresh visualization
       And I selected visualization "Visualization 1"
       And I selected dossier page or chapter 2
       And I selected visualization "Chart vis"
-      And I created dossier bookmark "Test bookmark"
+      And I created dossier bookmark "Test bookmark" if not exists
       And I selected dossier bookmark 1
 
       And I "increased" year filter value on dossier from "left" side
