@@ -28,6 +28,9 @@ class ElementGet(ElementCheck):
     def get_element_by_id(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.ID, selector, timeout), self.driver)
 
+    def get_element_by_id_no_visibility_checked(self, selector, timeout=DEFAULT_TIMEOUT):
+        return BaseElement(self._get_raw_element_no_visibility_checked(By.ID, selector, timeout), self.driver)
+
     def get_element_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.CSS_SELECTOR, selector, timeout), self.driver)
 

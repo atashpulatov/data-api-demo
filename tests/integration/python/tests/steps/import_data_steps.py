@@ -90,6 +90,11 @@ def step_impl(context, error_message):
     context.pages.import_data_page().click_import_button_to_import_with_error(error_message)
 
 
+@step('I clicked Import button and saw global error "{error_message}"')
+def step_impl(context, error_message):
+    context.pages.import_data_page().click_import_button_to_import_with_global_error(error_message)
+
+
 @step('I hovered over the first object in the list')
 def step_impl(context):
     context.pages.import_data_page().hover_over_first_object_in_list()
