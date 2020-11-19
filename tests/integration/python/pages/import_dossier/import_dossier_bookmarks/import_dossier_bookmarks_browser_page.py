@@ -21,6 +21,6 @@ class ImportDossierBookmarksBrowserPage(BaseBrowserPage):
 
         bookmark_items[bookmark_index].click()
 
-    def create_bookmark(self, bookmark_name):
+    def create_bookmark_if_not_exists(self, bookmark_name):
         # TODO: Implement
         self.log('Missing step implementation.')

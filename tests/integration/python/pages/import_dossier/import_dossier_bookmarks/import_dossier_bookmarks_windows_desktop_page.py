@@ -1,6 +1,5 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.const import SHORT_TIMEOUT
-from framework.util.exception.MstrException import MstrException
 
 
 class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -12,7 +11,8 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
     BOOKMARK_WRAPPER = '//Text[@Name="MY BOOKMARKS"]/../List'
     BOOKMARK_ITEM_TAG = 'ListItem'
 
-    ADD_BOOKMARK_BUTTON = 'Add New'
+    ADD_NEW_BUTTON = 'Add New'
+    ADD_BOOKMARK_BUTTON = 'Add Bookmark'
     BOOKMARK_NAME_INPUT = 'Bookmark name required'
     SAVE_BOOKMARK_BUTTON = 'Save'
 
@@ -32,7 +32,7 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
 
         bookmark_items[int(bookmark_number) - 1].click()
 
-    def create_bookmark(self, bookmark_name):
+    def create_bookmark_if_not_exists(self, bookmark_name):
         self._open_bookmarks_window()
 
         add_in_main_element = self.get_add_in_main_element()
@@ -40,6 +40,33 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDossierBookmarksWindowsDesktopPage.BOOKMARKS_FRAME
         )
 
+        add_new_button_exists = bookmarks_frame.check_if_element_exists_by_name(
+            ImportDossierBookmarksWindowsDesktopPage.ADD_NEW_BUTTON, timeout=SHORT_TIMEOUT
+        )
+
+        if add_new_button_exists:
+            self._add_first_bookmark(bookmarks_frame, bookmark_name)
+        else:
+            self._add_subsequent_bookmark(bookmarks_frame, bookmark_name)
+
+        bookmarks_frame.get_element_by_name(
+            ImportDossierBookmarksWindowsDesktopPage.BOOKMARKS_FRAME_CLOSE
+        ).click()
+
+    def _add_first_bookmark(self, bookmarks_frame, bookmark_name):
+        bookmarks_frame.get_element_by_name(
+            ImportDossierBookmarksWindowsDesktopPage.ADD_NEW_BUTTON
+        ).click()
+
+        bookmarks_frame.get_element_by_name(
+            ImportDossierBookmarksWindowsDesktopPage.BOOKMARK_NAME_INPUT
+        ).send_keys(bookmark_name)
+
+        bookmarks_frame.get_element_by_name(
+            ImportDossierBookmarksWindowsDesktopPage.SAVE_BOOKMARK_BUTTON
+        ).click()
+
+    def _add_subsequent_bookmark(self, bookmarks_frame, bookmark_name):
         bookmarks_frame.get_element_by_name(
             ImportDossierBookmarksWindowsDesktopPage.ADD_BOOKMARK_BUTTON
         ).click()
@@ -48,18 +75,12 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDossierBookmarksWindowsDesktopPage.BOOKMARK_NAME_INPUT
         ).send_keys(bookmark_name)
 
-        if bookmarks_frame.check_if_element_exists_by_name(
+        if not bookmarks_frame.check_if_element_exists_by_name(
                 ImportDossierBookmarksWindowsDesktopPage.ERROR_DUPLICATE_NAME,
                 timeout=SHORT_TIMEOUT):
-            raise MstrException(f'Bookmark called [{bookmark_name}] already exists.')
-
-        bookmarks_frame.get_element_by_name(
-            ImportDossierBookmarksWindowsDesktopPage.SAVE_BOOKMARK_BUTTON
-        ).click()
-
-        bookmarks_frame.get_element_by_name(
-            ImportDossierBookmarksWindowsDesktopPage.BOOKMARKS_FRAME_CLOSE
-        ).click()
+            bookmarks_frame.get_element_by_name(
+                ImportDossierBookmarksWindowsDesktopPage.SAVE_BOOKMARK_BUTTON
+            ).click()
 
     def _open_bookmarks_window(self):
         self.get_element_by_name(
