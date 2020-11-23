@@ -67,11 +67,21 @@ class BaseElement:
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
-    def right_click(self):
-        (ActionChains(self.__driver)
-         .move_to_element(self.__element)
-         .context_click()
-         .perform())
+    def right_click(self, offset_x=None, offset_y=None):
+        if offset_x is None or offset_y is None:
+            (ActionChains(self.__driver)
+             .move_to_element(self.__element)
+             .pause(AFTER_OPERATION_WAIT_TIME)
+             .context_click()
+             .perform())
+        else:
+            (ActionChains(self.__driver)
+             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .pause(AFTER_OPERATION_WAIT_TIME)
+             .context_click()
+             .perform())
+
+        Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     @property
     def id(self):
@@ -169,6 +179,11 @@ class BaseElement:
 
     def get_elements_by_name(self, selector):
         raw_elements = self.__element.find_elements_by_name(selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
+
+    def get_elements_by_tag_name(self, selector):
+        raw_elements = self.__element.find_elements_by_tag_name(selector)
 
         return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
 

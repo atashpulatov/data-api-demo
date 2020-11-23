@@ -17,6 +17,8 @@ from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWind
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
 from pages.filter_panel.filter_panel_windows_desktop_page import FilterPanelWindowsDesktopPage
 from pages.import_data.import_data_windows_desktop_page import ImportDataWindowsDesktopPage
+from pages.import_dossier.import_dossier_bookmarks.import_dossier_bookmarks_windows_desktop_page import \
+    ImportDossierBookmarksWindowsDesktopPage
 from pages.import_dossier.import_dossier_context_menu.import_dossier_context_menu_windows_desktop_page import \
     ImportDossierContextMenuWindowsDesktopPage
 from pages.import_dossier.import_dossier_filter.import_dossier_filter_windows_desktop_page import \
@@ -25,6 +27,8 @@ from pages.import_dossier.import_dossier_main.import_dossier_main_windows_deskto
     ImportDossierMainWindowsDesktopPage
 from pages.import_dossier.import_dossier_show_data.import_dossier_show_data_windows_desktop_page import \
     ImportDossierShowDataWindowsDesktopPage
+from pages.import_dossier.import_dossier_table_of_contents.import_dossier_table_of_contents_windows_desktop_page import \
+    ImportDossierTableOfContentsWindowsDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
 from pages.prompt.prompt_windows_desktop_page import PromptWindowsDesktopPage
@@ -72,8 +76,8 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
 
         self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()
         self.import_dossier_filter_windows_desktop_page = ImportDossierFilterWindowsDesktopPage()
-        self.import_dossier_bookmarks_windows_desktop_page = None
-        self.import_dossier_table_of_contents_windows_desktop_page = None
+        self.import_dossier_bookmarks_windows_desktop_page = ImportDossierBookmarksWindowsDesktopPage()
+        self.import_dossier_table_of_contents_windows_desktop_page = ImportDossierTableOfContentsWindowsDesktopPage()
         self.import_dossier_context_menu_windows_desktop_page = ImportDossierContextMenuWindowsDesktopPage()
         self.import_dossier_show_data_windows_desktop_page = ImportDossierShowDataWindowsDesktopPage()
 

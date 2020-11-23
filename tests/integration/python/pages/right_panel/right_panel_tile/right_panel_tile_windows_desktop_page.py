@@ -14,6 +14,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     NOTIFICATION_ICON = 'successful_fill'
 
     BUTTON_OK = 'OK'
+    DUPLICATING_TEXT_ELEM = 'Duplicating'
     REFRESHING_TEXT_ELEM = 'Refreshing'
     IMPORTING_TEXT_ELEM = 'Importing'
     REMOVING_TEXT_ELEM = 'Removing'
@@ -40,6 +41,12 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self._wait_until_element_disappears(
             self.check_if_element_exists_by_name,
             RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM
+        )
+
+    def wait_for_duplicate_object_to_finish_successfully(self):
+        self._wait_until_element_disappears(
+            self.check_if_element_exists_by_name,
+            RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM
         )
 
     def wait_for_refresh_object_to_finish_successfully(self):
@@ -89,14 +96,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.click()
 
     def close_last_notification_on_hover(self):
-        self._wait_for_last_operation_to_finish_successfully()
+        self.wait_for_progress_notifications_to_disappear()
 
         self._hover_over_tile(RightPanelTileWindowsDesktopPage.XML_FIRST_ELEMENT_INDEX)
-
-    def _wait_for_last_operation_to_finish_successfully(self):
-        while not self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
-                                                                   timeout=SHORT_TIMEOUT):
-            pass
 
     def close_object_notification_on_hover(self, object_no):
         self._hover_over_tile(object_no)
@@ -200,8 +202,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
-        name_container.move_to()
-        name_container.right_click()
+        name_container.right_click(5, 5)  # Added small offset to ensure that right click occurs within searched element
 
         object_tile_elem.get_element_by_name(
             RightPanelTileWindowsDesktopPage.REMOVE_MENU_ITEM

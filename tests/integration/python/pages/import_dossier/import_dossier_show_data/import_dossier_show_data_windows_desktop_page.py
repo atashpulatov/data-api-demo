@@ -3,7 +3,6 @@ from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkar
 
 
 class ImportDossierShowDataWindowsDesktopPage(BaseWindowsDesktopPage):
-    SHOW_DATA_WINDOW = '//Group[contains(@Name, "Show Data")]/Table[position()>1]'
     CLOSE_SHOW_DATA_BUTTON = 'Close'
 
     def __init__(self):
@@ -14,8 +13,5 @@ class ImportDossierShowDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def close_show_data(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        self.get_element_by_name_using_parent(
-            self.get_element_by_xpath, ImportDossierShowDataWindowsDesktopPage.SHOW_DATA_WINDOW,
-            ImportDossierShowDataWindowsDesktopPage.CLOSE_SHOW_DATA_BUTTON,
-            image_name=self.prepare_image_name(ImportDossierShowDataWindowsDesktopPage.CLOSE_SHOW_DATA_BUTTON)
-        ).click()
+        add_in_main_element = self.get_add_in_main_element()
+        add_in_main_element.get_element_by_name(ImportDossierShowDataWindowsDesktopPage.CLOSE_SHOW_DATA_BUTTON).click()
