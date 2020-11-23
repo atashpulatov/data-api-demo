@@ -35,7 +35,7 @@ Feature: F24398 - Import and refresh visualization
       And I selected dossier page or chapter 1
       And I selected visualization "Visualization 1"
       And I selected "Total" in Show Totals for "Year" attribute for visualization "Visualization 1"
-      And I selected Drill by "Item" for "Catalog" attribute
+      And I selected Drill by "Item" for "Catalog" attribute for visualization "Visualization 1"
       And I selected Exclude for "2014" element in "Year" attribute for visualization "Visualization 1"
       And I selected "Year" in Replace With for "Item" attribute for visualization "Visualization 1"
       And I selected sort "Ascending" for "Profit" metric for visualization "Visualization 1"

@@ -18,11 +18,6 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.right_panel_tile_windows_desktop_page = RightPanelTileWindowsDesktopPage()
 
-    def __init__(self):
-        super().__init__()
-
-        self.right_panel_tile_windows_desktop_page = RightPanelTileWindowsDesktopPage()
-
     def import_visualization_by_name(self, visualization_name):
         self.select_visualization_by_name(visualization_name)
 

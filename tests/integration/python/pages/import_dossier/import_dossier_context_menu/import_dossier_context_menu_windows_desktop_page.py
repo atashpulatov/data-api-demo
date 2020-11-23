@@ -24,7 +24,6 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
     TABLE_CELL_FILE = 'Cell %s'
 
-    # Using index inside xpath selector allow us to create screenshot of this element.
     SORTING_METRIC_ICONS = '//Group[starts-with(@Name, "%s")]/following-sibling::HyperLink[%s]'
     SORTING_ICON_PREFIX = 'sort_icon_'
 
@@ -48,7 +47,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def select_sort_order_for_metric(self, sort_order, metric_name, visualization_name):
         if sort_order not in ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER:
-            raise MstrException('Wrong sort order specified: %s.' % sort_order)
+            raise MstrException(f'Wrong sort order specified: [{sort_order}].')
 
         self.get_element_by_xpath(
             ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % metric_name,
@@ -60,24 +59,24 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS % (visualization_name, icon_index)
         ).click()
 
-    def select_drill_by_for_attribute(self, drill_by, attribute_name):
-        self.get_element_by_xpath(
-            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name,
-            image_name=self.prepare_image_name(
-                ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL_FILE % attribute_name
-            )
+    def select_drill_by_for_attribute(self, drill_by, attribute_name, visualization_name):
+        tile = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
+
+        tile.get_element_by_xpath(
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name
         ).right_click()
 
+        self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_DRILL)
+
         try:
-            self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_DRILL)
             self.get_add_in_main_element().get_element_by_xpath(
                 ImportDossierContextMenuWindowsDesktopPage.DRILL_SUB_MENU_ITEM % drill_by
             ).click()
 
         except NoSuchElementException:
             raise MstrException(
-                'Item to drill by not present - attribute name: [%s], drill by: [%s].' % (attribute_name, drill_by))
-            pass
+                f'Item to drill by not present - attribute name: [{attribute_name}], drill by: [{drill_by}].'
+            )
 
     def select_replace_with_for_attribute(self, replace_with, attribute_name, visualization_name):
         visualization = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)

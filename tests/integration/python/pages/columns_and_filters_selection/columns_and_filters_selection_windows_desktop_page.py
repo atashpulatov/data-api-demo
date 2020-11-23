@@ -60,7 +60,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def click_import_button(self):
         self.click_import_button_without_success_check()
-        self.right_panel_tile_windows_desktop_page.wait_for_duplicate_object_to_finish_successfully()
+        self.right_panel_tile_windows_desktop_page.wait_for_import_object_to_finish_successfully()
 
     def click_import_button_to_duplicate(self):
         self.click_import_button_without_success_check()
