@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
+from framework.util.const import MEDIUM_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from framework.util.message_const import MessageConst
 from framework.util.util import Util
@@ -40,6 +41,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     TOOLTIP_XPATH = '//ToolTip[@Name]'
 
+    ADD_TO_LIBRARY_BUTTON = '//Button[starts-with(@Name, \"Add to library\")]'
     POPUP_WINDOW_ELEM = 'NUIDialog'
     POPUP_CLOSE_BUTTON = 'Close'
 
@@ -175,6 +177,19 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
         ).click()
 
+    def add_dossier_to_library(self):
+        add_to_library = self.check_if_element_exists_by_xpath(
+            ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
+            timeout=MEDIUM_TIMEOUT,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
+        )
+
+        if add_to_library:
+            self.get_element_by_xpath(
+                ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
+                image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
+            ).click()
+
     def show_object_details(self, object_number):
         self.windows_desktop_workaround.focus_on_popup_window()
 
@@ -276,7 +291,9 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).move_to()
 
     def get_tooltip_message_for_button(self):
-        return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_name_by_attribute()
+        return self.get_add_in_main_element().get_element_by_xpath(
+            ImportDataWindowsDesktopPage.TOOLTIP_XPATH
+        ).get_name_by_attribute()
 
     def find_the_color_of_first_object_in_list(self):
         element = self.get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW)

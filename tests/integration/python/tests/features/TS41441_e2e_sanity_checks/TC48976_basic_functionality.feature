@@ -10,7 +10,7 @@ Feature: TS41441 - Sanity checks
      Then I verified that I saw authentication error and I clicked OK
 
      When I closed Log In popup
-      And I logged in with username "b" and empty password
+      And I logged in with username "b" and password "b"
      Then I verified that I saw "No MicroStrategy for Office privileges" message and I clicked Try Again
 
      When I logged in as default user

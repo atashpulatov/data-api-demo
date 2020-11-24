@@ -25,9 +25,9 @@ def step_impl(context, object_number):
     context.pages.columns_and_filters_selection_filters_page().select_filter_by_number(object_number)
 
 
-@step('I scrolled into filter element number {object_number}')
+@step('I scrolled into filter element number {object_number} and selected it')
 def step_impl(context, object_number):
-    context.pages.columns_and_filters_selection_filters_page().scroll_into_filter_by_number(object_number)
+    context.pages.columns_and_filters_selection_filters_page().scroll_into_and_select_filter_by_number(object_number)
 
 
 @step('I selected filters {filters_and_elements_json}')

@@ -15,6 +15,11 @@ from framework.util.util import Util
 
 class BaseElement:
     NAME_ATTRIBUTE = 'Name'
+    AUTOMATION_ID_ATTRIBUTE = 'AutomationId'
+    IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
+
+    ATTRIBUTE_VALUE_TRUE = 'true'
+
     BACKGROUND_COLOR_PROPERTY = 'background-color'
     OPACITY_PROPERTY = 'opacity'
 
@@ -67,11 +72,21 @@ class BaseElement:
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
-    def right_click(self):
-        (ActionChains(self.__driver)
-         .move_to_element(self.__element)
-         .context_click()
-         .perform())
+    def right_click(self, offset_x=None, offset_y=None):
+        if offset_x is None or offset_y is None:
+            (ActionChains(self.__driver)
+             .move_to_element(self.__element)
+             .pause(AFTER_OPERATION_WAIT_TIME)
+             .context_click()
+             .perform())
+        else:
+            (ActionChains(self.__driver)
+             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .pause(AFTER_OPERATION_WAIT_TIME)
+             .context_click()
+             .perform())
+
+        Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     @property
     def id(self):
@@ -101,6 +116,12 @@ class BaseElement:
 
     def get_name_by_attribute(self):
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
+
+    def get_automation_id_by_attribute(self):
+        return self.get_attribute(BaseElement.AUTOMATION_ID_ATTRIBUTE)
+
+    def is_offscreen_by_attribute(self):
+        return self.get_attribute(BaseElement.IS_OFFSCREEN_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector):
         return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
@@ -163,6 +184,11 @@ class BaseElement:
 
     def get_elements_by_name(self, selector):
         raw_elements = self.__element.find_elements_by_name(selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
+
+    def get_elements_by_tag_name(self, selector):
+        raw_elements = self.__element.find_elements_by_tag_name(selector)
 
         return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
 

@@ -43,8 +43,13 @@ class ImageElement(BaseElement):
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
-    def right_click(self):
-        raise MstrException('Implement when needed')
+    def right_click(self, offset_x=0, offset_y=0):
+        (ActionChains(self.__driver)
+         .move_to_element_with_offset(ImageElement.excel_element,
+                                      self.__center_coordinates[0] + offset_x,
+                                      self.__center_coordinates[1] + offset_y)
+         .context_click()
+         .perform())
 
     @property
     def id(self):
@@ -62,6 +67,12 @@ class ImageElement(BaseElement):
 
     def get_name_by_attribute(self):
         raise MstrException('Invalid usage of ImageElement, get_name_by_attribute() is not allowed')
+
+    def get_automation_id_by_attribute(self):
+        raise MstrException('Invalid usage of ImageElement, get_automation_id_by_attribute() is not allowed')
+
+    def is_offscreen_by_attribute(self):
+        raise MstrException('Invalid usage of ImageElement, is_offscreen_by_attribute() is not allowed')
 
     def get_element_by_css(self, selector):
         raise MstrException('Invalid usage of ImageElement, get_element_by_css() is not allowed')
