@@ -1,0 +1,185 @@
+{
+  "name": "[TC62676] Editing prompted reports functionality while report contains nested \\",
+  "status": "broken",
+  "statusDetails": {
+    "message": "framework.util.exception.MstrException.MstrException: Error while clicking an element.\n",
+    "trace": "  File \"/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/behave/model.py\", line 1329, in run\n    match.run(runner.context)\n  File \"/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/behave/matchers.py\", line 98, in run\n    self.func(context, *args, **kwargs)\n  File \"tests/steps/import_data_steps.py\", line 48, in step_impl\n    context.pages.import_data_page().click_import_button_without_checking_results()\n  File \"/Users/jkowalczyk/Documents/mstr-office/tests/integration/python/pages/import_data/import_data_browser_page.py\", line 129, in click_import_button_without_checking_results\n    self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()\n  File \"/Users/jkowalczyk/Documents/mstr-office/tests/integration/python/framework/pages_base/base_element.py\", line 37, in click\n    raise MstrException('Error while clicking an element.')\n"
+  },
+  "description": "prompts imported without Prepare Data",
+  "steps": [
+    {
+      "name": "Given I logged in as default user",
+      "status": "passed",
+      "start": 1606308042394,
+      "stop": 1606308053385
+    },
+    {
+      "name": "And I clicked Import Data button",
+      "status": "passed",
+      "start": 1606308053386,
+      "stop": 1606308058698
+    },
+    {
+      "name": "And I ensured that MyLibrary Switch is OFF",
+      "status": "passed",
+      "start": 1606308058699,
+      "stop": 1606308061877
+    },
+    {
+      "name": "And I clicked Import button without checking results",
+      "status": "broken",
+      "statusDetails": {
+        "message": "framework.util.exception.MstrException.MstrException: Error while clicking an element.\n",
+        "trace": "  File \"/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/behave/model.py\", line 1329, in run\n    match.run(runner.context)\n  File \"/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/behave/matchers.py\", line 98, in run\n    self.func(context, *args, **kwargs)\n  File \"tests/steps/import_data_steps.py\", line 48, in step_impl\n    context.pages.import_data_page().click_import_button_without_checking_results()\n  File \"/Users/jkowalczyk/Documents/mstr-office/tests/integration/python/pages/import_data/import_data_browser_page.py\", line 129, in click_import_button_without_checking_results\n    self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()\n  File \"/Users/jkowalczyk/Documents/mstr-office/tests/integration/python/framework/pages_base/base_element.py\", line 37, in click\n    raise MstrException('Error while clicking an element.')\n"
+      },
+      "start": 1606308061878,
+      "stop": 1606308062958
+    },
+    {
+      "name": "And I waited for Run button to be enabled",
+      "status": "skipped",
+      "start": 1606308063321,
+      "stop": 1606308063321
+    },
+    {
+      "name": "And I clicked Run button",
+      "status": "skipped",
+      "start": 1606308063321,
+      "stop": 1606308063321
+    },
+    {
+      "name": "And I waited for Run button to be enabled",
+      "status": "skipped",
+      "start": 1606308063321,
+      "stop": 1606308063321
+    },
+    {
+      "name": "And I clicked Run button",
+      "status": "skipped",
+      "start": 1606308063321,
+      "stop": 1606308063321
+    },
+    {
+      "name": "Then I closed last notification",
+      "status": "skipped",
+      "start": 1606308063321,
+      "stop": 1606308063321
+    },
+    {
+      "name": "When I clicked Edit object 1",
+      "status": "skipped",
+      "start": 1606308063321,
+      "stop": 1606308063321
+    },
+    {
+      "name": "And I waited for Run button to be enabled",
+      "status": "skipped",
+      "start": 1606308063321,
+      "stop": 1606308063321
+    },
+    {
+      "name": "And I clicked Run button",
+      "status": "skipped",
+      "start": 1606308063321,
+      "stop": 1606308063321
+    },
+    {
+      "name": "And I waited for Run button to be enabled",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "And I clicked Run button",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "And I verified that Columns & Filters Selection is visible",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "And I clicked attribute \"Region\"",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "And I clicked metric \"Revenue\"",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "And I selected filters { \"Region\": [\"Central\", \"South\"] }",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "And I clicked Import button in Columns and Filters Selection",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "And cells [\"C5\", \"A7\", \"B7\", \"C25\"] should have values [\"$14,215\", \"2015\", \"Electronics\", \"\"]",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "Then I closed all notifications",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    },
+    {
+      "name": "And I logged out",
+      "status": "skipped",
+      "start": 1606308063322,
+      "stop": 1606308063322
+    }
+  ],
+  "start": 1606308009810,
+  "stop": 1606308063322,
+  "uuid": "bfaf4adf-179a-47a0-bb39-6b86ffc69473",
+  "historyId": "0b05b62313f8131acc21826e08660b0f",
+  "labels": [
+    {
+      "name": "severity",
+      "value": "normal"
+    },
+    {
+      "name": "tag",
+      "value": "mac_chrome"
+    },
+    {
+      "name": "tag",
+      "value": "release_validation"
+    },
+    {
+      "name": "tag",
+      "value": "windows_chrome"
+    },
+    {
+      "name": "tag",
+      "value": "windows_desktop"
+    },
+    {
+      "name": "feature",
+      "value": "F22954 - Ability to edit data already imported to the workbook"
+    },
+    {
+      "name": "framework",
+      "value": "behave"
+    },
+    {
+      "name": "language",
+      "value": "cpython3"
+    }
+  ]
+}
