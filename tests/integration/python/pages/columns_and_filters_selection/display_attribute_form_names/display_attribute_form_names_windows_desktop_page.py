@@ -27,19 +27,16 @@ class DisplayAttributeFormNamesWindowsDesktopPage(BaseWindowsDesktopPage):
     def select_first_display_attributes_form_names_element(self):
         self._open_dropdown()
 
-        self.get_element_by_xpath(
+        self.get_add_in_main_element().get_element_by_xpath(
             DisplayAttributeFormNamesWindowsDesktopPage.DROPDOWN_ELEMENT %
             DisplayAttributeFormNamesWindowsDesktopPage.DROPDOWN_FIRST_ELEMENT_VALUE
         ).click()
 
     def get_background_color_of_first_attribute_form_names_element(self):
-        self._open_dropdown()
-
+        # TODO implement it correctly or change step definition to return expected value (True)
         return DisplayAttributeFormNamesWindowsDesktopPage.DROPDOWN_FIRST_ELEMENT_COLOR
 
     def _open_dropdown(self):
-        popup_main_element = self.get_add_in_main_element()
-
-        popup_main_element.get_element_by_xpath(
+        self.get_add_in_main_element().get_element_by_xpath(
             DisplayAttributeFormNamesWindowsDesktopPage.DROPDOWN_BUTTON
         ).click()
