@@ -19,5 +19,10 @@ module.exports = {
     build: 'build',
     release: 'release',
     verdict: 'verdict'
+  },
+  status: {
+    broken: 'broken',
+    fail: 'Fail',
+    pass: 'Pass'
   }
 };
