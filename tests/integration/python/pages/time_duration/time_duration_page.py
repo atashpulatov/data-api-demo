@@ -37,10 +37,25 @@ class TimeDurationPage(BasePage):
         return duration_difference < threshold
 
     def is_execution_time_not_longer_than(self, first_timer_name, second_timer_name):
+        """
+        Checks if execution time measured by the first timer is NOT longer (is shorter or equal) than
+        execution time measured by the second timer.
+
+        :param first_timer_name: Timer representing expected shorted duration.
+        :param second_timer_name: Timer representing expected longer duration.
+
+        :return: True when first duration is shorter, False otherwise.
+        """
         first_timer_duration = self._get_timer_duration(first_timer_name)
         second_timer_duration = self._get_timer_duration(second_timer_name)
 
-        return second_timer_duration >= first_timer_duration
+        if first_timer_duration <= second_timer_duration:
+            return True
+
+        self.log(f'Execution time comparison error, first_timer_duration [{first_timer_duration}] '
+                 f'is longer than second_timer_duration [{second_timer_duration}].')
+
+        return False
 
     def _get_timer_duration(self, timer_name):
         self._validate_timer(timer_name)

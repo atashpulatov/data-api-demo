@@ -38,5 +38,3 @@ Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop
 - [Adding support for a new platform](docs/development_adding_new_platform.md)
 - [Developer's notes](docs/development_notes.md)
 - [Developer's environment](docs/development_environment.md)
-
-### NOTE: This README is being updated

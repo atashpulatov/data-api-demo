@@ -61,12 +61,12 @@ class ColumnsAndFiltersSelectionFiltersBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionFiltersBrowserPage.FILTER_ELEMENT_AT % object_number
         ).text
 
-    def scroll_into_filter_by_number(self, object_number):
+    def scroll_into_and_select_filter_by_number(self, object_number):
         self.focus_on_add_in_popup_frame()
 
         self.get_element_by_css_no_visibility_checked(
             ColumnsAndFiltersSelectionFiltersBrowserPage.FILTER_ELEMENT_AT % object_number
-        ).move_to()
+        ).move_to_and_click()
 
     def hover_over_first_filter(self):
         self.focus_on_add_in_popup_frame()

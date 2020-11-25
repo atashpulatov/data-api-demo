@@ -1,19 +1,20 @@
 from framework.driver.driver_factory import DriverFactory
-from framework.pages_base.element_coordinates import ElementCoordinates
+from framework.pages_base.element_info import ElementInfo
 from framework.pages_base.image_element import ImageElement
 from framework.util.config_util import ConfigUtil
 from framework.util.const import DEFAULT_TIMEOUT
 
 
-class ElementGetUsingParent(ElementCoordinates):
+class ElementGetUsingParent(ElementInfo):
     """
+    TODO: UPDATE
     Class providing methods for getting elements using a given parent element (relative search).
 
     It improves performance on Windows Desktop by allowing usage of image recognition in this scenario and helps
     to simplify Pages code.
 
     Concrete implementation of finding element is specified by each method's name,
-    e.g. get_element_by_name_using_parent() uses self.get_element_center_coordinates_by_name_using_parent
+    e.g. get_element_by_name_using_parent() uses self.get_element_info_by_name_using_parent
     and parent_element.parent_element.get_element_by_name().
 
     Parameters for all get_element_by_*_using_parent() methods:
@@ -36,7 +37,7 @@ class ElementGetUsingParent(ElementCoordinates):
         image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.POPUP_CLOSE_BUTTON)
     )
 
-    self.get_element_center_coordinates_by_*_using_parent methods should raise MstrException when element not present.
+    self.get_element_info_by_*_using_parent methods should raise MstrException when element not present.
     """
 
     def __init__(self):
@@ -52,7 +53,7 @@ class ElementGetUsingParent(ElementCoordinates):
         if image_name and self.image_recognition_enabled:
             return self._get_image_element_using_parent(
                 parent_selection_method, parent_selector,
-                self.get_element_center_coordinates_by_name_using_parent, element_selector,
+                self.get_element_info_by_name_using_parent, element_selector,
                 image_name, timeout
             )
         else:
@@ -62,14 +63,15 @@ class ElementGetUsingParent(ElementCoordinates):
     def _get_image_element_using_parent(self, parent_selection_method, parent_selector,
                                         element_selection_method_image, element_selector,
                                         image_name=None, timeout=DEFAULT_TIMEOUT):
-        cached_element_coordinates = self.image_util.get_element_center_coordinates_by_image(image_name)
-        if cached_element_coordinates:
-            return ImageElement(cached_element_coordinates, self.driver)
+        image_data_cached = self.image_util.get_image_data_by_image_name(image_name)
+
+        if image_data_cached is not None:
+            return ImageElement(image_data_cached, self.driver)
 
         parent_element = parent_selection_method(parent_selector, timeout=timeout)
 
-        element_center_coordinates = element_selection_method_image(
+        image_data_by_selector = element_selection_method_image(
             parent_element, element_selector, timeout, image_name
         )
 
-        return ImageElement(element_center_coordinates, self.driver)
+        return ImageElement(image_data_by_selector, self.driver)

@@ -3,7 +3,7 @@ from framework.util.exception.MstrException import MstrException
 
 
 class ImportDossierTableOfContentsBrowserPage(BaseBrowserPage):
-    TABLE_OF_CONTENT_BUTTON = '.icon-toc'
+    TABLE_OF_CONTENT_BUTTON = '.icon-tb_toc_n'
     TABLE_OF_CONTENT_ITEMS = '.mstrd-ToCDropdownMenuContainer-menuText'
 
     def select_table_of_content_option(self, option_number):

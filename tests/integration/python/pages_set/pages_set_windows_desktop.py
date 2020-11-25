@@ -7,6 +7,8 @@ from pages.columns_and_filters_selection.display_attribute_form_names.display_at
     import DisplayAttributeFormNamesWindowsDesktopPage
 from pages.columns_and_filters_selection.filters.columns_and_filters_selection_filters_windows_desktop_page import \
     ColumnsAndFiltersSelectionFiltersWindowsDesktopPage
+from pages.columns_and_filters_selection.list_header.columns_and_filters_selection_list_header_windows_desktop_page \
+    import ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage
 from pages.columns_and_filters_selection.metrics.columns_and_filters_selection_metrics_windows_desktop_page import \
     ColumnsAndFiltersSelectionMetricsWindowsDesktopPage
 from pages.excel.cleanup.cleanup_windows_desktop_page import CleanupWindowsDesktopPage
@@ -15,6 +17,8 @@ from pages.excel.excel_menu.excel_menu_windows_desktop_page import ExcelMenuWind
 from pages.excel.excel_sheet.excel_sheet_windows_desktop_page import ExcelSheetWindowsDesktopPage
 from pages.filter_panel.filter_panel_windows_desktop_page import FilterPanelWindowsDesktopPage
 from pages.import_data.import_data_windows_desktop_page import ImportDataWindowsDesktopPage
+from pages.import_dossier.import_dossier_bookmarks.import_dossier_bookmarks_windows_desktop_page import \
+    ImportDossierBookmarksWindowsDesktopPage
 from pages.import_dossier.import_dossier_context_menu.import_dossier_context_menu_windows_desktop_page import \
     ImportDossierContextMenuWindowsDesktopPage
 from pages.import_dossier.import_dossier_filter.import_dossier_filter_windows_desktop_page import \
@@ -23,6 +27,8 @@ from pages.import_dossier.import_dossier_main.import_dossier_main_windows_deskto
     ImportDossierMainWindowsDesktopPage
 from pages.import_dossier.import_dossier_show_data.import_dossier_show_data_windows_desktop_page import \
     ImportDossierShowDataWindowsDesktopPage
+from pages.import_dossier.import_dossier_table_of_contents.import_dossier_table_of_contents_windows_desktop_page import \
+    ImportDossierTableOfContentsWindowsDesktopPage
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
 from pages.prompt.prompt_windows_desktop_page import PromptWindowsDesktopPage
@@ -31,6 +37,8 @@ from pages.right_panel.duplicate_object_popup.duplicate_object_popup_windows_des
 from pages.right_panel.range_taken_popup.range_taken_popup_windows_desktop_page import RangeTakenPopupWindowsDesktopPage
 from pages.right_panel.right_panel_main.right_panel_main_windows_desktop_page import RightPanelMainWindowsDesktopPage
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
+from pages.right_panel.right_panel_tile_details.right_panel_tile_details_windows_desktop_page import \
+    RightPanelTileDetailsWindowsDesktopPage
 from pages_set.abstract_pages_set import AbstractPagesSet
 
 
@@ -53,7 +61,7 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.not_logged_right_panel_windows_desktop_page = NotLoggedRightPanelWindowsDesktopPage()
         self.right_panel_windows_desktop_page = RightPanelMainWindowsDesktopPage()
         self.right_panel_tile_windows_desktop_page = RightPanelTileWindowsDesktopPage()
-        self.right_panel_tile_details_windows_desktop_page = None
+        self.right_panel_tile_details_windows_desktop_page = RightPanelTileDetailsWindowsDesktopPage()
 
         self.columns_and_filters_selection_windows_desktop_page = ColumnsAndFiltersSelectionWindowsDesktopPage()
         self.columns_and_filters_selection_attributes_windows_desktop_page = \
@@ -62,13 +70,14 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage()
         self.columns_and_filters_selection_filters_windows_desktop_page = \
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage()
-        self.columns_and_filters_selection_list_header_windows_desktop_page = None
+        self.columns_and_filters_selection_list_header_windows_desktop_page = \
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage()
         self.display_attribute_form_names_windows_desktop_page = DisplayAttributeFormNamesWindowsDesktopPage()
 
         self.import_dossier_windows_desktop_page = ImportDossierMainWindowsDesktopPage()
         self.import_dossier_filter_windows_desktop_page = ImportDossierFilterWindowsDesktopPage()
-        self.import_dossier_bookmarks_windows_desktop_page = None
-        self.import_dossier_table_of_contents_windows_desktop_page = None
+        self.import_dossier_bookmarks_windows_desktop_page = ImportDossierBookmarksWindowsDesktopPage()
+        self.import_dossier_table_of_contents_windows_desktop_page = ImportDossierTableOfContentsWindowsDesktopPage()
         self.import_dossier_context_menu_windows_desktop_page = ImportDossierContextMenuWindowsDesktopPage()
         self.import_dossier_show_data_windows_desktop_page = ImportDossierShowDataWindowsDesktopPage()
 
