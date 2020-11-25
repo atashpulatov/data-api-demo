@@ -21,7 +21,7 @@ class DriverWindowsDesktop(AbstractDriver):
     WIN_APP_DRIVER = 'WinAppDriver.exe'
     WIN_APP_DRIVER_START = r'start "" "C:\Program Files (x86)\Windows Application Driver\%s" ' \
                            r'127.0.0.1 4723/wd/hub' % WIN_APP_DRIVER
-    WIN_APP_DRIVER_STOP = r'taskkill /f /t /im %s > NUL 2> NUL' % WIN_APP_DRIVER
+    WIN_APP_DRIVER_STOP = r'taskkill /f /t /im %s' % WIN_APP_DRIVER
 
     DRIVER_INITIALIZATION_ATTEMPT_COUNT = 5
 

@@ -28,6 +28,11 @@ def step_impl(context, object_name):
     context.pages.import_data_page().find_and_select_object(object_name)
 
 
+@step('I selected object "{object_name}"')
+def step_impl(context, object_name):
+    context.pages.import_data_page().select_object_by_name(object_name)
+
+
 @step('I found object by ID "{object_id}" and selected "{object_name}"')
 def step_impl(context, object_id, object_name):
     context.pages.import_data_page().find_and_select_object_by_id(object_name, object_id)
@@ -70,7 +75,7 @@ def step_impl(context):
     AssertUtil.assert_simple(compare_result, True)
 
 
-@step('I close Import Data popup')
+@step('I closed Import Data popup')
 def step_impl(context):
     context.pages.import_data_page().close_import_data_popup()
 
@@ -83,6 +88,11 @@ def step_impl(context):
 @step('I clicked Import button and saw error "{error_message}"')
 def step_impl(context, error_message):
     context.pages.import_data_page().click_import_button_to_import_with_error(error_message)
+
+
+@step('I clicked Import button and saw global error "{error_message}"')
+def step_impl(context, error_message):
+    context.pages.import_data_page().click_import_button_to_import_with_global_error(error_message)
 
 
 @step('I hovered over the first object in the list')
@@ -98,17 +108,56 @@ def step_impl(context):
 @step('I verified that the background color of the first object is "{color}"')
 def step_impl(context, color):
     found_color = context.pages.import_data_page().find_the_color_of_first_object_in_list()
+
     AssertUtil.assert_simple(found_color, color)
 
 
 @step('I verified that Import button is disabled')
 def step_impl(context):
-    context.pages.import_data_page().verify_if_import_button_is_disabled()
+    is_disabled = context.pages.import_data_page().verify_if_import_button_is_enabled()
+
+    AssertUtil.assert_simple(is_disabled, False)
+
+
+@step('I verified that Import button is enabled')
+def step_impl(context):
+    is_disabled = context.pages.import_data_page().verify_if_import_button_is_enabled()
+
+    AssertUtil.assert_simple(is_disabled, True)
 
 
 @step('I cleared search box')
 def step_impl(context):
     context.pages.import_data_page().clear_search_box()
+
+
+@step('I clicked header on column "{header}"')
+def step_impl(context, header):
+    context.pages.import_data_page().click_column_header(header)
+
+
+@step('verified that objects are sorted "{expected_sort_order}" on column "{header}"')
+def step_impl(context, expected_sort_order, header):
+    sort_order = context.pages.import_data_page().get_column_header_sort_order(header)
+
+    AssertUtil.assert_simple(sort_order, expected_sort_order)
+
+
+@step('I scrolled down list of objects by {number} page(s)')
+def step_impl(context, number):
+    context.pages.import_data_page().scroll_objects_list_by_number_of_pages(number)
+
+
+@step('I scrolled down list of objects to end')
+def step_impl(context):
+    context.pages.import_data_page().scroll_objects_list_to_end()
+
+
+@step('verified that Filters has "{number}" categories selected')
+def step_impl(context, number):
+    filters_number = context.pages.import_data_page().get_filters_number()
+
+    AssertUtil.assert_simple(filters_number, number)
 
 
 @step('I hover over Import button')

@@ -3,21 +3,32 @@ import time
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.color import Color
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
-    ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS
+    ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS, \
+    MEDIUM_TIMEOUT
 from framework.util.exception.MstrException import MstrException
+from framework.util.image_util import ImageUtil
 from framework.util.util import Util
 
 
 class BaseElement:
     NAME_ATTRIBUTE = 'Name'
+    AUTOMATION_ID_ATTRIBUTE = 'AutomationId'
+    IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
+
+    ATTRIBUTE_VALUE_TRUE = 'true'
+
     BACKGROUND_COLOR_PROPERTY = 'background-color'
     OPACITY_PROPERTY = 'opacity'
 
     def __init__(self, raw_element, driver):
         self.__element = raw_element
         self.__driver = driver
+        self.__image = None
+
+        self.image_util = ImageUtil()
 
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
@@ -28,7 +39,7 @@ class BaseElement:
                 self.__element.click()
             except ElementClickInterceptedException as e:
                 Util.log_error(e)
-                Util.pause(120)  # wait for debug purposes
+                raise MstrException('Error while clicking an element.')
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
@@ -61,11 +72,21 @@ class BaseElement:
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
-    def right_click(self):
-        (ActionChains(self.__driver)
-         .move_to_element(self.__element)
-         .context_click()
-         .perform())
+    def right_click(self, offset_x=None, offset_y=None):
+        if offset_x is None or offset_y is None:
+            (ActionChains(self.__driver)
+             .move_to_element(self.__element)
+             .pause(AFTER_OPERATION_WAIT_TIME)
+             .context_click()
+             .perform())
+        else:
+            (ActionChains(self.__driver)
+             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .pause(AFTER_OPERATION_WAIT_TIME)
+             .context_click()
+             .perform())
+
+        Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     @property
     def id(self):
@@ -95,6 +116,12 @@ class BaseElement:
 
     def get_name_by_attribute(self):
         return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
+
+    def get_automation_id_by_attribute(self):
+        return self.get_attribute(BaseElement.AUTOMATION_ID_ATTRIBUTE)
+
+    def is_offscreen_by_attribute(self):
+        return self.get_attribute(BaseElement.IS_OFFSCREEN_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector):
         return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
@@ -160,6 +187,11 @@ class BaseElement:
 
         return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
 
+    def get_elements_by_tag_name(self, selector):
+        raw_elements = self.__element.find_elements_by_tag_name(selector)
+
+        return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
+
     def get_elements_by_css(self, selector):
         raw_elements = self.__element.find_elements_by_css_selector(selector)
 
@@ -180,7 +212,16 @@ class BaseElement:
         raise MstrException('Cannot find elements: %s' % selector)
 
     def get_background_color(self):
-        return self._value_of_css_property(BaseElement.BACKGROUND_COLOR_PROPERTY)
+        """
+        Gets background color of this element using CSS property 'background-color'.
+
+        Works only for Browsers.
+
+        :return: Background color as a hex string, e.g. '#ffaac1'.
+        """
+        css_color_property = self._value_of_css_property(BaseElement.BACKGROUND_COLOR_PROPERTY)
+
+        return Color.from_string(css_color_property).hex
 
     def get_opacity(self):
         return self._value_of_css_property(BaseElement.OPACITY_PROPERTY)
@@ -315,3 +356,33 @@ class BaseElement:
                 break
 
         raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')
+
+    def wait_until_disappears(self, timeout=MEDIUM_TIMEOUT):
+        """
+        Waits until this element disappears.
+
+        :raises MstrException: when element is still visible after timeout (in seconds).
+        """
+        start_time = time.time()
+
+        while self.is_displayed():
+            if time.time() - start_time > timeout:
+                raise MstrException(f'Element is still displayed after {timeout} seconds.')
+
+    def pick_color(self, offset_x=0, offset_y=0):
+        """
+        Picks color from coordinates relative to element left top corner (0, 0).
+
+        It uses this element's image screenshot to check the color.
+
+        Screenshot is taken once and cached.
+
+        :param offset_x: X coordinate to pick color from.
+        :param offset_y: Y coordinate to pick color from.
+
+        :return: Color as a hex string, e.g. '#ffaac1'.
+        """
+        if self.__image is None:
+            self.__image = self.image_util.get_element_image(self)
+
+        return self.image_util.get_color_from_image(self.__image, offset_x, offset_y)

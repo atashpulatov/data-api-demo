@@ -3,7 +3,7 @@ from framework.util.exception.MstrException import MstrException
 
 
 class ImportDossierFilterBrowserPage(BaseBrowserPage):
-    FILTERS_BUTTON = '.icon-filter'
+    FILTERS_BUTTON = '.mstrd-FilterNavItemContainer'
     FILTER_CHANGE_INCREASE = 'increased'
     FILTER_CHANGE_DECREASE = 'decreased'
     FILTER_SIDE_LEFT = 'left'
