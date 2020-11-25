@@ -3,11 +3,13 @@ import time
 from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.color import Color
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
     ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS, \
     MEDIUM_TIMEOUT
 from framework.util.exception.MstrException import MstrException
+from framework.util.image_util import ImageUtil
 from framework.util.util import Util
 
 
@@ -24,6 +26,9 @@ class BaseElement:
     def __init__(self, raw_element, driver):
         self.__element = raw_element
         self.__driver = driver
+        self.__image = None
+
+        self.image_util = ImageUtil()
 
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
@@ -207,7 +212,16 @@ class BaseElement:
         raise MstrException('Cannot find elements: %s' % selector)
 
     def get_background_color(self):
-        return self._value_of_css_property(BaseElement.BACKGROUND_COLOR_PROPERTY)
+        """
+        Gets background color of this element using CSS property 'background-color'.
+
+        Works only for Browsers.
+
+        :return: Background color as a hex string, e.g. '#ffaac1'.
+        """
+        css_color_property = self._value_of_css_property(BaseElement.BACKGROUND_COLOR_PROPERTY)
+
+        return Color.from_string(css_color_property).hex
 
     def get_opacity(self):
         return self._value_of_css_property(BaseElement.OPACITY_PROPERTY)
@@ -354,3 +368,21 @@ class BaseElement:
         while self.is_displayed():
             if time.time() - start_time > timeout:
                 raise MstrException(f'Element is still displayed after {timeout} seconds.')
+
+    def pick_color(self, offset_x=0, offset_y=0):
+        """
+        Picks color from coordinates relative to element left top corner (0, 0).
+
+        It uses this element's image screenshot to check the color.
+
+        Screenshot is taken once and cached.
+
+        :param offset_x: X coordinate to pick color from.
+        :param offset_y: Y coordinate to pick color from.
+
+        :return: Color as a hex string, e.g. '#ffaac1'.
+        """
+        if self.__image is None:
+            self.__image = self.image_util.get_element_image(self)
+
+        return self.image_util.get_color_from_image(self.__image, offset_x, offset_y)

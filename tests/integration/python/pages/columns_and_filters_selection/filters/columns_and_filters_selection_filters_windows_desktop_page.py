@@ -11,12 +11,13 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     FILTER_VALUES_BOX = '//DataGrid[@Name="grid"]/Group[contains(@Name,"%s")]'
     FILTER_VALUE_SELECTOR = '//Text[@Name="%s"]'
 
+    FIRST_FILTER = '//Tree[starts-with(@Name, \"icon_filter_blue\")]/TreeItem[1]'
+
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_X = 0
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_Y = -100
 
     FILTER_TREE = '(//Group/Tree)[2]'
-
-    FILTER_TREE_ITEM_AT = f'({FILTER_TREE}/TreeItem/Group/Text)[%s]'
+    FILTER_TREE_ITEM_AT = '(%s/TreeItem/Group/Text)[%%s]' % FILTER_TREE
 
     CLICKS_TO_SCROLL = 4
 
@@ -34,7 +35,7 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
             self._select_filter(filter_name)
 
             if elements_names:
-                parent_element = self.get_element_by_xpath(
+                parent_element = self.get_add_in_main_element().get_element_by_xpath(
                     ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_VALUES_BOX % elements_names[0]
                 )
 
@@ -69,11 +70,9 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
 
         :param object_number: Number of object to scroll to.
         """
-        popup_main_element = self.get_add_in_main_element()
-
         filter_element = self._find_filter_by_number(object_number)
 
-        filters_container = popup_main_element.get_element_by_xpath(
+        filters_container = self.get_add_in_main_element().get_element_by_xpath(
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE
         )
 
@@ -92,9 +91,7 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
         self.press_home()
 
     def _find_filter_by_number(self, object_number):
-        popup_main_element = self.get_add_in_main_element()
-
-        return popup_main_element.get_element_by_xpath(
+        return self.get_add_in_main_element().get_element_by_xpath(
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TREE_ITEM_AT % object_number
         )
 
@@ -102,3 +99,17 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
         for i in range(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.CLICKS_TO_SCROLL):
             filters_container_size = filters_container.size
             filters_container.click(filters_container_size['width'], filters_container_size['height'])
+
+    def hover_over_first_filter(self):
+        self._get_first_filter().move_to()
+
+    def select_first_filter(self):
+        self._get_first_filter().click(10, 10)
+
+    def get_background_color_of_first_filter(self):
+        return self._get_first_filter().pick_color(2, 2)
+
+    def _get_first_filter(self):
+        return self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FIRST_FILTER
+        )

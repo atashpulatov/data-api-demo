@@ -77,7 +77,7 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def clear_data(self):
-        self._open_dots_menu()
+        self._toggle_dots_menu()
 
         self.get_element_by_name(
             RightPanelMainWindowsDesktopPage.CLEAR_DATA,
@@ -90,17 +90,39 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def logout(self):
-        self._open_dots_menu()
+        self._toggle_dots_menu()
 
         self.get_element_by_accessibility_id(
             RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID,
             image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID)
         ).click()
 
-    def _open_dots_menu(self):
+    def _toggle_dots_menu(self):
         self.windows_desktop_workaround.focus_on_right_side_panel()
 
         self.get_element_by_name(
             RightPanelMainWindowsDesktopPage.DOTS_MENU_NAME,
             image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.DOTS_MENU_NAME)
         ).click()
+
+    def hover_over_logout(self):
+        self.windows_desktop_workaround.focus_on_right_side_panel()
+
+        self._toggle_dots_menu()
+
+        self.get_element_by_accessibility_id(
+            RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID,
+            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID)
+        ).move_to()
+
+    def get_background_color_of_logout(self):
+        element = self.get_element_by_accessibility_id(
+            RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID,
+            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.LOGOUT_ACCESSIBILITY_ID)
+        )
+
+        color = element.pick_color(5, 5)
+
+        self._toggle_dots_menu()  # Close dots menu
+
+        return color
