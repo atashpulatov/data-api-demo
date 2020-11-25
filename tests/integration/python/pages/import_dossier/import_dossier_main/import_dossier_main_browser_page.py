@@ -8,7 +8,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     VISUALIZATION_LABEL = '.mstrmojo-EditableLabel'
     VISUALIZATION_TILE = '.mstrmojo-UnitContainer'
 
-    RESET_BUTTON = 'div.mstr-nav-icon.icon-resetfile'
+    RESET_BUTTON = '.icon-tb_reset'
     RESET_CONFIRMATION_YES = '.mstrd-DeleteDossier-button'
 
     IMPORT_BUTTON = 'import'

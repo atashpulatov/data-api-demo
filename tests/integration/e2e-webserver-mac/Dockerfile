@@ -1,4 +1,4 @@
-FROM tomcat:9-jdk11-openjdk
+FROM nexus.internal.microstrategy.com:49080/tomcat:9-jdk11-openjdk
 EXPOSE 8005
 EXPOSE 8443
 COPY server.xml mstr-office.jks tomcat-users.xml  /usr/local/tomcat/conf/

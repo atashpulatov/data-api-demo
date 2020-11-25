@@ -1,5 +1,7 @@
+import time
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import SHORT_TIMEOUT, DEFAULT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -12,12 +14,12 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPTED_DOSSIER_RUN_BUTTON = 'Run'
     PROMPTED_DOSSIER_RUN_DOSSIER_BUTTON_IMAGE = PROMPTED_DOSSIER_RUN_BUTTON + 'Dossier'
 
-    PROMPT_LIST_ELEM = '//Group[contains(@Name,"%s")]/DataItem[@Name="%s"]'
+    PROMPT_LIST_ELEM = '//Group[starts-with(@Name,"%s")]/DataItem[@Name="%s"]'
     PROMPT_OBJECT_BOX = '(//DataItem[@Name="%s.%s"]/../following-sibling::Table' \
                         '[starts-with(@AutomationId, "id_mstr")][1]' \
                         '//Group[starts-with(@AutomationId, "ListBlockContents")])[%s]/Group[@Name="%s"]'
 
-    PROMPT_VALUE_ELEM = '//Edit[starts-with(@AutomationId,"id_mstr") and contains(@AutomationId, "_txt")]'
+    PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem/Table/DataItem/Edit'
 
     PROMPT_NAME_SEPARATOR = '.'
     PROMPT_NAME_IMAGE_PREFIX = 'prompt_title_'
@@ -25,13 +27,16 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_FIELD_LABEL = '//Group[@AutomationId=\"mstrdossierPromptEditor\"]/Table[1]/DataItem[3]/Table[1]/DataItem[2]'
 
     def wait_for_run_button(self):
-        run_button_exists = self.check_if_element_exists_by_xpath(
-            PromptWindowsDesktopPage.PROMPT_RUN_BUTTON,
-            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
-        )
+        end_time = time.time() + DEFAULT_TIMEOUT
 
-        if not run_button_exists:
-            raise MstrException(f'Run button not exists or is not enabled.')
+        while end_time > time.time():
+            if self.check_if_element_exists_by_xpath(
+                    PromptWindowsDesktopPage.PROMPT_RUN_BUTTON,
+                    image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
+            ):
+                return True
+
+        raise MstrException(f'Run button not exists or is not enabled.')
 
     def click_run_button(self):
         prompt_field_label = self.get_add_in_main_element().get_element_by_xpath(
@@ -118,9 +123,11 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     def select_answer_for_value_prompt(self, prompt_number, prompt_name, text):
         self._select_prompt_from_list(prompt_number, prompt_name)
 
-        prompt = self.get_element_by_xpath(PromptWindowsDesktopPage.PROMPT_VALUE_ELEM)
+        prompt = self.get_element_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_VALUE_ELEM % (prompt_number, prompt_name)
+        )
 
-        prompt.double_click()
+        prompt.click()
         prompt.send_keys(text)
 
         self.press_tab()

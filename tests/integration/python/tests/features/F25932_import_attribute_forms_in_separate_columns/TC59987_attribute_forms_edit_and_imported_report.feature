@@ -10,7 +10,7 @@ Feature: F25932 - Import attribute forms in separate columns
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
-      And I found and selected object "06 Sort by Revenue Rank - Month Report Filter"
+      And I found object by ID "5881BE8D41D8E8BED284FBB403DD51BD" and selected "06 Sort by Revenue Rank - Month Report Filter"
       And I clicked Prepare Data button
       And I verified that Columns & Filters Selection is visible
 

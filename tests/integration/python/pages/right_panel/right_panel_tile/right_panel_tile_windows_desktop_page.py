@@ -14,6 +14,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     NOTIFICATION_ICON = 'successful_fill'
 
     BUTTON_OK = 'OK'
+    DUPLICATING_TEXT_ELEM = 'Duplicating'
     REFRESHING_TEXT_ELEM = 'Refreshing'
     IMPORTING_TEXT_ELEM = 'Importing'
     REMOVING_TEXT_ELEM = 'Removing'
@@ -24,7 +25,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
-    TILES_WRAPPER = '//Group[starts-with(@Name,"Imported Data")]/List'
+    TILES_WRAPPER = '//Group[starts-with(@Name, "Imported Data")]/List'
     TILE_ELEM = '//DataItem'
 
     NAME_INPUT_FOR_OBJECT = '//Button/Text'
@@ -34,10 +35,18 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     RENAME_MENU_ITEM = 'Rename'
     REMOVE_MENU_ITEM = 'Remove'
 
+    XML_FIRST_ELEMENT_INDEX = '1'
+
     def wait_for_import_object_to_finish_successfully(self):
         self._wait_until_element_disappears(
             self.check_if_element_exists_by_name,
             RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM
+        )
+
+    def wait_for_duplicate_object_to_finish_successfully(self):
+        self._wait_until_element_disappears(
+            self.check_if_element_exists_by_name,
+            RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM
         )
 
     def wait_for_refresh_object_to_finish_successfully(self):
@@ -59,7 +68,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         )
 
     def wait_for_progress_notifications_to_disappear(self):
-        right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
+        right_panel_element = self.get_add_in_right_panel_element()
 
         self._wait_until_element_disappears(
             right_panel_element.check_if_element_exists_by_tag_name,
@@ -87,17 +96,12 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.click()
 
     def close_last_notification_on_hover(self):
-        self._wait_for_last_operation_to_finish_successfully()
+        self.wait_for_progress_notifications_to_disappear()
 
-        self._hover_over_tile(0)
-
-    def _wait_for_last_operation_to_finish_successfully(self):
-        while not self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
-                                                                   timeout=SHORT_TIMEOUT):
-            pass
+        self._hover_over_tile(RightPanelTileWindowsDesktopPage.XML_FIRST_ELEMENT_INDEX)
 
     def close_object_notification_on_hover(self, object_no):
-        self._hover_over_tile(int(object_no) - 1)
+        self._hover_over_tile(object_no)
 
     def click_duplicate(self, tile_no):
         WindowsDesktopMainAddInElementCache.invalidate_cache()
@@ -142,7 +146,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         found_element = elements[object_index]
 
         # Workaround - hover over the tile and move mouse a little to gain focus
-        self._hover_over_tile(object_index)
+        self._hover_over_tile(tile_no)
 
         found_element.move_to(20, 20)
         found_element.move_to(-20, -20)
@@ -150,12 +154,12 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         found_element.click()
 
     def _hover_over_tile(self, tile_no):
-        self._get_object_by_index(
+        self._get_object_by_number(
             tile_no
         ).move_to()
 
     def get_object_name(self, index):
-        right_panel_element = self.get_element_by_name(RightPanelTileWindowsDesktopPage.RIGHT_PANEL_ELEM)
+        right_panel_element = self.get_add_in_right_panel_element()
 
         object_name_element = right_panel_element.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.OBJECT_NAME_ELEM % index
@@ -164,10 +168,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         return object_name_element.get_name_by_attribute()
 
     def click_object_number(self, object_no):
-        self._get_object_by_index(object_no).click()
+        self._get_object_by_number(object_no).click()
 
     def change_object_name_using_icon(self, object_no, new_object_name):
-        object_tile_elem = self._get_object_by_index(object_no)
+        object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
         name_container.move_to()
@@ -179,7 +183,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self.press_enter()
 
     def change_object_name_using_context_menu(self, object_no, new_object_name):
-        object_tile_elem = self._get_object_by_index(object_no)
+        object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
         name_container.move_to()
@@ -195,11 +199,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self.press_enter()
 
     def remove_object_using_context_menu(self, object_no):
-        object_tile_elem = self._get_object_by_index(object_no)
+        object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
-        name_container.move_to()
-        name_container.right_click()
+        name_container.right_click(5, 5)  # Added small offset to ensure that right click occurs within searched element
 
         object_tile_elem.get_element_by_name(
             RightPanelTileWindowsDesktopPage.REMOVE_MENU_ITEM
@@ -208,7 +211,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self.wait_using_parent_for_remove_object_to_finish_successfully(object_tile_elem)
 
     def get_object_name_from_tooltip(self, object_no):
-        object_tile_elem = self._get_object_by_index(object_no)
+        object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
         name_container.move_to()
@@ -217,8 +220,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return tooltip_text_elem.text
 
-    def _get_object_by_index(self, object_no):
-        tiles_wrapper = self.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
+    def _get_object_by_number(self, object_no):
+        right_panel_element = self.get_add_in_right_panel_element()
+
+        tiles_wrapper = right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
 
         tiles = tiles_wrapper.get_elements_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM)
 
