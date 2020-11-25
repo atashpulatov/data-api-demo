@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from framework.pages_base.base_element import BaseElement
 from framework.util.const import AFTER_OPERATION_WAIT_TIME
 from framework.util.exception.MstrException import MstrException
+from framework.util.image_util import ImageUtil
 from framework.util.util import Util
 
 
@@ -12,12 +13,12 @@ class ImageElement(BaseElement):
 
     excel_element = None
 
-    def __init__(self, image_name, corners_coordinates, image, driver):
+    def __init__(self, image_data, driver):
         super().__init__(None, driver)
-        self.__image_name = image_name
-        self.__corners_coordinates = corners_coordinates
-        self.__image = image
+        self.__image_data = image_data
         self.__driver = driver
+
+        self.image_util = ImageUtil()
 
     @classmethod
     def reset_excel_root_element(cls, driver, root_element=EXCEL_ROOT_ELEMENT):
@@ -26,8 +27,8 @@ class ImageElement(BaseElement):
     def click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
-                                      self.center_coordinates[0] + offset_x,
-                                      self.center_coordinates[1] + offset_y)
+                                      self.__image_data.center_coordinates['x'] + offset_x,
+                                      self.__image_data.center_coordinates['y'] + offset_y)
          .click()
          .perform())
 
@@ -36,8 +37,8 @@ class ImageElement(BaseElement):
     def double_click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
-                                      self.center_coordinates[0] + offset_x,
-                                      self.center_coordinates[1] + offset_y)
+                                      self.__image_data.center_coordinates['x'] + offset_x,
+                                      self.__image_data.center_coordinates['y'] + offset_y)
          .double_click()
          .perform())
 
@@ -46,8 +47,8 @@ class ImageElement(BaseElement):
     def right_click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
-                                      self.__center_coordinates[0] + offset_x,
-                                      self.__center_coordinates[1] + offset_y)
+                                      self.__image_data.center_coordinates['x'] + offset_x,
+                                      self.__image_data.center_coordinates['y'] + offset_y)
          .context_click()
          .perform())
 
@@ -95,55 +96,47 @@ class ImageElement(BaseElement):
     def move_to(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
-                                      self.center_coordinates[0] + offset_x,
-                                      self.center_coordinates[1] + offset_y)
+                                      self.__image_data.center_coordinates['x'] + offset_x,
+                                      self.__image_data.center_coordinates['y'] + offset_y)
          .perform())
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
 
     @property
     def size(self):
-        left, top, right, bottom = self.corners_coordinates
-
-        width = right - left
-        height = bottom - top
-
-        return {
-            'width': width,
-            'height': height
-        }
+        return self.__image_data.size
 
     @property
     def location(self):
-        left, top, _, _ = self.corners_coordinates
-
         return {
-            'x': left,
-            'y': top
+            'x': self.__image_data.coordinates['left'],
+            'y': self.__image_data.coordinates['top']
         }
 
     @property
-    def center_coordinates(self):
-        left = self.location['x']
-        top = self.location['y']
-        width = self.size['height']
-        height = self.size['height']
-
-        return (
-            left + int(width / 2),
-            top + int(height / 2)
-        )
-
-    @property
     def corners_coordinates(self):
-        return self.__corners_coordinates
+        return self.__image_data.coordinates
 
     @property
     def image_name(self):
-        return self.__image_name
+        return self.__image_data.image_name
 
     def send_keys(self, special_key):
         raise MstrException('Invalid usage of ImageElement, send_keys() is not allowed')
 
     def send_keys_with_check(self, text):
         raise MstrException('Invalid usage of ImageElement, send_keys_with_check() is not allowed')
+
+    def pick_color(self, offset_x=0, offset_y=0, force_new_screenshot=False):
+        """
+        Picks color from coordinates relative to element left top corner (0, 0).
+
+        It uses image stored in this ImageElement.
+
+        :param offset_x: X coordinate to pick color from.
+        :param offset_y: Y coordinate to pick color from.
+        :param force_new_screenshot: not used in Image Element.
+
+        :return: Color as a hex string, e.g. '#ffaac1'.
+        """
+        return self.image_util.get_color_from_image(self.__image_data.image, offset_x, offset_y)

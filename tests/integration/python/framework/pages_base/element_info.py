@@ -4,14 +4,11 @@ from selenium.webdriver.common.by import By
 from framework.util.const import DEFAULT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from framework.util.image_util import ImageUtil
-from framework.util.util import Util
 
 
 class ElementInfo:
     """
-    TODO: UPDATE
-
-    Class providing methods for finding element center's coordinates. If enabled, all methods use image recognition.
+    Class providing methods for finding element information (ImageData). If enabled, all methods use image recognition.
 
     Concrete implementation of finding element is specified by each method's name,
     e.g. get_element_info_by_name() uses By.NAME.
@@ -29,7 +26,7 @@ class ElementInfo:
 
     element = self.get_element_info_by_name_using_parent(parent_element, selector)
 
-    When safe = True, all get_element_info_by_*() methods return None when element is not present when,
+    When safe = True, all get_element_info_by_*() methods return None when element is not present,
     when safe = False, those methods raise MstrException when element is not present (default behavior).
     """
 
@@ -63,13 +60,10 @@ class ElementInfo:
         return self._get_element_info(By.TAG_NAME, selector, timeout, image_name, safe)
 
     def _get_element_info(self, selector_type, selector, timeout, image_name, safe):
-        element_data = self.image_util.get_element_info_by_image(image_name)
+        image_data = self.image_util.get_image_data_by_image_name(image_name)
 
-        if element_data is not None:
-            _, coordinates, image = element_data
-
-            if coordinates is not None and image is not None:
-                return element_data
+        if image_data is not None:
+            return image_data
 
         return self._get_element_info_using_parent(selector_type, selector, timeout, image_name, None, safe)
 
@@ -114,14 +108,13 @@ class ElementInfo:
 
     def _get_element_info_using_parent(self, selector_type, selector,
                                        timeout, image_name, parent_element, safe=False):
-        element_info = self.image_util.get_element_info_and_save_image(
+        image_data = self.image_util.get_image_data_and_save_image(
             selector_type, selector, timeout, image_name, parent_element
         )
-        _, coordinates, image = element_info
 
-        if not safe and coordinates is None and image is None:
+        if not safe and image_data is None:
             raise MstrException(f'No element found using selector_type: [{selector_type}], selector: [{selector}], '
                                 f'image_name: [{image_name}], timeout: [{timeout}], '
                                 f'parent_element: [{parent_element}].')
 
-        return element_info
+        return image_data

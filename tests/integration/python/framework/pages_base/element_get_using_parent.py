@@ -63,16 +63,15 @@ class ElementGetUsingParent(ElementInfo):
     def _get_image_element_using_parent(self, parent_selection_method, parent_selector,
                                         element_selection_method_image, element_selector,
                                         image_name=None, timeout=DEFAULT_TIMEOUT):
-        cached_element_info = self.image_util.get_element_info_by_image(image_name)
-        _, coordinates, image = cached_element_info
+        image_data_cached = self.image_util.get_image_data_by_image_name(image_name)
 
-        if coordinates and image:
-            return ImageElement(*cached_element_info, self.driver)
+        if image_data_cached is not None:
+            return ImageElement(image_data_cached, self.driver)
 
         parent_element = parent_selection_method(parent_selector, timeout=timeout)
 
-        element_info = element_selection_method_image(
+        image_data_by_selector = element_selection_method_image(
             parent_element, element_selector, timeout, image_name
         )
 
-        return ImageElement(*element_info, self.driver)
+        return ImageElement(image_data_by_selector, self.driver)

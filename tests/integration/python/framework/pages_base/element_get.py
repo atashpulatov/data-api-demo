@@ -39,31 +39,31 @@ class ElementGet(ElementCheck):
 
     def get_element_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
-            return ImageElement(*self.get_element_info_by_xpath(selector, timeout, image_name), self.driver)
+            return ImageElement(self.get_element_info_by_xpath(selector, timeout, image_name), self.driver)
         else:
             return BaseElement(self._get_raw_element(By.XPATH, selector, timeout), self.driver)
 
     def get_element_by_class_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
-            return ImageElement(*self.get_element_info_by_class_name(selector, timeout, image_name), self.driver)
+            return ImageElement(self.get_element_info_by_class_name(selector, timeout, image_name), self.driver)
         else:
             return BaseElement(self._get_raw_element(By.CLASS_NAME, selector, timeout), self.driver)
 
     def get_element_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
-            return ImageElement(*self.get_element_info_by_name(selector, timeout, image_name), self.driver)
+            return ImageElement(self.get_element_info_by_name(selector, timeout, image_name), self.driver)
         else:
             return BaseElement(self._get_raw_element(By.NAME, selector, timeout), self.driver)
 
     def get_element_by_accessibility_id(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
-            return ImageElement(*self.get_element_info_by_mobile_accessibility_id(selector, timeout), self.driver)
+            return ImageElement(self.get_element_info_by_mobile_accessibility_id(selector, timeout), self.driver)
         else:
             return BaseElement(self._get_raw_element(MobileBy.ACCESSIBILITY_ID, selector, timeout), self.driver)
 
     def get_element_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
-            return ImageElement(*self.get_element_info_by_tag_name(selector, timeout, image_name), self.driver)
+            return ImageElement(self.get_element_info_by_tag_name(selector, timeout, image_name), self.driver)
         else:
             return BaseElement(self._get_raw_element(By.TAG_NAME, selector, timeout), self.driver)
 

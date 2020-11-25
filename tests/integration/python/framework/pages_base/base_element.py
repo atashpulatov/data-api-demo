@@ -369,31 +369,20 @@ class BaseElement:
             if time.time() - start_time > timeout:
                 raise MstrException(f'Element is still displayed after {timeout} seconds.')
 
-    def pick_color(self, offset_x=0, offset_y=0, force_new_screenshot=False):
+    def pick_color(self, offset_x=0, offset_y=0):
         """
         Picks color from coordinates relative to element left top corner (0, 0).
 
-        It uses this element image screenshot to check the color.
+        It uses this element's image screenshot to check the color.
+
+        Screenshot is taken once and cached.
 
         :param offset_x: X coordinate to pick color from.
         :param offset_y: Y coordinate to pick color from.
-        :param force_new_screenshot: Flag indicating if element screenshot should be taken even if
-        cached image already exists.
 
         :return: Color as a hex string, e.g. '#ffaac1'.
         """
-        self._store_element_image(force_new_screenshot)
+        if self.__image is None:
+            self.__image = self.image_util.get_element_image(self)
 
         return self.image_util.get_color_from_image(self.__image, offset_x, offset_y)
-
-    def _store_element_image(self, force_new_screenshot=False):
-        """
-        Stores this element screenshot image in this object.
-
-        New image is stored in self.__image if it doesn't already exist or force_new_screenshot flag is True.
-
-        :param force_new_screenshot: Flag indicating if element screenshot should be taken even if
-        cached image already exists.
-        """
-        if self.__image is None or force_new_screenshot:
-            self.__image = self.image_util.get_element_image(self)

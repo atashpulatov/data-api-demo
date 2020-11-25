@@ -8,19 +8,20 @@ import cv2
 from PIL import Image
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 # from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.support.wait import WebDriverWait
+# from selenium.webdriver.support.wait import WebDriverWait
 
 from framework.driver.driver_factory import DriverFactory
 from framework.util.config_util import ConfigUtil
 from framework.util.const import DEFAULT_IMAGE_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS
 from framework.util.const import DEFAULT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
+from framework.util.image_data import ImageData
 from framework.util.util import Util
 
 
 class ImageUtil:
     """
-    Class providing core methods for finding element center's coordinates. Uses image recognition if enabled.
+    Class providing core methods for finding element's ImageData. Uses image recognition if enabled.
     """
 
     def __init__(self):
@@ -42,37 +43,37 @@ class ImageUtil:
 
     RGB_TO_HEX_PATTERN = '#{:x}{:x}{:x}'
 
-    def get_element_info_by_image(self, image_name):
+    def get_image_data_by_image_name(self, image_name):
         """
-        TODO: UPDATE
-        Gets element center's coordinates using image recognition.
+        Gets element's ImageData using image recognition.
 
-        Returns element center's coordinates (x, y) when image recognition is globally enabled, image given by
-        image_name is present in cache, and is currently visible on screen,
+        Returns element's ImageData (see ImageData for details) when image recognition is globally enabled,
+        image given by image_name is present in cache, and is currently visible on screen,
 
         or
 
         None when image recognition is disabled globally, image_name is empty, or image is currently not
         present on screen.
 
-        Note: coordinates of THE FIRST matching element are returned.
+        Note: data of THE FIRST matching element is returned.
 
         :param image_name: Name of image stored in images cache.
-        :return: Element's coordinates (x, y) or None.
+
+        :return: Element's ImageData or None.
         """
         if image_name and self.image_recognition_enabled:
             image = self._get_element_gray_image(image_name)
             coordinates = self._get_element_corners_coordinates_by_image(image)
 
-            return image_name, coordinates, image
+            if coordinates is not None:
+                return ImageData(image, image_name, coordinates)
 
         return None
 
-    def get_element_info_and_save_image(self, selector_type, selector,
-                                        timeout, image_name, parent_element=None):
+    def get_image_data_and_save_image(self, selector_type, selector,
+                                      timeout, image_name, parent_element=None):
         """
-        TODO: UPDATE
-        Gets element center coordinates and saves its image (if image recognition is enabled).
+        Gets element's ImageData and saves its image (if image recognition is enabled).
 
         Supports relative search when parent_element is provided.
 
@@ -85,14 +86,15 @@ class ImageUtil:
         :param image_name: Image name to store element's screenshot as.
         :param parent_element: Parent element to start relative search from, if not provided - use absolute search.
 
-        :return: Raw element found using selector_type and selector or None if not found.
+        :return: ImageData found using selector_type and selector or None if not found.
         """
 
         self.driver.implicitly_wait(timeout)
 
         start_time = time.time()
 
-        wait = WebDriverWait(self.driver, timeout)
+        # TODO to be removed if not needed
+        # wait = WebDriverWait(self.driver, timeout)
 
         try:
             # TODO to be removed if not needed
@@ -105,12 +107,13 @@ class ImageUtil:
 
             element_coordinates = self._calculate_element_coordinates(element)
 
-            image = self._save_element_image(element, image_name)
+            element_image = self.get_element_image(element)
+            self._save_element_image(element_image, image_name)
 
             Util.log(f'Element found by selector: [{selector}], coordinates: [{element_coordinates}], '
                      f'time: [{time.time() - start_time}]')
 
-            return image_name, element_coordinates, image
+            return ImageData(element_image, image_name, element_coordinates)
 
         except NoSuchElementException:
             pass
@@ -206,12 +209,12 @@ class ImageUtil:
             right = left + element_gray_image.shape[1]
             bottom = top + element_gray_image.shape[0]
 
-            return (
-                left,
-                top,
-                right,
-                bottom
-            )
+            return {
+                'left': left,
+                'top': top,
+                'right': right,
+                'bottom': bottom
+            }
 
         return None
 
@@ -223,23 +226,20 @@ class ImageUtil:
 
         return current_full_screen_file_path
 
-    def _save_element_image(self, element, file_name_prefix):
+    def _save_element_image(self, element_image, file_name_prefix):
         if file_name_prefix and self.image_recognition_enabled:
             element_file_name = self._prepare_image_file_path(file_name_prefix)
 
-            element_image = self.get_element_image(element)
             element_image.save(element_file_name)
-
-            return element_image
-
-        return None
 
     def get_element_image(self, element):
         screenshot_image = self._get_full_screen_image()
 
         coordinates = self._calculate_element_coordinates(element)
 
-        return screenshot_image.crop(coordinates)
+        return screenshot_image.crop(
+            (coordinates['left'], coordinates['top'], coordinates['right'], coordinates['bottom'])
+        )
 
     def _get_full_screen_image(self):
         screenshot_png = self.driver.get_screenshot_as_png()
@@ -255,7 +255,12 @@ class ImageUtil:
         right = left + element_size['width']
         bottom = top + element_size['height']
 
-        return left, top, right, bottom
+        return {
+            'left': left,
+            'top': top,
+            'right': right,
+            'bottom': bottom
+        }
 
     def _prepare_image_file_path(self, file_name_prefix):
         screenshots_folder = self._get_screenshots_folder()

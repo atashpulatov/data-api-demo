@@ -1,9 +1,11 @@
+import time
+
 from pyperclip import paste
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
-from framework.util.const import MEDIUM_TIMEOUT
+from framework.util.const import MEDIUM_TIMEOUT, DEFAULT_TIMEOUT, SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from framework.util.message_const import MessageConst
 from framework.util.util import Util
@@ -26,7 +28,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     ARIA_PROPERTY_CHECKED = 'checked'
 
     IMPORT_BUTTON_ELEM = 'Import'
-    IMPORT_BUTTON_DISABLED_BORDER_COLOR = '#e9e9e9'
+    IMPORT_BUTTON_ENABLED_BORDER_COLOR = '#d8d8d8'
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
     ERROR_MESSAGE_BUTTON_OK = 'OK'
@@ -148,13 +150,21 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._click_import_button()
 
-        if not self.check_if_element_exists_by_name(error_message):
-            raise MstrException('Different notification displayed')
+        self._check_if_error_message_exists(error_message)
 
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK,
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK)
         ).click()
+
+    def _check_if_error_message_exists(self, error_message):
+        end_time = time.time() + DEFAULT_TIMEOUT
+
+        while end_time > time.time():
+            if self.check_if_element_exists_by_name(error_message, timeout=SHORT_TIMEOUT):
+                return
+
+        raise MstrException(f'Different notification displayed, expected: [{error_message}].')
 
     def click_import_button_to_open_import_dossier(self):
         self.windows_desktop_workaround.focus_on_popup_window()
@@ -238,45 +248,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def hover_over_first_object_in_list(self):
-        self._scroll_up_until_first_object_doesnt_chage()
+        self._scroll_to_top_of_object_list()
 
         self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).move_to()
 
-    def _scroll_up_until_first_object_doesnt_chage(self):
+    def _scroll_to_top_of_object_list(self):
         object_list = self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.OBJECT_LIST)
 
         object_list.click(object_list.size['width'] - 10, 10)
 
-        first_element = self.get_add_in_main_element().get_element_by_xpath(
-            ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW
-        )
-
-        object_list.send_keys((
-            Keys.PAGE_UP,
-            Keys.PAGE_UP,
-            Keys.PAGE_UP,
-            Keys.PAGE_UP,
-            Keys.PAGE_UP
-        ))
-
-        for i in range(ImportDataWindowsDesktopPage.MAXIMUM_SCROLLS):
-            new_first_element = self.get_add_in_main_element().get_element_by_xpath(
-                ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW
-            )
-
-            if new_first_element != first_element:
-                object_list.send_keys((
-                    Keys.PAGE_UP,
-                    Keys.PAGE_UP,
-                    Keys.PAGE_UP,
-                    Keys.PAGE_UP,
-                    Keys.PAGE_UP
-                ))
-
-                first_element = new_first_element
-
-            else:
-                break
+        object_list.send_keys(Keys.HOME)
 
     def select_first_object_from_list(self):
         self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).click()
@@ -296,16 +277,13 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).get_name_by_attribute()
 
     def find_the_color_of_first_object_in_list(self):
-        element = self.get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW)
+        element = self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW)
 
         return element.pick_color(5, 5)
 
-    def verify_if_import_button_is_disabled(self):
+    def verify_if_import_button_is_enabled(self):
         element = self.get_element_by_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
 
         border_color = element.pick_color(20, 0)
 
-        if border_color != ImportDataWindowsDesktopPage.IMPORT_BUTTON_DISABLED_BORDER_COLOR:
-            raise MstrException(f'Import button is enabled, expected border color: '
-                                f'{ImportDataWindowsDesktopPage.IMPORT_BUTTON_DISABLED_BORDER_COLOR}, instead got: '
-                                f'{border_color}')
+        return border_color == ImportDataWindowsDesktopPage.IMPORT_BUTTON_ENABLED_BORDER_COLOR
