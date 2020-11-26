@@ -16,7 +16,7 @@ Feature: TF9328 - Release Validation
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found and selected object "01 Basic Report"
+      And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
       And I clicked Import button
       And I closed all notifications
      Then number of worksheets should be 2
@@ -27,9 +27,6 @@ Feature: TF9328 - Release Validation
      Then columns ["A", "N"] are selected
 
      When I clicked on object 1
-     Then columns ["A", "F"] are selected
-
-     When I clicked twice on the name of object 1
      Then columns ["A", "F"] are selected
 
      When I selected worksheet number 1
