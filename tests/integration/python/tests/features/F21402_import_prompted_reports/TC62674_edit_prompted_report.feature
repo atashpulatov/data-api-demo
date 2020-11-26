@@ -63,3 +63,5 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
      When I clicked Refresh on object 1
       And I closed last notification
      Then cells ["A2", "C3", "E3"] should have values ["2016", "Books", "$5,137"]
+
+      And I logged out
