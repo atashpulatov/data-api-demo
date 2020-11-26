@@ -1,3 +1,5 @@
+import logging
+
 from behave.contrib.scenario_autoretry import patch_scenario_with_autoretry
 
 from framework.driver.driver_factory import DriverFactory
@@ -11,29 +13,41 @@ from pages_set.pages_set_factory import PagesSetFactory
 
 
 def before_all(context):
-    context.config.setup_logging(
-        format='%(asctime)s %(levelname)-7s %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
-    ConfigUtil.initialize(context)
+    try:
+        context.config.setup_logging(
+            format='%(asctime)s %(levelname)-7s %(message)s',
+            datefmt='%Y-%m-%d %H:%M:%S'
+        )
+        ConfigUtil.initialize(context)
 
-    TestUtil.global_test_startup()
+        TestUtil.global_test_startup()
+    except Exception as e:
+        logging.exception('')
+        raise e
 
 
 def before_feature(context, feature):
-    max_attempts = ConfigUtil.get_max_no_of_test_executions()
+    try:
+        max_attempts = ConfigUtil.get_max_no_of_test_executions()
 
-    for scenario in feature.scenarios:
-        patch_scenario_with_autoretry(scenario, max_attempts=max_attempts)
+        for scenario in feature.scenarios:
+            patch_scenario_with_autoretry(scenario, max_attempts=max_attempts)
 
-    WindowsDesktopMainAddInElementCache.invalidate_right_panel_cache()
+        WindowsDesktopMainAddInElementCache.invalidate_right_panel_cache()
+    except Exception as e:
+        logging.exception('')
+        raise e
 
 
 def before_scenario(context, scenario):
-    if ConfigUtil.is_attaching_to_existing_session_enabled():
-        _initialize_using_existing_session(context)
-    else:
-        initialize_using_new_session(context)
+    try:
+        if ConfigUtil.is_attaching_to_existing_session_enabled():
+            _initialize_using_existing_session(context)
+        else:
+            initialize_using_new_session(context)
+    except Exception as e:
+        logging.exception('')
+        raise e
 
 
 def _initialize_using_existing_session(context):
@@ -63,10 +77,18 @@ def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME):
 
 
 def after_scenario(context, scenario):
-    if ConfigUtil.is_cleanup_after_tests_enabled():
-        context.pages.cleanup_page().clean_up_after_each_test()
+    try:
+        if ConfigUtil.is_cleanup_after_tests_enabled():
+            context.pages.cleanup_page().clean_up_after_each_test()
+    except Exception as e:
+        logging.exception('')
+        raise e
 
 
 def after_all(context):
-    if ConfigUtil.is_cleanup_after_tests_enabled():
-        TestUtil.global_test_cleanup()
+    try:
+        if ConfigUtil.is_cleanup_after_tests_enabled():
+            TestUtil.global_test_cleanup()
+    except Exception as e:
+        logging.exception('')
+        raise e
