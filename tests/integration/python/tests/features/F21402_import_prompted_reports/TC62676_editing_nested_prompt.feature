@@ -1,4 +1,5 @@
 @mac_chrome
+@release_validation
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC62676] - Editing prompted reports functionality while report contains nested prompts imported without Prepare Data
