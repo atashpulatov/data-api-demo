@@ -61,7 +61,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         raise MstrException('Visualization not found: %s.' % visualization_name)
 
     def click_import_visualization(self):
-        self.focus_on_add_in_frame()
+        self.focus_on_add_in_popup_frame()
 
         self.get_element_by_id(ImportDossierMainBrowserPage.IMPORT_BUTTON).click()
 
