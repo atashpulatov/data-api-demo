@@ -26,7 +26,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I selected "Year" as an answer for "1. Choose from a list of attributes/hierarchies to define level." prompt - object prompt
       And I clicked Run button
       # TODO Then I verified Run button is disabled
-#      And I verified that Columns & Filters Selection is visible
+      And I verified that Columns & Filters Selection is visible
       And I verified popup title is "Report with nested prompt"
       And I verified that counter of "metrics" shows "3" of "3" selected
       And I verified that counter of "attributes" shows "3" of "3" selected
