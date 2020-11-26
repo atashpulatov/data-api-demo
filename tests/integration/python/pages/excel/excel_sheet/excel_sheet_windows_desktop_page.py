@@ -11,6 +11,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     VALUE_ATTRIBUTE = 'Value.Value'
 
     BOOK_ELEM = 'Book1'
+    GRID_ELEM = 'Grid'
     BOOK_CHILDREN_ELEMS = '//TabItem'
     NAME_ATTRIBUTE = 'Name'
     SHEET_TAB_NAME = 'Sheet Tab'
@@ -27,10 +28,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     LIGHT_GREEN_TABLE = "Light Green, Table Style Light 21"
     LIGHT_GREEN = "Light Green"
 
-    COLUMN_ROW_SELECTED_COLORS = [(210, 210, 210), (205, 243, 223)]
-    COLUMN_CELL = '//HeaderItem[@Name="%s"]'
-    COLUMN_CELL_IMAGE = '_column_%s'
-    ROW_CELL_IMAGE = '_row_%s'
+    RANGE_SELECTED_COLORS = ('#d2d2d2', '#cdf3df', '#d3f0e0', '#9fd5b7')  # default Office Theme colors
+    COLUMN_CELL_HEADER_XPATH = '//HeaderItem[@Name="%s"]'
 
     def get_cells_values(self, cells):
         result = []
@@ -235,23 +234,20 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         return paste()
 
     def is_column_range_selected(self, column_names):
-        for column_name in column_names:
-            elementColor = self.get_element_by_xpath(
-                ExcelSheetWindowsDesktopPage.COLUMN_CELL % column_name
-            ).pick_color(10, 2)
-
-            if elementColor not in ExcelSheetWindowsDesktopPage.COLUMN_ROW_SELECTED_COLORS:
-                return False
-
-        return True
+        return self._is_range_selected(column_names)
 
     def is_row_range_selected(self, row_names):
-        for row_name in row_names:
-            elementColor = self.get_element_by_xpath(
-                ExcelSheetWindowsDesktopPage.COLUMN_CELL % row_name
+        return self._is_range_selected(row_names)
+
+    def _is_range_selected(self, item_names):
+        grid_element = self.get_element_by_accessibility_id(ExcelSheetWindowsDesktopPage.GRID_ELEM)
+
+        for item_name in item_names:
+            element_color = grid_element.get_element_by_xpath(
+                ExcelSheetWindowsDesktopPage.COLUMN_CELL_HEADER_XPATH % item_name
             ).pick_color(10, 2)
 
-            if elementColor not in ExcelSheetWindowsDesktopPage.COLUMN_ROW_SELECTED_COLORS:
+            if element_color not in ExcelSheetWindowsDesktopPage.RANGE_SELECTED_COLORS:
                 return False
 
         return True
