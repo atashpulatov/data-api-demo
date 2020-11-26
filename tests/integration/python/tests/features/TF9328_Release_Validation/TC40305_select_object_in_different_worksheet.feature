@@ -29,6 +29,12 @@ Feature: TF9328 - Release Validation
      When I clicked on object 1
      Then columns ["A", "F"] are selected
 
+     When I clicked twice on the name of object 1
+     # TODO Then I verified name of object 1 is highlighted with color "#xxxxxxx"
+
+     When I hovered over the name of object 1
+     # TODO Then I verified name of object 1 is highlighted with color "#xxxxxxx"
+
      When I selected worksheet number 1
      # TODO And I hide columns ["C", "D"]
      # TODO And I hide rows ["4", "5", "6"]
