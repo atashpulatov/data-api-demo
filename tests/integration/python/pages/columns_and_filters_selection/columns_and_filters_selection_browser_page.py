@@ -22,7 +22,9 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     SEARCH_INPUT = '.search-input > input'
 
-    TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
+    TOTALS_AND_SUBTOTALS_ELEMENT = '.subtotal-container'
+
+    TOTALS_AND_SUBTOTALS_SWITCH = TOTALS_AND_SUBTOTALS_ELEMENT + ' > button.ant-switch'
 
     def __init__(self):
         super().__init__()
@@ -30,8 +32,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
 
     def ensure_columns_and_filters_selection_is_visible(self):
-        self.focus_on_add_in_frame()
-        
+        self.focus_on_add_in_popup_frame()
+
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.NOTIFICATION_TEXT_ELEM,
             ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
@@ -114,3 +116,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionBrowserPage.ANT_BUTTON,
             ColumnsAndFiltersSelectionBrowserPage.CLOSE_PREVIEW_TEXT
         ).click()
+
+    def verify_subtotal_visible(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.check_if_element_exists_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_ELEMENT)
+
+
