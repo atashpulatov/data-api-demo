@@ -1,4 +1,7 @@
 import logging
+import allure
+from allure import attachment_type
+from allure import attach
 
 from behave.contrib.scenario_autoretry import patch_scenario_with_autoretry
 
@@ -53,11 +56,11 @@ def before_scenario(context, scenario):
 def _initialize_using_existing_session(context):
     driver_type = ConfigUtil.get_driver_type()
 
-    driver = DriverFactory().get_driver(driver_type)
+    _put_driver_to_context(context)
 
     if driver_type in DRIVERS_SUPPORTING_IMAGE_RECOGNITION:
         excel_root_element_name = ConfigUtil.get_windows_desktop_excel_root_element_name()
-        ImageElement.reset_excel_root_element(driver, excel_root_element_name)
+        ImageElement.reset_excel_root_element(context.driver, excel_root_element_name)
 
     context.pages = PagesSetFactory().get_pages_set()
 
@@ -66,20 +69,49 @@ def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME):
     DriverFactory.reset_driver()
     PagesSetFactory.reset_pages_set()
 
+    _put_driver_to_context(context)
+
     context.pages = PagesSetFactory().get_pages_set()
 
     context.pages.excel_general_page().go_to_excel(locale_name)
 
     context.pages.excel_general_page().maximize_excel_window()
 
+    raise 'a'
     context.pages.excel_menu_page().click_add_in_elem()
-    context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()
+    context.pages.not_logged_right_panel_page(
+    ).enable_windows_desktop_workaround_if_needed()
+
+
+def _put_driver_to_context(context):
+    driver_type = ConfigUtil.get_driver_type()
+    driver = DriverFactory().get_driver(driver_type)
+    context.driver = driver
+
+
+def after_step(context, step):
+    _take_screenshot_on_failure(context, step.status)
 
 
 def after_scenario(context, scenario):
+    _take_screenshot_on_failure(context, scenario.status)
+
     try:
         if ConfigUtil.is_cleanup_after_tests_enabled():
             context.pages.cleanup_page().clean_up_after_each_test()
+    except Exception as e:
+        logging.exception('')
+        raise e
+
+
+def _take_screenshot_on_failure(context, step_status):
+    try:
+        if step_status in ('broken', 'failed', 'skipped'):
+            allure.attach(
+              context.driver.get_screenshot_as_png(),
+              name='screenshot',
+              attachment_type=allure.attachment_type.PNG
+            )
     except Exception as e:
         logging.exception('')
         raise e
