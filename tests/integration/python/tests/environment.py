@@ -77,7 +77,6 @@ def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME):
 
     context.pages.excel_general_page().maximize_excel_window()
 
-    raise 'a'
     context.pages.excel_menu_page().click_add_in_elem()
     context.pages.not_logged_right_panel_page(
     ).enable_windows_desktop_workaround_if_needed()
