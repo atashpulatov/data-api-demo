@@ -46,8 +46,8 @@ function getTestCaseId(testCase) {
 */
 function getStatus(testCase) {
   const { status } = testCase;
-  const {broken, fail, pass } =strings.status;
-  return status === broken ? fail : pass;
+  const { fail, pass, passed } = strings.status;
+  return status === passed ? pass : fail;
 }
 
 /**
@@ -69,7 +69,7 @@ function getDuration(testCase) {
 */
 // TODO add functionality
 // function getBrowser(testCase) {
-  
+
 // }
 
 function parseArgs() {
@@ -87,10 +87,9 @@ function parseArgs() {
 *
 * @returns {String} Build number
 */
-function getBuild() {
-  const parameters = parseArgs();
-  if (strings.cmdArguments.build in parameters) {
-    return parameters[strings.cmdArguments.build];
+function getBuild(cmdArguments) {
+  if (strings.cmdArguments.build in cmdArguments) {
+    return cmdArguments[strings.cmdArguments.build];
   }
   return rallyconfig.automation.build;
 }
@@ -100,10 +99,9 @@ function getBuild() {
 *
 * @returns {String} Release
 */
-function getRelease() {
-  const parameters = parseArgs();
-  if (strings.cmdArguments.release in parameters) {
-    return parameters[strings.cmdArguments.release];
+function getRelease(cmdArguments) {
+  if (strings.cmdArguments.release in cmdArguments) {
+    return cmdArguments[strings.cmdArguments.release];
   }
   return rallyconfig.automation.release;
 }
@@ -126,6 +124,7 @@ function getTestsWithVerdict(tests) {
   if (verdict === 'all') {
     return tests;
   }
+  console.log(tests.filter(test => test.verdict === (verdict.charAt(0).toUpperCase() + verdict.slice(1))))
   return tests.filter(test => test.verdict === (verdict.charAt(0).toUpperCase() + verdict.slice(1)));
 }
 
@@ -135,12 +134,11 @@ function getTestsWithVerdict(tests) {
 *
 * @returns {String} OS on which the Test Case was executed
 */
-function getOS() {
-  const parameters = parseArgs();
-  if (!(strings.cmdArguments.os in parameters)) {
+function getOS(cmdArguments) {
+  if (!(strings.cmdArguments.os in cmdArguments)) {
     return rallyconfig.automation.OS;
   }
-  switch (parameters[strings.cmdArguments.os]) {
+  switch (cmdArguments[strings.cmdArguments.os]) {
     case strings.osCMD.mac13: return strings.OS.macOS13;
     case strings.osCMD.mac14: return strings.OS.macOS14;
     case strings.osCMD.mac15: return strings.OS.macOS15;
@@ -150,29 +148,50 @@ function getOS() {
 }
 
 /**
-* Gets data from the Allure report for all the test cases found in Allure report
+* Gets first failed step in a failed Test Case
 *
-* @returns {Array} Array of objects containing data that will be uploaded to Rally
+* @param {Object} testCase Object representing one test case from Allure report
+* @returns {String} added to Notes for failed Test Case; contains first failed step
+*/
+function getFirstFailedStep(testCase, verdict) {
+  if (verdict !== strings.status.pass) {
+    const firstFailedStep = testCase.steps.find(step => step.status !== strings.status.passed).name;
+    return `Failed step: ${firstFailedStep}`;
+  }
+}
+
+/**
+* Gets data from each file in Allure folder and adds it to the object that will be added to batch later uploaded to Rally
+*
+* @returns {Array} Array of objects that will be added to batch later uploaded to Rally
 */
 function getReportData() {
-  const arrayData = parseReportData(ALLURE_FOLDER);
-  const allureDataArray = [];
-  for (let i = 0; i < arrayData.length; i++) {
-    if (arrayData[i].name.includes('[TC')) {
-      const allure = {
-        duration: getDuration(arrayData[i]),
+  const cmdArguments = parseArgs();
+  const allureReportsArray = parseReportData(ALLURE_FOLDER);
+  let rallyDataArray = [];
+
+  // iterate over the data contained in each file in allureFolder
+  for (let i = 0; i < allureReportsArray.length; i++) {
+    const verdict = getStatus(allureReportsArray[i]);
+    if (allureReportsArray[i].name.includes('[TC')) {
+      // for failed TC add failed step to notes
+      const notesForFailedStep = getFirstFailedStep(allureReportsArray[i], verdict);
+      // create object for data from one TC
+      const rallyDataObject = {
+        duration: getDuration(allureReportsArray[i]),
         // browser: getBrowser(arrayData[i]),
-        verdict: getStatus(arrayData[i]),
-        testCaseId: getTestCaseId(arrayData[i]),
-        build: getBuild(),
-        release: getRelease(),
-        OS: getOS()
+        verdict: verdict,
+        testCaseId: getTestCaseId(allureReportsArray[i]),
+        build: getBuild(cmdArguments),
+        release: getRelease(cmdArguments),
+        OS: getOS(cmdArguments),
+        notes: `${rallyconfig.automation.notes}<br><hr><br>${notesForFailedStep}`
       };
-      allureDataArray.push(allure);
+      rallyDataArray.push(rallyDataObject);
     }
   }
-  console.log(allureDataArray)
-  return allureDataArray;
+  // console.log(rallyDataArray)
+  return rallyDataArray;
 }
 
 

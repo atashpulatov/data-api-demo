@@ -16,7 +16,7 @@ module.exports = async function createBatchArray(testCaseArray) {
   try {
     for (let i = 0; i < testCaseArray.length; i++) {
       const {
-        duration, browser, verdict, build, release, testCaseId, OS
+        duration, browser, verdict, build, release, testCaseId, OS, notes
       } = testCaseArray[i];
       const tcUrl = await helpers.getRallyTCUrl(testCaseId);
       const owner = await helpers.getOwner(testCaseId);
@@ -38,7 +38,7 @@ module.exports = async function createBatchArray(testCaseArray) {
               Tester: owner,
               TestSet: testSet, // for release validation add TS ID
               Duration: duration,
-              Notes: rallyConfig.automation.notes, // for release validation change to 'Release validation'
+              Notes: notes, // for release validation change to 'Release validation'
               c_Browsertype: browser,
               c_Environment: rallyConfig.automation.env,
               c_ProductionRelease: release,

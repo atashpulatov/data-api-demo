@@ -23,6 +23,8 @@ module.exports = {
   status: {
     broken: 'broken',
     fail: 'Fail',
-    pass: 'Pass'
+    pass: 'Pass',
+    skipped: 'skipped',
+    passed: 'passed'
   }
 };
