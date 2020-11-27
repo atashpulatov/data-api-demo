@@ -29,19 +29,20 @@ Feature: TF9328 - Release Validation
      When I clicked on object 1
      Then columns ["A", "F"] are selected
 
-     When I clicked twice on the name of object 1
-     # TODO Then I verified name of object 1 is highlighted with color "#xxxxxxx"
+     When I double clicked on the name of object 1
+     Then after double clicking I verified name of object 1 is highlighted with color "#1890ff"
+      And I selected cell "A1"
 
      When I hovered over the name of object 1
-     # TODO Then I verified name of object 1 is highlighted with color "#xxxxxxx"
+     Then I verified name of object 1 is highlighted with color "#ebebeb"
 
      When I selected worksheet number 1
-     # TODO And I hide columns ["C", "D"]
-     # TODO And I hide rows ["4", "5", "6"]
-     # TODO And I resized column "B" to width "30"
+#     # TODO And I hide columns ["C", "D"]
+#     # TODO And I hide rows ["4", "5", "6"]
+#     # TODO And I resized column "B" to width "30"
       And I clicked Refresh on object 2
-     # TODO Then I verified columns ["C", "D"] are hidden
-     # TODO And I verified rows ["4", "5", "6"] are hidden
-     # TODO And I verified column "B" has width "30"
-
+#     # TODO Then I verified columns ["C", "D"] are hidden
+#     # TODO And I verified rows ["4", "5", "6"] are hidden
+#     # TODO And I verified column "B" has width "30"
+#
       And I logged out
