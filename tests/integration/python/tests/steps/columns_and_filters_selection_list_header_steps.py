@@ -1,9 +1,15 @@
 from behave import *
 
+from framework.util.assert_util import AssertUtil
+
 
 @step('I verified that counter of "{item_type}" shows "{number}" of "{of_number}" selected')
 def step_impl(context, item_type, number, of_number):
-    context.pages.columns_and_filters_selection_list_header_page().ensure_item_selection(item_type, number, of_number)
+    expected_result = f'{item_type.upper()} ({number}/{of_number})'
+
+    result = context.pages.columns_and_filters_selection_list_header_page().get_column_title(item_type).upper()
+
+    AssertUtil.assert_simple(result, expected_result)
 
 
 @step('I changed sort order of "{object_type}" to ascending by click')

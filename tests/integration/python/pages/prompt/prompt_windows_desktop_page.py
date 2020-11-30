@@ -1,5 +1,7 @@
+import time
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import SHORT_TIMEOUT, DEFAULT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -25,13 +27,16 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_FIELD_LABEL = '//Group[@AutomationId=\"mstrdossierPromptEditor\"]/Table[1]/DataItem[3]/Table[1]/DataItem[2]'
 
     def wait_for_run_button(self):
-        run_button_exists = self.check_if_element_exists_by_xpath(
-            PromptWindowsDesktopPage.PROMPT_RUN_BUTTON,
-            image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
-        )
+        end_time = time.time() + DEFAULT_TIMEOUT
 
-        if not run_button_exists:
-            raise MstrException(f'Run button not exists or is not enabled.')
+        while end_time > time.time():
+            if self.check_if_element_exists_by_xpath(
+                    PromptWindowsDesktopPage.PROMPT_RUN_BUTTON,
+                    image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_NAME)
+            ):
+                return True
+
+        raise MstrException(f'Run button not exists or is not enabled.')
 
     def click_run_button(self):
         prompt_field_label = self.get_add_in_main_element().get_element_by_xpath(
