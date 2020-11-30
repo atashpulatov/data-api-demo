@@ -14,6 +14,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     NOTIFICATION_ICON = 'successful_fill'
 
     BUTTON_OK = 'OK'
+    DUPLICATING_TEXT_ELEM = 'Duplicating'
     REFRESHING_TEXT_ELEM = 'Refreshing'
     IMPORTING_TEXT_ELEM = 'Importing'
     REMOVING_TEXT_ELEM = 'Removing'
@@ -24,10 +25,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
-    TILES_WRAPPER = '//Group[starts-with(@Name, "Imported Data")]/List'
-    TILE_ELEM = '//DataItem'
+    TILE_ELEM = '//Group/List/DataItem[%s]'
 
     NAME_INPUT_FOR_OBJECT = '//Button/Text'
+    NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK = '//Edit'
     TEXT_INPUT_TAG_NAME = 'Edit'
     TOOLTIP_TEXT = '//ToolTip/Text'
 
@@ -40,6 +41,12 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self._wait_until_element_disappears(
             self.check_if_element_exists_by_name,
             RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM
+        )
+
+    def wait_for_duplicate_object_to_finish_successfully(self):
+        self._wait_until_element_disappears(
+            self.check_if_element_exists_by_name,
+            RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM
         )
 
     def wait_for_refresh_object_to_finish_successfully(self):
@@ -89,14 +96,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             element.click()
 
     def close_last_notification_on_hover(self):
-        self._wait_for_last_operation_to_finish_successfully()
+        self.wait_for_progress_notifications_to_disappear()
 
         self._hover_over_tile(RightPanelTileWindowsDesktopPage.XML_FIRST_ELEMENT_INDEX)
-
-    def _wait_for_last_operation_to_finish_successfully(self):
-        while not self.check_if_element_exists_by_accessibility_id(RightPanelTileWindowsDesktopPage.NOTIFICATION_ICON,
-                                                                   timeout=SHORT_TIMEOUT):
-            pass
 
     def close_object_notification_on_hover(self, object_no):
         self._hover_over_tile(object_no)
@@ -168,6 +170,41 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def click_object_number(self, object_no):
         self._get_object_by_number(object_no).click()
 
+    def double_click_on_name_of_object_number(self, object_no):
+        self._get_object_by_number(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
+        ).double_click()
+
+    def hover_over_object_number(self, object_no):
+        self._hover_over_tile(object_no)
+
+    def hover_over_name_of_object_number(self, object_no):
+        """
+        Hovers over name of object object_no in Right Panel.
+
+        This method doesn't work when previous step selected the name by double clicking, //Button/Text disappears from
+        page source. In this case, it necessary to unselect the name before calling this method, e.g. by selecting
+        an Excel cell.
+
+        If needed implementation for hovering after double clicking can be added, see:
+        get_highlight_color_of_object_number_after_double_click().
+
+        :param object_no: Right Panel object number.
+        """
+        self._get_object_by_number(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
+        ).move_to()
+
+    def get_highlight_color_of_object_number(self, object_no):
+        return self._get_object_by_number(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
+        ).pick_color(5, 2)
+
+    def get_highlight_color_of_object_number_after_double_click(self, object_no):
+        return self._get_object_by_number(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK
+        ).pick_color(5, 2)
+
     def change_object_name_using_icon(self, object_no, new_object_name):
         object_tile_elem = self._get_object_by_number(object_no)
 
@@ -200,8 +237,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
-        name_container.move_to()
-        name_container.right_click()
+        name_container.right_click(5, 5)  # Added small offset to ensure that right click occurs within searched element
 
         object_tile_elem.get_element_by_name(
             RightPanelTileWindowsDesktopPage.REMOVE_MENU_ITEM
@@ -222,13 +258,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def _get_object_by_number(self, object_no):
         right_panel_element = self.get_add_in_right_panel_element()
 
-        tiles_wrapper = right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
-
-        tiles = tiles_wrapper.get_elements_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM)
-
-        object_index = int(object_no) - 1
-
-        return tiles[object_index]
+        return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM % object_no)
 
     def is_icon_bar_visible(self, object_no):
         # TODO: There is no way for now to recognize if bar is visible, is_display() on icon bar and its elements

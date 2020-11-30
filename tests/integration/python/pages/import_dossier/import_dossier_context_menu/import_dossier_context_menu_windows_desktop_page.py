@@ -1,3 +1,5 @@
+from selenium.common.exceptions import NoSuchElementException
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
 from pages.import_dossier.import_dossier_main.import_dossier_main_windows_desktop_page import \
@@ -12,8 +14,18 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
     CONTEXT_MENU_ITEM_EXCLUDE = 'Exclude'
     CONTEXT_MENU_ITEM_OK = 'OK'
+    CONTEXT_MENU_ITEM_DRILL = 'Drill'
+
+    DRILL_SUB_MENU_ITEM = '//HyperLink[@Name = "%s"]'
 
     CONTEXT_SUB_MENU_ITEM = '//Group/Pane/Pane/Text[@Name="%s"]'
+
+    ALLOWED_SORT_ORDER = ('Ascending', 'Descending')
+
+    TABLE_CELL_FILE = 'Cell %s'
+
+    SORTING_METRIC_ICONS = '//Group[starts-with(@Name, "%s")]/following-sibling::HyperLink[%s]'
+    SORTING_ICON_PREFIX = 'sort_icon_'
 
     def __init__(self):
         super().__init__()
@@ -33,12 +45,45 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._click_context_sub_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_OK)
 
+    def select_sort_order_for_metric(self, sort_order, metric_name, visualization_name):
+        if sort_order not in ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER:
+            raise MstrException(f'Wrong sort order specified: [{sort_order}].')
+
+        self.get_element_by_xpath(
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % metric_name,
+            image_name=self.prepare_image_name(ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL_FILE % metric_name)
+        ).right_click()
+
+        icon_index = ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER.index(sort_order) + 1
+        self.get_add_in_main_element().get_element_by_xpath(
+            ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS % (visualization_name, icon_index)
+        ).click()
+
+    def select_drill_by_for_attribute(self, drill_by, attribute_name, visualization_name):
+        tile = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
+
+        tile.get_element_by_xpath(
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name
+        ).right_click()
+
+        self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_DRILL)
+
+        try:
+            self.get_add_in_main_element().get_element_by_xpath(
+                ImportDossierContextMenuWindowsDesktopPage.DRILL_SUB_MENU_ITEM % drill_by
+            ).click()
+
+        except NoSuchElementException:
+            raise MstrException(
+                f'Item to drill by not present - attribute name: [{attribute_name}], drill by: [{drill_by}].'
+            )
+
     def select_replace_with_for_attribute(self, replace_with, attribute_name, visualization_name):
         visualization = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
 
         visualization.get_element_by_xpath(
             ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name
-        ).right_click()
+        ).right_click(5, 5)
 
         self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_REPLACE_WITH)
 
@@ -48,7 +93,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         tile = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
 
         item = self._get_first_item_in_attribute_column(tile, attribute_name, exclude)
-        item.right_click()
+        item.right_click(10, 10)
 
         self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_EXCLUDE)
 

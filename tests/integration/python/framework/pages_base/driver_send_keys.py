@@ -20,6 +20,12 @@ class DriverSendKeys:
 
     def press_down_arrow(self):
         self.send_keys(Keys.ARROW_DOWN)
+    
+    def press_end(self):
+        self.send_keys(Keys.END)
+    
+    def press_page_down(self):
+        self.send_keys(Keys.PAGE_DOWN)
 
     def press_backspace(self):
         self.send_keys(Keys.BACKSPACE)
