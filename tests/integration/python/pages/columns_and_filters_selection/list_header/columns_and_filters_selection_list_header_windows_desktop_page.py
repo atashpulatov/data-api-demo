@@ -1,8 +1,8 @@
-from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
 
 
-class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
+class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseWindowsDesktopPage):
     TRIANGLE_IMAGE_XPATH = '//Image/Image/Image'
 
     SORT_ASCENDING = 'icon_sort_triangle_up_blue'
@@ -34,17 +34,17 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
 
     COLUMN_NAME = '//Group/Button[@Name="%s"]/Text'
 
-    SORT_ASCENDING = "icon_sort_triangle_up_blue"
-    SORT_DESCENDING = "icon_sort_triangle_bottom_blue"
-    SORT_DEFAULT = "icon_sort_triangle_gray"
+    SORT_ASCENDING = 'icon_sort_triangle_up_blue'
+    SORT_DESCENDING = 'icon_sort_triangle_bottom_blue'
+    SORT_DEFAULT = 'icon_sort_triangle_gray'
 
-    def ensure_item_selection(self, item_type, number, of_number):
+    def get_column_title(self, item_type):
         """
-        Ensures proper number of given item type is selected.
+        Gets title of a column for a given item type.
 
-        :param item_type: type of item (metrics / attributes / filters)
-        :param number: number of selected items
-        :param of_number: number of all items
+        :param item_type: Type of item ('metrics', 'attributes' or 'filters').
+
+        :return: Title of column.
         """
 
         if item_type not in ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME:
@@ -52,14 +52,9 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
 
         sort_title_name = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[item_type]
 
-        title = f'{item_type.capitalize()} ({number}/{of_number})'
-
-        column_name = self.get_element_by_xpath(
+        column_name = self.get_add_in_main_element().get_element_by_xpath(
             ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.COLUMN_NAME % sort_title_name
         ).text
-
-        if column_name != title:
-            self.log_warning(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
 
         return column_name
 
