@@ -19,7 +19,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     TOTALS_AND_SUBTOTALS_SWITCH = '//Text[@Name="%s"]' % TOTALS_AND_SUBTOTALS
 
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
-    POPUP_WINDOW_TITLE = '//Group[@AutomationId=\"popup-wrapper\"]/Text[@Name=\"%s\"]'
+    POPUP_WINDOW_TITLE = '//Group[@AutomationId="popup-wrapper"]/Text[@Name="%s"]'
 
     SEARCH_INPUT = "Search..."
 
@@ -38,6 +38,14 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not is_visible:
             raise MstrException('Error while opening Attributes Metrics Filters.')
+
+    def ensure_popup_title_is_correct(self, title):
+        popup_title = self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_TITLE % title
+        )
+
+        if not popup_title:
+            raise MstrException(f'Popup title does not match given title, expected title: [{title}].')
 
     def search_for_element(self, element_name):
         search_input = self.get_element_by_name(
@@ -99,14 +107,6 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS_SWITCH,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS)
         ).move_to_and_click(offset_x=90, offset_y=2)
-
-    def ensure_popup_title_is_correct(self, title):
-        popup_title = self.get_element_by_xpath(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_TITLE % title
-        )
-
-        if not popup_title:
-            raise MstrException('Popup title does not match given title.')
 
     def click_data_preview(self):
         self.get_element_by_accessibility_id(
