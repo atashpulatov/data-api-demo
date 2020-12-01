@@ -1,8 +1,9 @@
 
 const updateResultHelpers = require('./helpers/updateResultHelpers');
+const { getAutomatedBatchArray, updateRallyTCResult } = updateResultHelpers;
 
-updateResultHelpers.getAutomatedBatchArray().then(batch => {
-  updateResultHelpers.updateRallyTCResult(batch)
+getAutomatedBatchArray().then(batch => {
+  updateRallyTCResult(batch)
     .then((result) => {
       const { Errors: errors } = result.BatchResult;
       if (errors.length > 0) { throw new Error(errors); }
