@@ -1,4 +1,3 @@
-
 const updateResultHelpers = require('./helpers/updateResultHelpers');
 const { getAutomatedBatchArray, updateRallyTCResult } = updateResultHelpers;
 

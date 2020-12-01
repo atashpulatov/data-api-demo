@@ -1,7 +1,6 @@
 const updateResultHelpers = require('./helpers/updateResultHelpers');
 const { getManualBatchArray, updateRallyTCResult } = updateResultHelpers;
 
-
 getManualBatchArray().then(batch => {
   updateRallyTCResult(batch)
     .then((result) => {

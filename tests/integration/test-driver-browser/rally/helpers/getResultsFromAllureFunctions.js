@@ -4,7 +4,7 @@ const rallyconfig = require('../rallyconfig');
 const strings = require('../constants/strings');
 const path = require('path')
 
-const ALLURE_FOLDER = '../python/allureFolder';
+const ALLURE_FOLDER = '../python/allure-report/data/test-cases';
 
 const cmd = process.argv;
 
@@ -15,7 +15,7 @@ const cmd = process.argv;
 * @returns {Array} Array of JS objects containing data found in Allure reports in the specified folder
 */
 function parseReportData(folder) {
-  return fs.readdirSync(folder).filter(file => path.extname(file) === '.json').map(file => {
+  return fs.readdirSync(folder).map(file => {
     const relativePath = folder + '/' + file;
     return JSON.parse(fs.readFileSync(relativePath));
   })
@@ -54,11 +54,11 @@ function getStatus(testCase) {
 * Gets duration of execution of a Test Case
 *
 * @param {Object} testCase Object representing one test case from Allure report
-* @returns {String} Duration of execution of the test case
+* @returns {String} Duration of execution of the test case in seconds
 */
 function getDuration(testCase) {
-  const { start, stop } = testCase;
-  return ((stop - start) / 1000).toFixed(2);
+  const { duration} = testCase.time;
+  return duration/1000;
 }
 
 /**
@@ -154,7 +154,7 @@ function getOS(cmdArguments) {
 function getFirstFailedStep(testCase, verdict) {
   const { pass, passed } = strings.status;
   if (verdict !== pass) {
-    const { steps } = testCase;
+    const { steps } = testCase.testStage;
     const firstFailedStep = steps.find(step => step.status !== passed).name;
     return `Failed step: ${firstFailedStep}`;
   }
