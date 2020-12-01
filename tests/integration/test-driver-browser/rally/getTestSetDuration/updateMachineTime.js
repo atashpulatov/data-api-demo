@@ -2,7 +2,7 @@
 const fetch = require('node-fetch');
 const rallyConfig = require('../rallyconfig');
 const getTestSetDuration = require('./getTestSetDuration');
-const helpers = require('../helpers');
+const helpers = require('../helpers/getDataHelpers');
 
 /**
 * Upload Test Set duration to existing Test Set Rally
