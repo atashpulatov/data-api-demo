@@ -2,6 +2,7 @@
 const fs = require('fs');
 const rallyconfig = require('../rallyconfig');
 const strings = require('../constants/strings');
+const path = require('path')
 
 const ALLURE_FOLDER = '../python/allureFolder';
 
@@ -14,7 +15,7 @@ const cmd = process.argv;
 * @returns {Array} Array of JS objects containing data found in Allure reports in the specified folder
 */
 function parseReportData(folder) {
-  return fs.readdirSync(folder).map(file => {
+  return fs.readdirSync(folder).filter(file => path.extname(file) === '.json').map(file => {
     const relativePath = folder + '/' + file;
     return JSON.parse(fs.readFileSync(relativePath));
   })
@@ -152,8 +153,7 @@ function getOS(cmdArguments) {
 */
 function getFirstFailedStep(testCase, verdict) {
   const { pass, passed } = strings.status;
-
-  if (verdict !== pass && 'steps' in testCase) {
+  if (verdict !== pass) {
     const { steps } = testCase;
     const firstFailedStep = steps.find(step => step.status !== passed).name;
     return `Failed step: ${firstFailedStep}`;
@@ -176,10 +176,8 @@ function getReportData() {
     if (allureReportsArray[i].name.includes('[TC')) {
       // for failed TC add failed step to notes
       const notesForFailedStep = getFirstFailedStep(allureReportsArray[i], verdict);
-      let notes = `${rallyconfig.automation.notes}`;
-      if (notesForFailedStep !== undefined) {
-        notes.concat(`<br><hr><br>${notesForFailedStep}`)
-      }
+      const {notes : rallyConfigNotes } = rallyconfig.automation;
+      const notes = notesForFailedStep !== undefined ? `${rallyConfigNotes}<br><hr><br>${notesForFailedStep}` : rallyConfigNotes;
       // create object for data from one TC
       const rallyDataObject = {
         duration: getDuration(allureReportsArray[i]),
