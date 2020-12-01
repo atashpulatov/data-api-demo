@@ -123,7 +123,6 @@ function getTestsWithVerdict(tests) {
   if (verdict === 'all') {
     return tests;
   }
-  console.log(tests.filter(test => test.verdict === (verdict.charAt(0).toUpperCase() + verdict.slice(1))))
   return tests.filter(test => test.verdict === (verdict.charAt(0).toUpperCase() + verdict.slice(1)));
 }
 
@@ -195,7 +194,6 @@ function getReportData() {
       rallyDataArray.push(rallyDataObject);
     }
   }
-  // console.log(rallyDataArray)
   return rallyDataArray;
 }
 

@@ -47,7 +47,6 @@ async function getManualBatchArray() {
  */
 async function getAutomatedBatchArray() {
   const allTests = getResultsFromAllure.getReportData();
-  console.log(allTests)
   if (allTests.length === 0) {
     console.log('No test results found in Allure report.');
     process.exit(1);
@@ -126,7 +125,6 @@ async function createAutomatedBatchArray(testCaseArray) {
         testSet = await helpers.getTestSet(rallyConfig.automation.testSet);
       }
       const batchItem = createBatchItem(build, today, testCase, verdict, owner, testSet, duration, notes, browser, env, release, exportApp, OS, language)
-      console.log('batchItem', batchItem.Entry.Body.testcaseresult);
       batch.push(batchItem);
     }
   } catch (error) {
