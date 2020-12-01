@@ -1,8 +1,8 @@
-from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.MstrException import MstrException
 
 
-class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
+class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseWindowsDesktopPage):
     TRIANGLE_IMAGE_XPATH = '//Image/Image/Image'
 
     SORT_ASCENDING = 'icon_sort_triangle_up_blue'
@@ -31,6 +31,32 @@ class ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage(BaseBrowserPage):
     SORT_TOGGLE_ORDER_SELECTORS = [SORT_DEFAULT, SORT_ASCENDING, SORT_DESCENDING]
 
     EVENT_CLICK = 'click'
+
+    COLUMN_NAME = '//Group/Button[@Name="%s"]/Text'
+
+    SORT_ASCENDING = 'icon_sort_triangle_up_blue'
+    SORT_DESCENDING = 'icon_sort_triangle_bottom_blue'
+    SORT_DEFAULT = 'icon_sort_triangle_gray'
+
+    def get_column_title(self, item_type):
+        """
+        Gets title of a column for a given item type.
+
+        :param item_type: Type of item ('metrics', 'attributes' or 'filters').
+
+        :return: Title of column.
+        """
+
+        if item_type not in ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME:
+            raise MstrException(f'Wrong item_type [{item_type}] argument passed to ensure_item_selection')
+
+        sort_title_name = ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.OBJECTS_TYPE_TO_ELEMENT_NAME[item_type]
+
+        column_name = self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionListHeaderWindowsDesktopPage.COLUMN_NAME % sort_title_name
+        ).text
+
+        return column_name
 
     def sort_elements_ascending_by_click(self, object_type):
         self._toggle_sort_elements(

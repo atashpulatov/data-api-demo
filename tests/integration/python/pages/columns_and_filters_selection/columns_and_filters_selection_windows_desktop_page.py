@@ -19,6 +19,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     TOTALS_AND_SUBTOTALS_SWITCH = '//Text[@Name="%s"]' % TOTALS_AND_SUBTOTALS
 
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
+    POPUP_WINDOW_TITLE = '//Group[@AutomationId="popup-wrapper"]/Text[@Name="%s"]'
 
     SEARCH_INPUT = "Search..."
 
@@ -37,6 +38,14 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not is_visible:
             raise MstrException('Error while opening Attributes Metrics Filters.')
+
+    def ensure_popup_title_is_correct(self, title):
+        popup_title = self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.POPUP_WINDOW_TITLE % title
+        )
+
+        if not popup_title:
+            raise MstrException(f'Popup title does not match given title, expected title: [{title}].')
 
     def search_for_element(self, element_name):
         search_input = self.get_element_by_name(

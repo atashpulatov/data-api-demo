@@ -16,6 +16,8 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_X = 0
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_Y = -100
 
+    ALL_ITEMS = '(All)'
+
     FILTER_TREE = '(//Group/Tree)[2]'
     FILTER_TREE_ITEM_AT = '(%s/TreeItem/Group/Text)[%%s]' % FILTER_TREE
 
@@ -50,10 +52,14 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
                         offset_y=ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.MOVE_OUT_OF_FILTER_PARENT_OFFSET_Y
                     )
 
+    def select_all_filter_elements(self, filter_name):
+        self._select_filter(filter_name)
+
+        self.get_elements_by_name(ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.ALL_ITEMS)[-1].click()
+
     def _select_filter(self, filter_name):
-        self.get_element_by_xpath(
-            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TITLE_ITEM % filter_name,
-            image_name=self.prepare_image_name(filter_name)
+        self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TITLE_ITEM % filter_name
         ).click()
 
     def get_filter_name(self, object_number):

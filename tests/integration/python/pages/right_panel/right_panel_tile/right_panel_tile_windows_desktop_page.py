@@ -25,10 +25,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
-    TILES_WRAPPER = '//Group[starts-with(@Name, "Imported Data")]/List'
-    TILE_ELEM = '//DataItem'
+    TILE_ELEM = '//Group/List/DataItem[%s]'
 
     NAME_INPUT_FOR_OBJECT = '//Button/Text'
+    NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK = '//Edit'
     TEXT_INPUT_TAG_NAME = 'Edit'
     TOOLTIP_TEXT = '//ToolTip/Text'
 
@@ -170,6 +170,41 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def click_object_number(self, object_no):
         self._get_object_by_number(object_no).click()
 
+    def double_click_on_name_of_object_number(self, object_no):
+        self._get_object_by_number(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
+        ).double_click()
+
+    def hover_over_object_number(self, object_no):
+        self._hover_over_tile(object_no)
+
+    def hover_over_name_of_object_number(self, object_no):
+        """
+        Hovers over name of object object_no in Right Panel.
+
+        This method doesn't work when previous step selected the name by double clicking, //Button/Text disappears from
+        page source. In this case, it necessary to unselect the name before calling this method, e.g. by selecting
+        an Excel cell.
+
+        If needed implementation for hovering after double clicking can be added, see:
+        get_highlight_color_of_object_number_after_double_click().
+
+        :param object_no: Right Panel object number.
+        """
+        self._get_object_by_number(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
+        ).move_to()
+
+    def get_highlight_color_of_object_number(self, object_no):
+        return self._get_object_by_number(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
+        ).pick_color(5, 2)
+
+    def get_highlight_color_of_object_number_after_double_click(self, object_no):
+        return self._get_object_by_number(object_no).get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK
+        ).pick_color(5, 2)
+
     def change_object_name_using_icon(self, object_no, new_object_name):
         object_tile_elem = self._get_object_by_number(object_no)
 
@@ -223,13 +258,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def _get_object_by_number(self, object_no):
         right_panel_element = self.get_add_in_right_panel_element()
 
-        tiles_wrapper = right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILES_WRAPPER)
-
-        tiles = tiles_wrapper.get_elements_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM)
-
-        object_index = int(object_no) - 1
-
-        return tiles[object_index]
+        return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM % object_no)
 
     def is_icon_bar_visible(self, object_no):
         # TODO: There is no way for now to recognize if bar is visible, is_display() on icon bar and its elements
