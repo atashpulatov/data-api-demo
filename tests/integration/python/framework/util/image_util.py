@@ -24,7 +24,7 @@ class ImageUtil:
     Class providing core methods for finding element's ImageData. Uses image recognition if enabled.
     """
 
-    DEBUG_DEBUG_SCREENSHOT_FILE_NAME_PREFIX = 'debug_screenshot_'
+    DEBUG_SCREENSHOT_FILE_NAME_PREFIX = 'debug_screenshot_'
     DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX = 'full_screen_'
     DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX = 'current_'
 
