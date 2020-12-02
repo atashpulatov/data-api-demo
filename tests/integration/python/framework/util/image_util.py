@@ -322,9 +322,11 @@ class ImageUtil:
 
         return hex_color
 
-    def take_debug_screenshots(self, element, file_name_prefix):
+    def take_debug_screenshots(self, element=None, file_name_prefix=DEBUG_SCREENSHOT_FILE_NAME_PREFIX):
         """
         Takes screenshots of full screen and a given element for debug purposes.
+
+        When element is not given, only full screen screenshot is taken.
 
         Screenshots are saved in ConfigUtil.get_image_recognition_screenshots_folder().
 
@@ -338,11 +340,12 @@ class ImageUtil:
             file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX
         )
 
-        element_image = self.get_element_image(element)
-        self._save_image(
-            element_image,
-            file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX
-        )
+        if element:
+            element_image = self.get_element_image(element)
+            self._save_image(
+                element_image,
+                file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX
+            )
 
     def _save_image(self, image, file_name_prefix):
         element_file_name = self._prepare_image_file_path(file_name_prefix)

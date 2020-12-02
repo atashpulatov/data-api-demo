@@ -30,9 +30,11 @@ class BasePage(ElementGet, ElementGetUsingParent, DriverSendKeys):
     def log_page_source(self):
         self.log_error(self.driver.page_source)
 
-    def take_debug_screenshots(self, element, file_name_prefix=ImageUtil.DEBUG_SCREENSHOT_FILE_NAME_PREFIX):
+    def take_debug_screenshots(self, element=None, file_name_prefix=ImageUtil.DEBUG_SCREENSHOT_FILE_NAME_PREFIX):
         """
         Takes screenshots of full screen and a given element for debug purposes.
+
+        When element is not given, only full screen screenshot is taken.
 
         Screenshots are saved in ConfigUtil.get_image_recognition_screenshots_folder().
 
