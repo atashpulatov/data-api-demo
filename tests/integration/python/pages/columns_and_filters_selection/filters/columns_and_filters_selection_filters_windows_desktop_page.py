@@ -7,14 +7,17 @@ from framework.util.exception.MstrException import MstrException
 
 
 class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage):
-    FILTER_TITLE_ITEM = '//TreeItem[starts-with(@Name,"icon_filter_blue")]/Group[@Name="%s"]/..'
-    FILTER_VALUES_BOX = '//DataGrid[@Name="grid"]/Group[contains(@Name,"%s")]'
+    FILTER_TITLE_ITEM = '//TreeItem[starts-with(@Name, "icon_filter_blue")]/Group[@Name="%s"]/..'
+    FILTER_VALUES_BOX = '//DataGrid[@Name="grid"]/Group[contains(@Name, "%s")]'
     FILTER_VALUE_SELECTOR = '//Text[@Name="%s"]'
 
-    FIRST_FILTER = '//Tree[starts-with(@Name, \"icon_filter_blue\")]/TreeItem[1]'
+    FIRST_FILTER = '//Tree[starts-with(@Name, "icon_filter_blue")]/TreeItem[1]'
 
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_X = 0
     MOVE_OUT_OF_FILTER_PARENT_OFFSET_Y = -100
+
+    SELECT_FILTER_OFFSET_X = 10
+    SELECT_FILTER_OFFSET_Y = 10
 
     ALL_ITEMS = '(All)'
 
@@ -60,7 +63,10 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
     def _select_filter(self, filter_name):
         self.get_add_in_main_element().get_element_by_xpath(
             ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_TITLE_ITEM % filter_name
-        ).click()
+        ).click(
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.SELECT_FILTER_OFFSET_X,
+            ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.SELECT_FILTER_OFFSET_Y
+        )
 
     def get_filter_name(self, object_number):
         return self._find_filter_by_number(object_number).get_name_by_attribute()
