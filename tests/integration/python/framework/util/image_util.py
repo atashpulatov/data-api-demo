@@ -24,6 +24,10 @@ class ImageUtil:
     Class providing core methods for finding element's ImageData. Uses image recognition if enabled.
     """
 
+    DEBUG_DEBUG_SCREENSHOT_FILE_NAME_PREFIX = 'debug_screenshot_'
+    DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX = 'full_screen_'
+    DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX = 'current_'
+
     def __init__(self):
         super().__init__()
 
@@ -218,8 +222,8 @@ class ImageUtil:
 
         return None
 
-    def _save_current_full_screen(self):
-        current_full_screen_file_path = self._prepare_image_file_path(ImageUtil.CURRENT_SCREENSHOT_FILE_NAME)
+    def _save_current_full_screen(self, current_full_screenshot_file_name=CURRENT_SCREENSHOT_FILE_NAME):
+        current_full_screen_file_path = self._prepare_image_file_path(current_full_screenshot_file_name)
 
         image = self._get_full_screen_image()
         image.save(current_full_screen_file_path)
@@ -228,9 +232,7 @@ class ImageUtil:
 
     def _save_element_image(self, element_image, file_name_prefix):
         if file_name_prefix and self.image_recognition_enabled:
-            element_file_name = self._prepare_image_file_path(file_name_prefix)
-
-            element_image.save(element_file_name)
+            self._save_image(element_image, file_name_prefix)
 
     def get_element_image(self, element):
         screenshot_image = self._get_full_screen_image()
@@ -319,3 +321,29 @@ class ImageUtil:
         hex_color = ImageUtil.RGB_TO_HEX_PATTERN.format(*color)
 
         return hex_color
+
+    def take_debug_screenshots(self, element, file_name_prefix):
+        """
+        Takes screenshots of full screen and a given element for debug purposes.
+
+        Screenshots are saved in ConfigUtil.get_image_recognition_screenshots_folder().
+
+        :param element: Element to take screenshot.
+        :param file_name_prefix: Debug file names prefix.
+        """
+
+        file_name_prefix_with_timestamp = f'{file_name_prefix}{time.time()}_'
+
+        self._save_current_full_screen(
+            file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX
+        )
+
+        element_image = self.get_element_image(element)
+        self._save_image(
+            element_image,
+            file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX
+        )
+
+    def _save_image(self, image, file_name_prefix):
+        element_file_name = self._prepare_image_file_path(file_name_prefix)
+        image.save(element_file_name)
