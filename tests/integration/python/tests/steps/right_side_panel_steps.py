@@ -72,3 +72,15 @@ def step_impl(context):
 @step('I removed selected objects')
 def step_impl(context):
     context.pages.right_panel_page().remove_selected()
+
+
+@step('I waited for Clear Data overlay to has title "{overlay_title}"')
+def step_impl(context, overlay_title):
+    context.pages.right_panel_page().wait_for_clear_data_overlay_to_finish_successfully_with_title(overlay_title)
+    
+
+@step('Clear Data overlay displays message "{overlay_message}"')
+def step_impl(context, overlay_message):
+    displayed_message = context.pages.right_panel_page().get_clear_data_overlay_message()
+
+    AssertUtil.assert_simple(displayed_message, overlay_message)

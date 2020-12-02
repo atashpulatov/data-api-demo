@@ -6,6 +6,7 @@ from framework.util.message_const import MessageConst
 class RightPanelTileBrowserPage(BaseBrowserPage):
     NOTIFICATION_TEXT_ELEM = '.notification-text'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
+    CLASS_NAME_ATTRIBUTE = 'className'
     PROGRESS_BAR = '.progress-bar'
 
     TILES = '.object-tile-content'
@@ -18,6 +19,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' .icon-bar '
 
     RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON = RIGHT_PANEL_TILE_NOTIFICATION + ' .progress-bar-notification-button-container > button'
+
+    RIGHT_PANEL_TILE_PROGRESS_PROCESSED_ITEMS = RIGHT_PANEL_TILE_NOTIFICATION + ' .notification-body .progress-processed-items'
+    RIGHT_PANEL_TILE_PROGRESS_ACTION = RIGHT_PANEL_TILE_NOTIFICATION + ' .notification-text .left-text'
+    RIGHT_PANEL_TILE_PROGRESS_PERCENTAGE = RIGHT_PANEL_TILE_NOTIFICATION + ' .notification-text .right-text'
+    RIGHT_PANEL_TILE_FIRST_DIV = '.object-tile-list > article:nth-child(%s) > div > div:nth-child(1)'
 
     DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
     EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
@@ -52,6 +58,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     def wait_for_remove_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT, timeout)
+    
+    def wait_for_operation_to_finish_successfully_with_message(self, expected_message, timeout=DEFAULT_TIMEOUT):
+        self._wait_for_operation_with_status(expected_message, timeout)
 
     def wait_for_operation_error_and_accept(self, expected_message, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(expected_message, timeout)
@@ -228,3 +237,58 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         opacity_value = icon_bar.get_opacity()
 
         return int(opacity_value) > 0
+    
+    def get_object_action_in_progress_name(self, object_number):
+        self.focus_on_add_in_frame()
+        
+        element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number)
+
+        return element.get_attribute(RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE)
+    
+    def get_object_action_in_progress_total_rows_count(self, object_number):
+        self.focus_on_add_in_frame()
+        
+        element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_PROCESSED_ITEMS % object_number)
+
+        rows_count = element.get_attribute(RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE)
+        rows_count_list = rows_count.split("/")
+        total_rows = rows_count_list[1]
+
+        return total_rows
+    
+    def verify_object_action_displays_progress_percentage(self, object_number):
+        self.focus_on_add_in_frame()
+        
+        element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_PERCENTAGE % object_number)
+
+        percentage = element.get_attribute(RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE)
+        percentage_position = percentage.find("%")
+
+        return (percentage_position == 2) or (percentage_position == 3)
+    
+    def verify_object_action_is_pending(self, object_number):
+        self.focus_on_add_in_frame()
+        
+        element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_PERCENTAGE % object_number)
+        percentage = element.get_attribute(RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE)
+
+        element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number)
+        action_status = element.get_attribute(RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE)
+
+        return (percentage == "0%") and (action_status == "Pending")
+
+    def verify_object_has_message_displayed(self, object_number):
+        self.focus_on_add_in_frame()
+        
+        element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_FIRST_DIV % object_number)
+        first_div = element.get_attribute(RightPanelTileBrowserPage.CLASS_NAME_ATTRIBUTE)
+
+        return (first_div == "notification-container")
+    
+    def wait_for_object_operation_to_finish_successfully_with_message(self, object_number, expected_message):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number,
+                                                             RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+                                                             expected_message,
+                                                             timeout=DEFAULT_TIMEOUT)

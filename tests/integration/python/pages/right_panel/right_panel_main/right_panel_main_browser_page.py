@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import SHORT_TIMEOUT, DEFAULT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -20,11 +20,14 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     CONFIRM_CLEAR_DATA_ID = 'confirm-btn'
 
     VIEW_DATA_BUTTON_ELEM = '.data-cleared > button'
+    DATA_CLEARED_OVERLAY_TITLE = '.data-cleared .data-cleared-header'
+    DATA_CLEARED_OVERLAY_MESSAGE = '.data-cleared .data-cleared-info'
 
     RIGHT_PANEL_OBJECT_LIST = '.object-tile-container .object-tile-list'
 
     ATTRIBUTE_NAME_CLIENT_HEIGHT = 'clientHeight'
     ATTRIBUTE_NAME_SCROLL_HEIGHT = 'scrollHeight'
+    TEXT_CONTENT_ATTRIBUTE = 'textContent'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -115,3 +118,19 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         element = self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT_ID)
 
         return element.get_background_color()
+    
+    def wait_for_clear_data_overlay_to_finish_successfully_with_title(self, overlay_title):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(RightPanelMainBrowserPage.DATA_CLEARED_OVERLAY_TITLE,
+                                                             RightPanelMainBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+                                                             overlay_title,
+                                                             timeout=DEFAULT_TIMEOUT)
+
+    def get_clear_data_overlay_message(self):
+        self.focus_on_add_in_frame()
+
+        element = self.get_element_by_css(RightPanelMainBrowserPage.DATA_CLEARED_OVERLAY_MESSAGE)
+        overlay_message = element.get_attribute(RightPanelMainBrowserPage.TEXT_CONTENT_ATTRIBUTE)
+
+        return overlay_message

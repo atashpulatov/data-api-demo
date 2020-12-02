@@ -18,6 +18,9 @@ class DuplicateObjectPopupBrowserPage(BaseBrowserPage):
         self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_IMPORT_BUTTON).click()
 
         self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully()
+    
+    def click_import_without_check(self):
+        self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_IMPORT_BUTTON).click()
 
     def click_edit(self):
         self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_EDIT_BUTTON).click()
