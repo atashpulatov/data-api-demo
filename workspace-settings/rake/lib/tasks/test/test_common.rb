@@ -48,12 +48,21 @@ task :py_e2e_test_win,[:tag_name] do | t, args|
   test_dir = get_python_test_dir()
   tag_name = args['tag_name']
   report_dir = 'allure-report'
+  allure_folder = 'allureFolder'
+  allure_folder_path = "#{test_dir}/#{allure_folder}"
+  test_os = "win19"
 
-  FileUtils.rm_rf report_dir if Dir.exist? report_dir
+  FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
   shell_command! "python -m venv venv_win", cwd: test_dir
   shell_command! "venv_win\\Scripts\\Activate.bat", cwd: test_dir
   shell_command! "python -m behave --tags=@ci --tags=@#{PY_WIN_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_WIN_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
+
+  shell_command! "allure generate --clean #{report_dir}"
+
+  info "publish e2e test result to Rally"
+  shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_WIN_TEST_PARAM[tag_name]}", cwd: test_dir
+
 end
 
 desc "run test in python on Mac"
@@ -61,10 +70,18 @@ task :py_e2e_test_mac,[:tag_name] do | t, args|
   test_dir = get_python_test_dir()
   tag_name = args['tag_name']
   report_dir = 'allure-report'
+  allure_folder = 'allureFolder'
+  allure_folder_path = "#{test_dir}/#{allure_folder}"
+  test_os = "mac14"
 
-  FileUtils.rm_rf report_dir if Dir.exist? report_dir
+  FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
   shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
+  
+  shell_command! "allure generate --clean #{report_dir}"
+
+  info "publish e2e test result to Rally"
+  shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_MAC_TEST_PARAM[tag_name]}", cwd: test_dir
 end
 
 desc "run browser based test"
