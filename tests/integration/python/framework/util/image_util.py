@@ -26,7 +26,7 @@ class ImageUtil:
 
     DEBUG_SCREENSHOT_FILE_NAME_PREFIX = 'debug_screenshot_'
     DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX = 'full_screen_'
-    DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX = 'current_'
+    DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX = 'current_element_'
 
     def __init__(self):
         super().__init__()
@@ -160,9 +160,10 @@ class ImageUtil:
             return None
 
         end_time = time.time() + DEFAULT_IMAGE_TIMEOUT
-        i = 1
+        i = 0
 
         while end_time > time.time():
+            i += 1
             Util.log(f'Looking for image, name: [{image_name}], try: {i}.')
 
             current_full_screen_gray_image = self._get_current_full_screen_gray_image()
@@ -179,9 +180,8 @@ class ImageUtil:
                 return coordinates
 
             Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
-            i += 1
 
-        Util.log(f'Image not found, name: [{image_name}], tries: {i - 1}, timeout: [{end_time - time.time()}].')
+        Util.log(f'Image not found, name: [{image_name}], tries: {i}, timeout: [{end_time - time.time()}].')
 
         return None
 
