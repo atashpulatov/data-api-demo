@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import SHORT_TIMEOUT, DEFAULT_TIMEOUT
+from framework.util.const import SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -13,8 +13,8 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
     SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .checkbox-cell'
-    REFRESH_SELECTED = SELECT_ALL_TILES + 'button:nth-child(5)'
-    REMOVE_SELECTED = SELECT_ALL_TILES + 'button:nth-child(6)'
+    REFRESH_SELECTED = SELECT_ALL_TILES + 'button:nth-of-type(3)'
+    REMOVE_SELECTED = SELECT_ALL_TILES + 'button:nth-of-type(4)'
 
     CLEAR_DATA = '.clear-data'
     CONFIRM_CLEAR_DATA_ID = 'confirm-btn'
@@ -124,8 +124,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(RightPanelMainBrowserPage.DATA_CLEARED_OVERLAY_TITLE,
                                                              RightPanelMainBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-                                                             overlay_title,
-                                                             timeout=DEFAULT_TIMEOUT)
+                                                             overlay_title)
 
     def get_clear_data_overlay_message(self):
         self.focus_on_add_in_frame()

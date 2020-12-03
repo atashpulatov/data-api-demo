@@ -277,7 +277,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         return (percentage == "0%") and (action_status == "Pending")
 
-    def verify_object_has_message_displayed(self, object_number):
+    def verify_object_has_popup_displayed(self, object_number):
         self.focus_on_add_in_frame()
         
         element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_FIRST_DIV % object_number)
@@ -290,5 +290,4 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number,
                                                              RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-                                                             expected_message,
-                                                             timeout=DEFAULT_TIMEOUT)
+                                                             expected_message)

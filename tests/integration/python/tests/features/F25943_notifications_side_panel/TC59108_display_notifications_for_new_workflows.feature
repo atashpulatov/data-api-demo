@@ -73,7 +73,7 @@ Feature: F25943 - Notifications side panel
       And object 5 action is pending
 
      When I canceled object 5 pending action
-     Then object 5 has no message displayed
+     Then object 5 tile has no popup displayed
       And I waited for object 4 to have message on succesful operation: "Refresh complete"
       And object 1 has displayed message "Refresh complete"
       And object 3 has displayed message "Refresh complete"
@@ -105,7 +105,7 @@ Feature: F25943 - Notifications side panel
       And I selected 7 using object checkbox
       And I removed selected objects
       And I canceled object 7 pending action
-     Then object 7 has no message displayed
+     Then object 7 tile has no popup displayed
       And I waited for object 6 to have message on succesful operation: "Object removed"
       And object 1 has displayed message "Object removed"
       And object 2 has displayed message "Object removed"
@@ -115,11 +115,11 @@ Feature: F25943 - Notifications side panel
      Then I closed all notifications
 
      When I clicked clear data
-      And I waited for Clear Data overlay to has title "Data Cleared!"
-     Then object 1 has no message displayed
-      And object 2 has no message displayed
-      And object 3 has no message displayed
-      And object 4 has no message displayed
+      And I waited for Clear Data overlay to have title "Data Cleared!"
+     Then object 1 tile has no popup displayed
+      And object 2 tile has no popup displayed
+      And object 3 tile has no popup displayed
+      And object 4 tile has no popup displayed
       And Clear Data overlay displays message "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again."
 
       And I logged out
