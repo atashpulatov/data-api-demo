@@ -1,6 +1,5 @@
 
 import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
-import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { mergeHeaderColumns, mergeHeaderRows } from './office-api-header-merge-helper';
 
 const EXCEL_XTABS_BORDER_COLOR = '#a5a5a5';
