@@ -2,9 +2,6 @@
 const fs = require('fs');
 const rallyconfig = require('../rallyconfig');
 const strings = require('../constants/strings');
-const path = require('path')
-
-const ALLURE_FOLDER = '../python/allure-report/data/test-cases';
 
 const cmd = process.argv;
 
@@ -57,20 +54,11 @@ function getStatus(testCase) {
 * @returns {String} Duration of execution of the test case in seconds
 */
 function getDuration(testCase) {
-  const { duration} = testCase.time;
-  return duration/1000;
+  const { duration } = testCase.time;
+  return (duration / 1000).toFixed(2);
 }
 
-/**
-* Gets browser in which the Test Case was executed from Allure report
-*
-* @param {Object} testCase Object representing one test case from Allure report
-* @returns {String} Browser name in which the test case was executed
-*/
-// TODO add functionality
-// function getBrowser(testCase) {
 
-// }
 
 function parseArgs() {
   const parameters = {};
@@ -85,11 +73,13 @@ function parseArgs() {
 /**
 * Returns build in which the Test Case was executed
 *
+* @param {Object} cmdArguments Containing key-value pairs representing arguments passed to the script from command line
 * @returns {String} Build number
 */
 function getBuild(cmdArguments) {
-  if (strings.cmdArguments.build in cmdArguments) {
-    return cmdArguments[strings.cmdArguments.build];
+  const {build} = strings.cmdArguments;
+  if (build in cmdArguments) {
+    return cmdArguments[build];
   }
   return rallyconfig.automation.build;
 }
@@ -97,11 +87,13 @@ function getBuild(cmdArguments) {
 /**
 * Returns release in which the Test Case was executed
 *
+* @param {Object} cmdArguments Containing key-value pairs representing arguments passed to the script from command line
 * @returns {String} Release
 */
 function getRelease(cmdArguments) {
-  if (strings.cmdArguments.release in cmdArguments) {
-    return cmdArguments[strings.cmdArguments.release];
+  const {release} = strings.cmdArguments;
+  if (release in cmdArguments) {
+    return cmdArguments[release];
   }
   return rallyconfig.automation.release;
 }
@@ -130,18 +122,24 @@ function getTestsWithVerdict(tests) {
 /**
 * Returns OS on which the Test Case was executed
 *
+* @param {Object} cmdArguments Containing key-value pairs representing arguments passed to the script from command line
 * @returns {String} OS on which the Test Case was executed
 */
 function getOS(cmdArguments) {
-  if (!(strings.cmdArguments.os in cmdArguments)) {
+  const { os } = strings.cmdArguments;
+  const { mac13, mac14, mac15, win10, win19 } = strings.osCMD;
+  const { macOS13, macOS14, macOS15, msWin10, msWin19} = strings.OS;
+
+  if (!(os in cmdArguments)) {
     return rallyconfig.automation.OS;
   }
+
   switch (cmdArguments[strings.cmdArguments.os]) {
-    case strings.osCMD.mac13: return strings.OS.macOS13;
-    case strings.osCMD.mac14: return strings.OS.macOS14;
-    case strings.osCMD.mac15: return strings.OS.macOS15;
-    case strings.osCMD.win10: return strings.OS.msWin10;
-    case strings.osCMD.win19: return strings.OS.msWin19;
+    case mac13: return macOS13;
+    case mac14: return macOS14;
+    case mac15: return macOS15;
+    case win10: return msWin10;
+    case win19: return msWin19;
   }
 }
 
@@ -161,33 +159,84 @@ function getFirstFailedStep(testCase, verdict) {
 }
 
 /**
+* Gets browser in which the Test Case was executed from Allure report
+*
+* @param {Object} cmdArguments Containing key-value pairs representing arguments passed to the script from command line
+* @returns {String} Browser name in which the test case was executed
+*/
+function getBrowser(cmdArguments) {
+  const { browser } = rallyconfig.automation;
+  const { target } = strings.cmdArguments;
+  const { macChrome, winChrome } = strings.target;
+  const { chrome } = strings.browser;
+
+  if (!(target in cmdArguments)) {
+    return browser;
+  }
+
+  switch (cmdArguments[target]) {
+    case macChrome:
+    case winChrome:
+      return chrome;
+  }
+}
+
+/**
+* Gets browser in which the Test Case was executed from Allure report
+*
+* @param {Object} cmdArguments Containing key-value pairs representing arguments passed to the script from command line
+* @returns {String} Export application in which the test case was executed
+*/
+
+function getExportApp(cmdArguments) {
+  const { exportApp } = rallyconfig.automation;
+  const { macChrome, winChrome, macDesktop, winDesktop } = strings.target;
+  const { office2019, office365 } = strings.officeVersion;
+  const { target } = strings.cmdArguments;
+
+  if (!(target in cmdArguments)) {
+    return exportApp;
+  }
+
+  switch (cmdArguments[target]) {
+    case macChrome:
+    case winChrome:
+      return office365;
+    case macDesktop:
+    case winDesktop:
+      return office2019;
+  }
+}
+
+/**
 * Gets data from each file in Allure folder and adds it to the object that will be added to batch later uploaded to Rally
 *
 * @returns {Array} Array of objects that will be added to batch later uploaded to Rally
 */
 function getReportData() {
   const cmdArguments = parseArgs();
-  const allureReportsArray = parseReportData(ALLURE_FOLDER);
+  const allureReportsArray = parseReportData(strings.allureFolderPath);
   let rallyDataArray = [];
 
-  // iterate over the data contained in each file in allureFolder
+  // iterate over the data contained in each file in allure-report
   for (let i = 0; i < allureReportsArray.length; i++) {
     const verdict = getStatus(allureReportsArray[i]);
     if (allureReportsArray[i].name.includes('[TC')) {
       // for failed TC add failed step to notes
       const notesForFailedStep = getFirstFailedStep(allureReportsArray[i], verdict);
-      const {notes : rallyConfigNotes } = rallyconfig.automation;
+      const { notes: rallyConfigNotes } = rallyconfig.automation;
       const notes = notesForFailedStep !== undefined ? `${rallyConfigNotes}<br><hr><br>${notesForFailedStep}` : rallyConfigNotes;
       // create object for data from one TC
       const rallyDataObject = {
         duration: getDuration(allureReportsArray[i]),
-        // browser: getBrowser(arrayData[i]),
+        browser: getBrowser(cmdArguments),
         verdict: verdict,
         testCaseId: getTestCaseId(allureReportsArray[i]),
         build: getBuild(cmdArguments),
         release: getRelease(cmdArguments),
         OS: getOS(cmdArguments),
-        notes: notes
+        notes: notes,
+        exportApp: getExportApp(cmdArguments)
       };
       rallyDataArray.push(rallyDataObject);
     }
