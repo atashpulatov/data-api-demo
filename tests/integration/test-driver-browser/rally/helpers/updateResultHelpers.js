@@ -113,9 +113,9 @@ async function createAutomatedBatchArray(testCaseArray) {
   try {
     for (let i = 0; i < testCaseArray.length; i++) {
       const {
-        duration, browser, verdict, build, release, testCaseId, OS, notes
+        duration, browser, verdict, build, release, testCaseId, OS, notes, exportApp
       } = testCaseArray[i];
-      const { env, exportApp, language } = rallyConfig.automation;
+      const { env, language } = rallyConfig.automation;
       const tcUrl = await helpers.getRallyTCUrl(testCaseId);
       const testCase = tcUrl.split('v2.0')[1];
 
