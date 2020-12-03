@@ -1,6 +1,7 @@
 @windows_chrome
 @mac_chrome
 @release_validation
+@ga_validation
 Feature: F25931 - Duplicate object
 
   Scenario: [TC64700] - [Duplicate object] [Range taken] - E2E
@@ -24,7 +25,7 @@ Feature: F25931 - Duplicate object
       And I found object by ID "E247019211E9DF8176990080EFB5ACD2" and selected "Dossier for interactive components"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      And I selected dossier page or chapter 2
+      And I selected dossier page or chapter 1
       And I selected visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
