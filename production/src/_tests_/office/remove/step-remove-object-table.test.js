@@ -95,7 +95,10 @@ describe('StepRemoveObjectStore', () => {
     expect(getItemMock).toBeCalledWith('bindIdTest');
 
     expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledTimes(1);
-    expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledWith({ sth: 42, showHeaders: true });
+    expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledWith(
+      { sth: 42, showHeaders: true },
+      excelContextMock
+    );
 
     expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledTimes(1);
     expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledWith(
