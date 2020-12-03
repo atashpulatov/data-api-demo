@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const rallyConfig = require('../rallyconfig');
 const getResultsFromAllure = require('./getResultsFromAllureFunctions');
 const fetch = require('node-fetch');

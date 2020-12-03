@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 const fetch = require('node-fetch');
 const rallyConfig = require('../rallyconfig');
 const getTestSetDuration = require('./getTestSetDuration');

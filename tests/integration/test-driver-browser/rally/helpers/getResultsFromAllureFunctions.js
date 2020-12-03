@@ -1,4 +1,3 @@
-/* eslint-disable default-case */
 const fs = require('fs');
 const rallyconfig = require('../rallyconfig');
 const strings = require('../constants/strings');
@@ -58,7 +57,11 @@ function getDuration(testCase) {
   return (duration / 1000).toFixed(2);
 }
 
-
+/**
+* Parses arguments from command line
+*
+* @returns {Object} containing key-value pairs representing command line argument and its value
+*/
 
 function parseArgs() {
   const parameters = {};
@@ -68,6 +71,7 @@ function parseArgs() {
       parameters[args[0]] = args[1];
     }
   });
+  console.log(parameters)
   return parameters;
 }
 /**

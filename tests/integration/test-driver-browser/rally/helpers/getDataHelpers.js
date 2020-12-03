@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 const rallyConfig = require('../rallyconfig');
 const fetch = require('node-fetch');
 

@@ -1,6 +1,4 @@
-/* eslint-disable no-underscore-dangle */
 const helpers = require('../helpers/getDataHelpers');
-// const getDataFromRally = require('../getDataFromRally');
 
 /**
 * Get Test Set duration of the Test Set which ID is passed as a parameter
