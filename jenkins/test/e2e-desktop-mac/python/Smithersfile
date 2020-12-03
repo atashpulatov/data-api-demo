@@ -34,7 +34,7 @@ source .ecosystem
 export HATS=pipeline:$HATS
 
 rake deploy_tester_server[$APPLICATION_VERSION]
-rake py_e2e_test_mac[desktop]
+rake py_e2e_test_mac[desktop, $APPLICATION_VERSION]
 '
     end
   end
