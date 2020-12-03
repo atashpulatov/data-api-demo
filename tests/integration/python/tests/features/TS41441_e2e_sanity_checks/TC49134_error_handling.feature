@@ -11,7 +11,7 @@ Feature: TS41441 - Sanity checks
 
      #TODO Expire user session
 
-      And I found object by ID "E6B64AE611E95F872F800080EFD500F4" and selected "1,5M Sales Records.csv"
+      And I found object by ID "56A532DD11EA9A91D5440080EF853B57" and selected "50k columns report - pivoted"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1048576"
@@ -40,13 +40,12 @@ Feature: TS41441 - Sanity checks
       And I hover over Import button
      Then I verified that tooltip for Import button shows message "You cannot import an unpublished cube."
 
-# TODO Waiting for fix for defect xxxxxxxx
      When I cleared search box
-#      And I found object by ID "D796E92211EA434C28680080EF753F73" and selected "Report unpublished cube"
-#     Then I clicked Import button and saw errors "You cannot import an unpublished cube."
+      And I found object by ID "D796E92211EA434C28680080EF753F73" and selected "Report unpublished cube"
+     Then I clicked Import button and saw global error "You cannot import an unpublished cube."
 
-#     When I selected cell "A1"
-#      And I clicked Import Data button
+     When I selected cell "A1"
+      And I clicked Import Data button
       And I found object by ID "6A626B0C11E94AF4A45E0080EF95FFD5" and selected "Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes"
       And I clicked Import button
      Then I closed all notifications
@@ -128,13 +127,10 @@ Feature: TS41441 - Sanity checks
 
      When I clicked clear data
       And I logged out
-      And I logged in with username "Martyna" and empty password
+      And I logged in with username "Jeff" and empty password
       And I clicked view data
-   #TODO Create step for accepting error for specific object
       And I closed all warning notifications
-      And I closed all warning notifications
-      And I closed all warning notifications
-      And I closed all warning notifications
-     Then cells ["A2", "C3"] should have values ["", ""]
+      And I selected worksheet number 4
+     Then cells ["A2", "C3"] should have values ["Mid-Atlantic", "$646,421"]
 
       And I logged out

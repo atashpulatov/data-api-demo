@@ -3,7 +3,7 @@ from framework.util.exception.MstrException import MstrException
 
 
 class ImportDossierBookmarksBrowserPage(BaseBrowserPage):
-    BOOKMARK_BUTTON = '.icon-bookmark'
+    BOOKMARK_BUTTON = '.icon-tb_bookmarks_n'
     BOOKMARK_ITEMS = '.mstrd-BookmarkItem-nameText'
 
     def select_bookmark(self, bookmark_number):
@@ -20,3 +20,7 @@ class ImportDossierBookmarksBrowserPage(BaseBrowserPage):
                 ('Not possible to click bookmark item, given object index is too big', bookmark_index, bookmark_items))
 
         bookmark_items[bookmark_index].click()
+
+    def create_bookmark_if_not_exists(self, bookmark_name):
+        # TODO: Implement
+        self.log('Missing step implementation.')

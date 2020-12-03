@@ -295,15 +295,14 @@ class OfficeApiCrosstabHelper {
   }
 
   /**
-   * Clear the empty row in Crosstab Report
-   * Since showing Excel table header dont override the data but insert new row,
-   * we clear values from empty row in crosstab to prevent it
+   * Delete the empty row in Crosstab Report
+   * Since showing Excel table header dont override the data but insert new row
    *
    * @param {Office} officeTable Reference to Excel Table
    */
   clearEmptyCrosstabRow = (officeTable) => {
     const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
-    headerRange.clear('Contents');
+    headerRange.delete('Up');
   }
 
   /**

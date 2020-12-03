@@ -11,14 +11,22 @@ def step_impl(context, totals_to_select, attribute_name, visualization_name):
     )
 
 
-@step('I selected sort "{sort_order}" for "{metric_name}" metric')
-def step_impl(context, sort_order, metric_name):
-    context.pages.import_dossier_context_menu_page().select_sort_order_for_metric(sort_order, metric_name)
+@step('I selected sort "{sort_order}" for "{metric_name}" metric for visualization "{visualization_name}"')
+def step_impl(context, sort_order, metric_name, visualization_name):
+    context.pages.import_dossier_context_menu_page().select_sort_order_for_metric(
+        sort_order,
+        metric_name,
+        visualization_name
+    )
 
 
-@step('I selected Drill by "{drill_by}" for "{attribute_name}" attribute')
-def step_impl(context, drill_by, attribute_name):
-    context.pages.import_dossier_context_menu_page().select_drill_by_for_attribute(drill_by, attribute_name)
+@step('I selected Drill by "{drill_by}" for "{attribute_name}" attribute for visualization "{visualization_name}"')
+def step_impl(context, drill_by, attribute_name, visualization_name):
+    context.pages.import_dossier_context_menu_page().select_drill_by_for_attribute(
+        drill_by,
+        attribute_name,
+        visualization_name
+    )
 
 
 @step('I selected "{replace_with}" in Replace With for "{attribute_name}" attribute '

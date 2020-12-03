@@ -9,6 +9,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     CLASS_NAME_ATTRIBUTE = 'className'
     PROGRESS_BAR = '.progress-bar'
 
+    GLOBAL_ERROR_ELEM = '.global-warning-title'
+    GLOBAL_WARNING_BUTTON = '.global-warning-buttons'
+
     TILES = '.object-tile-content'
 
     SIDE_PANEL_HEADER = '.side-panel > .header'
@@ -67,10 +70,23 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RightPanelTileBrowserPage.NOTIFICATION_BUTTON).click()
 
+    def wait_for_operation_global_error_and_accept(self, expected_message, timeout=DEFAULT_TIMEOUT):
+        self._wait_for_global_error(expected_message, timeout)
+
+        self.get_element_by_css(RightPanelTileBrowserPage.GLOBAL_WARNING_BUTTON).click()
+
     def _wait_for_operation_with_status(self, expected_message, timeout):
         self.focus_on_add_in_frame()
 
         self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
+                                                             RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+                                                             expected_message,
+                                                             timeout=timeout)
+
+    def _wait_for_global_error(self, expected_message, timeout):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.GLOBAL_ERROR_ELEM,
                                                              RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
                                                              expected_message,
                                                              timeout=timeout)

@@ -1,8 +1,11 @@
+import time
+
 from pyperclip import paste
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
+from framework.util.const import MEDIUM_TIMEOUT, DEFAULT_TIMEOUT, SHORT_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from framework.util.message_const import MessageConst
 from framework.util.util import Util
@@ -11,7 +14,10 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_windows_d
 
 
 class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
-    MY_LIBRARY_SWITCH_ELEM = 'My Library'
+    MY_LIBRARY_SWITCH_ELEM = 'mstr-switch-toggle'
+    MY_LIBRARY_SWITCH_ELEM_ON_COLOR = '#1c91dc'
+    MY_LIBRARY_SWITCH_ELEM_OFF_COLOR = '#ffffff'
+
     FILTERS_BUTTON_ELEM = 'Filters'
 
     SEARCH_ELEM = '//Group/Edit'
@@ -22,6 +28,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     ARIA_PROPERTY_CHECKED = 'checked'
 
     IMPORT_BUTTON_ELEM = 'Import'
+    IMPORT_BUTTON_ENABLED_BORDER_COLOR = '#d8d8d8'
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
     ERROR_MESSAGE_BUTTON_OK = 'OK'
@@ -31,12 +38,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     ALLOW_ACCESS = 'Allow access'
 
-    FIRST_OBJECT_ROW = '//Pane/Group/DataGrid/Group[2]/Group/ListItem[1]'
+    OBJECT_LIST = '//Pane/Group/DataGrid/Group[2]'
+    FIRST_OBJECT_ROW = '//DataGrid/Group[2]/Group/ListItem[1]'
 
     TOOLTIP_XPATH = '//ToolTip[@Name]'
 
+    ADD_TO_LIBRARY_BUTTON = '//Button[starts-with(@Name, \"Add to library\")]'
     POPUP_WINDOW_ELEM = 'NUIDialog'
     POPUP_CLOSE_BUTTON = 'Close'
+
+    MAXIMUM_SCROLLS = 100
 
     def __init__(self):
         super().__init__()
@@ -47,11 +58,20 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def ensure_mylibrary_switch_is_off(self):
         self.windows_desktop_workaround.focus_on_popup_window()
 
-        # TODO check if is on or ignore to have better performance?
-        self.get_element_by_name(
-            ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
-        ).click()
+        self._change_mylibrary_switch(False)
+
+    def ensure_mylibrary_switch_is_on(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        self._change_mylibrary_switch(True)
+
+    def _change_mylibrary_switch(self, expected_state):
+        element = self.get_element_by_accessibility_id(ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM)
+
+        switch_state = element.pick_color(10, 10) == ImportDataWindowsDesktopPage.MY_LIBRARY_SWITCH_ELEM_ON_COLOR
+
+        if switch_state != expected_state:
+            element.click()
 
     def _is_on(self, element):
         aria_properties_value = self._get_element_aria_properties(element)
@@ -96,6 +116,19 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.find_and_select_object_by_id(object_name, object_name)
 
+    def select_object_by_name(self, object_name):
+        """
+        Select object by name on the displayed objects list. This method does not verify ids and cannot handle
+        all special characters.
+
+        :param object_name: object name to search for
+        """
+
+        self.get_element_by_name(
+            object_name,
+            image_name=self.prepare_image_name(object_name)
+        ).click()
+
     def find_and_select_object_by_id(self, object_name, object_id):
         """
         Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
@@ -130,13 +163,21 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._click_import_button()
 
-        if not self.check_if_element_exists_by_name(error_message):
-            raise MstrException('Different notification displayed')
+        self._check_if_error_message_exists(error_message)
 
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK,
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK)
         ).click()
+
+    def _check_if_error_message_exists(self, error_message):
+        end_time = time.time() + DEFAULT_TIMEOUT
+
+        while end_time > time.time():
+            if self.check_if_element_exists_by_name(error_message, timeout=SHORT_TIMEOUT):
+                return
+
+        raise MstrException(f'Different notification displayed, expected: [{error_message}].')
 
     def click_import_button_to_open_import_dossier(self):
         self.windows_desktop_workaround.focus_on_popup_window()
@@ -158,6 +199,19 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM,
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM)
         ).click()
+
+    def add_dossier_to_library(self):
+        add_to_library = self.check_if_element_exists_by_xpath(
+            ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
+            timeout=MEDIUM_TIMEOUT,
+            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
+        )
+
+        if add_to_library:
+            self.get_element_by_xpath(
+                ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
+                image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
+            ).click()
 
     def show_object_details(self, object_number):
         self.windows_desktop_workaround.focus_on_popup_window()
@@ -207,7 +261,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def hover_over_first_object_in_list(self):
+        self._scroll_to_top_of_object_list()
+
         self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).move_to()
+
+    def _scroll_to_top_of_object_list(self):
+        object_list = self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.OBJECT_LIST)
+
+        object_list.click(object_list.size['width'] - 10, 10)
+
+        object_list.send_keys(Keys.HOME)
 
     def select_first_object_from_list(self):
         self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW).click()
@@ -222,4 +285,18 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).move_to()
 
     def get_tooltip_message_for_button(self):
-        return self.get_element_by_xpath(ImportDataWindowsDesktopPage.TOOLTIP_XPATH).get_name_by_attribute()
+        return self.get_add_in_main_element().get_element_by_xpath(
+            ImportDataWindowsDesktopPage.TOOLTIP_XPATH
+        ).get_name_by_attribute()
+
+    def find_the_color_of_first_object_in_list(self):
+        element = self.get_add_in_main_element().get_element_by_xpath(ImportDataWindowsDesktopPage.FIRST_OBJECT_ROW)
+
+        return element.pick_color(5, 5)
+
+    def verify_if_import_button_is_enabled(self):
+        element = self.get_element_by_name(ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM)
+
+        border_color = element.pick_color(20, 0)
+
+        return border_color == ImportDataWindowsDesktopPage.IMPORT_BUTTON_ENABLED_BORDER_COLOR

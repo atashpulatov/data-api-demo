@@ -35,16 +35,16 @@ class ColumnsAndFiltersSelectionFiltersBrowserPage(BaseBrowserPage):
                         element_name
                     ).click()
 
-    def select_all_filter_elements(self, filter):
+    def select_all_filter_elements(self, filter_name):
         self.focus_on_add_in_popup_frame()
-        self._select_filter(filter)
+        self._select_filter(filter_name)
 
         self.get_element_by_css(ColumnsAndFiltersSelectionFiltersBrowserPage.ALL_FILTERS).click()
 
-    def _select_filter(self, filter):
+    def _select_filter(self, filter_name):
         filter_item = self.find_element_by_text_in_elements_list_by_css(
             ColumnsAndFiltersSelectionFiltersBrowserPage.FILTER_TITLE_ITEM,
-            filter
+            filter_name
         )
 
         filter_item.click()

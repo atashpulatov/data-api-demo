@@ -39,13 +39,13 @@ class ColumnsAndFiltersSelectionListHeaderBrowserPage(BaseBrowserPage):
         FILTERS: FILTER_SORT_TITLE
     }
 
-    def ensure_item_selection(self, item_type, number, of_number):
+    def get_column_title(self, item_type):
         """
-        Ensures proper number of given item type is selected.
+        Gets title of a column for a given item type.
 
-        :param item_type: type of item (metrics / attributes / filters)
-        :param number: number of selected items
-        :param of_number: number of all items
+        :param item_type: Type of item ('metrics', 'attributes' or 'filters').
+
+        :return: Title of column.
         """
 
         if item_type not in ColumnsAndFiltersSelectionListHeaderBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP:
@@ -56,14 +56,9 @@ class ColumnsAndFiltersSelectionListHeaderBrowserPage(BaseBrowserPage):
         sort_title_selector = \
             ColumnsAndFiltersSelectionListHeaderBrowserPage.OBJECTS_TYPE_TO_OBJECTS_COLUMN_TITLE_GROUP[item_type]
 
-        title = f'{item_type.upper()} ({number}/{of_number})'
-
         column_name = self.get_element_by_css(sort_title_selector).text
 
-        if column_name == title:
-            return
-
-        raise MstrException(f'{item_type} selection does not match - selector: {column_name}, text: {title}.')
+        return column_name
 
     def sort_elements_ascending_by_click(self, object_type):
         self._sort_elements_by_click(object_type, ColumnsAndFiltersSelectionListHeaderBrowserPage.SORT_ASCENDING)
