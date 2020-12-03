@@ -299,10 +299,17 @@ class OfficeApiCrosstabHelper {
    * Since showing Excel table header dont override the data but insert new row
    *
    * @param {Office} officeTable Reference to Excel Table
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
-  clearEmptyCrosstabRow = (officeTable) => {
-    const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
-    headerRange.delete('Up');
+  clearEmptyCrosstabRow = async (officeTable, excelContext) => {
+    officeTable.load('showHeaders');
+    await excelContext.sync();
+    const { showHeaders } = officeTable;
+
+    if (!showHeaders) {
+      const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
+      headerRange.delete('Up');
+    }
   }
 
   /**
