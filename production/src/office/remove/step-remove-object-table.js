@@ -29,7 +29,7 @@ class StepRemoveObjectTable {
       const excelContext = await officeApiHelper.getExcelContext();
       const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-      officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
+      await officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable, excelContext);
       officeTable.showHeaders = true;
 
       const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(

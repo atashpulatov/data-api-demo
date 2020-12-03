@@ -11,7 +11,7 @@ Feature: TS41441 - Sanity checks
 
      #TODO Expire user session
 
-      And I found object by ID "E6B64AE611E95F872F800080EFD500F4" and selected "1,5M Sales Records.csv"
+      And I found object by ID "56A532DD11EA9A91D5440080EF853B57" and selected "50k columns report - pivoted"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1048576"
@@ -40,13 +40,12 @@ Feature: TS41441 - Sanity checks
       And I hover over Import button
      Then I verified that tooltip for Import button shows message "You cannot import an unpublished cube."
 
-     # TODO Uncomment when step is created for windows_desktop
-    When I cleared search box
-     # And I found object by ID "D796E92211EA434C28680080EF753F73" and selected "Report unpublished cube"
-     # Then I clicked Import button and saw global error "You cannot import an unpublished cube."
-     #
-     # When I selected cell "A1"
-     # And I clicked Import Data button
+     When I cleared search box
+      And I found object by ID "D796E92211EA434C28680080EF753F73" and selected "Report unpublished cube"
+     Then I clicked Import button and saw global error "You cannot import an unpublished cube."
+
+     When I selected cell "A1"
+      And I clicked Import Data button
       And I found object by ID "6A626B0C11E94AF4A45E0080EF95FFD5" and selected "Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes"
       And I clicked Import button
      Then I closed all notifications
