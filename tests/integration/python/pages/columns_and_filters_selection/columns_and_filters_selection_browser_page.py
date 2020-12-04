@@ -22,9 +22,9 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     SEARCH_INPUT = '.search-input > input'
 
-    TOTALS_AND_SUBTOTALS_ELEMENT = '.subtotal-container'
+    SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
 
-    TOTALS_AND_SUBTOTALS_SWITCH = TOTALS_AND_SUBTOTALS_ELEMENT + ' > button.ant-switch'
+    SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
     def __init__(self):
         super().__init__()
@@ -102,7 +102,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def click_include_totals_and_subtotals(self):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH).click()
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE).click()
 
     def click_data_preview(self):
         self.focus_on_add_in_popup_frame()
@@ -121,6 +121,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         return self.check_if_element_exists_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_ELEMENT, timeout=SHORT_TIMEOUT)
+            ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE_CONTAINER, timeout=SHORT_TIMEOUT)
 
 
