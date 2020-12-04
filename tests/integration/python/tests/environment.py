@@ -1,7 +1,6 @@
 import logging
-import allure
-from allure import attachment_type
-from allure import attach
+from allure_commons._allure import attach
+from allure_commons.types import AttachmentType
 
 from behave.contrib.scenario_autoretry import patch_scenario_with_autoretry
 
@@ -106,11 +105,11 @@ def after_scenario(context, scenario):
 def _take_screenshot_on_failure(context, step_status):
     try:
         if step_status in ('broken', 'failed', 'skipped'):
-            allure.attach(
+            attach(
               context.driver.get_screenshot_as_png(),
               name='screenshot',
-              attachment_type=allure.attachment_type.PNG
-            )
+              attachment_type=AttachmentType.PNG
+            )  
     except Exception as e:
         logging.exception('')
         raise e
