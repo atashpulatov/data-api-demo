@@ -1,4 +1,5 @@
 module.exports = {
+  allureFolderPath: '../python/allure-report/data/test-cases',
   osCMD: {
     mac13: 'mac13',
     mac14: 'mac14',
@@ -18,7 +19,8 @@ module.exports = {
     os: 'os',
     build: 'build',
     release: 'release',
-    verdict: 'verdict'
+    verdict: 'verdict',
+    target: 'target'
   },
   status: {
     broken: 'broken',
@@ -26,5 +28,18 @@ module.exports = {
     pass: 'Pass',
     skipped: 'skipped',
     passed: 'passed'
+  },
+  target: {
+    macDesktop: 'mac_desktop',
+    macChrome: 'mac_chrome',
+    winDesktop: 'windows_desktop',
+    winChrome: 'windows_chrome',
+  },
+  browser: {
+    chrome: 'Chrome'
+  },
+  officeVersion: {
+    office365: 'Microsoft Office 365',
+    office2019: 'Microsoft Office 2019'
   }
 };
