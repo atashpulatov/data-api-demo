@@ -302,13 +302,20 @@ class OfficeApiCrosstabHelper {
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
   clearEmptyCrosstabRow = async (officeTable, excelContext) => {
-    officeTable.load('showHeaders');
-    await excelContext.sync();
-    const { showHeaders } = officeTable;
+    try {
+      officeTable.load('showHeaders');
+      await excelContext.sync();
+      const { showHeaders } = officeTable;
 
-    if (!showHeaders) {
+      if (!showHeaders) {
+        const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
+        headerRange.delete('Up');
+        await excelContext.sync();
+      }
+    } catch (error) {
       const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
-      headerRange.delete('Up');
+      headerRange.unmerge();
+      headerRange.clear('Contents');
     }
   }
 

@@ -2,6 +2,7 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeRemoveHelper } from './office-remove-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepRemoveObjectTable {
   /**
@@ -25,8 +26,17 @@ class StepRemoveObjectTable {
       crosstabHeaderDimensions = {},
     } = objectData;
 
+    let excelContext;
+    let objectExist;
+
     try {
-      const excelContext = await officeApiHelper.getExcelContext();
+      excelContext = await officeApiHelper.getExcelContext();
+      objectExist = await officeRemoveHelper.checkIfObjectExist(objectData, excelContext);
+
+      if (!objectExist) {
+        operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
+      }
+
       const officeTable = excelContext.workbook.tables.getItem(bindId);
 
       await officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable, excelContext);
@@ -45,11 +55,16 @@ class StepRemoveObjectTable {
       };
 
       await officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, validCrosstabHeaderDimnesions);
-    } catch (error) {
-      console.error(error);
-    }
 
-    operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
+      operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
+    } catch (error) {
+      if (objectExist) {
+        operationErrorHandler.handleOperationError(objectData, operationData, error);
+      } else {
+        console.error(error);
+        operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
+      }
+    }
   };
 }
 
