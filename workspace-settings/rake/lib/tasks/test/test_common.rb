@@ -78,7 +78,7 @@ task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
 
   FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
-  shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
+  shell_command! "behave --no-color --logging-level=WARNING --format allure_behave.formatter:AllureFormatter -o allureFolder --no-capture-stderr --no-logcapture tests/features/F25931_duplicate_object", cwd: test_dir
   
   shell_command! "allure generate --clean #{report_dir}"
 
