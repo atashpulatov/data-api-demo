@@ -29,7 +29,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     COLUMN_HEADER = '.ewrch-col-nosel > .ewr-chc'
 
-    EXCEL_COLUMN_OPTION_CSS = '.item-125 > button > div > span'
+    EXCEL_COLUMN_OPTION_CSS = '.label-97'
 
     OPTION_DELETE_COLUMNS = 'Delete Columns'
 
