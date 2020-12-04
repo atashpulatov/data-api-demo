@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import LONG_TIMEOUT
+from framework.util.const import LONG_TIMEOUT, SHORT_TIMEOUT
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -120,7 +120,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def verify_subtotal_visible(self):
         self.focus_on_add_in_popup_frame()
 
-        self.check_if_element_exists_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_ELEMENT)
+        return self.check_if_element_exists_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_ELEMENT, timeout=SHORT_TIMEOUT)
 
 
