@@ -316,6 +316,7 @@ class OfficeApiCrosstabHelper {
       const headerRange = officeTable.getDataBodyRange().getRow(0).getOffsetRange(-1, 0);
       headerRange.unmerge();
       headerRange.clear('Contents');
+      return error;
     }
   }
 
