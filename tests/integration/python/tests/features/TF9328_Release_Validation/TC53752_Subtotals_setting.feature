@@ -1,4 +1,4 @@
-#@mac_chrome
+@mac_chrome
 @release_validation
 @ga_validation
 Feature: TF9328 - Release Validation
@@ -9,8 +9,8 @@ Feature: TF9328 - Release Validation
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "51DB6FC611EA638917E80080EFD5ACB1" and selected "Report based on cube with subtotals"
       And I clicked Prepare Data button
-      And I verified that Columns & Filters Selection is visible
-     Then I verified subtotal toggle is visible
+     Then I verified that Columns & Filters Selection is visible
+      And I verified subtotal toggle is visible
 
      When I selected all attributes
       And I selected all metrics
@@ -26,8 +26,9 @@ Feature: TF9328 - Release Validation
       And for cell "H3" bold button should be selected
 
      When I clicked Edit object 1
-      And I verified that Columns & Filters Selection is visible
-      And I clicked Include Subtotals and Totals switch
+     Then I verified that Columns & Filters Selection is visible
+
+     When I clicked Include Subtotals and Totals switch
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
      Then cells ["B1", "J3"] should have values ["Item Type", "2104134.98"]
@@ -40,8 +41,8 @@ Feature: TF9328 - Release Validation
       And I clicked Run button
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
-      And I verified that Columns & Filters Selection is visible
-     Then I verified subtotal toggle is visible
+     Then I verified that Columns & Filters Selection is visible
+      And I verified subtotal toggle is visible
 
      When I selected all attributes
       And I selected all metrics
@@ -59,8 +60,9 @@ Feature: TF9328 - Release Validation
      When I clicked Edit object 1
       And I waited for Run button to be enabled
       And I clicked Run button
-      And I verified that Columns & Filters Selection is visible
-      And I clicked Include Subtotals and Totals switch
+     Then I verified that Columns & Filters Selection is visible
+
+     When I clicked Include Subtotals and Totals switch
       And I clicked Import button in Columns and Filters Selection
      Then cells ["B1", "D8"] should have values ["Subcategory", "$1,562"]
 
@@ -68,8 +70,8 @@ Feature: TF9328 - Release Validation
       And I clicked Add Data button
       And I found object by ID "B570B68011EA637625CE0080EF65F1FA" and selected "Report with crosstab and subtotals"
       And I clicked Prepare Data button
-      And I verified that Columns & Filters Selection is visible
-     Then I verified subtotal toggle is visible
+     Then I verified that Columns & Filters Selection is visible
+      And I verified subtotal toggle is visible
 
      When I selected all attributes
       And I selected all metrics
@@ -85,8 +87,9 @@ Feature: TF9328 - Release Validation
       And for cell "W10" bold button should be selected
 
      When I clicked Edit object 1
-      And I verified that Columns & Filters Selection is visible
-      And I clicked Include Subtotals and Totals switch
+     Then I verified that Columns & Filters Selection is visible
+
+     When I clicked Include Subtotals and Totals switch
       And I clicked Import button in Columns and Filters Selection
      Then cells ["B1", "W9"] should have values ["Region", "$1,263,442"]
 
@@ -94,8 +97,8 @@ Feature: TF9328 - Release Validation
       And I clicked Add Data button
       And I found object by ID "55F93DF611EA6378261F0080EF2572FC" and selected "Report Totals Subtotals 1"
       And I clicked Prepare Data button
-      And I verified that Columns & Filters Selection is visible
-     Then I verified subtotal toggle is visible
+     Then I verified that Columns & Filters Selection is visible
+      And I verified subtotal toggle is visible
 
      When I selected all attributes
       And I selected all metrics
@@ -109,8 +112,8 @@ Feature: TF9328 - Release Validation
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
       And I clicked Run button
-      And I verified that Columns & Filters Selection is visible
-     Then I verified subtotal toggle is visible
+     Then I verified that Columns & Filters Selection is visible
+      And I verified subtotal toggle is visible
 
      When I clicked Include Subtotals and Totals switch
       And I selected all attributes
@@ -121,14 +124,18 @@ Feature: TF9328 - Release Validation
      When I refreshed all objects
       And I closed all notifications
      Then cells ["B1", "AV14"] should have values ["Region", "$3,319,225"]
-      And I selected worksheet number 1
-      Then cells ["B1", "J3"] should have values ["Item Type", "2104134.98"]
-      And I selected worksheet number 2
-      Then cells ["B1", "D8"] should have values ["Subcategory", "$1,562"]
-      And I selected worksheet number 3
-      Then cells ["B1", "W9"] should have values ["Region", "$1,263,442"]
-      And I selected worksheet number 4
-      Then cells ["B1", "D2"] should have values ["Country", "$157,963"]
+
+     When I selected worksheet number 1
+     Then cells ["B1", "J3"] should have values ["Item Type", "2104134.98"]
+
+     When I selected worksheet number 2
+     Then cells ["B1", "D8"] should have values ["Subcategory", "$1,562"]
+
+     When I selected worksheet number 3
+     Then cells ["B1", "W9"] should have values ["Region", "$1,263,442"]
+
+     When I selected worksheet number 4
+     Then cells ["B1", "D2"] should have values ["Country", "$157,963"]
 
      When I added a new worksheet
       And I clicked Add Data button
