@@ -62,9 +62,19 @@ Feature: TF9328 - Release Validation
       And I closed all notifications
      Then cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
 
-     When I removed object 1 using icon
+     When I wrote text "123" in cell "C3"
+      And cell "C3" should have value "123"
+#     When I merged cells from "L3" to " X3"
+      And I wrote text "=B3" in cell "B49"
+      And cells ["B3", "B49"] should have values ["", "0"]
+      And I wrote text "100" in cell "H3"
+      And I wrote text "=SUM(H3:H39)" in cell "B43"
+      And cell "H3" should have value "100"
+      And cell "B43" should have value "400970.8"
+
+      And I removed object 1 using icon
      Then I closed last notification
-      And cells ["B3", "E5", "H3", "V6"] should have values ["", "", "", ""]
+      And cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "", "", "", "0", "#REF!"]
 
      When I added a new worksheet
       And I clicked Import Data button
