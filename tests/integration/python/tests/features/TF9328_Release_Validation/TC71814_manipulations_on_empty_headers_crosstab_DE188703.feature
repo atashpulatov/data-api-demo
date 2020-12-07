@@ -3,7 +3,7 @@
 @release_validation
 Feature: TF9328 - Release Validation
 
-  Scenario: [TC40305] - Selecting objects imported to the different worksheets and to adjacent columns/rows
+  Scenario: [TC71814] - DE188703 - Table moved down after report refresh through Excel add-in - 11.3 GA
     Given I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
@@ -61,7 +61,6 @@ Feature: TF9328 - Release Validation
       And I clicked view data
       And I closed all notifications
      Then cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
-
 
      When I removed object 1 using icon
      Then I closed last notification
