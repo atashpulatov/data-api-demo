@@ -117,7 +117,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionBrowserPage.CLOSE_PREVIEW_TEXT
         ).click()
 
-    def verify_subtotal_visible(self):
+    def is_subtotal_visible(self):
         self.focus_on_add_in_popup_frame()
 
         return self.check_if_element_exists_by_css(
