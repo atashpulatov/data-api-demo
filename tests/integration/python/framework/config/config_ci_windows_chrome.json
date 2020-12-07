@@ -5,8 +5,8 @@
   "max_no_of_test_executions": 2,
   "cleanup_after_test_enabled": true,
   "driver_path_windows_chrome": "framework\\resources\\chromedriver87_win32.exe",
-  "excel_add_in_environment": "228690",
-  "excel_desktop_add_in_import_data_name": "env-228690",
+  "excel_add_in_environment": "236574",
+  "excel_desktop_add_in_import_data_name": "env-236574",
   "excel_add_in_environment_default_user_name": "a",
   "excel_add_in_environment_default_password": ""
 }
