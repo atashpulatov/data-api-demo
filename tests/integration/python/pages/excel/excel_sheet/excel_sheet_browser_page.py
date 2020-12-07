@@ -56,6 +56,9 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
     EXCEL_SELECTED_COLUMN_HEADER = '.ewrch-col-cellsel > .ewr-chc'
     EXCEL_SELECTED_ROW_HEADER = '.ewrch-row-cellsel > .ewr-rhc'
 
+    RANGE_SEPARATOR = ':'
+    MERGE_AND_CENTER_BUTTON = "[title='Merge & Centre']"
+
     def get_cells_values(self, cells):
         result = []
 
@@ -72,9 +75,19 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         return value.strip() if value else value
 
     def go_to_cell(self, cell):
-        cell_upper = cell.upper()
+        self._select_cell_or_range(cell)
 
-        # TODO called few times in java app
+    def merge_range(self, start_cell, end_cell):
+        self._select_range(start_cell, end_cell)
+
+        self.log_page_source()
+        merge_button = self.get_element_by_css(ExcelSheetBrowserPage.MERGE_AND_CENTER_BUTTON)
+        merge_button.click()
+
+    def _select_range(self, start_cell, end_cell):
+        self._select_cell_or_range(start_cell + ExcelSheetBrowserPage.RANGE_SEPARATOR + end_cell)
+
+    def _select_cell_or_range(self, cells):
         self.focus_on_excel_frame()
 
         cell_input = self.get_element_by_id(ExcelSheetBrowserPage.CELL_TRAVERSAL_INPUT_ELEM)
@@ -82,7 +95,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         cell_input.click()
         self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
 
-        cell_input.send_keys(cell_upper)
+        cell_input.send_keys(cells)
 
         cell_input.send_keys(Keys.ENTER)
         self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)

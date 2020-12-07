@@ -16,7 +16,7 @@ Feature: TF9328 - Release Validation
 
      When I wrote text "123" in cell "C3"
       And cell "C3" should have value "123"
-#     When I merged cells from "L3" to " X3"
+     When I merged range from "L3" to "X3"
       And I wrote text "=B3" in cell "B49"
       And cells ["B3", "B49"] should have values ["", "0"]
       And I wrote text "100" in cell "H3"
@@ -31,7 +31,7 @@ Feature: TF9328 - Release Validation
 
      When I wrote text "123" in cell "C3"
       And cell "C3" should have value "123"
-#     When I merged cells from "L3" to " X3"
+     When I merged range from "L3" to "X3"
       And I wrote text "=B3" in cell "B49"
       And cells ["B3", "B49"] should have values ["", "0"]
       And I wrote text "100" in cell "H3"
@@ -48,7 +48,7 @@ Feature: TF9328 - Release Validation
 
      When I wrote text "123" in cell "C3"
       And cell "C3" should have value "123"
-#     When I merged cells from "L3" to " X3"
+     When I merged range from "L3" to "X3"
       And I wrote text "=B3" in cell "B49"
       And cells ["B3", "B49"] should have values ["", "0"]
       And I wrote text "100" in cell "H3"
@@ -64,7 +64,7 @@ Feature: TF9328 - Release Validation
 
      When I wrote text "123" in cell "C3"
       And cell "C3" should have value "123"
-#     When I merged cells from "L3" to " X3"
+     When I merged range from "L3" to "X3"
       And I wrote text "=B3" in cell "B49"
       And cells ["B3", "B49"] should have values ["", "0"]
       And I wrote text "100" in cell "H3"
