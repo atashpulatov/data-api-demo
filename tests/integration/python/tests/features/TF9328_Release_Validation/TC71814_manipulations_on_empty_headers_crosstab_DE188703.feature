@@ -57,7 +57,7 @@ Feature: TF9328 - Release Validation
       And cell "B43" should have value "400970.8"
 
       And I clicked clear data
-      And cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "", "", ", "0", "#REF!"]
+      And cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["Column2", "", "Column7", "", "0", "#REF!"]
       And I clicked view data
       And I closed all notifications
      Then cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
