@@ -2,6 +2,7 @@ import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import { officeRemoveHelper } from './office-remove-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
+import operationErrorHandler from '../../operation/operation-error-handler';
 
 class StepRemoveObjectTable {
   /**
@@ -25,31 +26,47 @@ class StepRemoveObjectTable {
       crosstabHeaderDimensions = {},
     } = objectData;
 
+    let excelContext;
+    let objectExist;
+    let clearEmptyCrosstabRowError;
+
     try {
-      const excelContext = await officeApiHelper.getExcelContext();
-      const officeTable = excelContext.workbook.tables.getItem(bindId);
+      excelContext = await officeApiHelper.getExcelContext();
+      objectExist = await officeRemoveHelper.checkIfObjectExist(objectData, excelContext);
 
-      officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
-      officeTable.showHeaders = true;
+      if (!objectExist) {
+        operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
+      } else {
+        const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-      const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
-        crosstabHeaderDimensions,
-        officeTable,
-        excelContext
-      );
+        clearEmptyCrosstabRowError = await officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable, excelContext);
+        officeTable.showHeaders = true;
 
-      const validCrosstabHeaderDimnesions = {
-        ...crosstabHeaderDimensions,
-        columnsY: validColumnsY,
-        rowsX: validRowsX
-      };
+        const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
+          crosstabHeaderDimensions,
+          officeTable,
+          excelContext
+        );
 
-      await officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, validCrosstabHeaderDimnesions);
+        const validCrosstabHeaderDimnesions = {
+          ...crosstabHeaderDimensions,
+          columnsY: validColumnsY,
+          rowsX: validRowsX
+        };
+
+        await officeRemoveHelper.removeExcelTable(officeTable, excelContext, isCrosstab, validCrosstabHeaderDimnesions);
+
+        operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
+      }
     } catch (error) {
-      console.error(error);
+      const errorToHandle = clearEmptyCrosstabRowError || error;
+      if (objectExist) {
+        operationErrorHandler.handleOperationError(objectData, operationData, errorToHandle);
+      } else {
+        console.error(errorToHandle);
+        operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
+      }
     }
-
-    operationStepDispatcher.completeRemoveObjectTable(objectWorkingId);
   };
 }
 

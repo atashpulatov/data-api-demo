@@ -1,4 +1,3 @@
-from pyperclip import paste
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
@@ -43,7 +42,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         # First go to cell to ensure it's visible (scrolled to).
         self.go_to_cell(cell)
 
-        value = self._get_selected_cell_value(cell)
+        value = self._get_selected_cell_value()
 
         return value.strip() if value else value
 
@@ -56,29 +55,13 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.press_enter()
 
-    def _get_selected_cell_value(self, cell):
-        cell_selector_name = self._get_selector_name(cell)
-
-        cell_elem = self.get_element_by_name(cell_selector_name)
-
-        cell_value = cell_elem.get_attribute(ExcelSheetWindowsDesktopPage.VALUE_ATTRIBUTE)
+    def _get_selected_cell_value(self):
+        cell_value = self.get_selected_text_using_clipboard()
+        self.press_escape()
 
         formatted_cell_value = ExcelUtil.format_cell_value(cell_value) if cell_value else ''
 
         return formatted_cell_value
-
-    def _get_selector_name(self, cell):
-        cell_upper = cell.upper()
-
-        result = []
-
-        for char in list(cell_upper):
-            if char.isalpha():
-                result.append('"%s" ' % char)
-            else:
-                result.append(char)
-
-        return ''.join(result)
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)
@@ -227,11 +210,11 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._select_font_name_combo_box()
 
-        self.send_keys(Keys.CONTROL + 'c')
-        self.send_keys(Keys.CONTROL)
+        font_name = self.get_selected_text_using_clipboard()
+
         self.press_escape()
 
-        return paste()
+        return font_name
 
     def is_column_range_selected(self, column_names):
         return self._is_range_selected(column_names)

@@ -33,7 +33,7 @@ class OfficeRemoveHelper {
     excelContext.trackedObjects.add(tableRange);
 
     if (isCrosstab) {
-      officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
+      await officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable, excelContext);
       officeTable.showHeaders = true;
       await excelContext.sync();
 

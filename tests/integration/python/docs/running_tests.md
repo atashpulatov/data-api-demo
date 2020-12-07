@@ -17,11 +17,16 @@
     "C:\Program Files (x86)\Windows Application Driver\WinAppDriver.exe" 127.0.0.1 4723/wd/hub
     ```
 
+    This step is not required when `run_win_app_driver_enabled` configuration parameter is set to `True`. 
+
 1. Open second `cmd` window or console in your IDE and activate Python environment:
 
     ```console
     cd PROJECT_DIR/tests/integration/python
     venv_win\Scripts\Activate
+
+    set PYTHONIOENCODING=utf-8
+    set PYTHONLEGACYWINDOWSSTDIO=utf-8
     ```
 
 1. Ensure in `config.json` (or as command line parameters) you have:
@@ -41,6 +46,9 @@
     ```console
     cd PROJECT_DIR/tests/integration/python
     venv_win\Scripts\Activate
+    
+    set PYTHONIOENCODING=utf-8
+    set PYTHONLEGACYWINDOWSSTDIO=utf-8
     ```
 
 1. Ensure `driver_type` is set to `windows_chrome` in `config.json` or as a command line parameter.
@@ -76,6 +84,8 @@
 1. Execute tests (see [Running tests](#running_tests)).
 
 ### Starting tests on Mac and executing them on remote Windows Desktop
+
+#### Running tests in 2-machines configuration doesn't work when OS's clipboard is used (e.g. for copying cell's value). 
 
 ##### On Windows:
 
