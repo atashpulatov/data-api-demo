@@ -35,11 +35,7 @@ class BaseElement:
 
     def click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
-            try:
-                self.__element.click()
-            except ElementClickInterceptedException as e:
-                Util.log_error(e)
-                raise MstrException('Error while clicking an element.')
+            self.simple_click()
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
@@ -55,6 +51,13 @@ class BaseElement:
         ActionChains(self.__driver).click().perform()
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
+
+    def simple_click(self):
+        try:
+            self.__element.click()
+        except ElementClickInterceptedException as e:
+            Util.log_error(e)
+            raise MstrException('Error while clicking an element.')
 
     def double_click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:

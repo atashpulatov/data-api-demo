@@ -43,26 +43,30 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
             image_name=self.prepare_image_name('unselect_all_attributes')
         ).click()
 
-    # TODO change implementation to ensure attribute is selected (not only clicking without checking)
     def ensure_attribute_is_selected_and_click_forms(self, attributes_and_forms_json):
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
         popup_main_element = self.get_add_in_main_element()
 
         for attribute_name, form_names in attributes_and_forms.items():
-            popup_main_element.get_element_by_xpath(
-                ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
-            ).click()
-
             if len(form_names) > 0:
-                popup_main_element.get_element_by_xpath(
-                    ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM % attribute_name
-                ).click()
+                try:
+                    self.get_attribute_dropdown(popup_main_element, attribute_name).click()
+                except MstrException:
+                    popup_main_element.get_element_by_xpath(
+                        ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
+                    ).click()
+                    self.get_attribute_dropdown(popup_main_element, attribute_name).click()
 
                 for form_name in form_names:
                     popup_main_element.get_element_by_xpath(
                         ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_ITEM_ELEM % form_name
                     ).click()
+
+    def get_attribute_dropdown(self, add_in_main_element, attribute_name):
+        return add_in_main_element.get_element_by_xpath(
+          ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM % attribute_name
+        )
 
     def select_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()
