@@ -80,7 +80,6 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
     def merge_range(self, start_cell, end_cell):
         self._select_range(start_cell, end_cell)
 
-        self.log_page_source()
         merge_button = self.get_element_by_css(ExcelSheetBrowserPage.MERGE_AND_CENTER_BUTTON)
         merge_button.click()
 

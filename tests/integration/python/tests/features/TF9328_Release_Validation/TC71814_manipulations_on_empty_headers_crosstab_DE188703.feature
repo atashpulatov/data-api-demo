@@ -89,7 +89,7 @@ Feature: TF9328 - Release Validation
       And I clicked Import button
       And I closed last notification
       And I removed object 2 using icon
-     Then I closed last notification
+     Then I closed notification on object 2
       And cells ["B3", "E5", "H3", "V6"] should have values ["", "", "", ""]
 
       And I logged out
