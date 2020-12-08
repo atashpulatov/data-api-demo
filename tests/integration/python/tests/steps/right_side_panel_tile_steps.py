@@ -123,7 +123,7 @@ def step_impl(contex):
     contex.pages.right_panel_tile_page().wait_for_duplicate_object_to_finish_successfully()
 
 
-@step('I waited for object operation to complete successfully with message: "{expected_message}"')
+@step('I waited for object operation to complete successfully with message "{expected_message}"')
 def step_impl(contex, expected_message):
     contex.pages.right_panel_tile_page().wait_for_operation_to_finish_successfully_with_message(expected_message)
 
@@ -140,7 +140,7 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_icon_bar_visible, True)
 
 
-@step('I selected {object_number} using object checkbox')
+@step('I selected object {object_number} using object checkbox')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_checkbox_for_object_selection(object_number)
 
@@ -150,42 +150,42 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_cancel_on_pending_action(object_number)
 
 
-@step('object {object_number} action in progress name is "{object_action}"')
+@step('I verified that the object {object_number} action in progress name was "{object_action}"')
 def step_impl(context, object_number, object_action):
     action_in_progress_name = context.pages.right_panel_tile_page().get_object_action_in_progress_name(object_number)
 
     AssertUtil.assert_simple(action_in_progress_name, object_action)
 
 
-@step('object {object_number} action in progress is executed on total "{total_rows_expected}"')
+@step('I verified that the object {object_number} action in progress was executed on total "{total_rows_expected}"')
 def step_impl(context, object_number, total_rows_expected):
     total_rows = context.pages.right_panel_tile_page().get_object_action_in_progress_total_rows_count(object_number)
 
     AssertUtil.assert_simple(total_rows, total_rows_expected)
 
 
-@step('object {object_number} action displays percentage progress')
+@step('I verified that the object {object_number} action displayed percentage progress')
 def step_impl(context, object_number):
     is_percentage_displayed = context.pages.right_panel_tile_page().verify_object_action_displays_progress_percentage(object_number)
 
     AssertUtil.assert_simple(is_percentage_displayed, True)
 
 
-@step('object {object_number} action is pending')
+@step('I verified that the object {object_number} action was pending')
 def step_impl(context, object_number):
     is_action_pending = context.pages.right_panel_tile_page().verify_object_action_is_pending(object_number)
 
     AssertUtil.assert_simple(is_action_pending, True)
 
 
-@step('object {object_number} has displayed message "{object_message}"')
+@step('I verified that the object {object_number} had displayed message "{object_message}"')
 def step_impl(context, object_number, object_message):
     displayed_message = context.pages.right_panel_tile_page().get_object_action_in_progress_name(object_number)
 
     AssertUtil.assert_simple(displayed_message, object_message)
 
 
-@step('object {object_number} tile has no popup displayed')
+@step('I verified that the object {object_number} tile had no popup displayed')
 def step_impl(context, object_number):
     is_message_displayed = context.pages.right_panel_tile_page().verify_object_has_popup_displayed(object_number)
 

@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.const import DEFAULT_TIMEOUT, LONG_TIMEOUT
 from framework.util.message_const import MessageConst
 
 
@@ -62,7 +62,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def wait_for_remove_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT, timeout)
     
-    def wait_for_operation_to_finish_successfully_with_message(self, expected_message, timeout=DEFAULT_TIMEOUT):
+    def wait_for_operation_to_finish_successfully_with_message(self, expected_message, timeout=LONG_TIMEOUT):
         self._wait_for_operation_with_status(expected_message, timeout)
 
     def wait_for_operation_error_and_accept(self, expected_message, timeout=DEFAULT_TIMEOUT):

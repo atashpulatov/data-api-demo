@@ -79,7 +79,7 @@ def step_impl(context, overlay_title):
     context.pages.right_panel_page().wait_for_clear_data_overlay_to_finish_successfully_with_title(overlay_title)
     
 
-@step('Clear Data overlay displays message "{overlay_message}"')
+@step('I verified that the Clear Data overlay displayed message "{overlay_message}"')
 def step_impl(context, overlay_message):
     displayed_message = context.pages.right_panel_page().get_clear_data_overlay_message()
 
