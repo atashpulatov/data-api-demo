@@ -94,7 +94,8 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         cell_input.click()
         self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
 
-        cell_input.send_keys(cells)
+        cells_uppercase = cells.upper()
+        cell_input.send_keys(cells_uppercase)
 
         cell_input.send_keys(Keys.ENTER)
         self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
