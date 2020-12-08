@@ -20,6 +20,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
     EXPAND_DETAILS_ELEM = '.details-indicator'
     OBJECT_DETAILS_TABLE = '.details-table > table tr'
     OBJECT_DETAILS_VALUE = '.tooltip :last-child'
+    OBJECT_TYPE_DETAIL = '.details-table tr:nth-child(1) p'
+    OBJECT_ID_DETAIL = '.details-table tr:nth-child(2) p'
+    OBJECT_CREATED_DETAIL = '.details-table tr:nth-child(3) p'
+    OBJECT_LOCATION_DETAIL = '.details-table tr:nth-child(4) .ellipsis-container'
+    OBJECT_DESCRIPTION_DETAIL = '.details-table tr:nth-child(5) .ellipsis-container'
 
     IMPORT_BUTTON_ELEM = 'import'
     IMPORT_BUTTON_DISABLED = 'disabled'
@@ -156,6 +161,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
             add_to_library_button.click()
 
     def show_object_details(self, object_number):
+        self.focus_on_add_in_popup_frame()
         object_index = int(object_number) - 1
 
         self.get_elements_by_css(ImportDataBrowserPage.EXPAND_DETAILS_ELEM)[object_index].click()
@@ -176,6 +182,36 @@ class ImportDataBrowserPage(BaseBrowserPage):
                 return False
 
         return True
+    
+    def get_object_type_detail_value(self):
+        self.focus_on_add_in_popup_frame()
+        object_detail = self.get_elements_by_css(ImportDataBrowserPage.OBJECT_TYPE_DETAIL)
+
+        return object_detail[0].text
+    
+    def get_object_id_detail_value(self):
+        self.focus_on_add_in_popup_frame()
+        object_detail = self.get_elements_by_css(ImportDataBrowserPage.OBJECT_ID_DETAIL)
+
+        return object_detail[0].text
+
+    def get_object_created_detail_value(self):
+        self.focus_on_add_in_popup_frame()
+        object_detail = self.get_elements_by_css(ImportDataBrowserPage.OBJECT_CREATED_DETAIL)
+
+        return object_detail[0].text
+
+    def get_object_location_detail_value(self):
+        self.focus_on_add_in_popup_frame()
+        object_detail = self.get_elements_by_css(ImportDataBrowserPage.OBJECT_LOCATION_DETAIL)
+
+        return object_detail[0].text
+
+    def get_object_description_detail_value(self):
+        self.focus_on_add_in_popup_frame()
+        object_detail = self.get_elements_by_css(ImportDataBrowserPage.OBJECT_DESCRIPTION_DETAIL)
+
+        return object_detail[0].text
 
     def close_import_data_popup(self):
         self.get_element_by_css(ImportDataBrowserPage.CLOSE_IMPORT_DATA_BUTTON).click()

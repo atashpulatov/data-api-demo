@@ -1,7 +1,7 @@
 @windows_desktop
 @mac_chrome
 @windows_chrome
-Feature: F25932 - Details panel
+Feature: F25946 - Details panel
 
   Scenario: [TC59673] - Copy to clipboard
     Given I logged in as default user
