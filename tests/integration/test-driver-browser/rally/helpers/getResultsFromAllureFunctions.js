@@ -71,7 +71,6 @@ function parseArgs() {
       parameters[args[0]] = args[1];
     }
   });
-  console.log(parameters)
   return parameters;
 }
 /**
