@@ -22,12 +22,14 @@ module.exports = {
     verdict: 'verdict',
     target: 'target'
   },
-  status: {
+  allureStatus: {
     broken: 'broken',
-    fail: 'Fail',
-    pass: 'Pass',
     skipped: 'skipped',
     passed: 'passed'
+  },
+  rallyStatus: {
+    fail: 'Fail',
+    pass: 'Pass',
   },
   target: {
     macDesktop: 'mac_desktop',
