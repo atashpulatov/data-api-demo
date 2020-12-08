@@ -16,13 +16,14 @@ Feature: TF9328 - Release Validation
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
-     Then cells ["B1", "J3"] should have values ["Item Type", "81320.96"]
+     Then cells ["B1", "J3", "H3"] should have values ["Item Type", "81320.96", "Maximum"]
       And for cell "H3" bold button should be selected
       And object number 1 should be called "Report based on cube with subtotals"
 
      When I clicked Refresh on object 1
+      And I waited for object to be refreshed successfully
       And I closed last notification
-     Then cells ["B1", "J3"] should have values ["Item Type", "81320.96"]
+     Then cells ["B1", "J3", "H3"] should have values ["Item Type", "81320.96", "Maximum"]
       And for cell "H3" bold button should be selected
 
      When I clicked Edit object 1
@@ -30,15 +31,15 @@ Feature: TF9328 - Release Validation
 
      When I clicked Include Subtotals and Totals switch
       And I clicked Import button in Columns and Filters Selection
+      And I waited for object to be imported successfully
       And I closed last notification
-     Then cells ["B1", "J3"] should have values ["Item Type", "2104134.98"]
+     Then cells ["B1", "J3", "H3"] should have values ["Item Type", "2104134.98", "27/04/2011"]
 
      When I added a new worksheet
       And I clicked Add Data button
       And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
       And I clicked Prepare Data button
       And I waited for Run button to be enabled
-      And I clicked Run button
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
      Then I verified that Columns & Filters Selection is visible
@@ -47,14 +48,16 @@ Feature: TF9328 - Release Validation
      When I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
+      And I waited for object to be imported successfully
       And I closed last notification
-     Then cells ["B1", "D8"] should have values ["Subcategory", "$7,662"]
+     Then cells ["B1", "C7", "B8"] should have values ["Subcategory", "$1,164", "Total"]
       And for cell "D8" bold button should be selected
       And object number 1 should be called "Report with a subtotal & prompt"
 
      When I clicked Refresh on object 1
+      And I waited for object to be refreshed successfully
       And I closed last notification
-     Then cells ["B1", "D8"] should have values ["Subcategory", "$7,662"]
+     Then cells ["B1", "C7", "B8"] should have values ["Subcategory", "$1,164", "Total"]
       And for cell "D8" bold button should be selected
 
      When I clicked Edit object 1
@@ -64,7 +67,9 @@ Feature: TF9328 - Release Validation
 
      When I clicked Include Subtotals and Totals switch
       And I clicked Import button in Columns and Filters Selection
-     Then cells ["B1", "D8"] should have values ["Subcategory", "$1,562"]
+      And I waited for object to be imported successfully
+      And I closed last notification
+     Then cells ["B1", "C7", "B8"] should have values ["Subcategory", "$1,164", "Art & Architecture"]
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -76,14 +81,16 @@ Feature: TF9328 - Release Validation
      When I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
+      And I waited for object to be imported successfully
       And I closed last notification
-     Then cells ["B1", "W9"] should have values ["Region", "$1"]
+     Then cells ["B1", "B7", "C4", "W9"] should have values ["Region", "Total", "", "$1"]
       And for cell "W10" bold button should be selected
       And object number 1 should be called "Report with crosstab and subtotals"
 
      When I clicked Refresh on object 1
+      And I waited for object to be refreshed successfully
       And I closed last notification
-     Then cells ["B1", "W9"] should have values ["Region", "$1"]
+     Then cells ["B1", "B7", "C4", "W9"] should have values ["Region", "Total", "", "$1"]
       And for cell "W10" bold button should be selected
 
      When I clicked Edit object 1
@@ -91,7 +98,9 @@ Feature: TF9328 - Release Validation
 
      When I clicked Include Subtotals and Totals switch
       And I clicked Import button in Columns and Filters Selection
-     Then cells ["B1", "W9"] should have values ["Region", "$1,263,442"]
+      And I waited for object to be imported successfully
+      And I closed last notification
+     Then cells ["B1", "B7", "C4", "W9"] should have values ["Region", "USA", "", "$1,263,442"]
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -104,7 +113,9 @@ Feature: TF9328 - Release Validation
       And I selected all metrics
       And I clicked Include Subtotals and Totals switch
       And I clicked Import button in Columns and Filters Selection
-     Then cells ["B1", "D2"] should have values ["Country", "$157,963"]
+      And I waited for object to be imported successfully
+      And I closed last notification
+     Then cells ["B3", "D2"] should have values ["USA", "$157,963"]
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -119,23 +130,26 @@ Feature: TF9328 - Release Validation
       And I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
-     Then cells ["B1", "AV14"] should have values ["Region", "$3,319,225"]
+      And I waited for object to be imported successfully
+      And I closed last notification
+     Then cells ["B7", "C4", "AV14"] should have values ["USA", "", "$3,319,225"]
 
      When I refreshed all objects
+      And I waited for all progress notifications to disappear
       And I closed all notifications
-     Then cells ["B1", "AV14"] should have values ["Region", "$3,319,225"]
+     Then cells ["B7", "C4", "AV14"] should have values ["USA", "", "$3,319,225"]
 
      When I selected worksheet number 1
-     Then cells ["B1", "J3"] should have values ["Item Type", "2104134.98"]
+     Then cells ["B1", "J3", "H3"] should have values ["Item Type", "2104134.98", "27/04/2011"]
 
      When I selected worksheet number 2
-     Then cells ["B1", "D8"] should have values ["Subcategory", "$1,562"]
+     Then cells ["B1", "C7", "B8"] should have values ["Subcategory", "$1,164", "Art & Architecture"]
 
      When I selected worksheet number 3
-     Then cells ["B1", "W9"] should have values ["Region", "$1,263,442"]
+     Then cells ["B1", "B7", "C4", "W9"] should have values ["Region", "USA", "", "$1,263,442"]
 
      When I selected worksheet number 4
-     Then cells ["B1", "D2"] should have values ["Country", "$157,963"]
+     Then cells ["B3", "D2"] should have values ["USA", "$157,963"]
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -188,6 +202,7 @@ Feature: TF9328 - Release Validation
      When I selected all attributes
       And I selected all metrics
       And I clicked Import button in Columns and Filters Selection
+      And I waited for object to be imported successfully
       And I closed last notification
      Then cells ["B1", "D2"] should have values ["Avg (Item)", "$5,293,624"]
       And for cell "D2" bold button should be selected
