@@ -23,7 +23,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     SEARCH_INPUT = '.search-input > input'
 
     SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
-
     SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
     def __init__(self):
@@ -121,6 +120,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         return self.check_if_element_exists_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE_CONTAINER, timeout=SHORT_TIMEOUT)
-
-
+            ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE_CONTAINER,
+            timeout=SHORT_TIMEOUT
+        )
