@@ -75,6 +75,7 @@ def step_impl(context):
 
 @step('I verified "{button_name}" button is "{expected_state}"')
 def step_impl(context, button_name, expected_state):
+    # todo: move lines 78 - 97 to different file, which is shared beetween all platforms
     AVAILABLE_STATES_DICT = {
         'enabled': True,
         'disabled': False,
@@ -83,17 +84,17 @@ def step_impl(context, button_name, expected_state):
 
     if expected_state not in AVAILABLE_STATES:
         raise MstrException(
-          'Specified state not allowed: [%s], available states: %s.' % (expected_state, AVAILABLE_STATES))
+          f'Specified state not allowed: [{expected_state}], available states: {AVAILABLE_STATES}.')
 
     AVAILABLE_BUTTON_NAMES = [
-      "Import",
-      "Data Preview",
-      "Cancel",
+        'Import',
+        'Data Preview',
+        'Cancel',
     ]
 
     if button_name not in AVAILABLE_BUTTON_NAMES:
         raise MstrException(
-          'Specified button name not allowed: [%s], available buttons: %s.' % (button_name, AVAILABLE_BUTTON_NAMES))
+          f'Specified button name not allowed: [{button_name}], available buttons: {AVAILABLE_BUTTON_NAMES}.')
 
     button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled(button_name)
 

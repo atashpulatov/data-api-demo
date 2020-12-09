@@ -6,12 +6,19 @@ from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page im
 
 from distutils.util import strtobool
 
+
 class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     IMPORT_BUTTON = 'import'
     BACK_BUTTON = 'back'
     DATA_PREVIEW_BUTTON = 'data-preview'
     CLOSE_PREVIEW_BUTTON = 'Close Preview'
     CANCEL_BUTTON = 'cancel'
+
+    BUTTONS_SELECTORS = {
+        'Import': IMPORT_BUTTON,
+        'Data Preview': DATA_PREVIEW_BUTTON,
+        'Cancel': CANCEL_BUTTON,
+    }
 
     POPUP_WINDOW_ELEM = 'NUIDialog'
     POPUP_CLOSE_BUTTON = 'Close'
@@ -22,7 +29,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
     POPUP_WINDOW_TITLE = '//Group[@AutomationId="popup-wrapper"]/Text[@Name="%s"]'
 
-    SEARCH_INPUT = "Search..."
+    SEARCH_INPUT = 'Search...'
 
     def __init__(self):
         super().__init__()
@@ -122,16 +129,9 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def is_button_enabled(self, button_name):
-        BUTTONS_SELECTORS = {
-          "Import": ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON,
-          "Data Preview": ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON,
-          "Cancel": ColumnsAndFiltersSelectionWindowsDesktopPage.CANCEL_BUTTON,
-        }
-
-        button = self.get_element_by_accessibility_id(BUTTONS_SELECTORS[button_name])
+        button = self.get_element_by_accessibility_id(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.BUTTONS_SELECTORS[button_name]
+        )
         is_enabled_str = button.get_attribute('IsEnabled')
-
-        # to convert from string ['false','true'] to bool - https://stackoverflow.com/a/35412300
         is_enabled_bool = bool(strtobool(is_enabled_str))
-
         return is_enabled_bool
