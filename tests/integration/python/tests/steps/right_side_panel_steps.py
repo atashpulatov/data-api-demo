@@ -66,12 +66,12 @@ def step_impl(context):
 
 @step('I refreshed selected objects')
 def step_impl(context):
-    context.pages.right_panel_page().refresh_selected()
+    context.pages.right_panel_page().click_refresh_selected_button()
 
 
 @step('I removed selected objects')
 def step_impl(context):
-    context.pages.right_panel_page().remove_selected()
+    context.pages.right_panel_page().click_remove_selected_button()
 
 
 @step('I waited for Clear Data overlay to have title "{overlay_title}"')

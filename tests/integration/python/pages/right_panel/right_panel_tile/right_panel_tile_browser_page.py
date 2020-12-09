@@ -280,7 +280,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         percentage = element.get_attribute(RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE)
         percentage_position = percentage.find("%")
 
-        return (percentage_position == 2) or (percentage_position == 3)
+        return percentage_position in (1,2,3)
     
     def verify_object_action_is_pending(self, object_number):
         self.focus_on_add_in_frame()
