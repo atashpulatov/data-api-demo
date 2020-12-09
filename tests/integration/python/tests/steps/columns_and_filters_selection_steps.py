@@ -1,4 +1,6 @@
 from behave import *
+from framework.util.assert_util import AssertUtil
+from framework.util.exception.MstrException import MstrException
 
 
 @step('I verified that Columns & Filters Selection is visible')
@@ -70,3 +72,29 @@ def step_impl(context):
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_close_preview()
 
+
+@step('I verified "{button_name}" button is "{expected_state}"')
+def step_impl(context, button_name, expected_state):
+    AVAILABLE_STATES_DICT = {
+        'enabled': True,
+        'disabled': False,
+    }
+    AVAILABLE_STATES = AVAILABLE_STATES_DICT.keys()
+
+    if expected_state not in AVAILABLE_STATES:
+        raise MstrException(
+          'Specified state not allowed: [%s], available states: %s.' % (expected_state, AVAILABLE_STATES))
+
+    AVAILABLE_BUTTON_NAMES = [
+      "Import",
+      "Data Preview",
+      "Cancel",
+    ]
+
+    if button_name not in AVAILABLE_BUTTON_NAMES:
+        raise MstrException(
+          'Specified button name not allowed: [%s], available buttons: %s.' % (button_name, AVAILABLE_BUTTON_NAMES))
+
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled(button_name)
+
+    AssertUtil.assert_simple(button_enabled, AVAILABLE_STATES_DICT[expected_state])

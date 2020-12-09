@@ -4,6 +4,7 @@ from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPag
 from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 
+from distutils.util import strtobool
 
 class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     IMPORT_BUTTON = 'import'
@@ -119,3 +120,18 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
         ).click()
+
+    def is_button_enabled(self, button_name):
+        BUTTONS_SELECTORS = {
+          "Import": ColumnsAndFiltersSelectionWindowsDesktopPage.IMPORT_BUTTON,
+          "Data Preview": ColumnsAndFiltersSelectionWindowsDesktopPage.DATA_PREVIEW_BUTTON,
+          "Cancel": ColumnsAndFiltersSelectionWindowsDesktopPage.CANCEL_BUTTON,
+        }
+
+        button = self.get_element_by_accessibility_id(BUTTONS_SELECTORS[button_name])
+        is_enabled_str = button.get_attribute('IsEnabled')
+
+        # to convert from string ['false','true'] to bool - https://stackoverflow.com/a/35412300
+        is_enabled_bool = bool(strtobool(is_enabled_str))
+
+        return is_enabled_bool
