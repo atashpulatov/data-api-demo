@@ -147,25 +147,15 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     def click_bold_button(self):
         self._navigate_to_home_tab_and_press('1')
 
-    def click_font_color_button(self):
-        # TODO Select a specific font color. For now, hardcode
+    def click_font_color_button(self, font_color):
         self._navigate_to_home_tab_and_press('fc')
 
-        self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH % ExcelSheetWindowsDesktopPage.LIGHT_GREEN
-        ).click()
+        self._select_font_color(font_color)
 
-        self.pause(AFTER_OPERATION_WAIT_TIME)
-
-    def click_fill_color_button(self):
-        # TODO Select a specific fill color. For now, hardcode
+    def click_fill_color_button(self, fill_color):
         self._navigate_to_home_tab_and_press('h')
 
-        self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH % ExcelSheetWindowsDesktopPage.LIGHT_GREEN
-        ).click()
-
-        self.pause(AFTER_OPERATION_WAIT_TIME)
+        self._select_fill_color(fill_color)
 
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)
@@ -189,21 +179,17 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return self.get_element_by_name(name).is_selected()
 
-    def is_font_color_selected(self):
-        # TODO Select a specific font color. For now, hardcode
+    def is_font_color_selected(self, cell_name, font_color):
+        self.go_to_cell(cell_name)
         self._navigate_to_home_tab_and_press('fc')
 
-        return self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH % ExcelSheetWindowsDesktopPage.LIGHT_GREEN
-        ).is_selected()
+        return self.get_element_by_name(font_color).is_selected()
 
-    def is_fill_color_selected(self):
-        # TODO Select a specific fill color. For now, hardcode
+    def is_fill_color_selected(self, cell_name, fill_color):
+        self.go_to_cell(cell_name)
         self._navigate_to_home_tab_and_press('h')
 
-        return self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH % ExcelSheetWindowsDesktopPage.LIGHT_GREEN
-        ).is_selected()
+        return self.get_element_by_name(fill_color).is_selected()
 
     def get_font_name_of_cell(self, cell_name):
         self.go_to_cell(cell_name)
@@ -242,3 +228,23 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.send_keys(Keys.ALT + 'h')
 
         self.send_keys(Keys.ALT + keys)
+
+    def close_font_color_by_selecting(self, font_color):
+        self._select_font_color(font_color)
+
+    def close_fill_color_by_selecting(self, fill_color):
+        self._select_fill_color(fill_color)
+
+    def _select_font_color(self, font_color):
+        self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH % font_color
+        ).click()
+
+        self.pause(AFTER_OPERATION_WAIT_TIME)
+
+    def _select_fill_color(self, fill_color):
+        self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH % fill_color
+        ).click()
+
+        self.pause(AFTER_OPERATION_WAIT_TIME)
