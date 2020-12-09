@@ -10,6 +10,11 @@ def step_impl(context, cell_name):
     context.pages.excel_sheet_page().go_to_cell(cell_name)
 
 
+@step('I merged range from "{start_cell}" to "{end_cell}"')
+def step_impl(context, start_cell, end_cell):
+    context.pages.excel_sheet_page().merge_range(start_cell, end_cell)
+
+
 @step('I wrote text "{text}" in cell "{cell_name}"')
 def step_impl(context, text, cell_name):
     context.pages.excel_sheet_page().write_value_in_cell(cell_name, text)
