@@ -79,9 +79,9 @@ task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
   FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
   begin
-  shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} --no-skipped -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/", cwd: test_dir
+    shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} --no-skipped -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
   ensure 
-  shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
+    shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
 
 
   info "publish e2e test result to Rally"
