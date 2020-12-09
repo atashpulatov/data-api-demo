@@ -90,10 +90,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def click_back_button(self):
-        self.get_element_by_accessibility_id(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON)
-        ).click()
+        self._get_back_button().click()
 
     def click_cancel_button(self):
         self.get_element_by_accessibility_id(
@@ -135,3 +132,12 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         is_enabled_str = button.get_attribute('IsEnabled')
         is_enabled_bool = bool(strtobool(is_enabled_str))
         return is_enabled_bool
+
+    def _get_back_button(self):
+        return self.get_element_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON)
+        )
+
+    def is_back_button_visible(self):
+        self._get_back_button()

@@ -73,29 +73,30 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_close_preview()
 
 
-@step('I verified "{button_name}" button is "{expected_state}"')
+@step('I verified that Import button is enabled')
+def step_impl(context, expected_state):
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Import')
+    AssertUtil.assert_simple(button_enabled, True)
+
+
+@step('I verified that Data Preview button is enabled')
+def step_impl(context, expected_state):
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Data Preview')
+    AssertUtil.assert_simple(button_enabled, True)
+
+
+@step('I verified that Import button is disabled')
 def step_impl(context, button_name, expected_state):
-    # todo: move lines 78 - 97 to different file, which is shared beetween all platforms
-    AVAILABLE_STATES_DICT = {
-        'enabled': True,
-        'disabled': False,
-    }
-    AVAILABLE_STATES = AVAILABLE_STATES_DICT.keys()
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Import')
+    AssertUtil.assert_simple(button_enabled, False)
 
-    if expected_state not in AVAILABLE_STATES:
-        raise MstrException(
-          f'Specified state not allowed: [{expected_state}], available states: {AVAILABLE_STATES}.')
 
-    AVAILABLE_BUTTON_NAMES = [
-        'Import',
-        'Data Preview',
-        'Cancel',
-    ]
+@step('I verified that Data Preview button is disabled')
+def step_impl(context, button_name, expected_state):
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Data Preview')
+    AssertUtil.assert_simple(button_enabled, False)
 
-    if button_name not in AVAILABLE_BUTTON_NAMES:
-        raise MstrException(
-          f'Specified button name not allowed: [{button_name}], available buttons: {AVAILABLE_BUTTON_NAMES}.')
 
-    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled(button_name)
-
-    AssertUtil.assert_simple(button_enabled, AVAILABLE_STATES_DICT[expected_state])
+@step('I verified that Back button is visible')
+def step_impl(context, button_name, expected_state):
+    context.pages.columns_and_filters_selection_page().is_back_button_visible()
