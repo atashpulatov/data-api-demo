@@ -1,4 +1,3 @@
-@windows_chrome
 @mac_chrome
 @release_validation
 Feature: TF9328 - Release Validation
