@@ -19,17 +19,17 @@ Feature: TS41441 - Sanity checks
       And I verified that counter of "attributes" shows "0" of "3" selected
       And I verified that counter of "metrics" shows "0" of "2" selected
       And I verified that counter of "filters" shows "0" of "3" selected
-      And I verified that Data Preview button is disabled
-      And I verified that Import button is disabled
-      And I verified that Back button is visible
+      And I verified Data Preview button is disabled
+      And I verified Import button is disabled
+      And I verified Back button is visible
 
      When I clicked metric "Revenue"
-     Then I verified that Data Preview button is enabled
-      And I verified that Import button is enabled
+     Then I verified Data Preview button is enabled
+      And I verified Import button is enabled
      
      When I clicked metric "Revenue"
-     Then I verified that Data Preview button is disabled
-      And I verified that Import button is disabled
+     Then I verified Data Preview button is disabled
+      And I verified Import button is disabled
 
      When I clicked attribute "Year"
       And I clicked attribute "Region"
@@ -38,8 +38,8 @@ Feature: TS41441 - Sanity checks
       And I selected filter "Year" with all elements
       And I selected filters { "Region" : ["Central", "Southwest", "South", "Northeast"] }
     
-     Then I verified that Data Preview button is enabled
-      And I verified that Import button is enabled
+     Then I verified Data Preview button is enabled
+      And I verified Import button is enabled
      Then I clicked Data Preview button
       And I clicked Close Preview button
 

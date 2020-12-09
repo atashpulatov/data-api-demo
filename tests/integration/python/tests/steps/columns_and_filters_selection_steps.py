@@ -73,30 +73,30 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_close_preview()
 
 
-@step('I verified that Import button is enabled')
+@step('I verified Import button is enabled')
 def step_impl(context, expected_state):
     button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Import')
     AssertUtil.assert_simple(button_enabled, True)
 
 
-@step('I verified that Data Preview button is enabled')
+@step('I verified Data Preview button is enabled')
 def step_impl(context, expected_state):
     button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Data Preview')
     AssertUtil.assert_simple(button_enabled, True)
 
 
-@step('I verified that Import button is disabled')
+@step('I verified Import data button is disabled')
 def step_impl(context, button_name, expected_state):
     button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Import')
     AssertUtil.assert_simple(button_enabled, False)
 
 
-@step('I verified that Data Preview button is disabled')
+@step('I verified Data Preview button is disabled')
 def step_impl(context, button_name, expected_state):
     button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Data Preview')
     AssertUtil.assert_simple(button_enabled, False)
 
 
-@step('I verified that Back button is visible')
+@step('I verified Back button is visible')
 def step_impl(context, button_name, expected_state):
     context.pages.columns_and_filters_selection_page().is_back_button_visible()
