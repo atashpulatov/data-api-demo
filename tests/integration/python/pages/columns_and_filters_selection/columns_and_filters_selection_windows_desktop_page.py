@@ -134,7 +134,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         return is_enabled_bool
 
     def _get_back_button(self):
-        return self.get_element_by_name(
+        return self.get_element_by_accessibility_id(
             ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON)
         )

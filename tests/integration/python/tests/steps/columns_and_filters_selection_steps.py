@@ -85,7 +85,7 @@ def step_impl(context):
     AssertUtil.assert_simple(button_enabled, True)
 
 
-@step('I verified Import data button is disabled')
+@step('I verified Import button is disabled')
 def step_impl(context):
     button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Import')
     AssertUtil.assert_simple(button_enabled, False)
