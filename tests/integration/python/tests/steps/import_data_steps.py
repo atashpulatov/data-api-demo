@@ -75,37 +75,9 @@ def step_impl(context):
     AssertUtil.assert_simple(compare_result, True)
 
 
-@step('I verified that the object displayed Type detail is "{expected_value}"')
-def step_impl(context, expected_value):
-    object_detail_value = context.pages.import_data_page().get_object_type_detail_value()
-
-    AssertUtil.assert_simple(object_detail_value, expected_value)
-
-
-@step('I verified that the object displayed ID detail is "{expected_value}"')
-def step_impl(context, expected_value):
-    object_detail_value = context.pages.import_data_page().get_object_id_detail_value()
-
-    AssertUtil.assert_simple(object_detail_value, expected_value)
-
-
-@step('I verified that the object displayed Created detail is "{expected_value}"')
-def step_impl(context, expected_value):
-    object_detail_value = context.pages.import_data_page().get_object_created_detail_value()
-
-    AssertUtil.assert_simple(object_detail_value, expected_value)
-
-
-@step('I verified that the object displayed Location detail is "{expected_value}"')
-def step_impl(context, expected_value):
-    object_detail_value = context.pages.import_data_page().get_object_location_detail_value()
-
-    AssertUtil.assert_simple(object_detail_value, expected_value)
-
-
-@step('I verified that the object displayed Description detail is "{expected_value}"')
-def step_impl(context, expected_value):
-    object_detail_value = context.pages.import_data_page().get_object_description_detail_value()
+@step('I verified that the details of the first expanded object show "{detail_type}" as "{expected_value}"')
+def step_impl(context, detail_type, expected_value):
+    object_detail_value = context.pages.import_data_page().get_object_detail_value(detail_type)
 
     AssertUtil.assert_simple(object_detail_value, expected_value)
 

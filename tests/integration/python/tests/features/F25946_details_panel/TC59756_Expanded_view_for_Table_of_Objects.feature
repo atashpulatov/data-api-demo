@@ -14,25 +14,25 @@ Feature: F25946 - Details panel
      Then I found object "single_attribute"
 
      When I displayed details for object number 3
-     Then I verified that the object displayed Type detail is "Dataset"
-      And I verified that the object displayed ID detail is "EB7B0A4711EA8A5EC5020080EF658AEC"
-      And I verified that the object displayed Created detail is "4/29/2020 9:18 PM"
-      And I verified that the object displayed Location detail is "MicroStrategy Tutorial > Public Objects > Reports > DS Objects"
-      And I verified that the object displayed Description detail is "some description"
+     Then I verified that the details of the first expanded object show "type" as "Dataset"
+      And I verified that the details of the first expanded object show "id" as "EB7B0A4711EA8A5EC5020080EF658AEC"
+      And I verified that the details of the first expanded object show "created" as "4/29/2020 9:18 PM"
+      And I verified that the details of the first expanded object show "location" as "MicroStrategy Tutorial > Public Objects > Reports > DS Objects"
+      And I verified that the details of the first expanded object show "description" as "some description"
       And I verified that copying the details to clipboard works correctly
      
      When I displayed details for object number 2
-     Then I verified that the object displayed Type detail is "Dataset"
-      And I verified that the object displayed ID detail is "CED9B2FF11EA8AF275CF0080EF6555DF"
-      And I verified that the object displayed Created detail is "4/30/2020 2:56 PM"
-      And I verified that the object displayed Location detail is "MicroStrategy Tutorial > Profiles > MSTR User (mstr) > My Reports"
+     Then I verified that the details of the first expanded object show "type" as "Dataset"
+      And I verified that the details of the first expanded object show "id" as "CED9B2FF11EA8AF275CF0080EF6555DF"
+      And I verified that the details of the first expanded object show "created" as "4/30/2020 2:56 PM"
+      And I verified that the details of the first expanded object show "location" as "MicroStrategy Tutorial > Profiles > MSTR User (mstr) > My Reports"
 
      When I displayed details for object number 1
-     Then I verified that the object displayed Type detail is "Dataset"
-      And I verified that the object displayed ID detail is "D5798B4D11EAB497A9EC0080EF9503F3"
-      And I verified that the object displayed Created detail is "6/22/2020 2:51 PM"
-      And I verified that the object displayed Location detail is "MicroStrategy Tutorial > Public Objects > Reports > DS Objects > Cubes for Create Testing"
-      And I verified that the object displayed Description detail is "some description"
+     Then I verified that the details of the first expanded object show "type" as "Dataset"
+      And I verified that the details of the first expanded object show "id" as "D5798B4D11EAB497A9EC0080EF9503F3"
+      And I verified that the details of the first expanded object show "created" as "6/22/2020 2:51 PM"
+      And I verified that the details of the first expanded object show "location" as "MicroStrategy Tutorial > Public Objects > Reports > DS Objects > Cubes for Create Testing"
+      And I verified that the details of the first expanded object show "description" as "some description"
 
      When I selected object "single_attribute"
       And I clicked Import button
