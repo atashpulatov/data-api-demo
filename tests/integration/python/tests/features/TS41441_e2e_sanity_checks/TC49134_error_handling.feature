@@ -128,11 +128,12 @@ Feature: TS41441 - Sanity checks
      When I clicked clear data
       And I waited for all progress notifications to disappear
       And I logged out
-      And I logged in with username "Jeff" and empty password
+      And I logged in with username "a" and empty password
       And I clicked view data
-      And I waited for all progress notifications to disappear
+      And I waited for object to be refreshed successfully
       And I closed all warning notifications
+      And I selected worksheet number 1
       And I selected worksheet number 4
-     Then cells ["A2", "C3"] should have values ["Mid-Atlantic", "$646,421"]
+     Then cells ["A2", "C3"] should have values ["Central", "$3,506,062"]
 
       And I logged out
