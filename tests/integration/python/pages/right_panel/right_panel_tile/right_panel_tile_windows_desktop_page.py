@@ -143,6 +143,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.pause(3)  # TODO check visibility
 
+    def hover_refresh(self, tile_no):
+        self._hover_button_on_tile(RightPanelTileWindowsDesktopPage.REFRESH_BUTTON_ELEM, tile_no)
+
     def click_edit(self, tile_no):
         WindowsDesktopMainAddInElementCache.invalidate_cache()
 
@@ -152,6 +155,14 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not plugin_window:
             raise MstrException('MicroStrategy for office is not visible')
+
+    def hover_edit(self, tile_no):
+        self._hover_button_on_tile(RightPanelTileWindowsDesktopPage.EDIT_BUTTON_ELEM, tile_no)
+
+    def get_tooltip_text(self, tile_no):
+        object_tile_elem = self._get_object_tile_by_number(tile_no)
+        tooltip_text_elem = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TOOLTIP_TEXT)
+        return tooltip_text_elem.text
 
     def remove_object_using_icon(self, tile_no):
         self._click_button_on_tile(RightPanelTileWindowsDesktopPage.REMOVE_BUTTON_ELEM, tile_no)
@@ -172,6 +183,14 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         # use simple_click to click button and quiclkly move cursor away from tile to not dismiss notification
         button.simple_click()
         object_tile_elem.move_to(0, 0)
+
+    def _hover_button_on_tile(self, button_selector, tile_no):
+        object_tile_elem = self._get_object_tile_by_number(tile_no)
+        object_tile_elem.move_to(1, 1)
+
+        button = object_tile_elem.get_element_by_name(button_selector)
+        button.move_to(1, 1)
+        self.pause(3)
 
     def _hover_over_tile(self, tile_no):
         self._get_object_tile_by_number(
