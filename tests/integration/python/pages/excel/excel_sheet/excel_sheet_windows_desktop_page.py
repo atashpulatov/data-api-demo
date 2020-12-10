@@ -10,7 +10,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
     BOOK_ELEM = 'Book1'
     GRID_ELEM = 'Grid'
-    BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"][%s]'
+    BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'
+    BOOK_CHILDREN_ELEM = '//TabItem[@AutomationId="SheetTab"][%s]'
     NAME_ATTRIBUTE = 'Name'
     ADD_SHEET_BUTTON = 'Sheet Tab Add Sheet'
 
@@ -79,9 +80,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def open_worksheet(self, worksheet_number):
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
-        book_element.get_elements_by_xpath(
-            ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS % worksheet_number
-        ).click()
+        book_element.get_element_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEM % worksheet_number).click()
 
     def remove_columns(self, column_name, number_of_columns):
         self.go_to_cell(f'{column_name}1')
