@@ -3,7 +3,6 @@ from selenium.webdriver.common.keys import Keys
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.const import AFTER_OPERATION_WAIT_TIME
 from framework.util.excel_util import ExcelUtil
-from framework.util.exception.MstrException import MstrException
 
 
 class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -11,7 +10,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
     BOOK_ELEM = 'Book1'
     GRID_ELEM = 'Grid'
-    BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'
+    BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"][%s]'
     NAME_ATTRIBUTE = 'Name'
     ADD_SHEET_BUTTON = 'Sheet Tab Add Sheet'
 
@@ -79,18 +78,10 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def open_worksheet(self, worksheet_number):
-        worksheet_number_int = int(worksheet_number)
-
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
-        book_children_elements = book_element.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
-
-        available_worksheets_number = len(book_children_elements)
-
-        if available_worksheets_number < worksheet_number_int:
-            raise MstrException(f'Cannot open worksheet number: {worksheet_number},'
-                                f' number of worksheets: {available_worksheets_number}.')
-
-        book_children_elements[worksheet_number_int - 1].click()
+        book_element.get_elements_by_xpath(
+            ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS % worksheet_number
+        ).click()
 
     def remove_columns(self, column_name, number_of_columns):
         self.go_to_cell(f'{column_name}1')
