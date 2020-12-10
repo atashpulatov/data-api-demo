@@ -11,9 +11,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
     BOOK_ELEM = 'Book1'
     GRID_ELEM = 'Grid'
-    BOOK_CHILDREN_ELEMS = '//TabItem'
+    BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'
     NAME_ATTRIBUTE = 'Name'
-    SHEET_TAB_NAME = 'Sheet Tab'
     ADD_SHEET_BUTTON = 'Sheet Tab Add Sheet'
 
     TABLE_STYLE_XPATH = '//DataGrid[@Name="Quick Styles"]/Group/ListItem[@Name="%s"]'
@@ -71,15 +70,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
         book_children_elements = book_element.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
 
-        sheet_tab_elements = list(
-            filter(
-                lambda item: item.get_attribute(
-                    ExcelSheetWindowsDesktopPage.NAME_ATTRIBUTE
-                ).startswith(ExcelSheetWindowsDesktopPage.SHEET_TAB_NAME), book_children_elements
-            )
-        )
-
-        return len(sheet_tab_elements)
+        return len(book_children_elements)
 
     def add_worksheet(self):
         self.get_element_by_name(
@@ -93,17 +84,13 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
         book_children_elements = book_element.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
 
-        i = 0
-        for child in book_children_elements:
-            if child.get_attribute(ExcelSheetWindowsDesktopPage.NAME_ATTRIBUTE).startswith(
-                    ExcelSheetWindowsDesktopPage.SHEET_TAB_NAME):
-                i += 1
+        available_worksheets_number = len(book_children_elements)
 
-                if i == worksheet_number_int:
-                    child.click()
-                    return
+        if available_worksheets_number < worksheet_number_int:
+            raise MstrException(f'Cannot open worksheet number: {worksheet_number},'
+                                f' number of worksheets: {available_worksheets_number}.')
 
-        raise MstrException('Cannot open worksheet number: %s.' % worksheet_number)
+        book_children_elements[worksheet_number_int - 1].click()
 
     def remove_columns(self, column_name, number_of_columns):
         self.go_to_cell(f'{column_name}1')
