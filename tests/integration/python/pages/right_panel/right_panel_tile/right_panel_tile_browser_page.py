@@ -297,9 +297,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
         
         element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_FIRST_DIV % object_number)
-        first_div = element.get_attribute(RightPanelTileBrowserPage.CLASS_NAME_ATTRIBUTE)
+        element_className = element.get_attribute(RightPanelTileBrowserPage.CLASS_NAME_ATTRIBUTE)
 
-        return (first_div == "notification-container")
+        return (element_className == "notification-container")
     
     def wait_for_object_operation_to_finish_successfully_with_message(self, object_number, expected_message):
         self.focus_on_add_in_frame()
