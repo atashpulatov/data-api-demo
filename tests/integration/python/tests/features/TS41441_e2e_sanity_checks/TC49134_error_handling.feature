@@ -128,7 +128,7 @@ Feature: TS41441 - Sanity checks
      When I clicked clear data
       And I waited for all progress notifications to disappear
       And I logged out
-      And I logged in with username "a" and empty password
+      And I logged in with username "Jeff" and empty password
       And I clicked view data
       And I waited for object to be refreshed successfully
       And I closed all warning notifications
