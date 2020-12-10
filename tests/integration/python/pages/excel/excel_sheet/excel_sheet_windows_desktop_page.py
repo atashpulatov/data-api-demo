@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import AFTER_OPERATION_WAIT_TIME
+from framework.util.const import AFTER_OPERATION_WAIT_TIME, SHORT_TIMEOUT
 from framework.util.excel_util import ExcelUtil
 
 
@@ -13,7 +13,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'
     BOOK_CHILDREN_ELEM = '//TabItem[@AutomationId="SheetTab"][%s]'
     NAME_ATTRIBUTE = 'Name'
-    ADD_SHEET_BUTTON = 'Sheet Tab Add Sheet'
+    ADD_SHEET_BUTTON_NEW_EXCEL = 'Add Sheet'
+    ADD_SHEET_BUTTON_OLD_EXCEL = 'Sheet Tab ' + ADD_SHEET_BUTTON_NEW_EXCEL
+    ADD_SHEET_BUTTON_IMAGE = ADD_SHEET_BUTTON_NEW_EXCEL
 
     TABLE_STYLE_XPATH = '//DataGrid[@Name="Quick Styles"]/Group/ListItem[@Name="%s"]'
 
@@ -73,10 +75,22 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         return len(book_children_elements)
 
     def add_worksheet(self):
-        self.get_element_by_name(
-            ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON,
-            image_name=self.prepare_image_name(ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON)
-        ).click()
+        is_add_button_visible_new_excel = self.check_if_element_exists_by_name(
+            ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON_NEW_EXCEL,
+            image_name=ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON_IMAGE,
+            timeout=SHORT_TIMEOUT
+        )
+
+        if is_add_button_visible_new_excel:
+            self.get_element_by_name(
+                ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON_NEW_EXCEL,
+                image_name=ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON_IMAGE,
+            ).click()
+        else:
+            self.get_element_by_name(
+                ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON_OLD_EXCEL,
+                image_name=ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON_IMAGE,
+            ).click()
 
     def open_worksheet(self, worksheet_number):
         book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
