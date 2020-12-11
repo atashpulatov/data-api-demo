@@ -150,10 +150,10 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
     def click_bold_button(self):
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.BOLD_BUTTON).click()
 
-    def click_font_color_button(self):
+    def set_font_color(self):
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.FONT_COLOR_BUTTON).click()
 
-    def click_fill_color_button(self):
+    def set_fill_color(self):
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.FILL_COLOR_BUTTON).click()
 
     def change_font_name_of_cell(self, cell_name, font_name):

@@ -102,14 +102,14 @@ def step_impl(context):
     context.pages.excel_sheet_page().click_bold_button()
 
 
-@step('I clicked "{font_color}" font color button')
+@step('I changed font color to "{font_color}"')
 def step_impl(context, font_color):
-    context.pages.excel_sheet_page().click_font_color_button(font_color)
+    context.pages.excel_sheet_page().set_font_color(font_color)
 
 
-@step('I clicked "{fill_color}" fill color button')
+@step('I changed fill color to "{fill_color}"')
 def step_impl(context, fill_color):
-    context.pages.excel_sheet_page().click_fill_color_button(fill_color)
+    context.pages.excel_sheet_page().set_fill_color(fill_color)
 
 
 @step('I changed cell "{cell_name}" font name to "{font_name}"')
@@ -169,13 +169,9 @@ def step_impl(context, cell_name, font_color):
 
     AssertUtil.assert_simple(font_color_selected, True)
 
-    context.pages.excel_sheet_page().close_font_color_by_selecting(font_color)
-
 
 @step('for cell "{cell_name}" fill color "{fill_color}" should be selected')
 def step_impl(context, cell_name, fill_color):
     fill_color_selected = context.pages.excel_sheet_page().is_fill_color_selected(cell_name, fill_color)
 
     AssertUtil.assert_simple(fill_color_selected, True)
-
-    context.pages.excel_sheet_page().close_fill_color_by_selecting(fill_color)

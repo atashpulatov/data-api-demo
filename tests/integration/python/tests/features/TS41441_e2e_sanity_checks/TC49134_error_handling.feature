@@ -94,10 +94,10 @@ Feature: TS41441 - Sanity checks
       And I clicked bold button
 
       And I selected cell "E2"
-      And I clicked "Light Green" font color button
+      And I changed font color to "Light Green"
 
       And I selected cell "G2"
-      And I clicked "Light Green" fill color button
+      And I changed fill color to "Light Green"
 
       And I changed cell "G2" font name to "Arial Black"
 
@@ -118,7 +118,6 @@ Feature: TS41441 - Sanity checks
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I ensured that MyLibrary Switch is OFF
       And I found object by ID "778ECA4C11E990F800000080EFA56C55" and selected "Revenue by Region and Category - secure data"
       And I clicked Import button
       And I closed all notifications

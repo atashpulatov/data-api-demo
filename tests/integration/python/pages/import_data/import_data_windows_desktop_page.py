@@ -159,18 +159,12 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         self._click_import_button()
 
     def click_import_button_to_import_with_error(self, error_message):
-        self.windows_desktop_workaround.focus_on_popup_window()
-
-        self._click_import_button()
-
-        self._check_if_error_message_exists(error_message)
-
-        self.get_element_by_name(
-            ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK,
-            image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ERROR_MESSAGE_BUTTON_OK)
-        ).click()
+        self._import_with_error(error_message)
 
     def click_import_button_to_import_with_global_error(self, error_message):
+        self._import_with_error(error_message)
+
+    def _import_with_error(self, error_message):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self._click_import_button()
