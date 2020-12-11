@@ -1,5 +1,4 @@
 @windows_desktop
-@mac_chrome
 @release_validation
 @ga_validation
 Feature: TS41441 - Sanity checks
@@ -134,6 +133,6 @@ Feature: TS41441 - Sanity checks
       And I closed all warning notifications
       And I selected worksheet number 1
       And I selected worksheet number 4
-     Then cells ["A2", "C3"] should have values ["Central", "$3,506,062"]
+     Then cells ["A2", "C3"] should have values ["Mid-Atlantic", "$646,421"]
 
       And I logged out
