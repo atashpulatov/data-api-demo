@@ -1,5 +1,4 @@
-@mac_chrome
-@windows_chrome
+@windows_desktop
 @release_validation
 @ga_validation
 Feature: TS41441 - Sanity checks
