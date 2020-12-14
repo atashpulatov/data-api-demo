@@ -4,6 +4,7 @@ from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPag
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.const import SHORT_TIMEOUT, LONG_TIMEOUT
 from framework.util.exception.MstrException import MstrException
+from framework.util.message_const import MessageConst
 
 
 class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -19,11 +20,11 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     REMOVING_TEXT_ELEM = 'Removing'
 
     NOTIFICATIONS_TEXTS = [
-      'Import successful',
-      'Refresh complete',
-      'Object removed',
-      'Object duplicated'
-      ]
+      MessageConst.IMPORT_SUCCESSFUL_TEXT,
+      MessageConst.DUPLICATE_OBJECT_SUCCESSFUL_TEXT,
+      MessageConst.REFRESH_OBJECT_SUCCESSFUL_TEXT,
+      MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT,
+    ]
 
     PROGRESS_BAR_TAG_NAME = 'ProgressBar'
 
@@ -160,7 +161,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self._hover_button_on_tile(RightPanelTileWindowsDesktopPage.EDIT_BUTTON_ELEM, tile_no)
 
     def get_tooltip_text(self, tile_no):
-        object_tile_elem = self._get_object_tile_by_number(tile_no)
+        object_tile_elem = self._get_object_by_number(tile_no)
         tooltip_text_elem = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TOOLTIP_TEXT)
         return tooltip_text_elem.text
 
@@ -175,7 +176,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         :param button_selector: Button selector.
         :param tile_no: Number of tile, counting from 1.
         """
-        object_tile_elem = self._get_object_tile_by_number(tile_no)
+        object_tile_elem = self._get_object_by_number(tile_no)
         object_tile_elem.move_to(0, 0)
 
         button = object_tile_elem.get_element_by_name(button_selector)
@@ -185,7 +186,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         object_tile_elem.move_to(0, 0)
 
     def _hover_button_on_tile(self, button_selector, tile_no):
-        object_tile_elem = self._get_object_tile_by_number(tile_no)
+        object_tile_elem = self._get_object_by_number(tile_no)
         object_tile_elem.move_to(1, 1)
 
         button = object_tile_elem.get_element_by_name(button_selector)
@@ -193,7 +194,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self.pause(3)
 
     def _hover_over_tile(self, tile_no):
-        self._get_object_tile_by_number(
+        self._get_object_by_number(
             tile_no
         ).move_to()
 
@@ -207,10 +208,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         return object_name_element.get_name_by_attribute()
 
     def click_object_number(self, object_no):
-        self._get_object_tile_by_number(object_no).click()
+        self._get_object_by_number(object_no).click()
 
     def double_click_on_name_of_object_number(self, object_no):
-        self._get_object_tile_by_number(object_no).get_element_by_xpath(
+        self._get_object_by_number(object_no).get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
         ).double_click()
 
@@ -230,22 +231,22 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         :param object_no: Right Panel object number.
         """
-        self._get_object_tile_by_number(object_no).get_element_by_xpath(
+        self._get_object_by_number(object_no).get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
         ).move_to()
 
     def get_highlight_color_of_object_number(self, object_no):
-        return self._get_object_tile_by_number(object_no).get_element_by_xpath(
+        return self._get_object_by_number(object_no).get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT
         ).pick_color(5, 2)
 
     def get_highlight_color_of_object_number_after_double_click(self, object_no):
-        return self._get_object_tile_by_number(object_no).get_element_by_xpath(
+        return self._get_object_by_number(object_no).get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK
         ).pick_color(5, 2)
 
     def change_object_name_using_icon(self, object_no, new_object_name):
-        object_tile_elem = self._get_object_tile_by_number(object_no)
+        object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
         name_container.move_to()
@@ -257,7 +258,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self.press_enter()
 
     def change_object_name_using_context_menu(self, object_no, new_object_name):
-        object_tile_elem = self._get_object_tile_by_number(object_no)
+        object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
         name_container.move_to()
@@ -273,7 +274,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self.press_enter()
 
     def remove_object_using_context_menu(self, object_no):
-        object_tile_elem = self._get_object_tile_by_number(object_no)
+        object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
         name_container.right_click(5, 5)  # Added small offset to ensure that right click occurs within searched element
@@ -285,7 +286,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self.wait_using_parent_for_remove_object_to_finish_successfully(object_tile_elem)
 
     def get_object_name_from_tooltip(self, object_no):
-        object_tile_elem = self._get_object_tile_by_number(object_no)
+        object_tile_elem = self._get_object_by_number(object_no)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
         name_container.move_to()
@@ -294,7 +295,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return tooltip_text_elem.text
 
-    def _get_object_tile_by_number(self, object_no):
+    def _get_object_by_number(self, object_no):
         right_panel_element = self.get_add_in_right_panel_element()
 
         return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM % object_no)
