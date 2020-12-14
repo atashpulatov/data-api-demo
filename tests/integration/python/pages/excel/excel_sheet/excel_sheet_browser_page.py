@@ -188,12 +188,12 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         self.get_element_by_id(ExcelSheetBrowserPage.BOLD_BUTTON).click()
 
-    def set_font_color(self):
+    def set_font_color(self, font_color):
         self.focus_on_excel_frame()
 
         self.get_element_by_id(ExcelSheetBrowserPage.FONT_COLOR_BUTTON).click()
 
-    def set_fill_color(self):
+    def set_fill_color(self, fill_color):
         self.focus_on_excel_frame()
 
         self.get_element_by_id(ExcelSheetBrowserPage.FILL_COLOR_BUTTON).click()

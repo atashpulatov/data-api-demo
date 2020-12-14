@@ -30,7 +30,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     RANGE_SELECTED_COLORS = ('#d2d2d2', '#cdf3df', '#d3f0e0', '#9fd5b7')  # default Office Theme colors
     COLUMN_CELL_HEADER_XPATH = '//HeaderItem[@Name="%s"]'
 
-    THEME_COLORS = 'Theme Colors'
+    THEME_COLORS_TITLE = 'Theme Colors'
 
     def get_cells_values(self, cells):
         result = []
@@ -152,12 +152,16 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     def set_font_color(self, font_color):
         self._navigate_to_home_tab_and_press('fc')
 
-        self._select_font_color(font_color)
+        self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH % font_color
+        ).click()
 
     def set_fill_color(self, fill_color):
         self._navigate_to_home_tab_and_press('h')
 
-        self._select_fill_color(fill_color)
+        self.get_element_by_xpath(
+            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH % fill_color
+        ).click()
 
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)
@@ -185,10 +189,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.go_to_cell(cell_name)
         self._navigate_to_home_tab_and_press('fc')
 
-        is_selected = self.get_element_by_name(font_color).is_selected()
-
-        self.get_element_by_name(ExcelSheetWindowsDesktopPage.THEME_COLORS).click()
-        self.press_escape()
+        is_selected = self._check_if_color_selected(font_color)
 
         return is_selected
 
@@ -196,12 +197,17 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.go_to_cell(cell_name)
         self._navigate_to_home_tab_and_press('h')
 
-        is_selected = self.get_element_by_name(fill_color).is_selected()
-
-        self.get_element_by_name(ExcelSheetWindowsDesktopPage.THEME_COLORS).click()
-        self.press_escape()
+        is_selected = self._check_if_color_selected(fill_color)
 
         return is_selected
+
+    def _check_if_color_selected(self, color):
+        is_color_selected = self.get_element_by_name(color).is_selected()
+
+        self.get_element_by_name(ExcelSheetWindowsDesktopPage.THEME_COLORS_TITLE).click()
+        self.press_escape()
+
+        return is_color_selected
 
     def get_font_name_of_cell(self, cell_name):
         self.go_to_cell(cell_name)
@@ -240,13 +246,3 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.send_keys(Keys.ALT + 'h')
 
         self.send_keys(Keys.ALT + keys)
-
-    def _select_font_color(self, font_color):
-        self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.FONT_COLOR_XPATH % font_color
-        ).click()
-
-    def _select_fill_color(self, fill_color):
-        self.get_element_by_xpath(
-            ExcelSheetWindowsDesktopPage.FILL_COLOR_XPATH % fill_color
-        ).click()
