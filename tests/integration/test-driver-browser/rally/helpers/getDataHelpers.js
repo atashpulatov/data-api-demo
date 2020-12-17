@@ -1,6 +1,21 @@
-/* eslint-disable no-underscore-dangle */
-const getDataFromRally = require('./getDataFromRally');
-const rallyConfig = require('./rallyconfig');
+const rallyConfig = require('../rallyconfig');
+const fetch = require('node-fetch');
+
+/**
+ * Retrieve Rally Test Case data using url to the particular endpoint
+ *
+ * @param {String} url Url to the endpoint
+ * @returns {Promise} Promise that will be resolved when the request to the endpoint is made
+ */
+function getDataFromRally(url) {
+  const options = {
+    method: 'GET',
+    headers: { zsessionid: rallyConfig.rallyApiKey, }
+  };
+
+  return fetch(url, options)
+    .then(result => result.json());
+};
 
 /**
 * Returns Test Set endpoint using Formatted Test Set ID (e.g. 'TS23156')
@@ -65,7 +80,10 @@ async function getTCDetailsFromRally(formattedID) {
     .catch(() => { throw Error(`Couldn't get ${formattedID} details`); });
 }
 
-exports.getTestSet = getTestSet;
-exports.getTesterUrl = getTesterUrl;
-exports.getRallyTCUrl = getRallyTCUrl;
-exports.getOwner = getOwner;
+module.exports = {
+  getOwner: getOwner,
+  getTestSet: getTestSet,
+  getRallyTCUrl: getRallyTCUrl,
+  getTesterUrl: getTesterUrl,
+  getDataFromRally: getDataFromRally
+}

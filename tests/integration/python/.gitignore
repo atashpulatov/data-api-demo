@@ -142,3 +142,4 @@ framework/config/config.json
 
 # Allure reports
 allure-report
+allureFolder
