@@ -1,11 +1,10 @@
 @windows_desktop
-@mac_chrome
 @release_validation
 @ga_validation
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC53560] - Importing grid visualisations - basic scenario
-    Given I logged in as default user
+     Given I logged in as default user
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
@@ -21,11 +20,11 @@ Feature: F24398 - Import and refresh visualization
       And I selected dossier bookmark 1
 
       And I "increased" year filter value on dossier from "left" side
-      # TODO I verified value for filter "Year" is "2015-2016"
+      And I verified value for filter "Year" is "(2015 - 2016)"
       And I reset dossier
-      # TODO I verified value for filter "Year" is "2014-2015"
+      And I verified value for filter "Year" is "(2014 - 2015)"
       And I selected dossier page or chapter 2
-      And I selected visualization "Chart vis"
+      And I selected visualization "Chart vis" 
       And I clicked import dossier
       And I closed last notification
      Then cells ["A2", "A3"] should have values ["2014", "2015"]
