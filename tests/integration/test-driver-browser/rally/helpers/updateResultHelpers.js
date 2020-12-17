@@ -2,7 +2,7 @@ const rallyConfig = require('../rallyconfig');
 const getResultsFromAllure = require('./getResultsFromAllureFunctions');
 const fetch = require('node-fetch');
 const strings = require('../constants/strings');
-const helpers = require('./getDataHelpers');
+const getDataHelper = require('./getDataHelpers');
 
 const today = new Date();
 
@@ -77,20 +77,20 @@ async function createManualBatchArray(testCaseArray) {
     for (let i = 0; i < testCaseArray.length; i++) {
       let testerUrl = '';
       if (rallyConfig.email !== '') {
-        testerUrl = await helpers.getTesterUrl(rallyConfig.email);
+        testerUrl = await getDataHelper.getTesterUrl(rallyConfig.email);
       } else {
         throw Error('Add your email to rallyconfig.js');
       }
-      const tcUrl = await helpers.getRallyTCUrl(testCaseArray[i].testCaseId);
-      const testCaseId = tcUrl.split('v2.0')[1];
+      const tcUrl = await getDataHelper.getRallyTCUrl(testCaseArray[i].testCaseId);
+      const testCase = tcUrl.split('v2.0')[1];
       const { verdict } = testCaseArray[i];
       let testSet = '';
       if (rallyConfig.manual.testSet !== '') {
-        testSet = await helpers.getTestSet(rallyConfig.manual.testSet);
+        testSet = await getDataHelper.getTestSet(rallyConfig.manual.testSet);
       }
       const { build, duration, notes, browser, release, env, exportApp, OS, language } = rallyConfig.manual;
 
-      const batchItem = createBatchItem(build, today, testCaseId, verdict, testerUrl, testSet, duration, notes, browser, env, release, exportApp, OS, language);
+      const batchItem = createBatchItem({build, date: today, testCase, verdict, testerUrl: tester, testSet, duration, notes, browser, env, release, exportApp, OS, language});
       batch.push(batchItem);
     }
     return { Batch: batch };
@@ -115,15 +115,15 @@ async function createAutomatedBatchArray(testCaseArray) {
         duration, browser, verdict, build, release, testCaseId, OS, notes, exportApp
       } = testCaseArray[i];
       const { env, language } = rallyConfig.automation;
-      const tcUrl = await helpers.getRallyTCUrl(testCaseId);
+      const tcUrl = await getDataHelper.getRallyTCUrl(testCaseId);
       const testCase = tcUrl.split('v2.0')[1];
 
-      const owner = await helpers.getOwner(testCaseId);
+      const owner = await getDataHelper.getOwner(testCaseId);
       let testSet = '';
       if (rallyConfig.automation.testSet !== '') {
-        testSet = await helpers.getTestSet(rallyConfig.automation.testSet);
+        testSet = await getDataHelper.getTestSet(rallyConfig.automation.testSet);
       }
-      const batchItem = createBatchItem(build, today, testCase, verdict, owner, testSet, duration, notes, browser, env, release, exportApp, OS, language)
+      const batchItem = createBatchItem({build, date: today, testCase, verdict, tester: owner, testSet, duration, notes, browser, env, release, exportApp, OS, language})
       batch.push(batchItem);
     }
   } catch (error) {
@@ -140,7 +140,7 @@ async function createAutomatedBatchArray(testCaseArray) {
  * @returns {Object} batch item
  */
 
-function createBatchItem(build, date, testCase, verdict, tester, testSet, duration, notes, browser, env, release, exportApp, os, language) {
+function createBatchItem({build, date, testCase, verdict, tester, testSet, duration, notes, browser, env, release, exportApp, OS, language}) {
   return {
     Entry: {
       Path: '/testcaseresult/create',
@@ -159,7 +159,7 @@ function createBatchItem(build, date, testCase, verdict, tester, testSet, durati
           c_Environment: env,
           c_ProductionRelease: release,
           c_ExportApplication: exportApp,
-          c_ClientOS: os,
+          c_ClientOS: OS,
           c_Language: language
         }
       }

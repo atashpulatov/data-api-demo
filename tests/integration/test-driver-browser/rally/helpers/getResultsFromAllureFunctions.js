@@ -42,7 +42,8 @@ function getTestCaseId(testCase) {
 */
 function getStatus(testCase) {
   const { status } = testCase;
-  const { fail, pass, passed } = strings.status;
+  const { fail, pass } = strings.rallyStatus;
+  const { passed } =  strings.allureStatus;
   return status === passed ? pass : fail;
 }
 
@@ -71,7 +72,6 @@ function parseArgs() {
       parameters[args[0]] = args[1];
     }
   });
-  console.log(parameters)
   return parameters;
 }
 /**
@@ -154,7 +154,9 @@ function getOS(cmdArguments) {
 * @returns {String} added to Notes for failed Test Case; contains first failed step
 */
 function getFirstFailedStep(testCase, verdict) {
-  const { pass, passed } = strings.status;
+  const { pass } = strings.rallyStatus;
+  const { passed } = strings.allureStatus;
+
   if (verdict !== pass) {
     const { steps } = testCase.testStage;
     const firstFailedStep = steps.find(step => step.status !== passed).name;

@@ -38,16 +38,15 @@ class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
     OBJECT_ID = 'ID'
     OBJECT_OWNER = 'Owner'
     OBJECT_LOCATION = 'Location'
-    OBJECT_TOTALS_AND_SUBTOTALS = 'Totals and Subtotals'
 
-    TOTALS_AND_SUBTOTALS_ON = 'ON'
+    TOTALS_AND_SUBTOTALS_ON = 'Totals and SubtotalsON'
 
     CERTIFIED_BY = 'Certified by '
 
     PROMPTS_ANSWERS = 'Prompts answers'
     SELECTED_ATTRIBUTES = 'Selected attributes'
     SELECTED_METRICS = 'Selected metrics'
-    SELECTED_FILTERS = 'Selected filters'
+    SELECTED_FILTERS = 'Selected filters with answers'
 
     NAME_LISTS_TO_STRING = {
         'Prompt': PROMPTS_ANSWERS,
@@ -70,20 +69,22 @@ class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
         show_details_selector = tile_element_selector + RightPanelTileDetailsWindowsDesktopPage.SHOW_DETAILS_XPATH
         hide_details_selector = tile_element_selector + RightPanelTileDetailsWindowsDesktopPage.HIDE_DETAILS_XPATH
 
-        return self.get_element_by_xpath(show_details_selector + "|" + hide_details_selector)
+        return self.get_add_in_right_panel_element().get_element_by_xpath(
+            show_details_selector + "|" + hide_details_selector
+        )
 
     def click_name_list_expand_button(self, object_number, name_list_type):
         property_value_collapsed_selector = self._get_property_value_collapsed_selector(name_list_type)
 
         selector = self._get_tile_element_selector(object_number) + property_value_collapsed_selector
 
-        self.get_element_by_xpath(selector).click()
+        self.get_add_in_right_panel_element().get_element_by_xpath(selector).click()
 
     def click_object_location_expand_button(self, object_number):
         selector = self._get_tile_details_container_selector(object_number) \
                    + RightPanelTileDetailsWindowsDesktopPage.LOCATION_VALUE_COLLAPSED
 
-        self.get_element_by_xpath(selector).click()
+        self.get_add_in_right_panel_element().get_element_by_xpath(selector).click()
 
     def is_object_is_certified(self, object_number):
         return self._get_object_list_property_value_merged(
@@ -99,8 +100,9 @@ class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
 
         selector = self._get_tile_details_container_selector(object_number) + property_value_collapsed_selector
 
-        return self.check_if_element_exists_by_xpath(
-            selector, image_name=self.prepare_image_name(selector)
+        return self.get_add_in_right_panel_element().check_if_element_exists_by_xpath(
+            selector,
+            image_name=self.prepare_image_name(selector)
         )
 
     def _get_property_value_collapsed_selector(self, name_list_type):
@@ -112,7 +114,10 @@ class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
         selector = self._get_tile_details_container_selector(object_number) \
                    + RightPanelTileDetailsWindowsDesktopPage.LOCATION_VALUE_COLLAPSED
 
-        return self.check_if_element_exists_by_xpath(selector, image_name=self.prepare_image_name(selector))
+        return self.get_add_in_right_panel_element().check_if_element_exists_by_xpath(
+            selector,
+            image_name=self.prepare_image_name(selector)
+        )
 
     def get_object_list_property_value(self, object_number, name_list_type):
         return self._get_object_list_property_value(
@@ -204,7 +209,7 @@ class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
         :return: List containing names and values of object's properties, odd items contain names, even items values.
         """
 
-        details_container_name = self.get_element_by_xpath(
+        details_container_name = self.get_add_in_right_panel_element().get_element_by_xpath(
             self._get_tile_details_container_selector(object_number)
         ).get_name_by_attribute()
 
