@@ -4,7 +4,7 @@
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC53560] - Importing grid visualisations - basic scenario
-     Given I logged in as default user
+    Given I logged in as default user
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
