@@ -57,13 +57,16 @@ task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
 
   shell_command! "python -m venv venv_win", cwd: test_dir
   shell_command! "venv_win\\Scripts\\Activate.bat", cwd: test_dir
-  shell_command! "python -m behave --tags=@ci --tags=@#{PY_WIN_TEST_PARAM[tag_name]} -D config_file=config_ci_#{PY_WIN_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
-
-  shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
-
-  info "publish e2e test result to Rally"
-  shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_WIN_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
-
+  begin
+    shell_command! "python -m behave --tags=@ci --tags=@#{PY_WIN_TEST_PARAM[tag_name]} --no-skipped -D config_file=config_ci_#{PY_WIN_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/", cwd: test_dir
+  ensure
+    shell_command! "npm install -g allure-commandline --save-dev",  cwd: "#{test_dir}"
+    shell_command! "python -m allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
+    shell_command! "npm install", cwd: get_browser_test_dir()
+    info "publish e2e test result to Rally"
+    
+    shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_WIN_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
+  end
 end
 
 desc "run test in python on Mac"
@@ -78,14 +81,13 @@ task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
 
   FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
-  begin
-    shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} --no-skipped -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{report_dir} tests/", cwd: test_dir
-  ensure 
+  begin 
+    shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} --no-skipped -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/features/F25931_duplicate_object", cwd: test_dir
+  ensure
     shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
-
-
-  info "publish e2e test result to Rally"
-  shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_MAC_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
+    info "publish e2e test result to Rally"
+    shell_command! "npm install", cwd: get_browser_test_dir()
+    shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_MAC_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
   end
 end
 
