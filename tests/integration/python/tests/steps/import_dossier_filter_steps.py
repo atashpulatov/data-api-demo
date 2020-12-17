@@ -1,5 +1,7 @@
 from behave import *
 
+from framework.util.assert_util import AssertUtil
+
 
 @step('I "{filter_change}" year filter value on dossier from "{filter_side}" side')
 def step_impl(context, filter_change, filter_side):
