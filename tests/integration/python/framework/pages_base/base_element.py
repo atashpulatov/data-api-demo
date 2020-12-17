@@ -166,19 +166,22 @@ class BaseElement:
 
         :return: BaseElement found using selector_type and selector.
         """
+
+        self.__driver.implicitly_wait(timeout)
+
         end_time = time.time() + timeout
-        while True:
+
+        while end_time > time.time():
             try:
                 raw_element = self.__element.find_element(by=selector_type, value=selector)
+
+                self.__driver.implicitly_wait(DEFAULT_TIMEOUT)
 
                 return BaseElement(raw_element, self.__driver)
             except NoSuchElementException:
                 pass
 
             Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
-
-            if time.time() > end_time:
-                break
 
         raise MstrException(('Element not found', selector))
 
@@ -343,7 +346,8 @@ class BaseElement:
         :raises MstrException: when no element found.
         """
         end_time = time.time() + timeout
-        while True:
+
+        while end_time > time.time():
             elements = self.get_elements_by_css(selector)
 
             element = next((item for item in elements if item.text == expected_text), None)
@@ -351,9 +355,6 @@ class BaseElement:
                 return element
 
             Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
-
-            if time.time() > end_time:
-                break
 
         raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')
 

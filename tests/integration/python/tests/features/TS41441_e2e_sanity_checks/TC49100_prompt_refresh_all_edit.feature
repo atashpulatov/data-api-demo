@@ -4,7 +4,7 @@
 @ga_validation
 Feature: TS41441 - Sanity checks
 
-  Scenario: [TC49100] Import Prompted Reports | Import multiple objects | Refresh All | Refresh | Edit - Prompts)
+  Scenario: [TC49100] Part 1. - Import Prompted Reports | Import multiple objects | Refresh | Edit - Prompts
     Given I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
@@ -106,47 +106,5 @@ Feature: TS41441 - Sanity checks
     When I clicked Import button in Columns and Filters Selection
      And I closed notification on object 1
     Then cells ["A1", "B4", "D1"] should have values ["Year", "$2,249,397", ""]
-
-
-    When I selected worksheet number 1
-     And I selected cell "M1"
-     And I clicked Add Data button
-     And I found object by ID "FB57AF3E11EA94342AF20080EFD58458" and selected "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Polish Pójdźże, kiń tę chmurność w głąb flaszy!"
-     And I clicked Import button
-
-     And I selected cell "R1"
-     And I clicked Add Data button
-     And I found object by ID "F3DA2FE611E75A9600000080EFC5B53B" and selected "Seasonal Report"
-     And I clicked Import button
-
-     And I selected cell "W1"
-     And I clicked Add Data button
-     And I found object by ID "A2BC67F211E9F56F23850080EF55D48D" and selected "Grid/graph"
-     And I clicked Import button
-
-     And I selected cell "AB1"
-     And I clicked Add Data button
-     And I found object by ID "3902375B11EA951135AC0080EFA5B3E7" and selected "this name is so long that it has ellipsis when it is displayed and in fact it is more than 100 chara"
-     And I clicked Import button
-
-     And I selected cell "AR1"
-     And I clicked Add Data button
-     And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"
-     And I clicked Import button
-
-     And I selected cell "BG1"
-     And I clicked Add Data button
-     And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"
-     And I clicked Import button
-
-     And I refreshed all objects
-     And I waited for all progress notifications to disappear
-     And I closed all notifications
-
-    And I removed object 1 using icon
-    And I removed object 9 using icon
-    And I closed all notifications
-
-    Then cells ["A1", "BG1"] should have values ["", ""]
 
     And I logged out

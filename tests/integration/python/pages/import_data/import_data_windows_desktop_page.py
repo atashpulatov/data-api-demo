@@ -116,6 +116,19 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.find_and_select_object_by_id(object_name, object_name)
 
+    def select_object_by_name(self, object_name):
+        """
+        Select object by name on the displayed objects list. This method does not verify ids and cannot handle
+        all special characters.
+
+        :param object_name: object name to search for
+        """
+
+        self.get_element_by_name(
+            object_name,
+            image_name=self.prepare_image_name(object_name)
+        ).click()
+
     def find_and_select_object_by_id(self, object_name, object_id):
         """
         Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
@@ -146,6 +159,12 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         self._click_import_button()
 
     def click_import_button_to_import_with_error(self, error_message):
+        self._import_with_error(error_message)
+
+    def click_import_button_to_import_with_global_error(self, error_message):
+        self._import_with_error(error_message)
+
+    def _import_with_error(self, error_message):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self._click_import_button()

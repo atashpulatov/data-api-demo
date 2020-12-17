@@ -330,3 +330,5 @@ coverage/
 .comparison_report/current/
 .comparison_report/markdown.html
 .eslint/
+
+workspace-settings/bundle/vendor

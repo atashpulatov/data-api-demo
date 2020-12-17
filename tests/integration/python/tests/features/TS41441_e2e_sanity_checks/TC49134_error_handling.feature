@@ -1,5 +1,4 @@
 @windows_desktop
-@mac_chrome
 @release_validation
 @ga_validation
 Feature: TS41441 - Sanity checks
@@ -11,7 +10,7 @@ Feature: TS41441 - Sanity checks
 
      #TODO Expire user session
 
-      And I found object by ID "E6B64AE611E95F872F800080EFD500F4" and selected "1,5M Sales Records.csv"
+      And I found object by ID "56A532DD11EA9A91D5440080EF853B57" and selected "50k columns report - pivoted"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1048576"
@@ -40,13 +39,12 @@ Feature: TS41441 - Sanity checks
       And I hover over Import button
      Then I verified that tooltip for Import button shows message "You cannot import an unpublished cube."
 
-     # TODO Uncomment when step is created for windows_desktop
-    When I cleared search box
-     # And I found object by ID "D796E92211EA434C28680080EF753F73" and selected "Report unpublished cube"
-     # Then I clicked Import button and saw global error "You cannot import an unpublished cube."
-     #
-     # When I selected cell "A1"
-     # And I clicked Import Data button
+     When I cleared search box
+      And I found object by ID "D796E92211EA434C28680080EF753F73" and selected "Report unpublished cube"
+     Then I clicked Import button and saw global error "You cannot import an unpublished cube."
+
+     When I selected cell "A1"
+      And I clicked Import Data button
       And I found object by ID "6A626B0C11E94AF4A45E0080EF95FFD5" and selected "Report with Page by, Advanced Sorting, Thresholds, Outline, Banding, Merge cells & Multiform attributes"
       And I clicked Import button
      Then I closed all notifications
@@ -78,8 +76,7 @@ Feature: TS41441 - Sanity checks
      When I clicked table design tab
      Then I clicked green table style
 
-     When I clicked home tab
-      And I selected cell "B4"
+     When I selected cell "B4"
       And I clicked percentage button
      Then cell "B4" should have value "890700%"
 
@@ -96,13 +93,11 @@ Feature: TS41441 - Sanity checks
       And I selected cell "D2"
       And I clicked bold button
 
-   # TODO select a specific color and later verify it if it's ok, check for desktop platforms
       And I selected cell "E2"
-      And I clicked font color button
+      And I changed font color to "Light Green"
 
-   # TODO select a specific color and later verify it if it's ok, check for desktop platforms
       And I selected cell "G2"
-      And I clicked fill color button
+      And I changed fill color to "Light Green"
 
       And I changed cell "G2" font name to "Arial Black"
 
@@ -111,6 +106,8 @@ Feature: TS41441 - Sanity checks
       And I closed last notification
 
      Then cell "L4" should have value "245,677 PLN"
+      And for cell "E2" font color "Light Green" should be selected
+      And for cell "G2" fill color "Light Green" should be selected
       And for cell "B2" align middle button should be selected
       And for cell "C2" align left button should be selected
       And for cell "D2" bold button should be selected
@@ -127,10 +124,13 @@ Feature: TS41441 - Sanity checks
      Then cell "C3" should have value "$3,506,062"
 
      When I clicked clear data
+      And I waited for all progress notifications to disappear
       And I logged out
       And I logged in with username "Jeff" and empty password
       And I clicked view data
+      And I waited for object to be refreshed successfully
       And I closed all warning notifications
+      And I selected worksheet number 1
       And I selected worksheet number 4
      Then cells ["A2", "C3"] should have values ["Mid-Atlantic", "$646,421"]
 

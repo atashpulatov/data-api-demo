@@ -1,5 +1,7 @@
 from behave import *
 
+from framework.util.assert_util import AssertUtil
+
 
 @step('I verified that Columns & Filters Selection is visible')
 def step_impl(context):
@@ -70,3 +72,16 @@ def step_impl(context):
 def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_close_preview()
 
+
+@step('I verified subtotal toggle is NOT visible')
+def step_impl(context):
+    subtotal_toggle_visible = context.pages.columns_and_filters_selection_page().is_subtotal_visible()
+
+    AssertUtil.assert_simple(subtotal_toggle_visible, False)
+
+
+@step('I verified subtotal toggle is visible')
+def step_impl(context):
+    subtotal_toggle_visible = context.pages.columns_and_filters_selection_page().is_subtotal_visible()
+
+    AssertUtil.assert_simple(subtotal_toggle_visible, True)
