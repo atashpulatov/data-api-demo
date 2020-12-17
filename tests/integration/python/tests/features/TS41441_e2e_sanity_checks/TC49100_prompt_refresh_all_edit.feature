@@ -18,17 +18,17 @@ Feature: TS41441 - Sanity checks
       And I verified that counter of "attributes" shows "0" of "3" selected
       And I verified that counter of "metrics" shows "0" of "2" selected
       And I verified that counter of "filters" shows "0" of "3" selected
-      And I verified Data Preview button is disabled
-      And I verified Import button is disabled
-      And I verified Back button is visible
+      And I verified that Data Preview button in Columns and Filters Selection is disabled
+      And I verified that Import button in Columns and Filters Selection is disabled
+      And I verified that Back button in Columns and Filters Selection is visible
 
      When I clicked metric "Revenue"
-     Then I verified Data Preview button is enabled
-      And I verified Import button is enabled
+     Then I verified that Data Preview button in Columns and Filters Selection is enabled
+      And I verified that Import button in Columns and Filters Selection is enabled
      
      When I clicked metric "Revenue"
-     Then I verified Data Preview button is disabled
-      And I verified Import button is disabled
+     Then I verified that Data Preview button in Columns and Filters Selection is disabled
+      And I verified that Import button in Columns and Filters Selection is disabled
 
      When I clicked attribute "Year"
       And I clicked attribute "Region"
@@ -37,8 +37,8 @@ Feature: TS41441 - Sanity checks
       And I selected filter "Year" with all elements
       And I selected filters { "Region" : ["Central", "Southwest", "South", "Northeast"] }
     
-     Then I verified Data Preview button is enabled
-      And I verified Import button is enabled
+     Then I verified that Data Preview button in Columns and Filters Selection is enabled
+      And I verified that Import button in Columns and Filters Selection is enabled
      Then I clicked Data Preview button
       And I clicked Close Preview button
 
@@ -58,17 +58,17 @@ Feature: TS41441 - Sanity checks
      Then object number 1 should be called "Report with a subtotal & prompt"
       And cells ["G8", "H8", "L8"] should have values ["Jan 2014", "Total", "$ 302,399"]
 
-     When I hovered on Refresh button on object 2
+     When I hovered over Refresh button on object 2
 # TODO: investigate why duplicate and edit tooltips are in page source and refresh and remove are not
-# TODO: Then tooltip "Refresh" should be displayed on object 2
+# TODO: Then I verified that tooltip "Refresh" was displayed on object 2
 
      When I clicked Refresh on object 2
       And I waited for object to be refreshed successfully
       And I closed notification on object 2
      Then cells ["A3", "B3"] should have values ["2014", "Northeast"]
 
-     When I hovered on Edit button on object 1
-     Then tooltip "Edit" should be displayed on object 1
+     When I hovered over Edit button on object 1
+     Then I verified that tooltip "Edit" was displayed on object 1
 
      When I clicked Edit object 1
       And I waited for Run button to be enabled

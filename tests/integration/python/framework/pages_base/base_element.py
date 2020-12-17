@@ -17,6 +17,7 @@ class BaseElement:
     NAME_ATTRIBUTE = 'Name'
     AUTOMATION_ID_ATTRIBUTE = 'AutomationId'
     IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
+    IS_ENABLED_ATTRIBUTE = 'IsEnabled'
 
     ATTRIBUTE_VALUE_TRUE = 'true'
 
@@ -33,9 +34,13 @@ class BaseElement:
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
 
-    def click(self, offset_x=None, offset_y=None):
+    def click(self, offset_x=None, offset_y=None, wait_after_click=AFTER_OPERATION_WAIT_TIME):
         if offset_x is None or offset_y is None:
-            self.simple_click()
+            try:
+                self.__element.click()
+            except ElementClickInterceptedException as e:
+                Util.log_error(e)
+                raise MstrException('Error while clicking an element.')
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
@@ -43,7 +48,7 @@ class BaseElement:
              .click()
              .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(wait_after_click)
 
     def move_to_and_click(self, offset_x=None, offset_y=None):
         self.move_to(offset_x, offset_y)
@@ -51,13 +56,6 @@ class BaseElement:
         ActionChains(self.__driver).click().perform()
 
         Util.pause(AFTER_OPERATION_WAIT_TIME)
-
-    def simple_click(self):
-        try:
-            self.__element.click()
-        except ElementClickInterceptedException as e:
-            Util.log_error(e)
-            raise MstrException('Error while clicking an element.')
 
     def double_click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
@@ -126,6 +124,9 @@ class BaseElement:
     def is_offscreen_by_attribute(self):
         return self.get_attribute(BaseElement.IS_OFFSCREEN_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
+    def is_enabled_by_attribute(self):
+        return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
+
     def get_element_by_css(self, selector):
         return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
 
@@ -146,6 +147,9 @@ class BaseElement:
 
     def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.CSS_SELECTOR, selector, timeout)
+
+    def check_if_element_exists_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT):
+        return self._check_if_element_exists(By.XPATH, selector, timeout)
 
     def _check_if_element_exists(self, selector_type, selector, timeout=DEFAULT_TIMEOUT):
         try:

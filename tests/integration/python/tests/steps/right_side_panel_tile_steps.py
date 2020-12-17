@@ -28,7 +28,7 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_edit(object_number)
 
 
-@step('I hovered on Edit button on object {object_number}')
+@step('I hovered over Edit button on object {object_number}')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().hover_edit(object_number)
 
@@ -43,14 +43,15 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_refresh(object_number)
 
 
-@step('I hovered on Refresh button on object {object_number}')
+@step('I hovered over Refresh button on object {object_number}')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().hover_refresh(object_number)
 
 
-@step('tooltip "{expected_tooltip_text}" should be displayed on object {object_number}')
+@step('I verified that tooltip "{expected_tooltip_text}" was displayed on object {object_number}')
 def step_impl(context, expected_tooltip_text, object_number):
     tooltip_text = context.pages.right_panel_tile_page().get_tooltip_text(object_number)
+
     AssertUtil.assert_simple(tooltip_text, expected_tooltip_text)
 
 

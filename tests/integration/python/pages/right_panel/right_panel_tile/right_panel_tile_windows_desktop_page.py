@@ -20,10 +20,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     REMOVING_TEXT_ELEM = 'Removing'
 
     NOTIFICATIONS_TEXTS = [
-      MessageConst.IMPORT_SUCCESSFUL_TEXT,
-      MessageConst.DUPLICATE_OBJECT_SUCCESSFUL_TEXT,
-      MessageConst.REFRESH_OBJECT_SUCCESSFUL_TEXT,
-      MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT,
+        MessageConst.IMPORT_SUCCESSFUL_TEXT,
+        MessageConst.DUPLICATE_OBJECT_SUCCESSFUL_TEXT,
+        MessageConst.REFRESH_OBJECT_SUCCESSFUL_TEXT,
+        MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT,
     ]
 
     PROGRESS_BAR_TAG_NAME = 'ProgressBar'
@@ -33,7 +33,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
     TILE_LIST = '//Group/List'
-    TILE_ELEM = '//Group/List/DataItem[%s]'
+    TILE_ELEM = TILE_LIST + '/DataItem[%s]'
 
     NAME_INPUT_FOR_OBJECT = '//Button/Text'
     NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK = '//Edit'
@@ -91,32 +91,36 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
                 raise MstrException(f'Error while waiting for operation [{check_if_element_exists_method}] to finish, '
                                     f'element still visible: [{selector}].')
 
-    # todo: rename to close_all_success_notifications_on_hover
+    # TODO rename to close_all_success_notifications_on_hover when implementation for other platforms is also fixed
     def close_all_notifications_on_hover(self):
         tile_list = self.get_tile_list()
 
-        # todo: get only tiles with notification instead of button from every tile
-        elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
+        elements = tile_list.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
 
-        # scroll to top of tile list
-        tile_list.click()
-        self.press_home()
+        self._scroll_to_top_of_tile_list(tile_list)
 
-        notification_opened = self.is_any_successful_notification_open()
-
-        while (notification_opened):
+        while self._is_any_successful_notification_open(tile_list):
             for element in elements:
                 element.move_to(offset_x=-20, offset_y=0)
 
-            # scroll tile list to next page
-            tile_list.click()
-            self.press_page_down()
+            self._scroll_tile_list_to_next_page(tile_list)
 
-            notification_opened = self.is_any_successful_notification_open()
+        self._scroll_to_top_of_tile_list(tile_list)
 
-        # scroll to top of tile list
+    def _scroll_to_top_of_tile_list(self, tile_list):
         tile_list.click()
         self.press_home()
+
+    def _scroll_tile_list_to_next_page(self, tile_list):
+        tile_list.click()
+        self.press_page_down()
+
+    def _is_any_successful_notification_open(self, tile_list):
+        for text in RightPanelTileWindowsDesktopPage.NOTIFICATIONS_TEXTS:
+            if tile_list.check_if_element_exists_by_name(text, timeout=SHORT_TIMEOUT):
+                return True
+
+        return False
 
     def close_all_warning_notifications(self):
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.BUTTON_OK)
@@ -162,7 +166,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def get_tooltip_text(self, tile_no):
         object_tile_elem = self._get_object_by_number(tile_no)
+
         tooltip_text_elem = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TOOLTIP_TEXT)
+
         return tooltip_text_elem.text
 
     def remove_object_using_icon(self, tile_no):
@@ -173,6 +179,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def _click_button_on_tile(self, button_selector, tile_no):
         """
         Clicks button given by selector on tile number object_no.
+
         :param button_selector: Button selector.
         :param tile_no: Number of tile, counting from 1.
         """
@@ -180,9 +187,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         object_tile_elem.move_to(0, 0)
 
         button = object_tile_elem.get_element_by_name(button_selector)
-        button.move_to(0, 0)
-        # use simple_click to click button and quiclkly move cursor away from tile to not dismiss notification
-        button.simple_click()
+        button.move_to(1, 1)
+
+        # do not wait after click to not dismiss notification
+        button.click(wait_after_click=0)
         object_tile_elem.move_to(0, 0)
 
     def _hover_button_on_tile(self, button_selector, tile_no):
@@ -191,7 +199,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         button = object_tile_elem.get_element_by_name(button_selector)
         button.move_to(1, 1)
-        self.pause(3)
+
+        # wait to trigger tooltip after hovering over button
+        self.pause(SHORT_TIMEOUT)
 
     def _hover_over_tile(self, tile_no):
         self._get_object_by_number(
@@ -302,6 +312,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def get_tile_list(self):
         right_panel_element = self.get_add_in_right_panel_element()
+
         return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_LIST)
 
     def is_icon_bar_visible(self, object_no):
@@ -309,12 +320,3 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         # is always returns true. This method should be updated when there will be added an element attribute making
         # it possible to distinguish if icon bar is visible.
         return True
-
-    def is_any_successful_notification_open(self):
-        is_open = False
-
-        for text in RightPanelTileWindowsDesktopPage.NOTIFICATIONS_TEXTS:
-            if (not is_open):
-                is_open = self.check_if_element_exists_by_name(text, timeout=1)
-
-        return is_open

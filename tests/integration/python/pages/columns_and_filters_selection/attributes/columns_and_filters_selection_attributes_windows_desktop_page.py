@@ -2,7 +2,7 @@ import json
 import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import LONG_TIMEOUT
+from framework.util.const import LONG_TIMEOUT, MEDIUM_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 
 
@@ -46,27 +46,37 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def ensure_attribute_is_selected_and_click_forms(self, attributes_and_forms_json):
         attributes_and_forms = json.loads(attributes_and_forms_json)
 
-        popup_main_element = self.get_add_in_main_element()
-
         for attribute_name, form_names in attributes_and_forms.items():
             if len(form_names) > 0:
-                try:
-                    self.get_attribute_dropdown(popup_main_element, attribute_name).click()
-                except MstrException:
-                    popup_main_element.get_element_by_xpath(
-                        ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
-                    ).click()
-                    self.get_attribute_dropdown(popup_main_element, attribute_name).click()
+                self._select_forms_of_attribute(attribute_name, form_names)
 
-                for form_name in form_names:
-                    popup_main_element.get_element_by_xpath(
-                        ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_ITEM_ELEM % form_name
-                    ).click()
+    def _select_forms_of_attribute(self, attribute_name, form_names):
+        self._ensure_attribute_is_selected(attribute_name)
 
-    def get_attribute_dropdown(self, add_in_main_element, attribute_name):
-        return add_in_main_element.get_element_by_xpath(
-          ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM % attribute_name
-        )
+        self._open_attribute_forms_list(attribute_name)
+
+        self._select_attribute_forms_for_selected_attribute(form_names)
+
+    def _ensure_attribute_is_selected(self, attribute_name):
+        if not self.get_add_in_main_element().check_if_element_exists_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM % attribute_name,
+            timeout=MEDIUM_TIMEOUT
+        ):
+            self.get_add_in_main_element().get_element_by_xpath(
+                ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
+            ).click()
+
+    def _open_attribute_forms_list(self, attribute_name):
+        self.get_add_in_main_element().get_element_by_xpath(
+            ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM % attribute_name
+        ).click()
+
+    # TODO ensure it selects forms of the correct attribute
+    def _select_attribute_forms_for_selected_attribute(self, form_names):
+        for form_name in form_names:
+            self.get_add_in_main_element().get_element_by_xpath(
+                ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_ITEM_ELEM % form_name
+            ).click()
 
     def select_attribute_by_number(self, object_number):
         popup_main_element = self.get_add_in_main_element()

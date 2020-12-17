@@ -1,8 +1,5 @@
 from behave import *
 from framework.util.assert_util import AssertUtil
-from framework.util.exception.MstrException import MstrException
-
-from framework.util.assert_util import AssertUtil
 
 
 @step('I verified that Columns & Filters Selection is visible')
@@ -89,30 +86,22 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_close_preview()
 
 
-@step('I verified Import button is enabled')
-def step_impl(context):
-    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Import')
+@step('I verified that {button_name} button in Columns and Filters Selection is enabled')
+def step_impl(context, button_name):
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled(button_name)
+
     AssertUtil.assert_simple(button_enabled, True)
 
 
-@step('I verified Data Preview button is enabled')
-def step_impl(context):
-    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Data Preview')
-    AssertUtil.assert_simple(button_enabled, True)
+@step('I verified that {button_name} button in Columns and Filters Selection is disabled')
+def step_impl(context, button_name):
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled(button_name)
 
-
-@step('I verified Import button is disabled')
-def step_impl(context):
-    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Import')
     AssertUtil.assert_simple(button_enabled, False)
 
 
-@step('I verified Data Preview button is disabled')
+@step('I verified that Back button in Columns and Filters Selection is visible')
 def step_impl(context):
-    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled('Data Preview')
-    AssertUtil.assert_simple(button_enabled, False)
+    button_visible = context.pages.columns_and_filters_selection_page().is_back_button_visible()
 
-
-@step('I verified Back button is visible')
-def step_impl(context):
-    context.pages.columns_and_filters_selection_page().is_back_button_visible()
+    AssertUtil.assert_simple(button_visible, True)
