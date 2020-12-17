@@ -61,7 +61,7 @@ task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
     shell_command! "python -m behave --tags=@ci --tags=@#{PY_WIN_TEST_PARAM[tag_name]} --no-skipped -D config_file=config_ci_#{PY_WIN_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/features/F25931_duplicate_object", cwd: test_dir
   ensure
     shell_command! "npm install -g allure-commandline --save-dev",  cwd: "#{test_dir}"
-    shell_command! "python -m allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
+    shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
     shell_command! "npm install", cwd: get_browser_test_dir()
     info "publish e2e test result to Rally"
     
