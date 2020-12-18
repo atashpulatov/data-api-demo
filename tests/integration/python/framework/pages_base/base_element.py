@@ -7,19 +7,14 @@ from selenium.webdriver.support.color import Color
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
     ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS, \
-    MEDIUM_TIMEOUT
+    MEDIUM_TIMEOUT, NAME_ATTRIBUTE, AUTOMATION_ID_ATTRIBUTE, IS_OFFSCREEN_ATTRIBUTE, ATTRIBUTE_VALUE_TRUE, \
+    TEXT_CONTENT_ATTRIBUTE, CLASS_NAME_ATTRIBUTE
 from framework.util.exception.MstrException import MstrException
 from framework.util.image_util import ImageUtil
 from framework.util.util import Util
 
 
 class BaseElement:
-    NAME_ATTRIBUTE = 'Name'
-    AUTOMATION_ID_ATTRIBUTE = 'AutomationId'
-    IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
-
-    ATTRIBUTE_VALUE_TRUE = 'true'
-
     BACKGROUND_COLOR_PROPERTY = 'background-color'
     OPACITY_PROPERTY = 'opacity'
 
@@ -42,7 +37,7 @@ class BaseElement:
                 raise MstrException('Error while clicking an element.')
         else:
             (ActionChains(self.__driver)
-             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .move_to_element_with_offset(self.__element, offset_x, offset_y)
              .pause(AFTER_OPERATION_WAIT_TIME)
              .click()
              .perform())
@@ -65,7 +60,7 @@ class BaseElement:
              .perform())
         else:
             (ActionChains(self.__driver)
-             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .move_to_element_with_offset(self.__element, offset_x, offset_y)
              .pause(AFTER_OPERATION_WAIT_TIME)
              .double_click()
              .perform())
@@ -81,7 +76,7 @@ class BaseElement:
              .perform())
         else:
             (ActionChains(self.__driver)
-             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .move_to_element_with_offset(self.__element, offset_x, offset_y)
              .pause(AFTER_OPERATION_WAIT_TIME)
              .context_click()
              .perform())
@@ -115,13 +110,19 @@ class BaseElement:
         return self.__element.is_displayed()
 
     def get_name_by_attribute(self):
-        return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
+        return self.get_attribute(NAME_ATTRIBUTE)
 
     def get_automation_id_by_attribute(self):
-        return self.get_attribute(BaseElement.AUTOMATION_ID_ATTRIBUTE)
+        return self.get_attribute(AUTOMATION_ID_ATTRIBUTE)
 
     def is_offscreen_by_attribute(self):
-        return self.get_attribute(BaseElement.IS_OFFSCREEN_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
+        return self.get_attribute(IS_OFFSCREEN_ATTRIBUTE) == ATTRIBUTE_VALUE_TRUE
+
+    def get_text_content_by_attribute(self):
+        return self.get_attribute(TEXT_CONTENT_ATTRIBUTE)
+
+    def get_class_name_by_attribute(self):
+        return self.get_attribute(CLASS_NAME_ATTRIBUTE)
 
     def get_element_by_css(self, selector):
         return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
@@ -240,7 +241,7 @@ class BaseElement:
              .perform())
         else:
             (ActionChains(self.__driver)
-             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .move_to_element_with_offset(self.__element, offset_x, offset_y)
              .pause(AFTER_OPERATION_WAIT_TIME)
              .perform())
 

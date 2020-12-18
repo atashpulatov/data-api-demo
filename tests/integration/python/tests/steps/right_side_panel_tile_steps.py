@@ -109,23 +109,23 @@ def step_impl(context, object_number):
 
 
 @step('I waited for object to be refreshed successfully')
-def step_impl(contex):
+def step_impl(context):
     contex.pages.right_panel_tile_page().wait_for_refresh_object_to_finish_successfully()
 
 
 @step('I waited for object to be imported successfully')
-def step_impl(contex):
+def step_impl(context):
     contex.pages.right_panel_tile_page().wait_for_import_object_to_finish_successfully()
 
 
 @step('I waited for object to be duplicated successfully')
-def step_impl(contex):
+def step_impl(context):
     contex.pages.right_panel_tile_page().wait_for_duplicate_object_to_finish_successfully()
 
 
 @step('I waited for object operation to complete successfully with message "{expected_message}"')
-def step_impl(contex, expected_message):
-    contex.pages.right_panel_tile_page().wait_for_operation_to_finish_successfully_with_message(expected_message)
+def step_impl(context, expected_message):
+    context.pages.right_panel_tile_page().wait_for_operation_to_finish_successfully_with_message(expected_message)
 
 
 @step('I waited for all progress notifications to disappear')
@@ -166,7 +166,9 @@ def step_impl(context, object_number, total_rows_expected):
 
 @step('I verified that the object {object_number} action displayed percentage progress')
 def step_impl(context, object_number):
-    is_percentage_displayed = context.pages.right_panel_tile_page().verify_object_action_displays_progress_percentage(object_number)
+    is_percentage_displayed = context.pages.right_panel_tile_page().verify_object_action_displays_progress_percentage(
+        object_number
+    )
 
     AssertUtil.assert_simple(is_percentage_displayed, True)
 
@@ -192,6 +194,9 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_message_displayed, False)
 
 
-@step('I waited for object {object_number} to have message on succesful operation: "{expected_message}"')
-def step_impl(contex, object_number, expected_message):
-    contex.pages.right_panel_tile_page().wait_for_object_operation_to_finish_successfully_with_message(object_number, expected_message)
+@step('I waited for object {object_number} to have message on successful operation: "{expected_message}"')
+def step_impl(context, object_number, expected_message):
+    context.pages.right_panel_tile_page().wait_for_object_operation_to_finish_successfully_with_message(
+        object_number,
+        expected_message
+    )

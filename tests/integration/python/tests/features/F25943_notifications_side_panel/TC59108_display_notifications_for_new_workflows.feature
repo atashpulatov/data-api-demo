@@ -1,14 +1,16 @@
 @mac_chrome
 
-# This script for the TC59108 verifies that correct notifications are displayed on objects when an operation is in 
-# progress and when operation is completed. Due to different operation performance on different machines and inertia in 
-# the automation framework the script might be failing. For instance, when operation run fast some elements might disappear 
-# before the step using the element will be executed. In such case script might be modified to use different object which
-# will have operation running longer or shorter depending on the physical machine performance.
+# This script for the TC59108 verifies that correct notifications are displayed on objects when an operation is in
+# progress and when operation is completed. Due to different operation performance on different machines and inertia in
+# the automation framework, the script might be failing. For instance, when operation run fast some elements might
+# disappear before the step using the element will be executed. In such case script might be modified to use different
+# object, which will have operation running longer or shorter, depending on the physical machine performance.
+#
 # When deciding when the script should be run the above should be considered. It is suggested to not execute the script
-# for each build but rather once a week or during release validation.
-# It might be difficult to enable the script for Desktop platforms due to very slow framework performance. In such case
-# testing for Desktop should be executed manually.
+# for each build, but rather once a week or during release validation.
+#
+# It might be difficult to enable the script for Windows Desktop platform due to very slow WinAppDriver performance.
+# In such case testing for Windows Desktop should be executed manually.
 
 Feature: F25943 - Notifications side panel
 
@@ -60,7 +62,7 @@ Feature: F25943 - Notifications side panel
       And I verified that the object 1 action displayed percentage progress
       And I waited for object operation to complete successfully with message "Import successful"
       And I closed last notification
-    
+
      When I clicked Duplicate on object 1
       And I clicked Import button in Duplicate popup without checking results
      Then I verified that the object 1 action in progress name was "Duplicating"
@@ -76,14 +78,14 @@ Feature: F25943 - Notifications side panel
       And I refreshed selected objects
      Then I verified that the object 1 action in progress name was "Refreshing"
       And I verified that the object 1 action in progress was executed on total "50,000 rows"
-      And I verified that the object 1 action displayed percentage progress 
+      And I verified that the object 1 action displayed percentage progress
       And I verified that the object 3 action was pending
       And I verified that the object 4 action was pending
       And I verified that the object 5 action was pending
 
      When I canceled object 5 pending action
      Then I verified that the object 5 tile had no popup displayed
-      And I waited for object 4 to have message on succesful operation: "Refresh complete"
+      And I waited for object 4 to have message on successful operation: "Refresh complete"
       And I verified that the object 1 had displayed message "Refresh complete"
       And I verified that the object 3 had displayed message "Refresh complete"
       And I closed all notifications
@@ -92,7 +94,7 @@ Feature: F25943 - Notifications side panel
       And I selected object 2 using object checkbox
       And I selected object 4 using object checkbox
       And I removed selected objects
-     Then I waited for object 4 to have message on succesful operation: "Object removed"
+     Then I waited for object 4 to have message on successful operation: "Object removed"
       And I verified that the object 1 had displayed message "Object removed"
       And I verified that the object 2 had displayed message "Object removed"
       And I closed all notifications
