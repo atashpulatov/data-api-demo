@@ -13,7 +13,7 @@ def step_impl(context, year):
     context.pages.import_dossier_filter_page().select_year_in_year_filter(year)
 
 
-@step('I verified value for filter "{filter_name}" is "{filter_value}"')
+@step('I verified that value for filter "{filter_name}" is "{filter_value}"')
 def step_impl(context, filter_name, filter_value):
     result = context.pages.import_dossier_filter_page().get_filter_value(filter_name)
 

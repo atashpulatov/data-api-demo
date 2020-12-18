@@ -20,11 +20,11 @@ Feature: F24398 - Import and refresh visualization
       And I selected dossier bookmark 1
 
       And I "increased" year filter value on dossier from "left" side
-      And I verified value for filter "Year" is "(2015 - 2016)"
+      And I verified that value for filter "Year" is "(2015 - 2016)"
       And I reset dossier
-      And I verified value for filter "Year" is "(2014 - 2015)"
+      And I verified that value for filter "Year" is "(2014 - 2015)"
       And I selected dossier page or chapter 2
-      And I selected visualization "Chart vis" 
+      And I selected visualization "Chart vis"
       And I clicked import dossier
       And I closed last notification
      Then cells ["A2", "A3"] should have values ["2014", "2015"]
