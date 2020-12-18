@@ -9,6 +9,8 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
     DOSSIER_FILTER_VALUE = '//Pane[@Name=\"Filter Data\"]//CheckBox[@Name=\"%s\"]'
     DOSSIER_FILTER_YEAR = '//Pane[@Name=\"Filter Data\"]//MenuItem[starts-with(@Name, \"Year\")]'
 
+    DOSSIER_FILTER_VALUE_TEXT = '//ListItem[@Name="%s"]/../ListItem[2]'
+
     FILTER_CHANGE_INCREASE = 'increased'
     FILTER_CHANGE_DECREASE = 'decreased'
     FILTER_SIDE_LEFT = 'left'
@@ -73,3 +75,12 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
     def _open_filter_menu(self):
         add_in_main_element = self.get_add_in_main_element()
         add_in_main_element.get_element_by_name(ImportDossierFilterWindowsDesktopPage.FILTERS_BUTTON).click()
+
+    def get_filter_value(self, filter_name):
+        add_in_main_element = self.get_add_in_main_element()
+
+        filter_value = add_in_main_element.get_element_by_xpath(
+            ImportDossierFilterWindowsDesktopPage.DOSSIER_FILTER_VALUE_TEXT % filter_name
+        ).text
+
+        return filter_value
