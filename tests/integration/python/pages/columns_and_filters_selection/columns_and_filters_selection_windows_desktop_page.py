@@ -128,6 +128,9 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def is_button_enabled(self, button_name):
+        if button_name not in ColumnsAndFiltersSelectionWindowsDesktopPage.BUTTONS_SELECTORS.keys():
+            raise MstrException('Provided button name is not supported.')
+
         button = self.get_element_by_accessibility_id(
             ColumnsAndFiltersSelectionWindowsDesktopPage.BUTTONS_SELECTORS[button_name]
         )
