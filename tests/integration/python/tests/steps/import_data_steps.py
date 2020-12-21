@@ -75,7 +75,7 @@ def step_impl(context):
     AssertUtil.assert_simple(compare_result, True)
 
 
-@step('I verified that the details of the first expanded object show "{detail_type}" as "{expected_value}"')
+@step('I verified that the details of the first expanded object displayed "{detail_type}" as "{expected_value}"')
 def step_impl(context, detail_type, expected_value):
     object_detail_value = context.pages.import_data_page().get_object_detail_value(detail_type)
 

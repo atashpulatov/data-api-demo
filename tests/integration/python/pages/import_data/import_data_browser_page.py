@@ -163,6 +163,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def show_object_details(self, object_number):
         self.focus_on_add_in_popup_frame()
+
         object_index = int(object_number) - 1
 
         self.get_elements_by_css(ImportDataBrowserPage.EXPAND_DETAILS_ELEM)[object_index].click()
@@ -183,9 +184,10 @@ class ImportDataBrowserPage(BaseBrowserPage):
                 return False
 
         return True
-    
+
     def get_object_detail_value(self, detail_type):
         self.focus_on_add_in_popup_frame()
+
         object_detail = self.get_elements_by_css(ImportDataBrowserPage.OBJECT_DETAIL_SELECTORS[detail_type])
 
         return object_detail[0].text
