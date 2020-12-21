@@ -33,7 +33,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
     PREPARE_BUTTON_ELEM = 'prepare'
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
-    TEXT_CONTENT_ATTRIBUTE = 'textContent'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
 
     ADD_TO_LIBRARY_BUTTON = '.mstrd-PageNotification-buttonContainer > .mstrd-Button--primary'

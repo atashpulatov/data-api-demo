@@ -26,7 +26,7 @@ class StepClearCrosstabHeaders {
         const { isCrosstab, bindId } = objectData;
         if (isCrosstab) {
           const officeTable = await officeApiHelper.getTable(excelContext, bindId);
-          officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable);
+          await officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable, excelContext);
           officeTable.showHeaders = true;
           officeTable.showFilterButton = false;
 

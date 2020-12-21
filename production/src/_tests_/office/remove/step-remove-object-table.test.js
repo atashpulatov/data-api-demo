@@ -4,7 +4,7 @@ import { officeRemoveHelper } from '../../../office/remove/office-remove-helper'
 import stepRemoveObjectTable from '../../../office/remove/step-remove-object-table';
 import { officeApiCrosstabHelper } from '../../../office/api/office-api-crosstab-helper';
 
-describe('StepRemoveObjectStore', () => {
+describe('StepRemoveObjectTable', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -42,7 +42,7 @@ describe('StepRemoveObjectStore', () => {
   ${false}           | ${false}        | ${{ crosstabHeaderDimensionsParam: 42 }}
   ${false}           | ${undefined}    | ${{ crosstabHeaderDimensionsParam: 42 }}
 
-  `('stepRemoveObjectStore should work as expected',
+  `('removeObjectTable should work as expected',
   async ({
     expectedIsCrosstab,
     isCrosstabParam,
@@ -60,6 +60,8 @@ describe('StepRemoveObjectStore', () => {
     };
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContextMock);
+
+    jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockReturnValue(true);
 
     jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockImplementation();
 
@@ -95,7 +97,10 @@ describe('StepRemoveObjectStore', () => {
     expect(getItemMock).toBeCalledWith('bindIdTest');
 
     expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledTimes(1);
-    expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledWith({ sth: 42, showHeaders: true });
+    expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledWith(
+      { sth: 42, showHeaders: true },
+      excelContextMock
+    );
 
     expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledTimes(1);
     expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledWith(

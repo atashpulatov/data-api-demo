@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import LONG_TIMEOUT
+from framework.util.const import LONG_TIMEOUT, SHORT_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -16,13 +16,13 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     CANCEL_BUTTON_ELEM = 'cancel'
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
-    TEXT_CONTENT_ATTRIBUTE = 'textContent'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
     REPORT_TITLE = '.folder-browser-title > span:nth-child(2)'
 
     SEARCH_INPUT = '.search-input > input'
 
-    TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
+    SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
+    SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
     def __init__(self):
         super().__init__()
@@ -31,17 +31,17 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     def ensure_columns_and_filters_selection_is_visible(self):
         self.focus_on_add_in_popup_frame()
-        
+
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.NOTIFICATION_TEXT_ELEM,
-            ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            TEXT_CONTENT_ATTRIBUTE,
             ColumnsAndFiltersSelectionBrowserPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
         )
 
     def ensure_popup_title_is_correct(self, title):
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.REPORT_TITLE,
-            ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            TEXT_CONTENT_ATTRIBUTE,
             title
         )
 
@@ -100,7 +100,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def click_include_totals_and_subtotals(self):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH).click()
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE).click()
 
     def click_data_preview(self):
         self.focus_on_add_in_popup_frame()
@@ -114,3 +114,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionBrowserPage.ANT_BUTTON,
             ColumnsAndFiltersSelectionBrowserPage.CLOSE_PREVIEW_TEXT
         ).click()
+
+    def is_subtotal_visible(self):
+        self.focus_on_add_in_popup_frame()
+
+        return self.check_if_element_exists_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE_CONTAINER,
+            timeout=SHORT_TIMEOUT
+        )
