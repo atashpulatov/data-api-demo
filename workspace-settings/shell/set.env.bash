@@ -16,7 +16,7 @@ export VAGRANT_BOXES_WINDOWS_VERSION='1.0.4.next'
 export VAGRANT_BOXES_OSX_NAME='osx-10.11.3'
 export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 
-jdk_version="jdk1.8.0_74"
+jdk_version="jdk-11.0.8"
 
 export NODE_HOME=/usr/local/nodejs-binary-10.16.3
 
@@ -29,6 +29,7 @@ if uname -a | grep -q "Darwin"; then
   export PATH=$MAVEN_HOME/bin:$PATH
 elif uname -a | grep -q "MSYS"; then
   export JAVA_HOME=/c/java/$jdk_version
+  export PATH=$JAVA_HOME/bin:$PATH
   export PYTHON_HOME=/c/Users/jenkins/AppData/Local/Programs/Python/Python38
   export PATH=$PYTHON_HOME:$PIP_HOME:$PATH
   export DOCKER_HOME=/C/Program\ Files/Docker/Docker/Resources/

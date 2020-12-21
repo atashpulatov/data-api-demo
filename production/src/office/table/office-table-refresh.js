@@ -94,7 +94,7 @@ class OfficeTableRefresh {
       );
 
       if (crosstabEmptyRowExist) {
-        officeApiCrosstabHelper.clearEmptyCrosstabRow(prevOfficeTable);
+        await officeApiCrosstabHelper.clearEmptyCrosstabRow(prevOfficeTable, excelContext);
       }
     }
   };

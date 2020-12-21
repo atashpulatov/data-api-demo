@@ -1,5 +1,4 @@
 @windows_desktop
-@mac_chrome
 @release_validation
 @ga_validation
 Feature: TS41441 - Sanity checks
@@ -77,8 +76,7 @@ Feature: TS41441 - Sanity checks
      When I clicked table design tab
      Then I clicked green table style
 
-     When I clicked home tab
-      And I selected cell "B4"
+     When I selected cell "B4"
       And I clicked percentage button
      Then cell "B4" should have value "890700%"
 
@@ -95,13 +93,11 @@ Feature: TS41441 - Sanity checks
       And I selected cell "D2"
       And I clicked bold button
 
-   # TODO select a specific color and later verify it if it's ok, check for desktop platforms
       And I selected cell "E2"
-      And I clicked font color button
+      And I changed font color to "Light Green"
 
-   # TODO select a specific color and later verify it if it's ok, check for desktop platforms
       And I selected cell "G2"
-      And I clicked fill color button
+      And I changed fill color to "Light Green"
 
       And I changed cell "G2" font name to "Arial Black"
 
@@ -110,6 +106,8 @@ Feature: TS41441 - Sanity checks
       And I closed last notification
 
      Then cell "L4" should have value "245,677 PLN"
+      And for cell "E2" font color "Light Green" should be selected
+      And for cell "G2" fill color "Light Green" should be selected
       And for cell "B2" align middle button should be selected
       And for cell "C2" align left button should be selected
       And for cell "D2" bold button should be selected
@@ -126,10 +124,13 @@ Feature: TS41441 - Sanity checks
      Then cell "C3" should have value "$3,506,062"
 
      When I clicked clear data
+      And I waited for all progress notifications to disappear
       And I logged out
       And I logged in with username "Jeff" and empty password
       And I clicked view data
+      And I waited for object to be refreshed successfully
       And I closed all warning notifications
+      And I selected worksheet number 1
       And I selected worksheet number 4
      Then cells ["A2", "C3"] should have values ["Mid-Atlantic", "$646,421"]
 

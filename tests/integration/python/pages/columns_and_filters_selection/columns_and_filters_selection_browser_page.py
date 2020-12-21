@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import LONG_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
+from framework.util.const import LONG_TIMEOUT, SHORT_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -21,7 +21,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     SEARCH_INPUT = '.search-input > input'
 
-    TOTALS_AND_SUBTOTALS_SWITCH = '.subtotal-container > button.ant-switch'
+    SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
+    SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
     def __init__(self):
         super().__init__()
@@ -99,7 +100,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def click_include_totals_and_subtotals(self):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.TOTALS_AND_SUBTOTALS_SWITCH).click()
+        self.get_element_by_css(ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE).click()
 
     def click_data_preview(self):
         self.focus_on_add_in_popup_frame()
@@ -113,3 +114,11 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionBrowserPage.ANT_BUTTON,
             ColumnsAndFiltersSelectionBrowserPage.CLOSE_PREVIEW_TEXT
         ).click()
+
+    def is_subtotal_visible(self):
+        self.focus_on_add_in_popup_frame()
+
+        return self.check_if_element_exists_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE_CONTAINER,
+            timeout=SHORT_TIMEOUT
+        )
