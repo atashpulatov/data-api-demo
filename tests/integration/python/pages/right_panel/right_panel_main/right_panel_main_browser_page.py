@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import SHORT_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
 from framework.util.exception.MstrException import MstrException
 
 
@@ -13,13 +13,15 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
     SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .checkbox-cell'
-    REFRESH_ALL = SELECT_ALL_TILES + 'button:nth-child(5)'
-    REMOVE_ALL = SELECT_ALL_TILES + 'button:nth-child(6)'
+    REFRESH_SELECTED_BUTTON = SELECT_ALL_TILES + 'button:nth-of-type(3)'
+    REMOVE_SELECTED_BUTTON = SELECT_ALL_TILES + 'button:nth-of-type(4)'
 
     CLEAR_DATA = '.clear-data'
     CONFIRM_CLEAR_DATA_ID = 'confirm-btn'
 
     VIEW_DATA_BUTTON_ELEM = '.data-cleared > button'
+    DATA_CLEARED_OVERLAY_TITLE = '.data-cleared .data-cleared-header'
+    DATA_CLEARED_OVERLAY_MESSAGE = '.data-cleared .data-cleared-info'
 
     RIGHT_PANEL_OBJECT_LIST = '.object-tile-container .object-tile-list'
 
@@ -41,14 +43,24 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
-        self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_ALL).click()
+        self.click_refresh_selected_button()
+
+    def click_refresh_selected_button(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.REFRESH_SELECTED_BUTTON).click()
 
     def remove_all(self):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelMainBrowserPage.SELECT_ALL_TILES_CHECKBOX).click()
 
-        self.get_element_by_css(RightPanelMainBrowserPage.REMOVE_ALL).click()
+        self.click_remove_selected_button()
+
+    def click_remove_selected_button(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.REMOVE_SELECTED_BUTTON).click()
 
     def check_if_right_panel_is_empty(self):
         self.focus_on_add_in_frame()
@@ -105,3 +117,20 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         element = self.get_element_by_id(RightPanelMainBrowserPage.DOTS_MENU_ITEM_LOG_OUT_ID)
 
         return element.get_background_color()
+
+    def wait_for_clear_data_overlay_to_finish_successfully_with_title(self, overlay_title):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(
+            RightPanelMainBrowserPage.DATA_CLEARED_OVERLAY_TITLE,
+            TEXT_CONTENT_ATTRIBUTE,
+            overlay_title
+        )
+
+    def get_clear_data_overlay_message(self):
+        self.focus_on_add_in_frame()
+
+        element = self.get_element_by_css(RightPanelMainBrowserPage.DATA_CLEARED_OVERLAY_MESSAGE)
+        overlay_message = element.get_text_content_by_attribute()
+
+        return overlay_message

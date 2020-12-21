@@ -62,3 +62,25 @@ def step_impl(context):
     is_scrollbar_visible = context.pages.right_panel_page().is_scrollbar_visible()
 
     AssertUtil.assert_simple(is_scrollbar_visible, True)
+
+
+@step('I refreshed selected objects')
+def step_impl(context):
+    context.pages.right_panel_page().click_refresh_selected_button()
+
+
+@step('I removed selected objects')
+def step_impl(context):
+    context.pages.right_panel_page().click_remove_selected_button()
+
+
+@step('I waited for Clear Data overlay to have title "{overlay_title}"')
+def step_impl(context, overlay_title):
+    context.pages.right_panel_page().wait_for_clear_data_overlay_to_finish_successfully_with_title(overlay_title)
+
+
+@step('I verified that the Clear Data overlay displayed message "{overlay_message}"')
+def step_impl(context, overlay_message):
+    displayed_message = context.pages.right_panel_page().get_clear_data_overlay_message()
+
+    AssertUtil.assert_simple(displayed_message, overlay_message)
