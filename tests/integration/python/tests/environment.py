@@ -1,6 +1,4 @@
 import logging
-from allure_commons._allure import attach
-from allure_commons.types import AttachmentType
 
 from behave.contrib.scenario_autoretry import patch_scenario_with_autoretry
 
@@ -10,6 +8,7 @@ from framework.pages_base.image_element import ImageElement
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.config_util import ConfigUtil
 from framework.util.const import DEFAULT_LOCALE_NAME
+from framework.util.screenshot_on_failure_util import ScreenshotOnFailure
 from framework.util.test_util import TestUtil
 from pages_set.pages_set_factory import PagesSetFactory
 
@@ -55,11 +54,11 @@ def before_scenario(context, scenario):
 def _initialize_using_existing_session(context):
     driver_type = ConfigUtil.get_driver_type()
 
-    _put_driver_to_context(context)
+    driver = DriverFactory().get_driver(driver_type)
 
     if driver_type in DRIVERS_SUPPORTING_IMAGE_RECOGNITION:
         excel_root_element_name = ConfigUtil.get_windows_desktop_excel_root_element_name()
-        ImageElement.reset_excel_root_element(context.driver, excel_root_element_name)
+        ImageElement.reset_excel_root_element(driver, excel_root_element_name)
 
     context.pages = PagesSetFactory().get_pages_set()
 
@@ -68,8 +67,6 @@ def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME):
     DriverFactory.reset_driver()
     PagesSetFactory.reset_pages_set()
 
-    _put_driver_to_context(context)
-
     context.pages = PagesSetFactory().get_pages_set()
 
     context.pages.excel_general_page().go_to_excel(locale_name)
@@ -77,39 +74,24 @@ def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME):
     context.pages.excel_general_page().maximize_excel_window()
 
     context.pages.excel_menu_page().click_add_in_elem()
-    context.pages.not_logged_right_panel_page(
-    ).enable_windows_desktop_workaround_if_needed()
-
-
-def _put_driver_to_context(context):
-    driver_type = ConfigUtil.get_driver_type()
-    driver = DriverFactory().get_driver(driver_type)
-    context.driver = driver
+    context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()
 
 
 def after_step(context, step):
-    _take_screenshot_on_failure(context, step.status)
-
-
-def after_scenario(context, scenario):
-    _take_screenshot_on_failure(context, scenario.status)
-
     try:
-        if ConfigUtil.is_cleanup_after_tests_enabled():
-            context.pages.cleanup_page().clean_up_after_each_test()
+        ScreenshotOnFailure().take_screenshots_on_failure_step(step.status, step.name)
+
     except Exception as e:
         logging.exception('')
         raise e
 
 
-def _take_screenshot_on_failure(context, step_status):
+def after_scenario(context, scenario):
     try:
-        if step_status in ('broken', 'failed', 'skipped'):
-            attach(
-              context.driver.get_screenshot_as_png(),
-              name='screenshot',
-              attachment_type=AttachmentType.PNG
-            )  
+        ScreenshotOnFailure().take_screenshots_on_failure_scenario(scenario.status, scenario.name)
+
+        if ConfigUtil.is_cleanup_after_tests_enabled():
+            context.pages.cleanup_page().clean_up_after_each_test()
     except Exception as e:
         logging.exception('')
         raise e

@@ -25,8 +25,8 @@ class ImageUtil:
     """
 
     DEBUG_SCREENSHOT_FILE_NAME_PREFIX = 'debug_screenshot_'
-    DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX = 'full_screen_'
-    DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX = 'current_element_'
+    DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX = 'full_screen'
+    DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX = 'current_element'
 
     def __init__(self):
         super().__init__()
@@ -244,9 +244,12 @@ class ImageUtil:
         )
 
     def _get_full_screen_image(self):
-        screenshot_png = self.driver.get_screenshot_as_png()
+        screenshot_png = self.take_screenshot()
 
         return Image.open(BytesIO(screenshot_png))
+
+    def take_screenshot(self):
+        return self.driver.get_screenshot_as_png()
 
     def _calculate_element_coordinates(self, element):
         element_location = element.location

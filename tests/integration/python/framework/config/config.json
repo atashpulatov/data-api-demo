@@ -1,10 +1,11 @@
 {
   "driver_type": "mac_chrome",
   "image_recognition_enabled": true,
-  "image_recognition_screenshots_folder": "framework\\screenshots",
+  "image_recognition_screenshots_folder": "framework/screenshots",
   "connect_to_existing_session_enabled": false,
   "browser_existing_session_executor_url": "",
   "browser_existing_session_id": "",
+  "take_debug_screenshot_after_failure": true,
   "windows_desktop_excel_root_element_name": "Book1 - Excel",
   "max_no_of_test_executions": 1,
   "cleanup_after_test_enabled": true,
