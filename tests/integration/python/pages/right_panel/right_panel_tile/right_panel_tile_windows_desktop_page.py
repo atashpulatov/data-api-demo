@@ -37,9 +37,6 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     XML_FIRST_ELEMENT_INDEX = '1'
 
-# TODO still needed?
-# TODO check if import/refresh/... finished?
-
     def wait_for_import_object_to_finish_successfully(self):
         self._wait_until_element_disappears(
             self.check_if_element_exists_by_name,

@@ -53,7 +53,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     OBJECT_TILE_ACTIONS = '.icon-bar'
 
-    # PERCENTAGE_SIGN = '%'
     PERCENTAGE_ZERO = '0%'
     PERCENTAGE_NUMBER = '^\d{1,3}%$'
 
@@ -294,10 +293,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         percentage = self._get_progress_percentage(object_number)
 
         return re.match(RightPanelTileBrowserPage.PERCENTAGE_NUMBER, percentage) is not None
-
-        # percentage_position = percentage.find(RightPanelTileBrowserPage.PERCENTAGE_SIGN)
-        #
-        # return percentage_position in (1, 2, 3)
 
     def verify_object_action_is_pending(self, object_number):
         self.focus_on_add_in_frame()
