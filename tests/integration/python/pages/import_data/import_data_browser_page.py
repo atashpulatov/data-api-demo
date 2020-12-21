@@ -20,6 +20,13 @@ class ImportDataBrowserPage(BaseBrowserPage):
     EXPAND_DETAILS_ELEM = '.details-indicator'
     OBJECT_DETAILS_TABLE = '.details-table > table tr'
     OBJECT_DETAILS_VALUE = '.tooltip :last-child'
+    OBJECT_DETAIL_SELECTORS = {
+        'type': '.details-table tr:nth-child(1) p',
+        'id': '.details-table tr:nth-child(2) p',
+        'created': '.details-table tr:nth-child(3) p',
+        'location': '.details-table tr:nth-child(4) .ellipsis-container',
+        'description': '.details-table tr:nth-child(5) .ellipsis-container'
+    }
 
     IMPORT_BUTTON_ELEM = 'import'
     IMPORT_BUTTON_DISABLED = 'disabled'
@@ -155,6 +162,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
             add_to_library_button.click()
 
     def show_object_details(self, object_number):
+        self.focus_on_add_in_popup_frame()
+
         object_index = int(object_number) - 1
 
         self.get_elements_by_css(ImportDataBrowserPage.EXPAND_DETAILS_ELEM)[object_index].click()
@@ -175,6 +184,13 @@ class ImportDataBrowserPage(BaseBrowserPage):
                 return False
 
         return True
+
+    def get_object_detail_value(self, detail_type):
+        self.focus_on_add_in_popup_frame()
+
+        object_detail = self.get_elements_by_css(ImportDataBrowserPage.OBJECT_DETAIL_SELECTORS[detail_type])
+
+        return object_detail[0].text
 
     def close_import_data_popup(self):
         self.get_element_by_css(ImportDataBrowserPage.CLOSE_IMPORT_DATA_BUTTON).click()
