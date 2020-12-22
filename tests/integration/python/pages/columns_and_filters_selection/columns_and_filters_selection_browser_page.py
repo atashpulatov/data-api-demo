@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import LONG_TIMEOUT, SHORT_TIMEOUT
+from framework.util.const import LONG_TIMEOUT, SHORT_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -16,7 +16,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     CANCEL_BUTTON_ELEM = 'cancel'
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
-    TEXT_CONTENT_ATTRIBUTE = 'textContent'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
     REPORT_TITLE = '.folder-browser-title > span:nth-child(2)'
 
@@ -35,14 +34,14 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.NOTIFICATION_TEXT_ELEM,
-            ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            TEXT_CONTENT_ATTRIBUTE,
             ColumnsAndFiltersSelectionBrowserPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
         )
 
     def ensure_popup_title_is_correct(self, title):
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.REPORT_TITLE,
-            ColumnsAndFiltersSelectionBrowserPage.TEXT_CONTENT_ATTRIBUTE,
+            TEXT_CONTENT_ATTRIBUTE,
             title
         )
 
