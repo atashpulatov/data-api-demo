@@ -72,8 +72,8 @@ Build, release, and OS can also be specified from CMD as mentioned later.
 
     mac13 for 'Mac OS 10.13 High Sierra'
     mac14 for 'Mac OS 10.14 Mojave',
-    mac15 for  'Mac OS 10.15 Catalina',
-    win10 for  'Microsoft Windows 10',
+    mac15 for 'Mac OS 10.15 Catalina',
+    win10 for 'Microsoft Windows 10',
     win19 for 'Microsoft Windows Server 2019'
   ```
   For instance:
