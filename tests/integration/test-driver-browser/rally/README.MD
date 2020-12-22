@@ -70,7 +70,7 @@ To upload the results from manual execution, follow these points:
    .......
   },
   b) add the rest of the fields to 'manual' object,
-  manual: {
+  ```manual: {
     passedTestCases: ['TC1234'],  
     failedTestCases: ['TC1234', 'TC1214'],
     testSet: 'TS212', // not obligatory
@@ -83,7 +83,7 @@ To upload the results from manual execution, follow these points:
     env: 'AQDT Mirror',
     notes: '',
     browser: 'Chrome'
-
+```
   c) add your email to email, e.g:
     email: 'stasiek@microstrategy.com'
 2) Run the script `rally-man` with the following command from *test-driver-browser* folder:
