@@ -110,17 +110,17 @@ def step_impl(context, object_number):
 
 @step('I waited for object to be refreshed successfully')
 def step_impl(context):
-    contex.pages.right_panel_tile_page().wait_for_refresh_object_to_finish_successfully()
+    context.pages.right_panel_tile_page().wait_for_refresh_object_to_finish_successfully()
 
 
 @step('I waited for object to be imported successfully')
 def step_impl(context):
-    contex.pages.right_panel_tile_page().wait_for_import_object_to_finish_successfully()
+    context.pages.right_panel_tile_page().wait_for_import_object_to_finish_successfully()
 
 
 @step('I waited for object to be duplicated successfully')
 def step_impl(context):
-    contex.pages.right_panel_tile_page().wait_for_duplicate_object_to_finish_successfully()
+    context.pages.right_panel_tile_page().wait_for_duplicate_object_to_finish_successfully()
 
 
 @step('I waited for object operation to complete successfully with message "{expected_message}"')
