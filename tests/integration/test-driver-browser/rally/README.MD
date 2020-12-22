@@ -5,24 +5,27 @@ This script serves for uploading Test Case results to Rally.
 ##### Adding your Rally API key
 
 Start with creating your API key.
-  a) Go to this website, log in with your corporate credentials and go to API KEYS: https://rally1.rallydev.com/login/accounts/index.html#/apps
+  a) Go to the following website, log in with your corporate credentials and go to API KEYS: https://rally1.rallydev.com/login/accounts/index.html#/apps
   b) Create your key.
-  c) create file ".env" in test-driver-browser folder
-  d) add this line there: 
+  c) Create file ".env" in test-driver-browser folder
+  d) Add this line there: 
   RALLY_API_KEY ='YOUR_KEY'
 
 ##### Automated testing
 
-The main logic for uploading Test Case results to Rally from automation can be found in ./automated/updateAutomatedTCResult.js
-For results from CI pipeline release should be changed in [./rallyconfig.js] in automated{} object every release and pushed to m2020 branch.
+The main logic for uploading Test Case results to Rally from automation can be found in ./updateAutomatedTCResult.js
 
-If you trigerred the [AUTOMATION] suites manually and you want to upload the results to Rally, follow these points:
+For results from CI pipeline Production Release should be changed in [./rallyconfig.js] in [automated{}] object every release and pushed to m2020 branch. The results will be uploaded automatically.
 
-1) After the automation suite execution finished, you have to create the results report by executin script "report" from test-driver-browser folder. You run it with this command:
-  `npm run report`
-Now the results can be found under allure-report folder. We'll use "behaviours.json" file for uploading results.
+If suites are going to be trigerred manually, *'--format allure_behave.formatter:AllureFormatter -o allureFolder'* should be added to *behave* command, as specified in *../python/docs/running_tests.md*.
 
-2) Specify the fields values which you want to upload the results in [./rallyconfig.js] file in 
+1) After the automation suite execution finished, the raw data for the results report can be found under *../python/allureFolder*.
+2) In order to update results to Rally, you have to generate the report from the raw data by running the following command:
+  *'allure generate allureFolder --clean'*
+  from 
+  *../python* folder.
+
+3) Specify the fields values which you want to upload the results in [./rallyconfig.js] file in 
 automation {} object, e.g.:
 automation: {
     testSet: '', // only for Release Validation
@@ -36,12 +39,10 @@ automation: {
   }
 
 
-Build, release, and OS can also be specified from cmd as mentioned later.
+Build, release, and OS can also be specified from CMD as mentioned later.
 
-You can specify the Test Set only for RELEASE VALIDATION.
-
-3) To upload the parsed results use: `npm run rally` command from test-driver-browser folder with the following options:
-  a) verdict: `npm run rally` command by default uploads passed results. Add 'verdict=fail' parameter to upload failed results or 'verdict=all' to upload all the results. 
+4) To upload the parsed results run: `npm run rally` command from test-driver-browser folder with the following options:
+  a) verdict: `npm run rally` command by default uploads passed results. Add `verdict=fail` parameter to upload failed results or `verdict=all` to upload all the results. 
     e.g. `npm run rally verdict=fail `
     e.g. `npm run rally verdict=all`
     e.g. `npm run rally` = (`npm run rally verdict=pass`)
@@ -56,7 +57,7 @@ You can specify the Test Set only for RELEASE VALIDATION.
 
 
 ##### Manual testing
-The main logic for uploading Test Case results to Rally from manual testing can be found in ./manual/updateManualResults.js
+The main logic for uploading Test Case results to Rally from manual testing can be found in *./updateManualResults.js*.
 You run the script with command: `npm run rally-man`. The command has no other options.
 
 To upload the results from manual execution, follow these points:
@@ -64,15 +65,15 @@ To upload the results from manual execution, follow these points:
 1) Go to ./rallyconfig.js file and
   a) add IDs of the Test Cases that should be uploaded with Pass verdict to passedTestCases array and those with Fail verdict to failedTestCases array in 'manual' object, e.g.
     manual: {
-    passedTestCases: ['TS1234'],
-    failedTestCases: ['TS1234', 'TS1214'],
+    passedTestCases: ['TC1234'],
+    failedTestCases: ['TC1234', 'TC1214'],
    .......
   },
   b) add the rest of the fields to 'manual' object,
   manual: {
-    passedTestCases: ['TS1234'],
-    failedTestCases: ['TS1234', 'TS1214'],
-    testSet: '',
+    passedTestCases: ['TC1234'],
+    failedTestCases: ['TC1234', 'TC1214'],
+    testSet: 'TS212', // not obligatory
     release: '11.2.x',
     build: '11.23.5253.523',
     duration: '',
@@ -82,10 +83,11 @@ To upload the results from manual execution, follow these points:
     env: 'AQDT Mirror',
     notes: '',
     browser: 'Chrome'
-  c) testSet field can be left empty('') or pass there Test Set ID('TS212')
 
-  d) add your email to email, e.g:
+  c) add your email to email, e.g:
     email: 'stasiek@microstrategy.com'
+2) Run the script `rally-man` with the following command from *test-driver-browser* folder:
+  `npm run rally-man`
 
 ## Test Set duration
 
