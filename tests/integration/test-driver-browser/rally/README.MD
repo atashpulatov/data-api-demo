@@ -10,18 +10,23 @@ Start with creating your API key.
 
   b) Create your key.
 
-  c) Create file ".env" in test-driver-browser folder
+  c) Create file *.env* in *test-driver-browser* folder
 
   d) Add this line there: 
-
+```
   RALLY_API_KEY ='YOUR_KEY'
+  ```
 ##### Automated testing
 
-The main logic for uploading Test Case results to Rally from automation can be found in ./updateAutomatedTCResult.js
+The main logic for uploading Test Case results to Rally from automation can be found in *./updateAutomatedTCResult.js*
 
-For results from CI pipeline Production Release should be changed in [./rallyconfig.js] in [automated{}] object every release and pushed to m2020 branch. The results will be uploaded automatically.
+For results from CI pipeline Production Release should be changed in *./rallyconfig.js* file in *automated* object every release and pushed to the branch from where automation is run. The results will be uploaded automatically.
 
-If suites are going to be trigerred manually, *'--format allure_behave.formatter:AllureFormatter -o allureFolder'* should be added to *behave* command, as specified in *../python/docs/running_tests.md*.
+If suites are going to be trigerred manually,
+```
+'--format allure_behave.formatter:AllureFormatter -o allureFolder'
+```
+should be added to *behave* command, as specified in *../python/docs/running_tests.md*.
 
 1) After the automation suite execution finished, the raw data for the results report can be found under *../python/allureFolder*.
 
@@ -30,8 +35,8 @@ If suites are going to be trigerred manually, *'--format allure_behave.formatter
   from 
   *../python* folder.
 
-3) Specify the fields values which you want to upload the results in [./rallyconfig.js] file in 
-automation {} object, e.g.:
+3) Specify the fields values which you want to upload the results in *./rallyconfig.js* file in 
+*automation* object, e.g.:
 ```
 automation: {
     testSet: '', // only for Release Validation
@@ -57,18 +62,24 @@ Build, release, and OS can also be specified from CMD as mentioned later.
 
     e.g. `npm run rally` = (`npm run rally verdict=pass`)
 
-  b) build, OS and release: you can specify the build, OS and release with this options: 
+  b) you can specify the build, OS and release from CMD with the following parameters: 
+  ```
+  build=buildNumber
 
-    e.g. `npm run rally verdict=pass build=11.2.0100.22939 os=mac14 release=11.2.x`
+  release=releaseValue
 
-    For OS you have following options:
-    ```
-    mac13 for 'Mac OS 10.13 High Sierra',
+  os=OS, where OS can be
+
+    mac13 for 'Mac OS 10.13 High Sierra'
     mac14 for 'Mac OS 10.14 Mojave',
     mac15 for  'Mac OS 10.15 Catalina',
     win10 for  'Microsoft Windows 10',
     win19 for 'Microsoft Windows Server 2019'
-    ```
+  ```
+  For instance:
+
+  `npm run rally verdict=pass build=11.2.0100.22939 os=mac14 release=11.2.x`
+   
 ##### Manual testing
 The main logic for uploading Test Case results to Rally from manual testing can be found in *./updateManualResults.js*.
 
