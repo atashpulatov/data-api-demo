@@ -1,5 +1,4 @@
-@mac_chrome
-@windows_chrome
+@windows_desktop
 @release_validation
 @ga_validation
 Feature: TS41441 - Sanity checks
@@ -19,9 +18,17 @@ Feature: TS41441 - Sanity checks
       And I verified that counter of "attributes" shows "0" of "3" selected
       And I verified that counter of "metrics" shows "0" of "2" selected
       And I verified that counter of "filters" shows "0" of "3" selected
-      #TODO And I verified Data Preview button is disabled
-      #TODO And I verified Import button is disabled
-      #TODO And I verified Cancel button is enabled
+      And I verified that Data Preview button in Columns and Filters Selection is disabled
+      And I verified that Import button in Columns and Filters Selection is disabled
+      And I verified that Back button in Columns and Filters Selection is visible
+
+     When I clicked metric "Revenue"
+     Then I verified that Data Preview button in Columns and Filters Selection is enabled
+      And I verified that Import button in Columns and Filters Selection is enabled
+     
+     When I clicked metric "Revenue"
+     Then I verified that Data Preview button in Columns and Filters Selection is disabled
+      And I verified that Import button in Columns and Filters Selection is disabled
 
      When I clicked attribute "Year"
       And I clicked attribute "Region"
@@ -29,11 +36,11 @@ Feature: TS41441 - Sanity checks
       And I clicked metric "Revenue"
       And I selected filter "Year" with all elements
       And I selected filters { "Region" : ["Central", "Southwest", "South", "Northeast"] }
-      And I clicked Data Preview button
+    
+     Then I verified that Data Preview button in Columns and Filters Selection is enabled
+      And I verified that Import button in Columns and Filters Selection is enabled
+     Then I clicked Data Preview button
       And I clicked Close Preview button
-      #TODO Then I verified Data Preview button is enabled / OR I verified all buttons are enabled
-      #TODO And I verified Import button is enabled
-      #TODO And I verified Cancel button is enabled
 
      When I clicked Import button in Columns and Filters Selection
       And I closed last notification
@@ -51,60 +58,65 @@ Feature: TS41441 - Sanity checks
      Then object number 1 should be called "Report with a subtotal & prompt"
       And cells ["G8", "H8", "L8"] should have values ["Jan 2014", "Total", "$ 302,399"]
 
-    #TODO When I hovered on Refresh icon tooltip "Refresh Data" should be displayed
-    When I clicked Refresh on object 2
-     And I waited for object to be refreshed successfully
-     And I closed notification on object 2
-    Then cells ["A3", "B3"] should have values ["2014", "Northeast"]
+     When I hovered over Refresh button on object 2
+# TODO: investigate why duplicate and edit tooltips are in page source and refresh and remove are not
+# TODO: Then I verified that tooltip "Refresh" was displayed on object 2
 
-    #TODO When I hovered on Edit icon tooltip "Edit Data" should be displayed
-    When I clicked Edit object 1
-     And I waited for Run button to be enabled
-     And I selected "Music" as an answer for "1. Category" prompt - object prompt
-     And I unselected "Electronics" as an answer for "1. Category" prompt - object prompt
-     And I clicked Run button
-     And I verified that Columns & Filters Selection is visible
+     When I clicked Refresh on object 2
+      And I waited for object to be refreshed successfully
+      And I closed notification on object 2
+     Then cells ["A3", "B3"] should have values ["2014", "Northeast"]
 
-    Then I verified that counter of "metrics" shows "4" of "4" selected
-     And I verified that counter of "attributes" shows "2" of "2" selected
-     And I verified that counter of "filters" shows "0" of "2" selected
+     When I hovered over Edit button on object 1
+     Then I verified that tooltip "Edit" was displayed on object 1
 
-    When I clicked attribute "Month"
-     And I clicked metric "Profit"
-     And I ensured attribute is selected and I clicked forms { "Subcategory": ["ID"] }
-     And I selected filters { "Subcategory" : ["Alternative", "Pop"] }
+     When I clicked Edit object 1
+      And I waited for Run button to be enabled
+      And I selected "Music" as an answer for "1. Category" prompt - object prompt
+      And I unselected "Electronics" as an answer for "1. Category" prompt - object prompt
+      And I clicked Run button
+      And I verified that Columns & Filters Selection is visible
 
-    Then I verified that counter of "metrics" shows "3" of "4" selected
-     And I verified that counter of "attributes" shows "1" of "2" selected
-     And I verified that counter of "filters" shows "1" of "2" selected
+     Then I verified that counter of "metrics" shows "4" of "4" selected
+      And I verified that counter of "attributes" shows "2" of "2" selected
+      And I verified that counter of "filters" shows "0" of "2" selected
 
-    When I clicked Import button in Columns and Filters Selection
-     And I closed notification on object 1
-    Then cells ["G4", "H4", "I8", "K4"] should have values ["", "Total", "", "$ 1,197,222"]
+     When I clicked attribute "Month"
+      And I clicked metric "Profit"
+      And I ensured attribute is selected and I clicked forms { "Subcategory": ["ID"] }
+      And I selected filters { "Subcategory" : ["Alternative", "Pop"] }
 
-    When I added a new worksheet
-     And I clicked Add Data button
-     And I found object by ID "6D70D06949B83CD9DBFAC0AF5FE0010E" and selected "Report with prompt - Object prompt | Required | Default answer"
-     And I clicked Import button without checking results
-     And I waited for Run button to be enabled
-     And I clicked Run button
-     And I closed last notification
-     And I clicked Edit object 1
+     Then I verified that counter of "metrics" shows "3" of "4" selected
+      And I verified that counter of "attributes" shows "1" of "2" selected
+      And I verified that counter of "filters" shows "1" of "2" selected
 
-     And I unselected "Category" as an answer for "1. Objects" prompt - object prompt
-     And I unselected "Subcategory" as an answer for "1. Objects" prompt - object prompt
-     And I selected "Year" as an answer for "1. Objects" prompt - object prompt
-     And I waited for Run button to be enabled
-     And I clicked Run button
+     When I clicked Import button in Columns and Filters Selection
+      And I closed notification on object 1
+     Then cells ["G4", "H4", "I8", "K4"] should have values ["", "Total", "", "$ 1,197,222"]
 
-     And I verified that Columns & Filters Selection is visible
-     And I clicked metric "Profit"
-     And I clicked metric "Profit"
+     When I added a new worksheet
+      And I clicked Add Data button
+      And I found object by ID "6D70D06949B83CD9DBFAC0AF5FE0010E" and selected "Report with prompt - Object prompt | Required | Default answer"
+      And I clicked Import button without checking results
+      And I waited for Run button to be enabled
+      And I clicked Run button
+      And I closed last notification
 
-    Then I verified that counter of "filters" shows "0" of "1" selected
+      And I clicked Edit object 1
+      And I unselected "Category" as an answer for "1. Objects" prompt - object prompt
+      And I unselected "Subcategory" as an answer for "1. Objects" prompt - object prompt
+      And I selected "Year" as an answer for "1. Objects" prompt - object prompt
+      And I waited for Run button to be enabled
+      And I clicked Run button
 
-    When I clicked Import button in Columns and Filters Selection
-     And I closed notification on object 1
-    Then cells ["A1", "B4", "D1"] should have values ["Year", "$2,249,397", ""]
+      And I verified that Columns & Filters Selection is visible
+      And I clicked metric "Profit"
+      And I clicked metric "Profit"
 
-    And I logged out
+     Then I verified that counter of "filters" shows "0" of "1" selected
+
+     When I clicked Import button in Columns and Filters Selection
+      And I closed notification on object 1
+     Then cells ["A1", "B4", "D1"] should have values ["Year", "$2,249,397", ""]
+
+      And I logged out
