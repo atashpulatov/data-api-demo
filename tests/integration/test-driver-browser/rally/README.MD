@@ -71,7 +71,7 @@ To upload the results from manual execution, follow these points:
   },
   b) add the rest of the fields to 'manual' object,
   manual: {
-    passedTestCases: ['TC1234'],\
+    passedTestCases: ['TC1234'],  
     failedTestCases: ['TC1234', 'TC1214'],
     testSet: 'TS212', // not obligatory
     release: '11.2.x',
