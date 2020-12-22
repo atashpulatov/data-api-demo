@@ -79,6 +79,8 @@ Build, release, and OS can also be specified from CMD as mentioned later.
   For instance:
 
   `npm run rally verdict=pass build=11.2.0100.22939 os=mac14 release=11.2.x`
+
+  Parameters passed from CMD will overwrite the corresponding values from *./rallyconfig.js* file.
    
 ##### Manual testing
 The main logic for uploading Test Case results to Rally from manual testing can be found in *./updateManualResults.js*.
