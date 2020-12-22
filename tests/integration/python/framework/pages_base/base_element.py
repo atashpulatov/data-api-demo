@@ -15,6 +15,13 @@ from framework.util.util import Util
 
 
 class BaseElement:
+    NAME_ATTRIBUTE = 'Name'
+    AUTOMATION_ID_ATTRIBUTE = 'AutomationId'
+    IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
+    IS_ENABLED_ATTRIBUTE = 'IsEnabled'
+
+    ATTRIBUTE_VALUE_TRUE = 'true'
+
     BACKGROUND_COLOR_PROPERTY = 'background-color'
     OPACITY_PROPERTY = 'opacity'
 
@@ -28,7 +35,7 @@ class BaseElement:
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
 
-    def click(self, offset_x=None, offset_y=None):
+    def click(self, offset_x=None, offset_y=None, wait_after_click=AFTER_OPERATION_WAIT_TIME):
         if offset_x is None or offset_y is None:
             try:
                 self.__element.click()
@@ -42,7 +49,7 @@ class BaseElement:
              .click()
              .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(wait_after_click)
 
     def move_to_and_click(self, offset_x=None, offset_y=None):
         self.move_to(offset_x, offset_y)
@@ -124,6 +131,9 @@ class BaseElement:
     def get_class_name_by_attribute(self):
         return self.get_attribute(CLASS_NAME_ATTRIBUTE)
 
+    def is_enabled_by_attribute(self):
+        return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
+
     def get_element_by_css(self, selector):
         return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
 
@@ -144,6 +154,9 @@ class BaseElement:
 
     def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.CSS_SELECTOR, selector, timeout)
+
+    def check_if_element_exists_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT):
+        return self._check_if_element_exists(By.XPATH, selector, timeout)
 
     def _check_if_element_exists(self, selector_type, selector, timeout=DEFAULT_TIMEOUT):
         try:

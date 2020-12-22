@@ -63,16 +63,6 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_page().click_include_totals_and_subtotals()
 
 
-@step('I clicked Data Preview button')
-def step_impl(context):
-    context.pages.columns_and_filters_selection_page().click_data_preview()
-
-
-@step('I clicked Close Preview button')
-def step_impl(context):
-    context.pages.columns_and_filters_selection_page().click_close_preview()
-
-
 @step('I verified subtotal toggle is NOT visible')
 def step_impl(context):
     subtotal_toggle_visible = context.pages.columns_and_filters_selection_page().is_subtotal_visible()
@@ -85,3 +75,34 @@ def step_impl(context):
     subtotal_toggle_visible = context.pages.columns_and_filters_selection_page().is_subtotal_visible()
 
     AssertUtil.assert_simple(subtotal_toggle_visible, True)
+
+
+@step('I clicked Data Preview button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_data_preview()
+
+
+@step('I clicked Close Preview button')
+def step_impl(context):
+    context.pages.columns_and_filters_selection_page().click_close_preview()
+
+
+@step('I verified that {button_name} button in Columns and Filters Selection is enabled')
+def step_impl(context, button_name):
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled(button_name)
+
+    AssertUtil.assert_simple(button_enabled, True)
+
+
+@step('I verified that {button_name} button in Columns and Filters Selection is disabled')
+def step_impl(context, button_name):
+    button_enabled = context.pages.columns_and_filters_selection_page().is_button_enabled(button_name)
+
+    AssertUtil.assert_simple(button_enabled, False)
+
+
+@step('I verified that Back button in Columns and Filters Selection is visible')
+def step_impl(context):
+    button_visible = context.pages.columns_and_filters_selection_page().is_back_button_visible()
+
+    AssertUtil.assert_simple(button_visible, True)
