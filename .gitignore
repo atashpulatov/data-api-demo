@@ -332,3 +332,5 @@ coverage/
 .eslint/
 
 workspace-settings/bundle/vendor
+tests/integration/python/allure-report*
+tests/integration/python/allureFolder*

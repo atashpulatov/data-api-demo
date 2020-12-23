@@ -219,6 +219,10 @@ session (see: Running tests using existing application session).
 `-D browser_existing_session_id=session_id` specifies `session_id` address used when attaching to an existing browser
 session (see: Running tests using existing application session).
 
+`-D take_debug_screenshot_after_failure=False` enables (`True`) or disables (`False`) taking screenshots on test
+failure, useful for debug purposes, default: disabled. Screenshots are written to folder defined by
+`image_recognition_screenshots_folder` parameter. 
+
 `-D windows_desktop_excel_root_element_name=root_element_name` specifies Windows Desktop root Excel element name
 (e.g. `Book1 - Excel`) (see: Running tests using existing application session).
 
