@@ -1,6 +1,7 @@
 import time
 
-from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
+from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, \
+    StaleElementReferenceException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.color import Color
@@ -362,13 +363,27 @@ class BaseElement:
         """
         Waits until this element disappears.
 
+        Element disappears when:
+
+        is_displayed() is False,
+
+        or
+
+        it is stale (no longer in DOM) - StaleElementReferenceException is raised.
+
         :raises MstrException: when element is still visible after timeout (in seconds).
         """
-        start_time = time.time()
+        end_time = time.time() + timeout
 
-        while self.is_displayed():
-            if time.time() - start_time > timeout:
-                raise MstrException(f'Element is still displayed after {timeout} seconds.')
+        try:
+            while self.is_displayed():
+                if end_time > time.time():
+                    raise MstrException(f'Element is still displayed after {timeout} seconds.')
+
+                Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+        except StaleElementReferenceException:
+            pass
 
     def pick_color(self, offset_x=0, offset_y=0):
         """
