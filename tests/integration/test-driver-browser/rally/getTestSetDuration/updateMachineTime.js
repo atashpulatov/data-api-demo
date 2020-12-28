@@ -1,8 +1,7 @@
-/* eslint-disable camelcase */
 const fetch = require('node-fetch');
 const rallyConfig = require('../rallyconfig');
 const getTestSetDuration = require('./getTestSetDuration');
-const helpers = require('../helpers');
+const getDataHelper = require('../helpers/getDataHelpers');
 
 /**
 * Upload Test Set duration to existing Test Set Rally
@@ -18,7 +17,7 @@ async function updateMachineTime() {
   // Test Set ID passed to cmd
   const testSetId = cmd[2];
   const testSetDuration = await getTestSetDuration(testSetId);
-  const testSetUrl = await helpers.getTestSet(testSetId);
+  const testSetUrl = await getDataHelper.getTestSet(testSetId);
 
   const options = {
     method: 'PUT',

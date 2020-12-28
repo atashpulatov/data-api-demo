@@ -1,13 +1,15 @@
 import time
 
-from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
+from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, \
+    StaleElementReferenceException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.color import Color
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
     ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS, \
-    MEDIUM_TIMEOUT
+    MEDIUM_TIMEOUT, NAME_ATTRIBUTE, AUTOMATION_ID_ATTRIBUTE, IS_OFFSCREEN_ATTRIBUTE, ATTRIBUTE_VALUE_TRUE, \
+    TEXT_CONTENT_ATTRIBUTE, CLASS_NAME_ATTRIBUTE
 from framework.util.exception.MstrException import MstrException
 from framework.util.image_util import ImageUtil
 from framework.util.util import Util
@@ -17,6 +19,7 @@ class BaseElement:
     NAME_ATTRIBUTE = 'Name'
     AUTOMATION_ID_ATTRIBUTE = 'AutomationId'
     IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
+    IS_ENABLED_ATTRIBUTE = 'IsEnabled'
 
     ATTRIBUTE_VALUE_TRUE = 'true'
 
@@ -33,7 +36,7 @@ class BaseElement:
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
 
-    def click(self, offset_x=None, offset_y=None):
+    def click(self, offset_x=None, offset_y=None, wait_after_click=AFTER_OPERATION_WAIT_TIME):
         if offset_x is None or offset_y is None:
             try:
                 self.__element.click()
@@ -42,12 +45,12 @@ class BaseElement:
                 raise MstrException('Error while clicking an element.')
         else:
             (ActionChains(self.__driver)
-             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .move_to_element_with_offset(self.__element, offset_x, offset_y)
              .pause(AFTER_OPERATION_WAIT_TIME)
              .click()
              .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(wait_after_click)
 
     def move_to_and_click(self, offset_x=None, offset_y=None):
         self.move_to(offset_x, offset_y)
@@ -65,7 +68,7 @@ class BaseElement:
              .perform())
         else:
             (ActionChains(self.__driver)
-             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .move_to_element_with_offset(self.__element, offset_x, offset_y)
              .pause(AFTER_OPERATION_WAIT_TIME)
              .double_click()
              .perform())
@@ -81,7 +84,7 @@ class BaseElement:
              .perform())
         else:
             (ActionChains(self.__driver)
-             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .move_to_element_with_offset(self.__element, offset_x, offset_y)
              .pause(AFTER_OPERATION_WAIT_TIME)
              .context_click()
              .perform())
@@ -115,13 +118,22 @@ class BaseElement:
         return self.__element.is_displayed()
 
     def get_name_by_attribute(self):
-        return self.get_attribute(BaseElement.NAME_ATTRIBUTE)
+        return self.get_attribute(NAME_ATTRIBUTE)
 
     def get_automation_id_by_attribute(self):
-        return self.get_attribute(BaseElement.AUTOMATION_ID_ATTRIBUTE)
+        return self.get_attribute(AUTOMATION_ID_ATTRIBUTE)
 
     def is_offscreen_by_attribute(self):
-        return self.get_attribute(BaseElement.IS_OFFSCREEN_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
+        return self.get_attribute(IS_OFFSCREEN_ATTRIBUTE) == ATTRIBUTE_VALUE_TRUE
+
+    def get_text_content_by_attribute(self):
+        return self.get_attribute(TEXT_CONTENT_ATTRIBUTE)
+
+    def get_class_name_by_attribute(self):
+        return self.get_attribute(CLASS_NAME_ATTRIBUTE)
+
+    def is_enabled_by_attribute(self):
+        return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector):
         return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
@@ -143,6 +155,9 @@ class BaseElement:
 
     def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.CSS_SELECTOR, selector, timeout)
+
+    def check_if_element_exists_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT):
+        return self._check_if_element_exists(By.XPATH, selector, timeout)
 
     def _check_if_element_exists(self, selector_type, selector, timeout=DEFAULT_TIMEOUT):
         try:
@@ -240,7 +255,7 @@ class BaseElement:
              .perform())
         else:
             (ActionChains(self.__driver)
-             .move_to_element_with_offset(self.__element, offset_x if offset_x else 0, offset_y if offset_y else 0)
+             .move_to_element_with_offset(self.__element, offset_x, offset_y)
              .pause(AFTER_OPERATION_WAIT_TIME)
              .perform())
 
@@ -362,13 +377,27 @@ class BaseElement:
         """
         Waits until this element disappears.
 
+        Element disappears when:
+
+        is_displayed() is False,
+
+        or
+
+        it is stale (no longer in DOM) - StaleElementReferenceException is raised.
+
         :raises MstrException: when element is still visible after timeout (in seconds).
         """
-        start_time = time.time()
+        end_time = time.time() + timeout
 
-        while self.is_displayed():
-            if time.time() - start_time > timeout:
-                raise MstrException(f'Element is still displayed after {timeout} seconds.')
+        try:
+            while self.is_displayed():
+                if end_time > time.time():
+                    raise MstrException(f'Element is still displayed after {timeout} seconds.')
+
+                Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+
+        except StaleElementReferenceException:
+            pass
 
     def pick_color(self, offset_x=0, offset_y=0):
         """

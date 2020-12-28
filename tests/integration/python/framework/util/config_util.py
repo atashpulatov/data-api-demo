@@ -21,6 +21,7 @@ class ConfigUtil:
     PARAM_NAME_CONNECT_TO_EXISTING_SESSION_ENABLED = 'connect_to_existing_session_enabled'
     PARAM_NAME_BROWSER_EXISTING_SESSION_EXECUTOR_URL = 'browser_existing_session_executor_url'
     PARAM_NAME_BROWSER_EXISTING_SESSION_ID = 'browser_existing_session_id'
+    PARAM_NAME_TAKE_DEBUG_SCREENSHOT_AFTER_FAILURE = 'take_debug_screenshot_after_failure'
     PARAM_WINDOWS_DESKTOP_EXCEL_ROOT_ELEMENT_NAME = 'windows_desktop_excel_root_element_name'
     PARAM_MAX_NO_OF_TEST_EXECUTIONS = 'max_no_of_test_executions'
     PARAM_NAME_CLEANUP_AFTER_TEST_ENABLED = 'cleanup_after_test_enabled'
@@ -94,6 +95,13 @@ class ConfigUtil:
     @staticmethod
     def get_browser_existing_session_id():
         return ConfigUtil._get_variable_value(ConfigUtil.PARAM_NAME_BROWSER_EXISTING_SESSION_ID)
+
+    @staticmethod
+    def is_take_debug_screenshot_after_failure_enabled():
+        return ConfigUtil._get_variable_value(
+            ConfigUtil.PARAM_NAME_TAKE_DEBUG_SCREENSHOT_AFTER_FAILURE,
+            ignore_not_existing_variable=True
+        )
 
     @staticmethod
     def get_windows_desktop_excel_root_element_name():

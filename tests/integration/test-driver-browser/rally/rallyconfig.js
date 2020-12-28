@@ -25,6 +25,6 @@ module.exports = {
     OS: '', // e.g. 'Mac OS 10.15 Catalina' - exact name from Rally
     language: '', // e.g. 'English'
     build: '', // e.g. '11.1.1.3423'
-    release: '' // e.g. '11.2.2 [2020-Jun-05]' - exact name from Rally
+    release: '11.3.x' // e.g. '11.2.2 [2020-Jun-05]' - exact name from Rally
   }
 };

@@ -1,11 +1,13 @@
+import re
+
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.const import DEFAULT_TIMEOUT, LONG_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
 from framework.util.message_const import MessageConst
 
 
 class RightPanelTileBrowserPage(BaseBrowserPage):
+    NOTIFICATION_CONTAINER_CLASS_NAME = 'notification-container'
     NOTIFICATION_TEXT_ELEM = '.notification-text'
-    TEXT_CONTENT_ATTRIBUTE = 'textContent'
     PROGRESS_BAR = '.progress-bar'
 
     GLOBAL_ERROR_ELEM = '.global-warning-title'
@@ -16,13 +18,27 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     SIDE_PANEL_HEADER = '.side-panel > .header'
 
     RIGHT_PANEL_TILE = '.object-tile-list > article:nth-child(%s) > div > .react-contextmenu-wrapper'
+    RIGHT_PANEL_TILE_NOTIFICATION = '.object-tile-list > article:nth-child(%s) > div > .notification-container'
 
     RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' .icon-bar '
+
+    RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON = RIGHT_PANEL_TILE_NOTIFICATION + \
+                                                  ' .progress-bar-notification-button-container > button'
+
+    RIGHT_PANEL_TILE_PROGRESS_PROCESSED_ITEMS = RIGHT_PANEL_TILE_NOTIFICATION + \
+                                                ' .notification-body .progress-processed-items'
+
+    RIGHT_PANEL_TILE_PROGRESS_ACTION = RIGHT_PANEL_TILE_NOTIFICATION + ' .notification-text .left-text'
+    RIGHT_PANEL_TILE_PROGRESS_PERCENTAGE = RIGHT_PANEL_TILE_NOTIFICATION + ' .notification-text .right-text'
+    RIGHT_PANEL_TILE_FIRST_DIV = '.object-tile-list > article:nth-child(%s) > div > div:nth-child(1)'
+
+    PROGRESS_COUNT_SEPARATOR = '/'
 
     DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
     EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(3)'
     REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(4)'
+    CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .checkbox-cell'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
@@ -36,6 +52,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_WRAPPER = '.react-contextmenu-wrapper'
 
     OBJECT_TILE_ACTIONS = '.icon-bar'
+
+    PERCENTAGE_ZERO = '0%'
+    PERCENTAGE_NUMBER = '^\d{1,3}%$'
+
+    ACTION_STATUS_PENDING = 'Pending'
 
     def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
@@ -52,6 +73,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def wait_for_remove_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT, timeout)
 
+    def wait_for_operation_to_finish_successfully_with_message(self, expected_message, timeout=LONG_TIMEOUT):
+        self._wait_for_operation_with_status(expected_message, timeout)
+
     def wait_for_operation_error_and_accept(self, expected_message, timeout=DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(expected_message, timeout)
 
@@ -65,18 +89,22 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def _wait_for_operation_with_status(self, expected_message, timeout):
         self.focus_on_add_in_frame()
 
-        self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
-                                                             RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-                                                             expected_message,
-                                                             timeout=timeout)
+        self.wait_for_element_to_have_attribute_value_by_css(
+            RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
+            TEXT_CONTENT_ATTRIBUTE,
+            expected_message,
+            timeout=timeout
+        )
 
     def _wait_for_global_error(self, expected_message, timeout):
         self.focus_on_add_in_frame()
 
-        self.wait_for_element_to_have_attribute_value_by_css(RightPanelTileBrowserPage.GLOBAL_ERROR_ELEM,
-                                                             RightPanelTileBrowserPage.TEXT_CONTENT_ATTRIBUTE,
-                                                             expected_message,
-                                                             timeout=timeout)
+        self.wait_for_element_to_have_attribute_value_by_css(
+            RightPanelTileBrowserPage.GLOBAL_ERROR_ELEM,
+            TEXT_CONTENT_ATTRIBUTE,
+            expected_message,
+            timeout=timeout
+        )
 
     def wait_for_progress_notifications_to_disappear(self, timeout=DEFAULT_TIMEOUT):
         self.focus_on_add_in_frame()
@@ -126,6 +154,16 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self._click_tile_button(RightPanelTileBrowserPage.REMOVE_BUTTON_FOR_OBJECT, tile_no)
 
         self.wait_for_remove_object_to_finish_successfully()
+
+    def click_checkbox_for_object_selection(self, tile_no):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.CHECKBOX_FOR_OBJECT % tile_no).click()
+
+    def click_cancel_on_pending_action(self, tile_no):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON % tile_no).click()
 
     def _click_tile_button(self, selector, tile_no):
         self.focus_on_add_in_frame()
@@ -230,3 +268,66 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         opacity_value = icon_bar.get_opacity()
 
         return int(opacity_value) > 0
+
+    def get_object_action_in_progress_name(self, object_number):
+        self.focus_on_add_in_frame()
+
+        return self._get_action_status(object_number)
+
+    def get_object_action_in_progress_total_rows_count(self, object_number):
+        self.focus_on_add_in_frame()
+
+        element = self.get_element_by_css(
+            RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_PROCESSED_ITEMS % object_number
+        )
+
+        rows_count = element.get_text_content_by_attribute()
+        rows_count_list = rows_count.split(RightPanelTileBrowserPage.PROGRESS_COUNT_SEPARATOR)
+        total_rows = rows_count_list[1]
+
+        return total_rows
+
+    def verify_object_action_displays_progress_percentage(self, object_number):
+        self.focus_on_add_in_frame()
+
+        percentage = self._get_progress_percentage(object_number)
+
+        return re.match(RightPanelTileBrowserPage.PERCENTAGE_NUMBER, percentage) is not None
+
+    def verify_object_action_is_pending(self, object_number):
+        self.focus_on_add_in_frame()
+
+        percentage = self._get_progress_percentage(object_number)
+        action_status = self._get_action_status(object_number)
+
+        return percentage == RightPanelTileBrowserPage.PERCENTAGE_ZERO and \
+               action_status == RightPanelTileBrowserPage.ACTION_STATUS_PENDING
+
+    def _get_progress_percentage(self, object_number):
+        percentage_element = self.get_element_by_css(
+            RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_PERCENTAGE % object_number
+        )
+        return percentage_element.get_text_content_by_attribute()
+
+    def _get_action_status(self, object_number):
+        action_status_element = self.get_element_by_css(
+            RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number
+        )
+        return action_status_element.get_text_content_by_attribute()
+
+    def verify_object_has_popup_displayed(self, object_number):
+        self.focus_on_add_in_frame()
+
+        element = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_FIRST_DIV % object_number)
+        element_class_name = element.get_class_name_by_attribute()
+
+        return element_class_name == RightPanelTileBrowserPage.NOTIFICATION_CONTAINER_CLASS_NAME
+
+    def wait_for_object_operation_to_finish_successfully_with_message(self, object_number, expected_message):
+        self.focus_on_add_in_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(
+            RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number,
+            TEXT_CONTENT_ATTRIBUTE,
+            expected_message
+        )

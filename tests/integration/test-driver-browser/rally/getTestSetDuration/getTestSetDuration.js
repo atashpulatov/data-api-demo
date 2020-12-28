@@ -1,7 +1,4 @@
-/* eslint-disable no-underscore-dangle */
-const helpers = require('../helpers');
-const getDataFromRally = require('../getDataFromRally');
-const rallyConfig = require('../rallyconfig');
+const getDataHelper = require('../helpers/getDataHelpers');
 
 /**
 * Get Test Set duration of the Test Set which ID is passed as a parameter
@@ -12,18 +9,18 @@ const rallyConfig = require('../rallyconfig');
 module.exports = async function getDuration(testSetId) {
   try {
     // URL to the Test Set
-    const testSetUrl = await helpers.getTestSet(testSetId);
+    const testSetUrl = await getDataHelper.getTestSet(testSetId);
     const testSetID = testSetUrl.split('/')[7];
 
     // URL to list of Test Cases under the Test Set
-    const { TestSet } = await getDataFromRally(testSetUrl);
+    const { TestSet } = await getDataHelper.getDataFromRally(testSetUrl);
     const testCasesUrl = TestSet.TestCases._ref;
 
     // URL with result page size extended to 1000
     const tCUrlWithPageSize = testCasesUrl.concat('?pagesize=1000');
 
     // List of Test Cases under the Test Set
-    const { QueryResult: tcListResult } = await getDataFromRally(tCUrlWithPageSize);
+    const { QueryResult: tcListResult } = await getDataHelper.getDataFromRally(tCUrlWithPageSize);
 
     const testCasesList = tcListResult.Results;
     // List of URLs to results of Test Cases from testCasesList
@@ -34,8 +31,6 @@ module.exports = async function getDuration(testSetId) {
 
     for (let i = 0; i < testCasesList.length; i++) {
       listOfUrlsToTCResults.push(testCasesList[i].Results._ref);
-    }
-    for (let i = 0; i < testCasesList.length; i++) {
       testCasesIdList.push(testCasesList[i].ObjectID);
     }
 
@@ -44,7 +39,7 @@ module.exports = async function getDuration(testSetId) {
     let duration = 0;
 
     for (let i = 0; i < listOfUrlsToTCResults.length; i++) {
-      const { QueryResult } = await getDataFromRally(listOfUrlsToTCResults[i]);
+      const { QueryResult } = await getDataHelper.getDataFromRally(listOfUrlsToTCResults[i]);
       const results = QueryResult.Results;
       resultsArray.push(results);
       for (let j = 0; j < results.length; j++) {
