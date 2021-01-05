@@ -31,3 +31,4 @@ Feature: F24398 - Import and refresh visualization
      Then cells ["F2", "H8641"] should have values ["100 Places to Go While Still Young at Heart", "2016"]
 
       And I logged out
+
