@@ -8,8 +8,8 @@ from selenium.webdriver.support.color import Color
 
 from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
     ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS, \
-    MEDIUM_TIMEOUT, NAME_ATTRIBUTE, AUTOMATION_ID_ATTRIBUTE, IS_OFFSCREEN_ATTRIBUTE, ATTRIBUTE_VALUE_TRUE, \
-    TEXT_CONTENT_ATTRIBUTE, CLASS_NAME_ATTRIBUTE
+    NAME_ATTRIBUTE, AUTOMATION_ID_ATTRIBUTE, IS_OFFSCREEN_ATTRIBUTE, ATTRIBUTE_VALUE_TRUE, \
+    TEXT_CONTENT_ATTRIBUTE, CLASS_NAME_ATTRIBUTE, LONG_TIMEOUT
 from framework.util.exception.MstrException import MstrException
 from framework.util.image_util import ImageUtil
 from framework.util.util import Util
@@ -373,7 +373,7 @@ class BaseElement:
 
         raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')
 
-    def wait_until_disappears(self, timeout=MEDIUM_TIMEOUT):
+    def wait_until_disappears(self, timeout=LONG_TIMEOUT):
         """
         Waits until this element disappears.
 
