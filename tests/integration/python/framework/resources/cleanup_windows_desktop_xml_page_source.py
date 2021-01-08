@@ -117,4 +117,5 @@ def cleanup_xml():
         print_cleaned(single_tag_lines)
 
 
-cleanup_xml()
+if __name__ == '__main__':
+    cleanup_xml()

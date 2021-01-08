@@ -1,6 +1,5 @@
 import hashlib
 import os
-import re
 import time
 from io import BytesIO
 
@@ -41,7 +40,6 @@ class ImageUtil:
 
     SCREENSHOT_FILE_EXTENSION = '.png'
 
-    TO_ALPHA_REGEX = re.compile(r'\W')
     FILE_NAME_MAX_LENGTH = 100
     FILE_NAME_SEPARATOR = '_'
 
@@ -222,8 +220,11 @@ class ImageUtil:
 
         return None
 
-    def _save_current_full_screen(self, current_full_screenshot_file_name=CURRENT_SCREENSHOT_FILE_NAME):
-        current_full_screen_file_path = self._prepare_image_file_path(current_full_screenshot_file_name)
+    def _save_current_full_screen(self,
+                                  current_full_screenshot_file_name=CURRENT_SCREENSHOT_FILE_NAME,
+                                  folder_name=None):
+
+        current_full_screen_file_path = self._prepare_image_file_path(current_full_screenshot_file_name, folder_name)
 
         image = self._get_full_screen_image()
         image.save(current_full_screen_file_path)
@@ -232,7 +233,11 @@ class ImageUtil:
 
     def _save_element_image(self, element_image, file_name_prefix):
         if file_name_prefix and self.image_recognition_enabled:
-            self._save_image(element_image, file_name_prefix)
+            self._save_image(
+                element_image,
+                file_name_prefix,
+                ConfigUtil.get_image_recognition_screenshots_folder()
+            )
 
     def get_element_image(self, element):
         screenshot_image = self._get_full_screen_image()
@@ -267,19 +272,19 @@ class ImageUtil:
             'bottom': bottom
         }
 
-    def _prepare_image_file_path(self, file_name_prefix):
-        screenshots_folder = self._get_screenshots_folder()
+    def _prepare_image_file_path(self, file_name_prefix, folder_name=None):
+        screenshots_folder = self._get_screenshots_folder(folder_name)
 
-        file_name_prefix_alpha = ImageUtil.TO_ALPHA_REGEX.sub('_', file_name_prefix)
+        file_name_prefix_alpha = Util.normalize_file_name(file_name_prefix)
         file_name_shortend = self._shorten_file_name(file_name_prefix_alpha)
-        file_name = ''.join((file_name_shortend.lower(), ImageUtil.SCREENSHOT_FILE_EXTENSION))
+        file_name = ''.join((file_name_shortend, ImageUtil.SCREENSHOT_FILE_EXTENSION))
 
         file_path = os.path.join(screenshots_folder, file_name)
 
         return file_path
 
-    def _get_screenshots_folder(self):
-        screenshots_folder = ConfigUtil.get_image_recognition_screenshots_folder()
+    def _get_screenshots_folder(self, folder_name):
+        screenshots_folder = folder_name if folder_name else ConfigUtil.get_image_recognition_screenshots_folder()
 
         if os.path.exists(screenshots_folder):
             return screenshots_folder
@@ -340,16 +345,18 @@ class ImageUtil:
         file_name_prefix_with_timestamp = f'{file_name_prefix}{time.time()}_'
 
         self._save_current_full_screen(
-            file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX
+            file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX,
+            ConfigUtil.get_debug_data_folder()
         )
 
         if element:
             element_image = self.get_element_image(element)
             self._save_image(
                 element_image,
-                file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX
+                file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX,
+                ConfigUtil.get_debug_data_folder()
             )
 
-    def _save_image(self, image, file_name_prefix):
-        element_file_name = self._prepare_image_file_path(file_name_prefix)
+    def _save_image(self, image, file_name_prefix, folder_name):
+        element_file_name = self._prepare_image_file_path(file_name_prefix, folder_name=folder_name)
         image.save(element_file_name)
