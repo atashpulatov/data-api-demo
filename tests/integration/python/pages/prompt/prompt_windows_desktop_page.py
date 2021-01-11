@@ -49,15 +49,14 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         raise MstrException(f'Run button not exists or is not enabled.')
 
     def click_run_button(self):
-        prompt_field_label = self.get_add_in_main_element().get_element_by_xpath(
-            PromptWindowsDesktopPage.PROMPT_FIELD_LABEL
-        )
-
         self.get_element_by_accessibility_id(
             PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_ACCESSIBILITY_ID
         ).click()
 
-        prompt_field_label.wait_until_disappears()
+        self.wait_until_element_disappears_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_FIELD_LABEL,
+            self.get_add_in_main_element()
+        )
 
     def click_run_button_for_prompted_dossier_if_not_answered(self):
         if self._check_if_prompts_answer_window_is_open():

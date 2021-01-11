@@ -7,7 +7,6 @@ from framework.util.const import Const
 
 class ElementGetUsingParent(ElementInfo):
     """
-    TODO: UPDATE
     Class providing methods for getting elements using a given parent element (relative search).
 
     It improves performance on Windows Desktop by allowing usage of image recognition in this scenario and helps

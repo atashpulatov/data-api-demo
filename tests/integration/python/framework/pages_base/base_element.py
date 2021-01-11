@@ -1,7 +1,6 @@
 import time
 
-from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, \
-    StaleElementReferenceException
+from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.color import Color
@@ -144,6 +143,16 @@ class BaseElement:
     def get_element_by_tag_name(self, selector):
         return self.get_element(By.TAG_NAME, selector, timeout=Const.DEFAULT_TIMEOUT)
 
+    def get_element_by_xpath_safe(self, selector):
+        """
+        Exception-safe version of get_element_by_xpath().
+
+        :param selector: Selector to be used when searching for element.
+
+        :return: BaseElement found by XPath using selector or None when not found.
+        """
+        return self.get_element(By.XPATH, selector, timeout=Const.DEFAULT_TIMEOUT, safe=True)
+
     def check_if_element_exists_by_tag_name(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.TAG_NAME, selector, timeout)
 
@@ -163,20 +172,23 @@ class BaseElement:
         except MstrException:
             return False
 
-    def get_element(self, selector_type, selector, timeout=Const.DEFAULT_TIMEOUT):
+    def get_element(self, selector_type, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
         """
         Gets element which is a child of this base element.
 
         This is a generic method used by framework classes. In Pages implementation, for code clarity,
         please use get_element_by_* if possible.
 
+        When element is not present, MstrException is raised (when safe is False) or None returned (otherwise).
+
         :param selector_type: Selector type to be used when searching for element (e.g. By.NAME).
         :param selector: Selector to be used when searching for element (e.g. 'Close').
         :param timeout: Timeout threshold in seconds, when reached MstrException is raised.
+        :param safe: Switch enabling exception-safe behaviour.
 
-        :raises MstrException when timeout's threshold is reached.
+        :return: BaseElement found using selector_type and selector or None when not found (when safe is True).
 
-        :return: BaseElement found using selector_type and selector.
+        :raises MstrException when timeout's threshold is reached when safe is False (default).
         """
 
         self.__driver.implicitly_wait(timeout)
@@ -194,6 +206,9 @@ class BaseElement:
                 pass
 
             Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
+
+        if safe:
+            return None
 
         raise MstrException(('Element not found', selector))
 
@@ -369,32 +384,6 @@ class BaseElement:
             Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
         raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')
-
-    def wait_until_disappears(self, timeout=Const.LONG_TIMEOUT):
-        """
-        Waits until this element disappears.
-
-        Element disappears when:
-
-        is_displayed() is False,
-
-        or
-
-        it is stale (no longer in DOM) - StaleElementReferenceException is raised.
-
-        :raises MstrException: when element is still visible after timeout (in seconds).
-        """
-        end_time = time.time() + timeout
-
-        try:
-            while self.is_displayed():
-                if end_time > time.time():
-                    raise MstrException(f'Element is still displayed after {timeout} seconds.')
-
-                Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
-
-        except StaleElementReferenceException:
-            pass
 
     def pick_color(self, offset_x=0, offset_y=0):
         """
