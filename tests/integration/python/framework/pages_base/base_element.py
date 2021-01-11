@@ -6,10 +6,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.color import Color
 
-from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY, SEND_KEYS_RETRY_NUMBER, AFTER_OPERATION_WAIT_TIME, \
-    ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL, DEFAULT_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS, \
-    NAME_ATTRIBUTE, AUTOMATION_ID_ATTRIBUTE, IS_OFFSCREEN_ATTRIBUTE, ATTRIBUTE_VALUE_TRUE, \
-    TEXT_CONTENT_ATTRIBUTE, CLASS_NAME_ATTRIBUTE, LONG_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.image_util import ImageUtil
 from framework.util.util import Util
@@ -36,7 +33,7 @@ class BaseElement:
     def __eq__(self, element_to_compare):
         return self.id == element_to_compare.id
 
-    def click(self, offset_x=None, offset_y=None, wait_after_click=AFTER_OPERATION_WAIT_TIME):
+    def click(self, offset_x=None, offset_y=None, wait_after_click=Const.AFTER_OPERATION_WAIT_TIME):
         if offset_x is None or offset_y is None:
             try:
                 self.__element.click()
@@ -46,7 +43,7 @@ class BaseElement:
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x, offset_y)
-             .pause(AFTER_OPERATION_WAIT_TIME)
+             .pause(Const.AFTER_OPERATION_WAIT_TIME)
              .click()
              .perform())
 
@@ -57,39 +54,39 @@ class BaseElement:
 
         ActionChains(self.__driver).click().perform()
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     def double_click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
             (ActionChains(self.__driver)
              .move_to_element(self.__element)
-             .pause(AFTER_OPERATION_WAIT_TIME)
+             .pause(Const.AFTER_OPERATION_WAIT_TIME)
              .double_click()
              .perform())
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x, offset_y)
-             .pause(AFTER_OPERATION_WAIT_TIME)
+             .pause(Const.AFTER_OPERATION_WAIT_TIME)
              .double_click()
              .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     def right_click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
             (ActionChains(self.__driver)
              .move_to_element(self.__element)
-             .pause(AFTER_OPERATION_WAIT_TIME)
+             .pause(Const.AFTER_OPERATION_WAIT_TIME)
              .context_click()
              .perform())
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x, offset_y)
-             .pause(AFTER_OPERATION_WAIT_TIME)
+             .pause(Const.AFTER_OPERATION_WAIT_TIME)
              .context_click()
              .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     @property
     def id(self):
@@ -98,7 +95,7 @@ class BaseElement:
     def clear(self):
         self.__element.clear()
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     @property
     def text(self):
@@ -118,55 +115,55 @@ class BaseElement:
         return self.__element.is_displayed()
 
     def get_name_by_attribute(self):
-        return self.get_attribute(NAME_ATTRIBUTE)
+        return self.get_attribute(Const.NAME_ATTRIBUTE)
 
     def get_automation_id_by_attribute(self):
-        return self.get_attribute(AUTOMATION_ID_ATTRIBUTE)
+        return self.get_attribute(Const.AUTOMATION_ID_ATTRIBUTE)
 
     def is_offscreen_by_attribute(self):
-        return self.get_attribute(IS_OFFSCREEN_ATTRIBUTE) == ATTRIBUTE_VALUE_TRUE
+        return self.get_attribute(Const.IS_OFFSCREEN_ATTRIBUTE) == Const.ATTRIBUTE_VALUE_TRUE
 
     def get_text_content_by_attribute(self):
-        return self.get_attribute(TEXT_CONTENT_ATTRIBUTE)
+        return self.get_attribute(Const.TEXT_CONTENT_ATTRIBUTE)
 
     def get_class_name_by_attribute(self):
-        return self.get_attribute(CLASS_NAME_ATTRIBUTE)
+        return self.get_attribute(Const.CLASS_NAME_ATTRIBUTE)
 
     def is_enabled_by_attribute(self):
         return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector):
-        return self.get_element(By.CSS_SELECTOR, selector, timeout=DEFAULT_TIMEOUT)
+        return self.get_element(By.CSS_SELECTOR, selector, timeout=Const.DEFAULT_TIMEOUT)
 
     def get_element_by_xpath(self, selector):
-        return self.get_element(By.XPATH, selector, timeout=DEFAULT_TIMEOUT)
+        return self.get_element(By.XPATH, selector, timeout=Const.DEFAULT_TIMEOUT)
 
     def get_element_by_name(self, selector):
-        return self.get_element(By.NAME, selector, timeout=DEFAULT_TIMEOUT)
+        return self.get_element(By.NAME, selector, timeout=Const.DEFAULT_TIMEOUT)
 
     def get_element_by_tag_name(self, selector):
-        return self.get_element(By.TAG_NAME, selector, timeout=DEFAULT_TIMEOUT)
+        return self.get_element(By.TAG_NAME, selector, timeout=Const.DEFAULT_TIMEOUT)
 
-    def check_if_element_exists_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT):
+    def check_if_element_exists_by_tag_name(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.TAG_NAME, selector, timeout)
 
-    def check_if_element_exists_by_name(self, selector, timeout=DEFAULT_TIMEOUT):
+    def check_if_element_exists_by_name(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.NAME, selector, timeout)
 
-    def check_if_element_exists_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
+    def check_if_element_exists_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.CSS_SELECTOR, selector, timeout)
 
-    def check_if_element_exists_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT):
+    def check_if_element_exists_by_xpath(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.XPATH, selector, timeout)
 
-    def _check_if_element_exists(self, selector_type, selector, timeout=DEFAULT_TIMEOUT):
+    def _check_if_element_exists(self, selector_type, selector, timeout=Const.DEFAULT_TIMEOUT):
         try:
             self.get_element(selector_type, selector, timeout)
             return True
         except MstrException:
             return False
 
-    def get_element(self, selector_type, selector, timeout=DEFAULT_TIMEOUT):
+    def get_element(self, selector_type, selector, timeout=Const.DEFAULT_TIMEOUT):
         """
         Gets element which is a child of this base element.
 
@@ -190,13 +187,13 @@ class BaseElement:
             try:
                 raw_element = self.__element.find_element(by=selector_type, value=selector)
 
-                self.__driver.implicitly_wait(DEFAULT_TIMEOUT)
+                self.__driver.implicitly_wait(Const.DEFAULT_TIMEOUT)
 
                 return BaseElement(raw_element, self.__driver)
             except NoSuchElementException:
                 pass
 
-            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+            Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
         raise MstrException(('Element not found', selector))
 
@@ -217,14 +214,14 @@ class BaseElement:
 
     def get_elements_by_xpath(self, selector):
         i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+        while i < Const.ELEMENT_SEARCH_RETRY_NUMBER:
             try:
                 raw_elements = self.__element.find_elements_by_xpath(selector)
 
                 return BaseElement.wrap_raw_elements(raw_elements, self.__driver)
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
-                Util.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+                Util.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
             i += 1
 
         raise MstrException('Cannot find elements: %s' % selector)
@@ -251,15 +248,15 @@ class BaseElement:
         if offset_x is None or offset_y is None:
             (ActionChains(self.__driver)
              .move_to_element(self.__element)
-             .pause(AFTER_OPERATION_WAIT_TIME)
+             .pause(Const.AFTER_OPERATION_WAIT_TIME)
              .perform())
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x, offset_y)
-             .pause(AFTER_OPERATION_WAIT_TIME)
+             .pause(Const.AFTER_OPERATION_WAIT_TIME)
              .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     @property
     def size(self):
@@ -294,7 +291,7 @@ class BaseElement:
         if not self._check_if_keys_sent_correctly(text):
             self._execute_fallback_send_keys(text)
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     def _execute_fallback_send_keys(self, text):
         """
@@ -303,11 +300,11 @@ class BaseElement:
         :param text: text to send
         """
         if text:
-            for i in range(0, SEND_KEYS_RETRY_NUMBER):
+            for i in range(0, Const.SEND_KEYS_RETRY_NUMBER):
                 for c in text:
                     self.__element.send_keys(c)
 
-                    Util.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
+                    Util.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
                 if self._check_if_keys_sent_correctly(text):
                     return
@@ -350,7 +347,7 @@ class BaseElement:
 
         return wrapped_elements
 
-    def get_element_by_text_from_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
+    def get_element_by_text_from_elements_list_by_css(self, selector, expected_text, timeout=Const.DEFAULT_TIMEOUT):
         """
         Gets element from elements list found by a selector (starting from this element) that contains expected text.
 
@@ -369,11 +366,11 @@ class BaseElement:
             if element:
                 return element
 
-            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+            Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
         raise MstrException(f'No element found, selector: {selector}, text: {expected_text}')
 
-    def wait_until_disappears(self, timeout=LONG_TIMEOUT):
+    def wait_until_disappears(self, timeout=Const.LONG_TIMEOUT):
         """
         Waits until this element disappears.
 
@@ -394,7 +391,7 @@ class BaseElement:
                 if end_time > time.time():
                     raise MstrException(f'Element is still displayed after {timeout} seconds.')
 
-                Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+                Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
         except StaleElementReferenceException:
             pass

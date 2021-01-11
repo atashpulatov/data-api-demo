@@ -2,7 +2,7 @@ import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
-from framework.util.const import SHORT_TIMEOUT, LONG_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.message_const import MessageConst
 
@@ -84,9 +84,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         )
 
     def _wait_until_element_disappears(self, check_if_element_exists_method, selector):
-        end_time = time.time() + LONG_TIMEOUT
+        end_time = time.time() + Const.LONG_TIMEOUT
 
-        while check_if_element_exists_method(selector, timeout=SHORT_TIMEOUT):
+        while check_if_element_exists_method(selector, timeout=Const.SHORT_TIMEOUT):
             if time.time() > end_time:
                 raise MstrException(f'Error while waiting for operation [{check_if_element_exists_method}] to finish, '
                                     f'element still visible: [{selector}].')
@@ -117,7 +117,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def _is_any_successful_notification_open(self, tile_list):
         for text in RightPanelTileWindowsDesktopPage.NOTIFICATIONS_TEXTS:
-            if tile_list.check_if_element_exists_by_name(text, timeout=SHORT_TIMEOUT):
+            if tile_list.check_if_element_exists_by_name(text, timeout=Const.SHORT_TIMEOUT):
                 return True
 
         return False
@@ -201,7 +201,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         button.move_to(1, 1)
 
         # wait to trigger tooltip after hovering over button
-        self.pause(SHORT_TIMEOUT)
+        self.pause(Const.SHORT_TIMEOUT)
 
     def _hover_over_tile(self, tile_no):
         self._get_object_by_number(

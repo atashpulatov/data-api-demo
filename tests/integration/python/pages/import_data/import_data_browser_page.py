@@ -1,7 +1,7 @@
 from pyperclip import paste
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
@@ -208,7 +208,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         first_object_selected = self.check_if_element_exists_by_css(
             ImportDataBrowserPage.FIRST_OBJECT_ROW_SELECTED,
-            timeout=SHORT_TIMEOUT
+            timeout=Const.SHORT_TIMEOUT
         )
 
         if not first_object_selected:

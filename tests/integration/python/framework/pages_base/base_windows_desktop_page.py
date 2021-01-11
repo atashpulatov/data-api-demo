@@ -3,7 +3,7 @@ from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.image_element import ImageElement
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
-from framework.util.const import AFTER_OPERATION_WAIT_TIME
+from framework.util.const import Const
 
 
 class BaseWindowsDesktopPage(WindowsDesktopMainAddInElementCache):
@@ -18,7 +18,7 @@ class BaseWindowsDesktopPage(WindowsDesktopMainAddInElementCache):
         """
         ImageElement.excel_element.send_keys(keys)
 
-        self.pause(AFTER_OPERATION_WAIT_TIME)
+        self.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     def prepare_image_name(self, image_name):
         return '%s_%s' % (self.__class__.__name__, image_name)

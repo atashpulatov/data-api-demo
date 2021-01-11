@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import Const
 
 
 class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
@@ -91,7 +91,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
             RightPanelTileDetailsBrowserPage.OBJECT_LOCATION + RightPanelTileDetailsBrowserPage.COLLAPSED
         )
 
-    def _details_element_exists(self, object_number, selector, timeout=SHORT_TIMEOUT):
+    def _details_element_exists(self, object_number, selector, timeout=Const.SHORT_TIMEOUT):
         self.focus_on_add_in_frame()
 
         tile_details_container = self._get_tile_details_container(object_number)

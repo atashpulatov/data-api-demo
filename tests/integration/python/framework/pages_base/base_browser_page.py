@@ -3,8 +3,7 @@ import time
 from selenium.common.exceptions import NoSuchFrameException, NoSuchWindowException
 
 from framework.pages_base.base_page import BasePage
-from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS, DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_INTERVAL, \
-    SHORT_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -38,10 +37,10 @@ class BaseBrowserPage(BasePage):
         return self.driver.title
 
     def tab_contains_excel_frame(self):
-        return self.check_if_element_exists_by_id(BaseBrowserPage.EXCEL_FRAME_ELEM, timeout=SHORT_TIMEOUT)
+        return self.check_if_element_exists_by_id(BaseBrowserPage.EXCEL_FRAME_ELEM, timeout=Const.SHORT_TIMEOUT)
 
     def focus_on_excel_frame(self):
-        end_time = time.time() + DEFAULT_TIMEOUT
+        end_time = time.time() + Const.DEFAULT_TIMEOUT
 
         while True:
             try:
@@ -59,7 +58,7 @@ class BaseBrowserPage(BasePage):
             except NoSuchWindowException:
                 self.log('NoSuchWindowException while executing focus_on_excel_frame()')
 
-            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
 
             if time.time() > end_time:
                 raise MstrException('Cannot focus on excel frame')
@@ -80,7 +79,7 @@ class BaseBrowserPage(BasePage):
         self._switch_to_frame(dossier_frame_element)
 
     def focus_on_prompt_frame(self):
-        end_time = time.time() + DEFAULT_TIMEOUT
+        end_time = time.time() + Const.DEFAULT_TIMEOUT
 
         while True:
             try:
@@ -95,7 +94,7 @@ class BaseBrowserPage(BasePage):
             except Exception as e:
                 Util.log(e)
 
-            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
 
             if time.time() > end_time:
                 raise MstrException('Cannot focus on prompt frame')
@@ -110,7 +109,7 @@ class BaseBrowserPage(BasePage):
         Util.log_warning(('switch_to_frame', frame, diff_time))
 
     def wait_for_element_to_have_attribute_value_by_css(self, selector, attribute, expected_value,
-                                                        timeout=DEFAULT_TIMEOUT):
+                                                        timeout=Const.DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
         while True:
             notification_text_elem = self.get_element_by_css(selector)
@@ -119,14 +118,14 @@ class BaseBrowserPage(BasePage):
             if value == expected_value:
                 return
 
-            self.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+            self.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
             if time.time() > end_time:
                 break
 
         raise MstrException(('Value not found', selector, attribute, expected_value))
 
-    def wait_for_elements_to_disappear_from_dom(self, selector, timeout=DEFAULT_TIMEOUT):
+    def wait_for_elements_to_disappear_from_dom(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
 
         while True:
@@ -135,14 +134,14 @@ class BaseBrowserPage(BasePage):
             if len(elements_to_disappear) == 0:
                 return
 
-            self.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+            self.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
             if time.time() > end_time:
                 break
 
         raise MstrException(('Element still in DOM', selector))
 
-    def find_element_by_text_in_elements_list_by_css(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
+    def find_element_by_text_in_elements_list_by_css(self, selector, expected_text, timeout=Const.DEFAULT_TIMEOUT):
         element = self.find_element_by_text_in_elements_list_by_css_safe(selector, expected_text, timeout)
 
         if element:
@@ -150,7 +149,7 @@ class BaseBrowserPage(BasePage):
 
         raise MstrException(f'Element not found, selector: {selector}, expected text: {expected_text}')
 
-    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=DEFAULT_TIMEOUT):
+    def find_element_by_text_in_elements_list_by_css_safe(self, selector, expected_text, timeout=Const.DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
 
         while True:
@@ -160,7 +159,7 @@ class BaseBrowserPage(BasePage):
             if element:
                 return element
 
-            self.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+            self.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
             if time.time() > end_time:
                 break
@@ -170,7 +169,7 @@ class BaseBrowserPage(BasePage):
         return None
 
     def focus_on_add_in_frame(self):
-        end_time = time.time() + DEFAULT_TIMEOUT
+        end_time = time.time() + Const.DEFAULT_TIMEOUT
 
         while True:
             try:
@@ -188,7 +187,7 @@ class BaseBrowserPage(BasePage):
             except Exception as e:
                 Util.log(e)
 
-            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
 
             if time.time() > end_time:
                 break
@@ -232,7 +231,7 @@ class BaseBrowserPage(BasePage):
             raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
 
     def get_parent_element_by_child_text_from_parent_elements_list_by_css(self, parents_selector, child_selector,
-                                                                          expected_text, timeout=DEFAULT_TIMEOUT):
+                                                                          expected_text, timeout=Const.DEFAULT_TIMEOUT):
         """
         Gets parent element from parent elements list found by a selector that contains a child element
         having expected text.
@@ -254,7 +253,7 @@ class BaseBrowserPage(BasePage):
                 if child_element.text == expected_text:
                     return parent_element
 
-            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+            Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
             if time.time() > end_time:
                 break

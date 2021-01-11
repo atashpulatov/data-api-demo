@@ -1,7 +1,7 @@
 import re
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import DEFAULT_TIMEOUT, LONG_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
+from framework.util.const import Const
 from framework.util.message_const import MessageConst
 
 
@@ -58,30 +58,30 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     ACTION_STATUS_PENDING = 'Pending'
 
-    def wait_for_import_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+    def wait_for_import_to_finish_successfully(self, timeout=Const.DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_duplicate_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+    def wait_for_duplicate_object_to_finish_successfully(self, timeout=Const.DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.DUPLICATE_OBJECT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_refresh_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+    def wait_for_refresh_object_to_finish_successfully(self, timeout=Const.DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.REFRESH_OBJECT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_import_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+    def wait_for_import_object_to_finish_successfully(self, timeout=Const.DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_remove_object_to_finish_successfully(self, timeout=DEFAULT_TIMEOUT):
+    def wait_for_remove_object_to_finish_successfully(self, timeout=Const.DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.REMOVE_OBJECT_SUCCESSFUL_TEXT, timeout)
 
-    def wait_for_operation_to_finish_successfully_with_message(self, expected_message, timeout=LONG_TIMEOUT):
+    def wait_for_operation_to_finish_successfully_with_message(self, expected_message, timeout=Const.LONG_TIMEOUT):
         self._wait_for_operation_with_status(expected_message, timeout)
 
-    def wait_for_operation_error_and_accept(self, expected_message, timeout=DEFAULT_TIMEOUT):
+    def wait_for_operation_error_and_accept(self, expected_message, timeout=Const.DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(expected_message, timeout)
 
         self.get_element_by_css(RightPanelTileBrowserPage.NOTIFICATION_BUTTON).click()
 
-    def wait_for_operation_global_error_and_accept(self, expected_message, timeout=DEFAULT_TIMEOUT):
+    def wait_for_operation_global_error_and_accept(self, expected_message, timeout=Const.DEFAULT_TIMEOUT):
         self._wait_for_global_error(expected_message, timeout)
 
         self.get_element_by_css(RightPanelTileBrowserPage.GLOBAL_WARNING_BUTTON).click()
@@ -91,7 +91,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
-            TEXT_CONTENT_ATTRIBUTE,
+            Const.TEXT_CONTENT_ATTRIBUTE,
             expected_message,
             timeout=timeout
         )
@@ -101,12 +101,12 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.GLOBAL_ERROR_ELEM,
-            TEXT_CONTENT_ATTRIBUTE,
+            Const.TEXT_CONTENT_ATTRIBUTE,
             expected_message,
             timeout=timeout
         )
 
-    def wait_for_progress_notifications_to_disappear(self, timeout=DEFAULT_TIMEOUT):
+    def wait_for_progress_notifications_to_disappear(self, timeout=Const.DEFAULT_TIMEOUT):
         self.focus_on_add_in_frame()
 
         self.wait_for_elements_to_disappear_from_dom(RightPanelTileBrowserPage.PROGRESS_BAR, timeout=timeout)
@@ -328,6 +328,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number,
-            TEXT_CONTENT_ATTRIBUTE,
+            Const.TEXT_CONTENT_ATTRIBUTE,
             expected_message
         )

@@ -1,6 +1,6 @@
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
 from framework.util.config_util import ConfigUtil
-from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -46,7 +46,8 @@ class ExcelMainMacDesktopPage(BaseMacDesktopPage):
         for i in range(groups_of_my_add_ins_drop_down_no):
             element_candidate_xpath = ExcelMainMacDesktopPage.MY_ADD_INS_DROP_DOWN % i
 
-            if self.check_if_element_exists_by_xpath(element_candidate_xpath, timeout=DEFAULT_WAIT_BETWEEN_CHECKS):
+            if self.check_if_element_exists_by_xpath(element_candidate_xpath,
+                                                     timeout=Const.DEFAULT_WAIT_BETWEEN_CHECKS):
                 element_candidate = self.get_element_by_xpath(element_candidate_xpath)
 
                 title = element_candidate.get_attribute(ExcelMainMacDesktopPage.MY_ADD_INS_ITEM_ATTRIBUTE_NAME)

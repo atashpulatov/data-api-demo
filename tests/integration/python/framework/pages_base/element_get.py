@@ -11,7 +11,7 @@ from framework.pages_base.base_element import BaseElement
 from framework.pages_base.element_check import ElementCheck
 from framework.pages_base.image_element import ImageElement
 from framework.util.config_util import ConfigUtil
-from framework.util.const import DEFAULT_TIMEOUT, ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
@@ -25,43 +25,43 @@ class ElementGet(ElementCheck):
 
         self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
 
-    def get_element_by_id(self, selector, timeout=DEFAULT_TIMEOUT):
+    def get_element_by_id(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.ID, selector, timeout), self.driver)
 
-    def get_element_by_id_no_visibility_checked(self, selector, timeout=DEFAULT_TIMEOUT):
+    def get_element_by_id_no_visibility_checked(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element_no_visibility_checked(By.ID, selector, timeout), self.driver)
 
-    def get_element_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
+    def get_element_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element(By.CSS_SELECTOR, selector, timeout), self.driver)
 
-    def get_element_by_css_no_visibility_checked(self, selector, timeout=DEFAULT_TIMEOUT):
+    def get_element_by_css_no_visibility_checked(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return BaseElement(self._get_raw_element_no_visibility_checked(By.CSS_SELECTOR, selector, timeout), self.driver)
 
-    def get_element_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+    def get_element_by_xpath(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(self.get_element_info_by_xpath(selector, timeout, image_name), self.driver)
         else:
             return BaseElement(self._get_raw_element(By.XPATH, selector, timeout), self.driver)
 
-    def get_element_by_class_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+    def get_element_by_class_name(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(self.get_element_info_by_class_name(selector, timeout, image_name), self.driver)
         else:
             return BaseElement(self._get_raw_element(By.CLASS_NAME, selector, timeout), self.driver)
 
-    def get_element_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+    def get_element_by_name(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(self.get_element_info_by_name(selector, timeout, image_name), self.driver)
         else:
             return BaseElement(self._get_raw_element(By.NAME, selector, timeout), self.driver)
 
-    def get_element_by_accessibility_id(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+    def get_element_by_accessibility_id(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(self.get_element_info_by_mobile_accessibility_id(selector, timeout), self.driver)
         else:
             return BaseElement(self._get_raw_element(MobileBy.ACCESSIBILITY_ID, selector, timeout), self.driver)
 
-    def get_element_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None):
+    def get_element_by_tag_name(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         if image_name and self.image_recognition_enabled:
             return ImageElement(self.get_element_info_by_tag_name(selector, timeout, image_name), self.driver)
         else:
@@ -87,17 +87,17 @@ class ElementGet(ElementCheck):
 
         return BaseElement.wrap_raw_elements(raw_elements, self.driver)
 
-    def get_element_by_xpath_list(self, selectors, timeout=DEFAULT_TIMEOUT):
+    def get_element_by_xpath_list(self, selectors, timeout=Const.DEFAULT_TIMEOUT):
         for selector in selectors:
             try:
                 return BaseElement(self._get_raw_element(By.XPATH, selector, timeout), self.driver)
             except NoSuchElementException:
                 Util.log(('get_element_by_xpath_list', selector))
 
-    def get_frame_element_by_id(self, selector, timeout=DEFAULT_TIMEOUT):
+    def get_frame_element_by_id(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._get_raw_element(By.ID, selector, timeout)
 
-    def get_frame_element_by_css(self, selector, timeout=DEFAULT_TIMEOUT):
+    def get_frame_element_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._get_raw_element(By.CSS_SELECTOR, selector, timeout)
 
     def _get_raw_element(self, selector_type, selector, timeout):
@@ -127,12 +127,12 @@ class ElementGet(ElementCheck):
 
     def _get_raw_elements(self, selector_type, selector):
         i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+        while i < Const.ELEMENT_SEARCH_RETRY_NUMBER:
             try:
                 return self.driver.find_elements(selector_type, selector)
             except NoSuchElementException:
                 Util.log_warning('Element not found, try %s: %s' % (i, selector))
-                Util.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+                Util.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
             i += 1
 
         raise MstrException('Cannot find element: %s' % selector)

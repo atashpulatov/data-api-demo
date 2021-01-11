@@ -3,7 +3,7 @@ from selenium.webdriver.common.keys import Keys
 
 from framework.driver.driver_factory import DriverFactory
 from framework.util.config_util import ConfigUtil
-from framework.util.const import AFTER_OPERATION_WAIT_TIME
+from framework.util.const import Const
 from framework.util.util import Util
 
 
@@ -20,10 +20,10 @@ class DriverSendKeys:
 
     def press_down_arrow(self):
         self.send_keys(Keys.ARROW_DOWN)
-    
+
     def press_end(self):
         self.send_keys(Keys.END)
-    
+
     def press_page_down(self):
         self.send_keys(Keys.PAGE_DOWN)
 
@@ -45,4 +45,4 @@ class DriverSendKeys:
     def send_keys(self, keys):
         ActionChains(self.__driver).send_keys(keys).perform()
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)

@@ -11,8 +11,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 from framework.driver.driver_factory import DriverFactory
 from framework.util.config_util import ConfigUtil
-from framework.util.const import DEFAULT_IMAGE_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS
-from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.image_data import ImageData
 from framework.util.util import Util
@@ -123,7 +122,7 @@ class ImageUtil:
         except TimeoutException:
             pass
 
-        self.driver.implicitly_wait(DEFAULT_TIMEOUT)
+        self.driver.implicitly_wait(Const.DEFAULT_TIMEOUT)
 
         Util.log(f'Element not found by selector: [{selector}], time: [{time.time() - start_time}]')
 
@@ -157,7 +156,7 @@ class ImageUtil:
         if image is None:
             return None
 
-        end_time = time.time() + DEFAULT_IMAGE_TIMEOUT
+        end_time = time.time() + Const.DEFAULT_IMAGE_TIMEOUT
         i = 0
 
         while end_time > time.time():
@@ -177,7 +176,7 @@ class ImageUtil:
 
                 return coordinates
 
-            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+            Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
         Util.log(f'Image not found, name: [{image_name}], tries: {i}, timeout: [{end_time - time.time()}].')
 

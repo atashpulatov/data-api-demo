@@ -2,7 +2,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 
 from framework.pages_base.base_element import BaseElement
-from framework.util.const import AFTER_OPERATION_WAIT_TIME
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.image_util import ImageUtil
 from framework.util.util import Util
@@ -24,7 +24,7 @@ class ImageElement(BaseElement):
     def reset_excel_root_element(cls, driver, root_element=EXCEL_ROOT_ELEMENT):
         ImageElement.excel_element = BaseElement(driver.find_element(By.NAME, root_element), driver)
 
-    def click(self, offset_x=0, offset_y=0):
+    def click(self, offset_x=0, offset_y=0, wait_after_click=Const.AFTER_OPERATION_WAIT_TIME):
         (ActionChains(self.__driver)
          .move_to_element_with_offset(ImageElement.excel_element,
                                       self.__image_data.center_coordinates['x'] + offset_x,
@@ -32,7 +32,7 @@ class ImageElement(BaseElement):
          .click()
          .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(wait_after_click)
 
     def double_click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
@@ -42,7 +42,7 @@ class ImageElement(BaseElement):
          .double_click()
          .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     def right_click(self, offset_x=0, offset_y=0):
         (ActionChains(self.__driver)
@@ -106,7 +106,7 @@ class ImageElement(BaseElement):
                                       self.__image_data.center_coordinates['y'] + offset_y)
          .perform())
 
-        Util.pause(AFTER_OPERATION_WAIT_TIME)
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     @property
     def size(self):

@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import AFTER_OPERATION_WAIT_TIME, SHORT_TIMEOUT
+from framework.util.const import Const
 from framework.util.excel_util import ExcelUtil
 
 
@@ -80,7 +80,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         is_add_button_visible_new_excel = self.check_if_element_exists_by_name(
             ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON_NEW_EXCEL,
             image_name=ExcelSheetWindowsDesktopPage.ADD_SHEET_BUTTON_IMAGE,
-            timeout=SHORT_TIMEOUT
+            timeout=Const.SHORT_TIMEOUT
         )
 
         if is_add_button_visible_new_excel:
@@ -118,7 +118,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
             ExcelSheetWindowsDesktopPage.TABLE_STYLE_XPATH % ExcelSheetWindowsDesktopPage.LIGHT_GREEN_TABLE
         ).click()
 
-        self.pause(AFTER_OPERATION_WAIT_TIME)
+        self.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
     def click_home_tab(self):
         self.send_keys_using_excel_element(Keys.ALT)
