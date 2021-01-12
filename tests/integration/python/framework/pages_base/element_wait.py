@@ -58,12 +58,12 @@ class ElementWait(ElementGet):
 
         try:
             while True:
-                element = check_if_element_exists_method(selector, safe=True)
+                element = check_if_element_exists_method(selector, timeout=Const.MEDIUM_TIMEOUT, safe=True)
 
                 if not element or not element.is_displayed():
                     return
 
-                if end_time > time.time():
+                if time.time() > end_time:
                     raise MstrException(f'Element is still displayed after {timeout} seconds, selector: [{selector}].')
 
                 Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)

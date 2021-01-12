@@ -131,27 +131,28 @@ class BaseElement:
     def is_enabled_by_attribute(self):
         return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
-    def get_element_by_css(self, selector, safe=False):
-        return self.get_element(By.CSS_SELECTOR, selector, timeout=Const.DEFAULT_TIMEOUT, safe=safe)
+    def get_element_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
+        return self.get_element(By.CSS_SELECTOR, selector, timeout, safe=safe)
 
-    def get_element_by_xpath(self, selector, safe=False):
+    def get_element_by_xpath(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
         """
         Gets element by XPath.
 
         :param selector: Selector to be used when searching for element.
+        :param timeout: Timeout in seconds.
         :param safe: Switch enabling exception-safe behaviour.
 
         :return: BaseElement found by XPath using selector or None when not found (when safe is True).
 
         :raises MstrException when element not found (when safe is False, default behaviour).
         """
-        return self.get_element(By.XPATH, selector, timeout=Const.DEFAULT_TIMEOUT, safe=safe)
+        return self.get_element(By.XPATH, selector, timeout, safe=safe)
 
-    def get_element_by_name(self, selector, safe=False):
-        return self.get_element(By.NAME, selector, timeout=Const.DEFAULT_TIMEOUT, safe=safe)
+    def get_element_by_name(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
+        return self.get_element(By.NAME, selector, timeout, safe=safe)
 
-    def get_element_by_tag_name(self, selector, safe=False):
-        return self.get_element(By.TAG_NAME, selector, timeout=Const.DEFAULT_TIMEOUT, safe=safe)
+    def get_element_by_tag_name(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
+        return self.get_element(By.TAG_NAME, selector, timeout, safe=safe)
 
     def check_if_element_exists_by_tag_name(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.TAG_NAME, selector, timeout)
@@ -183,7 +184,7 @@ class BaseElement:
 
         :param selector_type: Selector type to be used when searching for element (e.g. By.NAME).
         :param selector: Selector to be used when searching for element (e.g. 'Close').
-        :param timeout: Timeout threshold in seconds, when reached MstrException is raised.
+        :param timeout: Timeout in seconds.
         :param safe: Switch enabling exception-safe behaviour.
 
         :return: BaseElement found using selector_type and selector or None when not found (when safe is True).

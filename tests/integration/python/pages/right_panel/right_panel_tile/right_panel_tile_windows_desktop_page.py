@@ -1,3 +1,5 @@
+import time
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.const import Const
@@ -75,11 +77,15 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._scroll_to_top_of_tile_list(tile_list)
 
+        end_time = time.time() + Const.VERY_LONG_TIMEOUT
         while self._is_any_successful_notification_open(tile_list):
             for element in elements:
                 element.move_to(offset_x=-20, offset_y=0)
 
             self._scroll_tile_list_to_next_page(tile_list)
+
+            if time.time() > end_time:
+                raise MstrException(f'Not all successful notifications closed after {Const.VERY_LONG_TIMEOUT} seconds.')
 
         self._scroll_to_top_of_tile_list(tile_list)
 

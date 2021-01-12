@@ -1,13 +1,11 @@
-import hashlib
 import os
 import time
-from io import BytesIO
 
 import cv2
+import hashlib
 from PIL import Image
+from io import BytesIO
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-# from selenium.webdriver.support import expected_conditions as ec
-# from selenium.webdriver.support.wait import WebDriverWait
 
 from framework.driver.driver_factory import DriverFactory
 from framework.util.config_util import ConfigUtil
@@ -122,7 +120,8 @@ class ImageUtil:
         except TimeoutException:
             pass
 
-        self.driver.implicitly_wait(Const.DEFAULT_TIMEOUT)
+        finally:
+            self.driver.implicitly_wait(Const.DEFAULT_TIMEOUT)
 
         Util.log(f'Element not found by selector: [{selector}], time: [{time.time() - start_time}]')
 
