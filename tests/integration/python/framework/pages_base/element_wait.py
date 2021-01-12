@@ -2,13 +2,37 @@ import time
 
 from selenium.common.exceptions import StaleElementReferenceException
 
+from framework.pages_base.element_get import ElementGet
 from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.util import Util
 
 
-class ElementWait:
-    def wait_until_element_disappears_by_xpath(self, selector, parent_element, timeout=Const.LONG_TIMEOUT):
+class ElementWait(ElementGet):
+    """
+    Class providing methods for waiting until element disappears.
+
+    Concrete implementation is specified by each method's name, e.g. get_element_info_by_name() uses By.NAME.
+
+    All methods use parent_element (if provided) to improve performance.
+    """
+
+    def wait_until_element_disappears_by_name(self, selector, parent_element=None, timeout=Const.LONG_TIMEOUT):
+        check_method = parent_element.get_element_by_name if parent_element else self.get_element_by_name
+
+        self._wait_until_element_disappears(check_method, selector, timeout)
+
+    def wait_until_element_disappears_by_xpath(self, selector, parent_element=None, timeout=Const.LONG_TIMEOUT):
+        check_method = parent_element.get_element_by_xpath if parent_element else self.get_element_by_xpath
+
+        self._wait_until_element_disappears(check_method, selector, timeout)
+
+    def wait_until_element_disappears_by_tag_name(self, selector, parent_element=None, timeout=Const.LONG_TIMEOUT):
+        check_method = parent_element.get_element_by_tag_name if parent_element else self.get_element_by_tag_name
+
+        self._wait_until_element_disappears(check_method, selector, timeout)
+
+    def _wait_until_element_disappears(self, check_if_element_exists_method, selector, timeout):
         """
         Waits until element disappears.
 
@@ -24,8 +48,8 @@ class ElementWait:
 
         it is stale (no longer in DOM) - StaleElementReferenceException is raised.
 
+        :param check_if_element_exists_method: Method used for getting element.
         :param selector: Selector to search for elements.
-        :param parent_element: Parent element to start relative search from.
         :param timeout: Timeout threshold in seconds.
 
         :raises MstrException: when element is still visible after timeout (in seconds).
@@ -34,9 +58,9 @@ class ElementWait:
 
         try:
             while True:
-                prompt_field_label = parent_element.get_element_by_xpath_safe(selector)
+                element = check_if_element_exists_method(selector, safe=True)
 
-                if not prompt_field_label or not prompt_field_label.is_displayed():
+                if not element or not element.is_displayed():
                     return
 
                 if end_time > time.time():

@@ -1,5 +1,3 @@
-import time
-
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.const import Const
@@ -46,50 +44,28 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     XML_FIRST_ELEMENT_INDEX = '1'
 
     def wait_for_import_object_to_finish_successfully(self):
-        self._wait_until_element_disappears(
-            self.check_if_element_exists_by_name,
-            RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM
-        )
+        self.wait_until_element_disappears_by_name(RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM)
 
     def wait_for_duplicate_object_to_finish_successfully(self):
-        self._wait_until_element_disappears(
-            self.check_if_element_exists_by_name,
-            RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM
-        )
+        self.wait_until_element_disappears_by_name(RightPanelTileWindowsDesktopPage.DUPLICATING_TEXT_ELEM)
 
     def wait_for_refresh_object_to_finish_successfully(self):
-        self._wait_until_element_disappears(
-            self.check_if_element_exists_by_name,
-            RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM
-        )
+        self.wait_until_element_disappears_by_name(RightPanelTileWindowsDesktopPage.REFRESHING_TEXT_ELEM)
 
     def wait_for_remove_object_to_finish_successfully(self):
-        self._wait_until_element_disappears(
-            self.check_if_element_exists_by_name,
-            RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM
-        )
+        self.wait_until_element_disappears_by_name(RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM)
 
     def wait_using_parent_for_remove_object_to_finish_successfully(self, parent):
-        self._wait_until_element_disappears(
-            parent.check_if_element_exists_by_name,
-            RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM
+        self.wait_until_element_disappears_by_name(
+            RightPanelTileWindowsDesktopPage.REMOVING_TEXT_ELEM,
+            parent_element=parent
         )
 
     def wait_for_progress_notifications_to_disappear(self):
-        right_panel_element = self.get_add_in_right_panel_element()
-
-        self._wait_until_element_disappears(
-            right_panel_element.check_if_element_exists_by_tag_name,
-            RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME
+        self.wait_until_element_disappears_by_tag_name(
+            RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME,
+            parent_element=self.get_add_in_right_panel_element()
         )
-
-    def _wait_until_element_disappears(self, check_if_element_exists_method, selector):
-        end_time = time.time() + Const.LONG_TIMEOUT
-
-        while check_if_element_exists_method(selector, timeout=Const.SHORT_TIMEOUT):
-            if time.time() > end_time:
-                raise MstrException(f'Error while waiting for operation [{check_if_element_exists_method}] to finish, '
-                                    f'element still visible: [{selector}].')
 
     # TODO rename to close_all_success_notifications_on_hover when implementation for other platforms is also fixed
     def close_all_notifications_on_hover(self):

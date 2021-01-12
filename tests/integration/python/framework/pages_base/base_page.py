@@ -1,6 +1,5 @@
 from framework.driver.driver_factory import DriverFactory
 from framework.pages_base.driver_send_keys import DriverSendKeys
-from framework.pages_base.element_get import ElementGet
 from framework.pages_base.element_get_using_parent import ElementGetUsingParent
 from framework.pages_base.element_wait import ElementWait
 from framework.util.config_util import ConfigUtil
@@ -8,7 +7,7 @@ from framework.util.image_util import ImageUtil
 from framework.util.util import Util
 
 
-class BasePage(ElementGet, ElementGetUsingParent, ElementWait, DriverSendKeys):
+class BasePage(ElementWait, ElementGetUsingParent, DriverSendKeys):
     def __init__(self):
         super().__init__()
         driver_type = ConfigUtil.get_driver_type()

@@ -131,27 +131,27 @@ class BaseElement:
     def is_enabled_by_attribute(self):
         return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
-    def get_element_by_css(self, selector):
-        return self.get_element(By.CSS_SELECTOR, selector, timeout=Const.DEFAULT_TIMEOUT)
+    def get_element_by_css(self, selector, safe=False):
+        return self.get_element(By.CSS_SELECTOR, selector, timeout=Const.DEFAULT_TIMEOUT, safe=safe)
 
-    def get_element_by_xpath(self, selector):
-        return self.get_element(By.XPATH, selector, timeout=Const.DEFAULT_TIMEOUT)
-
-    def get_element_by_name(self, selector):
-        return self.get_element(By.NAME, selector, timeout=Const.DEFAULT_TIMEOUT)
-
-    def get_element_by_tag_name(self, selector):
-        return self.get_element(By.TAG_NAME, selector, timeout=Const.DEFAULT_TIMEOUT)
-
-    def get_element_by_xpath_safe(self, selector):
+    def get_element_by_xpath(self, selector, safe=False):
         """
-        Exception-safe version of get_element_by_xpath().
+        Gets element by XPath.
 
         :param selector: Selector to be used when searching for element.
+        :param safe: Switch enabling exception-safe behaviour.
 
-        :return: BaseElement found by XPath using selector or None when not found.
+        :return: BaseElement found by XPath using selector or None when not found (when safe is True).
+
+        :raises MstrException when element not found (when safe is False, default behaviour).
         """
-        return self.get_element(By.XPATH, selector, timeout=Const.DEFAULT_TIMEOUT, safe=True)
+        return self.get_element(By.XPATH, selector, timeout=Const.DEFAULT_TIMEOUT, safe=safe)
+
+    def get_element_by_name(self, selector, safe=False):
+        return self.get_element(By.NAME, selector, timeout=Const.DEFAULT_TIMEOUT, safe=safe)
+
+    def get_element_by_tag_name(self, selector, safe=False):
+        return self.get_element(By.TAG_NAME, selector, timeout=Const.DEFAULT_TIMEOUT, safe=safe)
 
     def check_if_element_exists_by_tag_name(self, selector, timeout=Const.DEFAULT_TIMEOUT):
         return self._check_if_element_exists(By.TAG_NAME, selector, timeout)
