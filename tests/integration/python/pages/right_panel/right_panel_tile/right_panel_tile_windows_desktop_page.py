@@ -288,11 +288,15 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         return tooltip_text_elem.text
 
     def _get_object_by_number(self, object_no):
+        self.invalidate_right_panel_cache()
+
         right_panel_element = self.get_add_in_right_panel_element()
 
         return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM % object_no)
 
     def get_tile_list(self):
+        self.invalidate_right_panel_cache()
+
         right_panel_element = self.get_add_in_right_panel_element()
 
         return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_LIST)
