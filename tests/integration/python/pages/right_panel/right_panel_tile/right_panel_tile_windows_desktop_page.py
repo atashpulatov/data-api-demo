@@ -71,44 +71,65 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     # TODO rename to close_all_success_notifications_on_hover when implementation for other platforms is also fixed
     def close_all_notifications_on_hover(self):
-        tile_list = self.get_tile_list()
-
-        elements = tile_list.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
-
-        self._scroll_to_top_of_tile_list(tile_list)
+        self._scroll_to_top_of_tile_list()
 
         end_time = time.time() + Const.VERY_LONG_TIMEOUT
-        while self._is_any_successful_notification_open(tile_list):
-            for element in elements:
-                element.move_to(offset_x=-20, offset_y=0)
+        while True:
+            current_tile_list = self._get_tile_list_when_notification_open()
+            if current_tile_list is None:
+                break
 
-            self._scroll_tile_list_to_next_page(tile_list)
+            self._hover_over_all_elements(current_tile_list)
+
+            self._scroll_tile_list_to_next_page()
 
             if time.time() > end_time:
                 raise MstrException(f'Not all successful notifications closed after {Const.VERY_LONG_TIMEOUT} seconds.')
 
-        self._scroll_to_top_of_tile_list(tile_list)
+        self._scroll_to_top_of_tile_list()
 
-    def _scroll_to_top_of_tile_list(self, tile_list):
-        tile_list.click()
-        self.press_home()
+    def _scroll_to_top_of_tile_list(self):
+        tile_list = self._get_tile_list()
 
-    def _scroll_tile_list_to_next_page(self, tile_list):
-        tile_list.click()
-        self.press_page_down()
+        if tile_list:
+            tile_list.click()
+            self.press_home()
 
-    def _is_any_successful_notification_open(self, tile_list):
-        for text in RightPanelTileWindowsDesktopPage.NOTIFICATIONS_TEXTS:
-            if tile_list.check_if_element_exists_by_name(text, timeout=Const.SHORT_TIMEOUT):
-                return True
+    def _scroll_tile_list_to_next_page(self):
+        tile_list = self._get_tile_list()
 
-        return False
+        if tile_list:
+            tile_list.click()
+            self.press_page_down()
+
+    def _get_tile_list_when_notification_open(self):
+        tile_list = self._get_tile_list()
+
+        if tile_list:
+            for text in RightPanelTileWindowsDesktopPage.NOTIFICATIONS_TEXTS:
+                if tile_list.check_if_element_exists_by_name(text, timeout=Const.SHORT_TIMEOUT):
+                    return tile_list
+
+        return None
+
+    def _hover_over_all_elements(self, current_tile_list):
+        elements = current_tile_list.get_elements_by_name(RightPanelTileWindowsDesktopPage.DUPLICATE_BUTTON_ELEM)
+        for element in elements:
+            element.move_to(offset_x=-20, offset_y=0)
 
     def close_all_warning_notifications(self):
+        """
+        Closes all warning notifications by clicking all OK buttons.
+
+        After closing all warning notifications, clicks on tile list - otherwise key presses stop working.
+        """
         elements = self.get_elements_by_name(RightPanelTileWindowsDesktopPage.BUTTON_OK)
 
         for element in elements:
             element.click()
+
+        if elements:
+            self._get_tile_list().click()
 
     def close_last_notification_on_hover(self):
         self.wait_for_progress_notifications_to_disappear()
@@ -294,12 +315,16 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM % object_no)
 
-    def get_tile_list(self):
+    def _get_tile_list(self):
         self.invalidate_right_panel_cache()
 
         right_panel_element = self.get_add_in_right_panel_element()
 
-        return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_LIST)
+        return right_panel_element.get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.TILE_LIST,
+            timeout=Const.MEDIUM_TIMEOUT,
+            safe=True
+        )
 
     def is_icon_bar_visible(self, object_no):
         # TODO: There is no way for now to recognize if bar is visible, is_display() on icon bar and its elements

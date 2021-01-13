@@ -58,7 +58,7 @@ class ElementWait(ElementGet):
 
         try:
             while True:
-                element = check_if_element_exists_method(selector, timeout=Const.MEDIUM_TIMEOUT, safe=True)
+                element = check_if_element_exists_method(selector, timeout=Const.SHORT_TIMEOUT, safe=True)
 
                 if not element or not element.is_displayed():
                     return
