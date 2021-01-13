@@ -25,6 +25,10 @@ rake update_dep_db_from_file
 rake update_ready_for_pr
 '
     end
+
+    sonarqube do
+      other_properties 'sonar.javascript.lcov.reportPaths=production/coverage/lcov.info'
+    end
   end
 
   publishers do
