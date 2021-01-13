@@ -28,10 +28,10 @@ source .ecosystem
 rake stage_0_test
 '
     end
-  end
 
-  sonarqube do
-    other_properties 'sonar.javascript.lcov.reportPaths=production/coverage/lcov.info'
+    sonarqube do
+      other_properties 'sonar.javascript.lcov.reportPaths=production/coverage/lcov.info'
+    end
   end
 
   publishers do
