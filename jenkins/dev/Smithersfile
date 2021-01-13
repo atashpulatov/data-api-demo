@@ -27,6 +27,10 @@ rake update_ready_for_pr
     end
   end
 
+  sonarqube do
+    other_properties 'sonar.javascript.lcov.reportPaths=production/coverage/lcov.info'
+  end
+
   publishers do
     # junit do
     # end

@@ -30,6 +30,10 @@ rake stage_0_test
     end
   end
 
+  sonarqube do
+    other_properties 'sonar.javascript.lcov.reportPaths=production/coverage/lcov.info'
+  end
+
   publishers do
     html do
       report_name 'Code Coverage Report'
