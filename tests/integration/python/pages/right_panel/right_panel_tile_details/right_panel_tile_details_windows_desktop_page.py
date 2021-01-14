@@ -102,7 +102,7 @@ class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return self.get_add_in_right_panel_element().check_if_element_exists_by_xpath(
             selector,
-            image_name=self.prepare_image_name(selector)
+            timeout=Const.MEDIUM_TIMEOUT
         )
 
     def _get_property_value_collapsed_selector(self, name_list_type):
