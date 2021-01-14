@@ -1,7 +1,5 @@
 from behave import *
 
-from framework.util.assert_util import AssertUtil
-
 
 @step('I waited for Run button to be enabled')
 def step_impl(context):
@@ -32,9 +30,12 @@ def step_impl(context, item, prompt_number, prompt_name):
 def step_impl(context, text, prompt_number, prompt_name):
     context.pages.prompt_page().select_answer_for_value_prompt(prompt_number, prompt_name, text)
 
-@step('I typed "{date}" and ["{hour}", "{minute}", "{second}"] for "{prompt_number}. {prompt_name}" prompt - date prompt')
+
+@step('I typed "{date}" and ["{hour}", "{minute}", "{second}"] for "{prompt_number}. {prompt_name}" '
+      'prompt - date prompt')
 def step_impl(context, date, hour, minute, second, prompt_number, prompt_name):
     context.pages.prompt_page().provide_answer_for_date_prompt(prompt_number, prompt_name, date, hour, minute, second)
+
 
 @step('I cleared input box for prompt "{prompt_number}. {prompt_name}"')
 def step_impl(context, prompt_number, prompt_name):

@@ -137,17 +137,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             raise MstrException(f'Prompt title does not exist: {prompt_number}.{prompt_name}')
 
     def select_answer_for_value_prompt(self, prompt_number, prompt_name, text):
-        self._select_prompt_from_list(prompt_number, prompt_name)
-
-        value_prompt_is_regular = self.check_if_element_exists_by_xpath(
-          PromptWindowsDesktopPage.PROMPT_VALUE_ELEM % (prompt_number, prompt_name)
-        )
-
-        prompt_xpath = PromptWindowsDesktopPage.PROMPT_VALUE_ELEM if value_prompt_is_regular else PromptWindowsDesktopPage.PROMPT_VALUE_ELEM_COMPLEX
-
-        prompt = self.get_add_in_main_element().get_element_by_xpath(
-            prompt_xpath % (prompt_number, prompt_name)
-        )
+        prompt = self._get_prompt_for_entering_data(prompt_number, prompt_name)
 
         prompt.click()
         prompt.send_keys(text)
@@ -158,14 +148,12 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             timeout=SHORT_TIMEOUT
         )
 
-        if prompt_list_elem_exists:
-            self.get_add_in_main_element().get_element_by_name(
-                PromptWindowsDesktopPage.PROMPT_LIST_ELEM % (prompt_number, prompt_name)
-            ).click()
-        else:
-            self.get_add_in_main_element().get_element_by_name(
-                PromptWindowsDesktopPage.PROMPT_WITH_ASTERISK_LIST_ELEM % (prompt_number, prompt_name)
-            ).click()
+        prompt_xpath = PromptWindowsDesktopPage.PROMPT_LIST_ELEM if prompt_list_elem_exists \
+            else PromptWindowsDesktopPage.PROMPT_WITH_ASTERISK_LIST_ELEM
+
+        self.get_add_in_main_element().get_element_by_name(
+            prompt_xpath % (prompt_number, prompt_name)
+        ).click()
 
     def provide_answer_for_date_prompt(self, prompt_number, prompt_name, date, hour, minute, second):
         self._select_prompt_from_list(prompt_number, prompt_name)
@@ -196,18 +184,21 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         prompt_second.send_keys(second)
 
     def clear_prompt_input(self, prompt_number, prompt_name):
-        self._select_prompt_from_list(prompt_number, prompt_name)
-
-        value_prompt_is_regular = self.check_if_element_exists_by_xpath(
-          PromptWindowsDesktopPage.PROMPT_VALUE_ELEM % (prompt_number, prompt_name)
-        )
-
-        prompt_xpath = PromptWindowsDesktopPage.PROMPT_VALUE_ELEM if value_prompt_is_regular else PromptWindowsDesktopPage.PROMPT_VALUE_ELEM_COMPLEX
-
-        prompt = self.get_add_in_main_element().get_element_by_xpath(
-            prompt_xpath % (prompt_number, prompt_name)
-        )
+        prompt = self._get_prompt_for_entering_data(prompt_number, prompt_name)
 
         prompt.click()
         prompt.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
-    
+
+    def _get_prompt_for_entering_data(self, prompt_number, prompt_name):
+        self._select_prompt_from_list(prompt_number, prompt_name)
+
+        value_prompt_is_regular = self.check_if_element_exists_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_VALUE_ELEM % (prompt_number, prompt_name)
+        )
+
+        prompt_xpath = PromptWindowsDesktopPage.PROMPT_VALUE_ELEM if value_prompt_is_regular \
+            else PromptWindowsDesktopPage.PROMPT_VALUE_ELEM_COMPLEX
+
+        return self.get_add_in_main_element().get_element_by_xpath(
+            prompt_xpath % (prompt_number, prompt_name)
+        )
