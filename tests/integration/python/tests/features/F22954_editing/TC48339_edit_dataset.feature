@@ -1,3 +1,4 @@
+@windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: F22954 - Edit dataset

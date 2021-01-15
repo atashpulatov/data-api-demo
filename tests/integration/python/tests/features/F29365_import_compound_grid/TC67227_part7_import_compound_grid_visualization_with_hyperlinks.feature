@@ -1,3 +1,4 @@
+@windows_desktop
 @mac_chrome
 @windows_chrome
 @release_validation
@@ -14,7 +15,7 @@ Feature: F29365 - Import compound grid from dossier to Excel
       And I selected visualization "Hyperlinks in rows"
       And I clicked import dossier
       And I closed all notifications
-     
+
      Then cells ["C2", "C9", "C16"] should have values ["CICE, S.A.", "Viesgo", "Grupo Printeos"]
 
       And I logged out
