@@ -11,13 +11,11 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I waited for Run button to be enabled
       And I unselected "Subcategory" as an answer for "1. Objects" prompt - object prompt
       And I selected "Books" as an answer for "3. Category" prompt - object prompt
-      And I typed "2014" for "4. Year" prompt - value prompt
+      And I typed "2015" for "4. Year" prompt - value prompt
       And I typed "1820" for "7. Big decimal" prompt - value prompt
-      # TODO And I typed "12/12/2015" and ["08", "15", "00"] for "8. Date&Time" prompt - date prompt
-      # TODO And I cleared input box for prompt "9. Number"
+      And I typed "12/12/2015" and ["08", "15", "00"] for "8. Date&Time" prompt - date prompt
+      And I cleared input box for prompt "9. Number"
       And I typed "2015" for "9. Number" prompt - value prompt
-      # TODO And I cleared input box for prompt "10. Text"
-      And I typed "Books" for "10. Text" prompt - value prompt
       And I clicked Run button
      # TODO Then I verified Run button is disabled
       And I verified that Columns & Filters Selection is visible
@@ -41,9 +39,9 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
      When I clicked Edit object 1
       And I selected "Subcategory" as an answer for "1. Objects" prompt - object prompt
       And I selected "Movies" as an answer for "3. Category" prompt - object prompt
-      # TODO And I cleared input box for prompt "4. Year"
+      And I cleared input box for prompt "4. Year"
       And I typed "2016" for "4. Year" prompt - value prompt
-      # TODO And I cleared input box for prompt "9. Number"
+      And I cleared input box for prompt "9. Number"
       And I typed "2016" for "9. Number" prompt - value prompt
       And I clicked Run button
       # TODO Then I verified Run button is disabled
