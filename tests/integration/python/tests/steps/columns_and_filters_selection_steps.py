@@ -65,9 +65,9 @@ def step_impl(context):
 
 @step('I verified subtotal toggle is NOT visible')
 def step_impl(context):
-    subtotal_toggle_visible = context.pages.columns_and_filters_selection_page().is_subtotal_visible()
+    subtotal_toggle_visible = context.pages.columns_and_filters_selection_page().is_subtotal_not_visible()
 
-    AssertUtil.assert_simple(subtotal_toggle_visible, False)
+    AssertUtil.assert_simple(subtotal_toggle_visible, True)
 
 
 @step('I verified subtotal toggle is visible')

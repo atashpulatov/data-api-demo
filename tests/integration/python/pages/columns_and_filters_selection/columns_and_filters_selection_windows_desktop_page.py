@@ -127,9 +127,18 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
         ).click()
 
-    def is_subtotal_visible(self):
+    def is_subtotal_not_visible(self):
         is_visible = self.get_add_in_main_element().check_if_element_exists_by_name(
             ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS,
+            timeout=Const.MEDIUM_TIMEOUT
+        )
+
+        return not is_visible
+
+    def is_subtotal_visible(self):
+        is_visible = self.check_if_element_exists_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS),
             timeout=Const.MEDIUM_TIMEOUT
         )
 
