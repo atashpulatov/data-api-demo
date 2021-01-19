@@ -137,8 +137,8 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
             attribute_name
         ).right_click()
 
-    def select_exclude_for_attribute_element(self, exclude, attribute_name,
-                                             visualization_name):  # TODO visualization_name
+    # TODO visualization_name
+    def select_exclude_for_attribute_element(self, exclude, attribute_name, visualization_name):
         """
         Excludes given attribute element from visualization context menu.
 
