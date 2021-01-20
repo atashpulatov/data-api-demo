@@ -1,3 +1,4 @@
+import re
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
@@ -8,6 +9,7 @@ from framework.util.excel_util import ExcelUtil
 class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     VALUE_ATTRIBUTE = 'Value.Value'
 
+    WINDOW_ELEM = 'Window'
     BOOK_ELEM = 'Book1'
     GRID_ELEM = 'Grid'
     BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'
@@ -71,7 +73,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.send_keys((value, Keys.ENTER))
 
     def get_number_of_worksheets(self):
-        book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
+        book_element = self._get_book_element()
         book_children_elements = book_element.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEMS)
 
         return len(book_children_elements)
@@ -95,8 +97,43 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
             ).click()
 
     def open_worksheet(self, worksheet_number):
-        book_element = self.get_element_by_name(ExcelSheetWindowsDesktopPage.BOOK_ELEM)
+        book_element = self._get_book_element()
         book_element.get_element_by_xpath(ExcelSheetWindowsDesktopPage.BOOK_CHILDREN_ELEM % worksheet_number).click()
+
+    def _get_book_element(self):
+        """
+        Gets Book element.
+
+        Usually it's Name attribute is ExcelSheetWindowsDesktopPage.BOOK_ELEM, if not - use fallback method.
+
+        :return: Book element.
+        """
+        book_element = self.get_element_by_name(
+            ExcelSheetWindowsDesktopPage.BOOK_ELEM,
+            timeout=Const.SHORT_TIMEOUT,
+            safe=True
+        )
+
+        if book_element:
+            return book_element
+
+        return self._get_book_element_fallback()
+
+    def _get_book_element_fallback(self):
+        """
+        Fallback method for getting Book element.
+
+        Gets first Window element and uses it's Name, after normalizing ('Book2 - Excel' -> 'Book2'), to find
+        Book element.
+
+        :return: Book element.
+        """
+        first_window_element = self.get_element_by_tag_name(ExcelSheetWindowsDesktopPage.WINDOW_ELEM)
+        first_window_element_name = first_window_element.get_name_by_attribute()
+
+        book_element_name = re.sub(' .*', '', first_window_element_name)
+
+        return self.get_element_by_name(book_element_name)
 
     def remove_columns(self, column_name, number_of_columns):
         self.go_to_cell(f'{column_name}1')
