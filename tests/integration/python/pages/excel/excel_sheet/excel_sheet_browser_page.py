@@ -17,7 +17,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     FORMAT_CELLS_PROMPT_SAMPLE = 'sample'
 
-    FORMAT_CELLS_PROMPT_BUTTON_ELEM = '#buttonarea > .ewa-dlg-button'
+    FORMAT_CELLS_PROMPT_BUTTON_ELEM = 'WACDialogActionButton'
 
     WORKSHEETS_TABS = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div.ewa-stb-tabarea > ' \
                       'ul.ewa-stb-tabs > li'
@@ -119,7 +119,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         formatted_value = ExcelUtil.format_cell_value(sample_input_elem_value)
 
-        value_elem = self.get_elements_by_css(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)[1]
+        value_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)
         value_elem.click()
 
         return formatted_value if formatted_value else ''
