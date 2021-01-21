@@ -144,15 +144,6 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return not is_visible
 
-    def is_subtotal_visible(self):
-        is_visible = self.check_if_element_exists_by_name(
-            ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS,
-            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS),
-            timeout=MEDIUM_TIMEOUT
-        )
-
-        return is_visible
-
     def is_button_enabled(self, button_name):
         self._validate_button_name(button_name)
 
