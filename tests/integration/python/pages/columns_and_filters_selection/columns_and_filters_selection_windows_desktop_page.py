@@ -142,7 +142,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             timeout=Const.MEDIUM_TIMEOUT
         )
 
-        return not is_visible
+        return is_visible
 
     def is_button_enabled(self, button_name):
         self._validate_button_name(button_name)
