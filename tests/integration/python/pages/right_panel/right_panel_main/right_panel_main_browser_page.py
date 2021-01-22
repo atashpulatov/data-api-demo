@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import SHORT_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 
 
@@ -91,7 +91,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     def logout(self):
         self.focus_on_add_in_frame()
 
-        if not self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=SHORT_TIMEOUT):
+        if not self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=Const.SHORT_TIMEOUT):
             return
 
         self._open_dots_menu()
@@ -106,11 +106,12 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     def _open_dots_menu(self):
         self.focus_on_add_in_frame()
 
-        if not self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=SHORT_TIMEOUT):
+        if not self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU, timeout=Const.SHORT_TIMEOUT):
             raise MstrException(
                 'Error while opening Dots Menu, element not exists: ' + RightPanelMainBrowserPage.DOTS_MENU)
 
-        if not self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU_BOX, timeout=SHORT_TIMEOUT):
+        if not self.check_if_element_exists_by_css(RightPanelMainBrowserPage.DOTS_MENU_BOX,
+                                                   timeout=Const.SHORT_TIMEOUT):
             self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU).click()
 
     def get_background_color_of_logout(self):
@@ -123,7 +124,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelMainBrowserPage.DATA_CLEARED_OVERLAY_TITLE,
-            TEXT_CONTENT_ATTRIBUTE,
+            Const.TEXT_CONTENT_ATTRIBUTE,
             overlay_title
         )
 

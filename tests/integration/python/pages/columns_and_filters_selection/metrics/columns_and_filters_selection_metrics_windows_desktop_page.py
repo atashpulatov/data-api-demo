@@ -1,7 +1,7 @@
 import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import LONG_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 
 
@@ -68,7 +68,7 @@ class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage
             ColumnsAndFiltersSelectionMetricsWindowsDesktopPage.METRICS_CONTAINER
         )
 
-        end_time = time.time() + LONG_TIMEOUT
+        end_time = time.time() + Const.LONG_TIMEOUT
         while metric_element.is_offscreen_by_attribute():
             if time.time() > end_time:
                 raise MstrException(f'Timeout while scrolling to metric number {object_number} called '

@@ -2,7 +2,7 @@ import json
 import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import LONG_TIMEOUT, MEDIUM_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 
 
@@ -60,7 +60,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def _ensure_attribute_is_selected(self, attribute_name):
         if not self.get_add_in_main_element().check_if_element_exists_by_xpath(
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_FORM_DROPDOWN_ELEM % attribute_name,
-            timeout=MEDIUM_TIMEOUT
+            timeout=Const.MEDIUM_TIMEOUT
         ):
             self.get_add_in_main_element().get_element_by_xpath(
                 ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
@@ -127,7 +127,7 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTES_CONTAINER
         )
 
-        end_time = time.time() + LONG_TIMEOUT
+        end_time = time.time() + Const.LONG_TIMEOUT
         while attribute_element.is_offscreen_by_attribute():
             if time.time() > end_time:
                 raise MstrException(f'Timeout while scrolling to attribute number {object_number} called '

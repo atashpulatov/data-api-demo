@@ -1,4 +1,4 @@
-@windows_desktop
+@todo_windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: F25949 - Display filters and prompts

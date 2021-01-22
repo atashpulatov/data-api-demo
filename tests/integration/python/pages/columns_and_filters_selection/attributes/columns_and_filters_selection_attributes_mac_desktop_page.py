@@ -1,7 +1,7 @@
 import json
 
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
-from framework.util.const import DEFAULT_WAIT_BETWEEN_CHECKS
+from framework.util.const import Const
 
 
 class ColumnsAndFiltersSelectionAttributesMacDesktopPage(BaseMacDesktopPage):
@@ -24,7 +24,8 @@ class ColumnsAndFiltersSelectionAttributesMacDesktopPage(BaseMacDesktopPage):
         unchecked_attribute_checkbox = ColumnsAndFiltersSelectionAttributesMacDesktopPage \
                                            .ATTRIBUTE_CHECKBOX_UNCHECKED % attribute_name
 
-        if self.check_if_element_exists_by_xpath(unchecked_attribute_checkbox, timeout=DEFAULT_WAIT_BETWEEN_CHECKS):
+        if self.check_if_element_exists_by_xpath(unchecked_attribute_checkbox,
+                                                 timeout=Const.DEFAULT_WAIT_BETWEEN_CHECKS):
             self.get_element_by_xpath(unchecked_attribute_checkbox).click()
         else:
             self.get_element_by_xpath(

@@ -1,4 +1,4 @@
-@windows_desktop
+@todo_windows_desktop
 @windows_chrome
 @mac_chrome
 Feature: F12909 - Import report

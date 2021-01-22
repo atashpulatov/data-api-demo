@@ -1,4 +1,4 @@
-@windows_desktop
+@todo_windows_desktop
 @release_validation
 @ga_validation
 Feature: F24398 - Import and refresh visualization

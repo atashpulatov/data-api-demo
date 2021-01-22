@@ -7,8 +7,9 @@ from framework.driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
 from framework.pages_base.image_element import ImageElement
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.config_util import ConfigUtil
-from framework.util.const import DEFAULT_LOCALE_NAME
-from framework.util.screenshot_on_failure_util import ScreenshotOnFailure
+from framework.util.const import Const
+from framework.util.debug_on_failure.page_source_on_failure import PageSourceOnFailure
+from framework.util.debug_on_failure.screenshot_on_failure import ScreenshotOnFailure
 from framework.util.test_util import TestUtil
 from pages_set.pages_set_factory import PagesSetFactory
 
@@ -63,7 +64,7 @@ def _initialize_using_existing_session(context):
     context.pages = PagesSetFactory().get_pages_set()
 
 
-def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME):
+def initialize_using_new_session(context, locale_name=Const.DEFAULT_LOCALE_NAME):
     DriverFactory.reset_driver()
     PagesSetFactory.reset_pages_set()
 
@@ -80,6 +81,7 @@ def initialize_using_new_session(context, locale_name=DEFAULT_LOCALE_NAME):
 def after_step(context, step):
     try:
         ScreenshotOnFailure().take_screenshots_on_failure_step(step.status, step.name)
+        PageSourceOnFailure().log_page_source_on_failure(step.status, step.name)
 
     except Exception as e:
         logging.exception('')

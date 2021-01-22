@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY
+from framework.util.const import Const
 from framework.util.excel_util import ExcelUtil
 
 
@@ -92,13 +92,13 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         cell_input = self.get_element_by_id(ExcelSheetBrowserPage.CELL_TRAVERSAL_INPUT_ELEM)
 
         cell_input.click()
-        self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
         cells_uppercase = cells.upper()
         cell_input.send_keys(cells_uppercase)
 
         cell_input.send_keys(Keys.ENTER)
-        self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
     def _get_selected_cell_value(self):
         cell_formatting_drop_down_elem = self.get_element_by_xpath(

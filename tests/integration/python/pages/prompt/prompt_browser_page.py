@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from pages.columns_and_filters_selection.columns_and_filters_selection_browser_page import \
     ColumnsAndFiltersSelectionBrowserPage
@@ -52,7 +52,8 @@ class PromptBrowserPage(BaseBrowserPage):
             self.get_element_by_css(PromptBrowserPage.PROMPTED_DOSSIER_RUN_BUTTON).click()
 
     def _check_if_prompts_answer_window_is_open(self):
-        return self.check_if_element_exists_by_id(PromptBrowserPage.PROMPT_MAIN_CONTAINER_ID, timeout=SHORT_TIMEOUT)
+        return self.check_if_element_exists_by_id(PromptBrowserPage.PROMPT_MAIN_CONTAINER_ID,
+                                                  timeout=Const.SHORT_TIMEOUT)
 
     def select_answer_for_object_prompt(self, prompt_number, prompt_name, item):
         self._change_answer_for_object_prompt(

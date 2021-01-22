@@ -1,3 +1,4 @@
+@windows_desktop
 @mac_chrome
 @mac_desktop
 @windows_chrome

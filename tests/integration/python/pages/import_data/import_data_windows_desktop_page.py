@@ -5,7 +5,7 @@ from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
-from framework.util.const import MEDIUM_TIMEOUT, DEFAULT_TIMEOUT, SHORT_TIMEOUT
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 from framework.util.message_const import MessageConst
 from framework.util.util import Util
@@ -177,10 +177,10 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def _check_if_error_message_exists(self, error_message):
-        end_time = time.time() + DEFAULT_TIMEOUT
+        end_time = time.time() + Const.DEFAULT_TIMEOUT
 
         while end_time > time.time():
-            if self.check_if_element_exists_by_name(error_message, timeout=SHORT_TIMEOUT):
+            if self.check_if_element_exists_by_name(error_message, timeout=Const.SHORT_TIMEOUT):
                 return
 
         raise MstrException(f'Different notification displayed, expected: [{error_message}].')
@@ -209,7 +209,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     def add_dossier_to_library(self):
         add_to_library = self.check_if_element_exists_by_xpath(
             ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON,
-            timeout=MEDIUM_TIMEOUT,
+            timeout=Const.MEDIUM_TIMEOUT,
             image_name=self.prepare_image_name(ImportDataWindowsDesktopPage.ADD_TO_LIBRARY_BUTTON)
         )
 

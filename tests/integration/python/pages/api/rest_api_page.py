@@ -2,7 +2,7 @@ import requests
 
 from framework.pages_base.base_page import BasePage
 from framework.util.config_util import ConfigUtil
-from framework.util.const import TUTORIAL_PROJECT_ID
+from framework.util.const import Const
 from framework.util.exception.MstrException import MstrException
 
 
@@ -22,21 +22,21 @@ class RestApiPage(BasePage):
 
         self.__env_url = RestApiPage.ENV_URL % ConfigUtil.get_add_in_environment()
 
-    def certify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+    def certify_object(self, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
         self._change_certification_state(object_id, True, project_id)
 
-    def decertify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+    def decertify_object(self, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
         self._change_certification_state(object_id, False, project_id)
 
-    def ensure_object_is_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+    def ensure_object_is_certified(self, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
         if not self.is_object_certified(object_id, project_id):
             self.certify_object(object_id, project_id)
 
-    def ensure_object_is_decertified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+    def ensure_object_is_decertified(self, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
         if self.is_object_certified(object_id, project_id):
             self.decertify_object(object_id, project_id)
 
-    def _change_certification_state(self, object_id, certify, project_id=TUTORIAL_PROJECT_ID):
+    def _change_certification_state(self, object_id, certify, project_id=Const.TUTORIAL_PROJECT_ID):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
 
         url = self.__env_url + RestApiPage.REST_API_OBJECT_CERTIFY_ENDPOINT % (object_id, str(certify).lower())
@@ -51,7 +51,7 @@ class RestApiPage(BasePage):
             raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, cookies: {cookies}, '
                                 f'status: {response.status_code}, response content: {response.content}')
 
-    def is_object_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
+    def is_object_certified(self, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
         cookies, custom_headers = self._get_cookies_and_headers(project_id)
 
         url = self.__env_url + RestApiPage.REST_API_OBJECT_INFO_ENDPOINT % object_id
