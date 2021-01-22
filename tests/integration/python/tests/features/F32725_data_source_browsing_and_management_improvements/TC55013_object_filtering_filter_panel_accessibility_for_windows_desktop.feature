@@ -1,4 +1,4 @@
-@windows_desktop
+@todo_windows_desktop
 Feature: F32725 - Data source browsing and management improvements
 
   Scenario: [TC55013] - Filter panel Accessibility
