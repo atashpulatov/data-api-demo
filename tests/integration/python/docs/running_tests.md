@@ -220,9 +220,7 @@ session (see: Running tests using existing application session).
 session (see: Running tests using existing application session).
 
 `-D debug_data_folder=PATH\\TO\\SCREENSHOTS` specifies path to a folder where debug data (screenshots and page sources)
-is stored. For local test execution use relative path (e.g. `framework\\debug_data`) and for Jenkins triggered execution
-absolute path might be used to avoid removing already cached images before each test execution, as project folder
-is cleaned before each execution (e.g. `C:\\Users\\jenkins\\python_debug_data`).
+is stored, see `take_debug_screenshot_after_failure` and `log_page_source_after_failure`.
 
 `-D take_debug_screenshot_after_failure=False` enables (`True`) or disables (`False`) taking screenshots on test
 failure, useful for debug purposes, default: disabled. Screenshots are written to folder defined by
