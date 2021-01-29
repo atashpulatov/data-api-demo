@@ -3,6 +3,8 @@ import 'whatwg-fetch';
 
 const Office = window.Office;
 const OFFICE_PRIVILEGE_ID = '273';
+const DssXmlApplicationMicrosoftOffice = '47';
+const QUERY = `source=addin-mstr-office&applicationType=${DssXmlApplicationMicrosoftOffice}`;
 const libraryUrl = getLibraryUrl();
 let popup = null;
 
@@ -45,11 +47,10 @@ function onLoginClick() {
 }
 
 function goToReact(url) {
-  const loginParams = 'source=addin-mstr-office';
   try {
     if (popup) { popup.close(); }
   } finally {
-    window.location.replace(`${url}/apps/addin-mstr-office/index.html?${loginParams}`);
+    window.location.replace(`${url}/apps/addin-mstr-office/index.html?${QUERY}`);
   }
 }
 
@@ -89,7 +90,7 @@ function logout(libraryUrl) {
 }
 
 function openAuthDialog(url) {
-  const popupUrl = `${url}/apps/addin-mstr-office/auth/office-add-in.jsp?source=addin-mstr-office`;
+  const popupUrl = `${url}/apps/addin-mstr-office/auth/office-add-in.jsp?${QUERY}`;
   const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
   const openDialog = isOfficeOnline ? openPopup : openOfficeDialog;
   openDialog(popupUrl, onMessageReceived);
