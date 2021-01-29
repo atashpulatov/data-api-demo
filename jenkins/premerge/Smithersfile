@@ -24,8 +24,11 @@ export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
+rake pre_pipeline
 
 rake stage_0_test
+
+rake post_pipeline
 '
     end
 
