@@ -24,8 +24,11 @@ export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export ENABLE_BASELINE_WORKSPACE_CHEF=false
 export WORKSPACE_SETTING=fake
 source .ecosystem
+rake pre_pipeline
 
 rake monitor_DB_change
+
+rake post_pipeline
 '
     end
   end

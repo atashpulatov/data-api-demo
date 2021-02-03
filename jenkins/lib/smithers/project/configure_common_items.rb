@@ -28,14 +28,6 @@ module Smithers
           end
 
           publishers do
-            postbuild do
-              log_text [{
-                "logText"  => ".*",
-                "operator" => "AND"
-              }]
-              script "wget https://nexus.internal.microstrategy.com/repository/filerepo/com/microstrategy/devops/jenkins_workspace_clean/1.3/jenkins_workspace_clean-1.3.py || (curl -O https://nexus.internal.microstrategy.com/repository/filerepo/com/microstrategy/devops/jenkins_workspace_clean/1.3/jenkins_workspace_clean-1.3.py && exit 1)
-python jenkins_workspace_clean-1.3.py"
-            end
             set_build_name_and_meta_data{}
             logstash do
             end
