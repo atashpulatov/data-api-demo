@@ -23,11 +23,16 @@ The main logic for uploading Test Case results to Rally from automation can be f
 For results from CI pipeline Production Release should be changed in *./rallyconfig.js* file in *automated* object every release and pushed to the branch from where automation is run. The results will be uploaded automatically.
 
 If suites are going to be trigerred manually,
-```
-'--format allure_behave.formatter:AllureFormatter -o allureFolder'
+
+1)```
+--format allure_behave.formatter:AllureFormatter -o allureFolder
 ```
 should be added to *behave* command, as specified in *../python/docs/running_tests.md*.
 
+2) allureFolder should be deleted before starting test execution; it can be dome manually or by adding the command *rm -r -f allureFolder &&* to the beginning of behave command, e.g.
+```
+behave --no-color --logging-level=WARNING --format allure_behave.formatter:AllureFormatter -o allureFolder --no-capture-stderr --no-logcapture tests/features/F22954_editing
+```
 1) After the automation suite execution finished, the raw data for the results report can be found under *../python/allureFolder*.
 
 2) In order to update results to Rally, you have to generate the report from the raw data by running the following command:

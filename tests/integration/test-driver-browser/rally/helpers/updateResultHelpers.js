@@ -14,7 +14,7 @@ const today = new Date();
 async function updateRallyTCResult(batch) {
   const options = {
     method: 'POST',
-    headers: { sessionid: rallyConfig.rallyApiKey, },
+    headers: { zsessionid: rallyConfig.rallyApiKey, },
     body: JSON.stringify(batch)
   };
 
