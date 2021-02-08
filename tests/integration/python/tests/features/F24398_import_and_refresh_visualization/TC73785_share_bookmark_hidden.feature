@@ -14,3 +14,4 @@ Feature: F34504 - Removal of sharing bookmark button from embedded library exper
       And I added dossier to Library if not yet added
       And I created dossier bookmark "Test bookmark" if not exists
      Then I verified Share bookmark icon is NOT visible
+
