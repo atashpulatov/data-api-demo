@@ -14,7 +14,7 @@ const today = new Date();
 async function updateRallyTCResult(batch) {
   const options = {
     method: 'POST',
-    headers: { zsessionid: rallyConfig.rallyApiKey, },
+    headers: { sessionid: rallyConfig.rallyApiKey, },
     body: JSON.stringify(batch)
   };
 
@@ -90,7 +90,7 @@ async function createManualBatchArray(testCaseArray) {
       }
       const { build, duration, notes, browser, release, env, exportApp, OS, language } = rallyConfig.manual;
 
-      const batchItem = createBatchItem({build, date: today, testCase, verdict, testerUrl: tester, testSet, duration, notes, browser, env, release, exportApp, OS, language});
+      const batchItem = createBatchItem({build, date: today, testCase, verdict, tester: testerUrl, testSet, duration, notes, browser, env, release, exportApp, OS, language});
       batch.push(batchItem);
     }
     return { Batch: batch };
