@@ -33,6 +33,9 @@ should be added to *behave* command, as specified in *../python/docs/running_tes
 ```
 rm -r -f allureFolder && behave --no-color --logging-level=WARNING --format allure_behave.formatter:AllureFormatter -o allureFolder --no-capture-stderr --no-logcapture tests/features/F22954_editing
 ```
+
+The next steps for the automation tests from manual and pipeline execution are:
+
 1) After the automation suite execution finished, the raw data for the results report can be found under *../python/allureFolder*.
 
 2) In order to update results to Rally, you have to generate the report from the raw data by running the following command:
