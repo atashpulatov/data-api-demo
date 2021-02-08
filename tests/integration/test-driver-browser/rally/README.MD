@@ -31,7 +31,7 @@ should be added to *behave* command, as specified in *../python/docs/running_tes
 
 2) allureFolder should be deleted before starting test execution; it can be dome manually or by adding the command *rm -r -f allureFolder &&* to the beginning of behave command, e.g.
 ```
-behave --no-color --logging-level=WARNING --format allure_behave.formatter:AllureFormatter -o allureFolder --no-capture-stderr --no-logcapture tests/features/F22954_editing
+rm -r -f allureFolder && behave --no-color --logging-level=WARNING --format allure_behave.formatter:AllureFormatter -o allureFolder --no-capture-stderr --no-logcapture tests/features/F22954_editing
 ```
 1) After the automation suite execution finished, the raw data for the results report can be found under *../python/allureFolder*.
 
