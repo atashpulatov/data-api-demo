@@ -188,13 +188,7 @@ where `driver_name` is one of available driver types (see [driver_type.py](drive
 `--tags=@tag_name`, specifies which tests to execute (only those tagged `@tag_name`), for simplicity use the same 
 values as for `driver_name` (`@windows_desktop`, `@windows_chrome`, `@mac_desktop`, `@mac_chrome`).
 
-Tags related to selecting tests for different tasks:
-
-- `@release_validation` - tag used for running the release validation test set (test cases with this tag should 
-be reviewed before each release validation),
-- `@ga_validation` - tag used for running the GA validation test set (test cases with this tag should be reviewed
-before each GA validation),
-- `@ci` - tag used for test cases which will be executed on the CI pipeline after each build.
+**Check [Full list of tags](list_of_tags.md) before running tests.**
 
 To execute only tests tagged @windows_desktop AND @release_validation use `--tags` multiple times:
 
