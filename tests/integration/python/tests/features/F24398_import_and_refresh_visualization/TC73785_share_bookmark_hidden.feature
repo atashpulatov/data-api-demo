@@ -5,14 +5,16 @@ Feature: F34504 - Removal of sharing bookmark button from embedded library exper
 
   Scenario: [TC73785] - E2E - Checking if sharing bookmarks icon is hidden
     Given I logged in as default user
+
      When I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
-
       And I found object by ID "7908177211E9DF8E76990080EFB5ACD2" and selected "Visualization manipulation"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I added dossier to Library if not yet added
       And I created dossier bookmark "Test bookmark" if not exists
       And I selected dossier bookmark 1
+
      Then I verified Share bookmark icon is NOT visible
 
+      And I logged out
