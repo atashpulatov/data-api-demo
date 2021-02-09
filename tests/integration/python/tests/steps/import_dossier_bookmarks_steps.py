@@ -15,6 +15,6 @@ def step_impl(context, bookmark_name):
 
 @step('I verified Share bookmark icon is NOT visible')
 def step_impl(context):
-    share_bookmark_toggle_visible = context.pages.import_dossier_bookmarks_page().is_share_bookmark_not_visible()
+    share_bookmark_toggle_visible = context.pages.import_dossier_bookmarks_page().is_share_bookmark_visible()
 
-    AssertUtil.assert_simple(share_bookmark_toggle_visible, True)
+    AssertUtil.assert_simple(share_bookmark_toggle_visible, False)

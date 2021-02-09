@@ -27,10 +27,10 @@ class ImportDossierBookmarksBrowserPage(BaseBrowserPage):
         # TODO: Implement
         self.log('Missing step implementation.')
 
-    def is_share_bookmark_not_visible(self):
+    def is_share_bookmark_visible(self):
         self.select_bookmark(1)
 
-        return not self.check_if_element_exists_by_css(
+        return self.check_if_element_exists_by_css(
             ImportDossierBookmarksBrowserPage.BOOKMARK_SHARE_ICON,
             timeout=Const.SHORT_TIMEOUT
         )
