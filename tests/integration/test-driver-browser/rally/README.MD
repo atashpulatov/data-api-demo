@@ -24,7 +24,8 @@ For results from CI pipeline Production Release should be changed in *./rallycon
 
 If suites are going to be trigerred manually,
 
-1)```
+1)
+```
 --format allure_behave.formatter:AllureFormatter -o allureFolder
 ```
 should be added to *behave* command, as specified in *../python/docs/running_tests.md*.
