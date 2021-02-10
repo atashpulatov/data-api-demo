@@ -16,5 +16,5 @@ Feature: F34504 - Removal of sharing bookmark button from embedded library exper
       And I selected dossier bookmark 1
 
      Then I verified Share bookmark icon is NOT visible
-
+      And I closed popup window
       And I logged out
