@@ -1,5 +1,6 @@
 import time
 
+from appium.webdriver.common.mobileby import MobileBy
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 
@@ -47,7 +48,7 @@ class ElementGet(ElementCheck):
 
     def get_element_by_accessibility_id(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None, safe=False):
         return self._get_element_wrapper(
-            self.get_element_info_by_mobile_accessibility_id, By.ACCESSIBILITY_ID,
+            self.get_element_info_by_mobile_accessibility_id, MobileBy.ACCESSIBILITY_ID,
             selector, timeout, image_name, safe)
 
     def get_element_by_tag_name(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None, safe=False):

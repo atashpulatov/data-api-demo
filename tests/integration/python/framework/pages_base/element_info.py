@@ -85,7 +85,7 @@ class ElementInfo:
                                                                  timeout=Const.DEFAULT_TIMEOUT,
                                                                  image_name=None):
         return self._get_element_info_using_parent(
-            By.ACCESSIBILITY_ID, selector, timeout, image_name, parent_element
+            MobileBy.ACCESSIBILITY_ID, selector, timeout, image_name, parent_element
         )
 
     def get_element_info_by_xpath_using_parent(self, parent_element, selector,
