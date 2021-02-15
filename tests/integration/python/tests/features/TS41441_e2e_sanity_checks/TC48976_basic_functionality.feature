@@ -82,6 +82,7 @@ Feature: TS41441 - Sanity checks
       And I clicked Data Preview button
       And I clicked Close Preview button
       And I clicked Import button in Columns and Filters Selection
+      And I waited for object to be imported successfully
       And I closed last notification
       And I selected cell "H1"
       And I clicked Add Data button
@@ -127,13 +128,16 @@ Feature: TS41441 - Sanity checks
      When I clicked Data Preview button
       And I clicked Close Preview button
       And I clicked Import button in Columns and Filters Selection
+      And I waited for object to be imported successfully
       And I closed last notification
       And I clicked on object 2
      Then columns ["A", "B", "C"] are selected
       And rows ["1", "2", "3"] are selected
 
-     When I clicked Refresh on object 2
-      And I closed last notification
+     When I clicked Refresh on object 1
+      And I waited for object to be refreshed successfully
+      And I closed notification on object 1
+      # TODO Check why we are getting error on refreshing 2nd object (we are getting Excel error (only automation))
       And I clicked on object 1
      Then columns ["H", "I", "J"] are selected
       And rows ["1", "2", "3"] are selected
@@ -148,14 +152,17 @@ Feature: TS41441 - Sanity checks
      When I clicked attribute "Item Type" for dataset
       And I clicked metric "Unit Cost"
       And I clicked Import button in Columns and Filters Selection
-      And I closed last notification
+      And I waited for object to be imported successfully
+      And I closed notification on object 1
       And I clicked on object 1
      Then columns ["H", "I", "J"] are selected
       And rows ["1", "2", "3"] are selected
 
      When I removed object 2 using icon
+      And I waited for object operation to complete successfully with message "Object removed"
       And I closed last notification
       And I removed object 1 using icon
+      And I waited for object operation to complete successfully with message "Object removed"
       And I closed all notifications
 
       And I logged out

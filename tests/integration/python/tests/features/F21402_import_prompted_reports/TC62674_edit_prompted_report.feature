@@ -20,10 +20,13 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
      # TODO Then I verified Run button is disabled
       And I verified that Columns & Filters Selection is visible
       And I verified popup title is "Report with all type of prompts (except nested)"
+      And I verified that Import button is disabled
 
      When I selected all attributes
       And I clicked metric "Revenue"
-      And I selected filter "Year" with all elements
+     Then I verified that Import button is enabled
+
+     When I selected filter "Year" with all elements
       And I selected filters { "Region": ["Central", "South"] }
      Then I verified that counter of "metrics" shows "1" of "3" selected
       And I verified that counter of "attributes" shows "3" of "3" selected
@@ -50,7 +53,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I verified that counter of "metrics" shows "1" of "3" selected
       And I verified that counter of "attributes" shows "3" of "3" selected
       And I verified that counter of "filters" shows "1" of "3" selected
-      # TODO And I verified all buttons are enabled // comment: this can be also list  of the buttons
+      And I verified that Import button is disabled
 
      When I clicked metric "Profit"
       And I clicked attribute "Subcategory"
