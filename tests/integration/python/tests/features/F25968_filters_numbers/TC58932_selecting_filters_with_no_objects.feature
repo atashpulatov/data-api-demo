@@ -4,7 +4,9 @@
 Feature: F25968 - Filters numbers
 
   Scenario: [TC58932] - Deselecting/selecting filters with no objects
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

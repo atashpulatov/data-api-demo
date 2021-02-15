@@ -5,7 +5,9 @@
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49134] - Error Handling
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

@@ -2,7 +2,6 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 
 from framework.driver.driver_factory import DriverFactory
-from framework.util.config_util import ConfigUtil
 from framework.util.const import Const
 from framework.util.util import Util
 
@@ -11,9 +10,7 @@ class DriverSendKeys:
     def __init__(self):
         super().__init__()
 
-        driver_type = ConfigUtil.get_driver_type()
-
-        self.__driver = DriverFactory().get_driver(driver_type)
+        self.__driver = DriverFactory().get_driver()
 
     def press_right_arrow(self):
         self.send_keys(Keys.ARROW_RIGHT)

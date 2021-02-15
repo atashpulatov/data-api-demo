@@ -5,7 +5,9 @@
 Feature: F25932 - Import attribute forms in separate columns
 
   Scenario: [TC59987] [Attribute forms] Edit an imported report
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

@@ -5,7 +5,9 @@
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC48976] - E2E Basic Functionality
-    Given I logged in with username "wrong_user_name" and password "wrong_password"
+    Given I initialized Excel
+
+     When I logged in with username "wrong_user_name" and password "wrong_password"
      Then I verified that I saw authentication error and I clicked OK
 
      When I closed Log In popup

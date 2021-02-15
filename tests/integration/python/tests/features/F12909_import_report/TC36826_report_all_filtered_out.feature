@@ -4,7 +4,9 @@
 Feature: F12909 - Import report
 
   Scenario: [TC36826] Importing report with all data filtered out
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

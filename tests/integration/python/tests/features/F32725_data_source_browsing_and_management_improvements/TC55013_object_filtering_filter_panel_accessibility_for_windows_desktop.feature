@@ -2,7 +2,9 @@
 Feature: F32725 - Data source browsing and management improvements
 
   Scenario: [TC55013] - Filter panel Accessibility
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I clicked Filters button

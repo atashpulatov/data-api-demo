@@ -4,7 +4,9 @@
 Feature: F30479 - Hardening of importing data from Dossier to Excel
 
   Scenario: [TC65052] - E2E Hardening of importing data from Dossier to Excel
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

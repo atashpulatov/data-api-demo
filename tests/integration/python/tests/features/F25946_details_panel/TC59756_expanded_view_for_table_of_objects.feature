@@ -3,7 +3,9 @@
 Feature: F25946 - Details panel
 
   Scenario: [TC59756] - [Object Details] Expanded view for Table of Objects
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

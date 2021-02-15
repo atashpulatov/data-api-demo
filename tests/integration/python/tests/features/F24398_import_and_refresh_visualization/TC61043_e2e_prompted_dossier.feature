@@ -3,8 +3,10 @@
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC61043] - E2E with dossier containing all types of prompts (including nested prompts)
-    Given I logged in as default user
-     When I clicked Import Data button
+    Given I initialized Excel
+
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "B10D39BF11EB4F676D890080EFD53FDF" and selected "Dossier with all type of prompts (except nested)"

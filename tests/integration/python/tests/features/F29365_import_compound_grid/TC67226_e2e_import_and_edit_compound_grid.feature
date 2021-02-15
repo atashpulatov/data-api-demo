@@ -7,8 +7,10 @@
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67226] - Import and edit compound grid
-    Given I logged in as default user
-     When I clicked Import Data button
+    Given I initialized Excel
+
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "169D6C564AEFA0FAB707F59B2A74A8B8" and selected "Dossier with Compound Grid - Exclude/Keep Only"
       # TODO Then I verified Prepare Data button is disabled

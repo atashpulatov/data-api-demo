@@ -2,7 +2,9 @@
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC62674] - E2E Editing all types of prompted reports, except nested
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "CDE36AFC11EA6220B17C0080EF054542" and selected "Report with all type of prompts (except nested)"

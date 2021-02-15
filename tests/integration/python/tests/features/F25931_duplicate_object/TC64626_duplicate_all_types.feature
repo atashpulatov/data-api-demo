@@ -4,7 +4,9 @@
 Feature: F25931 - Duplicate object
 
   Scenario: [TC64626] - Duplicate all types of objects
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

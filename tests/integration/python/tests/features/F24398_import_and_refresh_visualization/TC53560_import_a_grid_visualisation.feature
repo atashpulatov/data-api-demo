@@ -4,8 +4,10 @@
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC53560] - Importing grid visualisations - basic scenario
-    Given I logged in as default user
-     When I clicked Import Data button
+    Given I initialized Excel
+
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "7908177211E9DF8E76990080EFB5ACD2" and selected "Visualization manipulation"

@@ -5,7 +5,9 @@
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49100] Part 1. - Import Prompted Reports | Import multiple objects | Refresh | Edit - Prompts
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "24F3C9804D8FCA7194F1A48D1B8F1C17" and selected "Report with prompt - Attribute element prompt of Category | Required | Not default"
@@ -26,7 +28,7 @@ Feature: TS41441 - Sanity checks
      When I clicked metric "Revenue"
      Then I verified that Data Preview button in Columns and Filters Selection is enabled
       And I verified that Import button in Columns and Filters Selection is enabled
-     
+
      When I clicked metric "Revenue"
      Then I verified that Data Preview button in Columns and Filters Selection is disabled
       And I verified that Import button in Columns and Filters Selection is disabled
@@ -37,7 +39,7 @@ Feature: TS41441 - Sanity checks
       And I clicked metric "Revenue"
       And I selected filter "Year" with all elements
       And I selected filters { "Region" : ["Central", "Southwest", "South", "Northeast"] }
-    
+
      Then I verified that Data Preview button in Columns and Filters Selection is enabled
       And I verified that Import button in Columns and Filters Selection is enabled
      Then I clicked Data Preview button

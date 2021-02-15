@@ -7,7 +7,9 @@
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49100] Part 2. - Import multiple objects | Refresh All
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "24F3C9804D8FCA7194F1A48D1B8F1C17" and selected "Report with prompt - Attribute element prompt of Category | Required | Not default"

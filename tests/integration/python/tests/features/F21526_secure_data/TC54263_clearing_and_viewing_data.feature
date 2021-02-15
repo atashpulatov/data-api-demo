@@ -1,13 +1,14 @@
-@windows_desktop
+@todo_windows_desktop
 @windows_chrome
 @mac_chrome
 @release_validation
 Feature: F21526 - Secure data
 
   Scenario: [TC54263] - Clearing and viewing data
-    Given I logged in as default user
+    Given I initialized Excel
 
-     When I clicked Import Data button
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "778ECA4C11E990F800000080EFA56C55" and selected "Revenue by Region and Category - secure data"
       And I clicked Import button without checking results

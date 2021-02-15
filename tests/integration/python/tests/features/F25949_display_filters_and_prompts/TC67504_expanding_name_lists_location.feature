@@ -2,7 +2,9 @@
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67504] - expanding name lists, location
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
