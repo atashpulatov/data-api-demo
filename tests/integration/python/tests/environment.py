@@ -3,11 +3,7 @@ import logging
 from behave.contrib.scenario_autoretry import patch_scenario_with_autoretry
 
 from framework.driver.driver_factory import DriverFactory
-from framework.driver.driver_type import DRIVERS_SUPPORTING_IMAGE_RECOGNITION
-from framework.pages_base.image_element import ImageElement
-from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.config_util import ConfigUtil
-from framework.util.const import Const
 from framework.util.debug_on_failure.page_source_on_failure import PageSourceOnFailure
 from framework.util.debug_on_failure.screenshot_on_failure import ScreenshotOnFailure
 from framework.util.test_util import TestUtil
@@ -35,7 +31,6 @@ def before_feature(context, feature):
         for scenario in feature.scenarios:
             patch_scenario_with_autoretry(scenario, max_attempts=max_attempts)
 
-        WindowsDesktopMainAddInElementCache.invalidate_right_panel_cache()
     except Exception as e:
         logging.exception('')
         raise e
@@ -43,39 +38,24 @@ def before_feature(context, feature):
 
 def before_scenario(context, scenario):
     try:
+        # reset_framework() is used here and by step I opened Excel and logged in to Excel using locale "{locale_name}"
+        context.reset_framework = _reset_framework
+
         if ConfigUtil.is_attaching_to_existing_session_enabled():
-            _initialize_using_existing_session(context)
+            context.pages = PagesSetFactory().get_pages_set()
         else:
-            initialize_using_new_session(context)
+            context.reset_framework(context)
+
     except Exception as e:
         logging.exception('')
         raise e
 
 
-def _initialize_using_existing_session(context):
-    driver_type = ConfigUtil.get_driver_type()
-
-    driver = DriverFactory().get_driver(driver_type)
-
-    if driver_type in DRIVERS_SUPPORTING_IMAGE_RECOGNITION:
-        excel_root_element_name = ConfigUtil.get_windows_desktop_excel_root_element_name()
-        ImageElement.reset_excel_root_element(driver, excel_root_element_name)
-
-    context.pages = PagesSetFactory().get_pages_set()
-
-
-def initialize_using_new_session(context, locale_name=Const.DEFAULT_LOCALE_NAME):
+def _reset_framework(context):
     DriverFactory.reset_driver()
     PagesSetFactory.reset_pages_set()
 
     context.pages = PagesSetFactory().get_pages_set()
-
-    context.pages.excel_general_page().go_to_excel(locale_name)
-
-    context.pages.excel_general_page().maximize_excel_window()
-
-    context.pages.excel_menu_page().click_add_in_elem()
-    context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()
 
 
 def after_step(context, step):

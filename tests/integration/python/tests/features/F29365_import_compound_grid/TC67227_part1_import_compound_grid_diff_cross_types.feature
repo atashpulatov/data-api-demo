@@ -4,8 +4,10 @@
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 1 -Import compound grid visualization with different cross type
-    Given I logged in as default user
-     When I clicked Import Data button
+    Given I initialized Excel
+
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "DD7D695411EABC3E93B50080EF65835E" and selected "Kind of compound grids - Cross type"
       And I clicked Import button to open Import Dossier
@@ -14,7 +16,7 @@ Feature: F29365 - Import compound grid
       And I selected visualization "tabular"
       And I clicked import dossier
       And I closed last notification
-    
+
      Then cells ["A1", "B2", "C3"] should have values ["Category", "$2,070,816", "$4,289,603"]
 
      When I selected cell "F1"

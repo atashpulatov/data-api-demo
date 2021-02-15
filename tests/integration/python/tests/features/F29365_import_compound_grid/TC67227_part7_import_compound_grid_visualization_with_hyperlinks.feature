@@ -5,7 +5,9 @@
 Feature: F29365 - Import compound grid from dossier to Excel
 
   Scenario: [TC67227] - part 7 - Import compound grid visualization with Hyperlinks
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

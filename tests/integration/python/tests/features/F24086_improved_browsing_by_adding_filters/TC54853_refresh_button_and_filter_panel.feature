@@ -3,7 +3,9 @@
 Feature: F24086 - Improved browsing by adding filters
 
   Scenario: [TC54853] - [Object filtering] Refresh button & filter panel
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
 
      When I clicked Filters button

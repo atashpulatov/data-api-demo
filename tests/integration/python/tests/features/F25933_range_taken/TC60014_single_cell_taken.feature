@@ -2,7 +2,9 @@
 Feature: F25933 - Range taken
 
   Scenario: [TC60014] - Single cell is taken
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I wrote text "abc" in cell "C1"
       And I selected cell "A1"
 

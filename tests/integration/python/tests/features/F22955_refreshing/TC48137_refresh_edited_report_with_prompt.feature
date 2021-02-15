@@ -4,7 +4,9 @@
 Feature: F22955 - Refresh data already imported to the workbook (including prompt)
 
   Scenario: [TC48137] - Refresh an edited report with prompt
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

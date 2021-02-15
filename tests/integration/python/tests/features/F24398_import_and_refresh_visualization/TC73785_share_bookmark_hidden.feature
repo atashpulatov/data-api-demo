@@ -6,9 +6,10 @@
 Feature: F34504 - Removal of sharing bookmark button from embedded library experience that is part of the federated analytics Office 365 Excel client
 
   Scenario: [TC73785] - E2E - Checking if sharing bookmarks icon is hidden
-    Given I logged in as default user
+    Given I initialized Excel
 
-     When I clicked Import Data button
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "7908177211E9DF8E76990080EFB5ACD2" and selected "Visualization manipulation"
       And I clicked Import button to open Import Dossier

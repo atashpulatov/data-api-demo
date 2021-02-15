@@ -4,8 +4,10 @@
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 4 - Import Compound Grid visualization with special structures
-    Given I logged in as default user
-     When I clicked Import Data button
+    Given I initialized Excel
+
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "3901187911EAC1E161F30080EFF54765" and selected "Kind of compound grids - Special structure"
       And I clicked Import button to open Import Dossier

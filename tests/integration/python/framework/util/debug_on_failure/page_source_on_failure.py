@@ -76,7 +76,7 @@ class PageSourceOnFailure:
         super().__init__()
 
         self.driver_type = ConfigUtil.get_driver_type()
-        self.driver = DriverFactory().get_driver(self.driver_type)
+        self.driver = DriverFactory().get_driver()
 
     def log_page_source_on_failure(self, status, step_name):
         """

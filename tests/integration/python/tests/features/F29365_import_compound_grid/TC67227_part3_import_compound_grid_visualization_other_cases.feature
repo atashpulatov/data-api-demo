@@ -2,8 +2,10 @@
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 3 -Import compound grid visualization (other cases)
-    Given I logged in as default user
-     When I clicked Import Data button
+    Given I initialized Excel
+
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "E52F04E111EABC6C58230080EF75D638" and selected "Kind of compound grids - Other cases"
       And I clicked Import button to open Import Dossier

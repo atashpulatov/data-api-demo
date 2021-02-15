@@ -4,7 +4,9 @@
 Feature: F22954 - Edit dataset
 
   Scenario: [TC48339] Editing dataset
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "8738171C11E97AED00000080EF155102" and selected "100_dataset"

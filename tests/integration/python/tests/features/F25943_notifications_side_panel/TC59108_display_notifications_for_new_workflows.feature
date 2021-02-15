@@ -15,7 +15,9 @@
 Feature: F25943 - Notifications side panel
 
   Scenario: [TC59108] - Display notifications for new workflows - E2E user journey
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "56A532DD11EA9A91D5440080EF853B57" and selected "50k columns report - pivoted"

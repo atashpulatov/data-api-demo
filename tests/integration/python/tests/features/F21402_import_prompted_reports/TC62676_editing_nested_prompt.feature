@@ -3,7 +3,9 @@
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC62676] - Editing prompted reports functionality while report contains nested prompts imported without Prepare Data
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

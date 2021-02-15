@@ -18,8 +18,7 @@ class ElementGet(ElementCheck):
     def __init__(self):
         super().__init__()
 
-        driver_type = ConfigUtil.get_driver_type()
-        self.driver = DriverFactory().get_driver(driver_type)
+        self.driver = DriverFactory().get_driver()
 
         self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
 

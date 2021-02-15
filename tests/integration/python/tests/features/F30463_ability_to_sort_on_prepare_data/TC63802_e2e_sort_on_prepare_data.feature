@@ -4,7 +4,9 @@
 Feature: F30463 - Ability to sort on prepare data
 
   Scenario: [TC63802] - E2E Sort on prepare data
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
