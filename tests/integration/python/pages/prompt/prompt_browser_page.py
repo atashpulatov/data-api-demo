@@ -7,7 +7,7 @@ from pages.columns_and_filters_selection.columns_and_filters_selection_browser_p
 
 class PromptBrowserPage(BaseBrowserPage):
     PROMPT_MAIN_CONTAINER_ID = "mstrdossierPromptEditor"
-    PROMPT_RUN_BUTTON = 'div#popup-wrapper button#run'
+    PROMPT_RUN_BUTTON = '#run'
     PROMPTED_DOSSIER_RUN_BUTTON = '.mstrPromptEditorButtonRun'
     PROMPT_LIST_ELEM = '.mstrPromptTOCListItemIndex'
     PROMPT_OBJECT_SELECTED_ITEM = '.mstrListCartCellSelectedView .mstrListBlockItemName'

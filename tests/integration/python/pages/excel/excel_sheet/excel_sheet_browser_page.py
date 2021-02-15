@@ -29,7 +29,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     COLUMN_HEADER = '.ewrch-col-nosel > .ewr-chc'
 
-    EXCEL_COLUMN_OPTION_CSS = '.label-97'
+    EXCEL_COLUMN_OPTION_CSS = '.label-100'
 
     OPTION_DELETE_COLUMNS = 'Delete Columns'
 
@@ -146,6 +146,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int).click()
 
     def remove_columns(self, column_name, number_of_columns):
+        # TODO investigate if it's possible to delete column using top menu or using keyboard keys
         self.focus_on_excel_frame()
 
         for i in range(0, int(number_of_columns)):
