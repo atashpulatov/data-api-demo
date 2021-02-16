@@ -3,7 +3,7 @@ import requests
 from framework.pages_base.base_page import BasePage
 from framework.util.config_util import ConfigUtil
 from framework.util.const import Const
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 
 
 class RestApiPage(BasePage):

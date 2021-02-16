@@ -3,7 +3,7 @@ import os
 import re
 
 from framework.driver.driver_type import AVAILABLE_DRIVERS, DRIVERS_SUPPORTING_IMAGE_RECOGNITION
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.util import Util
 
 

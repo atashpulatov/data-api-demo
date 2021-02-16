@@ -10,7 +10,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from framework.driver.driver_factory import DriverFactory
 from framework.util.config_util import ConfigUtil
 from framework.util.const import Const
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.image_data import ImageData
 from framework.util.util import Util
 

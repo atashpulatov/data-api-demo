@@ -6,7 +6,7 @@ from framework.driver.driver_factory import DriverFactory
 from framework.driver.driver_type import DRIVER_TYPE_WINDOWS_DESKTOP
 from framework.util.config_util import ConfigUtil
 from framework.util.debug_on_failure.common_debug_on_failure import CommonDebugOnFailure
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.util import Util
 
 

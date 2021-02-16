@@ -1,7 +1,7 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from framework.util.const import Const
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
 

@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.const import Const
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 
 
 class PromptWindowsDesktopPage(BaseWindowsDesktopPage):

@@ -10,7 +10,7 @@ from framework.pages_base.element_check import ElementCheck
 from framework.pages_base.image_element import ImageElement
 from framework.util.config_util import ConfigUtil
 from framework.util.const import Const
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.util import Util
 
 
