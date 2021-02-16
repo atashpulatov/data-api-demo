@@ -30,3 +30,12 @@ def step_impl(context, object_number_1, object_number_2):
     result = context.pages.excel_menu_page().are_timestamps_different(object_number_1, object_number_2)
 
     AssertUtil.assert_simple(result, True)
+
+
+@step('I stored environment id in context')
+def step_impl(context):
+    """
+    Technical step used to store environment_id in context, necessary for REST API calls. Environment id is taken from
+    Add-In name, e.g. NNNNNN for current_env_RV_NNNNNN.
+    """
+    context.environment_id = context.pages.excel_menu_page().get_environment_id()

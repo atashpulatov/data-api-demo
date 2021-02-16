@@ -2,21 +2,41 @@ import re
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.config_util import ConfigUtil
+from framework.util.util import Util
 
 
 class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
+    ADD_IN_IN_HOME_TAB_TEXT_ELEM = '//Button[starts-with(@Name, "%s")]'
+
     MENU_BUTTON = 'Task Pane Options'
     MENU_BUTTON_WIDTH = 40
     MENU_BUTTONS_MARGIN = 20
     NAME_BOX_ELEM = 'Name Box'
 
     def click_add_in_elem(self):
-        import_data_name = ConfigUtil.get_excel_desktop_add_in_import_data_name()
+        add_in_environment = ConfigUtil.get_excel_desktop_add_in_import_data_name()
 
-        self.get_element_by_name(
-            import_data_name,
-            image_name=self.prepare_image_name(import_data_name)
+        self.get_element_by_xpath(
+            ExcelMenuWindowsDesktopPage.ADD_IN_IN_HOME_TAB_TEXT_ELEM % add_in_environment,
+            image_name=self.prepare_image_name(add_in_environment)
         ).click()
+
+    def get_environment_id(self):
+        """
+        Gets environment id from Add-In name, used for preparing url for REST API calls.
+
+        E.g. for current_env_RV_NNNNNN it's NNNNNN.
+
+        :return: environment id.
+        """
+        add_in_environment = ConfigUtil.get_excel_desktop_add_in_import_data_name()
+
+        add_in_button = self.get_element_by_xpath(
+            ExcelMenuWindowsDesktopPage.ADD_IN_IN_HOME_TAB_TEXT_ELEM % add_in_environment
+        )
+        add_in_name = add_in_button.get_name_by_attribute()
+
+        return Util.extract_environment_id(add_in_environment, add_in_name)
 
     def click_close_add_in_button(self):
         # Close add-in button ('X') is not present in page source. Workaround is to find button next to this element
