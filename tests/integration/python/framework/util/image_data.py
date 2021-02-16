@@ -1,4 +1,4 @@
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 
 
 class ImageData:

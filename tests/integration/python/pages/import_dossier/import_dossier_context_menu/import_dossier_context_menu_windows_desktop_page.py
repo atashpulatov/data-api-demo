@@ -1,7 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 from pages.import_dossier.import_dossier_main.import_dossier_main_windows_desktop_page import \
     ImportDossierMainWindowsDesktopPage
 

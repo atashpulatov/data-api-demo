@@ -6,7 +6,7 @@ from selenium.webdriver.common.keys import Keys
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from framework.util.const import Const
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.message_const import MessageConst
 from framework.util.util import Util
 from pages.columns_and_filters_selection.columns_and_filters_selection_windows_desktop_page import \

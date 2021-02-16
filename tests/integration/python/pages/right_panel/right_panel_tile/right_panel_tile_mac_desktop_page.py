@@ -1,5 +1,5 @@
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.message_const import MessageConst
 from pages.excel.excel_menu.excel_menu_mac_desktop_page import ExcelMenuMacDesktopPage
 

@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 from time import sleep
 
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 
 
 class Util:
