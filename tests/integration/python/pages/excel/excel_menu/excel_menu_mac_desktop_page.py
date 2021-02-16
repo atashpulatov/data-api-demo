@@ -1,5 +1,6 @@
 from framework.pages_base.base_mac_desktop_page import BaseMacDesktopPage
 from framework.util.config_util import ConfigUtil
+from framework.util.exception.MstrException import MstrException
 
 
 class ExcelMenuMacDesktopPage(BaseMacDesktopPage):
@@ -18,7 +19,11 @@ class ExcelMenuMacDesktopPage(BaseMacDesktopPage):
 
         import_data_name = ConfigUtil.get_excel_desktop_add_in_import_data_name()
 
+        # TODO change implementation to handle name starting with import_data_name text.
         self.get_element_by_xpath(ExcelMenuMacDesktopPage.ADD_IN_IN_HOME_TAB_TEXT_ELEM % import_data_name).click()
+
+    def get_environment_id(self):
+        raise MstrException('TODO implement')
 
     def click_insert_tab_elem(self):
         self.get_element_by_xpath(ExcelMenuMacDesktopPage.INSERT_TAB_ELEM).click()

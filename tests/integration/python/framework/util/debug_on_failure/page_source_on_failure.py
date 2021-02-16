@@ -1,5 +1,4 @@
 import re
-import time
 
 from behave.model_core import Status
 
@@ -123,7 +122,8 @@ class PageSourceOnFailure:
             step_name
         )
 
-        file_name = Util.normalize_file_name(f'{file_name_prefix}{time.time()}')
+        current_datetime_string = Util.prepare_current_datetime_string()
+        file_name = Util.normalize_file_name(f'{file_name_prefix}{current_datetime_string}')
 
         return f'{ConfigUtil.get_debug_data_folder()}/{file_name}{file_name_extension}'
 

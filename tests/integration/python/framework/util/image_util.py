@@ -338,7 +338,8 @@ class ImageUtil:
         :param file_name_prefix: Debug file names prefix.
         """
 
-        file_name_prefix_with_timestamp = f'{file_name_prefix}{time.time()}_'
+        current_datetime_string = Util.prepare_current_datetime_string()
+        file_name_prefix_with_timestamp = f'{file_name_prefix}{current_datetime_string}_'
 
         self._save_current_full_screen(
             file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX,
