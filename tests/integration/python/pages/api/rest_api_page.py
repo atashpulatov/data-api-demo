@@ -104,4 +104,8 @@ class RestApiPage(BasePage):
         return auth_token, cookies
 
     def _prepare_env_url(self, environment_id):
+        if not environment_id:
+            raise MstrException('environment_id is not set, please call "I stored environment id in context" step '
+                                'before using REST API.')
+
         return RestApiPage.ENV_URL % environment_id

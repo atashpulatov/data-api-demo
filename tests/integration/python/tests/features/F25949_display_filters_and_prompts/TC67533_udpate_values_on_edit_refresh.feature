@@ -5,6 +5,7 @@ Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67533] - Update values on edit and refresh
     Given I initialized Excel
+      And I stored environment id in context
 
      When I logged in as default user
       And I clicked Import Data button
