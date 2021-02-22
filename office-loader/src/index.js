@@ -13,7 +13,7 @@ function officeInitialize() {
     .then(() => {
       translate();
       if (window.location.protocol !== 'https:') {
-        return window.location.replace(`${libraryUrl}/static/loader-mstr-office/no-https-connection.html`);
+        return window.location.replace(encodeURI(`${libraryUrl}/static/loader-mstr-office/no-https-connection.html`));
       }
       if (!canSaveCookies() || !storageAvailable('localStorage')) {
         //TODO: We may need to update the warning to include local storage
@@ -25,14 +25,14 @@ function officeInitialize() {
 }
 
 function startAuthentication() {
-  verifyToken(libraryUrl)
+  verifyToken()
     .then((isValid) => {
       if (isValid) {
         goToReact(libraryUrl);
       } else {
         showLoginBtn();
         removeStorageItem();
-        logout(libraryUrl);
+        logout();
       }
     })
     .catch((e) => {
@@ -43,7 +43,7 @@ function startAuthentication() {
 }
 
 function onLoginClick() {
-  openAuthDialog(libraryUrl);
+  openAuthDialog();
 }
 
 function goToReact(url) {
@@ -60,7 +60,7 @@ function getLibraryUrl() {
 
 }
 
-function verifyToken(libraryUrl) {
+function verifyToken() {
   const url = `${libraryUrl}/api/sessions/privileges/${OFFICE_PRIVILEGE_ID}`;
   const token = getStorageItem();
   const headers = { 'X-MSTR-AuthToken': token };
@@ -71,7 +71,7 @@ function verifyToken(libraryUrl) {
         return true
       } else if (status === 403) {
         // No privileges
-        logout(libraryUrl).finally(() => {
+        logout().finally(() => {
           const locale = Office.context.displayLanguage || navigator.language;
           window.location.replace(`${libraryUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
         });
@@ -81,7 +81,7 @@ function verifyToken(libraryUrl) {
     })
 }
 
-function logout(libraryUrl) {
+function logout() {
   const url = libraryUrl + '/api/auth/logout';
   const token = getStorageItem();
   removeStorageItem();
@@ -89,8 +89,8 @@ function logout(libraryUrl) {
   return fetch(url, { method: 'POST', credentials: 'include', headers });
 }
 
-function openAuthDialog(url) {
-  const popupUrl = `${url}/apps/addin-mstr-office/auth/office-add-in.jsp?${QUERY}`;
+function openAuthDialog() {
+  const popupUrl = encodeURI(`${libraryUrl}/apps/addin-mstr-office/auth/office-add-in.jsp?${QUERY}`);
   const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
   const openDialog = isOfficeOnline ? openPopup : openOfficeDialog;
   openDialog(popupUrl, onMessageReceived);
