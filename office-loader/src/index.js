@@ -4,7 +4,7 @@ import 'whatwg-fetch';
 const Office = window.Office;
 const OFFICE_PRIVILEGE_ID = '273';
 const DssXmlApplicationMicrosoftOffice = '47';
-const QUERY = `source=addin-mstr-office&applicationType=${DssXmlApplicationMicrosoftOffice}`;
+const QUERY = encodeURI(`source=addin-mstr-office&applicationType=${DssXmlApplicationMicrosoftOffice}`);
 const libraryUrl = getLibraryUrl();
 let popup = null;
 
@@ -28,7 +28,7 @@ function startAuthentication() {
   verifyToken()
     .then((isValid) => {
       if (isValid) {
-        goToReact(libraryUrl);
+        goToReact();
       } else {
         showLoginBtn();
         removeStorageItem();
@@ -46,11 +46,11 @@ function onLoginClick() {
   openAuthDialog();
 }
 
-function goToReact(url) {
+function goToReact() {
   try {
     if (popup) { popup.close(); }
   } finally {
-    window.location.replace(`${url}/apps/addin-mstr-office/index.html?${QUERY}`);
+    window.location.replace(`${libraryUrl}/apps/addin-mstr-office/index.html?${QUERY}`);
   }
 }
 
