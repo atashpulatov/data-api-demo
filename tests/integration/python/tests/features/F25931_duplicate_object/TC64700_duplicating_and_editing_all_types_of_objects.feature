@@ -2,6 +2,7 @@
 @mac_chrome
 @release_validation
 @ga_validation
+@11.3.1
 Feature: F25931 - Duplicate object
 
   Scenario: [TC64700] - [Duplicate object] [Range taken] - E2E

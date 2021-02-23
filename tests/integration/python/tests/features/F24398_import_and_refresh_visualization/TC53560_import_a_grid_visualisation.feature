@@ -1,6 +1,7 @@
 @todo_windows_desktop
 @release_validation
 @ga_validation
+@11.3.1
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC53560] - Importing grid visualisations - basic scenario

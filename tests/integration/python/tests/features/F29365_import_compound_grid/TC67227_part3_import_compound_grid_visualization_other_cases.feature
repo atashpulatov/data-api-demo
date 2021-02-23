@@ -1,4 +1,5 @@
 @mac_chrome
+@11.3.1
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 3 -Import compound grid visualization (other cases)

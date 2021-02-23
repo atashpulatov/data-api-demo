@@ -2,6 +2,7 @@
 @windows_desktop
 @release_validation
 @ga_validation
+@11.3.1
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49100] Part 1. - Import Prompted Reports | Import multiple objects | Refresh | Edit - Prompts

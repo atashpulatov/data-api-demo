@@ -1,5 +1,6 @@
 @mac_chrome
 @release_validation
+@11.3.1
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC61043] - E2E with dossier containing all types of prompts (including nested prompts)

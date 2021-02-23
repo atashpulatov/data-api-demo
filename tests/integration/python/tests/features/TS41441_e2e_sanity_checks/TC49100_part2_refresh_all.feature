@@ -4,6 +4,7 @@
 @windows_chrome
 @release_validation
 @ga_validation
+@11.3.1
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49100] Part 2. - Import multiple objects | Refresh All

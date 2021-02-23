@@ -2,6 +2,7 @@
 @mac_chrome
 @release_validation
 @ga_validation
+@11.3.1
 Feature: TF9328 - Release Validation
 
   Scenario: [TC62630] - [Privileges] Log in with different users with different permissions (Office, Library, Web)
