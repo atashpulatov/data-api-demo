@@ -2,12 +2,11 @@ from framework.driver.driver_factory import DriverFactory
 from framework.pages_base.element_info import ElementInfo
 from framework.pages_base.image_element import ImageElement
 from framework.util.config_util import ConfigUtil
-from framework.util.const import DEFAULT_TIMEOUT
+from framework.util.const import Const
 
 
 class ElementGetUsingParent(ElementInfo):
     """
-    TODO: UPDATE
     Class providing methods for getting elements using a given parent element (relative search).
 
     It improves performance on Windows Desktop by allowing usage of image recognition in this scenario and helps
@@ -43,13 +42,12 @@ class ElementGetUsingParent(ElementInfo):
     def __init__(self):
         super().__init__()
 
-        driver_type = ConfigUtil.get_driver_type()
-        self.driver = DriverFactory().get_driver(driver_type)
+        self.driver = DriverFactory().get_driver()
 
         self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
 
     def get_element_by_name_using_parent(self, parent_selection_method, parent_selector, element_selector,
-                                         image_name=None, timeout=DEFAULT_TIMEOUT):
+                                         image_name=None, timeout=Const.DEFAULT_TIMEOUT):
         if image_name and self.image_recognition_enabled:
             return self._get_image_element_using_parent(
                 parent_selection_method, parent_selector,
@@ -62,7 +60,7 @@ class ElementGetUsingParent(ElementInfo):
 
     def _get_image_element_using_parent(self, parent_selection_method, parent_selector,
                                         element_selection_method_image, element_selector,
-                                        image_name=None, timeout=DEFAULT_TIMEOUT):
+                                        image_name=None, timeout=Const.DEFAULT_TIMEOUT):
         image_data_cached = self.image_util.get_image_data_by_image_name(image_name)
 
         if image_data_cached is not None:

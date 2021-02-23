@@ -48,3 +48,5 @@ is related to one Page in tested application. Example of Steps file: `tests/step
 1. Implement all methods in appropriate Pages (e.g. `close_last_notification_on_hover()` in
 `RightPanelTileWindowsDesktopPage`, `RightPanelTileBrowserPage` etc.) and ensure Pages are added to all Page Sets,
 see `Adding a new Page`.
+
+1. Add all necessary tags to your new test file. **Check here [full list of tags](list_of_tags.md).**

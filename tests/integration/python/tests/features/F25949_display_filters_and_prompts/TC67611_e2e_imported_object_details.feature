@@ -2,7 +2,10 @@
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67611] - Imported object details E2E
-    Given I logged in as default user
+    Given I initialized Excel
+      And I stored environment id in context
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

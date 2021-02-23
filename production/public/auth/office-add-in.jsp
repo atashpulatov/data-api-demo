@@ -21,7 +21,7 @@
   <script>
     var message = {
       type: 'auth-token',
-      payload: '<%=Encode.forJavaScript(authToken)%>'
+      payload: '<%=Encode.forJavaScriptBlock(authToken)%>'
     };
 
     var origin = location.origin || '*';

@@ -1,7 +1,7 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
-from framework.util.const import MEDIUM_TIMEOUT
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
 
@@ -47,7 +47,7 @@ class AddInLoginWindowsDesktopPage(BaseWindowsDesktopPage):
         if self.check_if_element_exists_by_name(
                 AddInLoginWindowsDesktopPage.AUTH_ERROR_TITLE_TEXT,
                 image_name=self.prepare_image_name(AddInLoginWindowsDesktopPage.AUTH_ERROR_TITLE_TEXT),
-                timeout=MEDIUM_TIMEOUT
+                timeout=Const.MEDIUM_TIMEOUT
         ):
             self.get_element_by_name(
                 AddInLoginWindowsDesktopPage.AUTH_ERROR_OK_BUTTON,
@@ -61,7 +61,7 @@ class AddInLoginWindowsDesktopPage(BaseWindowsDesktopPage):
         if self.check_if_element_exists_by_name(
                 AddInLoginWindowsDesktopPage.PRIVILEGES_ERROR_MESSAGE_TEXT,
                 image_name=self.prepare_image_name(AddInLoginWindowsDesktopPage.PRIVILEGES_ERROR_MESSAGE_TEXT_FILE),
-                timeout=MEDIUM_TIMEOUT
+                timeout=Const.MEDIUM_TIMEOUT
         ):
             self.get_element_by_name(
                 AddInLoginWindowsDesktopPage.PRIVILEGES_ERROR_TRY_AGAIN_BUTTON,

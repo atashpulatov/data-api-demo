@@ -1,8 +1,10 @@
 import time
 
+from selenium.webdriver.common.keys import Keys
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import SHORT_TIMEOUT, LONG_TIMEOUT
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 
 
 class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -23,7 +25,12 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
                         '/../following-sibling::Table[starts-with(@AutomationId, "id_mstr")][1]' \
                         '//Group[starts-with(@AutomationId, "ListBlockContents")])[%s]/Group[@Name="%s"]'
 
-    PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem/Table/DataItem/Edit'
+    PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem/Edit'
+    PROMPT_VALUE_ELEM_COMPLEX = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem/Table/DataItem/Edit'
+
+    PROMPT_DATE_HOUR = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem[3]/Edit[1]'
+    PROMPT_DATE_MINUTE = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem[3]/Edit[2]'
+    PROMPT_DATE_SECOND = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem[3]/Edit[3]'
 
     PROMPT_NAME_SEPARATOR = '.'
     PROMPT_NAME_IMAGE_PREFIX = 'prompt_title_'
@@ -31,7 +38,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_FIELD_LABEL = '//Group[@AutomationId="%s"]/Table[1]/DataItem[3]/Table[1]/DataItem[2]' % PROMPT_MAIN_CONTAINER
 
     def wait_for_run_button(self):
-        end_time = time.time() + LONG_TIMEOUT
+        end_time = time.time() + Const.LONG_TIMEOUT
 
         while end_time > time.time():
             run_button = self.get_element_by_accessibility_id(
@@ -49,15 +56,14 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         raise MstrException(f'Run button not exists or is not enabled.')
 
     def click_run_button(self):
-        prompt_field_label = self.get_add_in_main_element().get_element_by_xpath(
-            PromptWindowsDesktopPage.PROMPT_FIELD_LABEL
-        )
-
         self.get_element_by_accessibility_id(
             PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_ACCESSIBILITY_ID
         ).click()
 
-        prompt_field_label.wait_until_disappears()
+        self.wait_until_element_disappears_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_FIELD_LABEL,
+            self.get_add_in_main_element()
+        )
 
     def click_run_button_for_prompted_dossier_if_not_answered(self):
         if self._check_if_prompts_answer_window_is_open():
@@ -69,7 +75,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     def _check_if_prompts_answer_window_is_open(self):
         return self.check_if_element_exists_by_accessibility_id(
             PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER,
-            timeout=SHORT_TIMEOUT,
+            timeout=Const.SHORT_TIMEOUT,
             image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPT_MAIN_CONTAINER)
         )
 
@@ -130,6 +136,25 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
             raise MstrException(f'Prompt title does not exist: {prompt_number}.{prompt_name}')
 
     def select_answer_for_value_prompt(self, prompt_number, prompt_name, text):
+        prompt = self._get_prompt_for_entering_data(prompt_number, prompt_name)
+
+        prompt.click()
+        prompt.send_keys(text)
+
+    def _select_prompt_from_list(self, prompt_number, prompt_name):
+        prompt_list_elem_exists = self.get_add_in_main_element().check_if_element_exists_by_name(
+            PromptWindowsDesktopPage.PROMPT_LIST_ELEM % (prompt_number, prompt_name),
+            timeout=Const.SHORT_TIMEOUT
+        )
+
+        prompt_xpath = PromptWindowsDesktopPage.PROMPT_LIST_ELEM if prompt_list_elem_exists \
+            else PromptWindowsDesktopPage.PROMPT_WITH_ASTERISK_LIST_ELEM
+
+        self.get_add_in_main_element().get_element_by_name(
+            prompt_xpath % (prompt_number, prompt_name)
+        ).click()
+
+    def provide_answer_for_date_prompt(self, prompt_number, prompt_name, date, hour, minute, second):
         self._select_prompt_from_list(prompt_number, prompt_name)
 
         prompt = self.get_add_in_main_element().get_element_by_xpath(
@@ -137,22 +162,42 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         )
 
         prompt.click()
-        prompt.send_keys(text)
+        prompt.send_keys(date)
 
+        prompt_hour = self.get_add_in_main_element().get_element_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_DATE_HOUR % (prompt_number, prompt_name)
+        )
         self.press_tab()
-        self.press_tab()
+        prompt_hour.send_keys(hour)
 
-    def _select_prompt_from_list(self, prompt_number, prompt_name):
-        prompt_list_elem_exists = self.get_add_in_main_element().check_if_element_exists_by_name(
-            PromptWindowsDesktopPage.PROMPT_LIST_ELEM % (prompt_number, prompt_name),
-            timeout=SHORT_TIMEOUT
+        prompt_minute = self.get_add_in_main_element().get_element_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_DATE_MINUTE % (prompt_number, prompt_name)
+        )
+        self.press_tab()
+        prompt_minute.send_keys(minute)
+
+        prompt_second = self.get_add_in_main_element().get_element_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_DATE_SECOND % (prompt_number, prompt_name)
+        )
+        self.press_tab()
+        prompt_second.send_keys(second)
+
+    def clear_prompt_input(self, prompt_number, prompt_name):
+        prompt = self._get_prompt_for_entering_data(prompt_number, prompt_name)
+
+        prompt.click()
+        prompt.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
+
+    def _get_prompt_for_entering_data(self, prompt_number, prompt_name):
+        self._select_prompt_from_list(prompt_number, prompt_name)
+
+        value_prompt_is_regular = self.check_if_element_exists_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_VALUE_ELEM % (prompt_number, prompt_name)
         )
 
-        if prompt_list_elem_exists:
-            self.get_add_in_main_element().get_element_by_name(
-                PromptWindowsDesktopPage.PROMPT_LIST_ELEM % (prompt_number, prompt_name)
-            ).click()
-        else:
-            self.get_add_in_main_element().get_element_by_name(
-                PromptWindowsDesktopPage.PROMPT_WITH_ASTERISK_LIST_ELEM % (prompt_number, prompt_name)
-            ).click()
+        prompt_xpath = PromptWindowsDesktopPage.PROMPT_VALUE_ELEM if value_prompt_is_regular \
+            else PromptWindowsDesktopPage.PROMPT_VALUE_ELEM_COMPLEX
+
+        return self.get_add_in_main_element().get_element_by_xpath(
+            prompt_xpath % (prompt_number, prompt_name)
+        )

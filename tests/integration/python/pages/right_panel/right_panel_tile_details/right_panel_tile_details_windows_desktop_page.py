@@ -1,5 +1,5 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import MEDIUM_TIMEOUT
+from framework.util.const import Const
 
 
 class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -102,7 +102,7 @@ class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return self.get_add_in_right_panel_element().check_if_element_exists_by_xpath(
             selector,
-            image_name=self.prepare_image_name(selector)
+            timeout=Const.MEDIUM_TIMEOUT
         )
 
     def _get_property_value_collapsed_selector(self, name_list_type):
@@ -130,7 +130,7 @@ class RightPanelTileDetailsWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return not object_tile.check_if_element_exists_by_name(
             RightPanelTileDetailsWindowsDesktopPage.SHOW_DETAILS,
-            timeout=MEDIUM_TIMEOUT
+            timeout=Const.MEDIUM_TIMEOUT
         )
 
     def get_toggle_details_tooltip_text(self, object_number):

@@ -1,7 +1,8 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.config_util import ConfigUtil
-from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
+from framework.util.util import Util
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
 
 
@@ -16,20 +17,39 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
         self.excel_sheet_browser_page = ExcelSheetBrowserPage()
 
     def click_add_in_elem(self):
+        self._get_add_in_button().click()
+
+    def get_environment_id(self):
+        """
+        Gets environment id from Add-In name, used for preparing url for REST API calls.
+
+        E.g. for current_env_RV_NNNNNN it's NNNNNN.
+
+        :return: environment id.
+        """
+        add_in_environment = ConfigUtil.get_excel_desktop_add_in_import_data_name()
+
+        add_in_button = self._get_add_in_button()
+        add_in_name = add_in_button.text
+
+        return Util.extract_environment_id(add_in_environment, add_in_name)
+
+    def _get_add_in_button(self):
         add_in_environment = ConfigUtil.get_add_in_environment()
 
         i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+        while i < Const.ELEMENT_SEARCH_RETRY_NUMBER:
             self.focus_on_excel_frame()
 
             all_candidates = self.get_elements_by_css(ExcelMenuBrowserPage.ICON_ELEM)
-            found_environment_elements = list(filter(lambda item: add_in_environment in item.text, all_candidates))
+            found_environment_elements = list(filter(
+                lambda item: item.text.startswith(add_in_environment), all_candidates
+            ))
 
             if len(found_environment_elements) == 1:
-                found_environment_elements[0].click()
-                return
+                return found_environment_elements[0]
 
-            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
 
             i += 1
 

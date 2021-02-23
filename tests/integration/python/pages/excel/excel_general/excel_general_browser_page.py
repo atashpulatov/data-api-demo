@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import DEFAULT_LOCALE_NAME
+from framework.util.const import Const
 from framework.util.test_util import TestUtil
 from pages.excel.excel_login.excel_login_browser_page import ExcelLoginBrowserPage
 from pages.excel.excel_main.excel_main_browser_page import ExcelMainBrowserPage
@@ -14,7 +14,7 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
 
     EXCEL_URL = 'https://www.office.com/launch/excel'
 
-    def go_to_excel(self, locale_name=DEFAULT_LOCALE_NAME):
+    def go_to_excel(self, locale_name=Const.DEFAULT_LOCALE_NAME):
         self._go_to_excel_by_url()
 
         self._login_to_excel(locale_name)

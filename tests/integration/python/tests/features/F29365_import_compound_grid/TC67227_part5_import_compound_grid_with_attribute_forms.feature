@@ -4,8 +4,10 @@
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 5 - Import compound grid visualization with Attribute forms
-    Given I logged in as default user
-     When I clicked Import Data button
+    Given I initialized Excel
+
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "2F1922D211EABF0355790080EFD509F0" and selected "Objects in compound grids - Attribute forms"
       And I clicked Import button to open Import Dossier
@@ -14,7 +16,7 @@ Feature: F29365 - Import compound grid
       And I selected visualization "Simple forms"
       And I clicked import dossier
       And I closed last notification
-    
+
      Then cells ["A1", "B2", "C4"] should have values ["", "Profit", "$1,057,330"]
 
      When I selected cell "G1"

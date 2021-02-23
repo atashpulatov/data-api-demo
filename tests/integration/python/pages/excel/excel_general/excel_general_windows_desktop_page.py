@@ -1,7 +1,7 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.image_element import ImageElement
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
-from framework.util.const import DEFAULT_LOCALE_NAME
+from framework.util.const import Const
 from pages.excel.excel_main.excel_main_windows_desktop_page import ExcelMainWindowsDesktopPage
 
 
@@ -23,7 +23,7 @@ class ExcelGeneralWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.windows_desktop_workaround = WindowsDesktopWorkaround()
 
-    def go_to_excel(self, locale_name=DEFAULT_LOCALE_NAME):
+    def go_to_excel(self, locale_name=Const.DEFAULT_LOCALE_NAME):
         ImageElement.reset_excel_root_element(self.driver)
 
         self.get_element_by_name(

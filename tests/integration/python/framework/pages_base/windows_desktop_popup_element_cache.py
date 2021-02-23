@@ -1,6 +1,6 @@
 from framework.pages_base.base_page import BasePage
-from framework.util.const import ELEMENT_SEARCH_RETRY_NUMBER, ELEMENT_SEARCH_RETRY_INTERVAL
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 
 
 class WindowsDesktopMainAddInElementCache(BasePage):
@@ -101,14 +101,14 @@ class WindowsDesktopMainAddInElementCache(BasePage):
 
     def _get_all_add_in_elements(self):
         i = 0
-        while i < ELEMENT_SEARCH_RETRY_NUMBER:
+        while i < Const.ELEMENT_SEARCH_RETRY_NUMBER:
             mstr_elements = self.get_elements_by_name(WindowsDesktopMainAddInElementCache.ADD_IN_MAIN_ELEMENT)
 
             if mstr_elements:
                 return mstr_elements
 
             self.log(f'Element not found: [{WindowsDesktopMainAddInElementCache.ADD_IN_MAIN_ELEMENT}], try no: {i}')
-            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
 
             i += 1
 

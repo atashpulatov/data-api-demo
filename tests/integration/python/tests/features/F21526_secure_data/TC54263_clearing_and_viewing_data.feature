@@ -1,22 +1,25 @@
-@windows_desktop
+@todo_windows_desktop
 @windows_chrome
 @mac_chrome
 @release_validation
 Feature: F21526 - Secure data
 
   Scenario: [TC54263] - Clearing and viewing data
-    Given I logged in as default user
+    Given I initialized Excel
 
-     When I clicked Import Data button
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "778ECA4C11E990F800000080EFA56C55" and selected "Revenue by Region and Category - secure data"
-      And I clicked Import button
+      And I clicked Import button without checking results
+      And I waited for object to be imported successfully
      Then I closed last notification
 
      When I selected cell "E1"
       And I clicked Add Data button
       And I found object by ID "DA3AE08611E9919D00000080EFF597FB" and selected "Secure data - always working"
-      And I clicked Import button
+      And I clicked Import button without checking results
+      And I waited for object to be imported successfully
      Then I closed all notifications
       And cells ["A1", "B33", "E1", "F77"] should have values ["Region", "Music", "Country", "Sub-Saharan Africa"]
 

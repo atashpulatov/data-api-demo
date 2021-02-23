@@ -1,8 +1,8 @@
 import json
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import SHORT_TIMEOUT
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 
 
 class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
@@ -89,7 +89,7 @@ class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
     def _ensure_attribute_is_selected(self, attribute_element):
         if not attribute_element.check_if_element_exists_by_css(
                 ColumnsAndFiltersSelectionAttributesBrowserPage.CHECKED_CHECKBOX_CLASS,
-                timeout=SHORT_TIMEOUT):
+                timeout=Const.SHORT_TIMEOUT):
             attribute_element.click()
 
     def _click_forms(self, attribute_element, form_names):
@@ -107,14 +107,14 @@ class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
     def _ensure_attributes_forms_are_expanded(self, attribute_element):
         if attribute_element.check_if_element_exists_by_css(
                 ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED,
-                timeout=SHORT_TIMEOUT):
+                timeout=Const.SHORT_TIMEOUT):
             attribute_element.get_element_by_css(
                 ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_FORM_ARROW_COLLAPSED
             ).click()
 
         if not attribute_element.check_if_element_exists_by_css(
                 ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_FORM_ARROW_EXPANDED,
-                timeout=SHORT_TIMEOUT):
+                timeout=Const.SHORT_TIMEOUT):
             raise MstrException('Error while expanding attributes forms.')
 
     def select_attribute_by_number(self, object_number):

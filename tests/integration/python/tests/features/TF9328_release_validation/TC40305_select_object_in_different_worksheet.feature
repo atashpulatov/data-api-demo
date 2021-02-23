@@ -3,7 +3,9 @@
 Feature: TF9328 - Release Validation
 
   Scenario: [TC40305] - Selecting objects imported to the different worksheets and to adjacent columns/rows
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

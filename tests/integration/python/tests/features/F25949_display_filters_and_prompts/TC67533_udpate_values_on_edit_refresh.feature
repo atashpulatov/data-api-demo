@@ -1,10 +1,13 @@
-@windows_desktop
+@todo_windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67533] - Update values on edit and refresh
-    Given I logged in as default user
+    Given I initialized Excel
+      And I stored environment id in context
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

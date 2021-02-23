@@ -2,8 +2,8 @@ import requests
 
 from framework.pages_base.base_page import BasePage
 from framework.util.config_util import ConfigUtil
-from framework.util.const import TUTORIAL_PROJECT_ID
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 
 
 class RestApiPage(BasePage):
@@ -20,26 +20,25 @@ class RestApiPage(BasePage):
     def __init__(self):
         super().__init__()
 
-        self.__env_url = RestApiPage.ENV_URL % ConfigUtil.get_add_in_environment()
+    def certify_object(self, environment_id, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
+        self._change_certification_state(environment_id, object_id, True, project_id)
 
-    def certify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
-        self._change_certification_state(object_id, True, project_id)
+    def decertify_object(self, environment_id, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
+        self._change_certification_state(environment_id, object_id, False, project_id)
 
-    def decertify_object(self, object_id, project_id=TUTORIAL_PROJECT_ID):
-        self._change_certification_state(object_id, False, project_id)
+    def ensure_object_is_certified(self, environment_id, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
+        if not self.is_object_certified(environment_id, object_id, project_id):
+            self.certify_object(environment_id, object_id, project_id)
 
-    def ensure_object_is_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
-        if not self.is_object_certified(object_id, project_id):
-            self.certify_object(object_id, project_id)
+    def ensure_object_is_decertified(self, environment_id, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
+        if self.is_object_certified(environment_id, object_id, project_id):
+            self.decertify_object(environment_id, object_id, project_id)
 
-    def ensure_object_is_decertified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
-        if self.is_object_certified(object_id, project_id):
-            self.decertify_object(object_id, project_id)
+    def _change_certification_state(self, environment_id, object_id, certify, project_id=Const.TUTORIAL_PROJECT_ID):
+        cookies, custom_headers = self._get_cookies_and_headers(environment_id, project_id)
 
-    def _change_certification_state(self, object_id, certify, project_id=TUTORIAL_PROJECT_ID):
-        cookies, custom_headers = self._get_cookies_and_headers(project_id)
-
-        url = self.__env_url + RestApiPage.REST_API_OBJECT_CERTIFY_ENDPOINT % (object_id, str(certify).lower())
+        url = self._prepare_env_url(environment_id) + \
+              RestApiPage.REST_API_OBJECT_CERTIFY_ENDPOINT % (object_id, str(certify).lower())
 
         response = requests.put(
             url,
@@ -51,10 +50,10 @@ class RestApiPage(BasePage):
             raise MstrException(f'Error while accessing url: {url}, headers: {custom_headers}, cookies: {cookies}, '
                                 f'status: {response.status_code}, response content: {response.content}')
 
-    def is_object_certified(self, object_id, project_id=TUTORIAL_PROJECT_ID):
-        cookies, custom_headers = self._get_cookies_and_headers(project_id)
+    def is_object_certified(self, environment_id, object_id, project_id=Const.TUTORIAL_PROJECT_ID):
+        cookies, custom_headers = self._get_cookies_and_headers(environment_id, project_id)
 
-        url = self.__env_url + RestApiPage.REST_API_OBJECT_INFO_ENDPOINT % object_id
+        url = self._prepare_env_url(environment_id) + RestApiPage.REST_API_OBJECT_INFO_ENDPOINT % object_id
 
         response = requests.get(
             url,
@@ -69,8 +68,8 @@ class RestApiPage(BasePage):
 
         return response.json()['certifiedInfo']['certified']
 
-    def _get_cookies_and_headers(self, project_id):
-        auth_token, cookies = self._get_auth_token_and_cookies()
+    def _get_cookies_and_headers(self, environment_id, project_id):
+        auth_token, cookies = self._get_auth_token_and_cookies(environment_id)
 
         custom_headers = {
             RestApiPage.HEADER_NAME_AUTH_TOKEN: auth_token,
@@ -79,7 +78,7 @@ class RestApiPage(BasePage):
 
         return cookies, custom_headers
 
-    def _get_auth_token_and_cookies(self):
+    def _get_auth_token_and_cookies(self, environment_id):
         username, password = ConfigUtil.get_add_in_environment_default_credentials()
 
         payload = {
@@ -88,7 +87,7 @@ class RestApiPage(BasePage):
             'loginMode': 1
         }
 
-        url = self.__env_url + RestApiPage.REST_API_LOGIN_ENDPOINT
+        url = self._prepare_env_url(environment_id) + RestApiPage.REST_API_LOGIN_ENDPOINT
 
         response = requests.post(
             url,
@@ -103,3 +102,10 @@ class RestApiPage(BasePage):
         cookies = response.cookies
 
         return auth_token, cookies
+
+    def _prepare_env_url(self, environment_id):
+        if not environment_id:
+            raise MstrException('environment_id is not set, please call "I stored environment id in context" step '
+                                'before using REST API.')
+
+        return RestApiPage.ENV_URL % environment_id

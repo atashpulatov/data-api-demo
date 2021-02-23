@@ -1,6 +1,6 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import ELEMENT_SEARCH_RETRY_INTERVAL
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 
 
 class ExcelMainBrowserPage(BaseBrowserPage):
@@ -61,6 +61,6 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
             self.switch_to_excel_initial_window()
 
-            self.pause(ELEMENT_SEARCH_RETRY_INTERVAL)
+            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
 
         raise MstrException('Error while opening a new Workbook.')

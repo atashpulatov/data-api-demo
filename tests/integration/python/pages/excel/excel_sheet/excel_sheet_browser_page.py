@@ -1,7 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import DEFAULT_WAIT_AFTER_SEND_KEY
+from framework.util.const import Const
 from framework.util.excel_util import ExcelUtil
 
 
@@ -17,7 +17,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     FORMAT_CELLS_PROMPT_SAMPLE = 'sample'
 
-    FORMAT_CELLS_PROMPT_BUTTON_ELEM = '#buttonarea > .ewa-dlg-button'
+    FORMAT_CELLS_PROMPT_BUTTON_ELEM = 'WACDialogActionButton'
 
     WORKSHEETS_TABS = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div.ewa-stb-tabarea > ' \
                       'ul.ewa-stb-tabs > li'
@@ -29,7 +29,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     COLUMN_HEADER = '.ewrch-col-nosel > .ewr-chc'
 
-    EXCEL_COLUMN_OPTION_CSS = '.label-97'
+    EXCEL_COLUMN_OPTION_CSS = '.label-100'
 
     OPTION_DELETE_COLUMNS = 'Delete Columns'
 
@@ -92,13 +92,13 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         cell_input = self.get_element_by_id(ExcelSheetBrowserPage.CELL_TRAVERSAL_INPUT_ELEM)
 
         cell_input.click()
-        self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
         cells_uppercase = cells.upper()
         cell_input.send_keys(cells_uppercase)
 
         cell_input.send_keys(Keys.ENTER)
-        self.pause(DEFAULT_WAIT_AFTER_SEND_KEY)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
     def _get_selected_cell_value(self):
         cell_formatting_drop_down_elem = self.get_element_by_xpath(
@@ -119,7 +119,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
         formatted_value = ExcelUtil.format_cell_value(sample_input_elem_value)
 
-        value_elem = self.get_elements_by_css(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)[1]
+        value_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)
         value_elem.click()
 
         return formatted_value if formatted_value else ''
@@ -146,6 +146,7 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int).click()
 
     def remove_columns(self, column_name, number_of_columns):
+        # TODO investigate if it's possible to delete column using top menu or using keyboard keys
         self.focus_on_excel_frame()
 
         for i in range(0, int(number_of_columns)):

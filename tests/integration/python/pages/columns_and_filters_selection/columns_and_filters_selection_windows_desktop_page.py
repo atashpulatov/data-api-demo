@@ -1,8 +1,8 @@
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import SHORT_TIMEOUT
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 
 
@@ -127,6 +127,23 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.CLOSE_PREVIEW_BUTTON)
         ).click()
 
+    def is_subtotal_not_visible(self):
+        is_visible = self.get_add_in_main_element().check_if_element_exists_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS,
+            timeout=Const.MEDIUM_TIMEOUT
+        )
+
+        return not is_visible
+
+    def is_subtotal_visible(self):
+        is_visible = self.check_if_element_exists_by_name(
+            ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS,
+            image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.TOTALS_AND_SUBTOTALS),
+            timeout=Const.MEDIUM_TIMEOUT
+        )
+
+        return is_visible
+
     def is_button_enabled(self, button_name):
         self._validate_button_name(button_name)
 
@@ -147,6 +164,6 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     def is_back_button_visible(self):
         return self.check_if_element_exists_by_accessibility_id(
             ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON,
-            timeout=SHORT_TIMEOUT,
+            timeout=Const.SHORT_TIMEOUT,
             image_name=self.prepare_image_name(ColumnsAndFiltersSelectionWindowsDesktopPage.BACK_BUTTON)
         )

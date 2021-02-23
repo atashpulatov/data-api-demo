@@ -3,7 +3,10 @@
 Feature: F25946 - Display filters and prompts
 
   Scenario: [TC67486] - Imported objects details showing, hiding and updating
-    Given I logged in as default user
+    Given I initialized Excel
+      And I stored environment id in context
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

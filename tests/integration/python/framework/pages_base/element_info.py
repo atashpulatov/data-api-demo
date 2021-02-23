@@ -1,8 +1,8 @@
 from appium.webdriver.common.mobileby import MobileBy
 from selenium.webdriver.common.by import By
 
-from framework.util.const import DEFAULT_TIMEOUT
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.image_util import ImageUtil
 
 
@@ -35,27 +35,27 @@ class ElementInfo:
 
         self.image_util = ImageUtil()
 
-    def get_element_info_by_name(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None, safe=False):
+    def get_element_info_by_name(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None, safe=False):
         return self._get_element_info(By.NAME, selector, timeout, image_name, safe)
 
-    def get_element_info_by_css(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None, safe=False):
+    def get_element_info_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None, safe=False):
         return self._get_element_info(By.CSS_SELECTOR, selector, timeout, image_name, safe)
 
-    def get_element_info_by_id(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None, safe=False):
+    def get_element_info_by_id(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None, safe=False):
         return self._get_element_info(By.ID, selector, timeout, image_name, safe)
 
-    def get_element_info_by_mobile_accessibility_id(self, selector, timeout=DEFAULT_TIMEOUT,
+    def get_element_info_by_mobile_accessibility_id(self, selector, timeout=Const.DEFAULT_TIMEOUT,
                                                     image_name=None, safe=False):
         return self._get_element_info(MobileBy.ACCESSIBILITY_ID, selector, timeout, image_name, safe)
 
-    def get_element_info_by_xpath(self, selector, timeout=DEFAULT_TIMEOUT, image_name=None, safe=False):
+    def get_element_info_by_xpath(self, selector, timeout=Const.DEFAULT_TIMEOUT, image_name=None, safe=False):
         return self._get_element_info(By.XPATH, selector, timeout, image_name, safe)
 
-    def get_element_info_by_class_name(self, selector, timeout=DEFAULT_TIMEOUT,
+    def get_element_info_by_class_name(self, selector, timeout=Const.DEFAULT_TIMEOUT,
                                        image_name=None, safe=False):
         return self._get_element_info(By.CLASS_NAME, selector, timeout, image_name, safe)
 
-    def get_element_info_by_tag_name(self, selector, timeout=DEFAULT_TIMEOUT,
+    def get_element_info_by_tag_name(self, selector, timeout=Const.DEFAULT_TIMEOUT,
                                      image_name=None, safe=False):
         return self._get_element_info(By.TAG_NAME, selector, timeout, image_name, safe)
 
@@ -68,40 +68,40 @@ class ElementInfo:
         return self._get_element_info_using_parent(selector_type, selector, timeout, image_name, None, safe)
 
     def get_element_info_by_name_using_parent(self, parent_element, selector,
-                                              timeout=DEFAULT_TIMEOUT, image_name=None):
+                                              timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_info_using_parent(By.NAME, selector, timeout, image_name, parent_element)
 
     def get_element_info_by_css_using_parent(self, parent_element, selector,
-                                             timeout=DEFAULT_TIMEOUT, image_name=None):
+                                             timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_info_using_parent(
             By.CSS_SELECTOR, selector, timeout, image_name, parent_element
         )
 
     def get_element_info_by_id_using_parent(self, parent_element, selector,
-                                            timeout=DEFAULT_TIMEOUT, image_name=None):
+                                            timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_info_using_parent(By.ID, selector, timeout, image_name, parent_element)
 
     def get_element_info_by_mobile_accessibility_id_using_parent(self, parent_element, selector,
-                                                                 timeout=DEFAULT_TIMEOUT,
+                                                                 timeout=Const.DEFAULT_TIMEOUT,
                                                                  image_name=None):
         return self._get_element_info_using_parent(
-            By.ACCESSIBILITY_ID, selector, timeout, image_name, parent_element
+            MobileBy.ACCESSIBILITY_ID, selector, timeout, image_name, parent_element
         )
 
     def get_element_info_by_xpath_using_parent(self, parent_element, selector,
-                                               timeout=DEFAULT_TIMEOUT, image_name=None):
+                                               timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_info_using_parent(
             By.XPATH, selector, timeout, image_name, parent_element
         )
 
     def get_element_info_by_class_name_using_parent(self, parent_element, selector,
-                                                    timeout=DEFAULT_TIMEOUT, image_name=None):
+                                                    timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_info_using_parent(
             By.CLASS_NAME, selector, timeout, image_name, parent_element
         )
 
     def get_element_info_by_tag_name_using_parent(self, parent_element, selector,
-                                                  timeout=DEFAULT_TIMEOUT, image_name=None):
+                                                  timeout=Const.DEFAULT_TIMEOUT, image_name=None):
         return self._get_element_info_using_parent(
             By.TAG_NAME, selector, timeout, image_name, parent_element
         )

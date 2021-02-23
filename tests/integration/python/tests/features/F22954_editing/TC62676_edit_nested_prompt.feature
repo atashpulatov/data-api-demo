@@ -1,4 +1,4 @@
-@windows_desktop
+@todo_windows_desktop
 @windows_chrome
 @mac_chrome
 @release_validation
@@ -6,7 +6,9 @@ Feature: F22954 - Ability to edit data already imported to the workbook
 
   Scenario: [TC62676] Editing prompted reports functionality while report contains nested \
             prompts imported without Prepare Data
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
      When I found object by ID "ABC9ACA2496777EE3FB81BA08A3CF9AD" and selected "Report with nested prompt"

@@ -1,9 +1,12 @@
+@windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: F25933 - Range taken
 
   Scenario: [TC59878] - Importing objects with new sheet
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

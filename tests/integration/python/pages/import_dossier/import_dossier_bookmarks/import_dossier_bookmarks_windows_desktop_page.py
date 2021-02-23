@@ -1,5 +1,5 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.const import SHORT_TIMEOUT
+from framework.util.const import Const
 
 
 class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -41,7 +41,7 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
         )
 
         add_new_button_exists = bookmarks_frame.check_if_element_exists_by_name(
-            ImportDossierBookmarksWindowsDesktopPage.ADD_NEW_BUTTON, timeout=SHORT_TIMEOUT
+            ImportDossierBookmarksWindowsDesktopPage.ADD_NEW_BUTTON, timeout=Const.SHORT_TIMEOUT
         )
 
         if add_new_button_exists:
@@ -77,7 +77,7 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not bookmarks_frame.check_if_element_exists_by_name(
                 ImportDossierBookmarksWindowsDesktopPage.ERROR_DUPLICATE_NAME,
-                timeout=SHORT_TIMEOUT):
+                timeout=Const.SHORT_TIMEOUT):
             bookmarks_frame.get_element_by_name(
                 ImportDossierBookmarksWindowsDesktopPage.SAVE_BOOKMARK_BUTTON
             ).click()

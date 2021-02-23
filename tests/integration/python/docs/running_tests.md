@@ -188,13 +188,7 @@ where `driver_name` is one of available driver types (see [driver_type.py](drive
 `--tags=@tag_name`, specifies which tests to execute (only those tagged `@tag_name`), for simplicity use the same 
 values as for `driver_name` (`@windows_desktop`, `@windows_chrome`, `@mac_desktop`, `@mac_chrome`).
 
-Tags related to selecting tests for different tasks:
-
-- `@release_validation` - tag used for running the release validation test set (test cases with this tag should 
-be reviewed before each release validation),
-- `@ga_validation` - tag used for running the GA validation test set (test cases with this tag should be reviewed
-before each GA validation),
-- `@ci` - tag used for test cases which will be executed on the CI pipeline after each build.
+**Check [Full list of tags](list_of_tags.md) before running tests.**
 
 To execute only tests tagged @windows_desktop AND @release_validation use `--tags` multiple times:
 
@@ -207,7 +201,7 @@ tests execution. Works only when implemented for selected driver (see `-D driver
 `-D image_recognition_screenshots_folder=PATH\\TO\\SCREENSHOTS` specifies path to a folder where images used by
 image recognition are stored. For local test execution use relative path (e.g. `framework\\screenshots`) and for
 Jenkins triggered execution absolute path might be used to avoid removing already cached images before each test
-execution (e.g. `C:\\Users\\jenkins\\python_screenshots`).
+execution, as project folder is cleaned before each execution (e.g. `C:\\Users\\jenkins\\python_screenshots`).
 
 `-D connect_to_existing_session_enabled=True` enables (`True`) or disables (`False`) attaching to an existing Excel
 or session. Speeds up tests development allowing to e.g. skip first part of the test (see: Running tests using existing
@@ -219,9 +213,16 @@ session (see: Running tests using existing application session).
 `-D browser_existing_session_id=session_id` specifies `session_id` address used when attaching to an existing browser
 session (see: Running tests using existing application session).
 
+`-D debug_data_folder=PATH\\TO\\SCREENSHOTS` specifies path to a folder where debug data (screenshots and page sources)
+is stored, see `take_debug_screenshot_after_failure` and `log_page_source_after_failure`.
+
 `-D take_debug_screenshot_after_failure=False` enables (`True`) or disables (`False`) taking screenshots on test
 failure, useful for debug purposes, default: disabled. Screenshots are written to folder defined by
-`image_recognition_screenshots_folder` parameter. 
+`debug_data_folder` parameter. 
+
+`-D log_page_source_after_failure=False` enables (`True`) or disables (`False`) saving page sources on test
+failure, useful for debug purposes, default: disabled. Page sources are written to folder defined by
+`debug_data_folder` parameter. 
 
 `-D windows_desktop_excel_root_element_name=root_element_name` specifies Windows Desktop root Excel element name
 (e.g. `Book1 - Excel`) (see: Running tests using existing application session).

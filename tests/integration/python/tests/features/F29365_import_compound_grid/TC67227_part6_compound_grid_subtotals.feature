@@ -4,8 +4,10 @@
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 6 - Import compound grid visualization with totals/subtotals
-    Given I logged in as default user
-     When I clicked Import Data button
+    Given I initialized Excel
+
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "A6349ADB11EABF0954E40080EF7549F1" and selected "Objects in compound grids - Show Total"
       And I clicked Import button to open Import Dossier

@@ -1,20 +1,16 @@
-import hashlib
 import os
-import re
 import time
-from io import BytesIO
 
 import cv2
+import hashlib
 from PIL import Image
+from io import BytesIO
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-# from selenium.webdriver.support import expected_conditions as ec
-# from selenium.webdriver.support.wait import WebDriverWait
 
 from framework.driver.driver_factory import DriverFactory
 from framework.util.config_util import ConfigUtil
-from framework.util.const import DEFAULT_IMAGE_TIMEOUT, DEFAULT_WAIT_BETWEEN_CHECKS
-from framework.util.const import DEFAULT_TIMEOUT
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.image_data import ImageData
 from framework.util.util import Util
 
@@ -31,9 +27,7 @@ class ImageUtil:
     def __init__(self):
         super().__init__()
 
-        driver_type = ConfigUtil.get_driver_type()
-
-        self.driver = DriverFactory().get_driver(driver_type)
+        self.driver = DriverFactory().get_driver()
 
         self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
 
@@ -41,7 +35,6 @@ class ImageUtil:
 
     SCREENSHOT_FILE_EXTENSION = '.png'
 
-    TO_ALPHA_REGEX = re.compile(r'\W')
     FILE_NAME_MAX_LENGTH = 100
     FILE_NAME_SEPARATOR = '_'
 
@@ -125,7 +118,8 @@ class ImageUtil:
         except TimeoutException:
             pass
 
-        self.driver.implicitly_wait(DEFAULT_TIMEOUT)
+        finally:
+            self.driver.implicitly_wait(Const.DEFAULT_TIMEOUT)
 
         Util.log(f'Element not found by selector: [{selector}], time: [{time.time() - start_time}]')
 
@@ -159,7 +153,7 @@ class ImageUtil:
         if image is None:
             return None
 
-        end_time = time.time() + DEFAULT_IMAGE_TIMEOUT
+        end_time = time.time() + Const.DEFAULT_IMAGE_TIMEOUT
         i = 0
 
         while end_time > time.time():
@@ -179,7 +173,7 @@ class ImageUtil:
 
                 return coordinates
 
-            Util.pause(DEFAULT_WAIT_BETWEEN_CHECKS)
+            Util.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
         Util.log(f'Image not found, name: [{image_name}], tries: {i}, timeout: [{end_time - time.time()}].')
 
@@ -222,8 +216,11 @@ class ImageUtil:
 
         return None
 
-    def _save_current_full_screen(self, current_full_screenshot_file_name=CURRENT_SCREENSHOT_FILE_NAME):
-        current_full_screen_file_path = self._prepare_image_file_path(current_full_screenshot_file_name)
+    def _save_current_full_screen(self,
+                                  current_full_screenshot_file_name=CURRENT_SCREENSHOT_FILE_NAME,
+                                  folder_name=None):
+
+        current_full_screen_file_path = self._prepare_image_file_path(current_full_screenshot_file_name, folder_name)
 
         image = self._get_full_screen_image()
         image.save(current_full_screen_file_path)
@@ -232,7 +229,11 @@ class ImageUtil:
 
     def _save_element_image(self, element_image, file_name_prefix):
         if file_name_prefix and self.image_recognition_enabled:
-            self._save_image(element_image, file_name_prefix)
+            self._save_image(
+                element_image,
+                file_name_prefix,
+                ConfigUtil.get_image_recognition_screenshots_folder()
+            )
 
     def get_element_image(self, element):
         screenshot_image = self._get_full_screen_image()
@@ -267,19 +268,19 @@ class ImageUtil:
             'bottom': bottom
         }
 
-    def _prepare_image_file_path(self, file_name_prefix):
-        screenshots_folder = self._get_screenshots_folder()
+    def _prepare_image_file_path(self, file_name_prefix, folder_name=None):
+        screenshots_folder = self._get_screenshots_folder(folder_name)
 
-        file_name_prefix_alpha = ImageUtil.TO_ALPHA_REGEX.sub('_', file_name_prefix)
+        file_name_prefix_alpha = Util.normalize_file_name(file_name_prefix)
         file_name_shortend = self._shorten_file_name(file_name_prefix_alpha)
-        file_name = ''.join((file_name_shortend.lower(), ImageUtil.SCREENSHOT_FILE_EXTENSION))
+        file_name = ''.join((file_name_shortend, ImageUtil.SCREENSHOT_FILE_EXTENSION))
 
         file_path = os.path.join(screenshots_folder, file_name)
 
         return file_path
 
-    def _get_screenshots_folder(self):
-        screenshots_folder = ConfigUtil.get_image_recognition_screenshots_folder()
+    def _get_screenshots_folder(self, folder_name):
+        screenshots_folder = folder_name if folder_name else ConfigUtil.get_image_recognition_screenshots_folder()
 
         if os.path.exists(screenshots_folder):
             return screenshots_folder
@@ -337,19 +338,22 @@ class ImageUtil:
         :param file_name_prefix: Debug file names prefix.
         """
 
-        file_name_prefix_with_timestamp = f'{file_name_prefix}{time.time()}_'
+        current_datetime_string = Util.prepare_current_datetime_string()
+        file_name_prefix_with_timestamp = f'{file_name_prefix}{current_datetime_string}_'
 
         self._save_current_full_screen(
-            file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX
+            file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX,
+            ConfigUtil.get_debug_data_folder()
         )
 
         if element:
             element_image = self.get_element_image(element)
             self._save_image(
                 element_image,
-                file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX
+                file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_CURRENT_ELEMENT_FILE_NAME_PREFIX,
+                ConfigUtil.get_debug_data_folder()
             )
 
-    def _save_image(self, image, file_name_prefix):
-        element_file_name = self._prepare_image_file_path(file_name_prefix)
+    def _save_image(self, image, file_name_prefix, folder_name):
+        element_file_name = self._prepare_image_file_path(file_name_prefix, folder_name=folder_name)
         image.save(element_file_name)

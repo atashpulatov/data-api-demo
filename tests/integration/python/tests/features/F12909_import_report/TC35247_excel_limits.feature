@@ -1,10 +1,12 @@
-@windows_desktop
+@todo_windows_desktop
 @windows_chrome
 @mac_chrome
 Feature: F12909 - Import report
 
   Scenario: [TC35247] - Importing reports larger than Excel rows & project limitation
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

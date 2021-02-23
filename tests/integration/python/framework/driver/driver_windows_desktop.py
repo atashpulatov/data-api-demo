@@ -5,8 +5,8 @@ from selenium.common.exceptions import WebDriverException
 
 from framework.driver.abstract_driver import AbstractDriver
 from framework.util.config_util import ConfigUtil
-from framework.util.const import DEFAULT_TIMEOUT
-from framework.util.exception.MstrException import MstrException
+from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.util import Util
 
 
@@ -78,7 +78,7 @@ class DriverWindowsDesktop(AbstractDriver):
     def _initialize_driver(self, host, capabilities):
         try:
             driver = webdriver.Remote(command_executor=host, desired_capabilities=capabilities)
-            driver.implicitly_wait(DEFAULT_TIMEOUT)
+            driver.implicitly_wait(Const.DEFAULT_TIMEOUT)
 
             Util.pause(4)
 

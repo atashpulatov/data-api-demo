@@ -4,7 +4,9 @@
 Feature: F25943 - Notifications side panel
 
   Scenario: [TC68123] - Removing the object and restarting plugin without closing notification
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

@@ -4,6 +4,7 @@ from framework.driver.driver_type import DRIVER_TYPE_MAC_CHROME, DRIVER_TYPE_MAC
     DRIVER_TYPE_WINDOWS_CHROME
 from framework.driver.driver_windows_chrome import DriverWindowsChrome
 from framework.driver.driver_windows_desktop import DriverWindowsDesktop
+from framework.util.config_util import ConfigUtil
 
 
 class DriverFactory:
@@ -32,7 +33,9 @@ class DriverFactory:
     driver = None
     driver_type = None
 
-    def get_driver(self, driver_type):
+    def get_driver(self):
+        driver_type = ConfigUtil.get_driver_type()
+
         if not DriverFactory.driver:
             DriverFactory.driver_type = driver_type
             DriverFactory.driver = DriverFactory.DRIVER_DEF[driver_type]()

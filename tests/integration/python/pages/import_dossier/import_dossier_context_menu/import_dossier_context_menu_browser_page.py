@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.exception.MstrException import MstrException
+from framework.util.exception.mstr_exception import MstrException
 
 
 class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
@@ -137,8 +137,8 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
             attribute_name
         ).right_click()
 
-    def select_exclude_for_attribute_element(self, exclude, attribute_name,
-                                             visualization_name):  # TODO visualization_name
+    # TODO visualization_name
+    def select_exclude_for_attribute_element(self, exclude, attribute_name, visualization_name):
         """
         Excludes given attribute element from visualization context menu.
 

@@ -1,5 +1,5 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.const import LONG_TIMEOUT, SHORT_TIMEOUT, TEXT_CONTENT_ATTRIBUTE
+from framework.util.const import Const
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -34,14 +34,14 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.NOTIFICATION_TEXT_ELEM,
-            TEXT_CONTENT_ATTRIBUTE,
+            Const.TEXT_CONTENT_ATTRIBUTE,
             ColumnsAndFiltersSelectionBrowserPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
         )
 
     def ensure_popup_title_is_correct(self, title):
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.REPORT_TITLE,
-            TEXT_CONTENT_ATTRIBUTE,
+            Const.TEXT_CONTENT_ATTRIBUTE,
             title
         )
 
@@ -75,12 +75,12 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def click_import_button(self):
         self.click_import_button_without_success_check()
 
-        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=LONG_TIMEOUT)
+        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=Const.LONG_TIMEOUT)
 
     def click_import_button_to_duplicate(self):
         self.click_import_button_without_success_check()
 
-        self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=LONG_TIMEOUT)
+        self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully(timeout=Const.LONG_TIMEOUT)
 
     def click_back_button(self):
         self.focus_on_add_in_popup_frame()
@@ -115,10 +115,13 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
             ColumnsAndFiltersSelectionBrowserPage.CLOSE_PREVIEW_TEXT
         ).click()
 
+    def is_subtotal_not_visible(self):
+        return not self.is_subtotal_visible()
+
     def is_subtotal_visible(self):
         self.focus_on_add_in_popup_frame()
 
         return self.check_if_element_exists_by_css(
             ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE_CONTAINER,
-            timeout=SHORT_TIMEOUT
+            timeout=Const.SHORT_TIMEOUT
         )

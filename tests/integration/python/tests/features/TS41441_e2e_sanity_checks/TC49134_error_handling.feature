@@ -1,10 +1,13 @@
+@ci_pipeline_rv_windows_desktop @ci_pipeline_premerge_windows_desktop @ci_pipeline_postmerge_windows_desktop @ci_pipeline_daily_windows_desktop @ci_pipeline_all_windows_desktop
 @windows_desktop
 @release_validation
 @ga_validation
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49134] - Error Handling
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 

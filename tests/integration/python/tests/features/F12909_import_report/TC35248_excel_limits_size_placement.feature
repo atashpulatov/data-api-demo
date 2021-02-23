@@ -3,7 +3,9 @@
 Feature: F12909 - Import report
 
   Scenario: [TC35248] - Importing objects exceeding Excel size and placement limits
-    Given I logged in as default user
+    Given I initialized Excel
+
+     When I logged in as default user
       And I selected cell "A1048576"
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
