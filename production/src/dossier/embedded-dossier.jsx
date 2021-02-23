@@ -138,7 +138,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         return Promise.resolve(authToken);
       },
       placeholder: container,
-      enableCollaboration: true,
+      enableCollaboration: false,
       filterFeature: {
         enabled: true,
         edit: true,
@@ -173,7 +173,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         email: true,
         export: true,
         download: true,
-        shareDossier: true,
+        shareDossier: false,
       },
       tocFeature: { enabled: true, },
       uiMessage: {
