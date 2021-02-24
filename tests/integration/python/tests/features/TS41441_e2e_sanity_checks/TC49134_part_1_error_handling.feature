@@ -1,5 +1,7 @@
 @ci_pipeline_rv_windows_desktop @ci_pipeline_premerge_windows_desktop @ci_pipeline_postmerge_windows_desktop @ci_pipeline_daily_windows_desktop @ci_pipeline_all_windows_desktop
+@ci_pipeline_rv_mac_chrome @ci_pipeline_premerge_mac_chrome @ci_pipeline_postmerge_mac_chrome @ci_pipeline_daily_mac_chrome @ci_pipeline_all_mac_chrome
 @windows_desktop
+@mac_chrome
 @release_validation
 @ga_validation
 @11.3.1
