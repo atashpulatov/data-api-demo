@@ -58,7 +58,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     ACTION_STATUS_PENDING = 'Pending'
 
-    def wait_for_import_to_finish_successfully(self, timeout=Const.DEFAULT_TIMEOUT):
+    def wait_for_import_to_finish_successfully(self, timeout=Const.LONG_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
 
     def wait_for_duplicate_object_to_finish_successfully(self, timeout=Const.DEFAULT_TIMEOUT):

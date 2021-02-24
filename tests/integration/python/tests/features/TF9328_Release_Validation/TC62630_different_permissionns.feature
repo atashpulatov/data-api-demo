@@ -6,7 +6,9 @@
 Feature: TF9328 - Release Validation
 
   Scenario: [TC62630] - [Privileges] Log in with different users with different permissions (Office, Library, Web)
-    Given I logged in with username "b" and password "b"
+    Given I initialized Excel
+
+     When I logged in with username "b" and password "b"
      Then I verified that I saw "No MicroStrategy for Office privileges" message and I clicked Try Again
 
      When I logged in with username "No library" and empty password

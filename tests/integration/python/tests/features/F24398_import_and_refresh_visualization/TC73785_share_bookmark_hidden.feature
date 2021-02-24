@@ -1,7 +1,6 @@
-@disabled_mac_chrome
+@mac_chrome
 @release_validation
-
-#TODO enable mac chrome  when fix will be implemented
+@11.3.1
 
 Feature: F34504 - Removal of sharing bookmark button from embedded library experience that is part of the federated analytics Office 365 Excel client
 
