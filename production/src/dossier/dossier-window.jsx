@@ -100,16 +100,12 @@ export default class DossierWindowNotConnected extends React.Component {
           const definition = await mstrObjectRestService
             .getDossierInstanceDefinition(chosenProjectId, chosenObjectId, instanceId);
 
-          const vizMap = new Set();
-          definition.chapters.forEach(chapter => {
-            chapter.pages.forEach(page => {
-              page.visualizations.forEach(viz => {
-                vizMap.add(viz.key);
-              });
-            });
+          const currentChapter = definition.chapters.find(chapter => chapter.key === chapterKey);
+          const vizKeys = new Set();
+          currentChapter.pages.forEach(page => {
+            page.visualizations.forEach(viz => vizKeys.add(viz.key));
           });
-
-          if (!vizMap.has(visualizationKey)) {
+          if (!vizKeys.has(visualizationKey)) {
             throw new Error('Selected visualization is not included in dossier instance definition.');
           }
         };

@@ -78,6 +78,7 @@ describe('Dossierwindow', () => {
       .spyOn(mstrObjectRestService, 'getDossierInstanceDefinition')
       .mockImplementationOnce(async () => ({
         chapters: [{
+          key: 'C40',
           pages: [{
             visualizations: [{ key: 'W50' }]
           }],
@@ -117,6 +118,7 @@ describe('Dossierwindow', () => {
       .spyOn(mstrObjectRestService, 'getDossierInstanceDefinition')
       .mockImplementationOnce(async () => ({
         chapters: [{
+          key: 'C40',
           pages: [{
             visualizations: [{ key: 'W50' }]
           }],
@@ -156,6 +158,7 @@ describe('Dossierwindow', () => {
       .spyOn(mstrObjectRestService, 'getDossierInstanceDefinition')
       .mockImplementationOnce(async () => ({
         chapters: [{
+          key: 'C40',
           pages: [{
             visualizations: []
           }],
