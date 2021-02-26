@@ -36,7 +36,6 @@ function startAuthentication() {
       }
     })
     .catch((e) => {
-      console.log(e);
       removeStorageItem();
       showLoginBtn();
     });
@@ -50,7 +49,7 @@ function goToReact() {
   try {
     if (popup) { popup.close(); }
   } finally {
-    window.location.replace(`${libraryUrl}/apps/addin-mstr-office/index.html?${QUERY}`);
+    window.location.replace(encodeURI(`${libraryUrl}/apps/addin-mstr-office/index.html?${QUERY}`));
   }
 }
 
@@ -73,7 +72,7 @@ function verifyToken() {
         // No privileges
         logout().finally(() => {
           const locale = Office.context.displayLanguage || navigator.language;
-          window.location.replace(`${libraryUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
+          window.location.replace(encodeURI(`${libraryUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`));
         });
       }
       // Not valid token
