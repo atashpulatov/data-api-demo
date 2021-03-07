@@ -28,6 +28,8 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
+   #TODO add validation for defect DE197071 and DE197073
+
      Then cell "I11" should have value "$311,597"
 
      When I selected cell "H40"
