@@ -43,5 +43,6 @@ module.exports = {
   officeVersion: {
     office365: 'Microsoft Office 365',
     office2019: 'Microsoft Office 2019'
-  }
+  },
+  batchSize: 10,
 };
