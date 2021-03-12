@@ -80,10 +80,23 @@ async function getTCDetailsFromRally(formattedID) {
     .catch(() => { throw Error(`Couldn't get ${formattedID} details`); });
 }
 
+async function getTCListFromTestSet(testSet) {
+  // URL to list of Test Cases under the Test Set
+  const { TestSet } = await getDataFromRally(testSet);
+  const testCasesUrl = TestSet.TestCases._ref;
+  // URL with result page size extended to 1000
+  const tCUrlWithPageSize = testCasesUrl.concat('?pagesize=1000');
+
+  // List of Test Cases under the Test Set
+  const { QueryResult: testCasesList } = await getDataFromRally(tCUrlWithPageSize);
+  return testCasesList.Results;
+}
+
 module.exports = {
   getOwner: getOwner,
   getTestSet: getTestSet,
   getRallyTCUrl: getRallyTCUrl,
   getTesterUrl: getTesterUrl,
-  getDataFromRally: getDataFromRally
+  getDataFromRally: getDataFromRally,
+  getTCListFromTestSet: getTCListFromTestSet
 }
