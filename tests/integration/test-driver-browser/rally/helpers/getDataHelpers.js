@@ -61,7 +61,7 @@ function getTesterUrl(testerEmail) {
 * @param {String} formattedID Formatted Test Case ID (e.g. 'TC12567')
 * @returns {String} URL to Test Case endpoint
 */
-function getRallyTCUrl(formattedID) {
+async function getRallyTCUrl(formattedID) {
   const formattedIDUrl = `${rallyConfig.apiUrl}/testcase/?query=(FormattedID%20%3D%20%22${formattedID}%22)`;
   return getDataFromRally(formattedIDUrl)
     .then(({ QueryResult }) => QueryResult.Results[0]._ref)
