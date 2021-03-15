@@ -80,7 +80,7 @@ async function createManualBatchArray(testCaseArray) {
       const batchItem = createBatchItem({build, date: today, testCase, verdict, tester: testerUrl, testSet, duration, notes, browser, env, release, exportApp, OS, language});
       batch.push(batchItem);
       }
-    return {Batch: batch };
+    return { Batch: batch };
   } catch (error) {
     console.error(error);
     process.exit(1);
@@ -154,7 +154,7 @@ async function createAutomatedBatchArray(testCaseArray) {
     console.error(error);
     process.exit(1);
   }
-  return {Batch : batch}
+  return { Batch: batch }
 };
 
 /**
