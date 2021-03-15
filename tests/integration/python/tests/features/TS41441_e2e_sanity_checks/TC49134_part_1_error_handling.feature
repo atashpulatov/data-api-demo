@@ -4,7 +4,7 @@
 @mac_chrome
 @release_validation
 @ga_validation
-@11.3.1
+
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC49134] - Error Handling and clear data part 1

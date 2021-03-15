@@ -3,7 +3,7 @@
 @mac_chrome
 #@mac_desktop
 @release_validation
-@11.3.1
+
 Feature: F25932 - Import attribute forms in separate columns
 
   Scenario: [TC59867] [Attribute forms] Import report using all types of "Display attribute form names"

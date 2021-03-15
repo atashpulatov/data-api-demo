@@ -1,7 +1,7 @@
 @windows_desktop
 @mac_chrome
 @release_validation
-@11.3.1
+
 Feature: F31681 - Authentication and Prepare Data workflow improvements
 
   Scenario: [TC67260] Improve usability of the add-in

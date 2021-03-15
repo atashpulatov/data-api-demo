@@ -1,7 +1,7 @@
 @mac_chrome
 @windows_chrome
 @release_validation
-@11.3.1
+@ga_validation
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 5 - Import compound grid visualization with Attribute forms
