@@ -11,6 +11,7 @@ const today = new Date();
  *
  * @returns {Promise} Promise to be resolved when the Test Case result is uploaded
  */
+// TODO investigate why some ofe the resulta are not updated
 async function updateRallyTCResult(batch) {
   const options = {
     method: 'POST',

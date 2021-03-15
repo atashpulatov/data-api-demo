@@ -1,4 +1,5 @@
 @release_validation
+@11.3.1
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC62674] - E2E Editing all types of prompted reports, except nested
