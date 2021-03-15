@@ -80,6 +80,12 @@ async function getTCDetailsFromRally(formattedID) {
     .catch(() => { throw Error(`Couldn't get ${formattedID} details`); });
 }
 
+/**
+* Returns Test Case list under the specified TS
+*
+* @param {String} testSet Formatted Test Case ID (e.g. 'TC12567')
+* @returns {Object} Object contatining Test Cases under the given Test Set
+*/
 async function getTCListFromTestSet(testSet) {
   // URL to list of Test Cases under the Test Set
   const { TestSet } = await getDataFromRally(testSet);
