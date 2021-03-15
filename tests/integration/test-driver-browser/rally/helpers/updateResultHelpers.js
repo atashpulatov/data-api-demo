@@ -21,6 +21,7 @@ async function updateRallyTCResult(batch) {
   return fetch(strings.batchURL, options)
     .then(result => result.json());
 }
+
 /**
  * Upload Test Case results from manual execution to Rally
  *
@@ -76,8 +77,7 @@ async function createManualBatchArray(testCaseArray) {
   try {
     for (let i = 0; i < testCaseArray.length; i++) {
       const batchParameters = await getManualBatchParameters(testCaseArray[i])
-      const { build, testCase, verdict, testerUrl, testSet, duration, notes, browser, env, release, exportApp, OS, language } = batchParameters;
-      const batchItem = createBatchItem({build, date: today, testCase, verdict, tester: testerUrl, testSet, duration, notes, browser, env, release, exportApp, OS, language});
+      const batchItem = createBatchItem({date: today, ...batchParameters});
       batch.push(batchItem);
       }
     return { Batch: batch };
@@ -95,19 +95,23 @@ async function createManualBatchArray(testCaseArray) {
  * @returns {object} containing data that will be added to batch array that will be uploaded to Rally
  */
 async function getManualBatchParameters(testCaseResult) {
+  const { verdict } = testCaseResult;
+
   let testerUrl = '';
   if (rallyConfig.email !== '') {
     testerUrl = await getDataHelper.getTesterUrl(rallyConfig.email);
   } else {
     throw Error('Add your email to rallyconfig.js');
   }
+
   const tcUrl = await getDataHelper.getRallyTCUrl(testCaseResult.testCaseId);
   const testCase = tcUrl.split('v2.0')[1];
-  const { verdict } = testCaseResult;
+
   let testSet = '';
   if (rallyConfig.manual.testSet !== '') {
     testSet = await getDataHelper.getTestSet(rallyConfig.manual.testSet);
   }
+
   const { build, duration, notes, browser, release, env, exportApp, OS, language } = rallyConfig.manual;
   return { testerUrl, testCase, verdict, testSet, build, duration, notes, browser, release, env, exportApp, OS, language }
 }
@@ -118,7 +122,6 @@ async function getManualBatchParameters(testCaseResult) {
  * @param {Array} testCaseArray Array of objects (test results) to be uploaded to Rally
  * @returns {Array} Array of JS objects containing test results parsed to the format that can be uploaded to Rally
  */
-
 async function createAutomatedBatchArray(testCaseArray) {
   const batch= [];
   let testSet = '';
@@ -138,17 +141,19 @@ async function createAutomatedBatchArray(testCaseArray) {
       // Get parameters with which the results will be uploaded to Rally
       const batchParameters = await getAutomatedBatchParameters(testCaseArray[i]);
       const {
-        duration, browser, verdict, build, release, testCaseId, OS, notes, exportApp, tcUrl, env, language, testCase, owner
+        duration, browser, verdict, build, release, testCaseId, OS, notes, exportApp, tcUrl, env, language, testCase, testerUrl
       } = batchParameters;
       // If there is a TS added in rallyConfig, check if the TC belongs to this TS
       if (rallyConfig.automation.testSet !== '') {
-        if (testCasesUrlList.filter(testCaseUrl => testCaseUrl === tcUrl).length === 0) {
-          continue;
+        if (testCasesUrlList.filter(testCaseUrl => testCaseUrl === tcUrl).length !== 0) {
+          const batchItem = createBatchItem(
+            {build, date: today, testCase, verdict, testerUrl, testSet, duration, notes, browser, env, release, exportApp, OS, language}
+            );
+
+          batch.push(batchItem);
+          console.log(`${testCaseId} result will be added to Rally.`);
         }
       }
-      const batchItem = createBatchItem({build, date: today, testCase, verdict, tester: owner, testSet, duration, notes, browser, env, release, exportApp, OS, language})
-      batch.push(batchItem);
-      console.log(`${testCaseId} result will be added to Rally.`);
     }
   } catch (error) {
     console.error(error);
@@ -165,14 +170,19 @@ async function createAutomatedBatchArray(testCaseArray) {
  * @returns {object} containing data that will be added to batch array that will be uploaded to Rally
  */
 async function getAutomatedBatchParameters(testCaseResult) {
+  const { env, language } = rallyConfig.automation;
+
   const {
     duration, browser, verdict, build, release, testCaseId, OS, notes, exportApp
   } = testCaseResult;
-  const { env, language } = rallyConfig.automation;
+
+
   const tcUrl = await getDataHelper.getRallyTCUrl(testCaseId);
   const testCase = tcUrl.split('v2.0')[1];
-  const owner = await getDataHelper.getOwner(testCaseId);
-  return { duration, browser, verdict, build, release, testCaseId, OS, notes, exportApp, tcUrl, env, language, testCase, owner }
+
+  const testerUrl = await getDataHelper.getOwner(testCaseId);
+
+  return { duration, browser, verdict, build, release, testCaseId, OS, notes, exportApp, tcUrl, env, language, testCase, testerUrl }
 }
 
 /**
@@ -181,8 +191,7 @@ async function getAutomatedBatchParameters(testCaseResult) {
  * @param {Object} Object containing data that will be added to Body of the request sent to upload results to Rally
  * @returns {Object} batch item
  */
-
-function createBatchItem({ build, date, testCase, verdict, tester, testSet, duration, notes, browser, env, release, exportApp, OS, language }) {
+function createBatchItem({ build, date, testCase, verdict, testerUrl, testSet, duration, notes, browser, env, release, exportApp, OS, language }) {
   return {
     Entry: {
       Path: '/testcaseresult/create',
@@ -193,7 +202,7 @@ function createBatchItem({ build, date, testCase, verdict, tester, testSet, dura
           Date: date,
           Testcase: testCase,
           Verdict: verdict,
-          Tester: tester,
+          Tester: testerUrl,
           TestSet: testSet,
           Duration: duration,
           Notes: notes,
