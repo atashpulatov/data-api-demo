@@ -24,6 +24,8 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
     SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
+    DISABLED_ATTRIBUTE = 'disabled'
+
     def __init__(self):
         super().__init__()
 
@@ -123,5 +125,19 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         return self.check_if_element_exists_by_css(
             ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE_CONTAINER,
+            timeout=Const.SHORT_TIMEOUT
+        )
+
+    def is_button_enabled(self, button_name):
+        self.focus_on_add_in_popup_frame()
+
+        element = self.get_element_by_id(ColumnsAndFiltersSelectionBrowserPage.IMPORT_BUTTON_ELEM)
+        return element.get_attribute(ColumnsAndFiltersSelectionBrowserPage.DISABLED_ATTRIBUTE) is None
+
+    def is_back_button_visible(self):
+        self.focus_on_add_in_popup_frame()
+
+        return self.check_if_element_exists_by_id(
+            ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_ELEM,
             timeout=Const.SHORT_TIMEOUT
         )
