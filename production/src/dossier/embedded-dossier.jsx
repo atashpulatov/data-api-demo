@@ -173,6 +173,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         email: true,
         export: true,
         download: true,
+        shareDossier: false,
       },
       tocFeature: { enabled: true, },
       uiMessage: {

@@ -86,29 +86,51 @@ export default class DossierWindowNotConnected extends React.Component {
 
       if (!vizualizationsData.find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey))) {
         let isSupported = true;
-        try {
-          await mstrObjectRestService.fetchVisualizationDefinition({
+
+        const checkIfVizDataCanBeImported = async () => {
+          mstrObjectRestService.fetchVisualizationDefinition({
             projectId: chosenProjectId,
             objectId: chosenObjectId,
             instanceId,
             visualizationInfo: { chapterKey, visualizationKey }
           });
-        } catch (error) {
-          console.error(error);
-          const { ERR009 } = errorCodes;
-          if (error.response && error.response.body.code === ERR009) {
-          // Close popup if session expired
-            popupHelper.handlePopupErrors(error);
-          } else {
-            isSupported = false;
+        };
+
+        const checkIfVizIsInDossierInstanceDefinition = async () => {
+          const definition = await mstrObjectRestService
+            .getDossierInstanceDefinition(chosenProjectId, chosenObjectId, instanceId);
+
+          const currentChapter = definition.chapters.find(chapter => chapter.key === chapterKey);
+          const vizKeys = new Set();
+          currentChapter.pages.forEach(page => {
+            page.visualizations.forEach(viz => vizKeys.add(viz.key));
+          });
+          if (!vizKeys.has(visualizationKey)) {
+            throw new Error('Selected visualization is not included in dossier instance definition.');
           }
-        }
+        };
+
+        await Promise.all([
+          checkIfVizDataCanBeImported(),
+          checkIfVizIsInDossierInstanceDefinition(),
+        ])
+          .catch(error => {
+            console.error(error);
+            const { ERR009 } = errorCodes;
+            if (error.response && error.response.body.code === ERR009) {
+              // Close popup if session expired
+              popupHelper.handlePopupErrors(error);
+            } else {
+              isSupported = false;
+            }
+          });
 
         vizualizationsData.push({
           chapterKey,
           visualizationKey,
           isSupported,
         });
+
         this.setState({ vizualizationsData });
       }
     }
