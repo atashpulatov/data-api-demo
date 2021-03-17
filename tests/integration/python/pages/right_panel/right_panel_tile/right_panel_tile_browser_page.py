@@ -58,7 +58,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     ACTION_STATUS_PENDING = 'Pending'
 
-    RIGHT_PANEL_TILE_EDIT_BUTTON_TOOLTIP = RIGHT_PANEL_TILE_BUTTON_PREFIX + '.__react_component_tooltip.show[id$="edit"]'
+    RIGHT_PANEL_TILE_EDIT_BUTTON_TOOLTIP = RIGHT_PANEL_TILE_BUTTON_PREFIX + \
+                                           '.__react_component_tooltip.show[id$="edit"]'
 
     def wait_for_import_to_finish_successfully(self, timeout=Const.DEFAULT_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
@@ -335,23 +336,21 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         )
 
     def hover_refresh(self, tile_no):
-        self.focus_on_add_in_frame()
-
-        self._hover_over_tile(int(tile_no) - 1)
-
-        refresh_button = self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT % int(tile_no))
-        refresh_button.move_to()
+        self._hover_button(tile_no, RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT)
 
     def hover_edit(self, tile_no):
+        self._hover_button(tile_no, RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT)
+
+    def _hover_button(self, tile_no, selector):
         self.focus_on_add_in_frame()
 
         self._hover_over_tile(int(tile_no) - 1)
 
-        edit_button = self.get_element_by_css(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT % int(tile_no))
+        edit_button = self.get_element_by_css(selector % tile_no)
         edit_button.move_to()
 
     def get_tooltip_text(self, object_number):
         tooltip_element = self.get_element_by_css(
-            RightPanelTileBrowserPage.RIGHT_PANEL_TILE_EDIT_BUTTON_TOOLTIP % int(object_number)
+            RightPanelTileBrowserPage.RIGHT_PANEL_TILE_EDIT_BUTTON_TOOLTIP % object_number
         )
         return tooltip_element.get_text_content_by_attribute()
