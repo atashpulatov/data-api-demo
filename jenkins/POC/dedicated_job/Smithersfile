@@ -55,7 +55,7 @@ rake copy_results rake yurii_test[$APPLICATION_VERSION, $TEST_TYPE]
   publishers do
     html do
        report_name 'Windows Desktop e2e Python Test Report'
-       report_directory_path "tests/results/$APPLICATION_VERSION/$TEST_TYPE"
+       report_directory_path "tests/results/"
        index_file_name 'index.html'
     end
   end
