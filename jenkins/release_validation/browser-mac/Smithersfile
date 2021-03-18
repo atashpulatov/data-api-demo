@@ -3,6 +3,15 @@ job 'release-validation-mac-browser' do
 
   configure_common_items{}
 
+    properties do
+     parameters do
+      upstream_parameter do
+        name 'APPLICATION_VERSION'
+        description 'the version of the application to deploy and test'
+      end
+    end
+  end
+
   scm do
     git do
     end
