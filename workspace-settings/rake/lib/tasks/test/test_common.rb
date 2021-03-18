@@ -201,3 +201,35 @@ def ci_metrics_system_test()
     puts "\nMETRICS_SYSTEM_TEST=#{metrics_system_test.to_json}\n"
   end
 end
+
+
+desc "publish test result for browser e2e"
+task :yurii_test,[:build_no, :type] do | t, args|
+  build_no = args['build_no']
+  type = args['type']
+  report_dir = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office"
+  report_path = "#{report_dir}/#{type}/#{build_no}.json"
+  puts report_dir
+  FileUtils.mkdir_p "#{report_dir}/#{type}" unless Dir.exists? "#{report_dir}/#{type}"
+  FileUtils.rm_rf report_path
+  application_hash = {
+    "build_number" => "#{Common::Version.application_version}"
+}
+  File.open(report_path,"w") do |f|
+    f.write(application_hash.to_json)
+  end
+end
+
+desc "publish test result for browser e2e"
+task :copy_results,[:build_no, :type] do | t, args|
+  build_no = args['build_no']
+  type = args['type']
+  report_dir = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office"
+  report_path = "#{report_dir}/#{type}/#{build_no}.json"
+  local_report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/results"
+  local_report_path = "#{local_report_dir}/#{build_no}"
+  
+  FileUtils.mkdir_p local_report_dir unless Dir.exists? local_report_dir
+  FileUtils.rm_rf local_report_path
+  FileUtils.cp_r(report_path, local_report_path)
+end
