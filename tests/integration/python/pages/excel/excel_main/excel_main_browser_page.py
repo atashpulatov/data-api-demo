@@ -36,8 +36,13 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
         If not - closes the tab and repeats opening a Workbook, at most OPEN_NEW_WORKBOOK_RETRY_NUMBER times.
 
+        IMPORTANT NOTE - due to Excel issue causing freezing, after opening a new tab, it's being closed and reopened
+        again (see usage of second_run variable).
+
         :raises MstrException: when not possible to open a new Workbook.
         """
+
+        second_run = False
 
         i = 0
         while i < ExcelMainBrowserPage.OPEN_NEW_WORKBOOK_RETRY_NUMBER:
@@ -49,13 +54,16 @@ class ExcelMainBrowserPage(BaseBrowserPage):
             if self.tab_contains_excel_frame():
                 self.focus_on_excel_frame()
 
-                brand_name_element = self.find_element_in_list_by_text_safe(
-                    ExcelMainBrowserPage.HEAD_BRAND_ELEM,
-                    ExcelMainBrowserPage.HEAD_BRAND_EXCEL_NAME
-                )
+                if second_run:
+                    brand_name_element = self.find_element_in_list_by_text_safe(
+                        ExcelMainBrowserPage.HEAD_BRAND_ELEM,
+                        ExcelMainBrowserPage.HEAD_BRAND_EXCEL_NAME
+                    )
 
-                if brand_name_element:
-                    return
+                    if brand_name_element:
+                        return
+
+                second_run = True
 
             self.close_current_tab()
 
