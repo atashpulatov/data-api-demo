@@ -168,6 +168,8 @@ PY_WIN_TEST_PARAM = {
 PY_MAC_TEST_PARAM = {
   "chrome" => "mac_chrome",
   "desktop" => "mac_desktop"
+  "ci_pipeline_rv_mac_chrome" => "mac_chrome"
+  "ci_pipeline_rv_mac_desktop" => "mac_desktop"
 }
 
 ######################################common ci metrics code######################################
