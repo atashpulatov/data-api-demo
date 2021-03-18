@@ -3,6 +3,7 @@ job 'stage-2-e2e-dedicated-job' do
 
  configure_common_items{}
 
+  properties do
      parameters do
       upstream_parameter do
         upstream_job_name 'stage-1-dev'
@@ -16,7 +17,7 @@ job 'stage-2-e2e-dedicated-job' do
         description 'the version of the application to deploy and test'
       end
     end
-
+  end
     
 
   scm do
