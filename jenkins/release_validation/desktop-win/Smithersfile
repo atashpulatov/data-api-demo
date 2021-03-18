@@ -1,4 +1,4 @@
-job 'stage-2-e2e-browser-test-python-win' do
+job 'release-validation-win-desktop' do
   description 'run browser based e2e python test for excel plugin, on windows'
 
    configure_common_items{}
