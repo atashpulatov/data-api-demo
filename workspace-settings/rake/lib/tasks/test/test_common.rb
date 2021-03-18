@@ -162,7 +162,9 @@ end
 
 PY_WIN_TEST_PARAM = {
   "chrome" => "windows_chrome",
-  "desktop" => "windows_desktop"
+  "desktop" => "windows_desktop",
+  "ci_pipeline_rv_windows_desktop" => "windows_desktop",
+  "ci_pipeline_rv_windows_chrome" => "windows_chrome"
 }
 
 PY_MAC_TEST_PARAM = {
