@@ -32,8 +32,8 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
         self.excel_login_browser_page.login_to_excel(locale_name)
 
     def maximize_excel_window(self):
-        # self.driver.maximize_window()
-        self.driver.set_window_size(1920, 1080)
+        self.driver.maximize_window()
+        # self.driver.set_window_size(1920, 1080)
 
     def change_excel_window_size(self, width, height):
         self.driver.set_window_size(width, height)
