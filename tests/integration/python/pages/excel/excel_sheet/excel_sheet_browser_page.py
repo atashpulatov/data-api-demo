@@ -1,3 +1,5 @@
+from abc import ABC
+
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
@@ -5,7 +7,7 @@ from framework.util.const import Const
 from framework.util.excel_util import ExcelUtil
 
 
-class ExcelSheetBrowserPage(BaseBrowserPage):
+class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     ATTRIBUTE_NAME_VALUE = 'value'
     ATTRIBUTE_NAME_ARIA_PRESSED = 'aria-pressed'
 
@@ -26,12 +28,6 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
 
     SELECT_SHEET_BUTTON = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > ' \
                           'li:nth-child(%s)'
-
-    COLUMN_HEADER = '.ewrch-col-nosel > .ewr-chc'
-
-    EXCEL_COLUMN_OPTION_CSS = '.label-100'
-
-    OPTION_DELETE_COLUMNS = 'Delete Columns'
 
     TABLE_HOME_TAB = 'm_excelWebRenderer_ewaCtl_Ribbon.Home-title'
     TABLE_DESIGN_TAB = 'm_excelWebRenderer_ewaCtl_Ribbon.Table.Design-title'
@@ -144,23 +140,6 @@ class ExcelSheetBrowserPage(BaseBrowserPage):
         worksheet_number_int = int(worksheet_number) + 1
 
         self.get_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int).click()
-
-    def remove_columns(self, column_name, number_of_columns):
-        # TODO investigate if it's possible to delete column using top menu or using keyboard keys
-        self.focus_on_excel_frame()
-
-        for i in range(0, int(number_of_columns)):
-            self.go_to_cell('%s1' % column_name)
-
-            self.press_tab()
-
-            self.find_element_by_text_in_elements_list_by_css(
-                ExcelSheetBrowserPage.COLUMN_HEADER, column_name).right_click()
-
-            self.find_element_by_text_in_elements_list_by_css(
-                ExcelSheetBrowserPage.EXCEL_COLUMN_OPTION_CSS,
-                ExcelSheetBrowserPage.OPTION_DELETE_COLUMNS
-            ).click()
 
     def click_table_design_tab(self):
         self.focus_on_excel_frame()

@@ -1,8 +1,9 @@
 from framework.driver.driver_type import DRIVER_TYPE_MAC_CHROME, DRIVER_TYPE_MAC_DESKTOP, DRIVER_TYPE_WINDOWS_DESKTOP, \
     DRIVER_TYPE_WINDOWS_CHROME
 from framework.util.config_util import ConfigUtil
-from pages_set.pages_set_browser import PagesSetBrowser
+from pages_set.pages_set_mac_chrome import PagesSetMacChrome
 from pages_set.pages_set_mac_desktop import PagesSetMacDesktop
+from pages_set.pages_set_windows_chrome import PagesSetWindowsChrome
 from pages_set.pages_set_windows_desktop import PagesSetWindowsDesktop
 
 
@@ -12,9 +13,9 @@ class PagesSetFactory:
     """
     PAGES_DEF = {
         DRIVER_TYPE_WINDOWS_DESKTOP: PagesSetWindowsDesktop,
-        DRIVER_TYPE_WINDOWS_CHROME: PagesSetBrowser,
+        DRIVER_TYPE_WINDOWS_CHROME: PagesSetWindowsChrome,
         DRIVER_TYPE_MAC_DESKTOP: PagesSetMacDesktop,
-        DRIVER_TYPE_MAC_CHROME: PagesSetBrowser,
+        DRIVER_TYPE_MAC_CHROME: PagesSetMacChrome
     }
 
     pages = None
