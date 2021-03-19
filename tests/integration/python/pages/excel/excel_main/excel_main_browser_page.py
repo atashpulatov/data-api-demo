@@ -11,7 +11,7 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
     NEW_BLANK_WORKBOOK_ELEM = '.new-template-icon'
 
-    HEAD_BRAND_ELEM = '.headBrand'
+    HEAD_BRAND_ELEM = '#O365Branding_container'
     HEAD_BRAND_EXCEL_NAME = 'Excel'
 
     def open_new_workbook(self):
@@ -37,24 +37,27 @@ class ExcelMainBrowserPage(BaseBrowserPage):
         If not - closes the tab and repeats opening a Workbook, at most OPEN_NEW_WORKBOOK_RETRY_NUMBER times.
 
         IMPORTANT NOTE - due to Excel issue causing freezing, after opening a new tab, it's being closed and reopened
-        again (see usage of second_run variable).
+        again (see usage of first_run variable).
 
         :raises MstrException: when not possible to open a new Workbook.
         """
 
-        second_run = False
+        first_run = True
 
         i = 0
         while i < ExcelMainBrowserPage.OPEN_NEW_WORKBOOK_RETRY_NUMBER:
             self.get_element_by_css(ExcelMainBrowserPage.NEW_BLANK_WORKBOOK_ELEM).click()
-            self.pause(5)
 
             self.switch_to_excel_workbook_window()
 
             if self.tab_contains_excel_frame():
-                self.focus_on_excel_frame()
+                if first_run:
+                    self.pause(Const.MEDIUM_TIMEOUT)
+                    first_run = False
 
-                if second_run:
+                else:
+                    self.focus_on_excel_frame()
+
                     brand_name_element = self.find_element_in_list_by_text_safe(
                         ExcelMainBrowserPage.HEAD_BRAND_ELEM,
                         ExcelMainBrowserPage.HEAD_BRAND_EXCEL_NAME
@@ -63,12 +66,10 @@ class ExcelMainBrowserPage(BaseBrowserPage):
                     if brand_name_element:
                         return
 
-                second_run = True
-
             self.close_current_tab()
 
             self.switch_to_excel_initial_window()
 
-            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
+            self.pause(Const.DEFAULT_WAIT_BETWEEN_CHECKS)
 
         raise MstrException('Error while opening a new Workbook.')
