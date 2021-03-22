@@ -1,5 +1,4 @@
 @mac_chrome
-
 Feature: F25946 - Details panel
 
   Scenario: [TC59756] - [Object Details] Expanded view for Table of Objects

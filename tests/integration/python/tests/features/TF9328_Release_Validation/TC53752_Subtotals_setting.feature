@@ -1,10 +1,9 @@
 @mac_chrome
 @release_validation
-@ga_validation
 Feature: TF9328 - Release Validation
 
   Scenario: [TC53752] - [Subtotals settings] E2E Importing report with subtotals | without subtotals | edit to import without subtotals | refresh | refresh all | stability of the toggle | accessibility
-   Given I initialized Excel
+    Given I initialized Excel
 
      When I logged in as default user
       And I clicked Import Data button

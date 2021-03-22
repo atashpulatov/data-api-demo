@@ -1,6 +1,5 @@
 @mac_chrome
 @release_validation
-
 Feature: F34504 - Removal of sharing bookmark button from embedded library experience that is part of the federated analytics Office 365 Excel client
 
   Scenario: [TC73785] - E2E - Checking if sharing bookmarks icon is hidden

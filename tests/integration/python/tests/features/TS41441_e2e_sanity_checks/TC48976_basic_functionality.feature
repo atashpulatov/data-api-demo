@@ -2,7 +2,6 @@
 @mac_chrome
 @release_validation
 @ga_validation
-
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC48976] - E2E Basic Functionality

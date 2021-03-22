@@ -1,7 +1,6 @@
 @todo_windows_desktop
 @mac_chrome
 @release_validation
-
 Feature: F30479 - Hardening of importing data from Dossier to Excel
 
   Scenario: [TC65052] - E2E Hardening of importing data from Dossier to Excel
