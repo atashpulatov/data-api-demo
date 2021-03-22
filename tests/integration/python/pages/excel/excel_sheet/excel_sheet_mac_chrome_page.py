@@ -1,8 +1,6 @@
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
 
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
-
 
 from framework.util.const import Const
 
