@@ -36,3 +36,5 @@ Feature: F24398 - Import and refresh visualization
 
       And I logged out
 
+   #TODO update steps from rally
+

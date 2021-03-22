@@ -4,7 +4,9 @@
 Feature: TF9328 - Release Validation
 
   Scenario: [TC53752] - [Subtotals settings] E2E Importing report with subtotals | without subtotals | edit to import without subtotals | refresh | refresh all | stability of the toggle | accessibility
-    Given I logged in as default user
+   Given I initialized Excel
+
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "51DB6FC611EA638917E80080EFD5ACB1" and selected "Report based on cube with subtotals"
