@@ -62,9 +62,9 @@ def step_impl(context, worksheet_number):
     context.pages.excel_sheet_page().open_worksheet(worksheet_number)
 
 
-@step('I removed {number_of_columns} columns starting from column "{column_name}"')
-def step_impl(context, number_of_columns, column_name):
-    context.pages.excel_sheet_page().remove_columns(column_name, number_of_columns)
+@step('I removed {number_of_columns_to_be_deleted} columns starting from column "{first_column_to_be_deleted}"')
+def step_impl(context, number_of_columns_to_be_deleted, first_column_to_be_deleted):
+    context.pages.excel_sheet_page().remove_columns(first_column_to_be_deleted, number_of_columns_to_be_deleted)
 
 
 @step('I clicked table design tab')
