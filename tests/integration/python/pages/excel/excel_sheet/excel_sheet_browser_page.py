@@ -1,4 +1,5 @@
 from abc import ABC
+from pyperclip import paste
 
 from selenium.webdriver.common.keys import Keys
 
@@ -10,12 +11,6 @@ from framework.util.excel_util import ExcelUtil
 class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     ATTRIBUTE_NAME_VALUE = 'value'
     ATTRIBUTE_NAME_ARIA_PRESSED = 'aria-pressed'
-
-    CELL_TRAVERSAL_INPUT_ELEM = 'm_excelWebRenderer_ewaCtl_NameBox'
-
-    CELL_FORMATTING_MENU_DROP_DOWN_ELEM = '''//span[contains(@id,'m_excelWebRenderer_ewaCtl_Number')]/a'''
-
-    CELL_FORMATTING_MENU_MORE_NUMBER_FORMATS_OPTION_ELEM = 'm_excelWebRenderer_ewaCtl_Number.NumberFormatDialog-Menu32'
 
     FORMAT_CELLS_PROMPT_SAMPLE = 'sample'
 
@@ -85,44 +80,44 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def _select_cell_or_range(self, cells):
         self.focus_on_excel_frame()
 
-        cell_input = self.get_element_by_id(ExcelSheetBrowserPage.CELL_TRAVERSAL_INPUT_ELEM)
-
-        cell_input.click()
+        self.hold_command_and_press_keys("g") # open GO TO popup
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
-        cells_uppercase = cells.upper()
-        cell_input.send_keys(cells_uppercase)
-
-        cell_input.send_keys(Keys.ENTER)
+        self.send_keys(cells)
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+        
+        self.send_keys(Keys.ENTER)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
 
     def _get_selected_cell_value(self):
-        cell_formatting_drop_down_elem = self.get_element_by_xpath(
-            ExcelSheetBrowserPage.CELL_FORMATTING_MENU_DROP_DOWN_ELEM
-        )
-        self.pause(0.2)
+ 
+        self.hold_command_and_press_keys("c") # copy to clipboard
+        
+        cell_value = paste()
 
-        cell_formatting_drop_down_elem.click()
-        self.pause(0.2)
+        return cell_value if cell_value else ''
 
-        self.get_element_by_id(
-            ExcelSheetBrowserPage.CELL_FORMATTING_MENU_MORE_NUMBER_FORMATS_OPTION_ELEM
-        ).click()
+        # self.hold_command_and_press_keys("1") # open cell formatting options
+        # self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
-        sample_input_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_SAMPLE)
+        # sample_input_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_SAMPLE)
 
-        sample_input_elem_value = sample_input_elem.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_VALUE)
+        # sample_input_elem_value = sample_input_elem.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_VALUE)
 
-        formatted_value = ExcelUtil.format_cell_value(sample_input_elem_value)
+        # formatted_value = ExcelUtil.format_cell_value(sample_input_elem_value)
 
-        value_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)
-        value_elem.click()
+        # value_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)
+        # value_elem.click()
 
-        return formatted_value if formatted_value else ''
+        # return formatted_value if formatted_value else ''
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)
         self.send_keys(value)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+        self.send_keys(Keys.ENTER)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
     def get_number_of_worksheets(self):
         self.focus_on_excel_frame()
