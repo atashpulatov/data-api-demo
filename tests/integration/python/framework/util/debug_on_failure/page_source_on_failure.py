@@ -25,9 +25,9 @@ class PageSourceOnFailure:
     """
 
     WIN_DESKTOP_ATTRIBUTES_TO_REMOVE = [
-        ' AcceleratorKey=".*?"'
-        ' AccessKey=\"\"',
-        ' AutomationId=\"\"',
+        ' AcceleratorKey=".*?"',
+        ' AccessKey=""',
+        ' AutomationId=""',
         ' CanMaximize=".*?"',
         ' CanMinimize=".*?"',
         ' CanMove=".*?"',
@@ -35,7 +35,7 @@ class PageSourceOnFailure:
         ' CanRotate=".*?"',
         ' ClassName=".*?"',
         ' FrameworkId=".*?"',
-        ' HasKeyboardFocus=".*?"'
+        ' HasKeyboardFocus=".*?"',
         ' HasKeyboardFocus=".*?"',
         ' HasKeyboardFocus=".*?"',
         ' HelpText=""',
@@ -50,8 +50,8 @@ class PageSourceOnFailure:
         ' IsRequiredForForm=".*?"',
         ' IsSelected=".*?"',
         ' IsTopmost=".*?"',
-        ' ItemStatus=\"\"',
-        ' ItemType=\"\"',
+        ' ItemStatus=""',
+        ' ItemType=""',
         ' LocalizedControlType=".*?"',
         ' Orientation="None"',
         ' ProcessId=".*?"',

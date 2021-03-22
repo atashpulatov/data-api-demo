@@ -38,6 +38,8 @@ class ExcelGeneralWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.excel_main_windows_desktop_page.click_new_blank_workbook_elem()
 
+        self.maximize_excel_window()
+
     def maximize_excel_window(self):
         # Excel usually is maximized, in this case 'Restore Down' is present and it's faster to look for existing
         # element instead of missing one ('Maximize')

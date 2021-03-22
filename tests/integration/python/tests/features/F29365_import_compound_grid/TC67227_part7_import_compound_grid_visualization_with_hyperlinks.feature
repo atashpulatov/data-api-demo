@@ -2,6 +2,7 @@
 @mac_chrome
 @windows_chrome
 @release_validation
+@ga_validation
 Feature: F29365 - Import compound grid from dossier to Excel
 
   Scenario: [TC67227] - part 7 - Import compound grid visualization with Hyperlinks

@@ -19,6 +19,8 @@ class ExcelGeneralBrowserPage(BaseBrowserPage):
 
         self._login_to_excel(locale_name)
 
+        self.maximize_excel_window()
+
         self.excel_main_browser_page.open_new_workbook()
 
         self.switch_to_excel_workbook_window()

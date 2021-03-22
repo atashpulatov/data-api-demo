@@ -2,6 +2,7 @@
 @windows_chrome
 @mac_chrome
 @release_validation
+
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC40359] - Navigation while importing prompted reports (Run, Back and Cancel buttons)
@@ -19,6 +20,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I waited for Run button to be enabled
       And I unselected "Subcategory" as an answer for "1. Objects" prompt - object prompt
      When I clicked Run button
+      And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
       And I selected filters { "Category": ["Books", "Electronics"] }

@@ -4,6 +4,7 @@
 @mac_chrome
 @release_validation
 @ga_validation
+
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67226] - Import and edit compound grid

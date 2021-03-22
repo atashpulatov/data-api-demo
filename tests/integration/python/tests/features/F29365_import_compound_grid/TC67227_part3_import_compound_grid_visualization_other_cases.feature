@@ -1,4 +1,5 @@
 @mac_chrome
+@ga_validation
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 3 -Import compound grid visualization (other cases)
@@ -26,6 +27,8 @@ Feature: F29365 - Import compound grid
       And I selected visualization "two columns sets with different column headers dimensions"
       And I clicked import dossier
       And I closed last notification
+
+   #TODO add validation for defect DE197071 and DE197073
 
      Then cell "I11" should have value "$311,597"
 
