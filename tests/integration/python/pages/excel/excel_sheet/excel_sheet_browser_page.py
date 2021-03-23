@@ -60,7 +60,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         return value.strip() if value else value
 
     def go_to_cell(self, cell):
-        self._select_cell_or_range(cell)
+        self.select_cell_or_range(cell)
 
     def merge_range(self, start_cell, end_cell):
         self._select_range(start_cell, end_cell)
@@ -69,19 +69,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         merge_button.click()
 
     def _select_range(self, start_cell, end_cell):
-        self._select_cell_or_range(start_cell + ExcelSheetBrowserPage.RANGE_SEPARATOR + end_cell)
-
-    def _select_cell_or_range(self, cells):
-        self.focus_on_excel_frame()
-
-        self.hold_command_and_press_keys("g") # open GO TO popup
-        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-
-        self.send_keys(cells)
-        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-        
-        self.send_keys(Keys.ENTER)
-        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+        self.select_cell_or_range(start_cell + ExcelSheetBrowserPage.RANGE_SEPARATOR + end_cell)
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)

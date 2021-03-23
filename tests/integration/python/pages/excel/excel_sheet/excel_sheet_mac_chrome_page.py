@@ -34,3 +34,15 @@ class ExcelSheetMacChromePage(ExcelSheetBrowserPage):
         formatted_value = ExcelUtil.format_cell_value(cell_value) # adjust number formatting to account for other locales
 
         return formatted_value if formatted_value else ''
+
+    def select_cell_or_range(self, cells):
+        self.focus_on_excel_frame()
+
+        self.hold_command_and_press_keys("g") # open GO TO popup
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+        self.send_keys(cells)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+        
+        self.send_keys(Keys.ENTER)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
