@@ -48,7 +48,7 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().hover_refresh(object_number)
 
 
-@step('I verified that tooltip "{expected_tooltip_text}" was displayed on object {object_number}')
+@step('I verified that tooltip "{expected_tooltip_text}" is displayed on object {object_number}')
 def step_impl(context, expected_tooltip_text, object_number):
     tooltip_text = context.pages.right_panel_tile_page().get_tooltip_text(object_number)
 
@@ -167,14 +167,14 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_cancel_on_pending_action(object_number)
 
 
-@step('I verified that the object {object_number} action in progress name was "{object_action}"')
+@step('I verified that the object {object_number} action in progress name is "{object_action}"')
 def step_impl(context, object_number, object_action):
     action_in_progress_name = context.pages.right_panel_tile_page().get_object_action_in_progress_name(object_number)
 
     AssertUtil.assert_simple(action_in_progress_name, object_action)
 
 
-@step('I verified that the object {object_number} action in progress was executed on total "{total_rows_expected}"')
+@step('I verified that the object {object_number} action in progress is executed on total "{total_rows_expected}"')
 def step_impl(context, object_number, total_rows_expected):
     total_rows = context.pages.right_panel_tile_page().get_object_action_in_progress_total_rows_count(object_number)
 
@@ -190,7 +190,7 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_percentage_displayed, True)
 
 
-@step('I verified that the object {object_number} action was pending')
+@step('I verified that the object {object_number} action is pending')
 def step_impl(context, object_number):
     is_action_pending = context.pages.right_panel_tile_page().verify_object_action_is_pending(object_number)
 

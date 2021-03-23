@@ -49,8 +49,8 @@ Feature: TS41441 - Sanity checks
       And I changed sort order of "attributes" to ascending by click
       And I changed sort order of "metrics" to ascending by click
       And I changed sort order of "filters" to ascending by click
-      And attribute number 1 should be called "Employee"
-      And attribute number 2 should be called "Region"
+      And I verified that attribute number 1 is called "Employee"
+      And I verified that attribute number 2 is called "Region"
       And metric number 1 should be called "Cost"
       And metric number 2 should be called "Profit"
       And metric number 3 should be called "Revenue"
@@ -59,8 +59,8 @@ Feature: TS41441 - Sanity checks
       And I changed sort order of "attributes" to descending by click
       And I changed sort order of "metrics" to descending by click
       And I changed sort order of "filters" to descending by click
-      And attribute number 1 should be called "Region"
-      And attribute number 2 should be called "Employee"
+      And I verified that attribute number 1 is called "Region"
+      And I verified that attribute number 2 is called "Employee"
       And metric number 1 should be called "Revenue"
       And metric number 2 should be called "Profit"
       And metric number 3 should be called "Cost"
@@ -68,8 +68,8 @@ Feature: TS41441 - Sanity checks
       And I changed sort order of "attributes" to default by click
       And I changed sort order of "metrics" to default by click
       And I changed sort order of "filters" to default by click
-      And attribute number 1 should be called "Region"
-      And attribute number 2 should be called "Employee"
+      And I verified that attribute number 1 is called "Region"
+      And I verified that attribute number 2 is called "Employee"
       And metric number 1 should be called "Revenue"
       And metric number 2 should be called "Cost"
       And metric number 3 should be called "Profit"

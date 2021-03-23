@@ -30,7 +30,7 @@ def step_impl(context, attributes_and_forms_json):
     )
 
 
-@step('attribute number {object_number} should be called "{expected_name}"')
+@step('I verified that attribute number {object_number} is called "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.columns_and_filters_selection_attributes_page().get_attribute_name(object_number)
 

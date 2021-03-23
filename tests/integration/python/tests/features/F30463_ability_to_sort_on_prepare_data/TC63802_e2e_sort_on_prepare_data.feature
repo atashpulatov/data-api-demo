@@ -14,16 +14,16 @@ Feature: F30463 - Ability to sort on prepare data
       And I clicked Prepare Data button
       And I verified that Columns & Filters Selection is visible
 
-     Then attribute number 1 should be called "Age Range"
+     Then I verified that attribute number 1 is called "Age Range"
 
      When I changed sort order of "attributes" to ascending by click
-     Then attribute number 1 should be called "Age Range"
+     Then I verified that attribute number 1 is called "Age Range"
 
      When I changed sort order of "attributes" to descending by click
-     Then attribute number 1 should be called "Zip Code"
+     Then I verified that attribute number 1 is called "Zip Code"
 
      When I changed sort order of "attributes" to default by click
-     Then attribute number 1 should be called "Age Range"
+     Then I verified that attribute number 1 is called "Age Range"
 
      Then metric number 1 should be called "Average Revenue"
      When I changed sort order of "metrics" to ascending by click
@@ -50,10 +50,10 @@ Feature: F30463 - Ability to sort on prepare data
       And I pressed tab until sorting "attributes" is focused
       And I changed sort order of "attributes" to ascending by pressing Enter
 
-     Then attribute number 1 should be called "Age Range"
+     Then I verified that attribute number 1 is called "Age Range"
 
      When I changed sort order of "attributes" to descending by pressing Enter
-     Then attribute number 1 should be called "Phone Usage"
+     Then I verified that attribute number 1 is called "Phone Usage"
 
      When I changed sort order of "attributes" to default by pressing Enter
       And I pressed tab until sorting "metrics" is focused
@@ -78,7 +78,7 @@ Feature: F30463 - Ability to sort on prepare data
       And I selected attribute element number 1
       And I expanded attribute forms of attribute number 1
 
-     Then attribute form number 1 of attribute number 1 should be called "DESC"
+     Then attribute form number 1 of I verified that attribute number 1 is called "DESC"
 
      When I collapsed attribute forms of attribute number 1
       And I deselected attribute element number 1
@@ -86,7 +86,7 @@ Feature: F30463 - Ability to sort on prepare data
       And I scrolled into attribute element number 30 and selected it
       And I expanded attribute forms of attribute number 30
 
-     Then attribute form number 1 of attribute number 30 should be called "DESC"
+     Then attribute form number 1 of I verified that attribute number 30 is called "DESC"
 
      When I collapsed attribute forms of attribute number 30
       And I deselected attribute element number 30

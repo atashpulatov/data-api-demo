@@ -13,7 +13,7 @@ Feature: TS41441 - Sanity checks
       And I closed all notifications
 
 # TODO step implemented only for Windows Desktop
-     Then item number 1 in Name Box, ignoring timestamp at the end, was called "_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_"
+     Then I verified that the name of item number 1 in Name Box, ignoring timestamp at the end, is "_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_"
       And I selected object number 1 from Name Box
 
      When I selected cell "K1"
@@ -24,7 +24,7 @@ Feature: TS41441 - Sanity checks
       And I selected object number 2 from Name Box
 
 # TODO step implemented only for Windows Desktop
-     Then item number 2 in Name Box, ignoring timestamp at the end, was called "_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_"
+     Then I verified that the name of item number 2 in Name Box, ignoring timestamp at the end, is "_01___________________________________Report_for_testing_binding_and_special_characters______________________________________________________________________Report_for_testing_binding_and_special_characters_________________________testtestt_"
 # TODO step implemented only for Windows Desktop
       And I selected object number 2 from Name Box
 

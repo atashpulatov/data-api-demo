@@ -59,16 +59,16 @@ Feature: F25943 - Notifications side panel
       And I clicked Add Data button
       And I found object by ID "942B7F4411E95F8730610080EF45E0F5" and selected "50k Sales Records.csv"
       And I clicked Import button without checking results
-     Then I verified that the object 1 action in progress name was "Importing"
-      And I verified that the object 1 action in progress was executed on total "50,000 rows"
+     Then I verified that the object 1 action in progress name is "Importing"
+      And I verified that the object 1 action in progress is executed on total "50,000 rows"
       And I verified that the object 1 action displayed percentage progress
       And I waited for object operation to complete successfully with message "Import successful"
       And I closed last notification
 
      When I clicked Duplicate on object 1
       And I clicked Import button in Duplicate popup without checking results
-     Then I verified that the object 1 action in progress name was "Duplicating"
-      And I verified that the object 1 action in progress was executed on total "50,000 rows"
+     Then I verified that the object 1 action in progress name is "Duplicating"
+      And I verified that the object 1 action in progress is executed on total "50,000 rows"
       And I verified that the object 1 action displayed percentage progress
       And I waited for object operation to complete successfully with message "Object duplicated"
       And I closed last notification
@@ -78,12 +78,12 @@ Feature: F25943 - Notifications side panel
       And I selected object 4 using object checkbox
       And I selected object 5 using object checkbox
       And I refreshed selected objects
-     Then I verified that the object 1 action in progress name was "Refreshing"
-      And I verified that the object 1 action in progress was executed on total "50,000 rows"
+     Then I verified that the object 1 action in progress name is "Refreshing"
+      And I verified that the object 1 action in progress is executed on total "50,000 rows"
       And I verified that the object 1 action displayed percentage progress
-      And I verified that the object 3 action was pending
-      And I verified that the object 4 action was pending
-      And I verified that the object 5 action was pending
+      And I verified that the object 3 action is pending
+      And I verified that the object 4 action is pending
+      And I verified that the object 5 action is pending
 
      When I canceled object 5 pending action
      Then I verified that the object 5 tile has no popup displayed

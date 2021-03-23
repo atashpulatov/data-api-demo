@@ -18,14 +18,14 @@ Feature: TF9328 - Release Validation
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
      Then I verified that cells ["B1", "J3", "H3"] have values ["Item Type", "81320.96", "Maximum"]
-      And for cell "H3" bold button should be selected
+      And I verified that bold button is selected for cell "H3"
       And object number 1 should be called "Report based on cube with subtotals"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
      Then I verified that cells ["B1", "J3", "H3"] have values ["Item Type", "81320.96", "Maximum"]
-      And for cell "H3" bold button should be selected
+      And I verified that bold button is selected for cell "H3"
 
      When I clicked Edit object 1
      Then I verified that Columns & Filters Selection is visible
@@ -52,14 +52,14 @@ Feature: TF9328 - Release Validation
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "C7", "B8"] have values ["Subcategory", "$1,164", "Total"]
-      And for cell "D8" bold button should be selected
+      And I verified that bold button is selected for cell "D8"
       And object number 1 should be called "Report with a subtotal & prompt"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
      Then I verified that cells ["B1", "C7", "B8"] have values ["Subcategory", "$1,164", "Total"]
-      And for cell "D8" bold button should be selected
+      And I verified that bold button is selected for cell "D8"
 
      When I clicked Edit object 1
       And I waited for Run button to be enabled
@@ -85,14 +85,14 @@ Feature: TF9328 - Release Validation
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "B7", "C4", "W9"] have values ["Region", "Total", "", "$1"]
-      And for cell "W10" bold button should be selected
+      And I verified that bold button is selected for cell "W10"
       And object number 1 should be called "Report with crosstab and subtotals"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
      Then I verified that cells ["B1", "B7", "C4", "W9"] have values ["Region", "Total", "", "$1"]
-      And for cell "W10" bold button should be selected
+      And I verified that bold button is selected for cell "W10"
 
      When I clicked Edit object 1
      Then I verified that Columns & Filters Selection is visible
@@ -206,7 +206,7 @@ Feature: TF9328 - Release Validation
       And I waited for object to be imported successfully
       And I closed last notification
      Then I verified that cells ["B1", "D2"] have values ["Avg (Item)", "$5,293,624"]
-      And for cell "D2" bold button should be selected
+      And I verified that bold button is selected for cell "D2"
       And object number 1 should be called "Prompted report with attributes with and without subtotals"
 
       And I logged out

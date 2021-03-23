@@ -64,7 +64,7 @@ Feature: TS41441 - Sanity checks
 
 #     When I hovered over Refresh button on object 2
 # TODO: investigate why duplicate and edit tooltips are in page source and refresh and remove are not
-# TODO: Then I verified that tooltip "Refresh" was displayed on object 2
+# TODO: Then I verified that tooltip "Refresh" is displayed on object 2
 
      When I clicked Refresh on object 2
       And I waited for object to be refreshed successfully
@@ -72,7 +72,7 @@ Feature: TS41441 - Sanity checks
      Then I verified that cells ["A3", "B3"] have values ["2014", "Northeast"]
 
 #     When I hovered over Edit button on object 1
-#     Then I verified that tooltip "Edit" was displayed on object 1
+#     Then I verified that tooltip "Edit" is displayed on object 1
 
      When I clicked Edit object 1
       And I waited for Run button to be enabled

@@ -27,7 +27,7 @@ def step_impl(context, cell_name, expected_value):
     AssertUtil.assert_simple(result, [expected_value])
 
 
-@step('I verified that cell "{cell_name}" was empty')
+@step('I verified that cell "{cell_name}" is empty')
 def step_impl(context, cell_name):
     result = context.pages.excel_sheet_page().get_cells_values([cell_name])
 
@@ -122,21 +122,21 @@ def step_impl(context, cell_name, font_name):
     context.pages.excel_sheet_page().change_font_name_of_cell(cell_name, font_name)
 
 
-@step('for cell "{cell_name}" align middle button should be selected')
+@step('I verified that align middle button is selected for cell "{cell_name}"')
 def step_impl(context, cell_name):
     button_selected = context.pages.excel_sheet_page().is_align_middle_button_selected(cell_name)
 
     AssertUtil.assert_simple(button_selected, True)
 
 
-@step('for cell "{cell_name}" align left button should be selected')
+@step('I verified that align left button is selected for cell "{cell_name}"')
 def step_impl(context, cell_name):
     button_selected = context.pages.excel_sheet_page().is_align_left_button_selected(cell_name)
 
     AssertUtil.assert_simple(button_selected, True)
 
 
-@step('for cell "{cell_name}" bold button should be selected')
+@step('I verified that bold button is selected for cell "{cell_name}"')
 def step_impl(context, cell_name):
     button_selected = context.pages.excel_sheet_page().is_bold_button_selected(cell_name)
 

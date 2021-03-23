@@ -51,9 +51,9 @@ Feature: TS41441 - Sanity checks
      Then I verified that cell "L4" has value "245,677 PLN"
       And for cell "E2" font color "Light Green" should be selected
       And for cell "G2" fill color "Light Green" should be selected
-      And for cell "B2" align middle button should be selected
-      And for cell "C2" align left button should be selected
-      And for cell "D2" bold button should be selected
+      And I verified that align middle button is selected for cell "B2"
+      And I verified that align left button is selected for cell "C2"
+      And I verified that bold button is selected for cell "D2"
       And for cell "G2" font name should be "Arial Black"
       And I verified that cell "B4" has value "$8,907.00"
       And I verified that cell "B2" has value "$4,560.00"
