@@ -57,7 +57,7 @@ def step_impl(context):
     AssertUtil.assert_simple(is_checked, False)
 
 
-@step('element "{element_name}" has focus')
+@step('I verified that element "{element_name}" has focus')
 def step_impl(context, element_name):
     has_focus = context.pages.filter_panel_page().examine_if_element_has_focus(element_name)
 
