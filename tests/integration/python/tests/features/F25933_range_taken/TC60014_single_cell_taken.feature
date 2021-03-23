@@ -17,6 +17,6 @@ Feature: F25933 - Range taken
       And I waited for object to be imported successfully
       And I closed last notification
 
-     Then number of worksheets should be 2
+     Then I verified that number of worksheets is 2
 
       And I logged out

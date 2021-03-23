@@ -14,7 +14,7 @@ Feature: F25933 - Range taken
       And I clicked Import button
       And I closed all notifications
 
-     Then number of worksheets should be 1
+     Then I verified that number of worksheets is 1
 
      When I selected cell "E4"
       And I clicked Add Data button
@@ -23,7 +23,7 @@ Feature: F25933 - Range taken
       And I clicked OK button in Range Taken popup
       And I closed all notifications
 
-     Then number of worksheets should be 2
+     Then I verified that number of worksheets is 2
 
      When I selected worksheet number 1
       And I selected cell "F5"
@@ -32,7 +32,7 @@ Feature: F25933 - Range taken
       And I clicked Import button without checking results
       And I clicked OK button in Range Taken popup
 
-     Then number of worksheets should be 3
+     Then I verified that number of worksheets is 3
 
      When I selected worksheet number 1
       And I selected cell "H8"
@@ -44,6 +44,6 @@ Feature: F25933 - Range taken
       And I clicked import dossier without waiting for results
       And I clicked OK button in Range Taken popup
 
-     Then number of worksheets should be 4
+     Then I verified that number of worksheets is 4
 
       And I logged out

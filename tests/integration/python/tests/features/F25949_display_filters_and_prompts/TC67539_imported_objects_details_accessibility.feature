@@ -187,7 +187,7 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
 
      Then I verified that object number 1 is called "100 Sales Records.csv Copy"
-      And number of worksheets should be 2
+      And I verified that number of worksheets is 2
 
      When I clicked on object 1
       And I pressed key Tab

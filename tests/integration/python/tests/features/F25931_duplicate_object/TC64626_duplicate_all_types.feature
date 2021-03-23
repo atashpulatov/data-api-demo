@@ -25,7 +25,7 @@ Feature: F25931 - Duplicate object
       And I waited for dossier to load successfully
       And I imported visualization "Bubble Chart"
 
-      And number of worksheets should be 3
+      And I verified that number of worksheets is 3
 
      When I selected worksheet number 1
       And I selected cell "G1"
@@ -54,6 +54,6 @@ Feature: F25931 - Duplicate object
 
      Then I verified that object number 1 is called "Bubble Chart Copy"
 
-      And number of worksheets should be 3
+      And I verified that number of worksheets is 3
 
       And I logged out

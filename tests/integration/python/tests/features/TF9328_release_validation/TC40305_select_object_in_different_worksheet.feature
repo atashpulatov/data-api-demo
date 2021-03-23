@@ -12,7 +12,7 @@ Feature: TF9328 - Release Validation
      When I found object by ID "B7743F5A11E97AED00000080EF257000" and selected "100_report"
       And I clicked Import button
       And I closed all notifications
-     Then number of worksheets should be 1
+     Then I verified that number of worksheets is 1
       And I verified that cells ["A2", "D2"] have values ["Albania", "385383069"]
       And I verified that object number 1 is called "100_report"
 
@@ -21,7 +21,7 @@ Feature: TF9328 - Release Validation
       And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
       And I clicked Import button
       And I closed all notifications
-     Then number of worksheets should be 2
+     Then I verified that number of worksheets is 2
       And I verified that cells ["A2", "D2"] have values ["Central", "$847,227"]
       And I verified that object number 1 is called "01 Basic Report"
 

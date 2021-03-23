@@ -45,7 +45,7 @@ def step_impl(context, cells_names, expected_cells_values):
     AssertUtil.assert_simple(result, expected_result)
 
 
-@step('number of worksheets should be {expected_number_of_worksheets}')
+@step('I verified that number of worksheets is {expected_number_of_worksheets}')
 def step_impl(context, expected_number_of_worksheets):
     result = context.pages.excel_sheet_page().get_number_of_worksheets()
 
