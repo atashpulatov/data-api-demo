@@ -8,7 +8,7 @@ def step_impl(context, filter_name):
     context.pages.columns_and_filters_selection_filters_page().select_all_filter_elements(filter_name)
 
 
-@step('filter number {object_number} should be called "{expected_name}"')
+@step('I verified that filter number {object_number} is called "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.columns_and_filters_selection_filters_page().get_filter_name(object_number)
 

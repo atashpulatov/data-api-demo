@@ -26,7 +26,7 @@ Feature: F25931 - Duplicate object
       And rows ["1", "2"] are selected
 
      When I changed object 1 name to "Incredible very long name of imported object Incredible very long name of imported object" using icon
-     Then name tooltip for object number 1 should display "Incredible very long name of imported object Incredible very long name of imported object"
+     Then I verified that name tooltip for object number 1 displays "Incredible very long name of imported object Incredible very long name of imported object"
 
      When I clicked Refresh on object 1
       And I closed last notification

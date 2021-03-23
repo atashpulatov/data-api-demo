@@ -143,7 +143,7 @@ def step_impl(context, cell_name):
     AssertUtil.assert_simple(button_selected, True)
 
 
-@step('for cell "{cell_name}" font name should be "{expected_name}"')
+@step('I verified that for cell "{cell_name}" font name is "{expected_name}"')
 def step_impl(context, cell_name, expected_name):
     result = context.pages.excel_sheet_page().get_font_name_of_cell(cell_name)
 
@@ -168,14 +168,14 @@ def step_impl(context, row_names):
     AssertUtil.assert_simple(result, True)
 
 
-@step('for cell "{cell_name}" font color "{font_color}" should be selected')
+@step('I verified that for cell "{cell_name}" font color "{font_color}" is selected')
 def step_impl(context, cell_name, font_color):
     font_color_selected = context.pages.excel_sheet_page().is_font_color_selected(cell_name, font_color)
 
     AssertUtil.assert_simple(font_color_selected, True)
 
 
-@step('for cell "{cell_name}" fill color "{fill_color}" should be selected')
+@step('I verified that for cell "{cell_name}" fill color "{fill_color}" is selected')
 def step_impl(context, cell_name, fill_color):
     fill_color_selected = context.pages.excel_sheet_page().is_fill_color_selected(cell_name, fill_color)
 

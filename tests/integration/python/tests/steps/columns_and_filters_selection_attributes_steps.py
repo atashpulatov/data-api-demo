@@ -57,8 +57,8 @@ def step_impl(context, object_number):
     context.pages.columns_and_filters_selection_attributes_page().collapse_attribute_form(object_number)
 
 
-@step('attribute form number {attribute_form_number} of attribute number {attribute_number} '
-      'should be called "{expected_name}"')
+@step('I verified that attribute form number {attribute_form_number} of attribute number {attribute_number} '
+      'is called "{expected_name}"')
 def step_impl(context, attribute_form_number, attribute_number, expected_name):
     result = context.pages.columns_and_filters_selection_attributes_page().get_attribute_form_name(
         attribute_form_number,

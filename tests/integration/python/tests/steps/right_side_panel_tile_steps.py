@@ -98,7 +98,7 @@ def step_impl(context, object_number, expected_color):
     AssertUtil.assert_simple(highlight_color, expected_color)
 
 
-@step('name tooltip for object number {object_number} should display "{expected_name}"')
+@step('I verified that name tooltip for object number {object_number} displays "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.right_panel_tile_page().get_object_name_from_tooltip(object_number)
 

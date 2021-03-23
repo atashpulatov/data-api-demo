@@ -51,29 +51,29 @@ Feature: TS41441 - Sanity checks
       And I changed sort order of "filters" to ascending by click
       And I verified that attribute number 1 is called "Employee"
       And I verified that attribute number 2 is called "Region"
-      And metric number 1 should be called "Cost"
-      And metric number 2 should be called "Profit"
-      And metric number 3 should be called "Revenue"
-      And filter number 1 should be called "Employee"
+      And I verified that metric number 1 is called "Cost"
+      And I verified that metric number 2 is called "Profit"
+      And I verified that metric number 3 is called "Revenue"
+      And I verified that filter number 1 is called "Employee"
 
       And I changed sort order of "attributes" to descending by click
       And I changed sort order of "metrics" to descending by click
       And I changed sort order of "filters" to descending by click
       And I verified that attribute number 1 is called "Region"
       And I verified that attribute number 2 is called "Employee"
-      And metric number 1 should be called "Revenue"
-      And metric number 2 should be called "Profit"
-      And metric number 3 should be called "Cost"
-      And filter number 2 should be called "Employee"
+      And I verified that metric number 1 is called "Revenue"
+      And I verified that metric number 2 is called "Profit"
+      And I verified that metric number 3 is called "Cost"
+      And I verified that filter number 2 is called "Employee"
       And I changed sort order of "attributes" to default by click
       And I changed sort order of "metrics" to default by click
       And I changed sort order of "filters" to default by click
       And I verified that attribute number 1 is called "Region"
       And I verified that attribute number 2 is called "Employee"
-      And metric number 1 should be called "Revenue"
-      And metric number 2 should be called "Cost"
-      And metric number 3 should be called "Profit"
-      And filter number 2 should be called "Employee"
+      And I verified that metric number 1 is called "Revenue"
+      And I verified that metric number 2 is called "Cost"
+      And I verified that metric number 3 is called "Profit"
+      And I verified that filter number 2 is called "Employee"
       And I verified that counter of "attributes" shows "1" of "2" selected
       And I verified that counter of "metrics" shows "1" of "3" selected
       And I verified that counter of "filters" shows "1" of "2" selected

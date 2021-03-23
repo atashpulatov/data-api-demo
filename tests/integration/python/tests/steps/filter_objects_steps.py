@@ -43,14 +43,14 @@ def step_impl(context):
     context.pages.filter_panel_page().click_all_panel_first_empty_element()
 
 
-@step('the first element with 0 objects in All Panel should be selected')
+@step('I verified that the first element with 0 objects in All Panel is selected')
 def step_impl(context):
     is_checked = context.pages.filter_panel_page().examine_if_first_empty_element_is_checked()
 
     AssertUtil.assert_simple(is_checked, True)
 
 
-@step('the first element with 0 objects in All Panel should NOT be selected')
+@step('I verified that the first element with 0 objects in All Panel is NOT selected')
 def step_impl(context):
     is_checked = context.pages.filter_panel_page().examine_if_first_empty_element_is_checked()
 
