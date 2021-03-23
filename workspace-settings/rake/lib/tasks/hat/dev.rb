@@ -11,7 +11,7 @@ include ShellHelper::Shell
 desc "update localization strings from ProductStrings"
 task :update_strings do
   # checkout and clean
-  # LocalizationHelper.check_out_to_branch
+  LocalizationHelper.check_out_to_branch
   
   # get the latest artifact version
   artifact_version = Nexus.latest_artifact_version(
