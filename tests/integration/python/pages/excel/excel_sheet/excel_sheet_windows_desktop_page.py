@@ -47,7 +47,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         # First go to cell to ensure it's visible (scrolled to).
         self.go_to_cell(cell)
 
-        value = self._get_selected_cell_value()
+        value = self.get_selected_cell_value()
 
         return value.strip() if value else value
 
@@ -60,7 +60,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.press_enter()
 
-    def _get_selected_cell_value(self):
+    def get_selected_cell_value(self):
         cell_value = self.get_selected_text_using_clipboard()
         self.press_escape()
 

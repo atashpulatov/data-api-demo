@@ -1,8 +1,11 @@
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
+from pyperclip import paste
 
 from selenium.webdriver.common.keys import Keys
 
+from framework.util.excel_util import ExcelUtil
 from framework.util.const import Const
+
 
 class ExcelSheetMacChromePage(ExcelSheetBrowserPage):
 
@@ -22,3 +25,12 @@ class ExcelSheetMacChromePage(ExcelSheetBrowserPage):
 
         self.hold_command_and_press_keys("-") # remove current selection
 
+    def get_selected_cell_value(self):
+ 
+        self.hold_command_and_press_keys("c") # copy to clipboard
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+        
+        cell_value = paste()
+        formatted_value = ExcelUtil.format_cell_value(cell_value) # adjust number formatting to account for other locales
+
+        return formatted_value if formatted_value else ''

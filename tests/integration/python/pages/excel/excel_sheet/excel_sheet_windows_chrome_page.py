@@ -1,4 +1,11 @@
 from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
+from pyperclip import paste
+
+from selenium.webdriver.common.keys import Keys
+
+from framework.util.excel_util import ExcelUtil
+from framework.util.const import Const
+
 
 
 class ExcelSheetWindowsChromePage(ExcelSheetBrowserPage):
@@ -7,18 +14,27 @@ class ExcelSheetWindowsChromePage(ExcelSheetBrowserPage):
     OPTION_DELETE_COLUMNS = 'Delete Columns'
 
     def remove_columns(self, first_column_to_be_deleted, number_of_columns_to_be_deleted):
-        # TODO investigate if it's possible to delete column using top menu or using keyboard keys
         self.focus_on_excel_frame()
 
-        for i in range(0, int(number_of_columns_to_be_deleted)):
-            self.go_to_cell('%s1' % first_column_to_be_deleted)
+        self.go_to_cell('%s1' % first_column_to_be_deleted)
 
-            self.press_tab()
+        for i in range(0, int(number_of_columns_to_be_deleted)-1):
+          self.hold_shift_and_press_keys(Keys.ARROW_RIGHT) # extent selection by one cell to the right
 
-            self.find_element_by_text_in_elements_list_by_css(
-                ExcelSheetWindowsChromePage.COLUMN_HEADER, first_column_to_be_deleted).right_click()
+          self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
-            self.find_element_by_text_in_elements_list_by_css(
-                ExcelSheetWindowsChromePage.EXCEL_COLUMN_OPTION_CSS,
-                ExcelSheetWindowsChromePage.OPTION_DELETE_COLUMNS
-            ).click()
+        for _ in range(2):
+          self.hold_ctrl_and_press_keys(Keys.SPACE) # 1. select populated column part / 2. select whole column 
+          self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+        self.hold_ctrl_and_press_keys("-") # remove current selection
+
+    def get_selected_cell_value(self):
+ 
+        self.hold_ctrl_and_press_keys("c") # copy to clipboard
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+        
+        cell_value = paste()
+        formatted_value = ExcelUtil.format_cell_value(cell_value)
+
+        return formatted_value if formatted_value else ''

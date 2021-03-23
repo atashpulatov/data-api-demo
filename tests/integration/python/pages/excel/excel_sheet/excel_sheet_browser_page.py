@@ -1,11 +1,9 @@
 from abc import ABC
-from pyperclip import paste
 
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.const import Const
-from framework.util.excel_util import ExcelUtil
 
 
 class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
@@ -57,7 +55,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def _get_cell_value(self, cell):
         self.go_to_cell(cell)
 
-        value = self._get_selected_cell_value()
+        value = self.get_selected_cell_value()
 
         return value.strip() if value else value
 
@@ -84,18 +82,6 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         
         self.send_keys(Keys.ENTER)
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-
-
-    def _get_selected_cell_value(self):
- 
-        self.hold_command_and_press_keys("c") # copy to clipboard
-        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-        
-        cell_value = paste()
-        formatted_value = ExcelUtil.format_cell_value(cell_value)
-
-        return formatted_value if formatted_value else ''
-
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)
