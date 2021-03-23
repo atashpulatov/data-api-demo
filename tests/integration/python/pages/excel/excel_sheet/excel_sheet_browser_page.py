@@ -15,6 +15,8 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     SELECT_SHEET_BUTTON = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > ' \
                           'li:nth-child(%s)'
 
+    WORKSHEETS_IN_GOTO_POPUP_SELECTOR = '#sheetDropDown > option'
+
     TABLE_HOME_TAB = 'm_excelWebRenderer_ewaCtl_Ribbon.Home-title'
     TABLE_DESIGN_TAB = 'm_excelWebRenderer_ewaCtl_Ribbon.Table.Design-title'
     GREEN_TABLE_STYLE = 'm_excelWebRenderer_ewaCtl_Ribbon.TableTools.TableStyles.Style6-Large'

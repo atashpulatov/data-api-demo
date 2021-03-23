@@ -10,8 +10,6 @@ from framework.util.const import Const
 
 class ExcelSheetWindowsChromePage(ExcelSheetBrowserPage):
 
-    WORKSHEETS_IN_GOTO_POPUP_SELECTOR = '#sheetDropDown > option'
-
     def remove_columns(self, first_column_to_be_deleted, number_of_columns_to_be_deleted):
         self.focus_on_excel_frame()
 
