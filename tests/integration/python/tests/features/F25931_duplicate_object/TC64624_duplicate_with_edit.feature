@@ -32,7 +32,7 @@ Feature: F25931 - Duplicate object
      Then object number 1 should be called "100_report Copy"
       And number of worksheets should be 2
 
-      And cell "B77" should have value "398042.4"
-      And cells ["C77", "A78", "B78", "C78"] should have values ["", "", "", ""]
+      And I verified that cell "B77" has value "398042.4"
+      And I verified that cells ["C77", "A78", "B78", "C78"] have values ["", "", "", ""]
 
       And I logged out

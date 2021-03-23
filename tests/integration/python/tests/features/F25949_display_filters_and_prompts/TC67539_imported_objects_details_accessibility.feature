@@ -23,7 +23,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
-     Then cells ["A10", "B10", "C10", "D10"] should have values ["Jan 2014", "Computers", "$6,530", "$5,347"]
+     Then I verified that cells ["A10", "B10", "C10", "D10"] have values ["Jan 2014", "Computers", "$6,530", "$5,347"]
 
      When I selected cell "H1"
       And I clicked Add Data button
@@ -36,7 +36,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
-     Then cells ["J15", "K15", "L15", "M15"] should have values ["519820964", "C", "Sub-Saharan Africa", "Offline"]
+     Then I verified that cells ["J15", "K15", "L15", "M15"] have values ["519820964", "C", "Sub-Saharan Africa", "Offline"]
 
      When I selected cell "X1"
       And I clicked Add Data button
@@ -47,7 +47,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["X5", "X9"] should have values ["27000", "42000"]
+     Then I verified that cells ["X5", "X9"] have values ["27000", "42000"]
 
      # expanding details on imported objects with keyboard navigation
      When I clicked on object 1

@@ -13,7 +13,7 @@ Feature: TF9328 - Release Validation
       And I clicked Import button
       And I closed all notifications
      Then number of worksheets should be 1
-      And cells ["A2", "D2"] should have values ["Albania", "385383069"]
+      And I verified that cells ["A2", "D2"] have values ["Albania", "385383069"]
       And object number 1 should be called "100_report"
 
      When I added a new worksheet
@@ -22,7 +22,7 @@ Feature: TF9328 - Release Validation
       And I clicked Import button
       And I closed all notifications
      Then number of worksheets should be 2
-      And cells ["A2", "D2"] should have values ["Central", "$847,227"]
+      And I verified that cells ["A2", "D2"] have values ["Central", "$847,227"]
       And object number 1 should be called "01 Basic Report"
 
      When I clicked on object 2

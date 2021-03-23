@@ -18,7 +18,7 @@ Feature: F24398 - Import and refresh visualization
       And I selected visualization "Expression prompt | Req | not D"
       And I clicked import dossier
       And I closed last notification
-     Then cells ["A2", "D2"] should have values ["Books", "$22,372"]
+     Then I verified that cells ["A2", "D2"] have values ["Books", "$22,372"]
 
      When I selected cell "F1"
       And I clicked Add Data button
@@ -31,7 +31,7 @@ Feature: F24398 - Import and refresh visualization
       And I selected visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
-     Then cells ["F2", "H8641"] should have values ["100 Places to Go While Still Young at Heart", "2016"]
+     Then I verified that cells ["F2", "H8641"] have values ["100 Places to Go While Still Young at Heart", "2016"]
 
       And I logged out
 

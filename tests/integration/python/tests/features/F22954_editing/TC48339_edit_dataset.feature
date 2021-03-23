@@ -14,7 +14,7 @@ Feature: F22954 - Edit dataset
      When I clicked Import button
       And I closed last notification
 
-     Then cells ["A1", "B2"] should have values ["Country", "Clothes"]
+     Then I verified that cells ["A1", "B2"] have values ["Country", "Clothes"]
 
      When I clicked Edit object 1
       And I unselected all attributes
@@ -25,6 +25,6 @@ Feature: F22954 - Edit dataset
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
-     Then cells ["A1", "B2"] should have values ["Region", "15233245.15"]
+     Then I verified that cells ["A1", "B2"] have values ["Region", "15233245.15"]
 
       And I logged out

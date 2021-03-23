@@ -76,7 +76,7 @@ Feature: TS41441 - Sanity checks
       And I found object by ID "778ECA4C11E990F800000080EFA56C55" and selected "Revenue by Region and Category - secure data"
       And I clicked Import button
       And I closed all notifications
-     Then cell "C3" should have value "$3,506,062"
+     Then I verified that cell "C3" has value "$3,506,062"
 
      When I clicked clear data
       And I waited for all progress notifications to disappear
@@ -87,6 +87,6 @@ Feature: TS41441 - Sanity checks
       And I closed all warning notifications
       And I selected worksheet number 1
       And I selected worksheet number 3
-     Then cells ["A2", "C3"] should have values ["Mid-Atlantic", "$646,421"]
+     Then I verified that cells ["A2", "C3"] have values ["Mid-Atlantic", "$646,421"]
 
       And I logged out

@@ -10,86 +10,86 @@ Feature: TF9328 - Release Validation
       And I found object by ID "A6E8885611E99CC31A6E0080EFF50C15" and selected "Report with crosstab 123"
       And I clicked Import button
       And I closed last notification
-     Then cells ["B3", "E5", "V6"] should have values ["", "$ 7,382", "$1,405"]
+     Then I verified that cells ["B3", "E5", "V6"] have values ["", "$ 7,382", "$1,405"]
       And object number 1 should be called "Report with crosstab 123"
 
      When I wrote text "123" in cell "C3"
-     Then cell "C3" should have value "123"
+     Then I verified that cell "C3" has value "123"
 
      When I merged range from "L3" to "X3"
       And I wrote text "=B3" in cell "B49"
-     Then cells ["B3", "B49"] should have values ["", "0"]
+     Then I verified that cells ["B3", "B49"] have values ["", "0"]
 
      When I wrote text "100" in cell "H3"
       And I wrote text "=SUM(H3:H39)" in cell "B43"
-     Then cell "H3" should have value "100"
-      And cell "B43" should have value "400970.8"
+     Then I verified that cell "H3" has value "100"
+      And I verified that cell "B43" has value "400970.8"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
-     Then cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
+     Then I verified that cells ["C3", "E5", "H3", "V6", "B43", "B49"] have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
 
      When I wrote text "123" in cell "C3"
-     Then cell "C3" should have value "123"
+     Then I verified that cell "C3" has value "123"
 
      When I merged range from "L3" to "X3"
       And I wrote text "=B3" in cell "B49"
-     Then cells ["B3", "B49"] should have values ["", "0"]
+     Then I verified that cells ["B3", "B49"] have values ["", "0"]
 
      When I wrote text "100" in cell "H3"
       And I wrote text "=SUM(H3:H39)" in cell "B43"
-     Then cell "H3" should have value "100"
-      And cell "B43" should have value "400970.8"
+     Then I verified that cell "H3" has value "100"
+      And I verified that cell "B43" has value "400970.8"
 
      When I clicked Edit object 1
       And I verified that Columns & Filters Selection is visible
       And I clicked Import button in Columns and Filters Selection
       And I waited for object to be imported successfully
       And I closed last notification
-     Then cells ["B3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
+     Then I verified that cells ["B3", "E5", "H3", "V6", "B43", "B49"] have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
 
      When I wrote text "123" in cell "C3"
-     Then cell "C3" should have value "123"
+     Then I verified that cell "C3" has value "123"
 
      When I merged range from "L3" to "X3"
       And I wrote text "=B3" in cell "B49"
-     Then cells ["B3", "B49"] should have values ["", "0"]
+     Then I verified that cells ["B3", "B49"] have values ["", "0"]
 
      When I wrote text "100" in cell "H3"
       And I wrote text "=SUM(H3:H39)" in cell "B43"
-     Then cell "H3" should have value "100"
-      And cell "B43" should have value "400970.8"
+     Then I verified that cell "H3" has value "100"
+      And I verified that cell "B43" has value "400970.8"
 
      When I clicked clear data
-     Then cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["Column2", "", "Column7", "", "0", "#REF!"]
+     Then I verified that cells ["C3", "E5", "H3", "V6", "B43", "B49"] have values ["Column2", "", "Column7", "", "0", "#REF!"]
 
      When I clicked view data
       And I closed all notifications
-     Then cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
+     Then I verified that cells ["C3", "E5", "H3", "V6", "B43", "B49"] have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
 
      When I wrote text "123" in cell "C3"
-     Then cell "C3" should have value "123"
+     Then I verified that cell "C3" has value "123"
 
      When I merged range from "L3" to "X3"
       And I wrote text "=B3" in cell "B49"
-     Then cells ["B3", "B49"] should have values ["", "0"]
+     Then I verified that cells ["B3", "B49"] have values ["", "0"]
 
      When I wrote text "100" in cell "H3"
       And I wrote text "=SUM(H3:H39)" in cell "B43"
-     Then cell "H3" should have value "100"
-      And cell "B43" should have value "400970.8"
+     Then I verified that cell "H3" has value "100"
+      And I verified that cell "B43" has value "400970.8"
 
      When I removed object 1 using icon
       And I closed last notification
-     Then cells ["C3", "E5", "H3", "V6", "B43", "B49"] should have values ["", "", "", "", "0", "#REF!"]
+     Then I verified that cells ["C3", "E5", "H3", "V6", "B43", "B49"] have values ["", "", "", "", "0", "#REF!"]
 
      When I added a new worksheet
       And I clicked Import Data button
       And I found object by ID "A6E8885611E99CC31A6E0080EFF50C15" and selected "Report with crosstab 123"
       And I clicked Import button
       And I closed last notification
-     Then cells ["B3", "E5", "V6"] should have values ["", "$ 7,382", "$1,405"]
+     Then I verified that cells ["B3", "E5", "V6"] have values ["", "$ 7,382", "$1,405"]
       And object number 1 should be called "Report with crosstab 123"
 
      When I selected cell "A49"
@@ -99,6 +99,6 @@ Feature: TF9328 - Release Validation
       And I closed last notification
       And I removed object 2 using icon
       And I closed notification on object 2
-     Then cells ["B3", "E5", "H3", "V6"] should have values ["", "", "", ""]
+     Then I verified that cells ["B3", "E5", "H3", "V6"] have values ["", "", "", ""]
 
       And I logged out

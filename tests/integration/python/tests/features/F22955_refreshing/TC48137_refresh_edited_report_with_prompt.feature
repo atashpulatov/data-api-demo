@@ -16,7 +16,7 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
       And I clicked Run button
       And I closed last notification
 
-     Then cells ["A1", "B2", "D3"] should have values ["Year", "Central", "$159,339"]
+     Then I verified that cells ["A1", "B2", "D3"] have values ["Year", "Central", "$159,339"]
 
      When I clicked Edit object 1
       And I waited for Run button to be enabled
@@ -29,12 +29,12 @@ Feature: F22955 - Refresh data already imported to the workbook (including promp
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
-     Then cells ["A1", "B2", "D3"] should have values ["Region", "$21,190", ""]
+     Then I verified that cells ["A1", "B2", "D3"] have values ["Region", "$21,190", ""]
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
 
-     Then cells ["A1", "B2", "D3"] should have values ["Region", "$21,190", ""]
+     Then I verified that cells ["A1", "B2", "D3"] have values ["Region", "$21,190", ""]
 
       And I logged out

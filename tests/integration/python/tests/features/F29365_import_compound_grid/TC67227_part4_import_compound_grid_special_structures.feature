@@ -18,7 +18,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "A3" should have value "Electronics"
+     Then I verified that cell "A3" has value "Electronics"
 
      When I selected cell "C1"
       And I clicked Add Data button
@@ -30,7 +30,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["C6", "E9", "F14", "H14"] should have values ["Books - Miscellaneous", "", "4181261.167", ""]
+     Then I verified that cells ["C6", "E9", "F14", "H14"] have values ["Books - Miscellaneous", "", "4181261.167", ""]
 
      When I selected cell "J1"
       And I clicked Add Data button
@@ -42,7 +42,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "L10" should have value "$3,149,663"
+     Then I verified that cell "L10" has value "$3,149,663"
 
      When I selected cell "P1"
       And I clicked Add Data button
@@ -54,6 +54,6 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["Q1", "T1", "R6"] should have values ["Subcategory", "Cost", "$811,787"]
+     Then I verified that cells ["Q1", "T1", "R6"] have values ["Subcategory", "Cost", "$811,787"]
 
       And I logged out

@@ -46,15 +46,15 @@ Feature: F24086 - Improved browsing by adding filters
       And I imported visualization "Visualization 1"
 
      Then I closed last notification
-      And cell "A1" should have value "Year"
+      And I verified that cell "A1" has value "Year"
 
      When I removed 1 columns starting from column "A"
-     Then cell "A1" should have value "Catalog"
+     Then I verified that cell "A1" has value "Catalog"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
      Then I closed all notifications
-      And cell "A1" should have value "Year"
+      And I verified that cell "A1" has value "Year"
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -73,13 +73,13 @@ Feature: F24086 - Improved browsing by adding filters
      When I found object by ID "94A1482F11EA8E01B50F0080EF05D782" and selected "ABCD_update"
       And I clicked Import button
       And I closed last notification
-     Then cells ["A1", "A2"] should have values ["A", "a"]
+     Then I verified that cells ["A1", "A2"] have values ["A", "a"]
 
      When I clicked clear data
-     Then cells ["A1", "A2"] should have values ["A", ""]
+     Then I verified that cells ["A1", "A2"] have values ["A", ""]
 
      When I clicked view data
       And I closed last notification
-     Then cells ["A1", "A2"] should have values ["A", "a"]
+     Then I verified that cells ["A1", "A2"] have values ["A", "a"]
 
       And I logged out

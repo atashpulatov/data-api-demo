@@ -21,7 +21,7 @@ Feature: TS41441 - Sanity checks
       And I waited for object to be imported successfully
       And I closed last notification
      Then object number 1 should be called "Report with prompt - Attribute element prompt of Category | Required | Not default"
-      And cells ["A3", "B3"] should have values ["2014", "Mid-Atlantic"]
+      And I verified that cells ["A3", "B3"] have values ["2014", "Mid-Atlantic"]
 
      When I selected cell "G1"
       And I clicked Add Data button
@@ -32,7 +32,7 @@ Feature: TS41441 - Sanity checks
       And I clicked Run button
       And I closed last notification
      Then object number 1 should be called "Report with a subtotal & prompt"
-      And cells ["G8", "H8", "L8"] should have values ["Jan 2014", "Total", "$ 302,399"]
+      And I verified that cells ["G8", "H8", "L8"] have values ["Jan 2014", "Total", "$ 302,399"]
 
      When I selected cell "M1"
       And I clicked Add Data button
@@ -68,7 +68,7 @@ Feature: TS41441 - Sanity checks
       And I waited for all progress notifications to disappear
       And I closed all notifications
 
-     Then cells ["A3", "B3", "G8", "H8", "L8", "M3", "R3", "W3", "AB3", "AR3", "BG3"] should have values ["2014", "Mid-Atlantic", "Jan 2014", "Total", "$ 302,399", "2015 Q1", "Feb 2014", "Central", "0", "Angola", "Angola" ]
+     Then I verified that cells ["A3", "B3", "G8", "H8", "L8", "M3", "R3", "W3", "AB3", "AR3", "BG3"] have values ["2014", "Mid-Atlantic", "Jan 2014", "Total", "$ 302,399", "2015 Q1", "Feb 2014", "Central", "0", "Angola", "Angola" ]
       And object number 8 should be called "Report with prompt - Attribute element prompt of Category | Required | Not default"
       And object number 7 should be called "Report with a subtotal & prompt"
       And object number 6 should be called "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Polish Pójdźże, kiń tę chmurność w głąb flaszy!"
@@ -81,6 +81,6 @@ Feature: TS41441 - Sanity checks
      When I removed object 1 using icon
       And I removed object 8 using icon
       And I closed all notifications
-     Then cells ["A1", "BG1"] should have values ["", ""]
+     Then I verified that cells ["A1", "BG1"] have values ["", ""]
 
       And I logged out

@@ -21,16 +21,16 @@ Feature: F21526 - Secure data
       And I clicked Import button without checking results
       And I waited for object to be imported successfully
      Then I closed all notifications
-      And cells ["A1", "B33", "E1", "F77"] should have values ["Region", "Music", "Country", "Sub-Saharan Africa"]
+      And I verified that cells ["A1", "B33", "E1", "F77"] have values ["Region", "Music", "Country", "Sub-Saharan Africa"]
 
      When I clicked clear data
-     Then cells ["A1", "B33", "E1", "F77"] should have values ["Region", "", "Country", ""]
+     Then I verified that cells ["A1", "B33", "E1", "F77"] have values ["Region", "", "Country", ""]
       And I logged out
 
      When I logged in with username "Tim" and empty password
       And I clicked view data
       And I closed all notifications
-     Then cells ["B33", "F77"] should have values ["Music", "Sub-Saharan Africa"]
+     Then I verified that cells ["B33", "F77"] have values ["Music", "Sub-Saharan Africa"]
 
      When I clicked clear data
      Then I logged out
@@ -38,7 +38,7 @@ Feature: F21526 - Secure data
      When I logged in with username "Jeff" and empty password
       And I clicked view data
       And I closed all notifications
-     Then cells ["B33", "F77", "B3"] should have values ["", "Sub-Saharan Africa", "Books"]
+     Then I verified that cells ["B33", "F77", "B3"] have values ["", "Sub-Saharan Africa", "Books"]
 
      When I clicked clear data
      Then I logged out
@@ -47,7 +47,7 @@ Feature: F21526 - Secure data
       And I clicked view data
       And I closed last notification
       And I closed all warning notifications
-     Then cells ["F77", "B3" ] should have values ["Sub-Saharan Africa", ""]
+     Then I verified that cells ["F77", "B3" ] have values ["Sub-Saharan Africa", ""]
 
      When I removed object 2 using icon
       And I removed object 1 using icon
