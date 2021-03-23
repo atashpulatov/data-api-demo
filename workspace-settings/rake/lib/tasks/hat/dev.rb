@@ -16,7 +16,7 @@ task :update_strings do
   # get the latest artifact version
   artifact_version = Nexus.latest_artifact_version(
     artifact_id: "MSTR_OFFICE", 
-    group_id: "com.microstrategy.US227749.ProductStrings", 
+    group_id: "com.microstrategy.next.ProductStrings", 
     repository: $WORKSPACE_SETTINGS[:nexus][:repos][:release],
     extra_coordinates: {e: 'zip'} 
   )
@@ -26,7 +26,7 @@ task :update_strings do
     file_path: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/string_bundle.zip",
     version: artifact_version,
     artifact_id: "MSTR_OFFICE", 
-    group_id: "com.microstrategy.US227749.ProductStrings",
+    group_id: "com.microstrategy.next.ProductStrings",
     repository: $WORKSPACE_SETTINGS[:nexus][:repos][:release],
     extra_coordinates: {e: 'zip'}
   )
@@ -41,7 +41,7 @@ task :update_strings do
     file_path: "#{$WORKSPACE_SETTINGS[:paths][:project][:production][:home]}/string_metadata.json",
     version: artifact_version,
     artifact_id: "MSTR_OFFICE", 
-    group_id: "com.microstrategy.US227749.ProductStrings.metadata",
+    group_id: "com.microstrategy.next.ProductStrings.metadata",
     repository: $WORKSPACE_SETTINGS[:nexus][:repos][:release],
     extra_coordinates: {e: 'json'}
   )
