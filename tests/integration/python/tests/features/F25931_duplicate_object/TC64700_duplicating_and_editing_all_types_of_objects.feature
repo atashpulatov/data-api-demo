@@ -45,7 +45,7 @@ Feature: F25931 - Duplicate object
       And I selected Active Cell option in Duplicate popup
       And I clicked Import button in Duplicate popup
       And I closed last notification
-     Then object number 1 should be called "Merged Header Report Copy"
+     Then I verified that object number 1 is called "Merged Header Report Copy"
       And I verified that cell "C2" has value "Books"
 
      When I clicked Edit object 4
@@ -60,7 +60,7 @@ Feature: F25931 - Duplicate object
      Then I verified that cells ["B2", "E2", "F2", "G2"] have values ["", "Books", "$2,070,816", "$569,278"]
 
      When I selected worksheet number 2
-      And object number 3 should be called "DATA_IMPORT_SQL_STATEMENT"
+      And I verified that object number 3 is called "DATA_IMPORT_SQL_STATEMENT"
       And I removed 1 columns starting from column "E"
       And I selected cell "E1"
       And I clicked Duplicate on object 3
@@ -68,9 +68,9 @@ Feature: F25931 - Duplicate object
       And I clicked Import button in Duplicate popup
       And I closed last notification
      Then I verified that cell "I2" has value "1"
-      And object number 1 should be called "DATA_IMPORT_SQL_STATEMENT Copy"
+      And I verified that object number 1 is called "DATA_IMPORT_SQL_STATEMENT Copy"
 
-     When object number 4 should be called "DATA_IMPORT_SQL_STATEMENT"
+     When I verified that object number 4 is called "DATA_IMPORT_SQL_STATEMENT"
       And I clicked Refresh on object 4
       And I selected cell "J1"
       And I selected Active Cell option in Range Taken popup
@@ -99,18 +99,18 @@ Feature: F25931 - Duplicate object
    #TODO  I veryfied "New  Sheet" is selected
       And I clicked OK button in Range Taken popup
       And I closed last notification
-     Then object number 1 should be called "Merged Header Report"
+     Then I verified that object number 1 is called "Merged Header Report"
       And I verified that cell "A2" has value "Books"
       And I selected worksheet number 5
       And I verified that cell "C3" has value "abc"
 
-     When object number 4 should be called "Merged Header Report Copy"
+     When I verified that object number 4 is called "Merged Header Report Copy"
       And I clicked Duplicate on object 1
       And I clicked Import button in Duplicate popup
       And I closed last notification
      Then I selected worksheet number 6
       And I verified that cell "A2" has value "Books"
-      And object number 1 should be called "Merged Header Report Copy 2"
+      And I verified that object number 1 is called "Merged Header Report Copy 2"
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -130,6 +130,6 @@ Feature: F25931 - Duplicate object
       And I closed last notification
       And I selected worksheet number 7
      Then I verified that cell "B2" has value "Cost"
-      And object number 1 should be called "attributes and metrics in rows"
+      And I verified that object number 1 is called "attributes and metrics in rows"
 
       And I logged out

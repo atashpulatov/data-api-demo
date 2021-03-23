@@ -75,7 +75,7 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().hover_over_name_of_object_number(object_number)
 
 
-@step('object number {object_number} should be called "{expected_name}"')
+@step('I verified that object number {object_number} is called "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.right_panel_tile_page().get_object_name(object_number)
 

@@ -36,7 +36,7 @@ Feature: TF9328 - Release Validation
       And I clicked import dossier
       And I closed last notification
      Then I verified that cells ["A2", "D2"] have values ["Metrics", "Profit Actual"]
-      And object number 1 should be called "Actual Profit vs. Target Profit"
+      And I verified that object number 1 is called "Actual Profit vs. Target Profit"
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -47,7 +47,7 @@ Feature: TF9328 - Release Validation
       And I clicked Run button
       And I closed last notification
      Then I verified that cells ["B1", "D2"] have values ["Subcategory", "$1,419"]
-      And object number 1 should be called "Report with a subtotal & prompt"
+      And I verified that object number 1 is called "Report with a subtotal & prompt"
 
      When I added a new worksheet
       And I clicked Add Data button

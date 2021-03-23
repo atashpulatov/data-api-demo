@@ -14,7 +14,7 @@ Feature: TF9328 - Release Validation
       And I closed all notifications
      Then number of worksheets should be 1
       And I verified that cells ["A2", "D2"] have values ["Albania", "385383069"]
-      And object number 1 should be called "100_report"
+      And I verified that object number 1 is called "100_report"
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -23,7 +23,7 @@ Feature: TF9328 - Release Validation
       And I closed all notifications
      Then number of worksheets should be 2
       And I verified that cells ["A2", "D2"] have values ["Central", "$847,227"]
-      And object number 1 should be called "01 Basic Report"
+      And I verified that object number 1 is called "01 Basic Report"
 
      When I clicked on object 2
      Then columns ["A", "N"] are selected

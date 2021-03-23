@@ -20,21 +20,21 @@ Feature: F25931 - Duplicate object
       And I clicked Import button in Duplicate popup
       And I closed all notifications
 
-     Then object number 1 should be called "100_report Copy"
+     Then I verified that object number 1 is called "100_report Copy"
       And number of worksheets should be 2
 
      When I clicked Duplicate on object 2
       And I clicked Import button in Duplicate popup
       And I closed all notifications
 
-     Then object number 1 should be called "100_report Copy 2"
+     Then I verified that object number 1 is called "100_report Copy 2"
       And number of worksheets should be 3
 
      When I clicked Duplicate on object 1
       And I clicked Import button in Duplicate popup
       And I closed all notifications
 
-     Then object number 1 should be called "100_report Copy 3"
+     Then I verified that object number 1 is called "100_report Copy 3"
       And number of worksheets should be 4
 
       And I logged out

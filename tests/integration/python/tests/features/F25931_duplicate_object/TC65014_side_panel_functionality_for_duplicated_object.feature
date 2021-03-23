@@ -17,7 +17,7 @@ Feature: F25931 - Duplicate object
       And I clicked Import button in Duplicate popup
       And I closed last notification
 
-     Then object number 1 should be called "100_report Copy"
+     Then I verified that object number 1 is called "100_report Copy"
 
      When I clicked on object 1
 

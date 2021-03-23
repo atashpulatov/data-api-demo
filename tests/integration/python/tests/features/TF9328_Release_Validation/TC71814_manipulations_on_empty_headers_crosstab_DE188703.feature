@@ -11,7 +11,7 @@ Feature: TF9328 - Release Validation
       And I clicked Import button
       And I closed last notification
      Then I verified that cells ["B3", "E5", "V6"] have values ["", "$ 7,382", "$1,405"]
-      And object number 1 should be called "Report with crosstab 123"
+      And I verified that object number 1 is called "Report with crosstab 123"
 
      When I selected cell "C3" and entered text "123"
      Then I verified that cell "C3" has value "123"
@@ -90,7 +90,7 @@ Feature: TF9328 - Release Validation
       And I clicked Import button
       And I closed last notification
      Then I verified that cells ["B3", "E5", "V6"] have values ["", "$ 7,382", "$1,405"]
-      And object number 1 should be called "Report with crosstab 123"
+      And I verified that object number 1 is called "Report with crosstab 123"
 
      When I selected cell "A49"
       And I clicked Add Data button

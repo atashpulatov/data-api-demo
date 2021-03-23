@@ -19,7 +19,7 @@ Feature: TF9328 - Release Validation
       And I closed last notification
      Then I verified that cells ["B1", "J3", "H3"] have values ["Item Type", "81320.96", "Maximum"]
       And I verified that bold button is selected for cell "H3"
-      And object number 1 should be called "Report based on cube with subtotals"
+      And I verified that object number 1 is called "Report based on cube with subtotals"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
@@ -53,7 +53,7 @@ Feature: TF9328 - Release Validation
       And I closed last notification
      Then I verified that cells ["B1", "C7", "B8"] have values ["Subcategory", "$1,164", "Total"]
       And I verified that bold button is selected for cell "D8"
-      And object number 1 should be called "Report with a subtotal & prompt"
+      And I verified that object number 1 is called "Report with a subtotal & prompt"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
@@ -86,7 +86,7 @@ Feature: TF9328 - Release Validation
       And I closed last notification
      Then I verified that cells ["B1", "B7", "C4", "W9"] have values ["Region", "Total", "", "$1"]
       And I verified that bold button is selected for cell "W10"
-      And object number 1 should be called "Report with crosstab and subtotals"
+      And I verified that object number 1 is called "Report with crosstab and subtotals"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
@@ -207,6 +207,6 @@ Feature: TF9328 - Release Validation
       And I closed last notification
      Then I verified that cells ["B1", "D2"] have values ["Avg (Item)", "$5,293,624"]
       And I verified that bold button is selected for cell "D2"
-      And object number 1 should be called "Prompted report with attributes with and without subtotals"
+      And I verified that object number 1 is called "Prompted report with attributes with and without subtotals"
 
       And I logged out

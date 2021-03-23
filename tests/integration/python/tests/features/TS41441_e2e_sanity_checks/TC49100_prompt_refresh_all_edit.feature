@@ -48,7 +48,7 @@ Feature: TS41441 - Sanity checks
 
      When I clicked Import button in Columns and Filters Selection
       And I closed last notification
-     Then object number 1 should be called "Report with prompt - Attribute element prompt of Category | Required | Not default"
+     Then I verified that object number 1 is called "Report with prompt - Attribute element prompt of Category | Required | Not default"
       And I verified that cells ["A3", "B3"] have values ["2014", "Northeast"]
 
      When I selected cell "G1"
@@ -59,7 +59,7 @@ Feature: TS41441 - Sanity checks
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
       And I closed last notification
-     Then object number 1 should be called "Report with a subtotal & prompt"
+     Then I verified that object number 1 is called "Report with a subtotal & prompt"
       And I verified that cells ["G8", "H8", "L8"] have values ["Jan 2014", "Total", "$ 302,399"]
 
 #     When I hovered over Refresh button on object 2

@@ -46,15 +46,15 @@ Feature: F24398 - Import and refresh visualization
      Then I verified that cells ["A2", "A3"] have values ["Total", "2015"]
 
      When I changed object 1 name to "Visualization-name" using icon
-     Then object number 1 should be called "Visualization-name"
+     Then I verified that object number 1 is called "Visualization-name"
 
      When I changed object 1 name to "Modified-visualization-name" using context menu
-     Then object number 1 should be called "Modified-visualization-name"
+     Then I verified that object number 1 is called "Modified-visualization-name"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
-     Then object number 1 should be called "Modified-visualization-name"
+     Then I verified that object number 1 is called "Modified-visualization-name"
       And I verified that cells ["A2", "A3"] have values ["Total", "2015"]
 
      When I selected cell "F1"
@@ -67,7 +67,7 @@ Feature: F24398 - Import and refresh visualization
       And I imported visualization "Grid visualisation with subtotals"
       And I closed last notification
      Then I verified that cells ["F2", "F3"] have values ["Total", "Al Hirschfeld"]
-      And object number 1 should be called "Grid visualisation with subtotals"
+      And I verified that object number 1 is called "Grid visualisation with subtotals"
 
      When I removed object 1 using icon
       And I closed last notification

@@ -29,7 +29,7 @@ Feature: F25931 - Duplicate object
      When I clicked Import button in Columns and Filters Selection to duplicate object
       And I closed last notification
 
-     Then object number 1 should be called "100_report Copy"
+     Then I verified that object number 1 is called "100_report Copy"
       And number of worksheets should be 2
 
       And I verified that cell "B77" has value "398042.4"
