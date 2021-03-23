@@ -197,14 +197,14 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_action_pending, True)
 
 
-@step('I verified that the object {object_number} had displayed message "{object_message}"')
+@step('I verified that the object {object_number} has displayed message "{object_message}"')
 def step_impl(context, object_number, object_message):
     displayed_message = context.pages.right_panel_tile_page().get_object_action_in_progress_name(object_number)
 
     AssertUtil.assert_simple(displayed_message, object_message)
 
 
-@step('I verified that the object {object_number} tile had no popup displayed')
+@step('I verified that the object {object_number} tile has no popup displayed')
 def step_impl(context, object_number):
     is_message_displayed = context.pages.right_panel_tile_page().verify_object_has_popup_displayed(object_number)
 

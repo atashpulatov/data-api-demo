@@ -15,7 +15,7 @@ def step_impl(context, start_cell, end_cell):
     context.pages.excel_sheet_page().merge_range(start_cell, end_cell)
 
 
-@step('I wrote text "{text}" in cell "{cell_name}"')
+@step('I selected cell "{cell_name}" and entered text "{text}"')
 def step_impl(context, text, cell_name):
     context.pages.excel_sheet_page().write_value_in_cell(cell_name, text)
 
@@ -27,7 +27,7 @@ def step_impl(context, cell_name, expected_value):
     AssertUtil.assert_simple(result, [expected_value])
 
 
-@step('cell "{cell_name}" should be empty')
+@step('I verified that cell "{cell_name}" was empty')
 def step_impl(context, cell_name):
     result = context.pages.excel_sheet_page().get_cells_values([cell_name])
 

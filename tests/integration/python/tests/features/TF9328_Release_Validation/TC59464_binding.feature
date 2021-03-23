@@ -28,6 +28,6 @@ Feature: TS41441 - Sanity checks
 # TODO step implemented only for Windows Desktop
       And I selected object number 2 from Name Box
 
-     Then object number 1 and object number 2 in Name Box had different timestamps
+     Then I verified that object number 1 and object number 2 in Name Box have different timestamps
 
       And I logged out

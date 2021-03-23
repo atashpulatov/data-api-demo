@@ -13,15 +13,15 @@ Feature: TF9328 - Release Validation
      Then I verified that cells ["B3", "E5", "V6"] have values ["", "$ 7,382", "$1,405"]
       And object number 1 should be called "Report with crosstab 123"
 
-     When I wrote text "123" in cell "C3"
+     When I selected cell "C3" and entered text "123"
      Then I verified that cell "C3" has value "123"
 
      When I merged range from "L3" to "X3"
-      And I wrote text "=B3" in cell "B49"
+      And I selected cell "B49" and entered text "=B3"
      Then I verified that cells ["B3", "B49"] have values ["", "0"]
 
-     When I wrote text "100" in cell "H3"
-      And I wrote text "=SUM(H3:H39)" in cell "B43"
+     When I selected cell "H3" and entered text "100"
+      And I selected cell "B43" and entered text "=SUM(H3:H39)"
      Then I verified that cell "H3" has value "100"
       And I verified that cell "B43" has value "400970.8"
 
@@ -30,15 +30,15 @@ Feature: TF9328 - Release Validation
       And I closed last notification
      Then I verified that cells ["C3", "E5", "H3", "V6", "B43", "B49"] have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
 
-     When I wrote text "123" in cell "C3"
+     When I selected cell "C3" and entered text "123"
      Then I verified that cell "C3" has value "123"
 
      When I merged range from "L3" to "X3"
-      And I wrote text "=B3" in cell "B49"
+      And I selected cell "B49" and entered text "=B3"
      Then I verified that cells ["B3", "B49"] have values ["", "0"]
 
-     When I wrote text "100" in cell "H3"
-      And I wrote text "=SUM(H3:H39)" in cell "B43"
+     When I selected cell "H3" and entered text "100"
+      And I selected cell "B43" and entered text "=SUM(H3:H39)"
      Then I verified that cell "H3" has value "100"
       And I verified that cell "B43" has value "400970.8"
 
@@ -49,15 +49,15 @@ Feature: TF9328 - Release Validation
       And I closed last notification
      Then I verified that cells ["B3", "E5", "H3", "V6", "B43", "B49"] have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
 
-     When I wrote text "123" in cell "C3"
+     When I selected cell "C3" and entered text "123"
      Then I verified that cell "C3" has value "123"
 
      When I merged range from "L3" to "X3"
-      And I wrote text "=B3" in cell "B49"
+      And I selected cell "B49" and entered text "=B3"
      Then I verified that cells ["B3", "B49"] have values ["", "0"]
 
-     When I wrote text "100" in cell "H3"
-      And I wrote text "=SUM(H3:H39)" in cell "B43"
+     When I selected cell "H3" and entered text "100"
+      And I selected cell "B43" and entered text "=SUM(H3:H39)"
      Then I verified that cell "H3" has value "100"
       And I verified that cell "B43" has value "400970.8"
 
@@ -68,15 +68,15 @@ Feature: TF9328 - Release Validation
       And I closed all notifications
      Then I verified that cells ["C3", "E5", "H3", "V6", "B43", "B49"] have values ["", "$ 7,382", "", "$1,405", "400870.8", "#REF!"]
 
-     When I wrote text "123" in cell "C3"
+     When I selected cell "C3" and entered text "123"
      Then I verified that cell "C3" has value "123"
 
      When I merged range from "L3" to "X3"
-      And I wrote text "=B3" in cell "B49"
+      And I selected cell "B49" and entered text "=B3"
      Then I verified that cells ["B3", "B49"] have values ["", "0"]
 
-     When I wrote text "100" in cell "H3"
-      And I wrote text "=SUM(H3:H39)" in cell "B43"
+     When I selected cell "H3" and entered text "100"
+      And I selected cell "B43" and entered text "=SUM(H3:H39)"
      Then I verified that cell "H3" has value "100"
       And I verified that cell "B43" has value "400970.8"
 

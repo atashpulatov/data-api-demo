@@ -86,10 +86,10 @@ Feature: F25943 - Notifications side panel
       And I verified that the object 5 action was pending
 
      When I canceled object 5 pending action
-     Then I verified that the object 5 tile had no popup displayed
+     Then I verified that the object 5 tile has no popup displayed
       And I waited for object 4 to have message on successful operation: "Refresh complete"
-      And I verified that the object 1 had displayed message "Refresh complete"
-      And I verified that the object 3 had displayed message "Refresh complete"
+      And I verified that the object 1 has displayed message "Refresh complete"
+      And I verified that the object 3 has displayed message "Refresh complete"
       And I closed all notifications
 
      When I selected object 1 using object checkbox
@@ -97,15 +97,15 @@ Feature: F25943 - Notifications side panel
       And I selected object 4 using object checkbox
       And I removed selected objects
      Then I waited for object 4 to have message on successful operation: "Object removed"
-      And I verified that the object 1 had displayed message "Object removed"
-      And I verified that the object 2 had displayed message "Object removed"
+      And I verified that the object 1 has displayed message "Object removed"
+      And I verified that the object 2 has displayed message "Object removed"
       And I closed all notifications
 
      When I clicked clear data
       And I waited for Clear Data overlay to have title "Data Cleared!"
-     Then I verified that the object 1 tile had no popup displayed
-      And I verified that the object 2 tile had no popup displayed
-      And I verified that the object 3 tile had no popup displayed
+     Then I verified that the object 1 tile has no popup displayed
+      And I verified that the object 2 tile has no popup displayed
+      And I verified that the object 3 tile has no popup displayed
       And I verified that the Clear Data overlay displayed message "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again."
 
       And I logged out

@@ -5,7 +5,7 @@ Feature: F25933 - Range taken
     Given I initialized Excel
 
      When I logged in as default user
-      And I wrote text "abc" in cell "C1"
+      And I selected cell "C1" and entered text "abc"
       And I selected cell "A1"
 
       And I clicked Import Data button
