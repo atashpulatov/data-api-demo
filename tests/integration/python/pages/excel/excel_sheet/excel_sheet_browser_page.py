@@ -12,10 +12,6 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     ATTRIBUTE_NAME_VALUE = 'value'
     ATTRIBUTE_NAME_ARIA_PRESSED = 'aria-pressed'
 
-    FORMAT_CELLS_PROMPT_SAMPLE = 'sample'
-
-    FORMAT_CELLS_PROMPT_BUTTON_ELEM = 'WACDialogActionButton'
-
     WORKSHEETS_TABS = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div.ewa-stb-tabarea > ' \
                       'ul.ewa-stb-tabs > li'
 
@@ -93,24 +89,13 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def _get_selected_cell_value(self):
  
         self.hold_command_and_press_keys("c") # copy to clipboard
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
         
         cell_value = paste()
+        formatted_value = ExcelUtil.format_cell_value(cell_value)
 
-        return cell_value if cell_value else ''
+        return formatted_value if formatted_value else ''
 
-        # self.hold_command_and_press_keys("1") # open cell formatting options
-        # self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-
-        # sample_input_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_SAMPLE)
-
-        # sample_input_elem_value = sample_input_elem.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_VALUE)
-
-        # formatted_value = ExcelUtil.format_cell_value(sample_input_elem_value)
-
-        # value_elem = self.get_element_by_id(ExcelSheetBrowserPage.FORMAT_CELLS_PROMPT_BUTTON_ELEM)
-        # value_elem.click()
-
-        # return formatted_value if formatted_value else ''
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)
