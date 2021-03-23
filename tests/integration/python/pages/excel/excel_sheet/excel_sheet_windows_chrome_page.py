@@ -9,9 +9,8 @@ from framework.util.const import Const
 
 
 class ExcelSheetWindowsChromePage(ExcelSheetBrowserPage):
-    COLUMN_HEADER = '.ewrch-col-nosel > .ewr-chc'
-    EXCEL_COLUMN_OPTION_CSS = '.label-100'
-    OPTION_DELETE_COLUMNS = 'Delete Columns'
+
+    WORKSHEETS_IN_GOTO_POPUP_SELECTOR = '#sheetDropDown > option'
 
     def remove_columns(self, first_column_to_be_deleted, number_of_columns_to_be_deleted):
         self.focus_on_excel_frame()
@@ -33,7 +32,7 @@ class ExcelSheetWindowsChromePage(ExcelSheetBrowserPage):
  
         self.hold_ctrl_and_press_keys("c") # copy to clipboard
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-        
+
         cell_value = paste()
         formatted_value = ExcelUtil.format_cell_value(cell_value)
 
@@ -47,6 +46,13 @@ class ExcelSheetWindowsChromePage(ExcelSheetBrowserPage):
 
         self.send_keys(cells)
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-        
+
         self.send_keys(Keys.ENTER)
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+    def get_number_of_worksheets(self):
+        self.focus_on_excel_frame()
+
+        self.hold_ctrl_and_press_keys("g")
+
+        return len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_IN_GOTO_POPUP_SELECTOR))

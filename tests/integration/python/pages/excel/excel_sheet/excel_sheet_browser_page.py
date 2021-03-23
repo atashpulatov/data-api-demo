@@ -10,9 +10,6 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     ATTRIBUTE_NAME_VALUE = 'value'
     ATTRIBUTE_NAME_ARIA_PRESSED = 'aria-pressed'
 
-    WORKSHEETS_TABS = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div.ewa-stb-tabarea > ' \
-                      'ul.ewa-stb-tabs > li'
-
     ADD_SHEET_BUTTON = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > .ewa-stb-navareaextra > .ewa-stb-navbutton'
 
     SELECT_SHEET_BUTTON = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > ' \
@@ -84,11 +81,6 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
         self.send_keys(Keys.ENTER)
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-
-    def get_number_of_worksheets(self):
-        self.focus_on_excel_frame()
-
-        return len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_TABS))
 
     def add_worksheet(self):
         self.focus_on_excel_frame()
