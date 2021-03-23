@@ -34,7 +34,7 @@ def step_impl(context, cell_name):
     AssertUtil.assert_simple(result, [None])
 
 
-@step("cells {cells_names} should have values {expected_cells_values}")
+@step("I verified that cells {cells_names} have values {expected_cells_values}")
 def step_impl(context, cells_names, expected_cells_values):
     param_cells_names = json.loads(cells_names)
 
