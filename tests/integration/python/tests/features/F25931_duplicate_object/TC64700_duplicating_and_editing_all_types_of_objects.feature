@@ -90,7 +90,7 @@ Feature: F25931 - Duplicate object
      Then I verified that cell "H1" has value "Milwaukee"
 
      When I added a new worksheet
-      And I selected cell "C3" and entered text "abc"
+      And I entered text "abc" into cell "C3" after selecting it
       And I verified that cell "C3" has value "abc"
       And I selected cell "A1"
       And I clicked Add Data button

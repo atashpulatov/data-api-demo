@@ -15,7 +15,7 @@ def step_impl(context, start_cell, end_cell):
     context.pages.excel_sheet_page().merge_range(start_cell, end_cell)
 
 
-@step('I selected cell "{cell_name}" and entered text "{text}"')
+@step('I entered text "{text}" into cell "{cell_name}" after selecting it')
 def step_impl(context, text, cell_name):
     context.pages.excel_sheet_page().write_value_in_cell(cell_name, text)
 
