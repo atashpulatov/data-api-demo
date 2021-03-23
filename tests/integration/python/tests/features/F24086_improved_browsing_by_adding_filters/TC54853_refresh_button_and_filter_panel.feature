@@ -10,22 +10,22 @@ Feature: F24086 - Improved browsing by adding filters
 
      When I clicked Filters button
 
-     Then verified that Certified Status category header on My Library has correct title
-      And verified that Certified Status category on My Library has element Certified
+     Then I verified that Certified Status category header on My Library has correct title
+      And I verified that Certified Status category on My Library has element Certified
 
-      And verified that Owner category header on My Library has title "Owner"
+      And I verified that Owner category header on My Library has title "Owner"
 
-      And verified that Modified category header on My Library has correct title
-      And verified that Modified category on My Library has From field
-      And verified that Modified category on My Library has To field
+      And I verified that Modified category header on My Library has correct title
+      And I verified that Modified category on My Library has From field
+      And I verified that Modified category on My Library has To field
 
-      And verified that Clear All on My Library has correct name
+      And I verified that Clear All on My Library has correct name
 
      When I clicked "Administrator" from "Owner" category
       And I clicked "MSTR User" from "Owner" category
 
-     Then verified that Owner category header on My Library has title "Owner (2)"
-      And verified that Filters has "1" categories selected
+     Then I verified that Owner category header on My Library has title "Owner (2)"
+      And I verified that Filters has "1" categories selected
 
      When I clicked header on column "Name"
      Then verified that objects are sorted "ascending" on column "Name"
@@ -63,12 +63,12 @@ Feature: F24086 - Improved browsing by adding filters
       And I clicked Application "MicroStrategy Tutorial"
       And I clicked Type "Dataset"
 
-     Then verified that Application category header has title "Application (1)"
-      And verified that Filters has "3" categories selected
+     Then I verified that Application category header has title "Application (1)"
+      And I verified that Filters has "3" categories selected
 
      When I opened All for Modified category
       And I clicked "Last Quarter" within Modified All Panel
-     Then verified that Filters has "4" categories selected
+     Then I verified that Filters has "4" categories selected
 
      When I found object by ID "94A1482F11EA8E01B50F0080EF05D782" and selected "ABCD_update"
       And I clicked Import button

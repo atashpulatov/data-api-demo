@@ -150,7 +150,7 @@ def step_impl(context):
     context.pages.right_panel_tile_page().wait_for_progress_notifications_to_disappear()
 
 
-@step('object {object_number} icon bar is visible')
+@step('I verified that object {object_number} icon bar is visible')
 def step_impl(context, object_number):
     is_icon_bar_visible = context.pages.right_panel_tile_page().is_icon_bar_visible(object_number)
 

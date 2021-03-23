@@ -21,7 +21,7 @@ Feature: F25949 - Display filters and prompts
      Then tooltip text for object 1 toggle details button is "Show Details"
 
      When I clicked toggle details button on object 1
-     Then object 1 is certified
+     Then I verified that object 1 is certified
       And object 1 has "Attribute" list displayed
       And object 1 has "Metric" list displayed
       And object 1 has id "3633950911EAA96889F00080EF25F8A4"
@@ -83,8 +83,8 @@ Feature: F25949 - Display filters and prompts
      Then object 1 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Prompted dossier" displayed
 
      When I clicked on object 1
-     Then columns ["A", "B", "C", "D"] are selected
-      And rows ["1", "2", "3", "4", "5", "6", "7", "8", "9"] are selected
+     Then I verified that columns ["A", "B", "C", "D"] are selected
+      And I verified that rows ["1", "2", "3", "4", "5", "6", "7", "8", "9"] are selected
 
      When I hovered over toggle details button on object 1
      Then tooltip text for object 1 toggle details button is "Hide Details"
@@ -101,7 +101,7 @@ Feature: F25949 - Display filters and prompts
 
       And I clicked toggle details button on object 3
 
-     Then object 3 is certified
+     Then I verified that object 3 is certified
       And object 3 has collapsed "Filter" list displayed
       And object 3 has collapsed "Attribute" list displayed
       And object 3 has collapsed "Metric" list displayed
@@ -160,7 +160,7 @@ Feature: F25949 - Display filters and prompts
       And object 3 has id "4BF6385A11EA638B25610080EFC58CB1"
 
      When I clicked toggle details button on object 4
-     Then object 4 is certified
+     Then I verified that object 4 is certified
       And object 4 has collapsed "Attribute" list displayed
       And object 4 has collapsed "Metric" list displayed
       And object 4 has collapsed location displayed
@@ -176,13 +176,13 @@ Feature: F25949 - Display filters and prompts
       And I closed all notifications
 
      When I clicked toggle details button on object 1
-     Then object 1 is certified
+     Then I verified that object 1 is certified
 
      When I clicked toggle details button on object 2
-     Then object 2 is certified
+     Then I verified that object 2 is certified
 
      When I clicked toggle details button on object 4
-     Then object 4 is certified
+     Then I verified that object 4 is certified
 
       And I decertified object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project
 

@@ -64,56 +64,56 @@ def step_impl(context, element_name):
     AssertUtil.assert_simple(has_focus, True)
 
 
-@step('verified that Certified Status category header on My Library has correct title')
+@step('I verified that Certified Status category header on My Library has correct title')
 def step_impl(context):
     element_title = context.pages.filter_panel_page().get_certified_header_on_mylibrary_title()
 
     AssertUtil.assert_simple(element_title, 'Certified Status')
 
 
-@step('verified that Certified Status category on My Library has element Certified')
+@step('I verified that Certified Status category on My Library has element Certified')
 def step_impl(context):
     element_title = context.pages.filter_panel_page().get_certified_element_on_mylibrary_title()
 
     AssertUtil.assert_simple(element_title, 'Certified')
 
 
-@step('verified that Owner category header on My Library has title "{title}"')
+@step('I verified that Owner category header on My Library has title "{title}"')
 def step_impl(context, title):
     element_title = context.pages.filter_panel_page().get_owner_header_on_mylibrary_title()
 
     AssertUtil.assert_simple(element_title, title)
 
 
-@step('verified that Modified category header on My Library has correct title')
+@step('I verified that Modified category header on My Library has correct title')
 def step_impl(context):
     element_title = context.pages.filter_panel_page().get_modified_header_on_mylibrary_title()
 
     AssertUtil.assert_simple(element_title, 'Modified')
 
 
-@step('verified that Modified category on My Library has From field')
+@step('I verified that Modified category on My Library has From field')
 def step_impl(context):
     element_title = context.pages.filter_panel_page().get_modified_from_field_on_mylibrary_title()
 
     AssertUtil.assert_simple(element_title, 'From')
 
 
-@step('verified that Modified category on My Library has To field')
+@step('I verified that Modified category on My Library has To field')
 def step_impl(context):
     element_title = context.pages.filter_panel_page().get_modified_to_field_on_mylibrary_title()
 
     AssertUtil.assert_simple(element_title, 'To')
 
 
-@step('verified that Clear All on My Library has correct name')
+@step('I verified that Clear All on My Library has correct name')
 def step_impl(context):
     element_title = context.pages.filter_panel_page().get_clear_all_on_mylibrary_title()
 
     AssertUtil.assert_simple(element_title, 'Clear All')
 
 
-@step('verified that Application category header has title "{title}"')
+@step('I verified that Application category header has title "{title}"')
 def step_impl(context, title):
     element_title = context.pages.filter_panel_page().get_application_header_title()
 

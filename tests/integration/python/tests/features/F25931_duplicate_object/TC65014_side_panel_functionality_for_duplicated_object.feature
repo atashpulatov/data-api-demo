@@ -22,8 +22,8 @@ Feature: F25931 - Duplicate object
      When I clicked on object 1
 
   # TODO Add scrolling or zooming of Excel sheet to check whole range of selection
-     Then columns ["A", "B"] are selected
-      And rows ["1", "2"] are selected
+     Then I verified that columns ["A", "B"] are selected
+      And I verified that rows ["1", "2"] are selected
 
      When I changed object 1 name to "Incredible very long name of imported object Incredible very long name of imported object" using icon
      Then I verified that name tooltip for object number 1 displays "Incredible very long name of imported object Incredible very long name of imported object"

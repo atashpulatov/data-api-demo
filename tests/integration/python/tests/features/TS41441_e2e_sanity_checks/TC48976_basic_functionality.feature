@@ -133,16 +133,16 @@ Feature: TS41441 - Sanity checks
       And I waited for object to be imported successfully
       And I closed last notification
       And I clicked on object 2
-     Then columns ["A", "B", "C"] are selected
-      And rows ["1", "2", "3"] are selected
+     Then I verified that columns ["A", "B", "C"] are selected
+      And I verified that rows ["1", "2", "3"] are selected
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed notification on object 1
       # TODO Check why we are getting error on refreshing 2nd object (we are getting Excel error (only automation))
       And I clicked on object 1
-     Then columns ["H", "I", "J"] are selected
-      And rows ["1", "2", "3"] are selected
+     Then I verified that columns ["H", "I", "J"] are selected
+      And I verified that rows ["1", "2", "3"] are selected
 
      When I clicked Edit object 1
      Then I verified that Columns & Filters Selection is visible
@@ -157,8 +157,8 @@ Feature: TS41441 - Sanity checks
       And I waited for object to be imported successfully
       And I closed notification on object 1
       And I clicked on object 1
-     Then columns ["H", "I", "J"] are selected
-      And rows ["1", "2", "3"] are selected
+     Then I verified that columns ["H", "I", "J"] are selected
+      And I verified that rows ["1", "2", "3"] are selected
 
      When I removed object 2 using icon
       And I waited for object operation to complete successfully with message "Object removed"

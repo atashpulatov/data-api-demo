@@ -54,7 +54,7 @@ Feature: F25946 - Display filters and prompts
      Then tooltip text for object 1 toggle details button is "Hide Details"
 
      When I clicked toggle details button on object 1
-     Then object 1 icon bar is visible
+     Then I verified that object 1 icon bar is visible
 
      When I clicked toggle details button on object 2
 
@@ -69,7 +69,7 @@ Feature: F25946 - Display filters and prompts
       And object 2 has owner "Administrator"
 
      When I changed Excel window size to 1920 x 600
-     Then Right panel has scrollbar
+     Then I verified that right panel has scrollbar
       And I maximized Excel window
 
      When I clicked Edit object 2
@@ -128,7 +128,7 @@ Feature: F25946 - Display filters and prompts
 
      When I clicked toggle details button on object 2
 
-     Then object 2 is certified
+     Then I verified that object 2 is certified
       And object 2 has "Prompt" list with value "Books"
       And object 2 has "Attribute" list with value "Country, Region"
       And object 2 has "Metric" list with value "Cost, Revenue"

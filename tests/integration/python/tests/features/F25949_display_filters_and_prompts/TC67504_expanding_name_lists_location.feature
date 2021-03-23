@@ -60,7 +60,7 @@ Feature: F25949 - Display filters and prompts
      Then object 3 has details panel displayed
       And object 3 has collapsed "Attribute" list displayed
       And object 3 has collapsed "Metric" list displayed
-      And object 3 is certified
+      And I verified that object 3 is certified
       And object 3 has id "3633950911EAA96889F00080EF25F8A4"
 
      When I clicked "Filter" list expand button on object 2
@@ -123,7 +123,7 @@ Feature: F25949 - Display filters and prompts
      Then object 3 has details panel displayed
       And object 3 has collapsed "Attribute" list displayed
       And object 3 has collapsed "Metric" list displayed
-      And object 3 is certified
+      And I verified that object 3 is certified
       And object 3 has id "3633950911EAA96889F00080EF25F8A4"
       And object 3 has collapsed location displayed
 

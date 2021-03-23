@@ -150,7 +150,7 @@ def step_impl(context, cell_name, expected_name):
     AssertUtil.assert_simple(result, expected_name)
 
 
-@step('columns {column_names} are selected')
+@step('I verified that columns {column_names} are selected')
 def step_impl(context, column_names):
     param_column_names = json.loads(column_names)
 
@@ -159,7 +159,7 @@ def step_impl(context, column_names):
     AssertUtil.assert_simple(result, True)
 
 
-@step('rows {row_names} are selected')
+@step('I verified that rows {row_names} are selected')
 def step_impl(context, row_names):
     param_row_names = json.loads(row_names)
 

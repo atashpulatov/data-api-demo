@@ -26,10 +26,10 @@ Feature: TF9328 - Release Validation
       And I verified that object number 1 is called "01 Basic Report"
 
      When I clicked on object 2
-     Then columns ["A", "N"] are selected
+     Then I verified that columns ["A", "N"] are selected
 
      When I clicked on object 1
-     Then columns ["A", "F"] are selected
+     Then I verified that columns ["A", "F"] are selected
 
      When I double clicked on the name of object 1
      Then after double clicking I verified name of object 1 is highlighted with color "#1890ff"

@@ -57,7 +57,7 @@ def step_impl(context, color):
     AssertUtil.assert_simple(found_color, color)
 
 
-@step('Right panel has scrollbar')
+@step('I verified that right panel has scrollbar')
 def step_impl(context):
     is_scrollbar_visible = context.pages.right_panel_page().is_scrollbar_visible()
 
