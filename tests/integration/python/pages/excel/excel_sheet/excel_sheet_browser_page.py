@@ -64,9 +64,17 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
     def merge_range(self, start_cell, end_cell):
         self._select_range(start_cell, end_cell)
+        self.send_keys(Keys.LEFT_ALT)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
-        merge_button = self.get_element_by_css(ExcelSheetBrowserPage.MERGE_AND_CENTER_BUTTON)
-        merge_button.click()
+        self.send_keys("h")
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+        
+        self.send_keys("m")
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+        
+        self.send_keys("c")
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
     def _select_range(self, start_cell, end_cell):
         self.select_cell_or_range(start_cell + ExcelSheetBrowserPage.RANGE_SEPARATOR + end_cell)
