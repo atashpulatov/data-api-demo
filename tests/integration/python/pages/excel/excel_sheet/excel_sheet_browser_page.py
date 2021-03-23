@@ -42,7 +42,6 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     EXCEL_SELECTED_ROW_HEADER = '.ewrch-row-cellsel > .ewr-rhc'
 
     RANGE_SEPARATOR = ':'
-    MERGE_AND_CENTER_BUTTON = "[title='Merge & Centre']"
 
     def get_cells_values(self, cells):
         result = []
