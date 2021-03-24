@@ -1,4 +1,5 @@
 from abc import ABC
+from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
 
 from selenium.webdriver.common.keys import Keys
 
@@ -41,6 +42,11 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     EXCEL_SELECTED_ROW_HEADER = '.ewrch-row-cellsel > .ewr-rhc'
 
     RANGE_SEPARATOR = ':'
+
+    def __init__(self):
+        super().__init__()
+
+        self.excel_menu_browser_page = ExcelMenuBrowserPage()
 
     def get_cells_values(self, cells):
         result = []

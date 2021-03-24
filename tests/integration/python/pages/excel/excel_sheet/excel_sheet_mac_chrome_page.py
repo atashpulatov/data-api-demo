@@ -36,7 +36,7 @@ class ExcelSheetMacChromePage(ExcelSheetBrowserPage):
         return formatted_value if formatted_value else ''
 
     def select_cell_or_range(self, cells):
-        self.focus_on_excel_frame()
+        self.excel_menu_browser_page.enable_use_of_keyboard_shortcuts()
 
         self.hold_command_and_press_keys("g") # open GO TO popup
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
