@@ -59,6 +59,15 @@ Feature: TS41441 - Sanity checks
       And I clicked Import button without checking results
      Then I clicked Cancel button in Range Taken popup
 
+     When I clicked Add Data button
+      And I found object by ID "2CA92F16E74D7C3FD4BB55AC2CA0F4E8" and selected "Panel Stack Visualisation"
+      And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
+      And I selected visualization "Panel Stack"
+      And I hover over Import button
+     Then I verified that tooltip for Import button shows message "Selected visualization cannot be imported in current version of the Add-in"
+      And I clicked Cancel button
+     
      When I selected cell "H1"
       And I clicked Add Data button
       And I found object by ID "BA32708211E94AF4A45E0080EF557FD5" and selected "Report with Totals and Subtotals"
