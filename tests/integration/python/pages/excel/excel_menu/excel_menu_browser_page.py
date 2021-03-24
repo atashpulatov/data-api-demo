@@ -75,8 +75,8 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
     def enable_use_of_keyboard_shortcuts(self):
         self.focus_on_excel_frame()
-        self._click_on_main_menu_item(MAIN_MENU_INSERT_BUTTON_ID)
-        self._click_on_main_menu_item(MAIN_MENU_HOME_BUTTON_ID)
+        self._click_on_main_menu_item(ExcelMenuBrowserPage.MAIN_MENU_INSERT_BUTTON_ID)
+        self._click_on_main_menu_item(ExcelMenuBrowserPage.MAIN_MENU_HOME_BUTTON_ID)
 
     def _click_on_main_menu_item(self, menu_item):
         self.get_element_by_id(menu_item).click()
