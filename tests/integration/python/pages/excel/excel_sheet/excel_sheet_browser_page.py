@@ -19,22 +19,23 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     WORKSHEETS_IN_GOTO_POPUP_SELECTOR = '#sheetDropDown > option'
 
     TABLE_HOME_TAB = 'm_excelWebRenderer_ewaCtl_Ribbon.Home-title'
-    TABLE_DESIGN_TAB = 'm_excelWebRenderer_ewaCtl_Ribbon.Table.Design-title'
-    GREEN_TABLE_STYLE = 'm_excelWebRenderer_ewaCtl_Ribbon.TableTools.TableStyles.Style6-Large'
+    TABLE_DESIGN_TAB_ID = 'Table'
+    GREEN_TABLE_STYLE_ID = 'PreviewTableFormatStyle1'
 
-    PERCENTAGE_BUTTON = 'm_excelWebRenderer_ewaCtl_Number.Percentage-Medium'
+    PERCENTAGE_BUTTON_ID = 'NumberFormatPercentage_MLR'
 
-    COMMA_STYLE_BUTTON = 'm_excelWebRenderer_ewaCtl_Number.NumberFormatComma-Medium'
+    COMMA_STYLE_BUTTON_ID = 'NumberFormatComma_MLR'
 
-    ALIGN_MIDDLE_BUTTON = 'm_excelWebRenderer_ewaCtl_Alignment.AlignMiddle-Medium'
-    ALIGN_LEFT_BUTTON = 'm_excelWebRenderer_ewaCtl_Alignment.AlignLeft-Medium'
+    ALIGN_MIDDLE_BUTTON = '[data-unique-id="Ribbon-AlignCenter_MLR"]'
+    ALIGN_LEFT_BUTTON = '[data-unique-id="Ribbon-AlignLeft_MLR"]'
 
-    EXCEL_FONT_NAME_SPAN = 'm_excelWebRenderer_ewaCtl_Font.FontName-Medium'
-    EXCEL_FONT_NAME_INPUT = 'm_excelWebRenderer_ewaCtl_Font.FontName'
+    EXCEL_FONT_NAME_INPUT_ID = 'Ribbon-FontName_New-input'
 
-    BOLD_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.Bold-Small'
-    FONT_COLOR_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.FontColorWithSplit-Small'
-    FILL_COLOR_BUTTON = 'm_excelWebRenderer_ewaCtl_Font.FillColorWithSplit-Small'
+    BOLD_BUTTON = '[data-unique-id="Ribbon-Bold"]'
+    FONT_COLOR_BUTTON_CSS = '[data-unique-id="Ribbon-FontColor"]>span>button:nth-of-type(2)'
+    FILL_COLOR_BUTTON_CSS = '[data-unique-id="Ribbon-FillColor"]>span>button:nth-of-type(2)'
+    LIGHT_GREEN_FONT_COLOR_BUTTON_CSS = '#Ribbon-FontColorDropdown button[aria-label="Light Green"]'
+    LIGHT_GREEN_FILL_COLOR_BUTTON_CSS = '#Ribbon-FillColorDropdown button[aria-label="Light Green"]'
 
     BUTTON_SELECTED_ARIA_VALUE = 'true'
 
@@ -105,12 +106,12 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def click_table_design_tab(self):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.TABLE_DESIGN_TAB).click()
+        self.get_element_by_id(ExcelSheetBrowserPage.TABLE_DESIGN_TAB_ID).click()
 
     def click_green_table_style(self):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.GREEN_TABLE_STYLE).click()
+        self.get_element_by_id(ExcelSheetBrowserPage.GREEN_TABLE_STYLE_ID).click()
 
     def click_home_tab(self):
         self.focus_on_excel_frame()
@@ -120,54 +121,64 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def click_percentage_button(self):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.PERCENTAGE_BUTTON).click()
+        self.get_element_by_id(ExcelSheetBrowserPage.PERCENTAGE_BUTTON_ID).click()
 
     def click_comma_style_button(self):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.COMMA_STYLE_BUTTON).click()
+        self.get_element_by_id(ExcelSheetBrowserPage.COMMA_STYLE_BUTTON_ID).click()
 
     def click_align_middle_button(self):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.ALIGN_MIDDLE_BUTTON).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.ALIGN_MIDDLE_BUTTON).click()
 
     def click_align_left_button(self):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.ALIGN_LEFT_BUTTON).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.ALIGN_LEFT_BUTTON).click()
 
     def click_bold_button(self):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.BOLD_BUTTON).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.BOLD_BUTTON).click()
 
     def set_font_color(self, font_color):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.FONT_COLOR_BUTTON).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.FONT_COLOR_BUTTON_CSS).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.LIGHT_GREEN_FONT_COLOR_BUTTON_CSS).click()
 
     def set_fill_color(self, fill_color):
         self.focus_on_excel_frame()
 
-        self.get_element_by_id(ExcelSheetBrowserPage.FILL_COLOR_BUTTON).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_BUTTON_CSS).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.LIGHT_GREEN_FILL_COLOR_BUTTON_CSS).click()
 
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)
 
-        self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_SPAN).click()
+        self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT_ID).click()
         self.press_backspace()
         self.send_keys(font_name)
         self.press_enter()
 
     def is_align_middle_button_selected(self, cell_name):
-        return self._is_button_selected(cell_name, ExcelSheetBrowserPage.ALIGN_MIDDLE_BUTTON)
+        return self._is_button_selected_by_css(cell_name, ExcelSheetBrowserPage.ALIGN_MIDDLE_BUTTON)
 
     def is_align_left_button_selected(self, cell_name):
-        return self._is_button_selected(cell_name, ExcelSheetBrowserPage.ALIGN_LEFT_BUTTON)
+        return self._is_button_selected_by_css(cell_name, ExcelSheetBrowserPage.ALIGN_LEFT_BUTTON)
 
     def is_bold_button_selected(self, cell_name):
-        return self._is_button_selected(cell_name, ExcelSheetBrowserPage.BOLD_BUTTON)
+        return self._is_button_selected_by_css(cell_name, ExcelSheetBrowserPage.BOLD_BUTTON)
+
+    def _is_button_selected_by_css(self, cell_name, selector):
+        self.go_to_cell(cell_name)
+
+        formatting_button = self.get_element_by_css(selector)
+        aria_attribute_value = formatting_button.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_ARIA_PRESSED)
+
+        return aria_attribute_value == ExcelSheetBrowserPage.BUTTON_SELECTED_ARIA_VALUE
 
     def _is_button_selected(self, cell_name, selector):
         self.go_to_cell(cell_name)
@@ -180,9 +191,9 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def get_font_name_of_cell(self, cell_name):
         self.go_to_cell(cell_name)
 
-        self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_SPAN).click()
+        self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT_ID).click()
 
-        font_input = self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT)
+        font_input = self.get_element_by_id(ExcelSheetBrowserPage.EXCEL_FONT_NAME_INPUT_ID)
 
         return font_input.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_VALUE)
 
