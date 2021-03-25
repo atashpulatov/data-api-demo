@@ -56,6 +56,8 @@ class PromptBrowserPage(BaseBrowserPage):
                                                   timeout=Const.SHORT_TIMEOUT)
 
     def select_answer_for_object_prompt(self, prompt_number, prompt_name, item):
+        self.focus_on_prompt_frame()
+
         self._change_answer_for_object_prompt(
             PromptBrowserPage.PROMPT_OBJECT_AVAILABLE_ITEM,
             prompt_number,
@@ -64,6 +66,8 @@ class PromptBrowserPage(BaseBrowserPage):
         )
 
     def unselect_answer_for_object_prompt(self, prompt_number, prompt_name, item):
+        self.focus_on_prompt_frame()
+        
         self._change_answer_for_object_prompt(
             PromptBrowserPage.PROMPT_OBJECT_SELECTED_ITEM,
             prompt_number,
