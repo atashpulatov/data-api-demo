@@ -173,6 +173,7 @@ PY_MAC_TEST_PARAM = {
   "desktop" => "mac_desktop",
   "ci_pipeline_rv_mac_chrome" => "mac_chrome",
   "ci_pipeline_rv_mac_desktop" => "mac_desktop"
+  "ci_pipeline_daily_mac_chrome" => "mac_chrome"
 }
 
 def group_id
