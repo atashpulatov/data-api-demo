@@ -19,6 +19,16 @@ job 'daily-mac-browser' do
 
   assigned_node_string 'mstr-office-test'
 
+  triggers do
+    timer_trigger do
+      minute 'H'
+      hour '0'
+      month '*'
+      day_of_week '*'
+      day_of_month '*'
+    end
+  end
+
   builders do
     bash do
       script '#!/usr/bin/env bash
