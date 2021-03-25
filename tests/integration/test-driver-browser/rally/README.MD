@@ -40,9 +40,7 @@ The next steps for the automation tests from manual and pipeline execution are:
 1) After the automation suite execution finished, the raw data for the results report can be found under *../python/allureFolder*.
 
 2) In order to update results to Rally, you have to generate the report from the raw data by running the following command:
-  *'allure generate allureFolder --clean'*
-  from 
-  *../python* folder.
+  `allure generate allureFolder --clean` from `../python` folder. If needed run `brew install allure` on Mac or `scoop install allure` on Windows.
 
 3) Specify the fields values which you want to upload the results in *./rallyconfig.js* file in 
 *automation* object, e.g.:
