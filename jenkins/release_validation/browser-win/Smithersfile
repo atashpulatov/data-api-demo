@@ -1,4 +1,4 @@
-job 'release-validation-mac-desktop' do
+job 'release-validation-win-browser' do
   description 'run desktop based e2e python test for excel plugin, on mac'
 
   configure_common_items{}
