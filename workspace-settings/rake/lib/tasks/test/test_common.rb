@@ -52,6 +52,8 @@ task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
   allure_folder_path = "#{test_dir}/#{allure_folder}"
   test_os = "win19"
 
+  puts "#{tag_name} yuriiiiiiii"
+
   FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
   shell_command! "python -m venv venv_win", cwd: test_dir
@@ -205,6 +207,11 @@ def ci_metrics_system_test()
     metrics_system_test['DURATION'] = duration
     puts "\nMETRICS_SYSTEM_TEST=#{metrics_system_test.to_json}\n"
   end
+end
+
+desc "publish test result for browser e2e"
+task :yurii_debuggggg do 
+
 end
 
 
