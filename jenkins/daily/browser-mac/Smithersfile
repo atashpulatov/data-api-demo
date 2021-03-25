@@ -24,7 +24,7 @@ job 'daily-mac-browser' do
       minute 'H'
       hour '23'
       month '*'
-      day_of_week '*'
+      day_of_week '1-4'
       day_of_month '*'
     end
   end
