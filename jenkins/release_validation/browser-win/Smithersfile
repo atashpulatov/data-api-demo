@@ -56,6 +56,5 @@ rake py_e2e_test_win[ci_pipeline_rv_windows_chrome, $APPLICATION_VERSION]
      always_trigger 'true'
      always_trigger_recipients_list ''
     end
-
   end
-
+end
