@@ -47,12 +47,10 @@ desc "run test in python on Windows"
 task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
   test_dir = get_python_test_dir()
   tag_name = args['tag_name']
-  build_no = args['build_no']
+  build_no = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
   allure_folder = 'allureFolder'
   allure_folder_path = "#{test_dir}/#{allure_folder}"
   test_os = "win19"
-
-  puts "#{tag_name} yuriiiiiiii"
 
   FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
@@ -75,7 +73,7 @@ desc "run test in python on Mac"
 task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
   test_dir = get_python_test_dir()
   tag_name = args['tag_name']
-  build_no = args['build_no']
+  build_no = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
   allure_folder = 'allureFolder'
   allure_folder_path = "#{test_dir}/#{allure_folder}"
   test_os = "mac14"
@@ -177,6 +175,13 @@ PY_MAC_TEST_PARAM = {
   "ci_pipeline_rv_mac_desktop" => "mac_desktop"
 }
 
+def group_id
+  return Common::Version.dependency_group_id
+end
+
+def artifact_id
+  return "mstr-office"
+end
 ######################################common ci metrics code######################################
 def ci_metrics_system_test()
   json_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/tests/integration/test-driver-browser/allure-report/data/suites.json"
