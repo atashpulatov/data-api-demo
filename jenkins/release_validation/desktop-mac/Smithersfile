@@ -1,14 +1,16 @@
-job 'release-validation-mac-browser' do
-  description 'run browser based e2e python test for excel plugin, on mac'
+job 'release-validation-mac-desktop' do
+  description 'run desktop based e2e python test for excel plugin, on mac'
 
   configure_common_items{}
 
-    properties do
-     parameters do
+  properties do
+    parameters do
       upstream_parameter do
+        upstream_job_name 'stage-1-dev'
         name 'APPLICATION_VERSION'
         description 'the version of the application to deploy and test'
       end
+
     end
   end
 
@@ -31,14 +33,14 @@ export WORKSPACE_SETTING=mac_test
 source .ecosystem
 export HATS=pipeline:$HATS
 
-rake py_e2e_test_mac[ci_pipeline_rv_mac_chrome, $APPLICATION_VERSION]
+rake py_e2e_test_mac[ci_pipeline_rv_mac_desktop, $APPLICATION_VERSION]
 '
     end
   end
 
   publishers do
     html do
-       report_name 'Mac Browser e2e Python Test Report'
+       report_name 'Mac Desktop e2e Python Test Report'
        report_directory_path "tests/integration/python/allure-report"
        index_file_name 'index.html'
     end
@@ -56,3 +58,4 @@ rake py_e2e_test_mac[ci_pipeline_rv_mac_chrome, $APPLICATION_VERSION]
   end
 
 end
+

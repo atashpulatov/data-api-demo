@@ -1,7 +1,7 @@
-job 'stage-2-e2e-browser-test-javascript-win' do
-  description 'run browser based e2e javascript test for excel plugin, on windows'
+job 'release-validation-win-browser' do
+  description 'run browser based e2e python test for excel plugin, on windows'
 
-  configure_common_items{}
+   configure_common_items{}
 
   properties do
     inject do
@@ -11,12 +11,11 @@ job 'stage-2-e2e-browser-test-javascript-win' do
 
     parameters do
       upstream_parameter do
-        upstream_job_name 'stage-1-dev'
         name 'APPLICATION_VERSION'
         description 'the version of the application to deploy and test'
       end
-
     end
+    
   end
 
   scm do
@@ -24,7 +23,7 @@ job 'stage-2-e2e-browser-test-javascript-win' do
     end
   end
 
-  assigned_node_string 'windows2019_t3medium'
+  assigned_node_string 'excel-windows-mock-node'
 
   builders do
     bash do
@@ -36,30 +35,26 @@ export WORKSPACE_SETTING=windows_test
 source .ecosystem
 export HATS=pipeline:$HATS
 
-rake deploy_tester_server[$APPLICATION_VERSION]
-rake e2e_test_browser[$APPLICATION_VERSION]
+rake py_e2e_test_win[ci_pipeline_rv_windows_chrome, $APPLICATION_VERSION]
 '
     end
   end
 
   publishers do
     html do
-       report_name 'Browser e2e JavaScript Test Report'
-       report_directory_path "tests/integration/test-driver-browser/allure-report"
+       report_name 'Windows Browser e2e Python Test Report'
+       report_directory_path "tests/integration/python/allure-report"
        index_file_name 'index.html'
     end
 
-    #ext_mailer do
-    #  recipients_list 'dhornos@microstrategy.com,yzhai@microstrategy.com'
-    #  subject '$JOB_NAME - $BUILD_STATUS'
-    #  content '$DEFAULT_CONTENT'
-    #  fail_trigger_recipients_list ''
-    #  fail_trigger_notify_developer 'true'
-    #  always_trigger 'true'
-    #  always_trigger_recipients_list ''
-    #end
-
+    ext_mailer do
+     recipients_list 'yzhuk@microstrategy.com, rraszplewicz@microstrategy.com'
+     subject '$JOB_NAME - $BUILD_STATUS'
+     content '$DEFAULT_CONTENT'
+     fail_trigger_recipients_list ''
+     fail_trigger_notify_developer 'true'
+     always_trigger 'true'
+     always_trigger_recipients_list ''
+    end
   end
-
 end
-
