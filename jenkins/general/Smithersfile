@@ -6,11 +6,6 @@ job 'stage-2-e2e-general-windows-desktop-job' do
   properties do	
     parameters do	
       upstream_parameter do	
-        name 'APPLICATION_VERSION'	
-        description 'the version of the application to deploy and test'	
-      end	
-
-      upstream_parameter do	
         name 'TEST_TYPE'	
         description 'the version of the application to deploy and test'	
       end	
@@ -36,7 +31,7 @@ export WORKSPACE_SETTING=windows_test
 source .ecosystem	
 export HATS=pipeline:$HATS	
 
-rake py_e2e_test_win[$TEST_TYPE, $APPLICATION_VERSION]
+rake py_e2e_test_win[$TEST_TYPE]
 '	
     end	
   end	
