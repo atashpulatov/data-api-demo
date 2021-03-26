@@ -68,12 +68,32 @@ task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
     shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_WIN_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
   end
 
+  # if {PY_MAC_TEST_PARAM[tag_name]} == "windows_desktop"
+  #   target_dir = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office/#{build_no}/#{tag_name}"
+  #   FileUtils.rm_rf target_dir
+  #   FileUtils.mkdir_p target_dir 
+  #   FileUtils.cp_r("#{test_dir}/allure-report", target_dir)
+  # end
 end
+
+# desc "publish test result for browser e2e"
+# task :copy_results,[:build_no, :type] do | t, args|
+#   build_no = args['build_no']
+#   type = args['type']
+#   report_dir = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office"
+#   report_path = "#{report_dir}/#{type}/#{build_no}.json"
+#   local_report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/results"
+#   local_report_path = "#{local_report_dir}/#{build_no}"
+  
+#   FileUtils.mkdir_p local_report_dir unless Dir.exists? local_report_dir
+#   FileUtils.rm_rf local_report_path
+#   FileUtils.cp_r(report_path, local_report_path)
+# end
 
 desc "run test in python on Mac"
 task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
   args.with_defaults(:build_no => Nexus.latest_artifact_version(artifact_id: "office", group_id: Common::Version.dependency_group_id))
-  # test_dir = get_python_test_dir()
+  test_dir = get_python_test_dir()
   tag_name = args['tag_name']
   build_no = args['build_no']
   allure_folder = 'allureFolder'
@@ -223,33 +243,3 @@ task :yurii_debuggggg do
 end
 
 
-desc "publish test result for browser e2e"
-task :yurii_test,[:build_no, :type] do | t, args|
-  build_no = args['build_no']
-  type = args['type']
-  report_dir = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office"
-  report_path = "#{report_dir}/#{type}/#{build_no}.json"
-  puts report_dir
-  FileUtils.mkdir_p "#{report_dir}/#{type}" unless Dir.exists? "#{report_dir}/#{type}"
-  FileUtils.rm_rf report_path
-  application_hash = {
-    "build_number" => "#{Common::Version.application_version}"
-}
-  File.open(report_path,"w") do |f|
-    f.write(application_hash.to_json)
-  end
-end
-
-desc "publish test result for browser e2e"
-task :copy_results,[:build_no, :type] do | t, args|
-  build_no = args['build_no']
-  type = args['type']
-  report_dir = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office"
-  report_path = "#{report_dir}/#{type}/#{build_no}.json"
-  local_report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/results"
-  local_report_path = "#{local_report_dir}/#{build_no}"
-  
-  FileUtils.mkdir_p local_report_dir unless Dir.exists? local_report_dir
-  FileUtils.rm_rf local_report_path
-  FileUtils.cp_r(report_path, local_report_path)
-end
