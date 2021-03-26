@@ -1,4 +1,4 @@
-job 'stage-2-e2e-general-windeows-desktop-job' do	
+job 'stage-2-e2e-general-windows-desktop-job' do	
   description 'run browser based e2e python test for excel plugin, on mac'	
 
   configure_common_items{}	
