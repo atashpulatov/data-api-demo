@@ -8,6 +8,7 @@ const fetch = require('node-fetch');
  * @returns {Promise} Promise that will be resolved when the request to the endpoint is made
  */
 function getDataFromRally(url) {
+  console.log('DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG DEBUG ' + rallyConfig.rallyApiKey === undefined)
   const options = {
     method: 'GET',
     headers: { zsessionid: rallyConfig.rallyApiKey, }
