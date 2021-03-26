@@ -45,9 +45,10 @@ end
 
 desc "run test in python on Windows"
 task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
+  args.with_defaults(:build_no => Nexus.latest_artifact_version(artifact_id: "office", group_id: Common::Version.dependency_group_id))
   test_dir = get_python_test_dir()
   tag_name = args['tag_name']
-  build_no = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
+  build_no = args['build_no']
   allure_folder = 'allureFolder'
   allure_folder_path = "#{test_dir}/#{allure_folder}"
   test_os = "win19"
@@ -71,9 +72,10 @@ end
 
 desc "run test in python on Mac"
 task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
+  args.with_defaults(:build_no => Nexus.latest_artifact_version(artifact_id: "office", group_id: Common::Version.dependency_group_id))
   test_dir = get_python_test_dir()
   tag_name = args['tag_name']
-  build_no = args['build_no'] || Nexus.latest_artifact_version(artifact_id: artifact_id, group_id: group_id)
+  build_no = args['build_no']
   allure_folder = 'allureFolder'
   allure_folder_path = "#{test_dir}/#{allure_folder}"
   test_os = "mac14"
