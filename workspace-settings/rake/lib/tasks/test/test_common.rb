@@ -73,23 +73,24 @@ end
 desc "run test in python on Mac"
 task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
   args.with_defaults(:build_no => Nexus.latest_artifact_version(artifact_id: "office", group_id: Common::Version.dependency_group_id))
-  test_dir = get_python_test_dir()
-  tag_name = args['tag_name']
-  build_no = args['build_no']
-  allure_folder = 'allureFolder'
-  allure_folder_path = "#{test_dir}/#{allure_folder}"
-  test_os = "mac14"
+  # test_dir = get_python_test_dir()
+  # tag_name = args['tag_name']
+  # build_no = args['build_no']
+  # allure_folder = 'allureFolder'
+  # allure_folder_path = "#{test_dir}/#{allure_folder}"
+  # test_os = "mac14"
 
-  FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
+  # FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
-  begin 
-    shell_command! "behave --tags=@#{tag_name} --no-skipped -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/", cwd: test_dir
-  ensure
-    shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
-    info "publish e2e test result to Rally"
-    shell_command! "npm install", cwd: get_browser_test_dir()
-    shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_MAC_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
-  end
+  # begin 
+  #   shell_command! "behave --tags=@#{tag_name} --no-skipped -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/", cwd: test_dir
+  # ensure
+  #   shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
+  #   info "publish e2e test result to Rally"
+  #   shell_command! "npm install", cwd: get_browser_test_dir()
+  #   shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_MAC_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
+  # end
+  puts ENV[RALLY_API_KEY]
 end
 
 desc "run browser based test"
@@ -252,4 +253,13 @@ task :copy_results,[:build_no, :type] do | t, args|
   FileUtils.mkdir_p local_report_dir unless Dir.exists? local_report_dir
   FileUtils.rm_rf local_report_path
   FileUtils.cp_r(report_path, local_report_path)
+end
+
+desc "debug rake task"
+task :debug_test do
+  # generate_comparison_report_markdown
+  # generate_eslint_report
+  # publish_to_pull_request_page
+  # update_package_json("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
+  puts ENV[RALLY_API_KEY]
 end
