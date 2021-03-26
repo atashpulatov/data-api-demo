@@ -28,7 +28,7 @@ job 'release-validation-win-desktop' do
   builders do
      parameterized_builder do	
       job_names %w{	
-        "mstr-office-.-#{Environment.branch_name}-.-stage-2-e2e-general-windows-desktop-job"
+        mstr-office-.-#{Environment.branch_name}-.-stage-2-e2e-general-windows-desktop-job
       }	
       parameters "TEST_TYPE=ci_pipeline_rv_windows_desktop"	
       block_and_sync_status true	
