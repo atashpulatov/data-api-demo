@@ -15,7 +15,7 @@ job 'daily-win-browser' do
     end
   end
 
-  assigned_node_string 'excel-windows-mock-node'
+  assigned_node_string 'mstr-office_browser-testing_autoscaling-pool'
 
   triggers do
     timer_trigger do

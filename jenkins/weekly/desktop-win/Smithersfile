@@ -8,14 +8,6 @@ job 'release-validation-win-desktop' do
       properties_content "MSYS=winsymlinks:nativestrict
         PATH=/usr/local/.rbenv/shims:/usr/local/ruby-install/bin:/usr/local/rbenv/libexec:/tools/msys/20160205-3/cmd:/tools/Sysinternals:/Users/vagrant/bin:/Users/vagrant/.rbenv/versions/2.2.4/bin:/cmd:/usr/local/bin:/mingw64/bin:/usr/bin:/Windows/system32:/Windows:/Windows/System32/Wbem:/Windows/System32/WindowsPowerShell/v1.0:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/c/Program\ Files/Amazon/AWSCLI"
     end
-
-    parameters do
-      upstream_parameter do
-        name 'APPLICATION_VERSION'
-        description 'the version of the application to deploy and test'
-      end
-    end
-    
   end
 
   scm do
@@ -35,7 +27,7 @@ export WORKSPACE_SETTING=windows_test
 source .ecosystem
 export HATS=pipeline:$HATS
 
-rake py_e2e_test_win[ci_pipeline_rv_windows_desktop, $APPLICATION_VERSION]
+rake py_e2e_test_win[ci_pipeline_rv_windows_desktop]
 '
     end
   end

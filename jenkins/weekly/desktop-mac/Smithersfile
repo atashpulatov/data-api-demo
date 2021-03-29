@@ -3,17 +3,6 @@ job 'release-validation-mac-desktop' do
 
   configure_common_items{}
 
-  properties do
-    parameters do
-      upstream_parameter do
-        upstream_job_name 'stage-1-dev'
-        name 'APPLICATION_VERSION'
-        description 'the version of the application to deploy and test'
-      end
-
-    end
-  end
-
   scm do
     git do
     end
@@ -33,7 +22,7 @@ export WORKSPACE_SETTING=mac_test
 source .ecosystem
 export HATS=pipeline:$HATS
 
-rake py_e2e_test_mac[ci_pipeline_rv_mac_desktop, $APPLICATION_VERSION]
+rake py_e2e_test_mac[ci_pipeline_rv_mac_desktop]
 '
     end
   end
