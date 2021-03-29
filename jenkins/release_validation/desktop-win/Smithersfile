@@ -21,19 +21,19 @@ job 'release-validation-win-desktop' do
   assigned_node_string 'windows2019_t3medium'
 
   builders do
+  parameterized_builder do	
+      job_names %w{	
+        mstr-office-.-US346818_POC-.-stage-2-e2e-general-windows-desktop-job
+      }	
+      parameters "TEST_TYPE=ci_pipeline_rv_windows_desktop"	
+      block_and_sync_status true	
+   end
     bash do
       script '#!/usr/bin/env bash
       echo APPLICATION_VERSION=$APPLICATION_VERSION	
       echo APPLICATION_COMMIT_HASH=xxx		
 '
     end
-        parameterized_builder do	
-      job_names %w{	
-        mstr-office-.-#{Environment.branch_name}-.-stage-2-e2e-general-windows-desktop-job
-      }	
-      parameters "TEST_TYPE=ci_pipeline_rv_windows_desktop"	
-      block_and_sync_status true	
-   end
   end
 
   publishers do
