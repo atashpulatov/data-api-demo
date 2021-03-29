@@ -68,7 +68,7 @@ task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
     shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_WIN_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
   end
 
-  if {PY_MAC_TEST_PARAM[tag_name]} == "windows_desktop"
+  if PY_MAC_TEST_PARAM[tag_name] == "windows_desktop"
     target_dir = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office/#{tag_name}"
     FileUtils.rm_rf target_dir
     FileUtils.mkdir_p target_dir 
