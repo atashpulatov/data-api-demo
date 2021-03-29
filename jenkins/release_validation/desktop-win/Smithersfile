@@ -29,9 +29,15 @@ job 'release-validation-win-desktop' do
       block_and_sync_status true	
    end
     bash do
-      script '#!/usr/bin/env bash
-      echo APPLICATION_VERSION=$APPLICATION_VERSION	
-      echo APPLICATION_COMMIT_HASH=xxx		
+      script '#!/usr/bin/env bash	
+set +xe	
+export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+export WORKSPACE_SETTING=windows_test
+
+source .ecosystem	
+export HATS=pipeline:$HATS	
+
+rake copy_results[ci_pipeline_rv_windows_desktop]
 '
     end
   end
