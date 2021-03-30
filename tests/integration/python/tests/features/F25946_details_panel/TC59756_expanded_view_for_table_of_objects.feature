@@ -39,6 +39,6 @@ Feature: F25946 - Details panel
       And I clicked Import button
       And I waited for object operation to complete successfully with message "Import successful"
      Then I closed last notification
-      And cells ["A1", "A2", "B2"] should have values ["attribute_column", "First Row", "1"]
+      And I verified that cells ["A1", "A2", "B2"] have values ["attribute_column", "First Row", "1"]
 
       And I logged out

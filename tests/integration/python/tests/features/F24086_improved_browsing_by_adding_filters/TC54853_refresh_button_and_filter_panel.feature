@@ -10,22 +10,22 @@ Feature: F24086 - Improved browsing by adding filters
 
      When I clicked Filters button
 
-     Then verified that Certified Status category header on My Library has correct title
-      And verified that Certified Status category on My Library has element Certified
+     Then I verified that Certified Status category header on My Library has correct title
+      And I verified that Certified Status category on My Library has element Certified
 
-      And verified that Owner category header on My Library has title "Owner"
+      And I verified that Owner category header on My Library has title "Owner"
 
-      And verified that Modified category header on My Library has correct title
-      And verified that Modified category on My Library has From field
-      And verified that Modified category on My Library has To field
+      And I verified that Modified category header on My Library has correct title
+      And I verified that Modified category on My Library has From field
+      And I verified that Modified category on My Library has To field
 
-      And verified that Clear All on My Library has correct name
+      And I verified that Clear All on My Library has correct name
 
      When I clicked "Administrator" from "Owner" category
       And I clicked "MSTR User" from "Owner" category
 
-     Then verified that Owner category header on My Library has title "Owner (2)"
-      And verified that Filters has "1" categories selected
+     Then I verified that Owner category header on My Library has title "Owner (2)"
+      And I verified that Filters has "1" categories selected
 
      When I clicked header on column "Name"
      Then verified that objects are sorted "ascending" on column "Name"
@@ -46,15 +46,15 @@ Feature: F24086 - Improved browsing by adding filters
       And I imported visualization "Visualization 1"
 
      Then I closed last notification
-      And cell "A1" should have value "Year"
+      And I verified that cell "A1" has value "Year"
 
      When I removed 1 columns starting from column "A"
-     Then cell "A1" should have value "Catalog"
+     Then I verified that cell "A1" has value "Catalog"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
      Then I closed all notifications
-      And cell "A1" should have value "Year"
+      And I verified that cell "A1" has value "Year"
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -63,23 +63,23 @@ Feature: F24086 - Improved browsing by adding filters
       And I clicked Application "MicroStrategy Tutorial"
       And I clicked Type "Dataset"
 
-     Then verified that Application category header has title "Application (1)"
-      And verified that Filters has "3" categories selected
+     Then I verified that Application category header has title "Application (1)"
+      And I verified that Filters has "3" categories selected
 
      When I opened All for Modified category
       And I clicked "Last Quarter" within Modified All Panel
-     Then verified that Filters has "4" categories selected
+     Then I verified that Filters has "4" categories selected
 
      When I found object by ID "94A1482F11EA8E01B50F0080EF05D782" and selected "ABCD_update"
       And I clicked Import button
       And I closed last notification
-     Then cells ["A1", "A2"] should have values ["A", "a"]
+     Then I verified that cells ["A1", "A2"] have values ["A", "a"]
 
      When I clicked clear data
-     Then cells ["A1", "A2"] should have values ["A", ""]
+     Then I verified that cells ["A1", "A2"] have values ["A", ""]
 
      When I clicked view data
       And I closed last notification
-     Then cells ["A1", "A2"] should have values ["A", "a"]
+     Then I verified that cells ["A1", "A2"] have values ["A", "a"]
 
       And I logged out

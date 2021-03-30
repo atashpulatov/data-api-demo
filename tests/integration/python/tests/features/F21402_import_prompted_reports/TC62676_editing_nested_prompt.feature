@@ -17,10 +17,10 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I clicked Run button
       # TODO Then I verified Run button is disabled
       And I closed last notification
-      And cells ["A2", "C3", "E3"] should have values ["2014", "Electronics", "$906,661"]
+      And I verified that cells ["A2", "C3", "E3"] have values ["2014", "Electronics", "$906,661"]
 
      When I clicked Refresh on object 1
-     Then cells ["A2", "C3", "E3"] should have values ["2014", "Electronics", "$906,661"]
+     Then I verified that cells ["A2", "C3", "E3"] have values ["2014", "Electronics", "$906,661"]
 
      When I clicked Edit object 1
       And I waited for Run button to be enabled
@@ -40,6 +40,6 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I selected filters { "Region": ["Central", "South"] }
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
-     Then cells ["A2", "C3", "E3"] should have values ["2014", "$1,891,551", ""]
+     Then I verified that cells ["A2", "C3", "E3"] have values ["2014", "$1,891,551", ""]
 
       And I logged out

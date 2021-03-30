@@ -20,7 +20,7 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
       # even if data loads quicker.
       And I clicked import dossier
       And I closed last notification
-     Then cells ["A2", "A56161"] should have values ["2014", "2017"]
+     Then I verified that cells ["A2", "A56161"] have values ["2014", "2017"]
 
 
      When I clicked Edit object 1
@@ -29,7 +29,7 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
       And I clicked import dossier
       And I saved execution duration to "visualisation_not_filtered_import_timer"
       And I closed last notification
-      And cells ["A2", "A56161"] should have values ["2014", "2017"]
+      And I verified that cells ["A2", "A56161"] have values ["2014", "2017"]
 
       And I clicked Edit object 1
       And I selected visualization "Visualization 1"
@@ -40,7 +40,7 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
       And I closed last notification
 
      Then I verified that execution duration "visualisation_only_2014_import_timer" is not longer than "visualisation_not_filtered_import_timer"
-      And cells ["A2", "A56161"] should have values ["2014", ""]
+      And I verified that cells ["A2", "A56161"] have values ["2014", ""]
 
      When I selected cell "F1"
       And I clicked Add Data button
@@ -51,6 +51,6 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
       And I selected visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
-     Then cells ["F2", "J2"] should have values ["Jan 2015", "18.70%"]
+     Then I verified that cells ["F2", "J2"] have values ["Jan 2015", "18.70%"]
 
       And I logged out

@@ -43,3 +43,21 @@ class DriverSendKeys:
         ActionChains(self.__driver).send_keys(keys).perform()
 
         Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
+
+    def hold_shift_and_press_keys(self, keys):
+        self._execute_hold_modifier_and_press_keys(Keys.LEFT_SHIFT, keys)
+
+    def hold_ctrl_and_press_keys(self, keys):
+        self._execute_hold_modifier_and_press_keys(Keys.CONTROL, keys)
+
+    def hold_command_and_press_keys(self, keys):
+        self._execute_hold_modifier_and_press_keys(Keys.COMMAND, keys)
+
+    def _execute_hold_modifier_and_press_keys(self, modifier_key, keys):
+        (ActionChains(self.__driver)
+         .key_down(modifier_key)
+         .send_keys(keys)
+         .key_up(modifier_key)
+         .perform())
+
+        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)

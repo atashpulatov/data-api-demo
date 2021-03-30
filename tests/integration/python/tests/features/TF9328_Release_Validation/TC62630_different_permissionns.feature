@@ -22,7 +22,7 @@ Feature: TF9328 - Release Validation
      When I clicked Import Data button
       And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
       And I clicked Import button
-     Then cells ["A2", "C3"] should have values ["Central", "Loren"]
+     Then I verified that cells ["A2", "C3"] have values ["Central", "Loren"]
       And I logged out
 
      When I logged in as default user
@@ -35,8 +35,8 @@ Feature: TF9328 - Release Validation
       And I selected visualization "Actual Profit vs. Target Profit"
       And I clicked import dossier
       And I closed last notification
-     Then cells ["A2", "D2"] should have values ["Metrics", "Profit Actual"]
-      And object number 1 should be called "Actual Profit vs. Target Profit"
+     Then I verified that cells ["A2", "D2"] have values ["Metrics", "Profit Actual"]
+      And I verified that object number 1 is called "Actual Profit vs. Target Profit"
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -46,13 +46,13 @@ Feature: TF9328 - Release Validation
       And I selected "Books" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
       And I closed last notification
-     Then cells ["B1", "D2"] should have values ["Subcategory", "$1,419"]
-      And object number 1 should be called "Report with a subtotal & prompt"
+     Then I verified that cells ["B1", "D2"] have values ["Subcategory", "$1,419"]
+      And I verified that object number 1 is called "Report with a subtotal & prompt"
 
      When I added a new worksheet
       And I clicked Add Data button
       And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
       And I clicked Import button
-     Then cells ["A2", "C3"] should have values ["Central", "Loren"]
+     Then I verified that cells ["A2", "C3"] have values ["Central", "Loren"]
 
       And I logged out

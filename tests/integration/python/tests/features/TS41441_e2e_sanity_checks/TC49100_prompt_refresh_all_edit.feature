@@ -48,8 +48,8 @@ Feature: TS41441 - Sanity checks
 
      When I clicked Import button in Columns and Filters Selection
       And I closed last notification
-     Then object number 1 should be called "Report with prompt - Attribute element prompt of Category | Required | Not default"
-      And cells ["A3", "B3"] should have values ["2014", "Northeast"]
+     Then I verified that object number 1 is called "Report with prompt - Attribute element prompt of Category | Required | Not default"
+      And I verified that cells ["A3", "B3"] have values ["2014", "Northeast"]
 
      When I selected cell "G1"
       And I clicked Add Data button
@@ -59,20 +59,20 @@ Feature: TS41441 - Sanity checks
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
       And I closed last notification
-     Then object number 1 should be called "Report with a subtotal & prompt"
-      And cells ["G8", "H8", "L8"] should have values ["Jan 2014", "Total", "$ 302,399"]
+     Then I verified that object number 1 is called "Report with a subtotal & prompt"
+      And I verified that cells ["G8", "H8", "L8"] have values ["Jan 2014", "Total", "$ 302,399"]
 
 #     When I hovered over Refresh button on object 2
 # TODO: investigate why duplicate and edit tooltips are in page source and refresh and remove are not
-# TODO: Then I verified that tooltip "Refresh" was displayed on object 2
+# TODO: Then I verified that tooltip "Refresh" is displayed on object 2
 
      When I clicked Refresh on object 2
       And I waited for object to be refreshed successfully
       And I closed notification on object 2
-     Then cells ["A3", "B3"] should have values ["2014", "Northeast"]
+     Then I verified that cells ["A3", "B3"] have values ["2014", "Northeast"]
 
 #     When I hovered over Edit button on object 1
-#     Then I verified that tooltip "Edit" was displayed on object 1
+#     Then I verified that tooltip "Edit" is displayed on object 1
 
      When I clicked Edit object 1
       And I waited for Run button to be enabled
@@ -96,7 +96,7 @@ Feature: TS41441 - Sanity checks
 
      When I clicked Import button in Columns and Filters Selection
       And I closed notification on object 1
-     Then cells ["G4", "H4", "I8", "K4"] should have values ["", "Total", "", "$ 1,197,222"]
+     Then I verified that cells ["G4", "H4", "I8", "K4"] have values ["", "Total", "", "$ 1,197,222"]
 
      When I added a new worksheet
       And I clicked Add Data button
@@ -121,6 +121,6 @@ Feature: TS41441 - Sanity checks
 
      When I clicked Import button in Columns and Filters Selection
       And I closed notification on object 1
-     Then cells ["A1", "B4", "D1"] should have values ["Year", "$2,249,397", ""]
+     Then I verified that cells ["A1", "B4", "D1"] have values ["Year", "$2,249,397", ""]
 
       And I logged out

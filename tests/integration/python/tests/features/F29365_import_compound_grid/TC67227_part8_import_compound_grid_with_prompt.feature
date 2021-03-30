@@ -19,6 +19,6 @@ Feature: F29365 - Import compound grid from dossier to Excel
       And I clicked import dossier
       And I closed all notifications
 
-     Then cells ["C2", "A7", "E4"] should have values ["Profit", "2014 Q4", "$63,938"]
+     Then I verified that cells ["C2", "A7", "E4"] have values ["Profit", "2014 Q4", "$63,938"]
 
       And I logged out

@@ -14,71 +14,71 @@ Feature: F30463 - Ability to sort on prepare data
       And I clicked Prepare Data button
       And I verified that Columns & Filters Selection is visible
 
-     Then attribute number 1 should be called "Age Range"
+     Then I verified that attribute number 1 is called "Age Range"
 
      When I changed sort order of "attributes" to ascending by click
-     Then attribute number 1 should be called "Age Range"
+     Then I verified that attribute number 1 is called "Age Range"
 
      When I changed sort order of "attributes" to descending by click
-     Then attribute number 1 should be called "Zip Code"
+     Then I verified that attribute number 1 is called "Zip Code"
 
      When I changed sort order of "attributes" to default by click
-     Then attribute number 1 should be called "Age Range"
+     Then I verified that attribute number 1 is called "Age Range"
 
-     Then metric number 1 should be called "Average Revenue"
+     Then I verified that metric number 1 is called "Average Revenue"
      When I changed sort order of "metrics" to ascending by click
 
-     Then metric number 1 should be called "Average Revenue"
+     Then I verified that metric number 1 is called "Average Revenue"
 
      When I changed sort order of "metrics" to descending by click
-     Then metric number 1 should be called "Sales Rank"
+     Then I verified that metric number 1 is called "Sales Rank"
 
      When I changed sort order of "metrics" to default by click
-     Then metric number 1 should be called "Average Revenue"
-      And filter number 1 should be called "Age Range"
+     Then I verified that metric number 1 is called "Average Revenue"
+      And I verified that filter number 1 is called "Age Range"
 
      When I changed sort order of "filters" to ascending by click
-     Then filter number 1 should be called "Age Range"
+     Then I verified that filter number 1 is called "Age Range"
 
      When I changed sort order of "filters" to descending by click
-     Then filter number 1 should be called "Zip Code"
+     Then I verified that filter number 1 is called "Zip Code"
 
      When I changed sort order of "filters" to default by click
-     Then filter number 1 should be called "Age Range"
+     Then I verified that filter number 1 is called "Age Range"
 
      When I searched for element called "Age"
       And I pressed tab until sorting "attributes" is focused
       And I changed sort order of "attributes" to ascending by pressing Enter
 
-     Then attribute number 1 should be called "Age Range"
+     Then I verified that attribute number 1 is called "Age Range"
 
      When I changed sort order of "attributes" to descending by pressing Enter
-     Then attribute number 1 should be called "Phone Usage"
+     Then I verified that attribute number 1 is called "Phone Usage"
 
      When I changed sort order of "attributes" to default by pressing Enter
       And I pressed tab until sorting "metrics" is focused
       And I changed sort order of "metrics" to ascending by pressing Enter
 
-     Then metric number 1 should be called "Average Revenue"
+     Then I verified that metric number 1 is called "Average Revenue"
 
      When I changed sort order of "metrics" to descending by pressing Enter
-     Then metric number 1 should be called "Running Revenue Average"
+     Then I verified that metric number 1 is called "Running Revenue Average"
 
      When I changed sort order of "metrics" to default by pressing Enter
       And I pressed tab until sorting "filters" is focused
       And I changed sort order of "filters" to ascending by pressing Enter
 
-     Then filter number 1 should be called "Age Range"
+     Then I verified that filter number 1 is called "Age Range"
 
      When I changed sort order of "filters" to descending by pressing Enter
-     Then filter number 1 should be called "Phone Usage"
+     Then I verified that filter number 1 is called "Phone Usage"
 
      When I changed sort order of "filters" to default by pressing Enter
       And I cleared the search for element with backspace
       And I selected attribute element number 1
       And I expanded attribute forms of attribute number 1
 
-     Then attribute form number 1 of attribute number 1 should be called "DESC"
+     Then I verified that attribute form number 1 of attribute number 1 is called "DESC"
 
      When I collapsed attribute forms of attribute number 1
       And I deselected attribute element number 1
@@ -86,7 +86,7 @@ Feature: F30463 - Ability to sort on prepare data
       And I scrolled into attribute element number 30 and selected it
       And I expanded attribute forms of attribute number 30
 
-     Then attribute form number 1 of attribute number 30 should be called "DESC"
+     Then I verified that attribute form number 1 of attribute number 30 is called "DESC"
 
      When I collapsed attribute forms of attribute number 30
       And I deselected attribute element number 30

@@ -25,7 +25,7 @@ Feature: F25931 - Duplicate object
       And I waited for dossier to load successfully
       And I imported visualization "Bubble Chart"
 
-      And number of worksheets should be 3
+      And I verified that number of worksheets is 3
 
      When I selected worksheet number 1
       And I selected cell "G1"
@@ -34,7 +34,7 @@ Feature: F25931 - Duplicate object
       And I clicked Import button in Duplicate popup
       And I closed last notification
 
-     Then object number 1 should be called "Secure data - always working Copy"
+     Then I verified that object number 1 is called "Secure data - always working Copy"
 
      When I selected worksheet number 2
       And I selected cell "R1"
@@ -43,7 +43,7 @@ Feature: F25931 - Duplicate object
       And I clicked Import button in Duplicate popup
       And I closed last notification
 
-     Then object number 1 should be called "1k Sales Records.csv Copy"
+     Then I verified that object number 1 is called "1k Sales Records.csv Copy"
 
      When I selected worksheet number 3
       And I selected cell "A10"
@@ -52,8 +52,8 @@ Feature: F25931 - Duplicate object
       And I clicked Import button in Duplicate popup
       And I closed last notification
 
-     Then object number 1 should be called "Bubble Chart Copy"
+     Then I verified that object number 1 is called "Bubble Chart Copy"
 
-      And number of worksheets should be 3
+      And I verified that number of worksheets is 3
 
       And I logged out

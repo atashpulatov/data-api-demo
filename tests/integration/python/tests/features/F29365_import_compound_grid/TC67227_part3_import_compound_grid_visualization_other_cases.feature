@@ -16,7 +16,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "E4" should have value "$180,044"
+     Then I verified that cell "E4" has value "$180,044"
 
      When I selected cell "H6"
       And I clicked Add Data button
@@ -30,7 +30,7 @@ Feature: F29365 - Import compound grid
 
    #TODO add validation for defect DE197071 and DE197073
 
-     Then cell "I11" should have value "$311,597"
+     Then I verified that cell "I11" has value "$311,597"
 
      When I selected cell "H40"
       And I clicked Add Data button
@@ -41,7 +41,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "K43" should have value "1.584"
+     Then I verified that cell "K43" has value "1.584"
 
      When I selected cell "P49"
       And I clicked Add Data button
@@ -53,7 +53,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "Q53" should have value "$311,597"
+     Then I verified that cell "Q53" has value "$311,597"
 
      When I selected cell "X100"
       And I clicked Add Data button
@@ -65,6 +65,6 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "Y108" should have value "$260,381"
+     Then I verified that cell "Y108" has value "$260,381"
 
       And I logged out

@@ -160,7 +160,7 @@ def step_impl(context):
     context.pages.import_data_page().scroll_objects_list_to_end()
 
 
-@step('verified that Filters has "{number}" categories selected')
+@step('I verified that Filters has "{number}" categories selected')
 def step_impl(context, number):
     filters_number = context.pages.import_data_page().get_filters_number()
 

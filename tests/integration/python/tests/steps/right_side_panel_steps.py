@@ -28,7 +28,7 @@ def step_impl(context):
     context.pages.right_panel_page().remove_all()
 
 
-@step('Right Panel is empty')
+@step('I verified that the right panel is empty')
 def step_impl(context):
     is_right_panel_empty = context.pages.right_panel_page().check_if_right_panel_is_empty()
 
@@ -57,7 +57,7 @@ def step_impl(context, color):
     AssertUtil.assert_simple(found_color, color)
 
 
-@step('Right panel has scrollbar')
+@step('I verified that right panel has scrollbar')
 def step_impl(context):
     is_scrollbar_visible = context.pages.right_panel_page().is_scrollbar_visible()
 
