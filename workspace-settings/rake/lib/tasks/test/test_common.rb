@@ -181,18 +181,25 @@ def get_python_test_dir()
 end
 
 PY_WIN_TEST_PARAM = {
-  "chrome" => "windows_chrome",
-  "desktop" => "windows_desktop",
-  "ci_pipeline_rv_windows_desktop" => "windows_desktop",
-  "ci_pipeline_rv_windows_chrome" => "windows_chrome"
+  "ci_pipeline_rv_windows_desktop" => "windows_desktop_rv",
+  "ci_pipeline_rv_windows_chrome" => "windows_chrome_rv",
+  "ci_pipeline_postmerge_windows_desktop" => "windows_desktop_local",
+  "ci_pipeline_postmerge_windows_chrome" => "windows_chrome_local",
+  "ci_pipeline_daily_windows_desktop" => "windows_desktop_local",
+  "ci_pipeline_daily_windows_chrome" => "windows_chrome_local",
+  "ci_pipeline_all_windows_desktop" => "windows_desktop_local",
+  "ci_pipeline_all_windows_chrome" => "windows_chrome_local"
 }
 
 PY_MAC_TEST_PARAM = {
-  "chrome" => "mac_chrome",
-  "desktop" => "mac_desktop",
-  "ci_pipeline_rv_mac_chrome" => "mac_chrome",
-  "ci_pipeline_rv_mac_desktop" => "mac_desktop",
-  "ci_pipeline_daily_mac_chrome" => "mac_chrome_local"
+  "ci_pipeline_rv_mac_chrome" => "mac_chrome_rv",
+  "ci_pipeline_rv_mac_desktop" => "mac_desktop_rv",
+  "ci_pipeline_postmerge_mac_chrome" => "mac_chrome_local",
+  "ci_pipeline_postmerge_mac_desktop" => "mac_desktop_local",
+  "ci_pipeline_daily_mac_chrome" => "mac_chrome_local",
+  "ci_pipeline_daily_mac_desktop" => "mac_desktop_local",
+  "ci_pipeline_all_mac_chrome" => "mac_chrome_local",
+  "ci_pipeline_all_mac_desktop" => "mac_desktop_local"
 }
 
 def group_id
