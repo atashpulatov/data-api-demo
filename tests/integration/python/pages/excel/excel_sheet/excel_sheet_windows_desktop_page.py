@@ -47,7 +47,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         # First go to cell to ensure it's visible (scrolled to).
         self.go_to_cell(cell)
 
-        value = self.get_selected_cell_value()
+        value = self._get_selected_cell_value()
 
         return value.strip() if value else value
 
@@ -60,7 +60,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.press_enter()
 
-    def get_selected_cell_value(self):
+    def _get_selected_cell_value(self):
         cell_value = self.get_selected_text_using_clipboard()
         self.press_escape()
 
@@ -136,9 +136,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         return self.get_element_by_name(book_element_name)
 
     def remove_columns(self, first_column_to_be_deleted, number_of_columns_to_be_deleted):
-        self.go_to_cell(f'{column_name}1')
+        self.go_to_cell(f'{first_column_to_be_deleted}1')
 
-        for i in range(0, int(number_of_columns)):
+        for i in range(int(number_of_columns_to_be_deleted)):
             self.send_keys_using_excel_element(Keys.CONTROL + Keys.SPACE)
             self.send_keys_using_excel_element(Keys.CONTROL + Keys.SUBTRACT)
 

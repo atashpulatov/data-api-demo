@@ -67,7 +67,7 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
     def _get_cell_value(self, cell):
         self.go_to_cell(cell)
 
-        value = self.get_selected_cell_value()
+        value = self._get_selected_cell_value()
 
         return value.strip() if value else value
 
@@ -90,7 +90,7 @@ class ExcelSheetMacDesktopPage(BaseMacDesktopPage):
         cell_input.send_keys(Keys.ENTER)
         Util.pause(0.1)
 
-    def get_selected_cell_value(self):
+    def _get_selected_cell_value(self):
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_MENU).click()
         self.get_element_by_xpath(ExcelSheetMacDesktopPage.FORMAT_CELLS_MENU).click()
 

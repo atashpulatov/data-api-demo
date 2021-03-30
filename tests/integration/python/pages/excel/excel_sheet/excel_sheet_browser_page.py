@@ -1,10 +1,12 @@
-from abc import ABC
-from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
+from abc import ABC, abstractmethod
 
+from pyperclip import paste
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.const import Const
+from framework.util.excel_util import ExcelUtil
+from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
 
 
 class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
@@ -23,7 +25,6 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     GREEN_TABLE_STYLE_ID = 'PreviewTableFormatStyle1'
 
     PERCENTAGE_BUTTON_ID = 'NumberFormatPercentage_MLR'
-
     COMMA_STYLE_BUTTON_ID = 'NumberFormatComma_MLR'
 
     ALIGN_MIDDLE_BUTTON = '[data-unique-id="Ribbon-AlignCenter_MLR"]'
@@ -49,6 +50,10 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         self.excel_menu_browser_page = ExcelMenuBrowserPage()
 
+    @abstractmethod
+    def hold_modifier_and_press_key(self, keys):
+        pass
+
     def get_cells_values(self, cells):
         result = []
 
@@ -60,12 +65,12 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def _get_cell_value(self, cell):
         self.go_to_cell(cell)
 
-        value = self.get_selected_cell_value()
+        value = self._get_selected_cell_value()
 
         return value.strip() if value else value
 
     def go_to_cell(self, cell):
-        self.select_cell_or_range(cell)
+        self._select_cell_or_range(cell)
 
     def merge_range(self, start_cell, end_cell):
         self._select_range(start_cell, end_cell)
@@ -74,22 +79,54 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         self.send_keys("h")
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-        
+
         self.send_keys("m")
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
-        
+
         self.send_keys("c")
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
     def _select_range(self, start_cell, end_cell):
-        self.select_cell_or_range(start_cell + ExcelSheetBrowserPage.RANGE_SEPARATOR + end_cell)
+        self._select_cell_or_range(start_cell + ExcelSheetBrowserPage.RANGE_SEPARATOR + end_cell)
+
+    def _select_cell_or_range(self, cells):
+        self.excel_menu_browser_page.enable_use_of_keyboard_shortcuts()
+
+        self.hold_modifier_and_press_key('g')  # open GO TO popup
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+        self.send_keys(cells)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+        self.send_keys(Keys.ENTER)
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+    def _get_selected_cell_value(self):
+        self.hold_modifier_and_press_key('c')  # copy to clipboard
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+        cell_value = paste()
+
+        # adjust number formatting to account for other locales
+        formatted_value = ExcelUtil.format_cell_value(cell_value)
+
+        return formatted_value if formatted_value else ''
 
     def write_value_in_cell(self, cell, value):
         self.go_to_cell(cell)
+
         self.send_keys(value)
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
         self.send_keys(Keys.ENTER)
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+    def get_number_of_worksheets(self):
+        self.focus_on_excel_frame()
+
+        self.hold_modifier_and_press_key('g')
+
+        return len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_IN_GOTO_POPUP_SELECTOR))
 
     def add_worksheet(self):
         self.focus_on_excel_frame()
@@ -102,6 +139,24 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         worksheet_number_int = int(worksheet_number) + 1
 
         self.get_element_by_css(ExcelSheetBrowserPage.SELECT_SHEET_BUTTON % worksheet_number_int).click()
+
+    def remove_columns(self, first_column_to_be_deleted, number_of_columns_to_be_deleted):
+        self.focus_on_excel_frame()
+
+        self.go_to_cell(f'{first_column_to_be_deleted}1')
+
+        for i in range(int(number_of_columns_to_be_deleted) - 1):
+            self.hold_shift_and_press_keys(Keys.ARROW_RIGHT)  # extent selection by one cell to the right
+
+            self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+        self.hold_ctrl_and_press_keys(Keys.SPACE)  # select populated column part
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+        self.hold_ctrl_and_press_keys(Keys.SPACE)  # select whole column
+        self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
+
+        self.hold_modifier_and_press_key('-')  # remove current selection
 
     def click_table_design_tab(self):
         self.focus_on_excel_frame()
