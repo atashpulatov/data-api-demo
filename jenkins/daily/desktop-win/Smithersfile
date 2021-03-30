@@ -37,7 +37,8 @@ export WORKSPACE_SETTING=windows_test
 source .ecosystem
 export HATS=pipeline:$HATS
 
-rake py_e2e_test_win[ci_pipeline_rv_windows_desktop]
+rake deploy_tester_server
+rake py_e2e_test_win[ci_pipeline_daily_windows_desktop]
 '
     end
   end

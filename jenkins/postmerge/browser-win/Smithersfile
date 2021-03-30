@@ -24,7 +24,7 @@ job 'stage-2-e2e-browser-test-python-win' do
     end
   end
 
-  assigned_node_string 'excel-windows-mock-node'
+  assigned_node_string 'mstr-office_browser-testing_autoscaling-pool'
 
   builders do
     bash do
