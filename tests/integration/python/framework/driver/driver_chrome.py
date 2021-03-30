@@ -37,7 +37,9 @@ class DriverChrome(AbstractDriver):
         return driver
 
     def _prepare_driver_new_session(self):
-        options = Options().add_argument('lang=en-US')
+        options = Options()
+        options.add_argument('--allow-insecure-localhost')
+        options.add_argument('lang=en-US')
 
         capabilities = DesiredCapabilities().CHROME.copy()
         capabilities['pageLoadStrategy'] = 'none'
