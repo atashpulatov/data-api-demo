@@ -60,7 +60,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I selected cell "F1"
       And I clicked Add Data button
-      And I found object by ID "c" and selected "Dossier with basic grid vis, vis with totals and vis with crosstabs"
+      And I found object by ID "F806E5E811E9EFE33E340080EF65F66F" and selected "Dossier with basic grid vis, vis with totals and vis with crosstabs"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I opened Show Data panel for "Grid visualisation with subtotals"
