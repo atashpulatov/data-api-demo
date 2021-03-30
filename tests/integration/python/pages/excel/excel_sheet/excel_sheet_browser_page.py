@@ -122,11 +122,13 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
     def get_number_of_worksheets(self):
-        self.focus_on_excel_frame()
+        self.excel_menu_browser_page.enable_use_of_keyboard_shortcuts()
 
         self.hold_modifier_and_press_key('g')
+        number_of_worksheets = len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_IN_GOTO_POPUP_SELECTOR))
+        self.send_keys(Keys.ESCAPE) 
 
-        return len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_IN_GOTO_POPUP_SELECTOR))
+        return number_of_worksheets
 
     def add_worksheet(self):
         self.focus_on_excel_frame()
