@@ -22,7 +22,7 @@ export WORKSPACE_SETTING=mac_test
 source .ecosystem
 export HATS=pipeline:$HATS
 
-rake py_e2e_test_mac[ci_pipeline_rv_mac_desktop]
+rake py_e2e_test_mac[ci_pipeline_all_mac_desktop]
 '
     end
   end

@@ -1,4 +1,4 @@
-job 'we-win-browser' do
+job 'weekly-win-browser' do
   description 'run browser based e2e python test for excel plugin, on windows'
 
    configure_common_items{}
@@ -27,6 +27,7 @@ export WORKSPACE_SETTING=windows_test
 source .ecosystem
 export HATS=pipeline:$HATS
 
+rake deploy_tester_server
 rake py_e2e_test_win[ci_pipeline_all_windows_chrome]
 '
     end
