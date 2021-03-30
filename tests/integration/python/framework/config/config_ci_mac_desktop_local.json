@@ -7,8 +7,8 @@
   "cleanup_after_test_enabled": true,
   "run_appium_for_mac_enabled": true,
   "host_url_mac_desktop": "http://localhost:4622/wd/hub",
-  "excel_add_in_environment": "236574",
-  "excel_desktop_add_in_import_data_name": "env-236574",
+  "excel_add_in_environment": "CI_local",
+  "excel_desktop_add_in_import_data_name": "CI_local",
   "excel_add_in_environment_default_user_name": "a",
   "excel_add_in_environment_default_password": ""
 }
