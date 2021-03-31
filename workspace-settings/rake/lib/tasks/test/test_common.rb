@@ -241,9 +241,4 @@ def ci_metrics_system_test()
   end
 end
 
-desc "publish test result for browser e2e"
-task :yurii_debuggggg do 
-
-end
-
 
