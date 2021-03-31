@@ -206,9 +206,6 @@ def group_id
   return Common::Version.dependency_group_id
 end
 
-def artifact_id
-  return "mstr-office"
-end
 ######################################common ci metrics code######################################
 def ci_metrics_system_test()
   json_path = "#{$WORKSPACE_SETTINGS[:paths][:project][:home]}/tests/integration/test-driver-browser/allure-report/data/suites.json"
