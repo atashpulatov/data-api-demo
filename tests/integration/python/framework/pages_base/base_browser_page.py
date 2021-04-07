@@ -15,6 +15,7 @@ class BaseBrowserPage(BasePage):
     ADD_IN_FRAME_ELEM = '.AddinIframe[src*="static/loader-mstr-office"]'
     ADD_IN_ROOT_ELEM = 'root'
     PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
+    POPUP_WRAPPER_ID = 'popup-wrapper'
 
     def switch_to_window_by_index(self, index):
         window_handles = self.driver.window_handles
@@ -64,11 +65,21 @@ class BaseBrowserPage(BasePage):
                 raise MstrException('Cannot focus on excel frame')
 
     def focus_on_add_in_popup_frame(self):
-        self.focus_on_excel_frame()
+        end_time = time.time() + Const.DEFAULT_TIMEOUT
 
-        add_in_popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.ADD_IN_POPUP_FRAME_ELEM)
+        while end_time > time.time():
+            self.focus_on_excel_frame()
 
-        self._switch_to_frame(add_in_popup_frame_element)
+            add_in_popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.ADD_IN_POPUP_FRAME_ELEM)
+
+            self._switch_to_frame(add_in_popup_frame_element)
+
+            if self.check_if_element_exists_by_id(BaseBrowserPage.POPUP_WRAPPER_ID, timeout=Const.SHORT_TIMEOUT):
+                return
+
+            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
+
+        raise MstrException('Cannot focus on Add-in popup frame')
 
     def focus_on_dossier_frame(self):
         self.focus_on_excel_frame()
