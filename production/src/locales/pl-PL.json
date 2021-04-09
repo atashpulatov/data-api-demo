@@ -151,7 +151,7 @@
    "Are you sure you want to <span>Clear Data</span>?": "Czy na pewno chcesz <span>Wyczyścić dane</span>?",
    "Clear Data": "Wyczyść dane",
    "Import report": "Importuj raport",
-   "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again.": "Dane MicroStrategy zostały usunięte ze skoroszytu. Kliknij „Wyświetl dane”, aby ponownie zaimportować dane.",
+   "MicroStrategy data has been removed from the workbook. Click 'View Data' to import it again.": "Dane MicroStrategy zostały usunięte ze skoroszytu. Kliknij przycisk „Wyświetl dane”, aby ponownie zaimportować dane.",
    "Unsuccessful HTTP response": "Niepomyślna odpowiedź HTTP",
    "This object binding is no longer valid due to previous updates.": "Powiązanie obiektu nie jest już prawidłowe z powodu wcześniejszych aktualizacji.",
    "An internal error has occurred.": "Wystąpił błąd wewnętrzny.",
