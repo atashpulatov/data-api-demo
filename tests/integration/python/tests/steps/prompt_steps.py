@@ -28,7 +28,7 @@ def step_impl(context, item, prompt_number, prompt_name):
 
 @step('I typed "{text}" for "{prompt_number}. {prompt_name}" prompt - value prompt')
 def step_impl(context, text, prompt_number, prompt_name):
-    context.pages.prompt_page().select_answer_for_value_prompt(prompt_number, text=text)
+    context.pages.prompt_page().select_answer_for_value_prompt(prompt_number, text)
 
 
 @step('I typed "{date}" and ["{hour}", "{minute}", "{second}"] for "{prompt_number}. {prompt_name}" '
