@@ -1,6 +1,8 @@
 @todo_windows_desktop
 @release_validation
 @ga_validation
+@mac_chrome
+@windows_chrome
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC53560] - Importing grid visualisations - basic scenario
@@ -22,10 +24,9 @@ Feature: F24398 - Import and refresh visualization
       And I selected dossier bookmark 1
 
       And I "increased" year filter value on dossier from "left" side
-      # TODO Fix filter verification
-      # And I verified that value for filter "Year" is "(2015 - 2016)"
+      And I verified that value for filter "Year" is "(2015 - 2016)"
       And I reset dossier
-      # And I verified that value for filter "Year" is "(2014 - 2015)"
+      And I verified that value for filter "Year" is "(2014 - 2015)"
       And I selected dossier page or chapter 2
       And I selected visualization "Chart vis"
       And I clicked import dossier
