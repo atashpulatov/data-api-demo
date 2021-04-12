@@ -16,9 +16,9 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         FILTER_SIDE_RIGHT: FILTER_SLIDER_MAX_POINT
     }
 
-    FILTER_SUMMARY_ITEMS = '.mstrd-FilterSummaryBarItem'
-    FILTER_SUMMARY_BAR_ITEM = '.mstrd-FilterSummaryBarItem-summaryText'
-    FILTER_SUMMARY_ITEM_TITLE = '.mstrd-FilterSummaryBarItem-titleText'
+    FILTER_SUMMARY_ITEMS_CLASS = '.mstrd-FilterSummaryBarItem'
+    FILTER_SUMMARY_BAR_ITEM_CLASS = '.mstrd-FilterSummaryBarItem-summaryText'
+    FILTER_SUMMARY_ITEM_TITLE_CLASS = '.mstrd-FilterSummaryBarItem-titleText'
 
     DOSSIER_FILTER_NAME = '.mstrd-FilterItemTitle-filterTitle'
     DOSSIER_FILTER_VALUE = '.mstrd-Checkbox-body[aria-label="%s"]'
@@ -62,11 +62,9 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
 
         filter_item = self._get_filter_summary_item_by_name(filter_name)
 
-        filter_value = filter_item.get_element_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_BAR_ITEM).text
+        filter_value = filter_item.get_element_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_BAR_ITEM_CLASS).text
 
-        filter_final_value = '(' + filter_value + ')'
-
-        return filter_final_value
+        return f'({filter_value})'
 
     def _apply_filter(self):
         self.get_element_by_css(ImportDossierFilterBrowserPage.APPLY_FILTER_BUTTON).click()
@@ -88,10 +86,10 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % filter_name).click()
 
     def _get_filter_summary_item_by_name(self, filter_name):
-        filter_items = self.get_elements_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEMS)
+        filter_items = self.get_elements_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEMS_CLASS)
 
         for filter_item in filter_items:
-            filter_title_css = ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEM_TITLE
+            filter_title_css = ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEM_TITLE_CLASS
             filter_title = filter_item.get_element_by_css(filter_title_css).text
 
             if filter_title == filter_name:
