@@ -116,6 +116,9 @@ class BaseElement:
     def get_name_by_attribute(self):
         return self.get_attribute(Const.NAME_ATTRIBUTE)
 
+    def get_id_by_attribute(self):
+        return self.get_attribute(Const.ID_ATTRIBUTE)
+
     def get_automation_id_by_attribute(self):
         return self.get_attribute(Const.AUTOMATION_ID_ATTRIBUTE)
 
