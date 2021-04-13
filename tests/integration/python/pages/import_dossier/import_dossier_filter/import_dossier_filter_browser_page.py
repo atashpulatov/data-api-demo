@@ -62,7 +62,7 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
 
         filter_item = self._get_filter_summary_item_by_name(filter_name)
 
-        filter_value = filter_item.get_element_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_BAR_ITEM_CLASS).text
+        filter_value = filter_item.get_element_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_BAR_ITEM_CSS).text
 
         return f'({filter_value})'
 
@@ -86,10 +86,10 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % filter_name).click()
 
     def _get_filter_summary_item_by_name(self, filter_name):
-        filter_items = self.get_elements_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEMS_CLASS)
+        filter_items = self.get_elements_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEMS_CSS)
 
         for filter_item in filter_items:
-            filter_title_css = ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEM_TITLE_CLASS
+            filter_title_css = ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEM_TITLE_CSS
             filter_title = filter_item.get_element_by_css(filter_title_css).text
 
             if filter_title == filter_name:
