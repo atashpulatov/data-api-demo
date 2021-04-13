@@ -16,9 +16,9 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         FILTER_SIDE_RIGHT: FILTER_SLIDER_MAX_POINT
     }
 
-    FILTER_SUMMARY_ITEMS_CLASS = '.mstrd-FilterSummaryBarItem'
-    FILTER_SUMMARY_BAR_ITEM_CLASS = '.mstrd-FilterSummaryBarItem-summaryText'
-    FILTER_SUMMARY_ITEM_TITLE_CLASS = '.mstrd-FilterSummaryBarItem-titleText'
+    FILTER_SUMMARY_ITEMS_CSS = '.mstrd-FilterSummaryBarItem'
+    FILTER_SUMMARY_BAR_ITEM_CSS = '.mstrd-FilterSummaryBarItem-summaryText'
+    FILTER_SUMMARY_ITEM_TITLE_CSS = '.mstrd-FilterSummaryBarItem-titleText'
 
     DOSSIER_FILTER_NAME = '.mstrd-FilterItemTitle-filterTitle'
     DOSSIER_FILTER_VALUE = '.mstrd-Checkbox-body[aria-label="%s"]'
