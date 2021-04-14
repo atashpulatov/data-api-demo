@@ -1,5 +1,6 @@
 @todo_windows_desktop
 @mac_chrome
+@windows_chrome
 @release_validation
 Feature: F30463 - Ability to sort on prepare data
 
