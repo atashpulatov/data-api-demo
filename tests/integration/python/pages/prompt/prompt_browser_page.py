@@ -158,7 +158,7 @@ class PromptBrowserPage(BaseBrowserPage):
         number = prompt_number + '.'
 
         for container in containers:
-            if container.get_id_by_attribute():
+            if container.get_id_by_attribute() != '':
                 if container.get_element_by_css(PromptBrowserPage.PROMPT_QUESTION_TITLE_INDEX_CSS).text == number:
                     return container
 
