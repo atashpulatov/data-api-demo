@@ -1,5 +1,6 @@
 @todo_windows_desktop
 @mac_chrome
+@windows_chrome
 @release_validation
 Feature: F30479 - Hardening of importing data from Dossier to Excel
 
@@ -47,10 +48,11 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
       And I found object by ID "077A3D5711EA84893F510080EF95313B" and selected "dossier with attribute/metric selector"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      # TODO And I select "Call Center" for attribute/metric selector
+
+      And I select "Call Center" for attribute/metric selector
       And I selected visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
-     Then I verified that cells ["F2", "J2"] have values ["Jan 2015", "18.70%"]
+     Then I verified that cells ["F2", "J2"] have values ["Memphis", "20.91%"]
 
       And I logged out

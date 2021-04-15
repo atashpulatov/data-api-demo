@@ -50,6 +50,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
     COLUMN_HEADER = '''div[aria-label='%s']'''
     BUTTON_TOOLTIP = '.ant-popover-inner-content'
 
+    ATTRIBUTE_METRIC_SELECTOR_ITEM_CSS = '.mstrmojo-FilterBox .item-wrapper'
+
     def __init__(self):
         super().__init__()
 
@@ -253,3 +255,14 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def scroll_objects_list_to_end(self):
         self.press_end()
+
+    def select_attribute_metric_selector_by_name(self, selector_name):
+        self.focus_on_dossier_frame()
+
+        selectors = self.get_elements_by_css(ImportDataBrowserPage.ATTRIBUTE_METRIC_SELECTOR_ITEM_CSS)
+        for selector in selectors:
+            if selector.text == selector_name:
+                selector.click()
+                return
+
+        raise MstrException(f'Could not find selector with name: {selector_name}')
