@@ -2,6 +2,7 @@
 @windows_chrome
 @mac_chrome
 @release_validation
+
 Feature: F21526 - Secure data
 
   Scenario: [TC54263] - Clearing and viewing data

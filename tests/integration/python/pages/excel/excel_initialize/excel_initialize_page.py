@@ -28,7 +28,5 @@ class ExcelInitializePage(BasePage):
     def initialize_using_new_session(self, context, locale_name=Const.DEFAULT_LOCALE_NAME):
         context.pages.excel_general_page().go_to_excel(locale_name)
 
-        context.pages.excel_general_page().maximize_excel_window()
-
         context.pages.excel_menu_page().click_add_in_elem()
         context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()

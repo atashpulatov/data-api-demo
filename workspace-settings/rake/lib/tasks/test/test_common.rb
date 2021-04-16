@@ -45,6 +45,7 @@ end
 
 desc "run test in python on Windows"
 task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
+  args.with_defaults(:build_no => Nexus.latest_artifact_version(artifact_id: "office", group_id: Common::Version.dependency_group_id))
   test_dir = get_python_test_dir()
   tag_name = args['tag_name']
   build_no = args['build_no']
@@ -57,7 +58,7 @@ task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
   shell_command! "python -m venv venv_win", cwd: test_dir
   shell_command! "venv_win\\Scripts\\Activate.bat", cwd: test_dir
   begin
-    shell_command! "python -m behave --tags=@ci --tags=@#{PY_WIN_TEST_PARAM[tag_name]} --no-skipped -D config_file=config_ci_#{PY_WIN_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/", cwd: test_dir
+    shell_command! "python -m behave --tags=@#{tag_name} --no-skipped -D config_file=config_ci_#{PY_WIN_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/", cwd: test_dir
   ensure
     shell_command! "npm install -g allure-commandline --save-dev",  cwd: "#{test_dir}"
     shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
@@ -66,10 +67,29 @@ task :py_e2e_test_win,[:tag_name, :build_no] do | t, args|
     
     shell_command! "npm run rally verdict=all build=#{build_no} os=#{test_os} target=#{PY_WIN_TEST_PARAM[tag_name]}", cwd: get_browser_test_dir()
   end
+
+  if PY_MAC_TEST_PARAM[tag_name] == "windows_desktop"
+    target_dir = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office/#{tag_name}"
+    FileUtils.rm_rf target_dir
+    FileUtils.mkdir_p target_dir 
+    FileUtils.cp_r("#{test_dir}/allure-report", target_dir)
+  end
+end
+
+desc "publish test result for browser e2e"
+task :copy_results,[:type] do | t, args|
+    type = args['type']
+    report_path = "#{$WORKSPACE_SETTINGS[:paths][:organization][:home]}/mstr-office/#{type}/allure-report"
+    local_report_dir = "#{$WORKSPACE_SETTINGS[:paths][:project][:tests][:home]}/#{type}"
+  
+  FileUtils.rm_rf local_report_dir
+  FileUtils.mkdir_p local_report_dir unless Dir.exists? local_report_dir
+  FileUtils.cp_r(report_path, local_report_dir)
 end
 
 desc "run test in python on Mac"
 task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
+  args.with_defaults(:build_no => Nexus.latest_artifact_version(artifact_id: "office", group_id: Common::Version.dependency_group_id))
   test_dir = get_python_test_dir()
   tag_name = args['tag_name']
   build_no = args['build_no']
@@ -80,7 +100,7 @@ task :py_e2e_test_mac,[:tag_name, :build_no] do | t, args|
   FileUtils.rm_rf allure_folder_path if Dir.exist? allure_folder_path
 
   begin 
-    shell_command! "behave --tags=@ci --tags=@#{PY_MAC_TEST_PARAM[tag_name]} --no-skipped -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/", cwd: test_dir
+    shell_command! "behave --tags=@#{tag_name} --no-skipped -D config_file=config_ci_#{PY_MAC_TEST_PARAM[tag_name]}.json --logging-level=DEBUG --format allure_behave.formatter:AllureFormatter -o #{allure_folder} tests/", cwd: test_dir
   ensure
     shell_command! "allure generate #{allure_folder} --clean ", cwd: "#{test_dir}"
     info "publish e2e test result to Rally"
@@ -161,14 +181,30 @@ def get_python_test_dir()
 end
 
 PY_WIN_TEST_PARAM = {
-  "chrome" => "windows_chrome",
-  "desktop" => "windows_desktop"
+  "ci_pipeline_rv_windows_desktop" => "windows_desktop_rv",
+  "ci_pipeline_rv_windows_chrome" => "windows_chrome_rv",
+  "ci_pipeline_postmerge_windows_desktop" => "windows_desktop_local",
+  "ci_pipeline_postmerge_windows_chrome" => "windows_chrome_local",
+  "ci_pipeline_daily_windows_desktop" => "windows_desktop_local",
+  "ci_pipeline_daily_windows_chrome" => "windows_chrome_local",
+  "ci_pipeline_all_windows_desktop" => "windows_desktop_local",
+  "ci_pipeline_all_windows_chrome" => "windows_chrome_local"
 }
 
 PY_MAC_TEST_PARAM = {
-  "chrome" => "mac_chrome",
-  "desktop" => "mac_desktop"
+  "ci_pipeline_rv_mac_chrome" => "mac_chrome_rv",
+  "ci_pipeline_rv_mac_desktop" => "mac_desktop_rv",
+  "ci_pipeline_postmerge_mac_chrome" => "mac_chrome_local",
+  "ci_pipeline_postmerge_mac_desktop" => "mac_desktop_local",
+  "ci_pipeline_daily_mac_chrome" => "mac_chrome_local",
+  "ci_pipeline_daily_mac_desktop" => "mac_desktop_local",
+  "ci_pipeline_all_mac_chrome" => "mac_chrome_local",
+  "ci_pipeline_all_mac_desktop" => "mac_desktop_local"
 }
+
+def group_id
+  return Common::Version.dependency_group_id
+end
 
 ######################################common ci metrics code######################################
 def ci_metrics_system_test()
@@ -201,3 +237,5 @@ def ci_metrics_system_test()
     puts "\nMETRICS_SYSTEM_TEST=#{metrics_system_test.to_json}\n"
   end
 end
+
+

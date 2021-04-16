@@ -1,6 +1,7 @@
 @mac_chrome
 @windows_chrome
 @release_validation
+@ga_validation
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 4 - Import Compound Grid visualization with special structures

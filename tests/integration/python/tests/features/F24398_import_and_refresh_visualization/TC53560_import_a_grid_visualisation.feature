@@ -1,6 +1,7 @@
 @todo_windows_desktop
 @release_validation
 @ga_validation
+
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC53560] - Importing grid visualisations - basic scenario
@@ -78,3 +79,5 @@ Feature: F24398 - Import and refresh visualization
      Then cells ["A2", "A3"] should have values ["", ""]
 
       And I logged out
+
+   #TODO upadte steps from rally

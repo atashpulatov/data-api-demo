@@ -61,7 +61,7 @@ function getTesterUrl(testerEmail) {
 * @param {String} formattedID Formatted Test Case ID (e.g. 'TC12567')
 * @returns {String} URL to Test Case endpoint
 */
-function getRallyTCUrl(formattedID) {
+async function getRallyTCUrl(formattedID) {
   const formattedIDUrl = `${rallyConfig.apiUrl}/testcase/?query=(FormattedID%20%3D%20%22${formattedID}%22)`;
   return getDataFromRally(formattedIDUrl)
     .then(({ QueryResult }) => QueryResult.Results[0]._ref)
@@ -80,10 +80,29 @@ async function getTCDetailsFromRally(formattedID) {
     .catch(() => { throw Error(`Couldn't get ${formattedID} details`); });
 }
 
+/**
+* Returns Test Case list under the specified TS
+*
+* @param {String} testSet Formatted Test Case ID (e.g. 'TC12567')
+* @returns {Object} Object contatining Test Cases under the given Test Set
+*/
+async function getTCListFromTestSet(testSet) {
+  // URL to list of Test Cases under the Test Set
+  const { TestSet } = await getDataFromRally(testSet);
+  const testCasesUrl = TestSet.TestCases._ref;
+  // URL with result page size extended to 1000
+  const tCUrlWithPageSize = testCasesUrl.concat('?pagesize=1000');
+
+  // List of Test Cases under the Test Set
+  const { QueryResult: testCasesList } = await getDataFromRally(tCUrlWithPageSize);
+  return testCasesList.Results;
+}
+
 module.exports = {
   getOwner: getOwner,
   getTestSet: getTestSet,
   getRallyTCUrl: getRallyTCUrl,
   getTesterUrl: getTesterUrl,
-  getDataFromRally: getDataFromRally
+  getDataFromRally: getDataFromRally,
+  getTCListFromTestSet: getTCListFromTestSet
 }

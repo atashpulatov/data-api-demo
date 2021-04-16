@@ -150,14 +150,6 @@ task :stage_1_test do
   get_test_coverage_metrics
 end
 
-desc "debug rake task"
-task :debug do
-  # generate_comparison_report_markdown
-  # generate_eslint_report
-  # publish_to_pull_request_page
-  update_package_json("#{$WORKSPACE_SETTINGS[:paths][:project][:home]}")
-end
-
 def run_test(working_dir)
   shell_command! "npm run test:coverage", cwd: "#{working_dir}/production"
 end

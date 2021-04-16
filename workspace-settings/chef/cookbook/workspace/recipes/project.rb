@@ -14,7 +14,6 @@ end
 
 case node['platform']
 when 'redhat', 'centos', 'fedora', 'amazon'
-  include_recipe 'java'
   bash 'Remove jenkins .config file if it is a regular file(not directory). To fix a previous mistake' do
     user 'root'
     code <<-EOH

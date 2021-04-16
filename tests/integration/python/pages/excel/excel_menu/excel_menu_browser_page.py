@@ -7,7 +7,7 @@ from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPa
 
 
 class ExcelMenuBrowserPage(BaseBrowserPage):
-    ICON_ELEM = '.cui-ctl-largelabel'
+    ICON_ELEM = 'button[data-unique-id^="Ribbon-AddinControl"]'
     CLOSE_ADD_IN_BUTTON = 'AgaveTaskpaneCloseButtonId'
     NAME_BOX = '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a'
 
