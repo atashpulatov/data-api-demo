@@ -1,5 +1,6 @@
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.const import Const
+from framework.util.exception.mstr_exception import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import RightPanelTileBrowserPage
 
 
@@ -23,6 +24,9 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
     SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
     SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
+
+    FOOTER_BUTTON_CSS = '.popup-buttons.popup-footer button'
+    BACK_BUTTON_CSS = '#back.ant-btn'
 
     def __init__(self):
         super().__init__()
@@ -123,5 +127,22 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         return self.check_if_element_exists_by_css(
             ColumnsAndFiltersSelectionBrowserPage.SUBTOTALS_TOGGLE_CONTAINER,
+            timeout=Const.SHORT_TIMEOUT
+        )
+
+    def is_button_enabled(self, button_name):
+        self.focus_on_add_in_popup_frame()
+
+        footer_buttons = self.get_elements_by_css(ColumnsAndFiltersSelectionBrowserPage.FOOTER_BUTTON_CSS)
+
+        for button in footer_buttons:
+            if button.text == button_name:
+                return not button.is_disabled_by_attribute()
+
+        raise MstrException(f'Could not find a button with the name: {button_name}')
+
+    def is_back_button_visible(self):
+        return self.check_if_element_exists_by_css(
+            ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_CSS,
             timeout=Const.SHORT_TIMEOUT
         )

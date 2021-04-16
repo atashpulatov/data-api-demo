@@ -22,5 +22,6 @@ class Const:
     IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
     TEXT_CONTENT_ATTRIBUTE = 'textContent'
     CLASS_NAME_ATTRIBUTE = 'className'
+    DISABLED_ATTRIBUTE = 'disabled'
 
     ATTRIBUTE_VALUE_TRUE = 'true'

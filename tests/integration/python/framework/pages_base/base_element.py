@@ -131,6 +131,9 @@ class BaseElement:
     def is_enabled_by_attribute(self):
         return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
 
+    def is_disabled_by_attribute(self):
+        return self.get_attribute(Const.DISABLED_ATTRIBUTE) == Const.ATTRIBUTE_VALUE_TRUE
+
     def get_element_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
         return self.get_element(By.CSS_SELECTOR, selector, timeout, safe=safe)
 
