@@ -38,14 +38,14 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.NOTIFICATION_TEXT_ELEM,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             ColumnsAndFiltersSelectionBrowserPage.COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT
         )
 
     def ensure_popup_title_is_correct(self, title):
         self.wait_for_element_to_have_attribute_value_by_css(
             ColumnsAndFiltersSelectionBrowserPage.REPORT_TITLE,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             title
         )
 

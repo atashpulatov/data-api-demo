@@ -14,7 +14,6 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     GRID_ELEM = 'Grid'
     BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'
     BOOK_CHILDREN_ELEM = '//TabItem[@AutomationId="SheetTab"][%s]'
-    NAME_ATTRIBUTE = 'Name'
     ADD_SHEET_BUTTON_NEW_EXCEL = 'Add Sheet'
     ADD_SHEET_BUTTON_OLD_EXCEL = 'Sheet Tab ' + ADD_SHEET_BUTTON_NEW_EXCEL
     ADD_SHEET_BUTTON_IMAGE = ADD_SHEET_BUTTON_NEW_EXCEL

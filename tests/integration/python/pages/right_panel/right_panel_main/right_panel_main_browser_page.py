@@ -124,7 +124,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelMainBrowserPage.DATA_CLEARED_OVERLAY_TITLE,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             overlay_title
         )
 

@@ -94,7 +94,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             expected_message,
             timeout=timeout
         )
@@ -104,7 +104,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.GLOBAL_ERROR_ELEM,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             expected_message,
             timeout=timeout
         )
@@ -357,6 +357,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             expected_message
         )
