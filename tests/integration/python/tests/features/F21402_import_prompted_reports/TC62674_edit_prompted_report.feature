@@ -1,4 +1,5 @@
 @release_validation
+@mac_chrome
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC62674] - E2E Editing all types of prompted reports, except nested
@@ -53,9 +54,9 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I verified that Columns & Filters Selection is visible
       And I verified popup title is "Report with all type of prompts (except nested)"
       And I verified that counter of "metrics" shows "1" of "3" selected
-      And I verified that counter of "attributes" shows "3" of "3" selected
-      And I verified that counter of "filters" shows "1" of "3" selected
-      And I verified that Import button is disabled
+      And I verified that counter of "attributes" shows "3" of "4" selected
+      And I verified that counter of "filters" shows "1" of "4" selected
+      And I verified that Import button is enabled
 
      When I clicked metric "Profit"
       And I clicked attribute "Subcategory"

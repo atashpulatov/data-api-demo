@@ -12,12 +12,7 @@ from framework.util.util import Util
 
 
 class BaseElement:
-    NAME_ATTRIBUTE = 'Name'
-    AUTOMATION_ID_ATTRIBUTE = 'AutomationId'
-    IS_OFFSCREEN_ATTRIBUTE = 'IsOffscreen'
     IS_ENABLED_ATTRIBUTE = 'IsEnabled'
-
-    ATTRIBUTE_VALUE_TRUE = 'true'
 
     BACKGROUND_COLOR_PROPERTY = 'background-color'
     OPACITY_PROPERTY = 'opacity'
@@ -116,6 +111,9 @@ class BaseElement:
     def get_name_by_attribute(self):
         return self.get_attribute(Const.NAME_ATTRIBUTE)
 
+    def get_id_by_attribute(self):
+        return self.get_attribute(Const.ID_ATTRIBUTE)
+
     def get_automation_id_by_attribute(self):
         return self.get_attribute(Const.AUTOMATION_ID_ATTRIBUTE)
 
@@ -129,7 +127,7 @@ class BaseElement:
         return self.get_attribute(Const.CLASS_NAME_ATTRIBUTE)
 
     def is_enabled_by_attribute(self):
-        return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == BaseElement.ATTRIBUTE_VALUE_TRUE
+        return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == Const.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
         return self.get_element(By.CSS_SELECTOR, selector, timeout, safe=safe)
