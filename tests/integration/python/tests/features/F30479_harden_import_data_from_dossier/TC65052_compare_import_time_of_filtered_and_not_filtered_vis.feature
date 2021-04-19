@@ -49,7 +49,7 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
 
-      And I select "Call Center" for attribute/metric selector
+      And I selected "Call Center" for attribute/metric selector
       And I selected visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification

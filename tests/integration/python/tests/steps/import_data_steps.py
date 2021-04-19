@@ -179,6 +179,6 @@ def step_impl(context, expected_tooltip_text):
     AssertUtil.assert_simple(tooltip_text, expected_tooltip_text)
 
 
-@step('I select "{selector_name}" for attribute/metric selector')
+@step('I selected "{selector_name}" for attribute/metric selector')
 def step_impl(context, selector_name):
     context.pages.import_data_page().select_attribute_metric_selector_by_name(selector_name)
