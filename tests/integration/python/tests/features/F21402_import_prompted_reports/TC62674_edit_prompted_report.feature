@@ -56,6 +56,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I verified that counter of "metrics" shows "1" of "3" selected
       And I verified that counter of "attributes" shows "3" of "4" selected
       And I verified that counter of "filters" shows "1" of "4" selected
+      And I verified that Import button is enabled
 
      When I clicked metric "Profit"
       And I clicked attribute "Subcategory"
