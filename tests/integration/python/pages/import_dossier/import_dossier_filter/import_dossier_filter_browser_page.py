@@ -58,17 +58,6 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
 
         self._apply_filter()
 
-    def get_filter_value(self, filter_name):
-
-        filter_item = self._get_filter_summary_item_by_name(filter_name)
-
-        filter_value = filter_item.get_element_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_BAR_ITEM_CSS).text
-
-        return f'({filter_value})'
-
-    def _apply_filter(self):
-        self.get_element_by_css(ImportDossierFilterBrowserPage.APPLY_FILTER_BUTTON).click()
-
     def _open_year_filter(self):
         self.focus_on_dossier_frame()
 
@@ -79,11 +68,22 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
             ImportDossierFilterBrowserPage.DOSSIER_FILTER_YEAR
         ).click()
 
+    def _select_filter_checkbox(self, filter_name):
+        self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % filter_name).click()
+
+    def _apply_filter(self):
+        self.get_element_by_css(ImportDossierFilterBrowserPage.APPLY_FILTER_BUTTON).click()
+
     def _open_filter_menu(self):
         self.get_element_by_css(ImportDossierFilterBrowserPage.FILTERS_BUTTON).click()
 
-    def _select_filter_checkbox(self, filter_name):
-        self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % filter_name).click()
+    def get_filter_value(self, filter_name):
+        filter_item = self._get_filter_summary_item_by_name(filter_name)
+
+        filter_value = filter_item.get_element_by_css(
+            ImportDossierFilterBrowserPage.FILTER_SUMMARY_BAR_ITEM_CSS).text
+
+        return f'({filter_value})'
 
     def _get_filter_summary_item_by_name(self, filter_name):
         filter_items = self.get_elements_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEMS_CSS)
