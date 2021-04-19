@@ -145,7 +145,8 @@ class PromptBrowserPage(BaseBrowserPage):
         prompt_container = self._find_prompt_container_by_prompt_number(prompt_number)
 
         name_found_in_prompt_container = prompt_container.get_element_by_css(
-            PromptBrowserPage.PROMPT_QUESTION_TITLE_NAME_CSS).text
+            PromptBrowserPage.PROMPT_QUESTION_TITLE_NAME_CSS
+        ).text
 
         if name_found_in_prompt_container == prompt_name:
             return
