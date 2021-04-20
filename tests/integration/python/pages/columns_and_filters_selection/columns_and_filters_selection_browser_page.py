@@ -26,7 +26,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
     FOOTER_BUTTON_CSS = '.popup-buttons.popup-footer button'
-    BACK_BUTTON_CSS = '#back.ant-btn'
+    BACK_BUTTON_ID = 'back'
 
     def __init__(self):
         super().__init__()
@@ -142,7 +142,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
         raise MstrException(f'Could not find a button with the name: {button_name}')
 
     def is_back_button_visible(self):
-        return self.check_if_element_exists_by_css(
-            ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_CSS,
+        return self.check_if_element_exists_by_id(
+            ColumnsAndFiltersSelectionBrowserPage.BACK_BUTTON_ID,
             timeout=Const.SHORT_TIMEOUT
         )
