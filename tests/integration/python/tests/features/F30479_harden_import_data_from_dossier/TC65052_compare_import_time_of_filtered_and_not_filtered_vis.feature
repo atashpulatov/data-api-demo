@@ -23,33 +23,31 @@ Feature: F30479 - Hardening of importing data from Dossier to Excel
       And I closed last notification
      Then I verified that cells ["A2", "A56161"] have values ["2014", "2017"]
 
-
      When I clicked Edit object 1
       And I selected visualization "Visualization 1"
       And I saved execution start time to "visualisation_not_filtered_import_timer"
       And I clicked import dossier
-      And I saved execution duration to "visualisation_not_filtered_import_timer"
+     Then I saved execution duration to "visualisation_not_filtered_import_timer"
       And I closed last notification
       And I verified that cells ["A2", "A56161"] have values ["2014", "2017"]
 
-      And I clicked Edit object 1
+     When I clicked Edit object 1
       And I selected visualization "Visualization 1"
       And I selected year "2014" in Year filter
-      And I saved execution start time to "visualisation_only_2014_import_timer"
+     Then I saved execution start time to "visualisation_only_2014_import_timer"
       And I clicked import dossier
       And I saved execution duration to "visualisation_only_2014_import_timer"
       And I closed last notification
-
-     Then I verified that execution duration "visualisation_only_2014_import_timer" is not longer than "visualisation_not_filtered_import_timer"
+      And I verified that execution duration "visualisation_only_2014_import_timer" is not longer than "visualisation_not_filtered_import_timer"
       And I verified that cells ["A2", "A56161"] have values ["2014", ""]
 
      When I selected cell "F1"
       And I clicked Add Data button
       And I found object by ID "077A3D5711EA84893F510080EF95313B" and selected "dossier with attribute/metric selector"
       And I clicked Import button to open Import Dossier
-      And I waited for dossier to load successfully
+     Then I waited for dossier to load successfully
 
-      And I selected "Call Center" for attribute/metric selector
+     When I selected "Call Center" for attribute/metric selector
       And I selected visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
