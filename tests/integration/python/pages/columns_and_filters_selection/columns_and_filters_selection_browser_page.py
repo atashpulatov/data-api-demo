@@ -137,7 +137,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
 
         for button in footer_buttons:
             if button.text == button_name:
-                return not button.is_disabled_by_attribute()
+                return button.is_enabled_by_attribute_html()
 
         raise MstrException(f'Could not find a button with the name: {button_name}')
 

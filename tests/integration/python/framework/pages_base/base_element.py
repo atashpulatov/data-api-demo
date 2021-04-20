@@ -124,11 +124,11 @@ class BaseElement:
     def get_class_name_by_attribute(self):
         return self.get_attribute(Const.ATTRIBUTE_CLASS_NAME)
 
-    def is_enabled_by_attribute(self):
+    def is_enabled_by_attribute_xml(self):
         return self.get_attribute(Const.ATTRIBUTE_IS_ENABLED) == Const.ATTRIBUTE_VALUE_TRUE
 
-    def is_disabled_by_attribute(self):
-        return self.get_attribute(Const.ATTRIBUTE_DISABLED) == Const.ATTRIBUTE_VALUE_TRUE
+    def is_enabled_by_attribute_html(self):
+        return not self.get_attribute(Const.ATTRIBUTE_DISABLED) == Const.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
         return self.get_element(By.CSS_SELECTOR, selector, timeout, safe=safe)

@@ -151,7 +151,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
             ColumnsAndFiltersSelectionWindowsDesktopPage.BUTTONS_SELECTORS[button_name]
         )
 
-        return button.is_enabled_by_attribute()
+        return button.is_enabled_by_attribute_xml()
 
     def _validate_button_name(self, button_name):
         supported_buttons_names = ColumnsAndFiltersSelectionWindowsDesktopPage.BUTTONS_SELECTORS.keys()
