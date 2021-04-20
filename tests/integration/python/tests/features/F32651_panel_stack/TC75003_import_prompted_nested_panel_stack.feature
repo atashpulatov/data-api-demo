@@ -8,12 +8,11 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
      When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
-     # TODO:update ID when added to the CMD env
-       #  And I found object by ID "ID" and selected "Prompted Dossier with nested panel Stack"
+      And I found object by ID "5DE8EDE90343E3D15A66A9AD5ADDA674" and selected "Prompted Nested Panel Stack"
       And I clicked Import button to open Import Dossier
       And I clicked Run button for prompted dossier if prompts not already answered
       And I selected dossier page or chapter 1
-    # TODO steps
+    # TODO implement steps
       And I selected Panel "1" for Panel Stack "Name"
       And I selected Panel "1" for nested Panel Stack in Panel Stack "Name"
       And I selected Visualization "Name" from Panel "1"
@@ -25,10 +24,10 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
      #  Then I verified that cells [] have values []
 
      When I clicked Edit object 1
-     # TODO:update when object will be added to the CMD env
-       #  And I selected "Subcategory" as an answer for "1. Objects" prompt - object prompt
+   # TODO implement step
+       #  And I selected checkbox for "Electronics" as an answer for "1. Choose from all elements of 'Category'." prompt
       And I clicked Run button for prompted dossier if prompts not already answered
-   # TODO steps
+   # TODO implement steps
       And I selected Panel "2" for Panel Stack "Name"
       And I selected Panel "2" for nested Panel Stack in Panel Stack "Name"
       And I selected Visualization "Name" from Panel "1"
