@@ -11,8 +11,8 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
      # And I found object by ID "ID" and selected "Nice by kechu" update ID when added to the CMD env
       And I clicked Import button to open Import Dossier
       And I selected dossier page or chapter 1
-      And I select Panel "1" for Panel Stack "Name"
-      And I select Visualization "Name" from Panel "1"
+      And I selected Panel "1" for Panel Stack "Name"
+      And I selected Visualization "Name" from Panel "1"
       And I clicked import dossier
       And I waited for object to be imported successfully
       And I closed last notification
@@ -20,8 +20,8 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
 
      When I clicked Edit object 1
       And I selected dossier page or chapter 2
-      And I select Panel "2" for Panel Stack "Name"
-      And I select Visualization "Name" from Panel "1"
+      And I selected Panel "2" for Panel Stack "Name"
+      And I selected Visualization "Name" from Panel "1"
       And I clicked import dossier
       And I waited for object to be imported successfully
       And I closed last notification
@@ -32,8 +32,8 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
       And I selected Active Cell option in Duplicate popup
       And I clicked Edit button in Duplicate popup
       And I selected dossier page or chapter 1
-      And I select Panel "2" for Panel Stack "Name"
-      And I select Visualization "Name" from Panel "1"
+      And I selected Panel "2" for Panel Stack "Name"
+      And I selected Visualization "Name" from Panel "1"
       And I clicked import dossier
       And I waited for object to be duplicated successfully
       And I closed last notification
@@ -54,5 +54,4 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
       And I closed all notifications
      Then I verified that cells ["", ""] have values ["", ""]
       And I logged out
-    
-    
+
