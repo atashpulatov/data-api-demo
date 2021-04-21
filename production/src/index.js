@@ -36,7 +36,7 @@ async function handleUnauthorized(envUrl, iSession) {
     const locale = window.Office.context.displayLanguage || navigator.language;
     if (res) {
       setInterval(() => {
-        window.location.replace(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`);
+        window.location.replace(encodeURI(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`));
       }, 200);
     }
   } catch (error) {
