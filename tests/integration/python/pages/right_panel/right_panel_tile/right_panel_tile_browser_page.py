@@ -360,17 +360,3 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
             Const.ATTRIBUTE_TEXT_CONTENT,
             expected_message
         )
-
-    def hover_refresh(self, tile_no):
-        self._hover_button(tile_no, RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT)
-
-    def hover_edit(self, tile_no):
-        self._hover_button(tile_no, RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT)
-
-    def _hover_button(self, tile_no, selector):
-        self.focus_on_add_in_frame()
-
-        self._hover_over_tile(int(tile_no) - 1)
-
-        edit_button = self.get_element_by_css(selector % tile_no)
-        edit_button.move_to()

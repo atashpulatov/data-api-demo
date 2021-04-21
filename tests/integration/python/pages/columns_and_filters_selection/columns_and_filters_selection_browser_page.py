@@ -25,7 +25,6 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     SUBTOTALS_TOGGLE_CONTAINER = '.subtotal-container'
     SUBTOTALS_TOGGLE = SUBTOTALS_TOGGLE_CONTAINER + ' button.ant-switch'
 
-    DISABLED_ATTRIBUTE = 'disabled'
     FOOTER_BUTTON_CSS = '.popup-buttons.popup-footer button'
     BACK_BUTTON_ID = 'back'
 
