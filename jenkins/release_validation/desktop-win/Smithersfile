@@ -1,0 +1,65 @@
+job 'release-validation-win-desktop' do
+  description 'run browser based e2e python test for excel plugin, on windows'
+
+   configure_common_items{}
+
+   properties do		
+      inject do		
+        properties_content "MSYS=winsymlinks:nativestrict		
+          PATH=/usr/local/.rbenv/shims:/usr/local/ruby-install/bin:/usr/local/rbenv/libexec:/tools/msys/20160205-3/cmd:/tools/Sysinternals:/Users/vagrant/bin:/Users/vagrant/.rbenv/versions/2.2.4/bin:/cmd:/usr/local/bin:/mingw64/bin:/usr/bin:/Windows/system32:/Windows:/Windows/System32/Wbem:/Windows/System32/WindowsPowerShell/v1.0:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/c/Program\ Files/Amazon/AWSCLI"		
+     end		
+
+    parameters do
+      upstream_parameter do
+        name 'APPLICATION_VERSION'
+        description 'the version of the application to deploy and test'
+      end
+    end
+    
+  end
+
+  assigned_node_string 'windows2019_t3medium'
+
+  builders do
+  parameterized_builder do	
+      job_names %w{	
+        mstr-office-.-US346818_POC-.-stage-2-e2e-general-windows-desktop-job
+      }	
+      parameters "TEST_TYPE=ci_pipeline_rv_windows_desktop"	
+      block_and_sync_status true	
+   end
+    bash do
+      script '#!/usr/bin/env bash	
+set +xe	
+export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+export WORKSPACE_SETTING=windows_test
+
+source .ecosystem	
+export HATS=pipeline:$HATS	
+
+rake copy_results[ci_pipeline_rv_windows_desktop]
+'
+    end
+  end
+
+  publishers do
+    html do
+       report_name 'Windows Browser e2e Python Test Report'
+       report_directory_path "tests/integration/python/allure-report"
+       index_file_name 'index.html'
+    end
+
+    ext_mailer do
+     recipients_list 'yzhuk@microstrategy.com, rraszplewicz@microstrategy.com'
+     subject '$JOB_NAME - $BUILD_STATUS'
+     content '$DEFAULT_CONTENT'
+     fail_trigger_recipients_list ''
+     fail_trigger_notify_developer 'true'
+     always_trigger 'true'
+     always_trigger_recipients_list ''
+    end
+
+  end
+
+end
+

@@ -11,21 +11,10 @@ module.exports = async function getDuration(testSetId) {
     // URL to the Test Set
     const testSetUrl = await getDataHelper.getTestSet(testSetId);
     const testSetID = testSetUrl.split('/')[7];
-
-    // URL to list of Test Cases under the Test Set
-    const { TestSet } = await getDataHelper.getDataFromRally(testSetUrl);
-    const testCasesUrl = TestSet.TestCases._ref;
-
-    // URL with result page size extended to 1000
-    const tCUrlWithPageSize = testCasesUrl.concat('?pagesize=1000');
-
     // List of Test Cases under the Test Set
-    const { QueryResult: tcListResult } = await getDataHelper.getDataFromRally(tCUrlWithPageSize);
-
-    const testCasesList = tcListResult.Results;
+    const testCasesList = await getDataHelper.getTCListFromTestSet(testSetUrl)
     // List of URLs to results of Test Cases from testCasesList
     const listOfUrlsToTCResults = [];
-
     // List of IDs to Test Cases under the Test Set
     const testCasesIdList = [];
 
