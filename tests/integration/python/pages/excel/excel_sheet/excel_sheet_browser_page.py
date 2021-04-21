@@ -4,6 +4,7 @@ from pyperclip import paste
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.const import Const
 from framework.util.excel_util import ExcelUtil
 from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
@@ -42,6 +43,13 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
     EXCEL_SELECTED_COLUMN_HEADER = '.ewrch-col-cellsel > .ewr-chc'
     EXCEL_SELECTED_ROW_HEADER = '.ewrch-row-cellsel > .ewr-rhc'
+    EXCEL_ALL_COLUMN_HEADER_CSS = '.ewrch-col-cellsel > .ewr-chc, .ewrch-col-nosel  > .ewr-chc'
+    EXCEL_ALL_ROW_HEADER_CSS = '.ewrch-row-cellsel > .ewr-rhc, .ewrch-row-nosel  > .ewr-rhc'
+
+    RESIZE_WINDOW_CHOICE_FIELD_CSS = '.ms-ChoiceField:nth-of-type(%s) .ms-ChoiceField-field'
+    RESIZE_WINDOW_SIZE_INPUT_ID = 'SizeInput'
+    RESIZE_WINDOW_OK_BUTTON_ID = 'DialogActionButton'
+    RESIZE_WINDOW_CANCEL_BUTTON_ID = 'DialogCancelButton'
 
     RANGE_SEPARATOR = ':'
 
@@ -281,3 +289,72 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
                 return False
 
         return True
+
+    def hide_columns(self, column_names):
+        self.focus_on_excel_frame()
+
+        for column_name in column_names:
+            self.go_to_cell(f'{column_name}1')
+            self.hold_modifier_and_press_key('0')
+
+    def hide_rows(self, row_names):
+        self.focus_on_excel_frame()
+
+        for row_name in row_names:
+            self.go_to_cell(f'A{row_name}')
+            self.hold_modifier_and_press_key('9')
+
+    def resize_column(self, column_name, new_width, units='default'):
+        self.focus_on_excel_frame()
+
+        self._open_resize_window_for_column(column_name)
+
+        size_input = self._get_resize_window_input_with_selected_units(units)
+
+        size_input.double_click()
+        size_input.send_keys(new_width)
+
+        self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_OK_BUTTON_ID).click()
+
+    def are_columns_hidden(self, column_names):
+        self.focus_on_excel_frame()
+
+        column_headers = self.get_elements_by_css(ExcelSheetBrowserPage.EXCEL_ALL_COLUMN_HEADER_CSS)
+
+        return not any(column_name in column_names for column_name in map(lambda column: column.text, column_headers))
+
+    def are_rows_hidden(self, row_names):
+        self.focus_on_excel_frame()
+
+        row_headers = self.get_elements_by_css(ExcelSheetBrowserPage.EXCEL_ALL_ROW_HEADER_CSS)
+
+        return not any(row_name in row_names for row_name in map(lambda row: row.text, row_headers))
+
+    def column_has_width(self, column_name, width, units='default'):
+        self.focus_on_excel_frame()
+
+        self._open_resize_window_for_column(column_name)
+
+        size_input = self._get_resize_window_input_with_selected_units(units)
+
+        width_is_equal = float(size_input.get_attribute(Const.ATTRIBUTE_NAME_VALUE)) == float(width)
+
+        self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_CANCEL_BUTTON_ID).click()
+
+        return width_is_equal
+
+    def _open_resize_window_for_column(self, column_name):
+        self.go_to_cell(f'{column_name}1')
+        self.send_keys((Keys.ALT, 'h', 'o', 'w'))
+
+    def _get_resize_window_input_with_selected_units(self, units):
+        if units == 'default':
+            units_number = 1
+        elif units == 'pixels':
+            units_number = 2
+        else:
+            raise MstrException(f'Incorrect units parameter. Received: {units}')
+
+        self.get_element_by_css(ExcelSheetBrowserPage.RESIZE_WINDOW_CHOICE_FIELD_CSS % units_number).click()
+
+        return self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_SIZE_INPUT_ID)
