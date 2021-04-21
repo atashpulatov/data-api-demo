@@ -59,8 +59,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     ACTION_STATUS_PENDING = 'Pending'
 
-    RIGHT_PANEL_TILE_EDIT_BUTTON_TOOLTIP = RIGHT_PANEL_TILE_BUTTON_PREFIX + \
-                                           '.__react_component_tooltip.show[id$="edit"]'
     TOOLTIP_CSS = '.__react_component_tooltip'
 
     def wait_for_import_to_finish_successfully(self, timeout=Const.LONG_TIMEOUT):
@@ -376,9 +374,3 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         edit_button = self.get_element_by_css(selector % tile_no)
         edit_button.move_to()
-
-    def get_tooltip_text(self, object_number):
-        tooltip_element = self.get_element_by_css(
-            RightPanelTileBrowserPage.RIGHT_PANEL_TILE_EDIT_BUTTON_TOOLTIP % object_number
-        )
-        return tooltip_element.get_text_content_by_attribute()
