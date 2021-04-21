@@ -110,7 +110,7 @@ class BaseElement:
         return self.get_attribute(Const.ATTRIBUTE_NAME)
 
     def get_id_by_attribute(self):
-        return self.get_attribute(Const.ID_ATTRIBUTE)
+        return self.get_attribute(Const.ATTRIBUTE_ID)
 
     def get_automation_id_by_attribute(self):
         return self.get_attribute(Const.ATTRIBUTE_AUTOMATION_ID)
