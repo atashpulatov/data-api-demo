@@ -1,6 +1,7 @@
 @mac_chrome
 @windows_chrome
 @release_validation
+@ga_validation
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part2 - Import compound grid visualization with different selectors
@@ -16,7 +17,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "F7" should have value "$539,383"
+     Then I verified that cell "F7" has value "$539,383"
 
      When I selected cell "H6"
       And I clicked Add Data button
@@ -28,7 +29,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "M9" should have value "$480,173"
+     Then I verified that cell "M9" has value "$480,173"
 
      When I selected cell "P1"
       And I clicked Add Data button
@@ -40,7 +41,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "Q4" should have value "$370,161"
+     Then I verified that cell "Q4" has value "$370,161"
 
      When I selected cell "X1"
       And I clicked Add Data button
@@ -52,6 +53,6 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "AC4" should have value "$480,173"
+     Then I verified that cell "AC4" has value "$480,173"
 
       And I logged out

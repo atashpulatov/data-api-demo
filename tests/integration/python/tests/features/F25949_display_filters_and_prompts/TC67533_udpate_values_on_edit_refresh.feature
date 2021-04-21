@@ -16,7 +16,7 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then object 1 has id "E659E86811E58C918D6F0080EF453539"
+     Then I verified that object 1 has id "E659E86811E58C918D6F0080EF453539"
 
      When I ensured object "E659E86811E58C918D6F0080EF453539" in Tutorial project is decertified
       And I clicked Refresh on object 1
@@ -24,7 +24,7 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then object 1 is NOT certified
+     Then I verified that object 1 is NOT certified
 
      When I certified object "E659E86811E58C918D6F0080EF453539" in Tutorial project
       And I clicked Refresh on object 1
@@ -32,7 +32,7 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then object 1 is certified
+     Then I verified that object 1 is certified
 
      When I decertified object "E659E86811E58C918D6F0080EF453539" in Tutorial project
       And I clicked Refresh on object 1
@@ -40,7 +40,7 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then object 1 is NOT certified
+     Then I verified that object 1 is NOT certified
 
      When I selected cell "F1"
       And I clicked Add Data button
@@ -59,10 +59,10 @@ Feature: F25949 - Display filters and prompts
 
      Then for object 1 Totals and Subtotals is OFF
 
-    Given object 1 has "Attribute" list displayed
-      And object 1 has "Attribute" list with value "Quarter, Region, Employee"
-      And object 1 has "Metric" list displayed
-      And object 1 has "Metric" list with value "Revenue, Cost, Profit"
+    Given I verified that object 1 has "Attribute" list displayed
+      And I verified that object 1 has "Attribute" list with value "Quarter, Region, Employee"
+      And I verified that object 1 has "Metric" list displayed
+      And I verified that object 1 has "Metric" list with value "Revenue, Cost, Profit"
 
      When I clicked Edit object 1
       And I clicked attribute "Employee"
@@ -72,8 +72,8 @@ Feature: F25949 - Display filters and prompts
       And I closed last notification
       And I clicked toggle details button on object 1
 
-     Then object 1 has "Attribute" list with value "Quarter, Region"
-      And object 1 has "Metric" list with value "Cost, Profit"
-      And object 1 has "Filter" list with value "Region (Central, Northwest)"
+     Then I verified that object 1 has "Attribute" list with value "Quarter, Region"
+      And I verified that object 1 has "Metric" list with value "Cost, Profit"
+      And I verified that object 1 has "Filter" list with value "Region (Central, Northwest)"
 
       And I logged out

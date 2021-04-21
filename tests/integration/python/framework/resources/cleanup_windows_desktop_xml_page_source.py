@@ -66,9 +66,9 @@ import fileinput
 import re
 
 ATTRIBUTES_TO_REMOVE = [
-    ' AcceleratorKey=".*?"'
-    ' AccessKey=\"\"',
-    ' AutomationId=\"\"',
+    ' AcceleratorKey=".*?"',
+    ' AccessKey=""',
+    ' AutomationId=""',
     ' CanMaximize=".*?"',
     ' CanMinimize=".*?"',
     ' CanMove=".*?"',
@@ -76,7 +76,7 @@ ATTRIBUTES_TO_REMOVE = [
     ' CanRotate=".*?"',
     ' ClassName=".*?"',
     ' FrameworkId=".*?"',
-    ' HasKeyboardFocus=".*?"'
+    ' HasKeyboardFocus=".*?"',
     ' HasKeyboardFocus=".*?"',
     ' HasKeyboardFocus=".*?"',
     ' HelpText=""',
@@ -91,8 +91,8 @@ ATTRIBUTES_TO_REMOVE = [
     ' IsRequiredForForm=".*?"',
     ' IsSelected=".*?"',
     ' IsTopmost=".*?"',
-    ' ItemStatus=\"\"',
-    ' ItemType=\"\"',
+    ' ItemStatus=""',
+    ' ItemType=""',
     ' LocalizedControlType=".*?"',
     ' Orientation="None"',
     ' ProcessId=".*?"',

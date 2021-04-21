@@ -18,6 +18,6 @@ Feature: F25943 - Notifications side panel
       And I clicked close Add-in button
       And I clicked Add-in icon
 
-     Then Right Panel is empty
+     Then I verified that the right panel is empty
 
       And I logged out

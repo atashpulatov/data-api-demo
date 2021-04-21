@@ -3,18 +3,15 @@ from framework.util.config_util import ConfigUtil
 from framework.util.const import Const
 from framework.util.exception.mstr_exception import MstrException
 from framework.util.util import Util
-from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
 
 
 class ExcelMenuBrowserPage(BaseBrowserPage):
-    ICON_ELEM = '.cui-ctl-largelabel'
+    ICON_ELEM = 'button[data-unique-id^="Ribbon-AddinControl"]'
     CLOSE_ADD_IN_BUTTON = 'AgaveTaskpaneCloseButtonId'
     NAME_BOX = '#m_excelWebRenderer_ewaCtl_NameBox-Medium > a'
 
-    def __init__(self):
-        super().__init__()
-
-        self.excel_sheet_browser_page = ExcelSheetBrowserPage()
+    MAIN_MENU_HOME_BUTTON_ID = 'Home'
+    MAIN_MENU_INSERT_BUTTON_ID = 'Insert'
 
     def click_add_in_elem(self):
         self._get_add_in_button().click()
@@ -75,3 +72,12 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
     def are_timestamps_different(self, object_number_1, object_number_2):
         raise MstrException('TODO implement')
+
+    def enable_use_of_keyboard_shortcuts(self):
+        self.focus_on_excel_frame()
+
+        self._click_on_main_menu_item(ExcelMenuBrowserPage.MAIN_MENU_INSERT_BUTTON_ID)
+        self._click_on_main_menu_item(ExcelMenuBrowserPage.MAIN_MENU_HOME_BUTTON_ID)
+
+    def _click_on_main_menu_item(self, menu_item):
+        self.get_element_by_id(menu_item).click()

@@ -14,7 +14,6 @@ from pages.columns_and_filters_selection.metrics.columns_and_filters_selection_m
 from pages.excel.cleanup.cleanup_browser_page import CleanupBrowserPage
 from pages.excel.excel_general.excel_general_browser_page import ExcelGeneralBrowserPage
 from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
-from pages.excel.excel_sheet.excel_sheet_browser_page import ExcelSheetBrowserPage
 from pages.filter_panel.filter_panel_browser_page import FilterPanelBrowserPage
 from pages.import_data.import_data_browser_page import ImportDataBrowserPage
 from pages.import_dossier.import_dossier_bookmarks.import_dossier_bookmarks_browser_page import \
@@ -44,7 +43,6 @@ class PagesSetBrowser(AbstractPagesSet):
 
         self.excel_general_browser_page = ExcelGeneralBrowserPage()
         self.excel_menu_browser_page = ExcelMenuBrowserPage()
-        self.excel_sheet_browser_page = ExcelSheetBrowserPage()
 
         self.add_in_login_browser_page = AddInLoginBrowserPage()
         self.cleanup_browser_page = CleanupBrowserPage()
@@ -78,9 +76,6 @@ class PagesSetBrowser(AbstractPagesSet):
 
     def excel_menu_page(self):
         return self.excel_menu_browser_page
-
-    def excel_sheet_page(self):
-        return self.excel_sheet_browser_page
 
     def add_in_login_page(self):
         return self.add_in_login_browser_page

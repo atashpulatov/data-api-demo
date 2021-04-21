@@ -30,14 +30,14 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_details_page().click_object_location_expand_button(object_number)
 
 
-@step('object {object_number} is certified')
+@step('I verified that object {object_number} is certified')
 def step_impl(context, object_number):
     is_certified = context.pages.right_panel_tile_details_page().is_object_is_certified(object_number)
 
     AssertUtil.assert_simple(is_certified, True)
 
 
-@step('object {object_number} is NOT certified')
+@step('I verified that object {object_number} is NOT certified')
 def step_impl(context, object_number):
     is_certified = context.pages.right_panel_tile_details_page().is_object_is_certified(object_number)
 

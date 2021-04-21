@@ -135,10 +135,10 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return self.get_element_by_name(book_element_name)
 
-    def remove_columns(self, column_name, number_of_columns):
-        self.go_to_cell(f'{column_name}1')
+    def remove_columns(self, first_column_to_be_deleted, number_of_columns_to_be_deleted):
+        self.go_to_cell(f'{first_column_to_be_deleted}1')
 
-        for i in range(0, int(number_of_columns)):
+        for i in range(int(number_of_columns_to_be_deleted)):
             self.send_keys_using_excel_element(Keys.CONTROL + Keys.SPACE)
             self.send_keys_using_excel_element(Keys.CONTROL + Keys.SUBTRACT)
 

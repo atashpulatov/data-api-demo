@@ -77,7 +77,7 @@ class ColumnsAndFiltersSelectionBrowserPage(BaseBrowserPage):
     def click_import_button(self):
         self.click_import_button_without_success_check()
 
-        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=Const.LONG_TIMEOUT)
+        self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully(timeout=Const.VERY_LONG_TIMEOUT)
 
     def click_import_button_to_duplicate(self):
         self.click_import_button_without_success_check()

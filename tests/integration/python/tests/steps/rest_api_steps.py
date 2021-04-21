@@ -23,14 +23,14 @@ def step_impl(context, object_id):
     context.pages.rest_api_page().decertify_object(context.environment_id, object_id)
 
 
-@step('object "{object_id}" is certified in Tutorial project')
+@step('I verified that object "{object_id}" is certified in Tutorial project')
 def step_impl(context, object_id):
     is_certified = context.pages.rest_api_page().is_object_certified(context.environment_id, object_id)
 
     AssertUtil.assert_simple(is_certified, True)
 
 
-@step('object "{object_id}" is not certified in Tutorial project')
+@step('I verified that object "{object_id}" is NOT certified in Tutorial project')
 def step_impl(context, object_id):
     is_certified = context.pages.rest_api_page().is_object_certified(context.environment_id, object_id)
 

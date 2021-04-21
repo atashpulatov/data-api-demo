@@ -14,7 +14,7 @@ Feature: F25933 - Range taken
       And I clicked Import button
       And I closed all notifications
 
-     Then number of worksheets should be 1
+     Then I verified that number of worksheets is 1
 
      When I removed 4 columns starting from column "K"
       And I selected cell "L1"
@@ -23,13 +23,13 @@ Feature: F25933 - Range taken
       And I clicked Import button
       And I closed all notifications
 
-     Then number of worksheets should be 1
+     Then I verified that number of worksheets is 1
 
      When I clicked Refresh on object 2
       And I clicked OK button in Range Taken popup
       And I waited for object to be refreshed successfully
       And I closed all notifications
 
-     Then number of worksheets should be 2
+     Then I verified that number of worksheets is 2
 
       And I logged out

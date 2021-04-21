@@ -49,31 +49,31 @@ Feature: TS41441 - Sanity checks
       And I changed sort order of "attributes" to ascending by click
       And I changed sort order of "metrics" to ascending by click
       And I changed sort order of "filters" to ascending by click
-      And attribute number 1 should be called "Employee"
-      And attribute number 2 should be called "Region"
-      And metric number 1 should be called "Cost"
-      And metric number 2 should be called "Profit"
-      And metric number 3 should be called "Revenue"
-      And filter number 1 should be called "Employee"
+      And I verified that attribute number 1 is called "Employee"
+      And I verified that attribute number 2 is called "Region"
+      And I verified that metric number 1 is called "Cost"
+      And I verified that metric number 2 is called "Profit"
+      And I verified that metric number 3 is called "Revenue"
+      And I verified that filter number 1 is called "Employee"
 
       And I changed sort order of "attributes" to descending by click
       And I changed sort order of "metrics" to descending by click
       And I changed sort order of "filters" to descending by click
-      And attribute number 1 should be called "Region"
-      And attribute number 2 should be called "Employee"
-      And metric number 1 should be called "Revenue"
-      And metric number 2 should be called "Profit"
-      And metric number 3 should be called "Cost"
-      And filter number 2 should be called "Employee"
+      And I verified that attribute number 1 is called "Region"
+      And I verified that attribute number 2 is called "Employee"
+      And I verified that metric number 1 is called "Revenue"
+      And I verified that metric number 2 is called "Profit"
+      And I verified that metric number 3 is called "Cost"
+      And I verified that filter number 2 is called "Employee"
       And I changed sort order of "attributes" to default by click
       And I changed sort order of "metrics" to default by click
       And I changed sort order of "filters" to default by click
-      And attribute number 1 should be called "Region"
-      And attribute number 2 should be called "Employee"
-      And metric number 1 should be called "Revenue"
-      And metric number 2 should be called "Cost"
-      And metric number 3 should be called "Profit"
-      And filter number 2 should be called "Employee"
+      And I verified that attribute number 1 is called "Region"
+      And I verified that attribute number 2 is called "Employee"
+      And I verified that metric number 1 is called "Revenue"
+      And I verified that metric number 2 is called "Cost"
+      And I verified that metric number 3 is called "Profit"
+      And I verified that filter number 2 is called "Employee"
       And I verified that counter of "attributes" shows "1" of "2" selected
       And I verified that counter of "metrics" shows "1" of "3" selected
       And I verified that counter of "filters" shows "1" of "2" selected
@@ -133,16 +133,16 @@ Feature: TS41441 - Sanity checks
       And I waited for object to be imported successfully
       And I closed last notification
       And I clicked on object 2
-     Then columns ["A", "B", "C"] are selected
-      And rows ["1", "2", "3"] are selected
+     Then I verified that columns ["A", "B", "C"] are selected
+      And I verified that rows ["1", "2", "3"] are selected
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed notification on object 1
       # TODO Check why we are getting error on refreshing 2nd object (we are getting Excel error (only automation))
       And I clicked on object 1
-     Then columns ["H", "I", "J"] are selected
-      And rows ["1", "2", "3"] are selected
+     Then I verified that columns ["H", "I", "J"] are selected
+      And I verified that rows ["1", "2", "3"] are selected
 
      When I clicked Edit object 1
      Then I verified that Columns & Filters Selection is visible
@@ -157,8 +157,8 @@ Feature: TS41441 - Sanity checks
       And I waited for object to be imported successfully
       And I closed notification on object 1
       And I clicked on object 1
-     Then columns ["H", "I", "J"] are selected
-      And rows ["1", "2", "3"] are selected
+     Then I verified that columns ["H", "I", "J"] are selected
+      And I verified that rows ["1", "2", "3"] are selected
 
      When I removed object 2 using icon
       And I waited for object operation to complete successfully with message "Object removed"

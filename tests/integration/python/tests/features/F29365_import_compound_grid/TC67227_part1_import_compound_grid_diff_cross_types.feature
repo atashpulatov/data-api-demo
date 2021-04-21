@@ -1,6 +1,7 @@
 @mac_chrome
 @windows_chrome
 @release_validation
+@ga_validation
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 1 -Import compound grid visualization with different cross type
@@ -17,7 +18,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["A1", "B2", "C3"] should have values ["Category", "$2,070,816", "$4,289,603"]
+     Then I verified that cells ["A1", "B2", "C3"] have values ["Category", "$2,070,816", "$4,289,603"]
 
      When I selected cell "F1"
       And I clicked Add Data button
@@ -29,7 +30,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["G1", "G2", "G4"] should have values ["Books", "Art & Architecture", "370160.583"]
+     Then I verified that cells ["G1", "G2", "G4"] have values ["Books", "Art & Architecture", "370160.583"]
 
      When I selected cell "AG1"
       And I clicked Add Data button
@@ -41,6 +42,6 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["AG3", "AH2", "AL4"] should have values ["Subcategory", "Cost", "$480,173"]
+     Then I verified that cells ["AG3", "AH2", "AL4"] have values ["Subcategory", "Cost", "$480,173"]
 
       And I logged out

@@ -1,6 +1,7 @@
 @mac_chrome
 @windows_chrome
 @release_validation
+@ga_validation
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 5 - Import compound grid visualization with Attribute forms
@@ -17,7 +18,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["A1", "B2", "C4"] should have values ["", "Profit", "$1,057,330"]
+     Then I verified that cells ["A1", "B2", "C4"] have values ["", "Profit", "$1,057,330"]
 
      When I selected cell "G1"
       And I clicked Add Data button
@@ -29,7 +30,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["G1", "H3", "I4"] should have values ["", "Subcategory ID", "$110,012"]
+     Then I verified that cells ["G1", "H3", "I4"] have values ["", "Subcategory ID", "$110,012"]
 
      When I selected cell "N1"
       And I clicked Add Data button
@@ -41,7 +42,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["N1", "O3", "Q6"] should have values ["", "Distribution Center ID 1", "$176,759"]
+     Then I verified that cells ["N1", "O3", "Q6"] have values ["", "Distribution Center ID 1", "$176,759"]
 
      When I selected cell "V1"
       And I clicked Add Data button
@@ -53,6 +54,6 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["V1", "W3", "Y1"] should have values ["", "Country Latitude", "Asia"]
+     Then I verified that cells ["V1", "W3", "Y1"] have values ["", "Country Latitude", "Asia"]
 
       And I logged out
