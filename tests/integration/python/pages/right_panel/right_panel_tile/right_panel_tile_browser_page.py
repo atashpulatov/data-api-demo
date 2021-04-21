@@ -3,6 +3,7 @@ import re
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.const import Const
 from framework.util.message_const import MessageConst
+from framework.util.exception.mstr_exception import MstrException
 
 
 class RightPanelTileBrowserPage(BaseBrowserPage):
@@ -60,6 +61,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     RIGHT_PANEL_TILE_EDIT_BUTTON_TOOLTIP = RIGHT_PANEL_TILE_BUTTON_PREFIX + \
                                            '.__react_component_tooltip.show[id$="edit"]'
+    TOOLTIP_CSS = '.__react_component_tooltip'
 
     def wait_for_import_to_finish_successfully(self, timeout=Const.LONG_TIMEOUT):
         self._wait_for_operation_with_status(MessageConst.IMPORT_SUCCESSFUL_TEXT, timeout)
@@ -94,7 +96,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.NOTIFICATION_TEXT_ELEM,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             expected_message,
             timeout=timeout
         )
@@ -104,7 +106,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.GLOBAL_ERROR_ELEM,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             expected_message,
             timeout=timeout
         )
@@ -150,8 +152,14 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def click_refresh(self, tile_no):
         self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
 
+    def hover_refresh(self, tile_no):
+        self._hover_over_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
+
     def click_edit(self, tile_no):
         self._click_tile_button(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT, tile_no)
+
+    def hover_edit(self, tile_no):
+        self._hover_over_tile_button(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT, tile_no)
 
     def remove_object_using_icon(self, tile_no):
         self._click_tile_button(RightPanelTileBrowserPage.REMOVE_BUTTON_FOR_OBJECT, tile_no)
@@ -174,6 +182,26 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self._hover_over_tile(int(tile_no) - 1)
 
         self.get_element_by_css(selector % tile_no).click()
+
+    def _hover_over_tile_button(self, selector, tile_no):
+        self.focus_on_add_in_frame()
+
+        self._hover_over_tile(int(tile_no) - 1)
+
+        self.get_element_by_css(selector % tile_no).move_to()
+
+    def get_tooltip_text(self, tile_no):
+        self.focus_on_add_in_frame()
+
+        tiles = self.get_elements_by_css(RightPanelTileBrowserPage.TILES)
+        selected_tile = tiles[int(tile_no) - 1]
+
+        tooltip_text_elem = selected_tile.get_elements_by_css(RightPanelTileBrowserPage.TOOLTIP_CSS)
+        for element in tooltip_text_elem:
+            if element.text != '':
+                return element.text
+
+        raise MstrException(f'Could not find a tooltip in tile number: {tile_no}')
 
     def _hover_over_tile(self, tile_no):
         other_container = self.get_element_by_css(RightPanelTileBrowserPage.SIDE_PANEL_HEADER)
@@ -331,7 +359,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.wait_for_element_to_have_attribute_value_by_css(
             RightPanelTileBrowserPage.RIGHT_PANEL_TILE_PROGRESS_ACTION % object_number,
-            Const.TEXT_CONTENT_ATTRIBUTE,
+            Const.ATTRIBUTE_TEXT_CONTENT,
             expected_message
         )
 

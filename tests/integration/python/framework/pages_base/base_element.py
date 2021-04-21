@@ -12,8 +12,6 @@ from framework.util.util import Util
 
 
 class BaseElement:
-    IS_ENABLED_ATTRIBUTE = 'IsEnabled'
-
     BACKGROUND_COLOR_PROPERTY = 'background-color'
     OPACITY_PROPERTY = 'opacity'
 
@@ -109,25 +107,28 @@ class BaseElement:
         return self.__element.is_displayed()
 
     def get_name_by_attribute(self):
-        return self.get_attribute(Const.NAME_ATTRIBUTE)
+        return self.get_attribute(Const.ATTRIBUTE_NAME)
 
     def get_id_by_attribute(self):
         return self.get_attribute(Const.ID_ATTRIBUTE)
 
     def get_automation_id_by_attribute(self):
-        return self.get_attribute(Const.AUTOMATION_ID_ATTRIBUTE)
+        return self.get_attribute(Const.ATTRIBUTE_AUTOMATION_ID)
 
     def is_offscreen_by_attribute(self):
-        return self.get_attribute(Const.IS_OFFSCREEN_ATTRIBUTE) == Const.ATTRIBUTE_VALUE_TRUE
+        return self.get_attribute(Const.ATTRIBUTE_IS_OFFSCREEN) == Const.ATTRIBUTE_VALUE_TRUE
 
     def get_text_content_by_attribute(self):
-        return self.get_attribute(Const.TEXT_CONTENT_ATTRIBUTE)
+        return self.get_attribute(Const.ATTRIBUTE_TEXT_CONTENT)
 
     def get_class_name_by_attribute(self):
-        return self.get_attribute(Const.CLASS_NAME_ATTRIBUTE)
+        return self.get_attribute(Const.ATTRIBUTE_CLASS_NAME)
 
-    def is_enabled_by_attribute(self):
-        return self.get_attribute(BaseElement.IS_ENABLED_ATTRIBUTE) == Const.ATTRIBUTE_VALUE_TRUE
+    def is_enabled_by_attribute_xml(self):
+        return self.get_attribute(Const.ATTRIBUTE_IS_ENABLED) == Const.ATTRIBUTE_VALUE_TRUE
+
+    def is_enabled_by_attribute_html(self):
+        return not self.get_attribute(Const.ATTRIBUTE_DISABLED) == Const.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
         return self.get_element(By.CSS_SELECTOR, selector, timeout, safe=safe)
