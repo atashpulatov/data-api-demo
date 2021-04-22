@@ -180,3 +180,47 @@ def step_impl(context, cell_name, fill_color):
     fill_color_selected = context.pages.excel_sheet_page().is_fill_color_selected(cell_name, fill_color)
 
     AssertUtil.assert_simple(fill_color_selected, True)
+
+
+@step('I hid columns {column_names}')
+def step_impl(context, column_names):
+    param_column_names = json.loads(column_names)
+
+    context.pages.excel_sheet_page().hide_columns(param_column_names)
+
+
+@step('I hid rows {row_names}')
+def step_impl(context, row_names):
+    param_row_names = json.loads(row_names)
+
+    context.pages.excel_sheet_page().hide_rows(param_row_names)
+
+
+@step('I resized column "{column_name}" to width "{new_width}" default units')
+def step_impl(context, column_name, new_width):
+    context.pages.excel_sheet_page().resize_column(column_name, new_width)
+
+
+@step('I verified columns {column_names} are hidden')
+def step_impl(context, column_names):
+    param_column_names = json.loads(column_names)
+
+    columns_hidden = context.pages.excel_sheet_page().are_columns_hidden(param_column_names)
+
+    AssertUtil.assert_simple(columns_hidden, True)
+
+
+@step('I verified rows {row_names} are hidden')
+def step_impl(context, row_names):
+    param_row_names = json.loads(row_names)
+
+    cells_hidden = context.pages.excel_sheet_page().are_rows_hidden(param_row_names)
+
+    AssertUtil.assert_simple(cells_hidden, True)
+
+
+@step('I verified column "{column_name}" has width "{expected_width}" default units')
+def step_impl(context, column_name, expected_width):
+    column_has_given_width = context.pages.excel_sheet_page().verify_column_width(column_name, expected_width)
+
+    AssertUtil.assert_simple(column_has_given_width, True)

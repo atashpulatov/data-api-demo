@@ -4,6 +4,7 @@ from pyperclip import paste
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
+from framework.util.exception.mstr_exception import MstrException
 from framework.util.const import Const
 from framework.util.excel_util import ExcelUtil
 from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
@@ -42,6 +43,19 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
     EXCEL_SELECTED_COLUMN_HEADER = '.ewrch-col-cellsel > .ewr-chc'
     EXCEL_SELECTED_ROW_HEADER = '.ewrch-row-cellsel > .ewr-rhc'
+    EXCEL_ALL_COLUMN_HEADER_CSS = '.ewrch-col-cellsel > .ewr-chc, .ewrch-col-nosel  > .ewr-chc'
+    EXCEL_ALL_ROW_HEADER_CSS = '.ewrch-row-cellsel > .ewr-rhc, .ewrch-row-nosel  > .ewr-rhc'
+
+    RESIZE_WINDOW_CHOICE_FIELD_CSS = '.ms-ChoiceField:nth-of-type(%s) .ms-ChoiceField-field'
+    RESIZE_WINDOW_SIZE_INPUT_ID = 'SizeInput'
+    RESIZE_WINDOW_OK_BUTTON_ID = 'DialogActionButton'
+    RESIZE_WINDOW_CANCEL_BUTTON_ID = 'DialogCancelButton'
+
+    DEFAULT_UNIT = 'default'
+    ALLOWED_UNITS = {
+        'default': 1,
+        'pixels': 2
+    }
 
     RANGE_SEPARATOR = ':'
 
@@ -126,7 +140,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         self.hold_modifier_and_press_key('g')
         number_of_worksheets = len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_IN_GOTO_POPUP_SELECTOR))
-        self.send_keys(Keys.ESCAPE) 
+        self.send_keys(Keys.ESCAPE)
 
         return number_of_worksheets
 
@@ -281,3 +295,73 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
                 return False
 
         return True
+
+    def hide_columns(self, column_names):
+        self.focus_on_excel_frame()
+
+        for column_name in column_names:
+            self.go_to_cell(f'{column_name}1')
+            self.hold_modifier_and_press_key('0')
+
+    def hide_rows(self, row_names):
+        self.focus_on_excel_frame()
+
+        for row_name in row_names:
+            self.go_to_cell(f'A{row_name}')
+            self.hold_modifier_and_press_key('9')
+
+    def resize_column(self, column_name, new_width, units=DEFAULT_UNIT):
+        self.focus_on_excel_frame()
+
+        self._open_resize_window_for_column(column_name)
+
+        size_input = self._get_resize_window_input_with_selected_units(units)
+
+        size_input.double_click()
+        size_input.send_keys(new_width)
+
+        self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_OK_BUTTON_ID).click()
+
+    def are_columns_hidden(self, column_names):
+        self.focus_on_excel_frame()
+
+        present_column_headers = self.get_elements_by_css(ExcelSheetBrowserPage.EXCEL_ALL_COLUMN_HEADER_CSS)
+        present_column_names = map(lambda column: column.text, present_column_headers)
+
+        return not any(column_name in column_names for column_name in present_column_names)
+
+    def are_rows_hidden(self, row_names):
+        self.focus_on_excel_frame()
+
+        present_row_headers = self.get_elements_by_css(ExcelSheetBrowserPage.EXCEL_ALL_ROW_HEADER_CSS)
+        present_row_names = map(lambda row: row.text, present_row_headers)
+
+        return not any(row_name in row_names for row_name in present_row_names)
+
+    def verify_column_width(self, column_name, expected_width, units=DEFAULT_UNIT):
+        self.focus_on_excel_frame()
+
+        self._open_resize_window_for_column(column_name)
+
+        size_input = self._get_resize_window_input_with_selected_units(units)
+
+        is_width_as_expected = size_input.get_attribute(Const.ATTRIBUTE_VALUE) == expected_width
+
+        self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_CANCEL_BUTTON_ID).click()
+
+        return is_width_as_expected
+
+    def _open_resize_window_for_column(self, column_name):
+        self.go_to_cell(f'{column_name}1')
+        self.send_keys((Keys.ALT, 'h', 'o', 'w'))
+
+    def _get_resize_window_input_with_selected_units(self, units):
+        if units not in ExcelSheetBrowserPage.ALLOWED_UNITS:
+            raise MstrException(f'Incorrect units parameter. Received: [{units}], '
+                                f'allowed: {list(ExcelSheetBrowserPage.ALLOWED_UNITS.keys())}')
+
+        units_list_element_no = ExcelSheetBrowserPage.ALLOWED_UNITS[units]
+
+        self.get_element_by_css(ExcelSheetBrowserPage.RESIZE_WINDOW_CHOICE_FIELD_CSS % units_list_element_no).click()
+
+        return self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_SIZE_INPUT_ID)

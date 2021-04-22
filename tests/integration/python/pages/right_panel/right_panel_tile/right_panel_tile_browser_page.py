@@ -208,6 +208,13 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         tiles = self.get_elements_by_css(RightPanelTileBrowserPage.TILES)
         tiles[tile_no].move_to()
 
+    def get_object_name(self, index):
+        self.focus_on_add_in_frame()
+
+        name_input = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % index)
+
+        return name_input.text
+
     def click_object_number(self, object_no):
         self.focus_on_add_in_frame()
 
@@ -219,12 +226,17 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         tile_context_menu_wrappers[object_index].click()
 
-    def get_object_name(self, index):
+    def double_click_on_name_of_object_number(self, object_no):
         self.focus_on_add_in_frame()
 
-        name_input = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % index)
+        name_container = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % object_no)
+        name_container.double_click()
 
-        return name_input.text
+    def hover_over_name_of_object_number(self, object_no):
+        self.focus_on_add_in_frame()
+
+        name_container = self.get_element_by_css(RightPanelTileBrowserPage.NAME_INPUT_FOR_OBJECT % object_no)
+        name_container.move_to()
 
     def change_object_name_using_icon(self, object_number, new_object_name):
         self.focus_on_add_in_frame()
