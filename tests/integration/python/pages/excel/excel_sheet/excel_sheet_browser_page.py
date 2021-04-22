@@ -51,6 +51,12 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     RESIZE_WINDOW_OK_BUTTON_ID = 'DialogActionButton'
     RESIZE_WINDOW_CANCEL_BUTTON_ID = 'DialogCancelButton'
 
+    DEFAULT_UNIT = 'default'
+    ALLOWED_UNITS = {
+        'default': 1,
+        'pixels': 2
+    }
+
     RANGE_SEPARATOR = ':'
 
     def __init__(self):
@@ -134,7 +140,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         self.hold_modifier_and_press_key('g')
         number_of_worksheets = len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_IN_GOTO_POPUP_SELECTOR))
-        self.send_keys(Keys.ESCAPE) 
+        self.send_keys(Keys.ESCAPE)
 
         return number_of_worksheets
 
@@ -304,7 +310,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
             self.go_to_cell(f'A{row_name}')
             self.hold_modifier_and_press_key('9')
 
-    def resize_column(self, column_name, new_width, units='default'):
+    def resize_column(self, column_name, new_width, units=DEFAULT_UNIT):
         self.focus_on_excel_frame()
 
         self._open_resize_window_for_column(column_name)
@@ -319,18 +325,20 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def are_columns_hidden(self, column_names):
         self.focus_on_excel_frame()
 
-        column_headers = self.get_elements_by_css(ExcelSheetBrowserPage.EXCEL_ALL_COLUMN_HEADER_CSS)
+        present_column_headers = self.get_elements_by_css(ExcelSheetBrowserPage.EXCEL_ALL_COLUMN_HEADER_CSS)
+        present_column_names = map(lambda column: column.text, present_column_headers)
 
-        return not any(column_name in column_names for column_name in map(lambda column: column.text, column_headers))
+        return not any(column_name in column_names for column_name in present_column_names)
 
     def are_rows_hidden(self, row_names):
         self.focus_on_excel_frame()
 
-        row_headers = self.get_elements_by_css(ExcelSheetBrowserPage.EXCEL_ALL_ROW_HEADER_CSS)
+        present_row_headers = self.get_elements_by_css(ExcelSheetBrowserPage.EXCEL_ALL_ROW_HEADER_CSS)
+        present_row_names = map(lambda row: row.text, present_row_headers)
 
-        return not any(row_name in row_names for row_name in map(lambda row: row.text, row_headers))
+        return not any(row_name in row_names for row_name in present_row_names)
 
-    def column_has_width(self, column_name, width, units='default'):
+    def column_has_width(self, column_name, width, units=DEFAULT_UNIT):
         self.focus_on_excel_frame()
 
         self._open_resize_window_for_column(column_name)
@@ -348,12 +356,11 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         self.send_keys((Keys.ALT, 'h', 'o', 'w'))
 
     def _get_resize_window_input_with_selected_units(self, units):
-        if units == 'default':
-            units_number = 1
-        elif units == 'pixels':
-            units_number = 2
-        else:
-            raise MstrException(f'Incorrect units parameter. Received: {units}')
+        if units not in ExcelSheetBrowserPage.ALLOWED_UNITS:
+            raise MstrException(f'Incorrect units parameter. Received: [{units}], '
+                                f'allowed: {list(ExcelSheetBrowserPage.ALLOWED_UNITS.keys())}')
+
+        units_number = ExcelSheetBrowserPage.ALLOWED_UNITS[units]
 
         self.get_element_by_css(ExcelSheetBrowserPage.RESIZE_WINDOW_CHOICE_FIELD_CSS % units_number).click()
 
