@@ -44,8 +44,8 @@ Feature: TF9328 - Release Validation
 #     Then I verified name of object 1 is highlighted with color "#ebebeb"
 
      When I selected worksheet number 1
-      And I hide columns ["C", "D"]
-      And I hide rows ["4", "5", "6"]
+      And I hid columns ["C", "D"]
+      And I hid rows ["4", "5", "6"]
       And I resized column "B" to width "30" default units
       And I clicked Refresh on object 2
      Then I verified columns ["C", "D"] are hidden

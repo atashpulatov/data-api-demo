@@ -182,14 +182,14 @@ def step_impl(context, cell_name, fill_color):
     AssertUtil.assert_simple(fill_color_selected, True)
 
 
-@step('I hide columns {column_names}')
+@step('I hid columns {column_names}')
 def step_impl(context, column_names):
     param_column_names = json.loads(column_names)
 
     context.pages.excel_sheet_page().hide_columns(param_column_names)
 
 
-@step('I hide rows {row_names}')
+@step('I hid rows {row_names}')
 def step_impl(context, row_names):
     param_row_names = json.loads(row_names)
 
