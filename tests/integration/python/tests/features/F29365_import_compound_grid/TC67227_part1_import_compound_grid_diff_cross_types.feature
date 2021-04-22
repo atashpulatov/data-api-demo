@@ -1,3 +1,5 @@
+@ci_pipeline_daily_windows_chrome
+@ci_pipeline_daily_mac_chrome
 @mac_chrome
 @windows_chrome
 @release_validation

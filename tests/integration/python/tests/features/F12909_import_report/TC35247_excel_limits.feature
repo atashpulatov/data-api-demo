@@ -1,4 +1,5 @@
-@todo_windows_desktop
+
+@windows_desktop
 @windows_chrome
 @mac_chrome
 Feature: F12909 - Import report
@@ -11,6 +12,6 @@ Feature: F12909 - Import report
       And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "E6B64AE611E95F872F800080EFD500F4" and selected "1,5M Sales Records.csv"
-     Then I clicked Import button and saw error "This object exceeds the MicroStrategy project row limit. Please contact your administrator."
+     Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
       And I logged out
