@@ -50,6 +50,6 @@ Feature: TF9328 - Release Validation
       And I clicked Refresh on object 2
      Then I verified columns ["C", "D"] are hidden
       And I verified rows ["4", "5", "6"] are hidden
-      And I verified column "B" has width "30" default units
+      And I verified column "B" has width "30.00" default units
 
       And I logged out

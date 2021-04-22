@@ -337,7 +337,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         size_input = self._get_resize_window_input_with_selected_units(units)
 
-        width_is_equal = float(size_input.get_attribute(Const.ATTRIBUTE_VALUE_NAME)) == float(width)
+        width_is_equal = size_input.get_attribute(Const.ATTRIBUTE_VALUE_NAME) == width
 
         self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_CANCEL_BUTTON_ID).click()
 
