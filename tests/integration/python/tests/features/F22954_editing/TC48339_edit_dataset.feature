@@ -1,4 +1,3 @@
-@ci_pipeline_daily_windows_desktop
 @ci_pipeline_daily_windows_chrome
 @ci_pipeline_daily_mac_chrome
 @windows_desktop
