@@ -11,7 +11,7 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
     NEW_BLANK_WORKBOOK_ELEM = '.new-template-icon'
 
-    HEAD_BRAND_ELEM = '#O365Branding_container'
+    HEAD_BRAND_ELEM_CSS = '#AppBrand'
     HEAD_BRAND_EXCEL_NAME = 'Excel'
 
     def open_new_workbook(self):
