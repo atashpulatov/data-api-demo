@@ -219,8 +219,8 @@ def step_impl(context, row_names):
     AssertUtil.assert_simple(cells_hidden, True)
 
 
-@step('I verified column "{column_name}" has width "{width}" default units')
-def step_impl(context, column_name, width):
-    column_has_given_width = context.pages.excel_sheet_page().column_has_width(column_name, width)
+@step('I verified column "{column_name}" has width "{expected_width}" default units')
+def step_impl(context, column_name, expected_width):
+    column_has_given_width = context.pages.excel_sheet_page().verify_column_width(column_name, expected_width)
 
     AssertUtil.assert_simple(column_has_given_width, True)

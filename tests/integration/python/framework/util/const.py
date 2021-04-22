@@ -25,6 +25,6 @@ class Const:
     ATTRIBUTE_CLASS_NAME = 'className'
     ATTRIBUTE_IS_ENABLED = 'IsEnabled'
     ATTRIBUTE_DISABLED = 'disabled'
-    ATTRIBUTE_VALUE_NAME = 'value'
+    ATTRIBUTE_VALUE = 'value'
 
     ATTRIBUTE_VALUE_TRUE = 'true'

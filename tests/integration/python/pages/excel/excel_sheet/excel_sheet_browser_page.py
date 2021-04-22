@@ -338,18 +338,18 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         return not any(row_name in row_names for row_name in present_row_names)
 
-    def column_has_width(self, column_name, width, units=DEFAULT_UNIT):
+    def verify_column_width(self, column_name, expected_width, units=DEFAULT_UNIT):
         self.focus_on_excel_frame()
 
         self._open_resize_window_for_column(column_name)
 
         size_input = self._get_resize_window_input_with_selected_units(units)
 
-        width_is_equal = size_input.get_attribute(Const.ATTRIBUTE_VALUE_NAME) == width
+        is_width_as_expected = size_input.get_attribute(Const.ATTRIBUTE_VALUE) == expected_width
 
         self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_CANCEL_BUTTON_ID).click()
 
-        return width_is_equal
+        return is_width_as_expected
 
     def _open_resize_window_for_column(self, column_name):
         self.go_to_cell(f'{column_name}1')
@@ -360,8 +360,8 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
             raise MstrException(f'Incorrect units parameter. Received: [{units}], '
                                 f'allowed: {list(ExcelSheetBrowserPage.ALLOWED_UNITS.keys())}')
 
-        units_number = ExcelSheetBrowserPage.ALLOWED_UNITS[units]
+        units_list_element_no = ExcelSheetBrowserPage.ALLOWED_UNITS[units]
 
-        self.get_element_by_css(ExcelSheetBrowserPage.RESIZE_WINDOW_CHOICE_FIELD_CSS % units_number).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.RESIZE_WINDOW_CHOICE_FIELD_CSS % units_list_element_no).click()
 
         return self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_SIZE_INPUT_ID)
