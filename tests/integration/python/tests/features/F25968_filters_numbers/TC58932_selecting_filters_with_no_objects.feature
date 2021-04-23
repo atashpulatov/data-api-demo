@@ -14,13 +14,13 @@ Feature: F25968 - Filters numbers
       And I opened All for Owner category
       And I clicked Select All within All Panel
       And I clicked "Certified" from "Certified Status" category
-     Then the first element with 0 objects in All Panel should be selected
+     Then I verified that the first element with 0 objects in All Panel is selected
 
      When I clicked first element with 0 objects in All Panel
-     Then the first element with 0 objects in All Panel should NOT be selected
+     Then I verified that the first element with 0 objects in All Panel is NOT selected
 
      When I clicked first element with 0 objects in All Panel
-     Then the first element with 0 objects in All Panel should NOT be selected
+     Then I verified that the first element with 0 objects in All Panel is NOT selected
 
       And I closed Import Data popup
       And I logged out

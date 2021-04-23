@@ -30,7 +30,7 @@ Feature: F22954 - Ability to edit data already imported to the workbook
       And I clicked metric "Revenue"
       And I selected filters { "Region": ["Central", "South"] }
       And I clicked Import button in Columns and Filters Selection
-      And cells ["C5", "A7", "B7", "C25"] should have values ["$14,215", "2015", "Electronics", ""]
+      And I verified that cells ["C5", "A7", "B7", "C25"] have values ["$14,215", "2015", "Electronics", ""]
 
      Then I closed all notifications
 

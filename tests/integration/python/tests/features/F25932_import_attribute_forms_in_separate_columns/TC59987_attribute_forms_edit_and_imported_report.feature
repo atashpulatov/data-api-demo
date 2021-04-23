@@ -21,7 +21,7 @@ Feature: F25932 - Import attribute forms in separate columns
 
      When I clicked Import button in Columns and Filters Selection
       And I closed all notifications
-     Then cells ["A4", "B3"] should have values ["Northeast", "2"]
+     Then I verified that cells ["A4", "B3"] have values ["Northeast", "2"]
 
     Given I clicked Edit object 1
       And I clicked attribute "Region"
@@ -29,6 +29,6 @@ Feature: F25932 - Import attribute forms in separate columns
       And I set Display attribute form names to "Show attribute name once"
      When I clicked Import button in Columns and Filters Selection
       And I closed all notifications
-     Then cell "A4" should have value "Laura"
+     Then I verified that cell "A4" has value "Laura"
 
       And I logged out

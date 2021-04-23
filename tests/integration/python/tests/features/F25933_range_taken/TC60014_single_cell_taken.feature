@@ -5,7 +5,7 @@ Feature: F25933 - Range taken
     Given I initialized Excel
 
      When I logged in as default user
-      And I wrote text "abc" in cell "C1"
+      And I entered text "abc" into cell "C1" after selecting it
       And I selected cell "A1"
 
       And I clicked Import Data button
@@ -17,6 +17,6 @@ Feature: F25933 - Range taken
       And I waited for object to be imported successfully
       And I closed last notification
 
-     Then number of worksheets should be 2
+     Then I verified that number of worksheets is 2
 
       And I logged out

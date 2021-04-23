@@ -18,7 +18,7 @@ def step_impl(context):
     context.pages.columns_and_filters_selection_metrics_page().unselect_all_metrics()
 
 
-@step('metric number {object_number} should be called "{expected_name}"')
+@step('I verified that metric number {object_number} is called "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.columns_and_filters_selection_metrics_page().get_metric_name(object_number)
 

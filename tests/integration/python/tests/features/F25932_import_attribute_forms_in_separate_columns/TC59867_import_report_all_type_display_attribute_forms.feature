@@ -3,7 +3,6 @@
 @mac_chrome
 #@mac_desktop
 @release_validation
-
 Feature: F25932 - Import attribute forms in separate columns
 
   Scenario: [TC59867] [Attribute forms] Import report using all types of "Display attribute form names"
@@ -25,30 +24,30 @@ Feature: F25932 - Import attribute forms in separate columns
      When I set Display attribute form names to "Off"
       And I clicked Import button in Columns and Filters Selection
       And I closed all notifications
-     Then cells ["A1", "B1", "C1", "D1", "E1", "F1" ] should have values ["Region", "Region2", "Country", "Country2", "Category", "Category2"]
+     Then I verified that cells ["A1", "B1", "C1", "D1", "E1", "F1" ] have values ["Region", "Region2", "Country", "Country2", "Category", "Category2"]
 
      When I clicked Edit object 1
       And I set Display attribute form names to "On"
       And I clicked Import button in Columns and Filters Selection
       And I closed all notifications
-     Then cells ["A1", "B1", "C1", "D1", "E1", "F1" ] should have values ["Region DESC", "Region ID", "Country DESC", "Country ID", "Category DESC", "Category ID"]
+     Then I verified that cells ["A1", "B1", "C1", "D1", "E1", "F1" ] have values ["Region DESC", "Region ID", "Country DESC", "Country ID", "Category DESC", "Category ID"]
 
      When I clicked Edit object 1
       And I set Display attribute form names to "Form name only"
       And I clicked Import button in Columns and Filters Selection
       And I closed all notifications
-     Then cells ["A1", "B1", "C1", "D1", "E1", "F1" ] should have values ["DESC", "ID", "DESC2", "ID2", "DESC3", "ID3"]
+     Then I verified that cells ["A1", "B1", "C1", "D1", "E1", "F1" ] have values ["DESC", "ID", "DESC2", "ID2", "DESC3", "ID3"]
 
      When I clicked Edit object 1
       And I set Display attribute form names to "Show attribute name once"
       And I clicked Import button in Columns and Filters Selection
       And I closed all notifications
-     Then cells ["A1", "B1", "C1", "D1", "E1", "F1" ] should have values ["Region DESC", "ID", "Country DESC", "ID2", "Category DESC", "ID3"]
+     Then I verified that cells ["A1", "B1", "C1", "D1", "E1", "F1" ] have values ["Region DESC", "ID", "Country DESC", "ID2", "Category DESC", "ID3"]
 
      When I clicked Edit object 1
       And I set Display attribute form names to "Automatic"
       And I clicked Import button in Columns and Filters Selection
       And I closed all notifications
-     Then cells ["A1", "B1", "C1", "D1", "E1", "F1" ] should have values ["Region DESC", "Region ID", "Country DESC", "Country ID", "Category DESC", "Category ID"]
+     Then I verified that cells ["A1", "B1", "C1", "D1", "E1", "F1" ] have values ["Region DESC", "Region ID", "Country DESC", "Country ID", "Category DESC", "Category ID"]
 
       And I logged out

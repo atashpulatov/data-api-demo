@@ -160,7 +160,7 @@ def step_impl(context):
     context.pages.import_data_page().scroll_objects_list_to_end()
 
 
-@step('verified that Filters has "{number}" categories selected')
+@step('I verified that Filters has "{number}" categories selected')
 def step_impl(context, number):
     filters_number = context.pages.import_data_page().get_filters_number()
 
@@ -177,3 +177,8 @@ def step_impl(context, expected_tooltip_text):
     tooltip_text = context.pages.import_data_page().get_tooltip_message_for_button()
 
     AssertUtil.assert_simple(tooltip_text, expected_tooltip_text)
+
+
+@step('I selected "{selector_name}" for attribute/metric selector')
+def step_impl(context, selector_name):
+    context.pages.import_data_page().select_attribute_metric_selector_by_name(selector_name)

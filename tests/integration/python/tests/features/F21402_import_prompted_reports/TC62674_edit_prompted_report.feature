@@ -1,5 +1,5 @@
 @release_validation
-@11.3.1
+@mac_chrome
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC62674] - E2E Editing all types of prompted reports, except nested
@@ -20,7 +20,8 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I cleared input box for prompt "9. Number"
       And I typed "2015" for "9. Number" prompt - value prompt
       And I clicked Run button
-     # TODO Then I verified Run button is disabled
+     # Verify wheter next step can be reliably tested due to button being enabled with varying, usually short delays
+# TODO Then I verified Run button is disabled
       And I verified that Columns & Filters Selection is visible
       And I verified popup title is "Report with all type of prompts (except nested)"
       And I verified that Import button is disabled
@@ -37,10 +38,10 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
 
      When I clicked Import button in Columns and Filters Selection
       And I closed last notification
-     Then cells ["A2", "C3"] should have values ["2015", "Books"]
+     Then I verified that cells ["A2", "C3"] have values ["2015", "Books"]
 
      When I clicked Refresh on object 1
-     Then cells ["A2", "C3", "E3"] should have values ["2015", "Books", ""]
+     Then I verified that cells ["A2", "C3", "E3"] have values ["2015", "Books", ""]
 
      When I clicked Edit object 1
       And I selected "Subcategory" as an answer for "1. Objects" prompt - object prompt
@@ -50,22 +51,23 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I cleared input box for prompt "9. Number"
       And I typed "2016" for "9. Number" prompt - value prompt
       And I clicked Run button
-      # TODO Then I verified Run button is disabled
+      # Verify wheter next step can be reliably tested due to button being enabled with varying, usually short delays
+# TODO Then I verified Run button is disabled
       And I verified that Columns & Filters Selection is visible
       And I verified popup title is "Report with all type of prompts (except nested)"
       And I verified that counter of "metrics" shows "1" of "3" selected
-      And I verified that counter of "attributes" shows "3" of "3" selected
-      And I verified that counter of "filters" shows "1" of "3" selected
-      And I verified that Import button is disabled
+      And I verified that counter of "attributes" shows "3" of "4" selected
+      And I verified that counter of "filters" shows "1" of "4" selected
+      And I verified that Import button is enabled
 
      When I clicked metric "Profit"
       And I clicked attribute "Subcategory"
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
-     Then cells ["A2", "C3", "E3"] should have values ["2016", "Books", "$5,137"]
+     Then I verified that cells ["A2", "C3", "E3"] have values ["2016", "Books", "$5,137"]
 
      When I clicked Refresh on object 1
       And I closed last notification
-     Then cells ["A2", "C3", "E3"] should have values ["2016", "Books", "$5,137"]
+     Then I verified that cells ["A2", "C3", "E3"] have values ["2016", "Books", "$5,137"]
 
       And I logged out

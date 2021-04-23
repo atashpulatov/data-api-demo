@@ -11,7 +11,7 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
     NEW_BLANK_WORKBOOK_ELEM = '.new-template-icon'
 
-    HEAD_BRAND_ELEM = '#O365Branding_container'
+    HEAD_BRAND_ELEM_CSS = '#AppBrand'
     HEAD_BRAND_EXCEL_NAME = 'Excel'
 
     def open_new_workbook(self):
@@ -32,7 +32,7 @@ class ExcelMainBrowserPage(BaseBrowserPage):
         Opens a new Excel Workbook.
 
         Ensures it's an Excel (not e.g. OneDrive) by checking if tab contains Excel frame (tab_contains_excel_frame())
-        and HEAD_BRAND_ELEM is HEAD_BRAND_EXCEL_NAME, which is i18n independent.
+        and HEAD_BRAND_ELEM_CSS is HEAD_BRAND_EXCEL_NAME, which is i18n independent.
 
         If not - closes the tab and repeats opening a Workbook, at most OPEN_NEW_WORKBOOK_RETRY_NUMBER times.
 
@@ -59,7 +59,7 @@ class ExcelMainBrowserPage(BaseBrowserPage):
                     self.focus_on_excel_frame()
 
                     brand_name_element = self.find_element_in_list_by_text_safe(
-                        ExcelMainBrowserPage.HEAD_BRAND_ELEM,
+                        ExcelMainBrowserPage.HEAD_BRAND_ELEM_CSS,
                         ExcelMainBrowserPage.HEAD_BRAND_EXCEL_NAME
                     )
 

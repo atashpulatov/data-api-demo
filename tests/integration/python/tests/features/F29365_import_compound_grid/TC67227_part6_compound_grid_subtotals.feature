@@ -18,7 +18,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "C6" should have value "$3"
+     Then I verified that cell "C6" has value "$3"
 
      When I selected cell "G1"
       And I clicked Add Data button
@@ -30,7 +30,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "I5" should have value "$1,410,402"
+     Then I verified that cell "I5" has value "$1,410,402"
 
      When I selected cell "G12"
       And I clicked Add Data button
@@ -41,6 +41,6 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cell "H20" should have value "$187,027"
+     Then I verified that cell "H20" has value "$187,027"
 
       And I logged out

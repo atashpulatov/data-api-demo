@@ -22,8 +22,8 @@ Feature: FMMMM - Import object
       
      When I clicked Import button
      
-     Then number of worksheets should be 1
-      And cell "A42" should have value "42"
+     Then I verified that number of worksheets is 1
+      And I verified that cell "A42" has value "42"
 ```
 
 Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop, Mac Chrome.

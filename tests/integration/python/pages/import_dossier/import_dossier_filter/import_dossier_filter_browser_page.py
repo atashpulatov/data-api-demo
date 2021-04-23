@@ -16,6 +16,10 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
         FILTER_SIDE_RIGHT: FILTER_SLIDER_MAX_POINT
     }
 
+    FILTER_SUMMARY_ITEMS_CSS = '.mstrd-FilterSummaryBarItem'
+    FILTER_SUMMARY_BAR_ITEM_CSS = '.mstrd-FilterSummaryBarItem-summaryText'
+    FILTER_SUMMARY_ITEM_TITLE_CSS = '.mstrd-FilterSummaryBarItem-titleText'
+
     DOSSIER_FILTER_NAME = '.mstrd-FilterItemTitle-filterTitle'
     DOSSIER_FILTER_VALUE = '.mstrd-Checkbox-body[aria-label="%s"]'
 
@@ -54,9 +58,6 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
 
         self._apply_filter()
 
-    def _apply_filter(self):
-        self.get_element_by_css(ImportDossierFilterBrowserPage.APPLY_FILTER_BUTTON).click()
-
     def _open_year_filter(self):
         self.focus_on_dossier_frame()
 
@@ -67,8 +68,33 @@ class ImportDossierFilterBrowserPage(BaseBrowserPage):
             ImportDossierFilterBrowserPage.DOSSIER_FILTER_YEAR
         ).click()
 
+    def _select_filter_checkbox(self, filter_name):
+        self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % filter_name).click()
+
+    def _apply_filter(self):
+        self.get_element_by_css(ImportDossierFilterBrowserPage.APPLY_FILTER_BUTTON).click()
+
     def _open_filter_menu(self):
         self.get_element_by_css(ImportDossierFilterBrowserPage.FILTERS_BUTTON).click()
 
-    def _select_filter_checkbox(self, filter_name):
-        self.get_element_by_css(ImportDossierFilterBrowserPage.DOSSIER_FILTER_VALUE % filter_name).click()
+    def get_filter_value(self, filter_name):
+        filter_item = self._get_filter_summary_item_by_name(filter_name)
+
+        filter_value = filter_item.get_element_by_css(
+            ImportDossierFilterBrowserPage.FILTER_SUMMARY_BAR_ITEM_CSS
+        ).text
+
+        return f'({filter_value})'
+
+    def _get_filter_summary_item_by_name(self, filter_name):
+        filter_items = self.get_elements_by_css(ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEMS_CSS)
+
+        for filter_item in filter_items:
+            filter_item_name = filter_item.get_element_by_css(
+                ImportDossierFilterBrowserPage.FILTER_SUMMARY_ITEM_TITLE_CSS
+            ).text
+
+            if filter_item_name == filter_name:
+                return filter_item
+
+        raise MstrException(f'Could not find filter by name [{filter_name}]')

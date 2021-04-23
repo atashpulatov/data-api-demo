@@ -4,7 +4,6 @@
 @mac_chrome
 @release_validation
 @ga_validation
-
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67226] - Import and edit compound grid
@@ -22,7 +21,7 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["A2", "A9", "C11"] should have values ["", "May", "$31,681"]
+     Then I verified that cells ["A2", "A9", "C11"] have values ["", "May", "$31,681"]
 
      When I clicked Edit object 1
       And I waited for dossier to load successfully
@@ -32,16 +31,16 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then cells ["A2", "A9", "C11"] should have values ["", "Science & Technology", ""]
+     Then I verified that cells ["A2", "A9", "C11"] have values ["", "Science & Technology", ""]
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
 
-     Then cells ["A2", "A9", "C11"] should have values ["", "Science & Technology", ""]
+     Then I verified that cells ["A2", "A9", "C11"] have values ["", "Science & Technology", ""]
 
      When I removed object 1 using icon
       And I closed last notification
-     Then cells ["A2", "A9", "C11"] should have values ["", "", ""]
+     Then I verified that cells ["A2", "A9", "C11"] have values ["", "", ""]
 
       And I logged out
