@@ -7,7 +7,7 @@
   "scripts": {
     "start": "HTTPS=true react-scripts start",
     "start:windows": "set HTTPS=true&&react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test --silent --noStackTrace",
     "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
