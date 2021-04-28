@@ -38,7 +38,7 @@ class ImageUtil:
     FILE_NAME_MAX_LENGTH = 100
     FILE_NAME_SEPARATOR = '_'
 
-    RGB_TO_HEX_PATTERN = '#{:x}{:x}{:x}'
+    RGB_TO_HEX_PATTERN = '#{:0>2x}{:0>2x}{:0>2x}'
 
     def get_image_data_by_image_name(self, image_name):
         """
