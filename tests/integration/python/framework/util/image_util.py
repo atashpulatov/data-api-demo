@@ -339,7 +339,7 @@ class ImageUtil:
         """
 
         current_datetime_string = Util.prepare_current_datetime_string()
-        file_name_prefix_with_timestamp = f'{file_name_prefix}{current_datetime_string}_'
+        file_name_prefix_with_timestamp = f'{current_datetime_string}_{file_name_prefix}_'
 
         self._save_current_full_screen(
             file_name_prefix_with_timestamp + ImageUtil.DEBUG_SCREENSHOT_FULL_SCREEN_FILE_NAME_PREFIX,
