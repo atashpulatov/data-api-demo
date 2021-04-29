@@ -115,7 +115,7 @@ class PageSourceOnFailure:
                             f'allowed: {list(PageSourceOnFailure.TAG_TO_FILE_EXTENSION_MAP.keys())}')
 
     def _prepare_debug_page_source_file_name(self, status_name, step_name, file_name_extension):
-        file_name_suffix = CommonDebugOnFailure().prepare_debug_file_name_prefix(
+        file_name_suffix = CommonDebugOnFailure().prepare_debug_file_name_suffix(
             PageSourceOnFailure.TEST_DEBUG_FILE_TYPE,
             CommonDebugOnFailure.USAGE_TYPE_STEP,
             status_name,
