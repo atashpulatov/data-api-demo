@@ -115,7 +115,7 @@ class PageSourceOnFailure:
                             f'allowed: {list(PageSourceOnFailure.TAG_TO_FILE_EXTENSION_MAP.keys())}')
 
     def _prepare_debug_page_source_file_name(self, status_name, step_name, file_name_extension):
-        file_name_prefix = CommonDebugOnFailure().prepare_debug_file_name_prefix(
+        file_name_suffix = CommonDebugOnFailure().prepare_debug_file_name_suffix(
             PageSourceOnFailure.TEST_DEBUG_FILE_TYPE,
             CommonDebugOnFailure.USAGE_TYPE_STEP,
             status_name,
@@ -123,7 +123,7 @@ class PageSourceOnFailure:
         )
 
         current_datetime_string = Util.prepare_current_datetime_string()
-        file_name = Util.normalize_file_name(f'{file_name_prefix}{current_datetime_string}')
+        file_name = Util.normalize_file_name(f'{current_datetime_string}_{file_name_suffix}')
 
         return f'{ConfigUtil.get_debug_data_folder()}/{file_name}{file_name_extension}'
 

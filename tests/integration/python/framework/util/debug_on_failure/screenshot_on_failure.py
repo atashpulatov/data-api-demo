@@ -46,7 +46,7 @@ class ScreenshotOnFailure:
 
     def _take_screenshots_on_failure(self, usage_type, status, name=''):
         if status == Status.failed:
-            file_name_prefix = CommonDebugOnFailure().prepare_debug_file_name_prefix(
+            file_name_prefix = CommonDebugOnFailure().prepare_debug_file_name_suffix(
                 ScreenshotOnFailure.TEST_DEBUG_FILE_TYPE,
                 usage_type,
                 status.name,
