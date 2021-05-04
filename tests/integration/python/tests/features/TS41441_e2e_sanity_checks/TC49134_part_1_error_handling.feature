@@ -1,8 +1,9 @@
 @disabled_ci_pipeline_rv_windows_desktop @disabled_ci_pipeline_premerge_windows_desktop @disabled_ci_pipeline_postmerge_windows_desktop @disabled_ci_pipeline_daily_windows_desktop @disabled_ci_pipeline_all_windows_desktop
 @disabled_ci_pipeline_rv_mac_chrome @disabled_ci_pipeline_premerge_mac_chrome @disabled_ci_pipeline_postmerge_mac_chrome @ci_pipeline_daily_mac_chrome @disabled_ci_pipeline_all_mac_chrome
 @ci_pipeline_daily_windows_chrome
-@windows_desktop
+@disabled_windows_desktop
 @mac_chrome
+@windows_chrome
 @release_validation
 @ga_validation
 Feature: TS41441 - Sanity checks
@@ -61,14 +62,16 @@ Feature: TS41441 - Sanity checks
      Then I clicked Cancel button in Range Taken popup
 
      When I clicked Add Data button
-      And I found object by ID "2CA92F16E74D7C3FD4BB55AC2CA0F4E8" and selected "Panel Stack Visualisation"
+      And I found object by ID "5587CB0B11EB8297835E0080AFEB08B5" and selected "Panel Stack demo"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      And I selected visualization "Panel Stack"
+      And I selected dossier page or chapter 7
+      And I selected panel stack "Panel 3" nested in panel stack "Panel 1"
+      And I selected visualization "Visualization on 1st Panel Stack Nested in Panel stack on 3rd Panel"
       And I hover over Import button
      Then I verified that tooltip for Import button shows message "Selected visualization cannot be imported in current version of the Add-in"
       And I clicked Cancel button
-     
+
      When I selected cell "H1"
       And I clicked Add Data button
       And I found object by ID "BA32708211E94AF4A45E0080EF557FD5" and selected "Report with Totals and Subtotals"

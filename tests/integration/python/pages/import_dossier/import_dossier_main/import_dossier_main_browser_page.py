@@ -19,6 +19,9 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
 
     INFORMATION_TEXT = 'span.dossier-window-information-text'
 
+    PANEL_STACK_TAB_LABEL_CSS = '.mstrmojo-VITab-tab .mstrmojo-EditableLabel'
+    PANEL_STACK_DOCUMENT_PANEL_CSS = '.mstrmojo-DocPanel'
+
     def __init__(self):
         super().__init__()
 
@@ -58,7 +61,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
             if label_element.text == visualization_name:
                 return tile
 
-        raise MstrException('Visualization not found: %s.' % visualization_name)
+        raise MstrException(f'Visualization not found: {visualization_name}.')
 
     def click_import_visualization(self):
         self.focus_on_add_in_popup_frame()
@@ -94,3 +97,20 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         # dossier object is ready when information text is visible, needs more time for final render of page content
         # TODO check if page loaded fully
         self.pause(2)
+
+    def select_panel_stack_nested_in_panel_stack(self, nested_panel_stack_name, panel_stack_name):
+        self.focus_on_dossier_frame()
+
+        self._get_panel_stack_tab_label_in_element_by_name(self, panel_stack_name).click()
+
+        document_panel = self.get_element_by_css(ImportDossierMainBrowserPage.PANEL_STACK_DOCUMENT_PANEL_CSS)
+        self._get_panel_stack_tab_label_in_element_by_name(document_panel, nested_panel_stack_name).click()
+
+    @staticmethod
+    def _get_panel_stack_tab_label_in_element_by_name(element, panel_stack_tab_name):
+        panels_stack_tab_labels = element.get_elements_by_css(ImportDossierMainBrowserPage.PANEL_STACK_TAB_LABEL_CSS)
+        for panels_stack_tab_label in panels_stack_tab_labels:
+            if panels_stack_tab_label.text == panel_stack_tab_name:
+                return panels_stack_tab_label
+
+        raise MstrException(f'Could not find panel stack tab label: {panel_stack_tab_name}')
