@@ -78,6 +78,7 @@ function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = 
 function getFetchObjectContentFields(visualizationType) {
   switch (visualizationType) {
     case mstrObjectEnum.visualizationType.COMPOUND_GRID:
+    case mstrObjectEnum.visualizationType.MICROCHARTS:
       return `-data.metricValues.columnSets.extras,-data.metricValues.columnSets.formatted`;
     default:
       return `-data.metricValues.extras,-data.metricValues.formatted`;

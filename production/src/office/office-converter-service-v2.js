@@ -92,6 +92,7 @@ class OfficeConverterServiceV2 {
   getHandler = (response) => {
     switch (response.visualizationType) {
       case mstrObjectType.visualizationType.COMPOUND_GRID:
+      case mstrObjectType.visualizationType.MICROCHARTS:
         return this.getHandlerForCompoundGrid(response);
       default:
         return mstrGridHandler;
