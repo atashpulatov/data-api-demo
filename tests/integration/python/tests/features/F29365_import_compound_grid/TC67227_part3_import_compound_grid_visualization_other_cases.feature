@@ -1,4 +1,7 @@
+@ci_pipeline_rv_windows_chrome
+@ci_pipeline_rv_mac_chrome
 @mac_chrome
+@release_validation
 @ga_validation
 Feature: F29365 - Import compound grid
 
