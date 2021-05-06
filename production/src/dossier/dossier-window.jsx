@@ -87,12 +87,14 @@ export default class DossierWindowNotConnected extends React.Component {
       if (!vizualizationsData.find(el => (el.visualizationKey === visualizationKey && el.chapterKey === chapterKey))) {
         let isSupported = true;
 
-        const checkIfVizDataCanBeImported = () => mstrObjectRestService.fetchVisualizationDefinition({
-          projectId: chosenProjectId,
-          objectId: chosenObjectId,
-          instanceId,
-          visualizationInfo: { chapterKey, visualizationKey }
-        });
+        const checkIfVizDataCanBeImported = async () => {
+          await mstrObjectRestService.fetchVisualizationDefinition({
+            projectId: chosenProjectId,
+            objectId: chosenObjectId,
+            instanceId,
+            visualizationInfo: { chapterKey, visualizationKey }
+          });
+        };
 
         const checkIfVizIsInDossierInstanceDefinition = async () => {
           const definition = await mstrObjectRestService
