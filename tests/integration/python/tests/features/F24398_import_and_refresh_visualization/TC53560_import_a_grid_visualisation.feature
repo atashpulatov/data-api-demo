@@ -1,8 +1,10 @@
+@ci_pipeline_rv_windows_chrome
+@ci_pipeline_rv_mac_chrome
 @todo_windows_desktop
-@release_validation
-@ga_validation
 @mac_chrome
 @windows_chrome
+@release_validation
+@ga_validation
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC53560] - Importing grid visualisations - basic scenario
