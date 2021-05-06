@@ -1,3 +1,5 @@
+@ci_pipeline_rv_windows_chrome
+@ci_pipeline_rv_mac_chrome
 @todo_windows_desktop
 @windows_chrome
 @mac_chrome

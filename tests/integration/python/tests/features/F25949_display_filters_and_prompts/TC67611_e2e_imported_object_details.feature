@@ -1,4 +1,7 @@
+@ci_pipeline_rv_windows_chrome
+@ci_pipeline_rv_mac_chrome
 @mac_chrome
+@release_validation
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67611] - Imported object details E2E
