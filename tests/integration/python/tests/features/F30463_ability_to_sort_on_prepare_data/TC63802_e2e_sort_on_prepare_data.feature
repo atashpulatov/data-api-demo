@@ -1,9 +1,6 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
 @todo_windows_desktop
 @mac_chrome
 @windows_chrome
-@release_validation
 Feature: F30463 - Ability to sort on prepare data
 
   Scenario: [TC63802] - E2E Sort on prepare data
