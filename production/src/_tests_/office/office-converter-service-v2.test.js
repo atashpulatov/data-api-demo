@@ -1,6 +1,7 @@
 import officeConverter from '../../office/office-converter-service-v2';
 import response from '../../mstr-object/rest-api-v2.json';
 import regularCompoundJSON from '../mstr-object/compound-grid/Regular Compound Grid.json';
+import microchartsExamples from '../mstr-object/microcharts/MicroChart Examples.json';
 import jsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 import { columnInformationMock, expectedColumnSplit, expectedColumnNoSplit } from './__mock__object__/column-information-mock';
 import mstrCompoundGridHandler from '../../mstr-object/handler/mstr-compound-grid-handler';
@@ -156,20 +157,16 @@ describe('Office converter service v2', () => {
     expect(renderTabularSpy).toBeCalled();
     expect(returnedValue).toStrictEqual({ row: [], rowTotals: [] });
   });
-  it('should return grid handler', () => {
-    // given
-    const gridResponse = response;
-    // when
-    const gridHandler = officeConverter.getHandler(gridResponse);
-    // then
-    expect(gridHandler).toEqual(mstrGridHandler);
-  });
-  it('should return compound grid handler', () => {
-    // given
-    const gridResponse = regularCompoundJSON;
-    // when
-    const gridHandler = officeConverter.getHandler(gridResponse);
-    // then
-    expect(gridHandler).toEqual(mstrCompoundGridHandler);
-  });
+  it.each`
+    gridData               | expectedGridHandler
+    ${response}            | ${mstrGridHandler}     
+    ${regularCompoundJSON} | ${mstrCompoundGridHandler}     
+    ${microchartsExamples} | ${mstrCompoundGridHandler}
+  `('should return correct gridHandler for given gridData', ({ gridData, expectedGridHandler }) => {
+  // given
+  // when
+  const gridHandler = officeConverter.getHandler(gridData);
+  // then
+  expect(gridHandler).toEqual(expectedGridHandler);
+});
 });

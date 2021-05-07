@@ -52,6 +52,7 @@ class MstrObjectType {
    NETWORK: 'network',
    IMAGE_LAYOUT: 'image_layout',
    ESRI_MAP: 'esri_map',
+   MICROCHARTS: 'microcharts',
  };
 
   getMstrTypeBySubtype = (objectSubtype = null) => Object.values(this.mstrObjectType).find(
