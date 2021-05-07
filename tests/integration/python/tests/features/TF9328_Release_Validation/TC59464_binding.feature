@@ -1,9 +1,6 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
 @windows_desktop
 @disabled_mac_chrome
 @disabled_windows_chrome
-@release_validation
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC59464] - Binding
