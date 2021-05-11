@@ -1,3 +1,4 @@
+@mac_chrome
 @release_validation
 Feature: TF9328 - Release Validation
 
@@ -14,16 +15,16 @@ Feature: TF9328 - Release Validation
       And I selected visualization "Best Snakey"
       And I clicked import dossier
       And I closed last notification
-     Then I verified that cells ["A2", "B2"] have values ["Furniture", "'FUR-BO-10000112"]
+     Then I verified that cells ["A2", "B2"] have values ["Furniture", "FUR-BO-10000112"]
 
      When I clicked Edit object 1
       And I waited for dossier to load successfully
       And I clicked Cancel button
-     Then I verified that cells ["A2", "B2"] have values ["Furniture", "'FUR-BO-10000112"]
+     Then I verified that cells ["A2", "B2"] have values ["Furniture", "FUR-BO-10000112"]
       
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
-     Then I verified that cells ["A2", "B2"] have values ["Furniture", "'FUR-BO-10000112"]
+     Then I verified that cells ["A2", "B2"] have values ["Furniture", "FUR-BO-10000112"]
 
       And I logged out
