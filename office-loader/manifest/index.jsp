@@ -1,7 +1,15 @@
 <%@ page import="java.nio.charset.Charset,java.security.MessageDigest,java.security.NoSuchAlgorithmException,java.util.Objects,java.util.UUID" %>
 <%!
-    String SUFFIX_EXCEL = "/static/loader-mstr-office/index.html";
-    String PATH = "/static/loader-mstr-office";
+    final String SUFFIX_EXCEL = "/static/loader-mstr-office/index.html";
+    final String PATH = "/static/loader-mstr-office";
+
+    String url = request.getRequestURL().toString();
+    final String ENVIRONMENT_URL = url.split("/static/")[0];
+    final String ASSETS_URL = ENVIRONMENT_URL + PATH + "/assets";
+
+    final String EXCEL_INDEX_URL = ENVIRONMENT_URL + SUFFIX_EXCEL;
+
+    UUID uuid = UUIDType5.nameUUIDFromUrl(EXCEL_INDEX_URL);
 
     public static class UUIDType5 {
         public static final UUID namespace = UUID.fromString("94a1c4bb-9a81-a8b9-f9b0-0fa57409f25b");
@@ -59,19 +67,11 @@
     response.setContentType("APPLICATION/OCTET-STREAM");
     response.setHeader("Content-Disposition","attachment; filename=\"" + filename);
 
-    String url = request.getRequestURL().toString();
-    String environmentUrl = url.split("/static/")[0];
-    String assetsUrl = environmentUrl.toString() + PATH + "/assets";
-
     String manifestName = "<DisplayName DefaultValue=\"MicroStrategy for Office\"/>";
     String applicationVersion = "0.0.1";
     String ribbon = "<bt:String id=\"MSTR.TaskpaneButton.Label\" DefaultValue=\"MicroStrategy for Office\"/>";
     String title = "<bt:String id=\"MSTR.GetStarted.Title\" DefaultValue=\"MicroStrategy for Office\"/>";
     String message = "<bt:String id=\"MSTR.GetStarted.Description\" DefaultValue=\"Click MicroStrategy for Office on Home tab to start plugin.\"/>";
-
-    String excelIndexUrl = environmentUrl + SUFFIX_EXCEL;
-
-    UUID uuid = UUIDType5.nameUUIDFromUrl(excelIndexUrl);
 
     String xml = String.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                     "  <OfficeApp xmlns=\"http://schemas.microsoft.com/office/appforoffice/1.1\"\n" +
@@ -200,14 +200,14 @@
             uuid.toString(),
             applicationVersion,
             manifestName,
-            assetsUrl,
-            assetsUrl,
-            environmentUrl + PATH,
-            assetsUrl,
-            assetsUrl,
-            assetsUrl,
-            environmentUrl + PATH,
-            environmentUrl + PATH,
+            ASSETS_URL,
+            ASSETS_URL,
+            ENVIRONMENT_URL + PATH,
+            ASSETS_URL,
+            ASSETS_URL,
+            ASSETS_URL,
+            ENVIRONMENT_URL + PATH,
+            ENVIRONMENT_URL + PATH,
             ribbon,
             title,
             message
