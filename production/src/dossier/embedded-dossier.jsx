@@ -48,6 +48,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleIframeLoadEvent } = this.props;
+      iframe.tabIndex = 0;
+      iframe.addEventListener('focus', this.onWindowFocus);
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
@@ -245,6 +247,18 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const { handleInstanceIdChange } = this.props;
     this.dossierData.instanceId = newInstanceId;
     handleInstanceIdChange(newInstanceId);
+  }
+
+  /**
+   * Skip focusing on the container and focus on the Table of Contents button instead.
+   * 
+   * @param {FocusEvent} event 
+   */
+  onWindowFocus = (event) => {
+    const tableOfContentsButton = event.target.contentDocument.getElementsByClassName('icon-tb_toc_n')[0];
+    if (tableOfContentsButton) {
+      tableOfContentsButton.focus();
+    }
   }
 
   render() {
