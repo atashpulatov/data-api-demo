@@ -1,6 +1,5 @@
-<%@ page import="java.security.MessageDigest,java.security.NoSuchAlgorithmException,java.util.Objects,java.util.UUID" %>
-<%@ page import="java.nio.charset.StandardCharsets" %>
-<%!
+<%@ page import="java.security.MessageDigest,java.security.NoSuchAlgorithmException,java.util.Objects,java.util.UUID"
+%><%@ page import="java.nio.charset.StandardCharsets" %><%!
     private static class UUIDType5 {
         private static final UUID NAMESPACE = UUID.fromString("94a1c4bb-9a81-a8b9-f9b0-0fa57409f25b");
         private static final String MESSAGE_DIGEST_SHA_1 = "SHA-1";
@@ -202,6 +201,7 @@
         private static final String URL_SUFFIX_EXCEL = "/static/loader-mstr-office/index.html";
         private static final String URL_PATH = "/static/loader-mstr-office";
         private static final String URL_ASSETS = "/assets";
+        private static final String APPLICATION_VERSION = "0.0.1";
 
         private static String getXml(String url) {
             final String environmentUrl = url.split(URL_STATIC)[0];
@@ -212,12 +212,10 @@
 
             final String uuid = UUIDType5.nameUUIDFromUrl(excelIndexUrl).toString();
 
-            String applicationVersion = "0.0.1";
-
             return String.format(
                     MANIFEST_XML_TEMPLATE,
                     uuid,
-                    applicationVersion,
+                    APPLICATION_VERSION,
                     assetsUrl,
                     assetsUrl,
                     loaderUrl,
