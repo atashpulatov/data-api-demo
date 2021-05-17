@@ -104,8 +104,7 @@
                 "      <IconUrl DefaultValue=\"%s/mstr_logo_32.png\"/>\n" +
                 "      <HighResolutionIconUrl DefaultValue=\"%s/mstr_logo_512.png\"/>\n" +
                 "      <SupportUrl DefaultValue=\"https://www2.microstrategy.com/producthelp/Current/Office/WebHelp/Lang_1033/index.htm\"/>\n" +
-                "      " +
-                "<Hosts>\n" +
+                "      <Hosts>\n" +
                 "          <Host Name=\"Workbook\"/>\n" +
                 "      </Hosts>\n" +
                 "      <Requirements>\n" +
