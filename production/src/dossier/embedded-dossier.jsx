@@ -217,6 +217,32 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   /**
+  * Update the instanceId in dossierData and also in parent component.
+  * InstanceId is changing as result of reset button click, switch to
+  * bookmark or new prompts answers given.
+  *
+  * @param {String} newInstanceId
+  */
+  instanceIdChangeHandler(newInstanceId) {
+    const { handleInstanceIdChange } = this.props;
+    this.dossierData.instanceId = newInstanceId;
+    handleInstanceIdChange(newInstanceId);
+  }
+
+  /**
+   * When focused on iframe switch focus to the Table of Contents button.
+   * The user cannot see that the iframe is focused on and will expect to see ToC button highlighted.
+   *
+   * @param {FocusEvent} focusEvent
+   */
+  onWindowFocus = (focusEvent) => {
+    const tableOfContentsButton = focusEvent.target.contentDocument.getElementsByClassName('icon-tb_toc_n')[0];
+    if (tableOfContentsButton) {
+      tableOfContentsButton.focus();
+    }
+  }
+
+  /**
   * Update the promptsAnswers in dossierData and also in parent component.
   * Update the selectedViz in parent component in case of simple reprompt
   * to keep the import button enabled.
@@ -233,31 +259,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       if (Object.keys(payload).length > 0) {
         this.onVizSelectionHandler(payload);
       }
-    }
-  }
-
-  /**
-  * Update the instanceId in dossierData and also in parent component.
-  * InstanceId is changing as result of reset button click, switch to
-  * bookmark or new prompts answers given.
-  *
-  * @param {String} newInstanceId
-  */
-  instanceIdChangeHandler(newInstanceId) {
-    const { handleInstanceIdChange } = this.props;
-    this.dossierData.instanceId = newInstanceId;
-    handleInstanceIdChange(newInstanceId);
-  }
-
-  /**
-   * Skip focusing on the container and focus on the Table of Contents button instead.
-   * 
-   * @param {FocusEvent} event 
-   */
-  onWindowFocus = (event) => {
-    const tableOfContentsButton = event.target.contentDocument.getElementsByClassName('icon-tb_toc_n')[0];
-    if (tableOfContentsButton) {
-      tableOfContentsButton.focus();
     }
   }
 
