@@ -217,19 +217,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   /**
-  * Update the instanceId in dossierData and also in parent component.
-  * InstanceId is changing as result of reset button click, switch to
-  * bookmark or new prompts answers given.
-  *
-  * @param {String} newInstanceId
-  */
-  instanceIdChangeHandler(newInstanceId) {
-    const { handleInstanceIdChange } = this.props;
-    this.dossierData.instanceId = newInstanceId;
-    handleInstanceIdChange(newInstanceId);
-  }
-
-  /**
    * When focused on iframe switch focus to the Table of Contents button.
    * The user cannot see that the iframe is focused on and will expect to see ToC button highlighted.
    *
@@ -240,6 +227,19 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     if (tableOfContentsButton) {
       tableOfContentsButton.focus();
     }
+  }
+
+  /**
+  * Update the instanceId in dossierData and also in parent component.
+  * InstanceId is changing as result of reset button click, switch to
+  * bookmark or new prompts answers given.
+  *
+  * @param {String} newInstanceId
+  */
+  instanceIdChangeHandler(newInstanceId) {
+    const { handleInstanceIdChange } = this.props;
+    this.dossierData.instanceId = newInstanceId;
+    handleInstanceIdChange(newInstanceId);
   }
 
   /**
