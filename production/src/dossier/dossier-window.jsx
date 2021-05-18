@@ -16,6 +16,24 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { errorCodes } from '../error/constants';
 
+// TODO move to helper
+// TODO jsdocs
+const mapVizesFromGivenPagesOrPanels = (givenPagesOrPanels, vizKeysSet) => {
+  givenPagesOrPanels.forEach(pageOrPanel => {
+    if (pageOrPanel.visualizations) {
+      pageOrPanel.visualizations.forEach(viz => vizKeysSet.add(viz.key));
+    }
+
+    if (pageOrPanel.panelStacks) {
+      pageOrPanel.panelStacks.forEach(panelStack => {
+        if (panelStack.panels) {
+          mapVizesFromGivenPagesOrPanels(panelStack.panels, vizKeysSet);
+        }
+      });
+    }
+  });
+};
+
 export default class DossierWindowNotConnected extends React.Component {
   constructor(props) {
     super(props);
@@ -69,14 +87,17 @@ export default class DossierWindowNotConnected extends React.Component {
   async handleSelection(dossierData) {
     const { chosenObjectId, chosenProjectId } = this.props;
     const {
-      chapterKey, visualizationKey, promptsAnswers, instanceId
+      chapterKey, visualizationKey, promptsAnswers, instanceId, pageKey, panelKey, panelStackKey
     } = dossierData;
 
     if (instanceId) {
       this.setState({
         lastSelectedViz: {
           chapterKey,
-          visualizationKey
+          visualizationKey,
+          pageKey,
+          panelKey,
+          panelStackKey,
         },
         promptsAnswers,
         instanceId,
@@ -97,14 +118,17 @@ export default class DossierWindowNotConnected extends React.Component {
         };
 
         const checkIfVizIsInDossierInstanceDefinition = async () => {
+          // TODO fetch the dossier definition only when it opens or when instance is changing
+          // TODO (e.g. prompts answered or reset) and run only simple selection here instead of complex parsing
           const definition = await mstrObjectRestService
             .getDossierInstanceDefinition(chosenProjectId, chosenObjectId, instanceId);
 
           const currentChapter = definition.chapters.find(chapter => chapter.key === chapterKey);
+          const currentPage = currentChapter.pages.find(page => page.key === pageKey);
+
           const vizKeys = new Set();
-          currentChapter.pages.forEach(page => {
-            page.visualizations.forEach(viz => vizKeys.add(viz.key));
-          });
+          mapVizesFromGivenPagesOrPanels([currentPage], vizKeys);
+
           if (!vizKeys.has(visualizationKey)) {
             throw new Error('Selected visualization is not included in dossier instance definition.');
           }
@@ -145,7 +169,9 @@ export default class DossierWindowNotConnected extends React.Component {
     } = this.props;
     const { isEdit } = editedObject;
     const { lastSelectedViz, promptsAnswers, instanceId } = this.state;
-    const { chapterKey, visualizationKey } = lastSelectedViz;
+    const {
+      chapterKey, visualizationKey, pageKey, panelKey, panelStackKey
+    } = lastSelectedViz;
     const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -157,6 +183,9 @@ export default class DossierWindowNotConnected extends React.Component {
       visualizationInfo: {
         chapterKey,
         visualizationKey,
+        pageKey,
+        panelKey,
+        panelStackKey
       },
       preparedInstanceId: instanceId,
       isEdit,
