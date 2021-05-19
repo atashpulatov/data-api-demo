@@ -63,6 +63,8 @@ class ScriptInjectionHelper {
       for (const mutation of mutationList) {
         if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
           const iframe = mutation.addedNodes[0];
+          iframe.tabIndex = 0;
+          iframe.focusEventListenerAdded = false;
           callback(iframe);
         }
       }

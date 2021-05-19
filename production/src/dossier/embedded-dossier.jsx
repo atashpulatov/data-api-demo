@@ -48,8 +48,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleIframeLoadEvent } = this.props;
-      iframe.tabIndex = 0;
-      iframe.addEventListener('focus', this.onWindowFocus);
+      if (iframe.focusEventListenerAdded == false) {
+        iframe.focusEventListenerAdded = true;
+        iframe.addEventListener('focus', this.onWindowFocus);
+      }
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
