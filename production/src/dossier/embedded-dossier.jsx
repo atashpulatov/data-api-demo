@@ -48,7 +48,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleIframeLoadEvent } = this.props;
-      if (iframe.focusEventListenerAdded == false) {
+      if (iframe.focusEventListenerAdded === false) {
         iframe.focusEventListenerAdded = true;
         iframe.addEventListener('focus', this.onWindowFocus);
       }
