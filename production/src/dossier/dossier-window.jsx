@@ -168,9 +168,7 @@ export default class DossierWindowNotConnected extends React.Component {
     } = this.props;
     const { isEdit } = editedObject;
     const { lastSelectedViz, promptsAnswers, instanceId } = this.state;
-    const {
-      chapterKey, visualizationKey, pageKey, panelKey, panelStackKey
-    } = lastSelectedViz;
+    const { chapterKey, visualizationKey } = lastSelectedViz;
     const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -181,10 +179,7 @@ export default class DossierWindowNotConnected extends React.Component {
       promptsAnswers,
       visualizationInfo: {
         chapterKey,
-        visualizationKey,
-        pageKey,
-        panelKey,
-        panelStackKey
+        visualizationKey
       },
       preparedInstanceId: instanceId,
       isEdit,
