@@ -185,6 +185,7 @@ class MstrObjectRestService {
    */
   getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
     const dossierDefinition = await this.getDossierInstanceDefinition(projectId, objectId, dossierInstance);
+
     for (const chapter of dossierDefinition.chapters) {
       for (const page of chapter.pages) {
         for (const visualization of page.visualizations) {
@@ -197,12 +198,61 @@ class MstrObjectRestService {
                 chapterName: chapter.name,
                 dossierName: dossierDefinition.name,
                 pageName: page.name
-              }
+              },
+              panelStackTree: [],
             };
+          }
+        }
+
+        if (page.panelStacks) {
+          for (const panelStack of page.panelStacks) {
+            for (const panel of panelStack.panels) {
+              for (const visualization of panel.visualizations) {
+                if (visualization.key === visualizationKey) {
+                  return {
+                    chapterKey: chapter.key,
+                    pageKey: page.key,
+                    visualizationKey,
+                    dossierStructure: {
+                      chapterName: chapter.name,
+                      dossierName: dossierDefinition.name,
+                      pageName: page.name
+                    },
+                    panelStackTree: [{ panelKey: panel.key, panelStackKey: panelStack.key }]
+                  };
+                }
+              }
+
+              if (panel.panelStacks) {
+                for (const nestedPanelStack of panel.panelStacks) {
+                  for (const nestedPanel of nestedPanelStack.panels) {
+                    for (const visualization of nestedPanel.visualizations) {
+                      if (visualization.key === visualizationKey) {
+                        return {
+                          chapterKey: chapter.key,
+                          pageKey: page.key,
+                          visualizationKey,
+                          dossierStructure: {
+                            chapterName: chapter.name,
+                            dossierName: dossierDefinition.name,
+                            pageName: page.name
+                          },
+                          panelStackTree: [
+                            { panelKey: panel.key, panelStackKey: panelStack.key },
+                            { panelKey: nestedPanel.key, panelStackKey: nestedPanelStack.key }
+                          ]
+                        };
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
+
     return null;
   };
 

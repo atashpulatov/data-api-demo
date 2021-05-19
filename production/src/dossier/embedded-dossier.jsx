@@ -75,19 +75,20 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const chapterData = payload[payloadChapterKey];
     const [payloadVisKey] = Object.keys(chapterData);
 
-    const { visualizationLocation } = chapterData;
-    const selectedVisualizationLocation = visualizationLocation[payloadVisKey];
-    const { pageKey, panelKey, panelStackKey } = selectedVisualizationLocation;
+    // const { visualizationLocation } = chapterData;
+    // const selectedVisualizationLocation = visualizationLocation[payloadVisKey];
+    // const { pageKey, panelKey, panelStackKey } = selectedVisualizationLocation;
 
     this.dossierData = {
       ...this.dossierData,
       chapterKey: payloadChapterKey,
-      visualizationKey: payloadVisKey,
-      pageKey,
+      visualizationKey: payloadVisKey
     };
 
-    if (panelKey) { this.dossierData.panelKey = panelKey; }
-    if (panelStackKey) { this.dossierData.panelStackKey = panelStackKey; }
+    // if (panelKey && panelStackKey) {
+    //   this.dossierData.panelKey = panelKey;
+    //   this.dossierData.panelStackKey = panelStackKey;
+    // }
 
     handleSelection(this.dossierData);
   }

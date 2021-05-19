@@ -16,23 +16,23 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { errorCodes } from '../error/constants';
 
-// TODO move to helper
-// TODO jsdocs
-const mapVizesFromGivenPagesOrPanels = (givenPagesOrPanels, vizKeysSet) => {
-  givenPagesOrPanels.forEach(pageOrPanel => {
-    if (pageOrPanel.visualizations) {
-      pageOrPanel.visualizations.forEach(viz => vizKeysSet.add(viz.key));
-    }
+// // TODO move to helper
+// // TODO jsdocs
+// const mapVizesFromGivenPagesOrPanels = (givenPagesOrPanels, vizKeysSet) => {
+//   givenPagesOrPanels.forEach(pageOrPanel => {
+//     if (pageOrPanel.visualizations) {
+//       pageOrPanel.visualizations.forEach(viz => vizKeysSet.add(viz.key));
+//     }
 
-    if (pageOrPanel.panelStacks) {
-      pageOrPanel.panelStacks.forEach(panelStack => {
-        if (panelStack.panels) {
-          mapVizesFromGivenPagesOrPanels(panelStack.panels, vizKeysSet);
-        }
-      });
-    }
-  });
-};
+//     if (pageOrPanel.panelStacks) {
+//       pageOrPanel.panelStacks.forEach(panelStack => {
+//         if (panelStack.panels) {
+//           mapVizesFromGivenPagesOrPanels(panelStack.panels, vizKeysSet);
+//         }
+//       });
+//     }
+//   });
+// };
 
 export default class DossierWindowNotConnected extends React.Component {
   constructor(props) {
@@ -87,17 +87,14 @@ export default class DossierWindowNotConnected extends React.Component {
   async handleSelection(dossierData) {
     const { chosenObjectId, chosenProjectId } = this.props;
     const {
-      chapterKey, visualizationKey, promptsAnswers, instanceId, pageKey, panelKey, panelStackKey
+      chapterKey, visualizationKey, promptsAnswers, instanceId
     } = dossierData;
 
     if (instanceId) {
       this.setState({
         lastSelectedViz: {
           chapterKey,
-          visualizationKey,
-          pageKey,
-          panelKey,
-          panelStackKey,
+          visualizationKey
         },
         promptsAnswers,
         instanceId,
@@ -117,26 +114,28 @@ export default class DossierWindowNotConnected extends React.Component {
           });
         };
 
-        const checkIfVizIsInDossierInstanceDefinition = async () => {
-          // TODO fetch the dossier definition only when it opens or when instance is changing
-          // TODO (e.g. prompts answered or reset) and run only simple selection here instead of complex parsing
-          const definition = await mstrObjectRestService
-            .getDossierInstanceDefinition(chosenProjectId, chosenObjectId, instanceId);
+        // const checkIfVizIsInDossierInstanceDefinition = async () => {
+        //   // TODO fetch the dossier definition only when it opens or when instance is changing
+        //   // TODO (e.g. prompts answered or reset) and run only simple selection here instead of complex parsing
+        //   const definition = await mstrObjectRestService
+        //     .getDossierInstanceDefinition(chosenProjectId, chosenObjectId, instanceId);
 
-          const currentChapter = definition.chapters.find(chapter => chapter.key === chapterKey);
-          const currentPage = currentChapter.pages.find(page => page.key === pageKey);
+        //   const currentChapter = definition.chapters.find(chapter => chapter.key === chapterKey);
+        //   const currentPage = currentChapter.pages.find(page => page.key === pageKey);
 
-          const vizKeys = new Set();
-          mapVizesFromGivenPagesOrPanels([currentPage], vizKeys);
+        //   const vizKeys = new Set();
+        //   mapVizesFromGivenPagesOrPanels([currentPage], vizKeys);
 
-          if (!vizKeys.has(visualizationKey)) {
-            throw new Error('Selected visualization is not included in dossier instance definition.');
-          }
-        };
+        //   if (!vizKeys.has(visualizationKey)) {
+        //     throw new Error('Selected visualization is not included in dossier instance definition.');
+        //   } else {
+        //     const panelStackTree = [];
+        //   }
+        // };
 
         await Promise.all([
           checkIfVizDataCanBeImported(),
-          checkIfVizIsInDossierInstanceDefinition(),
+          // checkIfVizIsInDossierInstanceDefinition(),
         ])
           .catch(error => {
             console.error(error);
@@ -260,6 +259,8 @@ export default class DossierWindowNotConnected extends React.Component {
     const isSelected = !!((chapterKey && visualizationKey));
     const isSupported = !!(isSelected && vizData && vizData.isSupported);
     const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
+
+    // TODO investigate why the import buton is not initialy enabled on edit
 
     return (
       <div className="dossier-window">
