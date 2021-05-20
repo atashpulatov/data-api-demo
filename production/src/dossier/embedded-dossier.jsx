@@ -75,20 +75,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const chapterData = payload[payloadChapterKey];
     const [payloadVisKey] = Object.keys(chapterData);
 
-    // const { visualizationLocation } = chapterData;
-    // const selectedVisualizationLocation = visualizationLocation[payloadVisKey];
-    // const { pageKey, panelKey, panelStackKey } = selectedVisualizationLocation;
-
     this.dossierData = {
       ...this.dossierData,
       chapterKey: payloadChapterKey,
       visualizationKey: payloadVisKey
     };
-
-    // if (panelKey && panelStackKey) {
-    //   this.dossierData.panelKey = panelKey;
-    //   this.dossierData.panelStackKey = panelStackKey;
-    // }
 
     handleSelection(this.dossierData);
   }
@@ -99,6 +90,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
       instanceId, selectedViz, visualizationInfo
     } = mstrData;
+    console.log(visualizationInfo);
     const instance = {};
     try {
       if (instanceId) {
@@ -131,6 +123,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
+
     let selectedVizChecked = selectedViz;
     if (selectedViz && visualizationInfo) {
       const { chapterKey, visualizationKey } = visualizationInfo;
@@ -201,6 +194,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
       },
     };
+
     if (microstrategy && microstrategy.dossier) {
       microstrategy.dossier
         .create(props)
