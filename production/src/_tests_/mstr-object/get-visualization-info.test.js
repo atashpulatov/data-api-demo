@@ -170,16 +170,16 @@ describe('GetVisualizationInfo', () => {
   };
 
   it.each`
-  dossierDefinition | expectedVisualizationInfo
+  dossierDefinition                                                         | expectedVisualizationInfo                           | testName
 
-  ${dossierDefinitionWithoutPanelStacks}                                    | ${expectedVisualizationInfoWithoutPanelStacks}
-  ${dossierDefinitionWithoutPanelStacksAndExpectedVisualization}            | ${null}
-  ${dossierDefinitionWithPanelStacks}                                       | ${expectedVisualizationInfoWithPanelStacks}
-  ${dossierDefinitionWithPanelStacksAndWithoutExpectedVisualization}        | ${null}
-  ${dossierDefinitionWithNestedPanelStacks}                                 | ${expectedVisualizationInfoWithNestedPanelStacks}
-  ${dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization}  | ${null}
+  ${dossierDefinitionWithoutPanelStacks}                                    | ${expectedVisualizationInfoWithoutPanelStacks}      | ${'no panel stacks'} 
+  ${dossierDefinitionWithoutPanelStacksAndExpectedVisualization}            | ${null}                                             | ${'no panel stacks and no expected visualization'} 
+  ${dossierDefinitionWithPanelStacks}                                       | ${expectedVisualizationInfoWithPanelStacks}         | ${'panel stack'} 
+  ${dossierDefinitionWithPanelStacksAndWithoutExpectedVisualization}        | ${null}                                             | ${'panel stack and no expected visualization'} 
+  ${dossierDefinitionWithNestedPanelStacks}                                 | ${expectedVisualizationInfoWithNestedPanelStacks}   | ${'nested panel stack'} 
+  ${dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization}  | ${null}                                             | ${'nested panel stack and no expected visualization'} 
 
-  `('should call getVisualizationInfo and get expectedVisualizationInfo for each of the dossier definitions', async ({ dossierDefinition, expectedVisualizationInfo }) => {
+  `('should call getVisualizationInfo and get expectedVisualizationInfo for "$testName" dossier definition', async ({ dossierDefinition, expectedVisualizationInfo }) => {
   // given
   jest.spyOn(mstrObjectRestService, 'getDossierInstanceDefinition').mockResolvedValue(dossierDefinition);
   // when

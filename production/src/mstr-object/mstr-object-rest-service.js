@@ -101,6 +101,35 @@ function prepareVisualizationInfoObject(
   };
 }
 
+function parsePanelStacks(
+  givenPanelStacks, visualizationKey, chapterKey, pageKey, chapterName, dosierName, pageName, currentPanelStackTree
+) {
+  for (const panelStack of givenPanelStacks) {
+    for (const panel of panelStack.panels) {
+      const panelLocation = { panelKey: panel.key, panelStackKey: panelStack.key };
+      const newPanelStackTree = [...currentPanelStackTree, panelLocation];
+
+      if (panel.visualizations) {
+        for (const visualization of panel.visualizations) {
+          if (visualization.key === visualizationKey) {
+            return prepareVisualizationInfoObject(
+              chapterKey, pageKey, visualizationKey, chapterName, dosierName, pageName, newPanelStackTree
+            );
+          }
+        }
+      }
+
+      if (panel.panelStacks) {
+        return parsePanelStacks(
+          panel.panelStacks, visualizationKey, chapterKey, pageKey, chapterName, dosierName, pageName, newPanelStackTree
+        );
+      }
+    }
+  }
+
+  return null;
+}
+
 class MstrObjectRestService {
   constructor() {
     this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
@@ -213,34 +242,10 @@ class MstrObjectRestService {
         }
 
         if (page.panelStacks) {
-          for (const panelStack of page.panelStacks) {
-            for (const panel of panelStack.panels) {
-              for (const visualization of panel.visualizations) {
-                if (visualization.key === visualizationKey) {
-                  return prepareVisualizationInfoObject(
-                    chapter.key, page.key, visualizationKey, chapter.name, dossierDefinition.name, page.name,
-                    [{ panelKey: panel.key, panelStackKey: panelStack.key }]
-                  );
-                }
-              }
-
-              if (panel.panelStacks) {
-                for (const nestedPanelStack of panel.panelStacks) {
-                  for (const nestedPanel of nestedPanelStack.panels) {
-                    for (const visualization of nestedPanel.visualizations) {
-                      if (visualization.key === visualizationKey) {
-                        return prepareVisualizationInfoObject(
-                          chapter.key, page.key, visualizationKey, chapter.name, dossierDefinition.name, page.name,
-                          [{ panelKey: panel.key, panelStackKey: panelStack.key },
-                            { panelKey: nestedPanel.key, panelStackKey: nestedPanelStack.key }]
-                        );
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+          return parsePanelStacks(
+            page.panelStacks, visualizationKey, chapter.key, page.key,
+            chapter.name, dossierDefinition.name, page.name, []
+          );
         }
       }
     }
