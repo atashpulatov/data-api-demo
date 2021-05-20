@@ -7,7 +7,6 @@ import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { popupHelper } from '../../popup/popup-helper';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { officeContext } from '../../office/office-context';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper } from '../../storage/session-helper';
@@ -74,17 +73,6 @@ describe('Dossierwindow', () => {
       .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
       .mockImplementationOnce(() => {});
 
-    const SpyGetDossierInstanceDefinition = jest
-      .spyOn(mstrObjectRestService, 'getDossierInstanceDefinition')
-      .mockImplementationOnce(async () => ({
-        chapters: [{
-          key: 'C40',
-          pages: [{
-            visualizations: [{ key: 'W50' }]
-          }],
-        }],
-      }));
-
     // when
     await componentWrapper.instance().handleSelection(dossierData);
     // then
@@ -93,7 +81,6 @@ describe('Dossierwindow', () => {
       visualizationKey: 'W50',
     });
     expect(SpyFetchVisualizationDefinition).toHaveBeenCalled();
-    expect(SpyGetDossierInstanceDefinition).toHaveBeenCalled();
     expect(componentWrapper.instance().state.vizualizationsData).toStrictEqual([{
       chapterKey: 'C40',
       visualizationKey: 'W50',
@@ -114,17 +101,6 @@ describe('Dossierwindow', () => {
       .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
       .mockImplementationOnce(() => { throw new Error(); });
 
-    const SpyGetDossierInstanceDefinition = jest
-      .spyOn(mstrObjectRestService, 'getDossierInstanceDefinition')
-      .mockImplementationOnce(async () => ({
-        chapters: [{
-          key: 'C40',
-          pages: [{
-            visualizations: [{ key: 'W50' }]
-          }],
-        }],
-      }));
-
     // when
     await componentWrapper.instance().handleSelection(dossierData);
     // then
@@ -133,47 +109,6 @@ describe('Dossierwindow', () => {
       visualizationKey: 'W50',
     });
     expect(SpyFetchVisualizationDefinition).toHaveBeenCalled();
-    expect(SpyGetDossierInstanceDefinition).toHaveBeenCalled();
-    expect(componentWrapper.instance().state.vizualizationsData).toStrictEqual([{
-      chapterKey: 'C40',
-      visualizationKey: 'W50',
-      isSupported: false,
-    }]);
-  });
-
-  it('should change state on handleSelection and store viz as not supported one because of missing viz in dossier def', async () => {
-    // given
-    const dossierData = { chapterKey: 'C40', visualizationKey: 'W50', promptsAnswers: [], instanceId: 'instanceId', };
-    const componentWrapper = shallow(<DossierWindowNotConnected />);
-    componentWrapper.setState({
-      lastSelectedViz: {},
-      vizualizationsData: [],
-    });
-
-    const SpyFetchVisualizationDefinition = jest
-      .spyOn(mstrObjectRestService, 'fetchVisualizationDefinition')
-      .mockImplementationOnce(() => {});
-
-    const SpyGetDossierInstanceDefinition = jest
-      .spyOn(mstrObjectRestService, 'getDossierInstanceDefinition')
-      .mockImplementationOnce(async () => ({
-        chapters: [{
-          key: 'C40',
-          pages: [{
-            visualizations: []
-          }],
-        }],
-      }));
-
-    // when
-    await componentWrapper.instance().handleSelection(dossierData);
-    // then
-    expect(componentWrapper.instance().state.lastSelectedViz).toStrictEqual({
-      chapterKey: 'C40',
-      visualizationKey: 'W50',
-    });
-    expect(SpyFetchVisualizationDefinition).toHaveBeenCalled();
-    expect(SpyGetDossierInstanceDefinition).toHaveBeenCalled();
     expect(componentWrapper.instance().state.vizualizationsData).toStrictEqual([{
       chapterKey: 'C40',
       visualizationKey: 'W50',

@@ -90,7 +90,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
       instanceId, selectedViz, visualizationInfo
     } = mstrData;
-    console.log(visualizationInfo);
     const instance = {};
     try {
       if (instanceId) {
