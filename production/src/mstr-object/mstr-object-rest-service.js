@@ -85,6 +85,22 @@ function getFetchObjectContentFields(visualizationType) {
   }
 }
 
+function prepareVisualizationInfoObject(
+  chapterKey, pageKey, visualizationKey, chapterName, dossierName, pageName, panelStackTree
+) {
+  return {
+    chapterKey,
+    pageKey,
+    visualizationKey,
+    dossierStructure: {
+      chapterName,
+      dossierName,
+      pageName,
+    },
+    panelStackTree,
+  };
+}
+
 class MstrObjectRestService {
   constructor() {
     this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
@@ -190,17 +206,9 @@ class MstrObjectRestService {
       for (const page of chapter.pages) {
         for (const visualization of page.visualizations) {
           if (visualization.key === visualizationKey) {
-            return {
-              chapterKey: chapter.key,
-              pageKey: page.key,
-              visualizationKey,
-              dossierStructure: {
-                chapterName: chapter.name,
-                dossierName: dossierDefinition.name,
-                pageName: page.name
-              },
-              panelStackTree: [],
-            };
+            return prepareVisualizationInfoObject(
+              chapter.key, page.key, visualizationKey, chapter.name, dossierDefinition.name, page.name, []
+            );
           }
         }
 
@@ -209,17 +217,10 @@ class MstrObjectRestService {
             for (const panel of panelStack.panels) {
               for (const visualization of panel.visualizations) {
                 if (visualization.key === visualizationKey) {
-                  return {
-                    chapterKey: chapter.key,
-                    pageKey: page.key,
-                    visualizationKey,
-                    dossierStructure: {
-                      chapterName: chapter.name,
-                      dossierName: dossierDefinition.name,
-                      pageName: page.name
-                    },
-                    panelStackTree: [{ panelKey: panel.key, panelStackKey: panelStack.key }]
-                  };
+                  return prepareVisualizationInfoObject(
+                    chapter.key, page.key, visualizationKey, chapter.name, dossierDefinition.name, page.name,
+                    [{ panelKey: panel.key, panelStackKey: panelStack.key }]
+                  );
                 }
               }
 
@@ -228,20 +229,11 @@ class MstrObjectRestService {
                   for (const nestedPanel of nestedPanelStack.panels) {
                     for (const visualization of nestedPanel.visualizations) {
                       if (visualization.key === visualizationKey) {
-                        return {
-                          chapterKey: chapter.key,
-                          pageKey: page.key,
-                          visualizationKey,
-                          dossierStructure: {
-                            chapterName: chapter.name,
-                            dossierName: dossierDefinition.name,
-                            pageName: page.name
-                          },
-                          panelStackTree: [
-                            { panelKey: panel.key, panelStackKey: panelStack.key },
-                            { panelKey: nestedPanel.key, panelStackKey: nestedPanelStack.key }
-                          ]
-                        };
+                        return prepareVisualizationInfoObject(
+                          chapter.key, page.key, visualizationKey, chapter.name, dossierDefinition.name, page.name,
+                          [{ panelKey: panel.key, panelStackKey: panelStack.key },
+                            { panelKey: nestedPanel.key, panelStackKey: nestedPanelStack.key }]
+                        );
                       }
                     }
                   }
