@@ -183,9 +183,10 @@ describe('GetVisualizationInfo', () => {
   // given
   jest.spyOn(mstrObjectRestService, 'getDossierInstanceDefinition').mockResolvedValue(dossierDefinition);
   // when
-  const newVisualizationInfo = await mstrObjectRestService
-    .getVisualizationInfo(projectId, objectId, visualizationKey, dossierInstance);
-    // then
+  const newVisualizationInfo = await mstrObjectRestService.getVisualizationInfo(
+    projectId, objectId, visualizationKey, dossierInstance
+  );
+  // then
   expect(newVisualizationInfo).toStrictEqual(expectedVisualizationInfo);
 });
 });

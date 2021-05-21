@@ -85,35 +85,42 @@ function getFetchObjectContentFields(visualizationType) {
   }
 }
 
-function prepareVisualizationInfoObject(
-  chapterKey, pageKey, visualizationKey, chapterName, dossierName, pageName, panelStackTree
-) {
+/**
+ * Converts given data to visualization info object query selector value based on type of the object
+ // TODO params
+ * @returns {Object} visualization info object
+ */
+function prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName, panelStackTree) {
   return {
-    chapterKey,
-    pageKey,
+    chapterKey: chapterData.key,
+    pageKey: pageData.key,
     visualizationKey,
     dossierStructure: {
-      chapterName,
+      chapterName: chapterData.name,
       dossierName,
-      pageName,
+      pageName: pageData.name,
     },
     panelStackTree,
   };
 }
 
-function parsePanelStacks(
-  givenPanelStacks, visualizationKey, chapterKey, pageKey, chapterName, dosierName, pageName, currentPanelStackTree
-) {
+/**
+ * Recursivly parses given panel stacks from dossier page to find visualization with given key
+ * and persist its location in the dossier.
+ // TODO params
+ * @returns {Object} Visualization info or null.
+ */
+function parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageData, dosierName, panelStackTree) {
   for (const panelStack of givenPanelStacks) {
     for (const panel of panelStack.panels) {
       const panelLocation = { panelKey: panel.key, panelStackKey: panelStack.key };
-      const newPanelStackTree = [...currentPanelStackTree, panelLocation];
+      const newPanelStackTree = [...panelStackTree, panelLocation];
 
       if (panel.visualizations) {
         for (const visualization of panel.visualizations) {
           if (visualization.key === visualizationKey) {
             return prepareVisualizationInfoObject(
-              chapterKey, pageKey, visualizationKey, chapterName, dosierName, pageName, newPanelStackTree
+              chapterData, pageData, visualizationKey, dosierName, newPanelStackTree
             );
           }
         }
@@ -121,10 +128,34 @@ function parsePanelStacks(
 
       if (panel.panelStacks) {
         return parsePanelStacks(
-          panel.panelStacks, visualizationKey, chapterKey, pageKey, chapterName, dosierName, pageName, newPanelStackTree
+          panel.panelStacks, visualizationKey, chapterData, pageData, dosierName, newPanelStackTree
         );
       }
     }
+  }
+
+  return null;
+}
+
+
+/**
+ * Parses given page from dossier chapter to find visualization with given key.
+ // TODO params
+ * @returns {Object} Visualization info or null.
+ */
+function parseDossierPage(page, visualizationKey, chapterData, dossierName) {
+  const pageData = { name: page.name, key: page.key };
+
+  for (const visualization of page.visualizations) {
+    if (visualization.key === visualizationKey) {
+      return prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName, []);
+    }
+  }
+
+  if (page.panelStacks) {
+    return parsePanelStacks(
+      page.panelStacks, visualizationKey, chapterData, pageData, dossierName, []
+    );
   }
 
   return null;
@@ -216,9 +247,8 @@ class MstrObjectRestService {
   }
 
   /**
-   * Get visualization key, page key, chapter key, and dossier structure with names from dossier hierarchy.
-   *
-   * In case if visualization key is not found in dossier, it returns undefined.
+   * Get visualization key, page key, chapter key, dossier structure with names and panel stack tree.
+   * from dossier hierarchy. In case if visualization key is not found in dossier, it returns null.
    *
    * Exceptions are handled by callers.
    *
@@ -232,21 +262,9 @@ class MstrObjectRestService {
     const dossierDefinition = await this.getDossierInstanceDefinition(projectId, objectId, dossierInstance);
 
     for (const chapter of dossierDefinition.chapters) {
+      const chapterData = { name: chapter.name, key: chapter.key };
       for (const page of chapter.pages) {
-        for (const visualization of page.visualizations) {
-          if (visualization.key === visualizationKey) {
-            return prepareVisualizationInfoObject(
-              chapter.key, page.key, visualizationKey, chapter.name, dossierDefinition.name, page.name, []
-            );
-          }
-        }
-
-        if (page.panelStacks) {
-          return parsePanelStacks(
-            page.panelStacks, visualizationKey, chapter.key, page.key,
-            chapter.name, dossierDefinition.name, page.name, []
-          );
-        }
+        return parseDossierPage(page, visualizationKey, chapterData, dossierDefinition.name);
       }
     }
 
