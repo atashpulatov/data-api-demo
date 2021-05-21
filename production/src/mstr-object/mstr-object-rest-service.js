@@ -86,8 +86,14 @@ function getFetchObjectContentFields(visualizationType) {
 }
 
 /**
- * Converts given data to visualization info object query selector value based on type of the object
- // TODO params
+ * Converts given data to visualization info object
+ * @param {String} chapterData.key key of parsed chapter
+ * @param {String} chapterData.name name of parsed chapter
+ * @param {String} pageData.key key of parsed page
+ * @param {String} pageData.name name of parsed page
+ * @param {String} visualizationKey key of visualization which script is looking for
+ * @param {String} dossierName name of parsed dossier
+ * @param {Array<Object} panelStackTree array of panel stacks and panels key which indicates parsed panel
  * @returns {Object} visualization info object
  */
 function prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName, panelStackTree) {
@@ -107,7 +113,14 @@ function prepareVisualizationInfoObject(chapterData, pageData, visualizationKey,
 /**
  * Recursivly parses given panel stacks from dossier page to find visualization with given key
  * and persist its location in the dossier.
- // TODO params
+ * @param {Array<Object>} givenPanelStacks arrray of panel stacks being parsed
+ * @param {String} visualizationKey key of visualization which script is looking for
+ * @param {String} chapterData.key key of parsed chapter
+ * @param {String} chapterData.name name of parsed chapter
+ * @param {String} pageData.key key of parsed page
+ * @param {String} pageData.name name of parsed page
+ * @param {String} dossierName name of parsed dossier
+ * @param {Array<Object} panelStackTree array of panel stacks and panels key which indicates parsed panel
  * @returns {Object} Visualization info or null.
  */
 function parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageData, dosierName, panelStackTree) {
@@ -127,9 +140,10 @@ function parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageD
       }
 
       if (panel.panelStacks) {
-        return parsePanelStacks(
+        const vizInfo = parsePanelStacks(
           panel.panelStacks, visualizationKey, chapterData, pageData, dosierName, newPanelStackTree
         );
+        if (vizInfo) { return vizInfo; }
       }
     }
   }
@@ -140,7 +154,11 @@ function parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageD
 
 /**
  * Parses given page from dossier chapter to find visualization with given key.
- // TODO params
+ * @param {Object} page page of dossier which is being parsed
+ * @param {String} visualizationKey key of visualization which script is looking for
+ * @param {String} chapterData.key key of parsed chapter
+ * @param {String} chapterData.name name of parsed chapter
+ * @param {String} dossierName name of parsed dossier
  * @returns {Object} Visualization info or null.
  */
 function parseDossierPage(page, visualizationKey, chapterData, dossierName) {
@@ -153,9 +171,10 @@ function parseDossierPage(page, visualizationKey, chapterData, dossierName) {
   }
 
   if (page.panelStacks) {
-    return parsePanelStacks(
+    const vizInfo = parsePanelStacks(
       page.panelStacks, visualizationKey, chapterData, pageData, dossierName, []
     );
+    if (vizInfo) { return vizInfo; }
   }
 
   return null;
@@ -255,7 +274,7 @@ class MstrObjectRestService {
    * @param {String} projectId
    * @param {String} objectId
    * @param {String} visualizationKey visualization id
-   * @param {Object} dossierInstance
+   * @param {Object} dossierInstance dossier instance id
    * @returns {Object} Contains info for visualization or null if visualization key is not found
    */
   getVisualizationInfo = async (projectId, objectId, visualizationKey, dossierInstance) => {
@@ -264,7 +283,8 @@ class MstrObjectRestService {
     for (const chapter of dossierDefinition.chapters) {
       const chapterData = { name: chapter.name, key: chapter.key };
       for (const page of chapter.pages) {
-        return parseDossierPage(page, visualizationKey, chapterData, dossierDefinition.name);
+        const vizInfo = parseDossierPage(page, visualizationKey, chapterData, dossierDefinition.name);
+        if (vizInfo) { return vizInfo; }
       }
     }
 
