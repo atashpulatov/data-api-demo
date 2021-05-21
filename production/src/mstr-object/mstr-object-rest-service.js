@@ -111,6 +111,30 @@ function prepareVisualizationInfoObject(chapterData, pageData, visualizationKey,
 }
 
 /**
+ * Parses given visualizations from dossier page or panel to find visualization with given key.
+ * @param {Array<Object>} visualizations arrray of visualizations being parsed
+ * @param {String} chapterData.key key of parsed chapter
+ * @param {String} chapterData.name name of parsed chapter
+ * @param {String} pageData.key key of parsed page
+ * @param {String} pageData.name name of parsed page
+ * @param {String} visualizationKey key of visualization which script is looking for
+ * @param {String} dossierName name of parsed dossier
+ * @param {Array<Object} panelStackTree array of panel stacks and panels key which indicates parsed panel
+ * @returns {Object} Visualization info or null.
+ */
+function parseVisualizations(visualizations, chapterData, pageData, visualizationKey, dossierName, panelStackTree) {
+  for (const visualization of visualizations) {
+    if (visualization.key === visualizationKey) {
+      return prepareVisualizationInfoObject(
+        chapterData, pageData, visualizationKey, dossierName, panelStackTree
+      );
+    }
+  }
+
+  return null;
+}
+
+/**
  * Recursivly parses given panel stacks from dossier page to find visualization with given key
  * and persist its location in the dossier.
  * @param {Array<Object>} givenPanelStacks arrray of panel stacks being parsed
@@ -130,13 +154,10 @@ function parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageD
       const newPanelStackTree = [...panelStackTree, panelLocation];
 
       if (panel.visualizations) {
-        for (const visualization of panel.visualizations) {
-          if (visualization.key === visualizationKey) {
-            return prepareVisualizationInfoObject(
-              chapterData, pageData, visualizationKey, dosierName, newPanelStackTree
-            );
-          }
-        }
+        const vizInfo = parseVisualizations(
+          panel.visualizations, chapterData, pageData, visualizationKey, dosierName, newPanelStackTree
+        );
+        if (vizInfo) { return vizInfo; }
       }
 
       if (panel.panelStacks) {
@@ -164,10 +185,11 @@ function parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageD
 function parseDossierPage(page, visualizationKey, chapterData, dossierName) {
   const pageData = { name: page.name, key: page.key };
 
-  for (const visualization of page.visualizations) {
-    if (visualization.key === visualizationKey) {
-      return prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName, []);
-    }
+  if (page.visualizations) {
+    const vizInfo = parseVisualizations(
+      page.visualizations, chapterData, pageData, visualizationKey, dossierName, []
+    );
+    if (vizInfo) { return vizInfo; }
   }
 
   if (page.panelStacks) {
