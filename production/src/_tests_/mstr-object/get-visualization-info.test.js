@@ -44,6 +44,19 @@ describe('GetVisualizationInfo', () => {
   const dossierDefinitionWithoutPanelStacks = {
     name: dossierName,
     chapters: [{
+      key: `${chapterKey}_1`,
+      name: `${chapterName}_1`,
+      pages: [{
+        key: `${pageKey}_1`,
+        name: `${pageName}_1`,
+        visualizations: [
+          {
+            key: `${visualizationKey}_1`
+          }
+        ]
+      }]
+    },
+    {
       key: chapterKey,
       name: chapterName,
       pages: [{
@@ -61,6 +74,19 @@ describe('GetVisualizationInfo', () => {
   const dossierDefinitionWithoutPanelStacksAndExpectedVisualization = {
     name: dossierName,
     chapters: [{
+      key: `${chapterKey}_1`,
+      name: `${chapterName}_1`,
+      pages: [{
+        key: `${pageKey}_1`,
+        name: `${pageName}_1`,
+        visualizations: [
+          {
+            key: `${visualizationKey}_1`
+          }
+        ]
+      }]
+    },
+    {
       key: chapterKey,
       name: chapterName,
       pages: [{
@@ -74,6 +100,28 @@ describe('GetVisualizationInfo', () => {
   const dossierDefinitionWithPanelStacks = {
     name: dossierName,
     chapters: [{
+      key: `${chapterKey}_1`,
+      name: `${chapterName}_1`,
+      pages: [{
+        key: `${pageKey}_1`,
+        name: `${pageName}_1`,
+        visualizations: [
+          {
+            key: `${visualizationKey}_1`
+          }
+        ],
+        panelStacks: [{
+          key: `${panelStackKey}_1`,
+          panels: [{
+            key: `${panelKey}_1`,
+            visualizations: [{
+              key: `${visualizationKey}_2`
+            }],
+          }]
+        }]
+      }]
+    },
+    {
       key: chapterKey,
       name: chapterName,
       pages: [{
@@ -96,6 +144,28 @@ describe('GetVisualizationInfo', () => {
   const dossierDefinitionWithPanelStacksAndWithoutExpectedVisualization = {
     name: dossierName,
     chapters: [{
+      key: `${chapterKey}_1`,
+      name: `${chapterName}_1`,
+      pages: [{
+        key: `${pageKey}_1`,
+        name: `${pageName}_1`,
+        visualizations: [
+          {
+            key: `${visualizationKey}_1`
+          }
+        ],
+        panelStacks: [{
+          key: `${panelStackKey}_1`,
+          panels: [{
+            key: `${panelKey}_1`,
+            visualizations: [{
+              key: `${visualizationKey}_2`
+            }],
+          }]
+        }]
+      }]
+    },
+    {
       key: chapterKey,
       name: chapterName,
       pages: [{
@@ -116,6 +186,35 @@ describe('GetVisualizationInfo', () => {
   const dossierDefinitionWithNestedPanelStacks = {
     name: dossierName,
     chapters: [{
+      key: `${chapterKey}_1`,
+      name: `${chapterName}_1`,
+      pages: [{
+        key: `${pageKey}_1`,
+        name: `${pageName}_1`,
+        visualizations: [{
+          key: `${visualizationKey}_1`
+        }],
+        panelStacks: [{
+          key: `${panelStackKey}_1`,
+          panels: [{
+            key: `${panelKey}_1`,
+            visualizations: [{
+              key: `${visualizationKey}_2`
+            }],
+            panelStacks: [{
+              key: `${nestedPanelStackKey}_1`,
+              panels: [{
+                key: `${nestedPanelKey}_1`,
+                visualizations: [{
+                  key: `${visualizationKey}_3`
+                }],
+              }]
+            }],
+          }]
+        }]
+      }]
+    },
+    {
       key: chapterKey,
       name: chapterName,
       pages: [{
@@ -145,6 +244,35 @@ describe('GetVisualizationInfo', () => {
   const dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization = {
     name: dossierName,
     chapters: [{
+      key: `${chapterKey}_1`,
+      name: `${chapterName}_1`,
+      pages: [{
+        key: `${pageKey}_1`,
+        name: `${pageName}_1`,
+        visualizations: [{
+          key: `${visualizationKey}_1`
+        }],
+        panelStacks: [{
+          key: `${panelStackKey}_1`,
+          panels: [{
+            key: `${panelKey}_1`,
+            visualizations: [{
+              key: `${visualizationKey}_2`
+            }],
+            panelStacks: [{
+              key: `${nestedPanelStackKey}_1`,
+              panels: [{
+                key: `${nestedPanelKey}_1`,
+                visualizations: [{
+                  key: `${visualizationKey}_3`
+                }],
+              }]
+            }],
+          }]
+        }]
+      }]
+    },
+    {
       key: chapterKey,
       name: chapterName,
       pages: [{
