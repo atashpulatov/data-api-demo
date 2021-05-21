@@ -2,6 +2,7 @@ import dossierInstanceDefinition from '../../mstr-object/instance/dossier-instan
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE } from '../../error/constants';
+import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
 
 describe('DossierInstanceDefinition', () => {
   afterEach(() => {
@@ -14,7 +15,7 @@ describe('DossierInstanceDefinition', () => {
       throw new Error('errorTest');
     });
 
-    jest.spyOn(mstrObjectRestService, 'getVisualizationInfo').mockImplementation();
+    jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockImplementation();
 
     jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockImplementation();
 
@@ -41,7 +42,7 @@ describe('DossierInstanceDefinition', () => {
     expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
     expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', 'bodyTest');
 
-    expect(mstrObjectRestService.getVisualizationInfo).not.toBeCalled();
+    expect(visualizationInfoService.getVisualizationInfo).not.toBeCalled();
     expect(mstrObjectRestService.fetchVisualizationDefinition).not.toBeCalled();
     expect(dossierInstanceDefinition.getVisualizationErrorType).not.toBeCalled();
   });
@@ -50,7 +51,7 @@ describe('DossierInstanceDefinition', () => {
     // given
     jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockImplementation();
 
-    jest.spyOn(mstrObjectRestService, 'getVisualizationInfo').mockReturnValue('updatedVisualizationInfoTest');
+    jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockReturnValue('updatedVisualizationInfoTest');
 
     jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockImplementation(() => {
       throw new Error('errorTest');
@@ -81,8 +82,8 @@ describe('DossierInstanceDefinition', () => {
 
     expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
 
-    expect(mstrObjectRestService.getVisualizationInfo).toBeCalledTimes(1);
-    expect(mstrObjectRestService.getVisualizationInfo).toBeCalledWith(
+    expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
+    expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(
       'projectIdTest',
       'objectIdTest',
       'visualizationKeyTest',
@@ -152,7 +153,7 @@ describe('DossierInstanceDefinition', () => {
 
     jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockReturnValue('instanceIdTest');
 
-    jest.spyOn(mstrObjectRestService, 'getVisualizationInfo').mockReturnValue('getVisualizationInfoTest');
+    jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockReturnValue('getVisualizationInfoTest');
 
     jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockReturnValue(
       { sth: 'fetchVisualizationDefinitionTest' }
@@ -180,8 +181,8 @@ describe('DossierInstanceDefinition', () => {
       expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
     }
 
-    expect(mstrObjectRestService.getVisualizationInfo).toBeCalledTimes(1);
-    expect(mstrObjectRestService.getVisualizationInfo).toBeCalledWith(
+    expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
+    expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(
       'projectIdTest',
       'objectIdTest',
       'visualizationKeyTest',

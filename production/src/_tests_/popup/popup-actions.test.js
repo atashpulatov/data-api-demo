@@ -10,6 +10,7 @@ import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { errorService } from '../../error/error-handler';
 import { popupController } from '../../popup/popup-controller';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
 
 jest.mock('../../office/api/office-api-helper');
 jest.mock('../../authentication/authentication-helper');
@@ -18,8 +19,10 @@ jest.mock('../../popup/popup-controller');
 jest.mock('../../error/error-handler');
 jest.mock('../../store');
 jest.mock('../../mstr-object/mstr-object-rest-service');
+jest.mock('../../mstr-object/visualization-info-service');
 
-const { createDossierInstance, getVisualizationInfo } = mstrObjectRestService;
+const { createDossierInstance } = mstrObjectRestService;
+const { getVisualizationInfo } = visualizationInfoService;
 
 describe('Popup actions', () => {
   beforeAll(() => {
@@ -30,6 +33,7 @@ describe('Popup actions', () => {
       popupHelper,
       mstrObjectRestService,
       popupController,
+      visualizationInfoService,
     );
   });
   afterEach(() => {

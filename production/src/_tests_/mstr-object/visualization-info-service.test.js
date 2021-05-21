@@ -1,6 +1,7 @@
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { visualizationInfoService } from '../../mstr-object/visualization-info-service';
 
-describe('GetVisualizationInfo', () => {
+describe('VisualizationInfoService', () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -311,7 +312,7 @@ describe('GetVisualizationInfo', () => {
   // given
   jest.spyOn(mstrObjectRestService, 'getDossierInstanceDefinition').mockResolvedValue(dossierDefinition);
   // when
-  const newVisualizationInfo = await mstrObjectRestService.getVisualizationInfo(
+  const newVisualizationInfo = await visualizationInfoService.getVisualizationInfo(
     projectId, objectId, visualizationKey, dossierInstance
   );
   // then

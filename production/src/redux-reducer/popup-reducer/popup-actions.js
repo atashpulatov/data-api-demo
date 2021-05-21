@@ -14,7 +14,8 @@ class PopupActions {
     officeReducerHelper,
     popupHelper,
     mstrObjectRestService,
-    popupController
+    popupController,
+    visualizationInfoService
   ) => {
     this.errorService = errorService;
     this.officeApiHelper = officeApiHelper;
@@ -22,6 +23,7 @@ class PopupActions {
     this.popupHelper = popupHelper;
     this.mstrObjectRestService = mstrObjectRestService;
     this.popupController = popupController;
+    this.visualizationInfoService = visualizationInfoService;
   };
 
   callForEdit = (reportParams) => async (dispatch) => {
@@ -129,7 +131,7 @@ class PopupActions {
 
     let updatedVisualizationInfo;
     try {
-      updatedVisualizationInfo = await this.mstrObjectRestService.getVisualizationInfo(
+      updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
         projectId,
         objectId,
         visualizationInfo.visualizationKey,
