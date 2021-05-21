@@ -231,9 +231,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const overlay = iframeDocument.getElementsByClassName('mstrd-PromptEditorContainer-overlay').length;
     let elementToFocusOn;
     if (overlay) {
-      [ elementToFocusOn ] = iframeDocument.getElementsByTagName('TD');
+      [elementToFocusOn] = iframeDocument.getElementsByTagName('TD');
     } else {
-      [ elementToFocusOn ] = iframeDocument.getElementsByClassName('icon-tb_toc_n');
+      [elementToFocusOn] = iframeDocument.getElementsByClassName('icon-tb_toc_n');
     }
     if (elementToFocusOn) {
       elementToFocusOn.focus();
