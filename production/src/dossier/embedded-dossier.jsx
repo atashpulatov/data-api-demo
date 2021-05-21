@@ -219,15 +219,24 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   /**
-   * When focused on iframe switch focus to the Table of Contents button.
-   * The user cannot see that the iframe is focused on and will expect to see ToC button highlighted.
-   *
-   * @param {FocusEvent} focusEvent
-   */
+  * When focused on iframe switch focus to the next focusable item in the iframe.
+  * For prompted dossiers this item will be first Table Data tag.
+  * For non-prompted dossiers it will be the Table of Content button.
+  * Focusing on the iframe itself is not visible for the user therefore should be skipped.
+  *
+  * @param {FocusEvent} focusEvent
+  */
   onWindowFocus = (focusEvent) => {
-    const tableOfContentsButton = focusEvent.target.contentDocument.getElementsByClassName('icon-tb_toc_n')[0];
-    if (tableOfContentsButton) {
-      tableOfContentsButton.focus();
+    const iframeDocument = focusEvent.target.contentDocument;
+    const overlay = iframeDocument.getElementsByClassName('mstrd-PromptEditorContainer-overlay').length;
+    let elementToFocusOn;
+    if (overlay) {
+      elementToFocusOn = iframeDocument.getElementsByTagName('TD')[0];
+    } else {
+      elementToFocusOn = iframeDocument.getElementsByClassName('icon-tb_toc_n')[0];
+    }
+    if (elementToFocusOn) {
+      elementToFocusOn.focus();
     }
   }
 

@@ -283,16 +283,17 @@ export class PromptsWindowNotConnected extends Component {
     onPopupBack();
   }
 
-    /**
-   * When focused on iframe switch focus to the Table of Contents button.
-   * The user cannot see that the iframe is focused on and will expect to see ToC button highlighted.
-   *
-   * @param {FocusEvent} focusEvent
-   */
+  /**
+  * When focused on iframe switch focus to first Table Data element.
+  * Focusing on the iframe itself is not visible for the user therefore should be skipped.
+  *
+  * @param {FocusEvent} focusEvent
+  */
   onWindowFocus = (focusEvent) => {
-    const tableOfContentsButton = focusEvent.target.contentDocument.getElementsByClassName('icon-tb_toc_n')[0];
-    if (tableOfContentsButton) {
-      tableOfContentsButton.focus();
+    const iframeDocument = focusEvent.target.contentDocument;
+    const elementToFocusOn = iframeDocument.getElementsByTagName('TD')[0];
+    if (elementToFocusOn) {
+      elementToFocusOn.focus();
     }
   }
 
