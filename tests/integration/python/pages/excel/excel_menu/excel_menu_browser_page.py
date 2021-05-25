@@ -92,15 +92,22 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
         self.get_element_by_css(ExcelMenuBrowserPage.NAME_BOX_DROPDOWN_BUTTON_CSS).click()
 
         name_box_items = self.get_elements_by_css(ExcelMenuBrowserPage.NAME_BOX_ITEMS_CSS)
-        first_name_box_item_name = name_box_items[int(first_object_number) - 1].text
-        first_name_box_item_timestamp = first_name_box_item_name[first_name_box_item_name.rindex('_')+1:]
 
-        second_name_box_item_name = name_box_items[int(second_object_number) - 1].text
-        second_name_box_item_timestamp = second_name_box_item_name[second_name_box_item_name.rindex('_')+1:]
+        first_name_box_item_timestamp = self._get_timestamp_of_name_box_item(name_box_items, first_object_number)
+        second_name_box_item_timestamp = self._get_timestamp_of_name_box_item(name_box_items, second_object_number)
 
         self.get_element_by_css(ExcelMenuBrowserPage.MODAL_DIV_CSS).click()
 
         return first_name_box_item_timestamp == second_name_box_item_timestamp
+
+    def _get_timestamp_of_name_box_item(self, name_box_items, object_number):
+        object_index = int(object_number) - 1
+
+        name_box_item_name = name_box_items[object_index].text
+
+        timestamp_index = name_box_item_name.rindex('_') + 1
+
+        return name_box_item_name[timestamp_index:]
 
     def enable_use_of_keyboard_shortcuts(self):
         self.focus_on_excel_frame()
