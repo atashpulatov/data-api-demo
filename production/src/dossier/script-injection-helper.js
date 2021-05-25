@@ -72,6 +72,28 @@ class ScriptInjectionHelper {
     const observer = new MutationObserver(onMutation);
     observer.observe(container, config);
   }
+
+  /**
+  * When focused on window switch focus to different element in this window.
+  * For prompted dossiers this element will be first Table Data tag.
+  * For non-prompted dossiers it will be the Table of Content button.
+  * Focusing on the window itself is not visible for the user therefore should be skipped.
+  *
+  * @param {FocusEvent} focusEvent
+  */
+  switchFocusToElementOnWindowFocus = (focusEvent) => {
+    const iframeDocument = focusEvent.target.contentDocument;
+    const overlay = iframeDocument.getElementsByClassName('mstrd-PromptEditorContainer-overlay').length;
+    let elementToFocusOn;
+    if (overlay) {
+      [elementToFocusOn] = iframeDocument.getElementsByTagName('TD');
+    } else {
+      [elementToFocusOn] = iframeDocument.getElementsByClassName('icon-tb_toc_n');
+    }
+    if (elementToFocusOn) {
+      elementToFocusOn.focus();
+    }
+  }
 }
 
 const scriptInjectionHelper = new ScriptInjectionHelper();

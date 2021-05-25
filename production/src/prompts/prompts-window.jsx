@@ -236,7 +236,7 @@ export class PromptsWindowNotConnected extends Component {
       const { contentDocument } = iframe;
       if (iframe.focusEventListenerAdded === false) {
         iframe.focusEventListenerAdded = true;
-        iframe.addEventListener('focus', this.onWindowFocus);
+        iframe.addEventListener('focus', scriptInjectionHelper.switchFocusToElementOnWindowFocus);
       }
       this.embeddedDocument = contentDocument;
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
@@ -281,20 +281,6 @@ export class PromptsWindowNotConnected extends Component {
     const { cancelImportRequest, onPopupBack } = this.props;
     cancelImportRequest();
     onPopupBack();
-  }
-
-  /**
-  * When focused on iframe switch focus to first Table Data element.
-  * Focusing on the iframe itself is not visible for the user therefore should be skipped.
-  *
-  * @param {FocusEvent} focusEvent
-  */
-  onWindowFocus = (focusEvent) => {
-    const iframeDocument = focusEvent.target.contentDocument;
-    const elementToFocusOn = iframeDocument.getElementsByTagName('TD')[0];
-    if (elementToFocusOn) {
-      elementToFocusOn.focus();
-    }
   }
 
   render() {
