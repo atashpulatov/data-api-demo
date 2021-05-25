@@ -27,6 +27,9 @@ done
 echo "tomcat stop successfully, start to replace files"
 sleep 2
 cp -f /opt/configOverride.properties /usr/local/tomcat/webapps/web-dossier/WEB-INF/classes/config/configOverride.properties
+cp -f /opt/context.xml /usr/local/tomcat/webapps/web-dossier/META-INF/context.xml
+cp -f opt/web.xml /usr/local/tomcat/webapps/web-dossier/WEB-INF/web.xml
+
 rm -rf /usr/local/tomcat/webapps/web-dossier/apps/addin-mstr-office
 rm -rf /usr/local/tomcat/webapps/web-dossier/static/loader-mstr-office
 unzip /opt/office.zip -d /usr/local/tomcat/webapps/web-dossier/apps/addin-mstr-office

@@ -1,0 +1,529 @@
+?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<display-name>MicroStrategy Library</display-name>
+		<context-param>
+			<param-name>spring.main.allow-bean-definition-overriding</param-name>
+			<param-value>true</param-value>
+		</context-param>
+
+  	<filter>
+		<filter-name>crlfResponseFilter</filter-name>
+		<filter-class>com.microstrategy.web.filter.CrlfResponseFilter</filter-class>
+		<async-supported>true</async-supported>
+		<init-param>
+	  		<param-name>isRemoveCrlf</param-name>
+	  		<param-value>true</param-value>
+		</init-param>
+  	</filter>
+  	<filter-mapping>
+		<filter-name>crlfResponseFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+	<filter>
+		<filter-name>redirectResponseFilter</filter-name>
+		<filter-class>com.microstrategy.web.filter.RedirectResponseFilter</filter-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>allowedProtocols</param-name>
+			<param-value>*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>domains</param-name>
+			<param-value>*</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>redirectResponseFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+  	<filter>
+	<filter-name>cookieProcessorFilter</filter-name>
+	<filter-class>com.microstrategy.web.filter.CookieProcessorFilter</filter-class>
+	<async-supported>true</async-supported>
+	<init-param>
+		<param-name>sameSite</param-name>
+		<!-- UNSET, STRICT, LAX, NONE -->
+		<param-value>NONE</param-value>
+	</init-param>
+	<init-param>
+		<param-name>httpOnly</param-name>
+		<param-value>true</param-value>
+	</init-param>
+	<init-param>
+		<param-name>secure</param-name>
+		<param-value></param-value>
+	</init-param>
+</filter>
+<filter-mapping>
+	<filter-name>cookieProcessorFilter</filter-name>
+	<url-pattern>/*</url-pattern>
+</filter-mapping>
+	
+<filter>
+	<filter-name>clientIDFilter</filter-name>
+	<filter-class>com.microstrategy.web.filter.ClientIDFilter</filter-class>
+	<async-supported>true</async-supported>
+	<init-param>
+	    	<param-name>mode</param-name>
+            <!-- PROXY, DEFAULT, DISABLED -->
+	    	<param-value>DEFAULT</param-value>
+	</init-param> 
+</filter>
+<filter-mapping>
+	<filter-name>clientIDFilter</filter-name>
+	<url-pattern>/*</url-pattern>
+</filter-mapping>	
+<listener>
+	<listener-class>com.microstrategy.web.filter.CookieProcessorFilter$ServletEventListenerForSessionCookieConfig</listener-class>
+</listener>
+
+    <!-- add etag filter for embeddinglib.js-->
+	<filter>
+		<filter-name>EtagFilter</filter-name>
+		<filter-class>org.springframework.web.filter.ShallowEtagHeaderFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>EtagFilter</filter-name>
+		<url-pattern>/javascript/embeddinglib.js</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>ExpireHeader</filter-name>
+		<filter-class>com.microstrategy.web.filter.ExpireHeaderFilter</filter-class>
+		<init-param>
+	    	<param-name>specifiedExpiration</param-name>
+            <!-- specify the resource file cache expired time -->
+	    	<param-value>/javascript/embeddinglib.js:43200</param-value>
+	    </init-param> 
+	</filter>
+
+	<filter-mapping>
+		<filter-name>ExpireHeader</filter-name>
+		<url-pattern>*.js</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>ExpireHeader</filter-name>
+		<url-pattern>*.css</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>ExpireHeader</filter-name>
+		<url-pattern>*.ttf</url-pattern>
+		<url-pattern>*.TTF</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>CspHeaders</filter-name>
+		<filter-class>com.microstrategy.web.filter.GlobalHeadersFilter</filter-class>
+		<async-supported>true</async-supported>
+		<init-param>
+			<param-name>headerConfig</param-name>
+			<!-- param-value should be a comma-separated list of headers and 
+			their respective values. If a header value contains a comma, escape
+			the header name and value within quotes. Example:
+			h1 : v1,
+			h2 : v2,
+			"h3 : v3a, v3b, v3c",
+			h4 : v4
+			-->
+			<param-value>
+			Content-Security-Policy: report-uri https://TEC-W-1002159.labs.microstrategy.com:4000; base-uri 'self'; default-src 'self'; object-src 'none'; script-src 'report-sample' 'self' 'unsafe-inline' 'unsafe-eval' http: https:; style-src 'self' 'unsafe-inline' 'unsafe-eval' blob: http: https:; connect-src 'self' * ws: wss: blob:; worker-src 'self' * data: blob:; font-src 'self' * data: blob:; frame-src 'self' * data: blob: about: mailto: mstrapp: dossier:; img-src 'self' * data: blob: about:; media-src 'self' * data: blob: rtsp: rtmp:; child-src 'self' * data: blob:;
+			</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CspHeaders</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>NoCacheHeader</filter-name>
+		<filter-class>com.microstrategy.web.filter.GlobalHeadersFilter</filter-class>
+    <init-param>
+        <param-name>headerConfig</param-name>
+        <param-value>
+        	Cache-Control: no-cache
+        </param-value>
+		</init-param>
+  </filter>
+  <filter-mapping>
+		<filter-name>NoCacheHeader</filter-name>
+		<url-pattern>/static/hyper/office/index.html</url-pattern>
+  </filter-mapping>
+
+	<filter>
+		<filter-name>GlobalHeaders</filter-name>
+		<filter-class>com.microstrategy.rest.filters.LibraryHeadersFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>GlobalHeaders</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+		<url-pattern>/auth/ui/loginPage</url-pattern>
+ 		<url-pattern>/auth/ui/LoginErrorPage</url-pattern>
+ 		<url-pattern>/auth/ui/embeddedLogin</url-pattern>
+		<url-pattern>/api/*</url-pattern>
+		<url-pattern>/app/*</url-pattern>
+	</filter-mapping>
+
+
+	<!-- first listener for server startup tasks -->
+	<listener>
+		<listener-class>com.microstrategy.consumerweb.servlets.ConsumerWebContextListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>com.microstrategy.consumerweb.servlets.ConsumerWebRequestListener</listener-class>
+	</listener>
+
+	<servlet>
+		<display-name>Main Servlet</display-name>
+		<servlet-name>mstrWeb</servlet-name>
+		<servlet-class>com.microstrategy.consumerweb.servlets.LibraryMainServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mstrWeb</servlet-name>
+		<url-pattern>/servlet/mstrWeb</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+	    <servlet-name>CertificateManagerService</servlet-name>
+	    <servlet-class>org.mitre.dsmiley.httpproxy.ProxyServlet</servlet-class>
+	    <init-param>
+	      <param-name>targetUri</param-name>
+	      <param-value>http://localhost:5050/api/serviceCertificates</param-value>
+	    </init-param>
+	    <init-param>
+	      <param-name>log</param-name>
+	      <param-value>true</param-value>
+	    </init-param>
+
+		<!-- SSL SUPPORT START - The following group of parameters are only relevant when the targetUri above uses the "https" protocol. -->
+		    <init-param>
+		      <param-name>truststorePath</param-name>
+		      <param-value>{PATH_TO_TRUSTSTORE}</param-value>
+		    </init-param>
+		    <init-param>
+		      <param-name>truststoreType</param-name>
+		      <param-value>PKCS12</param-value>
+		    </init-param>
+		    <init-param>
+		      <param-name>truststorePassword</param-name>
+		      <param-value>{TRUSTSTORE_PASSWORD_OR_BLANK_IF_NONE}</param-value>
+		    </init-param>
+		    <init-param>
+		      <param-name>keyPassword</param-name>
+		      <param-value>{KEY_PASSWORD_OR_BLANK_IF_NONE}</param-value>
+		    </init-param>
+
+			<!-- DEVELOPMENT - START - The following parameters are for development/debugging use only and should not be set to TRUE in production systems. -->
+		    <init-param>
+		      <param-name>trustAllCertificates</param-name>
+		      <param-value>false</param-value>
+		    </init-param>
+		    <init-param>
+		      <param-name>disableHostnameVerification</param-name>
+		      <param-value>false</param-value>
+		    </init-param>
+			<!-- DEVELOPMENT END -->
+
+		<!-- SSL SUPPORT END -->
+
+	</servlet>
+	<servlet-mapping>
+	  <servlet-name>CertificateManagerService</servlet-name>
+	  <url-pattern>/api/serviceCertificates/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Microstrategy Tasks -->
+
+	<filter>
+		<filter-name>AddSessionStateFilter</filter-name>
+		<filter-class>com.microstrategy.consumerweb.servlets.AddSessionStateFilter</filter-class>
+		<init-param>
+			<param-name>/servlet/mstrWeb</param-name>
+			<param-value>usrSmgr</param-value>
+		</init-param>
+		<init-param>
+			<param-name>/servlet/taskProc</param-name>
+			<param-value>sessionState</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>AddSessionStateFilter</filter-name>
+		<servlet-name>TaskProcessorServlet</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AddSessionStateFilter</filter-name>
+		<servlet-name>mstrWeb</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>AddSessionStateFilter</filter-name>
+		<servlet-name>MobileServlet</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+
+	<!-- Admin authentication support -->	
+    <context-param>	
+		<param-name>adminUrls</param-name>	
+		<param-value>/admin;/admin/**;/saml/config/**;/api/admin/**;/api/auth/admin/login;/api/auth/admin/login/**</param-value>	
+    </context-param>	
+
+
+    <filter>	
+        <filter-name>adminAuthFilter</filter-name>	
+        <filter-class>com.microstrategy.auth.MstrBasicAuthFilter</filter-class>
+		<async-supported>true</async-supported>	
+    </filter>	
+    <filter-mapping>	
+        <filter-name>adminAuthFilter</filter-name>	
+        <url-pattern>/*</url-pattern>	
+    </filter-mapping>
+	
+	<!-- SAML Config GUI -->
+	<servlet>
+		<servlet-name>samlConfig</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>samlConfig</servlet-name>
+		<url-pattern>/saml/*</url-pattern>
+	</servlet-mapping>
+
+  <security-constraint>	
+    <web-resource-collection>	
+      <web-resource-name>samlConfig</web-resource-name>	
+      <url-pattern>/saml/config/*</url-pattern>	
+    </web-resource-collection>	
+    <user-data-constraint>	
+      <transport-guarantee>NONE</transport-guarantee>	
+    </user-data-constraint>	
+  </security-constraint>
+	<!-- End SAML Config GUI -->
+	
+	<servlet>
+		<description>This is the Servlet that handles all AJAX-style requests from browser clients.</description>
+		<display-name>TaskProcessorServlet</display-name>
+		<servlet-name>TaskProcessorServlet</servlet-name>
+		<servlet-class>com.microstrategy.web.servlets.TaskProcessorServlet</servlet-class>
+		<init-param>
+			<param-name>servletDeploymentName</param-name>
+			<param-value>taskProc</param-value>
+		</init-param>
+		<load-on-startup>10</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TaskProcessorServlet</servlet-name>
+		<url-pattern>/servlet/taskProc</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>mstrDocumentImages</servlet-name>
+		<servlet-class>com.microstrategy.web.servlets.DocumentImageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mstrDocumentImages</servlet-name>
+		<url-pattern>/servlet/images/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Added for ESRI Map requirement on Mobile -->
+	<servlet>
+		<description>This is the Servlet that handles all requests from MicroStrategy Mobile.</description>
+		<display-name>MobileServlet</display-name>
+		<servlet-name>MobileServlet</servlet-name>
+		<servlet-class>com.microstrategy.web.servlets.MobileServlet</servlet-class>
+		<init-param>
+			<param-name>servletDeploymentName</param-name>
+			<param-value>mobile</param-value>
+		</init-param>
+		<init-param>
+			<description>This is the Fully Qualified Class Name of the AppController class to instantiate.</description>
+			<param-name>controllerClass</param-name>
+			<param-value>com.microstrategy.web.controller.MobileController</param-value>
+		</init-param>
+		<load-on-startup>10</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MobileServlet</servlet-name>
+		<url-pattern>/servlet/mobile</url-pattern>
+	</servlet-mapping>
+
+	<!-- Login page mapping -->
+	<servlet>
+		<servlet-name>LoginPage</servlet-name>
+		<jsp-file>/auth/ui/MultiModeLogin.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginPage</servlet-name>
+		<url-pattern>/auth/ui/loginPage</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>LoginErrorPage</servlet-name>
+		<jsp-file>/auth/ui/LoginError.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginErrorPage</servlet-name>
+		<url-pattern>/auth/ui/LoginErrorPage</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>EmbeddedLoginPage</servlet-name>
+		<jsp-file>/auth/ui/embeddedLogin.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmbeddedLoginPage</servlet-name>
+		<url-pattern>/auth/ui/embeddedLogin</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>MobileSamlLogin</servlet-name>
+		<jsp-file>/auth/mobile/samlLogin.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MobileSamlLogin</servlet-name>
+		<url-pattern>/mobileSamlLogin</url-pattern>
+	</servlet-mapping>
+
+	<!-- health check endpoint -->
+	<servlet>
+	    <servlet-name>HealthServlet</servlet-name>
+	    <jsp-file>/jsp/health.jsp</jsp-file>
+  	</servlet>
+
+  	<servlet-mapping>
+	    <servlet-name>HealthServlet</servlet-name>
+	    <url-pattern>/health</url-pattern>
+  	</servlet-mapping>
+
+	<!-- Consume Web Admin / Control Panel Servlet -->
+	<servlet>
+		<servlet-name>admin</servlet-name>
+		<jsp-file>/admin.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>admin</servlet-name>
+		<url-pattern>/admin</url-pattern>
+		<url-pattern>/admin/*</url-pattern>
+	</servlet-mapping>
+
+	<security-constraint>	
+		<web-resource-collection>	
+			<web-resource-name>consume-web admin / control panel</web-resource-name>	
+			<url-pattern>/admin</url-pattern>	
+			<url-pattern>/admin/*</url-pattern>	
+		</web-resource-collection>	
+		<user-data-constraint>	
+			<transport-guarantee>NONE</transport-guarantee> <!-- Change to "CONFIDENTIAL" to allow https only access -->
+		</user-data-constraint>	
+	</security-constraint>
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+		<!-- Removed cookie-config section as it causes problems for some app server deployments -->
+		<!-- The most commonly used App servers have this setting enabled as default anyway -->
+	</session-config>
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>/webUtilTL.tld</taglib-uri>
+			<taglib-location>/WEB-INF/tlds/webUtilTL.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+	<security-constraint>	
+		<web-resource-collection>	
+			<web-resource-name>Admin APIs</web-resource-name>	
+			<url-pattern>/api/admin/*</url-pattern>	
+			<url-pattern>/api/auth/admin/login</url-pattern>	
+		</web-resource-collection>	
+		<user-data-constraint>	
+			<transport-guarantee>NONE</transport-guarantee> <!-- Change to "CONFIDENTIAL" to allow https only access -->
+		</user-data-constraint>	
+	</security-constraint>
+
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>Administrator Authentication Area</realm-name>
+	</login-config>
+
+	<!-- TQMS #859156 -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>No HTTP access</web-resource-name>
+			<url-pattern>/jsp/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint />
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>esri access</web-resource-name>
+			<url-pattern>/jsp/esriproxy.jsp</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>*</role-name>
+		</auth-constraint>
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+
+	<security-role>
+		<role-name>admin</role-name>
+	</security-role>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>index.html</welcome-file> <!--required for swagger -->
+	</welcome-file-list>
+
+	<servlet>
+		<description>Servlet to render dossier.jsp for the front end Dossier Web App</description>
+		<servlet-name>app</servlet-name>
+		<jsp-file>/dossier.jsp</jsp-file>
+	</servlet>
+	<!--All URLs matching <ContextName>/app/* are for the front end Dossier Web App-->
+	<servlet-mapping>
+		<servlet-name>app</servlet-name>
+		<url-pattern>/app/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>api-docs</servlet-name>
+		<jsp-file>/api-docs/index.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>api-docs</servlet-name>
+		<url-pattern>/api-docs</url-pattern>
+	</servlet-mapping>
+
+	<!-- hyper endpoint -->
+	<servlet>
+	    <servlet-name>HyperServlet</servlet-name>
+	    <jsp-file>/apps/HyperIntelligence/jsp/Welcome.jsp</jsp-file>
+  	</servlet>
+
+  	<servlet-mapping>
+	    <servlet-name>HyperServlet</servlet-name>
+	    <url-pattern>/hyper/Welcome</url-pattern>
+  	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ViewInApp</servlet-name>
+		<jsp-file>/static/viewInAppRedirect/index.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ViewInApp</servlet-name>
+		<url-pattern>/ViewNow</url-pattern>
+	</servlet-mapping>
+
+</web-app>
