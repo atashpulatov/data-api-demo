@@ -6,7 +6,7 @@ Feature: TS41441 - Sanity checks
   Scenario: [TC59464] - Binding
     Given I initialized Excel
 
-    When I logged in as default user
+     When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "28185E364F4B1CA6E8FA178214FDC3AE" and selected "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«». • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Report for testing binding and special characters . • !#$%&'()*+,-:;<=>@/`testtesttes/km123456"
