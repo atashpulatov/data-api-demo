@@ -133,9 +133,9 @@ describe('ScriptInjectionHelper', () => {
     const focusEvent = {
       target: {
         contentDocument: {
-          getElementsByClassName: jest.fn((className) => 
+          getElementsByClassName: jest.fn((className) => (
             className === 'mstrd-PromptEditorContainer-overlay' ? [] : [tableOfContentsElement]
-          )
+          ))
         }
       }
     };
