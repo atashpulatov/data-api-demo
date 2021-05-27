@@ -120,11 +120,11 @@ describe('ScriptInjectionHelper', () => {
         }
       }
     };
-    const spy = jest.spyOn(tableDataElement, 'focus');
+    const focusSpy = jest.spyOn(tableDataElement, 'focus');
     // when
     scriptInjectionHelper.switchFocusToElementOnWindowFocus(focusEvent);
     // then
-    expect(spy).toBeCalledTimes(1);
+    expect(focusSpy).toBeCalledTimes(1);
   });
 
   it('should focus on Table of Contents element when overlay is absent', () => {
@@ -139,10 +139,10 @@ describe('ScriptInjectionHelper', () => {
         }
       }
     };
-    const spy = jest.spyOn(tableOfContentsElement, 'focus');
+    const focusSpy = jest.spyOn(tableOfContentsElement, 'focus');
     // when
     scriptInjectionHelper.switchFocusToElementOnWindowFocus(focusEvent);
     // then
-    expect(spy).toBeCalledTimes(1);
+    expect(focusSpy).toBeCalledTimes(1);
   });
 });
