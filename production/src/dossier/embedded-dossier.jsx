@@ -13,6 +13,9 @@ const { microstrategy, Office } = window;
 
 const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
+const VIZ_SELECTION_RETRY_DELAY = 200; // ms
+const VIZ_SELECTION_RETRY_LIMIT = 10;
+
 export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +25,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
+    this.restoreVizSelection = this.restoreVizSelection.bind(this);
+    this.retryCounter = 0;
     this.embeddedDossier = null;
     this.state = { loadingFrame: true };
   }
@@ -182,15 +187,12 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
         this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
-        this.msgRouter.registerEventHandler(EventType.ON_PAGE_LOADED, console.log('on page loaded'));
-        this.msgRouter.registerEventHandler(EventType.ON_PAGE_SWITCHED, console.log('on page switched'));
-        this.msgRouter.registerEventHandler(EventType.ON_LAYOUT_CHANGED, console.log('on layout changed'));
       },
     };
 
     if (microstrategy && microstrategy.dossier) {
       const embeddedDossier = await microstrategy.dossier.create(props);
-      console.log('after create');
+      this.embeddedDossier = embeddedDossier;
 
       if (selectedViz && visualizationInfo) {
         const { pageKey, chapterKey, visualizationKey } = visualizationInfo;
@@ -206,17 +208,28 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         const selectedPage = embeddedDossier.getPageByNodeKey(selectedPageNodeKey);
 
         await embeddedDossier.navigateToPage(selectedPage);
-        console.log('after navigate');
 
-        await embeddedDossier.selectViz(visualizationKey);
-        console.log('after select');
+        await this.restoreVizSelection(visualizationKey);
       }
 
-      this.embeddedDossier = embeddedDossier;
       this.setState({ loadingFrame: false });
       handleEmbeddedDossierLoad();
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+    }
+  }
+
+  async restoreVizSelection(visualizationKey) {
+    try {
+      this.retryCounter++;
+      await this.embeddedDossier.selectViz(visualizationKey);
+    } catch (error) {
+      if (this.retryCounter > VIZ_SELECTION_RETRY_LIMIT) {
+        console.error(error);
+      } else {
+        await new Promise(resolve => setTimeout(resolve, VIZ_SELECTION_RETRY_DELAY));
+        await this.restoreVizSelection(visualizationKey);
+      }
     }
   }
 
