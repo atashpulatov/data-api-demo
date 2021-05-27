@@ -119,11 +119,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
-    let selectedVizChecked = selectedViz;
-    if (selectedViz && visualizationInfo) {
-      const { chapterKey, visualizationKey } = visualizationInfo;
-      selectedVizChecked = `${chapterKey}:${visualizationKey}`;
-    }
+
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
     const props = {
@@ -181,34 +177,44 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         addToLibrary: true,
       },
       enableVizSelection: true,
-      selectedViz: selectedVizChecked,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
         this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_PAGE_LOADED, console.log('on page loaded'));
+        this.msgRouter.registerEventHandler(EventType.ON_PAGE_SWITCHED, console.log('on page switched'));
+        this.msgRouter.registerEventHandler(EventType.ON_LAYOUT_CHANGED, console.log('on layout changed'));
       },
     };
+
     if (microstrategy && microstrategy.dossier) {
-      microstrategy.dossier
-        .create(props)
-        .then(dossier => {
-          if (selectedViz && visualizationInfo) {
-            const { pageKey, chapterKey } = visualizationInfo;
+      const embeddedDossier = await microstrategy.dossier.create(props);
+      console.log('after create');
 
-            const selectedPageNodeKey = dossier
-              .getChapterList()
-              .find(chapter => chapter.nodeKey.includes(chapterKey))
-              .children
-              .find(page => page.nodeKey.includes(pageKey))
-              .nodeKey;
+      if (selectedViz && visualizationInfo) {
+        const { pageKey, chapterKey, visualizationKey } = visualizationInfo;
 
-            dossier.navigateToPage(dossier.getPageByNodeKey(selectedPageNodeKey));
-          }
-          this.embeddedDossier = dossier;
-          this.setState({ loadingFrame: false });
-          handleEmbeddedDossierLoad();
-        });
+        const chapterList = embeddedDossier.getChapterList();
+
+        const selectedPageNodeKey = chapterList
+          .find(chapter => chapter.nodeKey.includes(chapterKey))
+          .children
+          .find(page => page.nodeKey.includes(pageKey))
+          .nodeKey;
+
+        const selectedPage = embeddedDossier.getPageByNodeKey(selectedPageNodeKey);
+
+        await embeddedDossier.navigateToPage(selectedPage);
+        console.log('after navigate');
+
+        await embeddedDossier.selectViz(visualizationKey);
+        console.log('after select');
+      }
+
+      this.embeddedDossier = embeddedDossier;
+      this.setState({ loadingFrame: false });
+      handleEmbeddedDossierLoad();
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
     }
