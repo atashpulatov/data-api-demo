@@ -107,4 +107,42 @@ describe('ScriptInjectionHelper', () => {
     // then
     expect(isLoginPage).toBe(false);
   });
+
+  it('should focus on Table Data element when overlay is present', () => {
+    // given
+    const promptEditorContainerElement = document.createElement('div');
+    const tableDataElement = document.createElement('td');
+    const focusEvent = {
+      target: {
+        contentDocument: {
+          getElementsByClassName: jest.fn(() => [promptEditorContainerElement]),
+          getElementsByTagName: jest.fn(() => [tableDataElement])
+        }
+      }
+    };
+    const focusSpy = jest.spyOn(tableDataElement, 'focus');
+    // when
+    scriptInjectionHelper.switchFocusToElementOnWindowFocus(focusEvent);
+    // then
+    expect(focusSpy).toBeCalledTimes(1);
+  });
+
+  it('should focus on Table of Contents element when overlay is absent', () => {
+    // given
+    const tableOfContentsElement = document.createElement('div');
+    const focusEvent = {
+      target: {
+        contentDocument: {
+          getElementsByClassName: jest.fn((className) => (
+            className === 'mstrd-PromptEditorContainer-overlay' ? [] : [tableOfContentsElement]
+          ))
+        }
+      }
+    };
+    const focusSpy = jest.spyOn(tableOfContentsElement, 'focus');
+    // when
+    scriptInjectionHelper.switchFocusToElementOnWindowFocus(focusEvent);
+    // then
+    expect(focusSpy).toBeCalledTimes(1);
+  });
 });
