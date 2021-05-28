@@ -29,7 +29,9 @@ rake post_pipeline
     end
 
     sonarqube do
-      other_properties 'sonar.javascript.lcov.reportPaths=production/coverage/lcov.info'
+      other_properties 'sonar.javascript.lcov.reportPaths=production/coverage/lcov.info
+                        sonar.exclusions=**/_tests_/*,**/*.test.*
+                        sonar.coverage.exclusions=**/public/*'
     end
   end
 
