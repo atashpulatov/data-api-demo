@@ -31,8 +31,6 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     OBJECT_OWNER_CONTAINER = 'div[id^="owner-object-property-"]'
     OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER = 'div[id^="subtotals-object-property-"]'
     OBJECT_PROPERTY_VALUE_CSS = '.object-property-value'
-    OBJECT_LIST_CSS = '.name-list-container'
-    OBJECT_COLLAPSED_LIST_CSS = OBJECT_LIST_CSS + '.collapsed'
     OBJECT_ID_VALUE = OBJECT_ID_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE_CSS
     OBJECT_OWNER_VALUE = OBJECT_OWNER_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE_CSS
     OBJECT_TOTALS_AND_SUBTOTALS_VALUE = OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE_CSS
