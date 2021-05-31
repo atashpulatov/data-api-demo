@@ -9,7 +9,7 @@ from framework.util.exception.mstr_exception import MstrException
 class Util:
     TO_ALPHA_REGEX = re.compile(r'\W')
     CURRENT_DATETIME_PATTERN = '%y%m%d_%H%M%S'
-    EXTRACT_ENVIRONMENT_ID_PATTERN = '^%s_(.+?)$'
+    EXTRACT_ENVIRONMENT_ID_PATTERN = '^%s_\n(.+?)$'
 
     @staticmethod
     def log(text):

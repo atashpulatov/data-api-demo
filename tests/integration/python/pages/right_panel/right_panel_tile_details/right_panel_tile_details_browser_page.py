@@ -4,7 +4,7 @@ from framework.util.const import Const
 
 class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     TILE_DETAILS_CONTAINER = 'div[id^="object-details-panel-container-"]'
-    OBJECT_DETAILS_PANEL = '.object-details-panel'
+    OBJECT_DETAILS_PANEL_CSS = '.object-details-panel'
 
     TOGGLE_DETAILS_BUTTONS = '.toggle-show-details-button'
     TOGGLE_DETAILS_TOOLTIPS = TOGGLE_DETAILS_BUTTONS + ' > .__react_component_tooltip.show.place-bottom.type-dark'
@@ -30,10 +30,12 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
     OBJECT_ID_CONTAINER = 'div[id^="id-object-property-"]'
     OBJECT_OWNER_CONTAINER = 'div[id^="owner-object-property-"]'
     OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER = 'div[id^="subtotals-object-property-"]'
-    OBJECT_PROPERTY_VALUE = '.object-property-value'
-    OBJECT_ID_VALUE = OBJECT_ID_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
-    OBJECT_OWNER_VALUE = OBJECT_OWNER_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
-    OBJECT_TOTALS_AND_SUBTOTALS_VALUE = OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE
+    OBJECT_PROPERTY_VALUE_CSS = '.object-property-value'
+    OBJECT_LIST_CSS = '.name-list-container'
+    OBJECT_COLLAPSED_LIST_CSS = OBJECT_LIST_CSS + '.collapsed'
+    OBJECT_ID_VALUE = OBJECT_ID_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE_CSS
+    OBJECT_OWNER_VALUE = OBJECT_OWNER_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE_CSS
+    OBJECT_TOTALS_AND_SUBTOTALS_VALUE = OBJECT_TOTALS_AND_SUBTOTALS_CONTAINER + ' > ' + OBJECT_PROPERTY_VALUE_CSS
 
     TOTALS_AND_SUBTOTALS_ON = 'ON'
 
@@ -113,7 +115,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
         tile_details_container = self._get_tile_details_container(object_number)
 
         object_detail_panel = tile_details_container.get_elements_by_css(
-            RightPanelTileDetailsBrowserPage.OBJECT_DETAILS_PANEL
+            RightPanelTileDetailsBrowserPage.OBJECT_DETAILS_PANEL_CSS
         )
 
         return len(object_detail_panel) == 1
