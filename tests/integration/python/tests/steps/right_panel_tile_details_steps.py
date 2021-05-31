@@ -44,24 +44,7 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_certified, False)
 
 
-@step('I verified that object {object_number} has "{object_list_name}" list with value "{object_list_value}"')
-def step_impl(context, object_number, object_list_name, object_list_value):
-    found_object_list_value = context.pages.right_panel_tile_details_page().get_object_list_property_value(
-        object_number,
-        object_list_name
-    )
-
-    AssertUtil.assert_simple(found_object_list_value, object_list_value)
-
-
-@step('I verified that object {object_number} has full location "{object_location}" displayed')
-def step_impl(context, object_number, object_location):
-    found_object_location = context.pages.right_panel_tile_details_page().get_object_location(object_number)
-
-    AssertUtil.assert_simple(found_object_location, object_location)
-
-
-@step('object {object_number} has "{name_list_type}" list with value "{expected_value}"')
+@step('I verified that object {object_number} has "{name_list_type}" list with value "{expected_value}"')
 def step_impl(context, object_number, name_list_type, expected_value):
     attributes = context.pages.right_panel_tile_details_page().get_object_list_property_value(
         object_number,
@@ -121,7 +104,7 @@ def step_impl(context, object_number):
     AssertUtil.assert_simple(is_details_panel_displayed, False)
 
 
-@step('object {object_number} has full location "{expected_object_location}" displayed')
+@step('I verified that object {object_number} has full location "{expected_object_location}" displayed')
 def step_impl(context, object_number, expected_object_location):
     object_location = context.pages.right_panel_tile_details_page().get_object_location(object_number)
 
