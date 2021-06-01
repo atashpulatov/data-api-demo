@@ -20,7 +20,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     FILTERS_BUTTON_ELEM = 'Filters'
 
-    SEARCH_ELEM = '//Group/Edit'
+    SEARCH_ELEM = '//Document/Edit'
 
     ARIA_PROPERTIES_ATTRIBUTE = 'AriaProperties'
     ARIA_PROPERTIES_SEPARATOR = ';'
