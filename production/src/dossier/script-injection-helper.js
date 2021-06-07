@@ -63,12 +63,36 @@ class ScriptInjectionHelper {
       for (const mutation of mutationList) {
         if (mutation.addedNodes && mutation.addedNodes.length && mutation.addedNodes[0].nodeName === 'IFRAME') {
           const iframe = mutation.addedNodes[0];
+          iframe.tabIndex = 0;
+          iframe.focusEventListenerAdded = false;
           callback(iframe);
         }
       }
     };
     const observer = new MutationObserver(onMutation);
     observer.observe(container, config);
+  }
+
+  /**
+  * When focused on window switch focus to different element in this window.
+  * For prompted dossiers this element will be first Table Data tag.
+  * For non-prompted dossiers it will be the Table of Content button.
+  * Focusing on the window itself is not visible for the user therefore should be skipped.
+  *
+  * @param {FocusEvent} focusEvent
+  */
+  switchFocusToElementOnWindowFocus = (focusEvent) => {
+    const iframeDocument = focusEvent.target.contentDocument;
+    const overlay = iframeDocument.getElementsByClassName('mstrd-PromptEditorContainer-overlay').length;
+    let elementToFocusOn;
+    if (overlay) {
+      [elementToFocusOn] = iframeDocument.getElementsByTagName('TD');
+    } else {
+      [elementToFocusOn] = iframeDocument.getElementsByClassName('icon-tb_toc_n');
+    }
+    if (elementToFocusOn) {
+      elementToFocusOn.focus();
+    }
   }
 }
 
