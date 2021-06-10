@@ -234,6 +234,10 @@ export class PromptsWindowNotConnected extends Component {
   onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
+      if (iframe.focusEventListenerAdded === false) {
+        iframe.focusEventListenerAdded = true;
+        iframe.addEventListener('focus', scriptInjectionHelper.switchFocusToElementOnWindowFocus);
+      }
       this.embeddedDocument = contentDocument;
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
         scriptInjectionHelper.applyStyle(contentDocument, 'promptsWindow.css');
