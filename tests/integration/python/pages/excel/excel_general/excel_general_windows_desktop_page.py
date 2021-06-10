@@ -27,8 +27,7 @@ class ExcelGeneralWindowsDesktopPage(BaseWindowsDesktopPage):
         ImageElement.reset_excel_root_element(self.driver)
 
         self.get_element_by_name(
-            ExcelGeneralWindowsDesktopPage.FILE_TAB_ELEM,
-            image_name=self.prepare_image_name(ExcelGeneralWindowsDesktopPage.FILE_TAB_ELEM)
+            ExcelGeneralWindowsDesktopPage.FILE_TAB_ELEM
         ).click()
 
         self.get_element_by_name(

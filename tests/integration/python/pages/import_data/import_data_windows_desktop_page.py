@@ -99,6 +99,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         popup_main_element = self.get_add_in_main_element()
 
         search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM)
+        search_element.click()
 
         # Remove search box content.
         search_element.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
@@ -133,6 +134,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
         """
+        Util.pause(10)
 
         self.find_object(object_id)
 

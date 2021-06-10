@@ -37,8 +37,12 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     def get_cells_values(self, cells):
         result = []
 
+        self._navigate_to_home_tab_and_press('hfo')
+
         for cell in cells:
             result.append(self._get_cell_value(cell))
+
+        self._navigate_to_home_tab_and_press('hfo')
 
         return result
 
@@ -53,7 +57,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     def go_to_cell(self, cell):
         cell_upper = cell.upper()
 
-        self._navigate_to_home_tab_and_press('fdg')
+        self.press_f5()
 
         self.send_keys(cell_upper)
 
@@ -270,6 +274,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self._navigate_to_home_tab_and_press('ff')
 
     def _navigate_to_home_tab_and_press(self, keys):
-        self.send_keys(Keys.ALT + 'h')
-
-        self.send_keys(Keys.ALT + keys)
+        self.get_element_by_name(
+            'Home',
+            image_name=self.prepare_image_name('Home')
+        ).click()
+        self.send_keys(Keys.ALT)
+        self.send_keys(keys)

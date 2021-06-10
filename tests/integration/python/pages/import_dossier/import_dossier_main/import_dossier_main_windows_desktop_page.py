@@ -4,8 +4,9 @@ from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page im
 
 
 class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
-    VISUALIZATION_TILE = '//Group/Pane/Pane/Group'
-
+    VISUALIZATIONS_CONTAINER = '//Document/Document/Document'
+    VISUALIZATION_TILE = '/Group/Group/Group/Group'
+    IMPORT_PATH_HEADER = '//Pane/Document/Document/Document'
     IMPORT_BUTTON = 'Import'
     RESET_DOSSIER = 'Reset'
     RESET_DOSSIER_CONFIRM = 'Yes'
@@ -46,13 +47,19 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
     def find_tile_by_name(self, visualization_name):
         popup_main_element = self.get_add_in_main_element()
 
-        all_tiles = popup_main_element.get_elements_by_xpath(ImportDossierMainWindowsDesktopPage.VISUALIZATION_TILE)
+        self.pause(20)
 
-        for tile in all_tiles:
-            if tile.text.startswith(visualization_name):
-                return tile
+        visualizations_container = popup_main_element.get_element_by_xpath(
+            ImportDossierMainWindowsDesktopPage.VISUALIZATIONS_CONTAINER
+        )
+        visualization_tiles = visualizations_container.get_elements_by_xpath(
+            ImportDossierMainWindowsDesktopPage.VISUALIZATION_TILE
+        )
+        for visualization_tile in visualization_tiles:
+            if visualization_tile.text.startswith(visualization_name):
+                return visualization_tile
 
-        raise MstrException('Visualization not found: %s.' % visualization_name)
+        raise MstrException(f'Visualization not found: {visualization_name}.')
 
     def wait_for_dossier_to_load(self):
         self.pause(30)  # TODO wait when ready
