@@ -21,6 +21,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     FILTERS_BUTTON_ELEM = 'Filters'
 
     SEARCH_ELEM = '//Document/Edit'
+    SEARCH_ELEM_OLD_EXCEL = '//Group/Edit'
 
     ARIA_PROPERTIES_ATTRIBUTE = 'AriaProperties'
     ARIA_PROPERTIES_SEPARATOR = ';'
@@ -98,8 +99,14 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         popup_main_element = self.get_add_in_main_element()
 
-        search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM)
-        search_element.click()
+        search_element = popup_main_element.get_element_by_xpath(
+            ImportDataWindowsDesktopPage.SEARCH_ELEM,
+            timeout=Const.MEDIUM_TIMEOUT,
+            safe=True
+        ).click()
+
+        if not search_element:
+            search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM_OLD_EXCEL)
 
         # Remove search box content.
         search_element.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
