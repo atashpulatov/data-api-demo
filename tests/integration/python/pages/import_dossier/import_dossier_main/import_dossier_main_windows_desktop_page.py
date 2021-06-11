@@ -5,8 +5,7 @@ from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page im
 
 class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
     VISUALIZATIONS_CONTAINER = '//Document/Document/Document'
-    VISUALIZATION_TILE = '/Group/Group/Group/Group'
-    IMPORT_PATH_HEADER = '//Pane/Document/Document/Document'
+    VISUALIZATION_TILE = '//Group/Pane/Group'
     IMPORT_BUTTON = 'Import'
     RESET_DOSSIER = 'Reset'
     RESET_DOSSIER_CONFIRM = 'Yes'
@@ -46,8 +45,6 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def find_tile_by_name(self, visualization_name):
         popup_main_element = self.get_add_in_main_element()
-
-        self.pause(20)
 
         visualizations_container = popup_main_element.get_element_by_xpath(
             ImportDossierMainWindowsDesktopPage.VISUALIZATIONS_CONTAINER
