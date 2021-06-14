@@ -53,7 +53,6 @@ class PromptBrowserPage(BaseBrowserPage):
             if len(elements) == 0:
                 return False
             return elements[0].is_enabled_by_attribute_html()
-            # use negated is_enabled_by_attribute_html function
         except MstrException:
             return False
 
