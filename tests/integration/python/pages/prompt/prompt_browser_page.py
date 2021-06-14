@@ -43,7 +43,7 @@ class PromptBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
 
         self.wait_for_element_to_have_attribute_value_by_css(
-            PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
+            PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None, 30
         )
 
     def is_run_button_present_and_enabled(self):
