@@ -103,9 +103,11 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             ImportDataWindowsDesktopPage.SEARCH_ELEM,
             timeout=Const.MEDIUM_TIMEOUT,
             safe=True
-        ).click()
+        )
 
-        if not search_element:
+        if search_element:
+            search_element.click()
+        else:
             search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM_OLD_EXCEL)
 
         # Remove search box content.
