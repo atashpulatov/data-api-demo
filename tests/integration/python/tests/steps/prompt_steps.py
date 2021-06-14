@@ -14,9 +14,9 @@ def step_impl(context):
 
 @step('I verified Run button is disabled or not present')
 def step_impl(context):
-    disabled = context.pages.prompt_page().is_run_button_disabled_or_not_present()
+    present_and_enabled = context.pages.prompt_page().is_run_button_present_and_enabled()
 
-    AssertUtil.assert_simple(disabled, True)
+    AssertUtil.assert_simple(present_and_enabled, False)
 
 
 @step('I clicked Run button for prompted dossier if prompts not already answered')

@@ -46,15 +46,16 @@ class PromptBrowserPage(BaseBrowserPage):
             PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
         )
 
-    def is_run_button_disabled_or_not_present(self):
+    def is_run_button_present_and_enabled(self):
         try:
             self.focus_on_add_in_popup_frame()
             elements = self.get_elements_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON_CSS)
             if len(elements) == 0:
-                return True
-            return not elements[0].is_enabled_by_attribute_html(PromptBrowserPage.PROMPT_RUN_BUTTON_DISABLED) == 'true' # use negated is_enabled_by_attribute_html function
+                return False
+            return elements[0].is_enabled_by_attribute_html()
+            # use negated is_enabled_by_attribute_html function
         except MstrException:
-            return True
+            return False
 
     def click_run_button(self):
         self.focus_on_add_in_popup_frame()
