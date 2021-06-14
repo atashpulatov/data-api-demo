@@ -46,6 +46,16 @@ class PromptBrowserPage(BaseBrowserPage):
             PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
         )
 
+    def is_run_button_disabled_or_not_present(self):
+        try:
+            self.focus_on_add_in_popup_frame()
+            elements = self.get_elements_by_css(PromptBrowserPage.PROMPT_RUN_BUTTON_CSS)
+            if len(elements) == 0:
+                return True
+            return not elements[0].is_enabled_by_attribute_html(PromptBrowserPage.PROMPT_RUN_BUTTON_DISABLED) == 'true' # use negated is_enabled_by_attribute_html function
+        except MstrException:
+            return True
+
     def click_run_button(self):
         self.focus_on_add_in_popup_frame()
 
@@ -56,6 +66,12 @@ class PromptBrowserPage(BaseBrowserPage):
 
         if self._check_if_prompts_answer_window_is_open():
             self.get_element_by_css(PromptBrowserPage.PROMPTED_DOSSIER_RUN_BUTTON_CSS).click()
+
+    def wait_for_run_button_for_prompted_dossier(self):
+        self.focus_on_dossier_frame()
+        self.wait_for_element_to_have_attribute_value_by_css(
+            PromptBrowserPage.PROMPTED_DOSSIER_RUN_BUTTON_CSS, 'disabled', None
+        )
 
     def _check_if_prompts_answer_window_is_open(self):
         return self.check_if_element_exists_by_id(PromptBrowserPage.PROMPT_MAIN_CONTAINER_ID,

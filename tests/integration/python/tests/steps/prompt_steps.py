@@ -1,4 +1,5 @@
 from behave import *
+from framework.util.assert_util import AssertUtil
 
 
 @step('I waited for Run button to be enabled')
@@ -11,9 +12,21 @@ def step_impl(context):
     context.pages.prompt_page().click_run_button()
 
 
+@step('I verified Run button is disabled or not present')
+def step_impl(context):
+    disabled = context.pages.prompt_page().is_run_button_disabled_or_not_present()
+
+    AssertUtil.assert_simple(disabled, True)
+
+
 @step('I clicked Run button for prompted dossier if prompts not already answered')
 def step_impl(context):
     context.pages.prompt_page().click_run_button_for_prompted_dossier_if_not_answered()
+
+
+@step('I waited for Run button for dossier to be enabled')
+def step_impl(context):
+    context.pages.prompt_page().wait_for_run_button_for_prompted_dossier()
 
 
 @step('I selected "{item}" as an answer for "{prompt_number}. {prompt_name}" prompt - object prompt')
