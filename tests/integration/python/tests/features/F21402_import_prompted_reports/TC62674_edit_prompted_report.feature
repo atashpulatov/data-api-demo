@@ -1,7 +1,6 @@
 @ci_pipeline_rv_windows_chrome
 @ci_pipeline_rv_mac_chrome
 @mac_chrome
-@windows_chrome
 @release_validation
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
@@ -24,7 +23,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I typed "2015" for "9. Number" prompt - value prompt
       And I clicked Run button
      # Verify wheter next step can be reliably tested due to button being enabled with varying, usually short delays
-     Then I verified Run button is disabled or not present
+# TODO Then I verified Run button is disabled
       And I verified that Columns & Filters Selection is visible
       And I verified popup title is "Report with all type of prompts (except nested)"
       And I verified that Import button is disabled
@@ -55,7 +54,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I typed "2016" for "9. Number" prompt - value prompt
       And I clicked Run button
       # Verify wheter next step can be reliably tested due to button being enabled with varying, usually short delays
-      Then I verified Run button is disabled or not present
+# TODO Then I verified Run button is disabled
       And I verified that Columns & Filters Selection is visible
       And I verified popup title is "Report with all type of prompts (except nested)"
       And I verified that counter of "metrics" shows "1" of "3" selected
