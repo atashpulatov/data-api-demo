@@ -15,7 +15,7 @@ Feature: F29365 - Import compound grid
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "169D6C564AEFA0FAB707F59B2A74A8B8" and selected "Dossier with Compound Grid - Exclude/Keep Only"
-      # TODO Then I verified Prepare Data button is disabled
+     Then I verified Prepare Data button is disabled
 
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
