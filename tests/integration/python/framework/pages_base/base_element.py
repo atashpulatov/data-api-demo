@@ -14,6 +14,7 @@ from framework.util.util import Util
 class BaseElement:
     BACKGROUND_COLOR_PROPERTY = 'background-color'
     OPACITY_PROPERTY = 'opacity'
+    CHECKED_ATTRIBUTE = 'checked'
 
     def __init__(self, raw_element, driver):
         self.__element = raw_element
@@ -129,6 +130,9 @@ class BaseElement:
 
     def is_enabled_by_attribute_html(self):
         return not self.get_attribute(Const.ATTRIBUTE_DISABLED) == Const.ATTRIBUTE_VALUE_TRUE
+
+    def is_checked(self):
+        return self.get_attribute(BaseElement.CHECKED_ATTRIBUTE) == Const.ATTRIBUTE_VALUE_TRUE
 
     def get_element_by_css(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
         return self.get_element(By.CSS_SELECTOR, selector, timeout, safe=safe)

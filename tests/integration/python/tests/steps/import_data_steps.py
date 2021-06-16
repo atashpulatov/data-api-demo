@@ -54,9 +54,9 @@ def step_impl(context):
 
 @step('I verified Prepare Data button is disabled')
 def step_impl(context):
-    enabled = context.pages.import_data_page().verify_if_prepare_data_button_is_enabled()
+    is_prepare_data_enabled = context.pages.import_data_page().verify_if_prepare_data_button_is_enabled()
 
-    AssertUtil.assert_simple(enabled, False)
+    AssertUtil.assert_simple(is_prepare_data_enabled, False)
 
 @step('I clicked Prepare Data button')
 def step_impl(context):
