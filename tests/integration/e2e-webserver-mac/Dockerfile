@@ -1,6 +1,7 @@
 FROM nexus.internal.microstrategy.com:49080/tomcat:9-jdk11-openjdk
 EXPOSE 8005
 EXPOSE 8443
+EXPOSE 80
 COPY server.xml mstr-office.jks tomcat-users.xml  /usr/local/tomcat/conf/
 # COPY mstr-office.jks /usr/local/tomcat/conf/mstr-office.jks 
 # COPY tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
