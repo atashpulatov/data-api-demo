@@ -1,9 +1,6 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
 @disabled_windows_desktop
 @mac_chrome
 @windows_chrome
-@release_validation
 Feature: TF9328 - Release Validation
 
   Scenario: [TC40305] - Selecting objects imported to the different worksheets and to adjacent columns/rows

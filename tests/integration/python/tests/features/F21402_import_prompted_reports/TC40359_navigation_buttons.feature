@@ -24,7 +24,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       And I verified that Columns & Filters Selection is visible
       And I selected all attributes
       And I selected all metrics
-      And I selected filters { "Category": ["Books", "Electronics"] }
+      And I selected filters { "Category": ["Electronics", "Books"] }
      Then I clicked Back button
 
     Given I clicked Import button without checking results

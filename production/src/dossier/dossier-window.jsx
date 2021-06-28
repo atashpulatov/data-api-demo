@@ -88,7 +88,7 @@ export default class DossierWindowNotConnected extends React.Component {
         let isSupported = true;
 
         const checkIfVizDataCanBeImported = async () => {
-          mstrObjectRestService.fetchVisualizationDefinition({
+          await mstrObjectRestService.fetchVisualizationDefinition({
             projectId: chosenProjectId,
             objectId: chosenObjectId,
             instanceId,

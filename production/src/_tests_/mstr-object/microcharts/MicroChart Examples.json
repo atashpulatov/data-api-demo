@@ -1,0 +1,961 @@
+{
+  "k": "AFA3E1E2EB2E4FC2851145A68EEC12D9",
+  "n": "MicroChart Examples",
+  "key": "AFA3E1E2EB2E4FC2851145A68EEC12D9",
+  "name": "MicroChart Examples",
+  "visualizationType": "microcharts",
+  "definition": {
+    "grid": {
+      "crossTab": true,
+      "rows": [
+        {
+          "name": "Departure Hour",
+          "id": "70B32B3311EB13BFA8840080EF65A64C",
+          "type": "attribute",
+          "forms": [
+            {
+              "id": "45C11FA478E745FEA08D781CEA190FE5",
+              "name": "ID",
+              "dataType": "UTF8Char",
+              "baseFormCategory": "ID",
+              "baseFormType": "text"
+            }
+          ],
+          "elements": [
+            {
+              "formValues": [
+                "0:00-0:6:00"
+              ],
+              "id": "h0\\:00-0\\:6\\:00;70B32B3311EB13BFA8840080EF65A64C"
+            }
+          ]
+        },
+        {
+          "name": "Day of Week",
+          "id": "70B3302911EB13BFA8840080EF65A64C",
+          "type": "attribute",
+          "forms": [
+            {
+              "id": "45C11FA478E745FEA08D781CEA190FE5",
+              "name": "ID",
+              "dataType": "UTF8Char",
+              "baseFormCategory": "ID",
+              "baseFormType": "text"
+            }
+          ],
+          "elements": [
+            {
+              "formValues": [
+                "Sunday"
+              ],
+              "id": "hSunday;70B3302911EB13BFA8840080EF65A64C"
+            }
+          ]
+        },
+        {
+          "name": "Airline Name",
+          "id": "70B3220F11EB13BFA8840080EF65A64C",
+          "type": "attribute",
+          "forms": [
+            {
+              "id": "45C11FA478E745FEA08D781CEA190FE5",
+              "name": "ID",
+              "dataType": "UTF8Char",
+              "baseFormCategory": "ID",
+              "baseFormType": "text"
+            }
+          ],
+          "elements": [
+            {
+              "formValues": [
+                "AirTran Airways Corporation"
+              ],
+              "id": "hAirTran Airways Corporation;70B3220F11EB13BFA8840080EF65A64C"
+            }
+          ]
+        }
+      ],
+      "columnSets": [
+        {
+          "key": "82EC457E2A3B4F469C748EC8ACB71587",
+          "name": "Flights Cancelled Trend by Month",
+          "metricsPosition": {
+            "axis": "columns",
+            "index": 1
+          },
+          "columns": [
+            {
+              "name": "Month",
+              "id": "70B33B9111EB13BFA8840080EF65A64C",
+              "type": "attribute",
+              "forms": [
+                {
+                  "id": "45C11FA478E745FEA08D781CEA190FE5",
+                  "name": "ID",
+                  "dataType": "UTF8Char",
+                  "baseFormCategory": "ID",
+                  "baseFormType": "text"
+                }
+              ],
+              "elements": [
+                {
+                  "formValues": [
+                    "January"
+                  ],
+                  "id": "hJanuary;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "February"
+                  ],
+                  "id": "hFebruary;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "March"
+                  ],
+                  "id": "hMarch;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "April"
+                  ],
+                  "id": "hApril;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "May"
+                  ],
+                  "id": "hMay;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "June"
+                  ],
+                  "id": "hJune;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "July"
+                  ],
+                  "id": "hJuly;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "August"
+                  ],
+                  "id": "hAugust;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "September"
+                  ],
+                  "id": "hSeptember;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "October"
+                  ],
+                  "id": "hOctober;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "November"
+                  ],
+                  "id": "hNovember;70B33B9111EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "December"
+                  ],
+                  "id": "hDecember;70B33B9111EB13BFA8840080EF65A64C"
+                }
+              ]
+            },
+            {
+              "name": "Metrics",
+              "id": "00000000000000000000000000000000",
+              "type": "templateMetrics",
+              "elements": [
+                {
+                  "name": "Flights Cancelled",
+                  "id": "70B3567B11EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 0.0,
+                  "max": 26.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                }
+              ]
+            }
+          ],
+          "sorting": {
+            "rows": [],
+            "columns": [],
+            "pageBy": []
+          },
+          "thresholds": []
+        },
+        {
+          "key": "B074A8E9FCC649B588619CDF0AA34177",
+          "name": "Column Set 2",
+          "metricsPosition": {
+            "axis": "columns",
+            "index": 0
+          },
+          "columns": [
+            {
+              "name": "Metrics",
+              "id": "00000000000000000000000000000000",
+              "type": "templateMetrics",
+              "elements": [
+                {
+                  "name": "Flights Cancelled",
+                  "id": "70B3567B11EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "thresholds": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5
+                  ],
+                  "min": 0.0,
+                  "max": 54.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                }
+              ]
+            }
+          ],
+          "sorting": {
+            "rows": [],
+            "columns": [],
+            "pageBy": []
+          },
+          "thresholds": [
+            {
+              "id": "70B3567B11EB13BFA8840080EF65A64C#0",
+              "name": "threshold 0",
+              "type": "metric",
+              "replacement": {
+                "textType": 4,
+                "text": "..\/images\/quickThresholdImgs\/red_arrow.png"
+              },
+              "format": {},
+              "condition": "(Bottom 20 Percent of {Flights Cancelled})"
+            },
+            {
+              "id": "70B3567B11EB13BFA8840080EF65A64C#1",
+              "name": "threshold 1",
+              "type": "metric",
+              "replacement": {
+                "textType": 4,
+                "text": "..\/images\/quickThresholdImgs\/yellow_arrow.png"
+              },
+              "format": {},
+              "condition": "(Between 20 and 80 Percent of {Flights Cancelled})"
+            },
+            {
+              "id": "70B3567B11EB13BFA8840080EF65A64C#2",
+              "name": "threshold 2",
+              "type": "metric",
+              "replacement": {
+                "textType": 4,
+                "text": "..\/images\/quickThresholdImgs\/green_arrow.png"
+              },
+              "format": {},
+              "condition": "(Exclude Bottom 80 Percent of {Flights Cancelled})"
+            },
+            {
+              "id": "70B3567B11EB13BFA8840080EF65A64C#3",
+              "name": "threshold 0",
+              "type": "metric",
+              "replacement": {
+                "textType": 4,
+                "text": "..\/images\/quickThresholdImgs\/red_arrow.png"
+              },
+              "format": {},
+              "condition": "(Bottom 20 Percent of {Flights Cancelled})"
+            },
+            {
+              "id": "70B3567B11EB13BFA8840080EF65A64C#4",
+              "name": "threshold 1",
+              "type": "metric",
+              "replacement": {
+                "textType": 4,
+                "text": "..\/images\/quickThresholdImgs\/yellow_arrow.png"
+              },
+              "format": {},
+              "condition": "(Between 20 and 80 Percent of {Flights Cancelled})"
+            },
+            {
+              "id": "70B3567B11EB13BFA8840080EF65A64C#5",
+              "name": "threshold 2",
+              "type": "metric",
+              "replacement": {
+                "textType": 4,
+                "text": "..\/images\/quickThresholdImgs\/green_arrow.png"
+              },
+              "format": {},
+              "condition": "(Exclude Bottom 80 Percent of {Flights Cancelled})"
+            }
+          ]
+        },
+        {
+          "key": "A05C0F1B6D6F4427B55D91940305B3F1",
+          "name": "On-Time",
+          "metricsPosition": {
+            "axis": "columns",
+            "index": 1
+          },
+          "columns": [
+            {
+              "name": "Year",
+              "id": "70B3351F11EB13BFA8840080EF65A64C",
+              "type": "attribute",
+              "forms": [
+                {
+                  "id": "45C11FA478E745FEA08D781CEA190FE5",
+                  "name": "ID",
+                  "dataType": "UTF8Char",
+                  "baseFormCategory": "ID",
+                  "baseFormType": "text"
+                }
+              ],
+              "elements": [
+                {
+                  "formValues": [
+                    "2009"
+                  ],
+                  "id": "h2009;70B3351F11EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "2010"
+                  ],
+                  "id": "h2010;70B3351F11EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "2011"
+                  ],
+                  "id": "h2011;70B3351F11EB13BFA8840080EF65A64C"
+                }
+              ]
+            },
+            {
+              "name": "Metrics",
+              "id": "00000000000000000000000000000000",
+              "type": "templateMetrics",
+              "elements": [
+                {
+                  "name": "On-Time",
+                  "id": "70B33F8D11EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 0.0,
+                  "max": 705.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                }
+              ]
+            }
+          ],
+          "sorting": {
+            "rows": [],
+            "columns": [],
+            "pageBy": []
+          },
+          "thresholds": []
+        },
+        {
+          "key": "4AA87456C9D24B2A99DF9C08EB3CE078",
+          "name": "On-Time Performance",
+          "metricsPosition": {
+            "axis": "columns",
+            "index": 0
+          },
+          "columns": [
+            {
+              "name": "Metrics",
+              "id": "00000000000000000000000000000000",
+              "type": "templateMetrics",
+              "elements": [
+                {
+                  "name": "Number of Flights",
+                  "id": "70B3486111EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 1.0,
+                  "max": 1841.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                },
+                {
+                  "name": "Flights Delayed",
+                  "id": "70B34D9311EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 0.0,
+                  "max": 868.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                },
+                {
+                  "name": "Flights Cancelled",
+                  "id": "70B3567B11EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 0.0,
+                  "max": 54.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                },
+                {
+                  "name": "On-Time",
+                  "id": "70B33F8D11EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 0.0,
+                  "max": 1382.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                }
+              ]
+            }
+          ],
+          "sorting": {
+            "rows": [],
+            "columns": [],
+            "pageBy": []
+          },
+          "thresholds": []
+        },
+        {
+          "key": "078D99FEDB0343BB8BDF27953745A7D0",
+          "name": "4th MicroChart",
+          "metricsPosition": {
+            "axis": "columns",
+            "index": 1
+          },
+          "columns": [
+            {
+              "name": "Origin Airport",
+              "id": "70B3165611EB13BFA8840080EF65A64C",
+              "type": "attribute",
+              "forms": [
+                {
+                  "id": "45C11FA478E745FEA08D781CEA190FE5",
+                  "name": "ID",
+                  "dataType": "UTF8Char",
+                  "baseFormCategory": "ID",
+                  "baseFormType": "text"
+                }
+              ],
+              "elements": [
+                {
+                  "formValues": [
+                    "BWI"
+                  ],
+                  "id": "hBWI;70B3165611EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "DCA"
+                  ],
+                  "id": "hDCA;70B3165611EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "IAD"
+                  ],
+                  "id": "hIAD;70B3165611EB13BFA8840080EF65A64C"
+                }
+              ]
+            },
+            {
+              "name": "Metrics",
+              "id": "00000000000000000000000000000000",
+              "type": "templateMetrics",
+              "elements": [
+                {
+                  "name": "On-Time",
+                  "id": "70B33F8D11EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 0.0,
+                  "max": 1233.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                }
+              ]
+            }
+          ],
+          "sorting": {
+            "rows": [],
+            "columns": [],
+            "pageBy": []
+          },
+          "thresholds": []
+        },
+        {
+          "key": "7DCD35876FD54E69BE4D6ECF9C766F0D",
+          "name": "Column Set 3",
+          "metricsPosition": {
+            "axis": "columns",
+            "index": 0
+          },
+          "columns": [
+            {
+              "name": "Metrics",
+              "id": "00000000000000000000000000000000",
+              "type": "templateMetrics",
+              "elements": [
+                {
+                  "name": "Avg Delay (min)",
+                  "id": "70B35D5B11EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 2.0,
+                  "max": 3373.4218614719,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 6,
+                    "decimalPlaces": 2,
+                    "formatString": "0.00E+0#"
+                  }
+                }
+              ]
+            }
+          ],
+          "sorting": {
+            "rows": [],
+            "columns": [],
+            "pageBy": []
+          },
+          "thresholds": []
+        },
+        {
+          "key": "BCB7150CC8264295BEC5189D2FD2A445",
+          "name": "test",
+          "metricsPosition": {
+            "axis": "columns",
+            "index": 0
+          },
+          "columns": [
+            {
+              "name": "Metrics",
+              "id": "00000000000000000000000000000000",
+              "type": "templateMetrics",
+              "elements": [
+                {
+                  "name": "On-Time",
+                  "id": "70B33F8D11EB13BFA8840080EF65A64C",
+                  "type": "metric",
+                  "min": 0.0,
+                  "max": 1233.0,
+                  "dataType": "double",
+                  "numberFormatting": {
+                    "category": 7,
+                    "decimalPlaces": 0,
+                    "formatString": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Origin Airport",
+              "id": "70B3165611EB13BFA8840080EF65A64C",
+              "type": "attribute",
+              "forms": [
+                {
+                  "id": "45C11FA478E745FEA08D781CEA190FE5",
+                  "name": "ID",
+                  "dataType": "UTF8Char",
+                  "baseFormCategory": "ID",
+                  "baseFormType": "text"
+                }
+              ],
+              "elements": [
+                {
+                  "formValues": [
+                    "BWI"
+                  ],
+                  "id": "hBWI;70B3165611EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "DCA"
+                  ],
+                  "id": "hDCA;70B3165611EB13BFA8840080EF65A64C"
+                },
+                {
+                  "formValues": [
+                    "IAD"
+                  ],
+                  "id": "hIAD;70B3165611EB13BFA8840080EF65A64C"
+                }
+              ]
+            }
+          ],
+          "sorting": {
+            "rows": [],
+            "columns": [],
+            "pageBy": []
+          },
+          "thresholds": []
+        }
+      ]
+    }
+  },
+  "data": {
+    "paging": {
+      "total": 1149,
+      "current": 1,
+      "offset": 0,
+      "limit": 1
+    },
+    "headers": {
+      "rows": [
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "columnSets": [
+        [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            0
+          ],
+          [
+            5,
+            0
+          ],
+          [
+            6,
+            0
+          ],
+          [
+            7,
+            0
+          ],
+          [
+            8,
+            0
+          ],
+          [
+            9,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            11,
+            0
+          ]
+        ],
+        [
+          [
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        [
+          [
+            0
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        [
+          [
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ]
+        ]
+      ]
+    },
+    "metricValues": {
+      "columnSets": [
+        {
+          "raw": [
+            [
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              null,
+              null,
+              null,
+              null,
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "formatted": [
+            [
+              "1",
+              "1",
+              "0",
+              "0",
+              "",
+              "",
+              "",
+              "",
+              "0",
+              "0",
+              "0",
+              "1"
+            ]
+          ],
+          "extras": [
+            [
+              {},
+              {},
+              {},
+              {},
+              {},
+              {},
+              {},
+              {},
+              {},
+              {},
+              {},
+              {}
+            ]
+          ]
+        },
+        {
+          "raw": [
+            [
+              3.0
+            ]
+          ],
+          "formatted": [
+            [
+              "..\/images\/quickThresholdImgs\/red_arrow.png"
+            ]
+          ],
+          "extras": [
+            [
+              {
+                "ti": 0
+              }
+            ]
+          ]
+        },
+        {
+          "raw": [
+            [
+              15.0,
+              11.0,
+              null
+            ]
+          ],
+          "formatted": [
+            [
+              "15",
+              "11",
+              ""
+            ]
+          ],
+          "extras": [
+            [
+              {},
+              {},
+              {}
+            ]
+          ]
+        },
+        {
+          "raw": [
+            [
+              30.0,
+              4.0,
+              3.0,
+              26.0
+            ]
+          ],
+          "formatted": [
+            [
+              "30",
+              "4",
+              "3",
+              "26"
+            ]
+          ],
+          "extras": [
+            [
+              {},
+              {},
+              {},
+              {}
+            ]
+          ]
+        },
+        {
+          "raw": [
+            [
+              26.0,
+              null,
+              null
+            ]
+          ],
+          "formatted": [
+            [
+              "26",
+              "",
+              ""
+            ]
+          ],
+          "extras": [
+            [
+              {},
+              {},
+              {}
+            ]
+          ]
+        },
+        {
+          "raw": [
+            [
+              25.0
+            ]
+          ],
+          "formatted": [
+            [
+              "2.50E+01"
+            ]
+          ],
+          "extras": [
+            [
+              {}
+            ]
+          ]
+        },
+        {
+          "raw": [
+            [
+              26.0,
+              null,
+              null
+            ]
+          ],
+          "formatted": [
+            [
+              "26",
+              "",
+              ""
+            ]
+          ],
+          "extras": [
+            [
+              {},
+              {},
+              {}
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "internal": {
+    "manipulations": "&lt;rw_manipulations&gt;&lt;rw_manipulation&gt;&lt;rw_manipulation_method&gt;51&lt;\/rw_manipulation_method&gt;&lt;rw_node_key&gt;K36&lt;\/rw_node_key&gt;&lt;\/rw_manipulation&gt;&lt;rw_manipulation&gt;&lt;rw_manipulation_method&gt;72&lt;\/rw_manipulation_method&gt;&lt;rw_node_key&gt;K53&lt;\/rw_node_key&gt;&lt;\/rw_manipulation&gt;&lt;\/rw_manipulations&gt;"
+  }
+}
