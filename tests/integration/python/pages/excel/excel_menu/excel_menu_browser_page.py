@@ -84,6 +84,7 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
         name_box_item_name_without_timestamp = re.sub(r'_\d+$', '_', name_box_item_name)
 
         self.get_element_by_css(ExcelMenuBrowserPage.MODAL_DIV_CSS).click()
+
         return expected_name == name_box_item_name_without_timestamp
 
     def are_timestamps_equal(self, first_object_number, second_object_number):
