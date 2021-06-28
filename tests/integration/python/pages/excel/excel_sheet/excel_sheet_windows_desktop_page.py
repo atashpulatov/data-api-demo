@@ -37,27 +37,37 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     def get_cells_values(self, cells):
         result = []
 
+        self._toggle_clipboard_workaround()
+
         for cell in cells:
             result.append(self._get_cell_value(cell))
+
+        self._toggle_clipboard_workaround()
 
         return result
 
     def _get_cell_value(self, cell):
         # First go to cell to ensure it's visible (scrolled to).
-        self.go_to_cell(cell)
+        self.go_to_cell(cell, False)
 
         value = self._get_selected_cell_value()
 
         return value.strip() if value else value
 
-    def go_to_cell(self, cell):
+    def go_to_cell(self, cell, enable_clipboard_workaround=True):
         cell_upper = cell.upper()
 
-        self._navigate_to_home_tab_and_press('fdg')
+        if enable_clipboard_workaround:
+            self._toggle_clipboard_workaround()
+
+        self.press_f5()
 
         self.send_keys(cell_upper)
 
         self.press_enter()
+
+        if enable_clipboard_workaround:
+            self._toggle_clipboard_workaround()
 
     def _get_selected_cell_value(self):
         cell_value = self.get_selected_text_using_clipboard()
@@ -270,6 +280,16 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self._navigate_to_home_tab_and_press('ff')
 
     def _navigate_to_home_tab_and_press(self, keys):
-        self.send_keys(Keys.ALT + 'h')
+        self.send_keys(Keys.ALT)
+        self.send_keys('h')
 
-        self.send_keys(Keys.ALT + keys)
+        self.send_keys(keys)
+
+    def _toggle_clipboard_workaround(self):
+        """
+        Toggles clipboard workaround.
+
+        This workaround makes sure that focus is lifted from the right panel window, otherwise
+        some key commands (like F5) would be intercepted.
+        """
+        self._navigate_to_home_tab_and_press('fo')

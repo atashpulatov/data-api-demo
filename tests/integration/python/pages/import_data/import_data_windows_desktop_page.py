@@ -105,7 +105,9 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             safe=True
         )
 
-        if not search_element:
+        if search_element:
+            search_element.click()
+        else:
             search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM_OLD_EXCEL)
 
         # Remove search box content.
@@ -141,6 +143,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
         """
+        Util.pause(10)
 
         self.find_object(object_id)
 

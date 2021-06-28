@@ -46,5 +46,8 @@ class WindowsDesktopSendKeys(WindowsDesktopMainAddInElementCache):
     def press_home(self):
         self.send_keys(Keys.HOME)
 
+    def press_f5(self):
+        self.send_keys(Keys.F5)
+
     def send_keys(self, keys):
         self.send_keys_using_excel_element(keys)

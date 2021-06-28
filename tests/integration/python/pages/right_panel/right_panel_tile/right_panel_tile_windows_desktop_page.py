@@ -32,8 +32,8 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
     OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
 
-    TILE_LIST = '//Group/List'
-    TILE_ELEM = TILE_LIST + '/DataItem[%s]'
+    TILE_LIST = '//List'
+    TILE_ELEM = TILE_LIST + '/ListItem[%s]'
 
     NAME_INPUT_FOR_OBJECT = '//Button/Text'
     NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK = '//Edit'
