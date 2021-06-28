@@ -47,8 +47,3 @@ def step_impl(context, nested_panel_stack_name, panel_stack_name):
         nested_panel_stack_name,
         panel_stack_name
     )
-
-
-@step('I selected visualization in panel stack by index {visualization_index}')
-def step_impl(context, visualization_index):
-    context.pages.import_dossier_page().select_panel_stack_visualization_by_index(visualization_index)
