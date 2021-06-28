@@ -18,18 +18,20 @@ def step_impl(context, object_number):
     context.pages.excel_menu_page().select_object_from_name_box(object_number)
 
 
-@step('I verified that the name of item number {object_number} in Name Box, ignoring timestamp at the end, is "{expected_name}"')
+@step('I verified that the name of item number {object_number} '
+      'in Name Box, ignoring timestamp at the end, is "{expected_name}"')
 def step_impl(context, object_number, expected_name):
-    result = context.pages.excel_menu_page().is_object_name_in_name_box_correct(object_number, expected_name)
+    name_is_correct = context.pages.excel_menu_page().is_object_name_in_name_box_correct(object_number, expected_name)
 
-    AssertUtil.assert_simple(result, True)
+    AssertUtil.assert_simple(name_is_correct, True)
 
 
-@step('I verified that object number {object_number_1} and object number {object_number_2} in Name Box have different timestamps')
+@step('I verified that object number {object_number_1} and object number {object_number_2} '
+      'in Name Box have different timestamps')
 def step_impl(context, object_number_1, object_number_2):
-    result = context.pages.excel_menu_page().are_timestamps_different(object_number_1, object_number_2)
+    timestamps_are_equal = context.pages.excel_menu_page().are_timestamps_equal(object_number_1, object_number_2)
 
-    AssertUtil.assert_simple(result, True)
+    AssertUtil.assert_simple(timestamps_are_equal, False)
 
 
 @step('I stored environment id in context')
