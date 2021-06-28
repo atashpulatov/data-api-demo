@@ -287,9 +287,9 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def _toggle_clipboard_workaround(self):
         """
-        This workaround makes sure that focus is lifted from the right panel window, which otherwise,
-        would intercept some key commands (like f5)
+        Toggles clipboard workaround.
 
-        :return: None
+        This workaround makes sure that focus is lifted from the right panel window, otherwise
+        some key commands (like F5) would be intercepted.
         """
         self._navigate_to_home_tab_and_press('fo')
