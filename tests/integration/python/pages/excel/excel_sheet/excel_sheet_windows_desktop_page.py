@@ -37,12 +37,12 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     def get_cells_values(self, cells):
         result = []
 
-        self._navigate_to_home_tab_and_press('fo')
+        self._toggle_clipboard_workaround()
 
         for cell in cells:
             result.append(self._get_cell_value(cell))
 
-        self._navigate_to_home_tab_and_press('fo')
+        self._toggle_clipboard_workaround()
 
         return result
 
@@ -58,7 +58,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         cell_upper = cell.upper()
 
         if enable_clipboard_workaround:
-            self._navigate_to_home_tab_and_press('fo')
+            self._toggle_clipboard_workaround()
 
         self.press_f5()
 
@@ -67,7 +67,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.press_enter()
 
         if enable_clipboard_workaround:
-            self._navigate_to_home_tab_and_press('fo')
+            self._toggle_clipboard_workaround()
 
     def _get_selected_cell_value(self):
         cell_value = self.get_selected_text_using_clipboard()
@@ -284,3 +284,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self.send_keys('h')
 
         self.send_keys(keys)
+
+    # This workaround makes sure that focus is lifted from the right panel window, which otherwise,
+    # would intercept some key commands (like f5)
+    def _toggle_clipboard_workaround(self):
+        self._navigate_to_home_tab_and_press('fo')
