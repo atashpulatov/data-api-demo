@@ -285,7 +285,11 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.send_keys(keys)
 
-    # This workaround makes sure that focus is lifted from the right panel window, which otherwise,
-    # would intercept some key commands (like f5)
     def _toggle_clipboard_workaround(self):
+        """
+        This workaround makes sure that focus is lifted from the right panel window, which otherwise,
+        would intercept some key commands (like f5)
+
+        :return: None
+        """
         self._navigate_to_home_tab_and_press('fo')
