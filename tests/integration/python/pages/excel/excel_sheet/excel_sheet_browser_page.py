@@ -4,9 +4,9 @@ from pyperclip import paste
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.exception.mstr_exception import MstrException
 from framework.util.const import Const
 from framework.util.excel_util import ExcelUtil
+from framework.util.exception.mstr_exception import MstrException
 from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
 
 

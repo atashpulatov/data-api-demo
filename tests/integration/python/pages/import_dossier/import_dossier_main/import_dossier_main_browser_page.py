@@ -111,6 +111,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
 
     def _get_panel_stack_tab_label_in_element_by_name(self, select_element_method, panel_stack_tab_name):
         panels_stack_tab_labels = select_element_method(ImportDossierMainBrowserPage.PANEL_STACK_TAB_LABEL_CSS)
+
         for panels_stack_tab_label in panels_stack_tab_labels:
             if panels_stack_tab_label.text == panel_stack_tab_name:
                 return panels_stack_tab_label
