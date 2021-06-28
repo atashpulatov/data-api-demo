@@ -4,9 +4,9 @@ from pyperclip import paste
 from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
-from framework.util.exception.mstr_exception import MstrException
 from framework.util.const import Const
 from framework.util.excel_util import ExcelUtil
+from framework.util.exception.mstr_exception import MstrException
 from pages.excel.excel_menu.excel_menu_browser_page import ExcelMenuBrowserPage
 
 
@@ -34,10 +34,10 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     EXCEL_FONT_NAME_INPUT_ID = 'Ribbon-FontName_New-input'
 
     BOLD_BUTTON = '[data-unique-id="Ribbon-Bold"]'
-    FONT_COLOR_BUTTON_CSS = '[data-unique-id="Ribbon-FontColor"]>span>button:nth-of-type(2)'
-    FILL_COLOR_BUTTON_CSS = '[data-unique-id="Ribbon-FillColor"]>span>button:nth-of-type(2)'
-    LIGHT_GREEN_FONT_COLOR_BUTTON_CSS = '#Ribbon-FontColorDropdown button[aria-label="Light Green"]'
-    LIGHT_GREEN_FILL_COLOR_BUTTON_CSS = '#Ribbon-FillColorDropdown button[aria-label="Light Green"]'
+    FONT_COLOR_DROPDOWN_BUTTON_CSS = '[data-unique-id="Ribbon-FontColor"]>span>button:nth-of-type(2)'
+    FILL_COLOR_DROPDOWN_BUTTON_CSS = '[data-unique-id="Ribbon-FillColor"]>span>button:nth-of-type(2)'
+    FONT_COLOR_BUTTON_CSS = '#Ribbon-FontColorDropdown button[aria-label="%s"]'
+    FILL_COLOR_BUTTON_CSS = '#Ribbon-FillColorDropdown button[aria-label="%s"]'
 
     BUTTON_SELECTED_ARIA_VALUE = 'true'
 
@@ -217,14 +217,14 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     def set_font_color(self, font_color):
         self.focus_on_excel_frame()
 
-        self.get_element_by_css(ExcelSheetBrowserPage.FONT_COLOR_BUTTON_CSS).click()
-        self.get_element_by_css(ExcelSheetBrowserPage.LIGHT_GREEN_FONT_COLOR_BUTTON_CSS).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.FONT_COLOR_DROPDOWN_BUTTON_CSS).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.FONT_COLOR_BUTTON_CSS % font_color).click()
 
     def set_fill_color(self, fill_color):
         self.focus_on_excel_frame()
 
-        self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_BUTTON_CSS).click()
-        self.get_element_by_css(ExcelSheetBrowserPage.LIGHT_GREEN_FILL_COLOR_BUTTON_CSS).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_DROPDOWN_BUTTON_CSS).click()
+        self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_BUTTON_CSS % fill_color).click()
 
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)

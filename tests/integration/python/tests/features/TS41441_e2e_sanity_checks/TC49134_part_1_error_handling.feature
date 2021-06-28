@@ -4,6 +4,7 @@
 @windows_desktop
 @windows_chrome
 @mac_chrome
+@windows_chrome
 @release_validation
 @ga_validation
 Feature: TS41441 - Sanity checks
@@ -65,11 +66,13 @@ Feature: TS41441 - Sanity checks
       And I found object by ID "5587CB0B11EB8297835E0080AFEB08B5" and selected "Panel Stack demo"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      And I selected visualization "Visualization on 1st Panel Stack Nested in Panel stack on 3rd Panel copy"
+      And I selected dossier page or chapter 7
+      And I selected panel stack "Panel 3" nested in panel stack "Panel 1"
+      And I selected visualization "Visualization on 1st Panel Stack Nested in Panel stack on 3rd Panel"
       And I hover over Import button
      Then I verified that tooltip for Import button shows message "Selected visualization cannot be imported in current version of the Add-in"
       And I clicked Cancel button
-     
+
      When I selected cell "H1"
       And I clicked Add Data button
       And I found object by ID "BA32708211E94AF4A45E0080EF557FD5" and selected "Report with Totals and Subtotals"
