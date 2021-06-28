@@ -31,7 +31,7 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
         :return: environment id.
         """
-        add_in_environment = ConfigUtil.get_excel_desktop_add_in_import_data_name()
+        add_in_environment = ConfigUtil.get_add_in_environment()
 
         add_in_button = self._get_add_in_button()
         add_in_name = add_in_button.text
