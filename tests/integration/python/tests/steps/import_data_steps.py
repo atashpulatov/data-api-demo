@@ -52,11 +52,13 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().click_import_button_to_open_import_dossier()
 
-@step('I verified Prepare Data button is disabled')
+
+@step('I verified that Prepare Data button is disabled')
 def step_impl(context):
-    is_prepare_data_enabled = context.pages.import_data_page().verify_if_prepare_data_button_is_enabled()
+    is_prepare_data_enabled = context.pages.import_data_page().is_prepare_data_button_enabled()
 
     AssertUtil.assert_simple(is_prepare_data_enabled, False)
+
 
 @step('I clicked Prepare Data button')
 def step_impl(context):

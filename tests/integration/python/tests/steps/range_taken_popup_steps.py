@@ -17,8 +17,8 @@ def step_impl(context):
     context.pages.range_taken_popup_page().select_active_cell()
 
 
-@step('I verified "New  Sheet" is selected')
+@step('I verified that New Sheet is selected')
 def step_impl(context):
-    is_new_sheet_checked = context.pages.range_taken_popup_page().verify_that_new_sheet_is_checked()
+    is_new_sheet_checked = context.pages.range_taken_popup_page().is_new_sheet_checked()
 
     AssertUtil.assert_simple(is_new_sheet_checked, True)
