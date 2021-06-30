@@ -1,6 +1,5 @@
-426c426,428
-< 		<session-timeout>30</session-timeout>
----
-> 		<session-timeout>30</session-timeout> 
->     <http-only>true</http-only>
->     <secure>true</secure>
+426a427,430
+>       <cookie-config>
+> <http-only>true</http-only>
+> <secure>true</secure>
+> </cookie-config>
