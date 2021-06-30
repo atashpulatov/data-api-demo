@@ -12,5 +12,6 @@ COPY diff.patch context.xml configOverride.properties office.zip office-loader.z
 # COPY deploy-webdossier.sh /opt/deploy-webdossier.sh
 
 RUN apt-get update && apt-get install -y netcat \
+  && apt-get install patch
   && cd /opt \
   && bash deploy-webdossier.sh
