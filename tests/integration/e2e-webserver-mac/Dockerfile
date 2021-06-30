@@ -11,7 +11,6 @@ COPY web-dossier.war /usr/local/tomcat/webapps/web-dossier.war
 COPY diff.patch context.xml configOverride.properties office.zip office-loader.zip deploy-webdossier.sh /opt/
 # COPY deploy-webdossier.sh /opt/deploy-webdossier.sh
 
-RUN apt-get update && apt-get install -y netcat \
-  && apt-get install patch
+RUN apt-get update && apt-get install -y netcat patch\
   && cd /opt \
   && bash deploy-webdossier.sh
