@@ -1,0 +1,6 @@
+426c426,428
+< 		<session-timeout>30</session-timeout>
+---
+> 		<session-timeout>30</session-timeout> 
+>     <http-only>true</http-only>
+>     <secure>true</secure>
