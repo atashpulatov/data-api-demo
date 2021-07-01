@@ -3,6 +3,7 @@ EXPOSE 8005
 EXPOSE 8443
 EXPOSE 80
 COPY server.xml mstr-office.jks tomcat-users.xml  /usr/local/tomcat/conf/
+COPY confcontext.xml  /usr/local/tomcat/conf/context.xml
 # COPY mstr-office.jks /usr/local/tomcat/conf/mstr-office.jks 
 # COPY tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
 COPY manager.xml web-dossier.xml /usr/local/tomcat/conf/Catalina/localhost/
