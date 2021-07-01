@@ -10,7 +10,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     VALUE_ATTRIBUTE = 'Value.Value'
 
     WINDOW_ELEM = 'Window'
-    BOOK_ELEM = 'Book1'
+    BOOK_ELEM = '//Tab[@AutomationId="Book1"]'
     GRID_ELEM = 'Grid'
     BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'
     BOOK_CHILDREN_ELEM = '//TabItem[@AutomationId="SheetTab"][%s]'
@@ -117,7 +117,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         :return: Book element.
         """
-        book_element = self.get_element_by_name(
+        book_element = self.get_element_by_xpath(
             ExcelSheetWindowsDesktopPage.BOOK_ELEM,
             timeout=Const.SHORT_TIMEOUT,
             safe=True
