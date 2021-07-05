@@ -61,7 +61,7 @@ class ImportDataMacDesktopPage(BaseMacDesktopPage):
 
         self.find_and_select_object(object_id)
 
-    def click_import_button(self):
+    def click_import_button(self, not_used_reset_framework_method, not_used_context):
         self.get_element_by_xpath(ImportDataMacDesktopPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_mac_desktop_page.wait_for_import_to_finish_successfully()
