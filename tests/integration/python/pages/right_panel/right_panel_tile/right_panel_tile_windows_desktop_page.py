@@ -1,12 +1,10 @@
 import time
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.const import Const
 from framework.util.exception.mstr_exception import MstrException
 from framework.util.message_const import MessageConst
-from framework.util.util import Util
 
 
 class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -46,11 +44,6 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     REMOVE_MENU_ITEM = 'Remove'
 
     XML_FIRST_ELEMENT_INDEX = '1'
-
-    def __init__(self):
-        super().__init__()
-
-        self.windows_desktop_workaround = WindowsDesktopWorkaround()
 
     def wait_for_import_object_to_finish_successfully(self):
         self.wait_until_element_disappears_by_name(RightPanelTileWindowsDesktopPage.IMPORTING_TEXT_ELEM)
@@ -96,12 +89,11 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self._scroll_to_top_of_tile_list()
 
     def _scroll_to_top_of_tile_list(self):
-        self.windows_desktop_workaround.focus_on_right_side_panel()
+        tile_list = self._get_tile_list()
 
-        # doc = self.get_element_by_xpath('//Pane[@Name="Microsoft Edge"]')
-
-        self.get_element_by_xpath('//Pane[@Name="Microsoft Edge"]/Pane/Pane/Pane/Pane/Document/List').click()
-        self.press_home()
+        if tile_list:
+            tile_list.click()
+            self.press_home()
 
     def _scroll_tile_list_to_next_page(self):
         tile_list = self._get_tile_list()
@@ -220,7 +212,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         ).move_to()
 
     def get_object_name(self, index):
-        object_name_element = self.get_element_by_xpath(
+        right_panel_element = self.get_add_in_right_panel_element()
+
+        object_name_element = right_panel_element.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.OBJECT_NAME_ELEM % index
         )
 
@@ -324,9 +318,9 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     def _get_tile_list(self):
         self.invalidate_right_panel_cache()
 
-        # right_panel_element = self.get_add_in_right_panel_element()
+        right_panel_element = self.get_add_in_right_panel_element()
 
-        return self.get_element_by_xpath(
+        return right_panel_element.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.TILE_LIST,
             timeout=Const.MEDIUM_TIMEOUT,
             safe=True

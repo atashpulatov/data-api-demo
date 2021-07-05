@@ -51,8 +51,8 @@ def before_scenario(context, scenario):
         raise e
 
 
-def _reset_framework(context):
-    DriverFactory.reset_driver()
+def _reset_framework(context, restart_driver_during_run=False):
+    DriverFactory.reset_driver(restart_driver_during_run)
     PagesSetFactory.reset_pages_set()
 
     context.pages = PagesSetFactory().get_pages_set()

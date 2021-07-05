@@ -18,9 +18,11 @@ class ElementGet(ElementCheck):
     def __init__(self):
         super().__init__()
 
-        self.driver = DriverFactory().get_driver()
-
         self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
+
+    @property
+    def driver(self):
+        return DriverFactory().get_driver()
 
     def get_element_by_id(self, selector, timeout=Const.DEFAULT_TIMEOUT, safe=False):
         return self._get_base_element_wrapper(By.ID, selector, timeout, safe)

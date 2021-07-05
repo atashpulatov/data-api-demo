@@ -10,8 +10,6 @@ class DriverSendKeys:
     def __init__(self):
         super().__init__()
 
-        self.__driver = DriverFactory().get_driver()
-
     def press_right_arrow(self):
         self.send_keys(Keys.ARROW_RIGHT)
 
@@ -40,7 +38,9 @@ class DriverSendKeys:
         self.send_keys(Keys.HOME)
 
     def send_keys(self, keys):
-        ActionChains(self.__driver).send_keys(keys).perform()
+        driver = DriverFactory().get_driver()
+
+        ActionChains(driver).send_keys(keys).perform()
 
         Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
 
@@ -54,7 +54,9 @@ class DriverSendKeys:
         self._execute_hold_modifier_and_press_keys(Keys.COMMAND, keys)
 
     def _execute_hold_modifier_and_press_keys(self, modifier_key, keys):
-        (ActionChains(self.__driver)
+        driver = DriverFactory().get_driver()
+
+        (ActionChains(driver)
          .key_down(modifier_key)
          .send_keys(keys)
          .key_up(modifier_key)
