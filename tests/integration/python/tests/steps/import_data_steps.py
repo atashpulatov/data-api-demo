@@ -40,7 +40,7 @@ def step_impl(context, object_id, object_name):
 
 @step('I clicked Import button')
 def step_impl(context):
-    context.pages.import_data_page().click_import_button()
+    context.pages.import_data_page().click_import_button(context.reset_framework, context)
 
 
 @step('I clicked Import button without checking results')
