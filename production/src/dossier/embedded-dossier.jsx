@@ -53,6 +53,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleIframeLoadEvent } = this.props;
+      if (iframe.focusEventListenerAdded === false) {
+        iframe.focusEventListenerAdded = true;
+        iframe.addEventListener('focus', scriptInjectionHelper.switchFocusToElementOnWindowFocus);
+      }
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
@@ -234,6 +238,19 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   /**
+  * Update the instanceId in dossierData and also in parent component.
+  * InstanceId is changing as result of reset button click, switch to
+  * bookmark or new prompts answers given.
+  *
+  * @param {String} newInstanceId
+  */
+  instanceIdChangeHandler(newInstanceId) {
+    const { handleInstanceIdChange } = this.props;
+    this.dossierData.instanceId = newInstanceId;
+    handleInstanceIdChange(newInstanceId);
+  }
+
+  /**
   * Update the promptsAnswers in dossierData and also in parent component.
   * Update the selectedViz in parent component in case of simple reprompt
   * to keep the import button enabled.
@@ -251,19 +268,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.onVizSelectionHandler(payload);
       }
     }
-  }
-
-  /**
-  * Update the instanceId in dossierData and also in parent component.
-  * InstanceId is changing as result of reset button click, switch to
-  * bookmark or new prompts answers given.
-  *
-  * @param {String} newInstanceId
-  */
-  instanceIdChangeHandler(newInstanceId) {
-    const { handleInstanceIdChange } = this.props;
-    this.dossierData.instanceId = newInstanceId;
-    handleInstanceIdChange(newInstanceId);
   }
 
   render() {

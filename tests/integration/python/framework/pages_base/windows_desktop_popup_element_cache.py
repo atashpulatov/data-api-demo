@@ -79,10 +79,10 @@ class WindowsDesktopMainAddInElementCache(BasePage):
         all_add_in_elements = self._get_all_add_in_elements()
         all_add_in_elements_no = len(all_add_in_elements)
 
-        if all_add_in_elements_no == 2:
+        if all_add_in_elements_no >= 2:
             return all_add_in_elements[0]
 
-        raise MstrException(f'Main panel Add-in element not found, expected 2 '
+        raise MstrException(f'Main panel Add-in element not found, expected 2 or more '
                             f'[{WindowsDesktopMainAddInElementCache.ADD_IN_MAIN_ELEMENT}] elements, '
                             f'found {all_add_in_elements_no}.')
 
