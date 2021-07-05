@@ -5,6 +5,7 @@ from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesk
 from framework.util.const import Const
 from framework.util.exception.mstr_exception import MstrException
 from framework.util.message_const import MessageConst
+from framework.util.util import Util
 
 
 class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
@@ -132,6 +133,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
             self._get_tile_list().click()
 
     def close_last_notification_on_hover(self):
+        Util.pause(25)
         self.wait_for_progress_notifications_to_disappear()
 
         self._hover_over_tile(RightPanelTileWindowsDesktopPage.XML_FIRST_ELEMENT_INDEX)
@@ -320,7 +322,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         right_panel_element = self.get_add_in_right_panel_element()
 
-        return right_panel_element.get_element_by_xpath(
+        return right_panel_element.get_element_by_name(
             RightPanelTileWindowsDesktopPage.TILE_LIST,
             timeout=Const.MEDIUM_TIMEOUT,
             safe=True

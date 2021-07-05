@@ -63,6 +63,7 @@ class PageSourceOnFailure:
     TAG_TO_FILE_EXTENSION_MAP = {
         '<html': '.html',
         '<?xml': '.xml',
+        '<Body': '.xml',
         'Error': '.txt'
     }
 
