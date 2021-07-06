@@ -225,21 +225,14 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
   async restoreVizSelection(visualizationKey) {
     try {
-      console.log('try to select');
       this.retryCounter++;
       await this.embeddedDossier.selectViz(visualizationKey);
-      console.log('selected');
     } catch (error) {
-      console.log('error');
       if (this.retryCounter > VIZ_SELECTION_RETRY_LIMIT) {
-        console.log('limit reached');
         console.error(error);
       } else {
-        console.log('next try - delay start');
         await new Promise(resolve => setTimeout(resolve, VIZ_SELECTION_RETRY_DELAY));
-        console.log('next try - after delay');
         await this.restoreVizSelection(visualizationKey);
-        console.log('next try - end');
       }
     }
   }
