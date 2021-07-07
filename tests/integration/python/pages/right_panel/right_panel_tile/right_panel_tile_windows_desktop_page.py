@@ -35,7 +35,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     TILE_LIST = '//List'
     TILE_ELEM = TILE_LIST + '/ListItem[%s]'
 
-    NAME_INPUT_FOR_OBJECT = '//Button/Text'
+    NAME_INPUT_FOR_OBJECT = '//Button[5]'
     NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK = '//Edit'
     TEXT_INPUT_TAG_NAME = 'Edit'
     TOOLTIP_TEXT = '//ToolTip/Text'
