@@ -42,9 +42,11 @@ class ElementGetUsingParent(ElementInfo):
     def __init__(self):
         super().__init__()
 
-        self.driver = DriverFactory().get_driver()
-
         self.image_recognition_enabled = ConfigUtil.is_image_recognition_enabled()
+
+    @property
+    def driver(self):
+        return DriverFactory().get_driver()
 
     def get_element_by_name_using_parent(self, parent_selection_method, parent_selector, element_selector,
                                          image_name=None, timeout=Const.DEFAULT_TIMEOUT):

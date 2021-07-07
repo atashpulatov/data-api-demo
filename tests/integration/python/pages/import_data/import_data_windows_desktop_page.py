@@ -154,7 +154,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(object_name)
         ).click()
 
-    def click_import_button(self):
+    def click_import_button(self, reset_framework_method, context):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self._click_import_button()
@@ -163,6 +163,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not self.check_if_element_exists_by_name(MessageConst.IMPORT_SUCCESSFUL_TEXT):
             raise MstrException('Error while importing')
+
+        reset_framework_method(context, restart_driver_during_run=True)
 
     def click_import_button_without_checking_results(self):
         self.windows_desktop_workaround.focus_on_popup_window()

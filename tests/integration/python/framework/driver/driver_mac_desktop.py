@@ -23,7 +23,7 @@ class DriverMacDesktop(AbstractDriver):
 
     appium_for_mac_process = None
 
-    def get_driver(self):
+    def get_driver(self, not_used_driver_restarted_during_run):
         host = ConfigUtil.get_desktop_host()
 
         try:
