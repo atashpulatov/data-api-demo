@@ -149,6 +149,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def click_import_button_to_open_import_dossier(self):
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
+    def is_prepare_data_button_enabled(self):
+        element = self.get_element_by_id(ImportDataBrowserPage.PREPARE_BUTTON_ELEM)
+
+        return element.is_enabled_by_attribute_html()
+
     def click_prepare_data_button(self):
         self.get_element_by_id(ImportDataBrowserPage.PREPARE_BUTTON_ELEM).click()
 
