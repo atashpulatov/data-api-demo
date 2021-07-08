@@ -110,16 +110,10 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         :return: First item in a given attribute column for a given tile.
         """
         attribute_header = tile.get_element_by_name(attribute_name)
-        #     .get_element_by_xpath(
-        #     ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name
-        # )
 
         attribute_header_x = attribute_header.x
 
         data_items = tile.get_elements_by_name(item_name)
-        #     .get_elements_by_xpath(
-        #     ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % item_name
-        # )
 
         for item in data_items:
             if attribute_header_x == item.x:
