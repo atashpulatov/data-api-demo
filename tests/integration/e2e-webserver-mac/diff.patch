@@ -1,0 +1,5 @@
+426a427,430
+>       <cookie-config>
+> <http-only>true</http-only>
+> <secure>true</secure>
+> </cookie-config>

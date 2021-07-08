@@ -21,6 +21,7 @@ task :deploy_tester_server,[:build_no] do | t, args|
   FileUtils.cp("#{tomcat_config_win_dir}\\server.xml","#{tomcat_dir}\\conf\\server.xml")
   FileUtils.cp("#{tomcat_config_dir}\\mstr-office.jks","#{tomcat_dir}\\conf\\mstr-office.jks")
   FileUtils.cp("#{tomcat_config_dir}\\tomcat-users.xml","#{tomcat_dir}\\conf\\tomcat-users.xml")
+  FileUtils.cp("#{tomcat_config_dir}\\confcontext.xml","#{tomcat_dir}\\conf\\context.xml")
   FileUtils.mkdir_p "#{tomcat_dir}\\conf\\Catalina\\localhost" unless Dir.exists? "#{tomcat_dir}\\conf\\Catalina\\localhost"
   FileUtils.cp("#{tomcat_config_dir}\\manager.xml","#{tomcat_dir}\\conf\\Catalina\\localhost\\manager.xml")
   FileUtils.cp("#{tomcat_config_dir}\\web-dossier.xml","#{tomcat_dir}\\conf\\Catalina\\localhost\\web-dossier.xml")
@@ -28,9 +29,11 @@ task :deploy_tester_server,[:build_no] do | t, args|
   start_tomcat
   sleep(1)
   stop_tomcat
+  FileUtils.cp("#{tomcat_config_dir}\\context.xml","#{tomcat_dir}\\webapps\\web-dossier\\META-INF\\context.xml")
   FileUtils.cp("#{tomcat_config_dir}\\configOverride.properties","#{tomcat_dir}\\webapps\\web-dossier\\WEB-INF\\classes\\config\\configOverride.properties")
   FileUtils.rm_rf "#{tomcat_dir}\\webapps\\web-dossier\\apps\\addin-mstr-office"
   FileUtils.rm_rf "#{tomcat_dir}\\webapps\\web-dossier\\static\\loader-mstr-office"
+  cmd = "sed -i 's+<param-value>UNSET</param-value>+<param-value>NONE</param-value>+g'#{tomcat_dir}\\webapps\\web-dossier\\WEB-INF\\web.xml"
   cmd = "unzip #{tomcat_config_win_dir}\\office.zip  -d #{tomcat_dir}\\webapps\\web-dossier\\apps\\addin-mstr-office"
   shell_command! cmd
   cmd = "unzip #{tomcat_config_win_dir}\\office-loader.zip  -d #{tomcat_dir}\\webapps\\web-dossier\\static\\loader-mstr-office"
