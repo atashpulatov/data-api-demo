@@ -132,11 +132,11 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         if elements:
             self._get_tile_list().click()
 
-    def close_last_notification_on_hover(self):
-        Util.pause(25)
+    def close_last_notification_on_hover(self, reset_framework_method, context):
         self.wait_for_progress_notifications_to_disappear()
-
+        reset_framework_method(context, restart_driver_during_run=True)
         self._hover_over_tile(RightPanelTileWindowsDesktopPage.XML_FIRST_ELEMENT_INDEX)
+
 
     def close_object_notification_on_hover(self, object_no):
         self._hover_over_tile(object_no)
