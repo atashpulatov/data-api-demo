@@ -28,7 +28,7 @@ class RangeTakenPopupBrowserPage(BaseBrowserPage):
 
         self.get_element_by_id(RangeTakenPopupBrowserPage.RANGE_TAKEN_ACTIVE_CELL_OPTION).click()
 
-    def is_new_sheet_checked(self):
+    def is_new_sheet_selected(self):
         self.focus_on_add_in_frame()
 
         element = self.get_element_by_id(RangeTakenPopupBrowserPage.NEW_SHEET_ELEMENT_ID)

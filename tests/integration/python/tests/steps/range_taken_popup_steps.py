@@ -1,4 +1,5 @@
 from behave import *
+
 from framework.util.assert_util import AssertUtil
 
 
@@ -19,6 +20,6 @@ def step_impl(context):
 
 @step('I verified that New Sheet is selected')
 def step_impl(context):
-    is_new_sheet_checked = context.pages.range_taken_popup_page().is_new_sheet_checked()
+    is_new_sheet_selected = context.pages.range_taken_popup_page().is_new_sheet_selected()
 
-    AssertUtil.assert_simple(is_new_sheet_checked, True)
+    AssertUtil.assert_simple(is_new_sheet_selected, True)
