@@ -1,4 +1,4 @@
-@disabled_windows_desktop
+@windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: TF9328 - Release Validation

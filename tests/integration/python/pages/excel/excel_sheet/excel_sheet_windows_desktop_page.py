@@ -12,6 +12,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     WINDOW_ELEM = 'Window'
     BOOK_ELEM = 'Book1'
     GRID_ELEM = 'Grid'
+    EDIT_ELEM_XPATH = '//Edit'
     BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'
     BOOK_CHILDREN_ELEM = '//TabItem[@AutomationId="SheetTab"][%s]'
     ADD_SHEET_BUTTON_NEW_EXCEL = 'Add Sheet'
@@ -29,10 +30,14 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     LIGHT_GREEN_TABLE = "Light Green, Table Style Light 21"
     LIGHT_GREEN = "Light Green"
 
-    RANGE_SELECTED_COLORS = ('#d2d2d2', '#cdf3df', '#d3f0e0', '#9fd5b7')  # default Office Theme colors
-    COLUMN_CELL_HEADER_XPATH = '//HeaderItem[@Name="%s"]'
+    RANGE_SELECTED_COLORS = ('#d2d2d2', '#cdf3df', '#d3f0e0', '#9fd5b7', '#646464')  # default Office Theme colors
+    COLUMN_CELL_HEADER_XPATH = '//DataItem[@Name="%s"]'
+    EXCEL_ALL_COLUMN_HEADER_XPATH = '//DataItem[@ItemType="Column Header"]'
+    EXCEL_ALL_ROW_HEADER_XPATH = '//DataItem[@ItemType="Row Header"]'
 
     THEME_COLORS_TITLE = 'Theme Colors'
+
+    COLUMN_WIDTH_WINDOW_NAME = 'Column Width'
 
     def get_cells_values(self, cells):
         result = []
@@ -113,7 +118,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Gets Book element.
 
-        Usually it's Name attribute is ExcelSheetWindowsDesktopPage.BOOK_ELEM, if not - use fallback method.
+        Usually it's a Tab element with AutomationId attribute as in ExcelSheetWindowsDesktopPage.BOOK_ELEM, if not -
+        use fallback method.
 
         :return: Book element.
         """
@@ -264,10 +270,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         return self._is_range_selected(row_names)
 
     def _is_range_selected(self, item_names):
-        grid_element = self.get_element_by_accessibility_id(ExcelSheetWindowsDesktopPage.GRID_ELEM)
-
         for item_name in item_names:
-            element_color = grid_element.get_element_by_xpath(
+            element_color = self.get_element_by_xpath(
                 ExcelSheetWindowsDesktopPage.COLUMN_CELL_HEADER_XPATH % item_name
             ).pick_color(10, 2)
 
@@ -275,6 +279,57 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
                 return False
 
         return True
+
+    def hide_columns(self, column_names):
+        for column_name in column_names:
+            self.go_to_cell(f'{column_name}1')
+            self.hold_ctrl_and_press_keys('0')
+
+    def hide_rows(self, row_names):
+        for row_name in row_names:
+            self.go_to_cell(f'A{row_name}')
+            self.hold_ctrl_and_press_keys('9')
+
+    def resize_column(self, column_name, new_width):
+        excel_window_name = self.get_current_window_name()
+
+        self._open_resize_window_for_column(column_name)
+        self.switch_to_window_by_name(ExcelSheetWindowsDesktopPage.COLUMN_WIDTH_WINDOW_NAME)
+
+        input_box = self.get_element_by_xpath(ExcelSheetWindowsDesktopPage.EDIT_ELEM_XPATH)
+        input_box.send_keys(new_width + Keys.ENTER)
+
+        self.switch_to_window_by_name(excel_window_name)
+
+    def are_columns_hidden(self, column_names):
+        present_column_headers = self.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.EXCEL_ALL_COLUMN_HEADER_XPATH)
+        present_column_names = map(lambda column: column.get_name_by_attribute(), present_column_headers)
+
+        return not any(column_name in column_names for column_name in present_column_names)
+
+    def are_rows_hidden(self, row_names):
+        present_row_headers = self.get_elements_by_xpath(ExcelSheetWindowsDesktopPage.EXCEL_ALL_ROW_HEADER_XPATH)
+        present_row_names = map(lambda row: row.get_name_by_attribute, present_row_headers)
+
+        return not any(row_name in row_names for row_name in present_row_names)
+
+    def get_column_width(self, column_name):
+        excel_window_name = self.get_current_window_name()
+
+        self._open_resize_window_for_column(column_name)
+        self.switch_to_window_by_name(ExcelSheetWindowsDesktopPage.COLUMN_WIDTH_WINDOW_NAME)
+
+        input_box = self.get_element_by_xpath(ExcelSheetWindowsDesktopPage.EDIT_ELEM_XPATH)
+        column_width = input_box.text
+
+        input_box.send_keys(Keys.ESCAPE)
+        self.switch_to_window_by_name(excel_window_name)
+
+        return '{:.2f}'.format(float(column_width))
+
+    def _open_resize_window_for_column(self, column_name):
+        self.go_to_cell(f'{column_name}1')
+        self._navigate_to_home_tab_and_press('ow')
 
     def _select_font_name_combo_box(self):
         self._navigate_to_home_tab_and_press('ff')
