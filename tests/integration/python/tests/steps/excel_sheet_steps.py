@@ -223,4 +223,4 @@ def step_impl(context, row_names):
 def step_impl(context, column_name, expected_width):
     column_width = context.pages.excel_sheet_page().get_column_width(column_name)
 
-    AssertUtil.assert_simple('{:.2f}'.format(float(column_width)), expected_width)
+    AssertUtil.assert_simple(column_width, expected_width)

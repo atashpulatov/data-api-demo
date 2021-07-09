@@ -325,7 +325,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         input_box.send_keys(Keys.ESCAPE)
         self.switch_to_window_by_name(excel_window_name)
 
-        return column_width
+        return '{:.2f}'.format(float(column_width))
 
     def _open_resize_window_for_column(self, column_name):
         self.go_to_cell(f'{column_name}1')
