@@ -338,18 +338,18 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
         return not any(row_name in row_names for row_name in present_row_names)
 
-    def verify_column_width(self, column_name, expected_width, units=DEFAULT_UNIT):
+    def get_column_width(self, column_name, units=DEFAULT_UNIT):
         self.focus_on_excel_frame()
 
         self._open_resize_window_for_column(column_name)
 
         size_input = self._get_resize_window_input_with_selected_units(units)
 
-        is_width_as_expected = size_input.get_attribute(Const.ATTRIBUTE_VALUE) == expected_width
+        column_width = size_input.get_attribute(Const.ATTRIBUTE_VALUE)
 
         self.get_element_by_id(ExcelSheetBrowserPage.RESIZE_WINDOW_CANCEL_BUTTON_ID).click()
 
-        return is_width_as_expected
+        return column_width
 
     def _open_resize_window_for_column(self, column_name):
         self.go_to_cell(f'{column_name}1')

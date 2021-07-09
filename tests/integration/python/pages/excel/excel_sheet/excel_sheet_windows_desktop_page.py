@@ -118,7 +118,8 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Gets Book element.
 
-        Usually it's Name attribute is ExcelSheetWindowsDesktopPage.BOOK_ELEM, if not - use fallback method.
+        Usually it's a Tab element with AutomationId attribute as in ExcelSheetWindowsDesktopPage.BOOK_ELEM, if not -
+        use fallback method.
 
         :return: Book element.
         """
@@ -312,7 +313,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         return not any(row_name in row_names for row_name in present_row_names)
 
-    def verify_column_width(self, column_name, expected_width):
+    def get_column_width(self, column_name):
         excel_window_name = self.get_current_window_name()
 
         self._open_resize_window_for_column(column_name)
@@ -324,7 +325,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         input_box.send_keys(Keys.ESCAPE)
         self.switch_to_window_by_name(excel_window_name)
 
-        return '{:.2f}'.format(float(column_width)) == expected_width
+        return column_width
 
     def _open_resize_window_for_column(self, column_name):
         self.go_to_cell(f'{column_name}1')
