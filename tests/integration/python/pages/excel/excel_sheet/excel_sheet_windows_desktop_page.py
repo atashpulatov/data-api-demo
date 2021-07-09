@@ -123,7 +123,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
 
         :return: Book element.
         """
-        book_element = self.get_element_by_name(
+        book_element = self.get_element_by_xpath(
             ExcelSheetWindowsDesktopPage.BOOK_ELEM,
             timeout=Const.SHORT_TIMEOUT,
             safe=True
