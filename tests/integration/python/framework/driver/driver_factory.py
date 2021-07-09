@@ -33,12 +33,14 @@ class DriverFactory:
     driver = None
     driver_type = None
 
+    driver_restarted_during_run = False
+
     def get_driver(self):
         driver_type = ConfigUtil.get_driver_type()
 
         if not DriverFactory.driver:
             DriverFactory.driver_type = driver_type
-            DriverFactory.driver = DriverFactory.DRIVER_DEF[driver_type]()
+            DriverFactory.driver = DriverFactory.DRIVER_DEF[driver_type](DriverFactory.driver_restarted_during_run)
 
         return DriverFactory.driver
 
@@ -49,5 +51,8 @@ class DriverFactory:
         return DriverFactory.BEFORE_DRIVER_CLEANUP_DEF[driver_type]
 
     @classmethod
-    def reset_driver(cls):
+    def reset_driver(cls, restart_driver_during_run):
+        if restart_driver_during_run:
+            DriverFactory.driver_restarted_during_run = True
+
         DriverFactory.driver = None

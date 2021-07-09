@@ -9,7 +9,7 @@ from framework.util.util import Util
 
 
 class DriverChrome(AbstractDriver):
-    def get_driver(self):
+    def get_driver(self, not_used_driver_restarted_during_run):
         if ConfigUtil.is_attaching_to_existing_session_enabled():
             return self._prepare_driver_existing_session()
         else:

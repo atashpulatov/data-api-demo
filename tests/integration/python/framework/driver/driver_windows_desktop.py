@@ -27,8 +27,8 @@ class DriverWindowsDesktop(AbstractDriver):
 
     win_app_driver_process = None
 
-    def get_driver(self):
-        if ConfigUtil.is_attaching_to_existing_session_enabled():
+    def get_driver(self, driver_restarted_during_run):
+        if driver_restarted_during_run or ConfigUtil.is_attaching_to_existing_session_enabled():
             return self._prepare_driver_existing_session()
         else:
             return self._prepare_driver_new_session()

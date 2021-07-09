@@ -10,9 +10,11 @@ class BasePage(ElementWait, ElementGetUsingParent, DriverSendKeys):
     def __init__(self):
         super().__init__()
 
-        self.driver = DriverFactory().get_driver()
-
         self.__image_util = ImageUtil()
+
+    @property
+    def driver(self):
+        return DriverFactory().get_driver()
 
     def log(self, obj):
         Util.log(obj)
