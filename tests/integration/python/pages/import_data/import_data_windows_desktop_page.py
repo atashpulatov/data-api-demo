@@ -205,6 +205,15 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         # TODO check if dossier is opened
 
+    def is_prepare_data_button_enabled(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        prepare_data_button = self.get_element_by_name(
+            ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM
+        )
+
+        return prepare_data_button.is_enabled_by_attribute_xml()
+
     def _click_import_button(self):
         self.get_element_by_name(
             ImportDataWindowsDesktopPage.IMPORT_BUTTON_ELEM,
