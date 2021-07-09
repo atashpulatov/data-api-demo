@@ -10,7 +10,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     VALUE_ATTRIBUTE = 'Value.Value'
 
     WINDOW_ELEM = 'Window'
-    BOOK_ELEM = 'Book1'
+    BOOK_ELEM = '//Tab[@AutomationId="Book1"]'
     GRID_ELEM = 'Grid'
     EDIT_ELEM_XPATH = '//Edit'
     BOOK_CHILDREN_ELEMS = '//TabItem[@AutomationId="SheetTab"]'

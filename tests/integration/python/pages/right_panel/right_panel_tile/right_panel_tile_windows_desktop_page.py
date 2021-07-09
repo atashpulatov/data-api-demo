@@ -30,7 +30,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     POPUP_WINDOW_ELEM = 'NUIDialog'
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
-    OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
+    OBJECT_NAME_ELEM = '//ListItem[%s]/Group/Button[5]'
 
     TILE_LIST = '//List'
     TILE_ELEM = TILE_LIST + '/ListItem[%s]'
@@ -322,7 +322,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         right_panel_element = self.get_add_in_right_panel_element()
 
-        return right_panel_element.get_element_by_name(
+        return right_panel_element.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.TILE_LIST,
             timeout=Const.MEDIUM_TIMEOUT,
             safe=True
