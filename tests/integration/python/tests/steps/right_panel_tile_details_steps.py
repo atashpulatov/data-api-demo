@@ -81,7 +81,7 @@ def step_impl(context, object_number, expected_object_id):
     AssertUtil.assert_simple(expected_object_id, object_id)
 
 
-@step('object {object_number} has owner "{expected_owner_name}"')
+@step('I verified that object {object_number} has owner "{expected_owner_name}"')
 def step_impl(context, object_number, expected_owner_name):
     owner_name = context.pages.right_panel_tile_details_page().get_object_owner(object_number)
 
