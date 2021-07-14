@@ -98,7 +98,7 @@ Feature: F25931 - Duplicate object
       And I clicked Add Data button
       And I found object by ID "0DEF0B3346F3CE89858B41BFA5BD4915" and selected "Merged Header Report"
       And I clicked Import button without checking results
-   #TODO  I veryfied "New  Sheet" is selected
+      And I verified that New Sheet is selected
       And I clicked OK button in Range Taken popup
       And I closed last notification
      Then I verified that object number 1 is called "Merged Header Report"

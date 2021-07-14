@@ -30,12 +30,12 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     POPUP_WINDOW_ELEM = 'NUIDialog'
     RIGHT_PANEL_ELEM = 'MicroStrategy for Office'
-    OBJECT_NAME_ELEM = '//DataItem[%s]/Group/Button/Text'
+    OBJECT_NAME_ELEM = '//ListItem[%s]/Group/Button[5]'
 
-    TILE_LIST = '//Group/List'
-    TILE_ELEM = TILE_LIST + '/DataItem[%s]'
+    TILE_LIST = '//List'
+    TILE_ELEM = TILE_LIST + '/ListItem[%s]'
 
-    NAME_INPUT_FOR_OBJECT = '//Button/Text'
+    NAME_INPUT_FOR_OBJECT = '//Button[5]'
     NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK = '//Edit'
     TEXT_INPUT_TAG_NAME = 'Edit'
     TOOLTIP_TEXT = '//ToolTip/Text'
@@ -131,8 +131,10 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         if elements:
             self._get_tile_list().click()
 
-    def close_last_notification_on_hover(self):
+    def close_last_notification_on_hover(self, reset_framework_method, context):
         self.wait_for_progress_notifications_to_disappear()
+
+        reset_framework_method(context, restart_driver_during_run=True)
 
         self._hover_over_tile(RightPanelTileWindowsDesktopPage.XML_FIRST_ELEMENT_INDEX)
 

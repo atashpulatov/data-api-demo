@@ -124,7 +124,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
             other_container.move_to()
             tile.move_to()
 
-    def close_last_notification_on_hover(self):
+    def close_last_notification_on_hover(self, not_used_reset_framework_method, not_used_context):
         self.focus_on_add_in_frame()
 
         self._hover_over_tile(0)

@@ -221,6 +221,6 @@ def step_impl(context, row_names):
 
 @step('I verified column "{column_name}" has width "{expected_width}" default units')
 def step_impl(context, column_name, expected_width):
-    column_has_given_width = context.pages.excel_sheet_page().verify_column_width(column_name, expected_width)
+    column_width = context.pages.excel_sheet_page().get_column_width(column_name)
 
-    AssertUtil.assert_simple(column_has_given_width, True)
+    AssertUtil.assert_simple(column_width, expected_width)
