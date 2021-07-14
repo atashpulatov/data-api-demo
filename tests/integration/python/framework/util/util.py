@@ -39,9 +39,9 @@ class Util:
 
     @staticmethod
     def extract_environment_id(environment_prefix, environment_name):
-        m = re.search(Util.EXTRACT_ENVIRONMENT_ID_PATTERN % environment_prefix, environment_name)
+        m = re.split(Util.EXTRACT_ENVIRONMENT_ID_PATTERN % environment_prefix, environment_name)
         if m:
-            return m.group(1)
+            return m[2]
 
         raise MstrException('Error when extracting environment id from name, environment_prefix: '
                             f'[{environment_prefix}], environment_name: [{environment_name}]')
