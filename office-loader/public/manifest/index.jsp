@@ -1,5 +1,7 @@
 <%@ page import="java.security.MessageDigest,java.security.NoSuchAlgorithmException,java.util.Objects,java.util.UUID"
-%><%@ page import="java.nio.charset.StandardCharsets" %><%!
+%><%@ page import="java.nio.charset.StandardCharsets"
+%><%@ page language="Java" import="org.owasp.encoder.Encode"
+%><%!
     private static class UUIDType5 {
         private static final UUID NAMESPACE = UUID.fromString("94a1c4bb-9a81-a8b9-f9b0-0fa57409f25b");
         private static final String MESSAGE_DIGEST_SHA_1 = "SHA-1";
@@ -232,7 +234,7 @@
     final String CONTENT_DISPOSITION_KEY = "Content-Disposition";
     final String CONTENT_DISPOSITION_FILE_NAME_VALUE = "attachment; filename=\"MicroStrategy for Office.xml\"";
 
-    final String url = request.getRequestURL().toString();
+    final String url = Encode.forXmlAttribute(request.getRequestURL().toString());
     final String manifestXml = ManifestXmlCreator.getXml(url);
 
     response.setContentType(CONTENT_TYPE);
