@@ -20,7 +20,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     FILTERS_BUTTON_ELEM = 'Filters'
 
-    SEARCH_ELEM = '//Group/Edit'
+    SEARCH_ELEM = '//Document/Edit'
+    SEARCH_ELEM_OLD_EXCEL = '//Group/Edit'
 
     ARIA_PROPERTIES_ATTRIBUTE = 'AriaProperties'
     ARIA_PROPERTIES_SEPARATOR = ';'
@@ -98,7 +99,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         popup_main_element = self.get_add_in_main_element()
 
-        search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM)
+        search_element = popup_main_element.get_element_by_xpath(
+            ImportDataWindowsDesktopPage.SEARCH_ELEM,
+            timeout=Const.MEDIUM_TIMEOUT,
+            safe=True
+        )
+
+        if search_element:
+            search_element.click()
+        else:
+            search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM_OLD_EXCEL)
 
         # Remove search box content.
         search_element.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
@@ -133,6 +143,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         """
         Finds object by id and selects it, see ImportDataBrowserPage#find_and_select_object_by_id.
         """
+        Util.pause(10)
 
         self.find_object(object_id)
 
@@ -143,7 +154,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
             image_name=self.prepare_image_name(object_name)
         ).click()
 
-    def click_import_button(self):
+    def click_import_button(self, reset_framework_method, context):
         self.windows_desktop_workaround.focus_on_popup_window()
 
         self._click_import_button()
@@ -152,6 +163,8 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if not self.check_if_element_exists_by_name(MessageConst.IMPORT_SUCCESSFUL_TEXT):
             raise MstrException('Error while importing')
+
+        reset_framework_method(context, restart_driver_during_run=True)
 
     def click_import_button_without_checking_results(self):
         self.windows_desktop_workaround.focus_on_popup_window()
@@ -191,6 +204,15 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         self._click_import_button()
 
         # TODO check if dossier is opened
+
+    def is_prepare_data_button_enabled(self):
+        self.windows_desktop_workaround.focus_on_popup_window()
+
+        prepare_data_button = self.get_element_by_name(
+            ImportDataWindowsDesktopPage.PREPARE_DATA_BUTTON_ELEM
+        )
+
+        return prepare_data_button.is_enabled_by_attribute_xml()
 
     def _click_import_button(self):
         self.get_element_by_name(

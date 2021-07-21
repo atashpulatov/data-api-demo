@@ -5,7 +5,7 @@ from framework.util.assert_util import AssertUtil
 
 @step('I closed last notification')
 def step_impl(context):
-    context.pages.right_panel_tile_page().close_last_notification_on_hover()
+    context.pages.right_panel_tile_page().close_last_notification_on_hover(context.reset_framework, context)
 
 
 @step('I closed notification on object {object_number}')

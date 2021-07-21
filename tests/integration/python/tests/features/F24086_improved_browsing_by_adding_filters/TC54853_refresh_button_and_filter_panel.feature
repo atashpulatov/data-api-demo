@@ -1,5 +1,5 @@
-@windows_chrome
-@mac_chrome
+@ci_pipeline_rv_mac_chrome @mac_chrome
+@ci_pipeline_rv_windows_chrome @windows_chrome
 Feature: F24086 - Improved browsing by adding filters
 
   Scenario: [TC54853] - [Object filtering] Refresh button & filter panel
@@ -43,6 +43,7 @@ Feature: F24086 - Improved browsing by adding filters
 
      When I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
+      And I selected dossier page or chapter 1
       And I imported visualization "Visualization 1"
 
      Then I closed last notification

@@ -1,3 +1,5 @@
+import re
+
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.config_util import ConfigUtil
 from framework.util.const import Const
@@ -13,6 +15,11 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
     MAIN_MENU_HOME_BUTTON_ID = 'Home'
     MAIN_MENU_INSERT_BUTTON_ID = 'Insert'
 
+    NAME_BOX_DROPDOWN_BUTTON_CSS = '.cui-dd-arrow-button'
+    NAME_BOX_ITEMS_CSS = 'li.cui-menusection-items'
+
+    MODAL_DIV_CSS = '.cui-modalDiv'
+
     def click_add_in_elem(self):
         self._get_add_in_button().click()
 
@@ -24,7 +31,7 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
         :return: environment id.
         """
-        add_in_environment = ConfigUtil.get_excel_desktop_add_in_import_data_name()
+        add_in_environment = ConfigUtil.get_add_in_environment()
 
         add_in_button = self._get_add_in_button()
         add_in_name = add_in_button.text
@@ -68,10 +75,40 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
         self.press_enter()
 
     def is_object_name_in_name_box_correct(self, object_number, expected_name):
-        raise MstrException('TODO implement')
+        self.focus_on_excel_frame()
 
-    def are_timestamps_different(self, object_number_1, object_number_2):
-        raise MstrException('TODO implement')
+        self.get_element_by_css(ExcelMenuBrowserPage.NAME_BOX_DROPDOWN_BUTTON_CSS).click()
+
+        name_box_items = self.get_elements_by_css(ExcelMenuBrowserPage.NAME_BOX_ITEMS_CSS)
+        name_box_item_name = name_box_items[int(object_number) - 1].text
+        name_box_item_name_without_timestamp = re.sub(r'_\d+$', '_', name_box_item_name)
+
+        self.get_element_by_css(ExcelMenuBrowserPage.MODAL_DIV_CSS).click()
+
+        return expected_name == name_box_item_name_without_timestamp
+
+    def are_timestamps_equal(self, first_object_number, second_object_number):
+        self.focus_on_excel_frame()
+
+        self.get_element_by_css(ExcelMenuBrowserPage.NAME_BOX_DROPDOWN_BUTTON_CSS).click()
+
+        name_box_items = self.get_elements_by_css(ExcelMenuBrowserPage.NAME_BOX_ITEMS_CSS)
+
+        first_name_box_item_timestamp = self._get_timestamp_of_name_box_item(name_box_items, first_object_number)
+        second_name_box_item_timestamp = self._get_timestamp_of_name_box_item(name_box_items, second_object_number)
+
+        self.get_element_by_css(ExcelMenuBrowserPage.MODAL_DIV_CSS).click()
+
+        return first_name_box_item_timestamp == second_name_box_item_timestamp
+
+    def _get_timestamp_of_name_box_item(self, name_box_items, object_number):
+        object_index = int(object_number) - 1
+
+        name_box_item_name = name_box_items[object_index].text
+
+        timestamp_index = name_box_item_name.rindex('_') + 1
+
+        return name_box_item_name[timestamp_index:]
 
     def enable_use_of_keyboard_shortcuts(self):
         self.focus_on_excel_frame()

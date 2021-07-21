@@ -2,7 +2,7 @@ from abc import ABC
 
 
 class AbstractDriver(ABC):
-    def get_driver(self):
+    def get_driver(self, driver_restarted_during_run):
         pass
 
     @staticmethod

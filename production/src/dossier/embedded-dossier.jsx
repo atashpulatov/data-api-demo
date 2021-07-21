@@ -13,6 +13,9 @@ const { microstrategy, Office } = window;
 
 const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
 
+const VIZ_SELECTION_RETRY_DELAY = 200; // ms
+const VIZ_SELECTION_RETRY_LIMIT = 10;
+
 export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +25,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
+    this.restoreVizSelection = this.restoreVizSelection.bind(this);
+    this.retryCounter = 0;
     this.embeddedDossier = null;
     this.state = { loadingFrame: true };
   }
@@ -48,6 +53,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleIframeLoadEvent } = this.props;
+      if (iframe.focusEventListenerAdded === false) {
+        iframe.focusEventListenerAdded = true;
+        iframe.addEventListener('focus', scriptInjectionHelper.switchFocusToElementOnWindowFocus);
+      }
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
@@ -123,11 +132,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
 
-    let selectedVizChecked = selectedViz;
-    if (selectedViz && visualizationInfo) {
-      const { chapterKey, visualizationKey } = visualizationInfo;
-      selectedVizChecked = `${chapterKey}:${visualizationKey}`;
-    }
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
     const props = {
@@ -185,7 +189,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         addToLibrary: true,
       },
       enableVizSelection: true,
-      selectedViz: selectedVizChecked,
       onMsgRouterReadyHandler: ({ MsgRouter }) => {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
@@ -195,28 +198,59 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     };
 
     if (microstrategy && microstrategy.dossier) {
-      microstrategy.dossier
-        .create(props)
-        .then(dossier => {
-          if (selectedViz && visualizationInfo) {
-            const { pageKey, chapterKey } = visualizationInfo;
+      const embeddedDossier = await microstrategy.dossier.create(props);
+      this.embeddedDossier = embeddedDossier;
 
-            const selectedPageNodeKey = dossier
-              .getChapterList()
-              .find(chapter => chapter.nodeKey.includes(chapterKey))
-              .children
-              .find(page => page.nodeKey.includes(pageKey))
-              .nodeKey;
+      if (selectedViz && visualizationInfo) {
+        const { pageKey, chapterKey, visualizationKey } = visualizationInfo;
 
-            dossier.navigateToPage(dossier.getPageByNodeKey(selectedPageNodeKey));
-          }
-          this.embeddedDossier = dossier;
-          this.setState({ loadingFrame: false });
-          handleEmbeddedDossierLoad();
-        });
+        const chapterList = embeddedDossier.getChapterList();
+
+        const selectedPageNodeKey = chapterList
+          .find(chapter => chapter.nodeKey.includes(chapterKey))
+          .children
+          .find(page => page.nodeKey.includes(pageKey))
+          .nodeKey;
+
+        const selectedPage = embeddedDossier.getPageByNodeKey(selectedPageNodeKey);
+
+        await embeddedDossier.navigateToPage(selectedPage);
+
+        await this.restoreVizSelection(visualizationKey);
+      }
+
+      this.setState({ loadingFrame: false });
+      handleEmbeddedDossierLoad();
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
     }
+  }
+
+  async restoreVizSelection(visualizationKey) {
+    try {
+      this.retryCounter++;
+      await this.embeddedDossier.selectViz(visualizationKey);
+    } catch (error) {
+      if (this.retryCounter > VIZ_SELECTION_RETRY_LIMIT) {
+        console.error(error);
+      } else {
+        await new Promise(resolve => setTimeout(resolve, VIZ_SELECTION_RETRY_DELAY));
+        await this.restoreVizSelection(visualizationKey);
+      }
+    }
+  }
+
+  /**
+  * Update the instanceId in dossierData and also in parent component.
+  * InstanceId is changing as result of reset button click, switch to
+  * bookmark or new prompts answers given.
+  *
+  * @param {String} newInstanceId
+  */
+  instanceIdChangeHandler(newInstanceId) {
+    const { handleInstanceIdChange } = this.props;
+    this.dossierData.instanceId = newInstanceId;
+    handleInstanceIdChange(newInstanceId);
   }
 
   /**
@@ -237,19 +271,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.onVizSelectionHandler(payload);
       }
     }
-  }
-
-  /**
-  * Update the instanceId in dossierData and also in parent component.
-  * InstanceId is changing as result of reset button click, switch to
-  * bookmark or new prompts answers given.
-  *
-  * @param {String} newInstanceId
-  */
-  instanceIdChangeHandler(newInstanceId) {
-    const { handleInstanceIdChange } = this.props;
-    this.dossierData.instanceId = newInstanceId;
-    handleInstanceIdChange(newInstanceId);
   }
 
   render() {
