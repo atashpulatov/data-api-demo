@@ -81,12 +81,15 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   onVizSelectionHandler(payload) {
     const { handleSelection } = this.props;
     const [payloadChapterKey] = Object.keys(payload);
-    const [payloadVisKey] = Object.keys(payload[payloadChapterKey]);
+    const chapterData = payload[payloadChapterKey];
+    const [payloadVisKey] = Object.keys(chapterData);
+
     this.dossierData = {
       ...this.dossierData,
       chapterKey: payloadChapterKey,
       visualizationKey: payloadVisKey
     };
+
     handleSelection(this.dossierData);
   }
 

@@ -5,6 +5,7 @@ import { errorService } from '../../error/error-handler';
 import {
   errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE, DOSSIER_HAS_CHANGED
 } from '../../error/constants';
+import { visualizationInfoService } from '../visualization-info-service';
 
 class DossierInstanceDefinition {
   async getDossierInstanceDefinition(
@@ -92,7 +93,7 @@ class DossierInstanceDefinition {
    */
   getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
     try {
-      const visualizationInfo = await mstrObjectRestService.getVisualizationInfo(
+      const visualizationInfo = await visualizationInfoService.getVisualizationInfo(
         projectId,
         objectId,
         visualizationKey,
