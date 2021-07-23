@@ -1,4 +1,5 @@
 @mac_chrome
+@windows_chrome
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67539] - Imported objects details showing, hiding  and coping with keyboard navigation - accessibility
