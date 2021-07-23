@@ -122,14 +122,16 @@ Feature: F25949 - Display filters and prompts
       And I verified that object 3 has "Prompt" list with value "Books, Electronics, Movies, Music"
       And I verified that object 3 has collapsed "Filter" list displayed
       And I verified that object 3 has "Attribute" list with value "Month, Subcategory"
-      And I verified that object 3 has "Metric" list with value "Profit, Profit Forecast, Revenue, Revenue Forecast"
-      And I verified that object 3 has id "300DBAFA4A1D8EC546AC6AB8CDE7834E"
-      And I verified that object 3 has collapsed location displayed
 
      When I pressed key Tab
       And I pressed key Tab
       And I pressed key Enter
      Then I verified that object 3 has "Filter" list with value "Subcategory (Art & Architecture, Business, Literature, Books - Miscellaneous, Science & Technology, Sports & Health, Audio Equipment, Cameras, Computers, Electronics - Miscellaneous, TV's, Video Equipment, Action, Comedy, Drama, Horror, Kids / Family, Special Interests, Alternative, Country, Music - Miscellaneous, Pop, Rock, Soul / R&B)"
+
+     Then I pressed key Enter
+      And I verified that object 3 has "Metric" list with value "Profit, Profit Forecast, Revenue, Revenue Forecast"
+      And I verified that object 3 has id "300DBAFA4A1D8EC546AC6AB8CDE7834E"
+      And I verified that object 3 has collapsed location displayed
 
      When I pressed key Enter
      Then I verified that object 3 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Report with a subtotal & prompt" displayed
@@ -180,7 +182,7 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Esc
       And I pressed key Tab
       And I pressed key Tab
-      And I pressed key Tab
+      And I pressed key Arrow Up
       And I pressed key Tab
       And I pressed key Enter
       And I waited for all progress notifications to disappear

@@ -123,6 +123,8 @@ class BaseBrowserPage(BasePage):
                                                         timeout=Const.DEFAULT_TIMEOUT):
         end_time = time.time() + timeout
         while True:
+            self.pause(Const.AFTER_OPERATION_WAIT_TIME)
+
             notification_text_elem = self.get_element_by_css(selector)
             value = notification_text_elem.get_attribute(attribute)
 

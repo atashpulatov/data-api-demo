@@ -52,7 +52,7 @@ class RightPanelTileDetailsBrowserPage(BaseBrowserPage):
 
     def click_name_list_expand_button(self, object_number, name_list_type):
         selector = RightPanelTileDetailsBrowserPage.NAME_LISTS_TO_SELECTOR[name_list_type] + ' ' \
-                   + RightPanelTileDetailsBrowserPage.NAME_LIST_EXPAND_BUTTON
+            + RightPanelTileDetailsBrowserPage.NAME_LIST_EXPAND_BUTTON
 
         self._click_expand_button(object_number, selector)
 
