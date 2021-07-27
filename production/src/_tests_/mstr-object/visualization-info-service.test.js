@@ -29,17 +29,6 @@ describe('VisualizationInfoService', () => {
       chapterName,
       pageName,
     },
-    panelStackTree: [],
-  };
-
-  const expectedVisualizationInfoWithPanelStacks = {
-    ...expectedVisualizationInfoWithoutPanelStacks,
-    panelStackTree: [{ panelStackKey, panelKey }],
-  };
-
-  const expectedVisualizationInfoWithNestedPanelStacks = {
-    ...expectedVisualizationInfoWithPanelStacks,
-    panelStackTree: [{ panelStackKey, panelKey }, { panelStackKey: nestedPanelStackKey, panelKey: nestedPanelKey }],
   };
 
   const dossierDefinitionWithoutPanelStacks = {
@@ -303,9 +292,9 @@ describe('VisualizationInfoService', () => {
 
   ${dossierDefinitionWithoutPanelStacks}                                    | ${expectedVisualizationInfoWithoutPanelStacks}      | ${'no panel stacks'} 
   ${dossierDefinitionWithoutPanelStacksAndExpectedVisualization}            | ${null}                                             | ${'no panel stacks and no expected visualization'} 
-  ${dossierDefinitionWithPanelStacks}                                       | ${expectedVisualizationInfoWithPanelStacks}         | ${'panel stack'} 
+  ${dossierDefinitionWithPanelStacks}                                       | ${expectedVisualizationInfoWithoutPanelStacks}      | ${'panel stack'} 
   ${dossierDefinitionWithPanelStacksAndWithoutExpectedVisualization}        | ${null}                                             | ${'panel stack and no expected visualization'} 
-  ${dossierDefinitionWithNestedPanelStacks}                                 | ${expectedVisualizationInfoWithNestedPanelStacks}   | ${'nested panel stack'} 
+  ${dossierDefinitionWithNestedPanelStacks}                                 | ${expectedVisualizationInfoWithoutPanelStacks}      | ${'nested panel stack'} 
   ${dossierDefinitionWithNestedPanelStacksAndWithoutExpectedVisualization}  | ${null}                                             | ${'nested panel stack and no expected visualization'} 
 
   `('should call getVisualizationInfo and get expectedVisualizationInfo for "$testName" dossier definition', async ({ dossierDefinition, expectedVisualizationInfo }) => {
