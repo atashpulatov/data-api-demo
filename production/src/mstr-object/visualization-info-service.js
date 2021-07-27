@@ -12,7 +12,7 @@ class VisualizationInfoService {
   }
 
   /**
-   * Get visualization key, page key, chapter key, dossier structure with namesfrom dossier hierarchy.
+   * Get visualization key, page key, chapter key, dossier structure with names from dossier hierarchy.
    * In case if visualization key is not found in dossier, it returns null.
    *
    * Exceptions are handled by callers.
@@ -84,7 +84,7 @@ class VisualizationInfoService {
   }
 
   /**
-   * Recursivly parses given panel stacks from dossier page to find visualization with given key.
+   * Recursively parses given panel stacks from dossier page to find visualization with given key.
    * @param {Array<Object>} givenPanelStacks arrray of panel stacks being parsed
    * @param {String} visualizationKey key of visualization which script is looking for
    * @param {String} chapterData.key key of parsed chapter
