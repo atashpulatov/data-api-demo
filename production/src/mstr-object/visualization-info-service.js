@@ -12,8 +12,8 @@ class VisualizationInfoService {
   }
 
   /**
-   * Get visualization key, page key, chapter key, dossier structure with names and panel stack tree.
-   * from dossier hierarchy. In case if visualization key is not found in dossier, it returns null.
+   * Get visualization key, page key, chapter key, dossier structure with names from dossier hierarchy.
+   * In case if visualization key is not found in dossier, it returns null.
    *
    * Exceptions are handled by callers.
    *
@@ -46,11 +46,10 @@ class VisualizationInfoService {
    * @param {String} pageData.name name of parsed page
    * @param {String} visualizationKey key of visualization which script is looking for
    * @param {String} dossierName name of parsed dossier
-   * @param {Array<Object} panelStackTree array of panel stacks and panels key which indicates parsed panel
    * @returns {Object} visualization info object
    */
   // eslint-disable-next-line class-methods-use-this
-  prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName, panelStackTree) {
+  prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName) {
     return {
       chapterKey: chapterData.key,
       pageKey: pageData.key,
@@ -59,8 +58,7 @@ class VisualizationInfoService {
         chapterName: chapterData.name,
         dossierName,
         pageName: pageData.name,
-      },
-      panelStackTree,
+      }
     };
   }
 
@@ -73,15 +71,12 @@ class VisualizationInfoService {
    * @param {String} pageData.name name of parsed page
    * @param {String} visualizationKey key of visualization which script is looking for
    * @param {String} dossierName name of parsed dossier
-   * @param {Array<Object} panelStackTree array of panel stacks and panels key which indicates parsed panel
    * @returns {Object} Visualization info or null.
    */
-  parseVisualizations(visualizations, chapterData, pageData, visualizationKey, dossierName, panelStackTree) {
+  parseVisualizations(visualizations, chapterData, pageData, visualizationKey, dossierName) {
     for (const visualization of visualizations) {
       if (visualization.key === visualizationKey) {
-        return this.prepareVisualizationInfoObject(
-          chapterData, pageData, visualizationKey, dossierName, panelStackTree
-        );
+        return this.prepareVisualizationInfoObject(chapterData, pageData, visualizationKey, dossierName);
       }
     }
 
@@ -89,8 +84,7 @@ class VisualizationInfoService {
   }
 
   /**
-   * Recursivly parses given panel stacks from dossier page to find visualization with given key
-   * and persist its location in the dossier.
+   * Recursively parses given panel stacks from dossier page to find visualization with given key.
    * @param {Array<Object>} givenPanelStacks arrray of panel stacks being parsed
    * @param {String} visualizationKey key of visualization which script is looking for
    * @param {String} chapterData.key key of parsed chapter
@@ -98,25 +92,21 @@ class VisualizationInfoService {
    * @param {String} pageData.key key of parsed page
    * @param {String} pageData.name name of parsed page
    * @param {String} dossierName name of parsed dossier
-   * @param {Array<Object} panelStackTree array of panel stacks and panels key which indicates parsed panel
    * @returns {Object} Visualization info or null.
    */
-  parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageData, dosierName, panelStackTree) {
+  parsePanelStacks(givenPanelStacks, visualizationKey, chapterData, pageData, dosierName) {
     for (const panelStack of givenPanelStacks) {
       for (const panel of panelStack.panels) {
-        const panelLocation = { panelKey: panel.key, panelStackKey: panelStack.key };
-        const newPanelStackTree = [...panelStackTree, panelLocation];
-
         if (panel.visualizations) {
           const vizInfo = this.parseVisualizations(
-            panel.visualizations, chapterData, pageData, visualizationKey, dosierName, newPanelStackTree
+            panel.visualizations, chapterData, pageData, visualizationKey, dosierName
           );
           if (vizInfo) { return vizInfo; }
         }
 
         if (panel.panelStacks) {
           const vizInfo = this.parsePanelStacks(
-            panel.panelStacks, visualizationKey, chapterData, pageData, dosierName, newPanelStackTree
+            panel.panelStacks, visualizationKey, chapterData, pageData, dosierName
           );
           if (vizInfo) { return vizInfo; }
         }
@@ -141,14 +131,14 @@ class VisualizationInfoService {
 
     if (page.visualizations) {
       const vizInfo = this.parseVisualizations(
-        page.visualizations, chapterData, pageData, visualizationKey, dossierName, []
+        page.visualizations, chapterData, pageData, visualizationKey, dossierName
       );
       if (vizInfo) { return vizInfo; }
     }
 
     if (page.panelStacks) {
       const vizInfo = this.parsePanelStacks(
-        page.panelStacks, visualizationKey, chapterData, pageData, dossierName, []
+        page.panelStacks, visualizationKey, chapterData, pageData, dossierName
       );
       if (vizInfo) { return vizInfo; }
     }
