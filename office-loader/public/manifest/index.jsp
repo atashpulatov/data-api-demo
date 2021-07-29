@@ -1,6 +1,6 @@
 <%@ page import="java.security.MessageDigest,java.security.NoSuchAlgorithmException,java.util.Objects,java.util.UUID"
 %><%@ page import="java.nio.charset.StandardCharsets"
-%><%@ page language="Java" import="org.owasp.encoder.Encode"
+%><%@ page language="java" import="org.owasp.encoder.Encode"
 %><%!
     private static class UUIDType5 {
         private static final UUID NAMESPACE = UUID.fromString("94a1c4bb-9a81-a8b9-f9b0-0fa57409f25b");
