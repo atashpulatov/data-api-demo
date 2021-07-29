@@ -166,6 +166,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         options: false,
         search: false,
         bookmark: true,
+        edit: false,
       },
       optionsFeature: {
         enabled: true,
