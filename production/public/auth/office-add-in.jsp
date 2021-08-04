@@ -1,7 +1,7 @@
 <!-- 
-<%@ page language="Java" import="org.owasp.encoder.Encode" %>  
-<%@ page language="Java" import="com.microstrategy.auth.sessionmgr.SessionManager" %>
-<%@ page language="Java" import="com.microstrategy.auth.rest.ParamNames" %>
+<%@ page language="java" import="org.owasp.encoder.Encode" %>  
+<%@ page language="java" import="com.microstrategy.auth.sessionmgr.SessionManager" %>
+<%@ page language="java" import="com.microstrategy.auth.rest.ParamNames" %>
 <%
   SessionManager sessionManager = (SessionManager)session.getAttribute(ParamNames.SESSION_MANAGER);
   String authToken = sessionManager.getAccessToken();
