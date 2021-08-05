@@ -81,7 +81,7 @@ describe('Compound Grid Handler', () => {
     // given
     const { definition } = regularCompoundJSON;
     const attributeForms = null;
-    const expectedAttrForms = { rowsAttributes: ['\'Subcategory'] };
+    const expectedAttrForms = { rowsAttributes: ['Subcategory'] };
 
 
     // when
@@ -172,13 +172,13 @@ describe('Compound Grid Handler', () => {
       ['Profit', 'Profit', 'Profit', 'Profit', '2016', '2015', '2014']
     ];
     const expectedRowHeaders = [
-      ['\'Art & Architecture'],
-      ['\'Business'],
-      ['\'Cameras'],
-      ['\'Kids / Family'],
-      ['\'Special Interests'],
-      ['\'Alternative'],
-      ['\'Country']];
+      ['Art & Architecture'],
+      ['Business'],
+      ['Cameras'],
+      ['Kids / Family'],
+      ['Special Interests'],
+      ['Alternative'],
+      ['Country']];
 
     // when
     const headers = mstrCompoundGridHandler.getHeaders(response);
@@ -211,13 +211,13 @@ describe('Compound Grid Handler', () => {
       ['Profit', 'Profit', 'Profit', 'Profit', '2016', '2015', '2014']
     ];
     const expectedRowHeaders = [
-      ['\'Art & Architecture'],
-      ['\'Business'],
-      ['\'Cameras'],
-      ['\'Kids / Family'],
-      ['\'Special Interests'],
-      ['\'Alternative'],
-      ['\'Country']];
+      ['Art & Architecture'],
+      ['Business'],
+      ['Cameras'],
+      ['Kids / Family'],
+      ['Special Interests'],
+      ['Alternative'],
+      ['Country']];
 
     // when
     const headers = mstrCompoundGridHandler.getHeaders(response);

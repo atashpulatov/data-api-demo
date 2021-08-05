@@ -74,8 +74,6 @@ class StepApplyFormatting {
       const object = filteredColumnInformation[index];
       const columnRange = this.getColumnRangeForFormatting(index, isCrosstab, offset, officeTable);
       if (object.isAttribute) {
-        columnRange.numberFormat = '';
-
         await officeFormatHyperlinks.formatColumnAsHyperlinks(object, columnRange, excelContext);
       } else {
         columnRange.numberFormat = this.getFormat(object);
