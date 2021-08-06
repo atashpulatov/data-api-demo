@@ -173,7 +173,7 @@ describe('StepApplyFormatting', () => {
 
     expect(stepApplyFormatting.getFormat).not.toBeCalled();
 
-    expect(columnRangeMock.numberFormat).toEqual(undefined);
+    expect(columnRangeMock.numberFormat).toBeUndefined();
   });
 
   it('setupFormatting should work as expected for 1 filteredColumnInformation not attribute element', () => {

@@ -9,7 +9,7 @@ import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-p
 import { objectsList } from '../../../constants/objects-list';
 import { excelSelectors } from '../../../constants/selectors/office-selectors';
 import officeWorksheet from '../../../helpers/office/office.worksheet';
-import {logStep} from '../../../helpers/utils/allure-helper';
+import { logStep } from '../../../helpers/utils/allure-helper';
 
 describe('F21526 - Secure data - clearing data', () => {
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('F21526 - Secure data - clearing data', () => {
   });
 
   it('[TC54263] - Clearing and viewing data for users with different privileges', () => {
-   logStep(`should import 'Revenue by Region and Category - secure data' report`);
+    logStep(`should import 'Revenue by Region and Category - secure data' report`);
     PluginPopup.importObjectToCellAndAssertSuccess('A1', objectsList.reports.secureDataFiltering, 'Report for clearing data should be imported', false);
 
     logStep(`should import 'Secure data - always working' report`);
@@ -50,10 +50,10 @@ describe('F21526 - Secure data - clearing data', () => {
 
     logStep('should assert A2 and E2 cells are empty');
     switchToExcelFrame();
-    officeWorksheet.selectCell('A2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
-    officeWorksheet.selectCell('E2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
+    officeWorksheet.selectCell('A2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
+    officeWorksheet.selectCell('E2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
 
     logStep(`should click "View Data"`);
     browser.pause(4000);
@@ -67,10 +67,10 @@ describe('F21526 - Secure data - clearing data', () => {
 
     logStep(`should assert data was refreshed`);
     switchToExcelFrame();
-    officeWorksheet.selectCell('A2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Central`);
-    officeWorksheet.selectCell('E2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Albania`);
+    officeWorksheet.selectCell('A2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`Central`);
+    officeWorksheet.selectCell('E2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`Albania`);
 
     logStep(`should clear data`);
     switchToPluginFrame();
@@ -81,10 +81,10 @@ describe('F21526 - Secure data - clearing data', () => {
 
     logStep('should assert A2 and E2 cells are empty');
     switchToExcelFrame();
-    officeWorksheet.selectCell('A2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
-    officeWorksheet.selectCell('E2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
+    officeWorksheet.selectCell('A2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
+    officeWorksheet.selectCell('E2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
 
     logStep('should log out');
     browser.pause(2000);
@@ -108,10 +108,10 @@ describe('F21526 - Secure data - clearing data', () => {
 
     logStep(`should assert data was refreshed`);
     switchToExcelFrame();
-    officeWorksheet.selectCell('A2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Mid-Atlantic`)
-    officeWorksheet.selectCell('E2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Albania`)
+    officeWorksheet.selectCell('A2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`Mid-Atlantic`);
+    officeWorksheet.selectCell('E2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`Albania`);
     browser.pause(2000);
 
     logStep(`should clear data`);
@@ -123,10 +123,10 @@ describe('F21526 - Secure data - clearing data', () => {
 
     logStep('should assert A2 and E2 cells are empty');
     switchToExcelFrame();
-    officeWorksheet.selectCell('A2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
-    officeWorksheet.selectCell('E2')
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('')
+    officeWorksheet.selectCell('A2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
+    officeWorksheet.selectCell('E2');
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
 
     logStep('should log out');
     switchToPluginFrame();
@@ -152,6 +152,6 @@ describe('F21526 - Secure data - clearing data', () => {
     officeWorksheet.selectCell('A2');
     expect($(excelSelectors.excelFormulaBar).getText()).toEqual('');
     officeWorksheet.selectCell('E2');
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Albania`);
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`Albania`);
   });
 });

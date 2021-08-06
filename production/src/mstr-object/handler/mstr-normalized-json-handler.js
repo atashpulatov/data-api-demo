@@ -140,7 +140,7 @@ class NormalizedJsonHandler {
             const subtotalAttribute = grid.rows[element.subtotalAddress.attributeIndex];
             if (supportForms && subtotalAttribute && subtotalAttribute.forms && subtotalAttribute.forms.length > 1) {
               for (let idx = 0; idx < subtotalAttribute.forms.length - 1; idx++) {
-                tabularRows.push(`'`);
+                tabularRows.push(``);
               }
             }
           }

@@ -9,7 +9,7 @@ import { waitAndClick } from '../../../helpers/utils/click-helper';
 import { objectsList } from '../../../constants/objects-list';
 import { popupSelectors } from '../../../constants/selectors/popup-selectors';
 import { rightPanelSelectors } from '../../../constants/selectors/plugin.right-panel-selectors';
-import {excelSelectors} from '../../../constants/selectors/office-selectors';
+import { excelSelectors } from '../../../constants/selectors/office-selectors';
 import officeLogin from '../../../helpers/office/office.login';
 
 describe('TS41441 - Sanity checks', () => {
@@ -160,7 +160,7 @@ describe('TS41441 - Sanity checks', () => {
     // Assertion after "Region" filter addition
     switchToExcelFrame();
     OfficeWorksheet.selectCell('R3');
-    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`'Europe`);
+    expect($(excelSelectors.excelFormulaBar).getText()).toEqual(`Europe`);
     browser.pause(1000);
 
     // Rename the report
