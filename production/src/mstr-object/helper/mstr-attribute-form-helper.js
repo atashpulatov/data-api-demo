@@ -72,10 +72,6 @@ class MstrAttributeFormHelper {
         let title;
 
         switch (nameSet) {
-          case displayAttrFormNames.automatic:
-            title = singleForm ? `${e.name}` : `${e.name} ${formName}`;
-            titles.push(title);
-            break;
           case displayAttrFormNames.on:
             titles.push(`${e.name} ${formName}`);
             break;
@@ -104,8 +100,7 @@ class MstrAttributeFormHelper {
     if (!elements) { return []; }
 
     let names = [];
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
+    for (const element of elements) {
       const forms = this.getAttributesTitleWithForms(element, attrforms);
       names = forms ? [...names, ...forms] : [...names, `${element.name}`];
     }
