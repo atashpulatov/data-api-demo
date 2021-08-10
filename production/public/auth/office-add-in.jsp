@@ -2,9 +2,11 @@
 <%@ page language="java" import="org.owasp.encoder.Encode" %>  
 <%@ page language="java" import="com.microstrategy.auth.sessionmgr.SessionManager" %>
 <%@ page language="java" import="com.microstrategy.auth.rest.ParamNames" %>
+<%@ page import="com.microstrategy.consumerweb.servlets.ContentSecurityPolicyUtil" %>
 <%
   SessionManager sessionManager = (SessionManager)session.getAttribute(ParamNames.SESSION_MANAGER);
   String authToken = sessionManager.getAccessToken();
+  String cspNonce = ContentSecurityPolicyUtil.getNonce(request);
 %> -->
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +20,7 @@
 
 <body>
   <noscript>You need to enable JavaScript to login.</noscript>
-  <script>
+  <script nonce="<%=cspNonce%>">
     var message = {
       type: 'auth-token',
       payload: '<%=Encode.forJavaScriptBlock(authToken)%>'
@@ -49,7 +51,7 @@
     document.addEventListener('DOMContentLoaded', messageParent);
 
   </script>
-  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script nonce="<%=cspNonce%>" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 </body>
 
 </html>
