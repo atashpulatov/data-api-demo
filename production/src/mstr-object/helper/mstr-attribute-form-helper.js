@@ -100,7 +100,8 @@ class MstrAttributeFormHelper {
     if (!elements) { return []; }
 
     let names = [];
-    for (const element of elements) {
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements[i];
       const forms = this.getAttributesTitleWithForms(element, attrforms);
       names = forms ? [...names, ...forms] : [...names, `${element.name}`];
     }
