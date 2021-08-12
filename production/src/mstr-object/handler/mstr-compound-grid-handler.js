@@ -178,7 +178,7 @@ class CompoundGridHandler {
         return forms;
       }
       // attribute as column with forms
-      return supportForms && e.value.length > 1 ? e.value.map((form) => `'${form}`) : `'${e.value.join(' ')}`;
+      return supportForms && e.value.length > 1 ? e.value.map((form) => `${form}`) : `${e.value.join(' ')}`;
     };
 
     const onAttribute = (array) => (e, numberOfForms, attributeIndex, colIndex) => {

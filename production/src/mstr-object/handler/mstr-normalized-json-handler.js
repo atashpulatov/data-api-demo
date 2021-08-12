@@ -129,7 +129,7 @@ class NormalizedJsonHandler {
         const element = rowElements[attributeIndex];
         if (supportForms && element.value.length > 1) {
           for (let index = 0; index < element.value.length; index++) {
-            const form = `'${element.value[index]}`;
+            const form = `${element.value[index]}`;
             tabularRows.push(form);
           }
         } else {
@@ -140,7 +140,7 @@ class NormalizedJsonHandler {
             const subtotalAttribute = grid.rows[element.subtotalAddress.attributeIndex];
             if (supportForms && subtotalAttribute && subtotalAttribute.forms && subtotalAttribute.forms.length > 1) {
               for (let idx = 0; idx < subtotalAttribute.forms.length - 1; idx++) {
-                tabularRows.push(`'`);
+                tabularRows.push(``);
               }
             }
           }

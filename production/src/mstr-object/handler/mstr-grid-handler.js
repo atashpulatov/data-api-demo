@@ -55,7 +55,7 @@ class GridHandler {
     const { attrforms } = response;
     const onAttribute = (array) => (e) => {
       if (array) { array.push(e.subtotalAddress); }
-      return `'${e.value.join(' ')}`;
+      return `${e.value.join(' ')}`;
     };
     if (isCrosstab) {
       return { row: jsonHandler.renderRows(response.data) };
@@ -89,7 +89,7 @@ class GridHandler {
         return forms;
       }
       // attribute as column with forms
-      return supportForms && e.value.length > 1 ? e.value.map((form) => `'${form}`) : `'${e.value.join(' ')}`;
+      return supportForms && e.value.length > 1 ? e.value.map((form) => `${form}`) : `${e.value.join(' ')}`;
     };
     if (isCrosstab) {
       const rows = jsonHandler.renderHeaders(response.definition, 'rows', response.data.headers, onElement(rowTotals), supportForms);

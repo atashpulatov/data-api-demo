@@ -173,7 +173,7 @@ describe('StepApplyFormatting', () => {
 
     expect(stepApplyFormatting.getFormat).not.toBeCalled();
 
-    expect(columnRangeMock.numberFormat).toEqual('');
+    expect(columnRangeMock.numberFormat).toBeUndefined();
   });
 
   it('setupFormatting should work as expected for 1 filteredColumnInformation not attribute element', () => {
@@ -223,10 +223,10 @@ describe('StepApplyFormatting', () => {
   it.each`
   expectedNumberFormat  | getFormatCallNo | filteredColumnInformation
   
-  ${['', '']}           | ${0} | ${[{ isAttribute: true }, { isAttribute: true }]}
-  ${['fmt 0', '']}      | ${1} | ${[{ isAttribute: false }, { isAttribute: true }]}
-  ${['', 'fmt 1']}      | ${1} | ${[{ isAttribute: true }, { isAttribute: false }]}
-  ${['fmt 0', 'fmt 1']} | ${2} | ${[{ isAttribute: false }, { isAttribute: false }]}
+  ${[undefined, undefined]} | ${0} | ${[{ isAttribute: true }, { isAttribute: true }]}
+  ${['fmt 0', undefined]}   | ${1} | ${[{ isAttribute: false }, { isAttribute: true }]}
+  ${[undefined, 'fmt 1']}   | ${1} | ${[{ isAttribute: true }, { isAttribute: false }]}
+  ${['fmt 0', 'fmt 1']}     | ${2} | ${[{ isAttribute: false }, { isAttribute: false }]}
   
   `('setupFormatting should work as expected for 2 filteredColumnInformation elements',
   async ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
