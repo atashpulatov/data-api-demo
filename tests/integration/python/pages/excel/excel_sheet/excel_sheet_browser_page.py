@@ -109,6 +109,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         self.hold_modifier_and_press_key('g')  # open GO TO popup
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
+        self.hold_modifier_and_press_key('a')
         self.send_keys(cells)
         self.pause(Const.DEFAULT_WAIT_AFTER_SEND_KEY)
 
