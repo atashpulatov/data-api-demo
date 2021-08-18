@@ -1,6 +1,4 @@
-@todo_windows_desktop
-@mac_chrome
-@windows_chrome
+@todo_windows_desktop @windows_chrome @mac_chrome
 Feature: F30463 - Ability to sort on prepare data
 
   Scenario: [TC63802] - E2E Sort on prepare data

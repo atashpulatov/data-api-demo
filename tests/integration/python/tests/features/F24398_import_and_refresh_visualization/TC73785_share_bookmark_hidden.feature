@@ -1,5 +1,4 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
 @mac_chrome
 @release_validation
 Feature: F34504 - Removal of sharing bookmark button from embedded library experience that is part of the federated analytics Office 365 Excel client

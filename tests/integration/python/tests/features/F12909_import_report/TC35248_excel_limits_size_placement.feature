@@ -1,5 +1,4 @@
-@windows_chrome
-@mac_chrome
+@windows_chrome @mac_chrome
 Feature: F12909 - Import report
 
   Scenario: [TC35248] - Importing objects exceeding Excel size and placement limits

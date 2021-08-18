@@ -1,8 +1,5 @@
-@ci_pipeline_daily_windows_chrome
-@ci_pipeline_daily_mac_chrome
-@windows_desktop
-@mac_chrome
-@windows_chrome
+#@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
+@windows_desktop @windows_chrome @mac_chrome
 Feature: F22954 - Edit dataset
 
   Scenario: [TC48339] Editing dataset

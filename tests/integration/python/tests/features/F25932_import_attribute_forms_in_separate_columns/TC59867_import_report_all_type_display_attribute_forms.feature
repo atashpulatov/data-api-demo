@@ -1,9 +1,7 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
 #@windows_desktop / step for selecting attribute forms is not working
 #@windows_chrome
 @mac_chrome
-#@mac_desktop
 @release_validation
 Feature: F25932 - Import attribute forms in separate columns
 

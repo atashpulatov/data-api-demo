@@ -1,10 +1,6 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
-@todo_windows_desktop
-@windows_chrome
-@mac_chrome
-@release_validation
-@ga_validation
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
+@todo_windows_desktop @windows_chrome @mac_chrome
+@release_validation @ga_validation
 Feature: F31959 - Hardening the workflows of importing data with prompts to Excel
 
   Scenario: [TC67027] - E2E Editing Prompted reports | Nested

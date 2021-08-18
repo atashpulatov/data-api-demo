@@ -1,6 +1,4 @@
-@todo_windows_desktop
-@mac_chrome
-@windows_chrome
+@todo_windows_desktop @windows_chrome @mac_chrome
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67533] - Update values on edit and refresh
