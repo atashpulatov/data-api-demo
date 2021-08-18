@@ -49,15 +49,9 @@ Tags related to selecting tests for different tasks:
 
    @ci_pipeline_postmerge_windows_desktop @ci_pipeline_postmerge_windows_chrome @ci_pipeline_postmerge_mac_desktop @ci_pipeline_postmerge_mac_chrome
    
-   @ci_pipeline_daily_windows_desktop
-   @ci_pipeline_daily_windows_chrome  @ci_pipeline_daily_mac_chrome
-   @ci_pipeline_daily_mac_desktop
-   @ci_pipeline_daily_mac_chrome
+   @ci_pipeline_daily_windows_desktop @ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_desktop @ci_pipeline_daily_mac_chrome
    
-   @ci_pipeline_all_windows_desktop
-   @ci_pipeline_all_windows_chrome
-   @ci_pipeline_all_mac_desktop
-   @ci_pipeline_all_mac_chrome
+   @ci_pipeline_all_windows_desktop @ci_pipeline_all_windows_chrome @ci_pipeline_all_mac_desktop @ci_pipeline_all_mac_chrome
    ```
 All tags above will be used for CI pipeline jobs. 
 
