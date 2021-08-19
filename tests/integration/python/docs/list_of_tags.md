@@ -22,6 +22,10 @@
 We are using those tags to mark test cases ready for automation for tagged platform. When the test case broke 
 for a specific platform, we are tagging it with `@disabled_xxx`.
 
+In test case we are placing tags for drivers under CI tags and above task related tags. Required order is:
+
+`@windows_desktop @windows_chrome @mac_desktop @mac_chrome`
+
 <a name="#tasks_related_tags"></a>    
 ### 2. Tasks related tags
 
@@ -39,30 +43,15 @@ Tags related to selecting tests for different tasks:
 <a name="CI_pipeline_tags"></a>
 ### 3. CI pipeline tags
    ```
-   @ci_pipeline_rv_windows_desktop
-   @ci_pipeline_rv_windows_chrome
-   @ci_pipeline_rv_mac_chrome
-   @ci_pipeline_rv_mac_desktop
+   @ci_pipeline_rv_windows_desktop @ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_desktop @ci_pipeline_rv_mac_chrome
    
-   @ci_pipeline_premerge_windows_desktop
-   @ci_pipeline_premerge_windows_chrome
-   @ci_pipeline_premerge_mac_desktop
-   @ci_pipeline_premerge_mac_chrome
+   @ci_pipeline_premerge_windows_desktop @ci_pipeline_premerge_windows_chrome @ci_pipeline_premerge_mac_desktop @ci_pipeline_premerge_mac_chrome
+
+   @ci_pipeline_postmerge_windows_desktop @ci_pipeline_postmerge_windows_chrome @ci_pipeline_postmerge_mac_desktop @ci_pipeline_postmerge_mac_chrome
    
-   @ci_pipeline_postmerge_windows_desktop
-   @ci_pipeline_postmerge_windows_chrome
-   @ci_pipeline_postmerge_mac_desktop
-   @ci_pipeline_postmerge_mac_chrome
+   @ci_pipeline_daily_windows_desktop @ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_desktop @ci_pipeline_daily_mac_chrome
    
-   @ci_pipeline_daily_windows_desktop
-   @ci_pipeline_daily_windows_chrome
-   @ci_pipeline_daily_mac_desktop
-   @ci_pipeline_daily_mac_chrome
-   
-   @ci_pipeline_all_windows_desktop
-   @ci_pipeline_all_windows_chrome
-   @ci_pipeline_all_mac_desktop
-   @ci_pipeline_all_mac_chrome
+   @ci_pipeline_all_windows_desktop @ci_pipeline_all_windows_chrome @ci_pipeline_all_mac_desktop @ci_pipeline_all_mac_chrome
    ```
 All tags above will be used for CI pipeline jobs. 
 

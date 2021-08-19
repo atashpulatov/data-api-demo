@@ -1,6 +1,5 @@
-@windows_desktop
-@windows_chrome
-@mac_chrome
+@ci_pipeline_daily_windows_chrome  @ci_pipeline_daily_mac_chrome
+@windows_desktop @windows_chrome @mac_chrome
 Feature: F12909 - Import report
 
   Scenario: [TC36826] Importing report with all data filtered out

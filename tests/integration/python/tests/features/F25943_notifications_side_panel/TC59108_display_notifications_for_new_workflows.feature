@@ -1,6 +1,5 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
-@mac_chrome
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
+@windows_chrome @mac_chrome
 @release_validation
 # This script for the TC59108 verifies that correct notifications are displayed on objects when an operation is in
 # progress and when operation is completed. Due to different operation performance on different machines and inertia in

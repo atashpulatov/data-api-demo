@@ -1,5 +1,4 @@
-@mac_chrome
-@windows_chrome
+@windows_chrome @mac_chrome
 Feature: TF9328 - Release Validation
 
   Scenario: [TC53752] - [Subtotals settings] E2E Importing report with subtotals | without subtotals | edit to import without subtotals | refresh | refresh all | stability of the toggle | accessibility

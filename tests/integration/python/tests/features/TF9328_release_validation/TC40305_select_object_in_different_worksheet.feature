@@ -1,6 +1,4 @@
-@windows_desktop
-@mac_chrome
-@windows_chrome
+@windows_desktop @windows_chrome @mac_chrome
 Feature: TF9328 - Release Validation
 
   Scenario: [TC40305] - Selecting objects imported to the different worksheets and to adjacent columns/rows

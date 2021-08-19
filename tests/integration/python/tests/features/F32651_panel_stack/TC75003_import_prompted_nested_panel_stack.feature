@@ -1,5 +1,4 @@
-@release_validation
-@ga_validation
+@release_validation @ga_validation
 Feature: F32651 - Enable authors to create information-rich dossiers with Panel Stacks
 
   Scenario: [TC75003] - [Panel Stack] E2E - Importing, Editing, Duplicating, Refreshing, Clear Data for Prompted Dossier with Nested Panel Stack

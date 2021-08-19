@@ -1,8 +1,10 @@
-@ci_pipeline_rv_mac_chrome @disabled_ci_pipeline_premerge_mac_chrome @disabled_ci_pipeline_postmerge_mac_chrome @ci_pipeline_daily_mac_chrome @disabled_ci_pipeline_all_mac_chrome
-@ci_pipeline_rv_windows_chrome
+#@ci_pipeline_premerge_mac_chrome
+#@ci_pipeline_postmerge_mac_chrome
+#@ci_pipeline_daily_mac_chrome
+#@disabled_ci_pipeline_all_mac_chrome
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
 @mac_chrome
-@release_validation
-@ga_validation
+@release_validation @ga_validation
 Feature: TS41441 - Sanity checks
 
   Scenario: [TC48976] - E2E Basic Functionality

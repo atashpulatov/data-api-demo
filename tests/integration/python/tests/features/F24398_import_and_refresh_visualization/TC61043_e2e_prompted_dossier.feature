@@ -1,8 +1,6 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
 @mac_chrome
-@release_validation
-@ga_validation
+@release_validation @ga_validation
 Feature: F24398 - Import and refresh visualization
 
   Scenario: [TC61043] - E2E with dossier containing all types of prompts (including nested prompts)

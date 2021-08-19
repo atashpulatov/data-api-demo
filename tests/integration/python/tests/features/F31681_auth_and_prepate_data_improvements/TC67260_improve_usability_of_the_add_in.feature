@@ -1,7 +1,5 @@
-@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
-@windows_desktop
-@mac_chrome
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
+@windows_desktop @mac_chrome
 @release_validation
 Feature: F31681 - Authentication and Prepare Data workflow improvements
 

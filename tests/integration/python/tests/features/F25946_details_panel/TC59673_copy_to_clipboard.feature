@@ -1,6 +1,4 @@
-@windows_desktop
-@mac_chrome
-@windows_chrome
+@windows_desktop @windows_chrome @mac_chrome
 Feature: F25946 - Details panel
 
   Scenario: [TC59673] - Copy to clipboard
