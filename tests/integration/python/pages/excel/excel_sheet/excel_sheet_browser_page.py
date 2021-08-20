@@ -19,7 +19,8 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     SELECT_SHEET_BUTTON = '#m_excelWebRenderer_ewaCtl_m_sheetTabBar > div.ewa-stb-contentarea > div > ul > ' \
                           'li:nth-child(%s)'
 
-    WORKSHEETS_IN_GOTO_POPUP_SELECTOR = '#sheetDropDown > option'
+    SHEET_DROPDOWN_BUTTON_CSS = ".ms-ComboBox-CaretDown-button"
+    WORKSHEETS_IN_GOTO_POPUP_SELECTOR = '#comboBoxIDDropdown button'
 
     TABLE_HOME_TAB = 'm_excelWebRenderer_ewaCtl_Ribbon.Home-title'
     TABLE_DESIGN_TAB_ID = 'Table'
@@ -139,7 +140,10 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         self.excel_menu_browser_page.enable_use_of_keyboard_shortcuts()
 
         self.hold_modifier_and_press_key('g')
+        self.get_element_by_css(ExcelSheetBrowserPage.SHEET_DROPDOWN_BUTTON_CSS).click()
         number_of_worksheets = len(self.get_elements_by_css(ExcelSheetBrowserPage.WORKSHEETS_IN_GOTO_POPUP_SELECTOR))
+
+        self.send_keys(Keys.ESCAPE)
         self.send_keys(Keys.ESCAPE)
 
         return number_of_worksheets
