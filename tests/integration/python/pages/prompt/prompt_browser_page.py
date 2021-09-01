@@ -59,7 +59,7 @@ class PromptBrowserPage(BaseBrowserPage):
 
     def _check_if_prompts_answer_window_is_open(self):
         return self.check_if_element_exists_by_id(PromptBrowserPage.PROMPT_MAIN_CONTAINER_ID,
-                                                  timeout=Const.SHORT_TIMEOUT)
+                                                  timeout=Const.MEDIUM_TIMEOUT)
 
     def select_answer_for_object_prompt(self, prompt_number, prompt_name, item):
         self.focus_on_prompt_frame()

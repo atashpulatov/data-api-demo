@@ -11,16 +11,13 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
       And I clicked Import button to open Import Dossier
       And I clicked Run button for prompted dossier if prompts not already answered
       And I selected dossier page or chapter 1
-    # TODO implement steps
-      And I selected Panel "1" for Panel Stack "Name"
-      And I selected Panel "1" for nested Panel Stack in Panel Stack "Name"
-      And I selected Visualization "Name" from Panel "1"
+      And I selected panel stack "Panel 1" nested in panel stack "Panel 1"
+      And I selected Visualization "Visualization 1 copy"
 
       And I clicked import dossier
       And I waited for object to be imported successfully
       And I closed last notification
-   # TODO:update when functionality will be implemented
-     #  Then I verified that cells [] have values []
+     Then I verified that cells ["B6", "J4", "BQ6"] have values ["$17,267", "Profit", "$292,655"]
 
      When I clicked Edit object 1
    # TODO implement step
