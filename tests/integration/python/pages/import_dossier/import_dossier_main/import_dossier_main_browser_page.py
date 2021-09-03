@@ -99,10 +99,13 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         # TODO check if page loaded fully
         self.pause(2)
 
-    def select_panel_stack_nested_in_panel_stack(self, nested_panel_stack_name, panel_stack_name):
+    def select_panel_stack(self, panel_stack_name):
         self.focus_on_dossier_frame()
 
         self._get_panel_stack_tab_label_in_element_by_name(self, panel_stack_name).click()
+
+    def select_panel_stack_nested_in_panel_stack(self, nested_panel_stack_name, panel_stack_name):
+        self.select_panel_stack(panel_stack_name)
 
         document_panel = self.get_element_by_css(ImportDossierMainBrowserPage.PANEL_STACK_DOCUMENT_PANEL_CSS)
         self._get_panel_stack_tab_label_in_element_by_name(

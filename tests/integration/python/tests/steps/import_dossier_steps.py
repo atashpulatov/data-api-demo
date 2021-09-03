@@ -47,3 +47,8 @@ def step_impl(context, nested_panel_stack_name, panel_stack_name):
         nested_panel_stack_name,
         panel_stack_name
     )
+
+
+@step('I selected panel stack "{panel_stack_name}"')
+def step_impl(context, panel_stack_name):
+    context.pages.import_dossier_page().select_panel_stack(panel_stack_name)
