@@ -32,8 +32,6 @@ class PromptBrowserPage(BaseBrowserPage):
 
     REPROMPT_BUTTON_CSS = '.mstrd-PromptNavItem'
 
-
-
     def __init__(self):
         super().__init__()
 
