@@ -1,75 +1,64 @@
 @release_validation @ga_validation
+@mac_chrome
+@windows_chrome
 Feature: F32651 - Enable authors to create information-rich dossiers with Panel Stacks
 
   Scenario: [TC75003] - [Panel Stack] E2E - Importing, Editing, Duplicating, Refreshing, Clear Data for Prompted Dossier with Nested Panel Stack
-    Given I initialized Excel
+    Given I pass
 
-     When I logged in as default user
-      And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "5DE8EDE90343E3D15A66A9AD5ADDA674" and selected "Prompted Nested Panel Stack"
-      And I clicked Import button to open Import Dossier
-      And I clicked Run button for prompted dossier if prompts not already answered
-      And I selected dossier page or chapter 1
-    # TODO implement steps
-      And I selected Panel "1" for Panel Stack "Name"
-      And I selected Panel "1" for nested Panel Stack in Panel Stack "Name"
-      And I selected Visualization "Name" from Panel "1"
+#     When I logged in as default user
+#      And I clicked Import Data button
+#      And I ensured that MyLibrary Switch is OFF
+#      And I found object by ID "127C5E44B74AB6D61287D189E755694C" and selected "Always Prompted Nested Panel Stack"
+#      And I clicked Import button to open Import Dossier
+#      And I clicked Run button for prompted dossier if prompts not already answered
+#      And I selected dossier page or chapter 1
+#      And I selected panel stack "Panel 2" nested in panel stack "Panel 3"
+      And I selected Visualization "Nested Panel Visualization 1"
 
       And I clicked import dossier
       And I waited for object to be imported successfully
       And I closed last notification
-   # TODO:update when functionality will be implemented
-     #  Then I verified that cells [] have values []
+
+     Then I verified that cells ["E2", "E18", "E69"] have values ["8330.126", "16321.734", "21180"]
 
      When I clicked Edit object 1
-   # TODO implement step
-       #  And I selected checkbox for "Electronics" as an answer for "1. Choose from all elements of 'Category'." prompt
+      And I clicked re-prompt button
+      And I selected checkbox for "Electronics" as an answer for "1. Choose from all elements of 'Category'." prompt
       And I clicked Run button for prompted dossier if prompts not already answered
-   # TODO implement steps
-      And I selected Panel "2" for Panel Stack "Name"
-      And I selected Panel "2" for nested Panel Stack in Panel Stack "Name"
-      And I selected Visualization "Name" from Panel "1"
+      And I selected panel stack "Panel 11"
+      And I selected Visualization "Panel 11 Visualization 1"
 
       And I clicked import dossier
       And I waited for object to be imported successfully
       And I closed last notification
-    # TODO:update when functionality will be implemented
-     #  Then I verified that cells [] have values []
+     Then I verified that cells ["E2", "E29", "E69"] have values ["5749", "328306.264", "536862.7858"]
 
      When I selected cell "H1"
       And I clicked Duplicate on object 1
       And I selected Active Cell option in Duplicate popup
       And I clicked Edit button in Duplicate popup
-   # TODO:update when object will be added to the CMD env
-     #  And I selected "Subcategory" as an answer for "1. Objects" prompt - object prompt
+      And I clicked re-prompt button
+      And I selected checkbox for "Movies" as an answer for "1. Choose from all elements of 'Category'." prompt
       And I clicked Run button for prompted dossier if prompts not already answered
-   # TODO steps
-      And I selected Panel "2" for Panel Stack "Name"
-      And I selected Panel "2" for nested Panel Stack in Panel Stack "Name"
-      And I selected Visualization "Name" from Panel "1"
-      And I clicked import dossier
+      And I selected Visualization "Visualization 1"
+      And I clicked import dossier to duplicate
       And I waited for object to be duplicated successfully
       And I closed last notification
-   # TODO:update when functionality will be implemented
-     #  Then I verified that cells [] have values []
-      And I verified that object number 1 is called "Prompted Dossier with nested panel Stack Copy"
+     Then I verified that cells ["I2", "I16"] have values ["$933,067", "$3,469,529"]
+      And I verified that object number 1 is called "Visualization 1"
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
-   # TODO:update when functionality will be implemented
-     #  Then I verified that cells [] have values []
+     Then I verified that cells ["I2", "I16"] have values ["$933,067", "$3,469,529"]
 
      When I clicked clear data
-   # TODO:update when functionality will be implemented
-     #  Then I verified that cells [] have values []
+     Then I verified that cells ["A1", "A2", "H1", "I2"] have values ["Distribution Center", "", "Call Center", ""]
       And I logged out
 
      When I logged in with username "Tim" and empty password
       And I clicked view data
       And I closed all notifications
-   # TODO:update when functionality will be implemented
-     #  Then I verified that cells [] have values []
+     Then I verified that cells ["E2", "E29", "E69", "I2", "I16"] have values ["5749", "328306.264", "536862.7858", "$933,067", "$3,469,529"]
       And I logged out
-

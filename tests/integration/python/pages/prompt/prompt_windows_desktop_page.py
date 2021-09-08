@@ -16,6 +16,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_RUN_BUTTON_COLOR_OFFSET_Y = 2
 
     PROMPTED_DOSSIER_RUN_BUTTON = 'Run'
+    PROMPTED_DOSSIER_RUN_BUTTON_XPATH = '//Text[@Name="' + PROMPTED_DOSSIER_RUN_BUTTON + '"]'
     PROMPTED_DOSSIER_RUN_DOSSIER_BUTTON_IMAGE = PROMPTED_DOSSIER_RUN_BUTTON + 'Dossier'
 
     PROMPT_LIST_ELEM = '%s\r\n%s'
@@ -67,9 +68,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def click_run_button_for_prompted_dossier_if_not_answered(self):
         if self._check_if_prompts_answer_window_is_open():
-            self.get_element_by_name(
-                PromptWindowsDesktopPage.PROMPTED_DOSSIER_RUN_BUTTON,
-                image_name=self.prepare_image_name(PromptWindowsDesktopPage.PROMPTED_DOSSIER_RUN_DOSSIER_BUTTON_IMAGE)
+            self.get_element_by_xpath(
+                PromptWindowsDesktopPage.PROMPTED_DOSSIER_RUN_BUTTON_XPATH
             ).click()
 
     def _check_if_prompts_answer_window_is_open(self):
