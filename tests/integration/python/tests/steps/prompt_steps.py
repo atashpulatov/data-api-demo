@@ -21,6 +21,11 @@ def step_impl(context, item, prompt_number, prompt_name):
     context.pages.prompt_page().select_answer_for_object_prompt(prompt_number, prompt_name, item)
 
 
+@step('I selected checkbox for "{item}" as an answer for "{prompt_number}. {prompt_name}" prompt')
+def step_impl(context, item, prompt_number, prompt_name):
+    context.pages.prompt_page().select_checkbox_for_object_prompt(prompt_number, prompt_name, item)
+
+
 @step('I unselected "{item}" as an answer for "{prompt_number}. {prompt_name}" prompt - object prompt')
 def step_impl(context, item, prompt_number, prompt_name):
     context.pages.prompt_page().unselect_answer_for_object_prompt(prompt_number, prompt_name, item)
@@ -40,3 +45,8 @@ def step_impl(context, date, hour, minute, second, prompt_number, prompt_name):
 @step('I cleared input box for prompt "{prompt_number}. {prompt_name}"')
 def step_impl(context, prompt_number, prompt_name):
     context.pages.prompt_page().clear_prompt_input(prompt_number, prompt_name)
+
+
+@step('I clicked re-prompt button')
+def step_impl(context):
+    context.pages.prompt_page().click_reprompt_button()

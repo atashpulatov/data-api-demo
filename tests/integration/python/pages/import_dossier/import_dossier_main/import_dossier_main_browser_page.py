@@ -20,7 +20,8 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     INFORMATION_TEXT = 'span.dossier-window-information-text'
 
     PANEL_STACK_TAB_LABEL_CSS = '.mstrmojo-VITab-tab .mstrmojo-EditableLabel'
-    PANEL_STACK_DOCUMENT_PANEL_CSS = '.mstrmojo-DocPanel'
+    PANEL_STACK_DOCUMENT_PANEL_CSS = '.mstrmojo-DocPanelStack-content'
+    PANEL_STACK_SCROLL_RIGHT_BUTTON_CSS = '.mstrmojo-VITabStrip-rightBtn'
 
     def __init__(self):
         super().__init__()
@@ -98,22 +99,36 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
         # TODO check if page loaded fully
         self.pause(2)
 
-    def select_panel_stack_nested_in_panel_stack(self, nested_panel_stack_name, panel_stack_name):
+    def select_panel_stack(self, panel_stack_name):
         self.focus_on_dossier_frame()
 
-        self._get_panel_stack_tab_label_in_element_by_name(self.get_elements_by_css, panel_stack_name).click()
+        self._get_panel_stack_tab_label_in_element_by_name(self, panel_stack_name).click()
+
+    def select_panel_stack_nested_in_panel_stack(self, nested_panel_stack_name, panel_stack_name):
+        self.select_panel_stack(panel_stack_name)
 
         document_panel = self.get_element_by_css(ImportDossierMainBrowserPage.PANEL_STACK_DOCUMENT_PANEL_CSS)
         self._get_panel_stack_tab_label_in_element_by_name(
-            document_panel.get_elements_by_css,
+            document_panel,
             nested_panel_stack_name
         ).click()
 
-    def _get_panel_stack_tab_label_in_element_by_name(self, select_element_method, panel_stack_tab_name):
-        panels_stack_tab_labels = select_element_method(ImportDossierMainBrowserPage.PANEL_STACK_TAB_LABEL_CSS)
+    def _get_panel_stack_tab_label_in_element_by_name(self, selected_document_panel, panel_stack_tab_name):
+        while True:
+            panels_stack_tab_labels = selected_document_panel.get_elements_by_css(
+                ImportDossierMainBrowserPage.PANEL_STACK_TAB_LABEL_CSS
+            )
 
-        for panels_stack_tab_label in panels_stack_tab_labels:
-            if panels_stack_tab_label.text == panel_stack_tab_name:
-                return panels_stack_tab_label
+            for panels_stack_tab_label in panels_stack_tab_labels:
+                if panels_stack_tab_label.text == panel_stack_tab_name:
+                    return panels_stack_tab_label
+
+            scroll_right_button = selected_document_panel.get_element_by_css(
+                ImportDossierMainBrowserPage.PANEL_STACK_SCROLL_RIGHT_BUTTON_CSS
+            )
+            if not scroll_right_button.is_enabled_by_class_attribute_html():
+                break
+
+            scroll_right_button.click()
 
         raise MstrException(f'Could not find panel stack tab label: {panel_stack_tab_name}')
