@@ -1,4 +1,5 @@
 @release_validation @ga_validation
+@windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: F32651 - Enable authors to create information-rich dossiers with Panel Stacks

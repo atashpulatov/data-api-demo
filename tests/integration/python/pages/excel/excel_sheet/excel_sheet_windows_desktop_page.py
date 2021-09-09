@@ -66,9 +66,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
             self._toggle_clipboard_workaround()
 
         self.press_f5()
-
         self.send_keys(cell_upper)
-
         self.press_enter()
 
         if enable_clipboard_workaround:

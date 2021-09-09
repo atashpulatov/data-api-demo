@@ -20,7 +20,6 @@ class BaseWindowsDesktopPage(WindowsDesktopSendKeys):
 
         :return (str): Selected text.
         """
-
         self.send_keys(Keys.CONTROL + 'c')
         self.send_keys(Keys.CONTROL)
 
