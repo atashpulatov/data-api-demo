@@ -131,6 +131,10 @@ class BaseElement:
     def is_enabled_by_attribute_html(self):
         return not self.get_attribute(Const.ATTRIBUTE_DISABLED) == Const.ATTRIBUTE_VALUE_TRUE
 
+    def is_enabled_by_class_attribute_html(self):
+        class_name = self.get_class_name_by_attribute()
+        return Const.ATTRIBUTE_DISABLED not in class_name
+
     def is_checked_by_attribute(self):
         return self.get_attribute(BaseElement.CHECKED_ATTRIBUTE) == Const.ATTRIBUTE_VALUE_TRUE
 
