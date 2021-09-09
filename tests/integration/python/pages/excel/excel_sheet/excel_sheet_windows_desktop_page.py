@@ -60,23 +60,27 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         return value.strip() if value else value
 
     def go_to_cell(self, cell, enable_clipboard_workaround=True):
+        first_window_element = self.get_element_by_tag_name(ExcelSheetWindowsDesktopPage.WINDOW_ELEM)
+
         cell_upper = cell.upper()
 
         if enable_clipboard_workaround:
             self._toggle_clipboard_workaround()
 
-        self.press_f5()
+        first_window_element.send_keys(Keys.F5)
 
-        self.send_keys(cell_upper)
+        first_window_element.send_keys(cell_upper)
 
-        self.press_enter()
+        first_window_element.send_keys(Keys.ENTER)
 
         if enable_clipboard_workaround:
             self._toggle_clipboard_workaround()
 
     def _get_selected_cell_value(self):
+        first_window_element = self.get_element_by_tag_name(ExcelSheetWindowsDesktopPage.WINDOW_ELEM)
+
         cell_value = self.get_selected_text_using_clipboard()
-        self.press_escape()
+        first_window_element.send_keys(Keys.ENTER)
 
         formatted_cell_value = ExcelUtil.format_cell_value(cell_value) if cell_value else ''
 
@@ -335,10 +339,11 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self._navigate_to_home_tab_and_press('ff')
 
     def _navigate_to_home_tab_and_press(self, keys):
-        self.send_keys(Keys.ALT)
-        self.send_keys('h')
+        first_window_element = self.get_element_by_tag_name(ExcelSheetWindowsDesktopPage.WINDOW_ELEM)
+        first_window_element.send_keys(Keys.ALT)
+        first_window_element.send_keys('h')
 
-        self.send_keys(keys)
+        first_window_element.send_keys(keys)
 
     def _toggle_clipboard_workaround(self):
         """

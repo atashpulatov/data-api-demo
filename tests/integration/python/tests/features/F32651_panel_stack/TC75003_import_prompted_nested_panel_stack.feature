@@ -1,19 +1,20 @@
 @release_validation @ga_validation
+@windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: F32651 - Enable authors to create information-rich dossiers with Panel Stacks
 
   Scenario: [TC75003] - [Panel Stack] E2E - Importing, Editing, Duplicating, Refreshing, Clear Data for Prompted Dossier with Nested Panel Stack
-    Given I pass
+    Given I initialized Excel
 
-#     When I logged in as default user
-#      And I clicked Import Data button
-#      And I ensured that MyLibrary Switch is OFF
-#      And I found object by ID "127C5E44B74AB6D61287D189E755694C" and selected "Always Prompted Nested Panel Stack"
-#      And I clicked Import button to open Import Dossier
-#      And I clicked Run button for prompted dossier if prompts not already answered
-#      And I selected dossier page or chapter 1
-#      And I selected panel stack "Panel 2" nested in panel stack "Panel 3"
+     When I logged in as default user
+      And I clicked Import Data button
+      And I ensured that MyLibrary Switch is OFF
+      And I found object by ID "127C5E44B74AB6D61287D189E755694C" and selected "Always Prompted Nested Panel Stack"
+      And I clicked Import button to open Import Dossier
+      And I clicked Run button for prompted dossier if prompts not already answered
+      And I selected dossier page or chapter 1
+      And I selected panel stack "Panel 2" nested in panel stack "Panel 3"
       And I selected Visualization "Nested Panel Visualization 1"
 
       And I clicked import dossier

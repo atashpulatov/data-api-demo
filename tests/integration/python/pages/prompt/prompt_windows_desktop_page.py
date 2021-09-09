@@ -16,11 +16,14 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_RUN_BUTTON_COLOR_OFFSET_Y = 2
 
     PROMPTED_DOSSIER_RUN_BUTTON = 'Run'
+    PROMPTED_DOSSIER_REPROMPT_BUTTON = 'Re-Prompt'
     PROMPTED_DOSSIER_RUN_BUTTON_XPATH = '//Text[@Name="' + PROMPTED_DOSSIER_RUN_BUTTON + '"]'
     PROMPTED_DOSSIER_RUN_DOSSIER_BUTTON_IMAGE = PROMPTED_DOSSIER_RUN_BUTTON + 'Dossier'
 
-    PROMPT_LIST_ELEM = '%s\r\n%s'
-    PROMPT_WITH_ASTERISK_LIST_ELEM = '*' + PROMPT_LIST_ELEM
+    PROMPT_LIST_ELEM = '%s.%s'
+    PROMPT_WITH_ASTERISK_LIST_ELEM = '* ' + PROMPT_LIST_ELEM
+    PROMPT_ELEM_XPATH = '//DataItem[starts-with(@Name, "' + PROMPT_LIST_ELEM + ' %s")]'
+    PROMPT_WITH_ASTERISK_ELEM_XPATH = '//DataItem[starts-with(@Name, "' + PROMPT_WITH_ASTERISK_LIST_ELEM + ' %s")]'
 
     PROMPT_OBJECT_BOX = '(//DataItem[@Name="%s.%s"]' \
                         '/../following-sibling::Table[starts-with(@AutomationId, "id_mstr")][1]' \
@@ -89,6 +92,29 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         """
 
         self._toggle_answer_for_object_prompt(prompt_number, prompt_name, 1, item)
+
+    def select_checkbox_for_object_prompt(self, prompt_number, prompt_name, item):
+        """
+        Selects a checkbox for prompt
+
+        :param prompt_number: Number that specifies prompt to be answered.
+        :param prompt_name: Name of the prompt to be answered.
+        :param item: Name of the element that needs to be selected.
+        """
+
+        self._select_prompt_from_list(prompt_number, prompt_name)
+
+        prompt_elem_exists = self.get_add_in_main_element().check_if_element_exists_by_xpath(
+            PromptWindowsDesktopPage.PROMPT_ELEM_XPATH % (prompt_number, prompt_name, prompt_name),
+            timeout=Const.SHORT_TIMEOUT
+        )
+
+        prompt_xpath = PromptWindowsDesktopPage.PROMPT_ELEM_XPATH % (prompt_number, prompt_name, prompt_name) \
+            if prompt_elem_exists \
+            else PromptWindowsDesktopPage.PROMPT_WITH_ASTERISK_ELEM_XPATH % (prompt_number, prompt_name, prompt_name)
+
+        prompt_object_box = self.get_element_by_xpath(prompt_xpath)
+        prompt_object_box.get_element_by_name(item).click()
 
     def unselect_answer_for_object_prompt(self, prompt_number, prompt_name, item):
         """
@@ -187,6 +213,9 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
 
         prompt.click()
         prompt.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
+
+    def click_reprompt_button(self):
+        self.get_element_by_name(PromptWindowsDesktopPage.PROMPTED_DOSSIER_REPROMPT_BUTTON).click()
 
     def _get_prompt_for_entering_data(self, prompt_number, prompt_name):
         self._select_prompt_from_list(prompt_number, prompt_name)
