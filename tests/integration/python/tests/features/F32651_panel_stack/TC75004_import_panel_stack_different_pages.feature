@@ -1,4 +1,5 @@
 @release_validation @ga_validation
+@windows_desktop
 @mac_chrome
 @windows_chrome
 Feature: F32651 - Enable authors to create information-rich dossiers with Panel Stacks
@@ -17,6 +18,7 @@ Feature: F32651 - Enable authors to create information-rich dossiers with Panel 
       And I selected Visualization "Panel 3 Visualization 1"
       And I clicked import dossier
       And I waited for object to be imported successfully
+      And I closed last notification
      Then I verified that cells ["B2", "B9"] have values ["121.366", "93.909"]
 
      When I clicked Edit object 1

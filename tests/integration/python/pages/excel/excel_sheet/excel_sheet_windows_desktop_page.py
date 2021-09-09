@@ -76,8 +76,10 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         cell_value = self.get_selected_text_using_clipboard()
         self.press_escape()
 
-        formatted_cell_value = ExcelUtil.format_cell_value(cell_value) if cell_value else ''
+        if cell_value[-1] == '\n' and len(cell_value) > 1:
+            cell_value = cell_value[:-2]
 
+        formatted_cell_value = ExcelUtil.format_cell_value(cell_value) if cell_value else ''
         return formatted_cell_value
 
     def write_value_in_cell(self, cell, value):
