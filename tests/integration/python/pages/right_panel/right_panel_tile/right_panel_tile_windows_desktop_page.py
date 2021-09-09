@@ -1,5 +1,4 @@
 import time
-from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
@@ -9,7 +8,6 @@ from framework.util.message_const import MessageConst
 
 
 class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
-    WINDOW_ELEM = 'Window'
     DUPLICATE_BUTTON_ELEM = 'Duplicate button'
     EDIT_BUTTON_ELEM = 'Edit button'
     REFRESH_BUTTON_ELEM = 'Refresh button'
@@ -95,18 +93,14 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         if tile_list:
             tile_list.click()
-
-            first_window_element = self.get_element_by_tag_name(RightPanelTileWindowsDesktopPage.WINDOW_ELEM)
-            first_window_element.send_keys(Keys.HOME)
+            self.press_home()
 
     def _scroll_tile_list_to_next_page(self):
         tile_list = self._get_tile_list()
 
         if tile_list:
             tile_list.click()
-
-            first_window_element = self.get_element_by_tag_name(RightPanelTileWindowsDesktopPage.WINDOW_ELEM)
-            first_window_element.send_keys(Keys.PAGE_DOWN)
+            self.press_page_down()
 
     def _get_tile_list_when_notification_open(self):
         tile_list = self._get_tile_list()
