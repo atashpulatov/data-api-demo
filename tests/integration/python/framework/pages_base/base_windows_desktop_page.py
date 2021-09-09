@@ -20,10 +20,8 @@ class BaseWindowsDesktopPage(WindowsDesktopSendKeys):
 
         :return (str): Selected text.
         """
-        first_window_element = self.get_element_by_xpath(BaseWindowsDesktopPage.MAIN_WINDOW_XPATH)
-
-        first_window_element.send_keys(Keys.CONTROL + 'c')
-        first_window_element.send_keys(Keys.CONTROL)
+        self.send_keys(Keys.CONTROL + 'c')
+        self.send_keys(Keys.CONTROL)
 
         return paste()
 

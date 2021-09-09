@@ -118,7 +118,7 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def unselect_answer_for_object_prompt(self, prompt_number, prompt_name, item):
         """
-        Unelects answer for prompt by moving elements from the right box to the left box.
+        Unselects answer for prompt by moving elements from the right box to the left box.
 
         :param prompt_number: Number that specifies prompt to be answered.
         :param prompt_name: Name of the prompt to be answered.

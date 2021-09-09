@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from framework.pages_base.image_element import ImageElement
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.const import Const
+from framework.util.config_util import ConfigUtil
 
 
 class WindowsDesktopSendKeys(WindowsDesktopMainAddInElementCache):
@@ -15,6 +16,10 @@ class WindowsDesktopSendKeys(WindowsDesktopMainAddInElementCache):
 
         :param keys: Keys to be pressed.
         """
+        if ImageElement.excel_element is None:
+            root_element = ConfigUtil.get_windows_desktop_excel_root_element_name()
+            ImageElement.reset_excel_root_element(self.driver, root_element=root_element)
+
         ImageElement.excel_element.send_keys(keys)
 
         self.pause(Const.AFTER_OPERATION_WAIT_TIME)
