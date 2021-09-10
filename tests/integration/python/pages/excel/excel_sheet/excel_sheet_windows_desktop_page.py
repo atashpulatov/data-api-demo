@@ -76,7 +76,11 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         cell_value = self.get_selected_text_using_clipboard()
         self.press_escape()
 
-        if cell_value[-1] == '\n' and len(cell_value) > 1:
+        """
+        Sometimes on windows desktop cell values end with '\r\n',
+        which then causes the cell value not to be formatted.
+        """
+        if len(cell_value) > 1 and cell_value[-2:] == '\r\n':
             cell_value = cell_value[:-2]
 
         formatted_cell_value = ExcelUtil.format_cell_value(cell_value) if cell_value else ''
