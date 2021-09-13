@@ -40,8 +40,6 @@ class DriverChrome(AbstractDriver):
         options = Options()
         options.add_argument('--allow-insecure-localhost')
         options.add_argument('lang=en-US')
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
 
         capabilities = DesiredCapabilities().CHROME.copy()
         capabilities['pageLoadStrategy'] = 'none'
