@@ -23,7 +23,7 @@ job 'release-validation-win-browser' do
     end
   end
 
-  assigned_node_string 'mstr-office_browser-testing_autoscaling-pool'
+  assigned_node_string 'mstr-office-vra-win'
 
   builders do
     bash do
