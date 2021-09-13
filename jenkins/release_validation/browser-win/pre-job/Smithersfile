@@ -24,9 +24,7 @@ job 'release-validation-win-browser-pre' do
 
     builders do		
    bash do		
-       script '#!/usr/bin/env bash		
- echo APPLICATION_VERSION=$APPLICATION_VERSION		
- echo APPLICATION_COMMIT_HASH=xxx		
+       script '#!/usr/bin/env bash			
  '		
      end		
       parameterized_builder do		
