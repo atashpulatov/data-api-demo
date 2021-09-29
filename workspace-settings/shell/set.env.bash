@@ -51,3 +51,5 @@ function resign_as_data_bag_manager(){
 function become_jenkins_manager(){
   export HATS=$HATS:jenkins
 }
+
+export BRANCH_OFF_COMMIT=590f8b8cf8d399d36094a34a8172e00617d7921a
