@@ -1,6 +1,6 @@
 # Running tests
 
-**Check [Installation](installation.md) before running tests.** 
+**Check [Installation](01_installation.md) before running tests.** 
 
 1. [Preparation](#preparation)
 1. [Running tests](#running_tests)
@@ -90,7 +90,7 @@
 ##### On Windows:
 
 1. When using **PyTTy** configuration: open previously configured PuTTy session
-(see [Starting tests on Mac and executing them on remote Windows Desktop](installation.md#start_on_mac_execute_on_windows))
+(see [Starting tests on Mac and executing them on remote Windows Desktop](01_installation.md#start_on_mac_execute_on_windows))
 and login into your Mac machine (no need to do it when using firewall configuration).
 
 1. Open `cmd` window as Administrator and run `WinAppDriver`:
@@ -161,6 +161,10 @@ behave --tags=@mac_chrome --no-color --logging-level=WARNING --no-capture-stderr
 
 # test all features, no colors, only steps related information and errors logged, all logs printed to console:
 behave --tags=@mac_chrome --no-color --logging-level=ERROR --no-capture-stderr --no-logcapture tests/features/
+
+# test single feature file, redirecting logs to files override
+behave --logging-level=ERROR tests/features/F25931_duplicate_object/TC64607_duplicate_object.feature > log.out.txt 2> log.err.txt
+
 ```
 
 <a name="test_executing_parameters"></a>

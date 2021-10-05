@@ -30,11 +30,11 @@ Currently tests can be executed on: Windows Desktop, Windows Chrome, Mac Desktop
 
 ### Table of Contents:
 
-- [Installation](docs/installation.md)
-- [Running tests](docs/running_tests.md)
-- [Running tests using existing application session](docs/running_tests_using_existing_session.md)
+- [Installation](docs/01_installation.md)
+- [Running tests](docs/04_running_tests.md)
+- [Running tests using existing application session](docs/05_running_tests_using_existing_session.md)
 - [Adding a new test](docs/development_adding_new_test.md)
 - [Adding a new Page](docs/development_adding_new_page.md)
 - [Adding support for a new platform](docs/development_adding_new_platform.md)
-- [Developer's notes](docs/development_notes.md)
-- [Developer's environment](docs/development_environment.md)
+- [Developer's notes](docs/03_development_notes.md)
+- [Developer's environment](docs/02_development_environment.md)

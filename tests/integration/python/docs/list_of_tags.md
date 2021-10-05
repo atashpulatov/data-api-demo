@@ -1,6 +1,6 @@
 # List of tags
 
-**Check [running tests](running_tests.md) to check  how to use tags.** 
+**Check [running tests](04_running_tests.md) to check  how to use tags.** 
 
 1. [Driver tags](#driver_tags)
 1. [Tasks related tags](#tasks_related_tags)
