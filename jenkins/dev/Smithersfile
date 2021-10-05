@@ -6,6 +6,13 @@ produces and publishes a versioned deployment package'
   configure_common_items{}
 
   assigned_node_string 'amazon_linux'
+  
+   build_wrappers do
+    secret_text do
+      credentialsId 'Tools'
+      variable 'SRCCLR_API_TOKEN'
+    end
+  end
 
   builders do
     bash do
@@ -24,6 +31,8 @@ rake upload_plugins
  
 rake update_dep_db_from_file
 rake update_ready_for_pr
+
+rake veracode
 rake post_pipeline
 '
     end
@@ -36,22 +45,6 @@ rake post_pipeline
   end
 
   publishers do
-    # junit do
-    # end
-    #
-    # cobertura do
-    # end
-    #
-    # cucumber do
-    #   file_include_pattern 'prepush_test.json'
-    # end
-    #
-    # html do
-    #   report_name 'Vagrant Logs'
-    #   report_directory_path "deploy/vagrant/esxi/dev/logs"
-    #   index_file_name 'index.html'
-    # end
-
     parameterized_trigger do
       job_short_names %w{
         stage-2-e2e-browser-test-mac
@@ -59,6 +52,13 @@ rake post_pipeline
         stage-2-e2e-browser-test-python-mac
         stage-2-e2e-desktop-test-python-mac
       }
+    end
+    ext_mailer do
+     recipients_list 'la-oficina-para-dev-d-aaaacnxgbmsvk55vean2hciclq@microstrategy.slack.com,broken-build-gdc-aaaaetzcjbfbaqe4n7xaeu7ttm@microstrategy.slack.com'
+     subject 'mstr-office stage-1 - $BUILD_STATUS'
+     content '$DEFAULT_CONTENT'
+     fail_trigger_notify_developer 'true'
+     always_trigger 'false'
     end
   end
 

@@ -13,6 +13,13 @@ produces and publishes a versioned deployment package'
         commit_status_context "mstr-office-premerge-#{Environment.branch_name}"
       end
   end
+  
+  build_wrappers do
+   secret_text do
+     credentialsId 'Tools'
+     variable 'SRCCLR_API_TOKEN'
+    end
+  end
 
   builders do
     bash do
@@ -28,6 +35,7 @@ rake pre_pipeline
 
 rake stage_0_test
 
+rake vedacode
 rake post_pipeline
 '
     end
