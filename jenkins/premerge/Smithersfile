@@ -32,10 +32,10 @@ export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
 rake pre_pipeline
+rake veracode
 
 rake stage_0_test
 
-rake vedacode
 rake post_pipeline
 '
     end
