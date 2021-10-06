@@ -19,10 +19,10 @@
   <div>Cookie Helper</div>
   <script>
     //same cookie as in index.html
-    const TEMP_COOKIE = 'content_security_check=true; SameSite=None; Secure';
+    const TEMP_COOKIE = 'content_security_check=true; SameSite=None; Secure; max-age=31536000';
     document.cookie = TEMP_COOKIE;
     //refresh the add in window
-    window.opener.location = window.opener.location;
+    window.opener.location.reload();
     window.close();
   </script>
 </body>

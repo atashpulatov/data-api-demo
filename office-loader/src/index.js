@@ -212,10 +212,9 @@ function showLoginBtn() {
 
 
 function canSaveCookies() {
-  const TEMP_COOKIE = 'content_security_check=true';
   try {
-    document.cookie = `${TEMP_COOKIE}; SameSite=None; Secure';`;
-    return document.cookie.indexOf(TEMP_COOKIE) !== -1;
+    document.cookie = `content_security_check=true; SameSite=None; Secure; max-age=31536000`;
+    return document.cookie.indexOf('content_security_check') !== -1;
   } catch (e) {
     return false;
   }
