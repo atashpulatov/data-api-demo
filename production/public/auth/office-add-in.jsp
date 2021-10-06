@@ -5,7 +5,7 @@
 <%@ page import="com.microstrategy.consumerweb.servlets.ContentSecurityPolicyUtil" %>
 <%
   SessionManager sessionManager = (SessionManager)session.getAttribute(ParamNames.SESSION_MANAGER);
-  String authToken = sessionManager.getAccessToken();
+  String authToken = Encode.forJavaScriptBlock(sessionManager.getAccessToken());
   String cspNonce = ContentSecurityPolicyUtil.getNonce(request);
 %> -->
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
   <script nonce="<%=cspNonce%>">
     var message = {
       type: 'auth-token',
-      payload: '<%=Encode.forJavaScriptBlock(authToken)%>'
+      payload: '<%=authToken%>'
     };
 
     var origin = location.origin || '*';
