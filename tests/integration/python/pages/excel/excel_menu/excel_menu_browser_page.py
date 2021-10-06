@@ -19,6 +19,8 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
     NAME_BOX_ITEMS_CSS = 'li.cui-menusection-items'
 
     MODAL_DIV_CSS = '.cui-modalDiv'
+    ADD_IN_POPUP_MODAL_BUTTONS = '.ms-Fabric button'
+    ENABLE_BUTTON_ID = 'enableSpan'
 
     def click_add_in_elem(self):
         self._get_add_in_button().click()
@@ -40,14 +42,16 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
     def _get_add_in_button(self):
         add_in_environment = ConfigUtil.get_add_in_environment()
+        return self._get_add_in_button_by_name(add_in_environment)
 
+    def _get_add_in_button_by_name(self, add_in_name):
         i = 0
         while i < Const.ELEMENT_SEARCH_RETRY_NUMBER:
             self.focus_on_excel_frame()
 
             all_candidates = self.get_elements_by_css(ExcelMenuBrowserPage.ICON_ELEM)
             found_environment_elements = list(filter(
-                lambda item: item.text.startswith(add_in_environment), all_candidates
+                lambda item: item.text.startswith(add_in_name), all_candidates
             ))
 
             if len(found_environment_elements) == 1:
@@ -58,6 +62,10 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
             i += 1
 
         raise MstrException('Cannot find AddIn element.')
+
+    def click_ub_add_in_button(self, add_in_name):
+        add_in_button = self._get_add_in_button_by_name(add_in_name)
+        add_in_button.click()
 
     def click_close_add_in_button(self):
         self.focus_on_excel_frame()
@@ -118,3 +126,13 @@ class ExcelMenuBrowserPage(BaseBrowserPage):
 
     def _click_on_main_menu_item(self, menu_item):
         self.get_element_by_id(menu_item).click()
+
+    def click_close_add_in_popup(self):
+        self.focus_on_excel_frame()
+        self.find_element_in_list_by_attribute(
+            ExcelMenuBrowserPage.ADD_IN_POPUP_MODAL_BUTTONS, 'aria-label', 'Close'
+        ).click()
+
+    def click_enable_button(self):
+        self.focus_on_add_in_frame()
+        self.get_element_by_id(ExcelMenuBrowserPage.ENABLE_BUTTON_ID).click()

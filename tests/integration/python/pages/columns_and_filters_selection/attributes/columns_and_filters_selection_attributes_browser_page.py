@@ -17,6 +17,8 @@ class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
     ATTRIBUTE_FORM_ARROW_COLLAPSED = '.ant-tree-switcher_close'
     ATTRIBUTE_FORM_ARROW_EXPANDED = '.ant-tree-switcher_open'
 
+    ATTRIBUTE_FORM_NEW = '.filter-panel-selectors > div:first-child'
+
     ROOT_ATTRIBUTE_CONTAINER = '.attributes-col'
 
     # TODO might not work for datasets
@@ -166,3 +168,8 @@ class ColumnsAndFiltersSelectionAttributesBrowserPage(BaseBrowserPage):
         self.get_element_by_css_no_visibility_checked(
             ColumnsAndFiltersSelectionAttributesBrowserPage.ATTRIBUTE_ELEMENT_AT % object_number
         ).move_to_and_click()
+
+    def select_attribute_by_name(self, attribute_name):
+        self.focus_on_add_in_popup_frame()
+        checkbox_css_selector = f'.Checkbox input[name={attribute_name}'
+        self.get_element_by_css(checkbox_css_selector).click(-5, -5)

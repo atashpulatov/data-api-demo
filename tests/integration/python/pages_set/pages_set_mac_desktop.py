@@ -61,6 +61,8 @@ class PagesSetMacDesktop(AbstractPagesSet):
         self.import_dossier_context_menu_mac_desktop_page = ImportDossierContextMenuMacDesktopPage()
         self.import_dossier_show_data_mac_desktop_page = None
 
+        self.import_ub_performance_browser_page = None
+
     def excel_general_page(self):
         return self.excel_general_mac_desktop_page
 

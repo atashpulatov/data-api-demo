@@ -33,3 +33,20 @@ def step_impl(context, first_timer_name, second_timer_name):
     )
 
     AssertUtil.assert_simple(result, True)
+
+
+@step('I saved timestamp to "{timestamp_name}"')
+def step_impl(context, timestamp_name):
+    context.pages.time_duration_page().save_timestamp(timestamp_name)
+
+
+@step('I incremented execution timer named"{timer_name}"')
+def step_impl(context, timer_name):
+    context.pages.time_duration_page().save_duration_sum_and_counter(timer_name)
+
+
+@step('I updated execution start time for timer "{timer_name}"')
+def step_impl(context, timer_name):
+    context.pages.time_duration_page().update_execution_start(timer_name)
+
+

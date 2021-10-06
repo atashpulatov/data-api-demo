@@ -8,6 +8,16 @@ def step_impl(context):
     context.pages.excel_menu_page().click_close_add_in_button()
 
 
+@step('I clicked close Add-in popover')
+def step_impl(context):
+    context.pages.excel_menu_page().click_close_add_in_popup()
+
+
+@step('I clicked Enable button')
+def step_impl(context):
+    context.pages.excel_menu_page().click_enable_button()
+
+
 @step('I clicked Add-in icon')
 def step_impl(context):
     context.pages.excel_menu_page().click_add_in_elem()

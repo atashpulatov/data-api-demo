@@ -16,6 +16,7 @@ class BaseBrowserPage(BasePage):
     ADD_IN_ROOT_ELEM = 'root'
     PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
     POPUP_WRAPPER_ID = 'popup-wrapper'
+    UPLOAD_MENU_ID = 'UploadMenu'
 
     def switch_to_window_by_index(self, index):
         window_handles = self.driver.window_handles
@@ -80,6 +81,23 @@ class BaseBrowserPage(BasePage):
             self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
 
         raise MstrException('Cannot focus on Add-in popup frame')
+
+    def focus_on_add_in_upload_frame(self):
+        end_time = time.time() + Const.DEFAULT_TIMEOUT
+
+        while end_time > time.time():
+            self.focus_on_excel_frame()
+
+            add_in_popup_frame_element = self.get_frame_element_by_css(BaseBrowserPage.ADD_IN_POPUP_FRAME_ELEM)
+
+            self._switch_to_frame(add_in_popup_frame_element)
+
+            if self.check_if_element_exists_by_id(BaseBrowserPage.UPLOAD_MENU_ID, timeout=Const.SHORT_TIMEOUT):
+                return
+
+            self.pause(Const.ELEMENT_SEARCH_RETRY_INTERVAL)
+
+        raise MstrException('Cannot focus on Add-in upload frame')
 
     def focus_on_dossier_frame(self):
         self.focus_on_excel_frame()
@@ -223,6 +241,16 @@ class BaseBrowserPage(BasePage):
                 return item
 
         return None
+
+    def find_element_in_list_by_attribute(self, selector, attribute_name, attribute_value):
+        found_elements = self.get_elements_by_css(selector)
+
+        for element in found_elements:
+            if element.get_attribute(attribute_name) == attribute_value:
+                return element
+
+        raise MstrException('Element not found, selector: [%s], attribute_name: [%s], '
+                            'attribute_value: [%s]' % (selector, attribute_name, attribute_value))
 
     def find_index_of_element_in_list_by_text(self, selector, text):
         """

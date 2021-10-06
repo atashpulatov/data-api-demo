@@ -38,6 +38,7 @@ class FilterPanelBrowserPage(BaseBrowserPage):
 
     ELEMENT_FROM_CATEGORY = '.category-list-header[aria-label="%s"] + .category-list-table label[title="%s"]'
     ELEMENT_CHECKED = 'input:checked'
+    ELEMENT_FROM_CONTENT = '.all-panel__content input[aria-label="%s"]'
 
     CLEAR_ALL = '.filter-panel .filter-panel__button'
 
@@ -63,11 +64,18 @@ class FilterPanelBrowserPage(BaseBrowserPage):
     def click_owner_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.OWNER_ALL_PANEL).click()
 
+    def click_application_all_panel(self):
+        self.get_element_by_css(FilterPanelBrowserPage.APPLICATIONS_ALL_PANEL).click()
+
     def click_modified_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_ALL_PANEL).click()
 
     def click_modified_all_panel_element(self, modified_element):
         self.get_element_by_css(FilterPanelBrowserPage.MODIFIED_ALL_PANEL_CHECKBOX % modified_element).click()
+
+    def click_application_all_panel_element(self, application_element):
+        element_aria_label = f'Checkbox for {application_element}.'
+        self.get_element_by_css(FilterPanelBrowserPage.ELEMENT_FROM_CONTENT % element_aria_label).click()
 
     def click_select_all_within_all_panel(self):
         self.get_element_by_css(FilterPanelBrowserPage.SELECT_ALL_WITHIN_ALL_PANEL).click()

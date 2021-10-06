@@ -133,3 +133,7 @@ class AbstractPagesSet(ABC):
     @abstractmethod
     def right_panel_tile_details_page(self):
         pass
+
+    @abstractmethod
+    def import_ub_performance_page(self):
+        pass

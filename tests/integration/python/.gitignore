@@ -140,6 +140,9 @@ framework/screenshots/*.png
 # framework's configuration
 framework/config/config.json
 
+#framework's debug data
+framework/debug_data/
+
 # Allure reports
 allure-report
 allureFolder

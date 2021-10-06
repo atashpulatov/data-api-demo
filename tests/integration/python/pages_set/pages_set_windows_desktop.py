@@ -81,6 +81,8 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
         self.import_dossier_context_menu_windows_desktop_page = ImportDossierContextMenuWindowsDesktopPage()
         self.import_dossier_show_data_windows_desktop_page = ImportDossierShowDataWindowsDesktopPage()
 
+        self.import_ub_performance_browser_page = None
+
     def excel_general_page(self):
         return self.excel_general_windows_desktop_page
 

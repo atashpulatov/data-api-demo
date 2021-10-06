@@ -72,3 +72,9 @@ def step_impl(context, object_number):
     context.pages.columns_and_filters_selection_attributes_page().scroll_into_and_select_attribute_by_number(
         object_number
     )
+
+
+@step('I selected "{attribute_name}" in attribute selector')
+def step_impl(context, attribute_name):
+    context.pages.columns_and_filters_selection_attributes_page().select_attribute_by_name(attribute_name)
+

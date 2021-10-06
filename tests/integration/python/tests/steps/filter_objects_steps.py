@@ -8,6 +8,11 @@ def step_impl(context):
     context.pages.filter_panel_page().click_owner_all_panel()
 
 
+@step('I opened All for Application category')
+def setp_impl(context):
+    context.pages.filter_panel_page().click_application_all_panel()
+
+
 @step('I opened All for Modified category')
 def step_impl(context):
     context.pages.filter_panel_page().click_modified_all_panel()
@@ -21,6 +26,11 @@ def step_impl(context):
 @step('I clicked "{modified_element}" within Modified All Panel')
 def step_impl(context, modified_element):
     context.pages.filter_panel_page().click_modified_all_panel_element(modified_element)
+
+
+@step('I clicked "{application_element}" within Application All Panel')
+def step_impl(context, application_element):
+    context.pages.filter_panel_page().click_application_all_panel_element(application_element)
 
 
 @step('I clicked Type "{object_type}"')
