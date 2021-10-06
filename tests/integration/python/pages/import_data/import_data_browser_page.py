@@ -18,6 +18,9 @@ class ImportDataBrowserPage(BaseBrowserPage):
     NAME_OBJECT_ID_PREFIX = '#name-column-'
 
     EXPAND_DETAILS_ELEM = '.details-indicator'
+    ARROW_DETAILS_BUTTON_OPENED = ' .details-indicator-opened'
+    ARROW_DETAILS_BUTTON_CLOSED = ' .details-indicator'
+    ARROW_DETAILS_BUTTON_TOOLTIP = ' .tooltiptext-with-arrow'
     OBJECT_DETAILS_TABLE = '.details-table > table tr'
     OBJECT_DETAILS_VALUE = '.tooltip :last-child'
     OBJECT_DETAIL_SELECTORS = {
@@ -271,3 +274,30 @@ class ImportDataBrowserPage(BaseBrowserPage):
                 return
 
         raise MstrException(f'Could not find selector with name: {expected_selector_name}')
+
+#TODO merge get_tooltip_message_for_details_arrow_opened and get_tooltip_message_for_details_arrow_closed to one method
+    def get_tooltip_message_for_details_arrow_opened(self):
+
+        arrow_details_button = self.get_element_by_css(ImportDataBrowserPage.ARROW_DETAILS_BUTTON_OPENED)
+        arrow_details_button.move_to()
+
+        arrow_tooltip = self._get_name_tooltip_text()
+
+        return arrow_tooltip
+
+    def get_tooltip_message_for_details_arrow_closed(self):
+
+        arrow_details_button = self.get_element_by_css(ImportDataBrowserPage.ARROW_DETAILS_BUTTON_CLOSED)
+        arrow_details_button.move_to()
+
+        arrow_tooltip = self._get_name_tooltip_text()
+
+        return arrow_tooltip
+
+    def _get_name_tooltip_text(self):
+        name_tooltip = self.get_element_by_css(ImportDataBrowserPage.ARROW_DETAILS_BUTTON_TOOLTIP)
+
+        return name_tooltip.text
+
+
+

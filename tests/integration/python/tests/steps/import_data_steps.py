@@ -189,3 +189,21 @@ def step_impl(context, expected_tooltip_text):
 @step('I selected "{selector_name}" for attribute/metric selector')
 def step_impl(context, selector_name):
     context.pages.import_data_page().select_attribute_metric_selector_by_name(selector_name)
+
+
+@step('I verified that details arrow tooltip for object number 1 displays "Show less"')
+def step_impl(context):
+    tooltip_text = context.pages.import_data_page().get_tooltip_message_for_details_arrow_opened()
+
+    expected_tooltip = "Show less"
+
+    AssertUtil.assert_simple(tooltip_text, expected_tooltip)
+
+
+@step('I verified that details arrow tooltip for object number 1 displays "Show more"')
+def step_impl(context):
+    tooltip_text = context.pages.import_data_page().get_tooltip_message_for_details_arrow_closed()
+
+    expected_tooltip = "Show more"
+
+    AssertUtil.assert_simple(tooltip_text, expected_tooltip)
