@@ -105,6 +105,13 @@ def step_impl(context, object_number, expected_name):
     AssertUtil.assert_simple(result, expected_name)
 
 
+@step('I verified that path name for object number {object_number} displays "{expected_name}"')
+def step_impl(context, object_number, expected_name):
+    result = context.pages.right_panel_tile_page().get_object_path(object_number)
+
+    AssertUtil.assert_simple(result, expected_name)
+
+
 @step('I changed object {object_number} name to "{new_object_name}" using icon')
 def step_impl(context, object_number, new_object_name):
     context.pages.right_panel_tile_page().change_object_name_using_icon(object_number, new_object_name)

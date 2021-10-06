@@ -16,16 +16,17 @@ Feature: F24398 - Import and refresh visualization
       And I added dossier to Library if not yet added
       And I selected dossier page or chapter 1
       And I selected visualization "Visualization 1"
-      And I selected dossier page or chapter 2
+      And I selected dossier page or chapter 3
       And I selected visualization "Chart vis"
       And I created dossier bookmark "Test bookmark" if not exists
       And I selected dossier bookmark 1
-
       And I "increased" year filter value on dossier from "left" side
-      And I verified that value for filter "Year" is "(2015 - 2016)"
-      And I reset dossier
-      And I verified that value for filter "Year" is "(2014 - 2015)"
-      And I selected dossier page or chapter 2
+     Then I verified that value for filter "Year" is "(2015 - 2016)"
+
+     When I reset dossier
+     Then I verified that value for filter "Year" is "(2014 - 2015)"
+
+     When I selected dossier page or chapter 3
       And I selected visualization "Chart vis"
       And I clicked import dossier
       And I closed last notification
@@ -62,22 +63,72 @@ Feature: F24398 - Import and refresh visualization
       And I found object by ID "F806E5E811E9EFE33E340080EF65F66F" and selected "Dossier with basic grid vis, vis with totals and vis with crosstabs"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      And I opened Show Data panel for "Grid visualisation with subtotals"
+      And I opened Show Data panel for "Grid visualisation with subtotals and crosstabs"
       And I closed Show Data panel
-      And I imported visualization "Grid visualisation with subtotals"
+      And I imported visualization "Grid visualisation with subtotals and crosstabs"
       And I closed last notification
-     Then I verified that cells ["F2", "F3"] have values ["Total", "Al Hirschfeld"]
-      And I verified that object number 1 is called "Grid visualisation with subtotals"
+     Then I verified that cells ["F2", "F3"] have values ["Metrics", "Brand"]
+
+     When I selected cell "Z1"
+      And I clicked Add Data button
+      And I clicked Filters button
+      And I clicked Application "MicroStrategy Tutorial"
+      And I found object by ID "1909EE8E11E9FEEEDC670080EF958818" and selected "This is a very long name for a dossier so that we can test how we display long path to dossier visualisations"
+      And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
+      And I imported visualization "This is a very long name for a visualisation so that we can test how we display long name."
+      And I closed last notification
+     Then I verified that cells ["Z2", "Z3"] have values ["Winter 2011", "Winter 2011"]
+      And I verified that path name for object number 1 displays "This is a very long name for a dossier so that we can test how we display long path to dossier visualisations > This is a very long name for a visualisation so that we can test how we display long name. > This is a very long name for a visualisation so that we can test how we display long name."
+
+     When I selected cell "AE1"
+      And I clicked Add Data button
+      And I found object by ID "DB43CB0C11E9FEF1DC670080EF652715" and selected "Dossier with compound grid"
+      And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
+      And I imported visualization "Visualization 1"
+      And I closed last notification
+     Then I verified that cells ["AE2", "AE3"] have values ["Atlanta", "San Diego"]
+
+     When I selected cell "AI1"
+      And I clicked Add Data button
+      And I found object by ID "8F27EA1911EB7BFB74C70080EF850E4B" and selected "A_Prompted dossier"
+      And I clicked Import button to open Import Dossier
+      And I clicked Run button for prompted dossier if prompts not already answered
+      And I waited for dossier to load successfully
+      And I imported visualization "Visualization 1"
+      And I closed last notification
+     Then I verified that cells ["AI2", "AI3"] have values ["2014 Q1", "2014 Q1"]
+
+     When I selected cell "AN1"
+      And I clicked Add Data button
+      And I found object by ID "4178D5CE11EA8076D09F0080EF1588F4" and selected "Dossier with different custom visualizations"
+      And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
+      And I imported visualization "D3 WorldCloud"
+      And I closed last notification
+     Then I verified that cells ["AN2", "AN3"] have values ["USA", "Web"]
+
+     When I selected cell "AR1"
+      And I clicked Add Data button
+      And I found object by ID "4178D5CE11EA8076D09F0080EF1588F4" and selected "Dossier with different custom visualizations"
+      And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
+      And I imported visualization "Google Timeline"
+      And I closed last notification
+     Then I verified that cells ["AR2", "AR3"] have values ["Books", "Books"]
+
+     When I selected cell "AX1"
+      And I clicked Add Data button
+      And I found object by ID "4178D5CE11EA8076D09F0080EF1588F4" and selected "Dossier with different custom visualizations"
+      And I clicked Import button to open Import Dossier
+      And I waited for dossier to load successfully
+      And I imported visualization "Sequence Sunburst"
+      And I closed last notification
+     Then I verified that cells ["AX2", "AX3"] have values ["Books", "Electronics"]
 
      When I removed object 1 using icon
       And I closed last notification
-     Then I verified that cells ["F2", "F3"] have values ["", ""]
-
-     When I removed object 1 using context menu
-      And I closed last notification
-     Then I verified that cells ["A2", "A3"] have values ["", ""]
+     Then I verified that cells ["AX2", "AX3"] have values ["", ""]
 
       And I logged out
-
-   #TODO upadte steps from rally
-   

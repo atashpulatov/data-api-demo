@@ -45,6 +45,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.editable'
 
+    VISUALIZATION_PATH_FOR_OBJECT = RIGHT_PANEL_TILE + ' .visualization-path'
+
     RIGHT_PANEL_TILE_TOOLTIP = RIGHT_PANEL_TILE + ' .object-tile-name-row .__react_component_tooltip'
 
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
@@ -287,6 +289,13 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         object_name = self._get_name_tooltip_text(object_number)
 
         return object_name
+
+    def get_object_path(self, object_number):
+        self.focus_on_add_in_frame()
+
+        path_name = self.get_element_by_css(RightPanelTileBrowserPage.VISUALIZATION_PATH_FOR_OBJECT % object_number)
+
+        return path_name.text
 
     def _get_name_tooltip_text(self, object_number):
         name_tooltip = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_TOOLTIP % object_number)
