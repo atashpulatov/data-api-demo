@@ -1,4 +1,4 @@
-@ci_pipeline_daily_windows_chrome  @ci_pipeline_daily_mac_chrome
+#@ci_pipeline_daily_windows_chrome  @ci_pipeline_daily_mac_chrome
 @windows_desktop @windows_chrome @mac_desktop @mac_chrome
 Feature: F25931 - Duplicate object
 
