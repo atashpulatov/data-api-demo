@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PromptsContainer } from '../../prompts/prompts-container';
 
-
 describe('PromptsContainer', () => {
   it('should render with props', () => {
     // given

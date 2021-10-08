@@ -3,7 +3,6 @@ import { officeApiHelper } from '../api/office-api-helper';
 import { officeRemoveHelper } from '../remove/office-remove-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 
-
 class StepCheckObjectStatus {
   /**
    * Check if the Excel table of imported object exists in worksheet.

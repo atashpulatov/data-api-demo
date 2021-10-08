@@ -74,34 +74,34 @@ describe('StepBindOfficeTable', () => {
   
   `('should skip bindOfficeTable if no new table created', async ({ operationType }) => {
   // given
-  const objectData = {
-    bindId: 'bindIdTest',
-    objectWorkingId: 'objectWorkingIdTest',
-    isCrosstab: true,
-  };
-  const excelContext = { sync: jest.fn() };
-  const operationData = {
-    excelContext,
-    officeTable: {},
-    operationType,
-    tableChanged: false,
-  };
+    const objectData = {
+      bindId: 'bindIdTest',
+      objectWorkingId: 'objectWorkingIdTest',
+      isCrosstab: true,
+    };
+    const excelContext = { sync: jest.fn() };
+    const operationData = {
+      excelContext,
+      officeTable: {},
+      operationType,
+      tableChanged: false,
+    };
 
-  jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue('tableNameTest');
+    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue('tableNameTest');
 
-  jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
+    jest.spyOn(officeApiHelper, 'bindNamedItem').mockImplementation();
 
-  jest.spyOn(operationStepDispatcher, 'completeBindOfficeTable').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeBindOfficeTable').mockImplementation();
 
-  // when
-  await stepBindOfficeTable.bindOfficeTable(objectData, operationData);
+    // when
+    await stepBindOfficeTable.bindOfficeTable(objectData, operationData);
 
-  // then
-  expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(0);
+    // then
+    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(0);
 
-  expect(officeApiHelper.bindNamedItem).toBeCalledTimes(0);
+    expect(officeApiHelper.bindNamedItem).toBeCalledTimes(0);
 
-  expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledTimes(1);
-  expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith('objectWorkingIdTest');
-});
+    expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeBindOfficeTable).toBeCalledWith('objectWorkingIdTest');
+  });
 });

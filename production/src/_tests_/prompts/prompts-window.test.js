@@ -103,8 +103,9 @@ describe('PromptsWindowNotConnected', () => {
 
   it('prolongSession should be called on EXTEND_SESSION message', () => {
     // given
-    const message = { data: EXTEND_SESSION };
-    window.Office = {
+    // usually origin is added by the browser which is executing the code, but in test we need to add it manualy
+    const message = { data: EXTEND_SESSION, origin: 'http://localhost' };
+    global.Office = {
       context: {
         ui: { messageParent: () => { }, },
         diagnostics: { host: 'host', platform: 'platform', version: 'version' },
@@ -148,7 +149,6 @@ describe('PromptsWindowNotConnected', () => {
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
   });
-
 
   it('handleRun should call handlePopupErrors on not valid auth token ', async () => {
     // given

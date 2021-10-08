@@ -1,4 +1,3 @@
-
 import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -11,7 +10,6 @@ import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
-
 
 class SidePanelService {
   init = (reduxStore) => {

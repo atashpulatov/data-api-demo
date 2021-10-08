@@ -92,5 +92,4 @@ const didOperationNotChange = (previousOperationCopy, currentOperation) => {
   return false;
 };
 
-
 export const operationBus = new OperationBus();

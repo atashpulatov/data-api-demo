@@ -55,7 +55,6 @@ describe('PopupController', () => {
     expect(Office.context.ui.displayDialogAsync).toBeCalled();
   });
 
-
   it('should run edit popup with proper settings', () => {
     // given
     const reportParams = 'chosenObjectData';

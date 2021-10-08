@@ -14,17 +14,16 @@ describe('OfficeFormatHyperlinks', () => {
   ${'http:///a'}              | ${false}
   
   `('isValidUrl should return $expectedResult for $string',
-  ({
-    string,
-    expectedResult
-  }) => {
+    ({
+      string,
+      expectedResult
+    }) => {
     // when
-    const result = officeFormatHyperlinks.isValidUrl(string);
+      const result = officeFormatHyperlinks.isValidUrl(string);
 
-    // then
-    expect(result).toEqual(expectedResult);
-  });
-
+      // then
+      expect(result).toEqual(expectedResult);
+    });
 
   it.each`
   string                                                       | baseFormType | expectedResult
@@ -56,15 +55,15 @@ describe('OfficeFormatHyperlinks', () => {
   ${'invalid'}                                                 | ${'HTMLTag'} | ${null}
   
   `('parseHTMLTag should work for $string with form $baseFormType',
-  ({
-    string,
-    baseFormType,
-    expectedResult
-  }) => {
+    ({
+      string,
+      baseFormType,
+      expectedResult
+    }) => {
     // when
-    const result = officeFormatHyperlinks.parseHTMLTag(string, baseFormType);
+      const result = officeFormatHyperlinks.parseHTMLTag(string, baseFormType);
 
-    // then
-    expect(result).toEqual(expectedResult);
-  });
+      // then
+      expect(result).toEqual(expectedResult);
+    });
 });

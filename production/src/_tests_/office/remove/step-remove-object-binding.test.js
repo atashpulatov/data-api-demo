@@ -63,7 +63,6 @@ describe('StepRemoveObjectBinding', () => {
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
     jest.spyOn(officeStoreObject, 'removeObjectInExcelStore').mockImplementation();
 
-
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
       bindId: 'bindIdTest',

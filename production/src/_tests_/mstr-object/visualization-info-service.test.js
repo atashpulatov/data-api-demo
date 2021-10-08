@@ -299,12 +299,12 @@ describe('VisualizationInfoService', () => {
 
   `('should call getVisualizationInfo and get expectedVisualizationInfo for "$testName" dossier definition', async ({ dossierDefinition, expectedVisualizationInfo }) => {
   // given
-  jest.spyOn(mstrObjectRestService, 'getDossierInstanceDefinition').mockResolvedValue(dossierDefinition);
-  // when
-  const newVisualizationInfo = await visualizationInfoService.getVisualizationInfo(
-    projectId, objectId, visualizationKey, dossierInstance
-  );
-  // then
-  expect(newVisualizationInfo).toStrictEqual(expectedVisualizationInfo);
-});
+    jest.spyOn(mstrObjectRestService, 'getDossierInstanceDefinition').mockResolvedValue(dossierDefinition);
+    // when
+    const newVisualizationInfo = await visualizationInfoService.getVisualizationInfo(
+      projectId, objectId, visualizationKey, dossierInstance
+    );
+    // then
+    expect(newVisualizationInfo).toStrictEqual(expectedVisualizationInfo);
+  });
 });

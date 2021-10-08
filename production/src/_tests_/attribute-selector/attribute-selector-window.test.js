@@ -282,7 +282,6 @@ describe('AttributeSelectorWindow', () => {
     // expect(wrappedCancelButton.length).toBe(1);
   });
 
-
   it('should trigger attribute-selector-helpers: officeMessageParent when Cancel is clicked', () => {
     // given
     const mstrData = {
@@ -291,7 +290,6 @@ describe('AttributeSelectorWindow', () => {
       projectId: 'proId'
     };
     const chosenObject = { chosenObjectName: '55' };
-
 
     // when
     const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
@@ -307,7 +305,6 @@ describe('AttributeSelectorWindow', () => {
     expect(officeMessageParentSpy).toHaveBeenCalledTimes(1);
   });
 
-
   it('should change value of attributesSelected if attributesBeingSelected is being invoked', () => {
     // given
     const mstrData = {
@@ -320,7 +317,6 @@ describe('AttributeSelectorWindow', () => {
       chosenObjectName: '55',
       promptsAnswers: 'promptsAnswers',
     };
-
 
     const componentWrapper = shallow(<AttributeSelectorWindowNotConnected
       mstrData={mstrData}

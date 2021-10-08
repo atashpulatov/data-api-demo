@@ -57,82 +57,82 @@ describe('OfficeTableUpdate', () => {
   ${false}
   
   `('updateOfficeTable should should work as expected',
-  async ({ isCrosstabParam }) => {
+    async ({ isCrosstabParam }) => {
     // given
-    const mstrTableMock = {
-      isCrosstab: isCrosstabParam,
-      headers: {
-        columns: 'columnsTest',
-      },
-      subtotalsInfo: {
-        subtotalsAddresses: 'subtotalsAddressesTest',
-      },
-    };
+      const mstrTableMock = {
+        isCrosstab: isCrosstabParam,
+        headers: {
+          columns: 'columnsTest',
+        },
+        subtotalsInfo: {
+          subtotalsAddresses: 'subtotalsAddressesTest',
+        },
+      };
 
-    const instanceDefinitionMock = {
-      rows: 'rowsTest',
-      mstrTable: mstrTableMock
-    };
+      const instanceDefinitionMock = {
+        rows: 'rowsTest',
+        mstrTable: mstrTableMock
+      };
 
-    const prevOfficeTableMock = {
-      worksheet: 'worksheetTest',
-    };
+      const prevOfficeTableMock = {
+        worksheet: 'worksheetTest',
+      };
 
-    jest.spyOn(officeTableUpdate, 'handleSubtotalsFormatting').mockImplementation();
+      jest.spyOn(officeTableUpdate, 'handleSubtotalsFormatting').mockImplementation();
 
-    jest.spyOn(officeTableUpdate, 'validateAddedRowsRange').mockImplementation();
+      jest.spyOn(officeTableUpdate, 'validateAddedRowsRange').mockImplementation();
 
-    jest.spyOn(officeTableUpdate, 'createHeadersForCrosstab').mockImplementation();
+      jest.spyOn(officeTableUpdate, 'createHeadersForCrosstab').mockImplementation();
 
-    jest.spyOn(officeTableUpdate, 'setHeaderValuesNoCrosstab').mockImplementation();
+      jest.spyOn(officeTableUpdate, 'setHeaderValuesNoCrosstab').mockImplementation();
 
-    jest.spyOn(officeRemoveHelper, 'deleteRowsInChunks').mockImplementation();
+      jest.spyOn(officeRemoveHelper, 'deleteRowsInChunks').mockImplementation();
 
-    const excelContextSyncMock = jest.fn();
-    const excelContextMock = { sync: excelContextSyncMock };
+      const excelContextSyncMock = jest.fn();
+      const excelContextMock = { sync: excelContextSyncMock };
 
-    const result = await officeTableUpdate.updateOfficeTable(
-      instanceDefinitionMock,
-      excelContextMock,
-      'startCellTest',
-      prevOfficeTableMock
-    );
-
-    // then
-    expect(officeTableUpdate.handleSubtotalsFormatting).toBeCalledTimes(1);
-    expect(officeTableUpdate.handleSubtotalsFormatting).toBeCalledWith(
-      excelContextMock,
-      prevOfficeTableMock,
-      mstrTableMock,
-      'subtotalsAddressesTest'
-    );
-
-    expect(officeTableUpdate.validateAddedRowsRange).toBeCalledTimes(1);
-    expect(officeTableUpdate.validateAddedRowsRange).toBeCalledWith(excelContextMock, 'rowsTest', prevOfficeTableMock);
-
-    if (isCrosstabParam) {
-      expect(officeTableUpdate.createHeadersForCrosstab).toBeCalledTimes(1);
-      expect(officeTableUpdate.createHeadersForCrosstab).toBeCalledWith(
-        'worksheetTest',
+      const result = await officeTableUpdate.updateOfficeTable(
         instanceDefinitionMock,
-        'startCellTest'
+        excelContextMock,
+        'startCellTest',
+        prevOfficeTableMock
       );
-    } else {
-      expect(officeTableUpdate.setHeaderValuesNoCrosstab).toBeCalledTimes(1);
-      expect(officeTableUpdate.setHeaderValuesNoCrosstab).toBeCalledWith(
+
+      // then
+      expect(officeTableUpdate.handleSubtotalsFormatting).toBeCalledTimes(1);
+      expect(officeTableUpdate.handleSubtotalsFormatting).toBeCalledWith(
         excelContextMock,
         prevOfficeTableMock,
-        'columnsTest'
+        mstrTableMock,
+        'subtotalsAddressesTest'
       );
-    }
 
-    expect(officeRemoveHelper.deleteRowsInChunks).toBeCalledTimes(1);
-    expect(officeRemoveHelper.deleteRowsInChunks).toBeCalledWith(
-      excelContextMock, prevOfficeTableMock, 500, 'rowsTest'
-    );
+      expect(officeTableUpdate.validateAddedRowsRange).toBeCalledTimes(1);
+      expect(officeTableUpdate.validateAddedRowsRange).toBeCalledWith(excelContextMock, 'rowsTest', prevOfficeTableMock);
 
-    expect(result).toEqual(prevOfficeTableMock);
-  });
+      if (isCrosstabParam) {
+        expect(officeTableUpdate.createHeadersForCrosstab).toBeCalledTimes(1);
+        expect(officeTableUpdate.createHeadersForCrosstab).toBeCalledWith(
+          'worksheetTest',
+          instanceDefinitionMock,
+          'startCellTest'
+        );
+      } else {
+        expect(officeTableUpdate.setHeaderValuesNoCrosstab).toBeCalledTimes(1);
+        expect(officeTableUpdate.setHeaderValuesNoCrosstab).toBeCalledWith(
+          excelContextMock,
+          prevOfficeTableMock,
+          'columnsTest'
+        );
+      }
+
+      expect(officeRemoveHelper.deleteRowsInChunks).toBeCalledTimes(1);
+      expect(officeRemoveHelper.deleteRowsInChunks).toBeCalledWith(
+        excelContextMock, prevOfficeTableMock, 500, 'rowsTest'
+      );
+
+      expect(result).toEqual(prevOfficeTableMock);
+    });
 
   it.each`
   expectedApplySubtotalFormattingCallsNo | subtotalsAddressesParam
@@ -143,29 +143,29 @@ describe('OfficeTableUpdate', () => {
   ${1}                                   | ${[42, 4242]}
   
   `('handleSubtotalsFormatting should work as expected',
-  async ({ expectedApplySubtotalFormattingCallsNo, subtotalsAddressesParam }) => {
+    async ({ expectedApplySubtotalFormattingCallsNo, subtotalsAddressesParam }) => {
     // given
-    jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting').mockImplementation();
+      jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting').mockImplementation();
 
-    // when
-    await officeTableUpdate.handleSubtotalsFormatting(
-      'excelContextTest',
-      'prevOfficeTableTest',
-      'mstrTableTest',
-      subtotalsAddressesParam
-    );
-
-    // then
-    expect(officeFormatSubtotals.applySubtotalFormatting).toBeCalledTimes(expectedApplySubtotalFormattingCallsNo);
-    if (expectedApplySubtotalFormattingCallsNo > 0) {
-      expect(officeFormatSubtotals.applySubtotalFormatting).toBeCalledWith(
-        'prevOfficeTableTest',
+      // when
+      await officeTableUpdate.handleSubtotalsFormatting(
         'excelContextTest',
+        'prevOfficeTableTest',
         'mstrTableTest',
-        false
+        subtotalsAddressesParam
       );
-    }
-  });
+
+      // then
+      expect(officeFormatSubtotals.applySubtotalFormatting).toBeCalledTimes(expectedApplySubtotalFormattingCallsNo);
+      if (expectedApplySubtotalFormattingCallsNo > 0) {
+        expect(officeFormatSubtotals.applySubtotalFormatting).toBeCalledWith(
+          'prevOfficeTableTest',
+          'excelContextTest',
+          'mstrTableTest',
+          false
+        );
+      }
+    });
 
   it('validateAddedRowsRange should work as expected when addedRowsCount === 0', async () => {
     // given
@@ -216,19 +216,19 @@ describe('OfficeTableUpdate', () => {
   ${0} | ${1} | ${1}
   
   `('getAddedRowsCount should work as expected',
-  async ({ expectedResult, newRowsCountParam, prevRowsCount }) => {
+    async ({ expectedResult, newRowsCountParam, prevRowsCount }) => {
     // given
-    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue(prevRowsCount);
+      jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue(prevRowsCount);
 
-    // when
-    const result = await officeTableUpdate.getAddedRowsCount('excelContextTest', newRowsCountParam, 'prevOfficeTableRowsTest');
+      // when
+      const result = await officeTableUpdate.getAddedRowsCount('excelContextTest', newRowsCountParam, 'prevOfficeTableRowsTest');
 
-    // then
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', 'prevOfficeTableRowsTest', 'count');
+      // then
+      expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
+      expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', 'prevOfficeTableRowsTest', 'count');
 
-    expect(result).toEqual(expectedResult);
-  });
+      expect(result).toEqual(expectedResult);
+    });
 
   it('createHeadersForCrosstab should work as expected', () => {
     // given
@@ -260,29 +260,29 @@ describe('OfficeTableUpdate', () => {
   ${{ values: [42] }}          | ${[40, 41, 42]}
   
   `('setHeaderValuesNoCrosstab should work as expected',
-  ({ expectedValues, headerColumnsParam }) => {
+    ({ expectedValues, headerColumnsParam }) => {
     // given
-    const excelContextMock = {
-      workbook: {
-        application: {
-          suspendApiCalculationUntilNextSync: jest.fn()
+      const excelContextMock = {
+        workbook: {
+          application: {
+            suspendApiCalculationUntilNextSync: jest.fn()
+          }
         }
-      }
-    };
+      };
 
-    const getHeaderRowRangeMock = {};
-    const prevOfficeTableMock = {
-      getHeaderRowRange: jest.fn().mockReturnValue(getHeaderRowRangeMock)
-    };
+      const getHeaderRowRangeMock = {};
+      const prevOfficeTableMock = {
+        getHeaderRowRange: jest.fn().mockReturnValue(getHeaderRowRangeMock)
+      };
 
-    // when
-    officeTableUpdate.setHeaderValuesNoCrosstab(excelContextMock, prevOfficeTableMock, headerColumnsParam);
+      // when
+      officeTableUpdate.setHeaderValuesNoCrosstab(excelContextMock, prevOfficeTableMock, headerColumnsParam);
 
-    // then
-    expect(excelContextMock.workbook.application.suspendApiCalculationUntilNextSync).toBeCalledTimes(1);
-    expect(excelContextMock.workbook.application.suspendApiCalculationUntilNextSync).toBeCalledWith();
+      // then
+      expect(excelContextMock.workbook.application.suspendApiCalculationUntilNextSync).toBeCalledTimes(1);
+      expect(excelContextMock.workbook.application.suspendApiCalculationUntilNextSync).toBeCalledWith();
 
-    expect(prevOfficeTableMock.getHeaderRowRange).toBeCalledTimes(1);
-    expect(getHeaderRowRangeMock).toEqual(expectedValues);
-  });
+      expect(prevOfficeTableMock.getHeaderRowRange).toBeCalledTimes(1);
+      expect(getHeaderRowRangeMock).toEqual(expectedValues);
+    });
 });

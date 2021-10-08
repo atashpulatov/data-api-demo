@@ -134,82 +134,82 @@ describe('DossierInstanceDefinition', () => {
   ${{ sth: 'sth' }} | ${42}               | ${{ sth: 'sth' }} | ${{}}                 | ${42}
 
   `('getDossierInstanceDefinition should work as expected',
-  async ({
-    expectedBody,
-    expectedInstanceId,
-    bodyParam,
-    manipulationsXMLParam,
-    preparedInstanceIdParam
-  }) => {
+    async ({
+      expectedBody,
+      expectedInstanceId,
+      bodyParam,
+      manipulationsXMLParam,
+      preparedInstanceIdParam
+    }) => {
     // given
-    if (manipulationsXMLParam) {
-      manipulationsXMLParam.manipulations = 'manipulationsTest';
-      manipulationsXMLParam.promptAnswers = 'promptAnswersTest';
+      if (manipulationsXMLParam) {
+        manipulationsXMLParam.manipulations = 'manipulationsTest';
+        manipulationsXMLParam.promptAnswers = 'promptAnswersTest';
 
-      expectedBody = { ...expectedBody };
-      expectedBody.manipulations = 'manipulationsTest';
-      expectedBody.promptAnswers = 'promptAnswersTest';
-    }
+        expectedBody = { ...expectedBody };
+        expectedBody.manipulations = 'manipulationsTest';
+        expectedBody.promptAnswers = 'promptAnswersTest';
+      }
 
-    jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockReturnValue('instanceIdTest');
+      jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockReturnValue('instanceIdTest');
 
-    jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockReturnValue('getVisualizationInfoTest');
+      jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockReturnValue('getVisualizationInfoTest');
 
-    jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockReturnValue(
-      { sth: 'fetchVisualizationDefinitionTest' }
-    );
+      jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockReturnValue(
+        { sth: 'fetchVisualizationDefinitionTest' }
+      );
 
-    jest.spyOn(dossierInstanceDefinition, 'getVisualizationErrorType').mockImplementation();
+      jest.spyOn(dossierInstanceDefinition, 'getVisualizationErrorType').mockImplementation();
 
-    // when
-    const result = await dossierInstanceDefinition.getDossierInstanceDefinition({
-      projectId: 'projectIdTest',
-      objectId: 'objectIdTest',
-      body: bodyParam,
-      dossierData: 'dossierDataTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest',
-      manipulationsXML: manipulationsXMLParam,
-      preparedInstanceId: preparedInstanceIdParam,
-      visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
+      // when
+      const result = await dossierInstanceDefinition.getDossierInstanceDefinition({
+        projectId: 'projectIdTest',
+        objectId: 'objectIdTest',
+        body: bodyParam,
+        dossierData: 'dossierDataTest',
+        displayAttrFormNames: 'displayAttrFormNamesTest',
+        manipulationsXML: manipulationsXMLParam,
+        preparedInstanceId: preparedInstanceIdParam,
+        visualizationInfo: { visualizationKey: 'visualizationKeyTest' },
+      });
+
+      // then
+      if (preparedInstanceIdParam) {
+        expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
+      } else {
+        expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
+        expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
+      }
+
+      expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
+      expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(
+        'projectIdTest',
+        'objectIdTest',
+        'visualizationKeyTest',
+        expectedInstanceId
+      );
+
+      expect(mstrObjectRestService.fetchVisualizationDefinition).toBeCalledTimes(1);
+      expect(mstrObjectRestService.fetchVisualizationDefinition).toBeCalledWith({
+        projectId: 'projectIdTest',
+        objectId: 'objectIdTest',
+        instanceId: expectedInstanceId,
+        mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
+        dossierData: 'dossierDataTest',
+        body: expectedBody,
+        visualizationInfo: 'getVisualizationInfoTest',
+        displayAttrFormNames: 'displayAttrFormNamesTest'
+      });
+
+      expect(dossierInstanceDefinition.getVisualizationErrorType).not.toBeCalled();
+
+      expect(result.body).toEqual(expectedBody);
+      expect(result.visualizationInfo).toEqual('getVisualizationInfoTest');
+      expect(result.instanceDefinition).toEqual({
+        sth: 'fetchVisualizationDefinitionTest',
+        instanceId: expectedInstanceId
+      });
     });
-
-    // then
-    if (preparedInstanceIdParam) {
-      expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
-    } else {
-      expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
-      expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
-    }
-
-    expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
-    expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(
-      'projectIdTest',
-      'objectIdTest',
-      'visualizationKeyTest',
-      expectedInstanceId
-    );
-
-    expect(mstrObjectRestService.fetchVisualizationDefinition).toBeCalledTimes(1);
-    expect(mstrObjectRestService.fetchVisualizationDefinition).toBeCalledWith({
-      projectId: 'projectIdTest',
-      objectId: 'objectIdTest',
-      instanceId: expectedInstanceId,
-      mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name,
-      dossierData: 'dossierDataTest',
-      body: expectedBody,
-      visualizationInfo: 'getVisualizationInfoTest',
-      displayAttrFormNames: 'displayAttrFormNamesTest'
-    });
-
-    expect(dossierInstanceDefinition.getVisualizationErrorType).not.toBeCalled();
-
-    expect(result.body).toEqual(expectedBody);
-    expect(result.visualizationInfo).toEqual('getVisualizationInfoTest');
-    expect(result.instanceDefinition).toEqual({
-      sth: 'fetchVisualizationDefinitionTest',
-      instanceId: expectedInstanceId
-    });
-  });
 
   it.each`
   expectedErrorType | error
@@ -237,11 +237,11 @@ describe('DossierInstanceDefinition', () => {
   ${errorTypes.INVALID_VIZ_KEY} | ${{ type: 'typeTest', message: `test1 ${incomingErrorStrings.INVALID_VIZ_KEY} test1`, response: { body: { message: `test2 ${incomingErrorStrings.INVALID_VIZ_KEY} test2` } } }}
   
   `('getVisualizationErrorType work as expected',
-  ({ expectedErrorType, error }) => {
+    ({ expectedErrorType, error }) => {
     // when
-    const result = dossierInstanceDefinition.getVisualizationErrorType(error);
+      const result = dossierInstanceDefinition.getVisualizationErrorType(error);
 
-    // then
-    expect(result).toEqual(expectedErrorType);
-  });
+      // then
+      expect(result).toEqual(expectedErrorType);
+    });
 });

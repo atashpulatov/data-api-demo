@@ -68,7 +68,6 @@ describe('StepApplyFormatting', () => {
     expect(stepApplyFormatting.filterColumnInformation).toBeCalledTimes(1);
     expect(stepApplyFormatting.filterColumnInformation).toBeCalledWith('columnInformationTest');
 
-
     expect(stepApplyFormatting.calculateMetricColumnOffset).toBeCalledTimes(1);
     expect(stepApplyFormatting.calculateMetricColumnOffset).toBeCalledWith(
       'filteredColumnInformationTest',
@@ -131,13 +130,13 @@ describe('StepApplyFormatting', () => {
   ${0} | ${[{ isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: true, forms: [1, 2] }, { isAttribute: false, forms: [1, 2] }]} | ${false}
 
   `('calculateMetricColumnOffset should work as expected',
-  ({ expectedMetricColumnOffset, columnInformation, isCrosstab }) => {
+    ({ expectedMetricColumnOffset, columnInformation, isCrosstab }) => {
     // when
-    const attributeColumnNumber = stepApplyFormatting.calculateMetricColumnOffset(columnInformation, isCrosstab);
+      const attributeColumnNumber = stepApplyFormatting.calculateMetricColumnOffset(columnInformation, isCrosstab);
 
-    // then
-    expect(attributeColumnNumber).toEqual(expectedMetricColumnOffset);
-  });
+      // then
+      expect(attributeColumnNumber).toEqual(expectedMetricColumnOffset);
+    });
 
   it('setupFormatting should do nothing when filteredColumnInformation is empty', () => {
     // given
@@ -210,7 +209,6 @@ describe('StepApplyFormatting', () => {
     jest.spyOn(stepApplyFormatting, 'getFormat').mockReturnValue('getFormatTest');
     jest.spyOn(officeFormatHyperlinks, 'formatColumnAsHyperlinks').mockImplementation(jest.fn);
 
-
     const filteredColumnInformation = [{ isAttribute: true }];
 
     // when
@@ -229,44 +227,44 @@ describe('StepApplyFormatting', () => {
   ${['fmt 0', 'fmt 1']}     | ${2} | ${[{ isAttribute: false }, { isAttribute: false }]}
   
   `('setupFormatting should work as expected for 2 filteredColumnInformation elements',
-  async ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
+    async ({ expectedNumberFormat, getFormatCallNo, filteredColumnInformation }) => {
     // given
-    const columnRangeMock = [{}, {}];
-    let callNo = 0;
-    jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockImplementation(() => columnRangeMock[callNo++]);
+      const columnRangeMock = [{}, {}];
+      let callNo = 0;
+      jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockImplementation(() => columnRangeMock[callNo++]);
 
-    jest.spyOn(stepApplyFormatting, 'getFormat').mockImplementation(() => {
-      if (filteredColumnInformation[callNo - 1].isAttribute === false) {
-        return `fmt ${callNo - 1}`;
-      }
-      return '';
+      jest.spyOn(stepApplyFormatting, 'getFormat').mockImplementation(() => {
+        if (filteredColumnInformation[callNo - 1].isAttribute === false) {
+          return `fmt ${callNo - 1}`;
+        }
+        return '';
+      });
+
+      // when
+      await stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+
+      // then
+      expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(2);
+      expect(stepApplyFormatting.getColumnRangeForFormatting).toHaveBeenNthCalledWith(
+        1,
+        0,
+        'isCrosstabTest',
+        'offsetTest',
+        'officeTableTest',
+      );
+      expect(stepApplyFormatting.getColumnRangeForFormatting).toHaveBeenNthCalledWith(
+        2,
+        1,
+        'isCrosstabTest',
+        'offsetTest',
+        'officeTableTest',
+      );
+
+      expect(stepApplyFormatting.getFormat).toBeCalledTimes(getFormatCallNo);
+
+      expect(columnRangeMock[0].numberFormat).toEqual(expectedNumberFormat[0]);
+      expect(columnRangeMock[1].numberFormat).toEqual(expectedNumberFormat[1]);
     });
-
-    // when
-    await stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
-
-    // then
-    expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(2);
-    expect(stepApplyFormatting.getColumnRangeForFormatting).toHaveBeenNthCalledWith(
-      1,
-      0,
-      'isCrosstabTest',
-      'offsetTest',
-      'officeTableTest',
-    );
-    expect(stepApplyFormatting.getColumnRangeForFormatting).toHaveBeenNthCalledWith(
-      2,
-      1,
-      'isCrosstabTest',
-      'offsetTest',
-      'officeTableTest',
-    );
-
-    expect(stepApplyFormatting.getFormat).toBeCalledTimes(getFormatCallNo);
-
-    expect(columnRangeMock[0].numberFormat).toEqual(expectedNumberFormat[0]);
-    expect(columnRangeMock[1].numberFormat).toEqual(expectedNumberFormat[1]);
-  });
 
   it.each`
   expectedObjectIndex | index | isCrosstab | offset
@@ -275,28 +273,28 @@ describe('StepApplyFormatting', () => {
   ${11}               | ${10} | ${false}   | ${1}     
   
   `('getColumnRangeForFormatting should work as expected',
-  ({
-    expectedObjectIndex,
-    index,
-    isCrosstab,
-    offset
-  }) => {
+    ({
+      expectedObjectIndex,
+      index,
+      isCrosstab,
+      offset
+    }) => {
     // given
-    const getItemAtMock = jest.fn().mockReturnValue({ getDataBodyRange: jest.fn() });
+      const getItemAtMock = jest.fn().mockReturnValue({ getDataBodyRange: jest.fn() });
 
-    const officeTableMock = {
-      columns: {
-        getItemAt: getItemAtMock
-      }
-    };
+      const officeTableMock = {
+        columns: {
+          getItemAt: getItemAtMock
+        }
+      };
 
-    // when
-    stepApplyFormatting.getColumnRangeForFormatting(index, isCrosstab, offset, officeTableMock);
+      // when
+      stepApplyFormatting.getColumnRangeForFormatting(index, isCrosstab, offset, officeTableMock);
 
-    // then
-    expect(getItemAtMock).toBeCalledTimes(1);
-    expect(getItemAtMock).toBeCalledWith(expectedObjectIndex);
-  });
+      // then
+      expect(getItemAtMock).toBeCalledTimes(1);
+      expect(getItemAtMock).toBeCalledWith(expectedObjectIndex);
+    });
 
   it.each`
   expectedFilteredColumnInformation | columnInformation
@@ -326,13 +324,13 @@ describe('StepApplyFormatting', () => {
   ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]} | ${[{ isAttribute: false, sth: 'sth' }, { isAttribute: true, sth: 'sth' }]}
   
   `('filterColumnInformation should work as expected for non crosstab',
-  ({ expectedFilteredColumnInformation, columnInformation }) => {
+    ({ expectedFilteredColumnInformation, columnInformation }) => {
     // when
-    const result = stepApplyFormatting.filterColumnInformation(columnInformation, false);
+      const result = stepApplyFormatting.filterColumnInformation(columnInformation, false);
 
-    // then
-    expect(result).toEqual(expectedFilteredColumnInformation);
-  });
+      // then
+      expect(result).toEqual(expectedFilteredColumnInformation);
+    });
 });
 
 it.each`

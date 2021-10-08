@@ -129,24 +129,24 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   ${[]}          | ${[]}
   ${[1, 2]}      | ${[1, 2]}
   `('restoreLegacyObjectsFromExcelStore should work as expected when reportArray is empty',
-  ({ expectedResult, objectsParam }) => {
+    ({ expectedResult, objectsParam }) => {
     // given
-    jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue(undefined);
+      jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue(undefined);
 
-    jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
+      jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
-    // when
-    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
+      // when
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
 
-    // then
-    expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
+      // then
+      expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
+      expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
 
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).not.toBeCalled();
-    expect(settingsMock.saveAsync).not.toBeCalled();
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).not.toBeCalled();
+      expect(settingsMock.saveAsync).not.toBeCalled();
 
-    expect(result).toEqual(expectedResult);
-  });
+      expect(result).toEqual(expectedResult);
+    });
 
   it.each`
   expectedResult                                                                         | objectsParam
@@ -155,33 +155,33 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }]}                            | ${[]}
   ${[{ bindId: 'paramBindId' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }]} | ${[{ bindId: 'paramBindId' }]}
   `('restoreLegacyObjectsFromExcelStore should work as expected when 1 object, empty objects or bindId not found',
-  ({ expectedResult, objectsParam }) => {
+    ({ expectedResult, objectsParam }) => {
     // given
-    jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
-      { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' }
-    ]);
+      jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
+        { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' }
+      ]);
 
-    jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
+      jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
-    // when
-    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
+      // when
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
 
-    // then
-    expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
+      // then
+      expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
+      expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
 
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toBeCalledTimes(4);
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(1, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'objectId', 'id');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(2, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'mstrObjectType', 'objectType');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(3, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'previousTableDimensions', 'tableDimensions');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(4, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'subtotalsInfo', 'subtotalInfo');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toBeCalledTimes(4);
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(1, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'objectId', 'id');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(2, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'mstrObjectType', 'objectType');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(3, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'previousTableDimensions', 'tableDimensions');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(4, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'subtotalsInfo', 'subtotalInfo');
 
-    expect(settingsMock.saveAsync).toBeCalledTimes(1);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
+      expect(settingsMock.saveAsync).toBeCalledTimes(1);
+      expect(console.log).toBeCalledTimes(1);
+      expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
 
-    expect(result).toEqual(expectedResult);
-  });
+      expect(result).toEqual(expectedResult);
+    });
 
   it.each`
   expectedResult                                                                                                                                 | objectsParam
@@ -190,39 +190,39 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   ${[{ bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }]}                            | ${[]}
   ${[{ bindId: 'paramBindId' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }]} | ${[{ bindId: 'paramBindId' }]}
   `('restoreLegacyObjectsFromExcelStore should work as expected when many objects, empty objects or bindId not found',
-  ({ expectedResult, objectsParam }) => {
+    ({ expectedResult, objectsParam }) => {
     // given
-    jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
-      { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' },
-      { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' }
-    ]);
+      jest.spyOn(officeStoreRestoreObject, 'getLegacyObjectsList').mockReturnValue([
+        { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' },
+        { objectWorkingId: 'objectWorkingIdTest', bindId: 'otherBindId' }
+      ]);
 
-    jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
+      jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
-    // when
-    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
+      // when
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
 
-    // then
-    expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
-    expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
+      // then
+      expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
+      expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledWith();
 
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toBeCalledTimes(8);
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(1, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'objectId', 'id');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(2, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'mstrObjectType', 'objectType');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(3, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'previousTableDimensions', 'tableDimensions');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(4, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'subtotalsInfo', 'subtotalInfo');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toBeCalledTimes(8);
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(1, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'objectId', 'id');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(2, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'mstrObjectType', 'objectType');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(3, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'previousTableDimensions', 'tableDimensions');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(4, { bindId: 'otherBindId', objectWorkingId: 'nowTest0' }, 'subtotalsInfo', 'subtotalInfo');
 
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(5, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'objectId', 'id');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(6, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'mstrObjectType', 'objectType');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(7, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'previousTableDimensions', 'tableDimensions');
-    expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(8, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'subtotalsInfo', 'subtotalInfo');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(5, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'objectId', 'id');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(6, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'mstrObjectType', 'objectType');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(7, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'previousTableDimensions', 'tableDimensions');
+      expect(officeStoreRestoreObject.mapLegacyObjectValue).toHaveBeenNthCalledWith(8, { bindId: 'otherBindId', objectWorkingId: 'nowTest2' }, 'subtotalsInfo', 'subtotalInfo');
 
-    expect(settingsMock.saveAsync).toBeCalledTimes(1);
-    expect(console.log).toBeCalledTimes(1);
-    expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
+      expect(settingsMock.saveAsync).toBeCalledTimes(1);
+      expect(console.log).toBeCalledTimes(1);
+      expect(console.log).toBeCalledWith('Clearing report Array in settings saveAsyncTest');
 
-    expect(result).toEqual(expectedResult);
-  });
+      expect(result).toEqual(expectedResult);
+    });
 
   it('restoreLegacyObjectsFromExcelStore should work as expected when 1 object, 1 existing bindId', () => {
     // given
@@ -323,21 +323,21 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
   ${{ newKey: 42 }}  | ${{ oldKey: 42 }}  | ${'newKey'}  | ${'oldKey'} 
   
   `('mapLegacyObjectValue should work as expected',
-  async ({
-    expectedObject,
-    objectParam,
-    newKey,
-    oldKey
-  }) => {
+    async ({
+      expectedObject,
+      objectParam,
+      newKey,
+      oldKey
+    }) => {
     // given
-    const object = { ...objectParam };
+      const object = { ...objectParam };
 
-    // when
-    officeStoreRestoreObject.mapLegacyObjectValue(object, newKey, oldKey);
+      // when
+      officeStoreRestoreObject.mapLegacyObjectValue(object, newKey, oldKey);
 
-    // then
-    expect(object).toEqual(expectedObject);
-  });
+      // then
+      expect(object).toEqual(expectedObject);
+    });
 
   it('getLegacyObjectsList handles exception', () => {
     // given

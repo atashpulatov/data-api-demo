@@ -3,7 +3,6 @@ import { reportV2, reportWithMetricsInRows } from '../mockDataV2';
 import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
 import compoundJSONwithMetricsInRows from './compound-grid/Compound Grid with Metrics on Row.json';
 
-
 describe('MstrAttributeMetricHelper', () => {
   describe('extractAttributesMetricsCompoundGrid', () => {
     it('should extracts attributes and metrics for a compound grid', () => {
@@ -111,7 +110,6 @@ describe('MstrAttributeMetricHelper', () => {
       expect(element).toEqual(expectedElement);
     });
   });
-
 
   describe('extractMetrics', () => {
     it('should extracts metrics from rows and columns that we get from MSTR REST API', () => {

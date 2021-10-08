@@ -100,7 +100,6 @@ class PopupViewSelectorHelper {
     props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
   }
 
-
   // TODO: get this method from library
   createBody = (attributes, metrics, filters, instanceId) => {
     // temporary line below.

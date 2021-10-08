@@ -19,7 +19,6 @@ const fetchStrings = async (database, password, sqlString) => {
     options: { encrypt: false, },
   };
 
-
   const pool = await sql.connect(config);
   const result = await pool.request().query(sqlString);
   sql.close();

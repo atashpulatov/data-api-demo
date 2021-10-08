@@ -1,7 +1,5 @@
-
 import onlyAttrCompoundJSON from './compound-grid/Compound Grid with Only Attribute on Row.json';
 import mstrCompoundGridFlatten from '../../mstr-object/helper/mstr-compound-grid-flatten';
-
 
 describe('MstrCompoundGridFlatten', () => {
   afterEach(() => {
@@ -29,11 +27,9 @@ describe('MstrCompoundGridFlatten', () => {
     expect(response).toEqual(expectedValue);
   });
 
-
   it('flattenColumnSets should work correctly', () => {
     // given
     const response = { data: { headers: {} }, definition: { grid: { columnSets: [{ columns: [1] }] } } };
-
 
     const mockFlattenColumnSetsMetricElemets = jest.spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsMetricElemets').mockImplementation();
     const mockFlattenColumnSetsHeaders = jest.spyOn(mstrCompoundGridFlatten, 'flattenColumnSetsHeaders').mockReturnValue([1]);

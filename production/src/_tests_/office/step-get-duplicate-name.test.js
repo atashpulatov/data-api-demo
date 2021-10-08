@@ -31,7 +31,6 @@ describe('StepGetDuplicateName', () => {
     expect(nameCandidate).toEqual(expectedResult);
   });
 
-
   it.each`
     nameCandidate               | expectedResult
     ${'name Copy'}              | ${'name Copy'}

@@ -9,7 +9,6 @@ describe('SidePanelService', () => {
     jest.restoreAllMocks();
   });
 
-
   it('should call excel contex methods form initializeActiveCellChangedListener', async () => {
     // given
     const mockSync = jest.fn();
@@ -48,7 +47,6 @@ describe('SidePanelService', () => {
     const mockedGetObjects = jest.spyOn(officeReducerHelper, 'getObjectFromObjectReducerByBindId').mockReturnValueOnce(object);
     const mockedRemoveNotification = jest.spyOn(notificationService, 'removeExistingNotification').mockImplementation();
     const mockedRemove = jest.spyOn(sidePanelService, 'remove').mockImplementation();
-
 
     // when
     await sidePanelEventHelper.setOnDeletedTablesEvent(eventObject);
@@ -90,7 +88,6 @@ describe('SidePanelService', () => {
     expect(mockedRemove).toBeCalledWith([2]);
   });
 
-
   it.each`
   version   | firstCall | secondCall | eventAddedTimes
   
@@ -100,26 +97,26 @@ describe('SidePanelService', () => {
   
   `('should set up event listeners in addRemoveObjectListener', async ({ version, firstCall, secondCall, eventAddedTimes }) => {
   // given
-  const mockSync = jest.fn();
-  const mockedAddEvent = jest.fn();
-  const mockedisSetSupported = jest.fn().mockReturnValueOnce(firstCall).mockReturnValueOnce(secondCall);
+    const mockSync = jest.fn();
+    const mockedAddEvent = jest.fn();
+    const mockedisSetSupported = jest.fn().mockReturnValueOnce(firstCall).mockReturnValueOnce(secondCall);
 
-  const exceContext = { sync: mockSync, workbook: {
-    tables: { onDeleted: { add: mockedAddEvent } },
-    worksheets: { onDeleted: { add: mockedAddEvent } } }
-  };
-  window.Office = {
-    context: {
-      requirements: { isSetSupported: mockedisSetSupported }
-    }
-  };
+    const exceContext = { sync: mockSync, workbook: {
+      tables: { onDeleted: { add: mockedAddEvent } },
+      worksheets: { onDeleted: { add: mockedAddEvent } } }
+    };
+    window.Office = {
+      context: {
+        requirements: { isSetSupported: mockedisSetSupported }
+      }
+    };
 
-  const mockedExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(exceContext);
-  // when
-  await sidePanelEventHelper.addRemoveObjectListener();
-  // then
+    const mockedExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(exceContext);
+    // when
+    await sidePanelEventHelper.addRemoveObjectListener();
+    // then
 
-  expect(mockedExcelContext).toBeCalled();
-  expect(mockedAddEvent).toBeCalledTimes(eventAddedTimes);
-});
+    expect(mockedExcelContext).toBeCalled();
+    expect(mockedAddEvent).toBeCalledTimes(eventAddedTimes);
+  });
 });

@@ -41,7 +41,6 @@ describe('SidePanelService', () => {
     expect(mockedRunPopup).toBeCalledTimes(1);
   });
 
-
   it('should highlight an object', () => {
     // given
     const objectWorkingId = 12345;
@@ -155,7 +154,6 @@ describe('SidePanelService', () => {
     expect(popupActions.callForDuplicate).toBeCalledWith(expectedObject);
   });
 
-
   it.each`
   objectType
 
@@ -165,26 +163,26 @@ describe('SidePanelService', () => {
 
 `('should edit an object', async ({ objectType }) => {
   // given
-  const objectWorkingId = 1;
-  const mockObject = {
-    bindId: 1,
-    mstrObjectType: { name: objectType }
-  };
+    const objectWorkingId = 1;
+    const mockObject = {
+      bindId: 1,
+      mstrObjectType: { name: objectType }
+    };
 
-  const mockedGetExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
-  const mockedisSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation();
-  const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-  const getObjectFromObjectReducerByObjectWorkingId = jest
-    .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
-    .mockImplementationOnce(() => mockObject);
+    const mockedGetExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
+    const mockedisSheetProtected = jest.spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected').mockImplementation();
+    const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+    const getObjectFromObjectReducerByObjectWorkingId = jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockImplementationOnce(() => mockObject);
 
-  // when
-  await sidePanelService.edit(objectWorkingId);
+    // when
+    await sidePanelService.edit(objectWorkingId);
 
-  // then
-  expect(mockedGetExcelContext).toBeCalled();
-  expect(mockedisSheetProtected).toBeCalled();
-  expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
-  expect(mockedDispatch).toBeCalled();
-});
+    // then
+    expect(mockedGetExcelContext).toBeCalled();
+    expect(mockedisSheetProtected).toBeCalled();
+    expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
+    expect(mockedDispatch).toBeCalled();
+  });
 });

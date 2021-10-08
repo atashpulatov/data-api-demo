@@ -10,7 +10,6 @@ import {
   WRONG_CREDENTIALS
 } from '../../error/constants';
 
-
 describe('Constants', () => {
   describe('handleBadRequestError', () => {
     it('should return MISSING_ELEMENT_OBJECT_MESSAGE ', () => {

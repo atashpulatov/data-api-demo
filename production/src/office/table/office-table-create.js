@@ -33,7 +33,8 @@ class OfficeTableCreate {
       tableChanged = false,
       isRepeatStep,
       insertNewWorksheet
-    }) => {
+    }
+  ) => {
     const {
       rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions }
     } = instanceDefinition;
@@ -83,7 +84,6 @@ class OfficeTableCreate {
     });
   };
 
-
   /**
    * Set style for office table
    *
@@ -99,7 +99,6 @@ class OfficeTableCreate {
     // headerRowRange.format.fill.color = fillColor;
     // headerRowRange.format.font.color = fontColor;
   };
-
 
   /**
    * Get excel worksheet of previous office table or acxtive if no table was passed.
@@ -156,7 +155,6 @@ class OfficeTableCreate {
       prevOfficeTable,
       tableChanged
     });
-
 
     if (prevCrosstabDimensions && prevCrosstabDimensions !== crosstabHeaderDimensions && isCrosstab) {
       if (tableChanged) {

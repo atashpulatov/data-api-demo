@@ -126,7 +126,6 @@ class MstrObjectRestService {
       visualizationInfo,
     });
 
-
     const offsetSubtotal = (e) => {
       if (e) { (e.rowIndex += offset); }
     };
@@ -134,13 +133,11 @@ class MstrObjectRestService {
       if (e && e.axis === 'rows') { (e.colIndex += offset); }
     };
 
-
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
       let header;
       let crosstabSubtotal;
 
       const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit, visualizationType);
-
 
       const { current } = response.body.data.paging;
       if (MstrAttributeMetricHelper.isMetricInRows(response.body) && shouldExtractMetricsInRows) {
@@ -302,7 +299,6 @@ class MstrObjectRestService {
       .then((res) => res.body);
   }
 
-
   deleteDossierInstance = (projectId, objectId, instanceId) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -389,7 +385,6 @@ class MstrObjectRestService {
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
   }
-
 
   getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();

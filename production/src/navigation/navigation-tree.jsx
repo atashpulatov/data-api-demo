@@ -302,7 +302,6 @@ NavigationTreeNotConnected.propTypes = {
   restoreSelection: PropTypes.func,
 };
 
-
 NavigationTreeNotConnected.defaultProps = { t: (text) => text };
 
 export const mapStateToProps = ({ navigationTree, filterReducer, cacheReducer }) => ({

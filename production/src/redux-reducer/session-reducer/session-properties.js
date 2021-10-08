@@ -1,9 +1,4 @@
-import { propsProxy } from '../../home/enum-props-proxy';
-
-export const sessionProperties = new Proxy({
-  /**
-       * propertyAlias: propertyName,
-       */
+export const sessionProperties = {
   authToken: 'x-mstr-authtoken',
   projectId: 'x-mstr-projectid',
   projectName: 'mstr-project-name',
@@ -21,4 +16,4 @@ export const sessionProperties = new Proxy({
     setDialog: 'SESSION_SET_DIALOG',
     setAttrFormPrivilege: 'SESSION_SET_ATTR_FORM_PRIVILEGE'
   },
-}, propsProxy);
+};

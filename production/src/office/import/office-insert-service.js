@@ -44,7 +44,8 @@ class OfficeInsertService {
     tableChanged,
     contextPromises,
     header,
-    mstrTable) => {
+    mstrTable
+  ) => {
     await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableChanged, operationType);
 
     if (mstrTable.isCrosstab) { this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex); }

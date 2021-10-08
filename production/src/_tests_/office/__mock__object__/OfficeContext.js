@@ -1,4 +1,3 @@
-
 class OfficeContextMock {
   constructor() {
     this.workbook = {

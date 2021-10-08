@@ -14,36 +14,36 @@ describe('StepApplySubtotalFormatting', () => {
   ${0}
   
   `('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is 0 or undefined',
-  async ({ subtotalsAddressesLength }) => {
+    async ({ subtotalsAddressesLength }) => {
     // given
-    const objectData = { };
+      const objectData = { };
 
-    const operationData = {
-      objectWorkingId: 'objectWorkingIdTest',
-      instanceDefinition: {
-        mstrTable: {
-          subtotalsInfo: {
-            subtotalsAddresses: {
-              length: subtotalsAddressesLength
+      const operationData = {
+        objectWorkingId: 'objectWorkingIdTest',
+        instanceDefinition: {
+          mstrTable: {
+            subtotalsInfo: {
+              subtotalsAddresses: {
+                length: subtotalsAddressesLength
+              }
             }
           }
-        }
-      },
-    };
+        },
+      };
 
-    jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting').mockImplementation();
+      jest.spyOn(officeFormatSubtotals, 'applySubtotalFormatting').mockImplementation();
 
-    jest.spyOn(operationStepDispatcher, 'completeFormatSubtotals').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'completeFormatSubtotals').mockImplementation();
 
-    // when
-    await stepApplySubtotalFormatting.applySubtotalFormattingRedux(objectData, operationData);
+      // when
+      await stepApplySubtotalFormatting.applySubtotalFormattingRedux(objectData, operationData);
 
-    // then
-    expect(officeFormatSubtotals.applySubtotalFormatting).not.toBeCalled();
+      // then
+      expect(officeFormatSubtotals.applySubtotalFormatting).not.toBeCalled();
 
-    expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledWith('objectWorkingIdTest');
-  });
+      expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledTimes(1);
+      expect(operationStepDispatcher.completeFormatSubtotals).toBeCalledWith('objectWorkingIdTest');
+    });
 
   it('applySubtotalFormattingRedux should work as expected - subtotalsAddresses.length is defined', async () => {
     // given

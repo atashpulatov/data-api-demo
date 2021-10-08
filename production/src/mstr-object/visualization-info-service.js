@@ -116,7 +116,6 @@ class VisualizationInfoService {
     return null;
   }
 
-
   /**
    * Parses given page from dossier chapter to find visualization with given key.
    * @param {Object} page page of dossier which is being parsed

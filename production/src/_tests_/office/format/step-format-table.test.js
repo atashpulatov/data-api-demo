@@ -165,30 +165,30 @@ describe('StepFormatTable', () => {
   ${false}   | ${0}                      | ${true}
   
   `('formatCrosstabHeaders should work as expected',
-  ({ isCrosstab, autofitColumnsCalledTimes, showHeaders }) => {
+    ({ isCrosstab, autofitColumnsCalledTimes, showHeaders }) => {
     // given
-    const autofitColumnsMock = jest.fn();
+      const autofitColumnsMock = jest.fn();
 
-    const getColumnsBeforeMock = jest.fn().mockReturnValue({ format: { autofitColumns: autofitColumnsMock } });
+      const getColumnsBeforeMock = jest.fn().mockReturnValue({ format: { autofitColumns: autofitColumnsMock } });
 
-    const officeTableMock = {
-      showHeaders: true,
-      getDataBodyRange: jest.fn().mockReturnValue({ getColumnsBefore: getColumnsBeforeMock }),
-    };
+      const officeTableMock = {
+        showHeaders: true,
+        getDataBodyRange: jest.fn().mockReturnValue({ getColumnsBefore: getColumnsBeforeMock }),
+      };
 
-    // when
-    stepFormatTable.formatCrosstabHeaders(officeTableMock, isCrosstab, 'rowsXTest');
+      // when
+      stepFormatTable.formatCrosstabHeaders(officeTableMock, isCrosstab, 'rowsXTest');
 
-    // then
-    expect(getColumnsBeforeMock).toBeCalledTimes(autofitColumnsCalledTimes);
-    if (autofitColumnsCalledTimes !== 0) {
-      expect(getColumnsBeforeMock).toBeCalledWith('rowsXTest');
-    }
+      // then
+      expect(getColumnsBeforeMock).toBeCalledTimes(autofitColumnsCalledTimes);
+      if (autofitColumnsCalledTimes !== 0) {
+        expect(getColumnsBeforeMock).toBeCalledWith('rowsXTest');
+      }
 
-    expect(autofitColumnsMock).toBeCalledTimes(autofitColumnsCalledTimes);
+      expect(autofitColumnsMock).toBeCalledTimes(autofitColumnsCalledTimes);
 
-    expect(officeTableMock.showHeaders).toEqual(showHeaders);
-  });
+      expect(officeTableMock.showHeaders).toEqual(showHeaders);
+    });
 
   it.each`
   columnsCount
@@ -199,31 +199,31 @@ describe('StepFormatTable', () => {
   ${42}
   
   `('formatColumns should work as expected',
-  async ({ columnsCount }) => {
+    async ({ columnsCount }) => {
     // given
-    const getItemAtValueMock = `testColumnsCount ${columnsCount}`;
-    const getItemAtMock = jest.fn().mockReturnValue(getItemAtValueMock);
+      const getItemAtValueMock = `testColumnsCount ${columnsCount}`;
+      const getItemAtMock = jest.fn().mockReturnValue(getItemAtValueMock);
 
-    const columnsMock = { getItemAt: getItemAtMock };
+      const columnsMock = { getItemAt: getItemAtMock };
 
-    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue(columnsCount);
+      jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockReturnValue(columnsCount);
 
-    jest.spyOn(stepFormatTable, 'formatSingleColumn').mockImplementation();
+      jest.spyOn(stepFormatTable, 'formatSingleColumn').mockImplementation();
 
-    // when
-    await stepFormatTable.formatColumns('excelContextTest', columnsMock);
+      // when
+      await stepFormatTable.formatColumns('excelContextTest', columnsMock);
 
-    // then
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
-    expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', columnsMock, 'count');
+      // then
+      expect(officeApiDataLoader.loadSingleExcelData).toBeCalledTimes(1);
+      expect(officeApiDataLoader.loadSingleExcelData).toBeCalledWith('excelContextTest', columnsMock, 'count');
 
-    expect(stepFormatTable.formatSingleColumn).toBeCalledTimes(columnsCount);
-    if (columnsCount > 0) {
-      expect(stepFormatTable.formatSingleColumn).toBeCalledWith('excelContextTest', getItemAtValueMock);
-    }
+      expect(stepFormatTable.formatSingleColumn).toBeCalledTimes(columnsCount);
+      if (columnsCount > 0) {
+        expect(stepFormatTable.formatSingleColumn).toBeCalledWith('excelContextTest', getItemAtValueMock);
+      }
 
-    expect(getItemAtMock).toBeCalledTimes(columnsCount);
-  });
+      expect(getItemAtMock).toBeCalledTimes(columnsCount);
+    });
 
   it('formatSingleColumn should work as expected', async () => {
     // given

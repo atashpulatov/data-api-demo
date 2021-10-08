@@ -73,7 +73,6 @@ class SidePanelNotificationHelper {
       setSidePanelPopup(null);
     };
 
-
     setSidePanelPopup({
       type: this.popupTypes.RANGE_TAKEN,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),

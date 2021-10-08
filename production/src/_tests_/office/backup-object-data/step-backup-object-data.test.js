@@ -10,7 +10,6 @@ describe('StepBackupObjectData', () => {
     // given
     const objectData = { objectWorkingId: 1 };
 
-
     const mockedUpdateOperation = jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
     const mockedCompleteStep = jest.spyOn(operationStepDispatcher, 'completeBackupObjectData').mockImplementation();
 

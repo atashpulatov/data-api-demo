@@ -25,7 +25,6 @@ export const initialState = {
   chosenEnvElement: {},
 };
 
-
 function cleanSelection(state) {
   const newState = { ...state };
   newState.chosenObjectId = initialState.chosenObjectId;

@@ -158,17 +158,17 @@ describe('OfficeStoreHelper getters', () => {
   ${'isClearDataFailed'} | ${'setIsClearDataFailed'}
   
   `('setters should work as expected',
-  ({ expectedPropertyName, setterNameParam }) => {
+    ({ expectedPropertyName, setterNameParam }) => {
     // given
-    jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
+      jest.spyOn(officeStoreHelper, 'setPropertyValue').mockImplementation();
 
-    // when
-    officeStoreHelper[setterNameParam]('valueTest');
+      // when
+      officeStoreHelper[setterNameParam]('valueTest');
 
-    // then
-    expect(officeStoreHelper.setPropertyValue).toBeCalledTimes(1);
-    expect(officeStoreHelper.setPropertyValue).toBeCalledWith(expectedPropertyName, 'valueTest');
-  });
+      // then
+      expect(officeStoreHelper.setPropertyValue).toBeCalledTimes(1);
+      expect(officeStoreHelper.setPropertyValue).toBeCalledWith(expectedPropertyName, 'valueTest');
+    });
 
   it.each`
   propertyNameParam      | getterNameParam
@@ -177,17 +177,17 @@ describe('OfficeStoreHelper getters', () => {
   ${'isClearDataFailed'} | ${'isClearDataFailed'}
   
   `('getters should work as expected',
-  ({ propertyNameParam, getterNameParam }) => {
+    ({ propertyNameParam, getterNameParam }) => {
     // given
-    jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue('valueTest');
+      jest.spyOn(officeStoreHelper, 'getPropertyValue').mockReturnValue('valueTest');
 
-    // when
-    const result = officeStoreHelper[getterNameParam](propertyNameParam);
+      // when
+      const result = officeStoreHelper[getterNameParam](propertyNameParam);
 
-    // then
-    expect(officeStoreHelper.getPropertyValue).toBeCalledTimes(1);
-    expect(officeStoreHelper.getPropertyValue).toBeCalledWith(propertyNameParam);
+      // then
+      expect(officeStoreHelper.getPropertyValue).toBeCalledTimes(1);
+      expect(officeStoreHelper.getPropertyValue).toBeCalledWith(propertyNameParam);
 
-    expect(result).toEqual('valueTest');
-  });
+      expect(result).toEqual('valueTest');
+    });
 });

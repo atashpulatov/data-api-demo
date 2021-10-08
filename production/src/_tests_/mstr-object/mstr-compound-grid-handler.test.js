@@ -83,7 +83,6 @@ describe('Compound Grid Handler', () => {
     const attributeForms = null;
     const expectedAttrForms = { rowsAttributes: ['Subcategory'] };
 
-
     // when
     const attrNames = mstrCompoundGridHandler.getAttributesName(definition, attributeForms);
 
@@ -302,7 +301,6 @@ describe('Compound Grid Handler', () => {
     expect(titles).toHaveLength(expectedLength);
     expect(titles).toEqual(expectedColumnHeaders);
   });
-
 
   it('should handle attribute forms', () => {
     // given

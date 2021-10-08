@@ -100,7 +100,6 @@ describe('StepGetObjectDetails', () => {
     expect(operationStepDispatcher.updateObject).toBeCalledWith({ ...objectDataMock, details: mockedDetailsReturn });
   });
 
-
   it('should combine objectData with definition and details', async () => {
     // given
     const mockedDetailsReturn = { someProp: 'some data' };

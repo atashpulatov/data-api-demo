@@ -93,23 +93,23 @@ describe('OfficeStoreObject', () => {
   ${[{ objectWorkingId: 42 }, { objectWorkingId: 43 }]} | ${[{ objectWorkingId: 42 }, { objectWorkingId: 43 }]}   | ${4242}
   
   `('removeObjectInExcelStore should work as expected when objectWorkingId specified',
-  ({ expectedStoredObjects, storedObjectsParam, objectWorkingIdParam }) => {
+    ({ expectedStoredObjects, storedObjectsParam, objectWorkingIdParam }) => {
     /*
 
      */
-    // given
-    settingsMock.set('storedObjects', storedObjectsParam);
+      // given
+      settingsMock.set('storedObjects', storedObjectsParam);
 
-    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+      jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
-    // when
-    officeStoreObject.removeObjectInExcelStore(objectWorkingIdParam);
+      // when
+      officeStoreObject.removeObjectInExcelStore(objectWorkingIdParam);
 
-    // then
-    expect(settingsMock.get('storedObjects')).toEqual(expectedStoredObjects);
+      // then
+      expect(settingsMock.get('storedObjects')).toEqual(expectedStoredObjects);
 
-    expect(settingsMock.saveAsync).toBeCalledTimes(1);
-  });
+      expect(settingsMock.saveAsync).toBeCalledTimes(1);
+    });
 
   it('removeObjectFromStore should work as expected', () => {
     // given

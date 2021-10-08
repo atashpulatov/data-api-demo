@@ -14,7 +14,6 @@ class MstrCompoundGridFlatten {
     metricValues.columnSets = metricValues.columnSets.filter(({ raw }) => raw.length > 0);
   }
 
-
   /**
    * Flatten compound grid column sets to structure compatible with grid handler
    *

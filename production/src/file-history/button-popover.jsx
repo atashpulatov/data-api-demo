@@ -39,7 +39,6 @@ export class ButtonPopover extends React.Component {
   }
 }
 
-
 ButtonPopover.propTypes = {
   mouseEnterDelay: PropTypes.number,
   placement: PropTypes.string,

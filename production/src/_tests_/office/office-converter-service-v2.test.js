@@ -165,8 +165,8 @@ describe('Office converter service v2', () => {
   `('should return correct gridHandler for given gridData', ({ gridData, expectedGridHandler }) => {
   // given
   // when
-  const gridHandler = officeConverter.getHandler(gridData);
-  // then
-  expect(gridHandler).toEqual(expectedGridHandler);
-});
+    const gridHandler = officeConverter.getHandler(gridData);
+    // then
+    expect(gridHandler).toEqual(expectedGridHandler);
+  });
 });

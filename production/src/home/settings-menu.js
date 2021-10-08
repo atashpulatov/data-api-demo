@@ -80,7 +80,6 @@ export const SettingsMenuNotConnected = ({
     };
   }, [isSettings, toggleIsSettingsFlag]);
 
-
   return (
     <ul className="settings-list" ref={settingsMenuRef}>
       <li id="testid" className="user-data no-trigger-close not-linked-list">

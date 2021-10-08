@@ -1,4 +1,3 @@
-
 export const UPDATE_OBJECT = 'UPDATE_OBJECT';
 
 export const REMOVE_OBJECT = 'REMOVE_OBJECT';
@@ -11,7 +10,6 @@ export const updateObject = (updatedObject) => ({
   type: UPDATE_OBJECT,
   payload: updatedObject
 });
-
 
 export const removeObject = (objectWorkingId) => ({
   type: REMOVE_OBJECT,

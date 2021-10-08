@@ -12,14 +12,26 @@ import { sessionActions } from '../../redux-reducer/session-reducer/session-acti
 describe('sessionHelper', () => {
   const sessionStore = createStore(sessionReducer);
 
+  const savedLocation = window.location;
+
   beforeEach(() => {
     // default state should be empty
     expect(sessionStore.getState()).toEqual({});
     window.history.pushState({}, 'Test Title', '/test.html?query=true');
+
+    delete window.location;
+    window.location = { pathname: 'Test Title',
+      assign: jest.fn(),
+      reload: jest.fn(),
+      replace: jest.fn() };
   });
 
   afterEach(() => {
     jest.resetAllMocks();
+  });
+
+  afterAll(() => {
+    window.location = savedLocation;
   });
 
   it('should throw error due to logOutError', () => {
@@ -38,11 +50,10 @@ describe('sessionHelper', () => {
   it('should call redirect logOutRedirect', () => {
     // given
     jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
-    global.location.replace = jest.fn();
     // when
     sessionHelper.logOutRedirect();
     // then
-    expect(global.location.replace).toBeCalled();
+    expect(window.location.replace).toBeCalled();
   });
   it('should disable loading for localhost in logOutRedirect', () => {
     // given
@@ -121,7 +132,6 @@ describe('sessionHelper', () => {
     // then
     expect(errorService.handleError).toHaveBeenCalledTimes(1);
   });
-
 
   it('should not call onSessionExpire in case of error message and error code correpond', () => {
     // given

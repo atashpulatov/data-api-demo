@@ -28,7 +28,6 @@ class OfficeConverterServiceV2 {
     return mstrTable;
   }
 
-
   /**
    * Gets raw table rows
    *
@@ -40,7 +39,6 @@ class OfficeConverterServiceV2 {
     const handler = this.getHandler(response);
     return handler.getRows(response, isCrosstab);
   }
-
 
   /**
    * Gets object with crosstab rows and column headers

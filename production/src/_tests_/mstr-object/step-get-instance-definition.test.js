@@ -55,56 +55,56 @@ describe('StepGetInstanceDefinition', () => {
   ${0}                            | ${NO_DATA_RETURNED}      | ${[42]}   | ${false}
   
   `('getInstanceDefinition works as expected when mstrTable.rows.length is 0',
-  async ({
-    handleOperationErrorCallNo,
-    expectedErrorMsg,
-    rowsParam,
-    isPromptedParam,
-  }) => {
+    async ({
+      handleOperationErrorCallNo,
+      expectedErrorMsg,
+      rowsParam,
+      isPromptedParam,
+    }) => {
     // given
-    jest.spyOn(console, 'error');
+      jest.spyOn(console, 'error');
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
-    jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
-    jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue(
-      { mstrTable: { rows: rowsParam } }
-    );
-    jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
+      jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
+      jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
+      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue(
+        { mstrTable: { rows: rowsParam } }
+      );
+      jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
 
-    jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
+      jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
-    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
-    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-    jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
 
-    const expectedDispatchCallNo = handleOperationErrorCallNo === 1 ? 0 : 1;
+      const expectedDispatchCallNo = handleOperationErrorCallNo === 1 ? 0 : 1;
 
-    // when
-    await stepGetInstanceDefinition.getInstanceDefinition({
-      mstrObjectType: {},
-      isPrompted: isPromptedParam,
-    }, {
-      stepsQueue: ['step_0', 'step_1', undefined],
-    });
-
-    // then
-    expect(operationErrorHandler.handleOperationError).toBeCalledTimes(handleOperationErrorCallNo);
-    if (handleOperationErrorCallNo === 1) {
-      expect(console.error).toBeCalledTimes(1);
-      expect(console.error).toBeCalledWith(new Error(expectedErrorMsg));
-
-      expect(operationErrorHandler.handleOperationError).toBeCalledWith({
+      // when
+      await stepGetInstanceDefinition.getInstanceDefinition({
         mstrObjectType: {},
         isPrompted: isPromptedParam,
       }, {
         stepsQueue: ['step_0', 'step_1', undefined],
-      }, new Error(expectedErrorMsg));
-    }
+      });
 
-    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(expectedDispatchCallNo);
-    expect(operationStepDispatcher.updateObject).toBeCalledTimes(expectedDispatchCallNo);
-    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(expectedDispatchCallNo);
-  });
+      // then
+      expect(operationErrorHandler.handleOperationError).toBeCalledTimes(handleOperationErrorCallNo);
+      if (handleOperationErrorCallNo === 1) {
+        expect(console.error).toBeCalledTimes(1);
+        expect(console.error).toBeCalledWith(new Error(expectedErrorMsg));
+
+        expect(operationErrorHandler.handleOperationError).toBeCalledWith({
+          mstrObjectType: {},
+          isPrompted: isPromptedParam,
+        }, {
+          stepsQueue: ['step_0', 'step_1', undefined],
+        }, new Error(expectedErrorMsg));
+      }
+
+      expect(operationStepDispatcher.updateOperation).toBeCalledTimes(expectedDispatchCallNo);
+      expect(operationStepDispatcher.updateObject).toBeCalledTimes(expectedDispatchCallNo);
+      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(expectedDispatchCallNo);
+    });
 
   it.each`
   expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam                    | manipulationsXMLParam
@@ -126,212 +126,212 @@ describe('StepGetInstanceDefinition', () => {
   ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}       | ${'manipulationsXMLTest'}
 
   `('getInstanceDefinition should work as expected for visualization',
-  async ({
-    expectedVisualizationInfo,
-    expectedStartCell,
-    expectedGetStartCellCallsNo,
-    visualizationInfoParam,
-    nextStepParam,
-    manipulationsXMLParam,
-  }) => {
+    async ({
+      expectedVisualizationInfo,
+      expectedStartCell,
+      expectedGetStartCellCallsNo,
+      visualizationInfoParam,
+      nextStepParam,
+      manipulationsXMLParam,
+    }) => {
     // given
-    const objectData = {
-      objectWorkingId: 'objectWorkingIdTest',
-      insertNewWorksheet: 'insertNewWorksheetTest',
-      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-      subtotalsInfo: {
-        subtotalsAddresses: 'subtotalsAddressesTest',
-      },
-      bindId: 'bindIdTest',
-      mstrObjectType: {
-        name: mstrObjectEnum.mstrObjectType.visualization.name,
-      },
-      visualizationInfo: 'visualizationInfoTest',
-      body: 'bodyTest',
-      name: 'nameTest',
-    };
+      const objectData = {
+        objectWorkingId: 'objectWorkingIdTest',
+        insertNewWorksheet: 'insertNewWorksheetTest',
+        crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        subtotalsInfo: {
+          subtotalsAddresses: 'subtotalsAddressesTest',
+        },
+        bindId: 'bindIdTest',
+        mstrObjectType: {
+          name: mstrObjectEnum.mstrObjectType.visualization.name,
+        },
+        visualizationInfo: 'visualizationInfoTest',
+        body: 'bodyTest',
+        name: 'nameTest',
+      };
 
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
+      jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
 
-    jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
-      .mockReturnValue({
-        envUrl: 'envUrlTest',
-        username: 'usernameTest',
+      jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
+        .mockReturnValue({
+          envUrl: 'envUrlTest',
+          username: 'usernameTest',
+        });
+
+      jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
+
+      jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition')
+        .mockReturnValue({
+          body: 'bodyDossierTest',
+          visualizationInfo: visualizationInfoParam,
+          instanceDefinition: {
+            mstrTable: {
+              name: 'mstrTableNameDossierTest'
+            }
+          },
+        });
+
+      jest.spyOn(dossierInstanceDefinition, 'getVisualizationName').mockReturnValue('getVisualizationNameTest');
+
+      jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
+
+      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
+        .mockReturnValue({
+          mstrTable: {
+            name: 'nameModifyInstanceWithPromptTest',
+            rows: 'rowsModifyInstanceWithPromptTest',
+            insertNewWorksheet: 'insertNewWorksheetTest',
+            crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+            isCrosstab: 'isCrossTabTest',
+            manipulationsXML: manipulationsXMLParam,
+            attributes: ['some attributes'],
+            metrics: ['some metrics'],
+          },
+          rows: 'rowsModifyInstanceWithPromptTest',
+        });
+
+      const expectedMstrTable = {
+        name: 'nameModifyInstanceWithPromptTest',
+        rows: 'rowsModifyInstanceWithPromptTest',
+        insertNewWorksheet: 'insertNewWorksheetTest',
+        crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        isCrosstab: 'isCrossTabTest',
+        attributes: ['some attributes'],
+        metrics: ['some metrics'],
+      };
+
+      if (manipulationsXMLParam) {
+        expectedMstrTable.manipulationsXML = manipulationsXMLParam;
+      }
+
+      jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
+
+      jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
+
+      jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
+
+      // when
+      await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
+        operationType: 'operationTypeTest',
+        stepsQueue: ['step_0', 'step_1', nextStepParam],
       });
 
-    jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
+      // then
+      expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
 
-    jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition')
-      .mockReturnValue({
-        body: 'bodyDossierTest',
-        visualizationInfo: visualizationInfoParam,
+      expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledTimes(1);
+      expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledWith('bodyTest');
+
+      expect(dossierInstanceDefinition.getDossierInstanceDefinition).toBeCalledTimes(1);
+      expect(dossierInstanceDefinition.getDossierInstanceDefinition).toBeCalledWith({
+        objectWorkingId: 'objectWorkingIdTest',
+        insertNewWorksheet: 'insertNewWorksheetTest',
+        crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        subtotalsInfo: {
+          subtotalsAddresses: 'subtotalsAddressesTest',
+        },
+        bindId: 'bindIdTest',
+        mstrObjectType: {
+          name: mstrObjectEnum.mstrObjectType.visualization.name
+        },
+        body: 'bodyTest',
+        visualizationInfo: 'visualizationInfoTest',
+        name: 'nameTest',
+      });
+
+      expect(dossierInstanceDefinition.getVisualizationName).toBeCalledTimes(1);
+      expect(dossierInstanceDefinition.getVisualizationName).toBeCalledWith(
+        { operationType: 'operationTypeTest', stepsQueue: ['step_0', 'step_1', nextStepParam] },
+        'nameTest',
+        { mstrTable: { name: 'mstrTableNameDossierTest' } }
+      );
+
+      expect(mstrObjectRestService.createInstance).not.toBeCalled();
+
+      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
+      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
         instanceDefinition: {
           mstrTable: {
-            name: 'mstrTableNameDossierTest'
-          }
+            name: 'mstrTableNameDossierTest',
+          },
         },
+        objectWorkingId: 'objectWorkingIdTest',
+        subtotalsInfo: {
+          subtotalsAddresses: 'subtotalsAddressesTest',
+        },
+        bindId: 'bindIdTest',
+        mstrObjectType: {
+          name: mstrObjectEnum.mstrObjectType.visualization.name
+        },
+        visualizationInfo: 'visualizationInfoTest',
+        body: 'bodyTest',
+        insertNewWorksheet: 'insertNewWorksheetTest',
+        crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        name: 'nameTest',
       });
 
-    jest.spyOn(dossierInstanceDefinition, 'getVisualizationName').mockReturnValue('getVisualizationNameTest');
-
-    jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
-
-    jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt')
-      .mockReturnValue({
-        mstrTable: {
-          name: 'nameModifyInstanceWithPromptTest',
+      expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
+      expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
+        {
+          mstrTable: expectedMstrTable,
           rows: 'rowsModifyInstanceWithPromptTest',
-          insertNewWorksheet: 'insertNewWorksheetTest',
-          crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-          isCrosstab: 'isCrossTabTest',
-          manipulationsXML: manipulationsXMLParam,
+        },
+        'crosstabHeaderDimensionsTest',
+        'subtotalsAddressesTest',
+        nextStepParam,
+      );
+
+      expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
+      if (expectedGetStartCellCallsNo === 1) {
+        expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
+          'insertNewWorksheetTest',
+          'excelContextTest',
+        );
+      }
+
+      expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
+
+      expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
+      expect(operationStepDispatcher.updateOperation).toBeCalledWith({
+        excelContext: 'excelContextTest',
+        instanceDefinition: {
+          mstrTable: expectedMstrTable,
+          rows: 'rowsModifyInstanceWithPromptTest',
+        },
+        oldBindId: 'bindIdTest',
+        objectWorkingId: 'objectWorkingIdTest',
+        startCell: expectedStartCell,
+        totalRows: 'rowsModifyInstanceWithPromptTest',
+      });
+
+      expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+      expect(operationStepDispatcher.updateObject).toBeCalledWith({
+        body: 'bodyDossierTest',
+        crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        envUrl: {
+          envUrl: 'envUrlTest',
+          username: 'usernameTest',
+        },
+        isCrosstab: 'isCrossTabTest',
+        name: 'getVisualizationNameTest',
+        objectWorkingId: 'objectWorkingIdTest',
+        visualizationInfo: expectedVisualizationInfo,
+        subtotalsInfo: {
+          subtotalsAddresses: 'subtotalsAddressesTest',
+        },
+        definition: {
           attributes: ['some attributes'],
           metrics: ['some metrics'],
         },
-        rows: 'rowsModifyInstanceWithPromptTest',
+        manipulationsXML: false,
       });
 
-    const expectedMstrTable = {
-      name: 'nameModifyInstanceWithPromptTest',
-      rows: 'rowsModifyInstanceWithPromptTest',
-      insertNewWorksheet: 'insertNewWorksheetTest',
-      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-      isCrosstab: 'isCrossTabTest',
-      attributes: ['some attributes'],
-      metrics: ['some metrics'],
-    };
-
-    if (manipulationsXMLParam) {
-      expectedMstrTable.manipulationsXML = manipulationsXMLParam;
-    }
-
-    jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
-
-    jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
-
-    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
-    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-    jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
-
-    // when
-    await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
-      operationType: 'operationTypeTest',
-      stepsQueue: ['step_0', 'step_1', nextStepParam],
+      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
+      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith('objectWorkingIdTest');
     });
-
-    // then
-    expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
-
-    expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledTimes(1);
-    expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledWith('bodyTest');
-
-    expect(dossierInstanceDefinition.getDossierInstanceDefinition).toBeCalledTimes(1);
-    expect(dossierInstanceDefinition.getDossierInstanceDefinition).toBeCalledWith({
-      objectWorkingId: 'objectWorkingIdTest',
-      insertNewWorksheet: 'insertNewWorksheetTest',
-      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-      subtotalsInfo: {
-        subtotalsAddresses: 'subtotalsAddressesTest',
-      },
-      bindId: 'bindIdTest',
-      mstrObjectType: {
-        name: mstrObjectEnum.mstrObjectType.visualization.name
-      },
-      body: 'bodyTest',
-      visualizationInfo: 'visualizationInfoTest',
-      name: 'nameTest',
-    });
-
-    expect(dossierInstanceDefinition.getVisualizationName).toBeCalledTimes(1);
-    expect(dossierInstanceDefinition.getVisualizationName).toBeCalledWith(
-      { operationType: 'operationTypeTest', stepsQueue: ['step_0', 'step_1', nextStepParam] },
-      'nameTest',
-      { mstrTable: { name: 'mstrTableNameDossierTest' } }
-    );
-
-    expect(mstrObjectRestService.createInstance).not.toBeCalled();
-
-    expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
-    expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
-      instanceDefinition: {
-        mstrTable: {
-          name: 'mstrTableNameDossierTest',
-        },
-      },
-      objectWorkingId: 'objectWorkingIdTest',
-      subtotalsInfo: {
-        subtotalsAddresses: 'subtotalsAddressesTest',
-      },
-      bindId: 'bindIdTest',
-      mstrObjectType: {
-        name: mstrObjectEnum.mstrObjectType.visualization.name
-      },
-      visualizationInfo: 'visualizationInfoTest',
-      body: 'bodyTest',
-      insertNewWorksheet: 'insertNewWorksheetTest',
-      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-      name: 'nameTest',
-    });
-
-    expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
-    expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
-      {
-        mstrTable: expectedMstrTable,
-        rows: 'rowsModifyInstanceWithPromptTest',
-      },
-      'crosstabHeaderDimensionsTest',
-      'subtotalsAddressesTest',
-      nextStepParam,
-    );
-
-    expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
-    if (expectedGetStartCellCallsNo === 1) {
-      expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
-        'insertNewWorksheetTest',
-        'excelContextTest',
-      );
-    }
-
-    expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
-
-    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
-    expect(operationStepDispatcher.updateOperation).toBeCalledWith({
-      excelContext: 'excelContextTest',
-      instanceDefinition: {
-        mstrTable: expectedMstrTable,
-        rows: 'rowsModifyInstanceWithPromptTest',
-      },
-      oldBindId: 'bindIdTest',
-      objectWorkingId: 'objectWorkingIdTest',
-      startCell: expectedStartCell,
-      totalRows: 'rowsModifyInstanceWithPromptTest',
-    });
-
-    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({
-      body: 'bodyDossierTest',
-      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-      envUrl: {
-        envUrl: 'envUrlTest',
-        username: 'usernameTest',
-      },
-      isCrosstab: 'isCrossTabTest',
-      name: 'getVisualizationNameTest',
-      objectWorkingId: 'objectWorkingIdTest',
-      visualizationInfo: expectedVisualizationInfo,
-      subtotalsInfo: {
-        subtotalsAddresses: 'subtotalsAddressesTest',
-      },
-      definition: {
-        attributes: ['some attributes'],
-        metrics: ['some metrics'],
-      },
-      manipulationsXML: false,
-    });
-
-    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith('objectWorkingIdTest');
-  });
 
   it.each`
   expectedVisualizationInfo         | expectedStartCell  | expectedGetStartCellCallsNo | visualizationInfoParam            | nextStepParam
@@ -345,116 +345,52 @@ describe('StepGetInstanceDefinition', () => {
   ${'visualizationInfoDossierTest'} | ${'startCellTest'} | ${1}                        | ${'visualizationInfoDossierTest'} | ${GET_OFFICE_TABLE_IMPORT}
 
   `('getInstanceDefinition should work as expected for NO visualization',
-  async ({
-    expectedVisualizationInfo,
-    expectedStartCell,
-    expectedGetStartCellCallsNo,
-    visualizationInfoParam,
-    nextStepParam
-  }) => {
+    async ({
+      expectedVisualizationInfo,
+      expectedStartCell,
+      expectedGetStartCellCallsNo,
+      visualizationInfoParam,
+      nextStepParam
+    }) => {
     // given
-    const objectData = {
-      objectWorkingId: 'objectWorkingIdTest',
-      insertNewWorksheet: 'insertNewWorksheetTest',
-      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-      subtotalsInfo: {
-        subtotalsAddresses: 'subtotalsAddressesTest',
-      },
-      bindId: 'bindIdTest',
-      mstrObjectType: {
-        name: mstrObjectEnum.mstrObjectType.report.name
-      },
-      visualizationInfo: visualizationInfoParam,
-      body: 'bodyTest',
-    };
-
-    jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
-
-    jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
-      .mockReturnValue({
-        envUrl: 'envUrlTest',
-        username: 'usernameTest',
-      });
-
-    jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
-
-    jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockImplementation();
-
-    jest.spyOn(mstrObjectRestService, 'createInstance').mockReturnValue({
-      body: 'bodyNoDossierTest',
-      visualizationInfo: visualizationInfoParam,
-      instanceDefinition: {
-        mstrTable: {
-          name: 'mstrTableNameNoDossierTest'
-        }
-      },
-    });
-
-    jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue({
-      mstrTable: {
-        name: 'nameModifyInstanceWithPromptTest',
-        rows: 'rowsModifyInstanceWithPromptTest',
+      const objectData = {
+        objectWorkingId: 'objectWorkingIdTest',
         insertNewWorksheet: 'insertNewWorksheetTest',
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-        isCrosstab: 'isCrossTabTest',
-        attributes: ['some attributes'],
-        metrics: ['some metrics'],
-      },
-      rows: 'rowsModifyInstanceWithPromptTest',
-    });
-
-    jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
-
-    jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
-
-    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
-    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-    jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
-
-    // when
-    await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
-      operationType: 'operationTypeTest',
-      stepsQueue: ['step_0', 'step_1', nextStepParam],
-    });
-
-    // then
-    expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
-
-    expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledTimes(1);
-    expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledWith('bodyTest');
-
-    expect(dossierInstanceDefinition.getDossierInstanceDefinition).not.toBeCalled();
-
-    expect(mstrObjectRestService.createInstance).toBeCalledTimes(1);
-
-    expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
-    expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
-      bindId: 'bindIdTest',
-      body: 'bodyTest',
-      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-      insertNewWorksheet: 'insertNewWorksheetTest',
-      instanceDefinition: {
-        body: 'bodyNoDossierTest',
-        instanceDefinition: {
-          mstrTable: {
-            name: 'mstrTableNameNoDossierTest',
-          },
+        subtotalsInfo: {
+          subtotalsAddresses: 'subtotalsAddressesTest',
+        },
+        bindId: 'bindIdTest',
+        mstrObjectType: {
+          name: mstrObjectEnum.mstrObjectType.report.name
         },
         visualizationInfo: visualizationInfoParam,
-      },
-      mstrObjectType: {
-        name: 'report',
-      },
-      objectWorkingId: 'objectWorkingIdTest',
-      subtotalsInfo: {
-        subtotalsAddresses: 'subtotalsAddressesTest',
-      },
-      visualizationInfo: visualizationInfoParam,
-    });
+        body: 'bodyTest',
+      };
 
-    expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
-    expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
-      {
+      jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
+
+      jest.spyOn(authenticationHelper, 'getCurrentMstrContext')
+        .mockReturnValue({
+          envUrl: 'envUrlTest',
+          username: 'usernameTest',
+        });
+
+      jest.spyOn(stepGetInstanceDefinition, 'setupBodyTemplate').mockImplementation();
+
+      jest.spyOn(dossierInstanceDefinition, 'getDossierInstanceDefinition').mockImplementation();
+
+      jest.spyOn(mstrObjectRestService, 'createInstance').mockReturnValue({
+        body: 'bodyNoDossierTest',
+        visualizationInfo: visualizationInfoParam,
+        instanceDefinition: {
+          mstrTable: {
+            name: 'mstrTableNameNoDossierTest'
+          }
+        },
+      });
+
+      jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue({
         mstrTable: {
           name: 'nameModifyInstanceWithPromptTest',
           rows: 'rowsModifyInstanceWithPromptTest',
@@ -465,68 +401,132 @@ describe('StepGetInstanceDefinition', () => {
           metrics: ['some metrics'],
         },
         rows: 'rowsModifyInstanceWithPromptTest',
-      },
-      'crosstabHeaderDimensionsTest',
-      'subtotalsAddressesTest',
-      nextStepParam,
-    );
+      });
 
-    expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
-    if (expectedGetStartCellCallsNo === 1) {
-      expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
-        'insertNewWorksheetTest',
-        'excelContextTest',
+      jest.spyOn(stepGetInstanceDefinition, 'savePreviousObjectData').mockImplementation();
+
+      jest.spyOn(officeApiWorksheetHelper, 'getStartCell').mockReturnValue('startCellTest');
+
+      jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'completeGetInstanceDefinition').mockImplementation();
+
+      // when
+      await stepGetInstanceDefinition.getInstanceDefinition(objectData, {
+        operationType: 'operationTypeTest',
+        stepsQueue: ['step_0', 'step_1', nextStepParam],
+      });
+
+      // then
+      expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
+
+      expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledTimes(1);
+      expect(stepGetInstanceDefinition.setupBodyTemplate).toBeCalledWith('bodyTest');
+
+      expect(dossierInstanceDefinition.getDossierInstanceDefinition).not.toBeCalled();
+
+      expect(mstrObjectRestService.createInstance).toBeCalledTimes(1);
+
+      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledTimes(1);
+      expect(stepGetInstanceDefinition.modifyInstanceWithPrompt).toBeCalledWith({
+        bindId: 'bindIdTest',
+        body: 'bodyTest',
+        crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        insertNewWorksheet: 'insertNewWorksheetTest',
+        instanceDefinition: {
+          body: 'bodyNoDossierTest',
+          instanceDefinition: {
+            mstrTable: {
+              name: 'mstrTableNameNoDossierTest',
+            },
+          },
+          visualizationInfo: visualizationInfoParam,
+        },
+        mstrObjectType: {
+          name: 'report',
+        },
+        objectWorkingId: 'objectWorkingIdTest',
+        subtotalsInfo: {
+          subtotalsAddresses: 'subtotalsAddressesTest',
+        },
+        visualizationInfo: visualizationInfoParam,
+      });
+
+      expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
+      expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledWith(
+        {
+          mstrTable: {
+            name: 'nameModifyInstanceWithPromptTest',
+            rows: 'rowsModifyInstanceWithPromptTest',
+            insertNewWorksheet: 'insertNewWorksheetTest',
+            crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+            isCrosstab: 'isCrossTabTest',
+            attributes: ['some attributes'],
+            metrics: ['some metrics'],
+          },
+          rows: 'rowsModifyInstanceWithPromptTest',
+        },
+        'crosstabHeaderDimensionsTest',
+        'subtotalsAddressesTest',
+        nextStepParam,
       );
-    }
 
-    expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
+      expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
+      if (expectedGetStartCellCallsNo === 1) {
+        expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
+          'insertNewWorksheetTest',
+          'excelContextTest',
+        );
+      }
 
-    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
-    expect(operationStepDispatcher.updateOperation).toBeCalledWith({
-      excelContext: 'excelContextTest',
-      instanceDefinition: {
-        mstrTable: {
+      expect(authenticationHelper.getCurrentMstrContext).toBeCalledTimes(1);
+
+      expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
+      expect(operationStepDispatcher.updateOperation).toBeCalledWith({
+        excelContext: 'excelContextTest',
+        instanceDefinition: {
+          mstrTable: {
+            attributes: ['some attributes'],
+            metrics: ['some metrics'],
+            name: 'nameModifyInstanceWithPromptTest',
+            rows: 'rowsModifyInstanceWithPromptTest',
+            insertNewWorksheet: 'insertNewWorksheetTest',
+            crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+            isCrosstab: 'isCrossTabTest',
+          },
+          rows: 'rowsModifyInstanceWithPromptTest',
+        },
+        oldBindId: 'bindIdTest',
+        objectWorkingId: 'objectWorkingIdTest',
+        startCell: expectedStartCell,
+        totalRows: 'rowsModifyInstanceWithPromptTest',
+      });
+
+      expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+      expect(operationStepDispatcher.updateObject).toBeCalledWith({
+        body: 'bodyTest',
+        crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        envUrl: {
+          envUrl: 'envUrlTest',
+          username: 'usernameTest',
+        },
+        isCrosstab: 'isCrossTabTest',
+        name: 'nameModifyInstanceWithPromptTest',
+        objectWorkingId: 'objectWorkingIdTest',
+        visualizationInfo: expectedVisualizationInfo,
+        subtotalsInfo: {
+          subtotalsAddresses: 'subtotalsAddressesTest',
+        },
+        definition: {
           attributes: ['some attributes'],
           metrics: ['some metrics'],
-          name: 'nameModifyInstanceWithPromptTest',
-          rows: 'rowsModifyInstanceWithPromptTest',
-          insertNewWorksheet: 'insertNewWorksheetTest',
-          crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-          isCrosstab: 'isCrossTabTest',
         },
-        rows: 'rowsModifyInstanceWithPromptTest',
-      },
-      oldBindId: 'bindIdTest',
-      objectWorkingId: 'objectWorkingIdTest',
-      startCell: expectedStartCell,
-      totalRows: 'rowsModifyInstanceWithPromptTest',
-    });
+        manipulationsXML: false,
+      });
 
-    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({
-      body: 'bodyTest',
-      crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
-      envUrl: {
-        envUrl: 'envUrlTest',
-        username: 'usernameTest',
-      },
-      isCrosstab: 'isCrossTabTest',
-      name: 'nameModifyInstanceWithPromptTest',
-      objectWorkingId: 'objectWorkingIdTest',
-      visualizationInfo: expectedVisualizationInfo,
-      subtotalsInfo: {
-        subtotalsAddresses: 'subtotalsAddressesTest',
-      },
-      definition: {
-        attributes: ['some attributes'],
-        metrics: ['some metrics'],
-      },
-      manipulationsXML: false,
+      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
+      expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith('objectWorkingIdTest');
     });
-
-    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeGetInstanceDefinition).toBeCalledWith('objectWorkingIdTest');
-  });
 
   it.each`
   expectedBodyTemplate                 | expectedRequestedObjects             | body
@@ -540,14 +540,14 @@ describe('StepGetInstanceDefinition', () => {
   ${{ attributes: [1], metrics: [1] }} | ${{ attributes: [1], metrics: [1] }} | ${{ requestedObjects: { attributes: [1], metrics: [1] } }}
   
   `('setupBodyTemplate should work as expected',
-  ({ expectedBodyTemplate, expectedRequestedObjects, body }) => {
+    ({ expectedBodyTemplate, expectedRequestedObjects, body }) => {
     // when
-    stepGetInstanceDefinition.setupBodyTemplate(body);
+      stepGetInstanceDefinition.setupBodyTemplate(body);
 
-    // then
-    expect(body.template).toEqual(expectedBodyTemplate);
-    expect(body.requestedObjects).toEqual(expectedRequestedObjects);
-  });
+      // then
+      expect(body.template).toEqual(expectedBodyTemplate);
+      expect(body.requestedObjects).toEqual(expectedRequestedObjects);
+    });
 
   it('modifyInstanceWithPrompt should work as expected - status not 2', async () => {
     // given
@@ -704,41 +704,41 @@ describe('StepGetInstanceDefinition', () => {
   ${'crosstabHeaderDimensionsTest'} | ${false}                          | ${0}   | ${false}   | ${'crosstabHeaderDimensionsTest'}      
 
   `('savePreviousObjectData should work as expected',
-  ({
-    expectedPrevCrosstabDimensions,
-    expectedCrosstabHeaderDimensions,
-    callNo,
-    isCrosstab,
-    crosstabHeaderDimensions,
-  }) => {
-    // given
-    const mstrTableMock = {
+    ({
+      expectedPrevCrosstabDimensions,
+      expectedCrosstabHeaderDimensions,
+      callNo,
       isCrosstab,
-      subtotalsInfo: {},
-    };
-
-    const instanceDefinition = { mstrTable: mstrTableMock };
-
-    jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeaderDimensions')
-      .mockReturnValue('crosstabHeaderDimensionsTest');
-
-    // when
-    stepGetInstanceDefinition.savePreviousObjectData(
-      instanceDefinition,
       crosstabHeaderDimensions,
-      'subtotalsAddressesTest',
-    );
+    }) => {
+    // given
+      const mstrTableMock = {
+        isCrosstab,
+        subtotalsInfo: {},
+      };
 
-    // then
-    expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledTimes(callNo);
-    if (callNo === 1) {
-      expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledWith(instanceDefinition);
-    }
+      const instanceDefinition = { mstrTable: mstrTableMock };
 
-    expect(mstrTableMock.prevCrosstabDimensions).toEqual(expectedPrevCrosstabDimensions);
-    expect(mstrTableMock.crosstabHeaderDimensions).toEqual(expectedCrosstabHeaderDimensions);
-    expect(mstrTableMock.subtotalsInfo.subtotalsAddresses).toEqual('subtotalsAddressesTest');
-  });
+      jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeaderDimensions')
+        .mockReturnValue('crosstabHeaderDimensionsTest');
+
+      // when
+      stepGetInstanceDefinition.savePreviousObjectData(
+        instanceDefinition,
+        crosstabHeaderDimensions,
+        'subtotalsAddressesTest',
+      );
+
+      // then
+      expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledTimes(callNo);
+      if (callNo === 1) {
+        expect(officeApiCrosstabHelper.getCrosstabHeaderDimensions).toBeCalledWith(instanceDefinition);
+      }
+
+      expect(mstrTableMock.prevCrosstabDimensions).toEqual(expectedPrevCrosstabDimensions);
+      expect(mstrTableMock.crosstabHeaderDimensions).toEqual(expectedCrosstabHeaderDimensions);
+      expect(mstrTableMock.subtotalsInfo.subtotalsAddresses).toEqual('subtotalsAddressesTest');
+    });
 
   it.each`
   expectedStartCell | createAndActivateNewWorksheetCallNo | insertNewWorksheet
@@ -747,31 +747,32 @@ describe('StepGetInstanceDefinition', () => {
   ${42}             | ${1}                                | ${true}
   
   `('getStartCell should work as expected',
-  async ({
-    expectedStartCell,
-    createAndActivateNewWorksheetCallNo,
-    insertNewWorksheet,
-  }) => {
-    // given
-    jest.spyOn(officeApiWorksheetHelper, 'createAndActivateNewWorksheet').mockImplementation();
-
-    jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValue(42);
-
-    // when
-    const result = await officeApiWorksheetHelper.getStartCell(
+    async ({
+      expectedStartCell,
+      createAndActivateNewWorksheetCallNo,
       insertNewWorksheet,
-      'excelContextTest',
-    );
+    }) => {
+    // given
+      jest.spyOn(officeApiWorksheetHelper, 'createAndActivateNewWorksheet').mockImplementation();
 
-    // then
-    expect(result).toEqual(expectedStartCell);
+      jest.spyOn(officeApiHelper, 'getSelectedCell').mockReturnValue(42);
 
-    expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledTimes(createAndActivateNewWorksheetCallNo);
-    if (createAndActivateNewWorksheetCallNo === 1) {
-      expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledWith('excelContextTest');
-    }
+      // when
+      const result = await officeApiWorksheetHelper.getStartCell(
+        insertNewWorksheet,
+        'excelContextTest',
+      );
 
-    expect(officeApiHelper.getSelectedCell).toBeCalledTimes(1);
-    expect(officeApiHelper.getSelectedCell).toBeCalledWith('excelContextTest');
-  });
+      // then
+      expect(result).toEqual(expectedStartCell);
+
+      expect(officeApiWorksheetHelper.createAndActivateNewWorksheet)
+        .toBeCalledTimes(createAndActivateNewWorksheetCallNo);
+      if (createAndActivateNewWorksheetCallNo === 1) {
+        expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledWith('excelContextTest');
+      }
+
+      expect(officeApiHelper.getSelectedCell).toBeCalledTimes(1);
+      expect(officeApiHelper.getSelectedCell).toBeCalledWith('excelContextTest');
+    });
 });

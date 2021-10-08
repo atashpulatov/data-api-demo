@@ -40,7 +40,6 @@ class StepFetchInsertDataIntoExcel {
         instanceDefinition,
       } = operationData;
 
-
       const { columns, rows, mstrTable } = instanceDefinition;
       const limit = Math.min(Math.floor(DATA_LIMIT / columns), IMPORT_ROW_LIMIT);
 
@@ -89,7 +88,6 @@ class StepFetchInsertDataIntoExcel {
         console.groupEnd();
       }
       console.timeEnd('Fetch and insert into excel');
-
 
       await officeInsertService.syncChangesToExcel(contextPromises, true);
 

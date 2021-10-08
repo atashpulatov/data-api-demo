@@ -151,7 +151,6 @@ class OfficeTableHelperRange {
    */
   prepareRangeColumns = (prevOfficeTable, addedColumns) => prevOfficeTable.getRange().getColumnsAfter(addedColumns);
 
-
   /**
    * Extends the Excel range by crosstab header column dimension.
    *

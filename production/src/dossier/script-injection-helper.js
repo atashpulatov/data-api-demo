@@ -1,4 +1,3 @@
-
 class ScriptInjectionHelper {
   /**
    * Applies an external script file to a embedded document.

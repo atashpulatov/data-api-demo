@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { PopupButtonsNotConnected } from '../../popup/popup-buttons/popup-buttons';
 
-
 describe('PopupButtons', () => {
   it('should NOT display prepare data when secondary action NOT provided',
     () => {

@@ -146,45 +146,45 @@ describe('OfficeRemoveHelper', () => {
       ${10000}       | ${500}            | ${484}       | ${20}
     
       `('updateRows should work as expected when newRowCount < tableRowCount',
-  async ({ expectedRowsNo, contextLimitParam, newRowsCount, expectedLoopSteps }) => {
-    let i = 0;
-    jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => {
-      const newRowsValue = expectedRowsNo - (i * contextLimitParam);
-      i += 1;
-      return newRowsValue;
-    });
-    const excelContextSyncMock = jest.fn();
-    const suspendApiCalculationUntilNextSyncMock = jest.fn();
-    const excelContextMock = {
-      sync: excelContextSyncMock,
-      workbook: {
-        application: {
-          suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock
+    async ({ expectedRowsNo, contextLimitParam, newRowsCount, expectedLoopSteps }) => {
+      let i = 0;
+      jest.spyOn(officeApiDataLoader, 'loadSingleExcelData').mockImplementation(() => {
+        const newRowsValue = expectedRowsNo - (i * contextLimitParam);
+        i += 1;
+        return newRowsValue;
+      });
+      const excelContextSyncMock = jest.fn();
+      const suspendApiCalculationUntilNextSyncMock = jest.fn();
+      const excelContextMock = {
+        sync: excelContextSyncMock,
+        workbook: {
+          application: {
+            suspendApiCalculationUntilNextSync: suspendApiCalculationUntilNextSyncMock
+          },
         },
-      },
-    };
-    const deleteMock = jest.fn();
-    const getRowsAboveMock = jest.fn().mockReturnValue({
-      delete: deleteMock
-    });
-    const prevOfficeTable = {
-      rows: 'rowsTest',
-      getRange: () => ({
-        getLastRow: () => ({
-          getRowsAbove: getRowsAboveMock
+      };
+      const deleteMock = jest.fn();
+      const getRowsAboveMock = jest.fn().mockReturnValue({
+        delete: deleteMock
+      });
+      const prevOfficeTable = {
+        rows: 'rowsTest',
+        getRange: () => ({
+          getLastRow: () => ({
+            getRowsAbove: getRowsAboveMock
+          })
         })
-      })
-    };
-    // when
-    await officeRemoveHelper.deleteRowsInChunks(excelContextMock, prevOfficeTable, contextLimitParam, newRowsCount);
-    // then
-    expect(deleteMock).toHaveBeenCalledTimes(expectedLoopSteps);
-    expect(excelContextSyncMock).toHaveBeenCalledTimes(expectedLoopSteps);
-    expect(getRowsAboveMock).toHaveBeenCalledTimes(expectedLoopSteps);
+      };
+      // when
+      await officeRemoveHelper.deleteRowsInChunks(excelContextMock, prevOfficeTable, contextLimitParam, newRowsCount);
+      // then
+      expect(deleteMock).toHaveBeenCalledTimes(expectedLoopSteps);
+      expect(excelContextSyncMock).toHaveBeenCalledTimes(expectedLoopSteps);
+      expect(getRowsAboveMock).toHaveBeenCalledTimes(expectedLoopSteps);
 
-    const nrOfRowsToDeleteInLastStep = expectedRowsNo - ((expectedLoopSteps - 1) * contextLimitParam) - newRowsCount;
-    expect(getRowsAboveMock).toHaveBeenNthCalledWith(expectedLoopSteps, nrOfRowsToDeleteInLastStep);
-  });
+      const nrOfRowsToDeleteInLastStep = expectedRowsNo - ((expectedLoopSteps - 1) * contextLimitParam) - newRowsCount;
+      expect(getRowsAboveMock).toHaveBeenNthCalledWith(expectedLoopSteps, nrOfRowsToDeleteInLastStep);
+    });
 
   it.each`
   isCrosstab | isClear       | isSafari
@@ -198,46 +198,46 @@ describe('OfficeRemoveHelper', () => {
   ${false}   | ${undefined}  | ${false}
 
   `('removeExcelTable should work as expected', async ({ isCrosstab, isClear, isSafari }) => {
-  const deleteMock = jest.fn().mockImplementation();
-  const excelContextSyncMock = jest.fn().mockReturnValue();
-  const getDataBodyRangeMock = jest.fn().mockReturnValue({ clear: jest.fn() });
+    const deleteMock = jest.fn().mockImplementation();
+    const excelContextSyncMock = jest.fn().mockReturnValue();
+    const getDataBodyRangeMock = jest.fn().mockReturnValue({ clear: jest.fn() });
 
-  const addtrackedObjectsMock = jest.fn();
-  const removetrackedObjectsMock = jest.fn();
-  const excelContextMock = {
-    sync: excelContextSyncMock,
-    trackedObjects: { add: addtrackedObjectsMock, remove: removetrackedObjectsMock },
-    runtime: {}
-  };
+    const addtrackedObjectsMock = jest.fn();
+    const removetrackedObjectsMock = jest.fn();
+    const excelContextMock = {
+      sync: excelContextSyncMock,
+      trackedObjects: { add: addtrackedObjectsMock, remove: removetrackedObjectsMock },
+      runtime: {}
+    };
 
-  const crosstabHeaderDimensions = isCrosstab ? {} : undefined;
-  const officeTable = { getDataBodyRange: getDataBodyRangeMock, delete: deleteMock };
+    const crosstabHeaderDimensions = isCrosstab ? {} : undefined;
+    const officeTable = { getDataBodyRange: getDataBodyRangeMock, delete: deleteMock };
 
-  const deleteTableInChunksMock = jest.spyOn(officeRemoveHelper, 'deleteTableInChunks').mockReturnValue(0);
-  const clearCrosstabRangeMock = jest.spyOn(officeApiCrosstabHelper, 'clearCrosstabRange').mockReturnValue(0);
-  const clearEmptyCrosstabRowMock = jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockReturnValue(0);
-  const isMacAndSafariBasedMock = jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValue(isSafari);
+    const deleteTableInChunksMock = jest.spyOn(officeRemoveHelper, 'deleteTableInChunks').mockReturnValue(0);
+    const clearCrosstabRangeMock = jest.spyOn(officeApiCrosstabHelper, 'clearCrosstabRange').mockReturnValue(0);
+    const clearEmptyCrosstabRowMock = jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockReturnValue(0);
+    const isMacAndSafariBasedMock = jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValue(isSafari);
 
-  // when
-  await officeRemoveHelper.removeExcelTable(
-    officeTable,
-    excelContextMock,
-    isCrosstab,
-    crosstabHeaderDimensions,
-    isClear
-  );
+    // when
+    await officeRemoveHelper.removeExcelTable(
+      officeTable,
+      excelContextMock,
+      isCrosstab,
+      crosstabHeaderDimensions,
+      isClear
+    );
 
-  // then
-  const isCrosstabCalledTimes = isCrosstab ? 1 : 0;
-  const isnotClearCalledTimes = !isClear ? 1 : 0;
-  const deleteMockCalledTimes = !isClear && !isSafari ? 1 : 0;
-  const deleteTableInChunksMockCalledTimes = !isClear && isSafari ? 1 : 0;
+    // then
+    const isCrosstabCalledTimes = isCrosstab ? 1 : 0;
+    const isnotClearCalledTimes = !isClear ? 1 : 0;
+    const deleteMockCalledTimes = !isClear && !isSafari ? 1 : 0;
+    const deleteTableInChunksMockCalledTimes = !isClear && isSafari ? 1 : 0;
 
-  expect(getDataBodyRangeMock).toBeCalledTimes(1);
-  expect(clearCrosstabRangeMock).toBeCalledTimes(isCrosstabCalledTimes);
-  expect(clearEmptyCrosstabRowMock).toBeCalledTimes(isCrosstabCalledTimes);
-  expect(isMacAndSafariBasedMock).toBeCalledTimes(isnotClearCalledTimes);
-  expect(deleteMock).toBeCalledTimes(deleteMockCalledTimes);
-  expect(deleteTableInChunksMock).toBeCalledTimes(deleteTableInChunksMockCalledTimes);
-});
+    expect(getDataBodyRangeMock).toBeCalledTimes(1);
+    expect(clearCrosstabRangeMock).toBeCalledTimes(isCrosstabCalledTimes);
+    expect(clearEmptyCrosstabRowMock).toBeCalledTimes(isCrosstabCalledTimes);
+    expect(isMacAndSafariBasedMock).toBeCalledTimes(isnotClearCalledTimes);
+    expect(deleteMock).toBeCalledTimes(deleteMockCalledTimes);
+    expect(deleteTableInChunksMock).toBeCalledTimes(deleteTableInChunksMockCalledTimes);
+  });
 });

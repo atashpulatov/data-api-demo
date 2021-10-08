@@ -10,7 +10,6 @@ describe('StepClearCrosstabHeaders', () => {
     jest.restoreAllMocks();
   });
 
-
   it('StepHighlightObject should highligh object', async () => {
     // given
     const objectData = { };

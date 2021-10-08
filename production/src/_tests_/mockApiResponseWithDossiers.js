@@ -134,5 +134,4 @@ const mockApiRepsonseWithDossiers = {
   ],
 };
 
-
 export default mockApiRepsonseWithDossiers;

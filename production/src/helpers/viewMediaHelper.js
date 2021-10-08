@@ -30,12 +30,10 @@ const EnumDSSXMLViewMedia = {
   DssXmlViewMediaAll: 0x7FFFFFF,
 };
 
-
 const DOCUMENT_TYPES = Object.freeze({
   DOSSIER: EnumDSSXMLViewMedia.DssXmlViewMediaHTML5Dashboard,
   RSD: EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic,
 });
-
 
 /**
  * Get default mode from given viewMedia
@@ -48,7 +46,6 @@ function getDefaultViewMode(viewMedia) {
   }
   return EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic << defModePosition - 1;
 }
-
 
 /**
  * Map the documents default view media to the type of document, which can be Dossier or RSD.

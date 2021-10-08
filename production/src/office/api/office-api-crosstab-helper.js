@@ -1,4 +1,3 @@
-
 import mstrNormalizedJsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 import { mergeHeaderColumns, mergeHeaderRows } from './office-api-header-merge-helper';
 
@@ -220,7 +219,6 @@ class OfficeApiCrosstabHelper {
       mergeHeaderColumns(columnsAttributes, columnsTitlesRange);
     }
   };
-
 
   /**
   * Returns the number of rows and columns headers that are valid for crosstab

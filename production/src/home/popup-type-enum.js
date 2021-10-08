@@ -1,9 +1,4 @@
-import { propsProxy } from './enum-props-proxy';
-
-export const PopupTypeEnum = new Proxy({
-  /**
-     * propertyAlias: propertyName,
-     */
+export const PopupTypeEnum = {
   navigationTree: 'navigation-tree',
   dataPreparation: 'data-preparation',
   editFilters: 'edit-filters',
@@ -13,4 +8,4 @@ export const PopupTypeEnum = new Proxy({
   repromptingWindow: 'reprompting-window',
   dossierWindow: 'dossier-window',
   obtainInstanceHelper: 'obtain-instance-helper',
-}, propsProxy);
+};

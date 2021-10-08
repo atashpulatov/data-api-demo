@@ -1,9 +1,9 @@
 // setup file
 import React from 'react';
 import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import 'jest-localstorage-mock';
-import 'regenerator-runtime/runtime';
+import 'regenerator-runtime';
 import { diContainer } from './dependency-container';
 
 jest.mock('@mstr/connector-components', () => ({

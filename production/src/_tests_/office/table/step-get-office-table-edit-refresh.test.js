@@ -85,7 +85,6 @@ describe('StepGetOfficeTableEditRefresh', () => {
       'previousTableDimensionsTest',
     );
 
-
     expect(officeTableCreate.createOfficeTable).toBeCalledTimes(1);
     expect(officeTableCreate.createOfficeTable).toBeCalledWith({
       instanceDefinition: { mstrTable: 'mstrTableTest' },
@@ -124,75 +123,75 @@ describe('StepGetOfficeTableEditRefresh', () => {
   ${false}                       | ${false}
   
   `('getOfficeTableEditRefresh should work as expected when tableChanged',
-  async ({ inputNameAndFormatShouldUpdate, resultShouldFormat }) => {
+    async ({ inputNameAndFormatShouldUpdate, resultShouldFormat }) => {
     // given
-    const objectData = {
-      tableName: 'tableNameTest',
-      previousTableDimensions: 'previousTableDimensionsTest',
-      objectWorkingId: 'objectWorkingIdTest',
-    };
+      const objectData = {
+        tableName: 'tableNameTest',
+        previousTableDimensions: 'previousTableDimensionsTest',
+        objectWorkingId: 'objectWorkingIdTest',
+      };
 
-    const operationData = {
-      excelContext: 'excelContextTest',
-      instanceDefinition: { mstrTable: 'mstrTableTest' },
-      oldBindId: 'oldBindIdTest',
-      objectEditedData: { visualizationInfo: { nameAndFormatShouldUpdate: inputNameAndFormatShouldUpdate } },
-    };
+      const operationData = {
+        excelContext: 'excelContextTest',
+        instanceDefinition: { mstrTable: 'mstrTableTest' },
+        oldBindId: 'oldBindIdTest',
+        objectEditedData: { visualizationInfo: { nameAndFormatShouldUpdate: inputNameAndFormatShouldUpdate } },
+      };
 
-    jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
+      jest.spyOn(getOfficeTableHelper, 'checkReportTypeChange').mockImplementation();
 
-    jest.spyOn(officeTableRefresh, 'getPreviousOfficeTable').mockImplementation(() => 'prevOfficeTableTest',);
+      jest.spyOn(officeTableRefresh, 'getPreviousOfficeTable').mockImplementation(() => 'prevOfficeTableTest',);
 
-    jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(() => ({
-      tableChanged: false,
-      startCell: 'startCellTest',
-    }));
+      jest.spyOn(officeTableRefresh, 'getExistingOfficeTableData').mockImplementation(() => ({
+        tableChanged: false,
+        startCell: 'startCellTest',
+      }));
 
-    jest.spyOn(officeTableUpdate, 'updateOfficeTable').mockReturnValue('officeTableTest');
+      jest.spyOn(officeTableUpdate, 'updateOfficeTable').mockReturnValue('officeTableTest');
 
-    jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
-    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableEditRefresh').mockImplementation();
+      jest.spyOn(operationStepDispatcher, 'completeGetOfficeTableEditRefresh').mockImplementation();
 
-    // when
-    await stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh(objectData, operationData);
+      // when
+      await stepGetOfficeTableEditRefresh.getOfficeTableEditRefresh(objectData, operationData);
 
-    // then
-    expect(getOfficeTableHelper.checkReportTypeChange).toBeCalledTimes(1);
-    expect(getOfficeTableHelper.checkReportTypeChange).toBeCalledWith('mstrTableTest');
+      // then
+      expect(getOfficeTableHelper.checkReportTypeChange).toBeCalledTimes(1);
+      expect(getOfficeTableHelper.checkReportTypeChange).toBeCalledWith('mstrTableTest');
 
-    expect(officeTableRefresh.getExistingOfficeTableData).toBeCalledTimes(1);
-    expect(officeTableRefresh.getExistingOfficeTableData).toBeCalledWith(
-      'excelContextTest',
-      { mstrTable: 'mstrTableTest' },
-      'prevOfficeTableTest',
-      'previousTableDimensionsTest',
-    );
+      expect(officeTableRefresh.getExistingOfficeTableData).toBeCalledTimes(1);
+      expect(officeTableRefresh.getExistingOfficeTableData).toBeCalledWith(
+        'excelContextTest',
+        { mstrTable: 'mstrTableTest' },
+        'prevOfficeTableTest',
+        'previousTableDimensionsTest',
+      );
 
-    expect(officeTableUpdate.updateOfficeTable).toBeCalledTimes(1);
-    expect(officeTableUpdate.updateOfficeTable).toBeCalledWith(
-      { mstrTable: 'mstrTableTest' },
-      'excelContextTest',
-      'startCellTest',
-      'prevOfficeTableTest',
-    );
+      expect(officeTableUpdate.updateOfficeTable).toBeCalledTimes(1);
+      expect(officeTableUpdate.updateOfficeTable).toBeCalledWith(
+        { mstrTable: 'mstrTableTest' },
+        'excelContextTest',
+        'startCellTest',
+        'prevOfficeTableTest',
+      );
 
-    expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
-    expect(operationStepDispatcher.updateOperation).toBeCalledWith({
-      objectWorkingId: 'objectWorkingIdTest',
-      officeTable: 'officeTableTest',
-      shouldFormat: resultShouldFormat,
-      tableChanged: false,
-      instanceDefinition: { mstrTable: 'mstrTableTest' },
-      startCell: 'startCellTest',
+      expect(operationStepDispatcher.updateOperation).toBeCalledTimes(1);
+      expect(operationStepDispatcher.updateOperation).toBeCalledWith({
+        objectWorkingId: 'objectWorkingIdTest',
+        officeTable: 'officeTableTest',
+        shouldFormat: resultShouldFormat,
+        tableChanged: false,
+        instanceDefinition: { mstrTable: 'mstrTableTest' },
+        startCell: 'startCellTest',
+      });
+
+      expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+      expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: 'oldBindIdTest', });
+
+      expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledTimes(1);
+      expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledWith('objectWorkingIdTest');
     });
-
-    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: 'oldBindIdTest', });
-
-    expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeGetOfficeTableEditRefresh).toBeCalledWith('objectWorkingIdTest');
-  });
 });

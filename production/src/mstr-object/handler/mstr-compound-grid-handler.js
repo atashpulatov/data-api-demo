@@ -128,7 +128,6 @@ class CompoundGridHandler {
    */
   getSubtotalsInformation = (response) => [] // TODO
 
-
   /**
    * Creates an array with metric values per columnSet
    * If the table doesn't have metrics we return an empty 2d array
@@ -258,7 +257,6 @@ class CompoundGridHandler {
     this.populateEmptyColumnSetsHeaders(columnSetsHeaders, columnSetsMetricValues, columnSetsDefinition);
     const boundingHeight = this.calculateColumnHeaderHeight(columnSetsHeaders);
 
-
     // iterating over column sets
     for (let i = 0; i < columnSetsHeaders.length; i++) {
       const header = columnSetsHeaders[i];
@@ -313,7 +311,6 @@ class CompoundGridHandler {
 
     return mstrNormalizedJsonHandler.transposeMatrix(parsedHeaders);
   }
-
 
   /**
    * Adds empty cells when we have different header height due to attribute forms

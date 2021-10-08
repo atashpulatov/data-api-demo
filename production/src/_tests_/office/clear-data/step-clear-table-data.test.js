@@ -8,7 +8,6 @@ describe('StepclearTableData', () => {
     jest.restoreAllMocks();
   });
 
-
   it.each`
   objectExist  | calledClearTable
   ${true}      | ${1}
@@ -17,21 +16,20 @@ describe('StepclearTableData', () => {
   
 `('clearTableData should works correctly', async ({ objectExist, calledClearTable }) => {
   // given
-  const objectData = { };
-  const operationData = { objectExist };
+    const objectData = { };
+    const operationData = { objectExist };
 
+    const mockedRemoveTable = jest.spyOn(officeRemoveHelper, 'removeOfficeTableBody').mockImplementation();
+    const mockedCompleteStep = jest.spyOn(operationStepDispatcher, 'completeClearTableData').mockImplementation();
 
-  const mockedRemoveTable = jest.spyOn(officeRemoveHelper, 'removeOfficeTableBody').mockImplementation();
-  const mockedCompleteStep = jest.spyOn(operationStepDispatcher, 'completeClearTableData').mockImplementation();
+    // when
+    await stepClearTableData.clearTableData(objectData, operationData);
 
-  // when
-  await stepClearTableData.clearTableData(objectData, operationData);
-
-  // then
-  expect(mockedRemoveTable).toBeCalledTimes(calledClearTable);
-  expect(mockedCompleteStep).toBeCalledTimes(1);
-  expect(mockedCompleteStep).toBeCalledWith(operationData.objectWorkingId);
-});
+    // then
+    expect(mockedRemoveTable).toBeCalledTimes(calledClearTable);
+    expect(mockedCompleteStep).toBeCalledTimes(1);
+    expect(mockedCompleteStep).toBeCalledWith(operationData.objectWorkingId);
+  });
 
   it('should handle error on clearTableData', async () => {
     // given

@@ -4,7 +4,6 @@
 import Dexie from 'dexie';
 import 'dexie-observable';
 
-
 /**
  * Helper class to create, reset and add MicroStrategy objects into the db
  *

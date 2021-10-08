@@ -46,20 +46,6 @@ export default class DossierWindowNotConnected extends React.Component {
     window.removeEventListener('message', this.extendSession);
   }
 
-  extendSession = (message = {}) => {
-    const { data: postMessage, origin } = message;
-    const { origin: targetOrigin } = window;
-    if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
-      this.prolongSession();
-    }
-  }
-
-  validateSession = () => {
-    authenticationHelper.validateAuthToken().catch((error) => {
-      popupHelper.handlePopupErrors(error);
-    });
-  }
-
   handleCancel = () => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
@@ -201,6 +187,20 @@ export default class DossierWindowNotConnected extends React.Component {
   */
   handleEmbeddedDossierLoad() {
     this.setState({ isEmbeddedDossierLoaded: true });
+  }
+
+  extendSession = (message = {}) => {
+    const { data: postMessage, origin } = message;
+    const { origin: targetOrigin } = window;
+    if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
+      this.prolongSession();
+    }
+  }
+
+  validateSession = () => {
+    authenticationHelper.validateAuthToken().catch((error) => {
+      popupHelper.handlePopupErrors(error);
+    });
   }
 
   render() {

@@ -72,7 +72,6 @@ class StepGetInstanceDefinition {
         futureStep
       );
 
-
       // FIXME: below flow should not be part of this step
       if (futureStep === GET_OFFICE_TABLE_IMPORT) {
         startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
@@ -156,7 +155,8 @@ class StepGetInstanceDefinition {
       dossierData,
       body,
       displayAttrFormNames
-    }) => {
+    }
+  ) => {
     // Status 2 = report has open prompts to be answered before data can be returned
     if (instanceDefinition.status !== 2) {
       return instanceDefinition;

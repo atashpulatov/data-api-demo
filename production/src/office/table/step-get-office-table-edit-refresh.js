@@ -45,7 +45,6 @@ class StepGetOfficeTableEditRefresh {
       let bindId = oldBindId;
       let officeTable;
 
-
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
       const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(excelContext, oldBindId, mstrTable);
 

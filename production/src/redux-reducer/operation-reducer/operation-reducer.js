@@ -33,7 +33,6 @@ export const operationReducer = (state = initialState, action) => {
     case CANCEL_OPERATION:
       return cancelOperation(state, action.payload);
 
-
     default:
       return state;
   }
@@ -47,7 +46,6 @@ function operationRequested(state, payload) {
     ]
   };
 }
-
 
 function markStepCompleted(state, { objectWorkingId, completedStep }) {
   const processedOperationIndex = getProcessedOperationIndex(state.operations, objectWorkingId);
@@ -78,7 +76,6 @@ function cancelOperation(state, { objectWorkingId }) {
   state.operations.splice(processedOperationIndex, 1);
   return { ...state };
 }
-
 
 function getProcessedOperationIndex(operations, objectWorkingId) {
   const processedOperationIndex = operations

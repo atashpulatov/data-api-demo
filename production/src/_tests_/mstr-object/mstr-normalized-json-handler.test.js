@@ -1,7 +1,6 @@
 import jsonHandler from '../../mstr-object/handler/mstr-normalized-json-handler';
 import { reportV2 } from '../mockDataV2';
 
-
 describe('Normalized JSON Handler', () => {
   it('should lookup for column elements by index', () => {
     // given

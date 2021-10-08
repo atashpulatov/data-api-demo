@@ -50,7 +50,6 @@ class MstrAttributeFormHelper {
     return fullColumnInformation;
   }
 
-
   /**
    * Get attribute title names with attribute forms
    *

@@ -27,7 +27,6 @@ export const ConfirmationNotConnected = ({
     }
   });
 
-
   const confirmationRef = React.useRef(null);
 
   React.useEffect(() => {

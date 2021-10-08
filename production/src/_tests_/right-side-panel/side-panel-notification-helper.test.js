@@ -21,7 +21,6 @@ describe('SidePanelService', () => {
     jest.restoreAllMocks();
   });
 
-
   it('setRangeTakenPopup should set up range taken popup', () => {
     // given
     const objectWorkingId = 1;
@@ -101,7 +100,6 @@ describe('SidePanelService', () => {
     expect(object).toMatchObject(expectedObjects);
   });
 
-
   it.each`
   isSecured   | isClearDataFailed | popupType
   
@@ -110,19 +108,19 @@ describe('SidePanelService', () => {
   
   `('setClearDataPopups should setup correct clear data popup', ({ isSecured, isClearDataFailed, popupType }) => {
   // given
-  const mockedDispatch = jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { isSecured, isClearDataFailed } });
-  const mockedViewData = jest.spyOn(sidePanelNotificationHelper, 'handleViewData').mockImplementation();
+    const mockedDispatch = jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { isSecured, isClearDataFailed } });
+    const mockedViewData = jest.spyOn(sidePanelNotificationHelper, 'handleViewData').mockImplementation();
 
-  const expectedObject = {
-    onViewData: mockedViewData,
-    type: popupType,
-  };
+    const expectedObject = {
+      onViewData: mockedViewData,
+      type: popupType,
+    };
     // when
-  const popup = sidePanelNotificationHelper.setClearDataPopups();
-  // then
-  expect({ ...popup }).toMatchObject(expectedObject);
-  expect(mockedDispatch).toBeCalledTimes(1);
-});
+    const popup = sidePanelNotificationHelper.setClearDataPopups();
+    // then
+    expect({ ...popup }).toMatchObject(expectedObject);
+    expect(mockedDispatch).toBeCalledTimes(1);
+  });
 
   it('handleViewData should change flags anre refresh objects', async () => {
     // given
@@ -131,7 +129,6 @@ describe('SidePanelService', () => {
     const mockedRefresh = jest.spyOn(sidePanelService, 'refresh').mockImplementation();
     toggleFlag.toggleSecuredFlag = jest.fn();
     toggleFlag.toggleIsClearDataFailedFlag = jest.fn();
-
 
     // when
     await sidePanelNotificationHelper.handleViewData();
@@ -155,13 +152,13 @@ describe('SidePanelService', () => {
 
   `('shouldGenerateProgressPercentage should return correct boolean for operation type', ({ operationType, expectedResult }) => {
   // given
-  const objectOperation = { operationType };
+    const objectOperation = { operationType };
 
-  // when
-  const returnedValue = sidePanelNotificationHelper.shouldGenerateProgressPercentage(objectOperation);
-  // then
-  expect(returnedValue).toBe(expectedResult);
-});
+    // when
+    const returnedValue = sidePanelNotificationHelper.shouldGenerateProgressPercentage(objectOperation);
+    // then
+    expect(returnedValue).toBe(expectedResult);
+  });
 
   it.each`
   error                                         | isMacAndSafariBased | handleErrorCalledTimes | connectionLostCalledTimes | connectionCheckerCalledTimes
@@ -173,17 +170,17 @@ describe('SidePanelService', () => {
 
 `('should handle Side Panel Action Error', ({ error, isMacAndSafariBased, handleErrorCalledTimes, connectionLostCalledTimes, connectionCheckerCalledTimes }) => {
   // given
-  const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation();
-  const mockedConnectionLost = jest.spyOn(notificationService, 'connectionLost').mockImplementation();
-  const mockedConnectionCheckerp = jest.spyOn(sidePanelNotificationHelper, 'connectionCheckerLoop').mockImplementation();
-  jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValueOnce(isMacAndSafariBased);
+    const mockHandleError = jest.spyOn(errorService, 'handleError').mockImplementation();
+    const mockedConnectionLost = jest.spyOn(notificationService, 'connectionLost').mockImplementation();
+    const mockedConnectionCheckerp = jest.spyOn(sidePanelNotificationHelper, 'connectionCheckerLoop').mockImplementation();
+    jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValueOnce(isMacAndSafariBased);
 
-  // when
-  sidePanelNotificationHelper.handleSidePanelActionError(error);
-  // then
+    // when
+    sidePanelNotificationHelper.handleSidePanelActionError(error);
+    // then
 
-  expect(mockHandleError).toBeCalledTimes(handleErrorCalledTimes);
-  expect(mockedConnectionLost).toBeCalledTimes(connectionLostCalledTimes);
-  expect(mockedConnectionCheckerp).toBeCalledTimes(connectionCheckerCalledTimes);
-});
+    expect(mockHandleError).toBeCalledTimes(handleErrorCalledTimes);
+    expect(mockedConnectionLost).toBeCalledTimes(connectionLostCalledTimes);
+    expect(mockedConnectionCheckerp).toBeCalledTimes(connectionCheckerCalledTimes);
+  });
 });

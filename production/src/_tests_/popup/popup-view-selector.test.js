@@ -52,15 +52,15 @@ describe('PopupViewSelectorNotConnected', () => {
   ${PopupTypeEnum.obtainInstanceHelper} | ${ObtainInstanceHelper}
   `('should render $expectedComponent when setPopupType returns $popupType', ({ popupType, expectedComponent }) => {
   // given
-  const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType').mockImplementation(() => popupType);
+    const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType').mockImplementation(() => popupType);
 
-  // when
-  const componentWrapper = shallow(<PopupViewSelectorNotConnected authToken="testAuthToken" />);
+    // when
+    const componentWrapper = shallow(<PopupViewSelectorNotConnected authToken="testAuthToken" />);
 
-  // then
-  expect(setPopupType).toBeCalled();
-  expect(componentWrapper.find(expectedComponent).get(0)).toBeDefined();
-});
+    // then
+    expect(setPopupType).toBeCalled();
+    expect(componentWrapper.find(expectedComponent).get(0)).toBeDefined();
+  });
 });
 
 describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps test', () => {

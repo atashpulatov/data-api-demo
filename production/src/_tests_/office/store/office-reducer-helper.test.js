@@ -57,18 +57,18 @@ describe('OfficeReducerHelper', () => {
   ${false}                      | ${[42, 42]}
   
   `('noOperationInProgress works as expected',
-  ({ expectedNoOperationInProgress, operationsListParam }) => {
+    ({ expectedNoOperationInProgress, operationsListParam }) => {
     // given
-    jest.spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer').mockReturnValue(operationsListParam);
+      jest.spyOn(officeReducerHelper, 'getOperationsListFromOperationReducer').mockReturnValue(operationsListParam);
 
-    // when
-    const result = officeReducerHelper.noOperationInProgress();
+      // when
+      const result = officeReducerHelper.noOperationInProgress();
 
-    // then
-    expect(officeReducerHelper.getOperationsListFromOperationReducer).toBeCalledTimes(1);
+      // then
+      expect(officeReducerHelper.getOperationsListFromOperationReducer).toBeCalledTimes(1);
 
-    expect(result).toEqual(expectedNoOperationInProgress);
-  });
+      expect(result).toEqual(expectedNoOperationInProgress);
+    });
 });
 
 describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {
@@ -85,22 +85,22 @@ describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {
   ${{ bindId: 42 }}   | ${42}       | ${[{ bindId: 4242 }, { bindId: 42 }]}
 
   `('getObjectFromObjectReducer works as expected',
-  ({ expectedObject, bindIdParam, objectsParam }) => {
+    ({ expectedObject, bindIdParam, objectsParam }) => {
     // given
-    const reduxStoreMock = {
-      getState: () => ({
-        objectReducer: {
-          objects: objectsParam,
-        },
-      })
-    };
+      const reduxStoreMock = {
+        getState: () => ({
+          objectReducer: {
+            objects: objectsParam,
+          },
+        })
+      };
 
-    officeReducerHelper.init(reduxStoreMock);
+      officeReducerHelper.init(reduxStoreMock);
 
-    // when
-    const result = officeReducerHelper.getObjectFromObjectReducerByBindId(bindIdParam);
+      // when
+      const result = officeReducerHelper.getObjectFromObjectReducerByBindId(bindIdParam);
 
-    // then
-    expect(result).toEqual(expectedObject);
-  });
+      // then
+      expect(result).toEqual(expectedObject);
+    });
 });

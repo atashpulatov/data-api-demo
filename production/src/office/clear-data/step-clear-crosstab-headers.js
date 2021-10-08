@@ -3,7 +3,6 @@ import { officeApiHelper } from '../api/office-api-helper';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 
-
 class StepClearCrosstabHeaders {
   /**
    * Removes the data inserted into range taken by crosstab headers

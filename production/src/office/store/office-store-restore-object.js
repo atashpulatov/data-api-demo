@@ -26,7 +26,6 @@ class OfficeStoreRestoreObject {
     settings.set(officeProperties.storedObjects, objects);
   };
 
-
   /**
   * Maps previously stored objects information to new format of data
   *

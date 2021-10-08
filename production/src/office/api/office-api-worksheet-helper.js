@@ -1,7 +1,5 @@
-
 import { ProtectedSheetError } from '../../error/protected-sheets-error';
 import { officeApiHelper } from './office-api-helper';
-
 
 class OfficeApiWorksheetHelper {
   /**

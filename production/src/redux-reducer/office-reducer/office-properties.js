@@ -1,10 +1,4 @@
-import { propsProxy } from '../../home/enum-props-proxy';
-
-// TODO: rethink the name and the place of these properties
-export const officeProperties = new Proxy({
-  /**
-       * propertyAlias: propertyName,
-       */
+export const officeProperties = {
   reportArray: 'mstr-loaded-reports-array',
   officeAddress: 'address',
   storedObjects: 'storedObjects',
@@ -51,4 +45,4 @@ export const officeProperties = new Proxy({
       displayName: 'Off',
     },
   ]
-}, propsProxy);
+};

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import './settings.css';
 
-
 export default function SettingsComponent({ onBack, t }) {
   return (
     <>
