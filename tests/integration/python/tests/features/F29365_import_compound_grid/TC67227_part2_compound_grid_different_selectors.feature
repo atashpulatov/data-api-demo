@@ -24,7 +24,7 @@ Feature: F29365 - Import compound grid
       And I found object by ID "376200B311EABC4754C30080EF65034E" and selected "Kind of compound grids - Selector relationship"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      And I selected dossier page or chapter 2
+      And I selected dossier page or chapter 3
       And I selected visualization "template selector"
       And I clicked import dossier
       And I closed last notification
@@ -36,7 +36,7 @@ Feature: F29365 - Import compound grid
       And I found object by ID "376200B311EABC4754C30080EF65034E" and selected "Kind of compound grids - Selector relationship"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      And I selected dossier page or chapter 4
+      And I selected dossier page or chapter 5
       And I selected visualization "in-canvas selector: element"
       And I clicked import dossier
       And I closed last notification
@@ -48,7 +48,7 @@ Feature: F29365 - Import compound grid
       And I found object by ID "376200B311EABC4754C30080EF65034E" and selected "Kind of compound grids - Selector relationship"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
-      And I selected dossier page or chapter 5
+      And I selected dossier page or chapter 6
       And I selected visualization "compound grid as source of the template selector"
       And I clicked import dossier
       And I closed last notification

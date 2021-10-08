@@ -33,7 +33,7 @@ Feature: TS41441 - Sanity checks
       And I clicked Run button
       And I closed last notification
      Then I verified that object number 1 is called "Report with a subtotal & prompt"
-      And I verified that cells ["G8", "H8", "L8"] have values ["Jan 2014", "Total", "$ 302,399"]
+      And I verified that cells ["G8", "H8", "L8"] have values ["Jan-14", "Total", "$ 302,399"]
 
      When I selected cell "M1"
       And I clicked Add Data button
@@ -69,7 +69,7 @@ Feature: TS41441 - Sanity checks
       And I waited for all progress notifications to disappear
       And I closed all notifications
 
-     Then I verified that cells ["A3", "B3", "G8", "H8", "L8", "M3", "R3", "W3", "AB3", "AR3", "BG3"] have values ["2014", "Mid-Atlantic", "Jan 2014", "Total", "$ 302,399", "2015 Q1", "Feb 2014", "Central", "0", "Angola", "Angola" ]
+     Then I verified that cells ["A3", "B3", "G8", "H8", "L8", "M3", "R3", "W3", "AB3", "AR3", "BG3"] have values ["2014", "Mid-Atlantic", "Jan-14", "Total", "$ 302,399", "2015 Q1", "Feb-14", "Central", "0", "Angola", "Angola"]
       And I verified that object number 8 is called "Report with prompt - Attribute element prompt of Category | Required | Not default"
       And I verified that object number 7 is called "Report with a subtotal & prompt"
       And I verified that object number 6 is called "01. • !#$%&'()*+,-:;<=>@^`{|}~¢£¥¬«» Polish Pójdźże, kiń tę chmurność w głąb flaszy!"

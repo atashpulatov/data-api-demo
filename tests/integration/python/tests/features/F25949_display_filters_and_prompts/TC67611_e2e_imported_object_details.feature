@@ -173,7 +173,7 @@ Feature: F25949 - Display filters and prompts
 
     Given I ensured object "4BF6385A11EA638B25610080EFC58CB1" in Tutorial project is certified
 
-      And I logged in as default user
+      And I logged in with username "aaa" and password "1"
       And I refreshed all objects
       And I waited for all progress notifications to disappear
       And I closed all notifications

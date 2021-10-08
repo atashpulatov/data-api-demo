@@ -76,6 +76,16 @@ class PromptBrowserPage(BaseBrowserPage):
             item
         )
 
+    def select_answer_for_dossier_object_prompt(self, prompt_number, prompt_name, item):
+         self.focus_on_dossier_frame()
+
+         self._change_answer_for_object_prompt(
+            PromptBrowserPage.PROMPT_OBJECT_AVAILABLE_ITEM_CSS,
+            prompt_number,
+            prompt_name,
+            item
+         )
+
     def select_checkbox_for_object_prompt(self, prompt_number, prompt_name, item):
         self.focus_on_dossier_frame()
 

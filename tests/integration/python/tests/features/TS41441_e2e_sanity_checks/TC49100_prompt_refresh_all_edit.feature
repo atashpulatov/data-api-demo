@@ -61,7 +61,7 @@ Feature: TS41441 - Sanity checks
       And I clicked Run button
       And I closed last notification
      Then I verified that object number 1 is called "Report with a subtotal & prompt"
-      And I verified that cells ["G8", "H8", "L8"] have values ["Jan 2014", "Total", "$ 302,399"]
+      And I verified that cells ["G8", "H8", "L8"] have values ["Jan-14", "Total", "$ 302,399"]
 
      When I hovered over Refresh button on object 2
      Then I verified that tooltip "Refresh" is displayed on object 2

@@ -21,6 +21,11 @@ def step_impl(context, item, prompt_number, prompt_name):
     context.pages.prompt_page().select_answer_for_object_prompt(prompt_number, prompt_name, item)
 
 
+@step('I selected in dossier prompt "{item}" as an answer for "{prompt_number}. {prompt_name}" prompt - object prompt')
+def step_impl(context, item, prompt_number, prompt_name):
+    context.pages.prompt_page().select_answer_for_dossier_object_prompt(prompt_number, prompt_name, item)
+
+
 @step('I selected checkbox for "{item}" as an answer for "{prompt_number}. {prompt_name}" prompt')
 def step_impl(context, item, prompt_number, prompt_name):
     context.pages.prompt_page().select_checkbox_for_object_prompt(prompt_number, prompt_name, item)
