@@ -1,9 +1,7 @@
 #@ci_pipeline_daily_windows_chrome  @ci_pipeline_daily_mac_chrome
 @ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
 @release_validation @ga_validation
-@windows_desktop
-@mac_chrome
-@windows_chrome
+@windows_chrome @windows_desktop @mac_chrome
 Feature: F32651 - Enable authors to create information-rich dossiers with Panel Stacks
 
   Scenario: [TC75003] - [Panel Stack] E2E - Importing, Editing, Duplicating, Refreshing, Clear Data for Prompted Dossier with Nested Panel Stack
