@@ -14,7 +14,12 @@ Feature: TS41441 - Sanity checks
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
 
-     #TODO Expire user session
+      And I found and selected object "01 Basic Report"
+      And I expired user session
+      And I clicked Prepare Data button
+      And I logged in as default user
+      And I clicked Import Data button
+      And I ensured that MyLibrary Switch is OFF
 
       And I found object by ID "56A532DD11EA9A91D5440080EF853B57" and selected "50k columns report - pivoted"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
@@ -60,16 +65,6 @@ Feature: TS41441 - Sanity checks
       And I clicked Import button without checking results
      Then I clicked Cancel button in Range Taken popup
 
-     When I clicked Add Data button
-      And I found object by ID "5587CB0B11EB8297835E0080AFEB08B5" and selected "Panel Stack demo"
-      And I clicked Import button to open Import Dossier
-      And I waited for dossier to load successfully
-      And I selected dossier page or chapter 7
-      And I selected panel stack "Panel 3" nested in panel stack "Panel 1"
-      And I selected visualization "Visualization on 1st Panel Stack Nested in Panel stack on 3rd Panel"
-      And I hover over Import button
-     Then I verified that tooltip for Import button shows message "Selected visualization cannot be imported in current version of the Add-in"
-      And I clicked Cancel button
 
      When I selected cell "H1"
       And I clicked Add Data button

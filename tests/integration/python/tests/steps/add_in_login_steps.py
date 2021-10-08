@@ -33,3 +33,7 @@ def step_impl(context):
 @step('I closed Log In popup')
 def step_impl(context):
     context.pages.add_in_login_page().close_login_pop_up()
+
+@step('I expired user session')
+def step_impl(context):
+    context.pages.add_in_login_page().expire_user_session()

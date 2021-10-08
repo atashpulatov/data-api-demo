@@ -15,6 +15,8 @@ class AddInLoginBrowserPage(BaseBrowserPage):
     PRIVILEGES_ERROR_MESSAGE_TEXT = 'You do not have the rights to access MicroStrategy for Office'
     PRIVILEGES_ERROR_TRY_AGAIN_BUTTON_ID = 'tryAgainSpan'
 
+    ADDIN_SESSION_COOKIE_NAME = 'JSESSIONID'
+
     def __init__(self):
         super().__init__()
         self.not_logged_right_panel_page = NotLoggedRightPanelBrowserPage()
@@ -58,3 +60,6 @@ class AddInLoginBrowserPage(BaseBrowserPage):
         self.close_current_tab()
 
         self.switch_to_excel_workbook_window()
+
+    def expire_user_session(self):
+        self.driver.delete_cookie(AddInLoginBrowserPage.ADDIN_SESSION_COOKIE_NAME)

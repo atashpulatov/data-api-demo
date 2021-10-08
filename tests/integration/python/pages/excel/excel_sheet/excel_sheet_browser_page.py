@@ -231,6 +231,14 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_DROPDOWN_BUTTON_CSS).click()
         self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_BUTTON_CSS % fill_color).click()
 
+    def is_fill_color_selected(self, cell_name, fill_color):
+        self.go_to_cell(cell_name)
+
+        self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_DROPDOWN_BUTTON_CSS).click()
+        fill_color_element = self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_BUTTON_CSS % fill_color)
+            
+        return fill_color_element.get_attribute('aria-selected') == 'true'
+
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)
 
@@ -263,6 +271,14 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         aria_attribute_value = formatting_button.get_attribute(ExcelSheetBrowserPage.ATTRIBUTE_NAME_ARIA_PRESSED)
 
         return aria_attribute_value == ExcelSheetBrowserPage.BUTTON_SELECTED_ARIA_VALUE
+
+    def is_font_color_selected(self, cell_name, font_color):
+        self.go_to_cell(cell_name)
+
+        self.get_element_by_css(ExcelSheetBrowserPage.FONT_COLOR_DROPDOWN_BUTTON_CSS).click()
+        font_color_element = self.get_element_by_css(ExcelSheetBrowserPage.FONT_COLOR_BUTTON_CSS % font_color)
+        
+        return font_color_element.get_attribute('aria-selected') == 'true'
 
     def get_font_name_of_cell(self, cell_name):
         self.go_to_cell(cell_name)

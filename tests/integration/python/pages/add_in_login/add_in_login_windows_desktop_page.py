@@ -2,6 +2,7 @@ from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPag
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 from framework.util.const import Const
 from framework.util.exception.mstr_exception import MstrException
+from framework.util.util import Util
 from pages.not_logged_right_panel.not_logged_right_panel_windows_desktop_page import \
     NotLoggedRightPanelWindowsDesktopPage
 
@@ -21,6 +22,8 @@ class AddInLoginWindowsDesktopPage(BaseWindowsDesktopPage):
     PRIVILEGES_ERROR_MESSAGE_TEXT = 'You do not have the rights to access MicroStrategy for Office'
     PRIVILEGES_ERROR_MESSAGE_TEXT_FILE = '_no_rights_error'
     PRIVILEGES_ERROR_TRY_AGAIN_BUTTON = 'Try again'
+
+    SESSION_TIMEOUT_SECS = 1800
 
     def __init__(self):
         super().__init__()
@@ -77,3 +80,6 @@ class AddInLoginWindowsDesktopPage(BaseWindowsDesktopPage):
             AddInLoginWindowsDesktopPage.POPUP_CLOSE_BUTTON,
             image_name=self.prepare_image_name(AddInLoginWindowsDesktopPage.POPUP_CLOSE_BUTTON)
         ).click()
+    
+    def expire_user_session(self):
+        Util.pause(AddInLoginWindowsDesktopPage.SESSION_TIMEOUT_SECS)
