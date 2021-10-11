@@ -31,4 +31,3 @@ Feature: F25946 - Details panel
 
      When I pressed key Enter
      Then I verified that details arrow tooltip for object number 1 displays "Show more"
-       And I logged out

@@ -26,7 +26,7 @@ Feature: F25949 - Display filters and prompts
       And I clicked Import button in Columns and Filters Selection
       And I closed last notification
 
-     Then I verified that cells ["A10", "B10", "C10", "D10"] have values ["Jan 2014", "Computers", "$6,530", "$5,347"]
+     Then I verified that cells ["A10", "B10", "C10", "D10"] have values ["Jan-14", "Computers", "$6,530", "$5,347"]
 
      When I selected cell "H1"
       And I clicked Add Data button

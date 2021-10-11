@@ -27,21 +27,23 @@ Feature: F25946 - Details panel
 
      When I displayed details for object number 2
      Then I verified that the details of the first expanded object displayed "type" as "Dataset"
-      And I verified that the details of the first expanded object displayed "id" as "CED9B2FF11EA8AF275CF0080EF6555DF"
-      And I verified that the details of the first expanded object displayed "created" as "4/30/2020 2:56 PM"
-      And I verified that the details of the first expanded object displayed "location" as "MicroStrategy Tutorial > Profiles > MSTR User (mstr) > My Reports"
-
-     When I displayed details for object number 1
-     Then I verified that the details of the first expanded object displayed "type" as "Dataset"
       And I verified that the details of the first expanded object displayed "id" as "D5798B4D11EAB497A9EC0080EF9503F3"
       And I verified that the details of the first expanded object displayed "created" as "6/22/2020 2:51 PM"
       And I verified that the details of the first expanded object displayed "location" as "MicroStrategy Tutorial > Public Objects > Reports > DS Objects > Cubes for Create Testing"
       And I verified that the details of the first expanded object displayed "description" as "some description"
 
+     When I displayed details for object number 1
+     Then I verified that the details of the first expanded object displayed "type" as "Dataset"
+      And I verified that the details of the first expanded object displayed "id" as "CED9B2FF11EA8AF275CF0080EF6555DF"
+      And I verified that the details of the first expanded object displayed "created" as "4/30/2020 2:56 PM"
+      And I verified that the details of the first expanded object displayed "location" as "MicroStrategy Tutorial > Profiles > MSTR User (mstr) > My Reports"
+
+
+
      When I selected object "single_attribute"
       And I clicked Import button
       And I waited for object operation to complete successfully with message "Import successful"
      Then I closed last notification
-      And I verified that cells ["A1", "A2", "B2"] have values ["attribute_column", "First Row", "1"]
+      And I verified that cells ["A1", "A2", "B2"] have values ["Id", "1", "1"]
 
       And I logged out
