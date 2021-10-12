@@ -196,6 +196,14 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
         this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
       },
+      dossierFeature: {
+        visExport: {
+          enabled: false,
+          excel: false,
+          pdf: false,
+          csv: false,
+        }
+      }
     };
 
     if (microstrategy && microstrategy.dossier) {
