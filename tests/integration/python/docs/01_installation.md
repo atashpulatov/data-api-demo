@@ -31,17 +31,11 @@ or virtual, e.g. using VirtualBox) - **remote tests execution**.
     ```
     
 1. Install Python modules:
-    
-    ```console
-    pip install selenium
-    pip install Appium-Python-Client
-    pip install behave
-    pip install Pillow
-    pip install opencv-python-headless
-    pip install pyperclip
-    pip install allure-behave
-    pip install requests
-    ```
+
+   ```console
+   python -m ensurepip --upgrade
+   pip install -r requirements.txt
+   ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
 
@@ -69,17 +63,11 @@ on, warning message regarding remote deployment or Windows Device Portal can be 
     ```
     
 1. Install Python modules:
-    
-    ```console
-    pip install selenium
-    pip install Appium-Python-Client
-    pip install behave
-    pip install Pillow
-    pip install opencv-python-headless
-    pip install pyperclip
-    pip install allure-behave
-    pip install requests
-    ```
+
+   ```console
+   python -m ensurepip --upgrade
+   pip install -r requirements.txt
+   ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
 
@@ -104,16 +92,10 @@ line parameter).
 
 1. Install Python modules:
 
-    ```console
-    pip install selenium
-    pip install Appium-Python-Client
-    pip install behave
-    pip install Pillow
-    pip install opencv-python-headless
-    pip install pyperclip
-    pip install allure-behave
-    pip install requests
-    ```
+   ```console
+   python -m ensurepip --upgrade
+   pip install -r requirements.txt
+   ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
 
@@ -138,16 +120,10 @@ line parameter).
 
 1. Install Python modules:
 
-    ```console
-    pip install selenium
-    pip install Appium-Python-Client
-    pip install behave
-    pip install Pillow
-    pip install opencv-python-headless
-    pip install pyperclip
-    pip install allure-behave
-    pip install requests
-    ```
+   ```console
+   python -m ensurepip --upgrade
+   pip install -r requirements.txt
+   ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
 
@@ -224,17 +200,11 @@ simpler firewall configuration:
     ```
 
 1. Install Python modules:
-
-    ```console
-    pip install selenium
-    pip install Appium-Python-Client
-    pip install behave
-    pip install Pillow
-    pip install opencv-python-headless
-    pip install pyperclip
-    pip install allure-behave
-    pip install requests
-    ```
+   
+   ```console
+   python -m ensurepip --upgrade
+   pip install -r requirements.txt
+   ```
 
 1. Copy `framework/config/config.json.DIST` to `framework/config/config.json` and adjust configuration as needed.
 

@@ -1,0 +1,8 @@
+selenium
+Appium-Python-Client
+behave
+Pillow
+opencv-python-headless
+pyperclip
+allure-behave
+requests
