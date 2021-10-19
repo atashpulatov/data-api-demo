@@ -1,5 +1,7 @@
 import time
 
+from selenium.common.exceptions import StaleElementReferenceException
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.windows_desktop_popup_element_cache import WindowsDesktopMainAddInElementCache
 from framework.util.const import Const
@@ -18,6 +20,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
     REFRESHING_TEXT_ELEM = 'Refreshing'
     IMPORTING_TEXT_ELEM = 'Importing'
     REMOVING_TEXT_ELEM = 'Removing'
+    OBJECT_REMOVED_TEXT_ELEM = 'Object removed'
 
     NOTIFICATIONS_TEXTS = [
         MessageConst.IMPORT_SUCCESSFUL_TEXT,
@@ -34,11 +37,13 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     TILE_LIST = '//List'
     TILE_ELEM = TILE_LIST + '/ListItem[%s]'
+    TILE_LIST_FULL_XPATH = '//Document[@Name="' + RIGHT_PANEL_ELEM + '"]' + TILE_LIST
+    TILE_ELEM_FULL_XPATH = '//Document[@Name="' + RIGHT_PANEL_ELEM + '"]' + TILE_ELEM
 
     NAME_INPUT_FOR_OBJECT = '//Button[5]'
     NAME_INPUT_FOR_OBJECT_AFTER_DOUBLE_CLICK = '//Edit'
     TEXT_INPUT_TAG_NAME = 'Edit'
-    TOOLTIP_TEXT = '//ToolTip/Text'
+    TOOLTIP_TEXT = '//ToolTip'
 
     RENAME_MENU_ITEM = 'Rename'
     REMOVE_MENU_ITEM = 'Remove'
@@ -65,8 +70,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def wait_for_progress_notifications_to_disappear(self):
         self.wait_until_element_disappears_by_tag_name(
-            RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME,
-            parent_element=self.get_add_in_right_panel_element()
+            RightPanelTileWindowsDesktopPage.PROGRESS_BAR_TAG_NAME
         )
 
     # TODO rename to close_all_success_notifications_on_hover when implementation for other platforms is also fixed
@@ -174,7 +178,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
 
         tooltip_text_elem = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TOOLTIP_TEXT)
 
-        return tooltip_text_elem.text
+        return tooltip_text_elem.get_name_by_attribute()
 
     def remove_object_using_icon(self, tile_no):
         self._click_button_on_tile(RightPanelTileWindowsDesktopPage.REMOVE_BUTTON_ELEM, tile_no)
@@ -214,9 +218,7 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         ).move_to()
 
     def get_object_name(self, index):
-        right_panel_element = self.get_add_in_right_panel_element()
-
-        object_name_element = right_panel_element.get_element_by_xpath(
+        object_name_element = self.get_element_by_xpath(
             RightPanelTileWindowsDesktopPage.OBJECT_NAME_ELEM % index
         )
 
@@ -264,41 +266,65 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         object_tile_elem = self._get_object_by_number(object_number)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
-        name_container.move_to()
-        name_container.double_click()
+        current_object_name = name_container.get_name_by_attribute()
 
-        name_text = object_tile_elem.get_element_by_tag_name(RightPanelTileWindowsDesktopPage.TEXT_INPUT_TAG_NAME)
-        name_text.send_keys(new_object_name)
+        """
+        Sometimes the name doesn't get changed even after all the steps are executed correctly.
+        In such case this loop will try to change the name again
+        """
+        while current_object_name != new_object_name:
+            name_container.move_to()
+            name_container.double_click()
+            name_text = object_tile_elem.get_element_by_tag_name(RightPanelTileWindowsDesktopPage.TEXT_INPUT_TAG_NAME)
 
-        self.press_enter()
+            name_text.send_keys(new_object_name)
+            self.press_enter()
+
+            name_container = object_tile_elem.get_element_by_xpath(
+                RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
+            current_object_name = name_container.get_name_by_attribute()
 
     def change_object_name_using_context_menu(self, object_number, new_object_name):
         object_tile_elem = self._get_object_by_number(object_number)
 
         name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
-        name_container.move_to()
-        name_container.right_click()
+        current_object_name = name_container.get_name_by_attribute()
+        """
+        Sometimes the name doesn't get changed even after all the steps are executed correctly.
+        In such case this loop will try to change the name again
+        """
+        while current_object_name != new_object_name:
+            name_container.move_to()
+            name_container.right_click()
 
-        object_tile_elem.get_element_by_name(
-            RightPanelTileWindowsDesktopPage.RENAME_MENU_ITEM
-        ).click()
+            object_tile_elem.get_element_by_name(
+                RightPanelTileWindowsDesktopPage.RENAME_MENU_ITEM
+            ).click()
+            name_text = object_tile_elem.get_element_by_tag_name(RightPanelTileWindowsDesktopPage.TEXT_INPUT_TAG_NAME)
 
-        name_text = object_tile_elem.get_element_by_tag_name(RightPanelTileWindowsDesktopPage.TEXT_INPUT_TAG_NAME)
-        name_text.send_keys(new_object_name)
+            name_text.send_keys(new_object_name)
+            self.press_enter()
 
-        self.press_enter()
+            name_container = object_tile_elem.get_element_by_xpath(
+                RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
+            current_object_name = name_container.get_name_by_attribute()
 
     def remove_object_using_context_menu(self, object_number):
         object_tile_elem = self._get_object_by_number(object_number)
+        object_removed = False
 
-        name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
-        name_container.right_click(5, 5)  # Added small offset to ensure that right click occurs within searched element
+        while object_removed is False:
+            name_container = object_tile_elem.get_element_by_xpath(RightPanelTileWindowsDesktopPage.NAME_INPUT_FOR_OBJECT)
+            name_container.right_click(5, 5)  # Added offset to ensure that right click occurs within searched element
 
-        object_tile_elem.get_element_by_name(
-            RightPanelTileWindowsDesktopPage.REMOVE_MENU_ITEM
-        ).click()
+            object_tile_elem.get_element_by_name(
+                RightPanelTileWindowsDesktopPage.REMOVE_MENU_ITEM
+            ).click(2, 2)
 
-        self.wait_using_parent_for_remove_object_to_finish_successfully(object_tile_elem)
+            self.wait_using_parent_for_remove_object_to_finish_successfully(object_tile_elem)
+
+            object_removed = object_tile_elem.check_if_element_exists_by_name(
+                RightPanelTileWindowsDesktopPage.OBJECT_REMOVED_TEXT_ELEM)
 
     def get_object_name_from_tooltip(self, object_number):
         object_tile_elem = self._get_object_by_number(object_number)
@@ -314,16 +340,18 @@ class RightPanelTileWindowsDesktopPage(BaseWindowsDesktopPage):
         self.invalidate_right_panel_cache()
 
         right_panel_element = self.get_add_in_right_panel_element()
-
-        return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM % object_no)
+        try:
+            return right_panel_element.get_element_by_xpath(RightPanelTileWindowsDesktopPage.TILE_ELEM % object_no)
+        except StaleElementReferenceException:
+            return self.get_element_by_xpath(
+                RightPanelTileWindowsDesktopPage.TILE_ELEM_FULL_XPATH % object_no,
+                timeout=Const.MEDIUM_TIMEOUT,
+                safe=True
+            )
 
     def _get_tile_list(self):
-        self.invalidate_right_panel_cache()
-
-        right_panel_element = self.get_add_in_right_panel_element()
-
-        return right_panel_element.get_element_by_xpath(
-            RightPanelTileWindowsDesktopPage.TILE_LIST,
+        return self.get_element_by_xpath(
+            RightPanelTileWindowsDesktopPage.TILE_LIST_FULL_XPATH,
             timeout=Const.MEDIUM_TIMEOUT,
             safe=True
         )

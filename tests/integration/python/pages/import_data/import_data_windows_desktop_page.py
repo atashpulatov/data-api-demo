@@ -20,7 +20,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
     FILTERS_BUTTON_ELEM = 'Filters'
 
-    SEARCH_ELEM = '//Document/Edit'
+    SEARCH_ELEM = '//Edit[@Name="Search..."]'
     SEARCH_ELEM_OLD_EXCEL = '//Group/Edit'
 
     ARIA_PROPERTIES_ATTRIBUTE = 'AriaProperties'
@@ -32,6 +32,7 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
     IMPORT_BUTTON_ENABLED_BORDER_COLOR = '#d8d8d8'
     PREPARE_DATA_BUTTON_ELEM = 'Prepare Data'
 
+    ERROR_MESSAGE_XPATH = '//*[starts-with(@Name, "%s")]'
     ERROR_MESSAGE_BUTTON_OK = 'OK'
 
     SHOW_DETAILS = 'show details'
@@ -99,23 +100,16 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
 
         popup_main_element = self.get_add_in_main_element()
 
-        search_element = popup_main_element.get_element_by_xpath(
-            ImportDataWindowsDesktopPage.SEARCH_ELEM,
-            timeout=Const.MEDIUM_TIMEOUT,
-            safe=True
-        )
-
-        if search_element:
-            search_element.click()
-        else:
-            search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM_OLD_EXCEL)
+        search_element = popup_main_element.get_element_by_xpath(ImportDataWindowsDesktopPage.SEARCH_ELEM)
+        search_element.click(offset_x=35, offset_y=10)
 
         # Remove search box content.
         search_element.send_keys((Keys.CONTROL, 'a', Keys.CONTROL, Keys.DELETE))
 
         if object_name:
             # Enter object_name.
-            search_element.send_keys_with_check(object_name)
+            search_element.send_keys(object_name)
+
 
     def find_and_select_object(self, object_name):
         """
@@ -193,7 +187,9 @@ class ImportDataWindowsDesktopPage(BaseWindowsDesktopPage):
         end_time = time.time() + Const.DEFAULT_TIMEOUT
 
         while end_time > time.time():
-            if self.check_if_element_exists_by_name(error_message, timeout=Const.SHORT_TIMEOUT):
+            if self.check_if_element_exists_by_xpath(
+                    ImportDataWindowsDesktopPage.ERROR_MESSAGE_XPATH % error_message,
+                    timeout=Const.SHORT_TIMEOUT):
                 return
 
         raise MstrException(f'Different notification displayed, expected: [{error_message}].')

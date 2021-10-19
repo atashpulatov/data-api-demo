@@ -7,7 +7,7 @@ from pages.import_dossier.import_dossier_main.import_dossier_main_windows_deskto
 
 
 class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
-    TABLE_CELL = '//Table/DataItem/DataGrid/DataItem[@Name="%s"]'
+    TABLE_CELL = '//DataGrid[@Name="%s"]//DataItem[@Name="%s"]'
 
     CONTEXT_MENU_ITEM_REPLACE_WITH = 'Replace With'
     CONTEXT_MENU_ITEM_SHOW_TOTALS = 'Show Totals'
@@ -16,7 +16,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     CONTEXT_MENU_ITEM_OK = 'OK'
     CONTEXT_MENU_ITEM_DRILL = 'Drill'
 
-    DRILL_SUB_MENU_ITEM = '//HyperLink[@Name = "%s"]'
+    DRILL_SUB_MENU_ITEM = '//Group/Text[@Name = "%s"]'
 
     CONTEXT_SUB_MENU_ITEM = '//Group/Pane/Pane/Text[@Name="%s"]'
 
@@ -24,7 +24,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
     TABLE_CELL_FILE = 'Cell %s'
 
-    SORTING_METRIC_ICONS = '//Group[starts-with(@Name, "%s")]/following-sibling::HyperLink[%s]'
+    SORTING_METRIC_ICONS = '//Document/Group/Group[starts-with(@AutomationId, "mstr")]'
     SORTING_ICON_PREFIX = 'sort_icon_'
 
     def __init__(self):
@@ -36,7 +36,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         tile = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
 
         tile.get_element_by_xpath(
-            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % (visualization_name, attribute_name)
         ).right_click()
 
         self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_SHOW_TOTALS)
@@ -50,20 +50,20 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
             raise MstrException(f'Wrong sort order specified: [{sort_order}].')
 
         self.get_element_by_xpath(
-            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % metric_name,
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % (visualization_name, metric_name),
             image_name=self.prepare_image_name(ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL_FILE % metric_name)
         ).right_click()
 
-        icon_index = ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER.index(sort_order) + 1
+        icon_index = ImportDossierContextMenuWindowsDesktopPage.ALLOWED_SORT_ORDER.index(sort_order)
         self.get_add_in_main_element().get_element_by_xpath(
-            ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS % (visualization_name, icon_index)
-        ).click()
+            ImportDossierContextMenuWindowsDesktopPage.SORTING_METRIC_ICONS
+        ).click(offset_x=5 + (50 * icon_index), offset_y=30)
 
     def select_drill_by_for_attribute(self, drill_by, attribute_name, visualization_name):
         tile = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
 
         tile.get_element_by_xpath(
-            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % (visualization_name, attribute_name)
         ).right_click()
 
         self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_DRILL)
@@ -82,7 +82,7 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         visualization = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
 
         visualization.get_element_by_xpath(
-            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % attribute_name
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL % (visualization_name, attribute_name)
         ).right_click(5, 5)
 
         self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_REPLACE_WITH)

@@ -8,7 +8,7 @@ class ImportDossierBookmarksWindowsDesktopPage(BaseWindowsDesktopPage):
     BOOKMARKS_FRAME = '//Pane[starts-with(@Name, "Bookmarks dialog")]'
     BOOKMARKS_FRAME_CLOSE = 'Close'
 
-    BOOKMARK_WRAPPER = '//Text[@Name="MY BOOKMARKS"]/../List'
+    BOOKMARK_WRAPPER = '//Group[starts-with(@Name, "MY BOOKMARKS")]//List'
     BOOKMARK_ITEM_TAG = 'ListItem'
 
     ADD_NEW_BUTTON = 'Add New'

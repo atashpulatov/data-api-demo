@@ -10,7 +10,7 @@ Feature: F29365 - Import compound grid
      When I logged in as default user
       And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "169D6C564AEFA0FAB707F59B2A74A8B8" and selected "Dossier with Compound Grid - Exclude/Keep Only"
+      And I found object by ID "DB43CB0C11E9FEF1DC670080EF652715" and selected "Dossier with compound grid"
      Then I verified that Prepare Data button is disabled
 
       And I clicked Import button to open Import Dossier
@@ -19,26 +19,26 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then I verified that cells ["A2", "A9", "C11"] have values ["", "May", "$31,681"]
+     Then I verified that cells ["A2", "B9", "C2"] have values ["Atlanta", "1.051", "$1,052,108"]
 
      When I clicked Edit object 1
       And I waited for dossier to load successfully
-      And I selected "Subcategory" in Replace With for "Month of Year" attribute for visualization "Visualization 1"
-      And I selected Exclude for "Art & Architecture" element in "Subcategory" attribute for visualization "Visualization 1"
-      And I selected "Total" in Show Totals for "Subcategory" attribute for visualization "Visualization 1"
+      And I selected "Region" in Replace With for "Call Center" attribute for visualization "Visualization 1"
+      And I selected Exclude for "Mid-Atlantic" element in "Region" attribute for visualization "Visualization 1"
+      And I selected "Total" in Show Totals for "Region" attribute for visualization "Visualization 1"
       And I clicked import dossier
       And I closed last notification
 
-     Then I verified that cells ["A2", "A9", "C11"] have values ["", "Science & Technology", ""]
+     Then I verified that cells ["A2", "B9", "C2"] have values ["Total", "7.981", "$30,571,093"]
 
      When I clicked Refresh on object 1
       And I waited for object to be refreshed successfully
       And I closed last notification
 
-     Then I verified that cells ["A2", "A9", "C11"] have values ["", "Science & Technology", ""]
+     Then I verified that cells ["A2", "B9", "C2"] have values ["Total", "7.981", "$30,571,093"]
 
      When I removed object 1 using icon
       And I closed last notification
-     Then I verified that cells ["A2", "A9", "C11"] have values ["", "", ""]
+     Then I verified that cells ["A2", "B9", "C2"] have values ["", "", ""]
 
       And I logged out

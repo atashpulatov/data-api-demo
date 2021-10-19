@@ -9,10 +9,11 @@ from framework.util.exception.mstr_exception import MstrException
 class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopPage):
     ITEM_ALL_ATTRIBUTES = '(All)'
 
-    ATTRIBUTE_ELEM = '//Text[@Name="%s"]'
+    ATTRIBUTE_ELEM = '//TreeItem[@Name="%s"]'
     ATTRIBUTE_ELEM_AT = '//Group/Tree/TreeItem[%s]'
+    ATTRIBUTE_ELEM_WITH_DROPDOWN = '//TreeItem[@Name="icon: caret-down%s"]'
 
-    ATTRIBUTE_FORM_DROPDOWN_ELEM = '//TreeItem[@Name="%s"]/Text[@Name="icon: caret-down"]'
+    ATTRIBUTE_FORM_DROPDOWN_ELEM = '//TreeItem[@Name="icon: caret-down%s"]/Group'
     ATTRIBUTE_FORM_DROPDOWN_ELEM_AT = '//TreeItem[%s]/Text[@Name="icon: caret-down"]'
     ATTRIBUTE_FORM_ELEMENT_AT = '/Group/TreeItem[%s]/Group/Text'
     ATTRIBUTE_FORM_ITEM_ELEM = '//Group[@Name="%s"]'
@@ -24,9 +25,16 @@ class ColumnsAndFiltersSelectionAttributesWindowsDesktopPage(BaseWindowsDesktopP
     def click_attribute(self, attribute_name):
         popup_main_element = self.get_add_in_main_element()
 
-        popup_main_element.get_element_by_xpath(
+        if popup_main_element.check_if_element_exists_by_xpath(
             ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
-        ).click()
+        ):
+            popup_main_element.get_element_by_xpath(
+                ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM % attribute_name
+            ).click()
+        else:
+            popup_main_element.get_element_by_xpath(
+                ColumnsAndFiltersSelectionAttributesWindowsDesktopPage.ATTRIBUTE_ELEM_WITH_DROPDOWN % attribute_name
+            ).click()
 
     def click_attribute_for_dataset(self, attribute_name):
         self.click_attribute(attribute_name)

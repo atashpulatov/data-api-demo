@@ -1,17 +1,16 @@
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
-from framework.util.exception.mstr_exception import MstrException
 from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page import RightPanelTileWindowsDesktopPage
 
 
 class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
-    VISUALIZATION_TILE = '//DataGrid[@Name="%s"]'
+    VISUALIZATION_TILE = '//Pane/Group[starts-with(@Name, "%s")]'
     IMPORT_BUTTON = 'Import'
     RESET_DOSSIER = 'Reset'
     RESET_DOSSIER_CONFIRM = 'Yes'
 
     IMPORT_BUTTON_IMAGE_NAME = IMPORT_BUTTON + 'Dossier'
 
-    VISUALIZATION_MENU_BUTTON = 'Menu for %s'
+    VISUALIZATION_MENU_BUTTON_XPATH = '//Group[starts-with(@Name, "%s")]/Button[@Name="More"]'
     SHOW_DATA = 'Show Data'
 
     CONTENT_PANEL_XPATH = '//Pane[@Name="Contents Panel"]'
@@ -30,23 +29,21 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     def select_visualization_by_name(self, visualization_name):
         tile = self.find_tile_by_name(visualization_name)
-        tile.click(offset_x=5, offset_y=-32)
+        tile.click(offset_x=5, offset_y=5)
 
         self.pause(5)  # TODO wait when ready
 
     def click_import_visualization(self):
         self.click_import_visualization_without_waiting_for_results()
         self.right_panel_tile_windows_desktop_page.wait_for_import_object_to_finish_successfully()
+        self.get_element_by_xpath('//Window').click()
 
     def click_import_visualization_to_duplicate(self):
         self.click_import_visualization_without_waiting_for_results()
         self.right_panel_tile_windows_desktop_page.wait_for_duplicate_object_to_finish_successfully()
 
     def click_import_visualization_without_waiting_for_results(self):
-        self.get_element_by_name(
-            ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON,
-            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON_IMAGE_NAME)
-        ).click()
+        self.get_element_by_name(ImportDossierMainWindowsDesktopPage.IMPORT_BUTTON).click()
 
     def find_tile_by_name(self, visualization_name):
         popup_main_element = self.get_add_in_main_element()
@@ -77,19 +74,13 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def reset_dossier(self):
-        self.get_element_by_name(
-            ImportDossierMainWindowsDesktopPage.RESET_DOSSIER,
-            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.RESET_DOSSIER)
-        ).click()
+        self.get_element_by_name(ImportDossierMainWindowsDesktopPage.RESET_DOSSIER).click()
 
-        self.get_element_by_name(
-            ImportDossierMainWindowsDesktopPage.RESET_DOSSIER_CONFIRM,
-            image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.RESET_DOSSIER_CONFIRM)
-        ).click()
+        self.get_element_by_name(ImportDossierMainWindowsDesktopPage.RESET_DOSSIER_CONFIRM).click()
 
     def open_show_data_panel(self, visualization_name):
-        self.get_element_by_name(
-            ImportDossierMainWindowsDesktopPage.VISUALIZATION_MENU_BUTTON % visualization_name
+        self.get_element_by_xpath(
+            ImportDossierMainWindowsDesktopPage.VISUALIZATION_MENU_BUTTON_XPATH % visualization_name
         ).click()
 
         self.get_element_by_name(

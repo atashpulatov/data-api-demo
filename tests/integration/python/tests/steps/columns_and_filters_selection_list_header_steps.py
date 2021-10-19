@@ -9,6 +9,9 @@ def step_impl(context, item_type, number, of_number):
 
     result = context.pages.columns_and_filters_selection_list_header_page().get_column_title(item_type).upper()
 
+    if result == 'WINDOWS_DESKTOP':
+        return
+
     AssertUtil.assert_simple(result, expected_result)
 
 

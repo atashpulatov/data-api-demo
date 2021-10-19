@@ -27,6 +27,9 @@ class WindowsDesktopSendKeys(WindowsDesktopMainAddInElementCache):
     def press_right_arrow(self):
         self.send_keys(Keys.ARROW_RIGHT)
 
+    def press_left_arrow(self):
+        self.send_keys(Keys.ARROW_LEFT)
+
     def press_down_arrow(self):
         self.send_keys(Keys.ARROW_DOWN)
 

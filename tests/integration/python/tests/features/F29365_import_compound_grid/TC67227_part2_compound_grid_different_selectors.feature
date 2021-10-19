@@ -53,6 +53,6 @@ Feature: F29365 - Import compound grid
       And I clicked import dossier
       And I closed last notification
 
-     Then I verified that cell "AC4" has value "$480,173"
+     Then I verified that cell "U4" has value "$480,173"
 
       And I logged out

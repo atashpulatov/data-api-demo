@@ -1,3 +1,5 @@
+from selenium.webdriver.common.keys import Keys
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.exception.mstr_exception import MstrException
 
@@ -36,13 +38,15 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
         slider_point = ImportDossierFilterWindowsDesktopPage.SLIDER_POINT_MAPPING[filter_side]
 
         add_in_main_element = self.get_add_in_main_element()
-        add_in_main_element.get_element_by_xpath(ImportDossierFilterWindowsDesktopPage.SLIDER % slider_point).click()
+        filter_button = add_in_main_element.get_element_by_xpath(
+            ImportDossierFilterWindowsDesktopPage.SLIDER % slider_point)
+        filter_button.click()
 
         if filter_change == ImportDossierFilterWindowsDesktopPage.FILTER_CHANGE_INCREASE:
-            self.press_right_arrow()
+            filter_button.send_keys(Keys.ARROW_RIGHT)
 
         elif filter_change == ImportDossierFilterWindowsDesktopPage.FILTER_CHANGE_DECREASE:
-            self.press_backspace()
+            filter_button.press_left_arrow()
 
         self._apply_filter()
 
@@ -67,10 +71,7 @@ class ImportDossierFilterWindowsDesktopPage(BaseWindowsDesktopPage):
         ).click()
 
     def _apply_filter(self):
-        self.get_element_by_name(
-            ImportDossierFilterWindowsDesktopPage.APPLY_FILTER_BUTTON,
-            image_name=self.prepare_image_name(ImportDossierFilterWindowsDesktopPage.APPLY_FILTER_BUTTON)
-        ).click()
+        self.get_element_by_name(ImportDossierFilterWindowsDesktopPage.APPLY_FILTER_BUTTON).click()
 
     def _open_filter_menu(self):
         add_in_main_element = self.get_add_in_main_element()

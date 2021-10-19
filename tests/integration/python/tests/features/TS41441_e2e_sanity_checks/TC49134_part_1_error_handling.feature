@@ -65,7 +65,6 @@ Feature: TS41441 - Sanity checks
       And I clicked Import button without checking results
      Then I clicked Cancel button in Range Taken popup
 
-
      When I selected cell "H1"
       And I clicked Add Data button
       And I found object by ID "BA32708211E94AF4A45E0080EF557FD5" and selected "Report with Totals and Subtotals"
@@ -73,12 +72,14 @@ Feature: TS41441 - Sanity checks
      Then I closed all notifications
 
      When I added a new worksheet
+      And I selected cell "A1"
       And I clicked Add Data button
       And I found object by ID "A6E8885611E99CC31A6E0080EFF50C15" and selected "Report with crosstab 123"
       And I clicked Import button
      Then I closed all notifications
 
      When I added a new worksheet
+      And I selected cell "A1"
       And I clicked Add Data button
       And I found object by ID "778ECA4C11E990F800000080EFA56C55" and selected "Revenue by Region and Category - secure data"
       And I clicked Import button

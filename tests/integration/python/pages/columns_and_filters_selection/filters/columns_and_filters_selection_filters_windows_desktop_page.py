@@ -7,8 +7,8 @@ from framework.util.exception.mstr_exception import MstrException
 
 
 class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage):
-    FILTER_TITLE_ITEM = '//TreeItem[starts-with(@Name, "icon_filter_blue")]/Group[@Name="%s"]/..'
-    FILTER_VALUES_BOX = '//DataGrid[@Name="grid"]/Group[contains(@Name, "%s")]'
+    FILTER_TITLE_ITEM = '//TreeItem[starts-with(@Name, "icon_filter_blue")]/Group/Group[@Name="%s"]/..'
+    FILTER_VALUES_BOX = '//DataGrid[@Name="grid"][2]'
     FILTER_VALUE_SELECTOR = '//Text[@Name="%s"]'
 
     FIRST_FILTER = '//Tree[starts-with(@Name, "icon_filter_blue")]/TreeItem[1]'
@@ -41,7 +41,7 @@ class ColumnsAndFiltersSelectionFiltersWindowsDesktopPage(BaseWindowsDesktopPage
 
             if elements_names:
                 parent_element = self.get_add_in_main_element().get_element_by_xpath(
-                    ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_VALUES_BOX % elements_names[0]
+                    ColumnsAndFiltersSelectionFiltersWindowsDesktopPage.FILTER_VALUES_BOX
                 )
 
                 for element_name in elements_names:

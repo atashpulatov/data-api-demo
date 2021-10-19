@@ -26,7 +26,7 @@ class ColumnsAndFiltersSelectionWindowsDesktopPage(BaseWindowsDesktopPage):
     TOTALS_AND_SUBTOTALS_SWITCH = '//Text[@Name="%s"]' % TOTALS_AND_SUBTOTALS
 
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
-    POPUP_WINDOW_TITLE = '//Group[@AutomationId="popup-wrapper"]/Text[@Name="%s"]'
+    POPUP_WINDOW_TITLE = '//Text[@Name="%s"]'
 
     SEARCH_INPUT = 'Search...'
 

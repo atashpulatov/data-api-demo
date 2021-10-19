@@ -28,10 +28,10 @@ Feature: F25931 - Duplicate object
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 1
-      And I selected visualization "Visualization 1"
+      And I selected visualization "Basic Grid"
       And I clicked import dossier
       And I closed last notification
-     Then I verified that cell "A2" has value "Atlanta"
+     Then I verified that cell "A2" has value "2014"
 
      When I clicked Edit object 3
       And I clicked metric "Profit"

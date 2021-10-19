@@ -1,6 +1,7 @@
 import time
 
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import StaleElementReferenceException
 
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.util.const import Const
@@ -26,8 +27,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_WITH_ASTERISK_ELEM_XPATH = '//DataItem[starts-with(@Name, "' + PROMPT_WITH_ASTERISK_LIST_ELEM + ' %s")]'
 
     PROMPT_OBJECT_BOX = '(//DataItem[@Name="%s.%s"]' \
-                        '/../following-sibling::Table[starts-with(@AutomationId, "id_mstr")][1]' \
-                        '//Group[starts-with(@AutomationId, "ListBlockContents")])[%s]/Group[@Name="%s"]'
+                        '/../following-sibling::Group/Table[starts-with(@AutomationId, "id_mstr")][1]' \
+                        '//Group[starts-with(@AutomationId, "ListBlockContents")])[%s]//Group[@Name="%s"]'
 
     PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem/Edit'
     PROMPT_VALUE_ELEM_COMPLEX = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem/Table/DataItem/Edit'
@@ -45,19 +46,29 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
         end_time = time.time() + Const.LONG_TIMEOUT
 
         while end_time > time.time():
-            run_button = self.get_element_by_accessibility_id(
-                PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_ACCESSIBILITY_ID
-            )
+            """
+            If button gets enabled between getting element and picking color methods execution there will be a
+            StaleElementReferenceException error thrown
+            """
+            try:
+                color = self.get_element_by_accessibility_id(
+                    PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_ACCESSIBILITY_ID
+                ).pick_color(
+                    PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_COLOR_OFFSET_X,
+                    PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_COLOR_OFFSET_Y
+                )
+            except StaleElementReferenceException:
+                color = self.get_element_by_accessibility_id(
+                    PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_ACCESSIBILITY_ID
+                ).pick_color(
+                    PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_COLOR_OFFSET_X,
+                    PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_COLOR_OFFSET_Y
+                )
 
-            color = run_button.pick_color(
-                PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_COLOR_OFFSET_X,
-                PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_COLOR_OFFSET_Y
-
-            )
             if color in PromptWindowsDesktopPage.PROMPT_RUN_BUTTON_ENABLED_COLORS:
                 return True
 
-        raise MstrException(f'Run button not exists or is not enabled.')
+        raise MstrException(f'Run button is not enabled.')
 
     def click_run_button(self):
         self.get_element_by_accessibility_id(
