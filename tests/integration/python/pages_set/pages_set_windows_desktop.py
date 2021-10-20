@@ -160,3 +160,6 @@ class PagesSetWindowsDesktop(AbstractPagesSet):
 
     def import_dossier_show_data_page(self):
         return self.import_dossier_show_data_windows_desktop_page
+
+    def import_ub_performance_page(self):
+        return self.import_ub_performance_browser_page
