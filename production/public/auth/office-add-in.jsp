@@ -26,14 +26,14 @@
       payload: '<%=authToken%>'
     };
 
-    var origin = location.origin || '*';
+    var origin = location.origin;
 
     if (parent && parent !== window) {
-      parent.postMessage(message, origin);
+      parent.postMessage(message, origin || parent.origin);
     }
 
     if (opener && opener !== window) {
-      opener.postMessage(message, origin);
+      opener.postMessage(message, origin || opener.origin);
     }
 
     function messageParent() {

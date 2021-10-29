@@ -36,22 +36,22 @@ export const SettingsMenuNotConnected = ({
     if (!Office) { return '#'; } // If no Office return anchor url
     const { host, platform, version } = Office.context.diagnostics;
     const excelAPI = officeContext.getRequirementSet();
-    const { userAgent } = navigator;
+    const userAgent = encodeURIComponent(navigator.userAgent);
     const message = t('Please don’t change the text below. Type your message above this line.');
     const email = {
       address: 'info@microstrategy.com',
       title: 'MicroStrategy for Office Feedback',
       body: [
-        '%0D%0A %0D%0A ',
+        '\r\n',
         `----- ${message} ----- `,
         `Platform: ${platform} (${host})`,
         `Excel API: ${excelAPI}`,
         `Excel version: ${version}`,
         `MicroStrategy for Office version: ${APP_VERSION || `dev`}`,
-        `User agent: ${userAgent}`,
-      ].join('%0D%0A'),
+        `User agent: ${decodeURIComponent(userAgent)}`,
+      ].join('\r\n'),
     };
-    return `mailto:${email.address}?subject=${email.title}&body=${email.body}`;
+    return encodeURI(`mailto:${email.address}?subject=${email.title}&body=${email.body}`);
   };
 
   const showConfirmationPopup = () => {

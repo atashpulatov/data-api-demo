@@ -1,5 +1,5 @@
 import request from 'superagent';
-import { NO_DATA_RETURNED } from '../error/constants';
+import { NO_DATA_RETURNED, PROBLEM_WITH_REQUEST } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
@@ -60,10 +60,14 @@ function getFullPath({
 }
 
 function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1, visualizationType) {
-  const fields = getFetchObjectContentFields(visualizationType);
+  if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
+    throw new Error(PROBLEM_WITH_REQUEST);
+  }
+  const contentFields = getFetchObjectContentFields(visualizationType);
+  const validPath = encodeURI(`${fullPath}?offset=${offset}&limit=${limit}&fields=${contentFields}`);
 
   return request
-    .get(`${fullPath}?offset=${offset}&limit=${limit}&fields=${fields}`)
+    .get(validPath)
     .set('x-mstr-authtoken', authToken)
     .set('x-mstr-projectid', projectId)
     .withCredentials();
@@ -137,20 +141,23 @@ class MstrObjectRestService {
       let header;
       let crosstabSubtotal;
 
-      const response = await fetchObjectContent(fullPath, authToken, projectId, offset, limit, visualizationType);
+      const { body } = await fetchObjectContent(fullPath, authToken, projectId, offset, limit, visualizationType);
+      if (!body.data || !body.data.paging) {
+        throw new Error(NO_DATA_RETURNED);
+      }
 
-      const { current } = response.body.data.paging;
-      if (MstrAttributeMetricHelper.isMetricInRows(response.body) && shouldExtractMetricsInRows) {
-        metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(response.body, metricsInRows);
+      const { current } = body.data.paging;
+      if (MstrAttributeMetricHelper.isMetricInRows(body) && shouldExtractMetricsInRows) {
+        metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
         shouldExtractMetricsInRows = !!metricsInRows.length;
       }
 
       fetchedRows = current + offset;
-      response.body.attrforms = attrforms;
-      const { row, rowTotals } = officeConverterServiceV2.getRows(response.body, isCrosstab);
+      body.attrforms = attrforms;
+      const { row, rowTotals } = officeConverterServiceV2.getRows(body, isCrosstab);
 
       if (isCrosstab) {
-        header = officeConverterServiceV2.getHeaders(response.body, isCrosstab);
+        header = officeConverterServiceV2.getHeaders(body, isCrosstab);
         crosstabSubtotal = header.subtotalAddress;
         if (offset !== 0) { crosstabSubtotal.map(offsetCrosstabSubtotal); }
       } else if (offset !== 0) {
