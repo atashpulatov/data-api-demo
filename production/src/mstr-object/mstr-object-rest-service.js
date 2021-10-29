@@ -1,5 +1,5 @@
 import request from 'superagent';
-import { NO_DATA_RETURNED } from '../error/constants';
+import { NO_DATA_RETURNED, PROBLEM_WITH_REQUEST } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
@@ -60,8 +60,11 @@ function getFullPath({
 }
 
 function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1, visualizationType) {
-  const encodedFields = encodeURIComponent(getFetchObjectContentFields(visualizationType));
-  const validPath = encodeURI(`${fullPath}?offset=${offset}&limit=${limit}&fields=${encodedFields}`);
+  if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
+    throw new Error(PROBLEM_WITH_REQUEST);
+  }
+  const contentFields = getFetchObjectContentFields(visualizationType);
+  const validPath = encodeURI(`${fullPath}?offset=${offset}&limit=${limit}&fields=${contentFields}`);
 
   return request
     .get(validPath)
