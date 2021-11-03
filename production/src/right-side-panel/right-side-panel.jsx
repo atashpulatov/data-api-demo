@@ -46,12 +46,15 @@ export const RightSidePanelNotConnected = ({
   const duplicatePopupParams = { activeCellAddress, setDuplicatedObjectId, setSidePanelPopup };
 
   React.useEffect(() => {
-    try {
-      sidePanelEventHelper.addRemoveObjectListener();
-      sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
-    } catch (error) {
-      console.error(error);
+    async function initializeSidePanel() {
+      try {
+        await sidePanelEventHelper.addRemoveObjectListener();
+        await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
+      } catch (error) {
+        console.error(error);
+      }
     }
+    initializeSidePanel();
   }, []);
 
   React.useEffect(() => {

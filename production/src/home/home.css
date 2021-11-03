@@ -94,62 +94,6 @@ hr {
   font-weight: 300;
 }
 
-.tabs {
-  position: relative;
-  overflow: hidden;
-  zoom: 1;
-  height: calc(100vh - 72px);
-}
-
-.tab-content {
-  display: flex;
-  flex-direction: row;
-  transition: margin-left 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  will-change: margin-left;
-  height: calc(100% - 50px);
-  display: block;
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 100%;
-}
-
-.tab-content .tabpane {
-  flex-shrink: 0;
-  height: 100%;
-  width: 100%;
-  opacity: 1;
-  transition: opacity 0.45s;
-}
-
-.tab-container {
-  height: 44px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  margin: 0 0 5px 0;
-  border-bottom: 1px solid #e8e8e8;
-}
-
-.tabs-nav {
-  margin-left: 10px;
-  margin-bottom: -6px;
-  border-bottom: 2px solid #1c91dc;
-  position: relative;
-  overflow: hidden;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-.tab-header {
-  color: #444649;
-  padding: 12px 6px 8px 6px;
-  cursor: pointer;
-  transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
 .dialog-container {
   z-index: 1;
   height: 100vh;
@@ -292,7 +236,6 @@ hr {
   padding-bottom: 20px;
   color: #444649;
   font-size: 14px;
-  color: #444649;
   letter-spacing: 0;
   line-height: 16px;
 }
@@ -302,7 +245,6 @@ hr {
 }
 
 .confirm-message-text {
-  color: rgba(0, 0, 0, 0.65);
   padding-bottom: 30px;
   padding-right: 18px;
   font-size: 12px;

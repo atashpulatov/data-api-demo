@@ -409,7 +409,9 @@ class MstrObjectRestService {
 
   getObjectInfo = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();
-    if (mstrObjectType.type === 'undefined') {
+    // visualisation does not have object type, all other objects has type represented by number
+    // If we pass not a number we know its visualisation and we set type as 55 (document)
+    if (typeof mstrObjectType.type !== 'number') {
       mstrObjectType.type = 55;
     }
     const { envUrl, authToken } = storeState.sessionReducer;

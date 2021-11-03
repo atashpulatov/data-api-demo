@@ -97,13 +97,14 @@ describe('RightSidePanelNotConnected', () => {
     expect(mockedProps.toggleIsSettingsFlag).toHaveBeenCalled();
   });
 
-  it('should call addRemoveObjectListener and initializeActiveCellChangedListener on mount', () => {
+  it('should call addRemoveObjectListener and initializeActiveCellChangedListener on mount', async () => {
     // given
     const spyAddRemoveObjectListener = jest.spyOn(sidePanelEventHelper, 'addRemoveObjectListener');
     const spyInitializeActiveCellChangedListener = jest.spyOn(sidePanelEventHelper, 'initializeActiveCellChangedListener');
     // when
     mount(<RightSidePanelNotConnected {...mockedProps} />);
     // then
+    await new Promise(setImmediate);
     expect(spyAddRemoveObjectListener).toBeCalled();
     expect(spyInitializeActiveCellChangedListener).toBeCalled();
   });
