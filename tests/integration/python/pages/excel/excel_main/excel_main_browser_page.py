@@ -9,15 +9,21 @@ class ExcelMainBrowserPage(BaseBrowserPage):
     APP_LAUNCHER_ELEM = 'O365_MainLink_NavMenu'
     APP_LAUNCHER_EXCEL_ELEM = 'O365_AppTile_ExcelOnline'
 
+    RIGHT_MENU_EXCEL_ICON_CSS = '.ms-ohp-Icon--excelLogo'
+
     NEW_BLANK_WORKBOOK_ELEM = '.new-template-icon'
 
     HEAD_BRAND_ELEM_CSS = '#AppBrand'
     HEAD_BRAND_EXCEL_NAME = 'Excel'
 
     def open_new_workbook(self):
-        self._open_excel_page()
+        if self.check_if_element_exists_by_css(
+                ExcelMainBrowserPage.NEW_BLANK_WORKBOOK_ELEM, timeout=Const.SHORT_TIMEOUT):
+            self._open_new_workbook()
+        else:
+            self._select_excel_icon()
 
-        self._open_new_workbook()
+            self._open_new_workbook()
 
     def _open_excel_page(self):
         """
@@ -26,6 +32,13 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
         self.get_element_by_id(ExcelMainBrowserPage.APP_LAUNCHER_ELEM).click()
         self.get_element_by_id(ExcelMainBrowserPage.APP_LAUNCHER_EXCEL_ELEM).click()
+
+    def _select_excel_icon(self):
+        """
+        Selects Excel icon on the right menu
+        """
+
+        self.get_element_by_css(ExcelMainBrowserPage.RIGHT_MENU_EXCEL_ICON_CSS).click()
 
     def _open_new_workbook(self):
         """
