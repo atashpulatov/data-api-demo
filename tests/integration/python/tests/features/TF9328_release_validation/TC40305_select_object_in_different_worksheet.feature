@@ -29,7 +29,7 @@ Feature: TF9328 - Release Validation
 
      When I clicked on object 2
 #   #TODO can't verify for columns out of the screen
-     Then I verified that columns ["A", "K"] are selected
+     Then I verified that columns ["A", "E"] are selected
 
      When I clicked on object 1
      Then I verified that columns ["A", "F"] are selected
