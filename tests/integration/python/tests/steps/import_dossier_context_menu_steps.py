@@ -47,3 +47,14 @@ def step_impl(context, exclude, attribute_name, visualization_name):
         attribute_name,
         visualization_name
     )
+
+
+@step('I clicked "{selected_element}" element in "{attribute_name}" attribute '
+      'for visualization "{visualization_name}"')
+def step_impl(context, selected_element, attribute_name, visualization_name):
+    context.pages.import_dossier_context_menu_page().select_attribute_element(
+        selected_element,
+        attribute_name,
+        visualization_name
+    )
+    

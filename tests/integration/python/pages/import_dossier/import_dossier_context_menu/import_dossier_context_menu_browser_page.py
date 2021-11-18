@@ -137,6 +137,22 @@ class ImportDossierContextMenuBrowserPage(BaseBrowserPage):
             attribute_name
         ).right_click()
 
+    def select_attribute_element(self, selected_element, attribute_name, visualization_name):
+        self.focus_on_dossier_frame()
+
+        index_of_column = self.find_index_of_element_in_list_by_text(
+            ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_HEADER_ROW_ITEMS,
+            attribute_name
+        )
+
+        # index_of_column + 1 because indices of elements starts from 0 but css selector nth-child starts from 1
+        column_selector = ImportDossierContextMenuBrowserPage.VISUALIZATION_TABLE_COLUMN_X_ITEMS % (index_of_column + 1)
+
+        self.find_element_in_list_by_text(
+            column_selector,
+            selected_element
+        ).click()
+
     # TODO visualization_name
     def select_exclude_for_attribute_element(self, exclude, attribute_name, visualization_name):
         """
