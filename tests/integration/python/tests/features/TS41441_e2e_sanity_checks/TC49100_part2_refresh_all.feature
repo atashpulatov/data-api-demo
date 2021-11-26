@@ -76,7 +76,7 @@ Feature: TS41441 - Sanity checks
       And I verified that object number 5 is called "Seasonal Report"
       And I verified that object number 4 is called "Grid/graph"
       And I verified that object number 3 is called "this name is so long that it has ellipsis when it is displayed and in fact it is more than 100 chara"
-      And I verified that object number 2 is called "100_dataset
+      And I verified that object number 2 is called "100_dataset"
       And I verified that object number 1 is called "100_dataset"
 
      When I removed object 1 using icon
