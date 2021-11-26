@@ -1,10 +1,15 @@
+#@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
+#@windows_desktop @windows_chrome
 @mac_chrome
+@release_validation
 Feature: TF9328 - Release Validation
 
   Scenario: [TC71814] - DE188703 - Table moved down after report refresh through Excel add-in - 11.3 GA
-    Given I logged in as default user
+    Given I initialized Excel
 
-     When I clicked Import Data button
+     When I logged in as default user
+      And I clicked Import Data button
       And I ensured that MyLibrary Switch is OFF
       And I found object by ID "A6E8885611E99CC31A6E0080EFF50C15" and selected "Report with crosstab 123"
       And I clicked Import button
