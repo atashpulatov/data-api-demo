@@ -131,15 +131,26 @@ Feature: F25949 - Display filters and prompts
       And I pressed key Enter
      Then I verified that object 3 has "Filter" list with value "Subcategory (Art & Architecture, Business, Literature, Books - Miscellaneous, Science & Technology, Sports & Health, Audio Equipment, Cameras, Computers, Electronics - Miscellaneous, TV's, Video Equipment, Action, Comedy, Drama, Horror, Kids / Family, Special Interests, Alternative, Country, Music - Miscellaneous, Pop, Rock, Soul / R&B)"
 
-     Then I pressed key Enter
-      And I verified that object 3 has "Metric" list with value "Profit, Profit Forecast, Revenue, Revenue Forecast"
-      And I verified that object 3 has id "300DBAFA4A1D8EC546AC6AB8CDE7834E"
-      And I verified that object 3 has collapsed location displayed
+     When I pressed key Enter
+     Then I verified that object 3 has "Metric" list with value "Profit, Profit Forecast, Revenue, Revenue Forecast"
+      # workaround for screen resolution on CI Pipeline line "I clicked toggle details button on object 3" x2 to be removed, once to do is implemented for scroll down
+     When I clicked toggle details button on object 3
+      And I clicked toggle details button on object 3
+     Then I verified that object 3 has id "300DBAFA4A1D8EC546AC6AB8CDE7834E"
+
+      # 4 Tab steps to be removed once the todo for scroll is implemented
+     When I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      And I pressed key Tab
+      # TODO: step to implement
+      # And I scrolled down right panel to the end
+     Then I verified that object 3 has collapsed location displayed
 
      When I pressed key Enter
      Then I verified that object 3 has full location "MicroStrategy Tutorial > Public Objects > Reports > _Centralised Main Folder > Report with a subtotal & prompt" displayed
 
-     # hiding imported objects details
+      # hiding imported objects details
      When I clicked on object 1
       And I pressed key Tab
       And I pressed key Tab
