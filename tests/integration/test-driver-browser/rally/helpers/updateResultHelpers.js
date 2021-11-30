@@ -54,6 +54,7 @@ async function getAutomatedBatchArray() {
 
   const testsToUpdate = getResultsFromAllure.getTestsWithVerdict(allTests);
   const batch = await createAutomatedBatchArray(testsToUpdate);
+
   return batch;
 }
 
@@ -153,6 +154,12 @@ async function createAutomatedBatchArray(testCaseArray) {
           batch.push(batchItem);
           console.log(`${testCaseId} result will be added to Rally.`);
         }
+      } else {
+        const batchItem = createBatchItem(
+            {build, date: today, testCase, verdict, testerUrl, duration, notes, browser, env, release, exportApp, OS, language}
+            );
+
+          batch.push(batchItem);
       }
     }
   } catch (error) {
