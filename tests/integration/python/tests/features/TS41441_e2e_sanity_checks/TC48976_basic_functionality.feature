@@ -105,7 +105,7 @@ Feature: TS41441 - Sanity checks
       And I verified that counter of "filters" shows "0" of "8" selected
 
      When I selected all metrics
-      And I clicked metric "Row Count - 100 Sales Records.csv"
+      And I clicked metric "Unit Cost"
       And I clicked metric "Total Profit"
       And I clicked metric "Total Cost"
       And I clicked metric "Total Revenue"
