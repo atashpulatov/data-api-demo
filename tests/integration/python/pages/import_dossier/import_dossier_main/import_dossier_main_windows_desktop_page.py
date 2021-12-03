@@ -3,7 +3,7 @@ from pages.right_panel.right_panel_tile.right_panel_tile_windows_desktop_page im
 
 
 class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
-    VISUALIZATION_TILE = '//Pane/Group[starts-with(@Name, "%s")]'
+    VISUALIZATION_TILE = '//Pane//Group[starts-with(@Name, "%s")]'
     IMPORT_BUTTON = 'Import'
     RESET_DOSSIER = 'Reset'
     RESET_DOSSIER_CONFIRM = 'Yes'
@@ -16,6 +16,10 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
     CONTENT_PANEL_XPATH = '//Pane[@Name="Contents Panel"]'
     PANEL_STACK_ELEMENT_XPATH = '//Group/Table/DataItem[@Name="%s"]'
     NESTED_PANEL_STACK_ELEMENT_XPATH = '//Pane[@Name="Contents Panel"]/Group/Group/Group/Table/DataItem[@Name="%s"]'
+
+    INFO_WINDOW_VISUALIZATION = '//Group[contains(@Name, "%s")]'
+    INFO_WINDOW_VISUALIZATION_CONTEXT_BUTTON = '//Group[@Name="%s"]/Button[@Name="More"]'
+
 
     def __init__(self):
         super().__init__()
@@ -86,4 +90,18 @@ class ImportDossierMainWindowsDesktopPage(BaseWindowsDesktopPage):
         self.get_element_by_name(
             ImportDossierMainWindowsDesktopPage.SHOW_DATA,
             image_name=self.prepare_image_name(ImportDossierMainWindowsDesktopPage.SHOW_DATA)
+        ).click()
+
+    def select_info_window_visualization(self, visualization_name):
+        visualization_selector = ImportDossierMainWindowsDesktopPage.INFO_WINDOW_VISUALIZATION % visualization_name
+
+        info_window_visualization = self.get_element_by_xpath(visualization_selector)
+
+        info_window_visualization.click(offset_x=5, offset_y=5)
+
+    def open_show_data_panel_on_info_window(self, visualization_name):
+        self.get_element_by_xpath(ImportDossierMainWindowsDesktopPage.INFO_WINDOW_VISUALIZATION_CONTEXT_BUTTON % visualization_name).move_to_and_click(wait_time=0.1)
+
+        self.get_element_by_name(
+            ImportDossierMainWindowsDesktopPage.SHOW_DATA,
         ).click()

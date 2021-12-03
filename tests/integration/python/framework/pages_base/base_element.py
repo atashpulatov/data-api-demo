@@ -42,12 +42,12 @@ class BaseElement:
 
         Util.pause(wait_after_click)
 
-    def move_to_and_click(self, offset_x=None, offset_y=None):
-        self.move_to(offset_x, offset_y)
+    def move_to_and_click(self, offset_x=None, offset_y=None, wait_time=Const.AFTER_OPERATION_WAIT_TIME):
+        self.move_to(offset_x, offset_y, wait_time)
 
         ActionChains(self.__driver).click().perform()
 
-        Util.pause(Const.AFTER_OPERATION_WAIT_TIME)
+        Util.pause(wait_time)
 
     def double_click(self, offset_x=None, offset_y=None):
         if offset_x is None or offset_y is None:
@@ -267,16 +267,16 @@ class BaseElement:
     def _value_of_css_property(self, property_name):
         return self.__element.value_of_css_property(property_name)
 
-    def move_to(self, offset_x=None, offset_y=None):
+    def move_to(self, offset_x=None, offset_y=None, wait_time=Const.AFTER_OPERATION_WAIT_TIME):
         if offset_x is None or offset_y is None:
             (ActionChains(self.__driver)
              .move_to_element(self.__element)
-             .pause(Const.AFTER_OPERATION_WAIT_TIME)
+             .pause(wait_time)
              .perform())
         else:
             (ActionChains(self.__driver)
              .move_to_element_with_offset(self.__element, offset_x, offset_y)
-             .pause(Const.AFTER_OPERATION_WAIT_TIME)
+             .pause(wait_time)
              .perform())
 
         Util.pause(Const.AFTER_OPERATION_WAIT_TIME)

@@ -8,6 +8,7 @@ from pages.import_dossier.import_dossier_main.import_dossier_main_windows_deskto
 
 class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     TABLE_CELL = '//DataGrid[@Name="%s"]//DataItem[@Name="%s"]'
+    TABLE_CELL_BY_ATTRIBUTE_XPATH = '//Table//DataItem[@Name="%s"]'
 
     CONTEXT_MENU_ITEM_REPLACE_WITH = 'Replace With'
     CONTEXT_MENU_ITEM_SHOW_TOTALS = 'Show Totals'
@@ -96,6 +97,13 @@ class ImportDossierContextMenuWindowsDesktopPage(BaseWindowsDesktopPage):
         item.right_click(10, 10)
 
         self._click_context_menu_item(ImportDossierContextMenuWindowsDesktopPage.CONTEXT_MENU_ITEM_EXCLUDE)
+
+    def select_attribute_element(self, selected_element, attribute_name, visualization_name):
+        tile = self.import_dossier_main_windows_desktop_page.find_tile_by_name(visualization_name)
+
+        tile.get_element_by_xpath(
+            ImportDossierContextMenuWindowsDesktopPage.TABLE_CELL_BY_ATTRIBUTE_XPATH % (selected_element)
+        ).click()
 
     def _get_first_item_in_attribute_column(self, tile, attribute_name, item_name):
         """

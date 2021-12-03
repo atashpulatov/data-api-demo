@@ -17,11 +17,15 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     CONTEXT_MENU_SHOW_DATA = 'Show Data'
     CONTEXT_MENU_TEXT_ELEMENTS = '.mtxt'
 
+    MAXIMIZE_MINIMIZE_BUTTON_CSS = '.hover-max-restore-btn'
+
     INFORMATION_TEXT = 'span.dossier-window-information-text'
 
     PANEL_STACK_TAB_LABEL_CSS = '.mstrmojo-VITab-tab .mstrmojo-EditableLabel'
     PANEL_STACK_DOCUMENT_PANEL_CSS = '.mstrmojo-DocPanelStack-content'
     PANEL_STACK_SCROLL_RIGHT_BUTTON_CSS = '.mstrmojo-VITabStrip-rightBtn'
+
+    INFO_WINDOW_VISUALIZATION_CSS = '.InfoWindowNode .mstrmojo-UnitContainer[aria-label="%s"]'
 
     def __init__(self):
         super().__init__()
@@ -132,3 +136,33 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
             scroll_right_button.click()
 
         raise MstrException(f'Could not find panel stack tab label: {panel_stack_tab_name}')
+
+    def _get_info_window_visualization(self, visualization_name):
+        return self.get_element_by_css(ImportDossierMainBrowserPage.INFO_WINDOW_VISUALIZATION_CSS % visualization_name)
+
+    def select_info_window_visualization(self, visualization_name):
+        info_window = self._get_info_window_visualization(visualization_name)
+
+        info_window.get_element_by_css(ImportDossierMainBrowserPage.VISUALIZATION_RADIO_BUTTON).click()
+
+    def open_show_data_panel_on_info_window(self, visualization_name):
+        self.select_info_window_visualization(visualization_name)
+
+        info_window = self._get_info_window_visualization(visualization_name)
+
+        info_window.get_element_by_css(ImportDossierMainBrowserPage.TILE_CONTEXT_MENU).click()
+
+        self.find_element_in_list_by_text(
+            ImportDossierMainBrowserPage.CONTEXT_MENU_TEXT_ELEMENTS,
+            ImportDossierMainBrowserPage.CONTEXT_MENU_SHOW_DATA
+        ).click()
+
+    def maximize_visualization_on_info_window(self, visualization_name):
+        info_window = self._get_info_window_visualization(visualization_name)
+
+        info_window.get_element_by_css(ImportDossierMainBrowserPage.MAXIMIZE_MINIMIZE_BUTTON_CSS).click()
+
+    def minimize_visualization_on_info_window(self, visualization_name):
+        info_window = self._get_info_window_visualization(visualization_name)
+
+        info_window.get_element_by_css(ImportDossierMainBrowserPage.MAXIMIZE_MINIMIZE_BUTTON_CSS).click()
