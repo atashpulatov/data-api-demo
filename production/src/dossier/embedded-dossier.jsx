@@ -26,6 +26,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.restoreVizSelection = this.restoreVizSelection.bind(this);
+    this.onEmbeddedError = this.onEmbeddedError.bind(this);
     this.retryCounter = 0;
     this.embeddedDossier = null;
     this.state = { loadingFrame: true };
@@ -42,6 +43,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       this.msgRouter.removeEventhandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
       this.msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
       this.msgRouter.removeEventhandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
+      this.msgRouter.removeEventhandler(EventType.ON_ERROR, this.onEmbeddedError);
     }
   }
 
@@ -91,6 +93,23 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     };
 
     handleSelection(this.dossierData);
+  }
+
+  /**
+   * Handles the event throwed after new error in embedded dossier.
+   * Retrives the error type (based on title).
+   * If error type is not a notification - handles it by closing the window
+   *
+   * @param {Object} error - payload throwed by embedded.api after the error occured
+   */
+  // eslint-disable-next-line class-methods-use-this
+  onEmbeddedError(error) {
+    const { title } = error;
+    if (title !== 'Notification') {
+      // TODO: improve this, so it doesn't depend on i18n
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+      popupHelper.handlePopupErrors(error);
+    }
   }
 
   loadEmbeddedDossier = async (container) => {
@@ -195,6 +214,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
         this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_ERROR, this.onEmbeddedError);
       },
       dossierFeature: {
         visExport: {
