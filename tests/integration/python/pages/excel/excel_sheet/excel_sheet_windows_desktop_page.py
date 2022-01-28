@@ -10,6 +10,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
     VALUE_ATTRIBUTE = 'Value.Value'
 
     WINDOW_ELEM = 'Window'
+    HOME_ELEM = 'Home'
     BOOK_ELEM = '//Tab[@AutomationId="Book1"]'
     GRID_ELEM = 'Grid'
     EDIT_ELEM_XPATH = '//Edit'
@@ -339,6 +340,7 @@ class ExcelSheetWindowsDesktopPage(BaseWindowsDesktopPage):
         self._navigate_to_home_tab_and_press('ff')
 
     def _navigate_to_home_tab_and_press(self, keys):
+        self.get_element_by_name(ExcelSheetWindowsDesktopPage.HOME_ELEM).click()
         self.send_keys(Keys.ALT)
         self.send_keys('h')
 

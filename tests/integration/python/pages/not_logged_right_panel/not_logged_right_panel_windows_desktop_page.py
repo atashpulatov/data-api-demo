@@ -1,10 +1,13 @@
+from selenium.common.exceptions import StaleElementReferenceException
+
 from framework.pages_base.base_windows_desktop_page import BaseWindowsDesktopPage
 from framework.pages_base.image_element import ImageElement
 from framework.pages_base.windows_desktop_workaround import WindowsDesktopWorkaround
 
 
 class NotLoggedRightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
-    OPEN_LOGIN_POPUP_BUTTON_ELEM = 'Login button'
+    OPEN_LOGIN_POPUP_BUTTON_NAME = 'Login button'
+    OPEN_LOGIN_POPUP_BUTTON_XPATH = '//Button[@Name="' + OPEN_LOGIN_POPUP_BUTTON_NAME + '"]'
 
     ACCEPT_COOKIES_BUTTON_ELEM = 'Enable Cookies'
 
@@ -17,7 +20,7 @@ class NotLoggedRightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         self._enable_accept_cookies()
 
         image_data = self.get_element_info_by_name(
-            NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_ELEM
+            NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_NAME
         )
 
         excel_windows_size = ImageElement.excel_element.size
@@ -31,10 +34,13 @@ class NotLoggedRightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self._enable_accept_cookies()
 
-        self.get_element_by_name(
-            NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_ELEM,
-            image_name=self.prepare_image_name(NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_ELEM)
-        ).click()
+        try:
+            self.get_element_by_xpath(
+                NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_XPATH,
+                image_name=self.prepare_image_name(NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_NAME)
+            ).click()
+        except StaleElementReferenceException:
+            self.get_element_by_xpath(NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_XPATH,).click()
 
     def _enable_accept_cookies(self):
         enable_button = self.get_elements_by_name(NotLoggedRightPanelWindowsDesktopPage.ACCEPT_COOKIES_BUTTON_ELEM)
