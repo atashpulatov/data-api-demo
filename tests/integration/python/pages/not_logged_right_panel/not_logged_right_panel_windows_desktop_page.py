@@ -35,12 +35,9 @@ class NotLoggedRightPanelWindowsDesktopPage(BaseWindowsDesktopPage):
         self._enable_accept_cookies()
 
         try:
-            self.get_element_by_xpath(
-                NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_XPATH,
-                image_name=self.prepare_image_name(NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_NAME)
-            ).click()
+            self.get_element_by_xpath(NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_XPATH).click()
         except StaleElementReferenceException:
-            self.get_element_by_xpath(NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_XPATH,).click()
+            self.get_element_by_xpath(NotLoggedRightPanelWindowsDesktopPage.OPEN_LOGIN_POPUP_BUTTON_XPATH).click()
 
     def _enable_accept_cookies(self):
         enable_button = self.get_elements_by_name(NotLoggedRightPanelWindowsDesktopPage.ACCEPT_COOKIES_BUTTON_ELEM)
