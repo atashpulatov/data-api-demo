@@ -38,6 +38,9 @@ module Smithers
           end
 
           build_wrappers do
+            timestamper do
+              #nothing to configure, just turn it on
+            end
             ansicolor do
               #nothing to configure, just turn it on
             end
