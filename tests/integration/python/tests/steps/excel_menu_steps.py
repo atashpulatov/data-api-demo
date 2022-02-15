@@ -28,6 +28,11 @@ def step_impl(context, object_number):
     context.pages.excel_menu_page().select_object_from_name_box(object_number)
 
 
+@step('I changed the table name to "{new_table_name}"')
+def step_impl(context, new_table_name):
+    context.pages.excel_menu_page().change_table_name(new_table_name)
+
+
 @step('I verified that the name of item number {object_number} '
       'in Name Box, ignoring timestamp at the end, is "{expected_name}"')
 def step_impl(context, object_number, expected_name):

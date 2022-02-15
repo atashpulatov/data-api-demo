@@ -7,11 +7,13 @@ from framework.util.util import Util
 
 class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     ADD_IN_IN_HOME_TAB_TEXT_ELEM = '//Button[starts-with(@Name, "%s")]'
+    TABLE_NAME_EDIT_XPATH = '//Edit[@Name="%s"]'
 
     MENU_BUTTON = 'Task Pane Options'
     MENU_BUTTON_WIDTH = 40
     MENU_BUTTONS_MARGIN = 20
     NAME_BOX_ELEM = 'Name Box'
+    TABLE_NAME_ELEM = 'Table Name'
 
     def click_add_in_elem(self):
         add_in_environment = ConfigUtil.get_excel_desktop_add_in_import_data_name()
@@ -52,6 +54,14 @@ class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
     def select_object_from_name_box(self, object_number):
         self._go_to_object_from_name_box(object_number)
 
+        self.press_enter()
+
+    def change_table_name(self, new_table_name):
+        self.get_element_by_xpath(
+            ExcelMenuWindowsDesktopPage.TABLE_NAME_EDIT_XPATH % ExcelMenuWindowsDesktopPage.TABLE_NAME_ELEM
+        ).click()
+
+        self.send_keys(new_table_name)
         self.press_enter()
 
     def is_object_name_in_name_box_correct(self, object_number, expected_name):
@@ -96,3 +106,4 @@ class ExcelMenuWindowsDesktopPage(BaseWindowsDesktopPage):
 
         for i in range(int(object_number)):
             self.press_down_arrow()
+
