@@ -16,7 +16,7 @@ export VAGRANT_BOXES_WINDOWS_VERSION='1.0.4.next'
 export VAGRANT_BOXES_OSX_NAME='osx-10.11.3'
 export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 
-jdk_version="jdk-11.0.14.1"
+jdk_version="jdk-11.0.14"
 
 export NODE_HOME=/usr/local/nodejs-binary-10.16.3
 
