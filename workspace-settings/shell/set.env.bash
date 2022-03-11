@@ -34,7 +34,7 @@ elif uname -a | grep -q "MSYS"; then
   export PATH=$PYTHON_HOME:$PIP_HOME:$PATH
   export DOCKER_HOME=/C/Program\ Files/Docker/Docker/Resources/
   export MAVEN_HOME=/c/apache/apache-maven-3.6.3
-  export PATH=/c/node/node-v10.16.3-win-x64:$JAVA_HOME/bin:$DOCKER_HOME/bin:$MAVEN_HOME/bin:$PATH
+  export PATH=/c/node/node-v16.14.0-win-x64:$JAVA_HOME/bin:$DOCKER_HOME/bin:$MAVEN_HOME/bin:$PATH
 else
   export JAVA_HOME=/usr/java/$jdk_version
   export PATH=$JAVA_HOME/bin:$PATH
