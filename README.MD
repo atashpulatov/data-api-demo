@@ -121,7 +121,7 @@ Currently we do not support production builds.
 ## Manually uploading addin to AWS instance and uploading the test data
 
 ### Get Office addin and Office addin loader from Nexus at link:
-1. go to http://nexus.internal.microstrategy.com/#browse/browse:releases:com%2Fmicrostrategy
+1. go to https://nexus.internal.microstrategy.com/#browse/browse:releases:com%2Fmicrostrategy
 2. choose a branch folder (e.g. “m2020”)
 3. get addin:
     1. find folder “office”
