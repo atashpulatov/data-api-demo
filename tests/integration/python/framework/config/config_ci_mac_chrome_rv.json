@@ -8,7 +8,7 @@
   "log_page_source_after_failure": true,
   "max_no_of_test_executions": 2,
   "cleanup_after_test_enabled": true,
-  "driver_path_mac_chrome": "framework/resources/chromedriver97",
+  "driver_path_mac_chrome": "framework/resources/chromedriver99",
   "excel_add_in_environment": "current_env_RV",
   "excel_desktop_add_in_import_data_name": "current_env_RV",
   "excel_add_in_environment_default_user_name": "a",
