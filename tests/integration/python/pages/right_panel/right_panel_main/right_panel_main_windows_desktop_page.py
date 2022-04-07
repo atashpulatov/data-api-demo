@@ -35,7 +35,6 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
         self.get_element_by_name(
             RightPanelMainWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM,
-            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.IMPORT_DATA_BUTTON_ELEM)
         ).click()
 
     def click_add_data_button_element(self):

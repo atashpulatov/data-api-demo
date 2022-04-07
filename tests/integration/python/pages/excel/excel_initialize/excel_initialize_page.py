@@ -8,6 +8,9 @@ from framework.util.const import Const
 
 
 class ExcelInitializePage(BasePage):
+    CLOSE_DOCUMENT_RECOVERY_PANE_XPATH = '//Custom[@Name="Document Recovery"]//Button[@Name="Close"]'
+    EXCEL_DOCUMENT_RECOVERY_CONFIRMATION_OK_BUTTON_XPATH = '//Window[@Name="Microsoft Excel"]//Button[@Name="OK"]'
+
     def initialize_excel(self, context, locale_name=Const.DEFAULT_LOCALE_NAME):
         WindowsDesktopMainAddInElementCache.invalidate_right_panel_cache()
 
@@ -15,6 +18,9 @@ class ExcelInitializePage(BasePage):
             self._initialize_using_existing_session()
         else:
             self.initialize_using_new_session(context, locale_name)
+
+        if ConfigUtil.get_driver_type() == "windows_desktop":
+            self.document_recovery_desktop_workaround()
 
     def _initialize_using_existing_session(self):
         driver_type = ConfigUtil.get_driver_type()
@@ -30,3 +36,21 @@ class ExcelInitializePage(BasePage):
 
         context.pages.excel_menu_page().click_add_in_elem()
         context.pages.not_logged_right_panel_page().enable_windows_desktop_workaround_if_needed()
+
+    def document_recovery_desktop_workaround(self):
+        is_close_recovery_pane_visible = self.check_if_element_exists_by_xpath(
+            ExcelInitializePage.CLOSE_DOCUMENT_RECOVERY_PANE_XPATH
+        )
+        if is_close_recovery_pane_visible:
+            self.get_element_by_xpath(
+                ExcelInitializePage.CLOSE_DOCUMENT_RECOVERY_PANE_XPATH
+            ).click()
+
+        is_confirmation_window_ok_button_visible = self.check_if_element_exists_by_xpath(
+            ExcelInitializePage.EXCEL_DOCUMENT_RECOVERY_CONFIRMATION_OK_BUTTON_XPATH
+        )
+
+        if is_confirmation_window_ok_button_visible:
+            self.get_element_by_xpath(
+                ExcelInitializePage.EXCEL_DOCUMENT_RECOVERY_CONFIRMATION_OK_BUTTON_XPATH
+            ).click()
