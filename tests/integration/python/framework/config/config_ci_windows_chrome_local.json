@@ -5,7 +5,7 @@
   "connect_to_existing_session_enabled": false,
   "max_no_of_test_executions": 2,
   "cleanup_after_test_enabled": true,
-  "driver_path_windows_chrome": "framework\\resources\\chromedriver95_win32.exe",
+  "driver_path_windows_chrome": "framework\\resources\\chromedriver100_win32.exe",
   "excel_add_in_environment": "CI_local",
   "excel_desktop_add_in_import_data_name": "CI_local",
   "excel_add_in_environment_default_user_name": "a",
