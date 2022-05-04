@@ -52,4 +52,4 @@ function become_jenkins_manager(){
   export HATS=$HATS:jenkins
 }
 
-export BRANCH_OFF_COMMIT=e92daf19ed61167b98b6380a623fe0ba73d234c4
+export BRANCH_OFF_COMMIT=16f5d174da7c50265fc6882ab82ad7fee46e6194
