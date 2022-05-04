@@ -10,7 +10,7 @@ produces and publishes a versioned deployment package'
   triggers do
       pull_request_builder do
         trigger_phrase "#{Environment.project_name}-premerge-#{Environment.branch_name}.*"
-        commit_status_context "mstr-office-premerge-#{Environment.branch_name}"
+        commit_status_context "#{Environment.project_name}-premerge-#{Environment.branch_name}"
       end
   end
   
