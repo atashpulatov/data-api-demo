@@ -22,8 +22,8 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@mstr/connector-components": "^0.1.17",
-    "@mstr/mstr-react-library": "^1.7.27",
+    "@mstr/connector-components": "^1.0.2",
+    "@mstr/mstr-react-library": "^1.8.0",
     "antd": "^3.26.20",
     "core-js": "^3.18.0",
     "dexie": "^2.0.4",
@@ -36,23 +36,26 @@
     "proxy-polyfill": "^0.3.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-i18next": "^10.13.2",
+    "react-i18next": "^11.16.9",
     "react-redux": "^7.2.5",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.1",
     "redux": "^4.1.1",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "superagent": "^5.3.1"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.17.0",
     "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.17.12",
+    "@babel/preset-react": "^7.17.12",
     "@mstr/eslint-config-mstr": "^0.1.7",
     "@types/jest": "^25.2.3",
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
     "babel-preset-airbnb": "^4.5.0",
     "enzyme": "^3.10.0",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
@@ -69,7 +72,7 @@
     "redux-mock-store": "^1.5.4",
     "regenerator-runtime": "^0.13.9",
     "typescript": "^3.9.10",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^4.9.2"
   },
   "browserslist": {
     "production": [

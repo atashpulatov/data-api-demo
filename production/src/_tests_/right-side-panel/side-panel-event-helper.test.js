@@ -70,7 +70,7 @@ describe('SidePanelService', () => {
     const mockedRemoveNotification = jest.spyOn(notificationService, 'removeExistingNotification').mockImplementation();
     const mockedRemove = jest.spyOn(sidePanelService, 'remove').mockImplementation();
 
-    const exceContext = {
+    const excelContext = {
       sync: mockSync,
       workbook: {
         tables: {
@@ -79,7 +79,7 @@ describe('SidePanelService', () => {
       } };
 
     // when
-    await sidePanelEventHelper.setOnDeletedWorksheetEvent(exceContext);
+    await sidePanelEventHelper.setOnDeletedWorksheetEvent(excelContext);
     // then
     expect(mockedExcelContext).toBeCalled();
     expect(mockedGetObjects).toBeCalled();
@@ -90,11 +90,11 @@ describe('SidePanelService', () => {
 
   it.each`
   version   | firstCall | secondCall | eventAddedTimes
-  
+
   ${1.9}    | ${true}   | ${false}   | ${1}
   ${1.7}    | ${false}  | ${true}    | ${1}
   ${1.1}    | ${false}  | ${false}   | ${0}
-  
+
   `('should set up event listeners in addRemoveObjectListener', async ({ version, firstCall, secondCall, eventAddedTimes }) => {
   // given
     const mockSync = jest.fn();
@@ -111,6 +111,7 @@ describe('SidePanelService', () => {
       }
     };
 
+    jest.spyOn(sidePanelEventHelper, 'setOnDeletedWorksheetEvent').mockImplementation();
     const mockedExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(exceContext);
     // when
     await sidePanelEventHelper.addRemoveObjectListener();

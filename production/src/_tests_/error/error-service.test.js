@@ -355,6 +355,7 @@ describe('ErrorService', () => {
         response: { body: { code: '', }, },
       };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
+      global.setTimeout = jest.fn();
       // when
       errorService.handleError(error);
       // then

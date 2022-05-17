@@ -27,7 +27,7 @@ describe('sessionHelper', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   afterAll(() => {
@@ -96,14 +96,15 @@ describe('sessionHelper', () => {
   it('should call putSessions on installSessionProlongingHandler invocation', () => {
     // given
     const onSessionExpire = jest.fn();
-    jest.spyOn(authenticationService, 'putSessions');
-    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
+    const putSessionsMock = jest.spyOn(authenticationService, 'putSessions').mockImplementation();
+    jest.spyOn(window.navigator, 'onLine', 'get').mockReturnValueOnce(true);
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken', envUrl: 'Url' } });
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
     prolongSession();
 
     // then
-    expect(authenticationService.putSessions).toHaveBeenCalled();
+    expect(putSessionsMock).toHaveBeenCalled();
   });
 
   it('should call handleError in case of session expired', () => {
@@ -123,7 +124,7 @@ describe('sessionHelper', () => {
     authenticationService.putSessions = jest.fn().mockImplementationOnce(() => {
       throw sessionFailureError;
     });
-    jest.spyOn(errorService, 'handleError');
+    jest.spyOn(errorService, 'handleError').mockImplementation();
     jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);
@@ -156,7 +157,8 @@ describe('sessionHelper', () => {
 
   it('should call keepSessionAlive with default callback parameter', () => {
     // given
-    jest.spyOn(sessionHelper, 'keepSessionAlive');
+    jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementationOnce();
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ sessionReducer: { authToken: 'x-mstr-authToken' } });
 
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler();
@@ -169,7 +171,7 @@ describe('sessionHelper', () => {
   it('should call keepSessionAlive with callback function parameter', () => {
     // given
     const onSessionExpire = jest.fn();
-    jest.spyOn(sessionHelper, 'keepSessionAlive');
+    jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementationOnce();
 
     // when
     const prolongSession = sessionHelper.installSessionProlongingHandler(onSessionExpire);

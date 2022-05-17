@@ -24,6 +24,7 @@ describe('ButtonPopover', () => {
   });
   it('should clear timeout when unmounting component', () => {
     // given
+    global.clearTimeout = jest.fn();
     const componentWrapper = mount(
       <ButtonPopover>
         <Button />
@@ -51,6 +52,7 @@ describe('ButtonPopover', () => {
   });
   it('should clear timeout on mouseLeave event', () => {
     // given
+    global.clearTimeout = jest.fn();
     const componentWrapper = mount(
       <ButtonPopover>
         <Button />
