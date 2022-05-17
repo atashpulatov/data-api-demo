@@ -1,58 +1,58 @@
 {
   "en-us": {
-    "username": "test3@mstrtesting.onmicrosoft.com",
+    "username": "test@microstrategytest.onmicrosoft.com",
     "password": "FordFocus2019"
   },
   "es-es": {
-    "username": "testes@mstrtesting.onmicrosoft.com",
+    "username": "testes@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "fr-fr": {
-    "username": "testfr@mstrtesting.onmicrosoft.com",
+    "username": "testfr@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "it-it": {
-    "username": "testit@mstrtesting.onmicrosoft.com",
+    "username": "testit@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "zn-cn": {
-    "username": "testcn@mstrtesting.onmicrosoft.com",
+    "username": "testcn@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "zn-tw": {
-    "username": "testcn2@mstrtesting.onmicrosoft.com",
+    "username": "testcn2@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "de-de": {
-    "username": "testde@mstrtesting.onmicrosoft.com",
+    "username": "testde@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "nl-nl": {
-    "username": "testnl@mstrtesting.onmicrosoft.com",
+    "username": "testnl@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "da-dk": {
-    "username": "testdk@mstrtesting.onmicrosoft.com",
+    "username": "testdk@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "sv-se": {
-    "username": "testse@mstrtesting.onmicrosoft.com",
+    "username": "testse@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "pt-br": {
-    "username": "testpt@mstrtesting.onmicrosoft.com",
+    "username": "testpt@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "ja-jp": {
-    "username": "testjp@mstrtesting.onmicrosoft.com",
+    "username": "testjp@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "ko-kr": {
-    "username": "testkr@mstrtesting.onmicrosoft.com",
+    "username": "testkr@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   },
   "pl-pl": {
-    "username": "testpl@mstrtesting.onmicrosoft.com",
+    "username": "testpl@microstrategytest.onmicrosoft.com",
     "password": "Testing1212"
   }
 }

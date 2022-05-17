@@ -143,7 +143,7 @@ describe('Smart Folder - IMPORT -', () => {
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login('test3@mstrtesting.onmicrosoft.com', 'FordFocus2019');
+      OfficeLogin.login('test@microstrategytest.onmicrosoft.com', 'FordFocus2019');
     }
     OfficeWorksheet.createNewWorkbook();
     createManifestFile(webServerEnvironmentID);

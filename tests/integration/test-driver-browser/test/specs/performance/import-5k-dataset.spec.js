@@ -9,7 +9,7 @@ describe('Smart Folder - IMPORT -', () => {
   const objectName = '5k Sales Records.csv';
   let totalAddedImportingTime = 0;
   let numberOfExecutions = 0;
-  const serverVersion = 'Update 3'
+  const serverVersion = 'Update 3';
   const rows = 5000;
   const columns = 15;
   const clientCPUCores = 6;
@@ -20,7 +20,7 @@ describe('Smart Folder - IMPORT -', () => {
     OfficeWorksheet.openExcelHome();
     const url = browser.getUrl();
     if (url.includes('login.microsoftonline')) {
-      OfficeLogin.login('test3@mstrtesting.onmicrosoft.com', 'FordFocus2019');
+      OfficeLogin.login('test@microstrategytest.onmicrosoft.com', 'FordFocus2019');
     }
     OfficeWorksheet.createNewWorkbook();
     OfficeWorksheet.openPlugin();
