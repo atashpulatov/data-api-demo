@@ -8,9 +8,6 @@ include_recipe 'workspace::attributes_overrides'
 include_recipe 'nodejs'
 # include_recipe 'workspace::client_test_env'
 
-nodejs_npm 'yarn' do
-  version '1.22.16'
-end
 
 case node['platform']
 when 'redhat', 'centos', 'fedora', 'amazon'

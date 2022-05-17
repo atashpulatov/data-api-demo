@@ -18,9 +18,7 @@ export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 
 jdk_version="jdk-11.0.15"
 
-export NODE_HOME=/usr/local/nodejs-binary-10.16.3
-
-export PATH=$NODE_HOME/bin:$PATH
+nodejs_version="16.15.0"
 
 if uname -a | grep -q "Darwin"; then
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home
@@ -35,9 +33,14 @@ elif uname -a | grep -q "MSYS"; then
   export DOCKER_HOME=/C/Program\ Files/Docker/Docker/Resources/
   export MAVEN_HOME=/c/apache/apache-maven-3.6.3
   export PATH=/c/node/node-v10.16.3-win-x64:$JAVA_HOME/bin:$DOCKER_HOME/bin:$MAVEN_HOME/bin:$PATH
+  export NODE_HOME=/c/node/node-v$nodejs_version-win-x64/
+  export PATH=$NODE_HOME:$PATH
 else
   export JAVA_HOME=/usr/java/$jdk_version
   export PATH=$JAVA_HOME/bin:$PATH
+  export NODE_HOME=/usr/local/nodejs-binary-$nodejs_version
+  export PATH=$NODE_HOME/bin:$PATH
+  export PATH=~/.npm-global/bin:$PATH
 fi
 
 function become_data_bag_manager(){
