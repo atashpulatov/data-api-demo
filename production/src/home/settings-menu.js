@@ -14,8 +14,9 @@ import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import './settings-menu.scss';
 import { notificationService } from '../notification-v2/notification-service';
+import packageJson from '../../package.json';
 
-const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
+const APP_VERSION = packageJson.build;
 
 export const SettingsMenuNotConnected = ({
   userFullName,

@@ -14,6 +14,7 @@ import cacheReducer from './redux-reducer/cache-reducer/cache-reducer';
 import { popupStateReducer } from './redux-reducer/popup-state-reducer/popup-state-reducer';
 import { operationReducer } from './redux-reducer/operation-reducer/operation-reducer';
 import { objectReducer } from './redux-reducer/object-reducer/object-reducer';
+import packageJson from '../package.json';
 
 const rootReducer = combineReducers({
   sessionReducer,
@@ -46,7 +47,7 @@ export const reduxPersistor = persistStore(reduxStore);
 
 if (localStorage) {
   const version = localStorage.getItem('version');
-  const APP_VERSION = process.env.REACT_APP_MSTR_OFFICE_VERSION;
+  const APP_VERSION = packageJson.build;
   if (APP_VERSION !== version) {
     reduxPersistor.purge();
     localStorage.setItem('version', APP_VERSION);
