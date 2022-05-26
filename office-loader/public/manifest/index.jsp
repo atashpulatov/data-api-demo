@@ -4,7 +4,7 @@
 %><%!
     private static class UUIDType5 {
         private static final UUID NAMESPACE = UUID.fromString("94a1c4bb-9a81-a8b9-f9b0-0fa57409f25b");
-        private static final String MESSAGE_DIGEST_SHA_1 = "SHA-1";
+        private static final String MESSAGE_DIGEST_SHA_512 = "SHA-512";
 
         private static UUID nameUUIDFromUrl(String url) {
             final String urlNotNull = Objects.requireNonNull(url, "url is null");
@@ -19,9 +19,9 @@
         private static MessageDigest prepareMessageDigest(String url) {
             final MessageDigest md;
             try {
-                md = MessageDigest.getInstance(MESSAGE_DIGEST_SHA_1);
+                md = MessageDigest.getInstance(MESSAGE_DIGEST_SHA_512);
             } catch (NoSuchAlgorithmException e) {
-                throw new InternalError("SHA-1 not supported");
+                throw new InternalError("SHA-512 not supported");
             }
 
             final byte[] namespaceBytes = toBytes(NAMESPACE);
