@@ -46,15 +46,10 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
-    "@babel/plugin-transform-runtime": "^7.15.0",
     "@babel/preset-env": "^7.17.12",
     "@babel/preset-react": "^7.17.12",
     "@mstr/eslint-config-mstr": "^0.1.7",
-    "@types/jest": "^25.2.3",
-    "@typescript-eslint/eslint-plugin": "^2.34.0",
-    "@typescript-eslint/parser": "^2.34.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
-    "babel-preset-airbnb": "^4.5.0",
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^7.32.0",
@@ -71,7 +66,6 @@
     "office-addin-manifest": "^1.6.3",
     "redux-mock-store": "^1.5.4",
     "regenerator-runtime": "^0.13.9",
-    "typescript": "^3.9.10",
     "webpack-cli": "^4.9.2"
   },
   "browserslist": {
