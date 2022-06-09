@@ -25,7 +25,6 @@ when 'redhat', 'centos', 'fedora', 'amazon'
     user 'root'
     code <<-EOH
       chown -R jenkins:jenkins /var/lib/jenkins/.config || mkdir -p /var/lib/jenkins/.config && chown -R jenkins:jenkins /var/lib/jenkins/.config
-      chown -R jenkins:jenkins /var/lib/jenkins/.npm
     EOH
     only_if "echo $USER | grep jenkins"
   end
