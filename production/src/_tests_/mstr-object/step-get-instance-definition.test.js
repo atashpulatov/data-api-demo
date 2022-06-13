@@ -8,7 +8,7 @@ import { officeApiCrosstabHelper } from '../../office/api/office-api-crosstab-he
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import { GET_OFFICE_TABLE_EDIT_REFRESH, GET_OFFICE_TABLE_IMPORT } from '../../operation/operation-steps';
 import operationErrorHandler from '../../operation/operation-error-handler';
-import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
+import { errorMessages } from '../../error/constants';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 
 describe('StepGetInstanceDefinition', () => {
@@ -48,11 +48,11 @@ describe('StepGetInstanceDefinition', () => {
   it.each`
   handleOperationErrorCallNo      | expectedErrorMsg         | rowsParam | isPromptedParam
   
-  ${1}                            | ${ALL_DATA_FILTERED_OUT} | ${[]}     | ${true}
-  ${0}                            | ${ALL_DATA_FILTERED_OUT} | ${[42]}   | ${true}
+  ${1}                            | ${errorMessages.ALL_DATA_FILTERED_OUT} | ${[]}     | ${true}
+  ${0}                            | ${errorMessages.ALL_DATA_FILTERED_OUT} | ${[42]}   | ${true}
                                             
-  ${1}                            | ${NO_DATA_RETURNED}      | ${[]}     | ${false}
-  ${0}                            | ${NO_DATA_RETURNED}      | ${[42]}   | ${false}
+  ${1}                            | ${errorMessages.NO_DATA_RETURNED}      | ${[]}     | ${false}
+  ${0}                            | ${errorMessages.NO_DATA_RETURNED}      | ${[42]}   | ${false}
   
   `('getInstanceDefinition works as expected when mstrTable.rows.length is 0',
     async ({

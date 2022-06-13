@@ -21,7 +21,7 @@ import {
 } from './notification-actions';
 import { titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap } from './notification-title-maps';
 import { customT } from '../../customTranslation';
-import { GENERIC_SERVER_ERR } from '../../error/constants';
+import { errorMessages } from '../../error/constants';
 
 const initialState = { notifications: [], globalNotification: { type: '' } };
 
@@ -188,7 +188,7 @@ const getCancelButton = (objectWorkingId, operationType) => [{
 }];
 
 function getTitle(payload, notificationToUpdate) {
-  return payload.notification.title === GENERIC_SERVER_ERR
+  return payload.notification.title === errorMessages.GENERIC_SERVER_ERR
     ? titleOperationFailedMap[notificationToUpdate.operationType]
     : payload.notification.title;
 }

@@ -1,4 +1,4 @@
-import { TABLE_OVERLAP } from '../../error/constants';
+import { errorMessages } from '../../error/constants';
 import { OverlappingTablesError } from '../../error/overlapping-tables-error';
 
 class OfficeTableHelperRange {
@@ -241,7 +241,7 @@ class OfficeTableHelperRange {
     await excelContext.sync();
 
     if (!usedDataRange.isNullObject) {
-      throw new OverlappingTablesError(TABLE_OVERLAP);
+      throw new OverlappingTablesError(errorMessages.TABLE_OVERLAP);
     }
   };
 }

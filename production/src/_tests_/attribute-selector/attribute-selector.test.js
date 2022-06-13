@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { AttributeMetricFilter } from '@mstr/mstr-react-library';
 import { AttributeSelectorNotConnected } from '../../attribute-selector/attribute-selector';
 import { officeContext } from '../../office/office-context';
-import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../../error/constants';
+import { errorMessages, errorCodes } from '../../error/constants';
 
 jest.mock('../../office/office-context');
 
@@ -87,9 +87,9 @@ describe('AttributeSelectorNotConnected', () => {
         key: 'value',
         body: {
           code: ERR009,
-          message: SESSION_EXTENSION_FAILURE_MESSAGE,
+          message: errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE,
         },
-        text: `{code: ${ERR009}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+        text: `{code: ${ERR009}, message: ${errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       },
     };
     const displayLanguageMock = 'en-US';

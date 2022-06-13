@@ -4,9 +4,7 @@ import './popup-buttons.css';
 import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  NOT_PUBLISHED_CUBE, NO_DATA_SELECTED, NOT_SUPPORTED_VIZ, NOT_AVAILABLE_FOR_DOSSIER, CHECKING_SELECTION
-} from '../../error/constants';
+import { errorMessages } from '../../error/constants';
 import { DataPreviewButton } from './data-preview-button';
 import { BackButton } from './back-button';
 import { PrepareDataButton } from './prepare-data-button';
@@ -16,20 +14,20 @@ import { CancelButton } from './cancel-button';
 const getDisableReason = (isPublished, disableSecondary, disableActiveActions) => {
   const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions);
   return disableSecondary
-    ? NOT_AVAILABLE_FOR_DOSSIER
+    ? errorMessages.NOT_AVAILABLE_FOR_DOSSIER
     : disableReasonForImport;
 };
 
 const getDisableReasonImport = (isPublished, disableActiveActions, disableSecondary, checkingSelection) => {
   if (!isPublished && isPublished !== undefined) {
-    if (disableSecondary) { return NOT_SUPPORTED_VIZ; }
-    return NOT_PUBLISHED_CUBE;
+    if (disableSecondary) { return errorMessages.NOT_SUPPORTED_VIZ; }
+    return errorMessages.NOT_PUBLISHED_CUBE;
   }
   if (disableActiveActions) {
-    return NO_DATA_SELECTED;
+    return errorMessages.NO_DATA_SELECTED;
   }
   if (checkingSelection !== undefined && checkingSelection) {
-    return CHECKING_SELECTION;
+    return errorMessages.CHECKING_SELECTION;
   }
 };
 

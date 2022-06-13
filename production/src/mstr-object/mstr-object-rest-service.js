@@ -1,5 +1,5 @@
 import request from 'superagent';
-import { NO_DATA_RETURNED, PROBLEM_WITH_REQUEST } from '../error/constants';
+import { errorMessages } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
@@ -30,7 +30,7 @@ function parseInstanceDefinition(res, attrforms) {
   }
   const { instanceId, data, internal } = body;
   body.attrforms = attrforms;
-  if (data.paging.total === 0) { throw new Error(NO_DATA_RETURNED); }
+  if (data.paging.total === 0) { throw new Error(errorMessages.NO_DATA_RETURNED); }
   const mstrTable = officeConverterServiceV2.createTable(body);
   const { rows, columns } = checkTableDimensions(mstrTable.tableSize);
 
@@ -61,7 +61,7 @@ function getFullPath({
 
 function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1, visualizationType) {
   if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
-    throw new Error(PROBLEM_WITH_REQUEST);
+    throw new Error(errorMessages.PROBLEM_WITH_REQUEST);
   }
   const contentFields = getFetchObjectContentFields(visualizationType);
   const validPath = encodeURI(`${fullPath}?offset=${offset}&limit=${limit}&fields=${contentFields}`);
@@ -143,7 +143,7 @@ class MstrObjectRestService {
 
       const { body } = await fetchObjectContent(fullPath, authToken, projectId, offset, limit, visualizationType);
       if (!body.data || !body.data.paging) {
-        throw new Error(NO_DATA_RETURNED);
+        throw new Error(errorMessages.NO_DATA_RETURNED);
       }
 
       const { current } = body.data.paging;

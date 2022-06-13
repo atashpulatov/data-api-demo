@@ -8,7 +8,7 @@ import dossierInstanceDefinition from './dossier-instance-definition';
 import mstrObjectEnum from '../mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
-import { ALL_DATA_FILTERED_OUT, NO_DATA_RETURNED } from '../../error/constants';
+import { errorMessages } from '../../error/constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -108,7 +108,7 @@ class StepGetInstanceDefinition {
       };
 
       if (mstrTable.rows.length === 0) {
-        throw new Error(isPrompted ? ALL_DATA_FILTERED_OUT : NO_DATA_RETURNED);
+        throw new Error(isPrompted ? errorMessages.ALL_DATA_FILTERED_OUT : errorMessages.NO_DATA_RETURNED);
       }
 
       operationStepDispatcher.updateOperation(updatedOperation);

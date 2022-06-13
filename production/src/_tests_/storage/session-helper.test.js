@@ -6,7 +6,7 @@ import { errorService } from '../../error/error-handler';
 import { authenticationService } from '../../authentication/auth-rest-service';
 import { HomeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
-import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../../error/constants';
+import { errorMessages } from '../../error/constants';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 
 describe('sessionHelper', () => {
@@ -115,9 +115,9 @@ describe('sessionHelper', () => {
         key: 'value',
         body: {
           code: 'ERR009',
-          message: SESSION_EXTENSION_FAILURE_MESSAGE,
+          message: errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE,
         },
-        text: `{code: ERR009, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+        text: `{code: ERR009, message: ${errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       },
     };
     const onSessionExpire = jest.fn();

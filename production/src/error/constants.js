@@ -57,75 +57,77 @@ export const httpStatusToErrorType = withDefaultValue({
   504: errorTypes.CONNECTION_BROKEN_ERR,
 }, errorTypes.UNKNOWN_ERR);
 
-export const GENERIC_SERVER_ERR = 'This object cannot be imported.';
-export const ALL_DATA_FILTERED_OUT = 'No data returned for this view. This might be because the applied prompt excludes all data.';
-export const EMPTY_REPORT = 'You cannot import an empty object.';
-export const NO_DATA_RETURNED = 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.';
-export const NOT_SUPPORTED_SERVER_ERR = 'This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.';
-export const NOT_SUPPORTED_PROMPTS_REFRESH = 'Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.';
-export const NOT_PUBLISHED_CUBE = 'You cannot import an unpublished cube.';
-export const NO_DATA_SELECTED = 'This button is currently disabled because you didn’t select any data';
-export const NOT_IN_METADATA = 'The object no longer exists, it has been removed from the data source.';
-export const PROJECT_ROW_LIMIT = 'This object exceeds the MicroStrategy project row limit. Please contact your administrator.';
-export const TABLE_OVERLAP = 'This operation requires the use of additional empty rows or columns.';
-export const ERROR_POPUP_CLOSED = 'Function close call failed, error code:';
-export const NOT_SUPPORTED_CUSTOM_GROUP = 'This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.';
-export const TABLE_REMOVED = 'It looks like the object was deleted from the workbook. Delete it in the sidebar or click Add Data to import it again.';
-export const ENDPOINT_NOT_REACHED = 'The endpoint cannot be reached';
-export const EXCEEDS_WORKSHEET_LIMITS = 'The table you try to import exceeds the worksheet limits.';
-export const EXCEEDS_EXCEL_API_LIMITS = 'Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.';
-export const OUTSIDE_OF_OFFICE = 'Please run plugin inside Office';
-export const CONNECTION_BROKEN = 'Environment is unreachable. Please check your internet connection.';
-export const WRONG_CREDENTIALS = 'Wrong username or password.';
-export const SESSION_EXPIRED = 'Your session has expired. Please log in.';
-export const PROBLEM_WITH_REQUEST = 'There has been a problem with your request';
-export const UNKNOWN_ERROR = 'An error has occurred';
-export const LOGIN_FAILURE = 'Login failure';
-export const OBJ_REMOVED_FROM_EXCEL = 'This object does not exist in the workbook anymore.';
-export const SHEET_HIDDEN = 'To view the data, please unhide the worksheet.';
-export const PROTECTED_SHEET = 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.';
-export const NOT_SUPPORTED_VIZ = 'Selected visualization cannot be imported in current version of the Add-in';
-export const INVALID_VIZ_KEY_MESSAGE = 'You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.';
-export const SESSION_EXTENSION_FAILURE_MESSAGE = 'The user\'s session has expired, please reauthenticate';
-export const DOSSIER_HAS_CHANGED = 'The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.';
-export const NOT_AVAILABLE_FOR_DOSSIER = 'This option is not available for dossier';
-export const CHECKING_SELECTION = 'Checking selection...';
-export const MISSING_ELEMENT_OBJECT_MESSAGE = 'This action cannot be performed. It appears that part of the data has been removed from the data source. Please click Edit to see the changes.';
+export const errorMessages = {
+  GENERIC_SERVER_ERR: 'This object cannot be imported.',
+  ALL_DATA_FILTERED_OUT: 'No data returned for this view. This might be because the applied prompt excludes all data.',
+  EMPTY_REPORT: 'You cannot import an empty object.',
+  NO_DATA_RETURNED: 'This object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.',
+  NOT_SUPPORTED_SERVER_ERR: 'This object cannot be imported. Objects with cross tabs, totals, or subtotals are not supported in this version of MicroStrategy for Office.',
+  NOT_SUPPORTED_PROMPTS_REFRESH: 'Objects with prompts cannot be refreshed in this version of MicroStrategy for Office.',
+  NOT_PUBLISHED_CUBE: 'You cannot import an unpublished cube.',
+  NO_DATA_SELECTED: 'This button is currently disabled because you didn’t select any data',
+  NOT_IN_METADATA: 'The object no longer exists, it has been removed from the data source.',
+  PROJECT_ROW_LIMIT: 'This object exceeds the MicroStrategy project row limit. Please contact your administrator.',
+  TABLE_OVERLAP: 'This operation requires the use of additional empty rows or columns.',
+  ERROR_POPUP_CLOSED: 'Function close call failed, error code:',
+  NOT_SUPPORTED_CUSTOM_GROUP: 'This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.',
+  TABLE_REMOVED: 'It looks like the object was deleted from the workbook. Delete it in the sidebar or click Add Data to import it again.',
+  ENDPOINT_NOT_REACHED: 'The endpoint cannot be reached',
+  EXCEEDS_WORKSHEET_LIMITS: 'The table you try to import exceeds the worksheet limits.',
+  EXCEEDS_EXCEL_API_LIMITS: 'Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.',
+  OUTSIDE_OF_OFFICE: 'Please run plugin inside Office',
+  CONNECTION_BROKEN: 'Environment is unreachable. Please check your internet connection.',
+  WRONG_CREDENTIALS: 'Wrong username or password.',
+  SESSION_EXPIRED: 'Your session has expired. Please log in.',
+  PROBLEM_WITH_REQUEST: 'There has been a problem with your request',
+  UNKNOWN_ERROR: 'An error has occurred',
+  LOGIN_FAILURE: 'Login failure',
+  OBJ_REMOVED_FROM_EXCEL: 'This object does not exist in the workbook anymore.',
+  SHEET_HIDDEN: 'To view the data, please unhide the worksheet.',
+  PROTECTED_SHEET: 'The table you are trying to manipulate is in a protected sheet. To make a change, unprotect the sheet. You might be requested to enter a password.',
+  NOT_SUPPORTED_VIZ: 'Selected visualization cannot be imported in current version of the Add-in',
+  INVALID_VIZ_KEY_MESSAGE: 'You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.',
+  SESSION_EXTENSION_FAILURE_MESSAGE: 'The user\'s session has expired, please reauthenticate',
+  DOSSIER_HAS_CHANGED: 'The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.',
+  NOT_AVAILABLE_FOR_DOSSIER: 'This option is not available for dossier',
+  CHECKING_SELECTION: 'Checking selection...',
+  MISSING_ELEMENT_OBJECT_MESSAGE: 'This action cannot be performed. It appears that part of the data has been removed from the data source. Please click Edit to see the changes.'
+};
 
 // temporarily we map all those codes to one message; may be changed in the future
 const iServerErrorMessages = withDefaultValue({
-  '-2147171501': NOT_SUPPORTED_SERVER_ERR,
-  '-2147171502': NOT_SUPPORTED_CUSTOM_GROUP,
-  '-2147171503': NOT_SUPPORTED_SERVER_ERR,
-  '-2147171504': NOT_SUPPORTED_SERVER_ERR,
-  '-2147072488': NOT_PUBLISHED_CUBE,
-  '-2147466604': NOT_PUBLISHED_CUBE,
-  '-2147205488': PROJECT_ROW_LIMIT,
-  '-2147216373': NOT_IN_METADATA,
-  '-2147216959': LOGIN_FAILURE,
-  '-2147207419': CONNECTION_BROKEN,
-  '-2147213784': NO_DATA_RETURNED,
-  '-2147213377': DOSSIER_HAS_CHANGED,
-}, GENERIC_SERVER_ERR);
+  '-2147171501': errorMessages.NOT_SUPPORTED_SERVER_ERR,
+  '-2147171502': errorMessages.NOT_SUPPORTED_CUSTOM_GROUP,
+  '-2147171503': errorMessages.NOT_SUPPORTED_SERVER_ERR,
+  '-2147171504': errorMessages.NOT_SUPPORTED_SERVER_ERR,
+  '-2147072488': errorMessages.NOT_PUBLISHED_CUBE,
+  '-2147466604': errorMessages.NOT_PUBLISHED_CUBE,
+  '-2147205488': errorMessages.PROJECT_ROW_LIMIT,
+  '-2147216373': errorMessages.NOT_IN_METADATA,
+  '-2147216959': errorMessages.LOGIN_FAILURE,
+  '-2147207419': errorMessages.CONNECTION_BROKEN,
+  '-2147213784': errorMessages.NO_DATA_RETURNED,
+  '-2147213377': errorMessages.DOSSIER_HAS_CHANGED,
+}, errorMessages.GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({
   [errorTypes.ENV_NOT_FOUND_ERR]: ({ error }) => handleEnvNotFoundError(error),
-  [errorTypes.CONNECTION_BROKEN_ERR]: () => CONNECTION_BROKEN,
+  [errorTypes.CONNECTION_BROKEN_ERR]: () => errorMessages.CONNECTION_BROKEN,
   [errorTypes.UNAUTHORIZED_ERR]: ({ error }) => handleUnauthorizedError(error),
   [errorTypes.BAD_REQUEST_ERR]: ({ error }) => handleBadRequestError(error),
   [errorTypes.INTERNAL_SERVER_ERR]: ({ error }) => iServerErrorMessages((error.response && error.response.body && error.response.body.iServerCode) || '-1'),
-  [errorTypes.PROMPTED_REPORT_ERR]: () => NOT_SUPPORTED_PROMPTS_REFRESH,
-  [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => EXCEEDS_WORKSHEET_LIMITS,
-  [errorTypes.OVERLAPPING_TABLES_ERR]: () => TABLE_OVERLAP,
-  [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => OUTSIDE_OF_OFFICE,
-  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: () => OBJ_REMOVED_FROM_EXCEL,
-  [errorTypes.SHEET_HIDDEN_ERR]: () => SHEET_HIDDEN,
+  [errorTypes.PROMPTED_REPORT_ERR]: () => errorMessages.NOT_SUPPORTED_PROMPTS_REFRESH,
+  [errorTypes.OUTSIDE_OF_RANGE_ERR]: () => errorMessages.EXCEEDS_WORKSHEET_LIMITS,
+  [errorTypes.OVERLAPPING_TABLES_ERR]: () => errorMessages.TABLE_OVERLAP,
+  [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => errorMessages.OUTSIDE_OF_OFFICE,
+  [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: () => errorMessages.OBJ_REMOVED_FROM_EXCEL,
+  [errorTypes.SHEET_HIDDEN_ERR]: () => errorMessages.SHEET_HIDDEN,
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `${customT('An error has occurred in Excel.')} ${error.message}`,
-  [errorTypes.PROTECTED_SHEET_ERR]: () => PROTECTED_SHEET,
-  [errorTypes.INVALID_VIZ_KEY]: () => INVALID_VIZ_KEY_MESSAGE,
-  [errorTypes.EXCEEDS_EXCEL_API_LIMITS]: () => EXCEEDS_EXCEL_API_LIMITS,
+  [errorTypes.PROTECTED_SHEET_ERR]: () => errorMessages.PROTECTED_SHEET,
+  [errorTypes.INVALID_VIZ_KEY]: () => errorMessages.INVALID_VIZ_KEY_MESSAGE,
+  [errorTypes.EXCEEDS_EXCEL_API_LIMITS]: () => errorMessages.EXCEEDS_EXCEL_API_LIMITS,
 },
-({ error }) => error.message || UNKNOWN_ERROR);
+({ error }) => error.message || errorMessages.UNKNOWN_ERROR);
 
 export const httpStatusCodes = {
   UNAUTHORIZED_ERROR: 401,
@@ -146,9 +148,9 @@ export const handleBadRequestError = (error) => {
     && error.response.body.message.includes('Failed to find the')
     && error.response.body.message.includes('in the report or cube.')
   ) {
-    return MISSING_ELEMENT_OBJECT_MESSAGE;
+    return errorMessages.MISSING_ELEMENT_OBJECT_MESSAGE;
   }
-  return PROBLEM_WITH_REQUEST;
+  return errorMessages.PROBLEM_WITH_REQUEST;
 };
 
 export const handleUnauthorizedError = (error) => {
@@ -156,11 +158,11 @@ export const handleUnauthorizedError = (error) => {
   if (
     (error.response.body && error.response.body.code === ERR003)
     && (error.response.body.iServerCode)
-    && (iServerErrorMessages(error.response.body.iServerCode) === LOGIN_FAILURE)
+    && (iServerErrorMessages(error.response.body.iServerCode) === errorMessages.LOGIN_FAILURE)
   ) {
-    return WRONG_CREDENTIALS;
+    return errorMessages.WRONG_CREDENTIALS;
   }
-  return SESSION_EXPIRED;
+  return errorMessages.SESSION_EXPIRED;
 };
 
 export const handleEnvNotFoundError = (error) => {
@@ -172,7 +174,7 @@ export const handleEnvNotFoundError = (error) => {
     if (error.mstrObjectType) {
       return `This ${error.mstrObjectType} was deleted.`;
     }
-    return NOT_IN_METADATA;
+    return errorMessages.NOT_IN_METADATA;
   }
-  return ENDPOINT_NOT_REACHED;
+  return errorMessages.ENDPOINT_NOT_REACHED;
 };

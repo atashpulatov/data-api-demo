@@ -8,7 +8,7 @@ import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
-import { SESSION_EXTENSION_FAILURE_MESSAGE, errorCodes } from '../error/constants';
+import { errorMessages, errorCodes } from '../error/constants';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 
 export class AttributeSelectorNotConnected extends Component {
@@ -32,9 +32,9 @@ export class AttributeSelectorNotConnected extends Component {
         ...e.response,
         body: {
           code: ERR009,
-          message: SESSION_EXTENSION_FAILURE_MESSAGE,
+          message: errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE,
         },
-        text: `{code: ${ERR009}, message: ${SESSION_EXTENSION_FAILURE_MESSAGE}}`,
+        text: `{code: ${ERR009}, message: ${errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       }
     };
     handlePopupErrors(newErrorObject);

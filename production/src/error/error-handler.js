@@ -7,6 +7,7 @@ import {
   stringMessageToErrorType,
   errorMessageFactory,
   incomingErrorStrings,
+  errorMessages
 } from './constants';
 import {
   IMPORT_OPERATION,
@@ -58,15 +59,23 @@ class ErrorService {
     || this.getRestErrorType(updateError);
   }
 
-  getErrorDetails = (error, errorMessage, errorType) => {
+  getErrorDetails = (error, errorMessage) => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
     let details;
-    switch (errorType) {
-      case 'exceedExcelApiLimit':
+    const {
+      EXCEEDS_EXCEL_API_LIMITS, SHEET_HIDDEN, TABLE_OVERLAP, INVALID_VIZ_KEY_MESSAGE, NOT_IN_METADATA, EMPTY_REPORT
+    } = errorMessages;
+    switch (errorMessage) {
+      case EXCEEDS_EXCEL_API_LIMITS:
+      case SHEET_HIDDEN:
+      case TABLE_OVERLAP:
+      case INVALID_VIZ_KEY_MESSAGE:
+      case NOT_IN_METADATA:
+      case EMPTY_REPORT:
         details = '';
         break;
       default:
-        details = errorMessage !== errorDetails || errorType === 'exceedExcelApiLimit' ? errorDetails : '';
+        details = errorMessage !== errorDetails ? errorDetails : '';
         break;
     }
     return details;

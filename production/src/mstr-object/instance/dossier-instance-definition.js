@@ -2,9 +2,7 @@ import mstrObjectEnum from '../mstr-object-type-enum';
 import { mstrObjectRestService } from '../mstr-object-rest-service';
 import { IMPORT_OPERATION } from '../../operation/operation-type-names';
 import { errorService } from '../../error/error-handler';
-import {
-  errorTypes, incomingErrorStrings, INVALID_VIZ_KEY_MESSAGE, DOSSIER_HAS_CHANGED
-} from '../../error/constants';
+import { errorTypes, incomingErrorStrings, errorMessages } from '../../error/constants';
 import { visualizationInfoService } from '../visualization-info-service';
 
 class DossierInstanceDefinition {
@@ -78,7 +76,7 @@ class DossierInstanceDefinition {
    * Returns new visualization info object.
    *
    * If creating the visualization info fails and if the error is due to changed dossier structure,
-   * throws the error that dossier removed has changed (DOSSIER_HAS_CHANGED).
+   * throws the error that dossier removed has changed (errorMessages.DOSSIER_HAS_CHANGED).
    *
    * If there is no visualization for a given key, throws error that dossier doesn't exist (INVALID_VIZ_KEY_MESSAGE).
    *
@@ -88,8 +86,8 @@ class DossierInstanceDefinition {
    * @param {Object} instanceId Id of the created instance
    * @returns {Object} Contains info for visualization.
    *
-   * @throws {Error} DOSSIER_HAS_CHANGED when dossier has changed.
-   * @throws {Error} INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
+   * @throws {Error} errorMessages.DOSSIER_HAS_CHANGED when dossier has changed.
+   * @throws {Error} errorMessages.INVALID_VIZ_KEY_MESSAGE when dossier is not supported.
    */
   getUpdatedVisualizationInfo = async (projectId, objectId, visualizationKey, instanceId) => {
     try {
@@ -102,12 +100,12 @@ class DossierInstanceDefinition {
       if (visualizationInfo) {
         return visualizationInfo;
       }
-      throw new Error(DOSSIER_HAS_CHANGED);
+      throw new Error(errorMessages.DOSSIER_HAS_CHANGED);
     } catch (error) {
-      if (errorService.getErrorMessage(error) === DOSSIER_HAS_CHANGED) {
-        throw new Error(DOSSIER_HAS_CHANGED);
+      if (errorService.getErrorMessage(error) === errorMessages.DOSSIER_HAS_CHANGED) {
+        throw new Error(errorMessages.DOSSIER_HAS_CHANGED);
       }
-      throw new Error(INVALID_VIZ_KEY_MESSAGE);
+      throw new Error(errorMessages.INVALID_VIZ_KEY_MESSAGE);
     }
   };
 
