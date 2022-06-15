@@ -242,5 +242,6 @@
    "This operation requires the use of additional empty rows or columns.": "Questa operazione richiede l'utilizzo di righe o colonne vuote aggiuntive.",
    "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "Questo oggetto supera il limite di riga del progetto MicroStrategy. Contattare l'amministratore.",
    "To view the data, please unhide the worksheet.": "Per visualizzare i dati, scopri il foglio di lavoro.",
-   "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Importazione non riuscita perché il limite di dimensione del payload per qualsiasi richiesta o risposta di Excel Online è 5 MB. Prova a limitare i dati."
+   "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Importazione non riuscita perché il limite di dimensione del payload per qualsiasi richiesta o risposta di Excel Online è 5 MB. Prova a limitare i dati.",
+   "Please select only one range before import.": "Selezionare un solo intervallo prima dell'importazione."
 }
