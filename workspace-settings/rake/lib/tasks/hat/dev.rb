@@ -159,8 +159,8 @@ def install_dependencies(working_dir)
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/production"
   shell_command! "rm -rf node_modules", cwd: "#{working_dir}/office-loader"
   update_package_json(working_dir)
-  shell_command! "npm install", cwd: "#{working_dir}/production"
-  shell_command! "yarn install --network-concurrency 1", cwd: "#{working_dir}/office-loader"
+  shell_command! "npm ci", cwd: "#{working_dir}/production"
+  shell_command! "yarn install --frozen-lockfile", cwd: "#{working_dir}/office-loader"
 end
 
 def update_package_json(working_dir)

@@ -2,10 +2,43 @@ import {
   handleBadRequestError,
   handleEnvNotFoundError,
   handleUnauthorizedError,
-  errorMessages
+  errorMessages,
+  handleWrongRange
 } from '../../error/constants';
 
 describe('Constants', () => {
+  describe('handleWrongRange', () => {
+    it('should return errorMessages.UNKNOWN_ERROR ', () => {
+      // given
+      const error = {
+
+      };
+      // when
+      const result = handleWrongRange(error);
+      // then
+      expect(result).toBe(errorMessages.UNKNOWN_ERROR);
+    });
+    it('should return errorMessages.SHEET_HIDDEN ', () => {
+      // given
+      const error = {
+        debugInfo: { errorLocation: 'Range.select' },
+      };
+      // when
+      const result = handleWrongRange(error);
+      // then
+      expect(result).toBe(errorMessages.SHEET_HIDDEN);
+    });
+    it('should return errorMessages.WRONG_RANGE ', () => {
+      // given
+      const error = {
+        debugInfo: { errorLocation: 'Workbook.getSelectedRange' },
+      };
+      // when
+      const result = handleWrongRange(error);
+      // then
+      expect(result).toBe(errorMessages.WRONG_RANGE);
+    });
+  });
   describe('handleBadRequestError', () => {
     it('should return errorMessages.MISSING_ELEMENT_OBJECT_MESSAGE ', () => {
       // given

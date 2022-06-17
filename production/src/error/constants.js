@@ -36,6 +36,11 @@ export const incomingErrorStrings = {
   INVALID_VIZ_KEY: 'Invalid visualization key',
 };
 
+export const errorLocation = {
+  MULTIPLE_RANGE_SELECTED: 'Workbook.getSelectedRange',
+  SHEET_HIDDEN: 'Range.select'
+};
+
 export const stringMessageToErrorType = withDefaultValue({
   [incomingErrorStrings.EXCEL_NOT_DEFINED]: errorTypes.RUN_OUTSIDE_OFFICE_ERR,
   [incomingErrorStrings.TABLE_OVERLAP]: errorTypes.OVERLAPPING_TABLES_ERR,
@@ -91,7 +96,8 @@ export const errorMessages = {
   DOSSIER_HAS_CHANGED: 'The object cannot be refreshed because the dossier has changed. You can edit the object or remove it.',
   NOT_AVAILABLE_FOR_DOSSIER: 'This option is not available for dossier',
   CHECKING_SELECTION: 'Checking selection...',
-  MISSING_ELEMENT_OBJECT_MESSAGE: 'This action cannot be performed. It appears that part of the data has been removed from the data source. Please click Edit to see the changes.'
+  MISSING_ELEMENT_OBJECT_MESSAGE: 'This action cannot be performed. It appears that part of the data has been removed from the data source. Please click Edit to see the changes.',
+  WRONG_RANGE: 'Please select only one range before import.'
 };
 
 // temporarily we map all those codes to one message; may be changed in the future
@@ -121,7 +127,7 @@ export const errorMessageFactory = withDefaultValue({
   [errorTypes.OVERLAPPING_TABLES_ERR]: () => errorMessages.TABLE_OVERLAP,
   [errorTypes.RUN_OUTSIDE_OFFICE_ERR]: () => errorMessages.OUTSIDE_OF_OFFICE,
   [errorTypes.TABLE_REMOVED_FROM_EXCEL_ERR]: () => errorMessages.OBJ_REMOVED_FROM_EXCEL,
-  [errorTypes.SHEET_HIDDEN_ERR]: () => errorMessages.SHEET_HIDDEN,
+  [errorTypes.SHEET_HIDDEN_ERR]: ({ error }) => handleWrongRange(error),
   [errorTypes.GENERIC_OFFICE_ERR]: ({ error }) => `${customT('An error has occurred in Excel.')} ${error.message}`,
   [errorTypes.PROTECTED_SHEET_ERR]: () => errorMessages.PROTECTED_SHEET,
   [errorTypes.INVALID_VIZ_KEY]: () => errorMessages.INVALID_VIZ_KEY_MESSAGE,
@@ -177,4 +183,19 @@ export const handleEnvNotFoundError = (error) => {
     return errorMessages.NOT_IN_METADATA;
   }
   return errorMessages.ENDPOINT_NOT_REACHED;
+};
+
+export const handleWrongRange = (error) => {
+  if (!error.debugInfo) {
+    return errorMessages.UNKNOWN_ERROR;
+  }
+
+  switch (error.debugInfo.errorLocation) {
+    case errorLocation.SHEET_HIDDEN:
+      return errorMessages.SHEET_HIDDEN;
+    case errorLocation.MULTIPLE_RANGE_SELECTED:
+      return errorMessages.WRONG_RANGE;
+    default:
+      return errorMessages.UNKNOWN_ERROR;
+  }
 };
