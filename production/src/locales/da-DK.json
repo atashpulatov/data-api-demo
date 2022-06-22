@@ -243,5 +243,6 @@
    "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "Dette objekt overskrider MicroStrategy-projektets rækkebegrænsning. Kontakt administratoren.",
    "To view the data, please unhide the worksheet.": "Du kan se dataene ved at vise regnearket.",
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Importen mislykkedes, fordi størrelsesbegrænsningen for nyttelasten i alle Excel Online-anmodninger eller -svar er 5MB. Prøv at begrænse dine data.",
-   "Please select only one range before import.": "Vælg kun et interval inden import."
+   "Please select only one range before import.": "Vælg kun et interval inden import.",
+   "Apply": "Anvend"
 }

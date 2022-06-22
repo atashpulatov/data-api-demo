@@ -243,5 +243,6 @@
    "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "此对象超过了 MicroStrategy 项目的行数上限。请联系您的管理员。",
    "To view the data, please unhide the worksheet.": "要查看数据，请先取消隐藏工作表。",
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "导入失败，Execel Online 单次请求或响应的有效载荷上限是5MB。请缩小您的数据。",
-   "Please select only one range before import.": "请在导入前仅选择一个范围。"
+   "Please select only one range before import.": "请在导入前仅选择一个范围。",
+   "Apply": "应用"
 }

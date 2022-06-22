@@ -243,5 +243,6 @@
    "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "This object exceeds the MicroStrategy project row limit. Please contact your administrator.",
    "To view the data, please unhide the worksheet.": "To view the data, please unhide the worksheet.",
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Import failed because the payload size limit for any Excel Online request or response is 5 MB. Try to limit your data.",
-   "Please select only one range before import.": "Please select only one range before import."
+   "Please select only one range before import.": "Please select only one range before import.",
+   "Apply": "Apply"
 }
