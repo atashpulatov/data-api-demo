@@ -15,8 +15,12 @@ import { sessionActions } from '../redux-reducer/session-reducer/session-actions
 import './settings-menu.scss';
 import { notificationService } from '../notification-v2/notification-service';
 import packageJson from '../../package.json';
+import getDocumentationLocale from '../helpers/get-documentation-locale';
 
 const APP_VERSION = packageJson.build;
+
+const { Office } = window;
+const language = Office?.context?.displayLanguage;
 
 export const SettingsMenuNotConnected = ({
   userFullName,
@@ -33,7 +37,6 @@ export const SettingsMenuNotConnected = ({
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && objects && objects.length > 0;
   const prepareEmail = () => {
-    const { Office } = window;
     if (!Office) { return '#'; } // If no Office return anchor url
     const { host, platform, version } = Office.context.diagnostics;
     const excelAPI = officeContext.getRequirementSet();
@@ -127,7 +130,7 @@ export const SettingsMenuNotConnected = ({
       <li>
         <a
           tabIndex="0"
-          href="https://www2.microstrategy.com/producthelp/Current/Office/index.htm"
+          href={`https://www2.microstrategy.com/producthelp/Current/Office/${getDocumentationLocale(language)}/index.htm`}
           target="_blank"
           rel="noopener noreferrer"
         >
