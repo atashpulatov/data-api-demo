@@ -152,7 +152,7 @@ export const SettingsMenuNotConnected = ({
         size="small"
         role="menuitem"
         onClick={() => logout(() => clearCache(userID))}
-        onKeyUp={() => logout(() => clearCache(userID))}>
+        onKeyPress={() => logout(() => clearCache(userID))}>
         {t('Log Out')}
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>

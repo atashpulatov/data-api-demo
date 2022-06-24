@@ -27,9 +27,15 @@ $text-color: #3F4042;
       user-select: none; 
       display: block;
       color: $text-color;
+      &:focus-visible {
+        background: #F7F7F7;
+      }
     }
     &:focus {
       outline: none;
+    }
+    &:focus-visible {
+      background: #F7F7F7;
     }
     &:not(:first-child):not(:last-child):not(.clear-data-inactive) {
       &:hover {
