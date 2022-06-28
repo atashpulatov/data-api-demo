@@ -172,7 +172,7 @@ button.floating-button[disabled]:hover {
 
 .popup-footer {
   border: 1px solid #E8EDF0;
-  position: fixed;
+  position: relative;
   height: 68px;
   bottom: 0;
   left: 0;

@@ -314,14 +314,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         {loadingFrame && <Empty isLoading />}
         <div
           ref={this.container}
-          style={{
-            position: 'relative',
-            top: '0',
-            left: '0',
-            height: 'calc(100vh - 145px)',
-            minHeight: 'calc(100vh - 145px)',
-            maxHeight: 'calc(100vh - 145px)',
-          }} />
+          className="dossier-iframe" />
       </>
     );
   }

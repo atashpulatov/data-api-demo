@@ -53,3 +53,29 @@
 .ant-popover-inner-content {
     max-width: 100%;
  }
+
+.dossier-iframe {
+  position: relative;
+  top: 0;
+  left: 0;
+  min-height: calc(100vh - 145px);
+  max-height: calc(100vh - 145px);
+  min-width: 530px;
+}
+
+ @media (max-width: 530px) {
+  .popup-buttons {
+    margin-bottom: 15px;
+  }
+
+  .dossier-window {
+    height: 100vh;
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+  .dossier-iframe{
+    min-height: calc(100vh - 160px);
+    max-height: calc(100vh - 160px);
+  }
+}
