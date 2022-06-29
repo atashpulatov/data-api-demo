@@ -243,6 +243,6 @@
    "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "Dieses Objekt überschreitet das Zeilenlimit für MicroStrategy-Projekte. Bitte wenden Sie sich an Ihren Administrator.",
    "To view the data, please unhide the worksheet.": "Um Daten anzuzeigen, blenden Sie das Arbeitsblatt ein.",
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Die Importierung ist fehlgeschlagen, da die zulässige Nutzlastgröße für eine Excel-Online-Anforderung bzw. -Antwort von 5MB überschritten wurde. Versuchen Sie den Umfang Ihrer Daten einzuschränken.",
-   "Please select only one range before import.": "Bitte wählen Sie vor dem Import nur einen Bereich aus.",
+   "Please select only one range before import.": "Wählen Sie vor dem Import nur einen Bereich aus.",
    "Apply": "Übernehmen"
 }

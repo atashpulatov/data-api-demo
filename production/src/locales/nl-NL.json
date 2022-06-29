@@ -243,6 +243,6 @@
    "This object exceeds the MicroStrategy project row limit. Please contact your administrator.": "Dit object overschrijdt de project-rijlimiet van MicroStrategy. Neem contact op met de beheerder.",
    "To view the data, please unhide the worksheet.": "Maak het werkblad zichtbaar om de gegevens te bekijken.",
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Het importeren is mislukt omdat de laadgroottelimiet voor elk verzoek van of reactie op Excel Online 5 MB is. Probeer uw gegevens te beperken.",
-   "Please select only one range before import.": "Selecteer slechts één bereik voor het importeren.",
+   "Please select only one range before import.": "Selecteer slechts één bereik voor de import.",
    "Apply": "Toepassen"
 }
