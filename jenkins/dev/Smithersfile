@@ -30,7 +30,7 @@ rake pre_pipeline
 rake veracode
 rake upload_plugins 
  
-rake update_dep_db_from_file
+#rake update_dep_db_from_file
 rake update_ready_for_pr
 
 rake post_pipeline
