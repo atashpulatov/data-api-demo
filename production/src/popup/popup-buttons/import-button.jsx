@@ -12,7 +12,7 @@ export const ImportButton = ({
       type={!handleSecondary ? 'primary' : ''}
       onClick={handleOk}
       disabled={!!disableReason}>
-      {t(useImportAsRunButton ? 'Run' : 'Import')}
+      {t(useImportAsRunButton ? 'Apply' : 'Import')}
     </Button>
   );
 
