@@ -64,7 +64,7 @@
 }
 
  @media (max-width: 530px) {
-  .popup-buttons {
+  .dossier-window .popup-buttons {
     margin-bottom: 15px;
   }
 

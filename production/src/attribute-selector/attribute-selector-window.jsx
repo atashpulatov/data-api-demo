@@ -103,7 +103,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
       : 'Data';
     const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
     return (
-      <div>
+      <div className="attribute-selector-window">
         <AttributeSelector
           title={`Import ${typeName} > ${objectName}`}
           attributesSelectedChange={this.attributesBeingSelected}

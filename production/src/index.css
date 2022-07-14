@@ -179,3 +179,11 @@ button.floating-button[disabled]:hover {
   right: 0;
   min-width: 530px;
 }
+
+.promptsContainer + .popup-footer {
+  position: fixed;
+}
+
+.attribute-selector-window .popup-footer {
+  min-width: 650px;
+}
