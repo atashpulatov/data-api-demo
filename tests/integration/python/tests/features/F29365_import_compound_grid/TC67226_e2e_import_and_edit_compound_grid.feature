@@ -1,7 +1,7 @@
-#@ci_pipeline_daily_windows_chrome  @ci_pipeline_daily_mac_chrome
+#@ci_pipeline_daily_windows_desktop @ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
+#@ci_pipeline_rv_windows_desktop
 @ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-@todo_windows_desktop @windows_chrome @mac_desktop @mac_chrome
-@release_validation @ga_validation
+@disabled_windows_desktop @windows_chrome @mac_chrome
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67226] - Import and edit compound grid

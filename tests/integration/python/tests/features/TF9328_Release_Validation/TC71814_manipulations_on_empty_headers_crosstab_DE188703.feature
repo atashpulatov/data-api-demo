@@ -1,8 +1,7 @@
 #@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-#@windows_desktop @windows_chrome
-@mac_chrome
-@release_validation
+#@ci_pipeline_rv_windows_chrome
+@ci_pipeline_rv_mac_chrome
+@disabled_windows_chrome @mac_chrome
 Feature: TF9328 - Release Validation
 
   Scenario: [TC71814] - DE188703 - Table moved down after report refresh through Excel add-in - 11.3 GA

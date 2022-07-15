@@ -1,7 +1,6 @@
-#@ci_pipeline_daily_windows_chrome  @ci_pipeline_daily_mac_chrome
-@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-@windows_chrome @mac_chrome
-@release_validation
+#@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
+#@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
+@disabled_windows_chrome @disabled_mac_chrome
 Feature: F25949 - Display filters and prompts
 
   Scenario: [TC67539] - Imported objects details showing, hiding  and coping with keyboard navigation - accessibility
