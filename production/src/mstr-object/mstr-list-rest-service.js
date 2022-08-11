@@ -95,15 +95,16 @@ class MstrListRestService {
       .set('x-mstr-authtoken', authToken)
       .set('x-mstr-projectid', projectId)
       .withCredentials()
-      .then((res) => {
-        if (res.body.result.length === 7000) {
+      .then(({ body }) => {
+        const totalItems = this.processTotalItems(body);
+        if (totalItems > offset + limit) {
           offset += limit;
-          queue.enqueue(callback(res.body));
+          queue.enqueue(callback(body));
           return this.fetchObjectListByProject({
             requestParams, callback, offset, limit
           }, projectId, queue);
         }
-        return callback(res.body);
+        return callback(body);
       });
   }
 
