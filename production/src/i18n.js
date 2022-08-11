@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import i18n from 'i18next';
-import XHR from 'i18next-xhr-backend';
 import { initReactI18next } from 'react-i18next';
 import moment from 'moment';
 import enCommon from './locales/en-US.json';
@@ -85,7 +84,8 @@ const config = {
   fallbackLng: 'en-US',
   load: 'all',
   keySeparator: false, // we do not use keys in form messages.welcome
-
+  defaultNS: 'common',
+  fallbackNS: 'common',
   interpolation: {
     escapeValue: false, // react already safes from xss
     format(value, format, lng) {
@@ -93,15 +93,7 @@ const config = {
       return value;
     },
   },
-  debug: process.env.NODE_ENV === 'development',
 };
-
-if (process.env.NODE_ENV === 'development') {
-  config.backend = { addPath: 'https://10.23.6.59/office' };
-  config.saveMissing = true;
-  config.saveMissingTo = 'en-US';
-  i18n.use(XHR);
-}
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
