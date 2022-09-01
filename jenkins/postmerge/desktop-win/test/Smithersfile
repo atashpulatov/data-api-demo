@@ -32,7 +32,8 @@ set +xe
 export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=windows_test
 
-source .ecosystem	
+source .ecosystem
+rake pre_pipeline	
 export HATS=pipeline:$HATS	
 
 rake py_e2e_test_win[$TEST_TYPE]
