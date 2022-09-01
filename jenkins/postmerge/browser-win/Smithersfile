@@ -34,6 +34,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=windows_test
 
 source .ecosystem
+rake pre_pipeline
 export HATS=pipeline:$HATS
 
 rake deploy_tester_server[$APPLICATION_VERSION]
