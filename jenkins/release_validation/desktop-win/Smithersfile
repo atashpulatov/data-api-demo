@@ -34,7 +34,8 @@ set +xe
 export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=windows_test
 
-source .ecosystem	
+source .ecosystem
+rake pre_pipeline	
 export HATS=pipeline:$HATS	
 
 rake copy_results[ci_pipeline_rv_windows_desktop]
