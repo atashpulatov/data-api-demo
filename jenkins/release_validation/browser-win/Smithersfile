@@ -33,6 +33,7 @@ export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=windows_test
 
 source .ecosystem
+rake pre_pipeline
 export HATS=pipeline:$HATS
 
 rake py_e2e_test_win[ci_pipeline_rv_windows_chrome, $APPLICATION_VERSION]
