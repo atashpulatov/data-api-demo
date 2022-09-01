@@ -20,6 +20,7 @@ export TERM_PROGRAM=iTerm.app
 export WORKSPACE_SETTING=mac_test
 
 source .ecosystem
+rake pre_pipeline
 export HATS=pipeline:$HATS
 
 rake py_e2e_test_mac[ci_pipeline_all_mac_desktop]
