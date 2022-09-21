@@ -1,6 +1,5 @@
 #@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-@ci_pipeline_rv_windows_chrome
-#@ci_pipeline_rv_mac_chrome
+@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
 @windows_chrome @mac_chrome
 Feature: F25946 - Details panel
 
