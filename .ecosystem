@@ -3,7 +3,8 @@
 export PROJECT_NAME='mstr-office'
 export ORGANIZATION_NAME='Kiai'
 export COMPANY_NAME='microstrategy'
-export ECOSYSTEM_ROOT_VERSION=${ECOSYSTEM_ROOT_VERSION:='1.0.1771.next'}
+export ECOSYSTEM_ROOT_VERSION=${ECOSYSTEM_ROOT_VERSION:='m2021'}
+
 
 #<(((((((((((((((-------------------------------------------------------------------)))))))))))))))>#
 #<(((((((((((((((------------------- PLEASE DON'T EDIT BELOW -----------------------)))))))))))))))>#
@@ -12,6 +13,7 @@ export ECOSYSTEM_ROOT_VERSION=${ECOSYSTEM_ROOT_VERSION:='1.0.1771.next'}
 export ECOSYSTEM_ROOT_PATHS_PARENT_HOME='/usr/local'
 export ECOSYSTEM_ROOT_NAME='eco.root'
 export ECOSYSTEM_ROOT_PATHS_HOME="${ECOSYSTEM_ROOT_PATHS_PARENT_HOME}/${ECOSYSTEM_ROOT_NAME}-${ECOSYSTEM_ROOT_VERSION}"
+export VAGRANT_DEPLOYMENT_DISABLED=true
 
 if [[ -z "$USER" ]]; then
   if [[ -n "$JENKINS_HOME" ]]; then
@@ -23,6 +25,9 @@ if [[ -z "$USER" ]]; then
   fi
 fi
 
+default_branch=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
+workspace_path=$(pwd)
+
 if [[ ! -e "${ECOSYSTEM_ROOT_PATHS_HOME}/.git" ]]; then
   cd "${ECOSYSTEM_ROOT_PATHS_PARENT_HOME}"
 
@@ -30,17 +35,19 @@ if [[ ! -e "${ECOSYSTEM_ROOT_PATHS_HOME}/.git" ]]; then
     sudo chown $USER "${ECOSYSTEM_ROOT_PATHS_HOME}"
 
     git clone https://github.microstrategy.com/ecosystem/eco.root.git "${ECOSYSTEM_ROOT_PATHS_HOME}"
-
-  cd $OLDPWD
-  cd "${ECOSYSTEM_ROOT_PATHS_HOME}"
-
-    git checkout tags/"${ECOSYSTEM_ROOT_VERSION}"
-    if [[ $? != 0 ]]; then
-      git checkout "${ECOSYSTEM_ROOT_VERSION}"
-    fi
-
-  cd $OLDPWD
 fi
+
+cd "${ECOSYSTEM_ROOT_PATHS_HOME}"
+
+git checkout tags/"${ECOSYSTEM_ROOT_VERSION}"
+if [[ $? != 0 ]]; then
+  git reset --hard HEAD
+  git clean -df
+  git checkout "${ECOSYSTEM_ROOT_VERSION}"
+  git pull origin "${ECOSYSTEM_ROOT_VERSION}"
+fi
+
+cd $workspace_path
 
 export ECOSYSTEM_ROOT_PATHS_SHELL_HOME="${ECOSYSTEM_ROOT_PATHS_HOME}/shell"
 export ECOSYSTEM_ROOT_PATHS_SHELL_LIB_HOME="${ECOSYSTEM_ROOT_PATHS_SHELL_HOME}/lib"
@@ -50,10 +57,10 @@ source "${ECOSYSTEM_ROOT_PATHS_SHELL_LIB_CONTROL_HOME}/bootstrap.bash"
 
 
 cd "${ECOSYSTEM_ROOT_PATHS_HOME}"
-if ! git branch | grep '\*' | grep -q detached ; then
+if ! git branch | grep '\*' | grep -q $default_branch ; then
   warn "
-######################################################################################################
-                      WARNING ECO.ROOT IS ON A BRANCH NOT A SPECIFIC VERSION(TAG)
+#####################################################################################################
+                            WARNING ECO.ROOT IS NOT ON A PRODUCTION BRANCH
                     YOUR WARRANTY IS VOID, IE YOUR ARE ON YOUR OWN WITHOUT SUPPORT
 #####################################################################################################
 "
