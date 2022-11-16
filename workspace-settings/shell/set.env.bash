@@ -56,3 +56,5 @@ function become_jenkins_manager(){
 }
 
 export BRANCH_OFF_COMMIT=9572547a57838e62717679a03ed21b5aa3d6e725
+
+export BASE_VERSION=1000
