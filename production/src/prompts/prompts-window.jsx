@@ -149,6 +149,7 @@ export class PromptsWindowNotConnected extends Component {
         customAuthenticationType:
           CustomAuthenticationType.AUTH_TOKEN,
         enableResponsive: true,
+        reportInLibraryFeature: { enabled: false },
 
         getLoginToken() {
           return Promise.resolve(authToken);

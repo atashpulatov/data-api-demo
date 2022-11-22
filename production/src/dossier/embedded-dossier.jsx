@@ -161,6 +161,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       enableCustomAuthentication: true,
       customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
       enableResponsive: true,
+      reportInLibraryFeature: { enabled: false },
       getLoginToken() {
         return Promise.resolve(authToken);
       },
