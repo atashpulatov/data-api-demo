@@ -3,7 +3,7 @@
 export PROJECT_NAME='mstr-office'
 export ORGANIZATION_NAME='Kiai'
 export COMPANY_NAME='microstrategy'
-export ECOSYSTEM_ROOT_VERSION=${ECOSYSTEM_ROOT_VERSION:='m2021'}
+export ECOSYSTEM_ROOT_VERSION=${ECOSYSTEM_ROOT_VERSION:='next'}
 
 
 #<(((((((((((((((-------------------------------------------------------------------)))))))))))))))>#
