@@ -71,13 +71,21 @@ Add-in for Microsoft Office applications and MicroStrategy.
     Example:
         Team: TEC-CT-Web-Library-CTC
         Team: TEC-SR-Gateways-Framework
-        Contact: Fred Bloggs
+        Contact: Fred Bloggs (fbloggs)
 -->
 
 Team: TL-Application-Excel
 
-Contact: Alejandro Sedano @asedano
+Contact: Alejandro Sedano (asedano)  
 
+DevOps POC: Yurii Zhuk (yzhuk)
+
+stage-2-e2e-browser-test-python-mac POC: Michał Duong (miduong)
+stage-2-e2e-browser-test-python-win POC: Michał Duong (miduong)
+stage-2-e2e-client-test-win-pre POC: Michał Duong (miduong)
+stage-2-e2e-desktop-test-python-mac POC: Michał Duong (miduong)
+stage-2-e2e-desktop-test-python-win POC: Michał Duong (miduong)
+stage-2-e2e-general-windows-desktop-job POC: Michał Duong (miduong)
 <!-- End: Owner -->
 
 ## Documentation
