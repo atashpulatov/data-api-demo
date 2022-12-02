@@ -9,7 +9,7 @@ class ImportDossierMainBrowserPage(BaseBrowserPage):
     VISUALIZATION_TILE = '.mstrmojo-UnitContainer'
 
     RESET_BUTTON = '.icon-tb_reset'
-    RESET_CONFIRMATION_YES = '.mstrd-DeleteDossier-button'
+    RESET_CONFIRMATION_YES = '.mstrd-ConfirmationDialog-button'
 
     IMPORT_BUTTON = 'import'
 
