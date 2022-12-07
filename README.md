@@ -81,10 +81,15 @@ Contact: Alejandro Sedano (asedano)
 DevOps POC: Yurii Zhuk (yzhuk)
 
 stage-2-e2e-browser-test-python-mac POC: Michał Duong (miduong)
+
 stage-2-e2e-browser-test-python-win POC: Michał Duong (miduong)
+
 stage-2-e2e-client-test-win-pre POC: Michał Duong (miduong)
+
 stage-2-e2e-desktop-test-python-mac POC: Michał Duong (miduong)
+
 stage-2-e2e-desktop-test-python-win POC: Michał Duong (miduong)
+
 stage-2-e2e-general-windows-desktop-job POC: Michał Duong (miduong)
 <!-- End: Owner -->
 
