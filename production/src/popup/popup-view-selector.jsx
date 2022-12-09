@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
 import { popupHelper } from './popup-helper';
@@ -70,6 +71,11 @@ const mapDispatchToProps = {
   ...navigationTreeActions,
   ...filterActions,
   preparePromptedReport: popupActions.preparePromptedReport,
+};
+
+PopupViewSelectorNotConnected.propTypes = {
+  authToken: PropTypes.string,
+  popupType: PopupTypeEnum
 };
 
 export const PopupViewSelector = connect(mapStateToProps, mapDispatchToProps)(PopupViewSelectorNotConnected);
