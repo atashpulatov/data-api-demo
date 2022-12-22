@@ -38,6 +38,9 @@ module Smithers
           end
 
           build_wrappers do
+            github_credential do
+              credentialsId 'github_cloud'
+            end
             timestamper do
               #nothing to configure, just turn it on
             end
