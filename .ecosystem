@@ -34,7 +34,7 @@ if [[ ! -e "${ECOSYSTEM_ROOT_PATHS_HOME}/.git" ]]; then
     sudo mkdir "${ECOSYSTEM_ROOT_PATHS_HOME}"
     sudo chown $USER "${ECOSYSTEM_ROOT_PATHS_HOME}"
 
-    git clone https://github.microstrategy.com/ecosystem/eco.root.git "${ECOSYSTEM_ROOT_PATHS_HOME}"
+    git clone https://github.com/mstr-ecosystem/eco.root.git "${ECOSYSTEM_ROOT_PATHS_HOME}"
 fi
 
 cd "${ECOSYSTEM_ROOT_PATHS_HOME}"
