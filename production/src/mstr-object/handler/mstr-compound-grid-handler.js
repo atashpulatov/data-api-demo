@@ -296,6 +296,9 @@ class CompoundGridHandler {
               case 'templateMetrics':
                 parsedHeaders[colIndex].push(...onMetric(element));
                 break;
+              case 'customgroup':
+                parsedHeaders[colIndex].push(...element.formValues);
+                break;
               default:
                 parsedHeaders[colIndex].push('\'');
             }
