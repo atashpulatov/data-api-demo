@@ -10,6 +10,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeContext } from '../office/office-context';
 import { errorMessages, errorCodes } from '../error/constants';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import './attribute-selector.css';
 
 export class AttributeSelectorNotConnected extends Component {
   constructor(props) {
