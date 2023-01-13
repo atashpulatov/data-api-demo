@@ -42,6 +42,7 @@ class PopupStateActions {
     dispatch(navigationTreeActions.clearPromptAnswers());
     dispatch(popupActions.clearEditedObject());
     dispatch(navigationTreeActions.cancelDossierOpen());
+    dispatch(filterActions.changeSorting({}));
   }
 }
 
