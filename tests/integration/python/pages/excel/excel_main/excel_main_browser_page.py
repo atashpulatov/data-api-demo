@@ -11,7 +11,7 @@ class ExcelMainBrowserPage(BaseBrowserPage):
 
     RIGHT_MENU_EXCEL_ICON_XPATH = '//button[contains(@aria-label, "Go to Excel")]'
 
-    NEW_BLANK_WORKBOOK_ELEM_XPATH = '//a[contains(@aria-label, "Create a new blank workbook")]'
+    NEW_BLANK_WORKBOOK_ELEM_XPATH = '//div[contains(@aria-label, "Create a new blank workbook")]'
 
     HEAD_BRAND_ELEM_CSS = '#AppBrand'
     HEAD_BRAND_EXCEL_NAME = 'Excel'
