@@ -32,11 +32,11 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
     ALIGN_MIDDLE_BUTTON = '[data-unique-id="Ribbon-AlignCenter_MLR"]'
     ALIGN_LEFT_BUTTON = '[data-unique-id="Ribbon-AlignLeft_MLR"]'
 
-    EXCEL_FONT_NAME_INPUT_ID = 'Ribbon-FontName_New-input'
+    EXCEL_FONT_NAME_INPUT_ID = 'FontName_New-input'
 
     BOLD_BUTTON = '[data-unique-id="Ribbon-Bold"]'
-    FONT_COLOR_DROPDOWN_BUTTON_CSS = '[data-unique-id="Ribbon-FontColor"]>span>button:nth-of-type(2)'
-    FILL_COLOR_DROPDOWN_BUTTON_CSS = '[data-unique-id="Ribbon-FillColor"]>span>button:nth-of-type(2)'
+    FONT_COLOR_DROPDOWN_BUTTON_CSS = 'div[data-unique-id="Ribbon-FontColor"]>button:nth-of-type(2)'
+    FILL_COLOR_DROPDOWN_BUTTON_CSS = 'div[data-unique-id="Ribbon-FillColor"]>button:nth-of-type(2)'
     FONT_COLOR_BUTTON_CSS = '#Ribbon-FontColorDropdown button[aria-label="%s"]'
     FILL_COLOR_BUTTON_CSS = '#Ribbon-FillColorDropdown button[aria-label="%s"]'
 
@@ -237,7 +237,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_DROPDOWN_BUTTON_CSS).click()
         fill_color_element = self.get_element_by_css(ExcelSheetBrowserPage.FILL_COLOR_BUTTON_CSS % fill_color)
             
-        return fill_color_element.get_attribute('aria-selected') == 'true'
+        return fill_color_element.get_attribute('aria-checked') == 'true'
 
     def change_font_name_of_cell(self, cell_name, font_name):
         self.go_to_cell(cell_name)
@@ -278,7 +278,7 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
         self.get_element_by_css(ExcelSheetBrowserPage.FONT_COLOR_DROPDOWN_BUTTON_CSS).click()
         font_color_element = self.get_element_by_css(ExcelSheetBrowserPage.FONT_COLOR_BUTTON_CSS % font_color)
         
-        return font_color_element.get_attribute('aria-selected') == 'true'
+        return font_color_element.get_attribute('aria-checked') == 'true'
 
     def get_font_name_of_cell(self, cell_name):
         self.go_to_cell(cell_name)

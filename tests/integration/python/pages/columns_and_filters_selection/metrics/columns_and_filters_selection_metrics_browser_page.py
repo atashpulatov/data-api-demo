@@ -13,7 +13,7 @@ class ColumnsAndFiltersSelectionMetricsBrowserPage(BaseBrowserPage):
     def click_metric(self, metric_name):
         self.focus_on_add_in_popup_frame()
 
-        self.get_element_by_css(ColumnsAndFiltersSelectionMetricsBrowserPage.METRIC_ITEM % metric_name).click(1, 0)
+        self.get_element_by_css(ColumnsAndFiltersSelectionMetricsBrowserPage.METRIC_ITEM % metric_name).click(offset_x=10, offset_y=5)
 
     def select_all_metrics(self):
         self.focus_on_add_in_popup_frame()
