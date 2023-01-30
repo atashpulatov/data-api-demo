@@ -74,10 +74,12 @@ class StepGetInstanceDefinition {
 
       // FIXME: below flow should not be part of this step
       if (futureStep === GET_OFFICE_TABLE_IMPORT) {
-        startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
+        startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext, name);
       }
       if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;
+      } else {
+        await officeApiWorksheetHelper.renameExistingWorksheet(excelContext, name);
       }
 
       const { mstrTable } = instanceDefinition;

@@ -1,6 +1,5 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import operationErrorHandler from '../operation/operation-error-handler';
-import { customT } from '../customTranslation';
 
 class StepGetDuplicateName {
   init = (reduxStore) => {
@@ -27,10 +26,8 @@ class StepGetDuplicateName {
 
       if (!(objectEditedData && objectEditedData.visualizationInfo
         && objectEditedData.visualizationInfo.nameAndFormatShouldUpdate)) {
-        const translatedCopy = customT('Copy');
-
-        const nameCandidate = this.prepareNewNameForDuplicatedObject(name, translatedCopy);
-        const newName = this.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
+        const nameCandidate = this.prepareNewNameForDuplicatedObject(name);
+        const newName = this.checkAndSolveNameConflicts(nameCandidate);
         const updatedObject = {
           objectWorkingId,
           name: newName
@@ -47,32 +44,30 @@ class StepGetDuplicateName {
   /**
    * Prepares new name for duplicated object based on original object name.
    *
-   * New name contains original object name with additional 'copy' at the end.
-   * 'Copy' can be expanded by counting number, starting from 2.
+   * New name contains original object name with additional counter at the end.
+   * Counting number starts with 2.
    *
    * @param {String} originalObjectName Name of the original object.
-   * @param {String} translatedCopy 'Copy' translated to active language.
    * @returns {String} Proposed name for new duplicated object.
    */
-  prepareNewNameForDuplicatedObject = (originalObjectName, translatedCopy) => {
+  prepareNewNameForDuplicatedObject = (originalObjectName) => {
     const splitedName = String(originalObjectName).split(' ');
     const nrOfWords = splitedName.length;
 
     const lastWordIndex = nrOfWords - 1;
     const lastWord = splitedName[lastWordIndex];
-    const lastWordAsNumber = Number(lastWord);
+    const lastWordLength = lastWord.length;
 
-    const secondLastWordIndex = nrOfWords - 2;
-    const secondLastWord = splitedName[secondLastWordIndex];
-
-    if (lastWord === translatedCopy) {
-      splitedName.push('2');
-    } else if ((secondLastWord === translatedCopy) && (!(Number.isNaN(lastWordAsNumber)))) {
-      // if last word is number and second to last word is copy
-      splitedName.pop();
-      splitedName.push(`${lastWordAsNumber + 1}`);
+    if (lastWord.length > 2 && lastWord[0] === '(' && lastWord[lastWordLength - 1] === ')') {
+      const counterNumber = Number(lastWord.substring(1, lastWordLength - 1));
+      if (!(Number.isNaN(counterNumber))) {
+        splitedName.pop();
+        splitedName.push(`(${counterNumber + 1})`);
+      } else {
+        splitedName.push('(2)');
+      }
     } else {
-      splitedName.push(translatedCopy);
+      splitedName.push('(2)');
     }
 
     const nameCandidate = splitedName.join(' ');
@@ -85,16 +80,12 @@ class StepGetDuplicateName {
    * Name of duplicated object cannot be conflicting with names of already exisitng objects.
    * If there are conflicts, function adujsts nameCandidate in loop, until conflicts are solved.
    *
-   * In case of conflicts:
-   * 1. Add '2' if there is 'copy' at the end of nameCandidate.
-   * 2. Increment number which is at the end of nameCandidate.
+   * In case of conflicts counter is added at the end of nameCandidate.
    *
    * @param {String} nameCandidate Prepared name for duplicated object
-   * @param {String} translatedCopy 'Copy' translated to active language.
    * @returns {String} Final name for new duplicated object
    */
-  checkAndSolveNameConflicts = (nameCandidate, translatedCopy) => {
-    const splitedName = nameCandidate.split(' ');
+  checkAndSolveNameConflicts = (nameCandidate) => {
     let finalNameCandidate = nameCandidate;
 
     const { objects } = this.reduxStore.getState().objectReducer;
@@ -102,14 +93,7 @@ class StepGetDuplicateName {
     const objectsNames = objects.map(({ name }) => name);
 
     while (objectsNames.includes(finalNameCandidate)) {
-      if (splitedName[splitedName.length - 1] === translatedCopy) {
-        splitedName.push(2);
-      } else {
-        const lastWord = splitedName.pop();
-        const lastWordAsNumber = Number(lastWord);
-        splitedName.push(`${lastWordAsNumber + 1}`);
-      }
-      finalNameCandidate = splitedName.join(' ');
+      finalNameCandidate = this.prepareNewNameForDuplicatedObject(finalNameCandidate);
     }
     return finalNameCandidate;
   }

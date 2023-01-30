@@ -36,13 +36,13 @@ class OfficeTableCreate {
     }
   ) => {
     const {
-      rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions }
+      rows, columns, mstrTable, mstrTable: { isCrosstab, crosstabHeaderDimensions, name }
     } = instanceDefinition;
 
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
 
     if (insertNewWorksheet) {
-      startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext);
+      startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext, name);
     }
 
     const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);

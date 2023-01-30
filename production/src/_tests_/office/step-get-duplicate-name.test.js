@@ -10,52 +10,50 @@ describe('StepGetDuplicateName', () => {
 
   it.each`
     originalName            | expectedResult
-    ${''}                   | ${' Copy'}
-    ${'name'}               | ${'name Copy'}
-    ${'name 7'}             | ${'name 7 Copy'}
-    ${'name 7 Copy'}        | ${'name 7 Copy 2'}
-    ${'some name'}          | ${'some name Copy'}
-    ${'name Copy'}          | ${'name Copy 2'}
-    ${'name Copy 1'}        | ${'name Copy 2'}
-    ${'name Copy 2'}        | ${'name Copy 3'}
-    ${'name Copy 3 Copy'}   | ${'name Copy 3 Copy 2'} 
-    ${1234}                 | ${'1234 Copy'}
-    ${'name Copy test'}     | ${'name Copy test Copy'}
+    ${''}                   | ${' (2)'}
+    ${'name'}               | ${'name (2)'}
+    ${'name 7'}             | ${'name 7 (2)'}
+    ${'name 7 (2)'}         | ${'name 7 (3)'}
+    ${'some name'}          | ${'some name (2)'}
+    ${'name (2)'}           | ${'name (3)'}
+    ${'name 1'}             | ${'name 1 (2)'}
+    ${'name 2'}             | ${'name 2 (2)'}
+    ${'name (2) 3'}         | ${'name (2) 3 (2)'} 
+    ${1234}                 | ${'1234 (2)'}
+    ${'name (2) test'}      | ${'name (2) test (2)'}
     
   `('prepareNewNameForDuplicatedObject should return proper prepared name', ({ originalName, expectedResult }) => {
     // given
-    const translatedCopy = 'Copy';
     // when
-    const nameCandidate = stepGetDuplicateName.prepareNewNameForDuplicatedObject(originalName, translatedCopy);
+    const nameCandidate = stepGetDuplicateName.prepareNewNameForDuplicatedObject(originalName);
     // then
     expect(nameCandidate).toEqual(expectedResult);
   });
 
   it.each`
     nameCandidate               | expectedResult
-    ${'name Copy'}              | ${'name Copy'}
-    ${'some random name Copy'}  | ${'some random name Copy'}
-    ${'some name Copy'}         | ${'some name Copy 5'}
-    ${'some name Copy 3'}       | ${'some name Copy 5'}
-    ${'name 7 Copy'}            | ${'name 7 Copy 3'}
+    ${'name (2)'}               | ${'name (2)'}
+    ${'some random name'}       | ${'some random name'}
+    ${'some name'}              | ${'some name (5)'}
+    ${'some name (3)'}          | ${'some name (5)'}
+    ${'name 7 (2)'}             | ${'name 7 (3)'}
     
   `('checkAndSolveNameConflicts should return adjusted name', ({ nameCandidate, expectedResult }) => {
     // given
-    const translatedCopy = 'Copy';
     jest.spyOn(reduxStore, 'getState').mockImplementation(() => ({
       objectReducer: {
         objects: [
-          { name: 'some name Copy' },
-          { name: 'some name Copy 2' },
-          { name: 'some name Copy 3' },
-          { name: 'some name Copy 4' },
-          { name: 'name 7 Copy' },
-          { name: 'name 7 Copy 2' },
+          { name: 'some name' },
+          { name: 'some name (2)' },
+          { name: 'some name (3)' },
+          { name: 'some name (4)' },
+          { name: 'name 7' },
+          { name: 'name 7 (2)' },
         ]
       },
     }));
     // when
-    const adjustedName = stepGetDuplicateName.checkAndSolveNameConflicts(nameCandidate, translatedCopy);
+    const adjustedName = stepGetDuplicateName.checkAndSolveNameConflicts(nameCandidate);
     // then
     expect(adjustedName).toEqual(expectedResult);
   });
@@ -79,7 +77,7 @@ describe('StepGetDuplicateName', () => {
     expect(completeGetDuplicateNameMock).toBeCalledTimes(1);
     expect(updateObjectMock).toBeCalledWith({
       objectWorkingId: 'objectWorkingIdTest',
-      name: 'nameTest Copy',
+      name: 'nameTest (2)',
     });
   });
 

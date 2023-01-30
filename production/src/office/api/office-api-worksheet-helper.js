@@ -63,27 +63,116 @@ class OfficeApiWorksheetHelper {
   *
   * @param {Boolean} insertNewWorksheet specify whether new worksheet should be create before getting startcell
   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+  * @param {String} objectName Name of the object added to the new worksheet
   * @return {String} address of Excel cell
   */
-  getStartCell = async (insertNewWorksheet, excelContext) => {
+  getStartCell = async (insertNewWorksheet, excelContext, objectName) => {
     if (insertNewWorksheet) {
-      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext);
+      await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext, objectName);
     }
 
     return officeApiHelper.getSelectedCell(excelContext);
   };
 
   /**
-  * Creates Excel worksheet and set it as a active one.
+     * Prepares new Excel wooksheet name. Maximum name length is 31.
+     * If name is over the limit '...' are added at the end.
+     * If name already exists, counter is added at the end of the name.
+     * Worksheet name restricted chars: \ / ? : [ ] are replaced with _
+     *
+     * @param {String} excelContext Reference to Excel Context used by Excel API functions
+     * @param {Array} objectName Name of the object added to the worksheet
+     * @returns {String} New Excel worksheet name
+     */
+  prepareWorksheetName = async (excelContext, objectName) => {
+    const EXCEL_WORKSHEET_CHAR_LIMIT = 31;
+
+    const sheets = excelContext.workbook.worksheets;
+
+    sheets.load('items/name');
+    await excelContext.sync();
+    const sheetsNames = sheets.items.map(item => item.name);
+
+    let newSheetName = objectName.replace(/[:?*\\/\][]/g, '_');
+
+    // if objectName only contains whitespaces replace it with _
+    if (!newSheetName.replace(/\s/g, '').length) {
+      newSheetName = '_';
+    }
+
+    if (newSheetName.length > EXCEL_WORKSHEET_CHAR_LIMIT) {
+      newSheetName = `${newSheetName.substring(0, 28)}...`;
+    }
+
+    let counter = 2;
+
+    while (sheetsNames.includes(newSheetName)) {
+      const counterLength = counter.toString().length + 3;
+
+      const lastWord = newSheetName.split(' ').pop();
+      const lastWordLength = lastWord.length;
+      const lastWordCounter = Number(lastWord.substring(1, lastWordLength - 1));
+
+      const isLastWordACounter = lastWordLength > 2
+        && lastWord[0] === '('
+        && lastWord[lastWordLength - 1] === ')'
+        && !Number.isNaN(lastWordCounter);
+
+      if (isLastWordACounter) {
+        const counterIndex = newSheetName.lastIndexOf(' ');
+        newSheetName = newSheetName.substring(0, counterIndex);
+      }
+
+      if ((newSheetName.length + counterLength) > EXCEL_WORKSHEET_CHAR_LIMIT) {
+        newSheetName = `${newSheetName.slice(0, 28 - counterLength)} ...(${counter})`;
+      } else {
+        newSheetName = `${newSheetName} (${counter})`;
+      }
+
+      counter++;
+    }
+
+    return newSheetName;
+  }
+
+  /**
+  * Creates Excel worksheet and sets it as a active one. New worksheet name is based on added object name
   *
   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+  * @param {String} objectName Name of the object added to the worksheet
+  *
   */
-  createAndActivateNewWorksheet = async (excelContext) => {
+  createAndActivateNewWorksheet = async (excelContext, objectName) => {
+    const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
+
     const sheets = excelContext.workbook.worksheets;
-    const sheet = sheets.add();
+    await excelContext.sync();
+
+    const sheet = sheets.add(newSheetName);
+
     await excelContext.sync();
     sheet.activate();
     await excelContext.sync();
+  }
+
+  /**
+   * Checks if active worksheet is empty. If it is empty name is being changed to the object name
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {String} objectName Name of the object added to the worksheet
+   */
+
+  renameExistingWorksheet = async (excelContext, objectName) => {
+    const currentSheet = excelContext.workbook.worksheets.getActiveWorksheet();
+    const rangeOrNullObject = currentSheet.getUsedRangeOrNullObject();
+
+    await excelContext.sync();
+
+    if (rangeOrNullObject.isNullObject) {
+      const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
+      currentSheet.name = newSheetName;
+      await excelContext.sync();
+    }
   }
 }
 

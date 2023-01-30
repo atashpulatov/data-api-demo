@@ -65,6 +65,7 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(console, 'error');
 
       jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
+      jest.spyOn(officeApiWorksheetHelper, 'renameExistingWorksheet').mockImplementation();
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
       jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue(
         { mstrTable: { rows: rowsParam } }
@@ -289,6 +290,7 @@ describe('StepGetInstanceDefinition', () => {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
           'insertNewWorksheetTest',
           'excelContextTest',
+          'getVisualizationNameTest'
         );
       }
 
@@ -366,6 +368,7 @@ describe('StepGetInstanceDefinition', () => {
         },
         visualizationInfo: visualizationInfoParam,
         body: 'bodyTest',
+        name: 'nameTest'
       };
 
       jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
@@ -445,6 +448,7 @@ describe('StepGetInstanceDefinition', () => {
         mstrObjectType: {
           name: 'report',
         },
+        name: 'nameTest',
         objectWorkingId: 'objectWorkingIdTest',
         subtotalsInfo: {
           subtotalsAddresses: 'subtotalsAddressesTest',
@@ -476,6 +480,7 @@ describe('StepGetInstanceDefinition', () => {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
           'insertNewWorksheetTest',
           'excelContextTest',
+          'nameTest'
         );
       }
 
@@ -511,7 +516,7 @@ describe('StepGetInstanceDefinition', () => {
           username: 'usernameTest',
         },
         isCrosstab: 'isCrossTabTest',
-        name: 'nameModifyInstanceWithPromptTest',
+        name: 'nameTest',
         objectWorkingId: 'objectWorkingIdTest',
         visualizationInfo: expectedVisualizationInfo,
         subtotalsInfo: {
@@ -761,6 +766,7 @@ describe('StepGetInstanceDefinition', () => {
       const result = await officeApiWorksheetHelper.getStartCell(
         insertNewWorksheet,
         'excelContextTest',
+        'nameTest'
       );
 
       // then
@@ -769,7 +775,7 @@ describe('StepGetInstanceDefinition', () => {
       expect(officeApiWorksheetHelper.createAndActivateNewWorksheet)
         .toBeCalledTimes(createAndActivateNewWorksheetCallNo);
       if (createAndActivateNewWorksheetCallNo === 1) {
-        expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledWith('excelContextTest');
+        expect(officeApiWorksheetHelper.createAndActivateNewWorksheet).toBeCalledWith('excelContextTest', 'nameTest');
       }
 
       expect(officeApiHelper.getSelectedCell).toBeCalledTimes(1);
