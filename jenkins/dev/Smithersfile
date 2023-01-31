@@ -7,6 +7,11 @@ produces and publishes a versioned deployment package'
 
   assigned_node_string 'amazon_linux'
   
+  triggers do
+    github_push do
+    end
+  end
+  
    build_wrappers do
     secret_text do
       credentialsId 'Tools'
