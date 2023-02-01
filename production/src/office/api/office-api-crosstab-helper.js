@@ -279,13 +279,17 @@ class OfficeApiCrosstabHelper {
     const [offsetForMoving1, offsetForMoving2] = directionVector;
     for (let i = 0; i < headerArray.length - 1; i++) {
       let currentCell = startingCell;
-      for (let j = 0; j < headerArray[i].length - 1; j++) {
-        if (headerArray[i][j] === headerArray[i][j + 1]) {
-          // increasing size of selected range for cells that will be merged
-          currentCell.getResizedRange(offsetForMoving2, offsetForMoving1).merge();
-        }
+      let rangeToMerge = currentCell;
+      for (let j = 0; j < headerArray[i].length; j++) {
         // moving to next attributr value (cell)
         currentCell = currentCell.getOffsetRange(offsetForMoving2, offsetForMoving1);
+        if (headerArray[i][j + 1] !== undefined && headerArray[i][j] === headerArray[i][j + 1]) {
+          // increasing size of selected range for cells that will be merged
+          rangeToMerge = rangeToMerge.getResizedRange(offsetForMoving2, offsetForMoving1);
+        } else {
+          rangeToMerge.merge();
+          rangeToMerge = currentCell;
+        }
       }
       // moving to next attribute (row/column)
       startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2);
