@@ -89,7 +89,15 @@ class MstrListRestService {
     const {
       envUrl, authToken, typeQuery, getAncestors
     } = requestParams;
-    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}&getAncestors=${getAncestors}`;
+
+    const { officeReducer } = this.reduxStore.getState();
+    const { showHidden } = officeReducer;
+
+    // We omit the query when we want to show all objects(including hidden)
+    // Setting query to &result.hidden=true would result in fetching only hidden objects
+    const hiddenQuery = showHidden ? '' : '&result.hidden=false';
+
+    const url = `${envUrl}/${SEARCH_ENDPOINT}?limit=${limit}&offset=${offset}&type=${typeQuery}&getAncestors=${getAncestors}${hiddenQuery}`;
     return request
       .get(url)
       .set('x-mstr-authtoken', authToken)
@@ -104,6 +112,7 @@ class MstrListRestService {
             requestParams, callback, offset, limit
           }, projectId, queue);
         }
+
         return callback(body);
       });
   }

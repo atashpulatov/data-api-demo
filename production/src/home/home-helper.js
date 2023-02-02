@@ -5,6 +5,8 @@ import { clearDataRequested } from '../redux-reducer/operation-reducer/operation
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 
+const SHOW_HIDDEN_KEY = 'showHidden';
+
 export class HomeHelper {
   init = (reduxStore, sessionActions, sessionHelper) => {
     this.reduxStore = reduxStore;
@@ -43,6 +45,18 @@ export class HomeHelper {
         }
       }, {});
   };
+
+  storeShowHidden = () => {
+    try {
+      const showHiddenOfficeSettings = officeStoreRestoreObject.getExcelSettingValue(SHOW_HIDDEN_KEY);
+      const showHiddenLocalStorage = this.getStorageItem(SHOW_HIDDEN_KEY);
+      const showHidden = showHiddenOfficeSettings || showHiddenLocalStorage !== 'false';
+      const { dispatch } = this.reduxStore;
+      dispatch(officeActions.setShowHidden(showHidden));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   getStorageItem = (key = 'iSession') => window.localStorage.getItem(key);
 

@@ -1,6 +1,7 @@
 import { createStore } from 'redux';
 import { officeReducer } from '../../../redux-reducer/office-reducer/office-reducer';
 import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
+import { officeActions } from '../../../redux-reducer/office-reducer/office-actions';
 
 describe('officeReducer', () => {
   const officeStore = createStore(officeReducer);
@@ -14,6 +15,7 @@ describe('officeReducer', () => {
       supportForms: true,
       popupData: null,
       popupOpen: false,
+      showHidden: true
     });
   });
 
@@ -102,5 +104,17 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState.isClearDataFailed).toBe(true);
+  });
+
+  it('should set showHidden to false', () => {
+    // given
+    const oldState = { showHidden: true };
+    const action = officeActions.setShowHidden(false);
+
+    // when
+    const newState = officeReducer(oldState, action);
+
+    // then
+    expect(newState.showHidden).toBe(false);
   });
 });

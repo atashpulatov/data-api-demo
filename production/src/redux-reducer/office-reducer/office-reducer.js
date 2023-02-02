@@ -7,6 +7,7 @@ const initialState = {
   supportForms: true,
   popupData: null,
   popupOpen: false,
+  showHidden: true,
 };
 
 export const officeReducer = (state = initialState, action) => {
@@ -37,6 +38,9 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.clearSidePanelPopupData:
       return clearSidePanelPopupData(action, state);
+
+    case officeProperties.actions.setShowHidden:
+      return setShowHidden(action, state);
 
     default:
       break;
@@ -106,5 +110,12 @@ function clearSidePanelPopupData(action, state) {
   return {
     ...state,
     popupData: null,
+  };
+}
+
+function setShowHidden(action, state) {
+  return {
+    ...state,
+    showHidden: action.showHidden
   };
 }

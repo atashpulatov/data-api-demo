@@ -8,10 +8,13 @@ const QUERY = encodeURI(`source=addin-mstr-office&applicationType=${DssXmlApplic
 const libraryUrl = getLibraryUrl();
 let popup = null;
 
+const SHOW_HIDDEN_KEY = 'showHidden';
+
 function officeInitialize() {
   Office.onReady()
     .then(() => {
       translate();
+      readHiddenObjectConfigurationFromUrl();
       if (window.location.protocol !== 'https:') {
         return window.location.replace(encodeURI(`${libraryUrl}/static/loader-mstr-office/no-https-connection.html`));
       }
@@ -321,6 +324,29 @@ function translate() {
     };
   } catch (e) {
     console.log(e)
+  }
+}
+
+function getQueryShowHiddenParam() {
+    const query = window.location.search.substring(1);
+    const queryVariables = query.split("&");
+    for (let i=0; i<queryVariables.length; i++) {
+            const [key, value] = queryVariables[i].split("=");
+            if(key === SHOW_HIDDEN_KEY) {
+              return value;
+            }
+    }
+    return null;
+}
+
+function readHiddenObjectConfigurationFromUrl() {
+  const showHiddenValue = getQueryShowHiddenParam();
+
+  // If the showHidden key is not set we do not want to change the settings
+  // due to url overwrite when user logs out and logs back in
+  if (showHiddenValue !== null) {
+    setStorageItem(showHiddenValue === 'true', SHOW_HIDDEN_KEY)
+    setExcelSettingItem(showHiddenValue === 'true', SHOW_HIDDEN_KEY);
   }
 }
 

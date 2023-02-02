@@ -15,6 +15,7 @@ export const officeProperties = {
     toggleIsClearDataFailedFlag: 'OFFICE_TOGGLE_IS_CLEAR_DATA_FAILED',
     setRangeTakenPopup: 'OFFICE_SET_RANGE_TAKEN_POPUP',
     clearSidePanelPopupData: 'OFFICE_CLEAR_SIDE_PANEL_POPUP_DATA',
+    setShowHidden: 'SET_SHOW_HIDDEN'
   },
   displayAttrFormNames: {
     automatic: 'AUTOMATIC',

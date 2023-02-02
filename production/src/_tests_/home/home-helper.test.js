@@ -3,6 +3,7 @@ import { homeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 import officeStoreRestoreObject from '../../office/store/office-store-restore-object';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../redux-reducer/session-reducer/session-actions');
@@ -11,6 +12,11 @@ describe('HomeHelper', () => {
   beforeAll(() => {
     homeHelper.init(reduxStore, sessionActions, sessionHelper);
   });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   describe('saveLoginValues', () => {
     it('should trigger logout because of missing authToken and running on localhost', () => {
       // given
@@ -117,6 +123,30 @@ describe('HomeHelper', () => {
       homeHelper.getDocumentCookie();
       // then
       expect(cookieHelper).toBeCalled();
+    });
+  });
+
+  describe('storeShowHidden', () => {
+    it.each`
+    excelSettingValue | localStorageValue | expectedShowHiddenPayload
+    ${true}           | ${'true'}         | ${true}
+    ${false}          | ${'false'}        | ${false}
+    ${undefined}      | ${'true'}         | ${true}
+    ${true}           | ${''}             | ${true}
+    ${undefined}      | ${''}             | ${true}
+    `('should dispatch setSHowHidden action with correct payload', ({ excelSettingValue, localStorageValue, expectedShowHiddenPayload }) => {
+      // given
+      jest.spyOn(officeStoreRestoreObject, 'getExcelSettingValue').mockReturnValue(excelSettingValue);
+      jest.spyOn(homeHelper, 'getStorageItem').mockReturnValue(localStorageValue);
+      const actionPayloadSpy = jest.spyOn(officeActions, 'setShowHidden');
+      const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+      // when
+      homeHelper.storeShowHidden();
+
+      // then
+      expect(actionPayloadSpy).toHaveBeenCalledWith(expectedShowHiddenPayload);
+      expect(mockedDispatch).toBeCalledTimes(1);
     });
   });
 });

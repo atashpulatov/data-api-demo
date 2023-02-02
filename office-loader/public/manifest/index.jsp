@@ -165,7 +165,7 @@
                 "                  <bt:Image id=\"MSTR.tpicon_80x80\" DefaultValue=\"%s/mstr_logo_80.png\"/>\n" +
                 "              </bt:Images>\n" +
                 "              <bt:Urls>\n" +
-                "                  <bt:Url id=\"MSTR.Taskpane.Url\" DefaultValue=\"%s/index.html\"/>\n" +
+                "                  <bt:Url id=\"MSTR.Taskpane.Url\" DefaultValue=\"%s/index.html?showHidden=false\"/>\n" +
                 "                  <bt:Url id=\"MSTR.GetStarted.LearnMoreUrl\" DefaultValue=\"https://go.microsoft.com/fwlink/?LinkId=276812\"/>\n" +
                 "                  <bt:Url id=\"MSTR.DesktopFunctionFile.Url\" DefaultValue=\"%s/function-file/function-file.html\"/>\n" +
                 "              </bt:Urls>\n" +
