@@ -4,6 +4,7 @@ require 'json'
 require 'nokogiri'
 require 'github'
 require 'json'
+require 'active_support/all'
 require 'localization-helper'
 
 include ShellHelper::Shell
