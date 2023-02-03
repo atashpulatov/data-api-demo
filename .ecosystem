@@ -39,6 +39,8 @@ fi
 
 cd "${ECOSYSTEM_ROOT_PATHS_HOME}"
 
+git remote set-url origin https://github.com/mstr-ecosystem/eco.root.git
+
 git checkout tags/"${ECOSYSTEM_ROOT_VERSION}"
 if [[ $? != 0 ]]; then
   git reset --hard HEAD
