@@ -46,7 +46,7 @@ if [[ $? != 0 ]]; then
   git reset --hard HEAD
   git clean -df
   git checkout "${ECOSYSTEM_ROOT_VERSION}"
-  git pull origin "${ECOSYSTEM_ROOT_VERSION}"
+  git pull origin "${ECOSYSTEM_ROOT_VERSION}" --rebase
 fi
 
 cd $workspace_path
