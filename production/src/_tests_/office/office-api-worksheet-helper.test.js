@@ -66,28 +66,4 @@ describe('OfficeApiWorksheetHelper', () => {
     expect(prepareWorksheetNameMock).toBeCalledTimes(1);
     expect(prepareWorksheetNameMock).toBeCalledWith(context, 'object name');
   });
-
-  it('renameExistingWorksheet should not execute prepareWorksheetName', async () => {
-    // given
-    const prepareWorksheetNameMock = jest.spyOn(officeApiWorksheetHelper, 'prepareWorksheetName').mockImplementation();
-
-    const mockSync = jest.fn();
-    const mockGetUsedRangeOrNullObject = jest.fn().mockImplementation(() => ({ isNullObject: false }));
-    const context = {
-      workbook: {
-        worksheets: {
-          getActiveWorksheet: jest.fn().mockImplementation(() => ({
-            getUsedRangeOrNullObject: mockGetUsedRangeOrNullObject
-          })),
-        }
-      },
-      sync: mockSync,
-    };
-
-    // when
-    await officeApiWorksheetHelper.renameExistingWorksheet(context, 'object name');
-
-    // then
-    expect(prepareWorksheetNameMock).toBeCalledTimes(0);
-  });
 });

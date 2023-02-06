@@ -19,6 +19,7 @@ import stepClearTableData from '../office/clear-data/step-clear-table-data';
 import stepNotificationInProgress from '../notification-v2/step-notification-in-progress';
 import stepDisplayNotificationCompleted from '../notification-v2/step-display-notification-completed';
 import stepCompleteClearData from '../office/clear-data/step-complete-clear-data';
+import stepRenameExcelWorksheet from '../office/step-rename-excel-worksheet';
 
 import {
   BIND_OFFICE_TABLE,
@@ -44,6 +45,7 @@ import {
   BACKUP_OBJECT_DATA,
   COMPLETE_CLEAR_DATA,
   HIGHLIGHT_OBJECT,
+  RENAME_EXCEL_WORKSHEET
 } from './operation-steps';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
@@ -93,6 +95,8 @@ class SubscribeSteps {
       DISPLAY_NOTIFICATION_COMPLETED,
       stepDisplayNotificationCompleted.displayNotificationCompleted
     );
+
+    operationBus.subscribe(RENAME_EXCEL_WORKSHEET, stepRenameExcelWorksheet.renameExcelWorksheet);
   };
 }
 

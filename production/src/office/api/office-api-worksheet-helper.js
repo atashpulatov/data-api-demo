@@ -156,7 +156,7 @@ class OfficeApiWorksheetHelper {
   }
 
   /**
-   * Checks if active worksheet is empty. If it is empty name is being changed to the object name
+   * Renames active worksheet name to the object name
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} objectName Name of the object added to the worksheet
@@ -164,15 +164,23 @@ class OfficeApiWorksheetHelper {
 
   renameExistingWorksheet = async (excelContext, objectName) => {
     const currentSheet = excelContext.workbook.worksheets.getActiveWorksheet();
-    const rangeOrNullObject = currentSheet.getUsedRangeOrNullObject();
+    const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
+    currentSheet.name = newSheetName;
+    await excelContext.sync();
+  }
 
+  /**
+   * Checks if active worksheet is empty.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @returns Flag indicating whether active worksheet is empty
+   */
+  isActiveWorksheetEmpty = async (excelContext) => {
+    const activeSheet = excelContext.workbook.worksheets.getActiveWorksheet();
+    const rangeOrNullObject = activeSheet.getUsedRangeOrNullObject();
     await excelContext.sync();
 
-    if (rangeOrNullObject.isNullObject) {
-      const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
-      currentSheet.name = newSheetName;
-      await excelContext.sync();
-    }
+    return rangeOrNullObject.isNullObject;
   }
 }
 

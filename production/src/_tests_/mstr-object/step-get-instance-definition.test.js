@@ -65,7 +65,7 @@ describe('StepGetInstanceDefinition', () => {
       jest.spyOn(console, 'error');
 
       jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation();
-      jest.spyOn(officeApiWorksheetHelper, 'renameExistingWorksheet').mockImplementation();
+      jest.spyOn(officeApiWorksheetHelper, 'isActiveWorksheetEmpty').mockImplementation();
       jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation();
       jest.spyOn(stepGetInstanceDefinition, 'modifyInstanceWithPrompt').mockReturnValue(
         { mstrTable: { rows: rowsParam } }
@@ -304,6 +304,7 @@ describe('StepGetInstanceDefinition', () => {
           rows: 'rowsModifyInstanceWithPromptTest',
         },
         oldBindId: 'bindIdTest',
+        shouldRenameExcelWorksheet: false,
         objectWorkingId: 'objectWorkingIdTest',
         startCell: expectedStartCell,
         totalRows: 'rowsModifyInstanceWithPromptTest',
@@ -502,6 +503,7 @@ describe('StepGetInstanceDefinition', () => {
           rows: 'rowsModifyInstanceWithPromptTest',
         },
         oldBindId: 'bindIdTest',
+        shouldRenameExcelWorksheet: false,
         objectWorkingId: 'objectWorkingIdTest',
         startCell: expectedStartCell,
         totalRows: 'rowsModifyInstanceWithPromptTest',

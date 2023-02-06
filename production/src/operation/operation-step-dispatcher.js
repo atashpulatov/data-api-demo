@@ -25,6 +25,7 @@ import {
   BACKUP_OBJECT_DATA,
   COMPLETE_CLEAR_DATA,
   HIGHLIGHT_OBJECT,
+  RENAME_EXCEL_WORKSHEET
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 
@@ -143,6 +144,10 @@ class OperationStepDispatcher {
 
   completeDisplaySuccessNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, DISPLAY_NOTIFICATION_COMPLETED));
+  }
+
+  completeRenameExcelWorksheet = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, RENAME_EXCEL_WORKSHEET));
   }
 }
 

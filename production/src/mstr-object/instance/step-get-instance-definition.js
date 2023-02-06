@@ -52,6 +52,8 @@ class StepGetInstanceDefinition {
 
       let startCell;
       let instanceDefinition;
+      let shouldRenameExcelWorksheet = false;
+
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         ({ body, visualizationInfo, instanceDefinition } = await dossierInstanceDefinition.getDossierInstanceDefinition(
           { ...objectData, visualizationInfo }
@@ -79,7 +81,7 @@ class StepGetInstanceDefinition {
       if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;
       } else {
-        await officeApiWorksheetHelper.renameExistingWorksheet(excelContext, name);
+        shouldRenameExcelWorksheet = await officeApiWorksheetHelper.isActiveWorksheetEmpty(excelContext);
       }
 
       const { mstrTable } = instanceDefinition;
@@ -107,6 +109,7 @@ class StepGetInstanceDefinition {
         excelContext,
         oldBindId: bindId,
         totalRows: instanceDefinition.rows,
+        shouldRenameExcelWorksheet
       };
 
       if (mstrTable.rows.length === 0) {
