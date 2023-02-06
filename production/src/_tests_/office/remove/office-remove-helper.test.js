@@ -164,14 +164,14 @@ describe('OfficeRemoveHelper', () => {
         },
       };
       const deleteMock = jest.fn();
-      const getRowsAboveMock = jest.fn().mockReturnValue({
+      const getResizedRangeMock = jest.fn().mockReturnValue({
         delete: deleteMock
       });
       const prevOfficeTable = {
         rows: 'rowsTest',
         getRange: () => ({
           getLastRow: () => ({
-            getRowsAbove: getRowsAboveMock
+            getResizedRange: getResizedRangeMock
           })
         })
       };
@@ -180,10 +180,12 @@ describe('OfficeRemoveHelper', () => {
       // then
       expect(deleteMock).toHaveBeenCalledTimes(expectedLoopSteps);
       expect(excelContextSyncMock).toHaveBeenCalledTimes(expectedLoopSteps);
-      expect(getRowsAboveMock).toHaveBeenCalledTimes(expectedLoopSteps);
+      expect(getResizedRangeMock).toHaveBeenCalledTimes(expectedLoopSteps);
 
-      const nrOfRowsToDeleteInLastStep = expectedRowsNo - ((expectedLoopSteps - 1) * contextLimitParam) - newRowsCount;
-      expect(getRowsAboveMock).toHaveBeenNthCalledWith(expectedLoopSteps, nrOfRowsToDeleteInLastStep);
+      const nrOfRowsToDeleteInLastStep = -(expectedRowsNo - ((expectedLoopSteps - 1)
+      * contextLimitParam) - (newRowsCount + 1));
+
+      expect(getResizedRangeMock).toHaveBeenNthCalledWith(expectedLoopSteps, nrOfRowsToDeleteInLastStep, 0);
     });
 
   it.each`

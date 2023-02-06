@@ -99,7 +99,7 @@ class OfficeRemoveHelper {
       officeTable
         .getRange()
         .getLastRow()
-        .getRowsAbove(rowsToDeleteCount)
+        .getResizedRange(-(rowsToDeleteCount - 1), 0)
         .delete('Up');
 
       await excelContext.sync();
