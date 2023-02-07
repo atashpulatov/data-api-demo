@@ -10,7 +10,14 @@ job 'stage-2-e2e-browser-test-python-mac' do
         name 'APPLICATION_VERSION'
         description 'the version of the application to deploy and test'
       end
+    end
 
+    office_365_connector do
+      url 'https://microstrategy.webhook.office.com/webhookb2/634be0ba-786a-432d-aa12-ec0f76352e81@901c038b-4638-4259-b115-c1753c7735aa/IncomingWebhook/7b18118a42a64ea1a0d5cc9f2ccde920/89167fb2-af2d-467d-9dd9-b81339b8327a'
+      notifySuccess         false
+      notifyFailure         true
+      notifyBackToNormal    false
+      notifyRepeatedFailure true
     end
   end
 
