@@ -1,28 +1,29 @@
-import React, { Component } from 'react';
+import React, { FormEvent } from 'react';
 import './auth-component.css';
-import PropTypes from 'prop-types';
 import {
-  Form, Icon, Input, Button, Checkbox, Select,
+  Form, Input, Button, Checkbox, Select,
 } from 'antd';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
+import { LinkOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
 import { authenticationHelper } from './authentication-helper';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { AuthenticateNotConnectedProps } from './auth-component-types';
 
 const FormItem = Form.Item;
 
-export class AuthenticateNotConnected extends Component {
-  constructor(props) {
+export class AuthenticateNotConnected extends React.Component<AuthenticateNotConnectedProps> {
+  constructor(props: AuthenticateNotConnectedProps) {
     super(props);
     localStorage.removeItem('refreshData');
     props.resetState();
   }
 
-  onLoginUser = async (event) => {
+  onLoginUser = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { form } = this.props;
-    await form.validateFields(async (err, values) => authenticationHelper.loginUser(err, values));
-  }
+    form.validateFields(async (err: Error, values: Object) => authenticationHelper.loginUser(err, values));
+  };
 
   render() {
     const { session, form, t } = this.props;
@@ -41,7 +42,7 @@ export class AuthenticateNotConnected extends Component {
               initialValue: session.username,
               rules: [{ required: true, message: t('Please input your username!') }],
             })(<Input
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<UserOutlined />}
               placeholder={t('Username')}
               maxLength={250}
             />)}
@@ -51,7 +52,7 @@ export class AuthenticateNotConnected extends Component {
               initialValue: session.password || '',
               rules: [{ message: t('Please input your Password!') }],
             })(<Input
-              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<LockOutlined />}
               type="password"
               placeholder={t('Password')}
             />)}
@@ -61,7 +62,7 @@ export class AuthenticateNotConnected extends Component {
               initialValue: session.envUrl || '',
               rules: [{ required: true, message: t('Please input environment URL!'), type: 'url' }],
             })(<Input
-              prefix={<Icon type="link" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={<LinkOutlined />}
               placeholder={t('environment URL')}
             />)}
           </FormItem>
@@ -92,24 +93,8 @@ export class AuthenticateNotConnected extends Component {
     );
   }
 }
-AuthenticateNotConnected.propTypes = {
-  form: PropTypes.shape({
-    validateFields: PropTypes.func,
-    getFieldDecorator: PropTypes.func
-  }),
-  session: PropTypes.shape({
-    username: PropTypes.string,
-    password: PropTypes.string,
-    envUrl: PropTypes.string,
-    loginMode: PropTypes.string,
-    isRememberMeOn: PropTypes.bool
-  }),
-  resetState: PropTypes.func,
-  t: PropTypes.func
-};
-AuthenticateNotConnected.defaultProps = { t: (text) => text, };
 
-function mapStateToProps(state) {
+function mapStateToProps(state: any) {
   return { session: state.sessionReducer, };
 }
 

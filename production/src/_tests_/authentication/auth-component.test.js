@@ -48,7 +48,8 @@ describe('AuthComponent', () => {
         history={history}
         session={mockSession}
         form={mockForm}
-        resetState={mockMapping} />
+        resetState={mockMapping}
+        t={(text) => text} />
     );
     const onLoginUserSpy = jest.spyOn(wrappedComponent.instance(), 'onLoginUser');
     const form = wrappedComponent.find('Form').at(0);

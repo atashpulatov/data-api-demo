@@ -1,11 +1,21 @@
 {
+  "plugins": ["react", "babel", "@typescript-eslint", "import"],
   "extends": [
+    "airbnb",
     "@mstr/eslint-config-mstr"
   ],
-  "parser": "@babel/eslint-parser",
-  "parserOptions": {
-    "ecmaVersion": 2020
+  "settings": {
+    "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
   },
+  "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
     "node": true,
@@ -18,6 +28,7 @@
     "OfficeExtension": true
   },
   "rules": {
+    "no-use-before-define": "off",
     "key-spacing": ["error", { "afterColon": true }],
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "jsx-quotes": ["warn", "prefer-double"],
@@ -31,7 +42,17 @@
     }],
     "curly" :["error", "all"],
     "object-curly-newline": ["error", {"multiline": true, "minProperties":4}],
-    "no-redeclare": ["error", { "builtinGlobals": false }]
+    "no-redeclare": ["error", { "builtinGlobals": false }],
+    "import/extensions": [
+      "error",
+      "always",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+   ]
   },
   "overrides": [
     {

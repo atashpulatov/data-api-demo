@@ -12,9 +12,9 @@
     "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true react-scripts test  --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eject": "react-scripts eject",
-    "eslint": "eslint ./src --ext .js,.jsx --max-warnings=0",
-    "eslint:json": "eslint ./src --ext .js,.jsx --max-warnings=0 --format json --output-file ./coverage/eslint.json",
-    "eslint:html": "eslint ./src --ext .js,.jsx --max-warnings=0 --format html --output-file ./coverage/eslint.html",
+    "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
+    "eslint:json": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format json --output-file ./coverage/eslint.json",
+    "eslint:html": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format html --output-file ./coverage/eslint.html",
     "start:desktop": "office-addin-debugging start manifest.xml desktop",
     "start:web": "office-addin-debugging start manifest.xml web",
     "stop": "office-addin-debugging stop manifest.xml",
@@ -22,6 +22,7 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@mstr/connector-components": "^1.1.5",
     "@mstr/mstr-react-library": "^1.10.2",
     "antd": "^3.26.20",
@@ -46,13 +47,14 @@
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
     "@babel/preset-env": "^7.17.12",
-    "@babel/preset-react": "^7.17.12",
+    "@babel/preset-react": "^7.18.6",
     "@mstr/eslint-config-mstr": "^0.1.7",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
     "enzyme": "^3.10.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jest": "^27.1.6",
     "eslint-plugin-jsx-a11y": "^6.4.1",
@@ -64,6 +66,7 @@
     "office-addin-manifest": "^1.6.3",
     "redux-mock-store": "^1.5.4",
     "regenerator-runtime": "^0.13.9",
+    "typescript": "^4.5.2",
     "webpack-cli": "^4.9.2"
   },
   "browserslist": {
