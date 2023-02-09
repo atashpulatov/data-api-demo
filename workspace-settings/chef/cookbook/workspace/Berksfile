@@ -3,7 +3,7 @@ load_berks_file($WORKSPACE_SETTINGS[:ecosystem][:root][:chef][:berksfile])
 
 cookbook_from_git 'chef_commons', '2.0.0'
 cookbook_from_git 'extras', '0.1.70'
-cookbook_from_git 'maven',   '0.2.7'
+cookbook_from_git 'maven', '1.0.0'
 
 cookbook_from_git 'java-osx', '0.1.1'
 cookbook_from_git 'java-windows', '1.0.3'
