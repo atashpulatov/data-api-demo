@@ -49,6 +49,14 @@ line parameter.
 (see `Settings / Update & Security / For developers / Use developer features`). **Note: ensure `Developer mode` is
 on, warning message regarding remote deployment or Windows Device Portal can be ignored.**
 
+1. Troubleshooting: If you encounter problems with launching EXCEL desktop try removing venv_win directory. 
+And run steps 2 to 6 modifying the **step 3** by running 
+   ```console
+   python -m ensurepip --upgrade
+   pip install -r requirements_stable.txt
+   ```
+
+
 <a name="windows_chrome_browser"></a>
 ### Windows Chrome browser
 
