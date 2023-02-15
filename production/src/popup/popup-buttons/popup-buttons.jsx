@@ -1,7 +1,7 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import './popup-buttons.css';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { errorMessages } from '../../error/constants';
@@ -38,13 +38,14 @@ export const PopupButtonsNotConnected = ({
   handleBack,
   disableActiveActions,
   onPreviewClick,
-  t = (text) => text,
   hideSecondary,
   disableSecondary,
   isPublished,
   checkingSelection,
   useImportAsRunButton
 }) => {
+  const [t] = useTranslation();
+
   const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
   const disableReasonForImport = getDisableReasonImport(
     isPublished, disableActiveActions, disableSecondary, checkingSelection
@@ -80,7 +81,6 @@ PopupButtonsNotConnected.propTypes = {
   handleOk: PropTypes.func,
   handleSecondary: PropTypes.func,
   handleCancel: PropTypes.func,
-  t: PropTypes.func,
   handleBack: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.func
@@ -98,4 +98,4 @@ function mapStateToProps({ navigationTree }) {
   return { isPrompted: navigationTree.isPrompted };
 }
 
-export const PopupButtons = connect(mapStateToProps)(withTranslation('common')(PopupButtonsNotConnected));
+export const PopupButtons = connect(mapStateToProps)(PopupButtonsNotConnected);

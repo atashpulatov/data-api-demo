@@ -28,7 +28,7 @@ class StepClearTableData {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
-  }
+  };
 }
 
 const stepClearTableData = new StepClearTableData();

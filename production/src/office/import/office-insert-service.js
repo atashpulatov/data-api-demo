@@ -21,7 +21,7 @@ class OfficeInsertService {
       await Promise.all(contextPromises);
       console.timeEnd('Context sync');
     }
-  }
+  };
 
   /**
    * Appends rows with data and attributes to object in Excel.
@@ -50,7 +50,7 @@ class OfficeInsertService {
 
     if (mstrTable.isCrosstab) { this.appendCrosstabRowsToRange(officeTable, header.rows, rowIndex); }
     contextPromises.push(excelContext.sync());
-  }
+  };
 
   /**
    * Appends rows with data to Excel table only.
@@ -87,25 +87,25 @@ class OfficeInsertService {
       }
     }
     console.groupEnd('Append rows');
-  }
+  };
 
- /**
+  /**
   * Appends crosstab row headers to imported object.
   *
   * @param {Office} officeTable Reference to Ecxcel table.
   * @param {Array} header Contains data for crosstab row headers.
   * @param {Number} rowIndex Specify from row we should append rows
   */
- appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex) => {
-   console.time('Append crosstab rows');
-   const startCell = officeTable
-     .getDataBodyRange()
-     .getRow(0)
-     .getCell(0, 0)
-     .getOffsetRange(rowIndex, 0);
-   officeApiCrosstabHelper.createRowsHeaders(startCell, headerRows);
-   console.timeEnd('Append crosstab rows');
- }
+  appendCrosstabRowsToRange = (officeTable, headerRows, rowIndex) => {
+    console.time('Append crosstab rows');
+    const startCell = officeTable
+      .getDataBodyRange()
+      .getRow(0)
+      .getCell(0, 0)
+      .getOffsetRange(rowIndex, 0);
+    officeApiCrosstabHelper.createRowsHeaders(startCell, headerRows);
+    console.timeEnd('Append crosstab rows');
+  };
 }
 
 const officeInsertService = new OfficeInsertService();

@@ -6,7 +6,7 @@ import { RunOutsideOfficeError } from '../../error/run-outside-office-error';
 class OfficeStoreHelper {
   init = (errorService) => {
     this.errorService = errorService;
-  }
+  };
 
   /**
   * Return reference to Office settings that is required in order to use Office Api

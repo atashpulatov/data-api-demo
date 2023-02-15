@@ -12,7 +12,7 @@ const SUBTYPES = [768, 769, 774, 776, 779, DOSSIER_SUBTYPE];
 class MstrListRestService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-  }
+  };
 
   /**
    * Uses imported helper function to check whether object is a Dossier, but only if it is the same subtype as Dossier
@@ -25,7 +25,7 @@ class MstrListRestService {
       return filterDossiersByViewMedia(object.viewMedia);
     }
     return true;
-  }
+  };
 
   /**
    * Applies filtering function to body.result array of objects
@@ -36,7 +36,7 @@ class MstrListRestService {
   filterDossier = (body) => {
     const { result } = body;
     return result.filter(this.filterFunction);
-  }
+  };
 
   /**
    * Extracts the totalItems value from the response body
@@ -44,7 +44,7 @@ class MstrListRestService {
    * @param {*} body
    * @returns
    */
-  processTotalItems = (body) => body.totalItems
+  processTotalItems = (body) => body.totalItems;
 
   /**
    * Creates the request parameters from redux state
@@ -59,7 +59,7 @@ class MstrListRestService {
     return {
       envUrl, authToken, typeQuery, getAncestors
     };
-  }
+  };
 
   /**
    * Get a projects dictionary with key:value {id:name} pairs
@@ -140,7 +140,7 @@ class MstrListRestService {
     return Promise.all(promiseList).then(() => {
       console.timeEnd('Fetching environment objects');
     });
-  }
+  };
 
   /**
    * Fetches all objects available in my Library from MSTR API and filters out non-Dossier objects.
@@ -155,7 +155,7 @@ class MstrListRestService {
       .withCredentials()
       .then((res) => res.body)
       .then(callback);
-  }
+  };
 
   /**
    * Fetches all projects for the authenticated session.
@@ -172,7 +172,7 @@ class MstrListRestService {
       .withCredentials()
       .then((res) => res.body)
       .then(callback);
-  }
+  };
 
   /**
    * Returns all objects available in my Library with filtered out non-Dossier objects.
@@ -181,7 +181,7 @@ class MstrListRestService {
   getMyLibraryObjectList = (callback = (res) => res) => {
     const cbFilter = (res) => callback(res.filter((object) => filterDossiersByViewMedia(object.target.viewMedia)));
     return this.fetchMyLibraryObjectList(cbFilter);
-  }
+  };
 
   /**
  * Logic for fetching a list of objects (Reports, Datasets and Dossiers) from MSTR API.

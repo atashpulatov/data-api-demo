@@ -30,12 +30,12 @@ class PopupStateActions {
       type: SET_POPUP_TYPE,
       popupType: PopupTypeEnum.dataPreparation,
     });
-  }
+  };
 
   onClearPopupState = () => (dispatch) => {
     dispatch(filterActions.changeSearching(''));
     dispatch({ type: CLEAR_POPUP_STATE, });
-  }
+  };
 
   onPopupBack = () => (dispatch) => {
     dispatch({ type: ON_POPUP_BACK });
@@ -43,7 +43,7 @@ class PopupStateActions {
     dispatch(popupActions.clearEditedObject());
     dispatch(navigationTreeActions.cancelDossierOpen());
     dispatch(filterActions.changeSorting({}));
-  }
+  };
 }
 
 export const popupStateActions = new PopupStateActions();

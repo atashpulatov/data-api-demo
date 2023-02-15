@@ -293,7 +293,7 @@ class OfficeApiHelper {
       setActiveCellAddress(activeCellAddress);
     });
     await excelContext.sync();
-  }
+  };
 
   /**
    * Takes cell address. Extracts and removes worksheet name.
@@ -314,7 +314,7 @@ class OfficeApiHelper {
       console.error(error);
       return '';
     }
-  }
+  };
 }
 
 export const officeApiHelper = new OfficeApiHelper();

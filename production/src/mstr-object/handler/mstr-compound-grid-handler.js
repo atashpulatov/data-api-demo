@@ -118,7 +118,7 @@ class CompoundGridHandler {
    * @param {JSON} response
    * @return {Object} object with rows property
    */
-  getRows = (response) => ({ row: this.renderRows(response.data) })
+  getRows = (response) => ({ row: this.renderRows(response.data) });
 
   /**
    * Gets subtotals defined or visible information from the response.
@@ -126,7 +126,7 @@ class CompoundGridHandler {
    * @param {JSON} response
    * @return {Object}
    */
-  getSubtotalsInformation = (response) => [] // TODO
+  getSubtotalsInformation = (_response) => []; // Not supported at this moment
 
   /**
    * Creates an array with metric values per columnSet

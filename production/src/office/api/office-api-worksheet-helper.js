@@ -12,7 +12,7 @@ class OfficeApiWorksheetHelper {
     sheet.load('protection/protected');
     await excelContext.sync();
     return sheet.protection.protected;
-  }
+  };
 
   /**
     * Returns true if specific worksheet is protected
@@ -29,7 +29,7 @@ class OfficeApiWorksheetHelper {
         return false;
       }
     }
-  }
+  };
 
   /**
   * Get sheet of the table. Return isSheetProtected
@@ -56,7 +56,7 @@ class OfficeApiWorksheetHelper {
     if (isProtected) {
       throw new ProtectedSheetError();
     }
-  }
+  };
 
   /**
   * Get address of the Excel cell based on value of insertNewWorksheet might also create new worksheet.
@@ -133,7 +133,7 @@ class OfficeApiWorksheetHelper {
     }
 
     return newSheetName;
-  }
+  };
 
   /**
   * Creates Excel worksheet and sets it as a active one. New worksheet name is based on added object name
@@ -153,7 +153,7 @@ class OfficeApiWorksheetHelper {
     await excelContext.sync();
     sheet.activate();
     await excelContext.sync();
-  }
+  };
 
   /**
    * Renames active worksheet name to the object name
@@ -167,7 +167,7 @@ class OfficeApiWorksheetHelper {
     const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
     currentSheet.name = newSheetName;
     await excelContext.sync();
-  }
+  };
 
   /**
    * Checks if active worksheet is empty.
@@ -181,7 +181,7 @@ class OfficeApiWorksheetHelper {
     await excelContext.sync();
 
     return rangeOrNullObject.isNullObject;
-  }
+  };
 }
 
 export const officeApiWorksheetHelper = new OfficeApiWorksheetHelper();

@@ -65,7 +65,7 @@ class GridHandler {
     }
     const row = jsonHandler.renderTabular(response.definition, response.data, onAttribute(rowTotals));
     return { row, rowTotals };
-  }
+  };
 
   /**
    * Gets object with crosstab rows and column headers
@@ -125,7 +125,7 @@ class GridHandler {
       rows: response.data.paging.total,
       columns
     };
-  }
+  };
 
   /**
    * Checks if response contains crosstabs
@@ -133,15 +133,15 @@ class GridHandler {
    * @param {JSON} response
    * @return {Boolean}
    */
-    isCrosstab = (response) => {
-      try {
-        const { grid } = response.definition;
-        return !!grid.crossTab && grid.columns.length !== 0;
-      } catch (error) {
-        // This is changing so often that we want to at least return false
-        return false;
-      }
-    };
+  isCrosstab = (response) => {
+    try {
+      const { grid } = response.definition;
+      return !!grid.crossTab && grid.columns.length !== 0;
+    } catch (error) {
+      // This is changing so often that we want to at least return false
+      return false;
+    }
+  };
 
   /**
    * Gets array with indexed column definition
@@ -170,7 +170,7 @@ class GridHandler {
     }
 
     return mstrAttributeFormHelper.splitAttributeForms(columns, supportForms);
-  }
+  };
 
   /**
    * Gets subtotals defined or visible information from the response.
@@ -185,7 +185,7 @@ class GridHandler {
     } catch (error) {
       return false;
     }
-  }
+  };
 }
 
 export default new GridHandler();

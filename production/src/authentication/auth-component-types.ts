@@ -7,7 +7,7 @@ export interface FormType {
     (node: React.ReactNode) => React.ReactNode;
 }
 
-export interface AuthenticateNotConnectedProps{
+export interface AuthenticateComponent{
   form: FormType;
   session: {
     username: string;
@@ -17,5 +17,4 @@ export interface AuthenticateNotConnectedProps{
     isRememberMeOn: boolean
   };
   resetState: () => void;
-  t: (text: string) => string;
 }

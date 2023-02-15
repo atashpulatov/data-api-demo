@@ -32,32 +32,32 @@ class MstrObjectType {
     },
   };
 
- visualizationType = {
-   GRID: 'grid',
-   COMPOUND_GRID: 'compound_grid',
-   BAR_CHART: 'bar_chart',
-   LINE_CHART: 'line_chart',
-   AREA_CHART: 'area_chart',
-   BUBBLE_CHART: 'bubble_chart',
-   PIE_CHART: 'pie_chart',
-   RING_CHART: 'ring_chart',
-   COMBO_CHART: 'combo_chart',
-   HISTOGRAM: 'histogram',
-   BOX_PLOT: 'box_plot',
-   WATERFALL: 'waterfall',
-   GOOGLE_MAP: 'google_map',
-   KPI: 'kpi',
-   HEAT_MAP: 'heat_map',
-   GEOSPATIAL_SERVICE: 'geosptial_service',
-   NETWORK: 'network',
-   IMAGE_LAYOUT: 'image_layout',
-   ESRI_MAP: 'esri_map',
-   MICROCHARTS: 'microcharts',
- };
+  visualizationType = {
+    GRID: 'grid',
+    COMPOUND_GRID: 'compound_grid',
+    BAR_CHART: 'bar_chart',
+    LINE_CHART: 'line_chart',
+    AREA_CHART: 'area_chart',
+    BUBBLE_CHART: 'bubble_chart',
+    PIE_CHART: 'pie_chart',
+    RING_CHART: 'ring_chart',
+    COMBO_CHART: 'combo_chart',
+    HISTOGRAM: 'histogram',
+    BOX_PLOT: 'box_plot',
+    WATERFALL: 'waterfall',
+    GOOGLE_MAP: 'google_map',
+    KPI: 'kpi',
+    HEAT_MAP: 'heat_map',
+    GEOSPATIAL_SERVICE: 'geosptial_service',
+    NETWORK: 'network',
+    IMAGE_LAYOUT: 'image_layout',
+    ESRI_MAP: 'esri_map',
+    MICROCHARTS: 'microcharts',
+  };
 
   getMstrTypeBySubtype = (objectSubtype = null) => Object.values(this.mstrObjectType).find(
     (type) => type.subtypes.indexOf(objectSubtype) !== -1
-  )
+  );
 
   getMstrTypeByName = (typeName) => {
     let checkedType;

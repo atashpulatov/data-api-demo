@@ -101,7 +101,7 @@ class SidePanelNotificationHelper {
       tableChanged: true,
       insertNewWorksheet,
     }));
-  }
+  };
 
   /**
    * Displays one of the 2 popup for clear data based on the values in redux store.
@@ -126,17 +126,17 @@ class SidePanelNotificationHelper {
   /**
    * Toggles flags for cleardata and refresh all existing objects.
    */
-   handleViewData = async () => {
-     try {
-       await officeApiHelper.checkStatusOfSessions();
-       this.reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
-       this.reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(false));
-       sidePanelService.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
-         .map(({ objectWorkingId }) => objectWorkingId));
-     } catch (error) {
-       errorService.handleError(error);
-     }
-   };
+  handleViewData = async () => {
+    try {
+      await officeApiHelper.checkStatusOfSessions();
+      this.reduxStore.dispatch(officeActions.toggleSecuredFlag(false));
+      this.reduxStore.dispatch(officeActions.toggleIsClearDataFailedFlag(false));
+      sidePanelService.refresh(officeReducerHelper.getObjectsListFromObjectReducer()
+        .map(({ objectWorkingId }) => objectWorkingId));
+    } catch (error) {
+      errorService.handleError(error);
+    }
+  };
 
   /**
    * Displays notifications on the objects tiles
@@ -182,7 +182,7 @@ class SidePanelNotificationHelper {
   shouldGenerateProgressPercentage = (objectOperation) => objectOperation
   && objectOperation.operationType !== REMOVE_OPERATION
   && objectOperation.operationType !== CLEAR_DATA_OPERATION
-  && objectOperation.operationType !== HIGHLIGHT_OPERATION
+  && objectOperation.operationType !== HIGHLIGHT_OPERATION;
 
   /**
    * Handles error thrown during invoking side panel actions like refresh, edit etc.
@@ -203,7 +203,7 @@ class SidePanelNotificationHelper {
       return;
     }
     errorService.handleError(error);
-  }
+  };
 
   /**
    * This method creates an interval and checkes every CONNECTION_CHECK_TIMOUT seconds
@@ -214,7 +214,7 @@ class SidePanelNotificationHelper {
     const checkInterval = setInterval(() => {
       authenticationHelper.doesConnectionExist(checkInterval);
     }, CONNECTION_CHECK_TIMEOUT);
-  }
+  };
 }
 
 export const sidePanelNotificationHelper = new SidePanelNotificationHelper();

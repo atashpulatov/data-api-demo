@@ -55,7 +55,7 @@ class StepModifyObject {
       operationStepDispatcher.updateObject(updatedObject);
     }
     operationStepDispatcher.completeModifyObject(objectWorkingId);
-  }
+  };
 }
 
 const stepModifyObject = new StepModifyObject();

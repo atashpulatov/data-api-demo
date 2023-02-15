@@ -20,7 +20,7 @@ class OfficeApiCrosstabHelper {
     const bodyRange = cell.getOffsetRange(rowsY, columnsX - 1);
     const startingCell = cell.getCell(0, 0).getOffsetRange(-(columnsY), -rowsX);
     return startingCell.getBoundingRect(bodyRange);
-  }
+  };
 
   /**
    * Gets the total range of crosstab report - it sums table body range and headers ranges
@@ -38,7 +38,7 @@ class OfficeApiCrosstabHelper {
     );
     const startingCell = officeTable.getRange().getCell(0, 0).getOffsetRange(-validColumnsY, -validRowsX);
     return startingCell.getBoundingRect(officeTable.getRange());
-  }
+  };
 
   /**
    * Gets the biggest valid range by checking axis by axis
@@ -59,7 +59,7 @@ class OfficeApiCrosstabHelper {
       }
     }
     return limit;
-  }
+  };
 
   /**
    * Clears the two crosstab report ranges
@@ -123,7 +123,7 @@ class OfficeApiCrosstabHelper {
       officeTable.showHeaders = false;
       throw error;
     }
-  }
+  };
 
   /**
    *Prepares parameters for createHeaders
@@ -144,7 +144,7 @@ class OfficeApiCrosstabHelper {
     // TODO: Move merge cells after we import the whole table
     // const directionVector = [0, 1];
     // this.createHeaders(headerArray, startingCell, directionVector);
-  }
+  };
 
   /**
    * Create column and title headers for crosstab.
@@ -183,7 +183,7 @@ class OfficeApiCrosstabHelper {
     this.insertHeadersValues(headerRange, columns, 'columns');
 
     return this.createHeaders(columns, startingCell, directionVector);
-  }
+  };
 
   /**
   * Create Title headers for crosstab report
@@ -266,7 +266,7 @@ class OfficeApiCrosstabHelper {
     borders.getItem('EdgeLeft').color = EXCEL_XTABS_BORDER_COLOR;
     borders.getItem('InsideVertical').color = EXCEL_XTABS_BORDER_COLOR;
     borders.getItem('InsideHorizontal').color = EXCEL_XTABS_BORDER_COLOR;
-  }
+  };
 
   /**
    * Create Headers structure in Excel
@@ -294,7 +294,7 @@ class OfficeApiCrosstabHelper {
       // moving to next attribute (row/column)
       startingCell = startingCell.getOffsetRange(offsetForMoving1, offsetForMoving2);
     }
-  }
+  };
 
   /**
    * Delete the empty row in Crosstab Report
@@ -320,7 +320,7 @@ class OfficeApiCrosstabHelper {
       headerRange.clear('Contents');
       return error;
     }
-  }
+  };
 
   /**
    * Gets dimensions od the headers of crosstab report.

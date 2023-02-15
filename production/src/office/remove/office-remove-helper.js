@@ -16,7 +16,7 @@ class OfficeRemoveHelper {
     const { isCrosstab, crosstabHeaderDimensions } = object;
     const officeTable = excelContext.workbook.tables.getItem(object.bindId);
     await this.removeExcelTable(officeTable, excelContext, isCrosstab, crosstabHeaderDimensions, isClear);
-  }
+  };
 
   /**
   * Remove Excel table object from workbook. For crosstab reports will also clear the headers
@@ -65,7 +65,7 @@ class OfficeRemoveHelper {
 
     excelContext.trackedObjects.remove(tableRange);
     await excelContext.sync();
-  }
+  };
 
   deleteTableInChunks = async (excelContext, officeTable) => {
     const deleteChunkSize = 10000;
@@ -73,7 +73,7 @@ class OfficeRemoveHelper {
 
     officeTable.delete();
     await excelContext.sync();
-  }
+  };
 
   /**
  * Deletes redundant rows in office table.
@@ -108,7 +108,7 @@ class OfficeRemoveHelper {
       tableRowCount = await officeApiDataLoader.loadSingleExcelData(excelContext, tableRows, 'count');
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
     }
-  }
+  };
 
   /**
    * Checks if the object existing in Excel workbook
@@ -128,7 +128,7 @@ class OfficeRemoveHelper {
       // await this.removeObjectNotExistingInExcel(object, officeContext);
       return false;
     }
-  }
+  };
 
   /**
    * Remove objects that no longer exists in the Excel workbook from the store
@@ -139,7 +139,7 @@ class OfficeRemoveHelper {
   removeObjectNotExistingInExcel = async (object, officeContext) => {
     officeStoreObject.removeObjectFromStore(object.objectWorkingId);
     await officeContext.document.bindings.releaseByIdAsync(object.bindId, () => { console.log('released binding'); });
-  }
+  };
 }
 
 export const officeRemoveHelper = new OfficeRemoveHelper();

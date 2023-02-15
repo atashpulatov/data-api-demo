@@ -48,7 +48,7 @@ class MstrAttributeFormHelper {
       }
     });
     return fullColumnInformation;
-  }
+  };
 
   /**
    * Get attribute title names with attribute forms
@@ -93,7 +93,7 @@ class MstrAttributeFormHelper {
       return titles;
     }
     return false;
-  }
+  };
 
   getAttributeWithForms = (elements, attrforms) => {
     if (!elements) { return []; }

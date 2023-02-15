@@ -75,7 +75,7 @@ const mapDispatchToProps = {
 
 PopupViewSelectorNotConnected.propTypes = {
   authToken: PropTypes.string,
-  popupType: PopupTypeEnum
+  popupType: PropTypes.oneOf(Object.values(PopupTypeEnum))
 };
 
 export const PopupViewSelector = connect(mapStateToProps, mapDispatchToProps)(PopupViewSelectorNotConnected);

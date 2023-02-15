@@ -50,7 +50,7 @@ class SidePanelEventHelper {
     notificationService.removeExistingNotification(ObjectToDelete.objectWorkingId);
     await officeApiHelper.checkStatusOfSessions();
     sidePanelService.remove([ObjectToDelete.objectWorkingId]);
-  }
+  };
 
   /**
    * Removes all objects which were imported on deleted worksheet
@@ -73,7 +73,7 @@ class SidePanelEventHelper {
 
     const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
     sidePanelService.remove(objectWorkingIds);
-  }
+  };
 }
 
 export const sidePanelEventHelper = new SidePanelEventHelper();

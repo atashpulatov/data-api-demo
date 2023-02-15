@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { Popover } from 'antd';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import logo from './assets/mstr_logo.png';
 import overflowHelper from '../helpers/helpers';
@@ -20,7 +20,6 @@ import getDocumentationLocale from '../helpers/get-documentation-locale';
 const APP_VERSION = packageJson.build;
 
 const { Office } = window;
-const language = Office?.context?.displayLanguage;
 
 export const SettingsMenuNotConnected = ({
   userFullName,
@@ -28,12 +27,13 @@ export const SettingsMenuNotConnected = ({
   userInitials,
   isSecured,
   objects,
-  t,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
   clearCache,
   isSettings
 }) => {
+  const [t, i18n] = useTranslation();
+
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && objects && objects.length > 0;
   const prepareEmail = () => {
@@ -42,6 +42,7 @@ export const SettingsMenuNotConnected = ({
     const excelAPI = officeContext.getRequirementSet();
     const userAgent = encodeURIComponent(navigator.userAgent);
     const message = t('Please don’t change the text below. Type your message above this line.');
+    const officeVersion = APP_VERSION || `dev`;
     const email = {
       address: 'info@microstrategy.com',
       title: 'MicroStrategy for Office Feedback',
@@ -51,7 +52,7 @@ export const SettingsMenuNotConnected = ({
         `Platform: ${platform} (${host})`,
         `Excel API: ${excelAPI}`,
         `Excel version: ${version}`,
-        `MicroStrategy for Office version: ${APP_VERSION || `dev`}`,
+        `MicroStrategy for Office version: ${officeVersion}`,
         `User agent: ${decodeURIComponent(userAgent)}`,
       ].join('\r\n'),
     };
@@ -103,7 +104,7 @@ export const SettingsMenuNotConnected = ({
         tabIndex="0"
         role="menuitem"
         onClick={isSecuredActive ? showConfirmationPopup : null}
-        onKeyUp={isSecuredActive ? (e) => (e.keyCode === 13 && showConfirmationPopup()) : null}>
+        onKeyUp={isSecuredActive ? (e) => (e.key === 'Enter' && showConfirmationPopup()) : null}>
         {t('Clear Data')}
       </li>
       <div className="separate-line" />
@@ -130,7 +131,7 @@ export const SettingsMenuNotConnected = ({
       <li>
         <a
           tabIndex="0"
-          href={`https://www2.microstrategy.com/producthelp/Current/Office/${getDocumentationLocale(language)}/index.htm`}
+          href={`https://www2.microstrategy.com/producthelp/Current/Office/${getDocumentationLocale(i18n.language)}/index.htm`}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -160,8 +161,6 @@ export const SettingsMenuNotConnected = ({
   );
 };
 
-SettingsMenuNotConnected.defaultProps = { t: (text) => text, };
-
 function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
   const { userFullName, userInitials, userID } = sessionReducer;
   const { isSecured, isSettings } = officeReducer;
@@ -176,7 +175,7 @@ const mapDispatchToProps = {
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
   clearCache: clearCacheImported,
 };
-export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(SettingsMenuNotConnected));
+export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
 async function logout(preLogout) {
   try {
@@ -201,5 +200,4 @@ SettingsMenuNotConnected.propTypes = {
   toggleIsConfirmFlag: PropTypes.func,
   clearCache: PropTypes.func,
   isSettings: PropTypes.bool,
-  t: PropTypes.func,
 };

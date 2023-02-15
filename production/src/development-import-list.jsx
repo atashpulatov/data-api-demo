@@ -9,9 +9,9 @@ export class DevelopmentImportList extends Component {
     this.state = { selectedObject: 'SeasonalReport' };
   }
 
-  setObject= (objectName) => {
+  setObject = (objectName) => {
     this.setState({ selectedObject: objectName });
-  }
+  };
 
   render() {
     const menu = (

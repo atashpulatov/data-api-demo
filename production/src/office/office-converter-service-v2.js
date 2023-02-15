@@ -38,7 +38,7 @@ class OfficeConverterServiceV2 {
   getRows = (response, isCrosstab) => {
     const handler = this.getHandler(response);
     return handler.getRows(response, isCrosstab);
-  }
+  };
 
   /**
    * Gets object with crosstab rows and column headers
@@ -52,7 +52,7 @@ class OfficeConverterServiceV2 {
   getHeaders = (response, isCrosstab, isCrosstabular) => {
     const handler = this.getHandler(response);
     return handler.getHeaders(response, isCrosstab, isCrosstabular);
-  }
+  };
 
   /**
      * Gets subtotals defined or visible information from the response.
@@ -95,7 +95,7 @@ class OfficeConverterServiceV2 {
       default:
         return mstrGridHandler;
     }
-  }
+  };
 
   /**
    * return reference to handler based on compound grid structure
@@ -124,7 +124,7 @@ class OfficeConverterServiceV2 {
 
     mstrCompoundGridFlatten.flattenColumnSets(response);
     return mstrGridHandler;
-  }
+  };
 }
 
 export default new OfficeConverterServiceV2();

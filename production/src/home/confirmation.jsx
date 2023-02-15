@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import warningIcon from './assets/icon_conflict.svg';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -13,8 +13,9 @@ export const ConfirmationNotConnected = ({
   objects,
   isConfirm,
   toggleIsConfirmFlag,
-  t
 }) => {
+  const [t] = useTranslation();
+
   useEffect(() => {
     const ua = window.navigator.userAgent;
     // this is fix IE11 - it didn't handle z-index properties correctly
@@ -79,10 +80,7 @@ ConfirmationNotConnected.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   isConfirm: PropTypes.bool,
   toggleIsConfirmFlag: PropTypes.func,
-  t: PropTypes.func
 };
-
-ConfirmationNotConnected.defaultProps = { t: (text) => text, };
 
 function clearData(objects) {
   notificationService.dismissNotifications();
@@ -97,4 +95,4 @@ function mapStateToProps({ officeReducer, objectReducer }) {
 
 const mapDispatchToProps = { toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag };
 
-export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(ConfirmationNotConnected));
+export const Confirmation = connect(mapStateToProps, mapDispatchToProps)(ConfirmationNotConnected);

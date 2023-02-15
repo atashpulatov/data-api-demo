@@ -112,7 +112,7 @@ class OfficeTableCreate {
       return prevOfficeTable.worksheet;
     }
     return excelContext.workbook.worksheets.getActiveWorksheet();
-  }
+  };
 
   /**
    * Get range of the table. For crosstabs range is extended by headers.
@@ -165,7 +165,7 @@ class OfficeTableCreate {
     }
 
     return tableStartCell;
-  }
+  };
 
   /**
    * Set name of the table and format office table headers
@@ -203,7 +203,7 @@ class OfficeTableCreate {
       await excelContext.sync();
       throw error;
     }
-  }
+  };
 }
 const officeTableCreate = new OfficeTableCreate();
 export default officeTableCreate;

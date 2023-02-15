@@ -118,7 +118,7 @@ class DossierInstanceDefinition {
       name = instanceDefinition.mstrTable.name;
     }
     return name;
-  }
+  };
 
   /**
    * Returns an error type based on error get from visualization importing.

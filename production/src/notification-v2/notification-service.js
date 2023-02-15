@@ -21,44 +21,44 @@ class NotificationService {
 
   sessionExpired = () => {
     this.reduxStore.dispatch(createSessionExpiredNotification());
-  }
+  };
 
   connectionRestored = () => {
     this.reduxStore.dispatch(clearGlobalNotification());
-  }
+  };
 
   sessionRestored = () => {
     this.reduxStore.dispatch(clearGlobalNotification());
-  }
+  };
 
   globalWarningAppeared = (payload) => {
     this.reduxStore.dispatch(displayGlobalNotification(payload));
-  }
+  };
 
   globalNotificationDissapear = () => {
     this.reduxStore.dispatch(clearGlobalNotification());
-  }
+  };
 
   showObjectWarning = (objectWorkingId, notification) => {
     this.reduxStore.dispatch(displayObjectWarning(objectWorkingId, notification));
-  }
+  };
 
   dismissNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
-  }
+  };
 
   dismissSuccessfulRemoveNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.dismissNotification(objectWorkingId);
-  }
+  };
 
   removeObjectFromNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
-  }
+  };
 
   cancelOperationFromNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
-  }
+  };
 
   /**
    * Removes the notification on rightside panel if exist
@@ -70,7 +70,7 @@ class NotificationService {
     if (notification) {
       this.callDismissNotification(notification);
     }
-  }
+  };
 
   /**
    * Manually calls dismissNotification and callback methods from notifications.
@@ -86,7 +86,7 @@ class NotificationService {
     notifications.forEach((notification) => {
       this.callDismissNotification(notification);
     });
-  }
+  };
 
   /**
    * Manually calls dismissNotification and callback methods from single notification.
@@ -97,7 +97,7 @@ class NotificationService {
   callDismissNotification = (notification) => {
     notification.dismissNotification && notification.dismissNotification();
     notification.callback && notification.callback();
-  }
+  };
 }
 
 export const notificationService = new NotificationService();

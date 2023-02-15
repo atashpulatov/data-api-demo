@@ -33,8 +33,10 @@
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "jsx-quotes": ["warn", "prefer-double"],
     "semi": ["error", "always"],
+    "@typescript-eslint/semi": "error",
     "no-console": "off",
     "no-await-in-loop": "off",
+    "class-methods-use-this": "off",
     "space-before-function-paren": ["error", {
       "anonymous": "always",
       "named": "never",

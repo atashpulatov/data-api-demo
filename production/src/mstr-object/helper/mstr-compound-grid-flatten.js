@@ -12,7 +12,7 @@ class MstrCompoundGridFlatten {
     grid.columnSets = grid.columnSets.filter(({ columns }) => columns.length > 0);
     headers.columnSets = headers.columnSets.filter((columnHeaders) => columnHeaders.length > 0);
     metricValues.columnSets = metricValues.columnSets.filter(({ raw }) => raw.length > 0);
-  }
+  };
 
   /**
    * Flatten compound grid column sets to structure compatible with grid handler
@@ -63,7 +63,7 @@ class MstrCompoundGridFlatten {
     }
 
     return metricValues;
-  }
+  };
 
   /**
    * Flatten headers values indexes from all column sets into single array
@@ -71,7 +71,7 @@ class MstrCompoundGridFlatten {
    * @param {Object} headers contains infromation about headers values indexes
    * @returns {Array} flattened metric values
    */
-  flattenColumnSetsHeaders= (headers) => {
+  flattenColumnSetsHeaders = (headers) => {
     const columSetsNumber = headers.columnSets.length;
     let headerIndexOffset = 0;
     const headerColumns = [];
@@ -83,7 +83,7 @@ class MstrCompoundGridFlatten {
       headerIndexOffset += headers.columnSets[i].length;
     }
     return headerColumns;
-  }
+  };
 
   /**
    * Flatten metric elemets from all column sets into single array
@@ -110,7 +110,7 @@ class MstrCompoundGridFlatten {
       }
     }
     return gridColumns;
-  }
+  };
 }
 
 const mstrCompoundGridFlatten = new MstrCompoundGridFlatten();

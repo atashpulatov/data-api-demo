@@ -18,7 +18,7 @@ class OperationBus {
       && operationReducer.operations[0];
     this.previousOperationCopy = copyOperationInfo(currentOperation);
     this.store.subscribe(this.listener);
-  }
+  };
 
   listener = () => {
     const { operationReducer } = this.store.getState();
@@ -43,7 +43,7 @@ class OperationBus {
       const currentObject = this.getCurrentObject(currentOperation.objectWorkingId);
       subscribedCallback(currentObject, currentOperation);
     }
-  }
+  };
 
   /**
    * Subscribes for a certain step from the operation's steps queue.
@@ -56,7 +56,7 @@ class OperationBus {
    */
   subscribe = (stepName, callback) => {
     this.subscribedCallbacksMap[stepName] = callback;
-  }
+  };
 
   /**
    * Returns the object related to certain objectWorkingId.
@@ -68,7 +68,7 @@ class OperationBus {
   getCurrentObject = (objectWorkingId) => {
     const { objects } = this.store.getState().objectReducer;
     return objects.find(object => object.objectWorkingId === objectWorkingId);
-  }
+  };
 }
 
 const copyOperationInfo = (currentOperation) => {

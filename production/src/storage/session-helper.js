@@ -14,7 +14,7 @@ const DEFAULT_SESSION_REFRESH_TIME = 60000;
 class SessionHelper {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-  }
+  };
 
   /**
    * Handles terminating Rest session and logging out the user from plugin
@@ -28,7 +28,7 @@ class SessionHelper {
     } catch (error) {
       errorService.handleError(error, { isLogout: true });
     }
-  }
+  };
 
   /**
    * Redirect to user to the login page. If it's development mode
@@ -51,7 +51,7 @@ class SessionHelper {
         window.location.reload();
       }
     }
-  }
+  };
 
   /**
    * Return Information about envUrl, authToken and USE_PROXY from redux store
@@ -66,7 +66,7 @@ class SessionHelper {
       authToken: currentStore.sessionReducer.authToken,
     };
     return session;
-  }
+  };
 
   /**
    * Sends lightweight request to prolong the session.
@@ -103,16 +103,16 @@ class SessionHelper {
     }
   };
 
- /**
+  /**
   * Installs throttle on keepSessionAlive method.
   *
   * invokes keepSessionAlive method at most once per every DEFAULT_SESSION_REFRESH_TIME
   *
   * @param {func} onSessionExpire is callback function e.g closePopup() default value is [null].
   */
- installSessionProlongingHandler = (onSessionExpire = null) => throttle(() => {
-   this.keepSessionAlive(onSessionExpire);
- }, DEFAULT_SESSION_REFRESH_TIME, { trailing: false })
+  installSessionProlongingHandler = (onSessionExpire = null) => throttle(() => {
+    this.keepSessionAlive(onSessionExpire);
+  }, DEFAULT_SESSION_REFRESH_TIME, { trailing: false });
 
   /**
    * Get userData about currently logged user from Api and stores the information in redux store
@@ -131,7 +131,7 @@ class SessionHelper {
     } catch (error) {
       errorService.handleError(error, { isLogout: !isDevelopment });
     }
-  }
+  };
 
   /**
    * Get information whether currently logged user can set attribute forms and store it in redux store
@@ -151,7 +151,7 @@ class SessionHelper {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   /**
   * Return Url of the current page
@@ -159,7 +159,7 @@ class SessionHelper {
   * @param {String} propertyName Key used by Office Api to determine value from settings
   * @return {String} Page Url
   */
-  getUrl = () => window.location.href
+  getUrl = () => window.location.href;
 
   /**
    * Checks what type of build is currently used
@@ -173,7 +173,7 @@ class SessionHelper {
     } catch (error) {
       return false;
     }
-  }
+  };
 
   /**
    * Allows to import objects from MSTR without the use of popup

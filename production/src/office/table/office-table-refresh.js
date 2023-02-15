@@ -165,21 +165,21 @@ class OfficeTableRefresh {
     return Math.abs(rows - tableRows.count);
   };
 
-   /**
+  /**
    * Get top left cell from the excel table.
    *
    * @param {Object} prevOfficeTable Reference to previous Excel table
    * @param {Object} excelContext
    *
    */
-   getStartCellOnRefresh = async (prevOfficeTable, excelContext) => {
-     const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
-     headerCell.load('address');
-     await excelContext.sync();
-     return officeApiHelper.getStartCellOfRange(headerCell.address);
-   };
+  getStartCellOnRefresh = async (prevOfficeTable, excelContext) => {
+    const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+    headerCell.load('address');
+    await excelContext.sync();
+    return officeApiHelper.getStartCellOfRange(headerCell.address);
+  };
 
-   /**
+  /**
    * Get top left cell from the excel table. For crosstabs return the first cell of Excel table not crosstab headers.
    *
    * @param {Object} prevOfficeTable Reference to previous Excel table
@@ -189,39 +189,39 @@ class OfficeTableRefresh {
    * @param {Object} mstrTable Contains information about mstr object
    *
    */
-   clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableChanged, startCell, mstrTable) => {
-     const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
-     const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
-       prevCrosstabDimensions,
-       prevOfficeTable,
-       excelContext,
-     );
+  clearIfCrosstabHeadersChanged = async (prevOfficeTable, excelContext, tableChanged, startCell, mstrTable) => {
+    const { prevCrosstabDimensions, crosstabHeaderDimensions, isCrosstab } = mstrTable;
+    const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
+      prevCrosstabDimensions,
+      prevOfficeTable,
+      excelContext,
+    );
 
-     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
-       if (validRowsX !== crosstabHeaderDimensions.rowsX
+    if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
+      if (validRowsX !== crosstabHeaderDimensions.rowsX
       || validColumnsY !== crosstabHeaderDimensions.columnsY) {
-         tableChanged = true;
-         prevCrosstabDimensions.rowsX = validRowsX;
-         prevCrosstabDimensions.columnsY = validColumnsY;
-       }
-       if (tableChanged) {
-         startCell = officeApiHelper.offsetCellBy(
-           startCell,
-           -prevCrosstabDimensions.columnsY,
-           -prevCrosstabDimensions.rowsX
-         );
-       }
-     }
+        tableChanged = true;
+        prevCrosstabDimensions.rowsX = validRowsX;
+        prevCrosstabDimensions.columnsY = validColumnsY;
+      }
+      if (tableChanged) {
+        startCell = officeApiHelper.offsetCellBy(
+          startCell,
+          -prevCrosstabDimensions.columnsY,
+          -prevCrosstabDimensions.rowsX
+        );
+      }
+    }
 
-     if (prevCrosstabDimensions) {
-       officeApiCrosstabHelper.clearCrosstabRange(prevOfficeTable, mstrTable, excelContext);
-     }
+    if (prevCrosstabDimensions) {
+      officeApiCrosstabHelper.clearCrosstabRange(prevOfficeTable, mstrTable, excelContext);
+    }
 
-     await excelContext.sync();
-     return { tableChanged, startCell };
-   }
+    await excelContext.sync();
+    return { tableChanged, startCell };
+  };
 
-   /**
+  /**
    * Get previously imported Excel table
    *
    * @param {Office} excelContext excel context
@@ -230,16 +230,16 @@ class OfficeTableRefresh {
    * @returns {Office} Reference to previously imported Excel table
    *
    */
-   getPreviousOfficeTable = async (excelContext, bindId, mstrTable) => {
-     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
-     await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
-     prevOfficeTable.load(['name', 'showTotals']);
-     prevOfficeTable.showHeaders = true;
-     // We can set showTotals value here, since the loaded value will not change until we load it again
-     prevOfficeTable.showTotals = false;
-     await excelContext.sync();
-     return prevOfficeTable;
-   }
+  getPreviousOfficeTable = async (excelContext, bindId, mstrTable) => {
+    const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
+    await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
+    prevOfficeTable.load(['name', 'showTotals']);
+    prevOfficeTable.showHeaders = true;
+    // We can set showTotals value here, since the loaded value will not change until we load it again
+    prevOfficeTable.showTotals = false;
+    await excelContext.sync();
+    return prevOfficeTable;
+  };
 }
 const officeTableRefresh = new OfficeTableRefresh();
 export default officeTableRefresh;

@@ -28,7 +28,7 @@ export class AttributeSelectorWindowNotConnected extends Component {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
-  }
+  };
 
   onTriggerUpdate = (
     chosenObjectId,

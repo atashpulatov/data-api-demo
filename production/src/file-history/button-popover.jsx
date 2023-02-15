@@ -10,17 +10,17 @@ export class ButtonPopover extends React.Component {
 
   componentWillUnmount = () => {
     clearTimeout(this.popoverTimeoutId);
-  }
+  };
 
   showPopover = () => {
     const { mouseEnterDelay } = this.props;
     this.popoverTimeoutId = setTimeout(() => this.setState({ popoverVisible: true }), mouseEnterDelay * 1000);
-  }
+  };
 
   hidePopover = () => {
     clearTimeout(this.popoverTimeoutId);
     this.setState({ popoverVisible: false });
-  }
+  };
 
   render() {
     const { placement, content, children } = this.props;

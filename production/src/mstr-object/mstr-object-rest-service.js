@@ -96,7 +96,7 @@ class MstrObjectRestService {
 
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-  }
+  };
 
   // eslint-disable-next-line class-methods-use-this
   async* fetchContentGenerator({
@@ -187,7 +187,7 @@ class MstrObjectRestService {
       .send(promptsAnswers)
       .withCredentials()
       .then((res) => res.status);
-  }
+  };
 
   answerPrompts = ({
     objectId, projectId, instanceId, promptsAnswers
@@ -202,7 +202,7 @@ class MstrObjectRestService {
       .send(promptsAnswers)
       .withCredentials()
       .then((res) => res.status);
-  }
+  };
 
   createDossierBasedOnReport = (chosenObjectId, instanceId, projectId) => {
     // TODO: get rid of the getState
@@ -230,7 +230,7 @@ class MstrObjectRestService {
       .send(body)
       .withCredentials()
       .then((res) => res.body);
-  }
+  };
 
   createInstance = ({
     objectId,
@@ -256,7 +256,7 @@ class MstrObjectRestService {
       .send(body)
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
-  }
+  };
 
   fetchVisualizationDefinition = ({
     projectId,
@@ -279,7 +279,7 @@ class MstrObjectRestService {
       .send(body || '')
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
-  }
+  };
 
   createDossierInstance = (projectId, objectId, body = {}) => {
     const storeState = this.reduxStore.getState();
@@ -292,7 +292,7 @@ class MstrObjectRestService {
       .send(body)
       .withCredentials()
       .then((res) => res.body.mid);
-  }
+  };
 
   getDossierInstanceDefinition = (projectId, objectId, dossierInstanceId) => {
     const storeState = this.reduxStore.getState();
@@ -304,7 +304,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then((res) => res.body);
-  }
+  };
 
   deleteDossierInstance = (projectId, objectId, instanceId) => {
     const storeState = this.reduxStore.getState();
@@ -316,7 +316,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then((res) => res.body);
-  }
+  };
 
   getDossierStatus = (dossierId, instanceId, projectId) => {
     const storeState = this.reduxStore.getState();
@@ -329,7 +329,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then((res) => res);
-  }
+  };
 
   getInstance = ({
     objectId,
@@ -360,7 +360,7 @@ class MstrObjectRestService {
       .send(body)
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
-  }
+  };
 
   modifyInstance = ({
     objectId,
@@ -391,7 +391,7 @@ class MstrObjectRestService {
       .send(body)
       .withCredentials()
       .then((res) => parseInstanceDefinition(res, attrforms));
-  }
+  };
 
   getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();
@@ -405,7 +405,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then((res) => res.body);
-  }
+  };
 
   getObjectInfo = (objectId, projectId, mstrObjectType = reportObjectType) => {
     const storeState = this.reduxStore.getState();
@@ -423,7 +423,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then((res) => res.body);
-  }
+  };
 
   /**
    * Gets the prompts applied to the object's instance.
@@ -443,7 +443,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then((res) => res.body);
-  }
+  };
 
   isPrompted = (objectId, projectId, objectTypeName) => {
     const storeState = this.reduxStore.getState();
@@ -462,7 +462,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
       .then((res) => res.body && res.body.length);
-  }
+  };
 
   /**
    * Function getting information about a cube from a certain project.
@@ -481,7 +481,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
       .then((res) => res.body.cubesInfos[0]);
-  }
+  };
 
   rePromptDossier = (dossierId, instanceId, projectId) => {
     const storeState = this.reduxStore.getState();
@@ -494,7 +494,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .withCredentials()
       .then((res) => res.body);
-  }
+  };
 }
 
 export const mstrObjectRestService = new MstrObjectRestService();

@@ -7,16 +7,16 @@ export class PromptsContainer extends Component {
     this.container = React.createRef();
   }
 
-    componentDidMount = () => {
-      const { postMount } = this.props;
-      postMount(this.container.current);
-    }
+  componentDidMount = () => {
+    const { postMount } = this.props;
+    postMount(this.container.current);
+  };
 
-    render() {
-      return (
-        <div ref={this.container} className="promptsContainer" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }} />
-      );
-    }
+  render() {
+    return (
+      <div ref={this.container} className="promptsContainer" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }} />
+    );
+  }
 }
 
 PromptsContainer.propTypes = { postMount: PropTypes.func };

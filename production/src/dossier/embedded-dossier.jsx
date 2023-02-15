@@ -254,7 +254,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
     }
-  }
+  };
 
   async restoreVizSelection(visualizationKey) {
     try {

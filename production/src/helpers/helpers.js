@@ -14,7 +14,7 @@ class OverflowHelperNotConnected {
     } catch (error) {
       return true;
     }
-  }
+  };
 }
 
 OverflowHelperNotConnected.propTypes = {

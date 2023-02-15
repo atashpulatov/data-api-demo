@@ -25,7 +25,7 @@ class StepCompleteClearData {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData);
     }
-  }
+  };
 }
 
 const stepCompleteClearData = new StepCompleteClearData();

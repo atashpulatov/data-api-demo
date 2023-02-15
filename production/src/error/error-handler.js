@@ -24,7 +24,7 @@ class ErrorService {
     this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
-  }
+  };
 
   handleObjectBasedError = (objectWorkingId, error, callback, operationData) => {
     const errorType = this.getErrorType(error, operationData);
@@ -42,7 +42,7 @@ class ErrorService {
     } else {
       this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
     }
-  }
+  };
 
   handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
     const { onConfirm, isLogout, ...parameters } = options;
@@ -50,14 +50,14 @@ class ErrorService {
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(isLogout, errorType);
-  }
+  };
 
   getErrorType = (error, operationData) => {
     const updateError = this.getExcelError(error, operationData);
     return updateError.type
     || this.getOfficeErrorType(updateError)
     || this.getRestErrorType(updateError);
-  }
+  };
 
   getErrorDetails = (error, errorMessage) => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
@@ -79,7 +79,7 @@ class ErrorService {
         break;
     }
     return details;
-  }
+  };
 
   displayErrorNotification = (error, type, message = '', onConfirm = null) => {
     const errorDetails = (error.response && error.response.text) || error.message || '';
@@ -91,7 +91,7 @@ class ErrorService {
     const payload = this.createNotificationPayload(message, details);
     payload.children = this.getChildrenButtons();
     this.notificationService.globalWarningAppeared(payload);
-  }
+  };
 
   getChildrenButtons = () => getNotificationButtons([{
     type: 'basic',
@@ -105,7 +105,7 @@ class ErrorService {
         this.fullLogOut();
       }, TIMEOUT);
     }
-  }
+  };
 
   getOfficeErrorType = (error) => {
     console.warn({ error });
@@ -115,7 +115,7 @@ class ErrorService {
       return stringMessageToErrorType(error.message);
     }
     return null;
-  }
+  };
 
   /**
    * Function getting errors that occurs in types of operations.
@@ -159,19 +159,19 @@ class ErrorService {
     }
     const status = error.status || (error.response ? error.response.status : null);
     return httpStatusToErrorType(status);
-  }
+  };
 
   getErrorMessage = (error, options = { chosenObjectName: 'Report' }) => {
     const errorType = this.getErrorType(error);
     return errorMessageFactory(errorType)({ error, ...options });
-  }
+  };
 
   fullLogOut = async () => {
     this.notificationService.dismissNotifications();
     await this.sessionHelper.logOutRest();
     this.sessionActions.logOut();
     this.sessionHelper.logOutRedirect();
-  }
+  };
 
   createNotificationPayload(message, details) {
     const buttons = [

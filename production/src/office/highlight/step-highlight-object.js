@@ -19,7 +19,7 @@ class StepHighlightObject {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
-  }
+  };
 }
 
 const stepHighlightObject = new StepHighlightObject();

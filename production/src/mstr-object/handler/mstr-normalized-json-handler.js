@@ -41,7 +41,7 @@ class NormalizedJsonHandler {
       value: formValues || [name],
       subtotalAddress: crossTab ? { attributeIndex, colIndex, axis } : { attributeIndex, rowIndex },
     };
-  }
+  };
 
   /**
    * Gets the attribute name based on its index, returns object with an additional value key.
@@ -56,7 +56,7 @@ class NormalizedJsonHandler {
     const rawAttribute = definition.grid[axis][attributeIndex];
     const { name, formValues } = rawAttribute;
     return { ...rawAttribute, value: formValues || [name] };
-  }
+  };
 
   /**
    * Get an array with element names
@@ -82,7 +82,7 @@ class NormalizedJsonHandler {
       }
     }
     return result;
-  }
+  };
 
   /**
    * Get an array with element names
@@ -99,7 +99,7 @@ class NormalizedJsonHandler {
       result.push(this.lookupAttributeName(definition, axis, attributeIndex));
     }
     return result;
-  }
+  };
 
   /**
    * Creates a 2D Array with row attribute headers and metric values
@@ -175,7 +175,7 @@ class NormalizedJsonHandler {
       result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
     }
     return result;
-  }
+  };
 
   /**
    * Creates a 2D array with the crosstabs headers
@@ -202,7 +202,7 @@ class NormalizedJsonHandler {
     });
 
     return axis === 'columns' ? this.transposeMatrix(matrix) : matrix;
-  }
+  };
 
   /**
    * Creates a 2D array with the header titles
@@ -224,7 +224,7 @@ class NormalizedJsonHandler {
     });
     if (columnTitles.length === 0) { return [[]]; }
     return columnTitles;
-  }
+  };
 
   /**
    * Creates an array with the metric values. We pass a function to pick the object key onElement.
@@ -236,7 +236,7 @@ class NormalizedJsonHandler {
    *
    * @return {Array}
    */
-  renderRows = (data, valueMatrix = 'raw') => ((data.metricValues && data.metricValues[valueMatrix].length) ? data.metricValues[valueMatrix] : Array(data.paging.current).fill(Array(data.headers.columns[0].length).fill(null)))
+  renderRows = (data, valueMatrix = 'raw') => ((data.metricValues && data.metricValues[valueMatrix].length) ? data.metricValues[valueMatrix] : Array(data.paging.current).fill(Array(data.headers.columns[0].length).fill(null)));
 
   /**
    * For keep-only/exclude on an attribute cell
@@ -253,7 +253,7 @@ class NormalizedJsonHandler {
     const attribute = definition.grid[axis][attributeIndex];
     const element = attribute.elements[headerIndex];
     return element.id;
-  }
+  };
 
   /**
    * For keep-only/exclude on a metric value cell
@@ -268,7 +268,7 @@ class NormalizedJsonHandler {
     const rowHeader = headers.rows[mvZoneRowIndex];
     const columnHeader = headers.columns[mvZoneColumnIndex];
     return (rowHeader.concat(columnHeader)).map((element) => element.id);
-  }
+  };
 
   getMetricsColumnsInformation(columns) {
     if (columns.length === 0) { return columns; }

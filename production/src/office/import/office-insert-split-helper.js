@@ -41,7 +41,7 @@ class OfficeInsertSplitHelper {
     } while (!isFitSize);
     console.timeEnd('Split Rows');
     return splitRows;
-  }
+  };
 
   /**
    * Check size of passed object in MB
@@ -64,7 +64,7 @@ class OfficeInsertSplitHelper {
       }
     }
     return false;
-  }
+  };
 }
 
 const officeInsertSplitHelper = new OfficeInsertSplitHelper();

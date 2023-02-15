@@ -7,7 +7,7 @@ class AuthenticationHelper {
     this.sessionActions = sessionActions;
     this.authenticationService = authenticationService;
     this.errorService = errorService;
-  }
+  };
 
   loginUser = async (err, values) => {
     if (err) {
@@ -24,14 +24,14 @@ class AuthenticationHelper {
     } finally {
       this.sessionActions.disableLoading();
     }
-  }
+  };
 
   validateAuthToken = () => {
     const reduxStoreState = this.reduxStore.getState();
     const { authToken } = reduxStoreState.sessionReducer;
     const { envUrl } = reduxStoreState.sessionReducer;
     return this.authenticationService.putSessions(envUrl, authToken);
-  }
+  };
 
   /**
    * Checks for internet connection by trying to access image resource
@@ -59,7 +59,7 @@ class AuthenticationHelper {
           clearInterval(checkInterval);
         }
       });
-  }
+  };
 
   /**
    * Gets username and environment URL from Redux store.
@@ -79,7 +79,7 @@ class AuthenticationHelper {
   getCurrentMstrUserFullName = () => {
     const { userFullName } = this.reduxStore.getState().sessionReducer;
     return userFullName;
-  }
+  };
 }
 
 export const authenticationHelper = new AuthenticationHelper();

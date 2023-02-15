@@ -43,20 +43,20 @@ class PopupViewSelectorHelper {
       && isNullOrEmpty(props.editedObject.selectedMetrics)
       && isNullOrEmpty(props.editedObject.selectedFilters)
     );
-  }
+  };
 
   promptedReportSubmitted = (props) => (
     !!(props.propsToPass.isPrompted || props.isPrompted)
     && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
-  )
+  );
 
   isInstanceWithPromptsAnswered = (props) => (
     !!props.editedObject
     && !!props.editedObject.instanceId
     && props.preparedInstance === props.editedObject.instanceId
-  )
+  );
 
-  arePromptsAnswered = (props) => !!props.dossierData && !!props.dossierData.instanceId
+  arePromptsAnswered = (props) => !!props.dossierData && !!props.dossierData.instanceId;
 
   obtainInstanceWithPromptsAnswers = async (props) => {
     const { editedObject, chosenProjectId, chosenObjectId } = props;
@@ -98,7 +98,7 @@ class PopupViewSelectorHelper {
       body,
     };
     props.preparePromptedReport(instanceDefinition.instanceId, preparedReport);
-  }
+  };
 
   // TODO: get this method from library
   createBody = (attributes, metrics, filters, instanceId) => {
@@ -126,7 +126,7 @@ class PopupViewSelectorHelper {
       body.viewFilter = this.composeFilter(filters);
     }
     return body;
-  }
+  };
 
   // TODO: remove once create body is from library
   composeFilter = (selectedFilters) => {
@@ -158,7 +158,7 @@ class PopupViewSelectorHelper {
     return operandsLength === 1
       ? filterOperands[0]
       : { operator: 'And', operands: filterOperands };
-  }
+  };
 
   proceedToImport = (props) => {
     let visualizationInfo;
@@ -196,7 +196,7 @@ class PopupViewSelectorHelper {
     }
     props.startImport();
     popupHelper.officeMessageParent(message);
-  }
+  };
 }
 
 export const popupViewSelectorHelper = new PopupViewSelectorHelper();

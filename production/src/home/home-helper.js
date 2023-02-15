@@ -12,7 +12,7 @@ export class HomeHelper {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
-  }
+  };
 
   saveLoginValues = () => {
     const { authToken } = this.reduxStore.getState().sessionReducer;
@@ -56,27 +56,27 @@ export class HomeHelper {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   getStorageItem = (key = 'iSession') => window.localStorage.getItem(key);
 
-/**
- * With the introduction of http-only we cannot get the iSession token from the cookies
- * Retrieve the stored token from localstorage or Excel settings and save in redux store
- *
- * @returns {String} iSession token
- */
-getTokenFromStorage = () => {
-  const iSession = this.getStorageItem('iSession') || officeStoreRestoreObject.getExcelSettingValue('iSession');
-  if (iSession) {
-    this.sessionActions.logIn(iSession);
-    return iSession;
-  }
-};
+  /**
+   * With the introduction of http-only we cannot get the iSession token from the cookies
+   * Retrieve the stored token from localstorage or Excel settings and save in redux store
+   *
+   * @returns {String} iSession token
+   */
+  getTokenFromStorage = () => {
+    const iSession = this.getStorageItem('iSession') || officeStoreRestoreObject.getExcelSettingValue('iSession');
+    if (iSession) {
+      this.sessionActions.logIn(iSession);
+      return iSession;
+    }
+  };
 
-  getWindowLocation = () => window.location
+  getWindowLocation = () => window.location;
 
-  getDocumentCookie = () => document.cookie
+  getDocumentCookie = () => document.cookie;
 
   secureData = async (objects) => {
     try {
@@ -111,7 +111,7 @@ getTokenFromStorage = () => {
     const isChrome = userAgent.includes('chrome');
 
     return isMacintosh && isWebkit && !isChrome;
-  }
+  };
 }
 
 export const homeHelper = new HomeHelper();

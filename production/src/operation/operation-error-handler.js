@@ -25,7 +25,7 @@ class OperationErrorHandler {
   handleOperationError = async (objectData, operationData, error) => {
     const callback = this.getCallback(objectData, operationData);
     if (callback) { errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData); }
-  }
+  };
 
   /**
    * Function handling erros that occured during Import and Duplicate operation.
@@ -54,7 +54,7 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
 
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
-  }
+  };
 
   /**
    * Function handling erros that occured during Refresh and Edit operation.
@@ -78,7 +78,7 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
 
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
-  }
+  };
 
   /**
    * Function handling erros that occured during Clear Data operation.
@@ -97,7 +97,7 @@ class OperationErrorHandler {
     }
 
     officeActions.toggleIsClearDataFailedFlag(true)(this.reduxStore.dispatch);
-  }
+  };
 
   /**
    * Function handling erros that occurs in other types of operations.
@@ -111,7 +111,7 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
 
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
-  }
+  };
 
   /**
    * Function geting callback that occurs in all types of operations.

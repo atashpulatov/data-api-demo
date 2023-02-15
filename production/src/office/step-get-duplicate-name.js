@@ -4,7 +4,7 @@ import operationErrorHandler from '../operation/operation-error-handler';
 class StepGetDuplicateName {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
-  }
+  };
 
   /**
   * Assigns new name to duplicated object.
@@ -39,7 +39,7 @@ class StepGetDuplicateName {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData);
     }
-  }
+  };
 
   /**
    * Prepares new name for duplicated object based on original object name.
@@ -73,7 +73,7 @@ class StepGetDuplicateName {
     const nameCandidate = splitedName.join(' ');
 
     return nameCandidate;
-  }
+  };
 
   /**
    * Checks nameCandidate for conflicts with names of other imported objects.
@@ -96,7 +96,7 @@ class StepGetDuplicateName {
       finalNameCandidate = this.prepareNewNameForDuplicatedObject(finalNameCandidate);
     }
     return finalNameCandidate;
-  }
+  };
 }
 
 const stepGetDuplicateName = new StepGetDuplicateName();

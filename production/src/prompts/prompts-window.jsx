@@ -51,7 +51,7 @@ export class PromptsWindowNotConnected extends Component {
     window.removeEventListener('message', this.messageReceived);
   }
 
-  sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds))
+  sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
   preparePromptedReport = async (chosenObjectId, projectId, promptsAnswers) => {
     const config = { objectId: chosenObjectId, projectId };
@@ -71,7 +71,7 @@ export class PromptsWindowNotConnected extends Component {
     dossierInstanceDefinition.id = chosenObjectId;
 
     return dossierInstanceDefinition;
-  }
+  };
 
   answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers) => {
     const instanceId = instanceDefinition.mid;
@@ -96,7 +96,7 @@ export class PromptsWindowNotConnected extends Component {
       count += 1;
     }
     return instanceId;
-  }
+  };
 
   promptAnsweredHandler = (newAnswer) => {
     this.setState({ isPromptLoading: true });
@@ -107,11 +107,11 @@ export class PromptsWindowNotConnected extends Component {
     } else {
       this.setState({ newPromptsAnswers: [newAnswer] });
     }
-  }
+  };
 
   promptLoadedHandler = () => {
     this.setState({ isPromptLoading: false });
-  }
+  };
 
   loadEmbeddedDossier = async (container) => {
     const { loading, chosenObjectId, isReprompt } = this.state;
@@ -203,7 +203,7 @@ export class PromptsWindowNotConnected extends Component {
       console.error({ error });
       popupHelper.handlePopupErrors(error);
     }
-  }
+  };
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
@@ -221,7 +221,7 @@ export class PromptsWindowNotConnected extends Component {
     } catch (error) {
       popupHelper.handlePopupErrors(error);
     }
-  }
+  };
 
   closePopup = () => {
     const { commandCancel } = selectorProperties;
@@ -245,7 +245,7 @@ export class PromptsWindowNotConnected extends Component {
         scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
       }
     });
-  }
+  };
 
   messageReceived = (message = {}) => {
     if (message.data && message.data.value && message.data.value.iServerErrorCode) {
@@ -271,18 +271,18 @@ export class PromptsWindowNotConnected extends Component {
     if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
       this.prolongSession();
     }
-  }
+  };
 
   onPromptsContainerMount = (container) => {
     scriptInjectionHelper.watchForIframeAddition(container, this.onIframeLoad);
     this.loadEmbeddedDossier(container);
-  }
+  };
 
   handleBack = () => {
     const { cancelImportRequest, onPopupBack } = this.props;
     cancelImportRequest();
     onPopupBack();
-  }
+  };
 
   render() {
     const { isReprompt, isPromptLoading } = this.state;

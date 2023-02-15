@@ -89,7 +89,7 @@ class PopupHelper {
       });
     });
     return checkedForms;
-  }
+  };
 
   parseFilters(filtersNodes) {
     if (filtersNodes && filtersNodes[0] && filtersNodes[0].operands) {

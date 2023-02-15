@@ -68,7 +68,7 @@ class OfficeReducerHelper {
   */
   dispayPopupOnSidePanel = (popupData) => {
     this.reduxStore.dispatch(officeActions.setRangeTakenPopup(popupData));
-  }
+  };
 }
 
 const officeReducerHelper = new OfficeReducerHelper();

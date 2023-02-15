@@ -1,7 +1,7 @@
 class OfficeContext {
-  getOffice = () => window.Office
+  getOffice = () => window.Office;
 
-  getExcel = () => window.Excel
+  getExcel = () => window.Excel;
 
   /**
    * Returns the highest requirement set supported by the current platform.
@@ -17,7 +17,7 @@ class OfficeContext {
       if (isSupported) { api += 1; }
     }
     return `1.${api - 1}`;
-  }
+  };
 
   /**
    * Check if requirement set is supported.
@@ -31,7 +31,7 @@ class OfficeContext {
       return Office.context.requirements.isSetSupported('ExcelAPI', `${version}`);
     }
     return false;
-  }
+  };
 }
 
 export const officeContext = new OfficeContext();

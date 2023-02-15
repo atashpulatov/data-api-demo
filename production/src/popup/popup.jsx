@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { libraryErrorController } from '@mstr/mstr-react-library';
+import { useTranslation } from 'react-i18next';
 import { PopupViewSelector } from './popup-view-selector';
-import i18next from '../i18n';
 import InternetConnectionError from './internet-connection-error';
 import { popupHelper } from './popup-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
@@ -9,17 +9,21 @@ import { SessionExtendingWrapper } from './session-extending-wrapper';
 /* global Office */
 
 export const Popup = () => {
-  React.useEffect(() => {
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
     libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
   }, []);
 
-  i18next.changeLanguage(i18next.options.resources[Office.context.displayLanguage]
-    ? Office.context.displayLanguage
-    : 'en-US');
+  useEffect(() => {
+    i18n.changeLanguage(Office.context.displayLanguage || 'en-US');
+  }, [i18n]);
 
-  const { commandCancel } = selectorProperties;
-  const message = { command: commandCancel, };
-  const closePopup = () => popupHelper.officeMessageParent(message);
+  const closePopup = () => {
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
+    popupHelper.officeMessageParent(message);
+  };
 
   return (
     <SessionExtendingWrapper id="popup-wrapper" onSessionExpire={closePopup}>

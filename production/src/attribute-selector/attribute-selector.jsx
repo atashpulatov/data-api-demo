@@ -1,22 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { officeContext } from '../office/office-context';
 import { errorMessages, errorCodes } from '../error/constants';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import './attribute-selector.css';
 
-export class AttributeSelectorNotConnected extends Component {
-  constructor(props) {
-    super(props);
-    this.handleUnauthorized = this.handleUnauthorized.bind(this);
-  }
+export const AttributeSelectorNotConnected = (props) => {
+  const [t, i18n] = useTranslation();
 
   /**
    * Handles unathorized error from library - rearrange
@@ -24,9 +20,9 @@ export class AttributeSelectorNotConnected extends Component {
    *
    * @param {Error} e -  Error thrown by mstrReactLibrary
    */
-  handleUnauthorized(e) {
+  const handleUnauthorized = (e) => {
     const { ERR009 } = errorCodes;
-    const { handlePopupErrors } = this.props;
+    const { handlePopupErrors } = props;
     const newErrorObject = {
       status: e.status,
       response: {
@@ -39,47 +35,46 @@ export class AttributeSelectorNotConnected extends Component {
       }
     };
     handlePopupErrors(newErrorObject);
-  }
+  };
 
-  render() {
-    const {
-      title, session, displayAttrFormNames, isEdit,
-      triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
-      resetTriggerUpdate, attributesSelectedChange, t, openModal, closeModal,
-      switchImportSubtotalsOnImport, switchImportSubtotalsOnEdit,
-      updateDisplayAttrFormOnImport, updateDisplayAttrFormOnEdit,
-    } = this.props;
-    const locale = officeContext.getOffice().context.displayLanguage;
-    const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
-    const displayAttrFormSet = editedObject.displayAttrFormNames || displayAttrFormNames || defaultAttrFormNames;
-    return (
-      <ErrorBoundary>
-        <AttributeMetricFilter
-          t={t}
-          locale={locale}
-          attributesSelectedChange={attributesSelectedChange}
-          key={chosenObject.id}
-          title={title}
-          session={mapToLegacySession(chosenObject, session, editedObject)}
-          mstrData={{ ...mapToLegacyMstrData(chosenObject, session, editedObject), supportForms, isEdit }}
-          triggerUpdate={triggerUpdate}
-          onTriggerUpdate={onTriggerUpdate}
-          withDataPreview
-          resetTriggerUpdate={resetTriggerUpdate}
-          withFolderTree={false}
-          openModal={openModal}
-          closeModal={closeModal}
-          toggleSubtotal={isEdit ? switchImportSubtotalsOnEdit : switchImportSubtotalsOnImport}
-          importSubtotal={editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal}
-          handleUnauthorized={this.handleUnauthorized}
-          onDisplayAttrFormNamesUpdate={isEdit ? updateDisplayAttrFormOnEdit : updateDisplayAttrFormOnImport}
-          displayAttrFormNames={displayAttrFormSet}
-          displayAttrFormNamesOptions={officeProperties.displayAttrFormNamesOptions}
-        />
-      </ErrorBoundary>
-    );
-  }
-}
+  const {
+    title, session, displayAttrFormNames, isEdit,
+    triggerUpdate, onTriggerUpdate, chosenObject, importSubtotal, editedObject, supportForms,
+    resetTriggerUpdate, attributesSelectedChange, openModal, closeModal,
+    switchImportSubtotalsOnImport, switchImportSubtotalsOnEdit,
+    updateDisplayAttrFormOnImport, updateDisplayAttrFormOnEdit,
+  } = props;
+
+  const defaultAttrFormNames = officeProperties.displayAttrFormNames.automatic;
+  const displayAttrFormSet = editedObject.displayAttrFormNames || displayAttrFormNames || defaultAttrFormNames;
+
+  return (
+    <ErrorBoundary>
+      <AttributeMetricFilter
+        t={t}
+        locale={i18n.language}
+        attributesSelectedChange={attributesSelectedChange}
+        key={chosenObject.id}
+        title={title}
+        session={mapToLegacySession(chosenObject, session, editedObject)}
+        mstrData={{ ...mapToLegacyMstrData(chosenObject, session, editedObject), supportForms, isEdit }}
+        triggerUpdate={triggerUpdate}
+        onTriggerUpdate={onTriggerUpdate}
+        withDataPreview
+        resetTriggerUpdate={resetTriggerUpdate}
+        withFolderTree={false}
+        openModal={openModal}
+        closeModal={closeModal}
+        toggleSubtotal={isEdit ? switchImportSubtotalsOnEdit : switchImportSubtotalsOnImport}
+        importSubtotal={editedObject.subtotalsInfo ? editedObject.subtotalsInfo.importSubtotal : importSubtotal}
+        handleUnauthorized={handleUnauthorized}
+        onDisplayAttrFormNamesUpdate={isEdit ? updateDisplayAttrFormOnEdit : updateDisplayAttrFormOnImport}
+        displayAttrFormNames={displayAttrFormSet}
+        displayAttrFormNamesOptions={officeProperties.displayAttrFormNamesOptions}
+      />
+    </ErrorBoundary>
+  );
+};
 
 const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
   const legacyObject = {
@@ -124,7 +119,6 @@ AttributeSelectorNotConnected.propTypes = {
   updateDisplayAttrFormOnEdit: PropTypes.func,
   handlePopupErrors: PropTypes.func,
   onTriggerUpdate: PropTypes.func,
-  t: PropTypes.func,
   isEdit: PropTypes.bool,
   importSubtotal: PropTypes.bool,
   switchImportSubtotalsOnImport: PropTypes.func,
@@ -139,8 +133,6 @@ AttributeSelectorNotConnected.propTypes = {
   }),
   supportForms: PropTypes.bool,
 };
-
-AttributeSelectorNotConnected.defaultProps = { t: (text) => text, };
 
 const mapStateToProps = (state) => {
   const {
@@ -175,4 +167,4 @@ const mapDispatchToProps = {
   updateDisplayAttrFormOnEdit: popupActions.updateDisplayAttrFormOnEdit,
 };
 
-export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(AttributeSelectorNotConnected));
+export const AttributeSelector = connect(mapStateToProps, mapDispatchToProps)(AttributeSelectorNotConnected);

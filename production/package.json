@@ -22,7 +22,6 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@ant-design/icons": "^5.0.1",
     "@mstr/connector-components": "^1.1.5",
     "@mstr/mstr-react-library": "^1.10.2",
     "antd": "^3.26.20",

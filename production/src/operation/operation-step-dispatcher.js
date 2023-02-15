@@ -132,23 +132,23 @@ class OperationStepDispatcher {
 
   moveNotificationToInProgress = (objectWorkingId) => {
     this.reduxStore.dispatch({ type: MOVE_NOTIFICATION_TO_IN_PROGRESS, payload: { objectWorkingId } });
-  }
+  };
 
   completeMoveNotificationToInProgress = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MOVE_NOTIFICATION_TO_IN_PROGRESS));
-  }
+  };
 
   displaySuccessNotification = (objectWorkingId) => {
     this.reduxStore.dispatch({ type: DISPLAY_NOTIFICATION_COMPLETED, payload: { objectWorkingId } });
-  }
+  };
 
   completeDisplaySuccessNotification = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, DISPLAY_NOTIFICATION_COMPLETED));
-  }
+  };
 
   completeRenameExcelWorksheet = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, RENAME_EXCEL_WORKSHEET));
-  }
+  };
 }
 
 const operationStepDispatcher = new OperationStepDispatcher();

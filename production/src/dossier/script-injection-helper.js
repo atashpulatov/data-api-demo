@@ -14,7 +14,7 @@ class ScriptInjectionHelper {
       const title = contentDocument.head.getElementsByTagName('title')[0];
       contentDocument.head.insertBefore(script, title);
     }
-  }
+  };
 
   /**
    * Applies an external css file to a document.
@@ -32,7 +32,7 @@ class ScriptInjectionHelper {
       cssLink.type = 'text/css';
       contentDocument.head.appendChild(cssLink);
     }
-  }
+  };
 
   /**
    * Creates location of the file.
@@ -70,7 +70,7 @@ class ScriptInjectionHelper {
     };
     const observer = new MutationObserver(onMutation);
     observer.observe(container, config);
-  }
+  };
 
   /**
   * When focused on window switch focus to different element in this window.
@@ -92,7 +92,7 @@ class ScriptInjectionHelper {
     if (elementToFocusOn) {
       elementToFocusOn.focus();
     }
-  }
+  };
 }
 
 const scriptInjectionHelper = new ScriptInjectionHelper();

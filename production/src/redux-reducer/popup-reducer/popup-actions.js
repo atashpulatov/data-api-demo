@@ -111,7 +111,7 @@ class PopupActions {
       }
       return this.errorService.handleError(error);
     }
-  }
+  };
 
   /**
    * Creates instance of dossier which is used during edit workflow.
@@ -148,17 +148,17 @@ class PopupActions {
       editedDossier.visualizationInfo = updatedVisualizationInfo;
     }
     editedDossier.objectType = editedDossier.mstrObjectType;
-  }
+  };
 
   switchImportSubtotalsOnEdit = (data) => (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT, data });
 
   clearEditedObject = () => (dispatch) => {
     dispatch({ type: CLEAR_EDITED_OBJECT });
-  }
+  };
 
   updateDisplayAttrFormOnEdit = (data) => (dispatch) => {
     dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_EDIT, data });
-  }
+  };
 }
 
 export const popupActions = new PopupActions();

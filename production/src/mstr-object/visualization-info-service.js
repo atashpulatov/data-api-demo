@@ -9,7 +9,7 @@ class VisualizationInfoService {
 
   init = (mstrObjectRestService) => {
     this.mstrObjectRestService = mstrObjectRestService;
-  }
+  };
 
   /**
    * Get visualization key, page key, chapter key, dossier structure with names from dossier hierarchy.

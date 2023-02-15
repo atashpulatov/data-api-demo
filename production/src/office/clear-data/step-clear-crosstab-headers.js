@@ -40,7 +40,7 @@ class StepClearCrosstabHeaders {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     }
-  }
+  };
 }
 
 const stepClearCrosstabHeaders = new StepClearCrosstabHeaders();

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import './home.css';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Spin } from 'antd';
 import PropTypes from 'prop-types';
 import { sessionHelper } from '../storage/session-helper';
@@ -19,9 +19,9 @@ import { sessionActions } from '../redux-reducer/session-reducer/session-actions
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
-  const {
-    loading, popupOpen, authToken, t
-  } = props;
+  const { loading, popupOpen, authToken } = props;
+
+  const [t] = useTranslation();
 
   const handleConnectionRestored = () => {
     notificationService.connectionRestored();
@@ -104,9 +104,6 @@ HomeNotConnected.propTypes = {
   loading: PropTypes.bool,
   popupOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  t: PropTypes.func,
 };
 
-HomeNotConnected.defaultProps = { t: (text) => text, };
-
-export const Home = connect(mapStateToProps, mapDispatchToProps)(withTranslation('common')(HomeNotConnected));
+export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);

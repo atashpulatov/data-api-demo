@@ -25,7 +25,7 @@ class PopupController {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
-  }
+  };
 
   runPopupNavigation = async () => {
     // DE159475; clear sorting before popup display until it's fixed in object-table
@@ -153,7 +153,7 @@ class PopupController {
   handleRefreshCacheCommand = () => {
     const { dispatch, getState } = this.reduxStore;
     refreshCache()(dispatch, getState);
-  }
+  };
 
   handleUpdateCommand = async (response) => {
     const objectData = {
@@ -215,7 +215,7 @@ class PopupController {
       return { ...originalValues };
     }
     return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
-  }
+  };
 
   getObjectPreviousState = (reportParams) => {
     const { objects } = this.reduxStore.getState().objectReducer;
@@ -226,7 +226,7 @@ class PopupController {
       return { ...originalValues };
     }
     return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
-  }
+  };
 }
 
 export const popupController = new PopupController();

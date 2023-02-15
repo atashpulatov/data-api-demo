@@ -76,7 +76,7 @@ class MstrAttributeMetricHelper {
     const { rows } = body.definition.grid;
 
     return this.extractMetrics(rows, columns);
-  }
+  };
 
   /**
    * Compares two metric arrays and returns their difference
@@ -113,7 +113,7 @@ class MstrAttributeMetricHelper {
    */
   isMetricInRows = (body) => (body.definition.grid.metricsPosition
     ? body.definition.grid.metricsPosition.axis === 'rows'
-    : false)
+    : false);
 }
 
 const mstrAttributeMetricHelper = new MstrAttributeMetricHelper();

@@ -6,7 +6,7 @@ class StepDisplayNotificationCompleted {
       operationStepDispatcher.displaySuccessNotification(objectData.objectWorkingId);
       operationStepDispatcher.completeDisplaySuccessNotification(objectData.objectWorkingId);
     }, 500);
-  }
+  };
 }
 
 const stepDisplayNotificationCompleted = new StepDisplayNotificationCompleted();

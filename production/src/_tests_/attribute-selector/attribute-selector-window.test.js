@@ -5,7 +5,6 @@ import { reduxStore } from '../../store';
 import { AttributeSelectorWindowNotConnected } from '../../attribute-selector/attribute-selector-window';
 import { AttributeSelector } from '../../attribute-selector/attribute-selector';
 import { popupHelper } from '../../popup/popup-helper';
-import { officeContext } from '../../office/office-context';
 
 jest.mock('../../office/office-context');
 jest.mock('../../popup/popup-helper');
@@ -16,7 +15,6 @@ describe('AttributeSelectorWindow', () => {
     const mstrData = { chosenObjectType: 'report' };
     const chosenObject = { objectType: { name: 'dossier' } };
     const displayLanguageMock = 'en-US';
-    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const componentWrapper = mount(
       <Provider store={reduxStore}>
@@ -28,7 +26,6 @@ describe('AttributeSelectorWindow', () => {
     );
     // then
     const selectorWrapper = componentWrapper.find(AttributeSelector);
-    expect(getOfficeSpy).toHaveBeenCalled();
     expect(selectorWrapper.get(0)).toBeDefined();
   });
 
@@ -231,7 +228,6 @@ describe('AttributeSelectorWindow', () => {
       objectType: { name: 'dossier' }
     };
     const displayLanguageMock = 'en-US';
-    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const componentWrapper = mount(<Provider store={reduxStore}>
       <AttributeSelectorWindowNotConnected
@@ -240,7 +236,6 @@ describe('AttributeSelectorWindow', () => {
       />
     </Provider>);
     const spyMethod = jest.spyOn(popupHelper, 'officeMessageParent');
-    expect(getOfficeSpy).toHaveBeenCalled();
     const wrappedCancelButton = componentWrapper.find('Button #cancel');
     wrappedCancelButton.simulate('click');
 
@@ -259,8 +254,6 @@ describe('AttributeSelectorWindow', () => {
     };
     const chosenObject = { chosenObjectName: '55' };
     const handleBack = jest.fn();
-    const displayLanguageMock = 'en-US';
-    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const componentWrapper = mount(
       <Provider store={reduxStore}>
@@ -271,7 +264,6 @@ describe('AttributeSelectorWindow', () => {
         />
       </Provider>
     );
-    expect(getOfficeSpy).toHaveBeenCalled();
     const wrappedCancelButton = componentWrapper.find('Button #back');
     wrappedCancelButton.simulate('click');
 

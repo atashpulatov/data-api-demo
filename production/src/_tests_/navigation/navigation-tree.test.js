@@ -1,15 +1,16 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { ObjectTable, TopFilterPanel } from '@mstr/connector-components';
 import i18n from '../../i18n';
 import { NavigationTreeNotConnected, mapStateToProps } from '../../navigation/navigation-tree';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
-import { Office } from '../mockOffice';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { DEFAULT_STATE as CACHE_STATE } from '../../redux-reducer/cache-reducer/cache-reducer';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { popupHelper } from '../../popup/popup-helper';
-import DB from '../../cache/cache-db';
+import { Office } from '../mockOffice'; // This import is required for mocking office in tests
+import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 
 jest.mock('../../mstr-object/mstr-object-rest-service');
 jest.mock('../../authentication/authentication-helper', () => ({ authenticationHelper: { validateAuthToken: jest.fn().mockImplementation(() => Promise.resolve('Magic')) } }));
@@ -77,13 +78,14 @@ describe('NavigationTree', () => {
       />
     );
     // when
-    await wrappedComponent.instance().handleSecondary();
+    await wrappedComponent.find(PopupButtons).first().invoke('handleSecondary')();
+    const buttonWrapper = wrappedComponent.find(PopupButtons).first();
     // then
     expect(mockHandlePrepare).toBeCalled();
-    expect(wrappedComponent.state('previewDisplay')).toEqual(true);
+    expect(buttonWrapper.prop('previewDisplay')).toEqual(true);
   });
 
-  it('should call handlePopupErrors on checkIfPrompted bad response in handleSecondary', () => {
+  it('should call handlePopupErrors on checkIfPrompted bad response in handleSecondary', async () => {
     // given
     const mstrData = {
       envUrl: 'env',
@@ -106,7 +108,7 @@ describe('NavigationTree', () => {
       />
     );
     // when
-    wrappedComponent.instance().handleSecondary();
+    await wrappedComponent.find(PopupButtons).first().invoke('handleSecondary')();
     // then
     expect(popupHelper.handlePopupErrors).toBeCalled();
   });
@@ -127,32 +129,9 @@ describe('NavigationTree', () => {
     />);
     const office = jest.spyOn(popupHelper, 'officeMessageParent');
     // when
-    wrappedComponent.instance().handleCancel();
+    wrappedComponent.find(PopupButtons).first().invoke('handleCancel')();
     // then
     expect(office).toHaveBeenCalledWith(message);
-  });
-
-  it('should call proper method on trigger update', () => {
-    // given
-    const mstrData = {
-      envUrl: 'env',
-      authToken: 'authToken',
-      projectId: 'projectId',
-    };
-    const body = {};
-    const resultAction = {
-      command: selectorProperties.commandOnUpdate,
-      body,
-    };
-    const mockMessageParent = jest.spyOn(Office.context.ui, 'messageParent');
-    const wrappedComponent = shallow(<NavigationTreeNotConnected
-      mstrData={mstrData}
-      {...mockFunctionsAndProps}
-    />);
-    // when
-    wrappedComponent.instance().onTriggerUpdate(body);
-    // then
-    expect(mockMessageParent).toHaveBeenCalledWith(JSON.stringify(resultAction));
   });
 
   it('should take proper data from state for name NOT defined', () => {
@@ -192,7 +171,7 @@ describe('NavigationTree', () => {
       selectObject={mockSelectObject}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObject);
+    wrappedComponent.find(ObjectTable).first().invoke('onSelect')(givenObject);
     // then
     const expectedObject = {
       chosenObjectId: givenObjectId,
@@ -229,7 +208,7 @@ describe('NavigationTree', () => {
       myLibrary={givenMyLibrary}
     />);
     // when
-    wrappedComponent.instance().onObjectChosen(givenObject);
+    wrappedComponent.find(ObjectTable).first().invoke('onSelect')(givenObject);
     // then
     const expectedObject = {
       chosenObjectId: givenTargetId,
@@ -254,7 +233,8 @@ describe('NavigationTree', () => {
     />);
 
     // then
-    expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(true);
+    const wrapperButtons = wrappedComponent.find(PopupButtons).first();
+    expect(wrapperButtons.prop('isPublished')).toEqual(true);
   });
 
   it('should call setState twice and change states according to parameters', () => {
@@ -282,12 +262,9 @@ describe('NavigationTree', () => {
     />);
 
     // when
-    const setState = jest.spyOn(wrappedComponent.instance(), 'setState');
-    wrappedComponent.instance().onObjectChosen(givenObject);
-
+    wrappedComponent.find(ObjectTable).first().invoke('onSelect')(givenObject);
     // then
-    expect(wrappedComponent.state('isPublishedInEnvironment')).toEqual(true);
-    expect(setState).toHaveBeenCalledTimes(1);
+    expect(wrappedComponent.find(PopupButtons).first().prop('isPublished')).toEqual(true);
   });
 
   it('should call requestDossierOpen on handleOk if provided objectType is dossier', async () => {
@@ -317,13 +294,13 @@ describe('NavigationTree', () => {
       />
     );
     // when
-    await wrappedComponent.instance().handleOk();
+    await wrappedComponent.find(PopupButtons).first().invoke('handleOk')();
     // then
     expect(mockRequestImport).not.toBeCalled();
     expect(mockRequestDossierOpen).toBeCalled();
   });
 
-  it('should call requestImport on handleOk if provided objectType is dataset', () => {
+  it('should call requestImport on handleOk if provided objectType is dataset', async () => {
     // given
     const mstrData = {
       envUrl: 'env',
@@ -347,13 +324,13 @@ describe('NavigationTree', () => {
       />
     );
     // when
-    wrappedComponent.instance().handleOk();
+    await wrappedComponent.find(PopupButtons).first().invoke('handleOk')();
     // then
     expect(mockRequestImport).toBeCalled();
     expect(mockRequestDossierOpen).not.toBeCalled();
   });
 
-  it('should call handlePopupErrors on checkIfPrompted bad response in handleOk', () => {
+  it('should call handlePopupErrors on checkIfPrompted bad response in handleOk', async () => {
     // given
     const mstrData = {
       envUrl: 'env',
@@ -376,69 +353,13 @@ describe('NavigationTree', () => {
       />
     );
     // when
-    wrappedComponent.instance().handleOk();
+    await wrappedComponent.find(PopupButtons).first().invoke('handleOk')();
     // then
     expect(popupHelper.handlePopupErrors).toBeCalled();
   });
 
-  it('should connect on DB when navigation-tree is mounted', () => {
-    // given
-    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
-    const mstrData = {
-      envUrl: 'env',
-      authToken: 'authToken',
-      projectId: 'projectId'
-    };
-    DB.getIndexedDBSupport = jest.fn();
-    DB.getIndexedDBSupport.mockReturnValue(true);
-    // when
-    shallow(<NavigationTreeNotConnected
-      mstrData={mstrData}
-      {...mockFunctionsAndProps}
-      connectToDB={connectToDB}
-    />);
-    // then
-    expect(connectToDB).toHaveBeenCalled();
-  });
-
-  it('should fetch from network when navigation-tree is mounted and db is not supported', () => {
-    // given
-    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
-    const mstrData = {
-      envUrl: 'env',
-      authToken: 'authToken',
-      projectId: 'projectId'
-    };
-    DB.getIndexedDBSupport = jest.fn();
-    DB.getIndexedDBSupport.mockReturnValue(false);
-    // when
-    shallow(<NavigationTreeNotConnected
-      mstrData={mstrData}
-      {...mockFunctionsAndProps}
-      connectToDB={connectToDB}
-    />);
-    // then
-    expect(mockFunctionsAndProps.fetchObjectsFromNetwork).toHaveBeenCalled();
-  });
-
-  it('should not send error and call functionality properly', async () => {
-    // given
-    const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
-    popupHelper.handlePopupErrors = jest.fn();
-    const wrappedComponent = shallow(
-      <NavigationTreeNotConnected
-        {...mockFunctionsAndProps}
-        connectToDB={connectToDB} />
-    );
-    // when
-    await wrappedComponent.instance().refresh();
-    // then
-    expect(mockFunctionsAndProps.resetDBState).toHaveBeenCalledWith(true);
-  });
-
   it('should send error message on refresh when no session', async () => {
     // given
-    // const asyncMock = jest.fn().mockRejectedValue(new Error('Async error'));
     const connectToDB = jest.fn().mockReturnValue(Promise.resolve());
     const givenError = new Error('Session error');
     authenticationHelper.validateAuthToken.mockRejectedValue(givenError);
@@ -449,7 +370,8 @@ describe('NavigationTree', () => {
         connectToDB={connectToDB} />
     );
     // when
-    await wrappedComponent.instance().refresh();
+    await wrappedComponent.find(TopFilterPanel).first().invoke('onRefresh')();
+
     // then
     await expect(popupHelper.handlePopupErrors).toBeCalled();
   });

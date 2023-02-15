@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { AttributeMetricFilter } from '@mstr/mstr-react-library';
 import { AttributeSelectorNotConnected } from '../../attribute-selector/attribute-selector';
-import { officeContext } from '../../office/office-context';
 import { errorMessages, errorCodes } from '../../error/constants';
 
 jest.mock('../../office/office-context');
@@ -52,8 +51,6 @@ describe('AttributeSelectorNotConnected', () => {
       selectedMetrics: editedObject.selectedMetrics,
       selectedFilters: editedObject.selectedFilters,
     };
-    const displayLanguageMock = 'en-US';
-    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const selectorWrapped = shallow(
       <AttributeSelectorNotConnected
@@ -63,10 +60,8 @@ describe('AttributeSelectorNotConnected', () => {
         supportForms={supportForms} />
     );
     // then
-    expect(getOfficeSpy).toHaveBeenCalled();
-    const attributeMetricFilterWrapped = selectorWrapped.find(AttributeMetricFilter).at(0);
+    const attributeMetricFilterWrapped = selectorWrapped.find(AttributeMetricFilter).first();
     expect(attributeMetricFilterWrapped.prop('mstrData')).toEqual(mstrData);
-    // expect(attributeMetricFilterWrapped.key()).toEqual(mstrData.chosenObjectId);
   });
 
   it('should call handlePopupErrors with proper object', () => {
@@ -81,7 +76,7 @@ describe('AttributeSelectorNotConnected', () => {
     const libraryError = { status: 400, response: { key: 'value' } };
     const mockHandlePopupErrors = jest.fn();
     const { ERR009 } = errorCodes;
-    const pupupExpectedError = {
+    const popupExpectedError = {
       status: 400,
       response: {
         key: 'value',
@@ -92,8 +87,6 @@ describe('AttributeSelectorNotConnected', () => {
         text: `{code: ${ERR009}, message: ${errorMessages.SESSION_EXTENSION_FAILURE_MESSAGE}}`,
       },
     };
-    const displayLanguageMock = 'en-US';
-    const getOfficeSpy = jest.spyOn(officeContext, 'getOffice').mockImplementationOnce(() => ({ context: { displayLanguage: displayLanguageMock } }));
     // when
     const wrappedComponent = shallow(
       <AttributeSelectorNotConnected
@@ -102,9 +95,9 @@ describe('AttributeSelectorNotConnected', () => {
         editedObject={editedObject}
         handlePopupErrors={mockHandlePopupErrors} />
     );
-    wrappedComponent.instance().handleUnauthorized(libraryError);
+    const attributeMetricFilterWrapped = wrappedComponent.find(AttributeMetricFilter).first();
+    attributeMetricFilterWrapped.invoke('handleUnauthorized')(libraryError);
     // then
-    expect(getOfficeSpy).toHaveBeenCalled();
-    expect(mockHandlePopupErrors).toBeCalledWith(pupupExpectedError);
+    expect(mockHandlePopupErrors).toBeCalledWith(popupExpectedError);
   });
 });
