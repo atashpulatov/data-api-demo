@@ -100,8 +100,7 @@ class StepApplyFormatting {
     }
     // Tabular
     return officeTable.columns.getItemAt(objectIndex).getDataBodyRange();
-  }
-;
+  };
 
   /**
    * Returns filtered column information to ignore consolidations
