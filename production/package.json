@@ -22,7 +22,7 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@mstr/connector-components": "^1.1.5",
+    "@mstr/connector-components": "^1.2.1",
     "@mstr/mstr-react-library": "^1.10.2",
     "antd": "^3.26.20",
     "core-js": "^3.18.0",
