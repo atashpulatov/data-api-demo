@@ -92,10 +92,10 @@ class WindowsDesktopMainAddInElementCache(BasePage):
 
         if all_add_in_elements_no == 1:
             return all_add_in_elements[0]
-        elif all_add_in_elements_no == 2:
+        elif all_add_in_elements_no == 2 or all_add_in_elements_no == 3:
             return all_add_in_elements[1]
 
-        raise MstrException(f'Right panel Add-in element not found, expected 1 or 2 '
+        raise MstrException(f'Right panel Add-in element not found, expected 1, 2 or 3 '
                             f'[{WindowsDesktopMainAddInElementCache.ADD_IN_MAIN_ELEMENT}] elements, '
                             f'found {all_add_in_elements_no}.')
 

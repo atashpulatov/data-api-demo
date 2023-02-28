@@ -6,7 +6,7 @@ from framework.util.exception.mstr_exception import MstrException
 
 
 class ColumnsAndFiltersSelectionMetricsWindowsDesktopPage(BaseWindowsDesktopPage):
-    ITEM_ALL_METRICS = 'metric(All)'
+    ITEM_ALL_METRICS = 'metric (All)'
 
     METRIC_ELEM = '//Text[@Name="%s"]'
 

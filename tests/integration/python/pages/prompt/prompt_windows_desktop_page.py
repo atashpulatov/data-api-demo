@@ -26,8 +26,8 @@ class PromptWindowsDesktopPage(BaseWindowsDesktopPage):
     PROMPT_ELEM_XPATH = '//DataItem[starts-with(@Name, "' + PROMPT_LIST_ELEM + ' %s")]'
     PROMPT_WITH_ASTERISK_ELEM_XPATH = '//DataItem[starts-with(@Name, "' + PROMPT_WITH_ASTERISK_LIST_ELEM + ' %s")]'
 
-    PROMPT_OBJECT_BOX = '(//DataItem[@Name="%s.%s"]' \
-                        '/../following-sibling::Group/Table[starts-with(@AutomationId, "id_mstr")][1]' \
+    PROMPT_OBJECT_BOX = '(//DataItem[contains(@Name,"%s.%s")]' \
+                        '//Group/Table[starts-with(@AutomationId, "id_mstr")]' \
                         '//Group[starts-with(@AutomationId, "ListBlockContents")])[%s]//Group[@Name="%s"]'
 
     PROMPT_VALUE_ELEM = '//DataItem[@Name="%s.%s"]/../following-sibling::Table/DataItem/Edit'
