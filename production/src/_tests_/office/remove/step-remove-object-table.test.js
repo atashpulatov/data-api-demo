@@ -63,14 +63,12 @@ describe('StepRemoveObjectTable', () => {
 
       jest.spyOn(officeRemoveHelper, 'checkIfObjectExist').mockReturnValue(true);
 
-      jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockImplementation();
-
       jest.spyOn(officeApiCrosstabHelper, 'getCrosstabHeadersSafely')
-        .mockReturnValue({ validColumnsY: 'validColumnsYTest', validRowsX: 'validRowsXTest' });
+        .mockReturnValue({ validColumnsY: 2, validRowsX: 'validRowsXTest' });
 
       const expectedCrosstabHeaderDimensions = {
         ...crosstabHeaderDimensionsParam,
-        columnsY: 'validColumnsYTest',
+        columnsY: 1,
         rowsX: 'validRowsXTest',
       };
 
@@ -95,22 +93,16 @@ describe('StepRemoveObjectTable', () => {
       expect(getItemMock).toBeCalledTimes(1);
       expect(getItemMock).toBeCalledWith('bindIdTest');
 
-      expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledTimes(1);
-      expect(officeApiCrosstabHelper.clearEmptyCrosstabRow).toBeCalledWith(
-        { sth: 42, showHeaders: true },
-        excelContextMock
-      );
-
       expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledTimes(1);
       expect(officeApiCrosstabHelper.getCrosstabHeadersSafely).toBeCalledWith(
         crosstabHeaderDimensionsParam,
-        { sth: 42, showHeaders: true },
+        { sth: 42 },
         excelContextMock,
       );
 
       expect(officeRemoveHelper.removeExcelTable).toBeCalledTimes(1);
       expect(officeRemoveHelper.removeExcelTable).toBeCalledWith(
-        { sth: 42, showHeaders: true },
+        { sth: 42 },
         excelContextMock,
         expectedIsCrosstab,
         expectedCrosstabHeaderDimensions,

@@ -39,9 +39,6 @@ class StepRemoveObjectTable {
       } else {
         const officeTable = excelContext.workbook.tables.getItem(bindId);
 
-        clearEmptyCrosstabRowError = await officeApiCrosstabHelper.clearEmptyCrosstabRow(officeTable, excelContext);
-        officeTable.showHeaders = true;
-
         const { validColumnsY, validRowsX } = await officeApiCrosstabHelper.getCrosstabHeadersSafely(
           crosstabHeaderDimensions,
           officeTable,
@@ -50,7 +47,7 @@ class StepRemoveObjectTable {
 
         const validCrosstabHeaderDimnesions = {
           ...crosstabHeaderDimensions,
-          columnsY: validColumnsY,
+          columnsY: validColumnsY - 1,
           rowsX: validRowsX
         };
 

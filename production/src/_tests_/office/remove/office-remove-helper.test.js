@@ -217,7 +217,6 @@ describe('OfficeRemoveHelper', () => {
 
     const deleteTableInChunksMock = jest.spyOn(officeRemoveHelper, 'deleteTableInChunks').mockReturnValue(0);
     const clearCrosstabRangeMock = jest.spyOn(officeApiCrosstabHelper, 'clearCrosstabRange').mockReturnValue(0);
-    const clearEmptyCrosstabRowMock = jest.spyOn(officeApiCrosstabHelper, 'clearEmptyCrosstabRow').mockReturnValue(0);
     const isMacAndSafariBasedMock = jest.spyOn(homeHelper, 'isMacAndSafariBased').mockReturnValue(isSafari);
 
     // when
@@ -237,7 +236,6 @@ describe('OfficeRemoveHelper', () => {
 
     expect(getDataBodyRangeMock).toBeCalledTimes(1);
     expect(clearCrosstabRangeMock).toBeCalledTimes(isCrosstabCalledTimes);
-    expect(clearEmptyCrosstabRowMock).toBeCalledTimes(isCrosstabCalledTimes);
     expect(isMacAndSafariBasedMock).toBeCalledTimes(isnotClearCalledTimes);
     expect(deleteMock).toBeCalledTimes(deleteMockCalledTimes);
     expect(deleteTableInChunksMock).toBeCalledTimes(deleteTableInChunksMockCalledTimes);

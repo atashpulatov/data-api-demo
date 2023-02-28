@@ -173,10 +173,11 @@ class OfficeTableRefresh {
    *
    */
   getStartCellOnRefresh = async (prevOfficeTable, excelContext) => {
-    const headerCell = prevOfficeTable.getHeaderRowRange().getCell(0, 0);
+    const headerCell = prevOfficeTable.getDataBodyRange().getCell(0, 0);
     headerCell.load('address');
     await excelContext.sync();
-    return officeApiHelper.getStartCellOfRange(headerCell.address);
+    const startCellOfRange = officeApiHelper.getStartCellOfRange(headerCell.address);
+    return officeApiHelper.offsetCellBy(startCellOfRange, -1, 0);
   };
 
   /**
@@ -199,10 +200,10 @@ class OfficeTableRefresh {
 
     if (isCrosstab && crosstabHeaderDimensions && prevCrosstabDimensions) {
       if (validRowsX !== crosstabHeaderDimensions.rowsX
-      || validColumnsY !== crosstabHeaderDimensions.columnsY) {
+      || validColumnsY - 1 !== crosstabHeaderDimensions.columnsY) {
         tableChanged = true;
         prevCrosstabDimensions.rowsX = validRowsX;
-        prevCrosstabDimensions.columnsY = validColumnsY;
+        prevCrosstabDimensions.columnsY = validColumnsY - 1;
       }
       if (tableChanged) {
         startCell = officeApiHelper.offsetCellBy(
@@ -226,15 +227,12 @@ class OfficeTableRefresh {
    *
    * @param {Office} excelContext excel context
    * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
-   * @param {Object} mstrTable Contains information about mstr object
    * @returns {Office} Reference to previously imported Excel table
    *
    */
-  getPreviousOfficeTable = async (excelContext, bindId, mstrTable) => {
+  getPreviousOfficeTable = async (excelContext, bindId) => {
     const prevOfficeTable = await officeApiHelper.getTable(excelContext, bindId);
-    await this.clearEmptyCrosstabRow(mstrTable, prevOfficeTable, excelContext);
-    prevOfficeTable.load(['name', 'showTotals']);
-    prevOfficeTable.showHeaders = true;
+    prevOfficeTable.load('showTotals');
     // We can set showTotals value here, since the loaded value will not change until we load it again
     prevOfficeTable.showTotals = false;
     await excelContext.sync();

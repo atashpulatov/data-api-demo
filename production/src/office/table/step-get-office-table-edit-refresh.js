@@ -46,7 +46,7 @@ class StepGetOfficeTableEditRefresh {
       let officeTable;
 
       getOfficeTableHelper.checkReportTypeChange(mstrTable);
-      const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(excelContext, oldBindId, mstrTable);
+      const prevOfficeTable = await officeTableRefresh.getPreviousOfficeTable(excelContext, oldBindId);
 
       if (!isRepeatStep) {
         ({ tableChanged, startCell } = await officeTableRefresh.getExistingOfficeTableData(

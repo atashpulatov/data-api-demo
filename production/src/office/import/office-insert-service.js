@@ -76,8 +76,6 @@ class OfficeInsertService {
         .getOffsetRange(rowIndex, 0)
         .getResizedRange(splitExcelRows[i].length - 1, 0);
 
-      if (!tableChanged && operationType !== IMPORT_OPERATION && operationType !== DUPLICATE_OPERATION) { rowRange.clear('Contents'); }
-
       rowIndex += splitExcelRows[i].length;
       rowRange.values = splitExcelRows[i];
       if (isOverLimit) {

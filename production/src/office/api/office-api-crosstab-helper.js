@@ -52,7 +52,7 @@ class OfficeApiCrosstabHelper {
   getValidOffset = async (officeTable, limit, getFunction, excelContext) => {
     for (let i = 0; i <= limit; i++) {
       try {
-        officeTable.getRange()[getFunction](i + 1);
+        officeTable.getDataBodyRange()[getFunction](i + 1);
         await excelContext.sync();
       } catch (error) {
         return i;
@@ -84,17 +84,17 @@ class OfficeApiCrosstabHelper {
         excelContext.trackedObjects.add(leftRange);
         // Title headers
         titlesRange = officeTable
-          .getRange()
+          .getDataBodyRange()
           .getCell(0, 0)
           .getOffsetRange(0, -1)
-          .getResizedRange(-(columnsY), -(rowsX - 1));
+          .getResizedRange(-(columnsY + 1), -(rowsX - 1));
 
         excelContext.trackedObjects.add(titlesRange);
       }
 
       // Column headers
       if (columnsY) {
-        topRange = officeTable.getRange().getRowsAbove(columnsY);
+        topRange = officeTable.getDataBodyRange().getRowsAbove(columnsY + 1);
         excelContext.trackedObjects.add(topRange);
       }
       // Check if ranges are valid before clearing
@@ -229,7 +229,7 @@ class OfficeApiCrosstabHelper {
   */
   async getCrosstabHeadersSafely(crosstabHeaderDimensions, officeTable, excelContext) {
     const { columnsY, rowsX } = crosstabHeaderDimensions;
-    const validColumnsY = await this.getValidOffset(officeTable, columnsY, 'getRowsAbove', excelContext);
+    const validColumnsY = await this.getValidOffset(officeTable, columnsY + 1, 'getRowsAbove', excelContext);
     const validRowsX = await this.getValidOffset(officeTable, rowsX, 'getColumnsBefore', excelContext);
 
     return { validColumnsY, validRowsX };
