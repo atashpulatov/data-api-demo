@@ -8,7 +8,7 @@ cookbook_from_git 'maven', '1.0.0'
 cookbook_from_git 'java-osx', '0.1.1'
 cookbook_from_git 'java-windows', '1.0.3'
 cookbook_from_git 'java_ecosystem', '0.1.66'
-cookbook_from_github 'mstr-ecosystem-cookbooks', 'nodejs','16.19.0'
+cookbook_from_github 'mstr-ecosystem-cookbooks', 'nodejs','16.19.1'
 
 cookbook 'java', '4.3.0'
 
