@@ -4,7 +4,7 @@ require 'dependencies_db'
 Rake::Task[:upload].clear_prerequisites
 
 desc "upload plugins to nexus"
-task :upload_plugins=> [:clean, :stage_1_test, :build]  do
+task :upload_plugins=> [:build]  do
   Nexus.upload_artifact(
     group_id:       "#{$WORKSPACE_SETTINGS[:nexus][:base_coordinates][:group_id]}.#{Common::Version.application_branch}",
     artifact_id:    "office",

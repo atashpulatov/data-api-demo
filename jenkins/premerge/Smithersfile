@@ -11,7 +11,7 @@ produces and publishes a versioned deployment package'
       pull_request_builder do
       end
   end
-  
+
   build_wrappers do
    secret_text do
      credentialsId 'Tools'
@@ -32,7 +32,7 @@ source .ecosystem
 rake pre_pipeline
 rake veracode
 
-rake stage_0_test
+rake build
 
 rake post_pipeline
 '

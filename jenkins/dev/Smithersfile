@@ -16,12 +16,12 @@ produces and publishes a versioned deployment package'
   end
 
   assigned_node_string 'amazon_linux'
-  
+
   triggers do
     github_push do
     end
   end
-  
+
    build_wrappers do
     secret_text do
       credentialsId 'Tools'
@@ -39,12 +39,11 @@ export PATH=/usr/local/sbin:/usr/local/bin:$PATH
 export WORKSPACE_SETTING=aws_dev
 
 source .ecosystem
-rake count_line_of_code
 export HATS=$HATS:rallytask
 rake pre_pipeline
 rake veracode
-rake upload_plugins 
- 
+rake upload_plugins
+
 #rake update_dep_db_from_file
 rake update_ready_for_pr
 
@@ -77,5 +76,5 @@ rake post_pipeline
     end
   end
 
-end 
- 
+end
+

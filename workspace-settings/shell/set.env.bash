@@ -19,6 +19,7 @@ export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 jdk_version="jdk-11.0.16"
 
 nodejs_version="16.19.1"
+export nodejs_image_tag=$nodejs_version
 
 if uname -a | grep -q "Darwin"; then
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home
