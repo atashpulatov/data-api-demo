@@ -1,42 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Button, Dropdown, Menu } from 'antd';
 import { sessionHelper } from './storage/session-helper';
 import mstrObjectType from './mstr-object/mstr-object-type-enum';
 
-export class DevelopmentImportList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { selectedObject: 'SeasonalReport' };
-  }
+export const DevelopmentImportList = () => {
+  const [selectedObject, setObject] = useState('SeasonalReport');
 
-  setObject = (objectName) => {
-    this.setState({ selectedObject: objectName });
-  };
+  const menu = (
+    <Menu>
+      <Menu.Item key="SeasonalReport" onClick={(e) => { e.domEvent.stopPropagation(); setObject('SeasonalReport'); }}>{objectList.SeasonalReport.name}</Menu.Item>
+      <Menu.Item key="SubtotalsAllTypes" onClick={(e) => { e.domEvent.stopPropagation(); setObject('SubtotalsAllTypes'); }}>{objectList.SubtotalsAllTypes.name}</Menu.Item>
+      <Menu.Item key="Crosstab123" onClick={(e) => { e.domEvent.stopPropagation(); setObject('Crosstab123'); }}>{objectList.Crosstab123.name}</Menu.Item>
+      <Menu.Item key="CrosstabSubtotal" onClick={(e) => { e.domEvent.stopPropagation(); setObject('CrosstabSubtotal'); }}>{objectList.CrosstabSubtotal.name}</Menu.Item>
+    </Menu>
+  );
 
-  render() {
-    const menu = (
-      <Menu>
-        <Menu.Item key="SeasonalReport" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SeasonalReport'); }}>{objectList.SeasonalReport.name}</Menu.Item>
-        <Menu.Item key="SubtotalsAllTypes" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('SubtotalsAllTypes'); }}>{objectList.SubtotalsAllTypes.name}</Menu.Item>
-        <Menu.Item key="Crosstab123" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('Crosstab123'); }}>{objectList.Crosstab123.name}</Menu.Item>
-        <Menu.Item key="CrosstabSubtotal" onClick={(e) => { e.domEvent.stopPropagation(); this.setObject('CrosstabSubtotal'); }}>{objectList.CrosstabSubtotal.name}</Menu.Item>
-      </Menu>
-    );
-    const { selectedObject } = this.state;
-    return (
-      <div className="refresh-button-container">
-        <Dropdown overlay={menu} trigger={['contextMenu']}>
-          <Button
-            title={objectList[selectedObject].name}
-            className="add-data-btn floating-button"
-            onClick={() => sessionHelper.importObjectWithouPopup(objectList[selectedObject])}>
-            Quick Import
-          </Button>
-        </Dropdown>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="refresh-button-container">
+      <Dropdown overlay={menu} trigger={['contextMenu']}>
+        <Button
+          title={objectList[selectedObject].name}
+          className="add-data-btn floating-button"
+          onClick={() => sessionHelper.importObjectWithouPopup(objectList[selectedObject])}>
+          Quick Import
+        </Button>
+      </Dropdown>
+    </div>
+  );
+};
 
 const objectList = {
   SeasonalReport: {
