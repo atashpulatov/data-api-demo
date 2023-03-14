@@ -1,43 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Popover } from 'antd';
 import PropTypes from 'prop-types';
 
-export class ButtonPopover extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { popoverVisible: false, };
-  }
+export const ButtonPopover = (props) => {
+  const [popoverVisible, setPopoverVisible] = useState(false);
+  const [popoverTimeoutId, setPopoverTimeoutId] = useState(null);
 
-  componentWillUnmount = () => {
-    clearTimeout(this.popoverTimeoutId);
+  useEffect(() => function cleanup() {
+    clearTimeout(popoverTimeoutId);
+  }, [popoverTimeoutId]);
+
+  const showPopover = () => {
+    const { mouseEnterDelay } = props;
+    setPopoverTimeoutId(setTimeout(() => setPopoverVisible(true), mouseEnterDelay * 1000));
   };
 
-  showPopover = () => {
-    const { mouseEnterDelay } = this.props;
-    this.popoverTimeoutId = setTimeout(() => this.setState({ popoverVisible: true }), mouseEnterDelay * 1000);
+  const hidePopover = () => {
+    clearTimeout(popoverTimeoutId);
+    setPopoverVisible(false);
   };
 
-  hidePopover = () => {
-    clearTimeout(this.popoverTimeoutId);
-    this.setState({ popoverVisible: false });
-  };
+  const { placement, content, children } = props;
 
-  render() {
-    const { placement, content, children } = this.props;
-    const { popoverVisible } = this.state;
-    return (
-      <Popover
-        visible={popoverVisible}
-        placement={placement}
-        content={content}
-        onMouseEnter={this.showPopover}
-        onMouseLeave={this.hidePopover}
-        onClick={this.hidePopover}>
-        {children}
-      </Popover>
-    );
-  }
-}
+  return (
+    <Popover
+      visible={popoverVisible}
+      placement={placement}
+      content={content}
+      onMouseEnter={() => showPopover()}
+      onMouseLeave={() => hidePopover()}
+      onClick={() => hidePopover()}>
+      {children}
+    </Popover>
+  );
+};
 
 ButtonPopover.propTypes = {
   mouseEnterDelay: PropTypes.number,
