@@ -70,15 +70,25 @@ class NormalizedJsonHandler {
     definition, axis, headerCells: elementIndices, rowIndex = -1, colIndex = -1
   }) => {
     const result = [];
-    for (let attributeIndex = 0; attributeIndex < elementIndices.length; attributeIndex++) {
-      const elementIndex = elementIndices[attributeIndex];
-      if (elementIndex < 0) {
-        result.push({ value: [''] });
-      } else {
-        // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
-        result.push(this.lookupElement({
-          definition, axis, attributeIndex, elementIndex, rowIndex, colIndex
-        }));
+    const { length } = definition.grid[axis];
+    let columnIndex = 0;
+
+    for (let attributeIndex = 0; attributeIndex < length; attributeIndex++) {
+      const headerCount = definition.grid[axis][attributeIndex].headerCount || 1;
+      const { elements } = definition.grid[axis][attributeIndex] || '';
+
+      for (let headerIndex = 0; headerIndex < headerCount; headerIndex++) {
+        const elementIndex = elementIndices[columnIndex];
+        const isValueDuplicated = elements[elementIndices[columnIndex - 1]] === elements[elementIndex];
+
+        if (elementIndex < 0 || (headerIndex !== 0 && isValueDuplicated)) {
+          result.push({ value: [''] });
+        } else {
+          result.push(this.lookupElement({
+            definition, axis, attributeIndex, elementIndex, rowIndex, colIndex
+          }));
+        }
+        columnIndex++;
       }
     }
     return result;
@@ -89,14 +99,19 @@ class NormalizedJsonHandler {
    *
    * @param {Object} definition - Dataset definition
    * @param {string} axis - 'rows' or 'columns'
-   * @param {number} elementIndices - Array index that corresponds to an attribue element
    * @return {Array}
    */
-  mapElementIndicesToNames = ({ definition, axis, headerCells: elementIndices }) => {
+  mapElementIndicesToNames = ({ definition, axis }) => {
     const result = [];
-    for (let attributeIndex = 0; attributeIndex < elementIndices.length; attributeIndex++) {
+    const { length } = definition.grid[axis];
+
+    for (let attributeIndex = 0; attributeIndex < length; attributeIndex++) {
       // For elementsIndices tuple, each subscript is an attribute index and each value is an element index.
-      result.push(this.lookupAttributeName(definition, axis, attributeIndex));
+      const headerCount = definition.grid[axis][attributeIndex].headerCount || 1;
+
+      for (let headerIndex = 0; headerIndex < headerCount; headerIndex++) {
+        result.push(this.lookupAttributeName(definition, axis, attributeIndex));
+      }
     }
     return result;
   };
