@@ -11,7 +11,7 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 export const AttributeSelectorWindowNotConnected = (props) => {
-  const [openModal, setOpenModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [attributesSelected, setAttributesSelected] = useState(false);
 
@@ -73,18 +73,6 @@ export const AttributeSelectorWindowNotConnected = (props) => {
     setTriggerUpdate(false);
   };
 
-  const attributesBeingSelected = attributesBeingSelected2 => {
-    setAttributesSelected(attributesBeingSelected2);
-  };
-
-  const openModalHelper = () => {
-    setOpenModal(true);
-  };
-
-  const closeModal = () => {
-    setOpenModal(false);
-  };
-
   const {
     handleBack, chosenObject, mstrData, objectName, editedObject
   } = props;
@@ -103,8 +91,8 @@ export const AttributeSelectorWindowNotConnected = (props) => {
         triggerUpdate={triggerUpdate}
         onTriggerUpdate={onTriggerUpdate}
         resetTriggerUpdate={resetTriggerUpdate}
-        openModal={() => openModal()}
-        closeModal={() => closeModal()}
+        openModal={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
         handlePopupErrors={popupHelper.handlePopupErrors}
         isEdit={isEdit}
       />
@@ -113,7 +101,7 @@ export const AttributeSelectorWindowNotConnected = (props) => {
         handleBack={(!isEdit || isPrompted) && handleBack}
         handleOk={() => handleOk()}
         handleCancel={() => handleCancel()}
-        onPreviewClick={() => openModal()}
+        onPreviewClick={() => setIsModalOpen(true)}
       />
     </div>
   );
