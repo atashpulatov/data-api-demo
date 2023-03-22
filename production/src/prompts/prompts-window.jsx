@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -26,54 +28,52 @@ const {
 } = mstrObjectRestService;
 const postAnswerDossierPrompts = answerDossierPrompts;
 
-export class PromptsWindowNotConnected extends Component {
-  constructor(props) {
-    super(props);
-    const { mstrData, popupState, editedObject } = props;
-    this.state = {
-      chosenObjectId: mstrData.chosenObjectId,
-      loading: true,
-      isReprompt: popupState.isReprompt,
-      givenPromptsAnswers: mstrData.promptsAnswers || editedObject.promptsAnswers,
-      newPromptsAnswers: [],
-      isPromptLoading: true,
-    };
-    const { installSessionProlongingHandler } = sessionHelper;
-    this.prolongSession = installSessionProlongingHandler(this.closePopup);
-    this.container = React.createRef();
-  }
+export const PromptsWindowNotConnected = (props) => {
+  const {
+    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack
+  } = props;
+  const { installSessionProlongingHandler } = sessionHelper;
 
-  componentDidMount() {
-    window.addEventListener('message', this.messageReceived);
-  }
+  const [chosenObjectId, setChosenObjectId] = useState(mstrData.chosenObjectId);
+  const [loading, setLoading] = useState(false);
+  const [isReprompt, setIsReprompt] = useState(popupState.isReprompt);
+  const [givenPromptsAnswers, setGivenPromptsAnswers] = useState(mstrData.promptsAnswers || editedObject.promptsAnswers);
+  const [newPromptsAnswers, setNewPromptsAnswers] = useState([]);
+  const [isPromptLoading, setIsPromptLoading] = useState(true);
+  const [embeddedDocument, setEmbeddedDocument] = useState(null);
 
-  componentWillUnmount() {
-    window.removeEventListener('message', this.messageReceived);
-  }
+  const prolongSession = installSessionProlongingHandler(closePopup);
+  const container = useRef(null);
 
-  sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
+  useEffect(() => {
+    window.addEventListener('message', messageReceived);
 
-  preparePromptedReport = async (chosenObjectId, projectId, promptsAnswers) => {
-    const config = { objectId: chosenObjectId, projectId };
+    return (() => window.removeEventListener('message', messageReceived));
+  }, [messageReceived]);
+
+  const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
+
+  const preparePromptedReport = async (chosenObjectIdLocal, projectId, promptsAnswers) => {
+    const config = { objectId: chosenObjectIdLocal, projectId };
     const instanceDefinition = await createInstance(config);
     const { instanceId } = instanceDefinition;
-    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectId, instanceId, projectId);
+    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
     if (dossierInstanceDefinition.status === 2) {
-      dossierInstanceDefinition = await this.answerDossierPrompts(
+      dossierInstanceDefinition = await answerDossierPromptsHelper(
         dossierInstanceDefinition,
-        chosenObjectId,
+        chosenObjectIdLocal,
         projectId,
         promptsAnswers
       );
     }
 
-    dossierInstanceDefinition = await rePromptDossier(chosenObjectId, dossierInstanceDefinition, projectId);
-    dossierInstanceDefinition.id = chosenObjectId;
+    dossierInstanceDefinition = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition, projectId);
+    dossierInstanceDefinition.id = chosenObjectIdLocal;
 
     return dossierInstanceDefinition;
   };
 
-  answerDossierPrompts = async (instanceDefinition, objectId, projectId, promptsAnswers) => {
+  const answerDossierPromptsHelper = async (instanceDefinition, objectId, projectId, promptsAnswers) => {
     const instanceId = instanceDefinition.mid;
     let currentInstanceDefinition = instanceDefinition;
     let count = 0;
@@ -88,7 +88,7 @@ export class PromptsWindowNotConnected extends Component {
       if (count === promptsAnswers.length - 1) {
         let dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
         while (dossierStatusResponse.statusCode === 202) {
-          await this.sleep(1000);
+          await sleep(1000);
           dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
         }
         currentInstanceDefinition = dossierStatusResponse.body;
@@ -98,30 +98,25 @@ export class PromptsWindowNotConnected extends Component {
     return instanceId;
   };
 
-  promptAnsweredHandler = (newAnswer) => {
-    this.setState({ isPromptLoading: true });
-    const { newPromptsAnswers } = this.state;
+  const promptAnsweredHandler = (newAnswer) => {
+    setIsPromptLoading(true);
     if (newPromptsAnswers.length > 0) {
       const newArray = [...newPromptsAnswers, newAnswer];
-      this.setState({ newPromptsAnswers: newArray });
+      setNewPromptsAnswers(newArray);
     } else {
-      this.setState({ newPromptsAnswers: [newAnswer] });
+      setNewPromptsAnswers([newAnswer]);
     }
   };
 
-  promptLoadedHandler = () => {
-    this.setState({ isPromptLoading: false });
+  const promptLoadedHandler = () => {
+    setIsPromptLoading(false);
   };
 
-  loadEmbeddedDossier = async (container) => {
-    const { loading, chosenObjectId, isReprompt } = this.state;
+  const loadEmbeddedDossier = async (localContainer) => {
     if (!loading) {
       return;
     }
-    const { givenPromptsAnswers } = this.state;
-    const {
-      promptsAnswered, mstrData, session, editedObject
-    } = this.props;
+
     const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
     const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
     const { envUrl, authToken } = session;
@@ -130,7 +125,7 @@ export class PromptsWindowNotConnected extends Component {
     const instance = {};
     try {
       if (givenPromptsAnswers) {
-        instanceDefinition = await this.preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
+        instanceDefinition = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
         instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
         instance.mid = instanceDefinition && instanceDefinition.mid;
       }
@@ -141,7 +136,7 @@ export class PromptsWindowNotConnected extends Component {
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
 
-      const props = {
+      const props2 = {
         serverURL,
         applicationID: projectId,
         objectID: chosenObjectIdLocal,
@@ -154,18 +149,18 @@ export class PromptsWindowNotConnected extends Component {
         getLoginToken() {
           return Promise.resolve(authToken);
         },
-        placeholder: container,
+        placeholder: localContainer,
         onMsgRouterReadyHandler: ({ MsgRouter }) => {
           msgRouter = MsgRouter;
-          msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
-          msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
+          msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
+          msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
           // TODO: We should remember to unregister this handler once the page loads
         },
       };
 
       if (isReprompt) {
-        props.instance = instance;
+        props2.instance = instance;
       }
 
       if (!microstrategy || !microstrategy.dossier) {
@@ -174,7 +169,7 @@ export class PromptsWindowNotConnected extends Component {
       }
 
       microstrategy.dossier
-        .create(props)
+        .create(props2)
         .then(async (dossierPage) => {
           const chapter = await dossierPage.getCurrentChapter();
           const objectId = await dossierPage.getDossierId();
@@ -192,10 +187,9 @@ export class PromptsWindowNotConnected extends Component {
           // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
           deleteDossierInstance(projectId, objectId, instanceId);
 
-          msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, this.promptAnsweredHandler);
-          msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, this.promptLoadedHandler);
+          msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
+          msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
-          const { newPromptsAnswers } = this.state;
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
           promptsAnswered({ dossierData, promptsAnswers: newPromptsAnswers });
         });
@@ -209,11 +203,11 @@ export class PromptsWindowNotConnected extends Component {
    * This should run the embedded dossier and pass instance ID to the plugin
    * Session status is checked, and log out is performed if session expired.
    */
-  handleRun = async () => {
+  const handleRun = async () => {
     try {
       await authenticationHelper.validateAuthToken();
-      if (this.embeddedDocument) {
-        const runButton = this.embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
+      if (embeddedDocument) {
+        const runButton = embeddedDocument.getElementsByClassName('mstrPromptEditorButtonRun')[0];
         if (runButton) {
           runButton.click();
         }
@@ -223,7 +217,7 @@ export class PromptsWindowNotConnected extends Component {
     }
   };
 
-  closePopup = () => {
+  const closePopup = () => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
@@ -232,14 +226,14 @@ export class PromptsWindowNotConnected extends Component {
   /**
    * This function is called after a child (iframe) is added into mbedded dossier container
    */
-  onIframeLoad = (iframe) => {
+  const onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       if (iframe.focusEventListenerAdded === false) {
         iframe.focusEventListenerAdded = true;
         iframe.addEventListener('focus', scriptInjectionHelper.switchFocusToElementOnWindowFocus);
       }
-      this.embeddedDocument = contentDocument;
+      setEmbeddedDocument(contentDocument);
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
         scriptInjectionHelper.applyStyle(contentDocument, 'promptsWindow.css');
         scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
@@ -247,7 +241,7 @@ export class PromptsWindowNotConnected extends Component {
     });
   };
 
-  messageReceived = (message = {}) => {
+  const messageReceived = useCallback((message = {}) => {
     if (message.data && message.data.value && message.data.value.iServerErrorCode) {
       const newErrorObject = {
         status: message.data.value.statusCode,
@@ -269,42 +263,38 @@ export class PromptsWindowNotConnected extends Component {
     const { data: postMessage, origin } = message;
     const { origin: targetOrigin } = window;
     if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
-      this.prolongSession();
+      prolongSession();
     }
+  }, [prolongSession]);
+
+  const onPromptsContainerMount = (localContainer) => {
+    scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
+    loadEmbeddedDossier(localContainer);
   };
 
-  onPromptsContainerMount = (container) => {
-    scriptInjectionHelper.watchForIframeAddition(container, this.onIframeLoad);
-    this.loadEmbeddedDossier(container);
-  };
-
-  handleBack = () => {
-    const { cancelImportRequest, onPopupBack } = this.props;
+  const handleBack = () => {
     cancelImportRequest();
     onPopupBack();
   };
 
-  render() {
-    const { isReprompt, isPromptLoading } = this.state;
-    return (
-      <div
-        style={{ position: 'relative' }}
-      >
-        <PromptsContainer
-          postMount={this.onPromptsContainerMount}
-        />
-        <PopupButtons
-          handleOk={this.handleRun}
-          handleCancel={this.closePopup}
-          hideSecondary
-          handleBack={!isReprompt && this.handleBack}
-          useImportAsRunButton
-          disableActiveActions={isPromptLoading}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      style={{ position: 'relative' }}
+    >
+      <PromptsContainer
+        postMount={onPromptsContainerMount}
+      />
+      <PopupButtons
+        handleOk={handleRun}
+        handleCancel={closePopup}
+        hideSecondary
+        handleBack={!isReprompt && handleBack}
+        useImportAsRunButton
+        disableActiveActions={isPromptLoading}
+      />
+    </div>
+  );
+};
 
 PromptsWindowNotConnected.propTypes = {
   promptsAnswered: PropTypes.func,
