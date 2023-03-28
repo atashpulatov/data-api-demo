@@ -32,18 +32,18 @@ export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack
   } = props;
+  const { chosenObjectId } = mstrData;
+  const { isReprompt } = popupState;
+
   const { installSessionProlongingHandler } = sessionHelper;
 
-  const [chosenObjectId, setChosenObjectId] = useState(mstrData.chosenObjectId);
-  const [loading, setLoading] = useState(false);
-  const [isReprompt, setIsReprompt] = useState(popupState.isReprompt);
-  const [givenPromptsAnswers, setGivenPromptsAnswers] = useState(mstrData.promptsAnswers || editedObject.promptsAnswers);
   const [newPromptsAnswers, setNewPromptsAnswers] = useState([]);
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
 
+  const givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
   const prolongSession = installSessionProlongingHandler(closePopup);
-  const container = useRef(null);
+  const loading = true;
 
   useEffect(() => {
     window.addEventListener('message', messageReceived);
@@ -136,7 +136,7 @@ export const PromptsWindowNotConnected = (props) => {
       const { CustomAuthenticationType } = microstrategy.dossier;
       const { EventType } = microstrategy.dossier;
 
-      const props2 = {
+      const documentProps = {
         serverURL,
         applicationID: projectId,
         objectID: chosenObjectIdLocal,
@@ -160,7 +160,7 @@ export const PromptsWindowNotConnected = (props) => {
       };
 
       if (isReprompt) {
-        props2.instance = instance;
+        documentProps.instance = instance;
       }
 
       if (!microstrategy || !microstrategy.dossier) {
@@ -169,7 +169,7 @@ export const PromptsWindowNotConnected = (props) => {
       }
 
       microstrategy.dossier
-        .create(props2)
+        .create(documentProps)
         .then(async (dossierPage) => {
           const chapter = await dossierPage.getCurrentChapter();
           const objectId = await dossierPage.getDossierId();
