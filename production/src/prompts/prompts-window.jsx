@@ -41,8 +41,41 @@ export const PromptsWindowNotConnected = (props) => {
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
 
-  const givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
+  const closePopup = () => {
+    const { commandCancel } = selectorProperties;
+    const message = { command: commandCancel, };
+    popupHelper.officeMessageParent(message);
+  };
+
   const prolongSession = installSessionProlongingHandler(closePopup);
+
+  const messageReceived = useCallback((message = {}) => {
+    if (message.data && message.data.value && message.data.value.iServerErrorCode) {
+      const newErrorObject = {
+        status: message.data.value.statusCode,
+        response: {
+          body: {
+            code: message.data.value.errorCode,
+            iServerCode: message.data.value.iServerErrorCode,
+            message: message.data.value.message,
+          },
+          text: JSON.stringify({
+            code: message.data.value.errorCode,
+            iServerCode: message.data.value.iServerErrorCode,
+            message: message.data.value.message
+          }),
+        }
+      };
+      popupHelper.handlePopupErrors(newErrorObject);
+    }
+    const { data: postMessage, origin } = message;
+    const { origin: targetOrigin } = window;
+    if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
+      prolongSession();
+    }
+  }, [prolongSession]);
+
+  const givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
   const loading = true;
 
   useEffect(() => {
@@ -217,12 +250,6 @@ export const PromptsWindowNotConnected = (props) => {
     }
   };
 
-  const closePopup = () => {
-    const { commandCancel } = selectorProperties;
-    const message = { command: commandCancel, };
-    popupHelper.officeMessageParent(message);
-  };
-
   /**
    * This function is called after a child (iframe) is added into mbedded dossier container
    */
@@ -240,32 +267,6 @@ export const PromptsWindowNotConnected = (props) => {
       }
     });
   };
-
-  const messageReceived = useCallback((message = {}) => {
-    if (message.data && message.data.value && message.data.value.iServerErrorCode) {
-      const newErrorObject = {
-        status: message.data.value.statusCode,
-        response: {
-          body: {
-            code: message.data.value.errorCode,
-            iServerCode: message.data.value.iServerErrorCode,
-            message: message.data.value.message,
-          },
-          text: JSON.stringify({
-            code: message.data.value.errorCode,
-            iServerCode: message.data.value.iServerErrorCode,
-            message: message.data.value.message
-          }),
-        }
-      };
-      popupHelper.handlePopupErrors(newErrorObject);
-    }
-    const { data: postMessage, origin } = message;
-    const { origin: targetOrigin } = window;
-    if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
-      prolongSession();
-    }
-  }, [prolongSession]);
 
   const onPromptsContainerMount = (localContainer) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
