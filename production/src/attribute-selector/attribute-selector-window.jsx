@@ -99,8 +99,8 @@ export const AttributeSelectorWindowNotConnected = (props) => {
       <PopupButtons
         disableActiveActions={!attributesSelected}
         handleBack={(!isEdit || isPrompted) && handleBack}
-        handleOk={() => handleOk()}
-        handleCancel={() => handleCancel()}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
         onPreviewClick={() => setIsModalOpen(true)}
       />
     </div>
