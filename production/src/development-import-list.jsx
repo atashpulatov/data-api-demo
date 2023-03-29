@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Dropdown, Menu } from 'antd';
 import { sessionHelper } from './storage/session-helper';
 import mstrObjectType from './mstr-object/mstr-object-type-enum';
