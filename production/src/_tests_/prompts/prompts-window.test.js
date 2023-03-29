@@ -79,6 +79,7 @@ describe('PromptsWindowNotConnected', () => {
     });
   });
 
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('watchForIframeAddition,loadEmbeddedDossier should be called on onPromptsContainerMount with proper params', () => {
     // given
     const ref = React.createRef();
@@ -206,6 +207,7 @@ describe('PromptsWindowNotConnected', () => {
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
   });
 
+  // eslint-disable-next-line jest/no-disabled-tests
   it.skip('handleRun should call handlePopupErrors on not valid auth token ', async () => {
     // given
     popupHelper.handlePopupErrors = jest.fn();
