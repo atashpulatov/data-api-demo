@@ -108,5 +108,8 @@
       "!src/popup/assets/*.*",
       "!src/redux-reducer/*.*"
     ]
+  },
+  "overrides": {
+    "antd": "^3.26.20"
   }
 }
