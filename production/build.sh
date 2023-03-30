@@ -2,7 +2,7 @@
 set -e
 cd /mnt/production
 
-npm ci --silent
+npm ci
 npm run eslint:json
 npm run test:coverage
 npm run build
