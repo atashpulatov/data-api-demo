@@ -7,7 +7,6 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { popupHelper } from '../../popup/popup-helper';
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { reduxStore } from '../../store';
-import scriptInjectionHelper from '../../dossier/script-injection-helper';
 
 jest.mock('../../popup/popup-helper');
 
@@ -77,21 +76,6 @@ describe('PromptsWindowNotConnected', () => {
     await waitFor(() => {
       expect(removeEventListener).toHaveBeenCalled();
     });
-  });
-
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('watchForIframeAddition,loadEmbeddedDossier should be called on onPromptsContainerMount with proper params', () => {
-    // given
-    const ref = React.createRef();
-    // when
-    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
-    const watchForIframeAddition = jest.spyOn(scriptInjectionHelper, 'watchForIframeAddition').mockImplementation(() => true);
-    const loadEmbeddedDossier = jest.spyOn(wrappedComponent.instance(), 'loadEmbeddedDossier').mockImplementation(() => true);
-    const onIframeLoad = jest.spyOn(wrappedComponent.instance(), 'onIframeLoad').mockImplementation(() => true);
-    wrappedComponent.instance().onPromptsContainerMount(ref);
-    // then
-    expect(watchForIframeAddition).toHaveBeenCalledWith(ref, onIframeLoad);
-    expect(loadEmbeddedDossier).toHaveBeenCalledWith(ref);
   });
 
   it('handlePopupErrors should be called on proper messageReceived', () => {
@@ -205,25 +189,5 @@ describe('PromptsWindowNotConnected', () => {
 
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
-  });
-
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('handleRun should call handlePopupErrors on not valid auth token ', async () => {
-    // given
-    popupHelper.handlePopupErrors = jest.fn();
-    authenticationHelper.validateAuthToken = jest
-      .fn()
-      .mockImplementation(() => {
-        throw Error();
-      });
-    // when
-    const wrappedComponent = shallow(<PromptsWindowNotConnected
-      mstrData={mstrData}
-      popupState={popupState}
-    />);
-    await wrappedComponent.instance().handleRun();
-    // then
-    expect(authenticationHelper.validateAuthToken).toBeCalled();
-    expect(popupHelper.handlePopupErrors).toBeCalled();
   });
 });
