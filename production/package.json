@@ -22,7 +22,7 @@
   "dependencies": {
     "@mstr/connector-components": "^2.2.2",
     "@mstr/mstr-icons": "^2.11.3",
-    "@mstr/mstr-react-library": "^1.10.2",
+    "@mstr/mstr-react-library": "^1.15.1",
     "@mstr/rc": "^2.18.1",
     "antd": "^3.26.20",
     "core-js": "^3.18.0",
