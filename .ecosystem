@@ -1,70 +1,9 @@
 #!/usr/bin/env bash
 
 export PROJECT_NAME='mstr-office'
-export ORGANIZATION_NAME='Kiai'
-export COMPANY_NAME='microstrategy'
-export ECOSYSTEM_ROOT_VERSION=${ECOSYSTEM_ROOT_VERSION:='next'}
+export ORGANIZATION_NAME='mstr-kiai'
+export ECO_GIT_BRANCH=${ghprbTargetBranch:=${GIT_BRANCH}}
+export ECO_GIT_BRANCH=${ECO_GIT_BRANCH:=$(git rev-parse --abbrev-ref HEAD)}
 
-
-#<(((((((((((((((-------------------------------------------------------------------)))))))))))))))>#
-#<(((((((((((((((------------------- PLEASE DON'T EDIT BELOW -----------------------)))))))))))))))>#
-
-
-export ECOSYSTEM_ROOT_PATHS_PARENT_HOME='/usr/local'
-export ECOSYSTEM_ROOT_NAME='eco.root'
-export ECOSYSTEM_ROOT_PATHS_HOME="${ECOSYSTEM_ROOT_PATHS_PARENT_HOME}/${ECOSYSTEM_ROOT_NAME}-${ECOSYSTEM_ROOT_VERSION}"
-
-
-if [[ -z "$USER" ]]; then
-  if [[ -n "$JENKINS_HOME" ]]; then
-    export USER=jenkins
-    export LOGNAME=$USER
-  else
-    >&2 echo "the environment variable USER is not set, this is required!"
-    kill -s INT $$
-  fi
-fi
-
-default_branch=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
-workspace_path=$(pwd)
-
-if [[ ! -e "${ECOSYSTEM_ROOT_PATHS_HOME}/.git" ]]; then
-  cd "${ECOSYSTEM_ROOT_PATHS_PARENT_HOME}"
-
-    sudo mkdir "${ECOSYSTEM_ROOT_PATHS_HOME}"
-    sudo chown $USER "${ECOSYSTEM_ROOT_PATHS_HOME}"
-
-    git clone https://github.com/mstr-ecosystem/eco.root.git "${ECOSYSTEM_ROOT_PATHS_HOME}"
-fi
-
-cd "${ECOSYSTEM_ROOT_PATHS_HOME}"
-
-git remote set-url origin https://github.com/mstr-ecosystem/eco.root.git
-
-git checkout tags/"${ECOSYSTEM_ROOT_VERSION}"
-if [[ $? != 0 ]]; then
-  git reset --hard HEAD
-  git clean -df
-  git checkout "${ECOSYSTEM_ROOT_VERSION}"
-  git pull origin "${ECOSYSTEM_ROOT_VERSION}" --rebase
-fi
-
-cd $workspace_path
-
-export ECOSYSTEM_ROOT_PATHS_SHELL_HOME="${ECOSYSTEM_ROOT_PATHS_HOME}/shell"
-export ECOSYSTEM_ROOT_PATHS_SHELL_LIB_HOME="${ECOSYSTEM_ROOT_PATHS_SHELL_HOME}/lib"
-export ECOSYSTEM_ROOT_PATHS_SHELL_LIB_CONTROL_HOME="${ECOSYSTEM_ROOT_PATHS_SHELL_LIB_HOME}/control"
-
-source "${ECOSYSTEM_ROOT_PATHS_SHELL_LIB_CONTROL_HOME}/bootstrap.bash"
-
-
-cd "${ECOSYSTEM_ROOT_PATHS_HOME}"
-if ! git branch | grep '\*' | grep -q $default_branch ; then
-  warn "
-#####################################################################################################
-                            WARNING ECO.ROOT IS NOT ON A PRODUCTION BRANCH
-                    YOUR WARRANTY IS VOID, IE YOUR ARE ON YOUR OWN WITHOUT SUPPORT
-#####################################################################################################
-"
-fi
-cd "${PATHS_PROJECT_HOME}"
+curl -sS "https://devops-api-cloud.internal.microstrategy.com/api/ecoroot/source?org=${ORGANIZATION_NAME}&repo=${PROJECT_NAME}&branch=${ECO_GIT_BRANCH}" > .ecosystem_ecoroot
+source .ecosystem_ecoroot

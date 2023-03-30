@@ -24,6 +24,7 @@ class MstrAttributeFormHelper {
           });
           break;
         case 'attribute':
+        case 'customgroup':
         case 'consolidation':
           if (column.forms && supportForms) {
             for (let i = 0; i < column.forms.length; i++) {
@@ -99,10 +100,13 @@ class MstrAttributeFormHelper {
     if (!elements) { return []; }
 
     let names = [];
-    for (let i = 0; i < elements.length; i++) {
-      const element = elements[i];
-      const forms = this.getAttributesTitleWithForms(element, attrforms);
-      names = forms ? [...names, ...forms] : [...names, `${element.name}`];
+    for (const element of elements) {
+      const headerCount = element.headerCount || 1;
+
+      for (let headerIndex = 0; headerIndex < headerCount; headerIndex++) {
+        const forms = this.getAttributesTitleWithForms(element, attrforms);
+        names = forms ? [...names, ...forms] : [...names, `${element.name}`];
+      }
     }
 
     return names;

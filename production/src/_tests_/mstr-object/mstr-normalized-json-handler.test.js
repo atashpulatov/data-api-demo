@@ -67,9 +67,23 @@ describe('Normalized JSON Handler', () => {
     // given
     const { definition } = reportV2;
     const axis = 'columns';
-    const headerCells = [0];
+    const headerCells = [0, 0];
     const expectedElements = [{
       formValues: ['BWI', '1'], id: 'h1;1D5F4A7811E97722F1050080EF65506C', value: ['BWI', '1'], subtotalAddress: false,
+    }, {
+      id: '9BC486D611E977217DA10080EF55306D',
+      dataType: 6,
+      type: 'Metric',
+      value: ['Flights Delayed'],
+      subtotalAddress: false,
+      max: 10000,
+      min: 0,
+      name: 'Flights Delayed',
+      numberFormatting: {
+        category: 7,
+        decimalPlaces: 0,
+        formatString: '0',
+      },
     }];
     // when
     const elements = jsonHandler.mapElementIndicesToElements({ definition, axis, headerCells });

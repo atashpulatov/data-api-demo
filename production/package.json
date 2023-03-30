@@ -20,8 +20,10 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@mstr/connector-components": "^1.2.1",
+    "@mstr/connector-components": "^2.2.1",
+    "@mstr/mstr-icons": "^2.11.3",
     "@mstr/mstr-react-library": "^1.10.2",
+    "@mstr/rc": "^2.18.1",
     "antd": "^3.26.20",
     "core-js": "^3.18.0",
     "dexie": "^4.0.1-alpha.6",
@@ -107,5 +109,8 @@
       "!src/popup/assets/*.*",
       "!src/redux-reducer/*.*"
     ]
+  },
+  "overrides": {
+    "antd": "^3.26.20"
   }
 }
