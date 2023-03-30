@@ -266,10 +266,10 @@ export const PromptsWindowNotConnected = (props) => {
     });
   };
 
-  const onPromptsContainerMount = useCallback((localContainer) => {
+  const onPromptsContainerMount = (localContainer) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
     loadEmbeddedDossier(localContainer);
-  }, [loadEmbeddedDossier]);
+  };
 
   const handleBack = () => {
     cancelImportRequest();
