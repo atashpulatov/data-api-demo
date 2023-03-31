@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import '../home/home.css';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,27 +10,22 @@ import { popupHelper } from '../popup/popup-helper';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
-export class AttributeSelectorWindowNotConnected extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openModal: false,
-      triggerUpdate: false,
-      attributesSelected: false
-    };
-  }
+export const AttributeSelectorWindowNotConnected = (props) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
+  const [attributesSelected, setAttributesSelected] = useState(false);
 
-  handleOk = () => {
-    this.setState({ triggerUpdate: true });
+  const handleOk = () => {
+    setTriggerUpdate(true);
   };
 
-  handleCancel = () => {
+  const handleCancel = () => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
   };
 
-  onTriggerUpdate = (
+  const onTriggerUpdate = (
     chosenObjectId,
     projectId,
     chosenObjectSubtype,
@@ -38,12 +33,12 @@ export class AttributeSelectorWindowNotConnected extends Component {
     chosenObjectName,
     filterDetails,
   ) => {
-    const { chosenObject: { chosenObjectName: objectName } } = this.props;
+    const { chosenObject: { chosenObjectName: objectName } } = props;
     chosenObjectName = chosenObjectName || objectName;
 
     const {
       chosenObject, editedObject, importSubtotal, displayAttrFormNames
-    } = this.props;
+    } = props;
 
     const subtotalsInfo = {
       importSubtotal: (editedObject && editedObject.subtotalsInfo)
@@ -74,58 +69,43 @@ export class AttributeSelectorWindowNotConnected extends Component {
    * resets triggerUpdate property to false in order to allow re-pressing OK button
    * should be called every time OK is pressed but selector popup should not close
    */
-  resetTriggerUpdate = () => {
-    this.setState({ triggerUpdate: false });
+  const resetTriggerUpdate = () => {
+    setTriggerUpdate(false);
   };
 
-  attributesBeingSelected = attributesSelected => {
-    this.setState({ attributesSelected });
-  };
-
-  openModal = () => {
-    this.setState({ openModal: true });
-  };
-
-  closeModal = () => {
-    this.setState({ openModal: false });
-  };
-
-  render() {
-    const {
-      handleBack, chosenObject, mstrData, objectName, editedObject
-    } = this.props;
-    const { triggerUpdate, openModal, attributesSelected, } = this.state;
-    const { isPrompted } = mstrData;
-    const { chosenObjectName } = chosenObject;
-    const typeOfObject = editedObject || chosenObject;
-    const typeName = typeOfObject.mstrObjectType
-      ? typeOfObject.mstrObjectType.name.charAt(0).toUpperCase() + typeOfObject.mstrObjectType.name.substring(1)
-      : 'Data';
-    const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
-    return (
-      <div className="attribute-selector-window">
-        <AttributeSelector
-          title={`Import ${typeName} > ${objectName}`}
-          attributesSelectedChange={this.attributesBeingSelected}
-          triggerUpdate={triggerUpdate}
-          onTriggerUpdate={this.onTriggerUpdate}
-          resetTriggerUpdate={this.resetTriggerUpdate}
-          openModal={openModal}
-          closeModal={this.closeModal}
-          handlePopupErrors={popupHelper.handlePopupErrors}
-          isEdit={isEdit}
-        />
-        <PopupButtons
-          disableActiveActions={!attributesSelected}
-          handleBack={(!isEdit || isPrompted) && handleBack}
-          handleOk={this.handleOk}
-          handleCancel={this.handleCancel}
-          onPreviewClick={this.openModal}
-        />
-      </div>
-    );
-  }
-}
+  const {
+    handleBack, chosenObject, mstrData, objectName, editedObject
+  } = props;
+  const { isPrompted } = mstrData;
+  const { chosenObjectName } = chosenObject;
+  const typeOfObject = editedObject || chosenObject;
+  const typeName = typeOfObject.mstrObjectType
+    ? typeOfObject.mstrObjectType.name.charAt(0).toUpperCase() + typeOfObject.mstrObjectType.name.substring(1)
+    : 'Data';
+  const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
+  return (
+    <div className="attribute-selector-window">
+      <AttributeSelector
+        title={`Import ${typeName} > ${objectName}`}
+        attributesSelectedChange={(attributes) => setAttributesSelected(attributes)}
+        triggerUpdate={triggerUpdate}
+        onTriggerUpdate={onTriggerUpdate}
+        resetTriggerUpdate={resetTriggerUpdate}
+        openModal={isModalOpen}
+        closeModal={() => setIsModalOpen(false)}
+        handlePopupErrors={popupHelper.handlePopupErrors}
+        isEdit={isEdit}
+      />
+      <PopupButtons
+        disableActiveActions={!attributesSelected}
+        handleBack={(!isEdit || isPrompted) && handleBack}
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        onPreviewClick={() => setIsModalOpen(true)}
+      />
+    </div>
+  );
+};
 
 AttributeSelectorWindowNotConnected.propTypes = {
   chosenObject: PropTypes.shape({

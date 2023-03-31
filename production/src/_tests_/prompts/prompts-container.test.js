@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { PromptsContainer } from '../../prompts/prompts-container';
 
 describe('PromptsContainer', () => {
@@ -8,7 +8,7 @@ describe('PromptsContainer', () => {
     const postMount = jest.fn();
 
     // when
-    const wrappedComponent = shallow(<PromptsContainer postMount={postMount} />);
+    const wrappedComponent = mount(<PromptsContainer postMount={postMount} />);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(postMount).toBeCalled();
