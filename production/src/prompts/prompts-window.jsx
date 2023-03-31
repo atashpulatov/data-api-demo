@@ -86,7 +86,7 @@ export const PromptsWindowNotConnected = (props) => {
 
   const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-  const preparePromptedReport = async (chosenObjectIdLocal, projectId, promptsAnswers) => {
+  const preparePromptedReport = useCallback(async (chosenObjectIdLocal, projectId, promptsAnswers) => {
     const config = { objectId: chosenObjectIdLocal, projectId };
     const instanceDefinition = await createInstance(config);
     const { instanceId } = instanceDefinition;
@@ -104,9 +104,9 @@ export const PromptsWindowNotConnected = (props) => {
     dossierInstanceDefinition.id = chosenObjectIdLocal;
 
     return dossierInstanceDefinition;
-  };
+  }, [answerDossierPromptsHelper]);
 
-  const answerDossierPromptsHelper = async (instanceDefinition, objectId, projectId, promptsAnswers) => {
+  const answerDossierPromptsHelper = useCallback(async (instanceDefinition, objectId, projectId, promptsAnswers) => {
     const instanceId = instanceDefinition.mid;
     let currentInstanceDefinition = instanceDefinition;
     let count = 0;
@@ -129,7 +129,7 @@ export const PromptsWindowNotConnected = (props) => {
       count += 1;
     }
     return instanceId;
-  };
+  }, []);
 
   const promptAnsweredHandler = (newAnswer) => {
     setIsPromptLoading(true);
@@ -145,7 +145,7 @@ export const PromptsWindowNotConnected = (props) => {
     setIsPromptLoading(false);
   };
 
-  const loadEmbeddedDossier = async (localContainer) => {
+  const loadEmbeddedDossier = useCallback(async (localContainer) => {
     if (!loading) {
       return;
     }
@@ -230,7 +230,8 @@ export const PromptsWindowNotConnected = (props) => {
       console.error({ error });
       popupHelper.handlePopupErrors(error);
     }
-  };
+  }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, givenPromptsAnswers,
+    isReprompt, loading, mstrData.chosenProjectId, preparePromptedReport, promptsAnswered, session]);
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
@@ -268,10 +269,10 @@ export const PromptsWindowNotConnected = (props) => {
     });
   };
 
-  const onPromptsContainerMount = async (localContainer) => {
+  const onPromptsContainerMount = useCallback(async (localContainer) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
     await loadEmbeddedDossier(localContainer);
-  };
+  }, [loadEmbeddedDossier]);
 
   const handleBack = () => {
     cancelImportRequest();
