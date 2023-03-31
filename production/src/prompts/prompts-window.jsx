@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -35,7 +37,7 @@ export const PromptsWindowNotConnected = (props) => {
 
   const { installSessionProlongingHandler } = sessionHelper;
 
-  const [newPromptsAnswers, setNewPromptsAnswers] = useState([]);
+  const newPromptsAnswers = useRef([]);
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
 
@@ -131,11 +133,11 @@ export const PromptsWindowNotConnected = (props) => {
 
   const promptAnsweredHandler = (newAnswer) => {
     setIsPromptLoading(true);
-    if (newPromptsAnswers.length > 0) {
-      const newArray = [...newPromptsAnswers, newAnswer];
-      setNewPromptsAnswers(newArray);
+    if (newPromptsAnswers.current.length > 0) {
+      const newArray = [...newPromptsAnswers.current, newAnswer];
+      newPromptsAnswers.current = newArray;
     } else {
-      setNewPromptsAnswers([newAnswer]);
+      newPromptsAnswers.current = [newAnswer];
     }
   };
 
@@ -222,7 +224,7 @@ export const PromptsWindowNotConnected = (props) => {
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
-          promptsAnswered({ dossierData, promptsAnswers: newPromptsAnswers });
+          promptsAnswered({ dossierData, promptsAnswers: newPromptsAnswers.current });
         });
     } catch (error) {
       console.error({ error });
@@ -266,9 +268,9 @@ export const PromptsWindowNotConnected = (props) => {
     });
   };
 
-  const onPromptsContainerMount = (localContainer) => {
+  const onPromptsContainerMount = async (localContainer) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
-    loadEmbeddedDossier(localContainer);
+    await loadEmbeddedDossier(localContainer);
   };
 
   const handleBack = () => {

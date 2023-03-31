@@ -8,7 +8,8 @@ export const PromptsContainer = (props) => {
 
   useEffect(() => {
     postMount(container.current);
-  }, [postMount]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div ref={container} className="promptsContainer" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }} />
