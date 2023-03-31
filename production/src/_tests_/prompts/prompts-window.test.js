@@ -37,7 +37,13 @@ describe('PromptsWindowNotConnected', () => {
   it('should render with props given', () => {
     // given
     // when
-    const wrappedComponent = shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
+    const wrappedComponent = mount(<Provider store={reduxStore}>
+      <PromptsWindowNotConnected
+        mstrData={mstrData}
+        popupState={popupState}
+        editedObject={editedObject}
+        session={session} />
+    </Provider>);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
     expect(wrappedComponent.find('PromptsContainer').get(0)).toBeDefined();
@@ -185,8 +191,13 @@ describe('PromptsWindowNotConnected', () => {
     jest.spyOn(sessionHelper, 'installSessionProlongingHandler');
 
     // when
-    shallow(<PromptsWindowNotConnected mstrData={mstrData} popupState={popupState} />);
-
+    mount(<Provider store={reduxStore}>
+      <PromptsWindowNotConnected
+        mstrData={mstrData}
+        popupState={popupState}
+        editedObject={editedObject}
+        session={session} />
+    </Provider>);
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();
   });

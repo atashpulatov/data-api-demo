@@ -86,26 +86,6 @@ export const PromptsWindowNotConnected = (props) => {
 
   const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
-  const preparePromptedReport = useCallback(async (chosenObjectIdLocal, projectId, promptsAnswers) => {
-    const config = { objectId: chosenObjectIdLocal, projectId };
-    const instanceDefinition = await createInstance(config);
-    const { instanceId } = instanceDefinition;
-    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
-    if (dossierInstanceDefinition.status === 2) {
-      dossierInstanceDefinition = await answerDossierPromptsHelper(
-        dossierInstanceDefinition,
-        chosenObjectIdLocal,
-        projectId,
-        promptsAnswers
-      );
-    }
-
-    dossierInstanceDefinition = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition, projectId);
-    dossierInstanceDefinition.id = chosenObjectIdLocal;
-
-    return dossierInstanceDefinition;
-  }, [answerDossierPromptsHelper]);
-
   const answerDossierPromptsHelper = useCallback(async (instanceDefinition, objectId, projectId, promptsAnswers) => {
     const instanceId = instanceDefinition.mid;
     let currentInstanceDefinition = instanceDefinition;
@@ -130,6 +110,26 @@ export const PromptsWindowNotConnected = (props) => {
     }
     return instanceId;
   }, []);
+
+  const preparePromptedReport = useCallback(async (chosenObjectIdLocal, projectId, promptsAnswers) => {
+    const config = { objectId: chosenObjectIdLocal, projectId };
+    const instanceDefinition = await createInstance(config);
+    const { instanceId } = instanceDefinition;
+    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
+    if (dossierInstanceDefinition.status === 2) {
+      dossierInstanceDefinition = await answerDossierPromptsHelper(
+        dossierInstanceDefinition,
+        chosenObjectIdLocal,
+        projectId,
+        promptsAnswers
+      );
+    }
+
+    dossierInstanceDefinition = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition, projectId);
+    dossierInstanceDefinition.id = chosenObjectIdLocal;
+
+    return dossierInstanceDefinition;
+  }, [answerDossierPromptsHelper]);
 
   const promptAnsweredHandler = (newAnswer) => {
     setIsPromptLoading(true);
