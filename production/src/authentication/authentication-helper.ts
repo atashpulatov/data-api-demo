@@ -2,14 +2,22 @@ import request from 'superagent';
 import { notificationService } from '../notification-v2/notification-service';
 
 class AuthenticationHelper {
-  init = (reduxStore, sessionActions, authenticationService, errorService) => {
+  reduxStore: any;
+
+  sessionActions: any;
+
+  authenticationService: any;
+
+  errorService: any;
+
+  init = (reduxStore: any, sessionActions: any, authenticationService: any, errorService: any) => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.authenticationService = authenticationService;
     this.errorService = errorService;
   };
 
-  loginUser = async (err, values) => {
+  loginUser = async (err: any, values: any) => {
     if (err) {
       return;
     }
@@ -39,7 +47,7 @@ class AuthenticationHelper {
    *
    * @param {Object} checkInterval id of setInterval required to clear it on connection restored
    */
-  doesConnectionExist = (checkInterval) => {
+  doesConnectionExist = (checkInterval: string | number) => {
     const reduxStoreState = this.reduxStore.getState();
     const { envUrl } = reduxStoreState.sessionReducer;
     const changedUrl = envUrl.slice(0, -3);

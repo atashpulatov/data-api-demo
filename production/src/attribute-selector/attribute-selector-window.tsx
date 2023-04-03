@@ -8,9 +8,10 @@ import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
-export const AttributeSelectorWindowNotConnected = (props) => {
+export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWindowNotConnectedProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [attributesSelected, setAttributesSelected] = useState(false);
@@ -26,12 +27,12 @@ export const AttributeSelectorWindowNotConnected = (props) => {
   };
 
   const onTriggerUpdate = (
-    chosenObjectId,
-    projectId,
-    chosenObjectSubtype,
-    body,
-    chosenObjectName,
-    filterDetails,
+    chosenObjectId: String,
+    projectId: String,
+    chosenObjectSubtype: String,
+    body: any,
+    chosenObjectName: String,
+    filterDetails: any,
   ) => {
     const { chosenObject: { chosenObjectName: objectName } } = props;
     chosenObjectName = chosenObjectName || objectName;
@@ -87,7 +88,7 @@ export const AttributeSelectorWindowNotConnected = (props) => {
     <div className="attribute-selector-window">
       <AttributeSelector
         title={`Import ${typeName} > ${objectName}`}
-        attributesSelectedChange={(attributes) => setAttributesSelected(attributes)}
+        attributesSelectedChange={(attributes: React.SetStateAction<boolean>) => setAttributesSelected(attributes)}
         triggerUpdate={triggerUpdate}
         onTriggerUpdate={onTriggerUpdate}
         resetTriggerUpdate={resetTriggerUpdate}
@@ -107,34 +108,13 @@ export const AttributeSelectorWindowNotConnected = (props) => {
   );
 };
 
-AttributeSelectorWindowNotConnected.propTypes = {
-  chosenObject: PropTypes.shape({
-    chosenObjectName: PropTypes.string,
-    objectType: PropTypes.shape({ name: PropTypes.string }),
-    preparedInstanceId: PropTypes.string,
-    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
-  }),
-  objectName: PropTypes.string,
-  mstrData: PropTypes.shape({
-    envUrl: PropTypes.string,
-    authToken: PropTypes.string,
-    projectId: PropTypes.string,
-    instanceId: PropTypes.string,
-    promptsAnswers: PropTypes.string,
-    isPrompted: PropTypes.number
-  }).isRequired,
-  handleBack: PropTypes.func,
-  importSubtotal: PropTypes.bool,
-  displayAttrFormNames: PropTypes.string,
-  editedObject: PropTypes.shape({
-    displayAttrFormNames: PropTypes.string,
-    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
-    projectId: PropTypes.string,
-    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
-  }),
-};
-
-const mapStateToProps = state => {
+const mapStateToProps = (
+  state: {
+    navigationTree: { [x: string]: any; importSubtotal: any; displayAttrFormNames: any; };
+    popupReducer: { editedObject: any; };
+    popupStateReducer: any;
+    }
+) => {
   const { importSubtotal, displayAttrFormNames, ...chosenObject } = state.navigationTree;
   const { editedObject } = state.popupReducer;
 
