@@ -1,7 +1,7 @@
 export interface AttributeSelectorNotConnectedProps {
   title: string;
-  triggerUpdate: Boolean;
-  openModal: Boolean;
+  triggerUpdate: boolean;
+  openModal: boolean;
   session: SessionProps;
   mstrData?: MstrDataProps;
   resetTriggerUpdate: Function;
@@ -11,14 +11,14 @@ export interface AttributeSelectorNotConnectedProps {
   updateDisplayAttrFormOnEdit: Function;
   handlePopupErrors: Function;
   onTriggerUpdate: Function;
-  isEdit: Boolean;
-  importSubtotal: Boolean;
+  isEdit: boolean;
+  importSubtotal: boolean;
   switchImportSubtotalsOnImport: Function;
   switchImportSubtotalsOnEdit: Function;
   displayAttrFormNames: string;
   chosenObject: MstrDataProps;
   editedObject: EditedObjectProps;
-  supportForms: Boolean;
+  supportForms: boolean;
 }
 
 export interface MstrDataProps {
@@ -64,7 +64,7 @@ export interface SessionProps {
 }
 
 export interface SubtotalsInfoProps {
-    importSubtotal: Boolean;
+    importSubtotal: boolean;
 }
 
 export interface MstrError {
@@ -77,7 +77,7 @@ export interface AttributeSelectorWindowNotConnectedProps {
     objectName: string;
     mstrData: MstrDataProps;
     handleBack: NonNullable<boolean | ((...args: any[]) => any)>;
-    importSubtotal: Boolean;
+    importSubtotal: boolean;
     displayAttrFormNames: string;
     editedObject: EditedObjectProps;
 }
@@ -87,5 +87,5 @@ export interface ObjectTypeProps {
 }
 
 export interface SubtotalsInfo {
-    importSubtotal: Boolean;
+    importSubtotal: boolean;
 }
