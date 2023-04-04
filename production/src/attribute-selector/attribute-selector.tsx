@@ -1,7 +1,7 @@
 import React from 'react';
+// @ts-ignore
 import { AttributeMetricFilter, ErrorBoundary } from '@mstr/mstr-react-library';
 import { useTranslation } from 'react-i18next';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { popupHelper } from '../popup/popup-helper';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
@@ -10,8 +10,11 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { errorMessages, errorCodes } from '../error/constants';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import './attribute-selector.css';
+import {
+  AttributeSelectorNotConnectedProps, EditedObjectProps, MstrDataProps, MstrError, SessionProps
+} from './attribute-selector-types';
 
-export const AttributeSelectorNotConnected = (props) => {
+export const AttributeSelectorNotConnected = (props: AttributeSelectorNotConnectedProps) => {
   const [t, i18n] = useTranslation();
 
   /**
@@ -20,7 +23,7 @@ export const AttributeSelectorNotConnected = (props) => {
    *
    * @param {Error} e -  Error thrown by mstrReactLibrary
    */
-  const handleUnauthorized = (e) => {
+  const handleUnauthorized = (e: MstrError) => {
     const { ERR009 } = errorCodes;
     const { handlePopupErrors } = props;
     const newErrorObject = {
@@ -76,7 +79,11 @@ export const AttributeSelectorNotConnected = (props) => {
   );
 };
 
-const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
+const mapToLegacyMstrData = (
+  chosenObject: MstrDataProps,
+  session: SessionProps,
+  editedObject: EditedObjectProps
+) => {
   const legacyObject = {
     reportId: chosenObject.chosenObjectId || editedObject.chosenObjectId,
     envUrl: session.envUrl,
@@ -98,7 +105,7 @@ const mapToLegacyMstrData = (chosenObject, session, editedObject) => {
   return legacyObject;
 };
 
-const mapToLegacySession = (mstrData, session, editedObject) => ({
+const mapToLegacySession = (mstrData: MstrDataProps, session: SessionProps, editedObject: EditedObjectProps) => ({
   url: session.envUrl,
   USE_PROXY: false,
   authToken: session.authToken,
@@ -106,35 +113,13 @@ const mapToLegacySession = (mstrData, session, editedObject) => ({
   attrFormPrivilege: session.attrFormPrivilege
 });
 
-AttributeSelectorNotConnected.propTypes = {
-  title: PropTypes.string,
-  triggerUpdate: PropTypes.bool,
-  openModal: PropTypes.bool,
-  session: PropTypes.shape({}),
-  mstrData: PropTypes.shape({ chosenObjectId: PropTypes.string, }),
-  resetTriggerUpdate: PropTypes.func,
-  attributesSelectedChange: PropTypes.func,
-  closeModal: PropTypes.func,
-  updateDisplayAttrFormOnImport: PropTypes.func,
-  updateDisplayAttrFormOnEdit: PropTypes.func,
-  handlePopupErrors: PropTypes.func,
-  onTriggerUpdate: PropTypes.func,
-  isEdit: PropTypes.bool,
-  importSubtotal: PropTypes.bool,
-  switchImportSubtotalsOnImport: PropTypes.func,
-  switchImportSubtotalsOnEdit: PropTypes.func,
-  displayAttrFormNames: PropTypes.string,
-  chosenObject: PropTypes.shape({ id: PropTypes.string, }),
-  editedObject: PropTypes.shape({
-    displayAttrFormNames: PropTypes.string,
-    subtotalsInfo: PropTypes.shape({ importSubtotal: PropTypes.bool, }),
-    projectId: PropTypes.string,
-    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
-  }),
-  supportForms: PropTypes.bool,
-};
-
-const mapStateToProps = (state) => {
+// TODO: fix any types
+const mapStateToProps = (
+  state: {
+    navigationTree: { [x: string]: any; promptsAnswers: any; importSubtotal: any; displayAttrFormNames: any; };
+    popupStateReducer: any; popupReducer: any; sessionReducer: any; officeReducer: any;
+}
+) => {
   const {
     navigationTree: {
       promptsAnswers, importSubtotal, displayAttrFormNames, ...chosenObject
