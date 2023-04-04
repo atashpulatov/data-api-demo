@@ -21,6 +21,7 @@ export interface AttributeSelectorNotConnectedProps {
   supportForms: boolean;
 }
 
+// TODO: fix any types
 export interface MstrDataProps {
     id: string;
     envUrl: string;
@@ -38,6 +39,7 @@ export interface MstrDataProps {
     };
 }
 
+// TODO: fix any types
 export interface EditedObjectProps {
     chosenObjectId: string;
     chosenObjectName: string;
@@ -57,6 +59,7 @@ export interface EditedObjectProps {
     selectedAttrForms: any;
 }
 
+// TODO: fix any types
 export interface SessionProps {
     envUrl: string;
     authToken: string;
@@ -67,11 +70,13 @@ export interface SubtotalsInfoProps {
     importSubtotal: boolean;
 }
 
+// TODO: fix any types
 export interface MstrError {
     status: any;
     response: any;
 }
 
+// TODO: fix any types
 export interface AttributeSelectorWindowNotConnectedProps {
     chosenObject: MstrDataProps;
     objectName: string;

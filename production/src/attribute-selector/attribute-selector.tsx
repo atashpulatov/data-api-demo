@@ -113,6 +113,7 @@ const mapToLegacySession = (mstrData: MstrDataProps, session: SessionProps, edit
   attrFormPrivilege: session.attrFormPrivilege
 });
 
+// TODO: fix any types
 const mapStateToProps = (
   state: {
     navigationTree: { [x: string]: any; promptsAnswers: any; importSubtotal: any; displayAttrFormNames: any; };

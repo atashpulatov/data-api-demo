@@ -11,6 +11,7 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
+
 export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWindowNotConnectedProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
@@ -26,6 +27,7 @@ export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWind
     popupHelper.officeMessageParent(message);
   };
 
+  // TODO: fix any types
   const onTriggerUpdate = (
     chosenObjectId: string,
     projectId: string,
@@ -108,6 +110,7 @@ export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWind
   );
 };
 
+// TODO: fix any types
 const mapStateToProps = (
   state: {
     navigationTree: { [x: string]: any; importSubtotal: any; displayAttrFormNames: any; };
