@@ -11,10 +11,10 @@ import { errorMessages, errorCodes } from '../error/constants';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import './attribute-selector.css';
 import {
-  attributeSelectorNotConnectedProps, editedObjectProps, mstrDataProps, mstrError, sessionProps
+  AttributeSelectorNotConnectedProps, EditedObjectProps, MstrDataProps, MstrError, SessionProps
 } from './attribute-selector-types';
 
-export const AttributeSelectorNotConnected = (props: attributeSelectorNotConnectedProps) => {
+export const AttributeSelectorNotConnected = (props: AttributeSelectorNotConnectedProps) => {
   const [t, i18n] = useTranslation();
 
   /**
@@ -23,7 +23,7 @@ export const AttributeSelectorNotConnected = (props: attributeSelectorNotConnect
    *
    * @param {Error} e -  Error thrown by mstrReactLibrary
    */
-  const handleUnauthorized = (e: mstrError) => {
+  const handleUnauthorized = (e: MstrError) => {
     const { ERR009 } = errorCodes;
     const { handlePopupErrors } = props;
     const newErrorObject = {
@@ -80,9 +80,9 @@ export const AttributeSelectorNotConnected = (props: attributeSelectorNotConnect
 };
 
 const mapToLegacyMstrData = (
-  chosenObject: mstrDataProps,
-  session: sessionProps,
-  editedObject: editedObjectProps
+  chosenObject: MstrDataProps,
+  session: SessionProps,
+  editedObject: EditedObjectProps
 ) => {
   const legacyObject = {
     reportId: chosenObject.chosenObjectId || editedObject.chosenObjectId,
@@ -105,7 +105,7 @@ const mapToLegacyMstrData = (
   return legacyObject;
 };
 
-const mapToLegacySession = (mstrData: mstrDataProps, session: sessionProps, editedObject: editedObjectProps) => ({
+const mapToLegacySession = (mstrData: MstrDataProps, session: SessionProps, editedObject: EditedObjectProps) => ({
   url: session.envUrl,
   USE_PROXY: false,
   authToken: session.authToken,

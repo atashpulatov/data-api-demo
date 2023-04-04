@@ -8,10 +8,10 @@ import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { popupHelper } from '../popup/popup-helper';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
-import { attributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
+import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
-export const AttributeSelectorWindowNotConnected = (props: attributeSelectorWindowNotConnectedProps) => {
+export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWindowNotConnectedProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [attributesSelected, setAttributesSelected] = useState(false);
