@@ -13,7 +13,7 @@ class AuthenticationService {
     this.moduleProxy = proxy;
   }
 
-  authenticate(username: String, password: String, envUrl: String, loginMode = 1) {
+  authenticate(username: string, password: string, envUrl: string, loginMode = 1) {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/login`)
       .send({ username, password, loginMode })
@@ -21,7 +21,7 @@ class AuthenticationService {
       .then((res: any) => res.headers['x-mstr-authtoken']);
   }
 
-  logout(envUrl: String, authToken: String) {
+  logout(envUrl: string, authToken: string) {
     return this.moduleProxy.request
       .post(`${envUrl}/auth/logout`)
       .set('x-mstr-authtoken', authToken)
@@ -29,7 +29,7 @@ class AuthenticationService {
       .then(() => true);
   }
 
-  getSessions(envUrl: String, authToken: String) {
+  getSessions(envUrl: string, authToken: string) {
     return this.moduleProxy.request
       .get(`${envUrl}/sessions/userInfo`)
       .set('x-mstr-authtoken', authToken)
@@ -37,7 +37,7 @@ class AuthenticationService {
       .then((res: any) => res);
   }
 
-  putSessions(envUrl: String, authToken: String) {
+  putSessions(envUrl: string, authToken: string) {
     return this.moduleProxy.request
       .put(`${envUrl}/sessions`)
       .set('x-mstr-authtoken', authToken)
@@ -45,7 +45,7 @@ class AuthenticationService {
       .then((res: any) => res);
   }
 
-  async getOfficePrivilege(envUrl: String, iSession: any) {
+  async getOfficePrivilege(envUrl: string, iSession: any) {
     try {
       let response;
       if (iSession) { response = await this.fetchPrivilegeById(OFFICE_PRIVILEGE_ID, envUrl, iSession); }
@@ -63,7 +63,7 @@ class AuthenticationService {
     }
   }
 
-  async getAttributeFormPrivilege(envUrl: String, iSession: any) {
+  async getAttributeFormPrivilege(envUrl: string, iSession: any) {
     try {
       const response = await this.fetchPrivilegeById(ATTRIBUTE_FORM_PRIVILEGE_ID, envUrl, iSession);
       // Only return false if isUserLevelAllowed exists and is false
@@ -82,7 +82,7 @@ class AuthenticationService {
     }
   }
 
-  fetchPrivilegeById(id: String, envUrl: String, authToken: String) {
+  fetchPrivilegeById(id: string, envUrl: string, authToken: string) {
     return this.moduleProxy.request
       .get(`${envUrl}/sessions/privileges/${id}`)
       .set('x-mstr-authtoken', authToken)

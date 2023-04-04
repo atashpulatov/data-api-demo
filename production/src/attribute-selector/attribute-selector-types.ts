@@ -1,5 +1,5 @@
-export interface AttributeSelectorNotConnectedProps {
-  title: String;
+export interface attributeSelectorNotConnectedProps {
+  title: string;
   triggerUpdate: Boolean;
   openModal: Boolean;
   session: sessionProps;
@@ -15,39 +15,39 @@ export interface AttributeSelectorNotConnectedProps {
   importSubtotal: Boolean;
   switchImportSubtotalsOnImport: Function;
   switchImportSubtotalsOnEdit: Function;
-  displayAttrFormNames: String;
+  displayAttrFormNames: string;
   chosenObject: mstrDataProps;
   editedObject: editedObjectProps;
   supportForms: Boolean;
 }
 
 export interface mstrDataProps {
-    id: String;
-    envUrl: String;
-    authToken: String;
-    chosenObjectId: String;
-    chosenProjectId: String;
-    chosenObjectName: String;
+    id: string;
+    envUrl: string;
+    authToken: string;
+    chosenObjectId: string;
+    chosenProjectId: string;
+    chosenObjectName: string;
     objectType: objectTypeProps;
-    preparedInstanceId: String;
+    preparedInstanceId: string;
     chosenSubtype: any;
     isPrompted: boolean;
     promptsAnswers: Array<Object>;
     mstrObjectType: {
-        name: String;
+        name: string;
     };
 }
 
 export interface editedObjectProps {
-    chosenObjectId: String;
-    chosenObjectName: String;
-    displayAttrFormNames: String;
+    chosenObjectId: string;
+    chosenObjectName: string;
+    displayAttrFormNames: string;
     subtotalsInfo: subtotalsInfoProps;
-    projectId: String;
-    instanceId: String;
+    projectId: string;
+    instanceId: string;
     promptsAnswers: Array<Object>;
     mstrObjectType: {
-        name: String;
+        name: string;
     };
     chosenObjectType: any;
     chosenObjectSubtype: any;
@@ -58,8 +58,8 @@ export interface editedObjectProps {
 }
 
 export interface sessionProps {
-    envUrl: String;
-    authToken: String;
+    envUrl: string;
+    authToken: string;
     attrFormPrivilege: any;
 }
 
@@ -72,18 +72,18 @@ export interface mstrError {
     response: any;
 }
 
-export interface AttributeSelectorWindowNotConnectedProps {
+export interface attributeSelectorWindowNotConnectedProps {
     chosenObject: mstrDataProps;
-    objectName: String;
+    objectName: string;
     mstrData: mstrDataProps;
     handleBack: NonNullable<boolean | ((...args: any[]) => any)>;
     importSubtotal: Boolean;
-    displayAttrFormNames: String;
+    displayAttrFormNames: string;
     editedObject: editedObjectProps;
 }
 
 export interface objectTypeProps {
-    objectType: String;
+    objectType: string;
 }
 
 export interface subtotalsInfo {

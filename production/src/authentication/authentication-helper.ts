@@ -47,7 +47,7 @@ class AuthenticationHelper {
    *
    * @param {Object} checkInterval id of setInterval required to clear it on connection restored
    */
-  doesConnectionExist = (checkInterval: string | number) => {
+  doesConnectionExist = (checkInterval: any) => {
     const reduxStoreState = this.reduxStore.getState();
     const { envUrl } = reduxStoreState.sessionReducer;
     const changedUrl = envUrl.slice(0, -3);

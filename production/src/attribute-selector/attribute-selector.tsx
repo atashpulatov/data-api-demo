@@ -11,10 +11,10 @@ import { errorMessages, errorCodes } from '../error/constants';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import './attribute-selector.css';
 import {
-  AttributeSelectorNotConnectedProps, editedObjectProps, mstrDataProps, mstrError, sessionProps
+  attributeSelectorNotConnectedProps, editedObjectProps, mstrDataProps, mstrError, sessionProps
 } from './attribute-selector-types';
 
-export const AttributeSelectorNotConnected = (props: AttributeSelectorNotConnectedProps) => {
+export const AttributeSelectorNotConnected = (props: attributeSelectorNotConnectedProps) => {
   const [t, i18n] = useTranslation();
 
   /**
