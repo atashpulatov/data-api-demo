@@ -141,7 +141,7 @@
    "More Items": "Weitere Elemente",
    "Date and time of last modification": "Datum und Uhrzeit der letzten Änderung",
    "Search objects": "Objekte suchen",
-   "This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.": "Dieses Objekt kann nicht importiert werden. Objekte mit dynamischen Gruppierungen werden in dieser Version von MicroStrategy für Office nicht unterstützt.",
+   "This object cannot be imported. Objects with custom groups are not supported in this version of MicroStrategy for Office.": "Dieses Objekt kann nicht importiert werden. Objekte mit benutzerdefinierten Gruppen werden in dieser Version von MicroStrategy for Office nicht unterstützt.",
    "Show more": "Mehr anzeigen",
    "Show less": "Weniger anzeigen",
    "Version": "Version",
