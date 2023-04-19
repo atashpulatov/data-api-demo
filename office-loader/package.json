@@ -33,8 +33,8 @@
     "workbox-webpack-plugin": "3.6.2"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js"
+    "start": "node --openssl-legacy-provider scripts/start.js",
+    "build": "node --openssl-legacy-provider scripts/build.js"
   },
   "browserslist": [
     ">0.2%",

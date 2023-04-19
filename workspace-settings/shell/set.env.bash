@@ -18,7 +18,7 @@ export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 
 jdk_version="jdk-11.0.16"
 
-nodejs_version="16.19.1"
+nodejs_version="18.15.0"
 export nodejs_image_tag=$nodejs_version
 
 if uname -a | grep -q "Darwin"; then
