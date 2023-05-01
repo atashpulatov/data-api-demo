@@ -5,5 +5,5 @@ export ORGANIZATION_NAME='mstr-kiai'
 export ECO_GIT_BRANCH=${ghprbTargetBranch:=${GIT_BRANCH}}
 export ECO_GIT_BRANCH=${ECO_GIT_BRANCH:=$(git rev-parse --abbrev-ref HEAD)}
 
-curl -sS "https://devops-api-cloud.internal.microstrategy.com/api/ecoroot/source?org=${ORGANIZATION_NAME}&repo=${PROJECT_NAME}&branch=${ECO_GIT_BRANCH}" > .ecosystem_ecoroot
+curl -sS "https://devops-api.internal.microstrategy.com/api/ecoroot/source?org=${ORGANIZATION_NAME}&repo=${PROJECT_NAME}&branch=${ECO_GIT_BRANCH}" > .ecosystem_ecoroot
 source .ecosystem_ecoroot
