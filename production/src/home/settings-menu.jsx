@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { OverflowTooltip } from '@mstr/rc';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import logo from './assets/mstr_logo.png';
 import overflowHelper from '../helpers/helpers';
@@ -34,7 +34,7 @@ export const SettingsMenuNotConnected = ({
 }) => {
   const [t, i18n] = useTranslation();
 
-  const userNameDisplay = userFullName || 'MicroStrategy user';
+  const userNameDisplay = 'kjashdkjahsdkjhaskdhakshdakshdkashdkjshakdjhajkdhkajshdkashdkhasdkhaskdhasjkdhakjhdkashdkjashdkjhakjdhaksjhdkajshdkalsdhasdlahdhal';
   const isSecuredActive = !isSecured && objects && objects.length > 0;
   const prepareEmail = () => {
     if (!Office) { return '#'; } // If no Office return anchor url
@@ -91,13 +91,7 @@ export const SettingsMenuNotConnected = ({
         {userInitials !== null
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
           : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />}
-        {overflowHelper.isOverflown(userNameDisplay, 130)
-          ? (
-            <Popover placement="bottom" content={userNameDisplay} mouseEnterDelay={1}>
-              <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
-            </Popover>
-          )
-          : <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>}
+        <OverflowTooltip placement="bottom" theme="dark" content={userNameDisplay} mouseEnterDelay={1} containerClassName="user-name-tooltip" sourceClassName="user-name">{userNameDisplay}</OverflowTooltip>
       </li>
       <li
         className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}

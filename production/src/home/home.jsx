@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import './home.css';
 import { useTranslation } from 'react-i18next';
-import { Spin } from 'antd';
 import PropTypes from 'prop-types';
+import { Spinner } from '@mstr/rc';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -66,16 +66,14 @@ export const HomeNotConnected = (props) => {
     getUserData(authToken);
   }, [authToken]);
 
+  const renderAuthenticatePage = () => (loading ? <Spinner text="Loading" textPosition="RIGHT" /> : (IS_DEVELOPMENT && <Authenticate />));
+
   return (
     <SessionExtendingWrapper id="overlay">
       {IS_DEVELOPMENT && authToken && <DevelopmentImportList />}
       {authToken
         ? <RightSidePanel />
-        : (
-          <Spin spinning={loading}>
-            {IS_DEVELOPMENT && <Authenticate />}
-          </Spin>
-        )}
+        : renderAuthenticatePage()}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
     </SessionExtendingWrapper>
   );

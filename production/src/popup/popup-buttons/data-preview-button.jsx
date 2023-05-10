@@ -1,25 +1,19 @@
 import React from 'react';
-import { Button, Popover } from 'antd';
 import PropTypes from 'prop-types';
+import { MstrButton, StandardTooltip } from '@mstr/rc';
 
-export const DataPreviewButton = ({ disableReason, onPreviewClick, t }) => {
-  const internalButton = (
-    <Button
+export const DataPreviewButton = ({ disableReason, onPreviewClick, t }) => (
+  <StandardTooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} theme="dark" placement="topRight">
+    <MstrButton
       id="data-preview"
       onMouseDown={(e) => { e.preventDefault(); }}
       onClick={onPreviewClick}
-      disabled={!!disableReason}>
-      {t('Data Preview')}
-    </Button>
-  );
-  return disableReason
-    ? (
-      <Popover className="button-tooltip" placement="topRight" content={t(`${disableReason}`)} mouseEnterDelay={1}>
-        {internalButton}
-      </Popover>
-    )
-    : internalButton;
-};
+      disabled={!!disableReason}
+      mstrText={t('Data Preview')}
+      mstrType="secondary"
+    />
+  </StandardTooltip>
+);
 
 DataPreviewButton.propTypes = {
   onPreviewClick: PropTypes.func,

@@ -107,8 +107,17 @@ $text-color: #3F4042;
   }
 
   .user-name {
+    max-width: 130px;
+    display: inline-block;
     padding-left: 13px;
     padding-right: 13px;
-    line-height: 32px;
   }
+  
 }
+
+.user-name-tooltip {
+    z-index: 5;
+    .mstr-rc-tooltip-arrow {
+        display: none;
+    }
+  }
