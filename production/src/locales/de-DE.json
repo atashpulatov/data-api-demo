@@ -119,7 +119,7 @@
    "Dataset refreshed": "Datensatz aktualisiert",
    "The object binding is no longer valid due to previous updates.": "Diese Objektbindung ist wegen vorangegangener Aktualisierungen nicht mehr gültig",
    "The object cannot be imported. Either you do not have necessary permissions to view it, or it is empty.": "Das Objekt kann nicht importiert werden. Entweder sind Sie nicht berechtigt, es anzuzeigen, oder es ist leer.",
-   "The required data range in the worksheet is not empty.": "Der erforderliche Datenbereich im Arbeitsblatt ist nicht leer",
+   "The required data range in the worksheet is not empty.": "Der erforderliche Datenbereich im Arbeitsblatt ist nicht leer.",
    "MicroStrategy Office Client loaded. Click Import Data on the Home tab to start plugin. Login to Environment to start browsing documents.": "MicroStrategy Office Client wurde geladen. Klicken Sie auf der Registerkarte 'Start' auf 'Daten importieren', um das Plug-in zu starten. Melden Sie sich bei einer Umgebung an, um nach Dokumenten zu suchen",
    "Refresh": "Aktualisieren",
    "Data Cleared!": "Daten gelöscht!",
