@@ -58,7 +58,8 @@ function getTypeFromViewMedia(viewMedia) {
   if (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaViewAnalysis
     | defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaHTML5Dashboard) {
     return DOCUMENT_TYPES.DOSSIER;
-  } if (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic) {
+  }
+  if (defaultViewMedia & EnumDSSXMLViewMedia.DssXmlViewMediaViewStatic) {
     return DOCUMENT_TYPES.RSD;
   }
   return null;
