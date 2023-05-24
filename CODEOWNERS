@@ -1,0 +1,9 @@
+# This will automatically add reviewers based on file pattern matches
+
+# Development Owners
+
+* @agorski_mstr @bkoziel_mstr @eozturk_mstr @mbereszczuk_mstr @mduk_mstr @pnastaj_mstr @pzajk_mstr @gzhou_mstr @niyshah_mstr @atashpulatov_mstr @gparra_mstr @jvargas_mstr @kaiwang_mstr @kezhou_mstr @tsahasranaman_mstr @tdong_mstr @fniu_mstr
+
+# Automation Owners
+
+/tests/ @miduong_mstr @wapeng_mstr @agorski_mstr @bkoziel_mstr @eozturk_mstr @mbereszczuk_mstr @mduk_mstr @pnastaj_mstr @pzajk_mstr @gzhou_mstr @niyshah_mstr @atashpulatov_mstr @gparra_mstr @jvargas_mstr @kaiwang_mstr @kezhou_mstr @tsahasranaman_mstr @tdong_mstr @fniu_mstr
