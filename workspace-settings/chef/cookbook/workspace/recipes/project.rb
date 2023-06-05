@@ -30,7 +30,6 @@ when 'redhat', 'centos', 'fedora', 'amazon'
 
 when 'mac_os_x'
   include_recipe 'jdk_mac'
-  include_recipe 'docker'
   include_recipe 'maven'
   include_recipe 'workspace::prepare_e2e_dependencies'
 when 'windows'
