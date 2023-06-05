@@ -24,8 +24,10 @@ export nodejs_image_tag=$nodejs_version
 if uname -a | grep -q "Darwin"; then
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home
   export MAVEN_HOME=/usr/local/maven-3.3.9
+  export PYTHON_HOME=/var/lib/jenkins/.pyenv/shims
+  export PYENV=/var/lib/jenkins/.pyenv/bin
   export PATH=/usr/local/git/bin:$JAVA_HOME/bin:$PATH
-  export PATH=$MAVEN_HOME/bin:$PATH
+  export PATH=$PYENV:$PYTHON_HOME:$MAVEN_HOME/bin:$PATH
 elif uname -a | grep -q "MSYS"; then
   export JAVA_HOME=/c/java/$jdk_version
   export PYTHON_HOME=/c/Users/jenkins/.pyenv/pyenv-win/shims
