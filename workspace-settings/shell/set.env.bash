@@ -16,9 +16,9 @@ export VAGRANT_BOXES_WINDOWS_VERSION='1.0.4.next'
 export VAGRANT_BOXES_OSX_NAME='osx-10.11.3'
 export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 
-jdk_version="jdk-11.0.16"
+jdk_version="jdk-11.0.19"
 
-nodejs_version="18.15.0"
+nodejs_version="18.16.0"
 export nodejs_image_tag=$nodejs_version
 
 if uname -a | grep -q "Darwin"; then
@@ -28,15 +28,12 @@ if uname -a | grep -q "Darwin"; then
   export PATH=$MAVEN_HOME/bin:$PATH
 elif uname -a | grep -q "MSYS"; then
   export JAVA_HOME=/c/java/$jdk_version
-  export PATH=$JAVA_HOME/bin:$PATH
   export PYTHON_HOME=/c/Users/jenkins/.pyenv/pyenv-win/shims
   export PYENV=/c/Users/jenkins/.pyenv/pyenv-win/bin
-  export PATH=$PYENV:$PYTHON_HOME:$PATH
   export DOCKER_HOME=/C/Program\ Files/Docker/Docker/Resources/
   export MAVEN_HOME=/c/apache/apache-maven-3.6.3
-  export PATH=/c/node/node-v10.16.3-win-x64:$JAVA_HOME/bin:$DOCKER_HOME/bin:$MAVEN_HOME/bin:$PATH
   export NODE_HOME=/c/node/node-v$nodejs_version-win-x64/
-  export PATH=$NODE_HOME:$PATH
+  export PATH=$JAVA_HOME/bin:$DOCKER_HOME/bin:$MAVEN_HOME/bin:$NODE_HOME:$PYENV:$PYTHON_HOME:$PATH
 else
   export JAVA_HOME=/usr/java/$jdk_version
   export PATH=$JAVA_HOME/bin:$PATH
