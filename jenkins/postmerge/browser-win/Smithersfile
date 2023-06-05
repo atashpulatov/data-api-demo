@@ -31,7 +31,7 @@ job 'stage-2-e2e-browser-test-python-win' do
     end
   end
 
-  assigned_node_string 'mstr-office_browser-testing_autoscaling-pool'
+  assigned_node_string 'mstr-office-test-win'
 
   builders do
     bash do
@@ -44,7 +44,6 @@ source .ecosystem
 rake pre_pipeline
 export HATS=pipeline:$HATS
 
-rake deploy_tester_server[$APPLICATION_VERSION]
 rake py_e2e_test_win[chrome, $APPLICATION_VERSION]
 '
     end
