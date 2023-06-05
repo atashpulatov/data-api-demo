@@ -44,8 +44,8 @@ when 'mac_os_x'
     end
   end
 
-  execute "install dependencies" do
-    command "pip3 install selenium Appium-Python-Client behave Pillow opencv-python-headless pyperclip allure-behave requests"
-  end
+#   execute "install dependencies" do
+#     command "pip3 install selenium Appium-Python-Client behave Pillow opencv-python-headless pyperclip allure-behave requests"
+#   end
 
 end
