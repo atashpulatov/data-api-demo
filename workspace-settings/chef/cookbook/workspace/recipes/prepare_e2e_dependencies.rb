@@ -14,21 +14,6 @@ when 'windows'
     end
   end
 
-#   windows_package 'python 3.8.5' do
-#     source "https://nexus.internal.microstrategy.com/repository/filerepo/org/python/python/3.8.5/python-3.8.5-x64.exe"
-#       installer_type :custom
-#       options '/quiet /log C:\tmp\python_install_log.txt'
-#       remote_file_attributes ({
-#         :path => "#{ENV['TMP']}\\python-3.8.5-x64.exe",
-#         :checksum => '00123c4d6cabb2e07efc5848451dcd556a734cfa'
-#       })
-#       not_if {::File.exist?('C:\\Users\\jenkins\\AppData\\Local\\Programs\\Python\\Python38\\python.exe')}
-#   end
-
-#   execute "install dependencies" do
-#     command "python -m pip install selenium Appium-Python-Client behave Pillow opencv-python-headless pyperclip allure-behave requests"
-#   end
-
 when 'mac_os_x'
   unless Dir.exists? "/Applications/AppiumForMac.app"
     remote_file "/opt/appium_for_mac_0.3.0" do
@@ -43,9 +28,5 @@ when 'mac_os_x'
       cwd "/opt"
     end
   end
-
-#   execute "install dependencies" do
-#     command "pip3 install selenium Appium-Python-Client behave Pillow opencv-python-headless pyperclip allure-behave requests"
-#   end
 
 end
