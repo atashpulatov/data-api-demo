@@ -5,6 +5,11 @@ job 'stage-2-e2e-browser-test-python-mac' do
 
   properties do
     parameters do
+      string_parameter do
+        name 'TAG'
+        description 'Tests tag'
+        default_value 'ci_pipeline_postmerge_mac_chrome'
+      end
       upstream_parameter do
         upstream_job_name 'stage-1-dev'
         name 'APPLICATION_VERSION'
@@ -39,7 +44,7 @@ export WORKSPACE_SETTING=mac_test
 
 source .ecosystem
 rake pre_pipeline
-rake py_e2e_test_mac[ci_pipeline_postmerge_mac_chrome, $APPLICATION_VERSION]
+rake py_e2e_test_mac[$TAG, $APPLICATION_VERSION]
 '
     end
   end
@@ -50,18 +55,5 @@ rake py_e2e_test_mac[ci_pipeline_postmerge_mac_chrome, $APPLICATION_VERSION]
        report_directory_path "tests/integration/python/allure-report"
        index_file_name 'index.html'
     end
-
-    ext_mailer do
-      recipients_list 'rraszplewicz@microstrategy.com,yzhuk@microstrategy.com'
-      subject '$JOB_NAME - $BUILD_STATUS'
-      content '$DEFAULT_CONTENT'
-      fail_trigger_recipients_list ''
-      fail_trigger_notify_developer 'true'
-      always_trigger 'true'
-      always_trigger_recipients_list ''
-    end
-
   end
-
 end
-

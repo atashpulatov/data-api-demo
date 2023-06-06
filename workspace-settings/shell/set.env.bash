@@ -21,6 +21,8 @@ jdk_version="jdk-11.0.19"
 nodejs_version="18.16.0"
 export nodejs_image_tag=$nodejs_version
 
+export python_version="3.10.10"
+
 if uname -a | grep -q "Darwin"; then
   export JAVA_HOME=/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home
   export MAVEN_HOME=/usr/local/maven-3.3.9
