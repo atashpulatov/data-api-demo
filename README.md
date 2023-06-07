@@ -74,9 +74,9 @@ Add-in for Microsoft Office applications and MicroStrategy.
         Contact: Fred Bloggs (fbloggs)
 -->
 
-Team: TL-Application-Excel
+Team: PA-MSFT-365
 
-Contact: Alejandro Sedano (asedano)  
+Contact: Piotr Nastaj (pnastaj)  
 
 DevOps POC: Yurii Zhuk (yzhuk)
 
