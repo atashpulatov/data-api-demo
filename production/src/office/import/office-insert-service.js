@@ -1,7 +1,6 @@
 import { PROMISE_LIMIT } from '../../mstr-object/mstr-object-rest-service';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import officeInsertSplitHelper from './office-insert-split-helper';
-import { IMPORT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
 
 class OfficeInsertService {
   /**

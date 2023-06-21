@@ -43,11 +43,14 @@ moment.locale('zh-CN', {
   meridiem(hour, minute, isLowercase) {
     if (hour < 9) {
       return '早上';
-    } if (hour < 11 && minute < 30) {
+    }
+    if (hour < 11 && minute < 30) {
       return '上午';
-    } if (hour < 13 && minute < 30) {
+    }
+    if (hour < 13 && minute < 30) {
       return '中午';
-    } if (hour < 18) {
+    }
+    if (hour < 18) {
       return '下午';
     }
     return '晚上';
@@ -57,11 +60,14 @@ moment.locale('zh-TW', {
   meridiem(hour, minute, isLowercase) {
     if (hour < 9) {
       return '早上';
-    } if (hour < 11 && minute < 30) {
+    }
+    if (hour < 11 && minute < 30) {
       return '上午';
-    } if (hour < 13 && minute < 30) {
+    }
+    if (hour < 13 && minute < 30) {
       return '中午';
-    } if (hour < 18) {
+    }
+    if (hour < 18) {
       return '下午';
     }
     return '晚上';

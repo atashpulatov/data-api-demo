@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import '../home/home.css';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { selectorProperties } from './selector-properties';
 import { AttributeSelector } from './attribute-selector';

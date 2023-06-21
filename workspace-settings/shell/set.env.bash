@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export APPLICATION_SHORT_VERSION_PREFIX="11.3."
-export APPLICATION_LONG_VERSION_PREFIX="${APPLICATION_SHORT_VERSION_PREFIX}1060."
+export APPLICATION_LONG_VERSION_PREFIX="${APPLICATION_SHORT_VERSION_PREFIX}1130."
 
 export GROUP_ID_BASE='com.microstrategy'
 export BASE_BRANCH='m2021'
@@ -18,7 +18,7 @@ export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 
 jdk_version="jdk-11.0.16"
 
-nodejs_version="18.15.0"
+nodejs_version="18.16.0"
 export nodejs_image_tag=$nodejs_version
 
 if uname -a | grep -q "Darwin"; then
@@ -56,8 +56,8 @@ function become_jenkins_manager(){
   export HATS=$HATS:jenkins
 }
 
-export BRANCH_OFF_COMMIT=f77528baf2cf70b219e9b0a063e6d6983ff2b33f
+export BRANCH_OFF_COMMIT=e76908f4597c8919958b534e09b590979c229bfe
 
-export BASE_VERSION=0
 
-export BASE_VERSION=0
+
+export BASE_VERSION=100
