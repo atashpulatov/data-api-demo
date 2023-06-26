@@ -1,0 +1,56 @@
+.auth-form {
+  padding: 2em;
+
+  h1 {
+    text-align: center;
+    padding-bottom: 0.5em;
+  }
+}
+
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: auto;
+  grid-row-gap: 2em;
+
+  .input-container {
+    position: relative;
+
+    &:last-of-type {
+      label {
+        margin-left: 2em;
+      }
+    }
+  }
+
+  select {
+    display: block;
+    width: 100px;
+  }
+
+  input {
+    border-radius: 4px;
+    border-width: 1px;
+    height: 2em;
+    width: 100%;
+    font-size: 1em;
+    padding: 0 6px;
+
+    &[type='checkbox'] {
+      line-height: 1em;
+      height: 1em;
+      width: 1em;
+      position: absolute;
+      left: 0;
+    }
+
+    &[type='submit'] {
+      border-radius: 4px;
+      border: 1px solid #1c91dc;
+      background-color: #1c91dc;
+      height: 2.7em;
+      font-size: 1em;
+      color: white;
+    }
+  }
+}
