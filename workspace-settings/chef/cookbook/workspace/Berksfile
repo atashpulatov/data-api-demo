@@ -10,7 +10,7 @@ cookbook_from_git 'jdk_windows','11.0.19'
 cookbook_from_git 'jdk_mac','11.0.19'
 cookbook 'java', '~> 10.0.0'
 
-cookbook_from_github 'mstr-ecosystem-cookbooks', 'nodejs','18.16.0'
+cookbook_from_git 'nodejs','18.16.1'
 
 cookbook 'seven_zip', '~> 2.0.0'
 cookbook_from_git 'docker', '0.1.33'

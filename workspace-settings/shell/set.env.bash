@@ -18,7 +18,7 @@ export VAGRANT_BOXES_OSX_VERSION='1.0.0.next'
 
 jdk_version="jdk-11.0.19"
 
-nodejs_version="18.16.0"
+nodejs_version='18.16.1'
 export nodejs_image_tag=$nodejs_version
 
 export python_version="3.10.10"
