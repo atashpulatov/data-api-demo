@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { SidePanel, popupTypes } from '@mstr/connector-components';
+import { SidePanel, SettingsPanel, popupTypes } from '@mstr/connector-components';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
@@ -11,7 +11,8 @@ import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
 import { officeApiHelper } from '../office/api/office-api-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
+/* eslint-disable */
+import officeReducerHelper from '../office/store/office-reducer-helper';;
 import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
@@ -27,6 +28,8 @@ export const RightSidePanelNotConnected = ({
   isSettings,
   isSecured,
   isClearDataFailed,
+  settingsPanelLoaded,
+  reusePromptAnswers,
   toggleIsSettingsFlag,
   toggleSecuredFlag,
   toggleIsClearDataFailedFlag,
@@ -50,6 +53,7 @@ export const RightSidePanelNotConnected = ({
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
+        await sidePanelService.initReusePromptAnswers();
       } catch (error) {
         console.error(error);
       }
@@ -126,9 +130,23 @@ export const RightSidePanelNotConnected = ({
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
+  const handleReusePromptAnswers = async () => { await wrapper(sidePanelService.toggleReusePromptAnswers, reusePromptAnswers); };
+
+  const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
+
 
   return (
-    <SidePanel
+    <>
+    {settingsPanelLoaded 
+        ?  <SettingsPanel 
+        reusePromptAnswers={reusePromptAnswers}
+        handleReusePromptAnswers={handleReusePromptAnswers}
+        handleToggleSettingsPanel={handleToggleSettingsPanel}
+        locale={i18n.language}
+        />
+        : (<SidePanel
+      reusePromptAnswers={reusePromptAnswers}
+      handleReusePromptAnswers={handleReusePromptAnswers}
       locale={i18n.language}
       loadedObjects={loadedObjectsWrapped}
       onAddData={addDataWrapper}
@@ -146,7 +164,8 @@ export const RightSidePanelNotConnected = ({
       onSelectAll={notificationService.dismissNotifications}
       shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
       isPopupRendered={isPopupRendered}
-    />
+    />)}
+    </>
   );
 };
 
@@ -155,7 +174,7 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const {
-    isConfirm, isSettings, isSecured, isClearDataFailed, popupOpen, popupData
+    isConfirm, isSettings, isSecured, isClearDataFailed, settingsPanelLoaded, reusePromptAnswers, popupOpen, popupData
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -168,6 +187,8 @@ export const mapStateToProps = (state) => {
     notifications,
     isSecured,
     isClearDataFailed,
+    settingsPanelLoaded,
+    reusePromptAnswers,
     popupData,
     isPopupRendered: popupOpen,
   };
@@ -249,6 +270,8 @@ RightSidePanelNotConnected.propTypes = {
   isSettings: PropTypes.bool,
   isSecured: PropTypes.bool,
   isClearDataFailed: PropTypes.bool,
+  settingsPanelLoaded: PropTypes.bool,
+  reusePromptAnswers: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func,

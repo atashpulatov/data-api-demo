@@ -32,6 +32,21 @@ const toggleIsClearDataFailedFlag = (isClearDataFailed) => (dispatch) => {
   });
 };
 
+/* eslint-disable */
+const toggleSettingsPanelLoadedFlag = (settingsPanelLoded) => (dispatch) => {    
+    dispatch({
+      type: officeProperties.actions.toggleSettingsPanelLoadedFlag,
+      settingsPanelLoded,
+    });
+};
+
+const toggleReusePromptAnswersFlag = (reusePromptAnswers) => (dispatch) => {
+    dispatch({
+      type: officeProperties.actions.toggleReusePromptAnswersFlag,
+      reusePromptAnswers,
+    });
+};
+
 const toggleRenderSettingsFlag = () => (dispatch) => {
   dispatch({ type: officeProperties.actions.toggleRenderSettingsFlag, });
 };
@@ -52,6 +67,8 @@ export const officeActions = {
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,
   toggleIsClearDataFailedFlag,
+  toggleSettingsPanelLoadedFlag,
+  toggleReusePromptAnswersFlag,
   toggleRenderSettingsFlag,
   setRangeTakenPopup,
   clearSidePanelPopupData,

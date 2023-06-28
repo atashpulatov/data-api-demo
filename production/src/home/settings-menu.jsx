@@ -20,7 +20,7 @@ import getDocumentationLocale from '../helpers/get-documentation-locale';
 const APP_VERSION = packageJson.build;
 
 const { Office } = window;
-
+/* eslint-disable */
 export const SettingsMenuNotConnected = ({
   userFullName,
   userID,
@@ -29,6 +29,8 @@ export const SettingsMenuNotConnected = ({
   objects,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
+  settingsPanelLoaded,
+  toggleSettingsPanelLoadedFlag,
   clearCache,
   isSettings
 }) => {
@@ -107,6 +109,14 @@ export const SettingsMenuNotConnected = ({
         onKeyUp={isSecuredActive ? (e) => (e.key === 'Enter' && showConfirmationPopup()) : null}>
         {t('Clear Data')}
       </li>
+      <li
+        className={'no-trigger-close clear-data not-linked-list'}
+        tabIndex="0"
+        role="menuitem"
+        onClick={() => toggleSettingsPanelLoadedFlag(settingsPanelLoaded)}
+        onKeyUp={(e) => (e.key === 'Enter' && toggleSettingsPanelLoadedFlag(settingsPanelLoaded))}>
+        {t('Settings')}
+      </li>
       <div className="separate-line" />
       <li className="privacy-policy">
         <a
@@ -163,16 +173,17 @@ export const SettingsMenuNotConnected = ({
 
 function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
   const { userFullName, userInitials, userID } = sessionReducer;
-  const { isSecured, isSettings } = officeReducer;
+  const { isSecured, isSettings, settingsPanelLoaded } = officeReducer;
   const { objects } = objectReducer;
   return {
-    userFullName, userInitials, isSecured, userID, isSettings, objects
+    userFullName, userInitials, isSecured, userID, isSettings, settingsPanelLoaded, objects
   };
 }
 
 const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
+  toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
   clearCache: clearCacheImported,
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
@@ -195,9 +206,11 @@ SettingsMenuNotConnected.propTypes = {
   userFullName: PropTypes.string,
   userInitials: PropTypes.string,
   isSecured: PropTypes.bool,
+  settingsPanelLoaded: PropTypes.bool,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
+  toggleSettingsPanelLoadedFlag: PropTypes.func,
   clearCache: PropTypes.func,
   isSettings: PropTypes.bool,
 };

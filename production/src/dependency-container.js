@@ -10,6 +10,7 @@ import { notificationService } from './notification-v2/notification-service';
 import { authenticationHelper } from './authentication/authentication-helper';
 import { homeHelper } from './home/home-helper';
 import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
+import { userRestService } from './home/user-rest-service';
 import { popupController } from './popup/popup-controller';
 import { mstrListRestService } from './mstr-object/mstr-list-rest-service';
 import { popupHelper } from './popup/popup-helper';
@@ -72,6 +73,9 @@ class DIContainer {
 
     this.mstrObjectRestService = mstrObjectRestService;
     this.mstrObjectRestService.init(reduxStore);
+
+    this.userRestService = userRestService;
+    this.userRestService.init(reduxStore);
 
     this.visualizationInfoService = visualizationInfoService;
     this.visualizationInfoService.init(mstrObjectRestService);

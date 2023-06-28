@@ -13,6 +13,8 @@ export const officeProperties = {
     toggleIsConfirmFlag: 'OFFICE_TOGGLE_IS_CONFIRM_FLAG',
     toggleRenderSettingsFlag: 'OFFICE_TOGGLE_RENDER_SETTINGS_FLAG',
     toggleIsClearDataFailedFlag: 'OFFICE_TOGGLE_IS_CLEAR_DATA_FAILED',
+    toggleSettingsPanelLoadedFlag: 'OFFICE_TOGGLE_SETTINGS_PANEL_LOADED_FLAG',
+    toggleReusePromptAnswersFlag: 'OFFICE_TOGGLE_REUSE_PROMPT_ANSWERS_FLAG',
     setRangeTakenPopup: 'OFFICE_SET_RANGE_TAKEN_POPUP',
     clearSidePanelPopupData: 'OFFICE_CLEAR_SIDE_PANEL_POPUP_DATA',
     setShowHidden: 'SET_SHOW_HIDDEN'
