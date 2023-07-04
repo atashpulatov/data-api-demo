@@ -1,0 +1,57 @@
+job 'release-validation-win-desktop' do
+  description 'run browser based e2e python test for excel plugin, on windows'
+
+   configure_common_items{}
+
+  properties do
+    inject do
+      properties_content "MSYS=winsymlinks:nativestrict
+        PATH=/usr/local/.rbenv/shims:/usr/local/ruby-install/bin:/usr/local/rbenv/libexec:/tools/msys/20160205-3/cmd:/tools/Sysinternals:/Users/vagrant/bin:/Users/vagrant/.rbenv/versions/2.2.4/bin:/cmd:/usr/local/bin:/mingw64/bin:/usr/bin:/Windows/system32:/Windows:/Windows/System32/Wbem:/Windows/System32/WindowsPowerShell/v1.0:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/c/Program\ Files/Amazon/AWSCLI"
+    end
+  end
+
+  scm do
+    git do
+    end
+  end
+
+  assigned_node_string 'excel-windows-mock-node'
+
+  builders do
+    bash do
+      script '#!/usr/bin/env bash
+set +xe
+export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+export WORKSPACE_SETTING=windows_test
+
+source .ecosystem
+rake pre_pipeline
+export HATS=pipeline:$HATS
+
+rake deploy_tester_server
+rake py_e2e_test_win[ci_pipeline_all_windows_desktop]
+'
+    end
+  end
+
+  publishers do
+    html do
+       report_name 'Windows Browser e2e Python Test Report'
+       report_directory_path "tests/integration/python/allure-report"
+       index_file_name 'index.html'
+    end
+
+    ext_mailer do
+     recipients_list 'yzhuk@microstrategy.com, rraszplewicz@microstrategy.com'
+     subject '$JOB_NAME - $BUILD_STATUS'
+     content '$DEFAULT_CONTENT'
+     fail_trigger_recipients_list ''
+     fail_trigger_notify_developer 'true'
+     always_trigger 'true'
+     always_trigger_recipients_list ''
+    end
+
+  end
+
+end
+
