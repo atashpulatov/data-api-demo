@@ -24,9 +24,7 @@ class AuthenticationHelper {
     }
     try {
       this.sessionActions.enableLoading();
-      //   console.log(values);
       this.sessionActions.saveLoginValues(values);
-      //   console.log(values);
       const authToken = await this.authenticationService
         .authenticate(values.username, values.password, values.envUrl, values.loginMode || 1);
       this.sessionActions.logIn(authToken);

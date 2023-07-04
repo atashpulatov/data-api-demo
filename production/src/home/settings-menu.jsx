@@ -34,7 +34,7 @@ export const SettingsMenuNotConnected = ({
 }) => {
   const [t, i18n] = useTranslation();
 
-  const userNameDisplay = 'kjashdkjahsdkjhaskdhakshdakshdkashdkjshakdjhajkdhkajshdkashdkhasdkhaskdhasjkdhakjhdkashdkjashdkjhakjdhaksjhdkajshdkalsdhasdlahdhal';
+  const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && objects && objects.length > 0;
   const prepareEmail = () => {
     if (!Office) { return '#'; } // If no Office return anchor url
