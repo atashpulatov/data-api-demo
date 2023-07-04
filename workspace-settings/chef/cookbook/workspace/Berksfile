@@ -5,12 +5,12 @@ cookbook_from_git 'chef_commons', '2.0.0'
 cookbook_from_git 'extras', '0.1.70'
 cookbook_from_git 'maven', '1.0.0'
 
-cookbook_from_git 'java-osx', '0.1.1'
-cookbook_from_git 'java-windows', '1.0.3'
-cookbook_from_git 'java_ecosystem', '0.1.66'
-cookbook_from_github 'mstr-ecosystem-cookbooks', 'nodejs','18.16.0'
+cookbook_from_git 'jdk_linux','11.0.19'
+cookbook_from_git 'jdk_windows','11.0.19'
+cookbook_from_git 'jdk_mac','11.0.19'
+cookbook 'java', '~> 10.0.0'
 
-cookbook 'java', '4.3.0'
+cookbook_from_git 'nodejs','18.16.1'
 
 cookbook 'seven_zip', '~> 2.0.0'
 cookbook_from_git 'docker', '0.1.33'
