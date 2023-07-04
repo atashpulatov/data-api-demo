@@ -40,6 +40,7 @@
     "redux": "^4.1.1",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
+    "resize-observer-polyfill": "^1.5.1",
     "superagent": "^5.3.1"
   },
   "devDependencies": {
@@ -108,7 +109,11 @@
       "!src/office/import/*.*",
       "!src/popup/assets/*.*",
       "!src/redux-reducer/*.*"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^antd/es/(.*)$": "antd/lib/$1",
+      "^lodash-es$": "lodash"
+    }
   },
   "overrides": {
     "antd": "^3.26.20",
