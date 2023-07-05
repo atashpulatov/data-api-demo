@@ -10,11 +10,6 @@
 
 .navigation_tree__main_wrapper .object-table {
   min-width: 530px;
-  height: calc(100% - 120px);
-}
-
-.navigation_tree__main_wrapper .object-table .object-table-container {
-    background-color: white;
 }
 
 .navigation_tree__main_wrapper .popup-footer {

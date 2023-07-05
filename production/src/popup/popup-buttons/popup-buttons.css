@@ -2,7 +2,6 @@
     padding: 19px 20px;
     text-align: right;
     background-color: #fff;
-    height: 30px;
 }
 
 .popup-buttons .mstr-rc-button,
@@ -64,8 +63,8 @@
   position: relative;
   top: 0;
   left: 0;
-  min-height: calc(100vh - 180px);
-  max-height: calc(100vh - 180px);
+  min-height: calc(100vh - 145px);
+  max-height: calc(100vh - 145px);
   min-width: 530px;
 }
 
