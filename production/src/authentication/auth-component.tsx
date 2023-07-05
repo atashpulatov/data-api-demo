@@ -28,14 +28,13 @@ const Input = (props: InputProps): React.ReactElement => {
 };
 
 const SelectInput = (props: SelectInputProps): React.ReactElement => {
-  const { label } = props;
+  const { label, children } = props;
   return (
     <div className="input-container">
       {/* eslint-disable-next-line react/destructuring-assignment, jsx-a11y/label-has-associated-control */}
       <label>
         {label}
-        {/* eslint-disable-next-line react/destructuring-assignment */}
-        <select {...props}>{props.children}</select>
+        <select {...props}>{children}</select>
       </label>
     </div>
   );

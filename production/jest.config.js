@@ -1,7 +1,3 @@
-const path = require('path');
-
-process.env.TZ = 'UTC';
-
 module.exports = {
   roots: ['<rootDir>'],
   coverageReporters: ['html', 'cobertura', 'text', 'json-summary', 'lcov'],
@@ -16,5 +12,4 @@ module.exports = {
   testEnvironment: 'jsdom',
   resetMocks: true,
   timers: 'legacy',
-  moduleDirectories: ['node_modules', path.join(__dirname, './')],
 };
