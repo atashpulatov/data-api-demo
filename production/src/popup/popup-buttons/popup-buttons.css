@@ -4,8 +4,8 @@
     background-color: #fff;
 }
 
-.popup-buttons .ant-btn,
-.popup-buttons .ant-btn .button-tooltip {
+.popup-buttons .mstr-rc-button,
+.popup-buttons .mstr-rc-button .button-tooltip {
     height: 30px;
     padding-left: 20px;
     padding-right: 20px;
@@ -16,12 +16,17 @@
     margin-left: 0;
 }
 
-.popup-buttons .ant-btn {
+.popup-buttons .mstr-rc-button {
     margin-left: 14px;
+    vertical-align: top;
 }
 
-.ant-btn:disabled {
+.mstr-rc-button:disabled {
     opacity: 0.5;
+}
+
+.mstr-rc-tooltip-source {
+    display: inline;
 }
 
 #data-preview:focus:not(:hover) {
@@ -38,7 +43,7 @@
     border: 1px solid #1C91DC;
  }
 
- .popup-buttons span .ant-btn {
+ .popup-buttons span .mstr-rc-button {
      margin-left: 0 !important;
  }
 

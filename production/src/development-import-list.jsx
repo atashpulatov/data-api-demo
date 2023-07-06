@@ -1,30 +1,40 @@
-import React, { useState } from 'react';
-import { Button, Dropdown, Menu } from 'antd';
+import React from 'react';
+import { ContextMenu } from '@mstr/rc';
 import { sessionHelper } from './storage/session-helper';
 import mstrObjectType from './mstr-object/mstr-object-type-enum';
 
 export const DevelopmentImportList = () => {
-  const [selectedObject, setObject] = useState('SeasonalReport');
+  const menuItems = [
+    {
+      itemIndex: 'SeasonalReport',
+      title: objectList.SeasonalReport.name
+    },
+    {
+      itemIndex: 'SubtotalsAllTypes',
+      title: objectList.SubtotalsAllTypes.name
+    },
+    {
+      itemIndex: 'Crosstab123',
+      title: objectList.Crosstab123.name
+    },
+    {
+      itemIndex: 'CrosstabSubtotal',
+      title: objectList.CrosstabSubtotal.name
+    },
+  ];
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="SeasonalReport" onClick={(e) => { e.domEvent.stopPropagation(); setObject('SeasonalReport'); }}>{objectList.SeasonalReport.name}</Menu.Item>
-      <Menu.Item key="SubtotalsAllTypes" onClick={(e) => { e.domEvent.stopPropagation(); setObject('SubtotalsAllTypes'); }}>{objectList.SubtotalsAllTypes.name}</Menu.Item>
-      <Menu.Item key="Crosstab123" onClick={(e) => { e.domEvent.stopPropagation(); setObject('Crosstab123'); }}>{objectList.Crosstab123.name}</Menu.Item>
-      <Menu.Item key="CrosstabSubtotal" onClick={(e) => { e.domEvent.stopPropagation(); setObject('CrosstabSubtotal'); }}>{objectList.CrosstabSubtotal.name}</Menu.Item>
-    </Menu>
-  );
+  const onItemClick = (event) => {
+    if (event.key === 'SeasonalReport') { sessionHelper.importObjectWithouPopup(objectList.SeasonalReport); }
+    if (event.key === 'SubtotalsAllTypes') { sessionHelper.importObjectWithouPopup(objectList.SubtotalsAllTypes); }
+    if (event.key === 'Crosstab123') { sessionHelper.importObjectWithouPopup(objectList.Crosstab123); }
+    if (event.key === 'CrosstabSubtotal') { sessionHelper.importObjectWithouPopup(objectList.CrosstabSubtotal); }
+  };
 
   return (
     <div className="refresh-button-container">
-      <Dropdown overlay={menu} trigger={['contextMenu']}>
-        <Button
-          title={objectList[selectedObject].name}
-          className="add-data-btn floating-button"
-          onClick={() => sessionHelper.importObjectWithouPopup(objectList[selectedObject])}>
-          Quick Import
-        </Button>
-      </Dropdown>
+      <ContextMenu items={menuItems} onItemClick={onItemClick}>
+        <button type="button" onClick={() => sessionHelper.importObjectWithouPopup(objectList.SeasonalReport)}>Quick Import</button>
+      </ContextMenu>
     </div>
   );
 };
