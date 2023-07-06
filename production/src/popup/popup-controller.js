@@ -33,7 +33,7 @@ class PopupController {
     this.reduxStore.dispatch(popupStateActions.onClearPopupState());
     this.reduxStore.dispatch(navigationTreeActions.clearSelection());
     this.reduxStore.dispatch(this.popupActions.resetState());
-    await this.runPopup(PopupTypeEnum.navigationTree, 80, 80);
+    await this.runPopup(PopupTypeEnum.libraryWindow, 80, 80);
   };
 
   runEditFiltersPopup = async (reportParams) => {
@@ -68,7 +68,7 @@ class PopupController {
     try {
       await officeApiHelper.getExcelSessionStatus();
       console.time('Popup load time');
-      Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}`,
+      Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`,
         { height, width, displayInIframe: true },
         (asyncResult) => {
           const { value: dialog } = asyncResult;

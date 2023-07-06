@@ -14,9 +14,15 @@ class AuthenticationService {
   }
 
   authenticate(username: string, password: string, envUrl: string, loginMode = 1) {
+    const params = new URLSearchParams({
+      loginMode: '1',
+      username,
+      password,
+      applicationType: '47'
+    });
     return this.moduleProxy.request
       .post(`${envUrl}/auth/login`)
-      .send({ username, password, loginMode })
+      .send(params)
       .withCredentials()
       .then((res: any) => res.headers['x-mstr-authtoken']);
   }

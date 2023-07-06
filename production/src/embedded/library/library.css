@@ -1,0 +1,43 @@
+.library-window {
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+  min-width: 100%;    
+  overflow-x: auto;
+}
+
+.library-window-information-frame {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 26px;
+}
+
+.library-window-information-icon {
+  max-height: 18px;
+  max-width: 18px;
+}
+
+.library-window-information-text {
+  font-size: 11px;
+  color: #9A9A9A;
+  margin-left: 4px;
+}
+
+.library-title-margin-top {
+  margin-top: 10px;
+}
+
+#popup-wrapper .library-window .empty  {
+  position: fixed;
+  left: 0;
+  top: 77px;
+  width: 100%;
+  height: calc(100vh - 145px);
+}
+
+.library-window .popup-footer {
+  position: relative;
+}

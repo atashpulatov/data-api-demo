@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { DossierWindow, DossierWindowNotConnected } from '../../dossier/dossier-window';
+import { DossierWindow, DossierWindowNotConnected } from '../../embedded/dossier/dossier-window';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { popupHelper } from '../../popup/popup-helper';
@@ -10,7 +10,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper } from '../../storage/session-helper';
-import { EmbeddedDossier } from '../../dossier/embedded-dossier';
+import { EmbeddedDossier } from '../../embedded/dossier/embedded-dossier';
 
 jest.mock('../../popup/popup-helper');
 

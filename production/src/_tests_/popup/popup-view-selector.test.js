@@ -7,7 +7,7 @@ import { PromptsWindow } from '../../prompts/prompts-window';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { NavigationTree } from '../../navigation/navigation-tree';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
-import { DossierWindow } from '../../dossier/dossier-window';
+import { DossierWindow } from '../../embedded/dossier/dossier-window';
 import { ObtainInstanceHelper } from '../../popup/obtain-instance-helper';
 import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { popupHelper } from '../../popup/popup-helper';

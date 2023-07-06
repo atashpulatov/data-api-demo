@@ -6,7 +6,8 @@ import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
 import { popupHelper } from './popup-helper';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import { AttributeSelectorWindow } from '../attribute-selector/attribute-selector-window';
-import { DossierWindow } from '../dossier/dossier-window';
+import { DossierWindow } from '../embedded/dossier/dossier-window';
+import { LibraryWindow } from '../embedded/library/library-window';
 import { NavigationTree } from '../navigation/navigation-tree';
 import { PromptsWindow } from '../prompts/prompts-window';
 import { PopupTypeEnum } from '../home/popup-type-enum';
@@ -19,6 +20,8 @@ const renderProperComponent = (popupType) => {
     case PopupTypeEnum.dataPreparation:
     case PopupTypeEnum.editFilters:
       return <AttributeSelectorWindow />;
+    case PopupTypeEnum.libraryWindow:
+      return <LibraryWindow />;
     case PopupTypeEnum.navigationTree:
       return <NavigationTree />;
     case PopupTypeEnum.promptsWindow:
