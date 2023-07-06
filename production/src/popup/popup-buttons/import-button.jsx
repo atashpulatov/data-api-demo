@@ -1,29 +1,21 @@
 import React from 'react';
-import { Button, Popover } from 'antd';
 
 import PropTypes from 'prop-types';
+import { MstrButton, StandardTooltip } from '@mstr/rc';
 
 export const ImportButton = ({
   disableReason, handleSecondary, handleOk, t, useImportAsRunButton
-}) => {
-  const internalButton = (
-    <Button
+}) => (
+  <StandardTooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} theme="dark" placement="topRight">
+    <MstrButton
       id={useImportAsRunButton ? 'run' : 'import'}
-      type={!handleSecondary ? 'primary' : ''}
+      mstrType={!handleSecondary ? 'primary' : 'secondary'}
       onClick={handleOk}
-      disabled={!!disableReason}>
-      {t(useImportAsRunButton ? 'Apply' : 'Import')}
-    </Button>
-  );
-
-  return disableReason
-    ? (
-      <Popover className="button-tooltip" placement="topRight" content={t(`${disableReason}`)} mouseEnterDelay={1}>
-        {internalButton}
-      </Popover>
-    )
-    : internalButton;
-};
+      disabled={!!disableReason}
+      mstrText={t(useImportAsRunButton ? 'Apply' : 'Import')}
+    />
+  </StandardTooltip>
+);
 
 ImportButton.propTypes = {
   handleSecondary: PropTypes.func,

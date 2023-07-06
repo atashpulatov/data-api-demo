@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from 'antd';
 import PropTypes from 'prop-types';
+import { MstrButton } from '@mstr/rc';
 
-export const BackButton = ({ handleBack, t }) => (<Button id="back" onClick={handleBack}>{t('Back')}</Button>);
+export const BackButton = ({ handleBack, t }) => (<MstrButton mstrText={t('Back')} id="back" onClick={handleBack} mstrType="secondary" />);
 
 BackButton.propTypes = {
   handleBack: PropTypes.func,

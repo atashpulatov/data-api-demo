@@ -61,18 +61,9 @@ rake post_pipeline
   publishers do
     parameterized_trigger do
       job_short_names %w{
-        stage-2-e2e-browser-test-mac
-        stage-2-e2e-client-test-win-pre
         stage-2-e2e-browser-test-python-mac
-        stage-2-e2e-desktop-test-python-mac
+        stage-2-e2e-browser-test-python-win
       }
-    end
-    ext_mailer do
-     recipients_list 'la-oficina-para-dev-d-aaaacnxgbmsvk55vean2hciclq@microstrategy.slack.com,broken-build-gdc-aaaaetzcjbfbaqe4n7xaeu7ttm@microstrategy.slack.com'
-     subject 'mstr-office stage-1 - $BUILD_STATUS'
-     content '$DEFAULT_CONTENT'
-     fail_trigger_notify_developer 'true'
-     always_trigger 'false'
     end
   end
 

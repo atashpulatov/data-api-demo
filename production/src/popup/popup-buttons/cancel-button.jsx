@@ -1,11 +1,9 @@
 import React from 'react';
-import { Button } from 'antd';
 import PropTypes from 'prop-types';
+import { MstrButton } from '@mstr/rc';
 
 export const CancelButton = ({ handleCancel, t }) => (
-  <Button id="cancel" onClick={handleCancel}>
-    {t('Cancel')}
-  </Button>
+  <MstrButton id="cancel" onClick={handleCancel} mstrText={t('Cancel')} mstrType="secondary" />
 );
 
 CancelButton.propTypes = {
