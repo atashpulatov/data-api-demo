@@ -117,6 +117,11 @@
   },
   "overrides": {
     "antd": "^3.26.20",
-    "ua-parser-js": "0.7.33"
+    "json5": "2.2.2",
+    "node-fetch": "2.6.7",
+    "nth-check": "^2.1.1",
+    "semver": "7.5.2",
+    "ua-parser-js": "0.7.33",
+    "css-what": "6.1.0"
   }
 }
