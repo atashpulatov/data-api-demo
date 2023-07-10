@@ -14,6 +14,7 @@ import cacheReducer from './redux-reducer/cache-reducer/cache-reducer';
 import { popupStateReducer } from './redux-reducer/popup-state-reducer/popup-state-reducer';
 import { operationReducer } from './redux-reducer/operation-reducer/operation-reducer';
 import { objectReducer } from './redux-reducer/object-reducer/object-reducer';
+import { answersReducer } from './redux-reducer/answers-reducer/answers-reducer';
 import packageJson from '../package.json';
 
 const rootReducer = combineReducers({
@@ -27,12 +28,13 @@ const rootReducer = combineReducers({
   cacheReducer,
   operationReducer,
   objectReducer,
+  answersReducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['officeReducer', 'notificationReducer', 'navigationTree', 'cacheReducer', 'operationReducer', 'objectReducer'],
+  blacklist: ['officeReducer', 'notificationReducer', 'navigationTree', 'cacheReducer', 'operationReducer', 'objectReducer', 'answersReducer'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 let middleWare;

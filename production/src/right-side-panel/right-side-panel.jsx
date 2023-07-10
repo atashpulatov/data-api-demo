@@ -23,6 +23,7 @@ import {
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
+  loadedAnswers,
   isConfirm,
   isSettings,
   isSecured,
@@ -40,6 +41,7 @@ export const RightSidePanelNotConnected = ({
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
+  const [loadedAnswersWrapped, setLoadedAnswersWrapped] = React.useState(loadedAnswers);
 
   const { i18n } = useTranslation('common');
 
@@ -91,6 +93,14 @@ export const RightSidePanelNotConnected = ({
     ));
   }, [loadedObjects, notifications, operations]);
 
+  React.useEffect(() => {
+    setLoadedAnswersWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
+      loadedAnswers,
+      notifications,
+      operations
+    ));
+  }, [loadedAnswers, notifications, operations]);
+
   /**
    * Wraps a function to be called when user clicks an action icon.
    *
@@ -131,6 +141,7 @@ export const RightSidePanelNotConnected = ({
     <SidePanel
       locale={i18n.language}
       loadedObjects={loadedObjectsWrapped}
+      loadedAnswers={loadedAnswersWrapped}
       onAddData={addDataWrapper}
       onTileClick={highlightObjectWrapper}
       onDuplicateClick={duplicateWrapper}
@@ -159,6 +170,7 @@ export const mapStateToProps = (state) => {
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
+    loadedAnswers: state.answersReducer.answers,
     operations,
     importRequested,
     dossierOpenRequested,
@@ -185,6 +197,14 @@ export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(Right
 RightSidePanelNotConnected.propTypes = {
   popupData: PropTypes.shape({}),
   globalNotification: PropTypes.shape({}),
+  loadedAnswers: PropTypes.arrayOf(
+    PropTypes.shape({
+      body: PropTypes.shape({}),
+      key: PropTypes.string,
+      values: PropTypes.string,
+      useDefault: PropTypes.bool,
+    })
+  ).isRequired,
   loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({
       body: PropTypes.shape({}),

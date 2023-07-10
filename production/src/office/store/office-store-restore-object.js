@@ -1,6 +1,7 @@
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { errorService } from '../../error/error-handler';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
+import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import officeStoreHelper from './office-store-helper';
 
 class OfficeStoreRestoreObject {
@@ -24,6 +25,16 @@ class OfficeStoreRestoreObject {
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
 
     settings.set(officeProperties.storedObjects, objects);
+  };
+
+  /**
+   * Retrieves information about prompts answers imported in previous versions.
+   */
+  restoreAnswersFromExcelStore = () => {
+    const settings = officeStoreHelper.getOfficeSettings();
+    const answers = settings.get(officeProperties.storedAnswers) || [];
+
+    answers && this.reduxStore.dispatch(restoreAllAnswers(answers));
   };
 
   /**
