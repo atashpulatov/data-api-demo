@@ -29,6 +29,7 @@ class OfficeStoreRestoreObject {
 
   /**
    * Retrieves information about prompts answers imported in previous versions.
+   * It fetches the information from Office Settings and stores it in Redux.
    */
   restoreAnswersFromExcelStore = () => {
     const settings = officeStoreHelper.getOfficeSettings();
