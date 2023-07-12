@@ -7,27 +7,22 @@
   overflow-x: auto;
 }
 
-.library-window-information-frame {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  text-align: center;
-  line-height: 26px;
+.library-window .title-bar {
+  min-width: 500px;
 }
 
-.library-window-information-icon {
-  max-height: 18px;
-  max-width: 18px;
+.library-window .title-bar>span {
+  font-size: 18px;
+  color: #333333;
+  font-weight: 500;
 }
 
-.library-window-information-text {
-  font-size: 11px;
-  color: #9A9A9A;
-  margin-left: 4px;
+.library-window .title-bar {
+  margin: 15px;
 }
 
-.library-title-margin-top {
-  margin-top: 10px;
+.library-iframe {
+  border-top: 1px solid #E8EDF0;
 }
 
 #popup-wrapper .library-window .empty  {

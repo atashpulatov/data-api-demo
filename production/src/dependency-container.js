@@ -11,7 +11,6 @@ import { authenticationHelper } from './authentication/authentication-helper';
 import { homeHelper } from './home/home-helper';
 import { mstrObjectRestService } from './mstr-object/mstr-object-rest-service';
 import { popupController } from './popup/popup-controller';
-import { mstrListRestService } from './mstr-object/mstr-list-rest-service';
 import { popupHelper } from './popup/popup-helper';
 import { popupActions } from './redux-reducer/popup-reducer/popup-actions';
 import { authenticationService } from './authentication/auth-rest-service';
@@ -118,9 +117,6 @@ class DIContainer {
 
     this.stepSaveObjectInExcel = stepSaveObjectInExcel;
     this.stepSaveObjectInExcel.init(reduxStore);
-
-    this.mstrListRestService = mstrListRestService;
-    this.mstrListRestService.init(reduxStore);
 
     this.stepGetDuplicateName = stepGetDuplicateName;
     this.stepGetDuplicateName.init(reduxStore);

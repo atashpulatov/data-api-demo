@@ -20,6 +20,13 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
   }
 
   componentDidMount() {
+    const origUserAgent = window.navigator.userAgent;
+    Object.defineProperty(window.navigator, 'userAgent', {
+      get() {
+        return `${origUserAgent} MSTRExcel/1.0`;
+      },
+      configurable: true,
+    });
     scriptInjectionHelper.watchForIframeAddition(
       this.container.current,
       this.onIframeLoad
@@ -50,13 +57,6 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       const { handleIframeLoadEvent } = this.props;
-      if (iframe.focusEventListenerAdded === false) {
-        iframe.focusEventListenerAdded = true;
-        iframe.addEventListener(
-          'focus',
-          scriptInjectionHelper.switchFocusToElementOnWindowFocus
-        );
-      }
       // DE160793 - Throw session expired error when library redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
@@ -112,10 +112,7 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
         customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
         enableResponsive: true,
         currentPage: { key: 'all' },
-        selectLibraryItemOnClick: {
-          enabled: true,
-          singleSelectMode: true
-        },
+        libraryItemSelectMode: 'single',
         getLoginToken() {
           return Promise.resolve(authToken);
         },

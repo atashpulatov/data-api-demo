@@ -1,5 +1,4 @@
 export const PopupTypeEnum = {
-  navigationTree: 'navigation-tree',
   dataPreparation: 'data-preparation',
   editFilters: 'edit-filters',
   loadingPage: 'loading-page',

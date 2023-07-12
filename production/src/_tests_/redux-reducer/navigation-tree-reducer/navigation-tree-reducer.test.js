@@ -1,7 +1,7 @@
 import {
   SELECT_OBJECT, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   REQUEST_DOSSIER_OPEN, CLEAR_PROMPTS_ANSWERS, CANCEL_DOSSIER_OPEN, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT,
-  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, CLEAR_SELECTION, RESTORE_SELECTION
+  UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT
 } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { navigationTree, initialState } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
@@ -180,51 +180,4 @@ describe('NavigationTree Reducer', () => {
     expect(newState.displayAttrFormNames).toEqual(testData);
   });
 
-  it('should return new proper state in case of CLEAR_SELECTION action', () => {
-    // given
-    const action = { type: CLEAR_SELECTION };
-    const state = {
-      chosenObjectId: '123',
-      chosenProjectId: '456',
-      chosenSubtype: 12345,
-      chosenObjectName: 'name',
-      chosenEnvElement: { test: 'test' },
-      dossierOpenRequested: true,
-      chosenLibraryElement: { someValue: '' },
-      chosenLibraryDossier: '123123',
-    };
-    // when
-    const newState = navigationTree(state, action);
-    // then
-    expect(newState.chosenObjectId).toEqual(initialState.chosenObjectId);
-    expect(newState.chosenProjectId).toEqual(initialState.chosenProjectId);
-    expect(newState.chosenSubtype).toEqual(initialState.chosenSubtype);
-    expect(newState.chosenObjectName).toEqual(initialState.chosenObjectName);
-    expect(newState.chosenEnvElement).toEqual(initialState.chosenEnvElement);
-    expect(newState.dossierOpenRequested).toEqual(initialState.dossierOpenRequested);
-    expect(newState.chosenLibraryElement).toEqual(initialState.chosenLibraryElement);
-    expect(newState.chosenLibraryDossier).toEqual(initialState.chosenLibraryDossier);
-  });
-
-  it('should return new proper state in case of RESTORE_SELECTION action if change to myLibrary', () => {
-    // given
-    const action = { type: RESTORE_SELECTION, data: { nextMyLibraryState: true } };
-    const chosenEnvElement = { chosenObjectId: 'env' };
-    const chosenLibraryElement = { chosenObjectId: 'library' };
-    // when
-    const newState = navigationTree({ chosenObjectId: 'test', chosenEnvElement, chosenLibraryElement }, action);
-    // then
-    expect(newState.chosenObjectId).toEqual('library');
-  });
-
-  it('should return new proper state in case of RESTORE_SELECTION action if change from myLibrary', () => {
-    // given
-    const action = { type: RESTORE_SELECTION, data: { nextMyLibraryState: false } };
-    const chosenEnvElement = { chosenObjectId: 'env' };
-    const chosenLibraryElement = { chosenObjectId: 'library' };
-    // when
-    const newState = navigationTree({ chosenObjectId: 'test', chosenEnvElement, chosenLibraryElement }, action);
-    // then
-    expect(newState.chosenObjectId).toEqual('env');
-  });
 });

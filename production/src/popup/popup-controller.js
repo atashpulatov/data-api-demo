@@ -7,8 +7,6 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
-import { filterActions } from '../redux-reducer/filter-reducer/filter-actions';
-import { REFRESH_CACHE_COMMAND, refreshCache } from '../redux-reducer/cache-reducer/cache-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 
@@ -28,10 +26,7 @@ class PopupController {
   };
 
   runPopupNavigation = async () => {
-    // DE159475; clear sorting before popup display until it's fixed in object-table
-    this.reduxStore.dispatch(filterActions.changeSorting({}));
     this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-    this.reduxStore.dispatch(navigationTreeActions.clearSelection());
     this.reduxStore.dispatch(this.popupActions.resetState());
     await this.runPopup(PopupTypeEnum.libraryWindow, 80, 80);
   };
@@ -97,12 +92,8 @@ class PopupController {
   onMessageFromPopup = async (dialog, reportParams, arg) => {
     const { message } = arg;
     const response = JSON.parse(message);
-    if (response.command === selectorProperties.commandBrowseUpdate) {
-      this.reduxStore.dispatch(filterActions.loadBrowsingState(response.body));
-      return;
-    }
     try {
-      if (response.command !== REFRESH_CACHE_COMMAND) { await this.closeDialog(dialog); }
+      await this.closeDialog(dialog);
       if (response.command !== selectorProperties.commandError) {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       }
@@ -133,9 +124,6 @@ class PopupController {
         case selectorProperties.commandError:
           errorService.handleError(response.error);
           break;
-        case REFRESH_CACHE_COMMAND:
-          this.handleRefreshCacheCommand();
-          break;
         default:
           break;
       }
@@ -144,15 +132,8 @@ class PopupController {
       errorService.handleError(error);
     } finally {
       this.reduxStore.dispatch(this.popupActions.resetState());
-      if (response.command !== REFRESH_CACHE_COMMAND) {
-        this.reduxStore.dispatch(officeActions.hidePopup());
-      }
+      this.reduxStore.dispatch(officeActions.hidePopup());
     }
-  };
-
-  handleRefreshCacheCommand = () => {
-    const { dispatch, getState } = this.reduxStore;
-    refreshCache()(dispatch, getState);
   };
 
   handleUpdateCommand = async (response) => {
