@@ -51,6 +51,8 @@ class PopupController {
 
   runPopup = async (popupType, height, width, reportParams = null) => {
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
+    // Reflect in redux store that there are previous prompt answers to be possibly applied when importing report or dossier.
+    this.reduxStore.dispatch(popupStateActions.setPreviousPromptAnswers({ previousPromptsAnswers: this.reduxStore.getState().answersReducer.answers }));
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {

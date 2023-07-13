@@ -72,7 +72,10 @@ export const navigationTree = (state = initialState, action) => {
     case REQUEST_IMPORT: {
       const newState = { ...state };
       newState.importRequested = true;
-      newState.isPrompted = data;
+      newState.isPrompted = data.isPrompted;
+      if (data.promptObjects) {
+        newState.promptObjects = data.promptObjects;
+      }
       return newState;
     }
 

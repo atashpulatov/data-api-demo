@@ -94,11 +94,11 @@ export const RightSidePanelNotConnected = ({
   }, [loadedObjects, notifications, operations]);
 
   React.useEffect(() => {
-    setLoadedAnswersWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
-      loadedAnswers,
-      notifications,
-      operations
-    ));
+    // setLoadedAnswersWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
+    //   loadedAnswers,
+    //   notifications,
+    //   operations
+    // ));
   }, [loadedAnswers, notifications, operations]);
 
   /**

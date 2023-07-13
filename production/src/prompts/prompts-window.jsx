@@ -327,11 +327,13 @@ export const mapStateToProps = (state) => {
     navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer
   } = state;
   const popupState = popupReducer.editedObject;
-  const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
+  const {
+    promptsAnswers, importSubtotal, importRequested, promptObjects, ...mstrData
+  } = navigationTree;
+  const { previousPromptsAnswers } = popupStateReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
-
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     ...state.promptsPopup,
@@ -340,6 +342,9 @@ export const mapStateToProps = (state) => {
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
+    previousPromptsAnswers,
+    importRequested,
+    promptObjects,
   };
 };
 
