@@ -30,7 +30,7 @@ const postAnswerDossierPrompts = answerDossierPrompts;
 
 export const PromptsWindowNotConnected = (props) => {
   const {
-    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack
+    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack, previousPromptsAnswers, importRequested, promptObjects,
   } = props;
   const { chosenObjectId } = mstrData;
   const { isReprompt } = popupState;
@@ -75,8 +75,27 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [prolongSession]);
 
-  const givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
+  let givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
   const loading = true;
+
+  // Declared variables to determine whether importing a report/dossier is taking place and
+  // whether there are previous prompt answers to handle
+  const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
+  const isImportedObjectPrompted = promptObjects && promptObjects.length > 0;
+
+  // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
+  if (importRequested && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
+    givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
+    previousPromptsAnswers.forEach((previousAnswer) => {
+      const previousPrmptIndex = promptObjects.findIndex(
+        (promptObject) => promptObject && promptObject.key === previousAnswer.key
+      );
+
+      if (previousPrmptIndex >= 0) {
+        givenPromptsAnswers[0].answers.push(previousAnswer);
+      }
+    });
+  }
 
   useEffect(() => {
     window.addEventListener('message', messageReceived);
@@ -192,7 +211,8 @@ export const PromptsWindowNotConnected = (props) => {
         },
       };
 
-      if (isReprompt) {
+      // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
+      if (isReprompt || (importRequested && areTherePreviousPromptAnswers && isImportedObjectPrompted)) {
         documentProps.instance = instance;
       }
 
@@ -320,6 +340,9 @@ PromptsWindowNotConnected.propTypes = {
     projectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
   }),
+  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+  importRequested: PropTypes.bool,
+  promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export const mapStateToProps = (state) => {
