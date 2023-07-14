@@ -47,19 +47,21 @@ export const LibraryWindowNotConnected = (props) => {
 
   const handleSelection = async (itemsInfo) => {
     const {
-      id,
       projectId,
       type,
       name,
       docId,
     } = itemsInfo[0];
 
-    let { subtype } = itemsInfo[0];
+    let { id, subtype } = itemsInfo[0];
 
     if (!subtype || typeof subtype !== 'number') {
       try {
         const objectInfo = await getObjectInfo(docId, projectId, getMstrObjectEnumByType(type));
         subtype = objectInfo.subtype;
+        // if subtype is not defined then the object is selected from myLibrary section
+        // so we need to use docId as id
+        id = docId;
       } catch (error) {
         popupHelper.handlePopupErrors(error);
       }

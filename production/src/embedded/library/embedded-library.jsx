@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Empty } from '@mstr/connector-components/';
@@ -9,17 +9,14 @@ import './library.css';
 
 const { microstrategy, Office } = window;
 
-export default class EmbeddedLibraryNotConnected extends React.Component {
-  constructor(props) {
-    super(props);
-    this.container = React.createRef();
-    this.msgRouter = null;
-    this.onEmbeddedError = this.onEmbeddedError.bind(this);
-    this.embeddedLibrary = null;
-    this.state = { loadingFrame: true };
-  }
+export const EmbeddedLibraryNotConnected = (props) => {
+  const { handleSelection, handleIframeLoadEvent, mstrData } = props;
+  const container = useRef(null);
+  const [msgRouter, setMsgRouter] = useState(null);
+  const [loadingFrame, setLoadingFrame] = useState(true);
 
-  componentDidMount() {
+  useLayoutEffect(() => {
+    // set user agent so that the embedded library can identify source
     const origUserAgent = window.navigator.userAgent;
     Object.defineProperty(window.navigator, 'userAgent', {
       get() {
@@ -28,35 +25,33 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
       configurable: true,
     });
     scriptInjectionHelper.watchForIframeAddition(
-      this.container.current,
-      this.onIframeLoad
+      container.current,
+      onIframeLoad
     );
-    this.loadEmbeddedLibrary(this.container.current);
-  }
+    loadEmbeddedLibrary(container.current);
 
-  componentWillUnmount() {
-    if (this.msgRouter) {
-      const { handleSelection } = this.props;
-      const { EventType } = microstrategy.dossier;
-      this.msgRouter.removeEventhandler(
-        EventType.ON_LIBRARY_ITEM_SELECTED,
-        handleSelection
-      );
-      this.msgRouter.removeEventhandler(
-        EventType.ON_ERROR,
-        this.onEmbeddedError
-      );
-    }
-  }
+    return () => {
+      if (msgRouter) {
+        const { EventType } = microstrategy.dossier;
+        msgRouter.removeEventhandler(
+          EventType.ON_LIBRARY_ITEM_SELECTED,
+          handleSelection
+        );
+        msgRouter.removeEventhandler(
+          EventType.ON_ERROR,
+          onEmbeddedError
+        );
+      }
+    };
+  }, []);
 
   /**
    * This function is called after the embedded library iframe is added into the DOM
    * @param {*} iframe
    */
-  onIframeLoad = (iframe) => {
+  const onIframeLoad = (iframe) => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
-      const { handleIframeLoadEvent } = this.props;
       // DE160793 - Throw session expired error when library redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
       if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
@@ -87,7 +82,7 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
    * @param {Object} error - payload throwed by embedded.api after the error occured
    */
   // eslint-disable-next-line class-methods-use-this
-  onEmbeddedError = (error) => {
+  const onEmbeddedError = (error) => {
     const { title } = error;
     if (title !== 'Notification') {
       // TODO: improve this, so it doesn't depend on i18n
@@ -96,8 +91,7 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
     }
   };
 
-  loadEmbeddedLibrary = async (container) => {
-    const { mstrData, handleEmbeddedLibraryLoad, handleSelection } = this.props;
+  const loadEmbeddedLibrary = async (containerElement) => {
     const { envUrl, authToken } = mstrData;
 
     const serverUrl = envUrl.slice(0, envUrl.lastIndexOf('/api'));
@@ -106,7 +100,7 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
     try {
-      const props = {
+      const embedProps = {
         serverUrl,
         enableCustomAuthentication: true,
         customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
@@ -116,20 +110,17 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
         getLoginToken() {
           return Promise.resolve(authToken);
         },
-        placeholder: container,
+        placeholder: containerElement,
         onMsgRouterReadyHandler: ({ MsgRouter }) => {
-          this.msgRouter = MsgRouter;
-          this.msgRouter.registerEventHandler(EventType.ON_LIBRARY_ITEM_SELECTED, handleSelection);
-          this.msgRouter.registerEventHandler(EventType.ON_ERROR, this.onEmbeddedError);
+          setMsgRouter(MsgRouter);
+          MsgRouter.registerEventHandler(EventType.ON_LIBRARY_ITEM_SELECTED, handleSelection);
+          MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
         },
       };
 
       if (microstrategy && microstrategy.embeddingContexts) {
-        const embeddedLibrary = await microstrategy.embeddingContexts.embedLibraryPage(props);
-        this.embeddedLibrary = embeddedLibrary;
-
-        this.setState({ loadingFrame: false });
-        handleEmbeddedLibraryLoad();
+        await microstrategy.embeddingContexts.embedLibraryPage(embedProps);
+        setLoadingFrame(false);
       } else {
         console.warn(
           'Cannot find microstrategy.embeddingContexts, please check embeddinglib.js is present in your environment'
@@ -140,21 +131,13 @@ export default class EmbeddedLibraryNotConnected extends React.Component {
     }
   };
 
-  render() {
-    const { loadingFrame } = this.state;
-    return (
-      /*
-      Height needs to be passed for container because without it, embedded api will set default height: 600px;
-      We need to calculate actual height, regarding the size of other elements:
-      58px for header, 19px for header and title margin and 68px for buttons.
-      */
-      <>
-        {loadingFrame && <Empty isLoading />}
-        <div ref={this.container} className="library-iframe" />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      {loadingFrame && <Empty isLoading />}
+      <div ref={container} className="library-iframe" />
+    </>
+  );
+};
 
 EmbeddedLibraryNotConnected.propTypes = {
   mstrData: PropTypes.shape({
@@ -162,7 +145,6 @@ EmbeddedLibraryNotConnected.propTypes = {
     authToken: PropTypes.string,
   }),
   handleIframeLoadEvent: PropTypes.func,
-  handleEmbeddedLibraryLoad: PropTypes.func,
   handleSelection: PropTypes.func,
 };
 
