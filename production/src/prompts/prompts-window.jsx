@@ -30,7 +30,8 @@ const postAnswerDossierPrompts = answerDossierPrompts;
 
 export const PromptsWindowNotConnected = (props) => {
   const {
-    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack, previousPromptsAnswers, importRequested, promptObjects,
+    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
+    previousPromptsAnswers, importRequested, promptObjects,
   } = props;
   const { chosenObjectId } = mstrData;
   const { isReprompt } = popupState;
@@ -251,7 +252,8 @@ export const PromptsWindowNotConnected = (props) => {
       popupHelper.handlePopupErrors(error);
     }
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, givenPromptsAnswers,
-    isReprompt, loading, mstrData.chosenProjectId, preparePromptedReport, promptsAnswered, session]);
+    isReprompt, loading, mstrData.chosenProjectId, preparePromptedReport, promptsAnswered, session,
+    areTherePreviousPromptAnswers, importRequested, isImportedObjectPrompted]);
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
