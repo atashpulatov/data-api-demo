@@ -179,5 +179,4 @@ describe('NavigationTree Reducer', () => {
     // then
     expect(newState.displayAttrFormNames).toEqual(testData);
   });
-
 });

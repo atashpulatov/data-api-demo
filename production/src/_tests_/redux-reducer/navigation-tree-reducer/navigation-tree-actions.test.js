@@ -94,5 +94,4 @@ describe('NavigationTree Actions', () => {
     // then
     expect(listener).toHaveBeenCalledWith({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
   });
-
 });
