@@ -117,7 +117,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       mstrData,
       handleEmbeddedDossierLoad,
       previousPromptsAnswers,
-      importRequested,
+      dossierOpenRequested,
       promptObjects,
     } = this.props;
     const {
@@ -139,7 +139,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         const isImportedObjectPrompted = promptObjects && promptObjects.length > 0;
 
         // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
-        if (areTherePreviousPromptAnswers && isImportedObjectPrompted) {
+        if (dossierOpenRequested && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
           givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
           previousPromptsAnswers.forEach((previousAnswer) => {
             const previousPrmptIndex = promptObjects.findIndex(
@@ -369,7 +369,7 @@ EmbeddedDossierNotConnected.propTypes = {
   handleIframeLoadEvent: PropTypes.func,
   handleEmbeddedDossierLoad: PropTypes.func,
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
-  importRequested: PropTypes.bool,
+  dossierOpenRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
@@ -400,7 +400,7 @@ const mapStateToProps = (state) => {
     chosenObjectId,
     chosenProjectId,
     promptObjects,
-    importRequested,
+    dossierOpenRequested,
   } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
@@ -423,7 +423,7 @@ const mapStateToProps = (state) => {
     mstrData,
     previousPromptsAnswers,
     promptObjects,
-    importRequested
+    dossierOpenRequested
   };
 };
 
