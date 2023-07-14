@@ -1,7 +1,7 @@
 import {
   SELECT_OBJECT, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_SELECTION, RESTORE_SELECTION
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_SELECTION, RESTORE_SELECTION, SET_PROMPT_OBJECTS
 } from './navigation-tree-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -69,6 +69,14 @@ export const navigationTree = (state = initialState, action) => {
       return makeSelection(newState, data);
     }
 
+    case SET_PROMPT_OBJECTS: {
+      const newState = { ...state };
+      if (data.promptObjects) {
+        newState.promptObjects = data.promptObjects;
+      }
+      return newState;
+    }
+
     case REQUEST_IMPORT: {
       const newState = { ...state };
       newState.importRequested = true;
@@ -111,7 +119,10 @@ export const navigationTree = (state = initialState, action) => {
     case REQUEST_DOSSIER_OPEN: {
       const newState = { ...state };
       newState.dossierOpenRequested = true;
-      newState.isPrompted = data;
+      newState.isPrompted = false;
+      if (data.promptObjects) {
+        newState.promptObjects = data.promptObjects;
+      }
       return newState;
     }
 
@@ -139,7 +150,12 @@ export const navigationTree = (state = initialState, action) => {
     case RESTORE_SELECTION: {
       const newState = { ...state };
       const { nextMyLibraryState } = data;
-      return makeSelection(newState, nextMyLibraryState ? newState.chosenLibraryElement : newState.chosenEnvElement);
+      return makeSelection(
+        newState,
+        nextMyLibraryState
+          ? newState.chosenLibraryElement
+          : newState.chosenEnvElement
+      );
     }
 
     default: {

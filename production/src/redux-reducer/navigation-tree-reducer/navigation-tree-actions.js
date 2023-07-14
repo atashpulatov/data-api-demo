@@ -10,12 +10,17 @@ export const CLEAR_PROMPTS_ANSWERS = 'NAV_TREE_CLEAR_PROMPTS_ANSWERS';
 export const UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT';
 export const CLEAR_SELECTION = 'NAV_TREE_CLEAR_SELECTION';
 export const RESTORE_SELECTION = 'NAV_TREE_RESTORE_SELECTION';
+export const SET_PROMPT_OBJECTS = 'SET_PROMPT_OBJECTS';
 
 function selectObject(data) {
   return (dispatch) => dispatch({
     type: SELECT_OBJECT,
     data,
   });
+}
+
+function setPromptObjects(data) {
+  return (dispatch) => dispatch({ type: SET_PROMPT_OBJECTS, data });
 }
 
 function requestImport(data) {
@@ -74,5 +79,6 @@ export const navigationTreeActions = {
   clearPromptAnswers,
   updateDisplayAttrFormOnImport,
   clearSelection,
-  restoreSelection
+  restoreSelection,
+  setPromptObjects,
 };

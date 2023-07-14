@@ -42,7 +42,7 @@ export const NavigationTreeNotConnected = (props) => {
     chosenObjectId, chosenProjectId, changeSorting, chosenLibraryDossier, searchText, sorter,
     changeSearching, mstrObjectType, cache, envFilter, myLibraryFilter, myLibrary, changeFilter,
     numberOfFiltersActive, resetDBState, fetchObjectsFromNetwork, connectToDB, selectObject, chosenSubtype,
-    requestImport, requestDossierOpen, handlePrepare, setObjectData, switchMyLibrary, restoreSelection
+    requestImport, requestDossierOpen, handlePrepare, setObjectData, switchMyLibrary, restoreSelection, setPromptObjects
   } = props;
   const objects = myLibrary ? cache.myLibrary.objects : cache.environmentLibrary.objects;
   const cacheLoading = cache.myLibrary.isLoading || cache.environmentLibrary.isLoading;
@@ -124,7 +124,7 @@ export const NavigationTreeNotConnected = (props) => {
         isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, chosenMstrObjectType.name);
       }
       if (chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
-        requestDossierOpen();
+        requestDossierOpen(isPromptedResponse);
       } else {
         requestImport(isPromptedResponse);
       }
@@ -140,7 +140,8 @@ export const NavigationTreeNotConnected = (props) => {
       if ((chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report)
         || (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier)) {
         const isPromptedResponse = await checkIfPrompted(chosenObjectId, chosenProjectId, chosenMstrObjectType.name);
-        setObjectData({ isPrompted: isPromptedResponse });
+        setObjectData({ isPrompted: isPromptedResponse.isPrompted });
+        setPromptObjects({ promptObjects: isPromptedResponse.promptObjects });
       }
       handlePrepare();
       setPreviewDisplay(true);
@@ -279,6 +280,7 @@ NavigationTreeNotConnected.propTypes = {
   changeFilter: PropTypes.func,
   numberOfFiltersActive: PropTypes.number,
   restoreSelection: PropTypes.func,
+  setPromptObjects: PropTypes.func,
 };
 
 export const mapStateToProps = ({ navigationTree, filterReducer, cacheReducer }) => ({

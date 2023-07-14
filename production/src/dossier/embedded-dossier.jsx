@@ -113,7 +113,13 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   loadEmbeddedDossier = async (container) => {
-    const { mstrData, handleEmbeddedDossierLoad } = this.props;
+    const {
+      mstrData,
+      handleEmbeddedDossierLoad,
+      previousPromptsAnswers,
+      importRequested,
+      promptObjects,
+    } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
       instanceId, selectedViz, visualizationInfo
@@ -125,14 +131,35 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       } else {
         const body = { disableManipulationsAutoSaving: true, persistViewState: true };
         instance.mid = await createDossierInstance(projectId, dossierId, body);
-        if (promptsAnswers != null) {
+        let givenPromptsAnswers = promptsAnswers;
+
+        // Declared variables to determine whether importing a report/dossier is taking place and
+        // whether there are previous prompt answers to handle
+        const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
+        const isImportedObjectPrompted = promptObjects && promptObjects.length > 0;
+
+        // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
+        if (areTherePreviousPromptAnswers && isImportedObjectPrompted) {
+          givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
+          previousPromptsAnswers.forEach((previousAnswer) => {
+            const previousPrmptIndex = promptObjects.findIndex(
+              (promptObject) => promptObject && promptObject.key === previousAnswer.key
+            );
+
+            if (previousPrmptIndex >= 0) {
+              givenPromptsAnswers[0].answers.push(previousAnswer);
+            }
+          });
+        }
+
+        if (givenPromptsAnswers != null) {
           let count = 0;
-          while (count < promptsAnswers.length) {
+          while (count < givenPromptsAnswers.length) {
             await answerDossierPrompts({
               objectId: dossierId,
               projectId,
               instanceId: instance.mid,
-              promptsAnswers: promptsAnswers[count]
+              promptsAnswers: givenPromptsAnswers[count]
             });
             count++;
           }
@@ -341,6 +368,9 @@ EmbeddedDossierNotConnected.propTypes = {
   handleInstanceIdChange: PropTypes.func,
   handleIframeLoadEvent: PropTypes.func,
   handleEmbeddedDossierLoad: PropTypes.func,
+  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+  importRequested: PropTypes.bool,
+  promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 EmbeddedDossierNotConnected.defaultProps = {
@@ -361,9 +391,17 @@ const mapStateToProps = (state) => {
     navigationTree,
     popupReducer,
     sessionReducer: { attrFormPrivilege, envUrl, authToken },
-    officeReducer
+    officeReducer,
+    popupStateReducer
   } = state;
-  const { chosenObjectName, chosenObjectId, chosenProjectId } = navigationTree;
+  const { previousPromptsAnswers } = popupStateReducer;
+  const {
+    chosenObjectName,
+    chosenObjectId,
+    chosenProjectId,
+    promptObjects,
+    importRequested,
+  } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
@@ -381,7 +419,12 @@ const mapStateToProps = (state) => {
     selectedViz: isEdit ? editedObject.selectedViz : '',
     instanceId: editedObject.instanceId,
   };
-  return { mstrData };
+  return {
+    mstrData,
+    previousPromptsAnswers,
+    promptObjects,
+    importRequested
+  };
 };
 
 export const EmbeddedDossier = connect(mapStateToProps)(EmbeddedDossierNotConnected);
