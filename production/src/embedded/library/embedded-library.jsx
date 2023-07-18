@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Empty } from '@mstr/connector-components/';
 import { popupHelper } from '../../popup/popup-helper';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import './library.css';
 
@@ -76,7 +75,7 @@ export const EmbeddedLibraryNotConnected = (props) => {
   };
 
   /**
-   * Handles the event throwed after new error in embedded library.
+   * Handles the event thrown after new error in embedded library.
    * Retrives the error type (based on title).
    * If error type is not a notification - handles it by closing the window
    *
