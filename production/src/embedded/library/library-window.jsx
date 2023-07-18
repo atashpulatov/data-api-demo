@@ -45,52 +45,71 @@ export const LibraryWindowNotConnected = (props) => {
 
   const disableActiveActions = !isPublished;
 
-  const handleSelection = async (itemsInfo) => {
-    const {
-      projectId,
-      type,
-      name,
-      docId,
-    } = itemsInfo[0];
+  /**
+   * The callback function which is invoked when the user selects an object from  embeded library
+   * @param {*} itemsInfo - Array of selected items
+   */
+  const handleSelection = async (itemsInfo = []) => {
+    if (itemsInfo.length > 0) {
+      const {
+        projectId,
+        type,
+        name,
+        docId,
+      } = itemsInfo[0];
 
-    let { id, subtype } = itemsInfo[0];
+      let { id, subtype } = itemsInfo[0];
 
-    if (!subtype || typeof subtype !== 'number') {
-      try {
-        const objectInfo = await getObjectInfo(docId, projectId, getMstrObjectEnumByType(type));
-        subtype = objectInfo.subtype;
-        // if subtype is not defined then the object is selected from myLibrary section
-        // so we need to use docId as id
-        id = docId;
-      } catch (error) {
-        popupHelper.handlePopupErrors(error);
+      if (!subtype || typeof subtype !== 'number') {
+        try {
+          const objectInfo = await getObjectInfo(docId, projectId, getMstrObjectEnumByType(type));
+          subtype = objectInfo.subtype;
+          /**
+           * if subtype is not defined then the object is selected from a library page other
+           * than content discovery and search page so we use docId as id
+           */
+          id = docId;
+        } catch (error) {
+          popupHelper.handlePopupErrors(error);
+        }
       }
-    }
 
-    const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
+      const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
 
-    let isCubePublished = true;
+      let isCubePublished = true;
 
-    if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
-      try {
-        const cubeInfo = await getCubeInfo(id, projectId);
-        isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
-      } catch (error) {
-        popupHelper.handlePopupErrors(error);
+      if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
+        try {
+          const cubeInfo = await getCubeInfo(id, projectId);
+          isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
+        } catch (error) {
+          popupHelper.handlePopupErrors(error);
+        }
       }
+
+      setIsPublished(isCubePublished);
+
+      selectObject({
+        chosenObjectId: id,
+        chosenObjectName: name,
+        chosenProjectId: projectId,
+        chosenSubtype: subtype,
+        mstrObjectType: chosenMstrObjectType,
+      });
+    } else {
+      selectObject({
+        chosenObjectId: null,
+        chosenObjectName: null,
+        chosenProjectId: null,
+        chosenSubtype: null,
+        mstrObjectType: null,
+      });
     }
-
-    setIsPublished(isCubePublished);
-
-    selectObject({
-      chosenObjectId: id,
-      chosenObjectName: name,
-      chosenProjectId: projectId,
-      chosenSubtype: subtype,
-      mstrObjectType: chosenMstrObjectType,
-    });
   };
 
+  /**
+   * The callback function which is invoked when the user clicks 'Import'
+   */
   const handleOk = async () => {
     let isPromptedResponse = false;
     try {
@@ -118,6 +137,9 @@ export const LibraryWindowNotConnected = (props) => {
     }
   };
 
+  /**
+   * The callback function which is invoked when the user clicks 'Prepare data'
+   */
   const handleSecondary = async () => {
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
@@ -140,6 +162,9 @@ export const LibraryWindowNotConnected = (props) => {
     }
   };
 
+  /**
+   * The callback function which is invoked when the user clicks 'Cancel'
+   */
   const handleCancel = () => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel };
