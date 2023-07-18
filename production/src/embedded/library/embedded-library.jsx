@@ -82,12 +82,9 @@ export const EmbeddedLibraryNotConnected = (props) => {
    *
    * @param {Object} error - payload throwed by embedded.api after the error occured
    */
-  // eslint-disable-next-line class-methods-use-this
   const onEmbeddedError = (error) => {
     const { title } = error;
     if (title !== 'Notification') {
-      // TODO: improve this, so it doesn't depend on i18n
-      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
     }
   };
@@ -95,8 +92,8 @@ export const EmbeddedLibraryNotConnected = (props) => {
   const loadEmbeddedLibrary = async (containerElement) => {
     const { envUrl, authToken } = mstrData;
 
-    const serverUrl = envUrl.slice(0, envUrl.lastIndexOf('/api'));
     // delete last occurence of '/api' from the enviroment url
+    const serverUrl = envUrl.slice(0, envUrl.lastIndexOf('/api'));
 
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 

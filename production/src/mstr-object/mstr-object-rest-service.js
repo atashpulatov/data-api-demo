@@ -471,7 +471,7 @@ class MstrObjectRestService {
    * @param {string} projectId
    * @returns {Object} Contains info for cube that match objectId and projectId
    */
-  getCubeInfo = (objectId, projectId) => {
+  getCubeInfo = async (objectId, projectId) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/cubes?id=${objectId}`;
