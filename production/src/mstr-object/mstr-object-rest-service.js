@@ -471,7 +471,7 @@ class MstrObjectRestService {
    * @param {string} projectId
    * @returns {Object} Contains info for cube that match objectId and projectId
    */
-  getCubeInfo = async (objectId, projectId) => {
+  getCubeInfo = (objectId, projectId) => new Promise((resolve, reject) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const fullPath = `${envUrl}/cubes?id=${objectId}`;
@@ -480,8 +480,9 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
-      .then((res) => res.body.cubesInfos[0]);
-  };
+      .then((res) => resolve(res.body.cubesInfos[0]))
+      .catch((error) => reject(error));
+  });
 
   rePromptDossier = (dossierId, instanceId, projectId) => {
     const storeState = this.reduxStore.getState();

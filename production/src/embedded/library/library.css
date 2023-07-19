@@ -9,16 +9,13 @@
 
 .library-window .title-bar {
   min-width: 500px;
+  margin: 15px;
 }
 
 .library-window .title-bar>span {
   font-size: 18px;
   color: #333333;
   font-weight: 500;
-}
-
-.library-window .title-bar {
-  margin: 15px;
 }
 
 .library-iframe {
