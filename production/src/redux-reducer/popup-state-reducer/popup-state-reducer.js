@@ -35,12 +35,7 @@ export const popupStateReducer = (state = initialState, action) => {
     case CLEAR_POPUP_STATE: {
       return initialState;
     }
-    case SET_PREVIOUS_PROMPTS_ANSWERS: {
-      return {
-        ...state,
-        ...action.payload,
-      };
-    }
+
     default:
       return state;
   }

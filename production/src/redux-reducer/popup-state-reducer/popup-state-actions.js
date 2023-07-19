@@ -26,11 +26,6 @@ class PopupStateActions {
     payload,
   });
 
-  setPreviousPromptAnswers = (payload) => (dispatch) => dispatch({
-    type: SET_PREVIOUS_PROMPTS_ANSWERS,
-    payload,
-  });
-
   onPrepareData = () => (dispatch) => {
     dispatch({
       type: SET_POPUP_TYPE,
