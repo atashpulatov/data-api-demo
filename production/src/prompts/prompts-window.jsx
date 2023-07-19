@@ -76,23 +76,24 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [prolongSession]);
 
+  const reusePromptAnswers = true; // TODO: update with proper flag value
   let givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
   const loading = true;
 
   // Declared variables to determine whether importing a report/dossier is taking place and
   // whether there are previous prompt answers to handle
-  const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
-  const isImportedObjectPrompted = promptObjects && promptObjects.length > 0;
+  const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
+  const isImportedObjectPrompted = promptObjects && promptObjects.length;
 
   // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
-  if (importRequested && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
+  if (importRequested && reusePromptAnswers && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
     givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
     previousPromptsAnswers.forEach((previousAnswer) => {
-      const previousPrmptIndex = promptObjects.findIndex(
+      const previousPromptIndex = promptObjects.findIndex(
         (promptObject) => promptObject && promptObject.key === previousAnswer.key
       );
 
-      if (previousPrmptIndex >= 0) {
+      if (previousPromptIndex >= 0) {
         givenPromptsAnswers[0].answers.push(previousAnswer);
       }
     });

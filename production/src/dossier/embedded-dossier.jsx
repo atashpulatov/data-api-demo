@@ -132,14 +132,15 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         const body = { disableManipulationsAutoSaving: true, persistViewState: true };
         instance.mid = await createDossierInstance(projectId, dossierId, body);
         let givenPromptsAnswers = promptsAnswers;
+        const reusePromptAnswers = true;
 
         // Declared variables to determine whether importing a report/dossier is taking place and
         // whether there are previous prompt answers to handle
-        const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
-        const isImportedObjectPrompted = promptObjects && promptObjects.length > 0;
+        const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
+        const isImportedObjectPrompted = promptObjects && promptObjects.length;
 
         // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
-        if (dossierOpenRequested && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
+        if (dossierOpenRequested && reusePromptAnswers && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
           givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
           previousPromptsAnswers.forEach((previousAnswer) => {
             const previousPrmptIndex = promptObjects.findIndex(

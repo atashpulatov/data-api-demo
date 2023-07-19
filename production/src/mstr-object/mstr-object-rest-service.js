@@ -458,18 +458,16 @@ class MstrObjectRestService {
     const fullPath = `${envUrl}/${typePath}/${objectId}/prompts`;
     return request
       .get(fullPath)
-      .set("x-mstr-authtoken", authToken)
-      .set("X-MSTR-ProjectID", projectId)
+      .set('x-mstr-authtoken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
-      .then((res) => {
-        // Create JSON object with promptObjects and isPrompted properties, and return it. isPrompted is true if report or dossier has prompts to be answered.
-        // If report or dossier has prompts, promptObjects contains an array of prompt objects defined in report/dossier.
-        const resJSON = {
-          promptObjects: res.body,
-          isPrompted: res.body && res.body.length,
-        };
-        return resJSON;
-      });
+      .then((res) => ({
+        // Return JSON object with promptObjects and isPrompted properties, and return it.
+        // isPrompted is true if report or dossier has prompts to be answered.
+        // If report/dossier has prompts, promptObjects contains an array of prompt objects defined in report/dossier.
+        promptObjects: res.body,
+        isPrompted: res.body && res.body.length,
+      }));
   };
 
   /**
