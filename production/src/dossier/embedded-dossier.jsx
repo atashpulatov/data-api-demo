@@ -393,9 +393,8 @@ const mapStateToProps = (state) => {
     popupReducer,
     sessionReducer: { attrFormPrivilege, envUrl, authToken },
     officeReducer,
-    popupStateReducer
+    answersReducer
   } = state;
-  const { previousPromptsAnswers } = popupStateReducer;
   const {
     chosenObjectName,
     chosenObjectId,
@@ -406,6 +405,7 @@ const mapStateToProps = (state) => {
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
+  const { answers } = answersReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
@@ -422,7 +422,7 @@ const mapStateToProps = (state) => {
   };
   return {
     mstrData,
-    previousPromptsAnswers,
+    previousPromptsAnswers: answers,
     promptObjects,
     dossierOpenRequested
   };

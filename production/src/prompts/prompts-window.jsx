@@ -350,13 +350,13 @@ PromptsWindowNotConnected.propTypes = {
 
 export const mapStateToProps = (state) => {
   const {
-    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer
+    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer, answersReducer
   } = state;
   const popupState = popupReducer.editedObject;
   const {
     promptsAnswers, importSubtotal, importRequested, promptObjects, ...mstrData
   } = navigationTree;
-  const { previousPromptsAnswers } = popupStateReducer;
+  const { answers } = answersReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
@@ -368,7 +368,7 @@ export const mapStateToProps = (state) => {
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
-    previousPromptsAnswers,
+    previousPromptsAnswers: answers,
     importRequested,
     promptObjects,
   };

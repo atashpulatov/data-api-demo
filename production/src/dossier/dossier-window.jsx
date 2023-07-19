@@ -275,7 +275,7 @@ DossierWindowNotConnected.defaultProps = {
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer, officeReducer, popupStateReducer
+    navigationTree, popupReducer, sessionReducer, officeReducer, answersReducer
   } = state;
   const {
     chosenObjectName,
@@ -285,10 +285,10 @@ function mapStateToProps(state) {
     promptObjects,
     importRequested,
   } = navigationTree;
-  const { previousPromptsAnswers } = popupStateReducer;
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
+  const { answers } = answersReducer;
   const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = {
@@ -309,7 +309,7 @@ function mapStateToProps(state) {
       ? editedObjectParse.projectId
       : chosenProjectId,
     editedObject: editedObjectParse,
-    previousPromptsAnswers,
+    previousPromptsAnswers: answers,
     promptObjects,
     importRequested
   };
