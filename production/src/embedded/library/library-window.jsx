@@ -46,7 +46,9 @@ export const LibraryWindowNotConnected = (props) => {
   const disableActiveActions = !isPublished;
 
   /**
-   * The callback function which is invoked when the user selects an object from  embeded library
+   * The callback function which is invoked when the user selects an object from embedded library.
+   * The parameter in this function is provided by the ON_LIBRARY_ITEM_SELECTED event. It will be 
+   * an array containing only one object which will be the selected dossier or report or dataset
    * @param {*} itemsInfo - Array of selected items
    */
   const handleSelection = async (itemsInfo = []) => {
@@ -66,7 +68,7 @@ export const LibraryWindowNotConnected = (props) => {
           subtype = objectInfo.subtype;
           /**
            * if subtype is not defined then the object is selected from a library page other
-           * than content discovery and search page so we use docId as id
+           * than content discovery and search page. In this case we set use docId as the id
            */
           id = docId;
         } catch (error) {
