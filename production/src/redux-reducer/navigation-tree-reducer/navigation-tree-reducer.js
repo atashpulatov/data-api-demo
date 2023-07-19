@@ -25,20 +25,6 @@ export const initialState = {
   chosenEnvElement: {},
 };
 
-function cleanSelection(state) {
-  const newState = { ...state };
-  newState.chosenObjectId = initialState.chosenObjectId;
-  newState.chosenProjectId = initialState.chosenProjectId;
-  newState.chosenSubtype = initialState.chosenSubtype;
-  newState.chosenObjectName = initialState.chosenObjectName;
-  newState.mstrObjectType = initialState.mstrObjectType;
-  newState.chosenEnvElement = initialState.chosenEnvElement;
-  newState.dossierOpenRequested = initialState.dossierOpenRequested;
-  newState.chosenLibraryElement = initialState.chosenLibraryElement;
-  newState.chosenLibraryDossier = initialState.chosenLibraryDossier;
-  return newState;
-}
-
 function makeSelection(newState, data) {
   newState.chosenObjectId = data.chosenObjectId || null;
   newState.chosenProjectId = data.chosenProjectId || null;
@@ -61,11 +47,6 @@ export const navigationTree = (state = initialState, action) => {
         return state;
       }
       const newState = { ...state };
-      if (data.chosenLibraryDossier) {
-        newState.chosenLibraryElement = data;
-      } else {
-        newState.chosenEnvElement = data;
-      }
       return makeSelection(newState, data);
     }
 
