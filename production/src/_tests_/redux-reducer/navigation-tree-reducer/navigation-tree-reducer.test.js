@@ -6,7 +6,6 @@ import {
 import { navigationTree, initialState } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
 describe('NavigationTree Reducer', () => {
-
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
     // given
     const action = {
