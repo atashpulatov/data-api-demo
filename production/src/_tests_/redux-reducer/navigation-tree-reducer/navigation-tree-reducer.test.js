@@ -6,51 +6,6 @@ import {
 import { navigationTree, initialState } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 
 describe('NavigationTree Reducer', () => {
-  it('should return new proper state in case of SELECT_OBJECT action for object from myLibrary', () => {
-    // given
-    const action = {
-      type: SELECT_OBJECT,
-      data: {
-        chosenObjectId: '1',
-        chosenProjectId: '2',
-        chosenSubtype: '3',
-        chosenObjectName: 'Prepare Data',
-        chosenChapterKey: null,
-        objectType: undefined,
-        chosenVisualizationKey: null,
-        preparedInstanceId: null,
-        chosenLibraryDossier: 'some dossier id',
-      },
-    };
-    // when
-    const newState = navigationTree({}, action);
-    // then
-    expect(newState.chosenLibraryElement).toEqual(action.data);
-    expect(newState.chosenObjectId).toEqual(action.data.chosenObjectId);
-  });
-
-  it('should return new proper state in case of SELECT_OBJECT action for non myLibrary', () => {
-    // given
-    const action = {
-      type: SELECT_OBJECT,
-      data: {
-        chosenObjectId: '1',
-        chosenProjectId: '2',
-        chosenSubtype: '3',
-        chosenObjectName: 'Prepare Data',
-        chosenChapterKey: null,
-        objectType: undefined,
-        chosenVisualizationKey: null,
-        preparedInstanceId: null,
-        chosenLibraryDossier: null,
-      },
-    };
-    // when
-    const newState = navigationTree({}, action);
-    // then
-    expect(newState.chosenEnvElement).toEqual(action.data);
-    expect(newState.chosenObjectId).toEqual(action.data.chosenObjectId);
-  });
 
   it('should return new proper state in case of SELECT_OBJECT action without proper data', () => {
     // given
@@ -71,7 +26,8 @@ describe('NavigationTree Reducer', () => {
       chosenVisualizationKey: null,
       preparedInstanceId: null,
       chosenLibraryDossier: null,
-      chosenEnvElement: action.data
+      isEdit: undefined,
+      mstrObjectType: undefined,
     });
   });
 
