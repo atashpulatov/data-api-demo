@@ -33,19 +33,21 @@ export const answersReducer = (state = initialState, action) => {
 function importRequested(state, payload) {
   const newAnswers = [...state.answers];
   const isDossier = payload.object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
-  const { answers } = isDossier ? payload.object.promptsAnswers : payload.object.promptsAnswers[0];
+  if (payload.object.isPrompted) {
+    const { answers } = isDossier ? payload.object.promptsAnswers : payload.object.promptsAnswers[0];
 
-  answers.forEach((answer) => {
-    const answerIdx = getAnswerIndex(state.answers, answer.key);
+    answers.forEach((answer) => {
+      const answerIdx = getAnswerIndex(state.answers, answer.key);
 
-    if (answerIdx === -1) {
-      // add unique answer to existing list
-      newAnswers.push(answer);
-    } else {
-      // update entry for pre-existing answer in list
-      newAnswers.splice(answerIdx, 1, answer);
-    }
-  });
+      if (answerIdx === -1) {
+        // add unique answer to existing list
+        newAnswers.push(answer);
+      } else {
+        // update entry for pre-existing answer in list
+        newAnswers.splice(answerIdx, 1, answer);
+      }
+    });
+  }
 
   return { answers: [...newAnswers] };
 }
