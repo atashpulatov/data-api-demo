@@ -1,6 +1,6 @@
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { IMPORT_OPERATION } from '../../operation/operation-type-names';
-import { RESTORE_ALL_ANSWERS, UPDATE_ANSWERS } from './answers-actions';
+import { RESTORE_ALL_ANSWERS, UPDATE_ANSWERS, RESET_ANSWERS } from './answers-actions';
 
 const initialState = { answers: [] };
 export const answersReducer = (state = initialState, action) => {
@@ -14,14 +14,18 @@ export const answersReducer = (state = initialState, action) => {
     case UPDATE_ANSWERS:
       return updateAnswers(state, action.payload);
 
+    case RESET_ANSWERS:
+      return { ...initialState, };
+
     default:
       return state;
   }
 };
 
 /**
- * Function called when dossier/report is imported. It will add the answers to the state by merging them with
- * the existing ones (if existing), or adding them if not.
+ * Function called when dossier/report is imported.
+ * It will add the answers to the state by merging them with the existing ones
+ * if existing or adding them if not.
  * @param {*} state
  * @param {*} payload
  * @returns
