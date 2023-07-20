@@ -11,7 +11,9 @@ import './dossier.css';
 
 const { microstrategy, Office } = window;
 
-const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
+const {
+  createDossierInstance, answerDossierPrompts, rePromptDossier, updateDossierPrompts, applyDossierPrompts
+} = mstrObjectRestService;
 
 const VIZ_SELECTION_RETRY_DELAY = 200; // ms
 const VIZ_SELECTION_RETRY_LIMIT = 10;
@@ -141,17 +143,44 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
         if (dossierOpenRequested && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
           givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
-          previousPromptsAnswers.forEach((previousAnswer) => {
-            const previousPrmptIndex = promptObjects.findIndex(
-              (promptObject) => promptObject && promptObject.key === previousAnswer.key
+          //   givenPromptsAnswers = [];
+          //   previousPromptsAnswers.forEach((previousAnswer) => {
+          //     const previousPromptIndex = promptObjects.findIndex(
+          //       (promptObject) => promptObject && promptObject.key === previousAnswer.key
+          //     );
+          //     if (previousPromptIndex >= 0) {
+          //       givenPromptsAnswers.push({
+          //         id: promptObjects[previousPromptIndex].id,
+          //         answers: [previousAnswer],
+          //         type: promptObjects[previousPromptIndex].type,
+          //       });
+          //     }
+          //   });
+          promptObjects.forEach((promptObject) => {
+            const previousPromptIndex = previousPromptsAnswers.findIndex(
+              (answerPrmpt) => answerPrmpt && answerPrmpt.key === promptObject.key
             );
-
-            if (previousPrmptIndex >= 0) {
-              givenPromptsAnswers[0].answers.push(previousAnswer);
+            if (previousPromptIndex >= 0) {
+              givenPromptsAnswers[0].answers.push(previousPromptsAnswers[previousPromptIndex]);
             }
           });
+          //   try {
+          //     await updateDossierPrompts({
+          //       objectId: dossierId,
+          //       projectId,
+          //       instanceId: instance.mid,
+          //       promptsAnswers: { prompts: promptObjects }
+          //     });
+          //   } catch (error) {
+          //     console.log(error);
+          //   }
+        //   await applyDossierPrompts({
+        //     objectId: dossierId,
+        //     projectId,
+        //     instanceId: instance.mid,
+        //     promptsAnswers: { prompts: promptObjects }
+        //   });
         }
-
         if (givenPromptsAnswers != null) {
           let count = 0;
           while (count < givenPromptsAnswers.length) {
@@ -159,15 +188,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
               objectId: dossierId,
               projectId,
               instanceId: instance.mid,
-              promptsAnswers: givenPromptsAnswers[count]
+              promptsAnswers: givenPromptsAnswers[0]
             });
             count++;
           }
         }
       }
     } catch (error) {
-      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
-      popupHelper.handlePopupErrors(error);
+      console.log(error);
+    //   error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+    //   popupHelper.handlePopupErrors(error);
     }
 
     this.dossierData = {
@@ -370,7 +400,11 @@ EmbeddedDossierNotConnected.propTypes = {
   handleEmbeddedDossierLoad: PropTypes.func,
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   dossierOpenRequested: PropTypes.bool,
-  promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
+  promptObjects: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    answers: PropTypes.arrayOf(PropTypes.shape({})),
+    type: PropTypes.string,
+  })),
 };
 
 EmbeddedDossierNotConnected.defaultProps = {

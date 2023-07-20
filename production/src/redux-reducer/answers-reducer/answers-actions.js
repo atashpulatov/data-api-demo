@@ -1,6 +1,6 @@
-export const RESTORE_ALL_ANSWERS = "RESTORE_ALL_ANSWERS";
-
-export const UPDATE_ANSWERS = "UPDATE_ANSWERS";
+export const RESTORE_ALL_ANSWERS = 'RESTORE_ALL_ANSWERS';
+export const RESET_ANSWERS = 'RESET_ANSWERS';
+export const UPDATE_ANSWERS = 'UPDATE_ANSWERS';
 
 /**
  * Function to restore all answers.
@@ -23,3 +23,11 @@ export const updateAnswers = (updatedAnswers) => ({
   type: UPDATE_ANSWERS,
   payload: updatedAnswers,
 });
+
+/**
+ * Function to reset all answers.
+ * It is dispatched when user either toggles off the
+ * "Re-use Prompt answers" setting or logs off.
+ * @returns
+ */
+export const resetAnswers = () => ({ type: RESET_ANSWERS, });
