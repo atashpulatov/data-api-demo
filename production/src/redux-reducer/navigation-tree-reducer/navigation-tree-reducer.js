@@ -43,11 +43,16 @@ export const navigationTree = (state = initialState, action) => {
   const { type, data } = action;
   switch (type) {
     case SELECT_OBJECT: {
-      if (!data.chosenObjectId) {
-        return state;
-      }
+      const newData = {
+        chosenObjectId: null,
+        chosenProjectId: null,
+        chosenSubtype: null,
+        chosenObjectName: DEFAULT_PROJECT_NAME,
+        mstrObjectType: null,
+        ...data
+      };
       const newState = { ...state };
-      return makeSelection(newState, data);
+      return makeSelection(newState, newData);
     }
 
     case REQUEST_IMPORT: {
