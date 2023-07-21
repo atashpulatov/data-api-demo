@@ -112,7 +112,7 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
         );
       }
     } catch (error) {
-      console.error(error);
+      popupHelper.handlePopupErrors(error);
     }
   };
 
