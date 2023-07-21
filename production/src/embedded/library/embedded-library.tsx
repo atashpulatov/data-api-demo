@@ -50,7 +50,9 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   }, []);
 
   /**
-   * This function is called after the embedded library iframe is added into the DOM
+   * Registers a load event handler for embedded library iframe 
+   * after it is added into the DOM
+   * 
    * @param {HTMLIFrameElement} iframe
    */
   const onIframeLoad = (iframe: HTMLIFrameElement) => {
