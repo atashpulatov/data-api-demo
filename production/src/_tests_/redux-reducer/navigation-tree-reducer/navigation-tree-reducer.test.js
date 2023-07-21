@@ -21,12 +21,11 @@ describe('NavigationTree Reducer', () => {
       chosenSubtype: null,
       chosenObjectName: 'Prepare Data',
       chosenChapterKey: null,
-      objectType: undefined,
       chosenVisualizationKey: null,
       preparedInstanceId: null,
       chosenLibraryDossier: null,
       isEdit: undefined,
-      mstrObjectType: undefined,
+      mstrObjectType: null,
     });
   });
 
