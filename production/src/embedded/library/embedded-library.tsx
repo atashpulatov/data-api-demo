@@ -50,9 +50,9 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   }, []);
 
   /**
-   * Registers a load event handler for embedded library iframe 
+   * Registers a load event handler for embedded library iframe
    * after it is added into the DOM
-   * 
+   *
    * @param {HTMLIFrameElement} iframe
    */
   const onIframeLoad = (iframe: HTMLIFrameElement) => {
@@ -80,8 +80,8 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
 
   /**
    * Initializes and Loads embedded library into the specified container element
-   *  
-   * @param {HTMLElement} containerElement 
+   *
+   * @param {HTMLElement} containerElement
    */
   const loadEmbeddedLibrary = async (containerElement: HTMLElement) => {
     const { envUrl, authToken } = mstrData;
