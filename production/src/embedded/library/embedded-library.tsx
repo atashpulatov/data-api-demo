@@ -6,6 +6,7 @@ import { Empty } from '@mstr/connector-components/';
 import { popupHelper } from '../../popup/popup-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { EmbeddedLibraryTypes } from './embedded-library-types';
+import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './library.css';
 
 // @ts-ignore
@@ -50,30 +51,14 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
 
   /**
    * This function is called after the embedded library iframe is added into the DOM
-   * @param {*} iframe
+   * @param {HTMLIFrameElement} iframe
    */
   const onIframeLoad = (iframe: HTMLIFrameElement) => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       // DE160793 - Throw session expired error when library redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
-      if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
-        // DE158588 - Not able to open library in embedding api on excel desktop in windows
-        const isOfficeOnline = Office.context
-          ? Office.context.platform === Office.PlatformType.OfficeOnline
-          : false;
-        const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
-        if (!isOfficeOnline && isIE) {
-          scriptInjectionHelper.applyFile(
-            contentDocument,
-            'javascript/mshtmllib.js'
-          );
-        }
-        scriptInjectionHelper.applyFile(
-          contentDocument,
-          'javascript/embeddingsessionlib.js'
-        );
-      }
+      handleLoginExcelDesktopInWindows(contentDocument, Office);
     });
   };
 
@@ -127,7 +112,7 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
         );
       }
     } catch (error) {
-      console.log('error', error);
+      console.error(error);
     }
   };
 

@@ -13,7 +13,7 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
-import { itemType, LibraryWindowProps } from './library-window-types';
+import { ItemType, LibraryWindowProps } from './library-window-types';
 
 const { isPrompted, getCubeInfo, getObjectInfo } = mstrObjectRestService;
 
@@ -36,12 +36,13 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   const disableActiveActions = !isPublished;
 
   /**
-   * The callback function which is invoked when the user selects an object from embedded library.
+   * Selects an object from embedded library and saves its info in the redux store.
    * The parameter in this function is provided by the ON_LIBRARY_ITEM_SELECTED event. It will be
    * an array containing only one object which will be the selected dossier or report or dataset
-   * @param {*} itemsInfo - Array of selected items
+   *
+   * @param {{Array<ItemType>}} itemsInfo - Array of selected items
    */
-  const handleSelection = async (itemsInfo: itemType[]): Promise<any> => {
+  const handleSelection = async (itemsInfo: ItemType[]): Promise<any> => {
     if (!itemsInfo || itemsInfo.length === 0) {
       selectObject({});
     }
@@ -60,10 +61,8 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         const objectType = type === 55 ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.mstrObjectType.report;
         const objectInfo = await getObjectInfo(docId, projectId, objectType);
         subtype = objectInfo.subtype;
-        /**
-          * if subtype is not defined then the object is selected from a library page other
-          * than content discovery and search page. In this case we set use docId as the id
-        */
+        // if subtype is not defined then the object is selected from a library page other
+        // than content discovery and search page. In this case we set use docId as the id
         id = docId;
       } catch (error) {
         popupHelper.handlePopupErrors(error);
@@ -95,12 +94,11 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   };
 
   /**
-   * The callback function which is invoked when the user clicks 'Import'
+   * Imports the object selected by the user
    */
   const handleOk = async () => {
     let isPromptedResponse = false;
     try {
-      // If myLibrary is on, then selected object is a dossier.
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if (
         chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report
@@ -125,7 +123,8 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   };
 
   /**
-   * The callback function which is invoked when the user clicks 'Prepare data'
+   * Checks if the selected object is prompted and invokes popup
+   * to render the 'Prepare data' UI
    */
   const handleSecondary = async () => {
     try {
@@ -149,7 +148,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   };
 
   /**
-   * The callback function which is invoked when the user clicks 'Cancel'
+   * sends a command to cancel the object selection and closes the popup
    */
   const handleCancel = () => {
     const { commandCancel } = selectorProperties;

@@ -1,4 +1,4 @@
-export interface itemType {
+export interface ItemType {
   id: string,
   name: string,
   projectId: string,
@@ -6,7 +6,6 @@ export interface itemType {
   subtype?: number,
   docId?: string,
 }
-
 export interface LibraryWindowProps {
   chosenObjectId: string,
   chosenProjectId: string,
