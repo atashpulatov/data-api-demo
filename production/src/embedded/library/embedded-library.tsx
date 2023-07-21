@@ -1,14 +1,17 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+// @ts-ignore
 import { Empty } from '@mstr/connector-components/';
 import { popupHelper } from '../../popup/popup-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
+import { EmbeddedLibraryTypes } from './embedded-library-types';
 import './library.css';
 
+// @ts-ignore
 const { microstrategy, Office } = window;
 
-export const EmbeddedLibraryNotConnected = (props) => {
+export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const { handleSelection, handleIframeLoadEvent, mstrData } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
@@ -49,7 +52,7 @@ export const EmbeddedLibraryNotConnected = (props) => {
    * This function is called after the embedded library iframe is added into the DOM
    * @param {*} iframe
    */
-  const onIframeLoad = (iframe) => {
+  const onIframeLoad = (iframe: HTMLIFrameElement) => {
     iframe.addEventListener('load', () => {
       const { contentDocument } = iframe;
       // DE160793 - Throw session expired error when library redirects to login (iframe 'load' event)
@@ -81,14 +84,14 @@ export const EmbeddedLibraryNotConnected = (props) => {
    *
    * @param {Object} error - payload throwed by embedded.api after the error occured
    */
-  const onEmbeddedError = (error) => {
+  const onEmbeddedError = (error: any) => {
     const { title } = error;
     if (title !== 'Notification') {
       popupHelper.handlePopupErrors(error);
     }
   };
 
-  const loadEmbeddedLibrary = async (containerElement) => {
+  const loadEmbeddedLibrary = async (containerElement: HTMLElement) => {
     const { envUrl, authToken } = mstrData;
 
     // delete last occurence of '/api' from the enviroment url
@@ -108,7 +111,7 @@ export const EmbeddedLibraryNotConnected = (props) => {
           return Promise.resolve(authToken);
         },
         placeholder: containerElement,
-        onMsgRouterReadyHandler: ({ MsgRouter }) => {
+        onMsgRouterReadyHandler: ({ MsgRouter }: any) => {
           setMsgRouter(MsgRouter);
           MsgRouter.registerEventHandler(EventType.ON_LIBRARY_ITEM_SELECTED, handleSelection);
           MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
@@ -153,7 +156,12 @@ EmbeddedLibraryNotConnected.defaultProps = {
   handleSelection: () => {},
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: {
+  sessionReducer: {
+    envUrl: string;
+    authToken: string;
+  }
+}) => {
   const { sessionReducer: { envUrl, authToken } } = state;
   const mstrData = {
     envUrl,

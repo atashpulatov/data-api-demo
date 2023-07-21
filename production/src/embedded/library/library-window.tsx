@@ -13,21 +13,11 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { itemType, LibraryWindowProps } from './library-window-types';
 
 const { isPrompted, getCubeInfo, getObjectInfo } = mstrObjectRestService;
 
-const getMstrObjectEnumByType = (type = 3) => {
-  switch (type) {
-    case 55:
-      return mstrObjectEnum.mstrObjectType.dossier;
-    case 3:
-    default:
-      return mstrObjectEnum.mstrObjectType.report;
-  }
-};
-
-export const LibraryWindowNotConnected = (props) => {
-  const [previewDisplay, setPreviewDisplay] = useState(false);
+export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   const [isPublished, setIsPublished] = useState(true);
   const [t] = useTranslation();
 
@@ -51,62 +41,57 @@ export const LibraryWindowNotConnected = (props) => {
    * an array containing only one object which will be the selected dossier or report or dataset
    * @param {*} itemsInfo - Array of selected items
    */
-  const handleSelection = async (itemsInfo = []) => {
-    if (itemsInfo.length > 0) {
-      const {
-        projectId,
-        type,
-        name,
-        docId,
-      } = itemsInfo[0];
-
-      let { id, subtype } = itemsInfo[0];
-
-      if (!subtype || typeof subtype !== 'number') {
-        try {
-          const objectInfo = await getObjectInfo(docId, projectId, getMstrObjectEnumByType(type));
-          subtype = objectInfo.subtype;
-          /**
-           * if subtype is not defined then the object is selected from a library page other
-           * than content discovery and search page. In this case we set use docId as the id
-           */
-          id = docId;
-        } catch (error) {
-          popupHelper.handlePopupErrors(error);
-        }
-      }
-
-      const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
-
-      let isCubePublished = true;
-
-      if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
-        try {
-          const cubeInfo = await getCubeInfo(id, projectId);
-          isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
-        } catch (error) {
-          popupHelper.handlePopupErrors(error);
-        }
-      }
-
-      setIsPublished(isCubePublished);
-
-      selectObject({
-        chosenObjectId: id,
-        chosenObjectName: name,
-        chosenProjectId: projectId,
-        chosenSubtype: subtype,
-        mstrObjectType: chosenMstrObjectType,
-      });
-    } else {
-      selectObject({
-        chosenObjectId: null,
-        chosenObjectName: null,
-        chosenProjectId: null,
-        chosenSubtype: null,
-        mstrObjectType: null,
-      });
+  const handleSelection = async (itemsInfo: itemType[]): Promise<any> => {
+    if (!itemsInfo || itemsInfo.length === 0) {
+      selectObject({});
     }
+
+    const {
+      projectId,
+      type,
+      name,
+      docId,
+    } = itemsInfo[0];
+
+    let { id, subtype } = itemsInfo[0];
+
+    if (!subtype || typeof subtype !== 'number') {
+      try {
+        const objectType = type === 55 ? mstrObjectEnum.mstrObjectType.dossier : mstrObjectEnum.mstrObjectType.report;
+        const objectInfo = await getObjectInfo(docId, projectId, objectType);
+        subtype = objectInfo.subtype;
+        /**
+          * if subtype is not defined then the object is selected from a library page other
+          * than content discovery and search page. In this case we set use docId as the id
+        */
+        id = docId;
+      } catch (error) {
+        popupHelper.handlePopupErrors(error);
+      }
+    }
+
+    const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(subtype);
+
+    let isCubePublished = true;
+
+    if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dataset) {
+      try {
+        const cubeInfo: any = await getCubeInfo(id, projectId);
+        isCubePublished = cubeInfo.status !== 0 || cubeInfo.serverMode === 2;
+      } catch (error) {
+        popupHelper.handlePopupErrors(error);
+      }
+    }
+
+    setIsPublished(isCubePublished);
+
+    selectObject({
+      chosenObjectId: id,
+      chosenObjectName: name,
+      chosenProjectId: projectId,
+      chosenSubtype: subtype,
+      mstrObjectType: chosenMstrObjectType,
+    });
   };
 
   /**
@@ -158,7 +143,6 @@ export const LibraryWindowNotConnected = (props) => {
         setObjectData({ isPrompted: isPromptedResponse });
       }
       handlePrepare();
-      setPreviewDisplay(true);
     } catch (err) {
       popupHelper.handlePopupErrors(err);
     }
@@ -178,8 +162,8 @@ export const LibraryWindowNotConnected = (props) => {
   const prolongSession = installSessionProlongingHandler(handleCancel);
 
   const extendSession = useCallback(
-    (message = {}) => {
-      const { data: postMessage, origin } = message;
+    (message: any) => {
+      const { data: postMessage, origin } = message || {};
       const { origin: targetOrigin } = window;
       if (origin === targetOrigin && postMessage === EXTEND_SESSION) {
         prolongSession();
@@ -195,7 +179,7 @@ export const LibraryWindowNotConnected = (props) => {
   }, [extendSession]);
 
   const validateSession = () => {
-    authenticationHelper.validateAuthToken().catch((error) => {
+    authenticationHelper.validateAuthToken().catch((error: object) => {
       popupHelper.handlePopupErrors(error);
     });
   };
@@ -214,7 +198,6 @@ export const LibraryWindowNotConnected = (props) => {
         handleOk={handleOk}
         handleSecondary={handleSecondary}
         handleCancel={handleCancel}
-        previewDisplay={previewDisplay}
         disableSecondary={
           mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
@@ -239,7 +222,14 @@ LibraryWindowNotConnected.propTypes = {
   ]),
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state: {
+  navigationTree: {
+    chosenObjectName: string;
+    chosenObjectId: string;
+    chosenProjectId: string;
+    chosenSubtype: number;
+    mstrObjectType: object;
+}}) {
   const { navigationTree } = state;
   const {
     chosenObjectName,
