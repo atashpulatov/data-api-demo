@@ -76,6 +76,11 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
     }
   };
 
+  /**
+   * Initializes and Loads embedded library into the specified container element
+   *  
+   * @param {HTMLElement} containerElement 
+   */
   const loadEmbeddedLibrary = async (containerElement: HTMLElement) => {
     const { envUrl, authToken } = mstrData;
 
