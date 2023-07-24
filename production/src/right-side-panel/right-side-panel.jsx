@@ -145,8 +145,6 @@ export const RightSidePanelNotConnected = ({
         locale={i18n.language}
         />
         : (<SidePanel
-      reusePromptAnswers={reusePromptAnswers}
-      handleReusePromptAnswers={handleReusePromptAnswers}
       locale={i18n.language}
       loadedObjects={loadedObjectsWrapped}
       onAddData={addDataWrapper}
