@@ -11,7 +11,7 @@ import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
 import { officeApiHelper } from '../office/api/office-api-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';;
+import officeReducerHelper from '../office/store/office-reducer-helper';
 import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
@@ -129,39 +129,44 @@ export const RightSidePanelNotConnected = ({
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
-  const handleReusePromptAnswers = async () => { await wrapper(sidePanelService.toggleReusePromptAnswers, reusePromptAnswers); };
+  const handleReusePromptAnswers = async () => {
+    await wrapper(sidePanelService.toggleReusePromptAnswers, reusePromptAnswers);
+  };
 
   const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
 
-
   return (
     <>
-    {settingsPanelLoaded 
-        ?  <SettingsPanel 
-        reusePromptAnswers={reusePromptAnswers}
-        handleReusePromptAnswers={handleReusePromptAnswers}
-        handleToggleSettingsPanel={handleToggleSettingsPanel}
-        locale={i18n.language}
-        />
-        : (<SidePanel
-      locale={i18n.language}
-      loadedObjects={loadedObjectsWrapped}
-      onAddData={addDataWrapper}
-      onTileClick={highlightObjectWrapper}
-      onDuplicateClick={duplicateWrapper}
-      onEditClick={editWrapper}
-      onRefreshClick={refreshWrapper}
-      onRemoveClick={removeWrapper}
-      onRename={renameWrapper}
-      popup={sidePanelPopup}
-      settingsMenu={isSettings && <SettingsMenu />}
-      onSettingsClick={handleSettingsClick}
-      confirmationWindow={isConfirm && <Confirmation />}
-      globalNotification={globalNotification}
-      onSelectAll={notificationService.dismissNotifications}
-      shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-      isPopupRendered={isPopupRendered}
-    />)}
+      {settingsPanelLoaded
+        ? (
+          <SettingsPanel
+            reusePromptAnswers={reusePromptAnswers}
+            handleReusePromptAnswers={handleReusePromptAnswers}
+            handleToggleSettingsPanel={handleToggleSettingsPanel}
+            locale={i18n.language}
+          />
+        )
+        : (
+          <SidePanel
+            locale={i18n.language}
+            loadedObjects={loadedObjectsWrapped}
+            onAddData={addDataWrapper}
+            onTileClick={highlightObjectWrapper}
+            onDuplicateClick={duplicateWrapper}
+            onEditClick={editWrapper}
+            onRefreshClick={refreshWrapper}
+            onRemoveClick={removeWrapper}
+            onRename={renameWrapper}
+            popup={sidePanelPopup}
+            settingsMenu={isSettings && <SettingsMenu />}
+            onSettingsClick={handleSettingsClick}
+            confirmationWindow={isConfirm && <Confirmation />}
+            globalNotification={globalNotification}
+            onSelectAll={notificationService.dismissNotifications}
+            shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+            isPopupRendered={isPopupRendered}
+          />
+        )}
     </>
   );
 };

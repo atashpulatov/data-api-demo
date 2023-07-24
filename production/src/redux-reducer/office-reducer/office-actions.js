@@ -32,18 +32,18 @@ const toggleIsClearDataFailedFlag = (isClearDataFailed) => (dispatch) => {
   });
 };
 
-const toggleSettingsPanelLoadedFlag = (settingsPanelLoded) => (dispatch) => {    
-    dispatch({
-      type: officeProperties.actions.toggleSettingsPanelLoadedFlag,
-      settingsPanelLoded,
-    });
+const toggleSettingsPanelLoadedFlag = (settingsPanelLoded) => (dispatch) => {
+  dispatch({
+    type: officeProperties.actions.toggleSettingsPanelLoadedFlag,
+    settingsPanelLoded,
+  });
 };
 
 const toggleReusePromptAnswersFlag = (reusePromptAnswers) => (dispatch) => {
-    dispatch({
-      type: officeProperties.actions.toggleReusePromptAnswersFlag,
-      reusePromptAnswers,
-    });
+  dispatch({
+    type: officeProperties.actions.toggleReusePromptAnswersFlag,
+    reusePromptAnswers,
+  });
 };
 
 const toggleRenderSettingsFlag = () => (dispatch) => {

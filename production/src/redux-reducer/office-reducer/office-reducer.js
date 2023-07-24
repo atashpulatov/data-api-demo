@@ -32,7 +32,7 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.toggleIsClearDataFailedFlag:
       return toggleIsClearDataFailedFlag(action, state);
-      
+
     case officeProperties.actions.toggleSettingsPanelLoadedFlag:
       return toggleSettingsPanelLoadedFlag(action, state);
 
@@ -106,18 +106,18 @@ function toggleIsClearDataFailedFlag(action, state) {
 }
 
 function toggleSettingsPanelLoadedFlag(action, state) {
-    return {
-      ...state,
-      settingsPanelLoaded: !state.settingsPanelLoaded
-    };
+  return {
+    ...state,
+    settingsPanelLoaded: !state.settingsPanelLoaded
+  };
 }
 
 function toggleReusePromptAnswersFlag(action, state) {
-    return {
-      ...state,
-      reusePromptAnswers: action.reusePromptAnswers
-    };
-  }
+  return {
+    ...state,
+    reusePromptAnswers: action.reusePromptAnswers
+  };
+}
 
 function setRangeTakenPopup(action, state) {
   return {

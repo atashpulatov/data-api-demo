@@ -109,7 +109,7 @@ export const SettingsMenuNotConnected = ({
         {t('Clear Data')}
       </li>
       <li
-        className={'no-trigger-close settings not-linked-list'}
+        className="no-trigger-close settings not-linked-list"
         tabIndex="0"
         role="menuitem"
         onClick={() => toggleSettingsPanelLoadedFlag(settingsPanelLoaded)}
