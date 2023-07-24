@@ -4,7 +4,6 @@ const initialState = {
   shouldRenderSettings: false,
   isConfirm: false,
   isSettings: false,
-  settingsPanelLoaded: false,
   supportForms: true,
   popupData: null,
   popupOpen: false,

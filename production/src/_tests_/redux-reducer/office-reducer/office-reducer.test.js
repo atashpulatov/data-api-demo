@@ -129,7 +129,7 @@ describe('officeReducer', () => {
         // when
         const newState = officeReducer(oldState, action);
         // then
-        expect(newState.reusePromptAnswers).toBe(false);
+        expect(newState.reusePromptAnswers).toBe(true);
     });
 
     it('should set showHidden to false', () => {

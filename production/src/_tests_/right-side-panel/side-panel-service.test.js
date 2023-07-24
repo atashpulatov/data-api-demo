@@ -1,4 +1,5 @@
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
+import { userRestService } from '../../home/user-rest-service'
 import { popupActions } from '../../redux-reducer/popup-reducer/popup-actions';
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 import { reduxStore } from '../../store';
