@@ -32,7 +32,6 @@ const toggleIsClearDataFailedFlag = (isClearDataFailed) => (dispatch) => {
   });
 };
 
-/* eslint-disable */
 const toggleSettingsPanelLoadedFlag = (settingsPanelLoded) => (dispatch) => {    
     dispatch({
       type: officeProperties.actions.toggleSettingsPanelLoadedFlag,

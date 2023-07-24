@@ -11,7 +11,6 @@ import officeStoreHelper from '../office/store/office-store-helper';
 import { sidePanelService } from './side-panel-service';
 import './right-side-panel.scss';
 import { officeApiHelper } from '../office/api/office-api-helper';
-/* eslint-disable */
 import officeReducerHelper from '../office/store/office-reducer-helper';;
 import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelEventHelper } from './side-panel-event-helper';

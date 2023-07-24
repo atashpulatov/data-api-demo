@@ -1,5 +1,5 @@
 import request from 'superagent';
-/* eslint-disable */
+
 class UserRestService {
     init = (reduxStore) => {
         this.reduxStore = reduxStore;

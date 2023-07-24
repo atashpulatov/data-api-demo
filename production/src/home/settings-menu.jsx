@@ -20,7 +20,6 @@ import getDocumentationLocale from '../helpers/get-documentation-locale';
 const APP_VERSION = packageJson.build;
 
 const { Office } = window;
-/* eslint-disable */
 export const SettingsMenuNotConnected = ({
   userFullName,
   userID,

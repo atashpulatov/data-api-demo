@@ -32,7 +32,7 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.toggleIsClearDataFailedFlag:
       return toggleIsClearDataFailedFlag(action, state);
-/* eslint-disable */
+      
     case officeProperties.actions.toggleSettingsPanelLoadedFlag:
       return toggleSettingsPanelLoadedFlag(action, state);
 
