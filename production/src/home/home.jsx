@@ -68,7 +68,7 @@ export const HomeNotConnected = (props) => {
 
   return (
     <SessionExtendingWrapper id="overlay">
-      {/* {IS_DEVELOPMENT && authToken && <DevelopmentImportList />} */}
+      {IS_DEVELOPMENT && authToken && <DevelopmentImportList />}
       {authToken
         ? <RightSidePanel />
         : (
