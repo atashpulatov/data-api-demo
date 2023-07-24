@@ -45,6 +45,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   const handleSelection = async (itemsInfo: ItemType[]): Promise<any> => {
     if (!itemsInfo || itemsInfo.length === 0) {
       selectObject({});
+      return;
     }
 
     const {
