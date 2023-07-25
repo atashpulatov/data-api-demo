@@ -7,5 +7,5 @@ function set_workspace_settings_to_windows_test() {
   export VAGRANT_CONTEXT="${VAGRANT_DEFAULT_PROVIDER}/test"
 
   export TEST_TYPES=integration_win
-  export HATS=
+  export HATS=pipeline
 }

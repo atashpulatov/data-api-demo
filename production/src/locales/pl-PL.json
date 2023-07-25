@@ -175,7 +175,7 @@
    "Element cannot be loaded": "Nie można załadować elementu",
    "Clearing data": "Czyszczenie danych",
    "{{reportNames}} could not be cleared.": "Nie można wyczyścić raportów: {{reportNames}}.",
-   "Invalid attempt to spread non-iterable instance": "Nieprawidłowa próba rozprzestrzeniania instancji  nieiterowalnej",
+   "Invalid attempt to spread non-iterable instance": "Nieprawidłowa próba rozprzestrzeniania instancji nieiterowalnej",
    "This view supports the regular dossier manipulations. To import data, select a visualization.": "Ten widok obsługuje zwykłe manipulacje dossier. Aby zaimportować dane, wybierz wizualizację.",
    "Report": "Raport",
    "Log Out": "Wyloguj",

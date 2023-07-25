@@ -29,7 +29,7 @@ describe('PopupController', () => {
 
   it('should run popup with proper settings when called for navigation', () => {
     // given
-    const popupType = PopupTypeEnum.navigationTree;
+    const popupType = PopupTypeEnum.libraryWindow;
     const size = 80;
     const runPopupSpy = jest
       .spyOn(popupController, 'runPopup')

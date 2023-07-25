@@ -3,8 +3,6 @@ import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
-import { createCache } from '../redux-reducer/cache-reducer/cache-actions';
-import DB from '../cache/cache-db';
 import { importRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { httpStatusCodes, incomingErrorStrings } from '../error/constants';
@@ -127,7 +125,6 @@ class SessionHelper {
     try {
       userData = await userRestService.getUserInfo(authToken, envUrl);
       !userData.userInitials && sessionActions.saveUserInfo(userData);
-      if (DB.getIndexedDBSupport()) { createCache(userData.id)(this.reduxStore.dispatch, this.reduxStore.getState); }
     } catch (error) {
       errorService.handleError(error, { isLogout: !isDevelopment });
     }

@@ -29,12 +29,11 @@ when 'redhat', 'centos', 'fedora', 'amazon'
   end
 
 when 'mac_os_x'
-  include_recipe 'docker'
+  include_recipe 'jdk_mac'
   include_recipe 'maven'
-  include_recipe 'java_ecosystem'
   include_recipe 'workspace::prepare_e2e_dependencies'
 when 'windows'
-  include_recipe 'java_ecosystem'
+  include_recipe 'jdk_windows'
   include_recipe 'workspace::tomcat_windows'
   include_recipe 'workspace::prepare_e2e_dependencies'
 else

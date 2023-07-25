@@ -4,8 +4,8 @@
     background-color: #fff;
 }
 
-.popup-buttons .ant-btn,
-.popup-buttons .ant-btn .button-tooltip {
+.popup-buttons .mstr-rc-button,
+.popup-buttons .mstr-rc-button .button-tooltip {
     height: 30px;
     padding-left: 20px;
     padding-right: 20px;
@@ -16,12 +16,17 @@
     margin-left: 0;
 }
 
-.popup-buttons .ant-btn {
+.popup-buttons .mstr-rc-button {
     margin-left: 14px;
+    vertical-align: top;
 }
 
-.ant-btn:disabled {
+.mstr-rc-button:disabled {
     opacity: 0.5;
+}
+
+.mstr-rc-tooltip-source {
+    display: inline;
 }
 
 #data-preview:focus:not(:hover) {
@@ -38,7 +43,7 @@
     border: 1px solid #1C91DC;
  }
 
- .popup-buttons span .ant-btn {
+ .popup-buttons span .mstr-rc-button {
      margin-left: 0 !important;
  }
 
@@ -54,27 +59,38 @@
     max-width: 100%;
  }
 
-.dossier-iframe {
+.dossier-iframe,
+.library-iframe {
   position: relative;
   top: 0;
   left: 0;
-  min-height: calc(100vh - 145px);
   max-height: calc(100vh - 145px);
   min-width: 530px;
 }
 
+.dossier-iframe {
+    min-height: calc(100vh - 145px);
+}
+
+.library-iframe {
+    min-height: calc(100vh - 125px);
+}
+
  @media (max-width: 530px) {
-  .dossier-window .popup-buttons {
+  .dossier-window .popup-buttons,
+  .library-window .popup-buttons {
     margin-bottom: 15px;
   }
 
-  .dossier-window {
+  .dossier-window,
+  .library-window {
     height: 100vh;
     overflow-x: scroll;
     overflow-y: hidden;
   }
 
-  .dossier-iframe{
+  .dossier-iframe,
+  .library-iframe {
     min-height: calc(100vh - 160px);
     max-height: calc(100vh - 160px);
   }

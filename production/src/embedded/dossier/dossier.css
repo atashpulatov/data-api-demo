@@ -1,0 +1,30 @@
+.dossier-window-information-frame {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  line-height: 26px;
+}
+
+.dossier-window-information-icon {
+  max-height: 18px;
+  max-width: 18px;
+}
+
+.dossier-window-information-text {
+  font-size: 11px;
+  color: #9A9A9A;
+  margin-left: 4px;
+}
+
+.dossier-title-margin-top {
+  margin-top: 10px;
+}
+
+#popup-wrapper .dossier-window .empty  {
+  position: fixed;
+  left: 0;
+  top: 77px;
+  width: 100%;
+  height: calc(100vh - 145px);
+}

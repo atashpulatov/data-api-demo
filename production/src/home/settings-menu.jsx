@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Popover } from 'antd';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { OverflowTooltip } from '@mstr/rc';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import logo from './assets/mstr_logo.png';
-import overflowHelper from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
-import { clearCache as clearCacheImported } from '../redux-reducer/cache-reducer/cache-actions';
-import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import './settings-menu.scss';
@@ -30,7 +27,6 @@ export const SettingsMenuNotConnected = ({
   toggleIsSettingsFlag,
   settingsPanelLoaded,
   toggleSettingsPanelLoadedFlag,
-  clearCache,
   isSettings
 }) => {
   const [t, i18n] = useTranslation();
@@ -92,13 +88,7 @@ export const SettingsMenuNotConnected = ({
         {userInitials !== null
           ? <span className="no-trigger-close" id="initials" alt={t('User profile')}>{userInitials}</span>
           : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />}
-        {overflowHelper.isOverflown(userNameDisplay, 130)
-          ? (
-            <Popover placement="bottom" content={userNameDisplay} mouseEnterDelay={1}>
-              <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>
-            </Popover>
-          )
-          : <span id="userName" className="user-name no-trigger-close">{userNameDisplay}</span>}
+        <OverflowTooltip placement="bottom" theme="dark" content={userNameDisplay} mouseEnterDelay={1} containerClassName="user-name-tooltip" sourceClassName="user-name">{userNameDisplay}</OverflowTooltip>
       </li>
       <li
         className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}
@@ -161,8 +151,8 @@ export const SettingsMenuNotConnected = ({
         id="logOut"
         size="small"
         role="menuitem"
-        onClick={() => logout(() => clearCache(userID))}
-        onKeyPress={() => logout(() => clearCache(userID))}>
+        onClick={logout}
+        onKeyPress={logout}>
         {t('Log Out')}
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
@@ -183,16 +173,14 @@ const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
   toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
-  clearCache: clearCacheImported,
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
-async function logout(preLogout) {
+async function logout() {
   try {
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();
-    if (DB.getIndexedDBSupport()) { await preLogout(); }
   } catch (error) {
     errorService.handleError(error);
   } finally {
@@ -210,6 +198,5 @@ SettingsMenuNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
   toggleSettingsPanelLoadedFlag: PropTypes.func,
-  clearCache: PropTypes.func,
   isSettings: PropTypes.bool,
 };

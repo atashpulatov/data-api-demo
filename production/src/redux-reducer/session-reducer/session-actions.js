@@ -1,5 +1,4 @@
 import { sessionProperties } from './session-properties';
-import { filterActions } from '../filter-reducer/filter-actions';
 
 class SessionActions {
   init = (reduxStore) => {
@@ -14,7 +13,6 @@ class SessionActions {
   };
 
   logIn = (authToken) => {
-    this.reduxStore.dispatch(filterActions.clearFilter());
     this.reduxStore.dispatch({
       type: sessionProperties.actions.loggedIn,
       authToken,
@@ -36,7 +34,6 @@ class SessionActions {
   };
 
   logOut = () => {
-    this.reduxStore.dispatch(filterActions.clearFilter());
     this.reduxStore.dispatch({ type: sessionProperties.actions.logOut, });
   };
 

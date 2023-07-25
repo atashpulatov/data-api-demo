@@ -24,10 +24,7 @@
     "@mstr/mstr-icons": "^2.11.3",
     "@mstr/mstr-react-library": "^1.17.1",
     "@mstr/rc": "^2.22.3",
-    "antd": "^3.26.20",
     "core-js": "^3.18.0",
-    "dexie": "^4.0.1-alpha.6",
-    "dexie-observable": "^4.0.1-beta.13",
     "focus-visible": "^5.2.0",
     "i18next": "^21.9.0",
     "lodash.throttle": "^4.1.1",
@@ -41,6 +38,7 @@
     "redux": "^4.1.1",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
+    "resize-observer-polyfill": "^1.5.1",
     "superagent": "^5.3.1"
   },
   "devDependencies": {
@@ -99,7 +97,6 @@
       "!src/office/office-context.js",
       "!src/office/store/office-store-service.js",
       "!src/breadcrumbs/breadcrumbs.jsx",
-      "!src/cache/cache-db.js",
       "!src/dossier/embedded-dossier.jsx",
       "!src/prompts/prompts-window.jsx",
       "!src/office/office-display-service.js",
@@ -109,9 +106,19 @@
       "!src/office/import/*.*",
       "!src/popup/assets/*.*",
       "!src/redux-reducer/*.*"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^antd/es/(.*)$": "antd/lib/$1",
+      "^lodash-es$": "lodash"
+    }
   },
   "overrides": {
-    "antd": "^3.26.20"
+    "antd": "^3.26.20",
+    "json5": "2.2.2",
+    "node-fetch": "2.6.7",
+    "nth-check": "^2.1.1",
+    "semver": "7.5.2",
+    "ua-parser-js": "0.7.33",
+    "css-what": "6.1.0"
   }
 }

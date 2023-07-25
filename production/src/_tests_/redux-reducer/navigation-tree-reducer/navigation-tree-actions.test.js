@@ -1,4 +1,4 @@
-import { navigationTreeActions, SELECT_OBJECT, CANCEL_REQUEST_IMPORT, START_IMPORT, REQUEST_IMPORT, PROMPTS_ANSWERED, REQUEST_DOSSIER_OPEN, CLEAR_SELECTION, CANCEL_DOSSIER_OPEN, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_PROMPTS_ANSWERS, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, RESTORE_SELECTION } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
+import { navigationTreeActions, SELECT_OBJECT, CANCEL_REQUEST_IMPORT, START_IMPORT, REQUEST_IMPORT, PROMPTS_ANSWERED, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_PROMPTS_ANSWERS, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT } from '../../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
 describe('NavigationTree Actions', () => {
   it('should dispatch proper selectObject action', () => {
@@ -93,24 +93,5 @@ describe('NavigationTree Actions', () => {
     navigationTreeActions.updateDisplayAttrFormOnImport(data)(listener);
     // then
     expect(listener).toHaveBeenCalledWith({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
-  });
-
-  it('should dispatch proper clearSelection action', () => {
-    // given
-    const listener = jest.fn();
-    // when
-    navigationTreeActions.clearSelection()(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: CLEAR_SELECTION });
-  });
-
-  it('should dispatch proper restoreSelection action', () => {
-    // given
-    const listener = jest.fn();
-    const data = 'whatever';
-    // when
-    navigationTreeActions.restoreSelection(data)(listener);
-    // then
-    expect(listener).toHaveBeenCalledWith({ type: RESTORE_SELECTION, data });
   });
 });

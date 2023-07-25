@@ -19,6 +19,7 @@ jest.mock('@mstr/connector-components', () => ({
     SUCCESS: 'SUCCESS',
   }
 }));
+global.ResizeObserver = require('resize-observer-polyfill');
 
 configure({ adapter: new Adapter() });
 diContainer.initializeAll();
