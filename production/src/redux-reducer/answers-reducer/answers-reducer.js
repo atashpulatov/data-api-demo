@@ -33,7 +33,7 @@ export const answersReducer = (state = initialState, action) => {
 function importRequested(state, payload) {
   const newAnswers = [...state.answers];
   const isDossier = payload.object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
-  if (payload.object.isPrompted) {
+  if ((isDossier && payload.object.promptsAnswers) || payload.object.isPrompted) {
     const { answers } = isDossier ? payload.object.promptsAnswers : payload.object.promptsAnswers[0];
 
     answers.forEach((answer) => {
