@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { SidePanel, SettingsPanel, popupTypes } from '@mstr/connector-components';
+import { SidePanel, popupTypes } from '@mstr/connector-components';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
@@ -95,17 +95,17 @@ export const RightSidePanelNotConnected = ({
   }, [loadedObjects, notifications, operations]);
 
   /**
-   * Wraps a function to be called when user clicks an action icon.
-   *
-   * Function will be called when:
-   *
-   * - session is valid,
-   * - no operation is in progress.
-   *
-   * @param {Function} func Function to be wrapped
-   * @param {*} params Parameters to wrapped function
-   * @param {String} name Optional new name of an object
-   */
+     * Wraps a function to be called when user clicks an action icon.
+     *
+     * Function will be called when:
+     *
+     * - session is valid,
+     * - no operation is in progress.
+     *
+     * @param {Function} func Function to be wrapped
+     * @param {*} params Parameters to wrapped function
+     * @param {String} name Optional new name of an object
+     */
   const wrapper = async (func, params, name) => {
     try {
       const { onLine } = window.navigator;
@@ -136,38 +136,28 @@ export const RightSidePanelNotConnected = ({
   const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
 
   return (
-    <>
-      {settingsPanelLoaded
-        ? (
-          <SettingsPanel
-            reusePromptAnswers={reusePromptAnswers}
-            handleReusePromptAnswers={handleReusePromptAnswers}
-            handleToggleSettingsPanel={handleToggleSettingsPanel}
-            locale={i18n.language}
-          />
-        )
-        : (
-          <SidePanel
-            locale={i18n.language}
-            loadedObjects={loadedObjectsWrapped}
-            onAddData={addDataWrapper}
-            onTileClick={highlightObjectWrapper}
-            onDuplicateClick={duplicateWrapper}
-            onEditClick={editWrapper}
-            onRefreshClick={refreshWrapper}
-            onRemoveClick={removeWrapper}
-            onRename={renameWrapper}
-            popup={sidePanelPopup}
-            settingsMenu={isSettings && <SettingsMenu />}
-            onSettingsClick={handleSettingsClick}
-            confirmationWindow={isConfirm && <Confirmation />}
-            globalNotification={globalNotification}
-            onSelectAll={notificationService.dismissNotifications}
-            shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-            isPopupRendered={isPopupRendered}
-          />
-        )}
-    </>
+    <SidePanel
+      locale={i18n.language}
+      loadedObjects={loadedObjectsWrapped}
+      onAddData={addDataWrapper}
+      onTileClick={highlightObjectWrapper}
+      onDuplicateClick={duplicateWrapper}
+      onEditClick={editWrapper}
+      onRefreshClick={refreshWrapper}
+      onRemoveClick={removeWrapper}
+      onRename={renameWrapper}
+      popup={sidePanelPopup}
+      settingsMenu={isSettings && <SettingsMenu />}
+      onSettingsClick={handleSettingsClick}
+      confirmationWindow={isConfirm && <Confirmation />}
+      globalNotification={globalNotification}
+      onSelectAll={notificationService.dismissNotifications}
+      shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+      isPopupRendered={isPopupRendered}
+      reusePromptAnswers={reusePromptAnswers}
+      settingsPanelLoaded={settingsPanelLoaded}
+      handleReusePromptAnswers={handleReusePromptAnswers}
+      handleToggleSettingsPanel={handleToggleSettingsPanel} />
   );
 };
 
