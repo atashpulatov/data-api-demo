@@ -1,7 +1,7 @@
 import {
   SELECT_OBJECT, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_SELECTION, RESTORE_SELECTION
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT
 } from './navigation-tree-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -25,20 +25,6 @@ export const initialState = {
   chosenEnvElement: {},
 };
 
-function cleanSelection(state) {
-  const newState = { ...state };
-  newState.chosenObjectId = initialState.chosenObjectId;
-  newState.chosenProjectId = initialState.chosenProjectId;
-  newState.chosenSubtype = initialState.chosenSubtype;
-  newState.chosenObjectName = initialState.chosenObjectName;
-  newState.mstrObjectType = initialState.mstrObjectType;
-  newState.chosenEnvElement = initialState.chosenEnvElement;
-  newState.dossierOpenRequested = initialState.dossierOpenRequested;
-  newState.chosenLibraryElement = initialState.chosenLibraryElement;
-  newState.chosenLibraryDossier = initialState.chosenLibraryDossier;
-  return newState;
-}
-
 function makeSelection(newState, data) {
   newState.chosenObjectId = data.chosenObjectId || null;
   newState.chosenProjectId = data.chosenProjectId || null;
@@ -57,16 +43,16 @@ export const navigationTree = (state = initialState, action) => {
   const { type, data } = action;
   switch (type) {
     case SELECT_OBJECT: {
-      if (!data.chosenObjectId) {
-        return state;
-      }
+      const newData = {
+        chosenObjectId: null,
+        chosenProjectId: null,
+        chosenSubtype: null,
+        chosenObjectName: DEFAULT_PROJECT_NAME,
+        mstrObjectType: null,
+        ...data
+      };
       const newState = { ...state };
-      if (data.chosenLibraryDossier) {
-        newState.chosenLibraryElement = data;
-      } else {
-        newState.chosenEnvElement = data;
-      }
-      return makeSelection(newState, data);
+      return makeSelection(newState, newData);
     }
 
     case REQUEST_IMPORT: {
@@ -128,15 +114,6 @@ export const navigationTree = (state = initialState, action) => {
       const newState = { ...state };
       newState.displayAttrFormNames = data;
       return newState;
-    }
-
-    case CLEAR_SELECTION:
-      return cleanSelection(state);
-
-    case RESTORE_SELECTION: {
-      const newState = { ...state };
-      const { nextMyLibraryState } = data;
-      return makeSelection(newState, nextMyLibraryState ? newState.chosenLibraryElement : newState.chosenEnvElement);
     }
 
     default: {

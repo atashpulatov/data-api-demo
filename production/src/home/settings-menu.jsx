@@ -5,11 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { OverflowTooltip } from '@mstr/rc';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import logo from './assets/mstr_logo.png';
-import overflowHelper from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
-import { clearCache as clearCacheImported } from '../redux-reducer/cache-reducer/cache-actions';
-import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import './settings-menu.scss';
@@ -29,7 +26,6 @@ export const SettingsMenuNotConnected = ({
   objects,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
-  clearCache,
   isSettings
 }) => {
   const [t, i18n] = useTranslation();
@@ -146,8 +142,8 @@ export const SettingsMenuNotConnected = ({
         id="logOut"
         size="small"
         role="menuitem"
-        onClick={() => logout(() => clearCache(userID))}
-        onKeyPress={() => logout(() => clearCache(userID))}>
+        onClick={logout}
+        onKeyPress={logout}>
         {t('Log Out')}
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
@@ -166,17 +162,15 @@ function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
 
 const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
-  toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
-  clearCache: clearCacheImported,
+  toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
-async function logout(preLogout) {
+async function logout() {
   try {
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();
-    if (DB.getIndexedDBSupport()) { await preLogout(); }
   } catch (error) {
     errorService.handleError(error);
   } finally {
@@ -192,6 +186,5 @@ SettingsMenuNotConnected.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
-  clearCache: PropTypes.func,
   isSettings: PropTypes.bool,
 };
