@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { authenticationHelper } from './authentication-helper';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
-import { resetAnswers } from '../redux-reducer/answers-reducer/answers-actions';
+import { clearAnswers } from '../redux-reducer/answers-reducer/answers-actions';
 import { AuthenticateComponent } from './auth-component-types';
 import './auth-component.css';
 
@@ -58,7 +58,7 @@ export const AuthenticateNotConnected: FC<AuthenticateComponent> = (props) => {
 
   localStorage.removeItem('refreshData');
   resetState();
-  resetAnswers();
+  clearAnswers();
 
   const onLoginUser = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -142,6 +142,6 @@ function mapStateToProps(state: any) {
   return { session: state.sessionReducer };
 }
 
-const mapDispatchToProps = { resetState: popupActions.resetState, resetAnswers };
+const mapDispatchToProps = { resetState: popupActions.resetState, clearAnswers };
 
 export const Authenticate = connect(mapStateToProps, mapDispatchToProps)(AuthenticateNotConnected);

@@ -1,6 +1,6 @@
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { IMPORT_OPERATION } from '../../operation/operation-type-names';
-import { RESTORE_ALL_ANSWERS, UPDATE_ANSWERS, RESET_ANSWERS } from './answers-actions';
+import { RESTORE_ALL_ANSWERS, UPDATE_ANSWERS, CLEAR_ANSWERS } from './answers-actions';
 
 const initialState = { answers: [] };
 export const answersReducer = (state = initialState, action) => {
@@ -14,8 +14,8 @@ export const answersReducer = (state = initialState, action) => {
     case UPDATE_ANSWERS:
       return updateAnswers(state, action.payload);
 
-    case RESET_ANSWERS:
-      return { ...initialState, };
+    case CLEAR_ANSWERS:
+      return { ...initialState };
 
     default:
       return state;

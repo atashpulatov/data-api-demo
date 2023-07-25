@@ -12,10 +12,12 @@ import { clearCache as clearCacheImported } from '../redux-reducer/cache-reducer
 import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { clearAnswers as clearAnswersImported } from '../redux-reducer/answers-reducer/answers-actions';
 import './settings-menu.scss';
 import { notificationService } from '../notification-v2/notification-service';
 import packageJson from '../../package.json';
 import getDocumentationLocale from '../helpers/get-documentation-locale';
+import officeStoreObject from '../office/store/office-store-object';
 
 const APP_VERSION = packageJson.build;
 
@@ -30,6 +32,7 @@ export const SettingsMenuNotConnected = ({
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
   clearCache,
+  clearSavedPromptAnswers,
   isSettings
 }) => {
   const [t, i18n] = useTranslation();
@@ -62,6 +65,13 @@ export const SettingsMenuNotConnected = ({
   const showConfirmationPopup = () => {
     toggleIsConfirmFlag(true);
     toggleIsSettingsFlag(false);
+  };
+
+  const preLogout = async () => {
+    clearCache(userID);
+    // clear stored prompt answers from Redux store, then clear cached prompt values in Excel Store
+    clearSavedPromptAnswers();
+    await officeStoreObject.saveAnswersInExcelStore();
   };
 
   const settingsMenuRef = React.useRef(null);
@@ -146,8 +156,8 @@ export const SettingsMenuNotConnected = ({
         id="logOut"
         size="small"
         role="menuitem"
-        onClick={() => logout(() => clearCache(userID))}
-        onKeyPress={() => logout(() => clearCache(userID))}>
+        onClick={() => logout(preLogout)}
+        onKeyPress={() => logout(preLogout)}>
         {t('Log Out')}
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
@@ -168,15 +178,17 @@ const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
   clearCache: clearCacheImported,
+  clearSavedPromptAnswers: clearAnswersImported
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
 async function logout(preLogout) {
   try {
+    // TODO: verify impact of moving preLogout up
+    if (DB.getIndexedDBSupport()) { await preLogout(); }
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();
-    if (DB.getIndexedDBSupport()) { await preLogout(); }
   } catch (error) {
     errorService.handleError(error);
   } finally {
@@ -193,5 +205,6 @@ SettingsMenuNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
   clearCache: PropTypes.func,
+  clearSavedPromptAnswers: PropTypes.func,
   isSettings: PropTypes.bool,
 };
