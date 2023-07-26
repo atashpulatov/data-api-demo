@@ -1,4 +1,4 @@
-import scriptInjectionHelper from '../../dossier/script-injection-helper';
+import scriptInjectionHelper from '../../../embedded/utils/script-injection-helper';
 
 describe('ScriptInjectionHelper', () => {
   afterEach(() => {

@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Empty } from '@mstr/connector-components/';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { popupHelper } from '../popup/popup-helper';
-import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import scriptInjectionHelper from './script-injection-helper';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { popupHelper } from '../../popup/popup-helper';
+import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import scriptInjectionHelper from '../utils/script-injection-helper';
+import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './dossier.css';
 
 const { microstrategy, Office } = window;
@@ -63,15 +64,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       }
       // DE160793 - Throw session expired error when dossier redirects to login (iframe 'load' event)
       handleIframeLoadEvent();
-      if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
-        // DE158588 - Not able to open dossier in embedding api on excel desktop in windows
-        const isOfficeOnline = Office.context ? Office.context.platform === Office.PlatformType.OfficeOnline : false;
-        const isIE = /Trident\/|MSIE /.test(window.navigator.userAgent);
-        if (!isOfficeOnline && isIE) {
-          scriptInjectionHelper.applyFile(contentDocument, 'javascript/mshtmllib.js');
-        }
-        scriptInjectionHelper.applyFile(contentDocument, 'javascript/embeddingsessionlib.js');
-      }
+      handleLoginExcelDesktopInWindows(contentDocument, Office);
     });
   };
 

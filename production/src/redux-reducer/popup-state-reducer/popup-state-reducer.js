@@ -29,7 +29,7 @@ export const popupStateReducer = (state = initialState, action) => {
     case ON_POPUP_BACK: {
       return {
         ...state,
-        popupType: PopupTypeEnum.navigationTree,
+        popupType: PopupTypeEnum.libraryWindow,
       };
     }
     case CLEAR_POPUP_STATE: {

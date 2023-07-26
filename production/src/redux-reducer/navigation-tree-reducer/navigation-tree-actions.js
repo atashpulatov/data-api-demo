@@ -8,8 +8,6 @@ export const CANCEL_DOSSIER_OPEN = 'NAV_TREE_CANCEL_DOSSIER_OPEN';
 export const SWITCH_IMPORT_SUBTOTALS_ON_IMPORT = 'NAV_TREE_SWITCH_IMPORT_SUBTOTALS_ON_IMPORT';
 export const CLEAR_PROMPTS_ANSWERS = 'NAV_TREE_CLEAR_PROMPTS_ANSWERS';
 export const UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT';
-export const CLEAR_SELECTION = 'NAV_TREE_CLEAR_SELECTION';
-export const RESTORE_SELECTION = 'NAV_TREE_RESTORE_SELECTION';
 export const SET_PROMPT_OBJECTS = 'SET_PROMPT_OBJECTS';
 
 function selectObject(data) {
@@ -59,14 +57,6 @@ function updateDisplayAttrFormOnImport(data) {
   return (dispatch) => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
 }
 
-function clearSelection() {
-  return (dispatch) => dispatch({ type: CLEAR_SELECTION });
-}
-
-function restoreSelection(data) {
-  return (dispatch) => dispatch({ type: RESTORE_SELECTION, data });
-}
-
 export const navigationTreeActions = {
   selectObject,
   requestImport,
@@ -78,7 +68,5 @@ export const navigationTreeActions = {
   switchImportSubtotalsOnImport,
   clearPromptAnswers,
   updateDisplayAttrFormOnImport,
-  clearSelection,
-  restoreSelection,
   setPromptObjects,
 };

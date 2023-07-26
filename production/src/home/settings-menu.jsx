@@ -5,11 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { OverflowTooltip } from '@mstr/rc';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import logo from './assets/mstr_logo.png';
-import overflowHelper from '../helpers/helpers';
 import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
-import { clearCache as clearCacheImported } from '../redux-reducer/cache-reducer/cache-actions';
-import DB from '../cache/cache-db';
 import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import { clearAnswers as clearAnswersImported } from '../redux-reducer/answers-reducer/answers-actions';
@@ -31,7 +28,6 @@ export const SettingsMenuNotConnected = ({
   objects,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
-  clearCache,
   clearSavedPromptAnswers,
   isSettings
 }) => {
@@ -156,8 +152,8 @@ export const SettingsMenuNotConnected = ({
         id="logOut"
         size="small"
         role="menuitem"
-        onClick={() => logout(preLogout)}
-        onKeyPress={() => logout(preLogout)}>
+        onClick={logout}
+        onKeyPress={logout}>
         {t('Log Out')}
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
@@ -177,12 +173,11 @@ function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
 const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
-  clearCache: clearCacheImported,
   clearSavedPromptAnswers: clearAnswersImported
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
-async function logout(preLogout) {
+async function logout() {
   try {
     // TODO: verify impact of moving preLogout up
     if (DB.getIndexedDBSupport()) { await preLogout(); }
@@ -204,7 +199,6 @@ SettingsMenuNotConnected.propTypes = {
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
-  clearCache: PropTypes.func,
   clearSavedPromptAnswers: PropTypes.func,
   isSettings: PropTypes.bool,
 };

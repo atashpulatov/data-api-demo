@@ -5,18 +5,18 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
-import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
-import { selectorProperties } from '../attribute-selector/selector-properties';
+import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
+import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
-import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import './dossier.css';
-import { DEFAULT_PROJECT_NAME } from '../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
-import { popupHelper } from '../popup/popup-helper';
-import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
-import { authenticationHelper } from '../authentication/authentication-helper';
-import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
-import { errorCodes } from '../error/constants';
+import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
+import { popupHelper } from '../../popup/popup-helper';
+import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
+import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
+import { authenticationHelper } from '../../authentication/authentication-helper';
+import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
+import { errorCodes } from '../../error/constants';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation();

@@ -3,8 +3,8 @@ import 'whatwg-fetch';
 
 const Office = window.Office;
 const OFFICE_PRIVILEGE_ID = '273';
-const DssXmlApplicationMicrosoftOffice = '47';
-const QUERY = encodeURI(`source=addin-mstr-office&applicationType=${DssXmlApplicationMicrosoftOffice}`);
+const DssXmlApplicationMicrosoftExcel = '74';
+const QUERY = encodeURI(`source=addin-mstr-excel&applicationType=${DssXmlApplicationMicrosoftExcel}`);
 const libraryUrl = getLibraryUrl();
 let popup = null;
 

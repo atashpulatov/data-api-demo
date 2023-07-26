@@ -4,7 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import scriptInjectionHelper from '../dossier/script-injection-helper';
+import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';

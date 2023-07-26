@@ -5,9 +5,9 @@ import thunk from 'redux-thunk';
 import { PopupViewSelector, PopupViewSelectorNotConnected } from '../../popup/popup-view-selector';
 import { PromptsWindow } from '../../prompts/prompts-window';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
-import { NavigationTree } from '../../navigation/navigation-tree';
+import { LibraryWindow } from '../../embedded/library/library-window';
 import { AttributeSelectorWindow } from '../../attribute-selector/attribute-selector-window';
-import { DossierWindow } from '../../dossier/dossier-window';
+import { DossierWindow } from '../../embedded/dossier/dossier-window';
 import { ObtainInstanceHelper } from '../../popup/obtain-instance-helper';
 import { popupViewSelectorHelper } from '../../popup/popup-view-selector-helper';
 import { popupHelper } from '../../popup/popup-helper';
@@ -45,7 +45,7 @@ describe('PopupViewSelectorNotConnected', () => {
   popupType                             | expectedComponent
   ${PopupTypeEnum.dataPreparation}      | ${AttributeSelectorWindow}
   ${PopupTypeEnum.editFilters}          | ${AttributeSelectorWindow}
-  ${PopupTypeEnum.navigationTree}       | ${NavigationTree}
+  ${PopupTypeEnum.libraryWindow}       | ${LibraryWindow}
   ${PopupTypeEnum.promptsWindow}        | ${PromptsWindow}
   ${PopupTypeEnum.repromptingWindow}    | ${PromptsWindow}
   ${PopupTypeEnum.dossierWindow}        | ${DossierWindow}
