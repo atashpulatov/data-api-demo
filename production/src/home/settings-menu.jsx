@@ -64,7 +64,6 @@ export const SettingsMenuNotConnected = ({
   };
 
   const preLogout = async () => {
-    clearCache(userID);
     // clear stored prompt answers from Redux store, then clear cached prompt values in Excel Store
     clearSavedPromptAnswers();
     await officeStoreObject.saveAnswersInExcelStore();
