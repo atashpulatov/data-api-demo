@@ -84,9 +84,12 @@ export const PromptsWindowNotConnected = (props) => {
   // whether there are previous prompt answers to handle
   const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
   const isImportedObjectPrompted = promptObjects && promptObjects.length;
+  const isEditedObjectPrompted = editedObject.promptsAnswers && editedObject.promptsAnswers.length;
 
+  const isImportingWithPreviousPromptAnswers = importRequested && reusePromptAnswers
+    && areTherePreviousPromptAnswers && isImportedObjectPrompted;
   // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
-  if (importRequested && reusePromptAnswers && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
+  if (isImportingWithPreviousPromptAnswers) {
     givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
     previousPromptsAnswers.forEach((previousAnswer) => {
       const previousPromptIndex = promptObjects.findIndex(
@@ -97,6 +100,21 @@ export const PromptsWindowNotConnected = (props) => {
         givenPromptsAnswers[0].answers.push(previousAnswer);
       }
     });
+  }
+
+  const isEditingWithPreviousPromptAnswers = isReprompt && reusePromptAnswers
+  && areTherePreviousPromptAnswers && isEditedObjectPrompted;
+  // Update givenPromptsAnswers collection with previous prompt answers if editing a report/dossier
+  if (isEditingWithPreviousPromptAnswers) {
+    if (givenPromptsAnswers && givenPromptsAnswers.length
+        && givenPromptsAnswers[0].answers && givenPromptsAnswers[0].answers.length) {
+      givenPromptsAnswers[0].answers = givenPromptsAnswers[0].answers.map(answer => {
+        const matchingPreviousPromptAnswer = previousPromptsAnswers.find(
+          previousAnswer => previousAnswer.key === answer.key
+        );
+        return matchingPreviousPromptAnswer || answer;
+      });
+    }
   }
 
   useEffect(() => {
