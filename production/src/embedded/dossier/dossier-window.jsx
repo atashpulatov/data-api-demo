@@ -29,7 +29,7 @@ export const DossierWindowNotConnected = (props) => {
 
   const {
     chosenObjectName, handleBack, editedObject, chosenObjectId,
-    chosenProjectId,
+    chosenProjectId, previousPromptsAnswers, importRequested, promptObjects,
   } = props;
   const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
@@ -252,6 +252,9 @@ DossierWindowNotConnected.propTypes = {
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
   }),
+  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+  importRequested: PropTypes.bool,
+  promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 DossierWindowNotConnected.defaultProps = {
@@ -272,17 +275,20 @@ DossierWindowNotConnected.defaultProps = {
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer, officeReducer
+    navigationTree, popupReducer, sessionReducer, officeReducer, answersReducer
   } = state;
   const {
     chosenObjectName,
     chosenObjectId,
     chosenProjectId,
     promptsAnswers,
+    promptObjects,
+    importRequested,
   } = navigationTree;
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
+  const { answers } = answersReducer;
   const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = {
@@ -303,6 +309,9 @@ function mapStateToProps(state) {
       ? editedObjectParse.projectId
       : chosenProjectId,
     editedObject: editedObjectParse,
+    previousPromptsAnswers: answers,
+    promptObjects,
+    importRequested
   };
 }
 

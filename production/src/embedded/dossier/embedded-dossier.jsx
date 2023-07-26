@@ -12,7 +12,9 @@ import './dossier.css';
 
 const { microstrategy, Office } = window;
 
-const { createDossierInstance, answerDossierPrompts } = mstrObjectRestService;
+const {
+  createDossierInstance, answerDossierPrompts, rePromptDossier, updateDossierPrompts, applyDossierPrompts
+} = mstrObjectRestService;
 
 const VIZ_SELECTION_RETRY_DELAY = 200; // ms
 const VIZ_SELECTION_RETRY_LIMIT = 10;
@@ -106,7 +108,13 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   loadEmbeddedDossier = async (container) => {
-    const { mstrData, handleEmbeddedDossierLoad } = this.props;
+    const {
+      mstrData,
+      handleEmbeddedDossierLoad,
+      previousPromptsAnswers,
+      dossierOpenRequested,
+      promptObjects,
+    } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
       instanceId, selectedViz, visualizationInfo
@@ -118,16 +126,47 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       } else {
         const body = { disableManipulationsAutoSaving: true, persistViewState: true };
         instance.mid = await createDossierInstance(projectId, dossierId, body);
-        if (promptsAnswers != null) {
+        let givenPromptsAnswers = promptsAnswers;
+        const reusePromptAnswers = true;
+
+        // Declared variables to determine whether importing a report/dossier is taking place and
+        // whether there are previous prompt answers to handle
+        const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
+        const isImportedObjectPrompted = promptObjects && promptObjects.length > 0;
+        const handlePreviousAnswersAtImport = dossierOpenRequested && reusePromptAnswers
+          && areTherePreviousPromptAnswers
+          && isImportedObjectPrompted;
+
+        // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
+        if (handlePreviousAnswersAtImport) {
+          givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
+          promptObjects.forEach((promptObject) => {
+            const previousPromptIndex = previousPromptsAnswers.findIndex(
+              (answerPrmpt) => answerPrmpt && answerPrmpt.key === promptObject.key
+            );
+            if (previousPromptIndex >= 0) {
+              givenPromptsAnswers[0].answers.push(previousPromptsAnswers[previousPromptIndex]);
+            }
+          });
+        }
+        if (givenPromptsAnswers != null) {
           let count = 0;
-          while (count < promptsAnswers.length) {
+          while (count < givenPromptsAnswers.length) {
             await answerDossierPrompts({
               objectId: dossierId,
               projectId,
               instanceId: instance.mid,
-              promptsAnswers: promptsAnswers[count]
+              promptsAnswers: givenPromptsAnswers[0]
             });
             count++;
+          }
+          // Open Prompts' dialog.
+          if (handlePreviousAnswersAtImport) {
+            const resp = await rePromptDossier(dossierId, instance.mid, projectId);
+
+            if (resp.mid) {
+              instance.mid = resp.mid;
+            }
           }
         }
       }
@@ -334,6 +373,13 @@ EmbeddedDossierNotConnected.propTypes = {
   handleInstanceIdChange: PropTypes.func,
   handleIframeLoadEvent: PropTypes.func,
   handleEmbeddedDossierLoad: PropTypes.func,
+  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+  dossierOpenRequested: PropTypes.bool,
+  promptObjects: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    answers: PropTypes.arrayOf(PropTypes.shape({})),
+    type: PropTypes.string,
+  })),
 };
 
 EmbeddedDossierNotConnected.defaultProps = {
@@ -354,12 +400,20 @@ const mapStateToProps = (state) => {
     navigationTree,
     popupReducer,
     sessionReducer: { attrFormPrivilege, envUrl, authToken },
-    officeReducer
+    officeReducer,
+    answersReducer
   } = state;
-  const { chosenObjectName, chosenObjectId, chosenProjectId } = navigationTree;
+  const {
+    chosenObjectName,
+    chosenObjectId,
+    chosenProjectId,
+    promptObjects,
+    dossierOpenRequested,
+  } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
   const { supportForms } = officeReducer;
+  const { answers } = answersReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
@@ -374,7 +428,12 @@ const mapStateToProps = (state) => {
     selectedViz: isEdit ? editedObject.selectedViz : '',
     instanceId: editedObject.instanceId,
   };
-  return { mstrData };
+  return {
+    mstrData,
+    previousPromptsAnswers: answers,
+    promptObjects,
+    dossierOpenRequested
+  };
 };
 
 export const EmbeddedDossier = connect(mapStateToProps)(EmbeddedDossierNotConnected);

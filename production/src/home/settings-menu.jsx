@@ -9,10 +9,12 @@ import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { clearAnswers as clearAnswersImported } from '../redux-reducer/answers-reducer/answers-actions';
 import './settings-menu.scss';
 import { notificationService } from '../notification-v2/notification-service';
 import packageJson from '../../package.json';
 import getDocumentationLocale from '../helpers/get-documentation-locale';
+import officeStoreObject from '../office/store/office-store-object';
 
 const APP_VERSION = packageJson.build;
 
@@ -27,6 +29,8 @@ export const SettingsMenuNotConnected = ({
   toggleIsSettingsFlag,
   settingsPanelLoaded,
   toggleSettingsPanelLoadedFlag,
+  clearCache,
+  clearSavedPromptAnswers,
   isSettings
 }) => {
   const [t, i18n] = useTranslation();
@@ -59,6 +63,13 @@ export const SettingsMenuNotConnected = ({
   const showConfirmationPopup = () => {
     toggleIsConfirmFlag(true);
     toggleIsSettingsFlag(false);
+  };
+
+  const preLogout = async () => {
+    clearCache(userID);
+    // clear stored prompt answers from Redux store, then clear cached prompt values in Excel Store
+    clearSavedPromptAnswers();
+    await officeStoreObject.saveAnswersInExcelStore();
   };
 
   const settingsMenuRef = React.useRef(null);
@@ -173,11 +184,15 @@ const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
   toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
+  clearCache: clearCacheImported,
+  clearSavedPromptAnswers: clearAnswersImported
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
 async function logout() {
   try {
+    // TODO: verify impact of moving preLogout up
+    if (DB.getIndexedDBSupport()) { await preLogout(); }
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();
@@ -198,5 +213,7 @@ SettingsMenuNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
   toggleSettingsPanelLoadedFlag: PropTypes.func,
+  clearCache: PropTypes.func,
+  clearSavedPromptAnswers: PropTypes.func,
   isSettings: PropTypes.bool,
 };

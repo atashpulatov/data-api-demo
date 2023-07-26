@@ -110,7 +110,10 @@ class MstrObjectRestService {
     displayAttrFormNames
   }) {
     const totalRows = instanceDefinition.rows;
-    const { instanceId, mstrTable: { isCrosstab, visualizationType } } = instanceDefinition;
+    const {
+      instanceId,
+      mstrTable: { isCrosstab, visualizationType },
+    } = instanceDefinition;
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
@@ -131,35 +134,54 @@ class MstrObjectRestService {
     });
 
     const offsetSubtotal = (e) => {
-      if (e) { (e.rowIndex += offset); }
+      if (e) {
+        e.rowIndex += offset;
+      }
     };
     const offsetCrosstabSubtotal = (e) => {
-      if (e && e.axis === 'rows') { (e.colIndex += offset); }
+      if (e && e.axis === 'rows') {
+        e.colIndex += offset;
+      }
     };
 
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
       let header;
       let crosstabSubtotal;
 
-      const { body } = await fetchObjectContent(fullPath, authToken, projectId, offset, limit, visualizationType);
+      const { body } = await fetchObjectContent(
+        fullPath,
+        authToken,
+        projectId,
+        offset,
+        limit,
+        visualizationType
+      );
       if (!body.data || !body.data.paging) {
         throw new Error(errorMessages.NO_DATA_RETURNED);
       }
 
       const { current } = body.data.paging;
       if (MstrAttributeMetricHelper.isMetricInRows(body) && shouldExtractMetricsInRows) {
-        metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
+        metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(
+          body,
+          metricsInRows
+        );
         shouldExtractMetricsInRows = !!metricsInRows.length;
       }
 
       fetchedRows = current + offset;
       body.attrforms = attrforms;
-      const { row, rowTotals } = officeConverterServiceV2.getRows(body, isCrosstab);
+      const { row, rowTotals } = officeConverterServiceV2.getRows(
+        body,
+        isCrosstab
+      );
 
       if (isCrosstab) {
         header = officeConverterServiceV2.getHeaders(body, isCrosstab);
         crosstabSubtotal = header.subtotalAddress;
-        if (offset !== 0) { crosstabSubtotal.map(offsetCrosstabSubtotal); }
+        if (offset !== 0) {
+          crosstabSubtotal.map(offsetCrosstabSubtotal);
+        }
       } else if (offset !== 0) {
         rowTotals.map(offsetSubtotal);
       }
@@ -175,7 +197,10 @@ class MstrObjectRestService {
   }
 
   answerDossierPrompts = ({
-    objectId, projectId, instanceId, promptsAnswers
+    objectId,
+    projectId,
+    instanceId,
+    promptsAnswers,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -190,7 +215,10 @@ class MstrObjectRestService {
   };
 
   answerPrompts = ({
-    objectId, projectId, instanceId, promptsAnswers
+    objectId,
+    projectId,
+    instanceId,
+    promptsAnswers
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
@@ -239,14 +267,19 @@ class MstrObjectRestService {
     dossierData,
     body = {},
     limit = 1,
-    displayAttrFormNames
+    displayAttrFormNames,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const { supportForms } = storeState.officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
     const fullPath = getFullPath({
-      dossierData, envUrl, limit, mstrObjectType, objectId, version: API_VERSION
+      dossierData,
+      envUrl,
+      limit,
+      mstrObjectType,
+      objectId,
+      version: API_VERSION
     });
 
     return request
@@ -393,7 +426,11 @@ class MstrObjectRestService {
       .then((res) => parseInstanceDefinition(res, attrforms));
   };
 
-  getObjectDefinition = (objectId, projectId, mstrObjectType = reportObjectType) => {
+  getObjectDefinition = (
+    objectId,
+    projectId,
+    mstrObjectType = reportObjectType
+  ) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
     const api = API_VERSION > 1 ? 'v2/' : '';
@@ -461,7 +498,14 @@ class MstrObjectRestService {
       .set('x-mstr-authtoken', authToken)
       .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
-      .then((res) => res.body && res.body.length);
+      .then((res) => ({
+        // Create JSON object with promptObjects and isPrompted properties, and return it.
+        // isPrompted is true if report or dossier has prompts to be answered.
+        // If report or dossier has prompts, promptObjects contains an array of
+        // prompt objects defined in report/dossier.
+        promptObjects: res.body,
+        isPrompted: res.body && res.body.length,
+      }));
   };
 
   /**
@@ -491,10 +535,52 @@ class MstrObjectRestService {
 
     return request
       .post(fullPath)
-      .set('x-mstr-authtoken', authToken)
-      .set('x-mstr-projectid', projectId)
+      .set('X-MSTR-AuthToken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
       .withCredentials()
       .then((res) => res.body);
+  };
+
+  updateDossierPrompts = ({
+    objectId,
+    projectId,
+    instanceId,
+    promptsAnswers,
+  }) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers`;
+    return request
+      .put(fullPath)
+      .set('X-MSTR-AuthToken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
+      .send(promptsAnswers)
+      .withCredentials()
+      .then((res) => {
+        console.log(res);
+        return res.status;
+      });
+  };
+
+  applyDossierPrompts = ({
+    objectId,
+    projectId,
+    instanceId,
+    promptsAnswers,
+  }) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts`;
+    return request
+      .post(fullPath)
+      .set('X-MSTR-AuthToken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
+      .send(promptsAnswers)
+      .withCredentials()
+      .then((res) => {
+        console.log(res);
+        return res.status;
+      });
   };
 }
 

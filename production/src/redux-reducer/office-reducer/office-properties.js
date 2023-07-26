@@ -2,6 +2,7 @@ export const officeProperties = {
   reportArray: 'mstr-loaded-reports-array',
   officeAddress: 'address',
   storedObjects: 'storedObjects',
+  storedAnswers: 'storedAnswers',
   loadedReportProperties: 'reportProperties',
   isSecured: 'isSecured',
   isClearDataFailed: 'isClearDataFailed',

@@ -54,6 +54,7 @@ export const HomeNotConnected = (props) => {
   useEffect(() => {
     try {
       officeStoreRestoreObject.restoreObjectsFromExcelStore();
+      officeStoreRestoreObject.restoreAnswersFromExcelStore();
       homeHelper.saveLoginValues();
       homeHelper.getTokenFromStorage();
       sessionActions.disableLoading();

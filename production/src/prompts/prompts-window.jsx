@@ -30,7 +30,8 @@ const postAnswerDossierPrompts = answerDossierPrompts;
 
 export const PromptsWindowNotConnected = (props) => {
   const {
-    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack
+    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
+    previousPromptsAnswers, importRequested, promptObjects,
   } = props;
   const { chosenObjectId } = mstrData;
   const { isReprompt } = popupState;
@@ -75,8 +76,28 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [prolongSession]);
 
-  const givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
+  const reusePromptAnswers = true; // TODO: update with proper flag value
+  let givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
   const loading = true;
+
+  // Declared variables to determine whether importing a report/dossier is taking place and
+  // whether there are previous prompt answers to handle
+  const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
+  const isImportedObjectPrompted = promptObjects && promptObjects.length;
+
+  // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
+  if (importRequested && reusePromptAnswers && areTherePreviousPromptAnswers && isImportedObjectPrompted) {
+    givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
+    previousPromptsAnswers.forEach((previousAnswer) => {
+      const previousPromptIndex = promptObjects.findIndex(
+        (promptObject) => promptObject && promptObject.key === previousAnswer.key
+      );
+
+      if (previousPromptIndex >= 0) {
+        givenPromptsAnswers[0].answers.push(previousAnswer);
+      }
+    });
+  }
 
   useEffect(() => {
     window.addEventListener('message', messageReceived);
@@ -192,7 +213,8 @@ export const PromptsWindowNotConnected = (props) => {
         },
       };
 
-      if (isReprompt) {
+      // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
+      if (isReprompt || (importRequested && areTherePreviousPromptAnswers && isImportedObjectPrompted)) {
         documentProps.instance = instance;
       }
 
@@ -231,7 +253,8 @@ export const PromptsWindowNotConnected = (props) => {
       popupHelper.handlePopupErrors(error);
     }
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, givenPromptsAnswers,
-    isReprompt, loading, mstrData.chosenProjectId, preparePromptedReport, promptsAnswered, session]);
+    isReprompt, loading, mstrData.chosenProjectId, preparePromptedReport, promptsAnswered, session,
+    areTherePreviousPromptAnswers, importRequested, isImportedObjectPrompted]);
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
@@ -320,18 +343,23 @@ PromptsWindowNotConnected.propTypes = {
     projectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
   }),
+  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+  importRequested: PropTypes.bool,
+  promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export const mapStateToProps = (state) => {
   const {
-    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer
+    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer, answersReducer
   } = state;
   const popupState = popupReducer.editedObject;
-  const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
+  const {
+    promptsAnswers, importSubtotal, importRequested, promptObjects, ...mstrData
+  } = navigationTree;
+  const { answers } = answersReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
-
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     ...state.promptsPopup,
@@ -340,6 +368,9 @@ export const mapStateToProps = (state) => {
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
+    previousPromptsAnswers: answers,
+    importRequested,
+    promptObjects,
   };
 };
 

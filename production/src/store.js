@@ -12,6 +12,7 @@ import { popupReducer } from './redux-reducer/popup-reducer/popup-reducer';
 import { popupStateReducer } from './redux-reducer/popup-state-reducer/popup-state-reducer';
 import { operationReducer } from './redux-reducer/operation-reducer/operation-reducer';
 import { objectReducer } from './redux-reducer/object-reducer/object-reducer';
+import { answersReducer } from './redux-reducer/answers-reducer/answers-reducer';
 import packageJson from '../package.json';
 
 const rootReducer = combineReducers({
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   popupStateReducer,
   operationReducer,
   objectReducer,
+  answersReducer,
 });
 
 const persistConfig = {
