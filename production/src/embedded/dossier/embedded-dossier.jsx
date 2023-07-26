@@ -111,6 +111,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const {
       mstrData,
       handleEmbeddedDossierLoad,
+      reusePromptAnswers,
       previousPromptsAnswers,
       dossierOpenRequested,
       promptObjects,
@@ -127,7 +128,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         const body = { disableManipulationsAutoSaving: true, persistViewState: true };
         instance.mid = await createDossierInstance(projectId, dossierId, body);
         let givenPromptsAnswers = promptsAnswers;
-        const reusePromptAnswers = true;
 
         // Declared variables to determine whether importing a report/dossier is taking place and
         // whether there are previous prompt answers to handle
@@ -373,6 +373,7 @@ EmbeddedDossierNotConnected.propTypes = {
   handleInstanceIdChange: PropTypes.func,
   handleIframeLoadEvent: PropTypes.func,
   handleEmbeddedDossierLoad: PropTypes.func,
+  reusePromptAnswers: PropTypes.bool,
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   dossierOpenRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({
@@ -412,7 +413,7 @@ const mapStateToProps = (state) => {
   } = navigationTree;
   const popupState = popupReducer.editedObject;
   const { promptsAnswers } = state.navigationTree;
-  const { supportForms } = officeReducer;
+  const { supportForms, reusePromptAnswers } = officeReducer;
   const { answers } = answersReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
@@ -430,6 +431,7 @@ const mapStateToProps = (state) => {
   };
   return {
     mstrData,
+    reusePromptAnswers,
     previousPromptsAnswers: answers,
     promptObjects,
     dossierOpenRequested

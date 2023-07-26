@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['officeReducer', 'notificationReducer', 'navigationTree', 'operationReducer', 'objectReducer'],
+  blacklist: ['notificationReducer', 'navigationTree', 'operationReducer', 'objectReducer'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 let middleWare;
@@ -42,6 +42,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 export const reduxStore = createStore(persistedReducer, middleWare);
 export const reduxPersistor = persistStore(reduxStore);
+
+window.store = reduxStore;
 
 if (localStorage) {
   const version = localStorage.getItem('version');

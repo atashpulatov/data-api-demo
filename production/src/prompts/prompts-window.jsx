@@ -31,7 +31,7 @@ const postAnswerDossierPrompts = answerDossierPrompts;
 export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
-    previousPromptsAnswers, importRequested, promptObjects,
+    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects,
   } = props;
   const { chosenObjectId } = mstrData;
   const { isReprompt } = popupState;
@@ -76,7 +76,6 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [prolongSession]);
 
-  const reusePromptAnswers = true; // TODO: update with proper flag value
   let givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
   const loading = true;
 
@@ -361,6 +360,7 @@ PromptsWindowNotConnected.propTypes = {
     projectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
   }),
+  reusePromptAnswers: PropTypes.bool,
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   importRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
@@ -375,7 +375,7 @@ export const mapStateToProps = (state) => {
     promptsAnswers, importSubtotal, importRequested, promptObjects, ...mstrData
   } = navigationTree;
   const { answers } = answersReducer;
-  const { supportForms } = officeReducer;
+  const { supportForms, reusePromptAnswers } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
@@ -386,6 +386,7 @@ export const mapStateToProps = (state) => {
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
+    reusePromptAnswers,
     previousPromptsAnswers: answers,
     importRequested,
     promptObjects,
