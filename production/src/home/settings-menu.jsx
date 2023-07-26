@@ -19,7 +19,6 @@ import officeStoreObject from '../office/store/office-store-object';
 const APP_VERSION = packageJson.build;
 
 const { Office } = window;
-
 export const SettingsMenuNotConnected = ({
   userFullName,
   userID,
@@ -28,6 +27,8 @@ export const SettingsMenuNotConnected = ({
   objects,
   toggleIsConfirmFlag,
   toggleIsSettingsFlag,
+  settingsPanelLoaded,
+  toggleSettingsPanelLoadedFlag,
   clearSavedPromptAnswers,
   isSettings
 }) => {
@@ -106,6 +107,14 @@ export const SettingsMenuNotConnected = ({
         onKeyUp={isSecuredActive ? (e) => (e.key === 'Enter' && showConfirmationPopup()) : null}>
         {t('Clear Data')}
       </li>
+      <li
+        className="no-trigger-close settings not-linked-list"
+        tabIndex="0"
+        role="menuitem"
+        onClick={() => toggleSettingsPanelLoadedFlag(settingsPanelLoaded)}
+        onKeyUp={(e) => (e.key === 'Enter' && toggleSettingsPanelLoadedFlag(settingsPanelLoaded))}>
+        {t('Settings')}
+      </li>
       <div className="separate-line" />
       <li className="privacy-policy">
         <a
@@ -162,16 +171,17 @@ export const SettingsMenuNotConnected = ({
 
 function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
   const { userFullName, userInitials, userID } = sessionReducer;
-  const { isSecured, isSettings } = officeReducer;
+  const { isSecured, isSettings, settingsPanelLoaded } = officeReducer;
   const { objects } = objectReducer;
   return {
-    userFullName, userInitials, isSecured, userID, isSettings, objects
+    userFullName, userInitials, isSecured, userID, isSettings, settingsPanelLoaded, objects
   };
 }
 
 const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
+  toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
   clearSavedPromptAnswers: clearAnswersImported
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
@@ -179,7 +189,6 @@ export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(Setting
 async function logout() {
   try {
     // TODO: verify impact of moving preLogout up
-    if (DB.getIndexedDBSupport()) { await preLogout(); }
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();
@@ -195,9 +204,11 @@ SettingsMenuNotConnected.propTypes = {
   userFullName: PropTypes.string,
   userInitials: PropTypes.string,
   isSecured: PropTypes.bool,
+  settingsPanelLoaded: PropTypes.bool,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
+  toggleSettingsPanelLoadedFlag: PropTypes.func,
   clearSavedPromptAnswers: PropTypes.func,
   isSettings: PropTypes.bool,
 };

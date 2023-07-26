@@ -129,7 +129,7 @@ export const navigationTree = (state = initialState, action) => {
       newState.displayAttrFormNames = data;
       return newState;
     }
-    
+
     default: {
       return state;
     }

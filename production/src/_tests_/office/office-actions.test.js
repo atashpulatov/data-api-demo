@@ -12,7 +12,10 @@ describe('Office Actions', () => {
     officeActions.toggleSecuredFlag(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleSecuredFlag, isSecured: true });
+    expect(listener).toHaveBeenCalledWith({
+      type: officeProperties.actions.toggleSecuredFlag,
+      isSecured: true,
+    });
 
     expect(officeStoreHelper.setFileSecuredFlag).toBeCalledTimes(1);
     expect(officeStoreHelper.setFileSecuredFlag).toBeCalledWith(true);
@@ -26,7 +29,10 @@ describe('Office Actions', () => {
     officeActions.toggleIsSettingsFlag(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsSettingsFlag, isSettings: true });
+    expect(listener).toHaveBeenCalledWith({
+      type: officeProperties.actions.toggleIsSettingsFlag,
+      isSettings: true,
+    });
   });
 
   it('should dispatch proper toggleIsConfirmFlag action', () => {
@@ -37,7 +43,38 @@ describe('Office Actions', () => {
     officeActions.toggleIsConfirmFlag(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleIsConfirmFlag, isConfirm: true });
+    expect(listener).toHaveBeenCalledWith({
+      type: officeProperties.actions.toggleIsConfirmFlag,
+      isConfirm: true,
+    });
+  });
+
+  it('should dispatch proper toggleSettingsPanelLoadedFlag action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    officeActions.toggleSettingsPanelLoadedFlag(true)(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({
+      type: officeProperties.actions.toggleSettingsPanelLoadedFlag,
+      settingsPanelLoded: true,
+    });
+  });
+
+  it('should dispatch proper toggleReusePromptAnswersFlag action', () => {
+    // given
+    const listener = jest.fn();
+
+    // when
+    officeActions.toggleReusePromptAnswersFlag(false)(listener);
+
+    // then
+    expect(listener).toHaveBeenCalledWith({
+      type: officeProperties.actions.toggleReusePromptAnswersFlag,
+      reusePromptAnswers: false,
+    });
   });
 
   it('should dispatch proper toggleRenderSettingsFlag action', () => {
@@ -48,7 +85,9 @@ describe('Office Actions', () => {
     officeActions.toggleRenderSettingsFlag()(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith({ type: officeProperties.actions.toggleRenderSettingsFlag });
+    expect(listener).toHaveBeenCalledWith({
+      type: officeProperties.actions.toggleRenderSettingsFlag,
+    });
   });
 
   it('should dispatch proper toggleIsClearDataFailedFlag action', () => {
@@ -60,12 +99,10 @@ describe('Office Actions', () => {
     officeActions.toggleIsClearDataFailedFlag(true)(listener);
 
     // then
-    expect(listener).toHaveBeenCalledWith(
-      {
-        type: officeProperties.actions.toggleIsClearDataFailedFlag,
-        isClearDataFailed: true
-      }
-    );
+    expect(listener).toHaveBeenCalledWith({
+      type: officeProperties.actions.toggleIsClearDataFailedFlag,
+      isClearDataFailed: true,
+    });
 
     expect(officeStoreHelper.setIsClearDataFailed).toBeCalledTimes(1);
     expect(officeStoreHelper.setIsClearDataFailed).toBeCalledWith(true);

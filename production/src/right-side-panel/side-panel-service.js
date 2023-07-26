@@ -7,9 +7,13 @@ import { popupController } from '../popup/popup-controller';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
+import { userRestService } from '../home/user-rest-service';
+
+const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -122,6 +126,42 @@ class SidePanelService {
     } else {
       this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
     }
+  };
+
+  /**
+   * Handles the editing of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   */
+  initReusePromptAnswers = async () => {
+    const { value } = await userRestService.getUserPreference(EXCEL_REUSE_PROMPT_ANSWERS);
+    const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
+
+    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
+  };
+
+  /**
+   * Handles the editing of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   */
+  toggleReusePromptAnswers = async (reusePromptAnswers) => {
+    const { value } = await userRestService.setUserPreference(EXCEL_REUSE_PROMPT_ANSWERS, !reusePromptAnswers);
+    const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
+
+    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
+  };
+
+  /**
+   * Handles the editing of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   */
+  toggleSettingsPanel = (settingsPanelLoded) => {
+    this.reduxStore.dispatch(officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded));
   };
 }
 
