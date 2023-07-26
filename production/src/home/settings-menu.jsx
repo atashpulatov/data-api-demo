@@ -29,7 +29,6 @@ export const SettingsMenuNotConnected = ({
   toggleIsSettingsFlag,
   settingsPanelLoaded,
   toggleSettingsPanelLoadedFlag,
-  clearCache,
   clearSavedPromptAnswers,
   isSettings
 }) => {
@@ -66,7 +65,6 @@ export const SettingsMenuNotConnected = ({
   };
 
   const preLogout = async () => {
-    clearCache(userID);
     // clear stored prompt answers from Redux store, then clear cached prompt values in Excel Store
     clearSavedPromptAnswers();
     await officeStoreObject.saveAnswersInExcelStore();
@@ -184,7 +182,6 @@ const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
   toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
-  clearCache: clearCacheImported,
   clearSavedPromptAnswers: clearAnswersImported
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
@@ -213,7 +210,6 @@ SettingsMenuNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
   toggleSettingsPanelLoadedFlag: PropTypes.func,
-  clearCache: PropTypes.func,
   clearSavedPromptAnswers: PropTypes.func,
   isSettings: PropTypes.bool,
 };

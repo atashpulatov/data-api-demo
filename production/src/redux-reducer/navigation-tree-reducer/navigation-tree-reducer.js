@@ -1,7 +1,7 @@
 import {
   SELECT_OBJECT, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, CLEAR_SELECTION, RESTORE_SELECTION, SET_PROMPT_OBJECTS
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, SET_PROMPT_OBJECTS
 } from './navigation-tree-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -128,20 +128,6 @@ export const navigationTree = (state = initialState, action) => {
       const newState = { ...state };
       newState.displayAttrFormNames = data;
       return newState;
-    }
-
-    case CLEAR_SELECTION:
-      return cleanSelection(state);
-
-    case RESTORE_SELECTION: {
-      const newState = { ...state };
-      const { nextMyLibraryState } = data;
-      return makeSelection(
-        newState,
-        nextMyLibraryState
-          ? newState.chosenLibraryElement
-          : newState.chosenEnvElement
-      );
     }
 
     default: {
