@@ -1,6 +1,5 @@
 import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
-/* eslint-disable */
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
@@ -129,22 +128,18 @@ class SidePanelService {
     }
   };
 
-    /**
+  /**
    * Handles the editing of object.
    * GEts object data from reducer and opens popup depending of the type of object.
    *
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
-    initReusePromptAnswers = async () => {
-        try {
-            const { value } = await userRestService.getUserPreference(EXCEL_REUSE_PROMPT_ANSWERS);
-            const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
-            
-            this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
-        } catch (error) {
-            throw error;
-        }
-    };
+  initReusePromptAnswers = async () => {
+    const { value } = await userRestService.getUserPreference(EXCEL_REUSE_PROMPT_ANSWERS);
+    const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
+
+    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
+  };
 
   /**
    * Handles the editing of object.
@@ -152,26 +147,22 @@ class SidePanelService {
    *
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
-    toggleReusePromptAnswers = async (reusePromptAnswers) => {
-        try {
-            const { value } = await userRestService.setUserPreference(EXCEL_REUSE_PROMPT_ANSWERS, !reusePromptAnswers);
-            const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
+  toggleReusePromptAnswers = async (reusePromptAnswers) => {
+    const { value } = await userRestService.setUserPreference(EXCEL_REUSE_PROMPT_ANSWERS, !reusePromptAnswers);
+    const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
 
-            this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
-        } catch (error) {
-            throw error;
-        }
-    };
+    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
+  };
 
-      /**
+  /**
    * Handles the editing of object.
    * GEts object data from reducer and opens popup depending of the type of object.
    *
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
-      toggleSettingsPanel = (settingsPanelLoded) => {
-        this.reduxStore.dispatch(officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded));
-    };
+  toggleSettingsPanel = (settingsPanelLoded) => {
+    this.reduxStore.dispatch(officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded));
+  };
 }
 
 export const sidePanelService = new SidePanelService();

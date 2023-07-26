@@ -189,7 +189,6 @@ export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(Setting
 async function logout() {
   try {
     // TODO: verify impact of moving preLogout up
-    if (DB.getIndexedDBSupport()) { await preLogout(); }
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();
