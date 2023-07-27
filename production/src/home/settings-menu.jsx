@@ -65,6 +65,7 @@ export const SettingsMenuNotConnected = ({
   };
 
   const preLogout = async () => {
+    toggleIsSettingsFlag(false); // close settings window
     // clear stored prompt answers from Redux store, then clear cached prompt values in Excel Store
     clearSavedPromptAnswers();
     await officeStoreObject.saveAnswersInExcelStore();
@@ -150,6 +151,8 @@ export const SettingsMenuNotConnected = ({
         <a
           tabIndex="0"
           href={prepareEmail()}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {t('Contact Us')}
         </a>
@@ -160,8 +163,8 @@ export const SettingsMenuNotConnected = ({
         id="logOut"
         size="small"
         role="menuitem"
-        onClick={logout}
-        onKeyPress={logout}>
+        onClick={() => logout(preLogout)}
+        onKeyPress={() => logout(preLogout)}>
         {t('Log Out')}
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
@@ -186,9 +189,9 @@ const mapDispatchToProps = {
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
-async function logout() {
+async function logout(preLogout) {
   try {
-    // TODO: verify impact of moving preLogout up
+    await preLogout();
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();
