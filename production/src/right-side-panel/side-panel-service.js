@@ -12,6 +12,7 @@ import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { userRestService } from '../home/user-rest-service';
+import { clearAnswers } from '../redux-reducer/answers-reducer/answers-actions';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 
@@ -113,18 +114,20 @@ class SidePanelService {
    * Handles the editing of object.
    * GEts object data from reducer and opens popup depending of the type of object.
    *
-   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
    */
-  edit = async (objectWorkingId) => {
-    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    const { bindId, mstrObjectType } = objectData;
-    const excelContext = await officeApiHelper.getExcelContext();
-    await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+  edit = async (objectWorkingIds) => {
+    for (const objectWorkingId of objectWorkingIds) {
+      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const { bindId, mstrObjectType } = objectData;
+      const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
-    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-      this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
-    } else {
-      this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+      } else {
+        this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+      }
     }
   };
 
@@ -151,6 +154,10 @@ class SidePanelService {
     const { value } = await userRestService.setUserPreference(EXCEL_REUSE_PROMPT_ANSWERS, !reusePromptAnswers);
     const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
 
+    if (!reusePromptAnswersFlag) {
+      // if toggling flag off, clear all saved answers
+      this.reduxStore.dispatch(clearAnswers());
+    }
     this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
   };
 
