@@ -125,6 +125,19 @@ class OfficeConverterServiceV2 {
     mstrCompoundGridFlatten.flattenColumnSets(response);
     return mstrGridHandler;
   };
+
+  /**
+   * replaces all cell data values containing null (which is MSTR standard for no data)
+   * to empty string (which is Excel standard for no data) as "null" means "do not change current value"
+   *
+   * @param {body} response
+   * @return {body}
+   */
+  convertCellValuesToExcelStandard = (body) => {
+    const adjustedRawValues = body.data.metricValues.raw.map((valuesArray) => valuesArray.map((value) => (value === null ? '' : value)));
+    body.data.metricValues.raw = adjustedRawValues;
+    return body;
+  };
 }
 
 export default new OfficeConverterServiceV2();
