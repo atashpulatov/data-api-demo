@@ -98,7 +98,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    * Imports the object selected by the user
    */
   const handleOk = async () => {
-    let isPromptedResponse = false;
+    let isPromptedResponse = {};
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if (
