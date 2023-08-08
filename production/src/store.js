@@ -1,9 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from 'redux';
 import {
-  persistStore, persistReducer,
-  FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER
-} from 'redux-persist';
+  createStore, combineReducers, applyMiddleware, compose
+} from 'redux';
+import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import { sessionReducer } from './redux-reducer/session-reducer/session-reducer';
@@ -35,14 +33,14 @@ const persistConfig = {
   blacklist: ['notificationReducer', 'navigationTree', 'operationReducer', 'objectReducer'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-export const reduxStore = configureStore({
-  reducer: persistedReducer,
-  devTools: process.env.NODE_ENV === 'development',
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(
-    { serializableCheck: { ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER] } }
-  )
-});
+let middleWare;
+if (process.env.NODE_ENV === 'development') {
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  middleWare = composeEnhancers(applyMiddleware(thunk));
+} else {
+  middleWare = applyMiddleware(thunk);
+}
+export const reduxStore = createStore(persistedReducer, middleWare);
 export const reduxPersistor = persistStore(reduxStore);
 
 if (localStorage) {
