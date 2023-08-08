@@ -5,9 +5,9 @@ cookbook_from_git 'chef_commons', '2.0.0'
 cookbook_from_git 'extras', '0.1.70'
 cookbook_from_git 'maven', '1.0.0'
 
-cookbook_from_git 'jdk_linux','11.0.19'
-cookbook_from_git 'jdk_windows','11.0.19'
-cookbook_from_git 'jdk_mac','11.0.19'
+cookbook_from_git 'jdk_linux','11.0.20'
+cookbook_from_git 'jdk_windows','11.0.20'
+cookbook_from_git 'jdk_mac','11.0.20'
 cookbook 'java', '~> 10.0.0'
 
 cookbook_from_git 'nodejs','18.16.1'

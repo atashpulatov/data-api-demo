@@ -148,17 +148,14 @@ class MstrObjectRestService {
       let header;
       let crosstabSubtotal;
 
-      const { body } = await fetchObjectContent(
-        fullPath,
-        authToken,
-        projectId,
-        offset,
-        limit,
-        visualizationType
+      const { body: fetchedBody } = await fetchObjectContent(
+        fullPath, authToken, projectId, offset, limit, visualizationType
       );
-      if (!body.data || !body.data.paging) {
+      if (!fetchedBody.data || !fetchedBody.data.paging) {
         throw new Error(errorMessages.NO_DATA_RETURNED);
       }
+
+      const body = officeConverterServiceV2.convertCellValuesToExcelStandard(fetchedBody);
 
       const { current } = body.data.paging;
       if (MstrAttributeMetricHelper.isMetricInRows(body) && shouldExtractMetricsInRows) {

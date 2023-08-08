@@ -169,4 +169,19 @@ describe('Office converter service v2', () => {
     // then
     expect(gridHandler).toEqual(expectedGridHandler);
   });
+  it('should convert null cell values to empty strings', () => {
+    // given
+    const mockedBody = { data: { metricValues: { raw: [
+      [1, null],
+      [0, -2, null, 'some string']
+    ] } } };
+    const expectedConvertedBody = { data: { metricValues: { raw: [
+      [1, ''],
+      [0, -2, '', 'some string']
+    ] } } };
+    // when
+    const body = officeConverter.convertCellValuesToExcelStandard(mockedBody);
+    // then
+    expect(body).toEqual(expectedConvertedBody);
+  });
 });
