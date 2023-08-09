@@ -57,7 +57,7 @@ export const navigationTree = (state = initialState, action) => {
 
     case SET_PROMPT_OBJECTS: {
       const newState = { ...state };
-      if (data.promptObjects) {
+      if (!!data && data.promptObjects) {
         newState.promptObjects = data.promptObjects;
       }
       return newState;
@@ -67,7 +67,7 @@ export const navigationTree = (state = initialState, action) => {
       const newState = { ...state };
       newState.importRequested = true;
       newState.isPrompted = data.isPrompted;
-      if (data.promptObjects) {
+      if (!!data && data.promptObjects) {
         newState.promptObjects = data.promptObjects;
       }
       return newState;
@@ -106,7 +106,7 @@ export const navigationTree = (state = initialState, action) => {
       const newState = { ...state };
       newState.dossierOpenRequested = true;
       newState.isPrompted = false;
-      if (data.promptObjects) {
+      if (!!data && data.promptObjects) {
         newState.promptObjects = data.promptObjects;
       }
       return newState;
