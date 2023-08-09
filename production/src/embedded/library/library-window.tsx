@@ -114,7 +114,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       if (
         chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
       ) {
-        requestDossierOpen();
+        requestDossierOpen(isPromptedResponse);
       } else {
         requestImport(isPromptedResponse);
       }
