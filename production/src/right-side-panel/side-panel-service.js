@@ -117,7 +117,10 @@ class SidePanelService {
    * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
    */
   edit = async (objectWorkingIds) => {
-    for (const objectWorkingId of objectWorkingIds) {
+    const aWorkingIds = Array.isArray(objectWorkingIds)
+      ? objectWorkingIds
+      : [objectWorkingIds];
+    for (const objectWorkingId of aWorkingIds) {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const { bindId, mstrObjectType } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
