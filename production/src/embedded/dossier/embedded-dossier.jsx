@@ -139,13 +139,25 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
         // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
         if (handlePreviousAnswersAtImport) {
+          // Re-prompt the Dossier's instance to apply previous answers if necessary.
+          const repromptResponse = await rePromptDossier(dossierId, instance.mid, projectId);
+
+          if (repromptResponse.mid) {
+            instance.mid = repromptResponse.mid;
+          }
+
           givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
           promptObjects.forEach((promptObject) => {
             const previousPromptIndex = previousPromptsAnswers.findIndex(
               (answerPrmpt) => answerPrmpt && answerPrmpt.key === promptObject.key
             );
             if (previousPromptIndex >= 0) {
+              if (!promptObject.required && previousPromptsAnswers[previousPromptIndex].values.length === 0) {
+                previousPromptsAnswers[previousPromptIndex].useDefault = true;
+              }
               givenPromptsAnswers[0].answers.push(previousPromptsAnswers[previousPromptIndex]);
+            } else if (promptObject.required) {
+              givenPromptsAnswers[0].answers.push({ key: promptObject.key, useDefault: true, values: [] });
             }
           });
         }
@@ -160,7 +172,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
             });
             count++;
           }
-          // Open Prompts' dialog.
+          // Open Prompts' dialog after applying previous answers.
           if (handlePreviousAnswersAtImport) {
             const resp = await rePromptDossier(dossierId, instance.mid, projectId);
 
@@ -374,7 +386,11 @@ EmbeddedDossierNotConnected.propTypes = {
   handleIframeLoadEvent: PropTypes.func,
   handleEmbeddedDossierLoad: PropTypes.func,
   reusePromptAnswers: PropTypes.bool,
-  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string,
+    useDefault: PropTypes.bool,
+    values: PropTypes.arrayOf(PropTypes.shape({}))
+  })),
   dossierOpenRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string,

@@ -551,7 +551,7 @@ class MstrObjectRestService {
       .put(fullPath)
       .set('X-MSTR-AuthToken', authToken)
       .set('X-MSTR-ProjectID', projectId)
-      .send(promptsAnswers)
+      .send({ prompts: promptsAnswers.answers })
       .withCredentials()
       .then((res) => {
         console.log(res);
