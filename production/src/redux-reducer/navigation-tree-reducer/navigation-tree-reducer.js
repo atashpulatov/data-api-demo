@@ -1,7 +1,7 @@
 import {
   SELECT_OBJECT, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, UPDATE_SELECTED_MENU
 } from './navigation-tree-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -23,6 +23,7 @@ export const initialState = {
   chosenLibraryDossier: null,
   chosenLibraryElement: {},
   chosenEnvElement: {},
+  selectedMenu: {},
 };
 
 function makeSelection(newState, data) {
@@ -113,6 +114,13 @@ export const navigationTree = (state = initialState, action) => {
     case UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT: {
       const newState = { ...state };
       newState.displayAttrFormNames = data;
+      return newState;
+    }
+
+    case UPDATE_SELECTED_MENU: {
+      const newState = { ...state };
+      const { key, groupId, } = data;
+      newState.selectedMenu = {key, groupId, };
       return newState;
     }
 

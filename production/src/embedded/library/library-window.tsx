@@ -14,6 +14,7 @@ import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { ItemType, LibraryWindowProps } from './library-window-types';
+import { TARGET_PAGE_KEYS, TARGET_GROUP_KEYS } from './embedded-library-constants';
 
 const { isPrompted, getCubeInfo, getObjectInfo } = mstrObjectRestService;
 
@@ -31,6 +32,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
     handlePrepare,
     setObjectData,
     mstrObjectType,
+    updateSelectedMenu,
   } = props;
 
   const disableActiveActions = !isPublished;
@@ -92,6 +94,23 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       chosenSubtype: subtype,
       mstrObjectType: chosenMstrObjectType,
     });
+  };
+
+  const handleMenuSelection = (selectedMenu: { pageKey: string, groupType:string }) => {
+    let targetPage = null;
+    if (selectedMenu.pageKey in TARGET_PAGE_KEYS) {
+        targetPage = {
+            pageKey: TARGET_PAGE_KEYS[selectedMenu.pageKey],
+            groupId: null,
+      };
+    } else {
+        targetPage = {
+            pageKey: TARGET_GROUP_KEYS[selectedMenu.groupType],
+            groupId: selectedMenu.pageKey,
+          };
+    }
+    
+    updateSelectedMenu(targetPage);
   };
 
   /**
@@ -191,6 +210,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       </div>
       <EmbeddedLibrary
         handleSelection={handleSelection}
+        handleMenuSelection={handleMenuSelection}
         handleIframeLoadEvent={validateSession}
       />
       <PopupButtons
@@ -220,6 +240,7 @@ LibraryWindowNotConnected.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.shape({}),
   ]),
+  updateSelectedMenu: PropTypes.func,
 };
 
 function mapStateToProps(state: {
@@ -254,6 +275,7 @@ const mapActionsToProps = {
   requestImport: navigationTreeActions.requestImport,
   handlePrepare: popupStateActions.onPrepareData,
   setObjectData: popupStateActions.setObjectData,
+  updateSelectedMenu: navigationTreeActions.updateSelectedMenu,
 };
 
 export const LibraryWindow = connect(
