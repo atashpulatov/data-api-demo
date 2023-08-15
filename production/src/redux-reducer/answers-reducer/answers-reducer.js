@@ -1,6 +1,6 @@
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
-import { IMPORT_OPERATION } from '../../operation/operation-type-names';
-import { RESTORE_ALL_ANSWERS, UPDATE_ANSWERS, CLEAR_ANSWERS } from './answers-actions';
+import { IMPORT_OPERATION, EDIT_OPERATION } from '../../operation/operation-type-names';
+import { RESTORE_ALL_ANSWERS, CLEAR_ANSWERS } from './answers-actions';
 
 const initialState = { answers: [] };
 export const answersReducer = (state = initialState, action) => {
@@ -11,7 +11,7 @@ export const answersReducer = (state = initialState, action) => {
     case RESTORE_ALL_ANSWERS:
       return restoreAllAnswers(action.payload);
 
-    case UPDATE_ANSWERS:
+    case EDIT_OPERATION:
       return updateAnswers(state, action.payload);
 
     case CLEAR_ANSWERS:
@@ -31,25 +31,14 @@ export const answersReducer = (state = initialState, action) => {
  * @returns
  */
 function importRequested(state, payload) {
-  const newAnswers = [...state.answers];
+  let newAnswers = [...state.answers];
   const isDossier = payload.object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
   if ((isDossier && payload.object.promptsAnswers) || payload.object.isPrompted) {
     const { answers } = isDossier ? payload.object.promptsAnswers : payload.object.promptsAnswers[0];
-
-    answers.forEach((answer) => {
-      const answerIdx = getAnswerIndex(state.answers, answer.key);
-
-      if (answerIdx === -1) {
-        // add unique answer to existing list
-        newAnswers.push(answer);
-      } else {
-        // update entry for pre-existing answer in list
-        newAnswers.splice(answerIdx, 1, answer);
-      }
-    });
+    newAnswers = getMergedAnswers(state.answers, answers);
   }
 
-  return { answers: [...newAnswers] };
+  return { answers: newAnswers };
 }
 
 /**
@@ -70,20 +59,10 @@ function restoreAllAnswers(payload) {
  * @returns
  */
 function updateAnswers(state, updatedAnswerProps) {
-  const answerToUpdateIndex = getAnswerIndex(
-    state.answers,
-    updatedAnswerProps.key
-  );
-  if (answerToUpdateIndex === -1) {
-    // TODO error handling
-    throw new Error();
-  }
-  const newAnswers = [...state.answers];
-  const updatedAnswer = {
-    ...state.answers[answerToUpdateIndex],
-    ...updatedAnswerProps,
-  };
-  newAnswers.splice(answerToUpdateIndex, 1, updatedAnswer);
+  // TODO: add Dossier type checking?
+  const { answers } = updatedAnswerProps.operation.objectEditedData.promptsAnswers[0];
+  const newAnswers = getMergedAnswers(state.answers, answers);
+
   return { answers: newAnswers };
 }
 
@@ -99,4 +78,29 @@ function getAnswerIndex(answers, keyId) {
     (answer) => answer && answer.key === keyId
   );
   return answerToUpdateIndex;
+}
+
+/**
+ * Helper function used to merge originally saved answers with new answers retrieved
+ * by either importing, editing, or re-prompting a Dossier/Report.
+ * @param {Array} originalAnswers Originally saved answers (from Redux store)
+ * @param {Array} newAnswers Newly retrieved answers (from import, edit, re-prompt, etc.)
+ * @returns Array containing merged objects from originalAnswers and newAnswers using
+ * 'key' prop as key, with duplicates from newAnswers replacing its originalAnswers copy.
+ */
+function getMergedAnswers(originalAnswers, newAnswers) {
+  const updatedAnswers = [...originalAnswers];
+  newAnswers.forEach((answer) => {
+    const answerIdx = getAnswerIndex(originalAnswers, answer.key);
+
+    if (answerIdx === -1) {
+      // add unique answer to existing list
+      updatedAnswers.push(answer);
+    } else {
+      // update entry for pre-existing answer in list
+      updatedAnswers.splice(answerIdx, 1, answer);
+    }
+  });
+
+  return updatedAnswers;
 }
