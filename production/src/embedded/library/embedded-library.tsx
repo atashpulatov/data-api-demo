@@ -99,9 +99,9 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
     const { key, groupId } = selectedMenu;
 
     const currentPageProp = key in TARGET_PAGE_KEYS
-    ? { key: TARGET_PAGE_KEYS[key] }
+    ? { key: TARGET_PAGE_KEYS[key as keyof typeof TARGET_PAGE_KEYS] }
     : {
-        key: TARGET_GROUP_KEYS[key],
+        key: TARGET_GROUP_KEYS[key as keyof typeof TARGET_GROUP_KEYS],
         targetGroup: {
             id: groupId,
         },
