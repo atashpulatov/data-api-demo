@@ -117,6 +117,7 @@ class SidePanelService {
    * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
    */
   edit = async (objectWorkingIds) => {
+    // Validate multiple selection; if only one item is selected then create 1-element array
     const aWorkingIds = Array.isArray(objectWorkingIds)
       ? objectWorkingIds
       : [objectWorkingIds];
