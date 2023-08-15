@@ -9,7 +9,6 @@ export const TARGET_PAGE_KEYS = {
 };
 
 export const TARGET_GROUP_KEYS = {
-    DEFAULT_GROUPS: 'defaultGroups',
-    MY_GROUPS: 'myGroups',
-  };
-
+  DEFAULT_GROUPS: 'defaultGroups',
+  MY_GROUPS: 'myGroups',
+};
