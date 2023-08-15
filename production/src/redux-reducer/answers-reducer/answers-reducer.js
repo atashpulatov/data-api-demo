@@ -3,7 +3,7 @@ import { IMPORT_OPERATION, EDIT_OPERATION } from '../../operation/operation-type
 import { RESTORE_ALL_ANSWERS, CLEAR_ANSWERS } from './answers-actions';
 
 const initialState = { answers: [] };
-export const answersReducer = (state = initialState, action) => {
+export const answersReducer = (state = initialState, action = {}) => {
   switch (action.type) {
     case IMPORT_OPERATION:
       return importRequested(state, action.payload);
@@ -30,11 +30,14 @@ export const answersReducer = (state = initialState, action) => {
  * @param {*} payload
  * @returns
  */
-function importRequested(state, payload) {
+function importRequested(state, payload = {}) {
+  const { object: payloadObject = {} } = payload;
   let newAnswers = [...state.answers];
-  const isDossier = payload.object.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
-  if ((isDossier && payload.object.promptsAnswers) || payload.object.isPrompted) {
-    const { answers } = isDossier ? payload.object.promptsAnswers : payload.object.promptsAnswers[0];
+  const isDossier = (payloadObject.mstrObjectType && payloadObject.mstrObjectType.name)
+    === mstrObjectEnum.mstrObjectType.visualization.name;
+  // for dossiers, check promptsAnswers directly. for reports, check isPrompted flag directly
+  if ((isDossier && payloadObject.promptsAnswers) || payloadObject.isPrompted) {
+    const { answers } = isDossier ? payloadObject.promptsAnswers : payloadObject.promptsAnswers[0];
     newAnswers = getMergedAnswers(state.answers, answers);
   }
 
@@ -48,20 +51,25 @@ function importRequested(state, payload) {
  * @param {*} payload
  * @returns
  */
-function restoreAllAnswers(payload) {
+function restoreAllAnswers(payload = []) {
   return { answers: [...payload] };
 }
 
 /**
  * Function to be called when an answer or more is updated. It will update the answers in the App state.
  * @param {*} state
- * @param {*} updatedAnswerProps
+ * @param {*} payload
  * @returns
  */
-function updateAnswers(state, updatedAnswerProps) {
-  // TODO: add Dossier type checking?
-  const { answers } = updatedAnswerProps.operation.objectEditedData.promptsAnswers[0];
-  const newAnswers = getMergedAnswers(state.answers, answers);
+function updateAnswers(state, payload = {}) {
+  const { objectEditedData: payloadEditedObject = {} } = (payload && payload.operation) || {};
+  let newAnswers = [...state.answers];
+  const isDossier = !!(payloadEditedObject && payloadEditedObject.visualizationInfo);
+  // for dossiers, check promptsAnswers directly. for reports, check isPrompted flag directly
+  if ((isDossier && payloadEditedObject.promptsAnswers) || payloadEditedObject.isPrompted) {
+    const { answers } = isDossier ? payloadEditedObject.promptsAnswers : payloadEditedObject.promptsAnswers[0];
+    newAnswers = getMergedAnswers(state.answers, answers);
+  }
 
   return { answers: newAnswers };
 }
