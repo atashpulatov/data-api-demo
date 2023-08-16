@@ -66,7 +66,7 @@ export const HomeNotConnected = (props) => {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [hidePopup]);
 
   useEffect(() => {
     getUserData(authToken);
