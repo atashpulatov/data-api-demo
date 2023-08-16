@@ -97,14 +97,18 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
 
     const { pageKey, groupId } = selectedMenu;
 
-    const currentPageProp = pageKey in TARGET_PAGE_KEYS
-    ? { key: TARGET_PAGE_KEYS[pageKey as keyof typeof TARGET_PAGE_KEYS] }
-    : {
-        key: TARGET_GROUP_KEYS[pageKey as keyof typeof TARGET_GROUP_KEYS],
-        targetGroup: {
-            id: groupId,
-        },
-    };
+    let currentPageProp = null;
+    
+    if (!groupId && pageKey in TARGET_PAGE_KEYS) {
+        currentPageProp = { key: TARGET_PAGE_KEYS[pageKey as keyof typeof TARGET_PAGE_KEYS] };
+    } else if (groupId && groupId in TARGET_GROUP_KEYS){
+        currentPageProp = {
+            key: TARGET_GROUP_KEYS[pageKey as keyof typeof TARGET_GROUP_KEYS],
+            targetGroup: {
+                id: groupId,
+            }
+        };
+    }
 
     try {
       const embedProps = {

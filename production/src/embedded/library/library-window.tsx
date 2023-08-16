@@ -96,14 +96,21 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
     });
   };
 
+  /**
+   * Selects the selected menu from embedded library and saves it in the redux store.
+   * The parameter in this function is provided by the ON_LIBRARY_MENU_SELECTED event. 
+   *
+   * @param {Object} selectedMenu - Selected menu object 
+   * conataining pageKey {@link TARGET_PAGE_KEYS} and groupType {@link TARGET_GROUP_KEYS}
+   */
   const handleMenuSelection = (selectedMenu: { pageKey: string, groupType:string }) => {
     let targetPage = null;
-    if (selectedMenu?.pageKey in TARGET_PAGE_KEYS) {
+    if (!selectedMenu?.groupType && selectedMenu?.pageKey in TARGET_PAGE_KEYS) {
       targetPage = {
         pageKey: selectedMenu.pageKey,
         groupId: null,
       };
-    } else {
+    } else if (selectedMenu?.groupType && selectedMenu?.groupType in TARGET_GROUP_KEYS) {
       targetPage = {
         pageKey: selectedMenu.groupType,
         groupId: selectedMenu.pageKey,
