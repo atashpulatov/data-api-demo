@@ -12,7 +12,9 @@ import './library.css';
 const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
-  const { handleSelection, handleMenuSelection, handleIframeLoadEvent, mstrData, selectedMenu } = props;
+  const {
+    handleSelection, handleMenuSelection, handleIframeLoadEvent, mstrData, selectedMenu
+  } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
   const [loadingFrame, setLoadingFrame] = useState(true);
@@ -97,9 +99,9 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
     const { pageKey, groupId } = selectedMenu;
 
     let targetGroup = {};
-    
+
     if (groupId) {
-        targetGroup = { targetGroup: { id: groupId } };
+      targetGroup = { targetGroup: { id: groupId } };
     }
 
     try {
@@ -108,7 +110,7 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
         enableCustomAuthentication: true,
         customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
         enableResponsive: true,
-        currentPage: { key: pageKey, ...targetGroup},
+        currentPage: { key: pageKey, ...targetGroup },
         libraryItemSelectMode: 'single',
         getLoginToken() {
           return Promise.resolve(authToken);
