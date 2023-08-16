@@ -14,7 +14,6 @@ import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { ItemType, LibraryWindowProps } from './library-window-types';
-import { TARGET_PAGE_KEYS, TARGET_GROUP_KEYS } from './embedded-library-constants';
 
 const { isPrompted, getCubeInfo, getObjectInfo } = mstrObjectRestService;
 
