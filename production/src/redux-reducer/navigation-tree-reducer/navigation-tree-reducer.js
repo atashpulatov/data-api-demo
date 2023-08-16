@@ -23,7 +23,7 @@ export const initialState = {
   chosenLibraryDossier: null,
   chosenLibraryElement: {},
   chosenEnvElement: {},
-  selectedMenu: { key: 'ALL', groupId: null },
+  selectedMenu: { pageKey: 'ALL', groupId: null },
 };
 
 function makeSelection(newState, data) {
@@ -119,8 +119,8 @@ export const navigationTree = (state = initialState, action) => {
 
     case UPDATE_SELECTED_MENU: {
       const newState = { ...state };
-      const { key, groupId, } = data;
-      newState.selectedMenu = { key, groupId, };
+      const { pageKey, groupId, } = data;
+      newState.selectedMenu = { pageKey, groupId };
       return newState;
     }
 

@@ -12,7 +12,6 @@ import { TARGET_PAGE_KEYS, TARGET_GROUP_KEYS } from './embedded-library-constant
 
 const { microstrategy, Office } = window;
 
-/* eslint-disable object-curly-newline, indent */
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const { handleSelection, handleMenuSelection, handleIframeLoadEvent, mstrData, selectedMenu } = props;
   const container = useRef(null);
@@ -96,12 +95,12 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
 
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
-    const { key, groupId } = selectedMenu;
+    const { pageKey, groupId } = selectedMenu;
 
-    const currentPageProp = key in TARGET_PAGE_KEYS
-    ? { key: TARGET_PAGE_KEYS[key as keyof typeof TARGET_PAGE_KEYS] }
+    const currentPageProp = pageKey in TARGET_PAGE_KEYS
+    ? { key: TARGET_PAGE_KEYS[pageKey as keyof typeof TARGET_PAGE_KEYS] }
     : {
-        key: TARGET_GROUP_KEYS[key as keyof typeof TARGET_GROUP_KEYS],
+        key: TARGET_GROUP_KEYS[pageKey as keyof typeof TARGET_GROUP_KEYS],
         targetGroup: {
             id: groupId,
         },
@@ -160,7 +159,7 @@ EmbeddedLibraryNotConnected.propTypes = {
     authToken: PropTypes.string,
   }),
   selectedMenu: PropTypes.shape({
-    key: PropTypes.string,
+    pageKey: PropTypes.string,
     groupId: PropTypes.string,
   }),
   handleIframeLoadEvent: PropTypes.func,

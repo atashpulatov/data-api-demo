@@ -1,7 +1,7 @@
 export const TARGET_PAGE_KEYS = {
   ALL: 'all',
-  MYCONTENT: 'myContent',
-  FAVORITES: 'favoriates',
+  MY_CONTENT: 'myContent',
+  FAVORITES: 'favorites',
   RECENTS: 'recents',
   WATCHLIST: 'insights',
   SUBSCRIPTIONS: 'subscriptions',

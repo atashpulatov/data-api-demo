@@ -4,7 +4,7 @@ export interface EmbeddedLibraryTypes {
     authToken: string
   },
   selectedMenu: {
-    key: string,
+    pageKey: string,
     groupId: string,
   },
   handleSelection: Function,

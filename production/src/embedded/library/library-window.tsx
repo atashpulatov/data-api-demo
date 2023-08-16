@@ -98,14 +98,14 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
 
   const handleMenuSelection = (selectedMenu: { pageKey: string, groupType:string }) => {
     let targetPage = null;
-    if (selectedMenu.pageKey in TARGET_PAGE_KEYS) {
+    if (selectedMenu?.pageKey in TARGET_PAGE_KEYS) {
       targetPage = {
-        pageKey: TARGET_PAGE_KEYS[selectedMenu.pageKey as keyof typeof TARGET_PAGE_KEYS],
+        pageKey: selectedMenu.pageKey,
         groupId: null,
       };
     } else {
       targetPage = {
-        pageKey: TARGET_GROUP_KEYS[selectedMenu.groupType as keyof typeof TARGET_GROUP_KEYS],
+        pageKey: selectedMenu.groupType,
         groupId: selectedMenu.pageKey,
       };
     }
