@@ -8,7 +8,6 @@ import scriptInjectionHelper from '../utils/script-injection-helper';
 import { EmbeddedLibraryTypes } from './embedded-library-types';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './library.css';
-import { TARGET_PAGE_KEYS, TARGET_GROUP_KEYS } from './embedded-library-constants';
 
 const { microstrategy, Office } = window;
 
@@ -97,17 +96,10 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
 
     const { pageKey, groupId } = selectedMenu;
 
-    let currentPageProp = null;
+    let targetGroup = {};
     
-    if (!groupId && pageKey in TARGET_PAGE_KEYS) {
-        currentPageProp = { key: TARGET_PAGE_KEYS[pageKey as keyof typeof TARGET_PAGE_KEYS] };
-    } else if (groupId && groupId in TARGET_GROUP_KEYS){
-        currentPageProp = {
-            key: TARGET_GROUP_KEYS[pageKey as keyof typeof TARGET_GROUP_KEYS],
-            targetGroup: {
-                id: groupId,
-            }
-        };
+    if (groupId) {
+        targetGroup = { targetGroup: { id: groupId } };
     }
 
     try {
@@ -116,7 +108,7 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
         enableCustomAuthentication: true,
         customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
         enableResponsive: true,
-        currentPage: { ...currentPageProp },
+        currentPage: { key: pageKey, ...targetGroup},
         libraryItemSelectMode: 'single',
         getLoginToken() {
           return Promise.resolve(authToken);
