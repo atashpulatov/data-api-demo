@@ -56,7 +56,6 @@ class OfficeStoreObject {
   *
   */
   saveAnswersInExcelStore = async () => {
-    // TODO: add UTs for this function, check saveObjectsInExcelStore references for examples
     const { answers } = this.reduxStore.getState().answersReducer;
     const settings = officeStoreHelper.getOfficeSettings();
     settings.set(officeProperties.storedAnswers, answers);
