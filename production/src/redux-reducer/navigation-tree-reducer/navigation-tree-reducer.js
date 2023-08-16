@@ -119,8 +119,7 @@ export const navigationTree = (state = initialState, action) => {
 
     case UPDATE_SELECTED_MENU: {
       const newState = { ...state };
-      const { pageKey, groupId, } = data;
-      newState.selectedMenu = { pageKey, groupId };
+      newState.selectedMenu = data;
       return newState;
     }
 
