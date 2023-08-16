@@ -23,7 +23,7 @@ export const initialState = {
   chosenLibraryDossier: null,
   chosenLibraryElement: {},
   chosenEnvElement: {},
-  selectedMenu: { pageKey: 'ALL', groupId: null },
+  selectedMenu: { pageKey: 'all', groupId: null },
 };
 
 function makeSelection(newState, data) {
