@@ -8,6 +8,8 @@ const initialState = {
   popupData: null,
   popupOpen: false,
   showHidden: true,
+  settingsPanelLoaded: false,
+  reusePromptAnswers: false,
 };
 
 export const officeReducer = (state = initialState, action) => {

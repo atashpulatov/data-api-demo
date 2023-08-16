@@ -17,6 +17,7 @@ import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
+const REUSE_PROMPT_ANSWERS_FEATURE = 'reusePrompAnswersFeatureEnabled';
 
 export const HomeNotConnected = (props) => {
   const {
@@ -35,6 +36,7 @@ export const HomeNotConnected = (props) => {
   };
 
   useEffect(() => {
+    window.localStorage.setItem(REUSE_PROMPT_ANSWERS_FEATURE, false);
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
     return (() => window.removeEventListener('online', handleConnectionRestored),
