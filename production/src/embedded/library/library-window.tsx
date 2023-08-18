@@ -31,6 +31,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
     handlePrepare,
     setObjectData,
     mstrObjectType,
+    updateSelectedMenu,
   } = props;
 
   const disableActiveActions = !isPublished;
@@ -191,6 +192,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       </div>
       <EmbeddedLibrary
         handleSelection={handleSelection}
+        handleMenuSelection={updateSelectedMenu}
         handleIframeLoadEvent={validateSession}
       />
       <PopupButtons
@@ -220,6 +222,7 @@ LibraryWindowNotConnected.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
     PropTypes.shape({}),
   ]),
+  updateSelectedMenu: PropTypes.func,
 };
 
 function mapStateToProps(state: {
@@ -254,6 +257,7 @@ const mapActionsToProps = {
   requestImport: navigationTreeActions.requestImport,
   handlePrepare: popupStateActions.onPrepareData,
   setObjectData: popupStateActions.setObjectData,
+  updateSelectedMenu: navigationTreeActions.updateSelectedMenu,
 };
 
 export const LibraryWindow = connect(

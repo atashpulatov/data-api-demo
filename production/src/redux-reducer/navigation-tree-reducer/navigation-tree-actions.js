@@ -9,6 +9,7 @@ export const SWITCH_IMPORT_SUBTOTALS_ON_IMPORT = 'NAV_TREE_SWITCH_IMPORT_SUBTOTA
 export const CLEAR_PROMPTS_ANSWERS = 'NAV_TREE_CLEAR_PROMPTS_ANSWERS';
 export const UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT';
 export const SET_PROMPT_OBJECTS = 'SET_PROMPT_OBJECTS';
+export const UPDATE_SELECTED_MENU = 'UPDATE_SELECTED_MENU';
 
 function selectObject(data) {
   return (dispatch) => dispatch({
@@ -57,6 +58,10 @@ function updateDisplayAttrFormOnImport(data) {
   return (dispatch) => dispatch({ type: UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT, data });
 }
 
+function updateSelectedMenu(data) {
+  return (dispatch) => dispatch({ type: UPDATE_SELECTED_MENU, data });
+}
+
 export const navigationTreeActions = {
   selectObject,
   requestImport,
@@ -69,4 +74,5 @@ export const navigationTreeActions = {
   clearPromptAnswers,
   updateDisplayAttrFormOnImport,
   setPromptObjects,
+  updateSelectedMenu
 };

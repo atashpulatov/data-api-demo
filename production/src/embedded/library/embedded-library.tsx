@@ -12,7 +12,9 @@ import './library.css';
 const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
-  const { handleSelection, handleIframeLoadEvent, mstrData } = props;
+  const {
+    handleSelection, handleMenuSelection, handleIframeLoadEvent, mstrData, selectedMenu
+  } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
   const [loadingFrame, setLoadingFrame] = useState(true);
@@ -38,6 +40,10 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
         msgRouter.removeEventhandler(
           EventType.ON_LIBRARY_ITEM_SELECTED,
           handleSelection
+        );
+        msgRouter.removeEventhandler(
+          EventType.ON_LIBRARY_MENU_SELECTED,
+          handleMenuSelection
         );
         msgRouter.removeEventhandler(
           EventType.ON_ERROR,
@@ -90,13 +96,21 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
 
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
+    const { pageKey, groupId } = selectedMenu;
+
+    let targetGroup = {};
+
+    if (groupId) {
+      targetGroup = { targetGroup: { id: groupId } };
+    }
+
     try {
       const embedProps = {
         serverUrl,
         enableCustomAuthentication: true,
         customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
         enableResponsive: true,
-        currentPage: { key: 'all' },
+        currentPage: { key: pageKey, ...targetGroup },
         libraryItemSelectMode: 'single',
         getLoginToken() {
           return Promise.resolve(authToken);
@@ -104,7 +118,14 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
         placeholder: containerElement,
         onMsgRouterReadyHandler: ({ MsgRouter }: any) => {
           setMsgRouter(MsgRouter);
-          MsgRouter.registerEventHandler(EventType.ON_LIBRARY_ITEM_SELECTED, handleSelection);
+          MsgRouter.registerEventHandler(
+            EventType.ON_LIBRARY_ITEM_SELECTED,
+            handleSelection
+          );
+          MsgRouter.registerEventHandler(
+            EventType.ON_LIBRARY_MENU_SELECTED,
+            handleMenuSelection
+          );
           MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
         },
       };
@@ -135,8 +156,13 @@ EmbeddedLibraryNotConnected.propTypes = {
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
   }),
+  selectedMenu: PropTypes.shape({
+    pageKey: PropTypes.string,
+    groupId: PropTypes.string,
+  }),
   handleIframeLoadEvent: PropTypes.func,
   handleSelection: PropTypes.func,
+  handleMenuSelection: PropTypes.func,
 };
 
 EmbeddedLibraryNotConnected.defaultProps = {
@@ -151,14 +177,18 @@ const mapStateToProps = (state: {
   sessionReducer: {
     envUrl: string;
     authToken: string;
+  },
+  navigationTree: {
+    selectedMenu: object;
   }
 }) => {
   const { sessionReducer: { envUrl, authToken } } = state;
+  const { navigationTree: { selectedMenu } } = state;
   const mstrData = {
     envUrl,
     authToken,
   };
-  return { mstrData };
+  return { mstrData, selectedMenu };
 };
 
 export const EmbeddedLibrary = connect(mapStateToProps)(
