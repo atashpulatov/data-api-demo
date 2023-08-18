@@ -3,7 +3,12 @@ export interface EmbeddedLibraryTypes {
     envUrl: string,
     authToken: string
   },
+  selectedMenu: {
+    pageKey: string,
+    groupId: string,
+  },
   handleSelection: Function,
+  handleMenuSelection: Function,
   handleIframeLoadEvent: Function
 }
 declare global {
