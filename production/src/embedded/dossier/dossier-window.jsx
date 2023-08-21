@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
+import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { EmbeddedDossier } from './embedded-dossier';
@@ -19,7 +20,7 @@ import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
 
 export const DossierWindowNotConnected = (props) => {
-  const [t] = useTranslation();
+  const [t] = useTranslation("common", { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
   const [instanceId, setInstanceId] = useState('');
   const [vizualizationsData, setVizualizationsData] = useState([]);

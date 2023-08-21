@@ -4,6 +4,7 @@ import './home.css';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { Spinner } from '@mstr/rc';
+import i18n from '../i18n';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
@@ -21,7 +22,7 @@ const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 export const HomeNotConnected = (props) => {
   const { loading, popupOpen, authToken } = props;
 
-  const [t] = useTranslation();
+  const [t] = useTranslation("common", { i18n });
 
   const handleConnectionRestored = () => {
     notificationService.connectionRestored();

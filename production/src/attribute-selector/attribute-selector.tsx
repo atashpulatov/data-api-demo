@@ -13,9 +13,10 @@ import './attribute-selector.css';
 import {
   AttributeSelectorNotConnectedProps, EditedObjectProps, MstrDataProps, MstrError, SessionProps
 } from './attribute-selector-types';
+import i18n from '../i18n';
 
 export const AttributeSelectorNotConnected = (props: AttributeSelectorNotConnectedProps) => {
-  const [t, i18n] = useTranslation();
+  const [t] = useTranslation("common", { i18n });
 
   /**
    * Handles unathorized error from library - rearrange
