@@ -15,7 +15,7 @@ export const ConfirmationNotConnected = ({
   isConfirm,
   toggleIsConfirmFlag,
 }) => {
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
 
   useEffect(() => {
     const ua = window.navigator.userAgent;

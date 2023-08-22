@@ -52,7 +52,7 @@ const getApiUrl = (url: string): string => {
 export const AuthenticateNotConnected: FC<AuthenticateComponent> = (props) => {
   const [formData, setFormData] = React.useState<LoginProps>({ ...defaultLoginProps });
 
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
 
   const { session, resetState } = props;
 

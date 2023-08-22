@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import i18n from '../i18n';
 import { OverflowTooltip } from '@mstr/rc';
+import i18n from '../i18n';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import logo from './assets/mstr_logo.png';
 import { sessionHelper } from '../storage/session-helper';
@@ -29,7 +29,7 @@ export const SettingsMenuNotConnected = ({
   toggleIsSettingsFlag,
   isSettings
 }) => {
- const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
 
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && objects && objects.length > 0;

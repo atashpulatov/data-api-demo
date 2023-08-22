@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { SidePanel, popupTypes } from '@mstr/connector-components';
 import i18n from '../i18n';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
@@ -41,8 +40,6 @@ export const RightSidePanelNotConnected = ({
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
-
-  const [t] = useTranslation("common", { i18n });
 
   const duplicatePopupParams = { activeCellAddress, setDuplicatedObjectId, setSidePanelPopup };
 

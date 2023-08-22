@@ -20,7 +20,7 @@ import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
 
 export const DossierWindowNotConnected = (props) => {
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
   const [instanceId, setInstanceId] = useState('');
   const [vizualizationsData, setVizualizationsData] = useState([]);

@@ -22,7 +22,7 @@ const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 export const HomeNotConnected = (props) => {
   const { loading, popupOpen, authToken } = props;
 
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
 
   const handleConnectionRestored = () => {
     notificationService.connectionRestored();

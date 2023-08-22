@@ -45,7 +45,7 @@ export const PopupButtonsNotConnected = ({
   checkingSelection,
   useImportAsRunButton
 }) => {
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
   const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
   const disableReasonForImport = getDisableReasonImport(
     isPublished, disableActiveActions, disableSecondary, checkingSelection

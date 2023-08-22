@@ -20,7 +20,7 @@ const { isPrompted, getCubeInfo, getObjectInfo } = mstrObjectRestService;
 
 export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   const [isPublished, setIsPublished] = useState(true);
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
 
   const {
     chosenObjectId,

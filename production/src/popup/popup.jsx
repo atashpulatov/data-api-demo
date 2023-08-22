@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { libraryErrorController } from '@mstr/mstr-react-library';
-import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import { PopupViewSelector } from './popup-view-selector';
 import InternetConnectionError from './internet-connection-error';
@@ -10,8 +9,6 @@ import { SessionExtendingWrapper } from './session-extending-wrapper';
 /* global Office */
 
 export const Popup = () => {
-  const [t] = useTranslation("common", { i18n });
-
   useEffect(() => {
     libraryErrorController.initializeHttpErrorsHandling(popupHelper.handlePopupErrors);
   }, []);

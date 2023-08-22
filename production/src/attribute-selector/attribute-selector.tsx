@@ -16,7 +16,7 @@ import {
 import i18n from '../i18n';
 
 export const AttributeSelectorNotConnected = (props: AttributeSelectorNotConnectedProps) => {
-  const [t] = useTranslation("common", { i18n });
+  const [t] = useTranslation('common', { i18n });
 
   /**
    * Handles unathorized error from library - rearrange
