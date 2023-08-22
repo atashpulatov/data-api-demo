@@ -172,13 +172,17 @@ export default class EmbeddedDossierNotConnected extends React.Component {
             });
             count++;
           }
-          // Open Prompts' dialog after applying previous answers.
-          if (handlePreviousAnswersAtImport) {
-            const resp = await rePromptDossier(dossierId, instance.mid, projectId);
+        }
+        // Open Prompts' dialog if there are prompts to answer
+        if (dossierOpenRequested && reusePromptAnswers && isImportedObjectPrompted) {
+          const resp = await rePromptDossier(
+            dossierId,
+            instance.mid,
+            projectId
+          );
 
-            if (resp.mid) {
-              instance.mid = resp.mid;
-            }
+          if (resp.mid) {
+            instance.mid = resp.mid;
           }
         }
       }

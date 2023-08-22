@@ -100,14 +100,6 @@ export const RightSidePanelNotConnected = ({
     ));
   }, [loadedObjects, notifications, operations]);
 
-  React.useEffect(() => {
-    // setLoadedAnswersWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
-    //   loadedAnswers,
-    //   notifications,
-    //   operations
-    // ));
-  }, [loadedAnswers, notifications, operations]);
-
   /**
      * Wraps a function to be called when user clicks an action icon.
      *
