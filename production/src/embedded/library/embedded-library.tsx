@@ -7,13 +7,14 @@ import { popupHelper } from '../../popup/popup-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { EmbeddedLibraryTypes } from './embedded-library-types';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
+import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import './library.css';
 
 const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const {
-    handleSelection, handleMenuSelection, handleIframeLoadEvent, mstrData, selectedMenu
+    handleSelection, handleIframeLoadEvent, updateSelectedMenu, switchSearchPageShown, updateSearchType, mstrData, selectedMenu
   } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
@@ -43,7 +44,15 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
         );
         msgRouter.removeEventhandler(
           EventType.ON_LIBRARY_MENU_SELECTED,
-          handleMenuSelection
+          updateSelectedMenu
+        );
+        msgRouter.removeEventhandler(
+            EventType.ON_LIBRARY_SEARCH_RESULTS_TOGGLED,
+            switchSearchPageShown
+        );
+        msgRouter.registerEventHandler(
+            EventType.ON_LIBRARY_SEARCH_TYPE_SWITCHED,
+            updateSearchType
         );
         msgRouter.removeEventhandler(
           EventType.ON_ERROR,
@@ -124,7 +133,15 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
           );
           MsgRouter.registerEventHandler(
             EventType.ON_LIBRARY_MENU_SELECTED,
-            handleMenuSelection
+            updateSelectedMenu
+          );
+          MsgRouter.registerEventHandler(
+            EventType.ON_LIBRARY_SEARCH_RESULTS_TOGGLED,
+            switchSearchPageShown
+          );
+          MsgRouter.registerEventHandler(
+            EventType.ON_LIBRARY_SEARCH_TYPE_SWITCHED,
+            updateSearchType
           );
           MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
         },
@@ -162,7 +179,9 @@ EmbeddedLibraryNotConnected.propTypes = {
   }),
   handleIframeLoadEvent: PropTypes.func,
   handleSelection: PropTypes.func,
-  handleMenuSelection: PropTypes.func,
+  updateSelectedMenu: PropTypes.func,
+  switchSearchPageShown: PropTypes.func,
+  updateSearchType: PropTypes.func
 };
 
 EmbeddedLibraryNotConnected.defaultProps = {
@@ -191,6 +210,12 @@ const mapStateToProps = (state: {
   return { mstrData, selectedMenu };
 };
 
-export const EmbeddedLibrary = connect(mapStateToProps)(
+const mapActionsToProps = {
+    updateSelectedMenu: navigationTreeActions.updateSelectedMenu,
+    switchSearchPageShown: navigationTreeActions.switchSearchPageShown,
+    updateSearchType: navigationTreeActions.updateSearchType,
+};
+
+export const EmbeddedLibrary = connect(mapStateToProps, mapActionsToProps)(
   EmbeddedLibraryNotConnected
 );

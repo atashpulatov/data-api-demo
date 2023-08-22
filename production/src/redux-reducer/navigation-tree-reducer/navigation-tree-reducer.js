@@ -1,7 +1,7 @@
 import {
   SELECT_OBJECT, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, UPDATE_SELECTED_MENU
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, UPDATE_SELECTED_MENU, SWITCH_SEARCH_PAGE_SHOWN, UPDATE_SEARCH_TYPE
 } from './navigation-tree-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -24,6 +24,8 @@ export const initialState = {
   chosenLibraryElement: {},
   chosenEnvElement: {},
   selectedMenu: { pageKey: 'all', groupId: null },
+  isSearchResultPageShown: false, 
+  searchType: 'dossier',
 };
 
 function makeSelection(newState, data) {
@@ -120,7 +122,20 @@ export const navigationTree = (state = initialState, action) => {
     case UPDATE_SELECTED_MENU: {
       const newState = { ...state };
       newState.selectedMenu = data;
-      return newState;
+      return makeSelection(newState, {});
+    }
+
+    case SWITCH_SEARCH_PAGE_SHOWN: {
+        const newState = { ...state };
+        newState.isSearchResultPageShown = data.isSearchResultPageShown;
+        newState.searchType = data.searchType;
+        return makeSelection(newState, {});
+    }
+
+    case UPDATE_SEARCH_TYPE: {
+        const newState = { ...state };
+        newState.searchType = data;
+        return makeSelection(newState, {});
     }
 
     default: {

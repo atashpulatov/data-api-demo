@@ -8,7 +8,9 @@ export interface EmbeddedLibraryTypes {
     groupId: string,
   },
   handleSelection: Function,
-  handleMenuSelection: Function,
+  updateSelectedMenu: Function,
+  switchSearchPageShown: Function,
+  updateSearchType: Function,
   handleIframeLoadEvent: Function
 }
 declare global {
