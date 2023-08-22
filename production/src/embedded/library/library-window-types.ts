@@ -16,9 +16,6 @@ export interface LibraryWindowProps {
   requestDossierOpen: Function,
   handlePrepare: Function,
   setObjectData: Function,
-  updateSelectedMenu: Function,
-  switchSearchPageShown: Function,
-  updateSearchType:Function,
   mstrObjectType: {
     type: number,
     subtypes: Array<number>,
