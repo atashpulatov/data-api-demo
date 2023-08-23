@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { OverflowTooltip } from '@mstr/rc';
+import i18n from '../i18n';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import logo from './assets/mstr_logo.png';
 import { sessionHelper } from '../storage/session-helper';
@@ -33,7 +34,7 @@ export const SettingsMenuNotConnected = ({
   clearSavedPromptAnswers,
   isSettings
 }) => {
-  const [t, i18n] = useTranslation();
+  const [t] = useTranslation('common', { i18n });
   const reusePrompAnswersFeatureEnabled = JSON.parse(localStorage.getItem(REUSE_PROMPT_ANSWERS_FEATURE));
 
   const userNameDisplay = userFullName || 'MicroStrategy user';

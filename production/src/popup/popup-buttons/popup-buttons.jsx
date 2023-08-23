@@ -4,6 +4,7 @@ import './popup-buttons.css';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import i18n from '../../i18n';
 import { errorMessages } from '../../error/constants';
 import { DataPreviewButton } from './data-preview-button';
 import { BackButton } from './back-button';
@@ -44,8 +45,7 @@ export const PopupButtonsNotConnected = ({
   checkingSelection,
   useImportAsRunButton
 }) => {
-  const [t] = useTranslation();
-
+  const [t] = useTranslation('common', { i18n });
   const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
   const disableReasonForImport = getDisableReasonImport(
     isPublished, disableActiveActions, disableSecondary, checkingSelection
