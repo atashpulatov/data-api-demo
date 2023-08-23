@@ -14,7 +14,8 @@ const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const {
-    handleSelection, handleIframeLoadEvent, updateSelectedMenu, switchSearchPageShown, updateSearchType, mstrData, selectedMenu
+    handleSelection, handleIframeLoadEvent, updateSelectedMenu, 
+    switchSearchPageShown, updateSearchType, mstrData, selectedMenu
   } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
@@ -47,12 +48,12 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
           updateSelectedMenu
         );
         msgRouter.removeEventhandler(
-            EventType.ON_LIBRARY_SEARCH_RESULTS_TOGGLED,
-            switchSearchPageShown
+          EventType.ON_LIBRARY_SEARCH_RESULTS_TOGGLED,
+          switchSearchPageShown
         );
         msgRouter.registerEventHandler(
-            EventType.ON_LIBRARY_SEARCH_TYPE_SWITCHED,
-            updateSearchType
+          EventType.ON_LIBRARY_SEARCH_TYPE_SWITCHED,
+          updateSearchType
         );
         msgRouter.removeEventhandler(
           EventType.ON_ERROR,
@@ -211,9 +212,9 @@ const mapStateToProps = (state: {
 };
 
 const mapActionsToProps = {
-    updateSelectedMenu: navigationTreeActions.updateSelectedMenu,
-    switchSearchPageShown: navigationTreeActions.switchSearchPageShown,
-    updateSearchType: navigationTreeActions.updateSearchType,
+  updateSelectedMenu: navigationTreeActions.updateSelectedMenu,
+  switchSearchPageShown: navigationTreeActions.switchSearchPageShown,
+  updateSearchType: navigationTreeActions.updateSearchType,
 };
 
 export const EmbeddedLibrary = connect(mapStateToProps, mapActionsToProps)(

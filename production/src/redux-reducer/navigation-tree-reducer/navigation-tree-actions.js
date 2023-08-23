@@ -60,11 +60,11 @@ function updateSelectedMenu(data) {
 }
 
 function switchSearchPageShown(data) {
-    return (dispatch) => dispatch({ type: SWITCH_SEARCH_PAGE_SHOWN, data });
+  return (dispatch) => dispatch({ type: SWITCH_SEARCH_PAGE_SHOWN, data });
 }
 
 function updateSearchType(data) {
-    return (dispatch) => dispatch({ type: UPDATE_SEARCH_TYPE, data });
+  return (dispatch) => dispatch({ type: UPDATE_SEARCH_TYPE, data });
 }
 
 export const navigationTreeActions = {

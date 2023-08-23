@@ -24,7 +24,7 @@ export const initialState = {
   chosenLibraryElement: {},
   chosenEnvElement: {},
   selectedMenu: { pageKey: 'all', groupId: null },
-  isSearchResultPageShown: false, 
+  isSearchResultPageShown: false,
   searchType: 'dossier',
 };
 
@@ -126,16 +126,16 @@ export const navigationTree = (state = initialState, action) => {
     }
 
     case SWITCH_SEARCH_PAGE_SHOWN: {
-        const newState = { ...state };
-        newState.isSearchResultPageShown = data.isSearchResultPageShown;
-        newState.searchType = data.searchType;
-        return makeSelection(newState, {});
+      const newState = { ...state };
+      newState.isSearchResultPageShown = data.isSearchResultPageShown;
+      newState.searchType = data.searchType;
+      return makeSelection(newState, {});
     }
 
     case UPDATE_SEARCH_TYPE: {
-        const newState = { ...state };
-        newState.searchType = data;
-        return makeSelection(newState, {});
+      const newState = { ...state };
+      newState.searchType = data;
+      return makeSelection(newState, {});
     }
 
     default: {
