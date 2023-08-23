@@ -14,7 +14,7 @@ const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const {
-    handleSelection, handleIframeLoadEvent, updateSelectedMenu, 
+    handleSelection, handleIframeLoadEvent, updateSelectedMenu,
     switchSearchPageShown, updateSearchType, mstrData, selectedMenu
   } = props;
   const container = useRef(null);
