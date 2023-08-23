@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import i18n from '../i18n';
 import warningIcon from './assets/icon_conflict.svg';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 
@@ -14,7 +15,7 @@ export const ConfirmationNotConnected = ({
   isConfirm,
   toggleIsConfirmFlag,
 }) => {
-  const [t] = useTranslation();
+  const [t] = useTranslation('common', { i18n });
 
   useEffect(() => {
     const ua = window.navigator.userAgent;

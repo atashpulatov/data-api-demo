@@ -13,6 +13,7 @@ import {
 } from './basic-login-types';
 
 import './basic-login.scss';
+import i18n from '../i18n';
 
 const Input = (props: InputProps): React.ReactElement => {
   const { label } = props;
@@ -51,7 +52,7 @@ const getApiUrl = (url: string): string => {
 export const AuthenticateNotConnected: FC<AuthenticateComponent> = (props) => {
   const [formData, setFormData] = React.useState<LoginProps>({ ...defaultLoginProps });
 
-  const [t] = useTranslation();
+  const [t] = useTranslation('common', { i18n });
 
   const { session, resetState } = props;
 

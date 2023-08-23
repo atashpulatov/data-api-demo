@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
 import { EmbeddedLibrary } from './embedded-library';
@@ -19,7 +20,7 @@ const { isPrompted, getCubeInfo, getObjectInfo } = mstrObjectRestService;
 
 export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   const [isPublished, setIsPublished] = useState(true);
-  const [t] = useTranslation();
+  const [t] = useTranslation('common', { i18n });
 
   const {
     chosenObjectId,
