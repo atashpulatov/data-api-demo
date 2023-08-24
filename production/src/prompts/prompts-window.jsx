@@ -76,46 +76,7 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [prolongSession]);
 
-  let givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
   const loading = true;
-
-  // Declared variables to determine whether importing a report/dossier is taking place and
-  // whether there are previous prompt answers to handle
-  const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
-  const isImportedObjectPrompted = promptObjects && promptObjects.length;
-  const isEditedObjectPrompted = editedObject.promptsAnswers && editedObject.promptsAnswers.length;
-
-  const isImportingWithPreviousPromptAnswers = importRequested && reusePromptAnswers
-    && areTherePreviousPromptAnswers && isImportedObjectPrompted;
-  // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
-  if (isImportingWithPreviousPromptAnswers) {
-    givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
-    previousPromptsAnswers.forEach((previousAnswer) => {
-      const previousPromptIndex = promptObjects.findIndex(
-        (promptObject) => promptObject && promptObject.key === previousAnswer.key
-      );
-
-      if (previousPromptIndex >= 0) {
-        givenPromptsAnswers[0].answers.push(previousAnswer);
-      }
-    });
-  }
-
-  const isEditingWithPreviousPromptAnswers = isReprompt && reusePromptAnswers
-  && areTherePreviousPromptAnswers && isEditedObjectPrompted;
-  // Update givenPromptsAnswers collection with previous prompt answers if editing a report/dossier
-  if (isEditingWithPreviousPromptAnswers) {
-    if (givenPromptsAnswers && givenPromptsAnswers.length
-        && givenPromptsAnswers[0].answers && givenPromptsAnswers[0].answers.length) {
-      givenPromptsAnswers[0].answers = givenPromptsAnswers[0].answers.map(answer => {
-        const matchingPreviousPromptAnswer = previousPromptsAnswers.find(
-          previousAnswer => previousAnswer.key === answer.key
-        );
-        return matchingPreviousPromptAnswer || answer;
-      });
-    }
-  }
-
   useEffect(() => {
     window.addEventListener('message', messageReceived);
 
@@ -194,6 +155,29 @@ export const PromptsWindowNotConnected = (props) => {
 
     let instanceDefinition;
     const instance = {};
+
+    let givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
+    // Declared variables to determine whether importing a report/dossier is taking place and
+    // whether there are previous prompt answers to handle
+    const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
+    const isImportedObjectPrompted = promptObjects && promptObjects.length;
+    const isImportingWithPreviousPromptAnswers = importRequested && reusePromptAnswers
+      && areTherePreviousPromptAnswers && isImportedObjectPrompted;
+    // Update givenPromptsAnswers collection with previous prompt answers if importing
+    // a report/dossier and reusePromptAnswers flag is enabled
+    if (isImportingWithPreviousPromptAnswers) {
+      givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
+      previousPromptsAnswers.forEach((previousAnswer) => {
+        const previousPromptIndex = promptObjects.findIndex(
+          (promptObject) => promptObject && promptObject.key === previousAnswer.key
+        );
+
+        if (previousPromptIndex >= 0) {
+          givenPromptsAnswers[0].answers.push(previousAnswer);
+        }
+      });
+    }
+
     try {
       if (givenPromptsAnswers) {
         instanceDefinition = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
@@ -269,9 +253,9 @@ export const PromptsWindowNotConnected = (props) => {
       console.error({ error });
       popupHelper.handlePopupErrors(error);
     }
-  }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, givenPromptsAnswers,
-    isReprompt, loading, mstrData.chosenProjectId, preparePromptedReport, promptsAnswered, session,
-    areTherePreviousPromptAnswers, importRequested, isImportedObjectPrompted]);
+  }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, editedObject.promptsAnswers,
+    isReprompt, loading, mstrData.chosenProjectId, mstrData.promptsAnswers, preparePromptedReport, promptsAnswered,
+    session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers]);
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
