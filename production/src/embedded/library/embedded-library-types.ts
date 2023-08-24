@@ -9,8 +9,7 @@ export interface EmbeddedLibraryTypes {
   },
   handleSelection: Function,
   updateSelectedMenu: Function,
-  switchSearchPageShown: Function,
-  updateSearchType: Function,
+  selectObject: Function,
   handleIframeLoadEvent: Function
 }
 declare global {

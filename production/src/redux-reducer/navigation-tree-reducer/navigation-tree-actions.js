@@ -9,8 +9,6 @@ export const SWITCH_IMPORT_SUBTOTALS_ON_IMPORT = 'NAV_TREE_SWITCH_IMPORT_SUBTOTA
 export const CLEAR_PROMPTS_ANSWERS = 'NAV_TREE_CLEAR_PROMPTS_ANSWERS';
 export const UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT = 'NAV_TREE_UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT';
 export const UPDATE_SELECTED_MENU = 'UPDATE_SELECTED_MENU';
-export const SWITCH_SEARCH_PAGE_SHOWN = 'SWITCH_SEARCH_PAGE_SHOWN';
-export const UPDATE_SEARCH_TYPE = 'UPDATE_SEARCH_TYPE';
 
 function selectObject(data) {
   return (dispatch) => dispatch({
@@ -59,14 +57,6 @@ function updateSelectedMenu(data) {
   return (dispatch) => dispatch({ type: UPDATE_SELECTED_MENU, data });
 }
 
-function switchSearchPageShown(data) {
-  return (dispatch) => dispatch({ type: SWITCH_SEARCH_PAGE_SHOWN, data });
-}
-
-function updateSearchType(data) {
-  return (dispatch) => dispatch({ type: UPDATE_SEARCH_TYPE, data });
-}
-
 export const navigationTreeActions = {
   selectObject,
   requestImport,
@@ -78,7 +68,5 @@ export const navigationTreeActions = {
   switchImportSubtotalsOnImport,
   clearPromptAnswers,
   updateDisplayAttrFormOnImport,
-  updateSelectedMenu,
-  switchSearchPageShown,
-  updateSearchType
+  updateSelectedMenu
 };

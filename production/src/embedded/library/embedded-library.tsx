@@ -14,8 +14,7 @@ const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const {
-    handleSelection, handleIframeLoadEvent, updateSelectedMenu,
-    switchSearchPageShown, updateSearchType, mstrData, selectedMenu
+    handleSelection, handleIframeLoadEvent, updateSelectedMenu, selectObject, mstrData, selectedMenu
   } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
@@ -48,12 +47,8 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
           updateSelectedMenu
         );
         msgRouter.removeEventhandler(
-          EventType.ON_LIBRARY_SEARCH_RESULTS_TOGGLED,
-          switchSearchPageShown
-        );
-        msgRouter.registerEventHandler(
-          EventType.ON_LIBRARY_SEARCH_TYPE_SWITCHED,
-          updateSearchType
+          EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED,
+          clearSelection
         );
         msgRouter.removeEventhandler(
           EventType.ON_ERROR,
@@ -92,6 +87,13 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
       popupHelper.handlePopupErrors(error);
     }
   };
+
+  /**
+   * Clears out the list of selected library items.
+   */
+  const clearSelection = () => {
+    selectObject({});
+  }
 
   /**
    * Initializes and Loads embedded library into the specified container element
@@ -137,12 +139,8 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
             updateSelectedMenu
           );
           MsgRouter.registerEventHandler(
-            EventType.ON_LIBRARY_SEARCH_RESULTS_TOGGLED,
-            switchSearchPageShown
-          );
-          MsgRouter.registerEventHandler(
-            EventType.ON_LIBRARY_SEARCH_TYPE_SWITCHED,
-            updateSearchType
+            EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED,
+            clearSelection
           );
           MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
         },
@@ -181,8 +179,7 @@ EmbeddedLibraryNotConnected.propTypes = {
   handleIframeLoadEvent: PropTypes.func,
   handleSelection: PropTypes.func,
   updateSelectedMenu: PropTypes.func,
-  switchSearchPageShown: PropTypes.func,
-  updateSearchType: PropTypes.func
+  selectObject: PropTypes.func,
 };
 
 EmbeddedLibraryNotConnected.defaultProps = {
@@ -213,8 +210,7 @@ const mapStateToProps = (state: {
 
 const mapActionsToProps = {
   updateSelectedMenu: navigationTreeActions.updateSelectedMenu,
-  switchSearchPageShown: navigationTreeActions.switchSearchPageShown,
-  updateSearchType: navigationTreeActions.updateSearchType,
+  selectObject: navigationTreeActions.selectObject,
 };
 
 export const EmbeddedLibrary = connect(mapStateToProps, mapActionsToProps)(
