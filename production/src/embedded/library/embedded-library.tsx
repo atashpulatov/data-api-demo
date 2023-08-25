@@ -7,13 +7,14 @@ import { popupHelper } from '../../popup/popup-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { EmbeddedLibraryTypes } from './embedded-library-types';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
+import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import './library.css';
 
 const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const {
-    handleSelection, handleMenuSelection, handleIframeLoadEvent, mstrData, selectedMenu
+    handleSelection, handleIframeLoadEvent, updateSelectedMenu, selectObject, mstrData, selectedMenu
   } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
@@ -43,7 +44,11 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
         );
         msgRouter.removeEventhandler(
           EventType.ON_LIBRARY_MENU_SELECTED,
-          handleMenuSelection
+          updateSelectedMenu
+        );
+        msgRouter.removeEventhandler(
+          EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED,
+          clearSelection
         );
         msgRouter.removeEventhandler(
           EventType.ON_ERROR,
@@ -81,6 +86,13 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
     if (title !== 'Notification') {
       popupHelper.handlePopupErrors(error);
     }
+  };
+
+  /**
+   * Clears out the list of selected library items.
+   */
+  const clearSelection = () => {
+    selectObject({});
   };
 
   /**
@@ -124,7 +136,11 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
           );
           MsgRouter.registerEventHandler(
             EventType.ON_LIBRARY_MENU_SELECTED,
-            handleMenuSelection
+            updateSelectedMenu
+          );
+          MsgRouter.registerEventHandler(
+            EventType.ON_LIBRARY_ITEM_SELECTION_CLEARED,
+            clearSelection
           );
           MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
         },
@@ -162,7 +178,8 @@ EmbeddedLibraryNotConnected.propTypes = {
   }),
   handleIframeLoadEvent: PropTypes.func,
   handleSelection: PropTypes.func,
-  handleMenuSelection: PropTypes.func,
+  updateSelectedMenu: PropTypes.func,
+  selectObject: PropTypes.func,
 };
 
 EmbeddedLibraryNotConnected.defaultProps = {
@@ -191,6 +208,11 @@ const mapStateToProps = (state: {
   return { mstrData, selectedMenu };
 };
 
-export const EmbeddedLibrary = connect(mapStateToProps)(
+const mapActionsToProps = {
+  updateSelectedMenu: navigationTreeActions.updateSelectedMenu,
+  selectObject: navigationTreeActions.selectObject,
+};
+
+export const EmbeddedLibrary = connect(mapStateToProps, mapActionsToProps)(
   EmbeddedLibraryNotConnected
 );
