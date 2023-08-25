@@ -93,7 +93,7 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
    */
   const clearSelection = () => {
     selectObject({});
-  }
+  };
 
   /**
    * Initializes and Loads embedded library into the specified container element
