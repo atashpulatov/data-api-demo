@@ -136,6 +136,31 @@ class SidePanelService {
   };
 
   /**
+   * Handles the re-prompting of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
+   * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
+   */
+  reprompt = async (objectWorkingIds) => {
+    // Validate multiple selection; if only one item is selected then create 1-element array
+    const aWorkingIds = Array.isArray(objectWorkingIds)
+      ? objectWorkingIds
+      : [objectWorkingIds];
+    for (const objectWorkingId of aWorkingIds) {
+      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const { bindId, mstrObjectType } = objectData;
+      const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        this.reduxStore.dispatch(popupActions.callForRepromptDossier({ bindId, mstrObjectType }));
+      } else {
+        this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+      }
+    }
+  };
+
+  /**
    * Handles the editing of object.
    * GEts object data from reducer and opens popup depending of the type of object.
    *

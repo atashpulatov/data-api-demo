@@ -52,6 +52,24 @@ class PopupActions {
     chosenObjectData,
   });
 
+  callForRepromptDossier = (reportParams) => async (dispatch) => {
+    try {
+      await this.officeApiHelper.checkStatusOfSessions();
+      const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+
+      await this.prepareDossierForReprompt(repromptedDossier);
+
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedObject: repromptedDossier,
+      });
+      this.popupController.runEditDossierPopup(reportParams);
+    } catch (error) {
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+      return this.errorService.handleError(error);
+    }
+  };
+
   callForEditDossier = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
@@ -148,6 +166,42 @@ class PopupActions {
       editedDossier.visualizationInfo = updatedVisualizationInfo;
     }
     editedDossier.objectType = editedDossier.mstrObjectType;
+  };
+
+  /**
+   * Creates instance of dossier which is used during reprompt workflow.
+   * @param {*} repromptedDossier
+   */
+  prepareDossierForReprompt = async (repromptedDossier) => {
+    const {
+      projectId, objectId, manipulationsXML, visualizationInfo
+    } = repromptedDossier;
+
+    const instanceId = await this.mstrObjectRestService.createDossierInstance(
+      projectId,
+      objectId,
+      { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
+    );
+
+    let updatedVisualizationInfo;
+    try {
+      updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationInfo.visualizationKey,
+        instanceId,
+      );
+    } catch (ignoreError) {
+      // Ignored
+    }
+
+    repromptedDossier.instanceId = instanceId;
+    repromptedDossier.isEdit = true;
+
+    if (updatedVisualizationInfo) {
+      repromptedDossier.visualizationInfo = updatedVisualizationInfo;
+    }
+    repromptedDossier.objectType = repromptedDossier.mstrObjectType;
   };
 
   switchImportSubtotalsOnEdit = (data) => (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT, data });

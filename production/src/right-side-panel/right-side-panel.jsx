@@ -128,6 +128,7 @@ export const RightSidePanelNotConnected = ({
     await wrapper(sidePanelNotificationHelper.setDuplicatePopup, { objectWorkingId, ...duplicatePopupParams });
   };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
+  const repromptWrapper = async (params) => { await wrapper(sidePanelService.reprompt, params); };
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
@@ -159,7 +160,8 @@ export const RightSidePanelNotConnected = ({
       reusePromptAnswers={reusePromptAnswers}
       settingsPanelLoaded={settingsPanelLoaded}
       handleReusePromptAnswers={handleReusePromptAnswers}
-      handleToggleSettingsPanel={handleToggleSettingsPanel} />
+      handleToggleSettingsPanel={handleToggleSettingsPanel}
+      onRepromptClick={repromptWrapper} />
   );
 };
 
