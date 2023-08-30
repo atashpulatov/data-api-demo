@@ -4,7 +4,7 @@ from framework.util.exception.mstr_exception import MstrException
 
 
 class RightPanelMainBrowserPage(BaseBrowserPage):
-    IMPORT_DATA_BUTTON_ELEM = '.import-data > button'
+    IMPORT_DATA_BUTTON_ELEM = '.import-data > span > button'
     ADD_DATA_BUTTON_ELEM_ID = 'add-data-btn'
 
     DOTS_MENU = '.settings-button'

@@ -17,6 +17,14 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().ensure_mylibrary_switch_is_off()
 
+@step('I opened All objects list')
+def step_imp(context):
+    context.pages.import_data_page().go_to_all_objects_list()
+
+@step('I selected first found object from the objects list')
+def step_impl(context):
+    context.pages.import_data_page().select_first_found_object()
+
 
 @step('I found object "{object_name}"')
 def step_impl(context, object_name):
