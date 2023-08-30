@@ -1,4 +1,5 @@
 from pyperclip import paste
+from selenium.webdriver.common.keys import Keys
 
 from framework.pages_base.base_browser_page import BaseBrowserPage
 from framework.util.const import Const
@@ -11,7 +12,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ARIA_CHECKED_ATTRIBUTE = 'aria-checked'
     ARIA_SORT_ATTRIBUTE = 'aria-sort'
 
-    SEARCH_BAR_ELEM = '.search-field__input'
+    SEARCH_BAR_ELEM = '''input[aria-label="Search box"]'''
     CLEAR_SEARCH_BAR = '.search-field__clear-button'
 
     NAME_OBJECT_ELEM = '''span[title='%s']'''
@@ -30,6 +31,9 @@ class ImportDataBrowserPage(BaseBrowserPage):
         'location': '.details-table tr:nth-child(4) .ellipsis-container',
         'description': '.details-table tr:nth-child(5) .ellipsis-container'
     }
+
+    ALL_OBJECTS_LIST = '.mstrd-SearchFilter li#searchFilterOption_all'
+    FIRST_OBJECT_LIBRARY = '.mstrd-SearchResultsList li:nth-child(1)'
 
     IMPORT_BUTTON_ELEM = 'import'
     IMPORT_BUTTON_DISABLED = 'disabled'
@@ -81,15 +85,33 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     def find_object(self, object_name):
         """
-        Finds object by name. Name can be any identifying characteristic of the object (i.e. id, name).
+        Finds object by name. Name can only be name of the object.
 
-        :param object_name: Object name or id.
+        :param object_name: Object name
         """
 
-        self.focus_on_add_in_popup_frame()
+        self.focus_on_library_frame()
 
         search_box = self.get_element_by_css(ImportDataBrowserPage.SEARCH_BAR_ELEM)
         search_box.send_keys_with_check(object_name)
+        search_box.send_keys(Keys.ENTER)
+
+    def go_to_all_objects_list(self):
+        """
+        Goes to all objects list, to include object outside of the library.
+        """
+        self.focus_on_library_frame()
+        all_element = self.get_element_by_css(ImportDataBrowserPage.ALL_OBJECTS_LIST)
+        all_element.click()
+
+    def select_first_found_object(self):
+        """
+        Selects first found object on the embedded library displayed objects list
+        """
+
+        self.focus_on_library_frame()
+        first_object = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_LIBRARY)
+        first_object.click()
 
     def find_and_select_object(self, object_name):
         """
@@ -132,14 +154,17 @@ class ImportDataBrowserPage(BaseBrowserPage):
         name_object.click()
 
     def click_import_button(self, not_used_reset_framework_method, not_used_context):
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_import_to_finish_successfully()
 
     def click_import_button_without_checking_results(self):
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
     def click_import_button_to_import_with_error(self, error_message):
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
         self.right_panel_tile_browser_page.wait_for_operation_error_and_accept(error_message)
