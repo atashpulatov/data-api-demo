@@ -113,9 +113,6 @@ class ImportDataBrowserPage(BaseBrowserPage):
         first_object = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_LIBRARY)
         first_object.click()
 
-
-        
-
     def find_and_select_object(self, object_name):
         """
         Finds object by name and selects it. This method does not verify ids and cannot handle all special characters.

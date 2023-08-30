@@ -116,7 +116,6 @@ class BaseBrowserPage(BasePage):
 
         self._switch_to_frame(library_frame_element)
         
-
     def focus_on_prompt_frame(self):
         end_time = time.time() + Const.DEFAULT_TIMEOUT
 
