@@ -12,6 +12,7 @@ class BaseBrowserPage(BasePage):
     EXCEL_FRAME_ELEM = 'WebApplicationFrame'
     ADD_IN_POPUP_FRAME_ELEM = '#WACDialogBodyPanel > iframe'
     DOSSIER_FRAME_ELEM = '.dossier-window > div > iframe'
+    LIBRARY_FRAME_ELEM = '.library-window > div > iframe'
     ADD_IN_FRAME_ELEM = '.AddinIframe[src*="static/loader-mstr-office"]'
     ADD_IN_ROOT_ELEM = 'root'
     PROMPT_FRAME_ELEM = '.promptsContainer > iframe'
@@ -106,6 +107,15 @@ class BaseBrowserPage(BasePage):
         dossier_frame_element = self.get_frame_element_by_css(BaseBrowserPage.DOSSIER_FRAME_ELEM)
 
         self._switch_to_frame(dossier_frame_element)
+
+    def focus_on_library_frame(self):
+        self.focus_on_excel_frame()
+        self.focus_on_add_in_popup_frame()
+
+        library_frame_element = self.get_frame_element_by_css(BaseBrowserPage.LIBRARY_FRAME_ELEM)
+
+        self._switch_to_frame(library_frame_element)
+        
 
     def focus_on_prompt_frame(self):
         end_time = time.time() + Const.DEFAULT_TIMEOUT
