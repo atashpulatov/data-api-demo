@@ -382,7 +382,8 @@ EmbeddedDossierNotConnected.propTypes = {
       chapterKey: PropTypes.string,
       pageKey: PropTypes.string,
       visualizationKey: PropTypes.string,
-    })
+    }),
+    isReprompted: PropTypes.bool,
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
@@ -411,7 +412,8 @@ EmbeddedDossierNotConnected.defaultProps = {
     projectId: 'default id',
     instanceId: 'default id',
     promptsAnswers: null,
-    selectedViz: ''
+    selectedViz: '',
+    isReprompted: false,
   },
   handleSelection: () => { },
 };
@@ -442,12 +444,13 @@ const mapStateToProps = (state) => {
   const mstrData = {
     envUrl,
     authToken,
-    dossierId: isEdit ? editedObject.chosenObjectId : chosenObjectId,
-    projectId: isEdit ? editedObject.projectId : chosenProjectId,
-    promptsAnswers: isEdit ? editedObject.promptsAnswers : promptsAnswers,
+    dossierId: isEdit || editedObject.isReprompted ? editedObject.chosenObjectId : chosenObjectId,
+    projectId: isEdit || editedObject.isReprompted ? editedObject.projectId : chosenProjectId,
+    promptsAnswers: isEdit || editedObject.isReprompted ? editedObject.promptsAnswers : promptsAnswers,
     visualizationInfo: editedObject.visualizationInfo,
-    selectedViz: isEdit ? editedObject.selectedViz : '',
+    selectedViz: isEdit || editedObject.isReprompted ? editedObject.selectedViz : '',
     instanceId: editedObject.instanceId,
+    isReprompted: editedObject.isReprompted,
   };
   return {
     mstrData,

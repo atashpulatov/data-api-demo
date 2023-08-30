@@ -195,8 +195,13 @@ class PopupActions {
       // Ignored
     }
 
-    repromptedDossier.instanceId = instanceId;
+    // Re-prompt the dossier to open prompts' popup
+    const resp = await this.mstrObjectRestService.rePromptDossier(objectId, instanceId, projectId);
+
+    // Update dossier's instanceId with the new one
+    repromptedDossier.instanceId = resp.mid ? resp.mid : instanceId;
     repromptedDossier.isEdit = true;
+    repromptedDossier.isReprompted = true;
 
     if (updatedVisualizationInfo) {
       repromptedDossier.visualizationInfo = updatedVisualizationInfo;

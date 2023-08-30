@@ -179,6 +179,7 @@ class PopupViewSelectorHelper {
       visualizationInfo,
       preparedInstanceId: props.preparedInstanceId,
       isEdit: props.isEdit,
+      isReprompted: props.isReprompted,
       displayAttrFormNames: props.displayAttrFormNames || officeProperties.displayAttrFormNames.automatic
     };
     if (props.dossierData) {

@@ -32,7 +32,7 @@ export const DossierWindowNotConnected = (props) => {
     chosenObjectName, handleBack, editedObject, chosenObjectId,
     chosenProjectId, previousPromptsAnswers, importRequested, promptObjects,
   } = props;
-  const { isEdit } = editedObject;
+  const { isEdit, isReprompted } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
 
   const vizData = useMemo(() => vizualizationsData.find(
@@ -90,7 +90,7 @@ export const DossierWindowNotConnected = (props) => {
         let isVizSupported = true;
 
         const checkIfVizDataCanBeImported = async () => {
-          await mstrObjectRestService.fetchVisualizationDefinition({
+          const temporaryInstanceDefinition = await mstrObjectRestService.fetchVisualizationDefinition({
             projectId: chosenProjectId,
             objectId: chosenObjectId,
             instanceId: chosenVizInstanceId,
@@ -194,6 +194,10 @@ export const DossierWindowNotConnected = (props) => {
     });
   };
 
+  if (isReprompted && isSelected) {
+    handleOk();
+  }
+
   return (
     <div className="dossier-window">
       <h1
@@ -225,16 +229,18 @@ export const DossierWindowNotConnected = (props) => {
         handleIframeLoadEvent={validateSession}
         handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
       />
-      <PopupButtons
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        handleBack={!isEdit && handleBack}
-        hideSecondary
-        disableActiveActions={!isSelected}
-        isPublished={!(isSelected && !isSupported && !isChecking)}
-        disableSecondary={isSelected && !isSupported && !isChecking}
-        checkingSelection={isChecking}
-      />
+      { !isReprompted && (
+        <PopupButtons
+          handleOk={handleOk}
+          handleCancel={handleCancel}
+          handleBack={!isEdit && handleBack}
+          hideSecondary
+          disableActiveActions={!isSelected}
+          isPublished={!(isSelected && !isSupported && !isChecking)}
+          disableSecondary={isSelected && !isSupported && !isChecking}
+          checkingSelection={isChecking}
+        />
+      )}
     </div>
   );
 };
@@ -252,6 +258,7 @@ DossierWindowNotConnected.propTypes = {
     dossierName: PropTypes.string,
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
+    isReprompted: PropTypes.bool,
   }),
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   importRequested: PropTypes.bool,
@@ -271,6 +278,7 @@ DossierWindowNotConnected.defaultProps = {
     dossierName: undefined,
     promptsAnswers: null,
     selectedViz: '',
+    isReprompted: false,
   },
 };
 
