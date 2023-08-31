@@ -161,6 +161,7 @@ class PopupActions {
 
     editedDossier.instanceId = instanceId;
     editedDossier.isEdit = true;
+    editedDossier.isReprompted = false;
 
     if (updatedVisualizationInfo) {
       editedDossier.visualizationInfo = updatedVisualizationInfo;

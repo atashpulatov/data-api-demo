@@ -98,7 +98,7 @@ function getAnswerIndex(answers, keyId) {
  */
 function getMergedAnswers(originalAnswers, newAnswers) {
   const updatedAnswers = [...originalAnswers];
-  newAnswers.forEach((answer) => {
+  newAnswers && newAnswers.forEach((answer) => {
     const answerIdx = getAnswerIndex(originalAnswers, answer.key);
 
     if (answerIdx === -1) {

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
+import { Empty } from '@mstr/connector-components/';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -27,6 +28,8 @@ export const DossierWindowNotConnected = (props) => {
   const [lastSelectedViz, setLastSelectedViz] = useState({});
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const [previousSelectionBackup, setPreviousSelectionBackup] = useState([]);
+
+  const [loadingFrame, setLoadingFrame] = useState(false);
 
   const {
     chosenObjectName, handleBack, editedObject, chosenObjectId,
@@ -137,9 +140,17 @@ export const DossierWindowNotConnected = (props) => {
       },
       preparedInstanceId: instanceId,
       isEdit,
+      isReprompted,
     };
     popupHelper.officeMessageParent(message);
   };
+
+  // Automatically close popup if re-prompted dossier is answered
+  // and visualization is selected
+  if (isReprompted && isSelected) {
+    setLoadingFrame(true); // Show loading spinner
+    handleOk();
+  }
 
   /**
    * Store new instance id in state.
@@ -194,10 +205,6 @@ export const DossierWindowNotConnected = (props) => {
     });
   };
 
-  if (isReprompted && isSelected) {
-    handleOk();
-  }
-
   return (
     <div className="dossier-window">
       <h1
@@ -221,6 +228,8 @@ export const DossierWindowNotConnected = (props) => {
             </span>
           </span>
         )}
+
+      {loadingFrame && <Empty isLoading />}
 
       <EmbeddedDossier
         handleSelection={handleSelection}
