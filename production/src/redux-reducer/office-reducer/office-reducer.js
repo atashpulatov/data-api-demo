@@ -7,7 +7,7 @@ const initialState = {
   supportForms: true,
   popupData: null,
   popupOpen: false,
-  showHidden: true,
+  showHidden: false,
 };
 
 export const officeReducer = (state = initialState, action) => {

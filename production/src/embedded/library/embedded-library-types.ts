@@ -7,6 +7,7 @@ export interface EmbeddedLibraryTypes {
     pageKey: string,
     groupId: string,
   },
+  showHidden: boolean,
   handleSelection: Function,
   updateSelectedMenu: Function,
   selectObject: Function,
