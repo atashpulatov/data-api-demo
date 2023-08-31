@@ -200,13 +200,13 @@ const mapStateToProps = (state: {
   navigationTree: {
     selectedMenu: object;
   },
-  officeReducer: {
+  configReducer: {
     showHidden: boolean;
   }
 }) => {
   const { sessionReducer: { envUrl, authToken } } = state;
   const { navigationTree: { selectedMenu } } = state;
-  const { officeReducer: { showHidden } } = state;
+  const { configReducer: { showHidden } } = state;
   const mstrData = {
     envUrl,
     authToken,

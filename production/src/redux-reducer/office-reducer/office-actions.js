@@ -43,8 +43,6 @@ const setRangeTakenPopup = (popupData) => ({
 
 const clearSidePanelPopupData = () => ({ type: officeProperties.actions.setRangeTakenPopup });
 
-const setShowHidden = (showHidden) => ({ type: officeProperties.actions.setShowHidden, showHidden });
-
 export const officeActions = {
   showPopup,
   hidePopup,
@@ -54,6 +52,5 @@ export const officeActions = {
   toggleIsClearDataFailedFlag,
   toggleRenderSettingsFlag,
   setRangeTakenPopup,
-  clearSidePanelPopupData,
-  setShowHidden
+  clearSidePanelPopupData
 };

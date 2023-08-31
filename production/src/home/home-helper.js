@@ -3,6 +3,7 @@ import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
 import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
+import { configActions } from '../redux-reducer/config-reducer/config-actions';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 
 const SHOW_HIDDEN_KEY = 'showHidden';
@@ -52,7 +53,7 @@ export class HomeHelper {
       const showHiddenLocalStorage = this.getStorageItem(SHOW_HIDDEN_KEY);
       const showHidden = showHiddenOfficeSettings || showHiddenLocalStorage !== 'false';
       const { dispatch } = this.reduxStore;
-      dispatch(officeActions.setShowHidden(showHidden));
+      dispatch(configActions.setShowHidden(showHidden));
     } catch (error) {
       console.error(error);
     }

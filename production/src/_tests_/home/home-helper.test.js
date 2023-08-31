@@ -3,7 +3,7 @@ import { homeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 import officeStoreRestoreObject from '../../office/store/office-store-restore-object';
-import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { configActions } from '../../redux-reducer/config-reducer/config-actions';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../redux-reducer/session-reducer/session-actions');
@@ -138,7 +138,7 @@ describe('HomeHelper', () => {
       // given
       jest.spyOn(officeStoreRestoreObject, 'getExcelSettingValue').mockReturnValue(excelSettingValue);
       jest.spyOn(homeHelper, 'getStorageItem').mockReturnValue(localStorageValue);
-      const actionPayloadSpy = jest.spyOn(officeActions, 'setShowHidden');
+      const actionPayloadSpy = jest.spyOn(configActions, 'setShowHidden');
       const mockedDispatch = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
       // when
