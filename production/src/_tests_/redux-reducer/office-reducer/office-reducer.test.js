@@ -103,5 +103,4 @@ describe('officeReducer', () => {
     // then
     expect(newState.isClearDataFailed).toBe(true);
   });
-
 });
