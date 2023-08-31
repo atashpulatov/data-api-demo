@@ -33,9 +33,9 @@ export const DossierWindowNotConnected = (props) => {
 
   const {
     chosenObjectName, handleBack, editedObject, chosenObjectId,
-    chosenProjectId, previousPromptsAnswers, importRequested, promptObjects,
+    chosenProjectId, previousPromptsAnswers, importRequested, promptObjects, isReprompt,
   } = props;
-  const { isEdit, isReprompted } = editedObject;
+  const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
 
   const vizData = useMemo(() => vizualizationsData.find(
@@ -140,14 +140,14 @@ export const DossierWindowNotConnected = (props) => {
       },
       preparedInstanceId: instanceId,
       isEdit,
-      isReprompted,
+      isReprompted: isReprompt,
     };
     popupHelper.officeMessageParent(message);
   };
 
   // Automatically close popup if re-prompted dossier is answered
   // and visualization is selected
-  if (isReprompted && isSelected) {
+  if (isReprompt && isSelected) {
     setLoadingFrame(true); // Show loading spinner
     handleOk();
   }
@@ -238,7 +238,7 @@ export const DossierWindowNotConnected = (props) => {
         handleIframeLoadEvent={validateSession}
         handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
       />
-      { !isReprompted && (
+      { !isReprompt && (
         <PopupButtons
           handleOk={handleOk}
           handleCancel={handleCancel}
@@ -267,11 +267,11 @@ DossierWindowNotConnected.propTypes = {
     dossierName: PropTypes.string,
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
-    isReprompted: PropTypes.bool,
   }),
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   importRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
+  isReprompt: PropTypes.bool,
 };
 
 DossierWindowNotConnected.defaultProps = {
@@ -287,13 +287,13 @@ DossierWindowNotConnected.defaultProps = {
     dossierName: undefined,
     promptsAnswers: null,
     selectedViz: '',
-    isReprompted: false,
   },
+  isReprompt: false,
 };
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer, officeReducer, answersReducer
+    navigationTree, popupReducer, sessionReducer, officeReducer, answersReducer, popupStateReducer
   } = state;
   const {
     chosenObjectName,
@@ -329,7 +329,8 @@ function mapStateToProps(state) {
     editedObject: editedObjectParse,
     previousPromptsAnswers: answers,
     promptObjects,
-    importRequested
+    importRequested,
+    isReprompt: popupStateReducer.isReprompt,
   };
 }
 

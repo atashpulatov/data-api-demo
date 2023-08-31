@@ -48,7 +48,6 @@ class PopupHelper {
       promptsAnswers: promptsAnswers || popupState.promptsAnswers,
       subtotalsInfo: popupState.subtotalsInfo,
       isEdit: popupState.isEdit,
-      isReprompted: popupState.isReprompted,
       visualizationInfo,
       dossierName,
       selectedViz: `${chapterKey}:${visualizationKey}`,

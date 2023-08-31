@@ -40,6 +40,11 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
+  runRepromptDossierPopup = async (reportParams) => {
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
+    await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
+  };
+
   runEditDossierPopup = async (reportParams) => {
     await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
@@ -132,6 +137,7 @@ class PopupController {
       errorService.handleError(error);
     } finally {
       this.reduxStore.dispatch(this.popupActions.resetState());
+      this.reduxStore.dispatch(popupStateActions.onClearPopupState());
       this.reduxStore.dispatch(officeActions.hidePopup());
     }
   };

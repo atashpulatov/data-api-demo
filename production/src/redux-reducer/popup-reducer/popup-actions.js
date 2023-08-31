@@ -63,7 +63,7 @@ class PopupActions {
         type: SET_REPORT_N_FILTERS,
         editedObject: repromptedDossier,
       });
-      this.popupController.runEditDossierPopup(reportParams);
+      this.popupController.runRepromptDossierPopup(reportParams);
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       return this.errorService.handleError(error);
@@ -161,7 +161,6 @@ class PopupActions {
 
     editedDossier.instanceId = instanceId;
     editedDossier.isEdit = true;
-    editedDossier.isReprompted = false;
 
     if (updatedVisualizationInfo) {
       editedDossier.visualizationInfo = updatedVisualizationInfo;
@@ -202,7 +201,6 @@ class PopupActions {
     // Update dossier's instanceId with the new one
     repromptedDossier.instanceId = resp.mid ? resp.mid : instanceId;
     repromptedDossier.isEdit = true;
-    repromptedDossier.isReprompted = true;
 
     if (updatedVisualizationInfo) {
       repromptedDossier.visualizationInfo = updatedVisualizationInfo;

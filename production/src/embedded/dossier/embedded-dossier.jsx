@@ -383,7 +383,6 @@ EmbeddedDossierNotConnected.propTypes = {
       pageKey: PropTypes.string,
       visualizationKey: PropTypes.string,
     }),
-    isReprompted: PropTypes.bool,
   }),
   handleSelection: PropTypes.func,
   handlePromptAnswer: PropTypes.func,
@@ -413,7 +412,6 @@ EmbeddedDossierNotConnected.defaultProps = {
     instanceId: 'default id',
     promptsAnswers: null,
     selectedViz: '',
-    isReprompted: false,
   },
   handleSelection: () => { },
 };
@@ -424,7 +422,8 @@ const mapStateToProps = (state) => {
     popupReducer,
     sessionReducer: { attrFormPrivilege, envUrl, authToken },
     officeReducer,
-    answersReducer
+    answersReducer,
+    popupStateReducer,
   } = state;
   const {
     chosenObjectName,
@@ -441,16 +440,16 @@ const mapStateToProps = (state) => {
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
+  const { isReprompt } = popupStateReducer;
   const mstrData = {
     envUrl,
     authToken,
-    dossierId: isEdit || editedObject.isReprompted ? editedObject.chosenObjectId : chosenObjectId,
-    projectId: isEdit || editedObject.isReprompted ? editedObject.projectId : chosenProjectId,
-    promptsAnswers: isEdit || editedObject.isReprompted ? editedObject.promptsAnswers : promptsAnswers,
+    dossierId: isEdit || isReprompt ? editedObject.chosenObjectId : chosenObjectId,
+    projectId: isEdit || isReprompt ? editedObject.projectId : chosenProjectId,
+    promptsAnswers: isEdit || isReprompt ? editedObject.promptsAnswers : promptsAnswers,
     visualizationInfo: editedObject.visualizationInfo,
-    selectedViz: isEdit || editedObject.isReprompted ? editedObject.selectedViz : '',
+    selectedViz: isEdit || isReprompt ? editedObject.selectedViz : '',
     instanceId: editedObject.instanceId,
-    isReprompted: editedObject.isReprompted,
   };
   return {
     mstrData,

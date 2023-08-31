@@ -20,7 +20,6 @@ export const initialState = {
   chosenVisualizationKey: null,
   dossierOpenRequested: false,
   isEdit: false,
-  isReprompted: false,
   chosenLibraryDossier: null,
   chosenLibraryElement: {},
   chosenEnvElement: {},
