@@ -40,6 +40,10 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
+  /**
+   * This method is used to run the Dossier's re-prompt popup from the Excel add-in
+   * @param {*} reportParams
+   */
   runRepromptDossierPopup = async (reportParams) => {
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
     await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);

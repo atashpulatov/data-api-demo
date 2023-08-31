@@ -43,7 +43,8 @@ export const PopupButtonsNotConnected = ({
   disableSecondary,
   isPublished,
   checkingSelection,
-  useImportAsRunButton
+  useImportAsRunButton,
+  hideOk,
 }) => {
   const [t] = useTranslation('common', { i18n });
   const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
@@ -59,13 +60,15 @@ export const PopupButtonsNotConnected = ({
           disableReason={disableReason}
           t={t} />
       )}
-      <ImportButton
-        handleSecondary={handleSecondary}
-        handleOk={handleOk}
-        disableReason={disableReasonForImport}
-        t={t}
-        useImportAsRunButton={useImportAsRunButton}
-      />
+      {!hideOk && (
+        <ImportButton
+          handleSecondary={handleSecondary}
+          handleOk={handleOk}
+          disableReason={disableReasonForImport}
+          t={t}
+          useImportAsRunButton={useImportAsRunButton}
+        />
+      )}
       {!hideSecondary && handleSecondary && (
         <PrepareDataButton
           handleSecondary={handleSecondary}
@@ -92,6 +95,7 @@ PopupButtonsNotConnected.propTypes = {
   isPublished: PropTypes.bool,
   checkingSelection: PropTypes.bool,
   useImportAsRunButton: PropTypes.bool,
+  hideOk: PropTypes.bool,
 };
 
 function mapStateToProps({ navigationTree }) {

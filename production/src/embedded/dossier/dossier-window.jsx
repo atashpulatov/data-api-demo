@@ -238,18 +238,17 @@ export const DossierWindowNotConnected = (props) => {
         handleIframeLoadEvent={validateSession}
         handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
       />
-      { !isReprompt && (
-        <PopupButtons
-          handleOk={handleOk}
-          handleCancel={handleCancel}
-          handleBack={!isEdit && handleBack}
-          hideSecondary
-          disableActiveActions={!isSelected}
-          isPublished={!(isSelected && !isSupported && !isChecking)}
-          disableSecondary={isSelected && !isSupported && !isChecking}
-          checkingSelection={isChecking}
-        />
-      )}
+      <PopupButtons
+        handleOk={handleOk}
+        handleCancel={handleCancel}
+        handleBack={!isEdit && handleBack}
+        hideSecondary
+        disableActiveActions={!isSelected}
+        isPublished={!(isSelected && !isSupported && !isChecking)}
+        disableSecondary={isSelected && !isSupported && !isChecking}
+        checkingSelection={isChecking}
+        hideOk={isReprompt}
+      />
     </div>
   );
 };
