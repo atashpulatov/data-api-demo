@@ -140,7 +140,6 @@ export const DossierWindowNotConnected = (props) => {
       },
       preparedInstanceId: instanceId,
       isEdit,
-      isReprompted: isReprompt,
     };
     popupHelper.officeMessageParent(message);
   };
@@ -148,8 +147,8 @@ export const DossierWindowNotConnected = (props) => {
   // Automatically close popup if re-prompted dossier is answered
   // and visualization is selected
   if (isReprompt && isSelected) {
-    setLoadingFrame(true); // Show loading spinner
     handleOk();
+    setLoadingFrame(true); // Show loading spinner
   }
 
   /**
@@ -231,13 +230,15 @@ export const DossierWindowNotConnected = (props) => {
 
       {loadingFrame && <Empty isLoading />}
 
-      <EmbeddedDossier
-        handleSelection={handleSelection}
-        handlePromptAnswer={handlePromptAnswer}
-        handleInstanceIdChange={handleInstanceIdChange}
-        handleIframeLoadEvent={validateSession}
-        handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
-      />
+      {!loadingFrame && (
+        <EmbeddedDossier
+          handleSelection={handleSelection}
+          handlePromptAnswer={handlePromptAnswer}
+          handleInstanceIdChange={handleInstanceIdChange}
+          handleIframeLoadEvent={validateSession}
+          handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
+        />
+      )}
       <PopupButtons
         handleOk={handleOk}
         handleCancel={handleCancel}
