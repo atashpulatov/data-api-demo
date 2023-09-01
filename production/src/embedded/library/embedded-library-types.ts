@@ -3,6 +3,7 @@ export interface EmbeddedLibraryTypes {
     envUrl: string,
     authToken: string
   },
+  showHidden: boolean,
   handleSelection: Function,
   updateSelectedMenu: Function,
   selectObject: Function,

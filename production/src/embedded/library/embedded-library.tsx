@@ -14,7 +14,7 @@ const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const {
-    handleSelection, handleIframeLoadEvent, updateSelectedMenu, selectObject, mstrData,
+    handleSelection, handleIframeLoadEvent, updateSelectedMenu, selectObject, mstrData, showHidden
   } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
@@ -135,6 +135,7 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
           );
           MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
         },
+        settings: { library: { _showHiddenObjects: showHidden } }
       };
 
       if (microstrategy && microstrategy.embeddingContexts) {
@@ -163,6 +164,7 @@ EmbeddedLibraryNotConnected.propTypes = {
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
   }),
+  showHidden: PropTypes.bool,
   handleIframeLoadEvent: PropTypes.func,
   handleSelection: PropTypes.func,
   updateSelectedMenu: PropTypes.func,
@@ -182,13 +184,17 @@ const mapStateToProps = (state: {
     envUrl: string;
     authToken: string;
   },
+  configReducer: {
+    showHidden: boolean;
+  }
 }) => {
   const { sessionReducer: { envUrl, authToken } } = state;
   const mstrData = {
     envUrl,
     authToken,
   };
-  return { mstrData };
+  const { configReducer: { showHidden } } = state;
+  return { mstrData, showHidden };
 };
 
 const mapActionsToProps = {
