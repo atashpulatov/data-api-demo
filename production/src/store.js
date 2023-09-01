@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import { sessionReducer } from './redux-reducer/session-reducer/session-reducer';
 import { navigationTree } from './redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
 import { officeReducer } from './redux-reducer/office-reducer/office-reducer';
+import { configReducer } from './redux-reducer/config-reducer/config-reducer';
 import { notificationReducer } from './redux-reducer/notification-reducer/notification-reducer';
 import { popupReducer } from './redux-reducer/popup-reducer/popup-reducer';
 import { popupStateReducer } from './redux-reducer/popup-state-reducer/popup-state-reducer';
@@ -18,6 +19,7 @@ import packageJson from '../package.json';
 const rootReducer = combineReducers({
   sessionReducer,
   officeReducer,
+  configReducer,
   notificationReducer,
   navigationTree,
   popupReducer,

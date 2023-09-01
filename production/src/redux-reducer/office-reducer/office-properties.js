@@ -17,8 +17,7 @@ export const officeProperties = {
     toggleSettingsPanelLoadedFlag: 'OFFICE_TOGGLE_SETTINGS_PANEL_LOADED_FLAG',
     toggleReusePromptAnswersFlag: 'OFFICE_TOGGLE_REUSE_PROMPT_ANSWERS_FLAG',
     setRangeTakenPopup: 'OFFICE_SET_RANGE_TAKEN_POPUP',
-    clearSidePanelPopupData: 'OFFICE_CLEAR_SIDE_PANEL_POPUP_DATA',
-    setShowHidden: 'SET_SHOW_HIDDEN'
+    clearSidePanelPopupData: 'OFFICE_CLEAR_SIDE_PANEL_POPUP_DATA'
   },
   displayAttrFormNames: {
     automatic: 'AUTOMATIC',

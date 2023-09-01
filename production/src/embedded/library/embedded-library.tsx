@@ -14,7 +14,7 @@ const { microstrategy, Office } = window;
 
 export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   const {
-    handleSelection, handleIframeLoadEvent, updateSelectedMenu, selectObject, mstrData, selectedMenu
+    handleSelection, handleIframeLoadEvent, updateSelectedMenu, selectObject, mstrData, showHidden
   } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
@@ -108,21 +108,12 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
 
     const { CustomAuthenticationType, EventType } = microstrategy.dossier;
 
-    const { pageKey, groupId } = selectedMenu;
-
-    let targetGroup = {};
-
-    if (groupId) {
-      targetGroup = { targetGroup: { id: groupId } };
-    }
-
     try {
       const embedProps = {
         serverUrl,
         enableCustomAuthentication: true,
         customAuthenticationType: CustomAuthenticationType.AUTH_TOKEN,
         enableResponsive: true,
-        currentPage: { key: pageKey, ...targetGroup },
         libraryItemSelectMode: 'single',
         getLoginToken() {
           return Promise.resolve(authToken);
@@ -144,6 +135,7 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
           );
           MsgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
         },
+        settings: { library: { _showHiddenObjects: showHidden } }
       };
 
       if (microstrategy && microstrategy.embeddingContexts) {
@@ -172,10 +164,7 @@ EmbeddedLibraryNotConnected.propTypes = {
     envUrl: PropTypes.string,
     authToken: PropTypes.string,
   }),
-  selectedMenu: PropTypes.shape({
-    pageKey: PropTypes.string,
-    groupId: PropTypes.string,
-  }),
+  showHidden: PropTypes.bool,
   handleIframeLoadEvent: PropTypes.func,
   handleSelection: PropTypes.func,
   updateSelectedMenu: PropTypes.func,
@@ -195,17 +184,17 @@ const mapStateToProps = (state: {
     envUrl: string;
     authToken: string;
   },
-  navigationTree: {
-    selectedMenu: object;
+  configReducer: {
+    showHidden: boolean;
   }
 }) => {
   const { sessionReducer: { envUrl, authToken } } = state;
-  const { navigationTree: { selectedMenu } } = state;
   const mstrData = {
     envUrl,
     authToken,
   };
-  return { mstrData, selectedMenu };
+  const { configReducer: { showHidden } } = state;
+  return { mstrData, showHidden };
 };
 
 const mapActionsToProps = {

@@ -6,10 +6,7 @@ const initialState = {
   isSettings: false,
   supportForms: true,
   popupData: null,
-  popupOpen: false,
-  showHidden: true,
-  settingsPanelLoaded: false,
-  reusePromptAnswers: false,
+  popupOpen: false
 };
 
 export const officeReducer = (state = initialState, action) => {
@@ -46,9 +43,6 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.clearSidePanelPopupData:
       return clearSidePanelPopupData(action, state);
-
-    case officeProperties.actions.setShowHidden:
-      return setShowHidden(action, state);
 
     default:
       break;
@@ -132,12 +126,5 @@ function clearSidePanelPopupData(action, state) {
   return {
     ...state,
     popupData: null,
-  };
-}
-
-function setShowHidden(action, state) {
-  return {
-    ...state,
-    showHidden: action.showHidden
   };
 }
