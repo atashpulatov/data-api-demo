@@ -3,10 +3,6 @@ export interface EmbeddedLibraryTypes {
     envUrl: string,
     authToken: string
   },
-  selectedMenu: {
-    pageKey: string,
-    groupId: string,
-  },
   showHidden: boolean,
   handleSelection: Function,
   updateSelectedMenu: Function,
