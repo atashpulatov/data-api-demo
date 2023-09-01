@@ -8,10 +8,11 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
+      And I found object "Report with nested prompt"
+      And I opened All objects listxx
+      And I selected first found object from the objects list
 
-     When I found object by ID "ABC9ACA2496777EE3FB81BA08A3CF9AD" and selected "Report with nested prompt"
-      And I clicked Import button without checking results
+     When I clicked Import button without checking results
       And I waited for Run button to be enabled
       And I clicked Run button
       And I waited for Run button to be enabled
