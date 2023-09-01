@@ -183,6 +183,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return element.is_enabled_by_attribute_html()
 
     def click_prepare_data_button(self):
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.PREPARE_BUTTON_ELEM).click()
 
     def add_dossier_to_library(self):
