@@ -37,8 +37,10 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
     OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
+    EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE + '.object-tile-wrapper .context-menu-list li:nth-child(1)'
     CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .checkbox-cell'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
+
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.editable'
@@ -151,7 +153,8 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self._hover_over_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
 
     def click_edit(self, tile_no):
-        self._click_tile_button(RightPanelTileBrowserPage.OPTIONS_BUTTON_FOR_OBJECT, tile_no)
+        self.click_options_for_object(tile_no)
+        self.get_element_by_css(RightPanelTileBrowserPage.EDIT_OPTION_FOR_OBJECT % tile_no).click()
 
     def hover_edit(self, tile_no):
         self._hover_over_tile_button(RightPanelTileBrowserPage.OPTIONS_BUTTON_FOR_OBJECT, tile_no)
@@ -170,6 +173,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON % tile_no).click()
+
+    def click_tile_options_menu(self, tile_no):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.OPTIONS_BUTTON_FOR_OBJECT, tile_no)
 
     def _click_tile_button(self, selector, tile_no):
         self.focus_on_add_in_frame()
