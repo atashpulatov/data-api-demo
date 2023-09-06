@@ -174,11 +174,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
         self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE_NOTIFICATION_CANCEL_BUTTON % tile_no).click()
 
-    def click_tile_options_menu(self, tile_no):
-        self.focus_on_add_in_frame()
-
-        self.get_element_by_css(RightPanelTileBrowserPage.OPTIONS_BUTTON_FOR_OBJECT, tile_no)
-
     def _click_tile_button(self, selector, tile_no):
         self.focus_on_add_in_frame()
 
