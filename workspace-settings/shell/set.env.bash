@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export APPLICATION_SHORT_VERSION_PREFIX="11.3."
-export APPLICATION_LONG_VERSION_PREFIX="${APPLICATION_SHORT_VERSION_PREFIX}1160."
+export APPLICATION_LONG_VERSION_PREFIX="${APPLICATION_SHORT_VERSION_PREFIX}1200."
 
 export GROUP_ID_BASE='com.microstrategy'
 export BASE_BRANCH='m2021'
@@ -58,6 +58,6 @@ function become_jenkins_manager(){
   export HATS=$HATS:jenkins
 }
 
-export BRANCH_OFF_COMMIT=d13ed6075738c2f3cad2e03a8cde71f7dbc38fb8
+export BRANCH_OFF_COMMIT=ff0ec2eb78f3bb78760af4e1e054678a3833c316
 
 export BASE_VERSION=100
