@@ -8,9 +8,7 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
 
      When I logged in as default user
       And I clicked Import Data button
-      And I found object "Report with nested prompt"
-      And I opened All objects listxx
-      And I selected first found object from the objects list
+      And I found and selected object "Report with nested prompt"
 
      When I clicked Import button without checking results
       And I waited for Run button to be enabled
@@ -20,10 +18,10 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
       # Verify wheter next step can be reliably tested due to button being enabled with varying, usually short delays
 # TODO Then I verified Run button is disabled
       And I closed last notification
-      And I verified that cells ["A2", "C3", "E3"] have values ["2014", "Electronics", "$906,661"]
+      And I verified that cells ["A2", "C3", "E3"] have values ["2020", "Electronics", "$906,661"]
 
      When I clicked Refresh on object 1
-     Then I verified that cells ["A2", "C3", "E3"] have values ["2014", "Electronics", "$906,661"]
+     Then I verified that cells ["A2", "C3", "E3"] have values ["2020", "Electronics", "$906,661"]
 
      When I clicked Edit object 1
       And I waited for Run button to be enabled
