@@ -18,7 +18,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     SIDE_PANEL_HEADER = '.side-panel > .header'
 
-    RIGHT_PANEL_TILE = '.object-tile-list > article:nth-child(%s) > div > .react-contextmenu-wrapper'
+    RIGHT_PANEL_TILE = '.object-tile-list > article:nth-child(%s) > div > .object-tile-wrapper'
     RIGHT_PANEL_TILE_NOTIFICATION = '.object-tile-list > article:nth-child(%s) > div > .notification-container'
 
     RIGHT_PANEL_TILE_BUTTON_PREFIX = RIGHT_PANEL_TILE + ' .icon-bar '
@@ -35,12 +35,12 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     PROGRESS_COUNT_SEPARATOR = '/'
 
-    DUPLICATE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
-    EDIT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
-    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(3)'
-    REMOVE_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(4)'
+    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
+    OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
+    EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE + '.object-tile-wrapper .context-menu-list li:nth-child(1)'
     CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .checkbox-cell'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
+
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.editable'
@@ -146,9 +146,6 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         for button in warnings_notifications_ok_buttons:
             button.click()
 
-    def click_duplicate(self, tile_no):
-        self._click_tile_button(RightPanelTileBrowserPage.DUPLICATE_BUTTON_FOR_OBJECT, tile_no)
-
     def click_refresh(self, tile_no):
         self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
 
@@ -156,20 +153,21 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         self._hover_over_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
 
     def click_edit(self, tile_no):
-        self._click_tile_button(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT, tile_no)
+        self.click_options_for_object(tile_no)
+        self.get_element_by_css(RightPanelTileBrowserPage.EDIT_OPTION_FOR_OBJECT % tile_no).click()
 
     def hover_edit(self, tile_no):
-        self._hover_over_tile_button(RightPanelTileBrowserPage.EDIT_BUTTON_FOR_OBJECT, tile_no)
-
-    def remove_object_using_icon(self, tile_no):
-        self._click_tile_button(RightPanelTileBrowserPage.REMOVE_BUTTON_FOR_OBJECT, tile_no)
-
-        self.wait_for_remove_object_to_finish_successfully()
+        self._hover_over_tile_button(RightPanelTileBrowserPage.OPTIONS_BUTTON_FOR_OBJECT, tile_no)
 
     def click_checkbox_for_object_selection(self, tile_no):
         self.focus_on_add_in_frame()
 
         self.get_element_by_css(RightPanelTileBrowserPage.CHECKBOX_FOR_OBJECT % tile_no).click()
+
+    def click_options_for_object(self, tile_no):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.OPTIONS_BUTTON_FOR_OBJECT % tile_no).click()
 
     def click_cancel_on_pending_action(self, tile_no):
         self.focus_on_add_in_frame()

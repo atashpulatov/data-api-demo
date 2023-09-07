@@ -9,8 +9,9 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "CDE36AFC11EA6220B17C0080EF054542" and selected "Report with all type of prompts (except nested)"
+      And I found object "Report with all type of prompts (except nested)"
+      And I opened All objects list
+      And I selected first found object from the objects list
 
      When I clicked Prepare Data button
       And I waited for Run button to be enabled
