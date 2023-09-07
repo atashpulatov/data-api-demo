@@ -17,6 +17,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     NAME_OBJECT_ELEM = '''span[title='%s']'''
     NAME_OBJECT_ID_PREFIX = '#name-column-'
+    LIST_OBJECT_ELEM = '''div[aria-label='%s']'''
 
     EXPAND_DETAILS_ELEM = '.details-indicator'
     ARROW_DETAILS_BUTTON_OPENED = ' .details-indicator-opened'
@@ -113,6 +114,10 @@ class ImportDataBrowserPage(BaseBrowserPage):
         first_object = self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_LIBRARY)
         first_object.click()
 
+    def find_and_select_object_from_list(self, object_name):
+        self.focus_on_library_frame()
+        self.get_element_by_css(ImportDataBrowserPage.LIST_OBJECT_ELEM % object_name).click()
+
     def find_and_select_object(self, object_name):
         """
         Finds object by name and selects it. This method does not verify ids and cannot handle all special characters.
@@ -123,6 +128,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
         """
         self.find_object(object_name)
 
+        self.go_to_all_objects_list()
+
         self.select_object_by_name(object_name)
 
     def select_object_by_name(self, object_name):
@@ -132,7 +139,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         :param object_name: object name to search for
         """
-        self.get_element_by_css(ImportDataBrowserPage.NAME_OBJECT_ELEM % object_name).click()
+        self.get_element_by_css(ImportDataBrowserPage.LIST_OBJECT_ELEM % object_name).click()
 
     def find_and_select_object_by_id(self, object_name, object_id):
         """
@@ -183,6 +190,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return element.is_enabled_by_attribute_html()
 
     def click_prepare_data_button(self):
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.PREPARE_BUTTON_ELEM).click()
 
     def add_dossier_to_library(self):

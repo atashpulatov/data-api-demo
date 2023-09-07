@@ -8,8 +8,9 @@ Feature: F21402 - Support for prompted reports while importing data for Excel ad
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-     When I found object by ID "6D70D06949B83CD9DBFAC0AF5FE0010E" and selected "Report with prompt - Object prompt | Required | Default answer"
+      And I found object "Report with prompt - Object prompt | Required | Default answer"
+      And I opened All objects list
+      And I selected first found object from the objects list
       And I clicked Import button without checking results
       And I waited for Run button to be enabled
      Then I clicked Back button

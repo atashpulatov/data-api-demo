@@ -25,6 +25,10 @@ def step_imp(context):
 def step_impl(context):
     context.pages.import_data_page().select_first_found_object()
 
+@step('I selected object "{object_name}" from the objects list')
+def step_impl(context, object_name):
+    context.pages.import_data_page().find_and_select_object_from_list(object_name)
+
 
 @step('I found object "{object_name}"')
 def step_impl(context, object_name):
