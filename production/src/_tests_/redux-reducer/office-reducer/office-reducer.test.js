@@ -13,7 +13,9 @@ describe('officeReducer', () => {
       isConfirm: false,
       supportForms: true,
       popupData: null,
-      popupOpen: false
+      popupOpen: false,
+      settingsPanelLoaded: false,
+      reusePromptAnswers: false
     });
   });
 
@@ -102,5 +104,31 @@ describe('officeReducer', () => {
     const newState = officeReducer(oldState, action);
     // then
     expect(newState.isClearDataFailed).toBe(true);
+  });
+
+  it('should set settingsPanelLoaded to given value on toggleSettingsPanelLoadedFlag', () => {
+    // given
+    const oldState = { settingsPanelLoaded: false };
+    const action = {
+      type: officeProperties.actions.toggleSettingsPanelLoadedFlag,
+      settingsPanelLoaded: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState.settingsPanelLoaded).toBe(true);
+  });
+
+  it('should set settingsPanelLoaded to given value on toggleReusePromptAnswersFlag', () => {
+    // given
+    const oldState = { reusePromptAnswers: false };
+    const action = {
+      type: officeProperties.actions.toggleReusePromptAnswersFlag,
+      reusePromptAnswers: true,
+    };
+    // when
+    const newState = officeReducer(oldState, action);
+    // then
+    expect(newState.reusePromptAnswers).toBe(true);
   });
 });

@@ -21,8 +21,6 @@ import {
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
 
-const REUSE_PROMPT_ANSWERS_FEATURE = 'reusePrompAnswersFeatureEnabled';
-
 export const RightSidePanelNotConnected = ({
   loadedObjects,
   isConfirm,
@@ -48,13 +46,11 @@ export const RightSidePanelNotConnected = ({
   const duplicatePopupParams = { activeCellAddress, setDuplicatedObjectId, setSidePanelPopup };
 
   React.useEffect(() => {
-    const reusePrompAnswersFeatureEnabled = JSON.parse(window.localStorage.getItem(REUSE_PROMPT_ANSWERS_FEATURE));
-
     async function initializeSidePanel() {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
-        reusePrompAnswersFeatureEnabled && await sidePanelService.initReusePromptAnswers();
+        await sidePanelService.initReusePromptAnswers();
       } catch (error) {
         console.error(error);
       }

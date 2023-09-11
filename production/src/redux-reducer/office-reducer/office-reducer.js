@@ -6,7 +6,9 @@ const initialState = {
   isSettings: false,
   supportForms: true,
   popupData: null,
-  popupOpen: false
+  popupOpen: false,
+  settingsPanelLoaded: false,
+  reusePromptAnswers: false
 };
 
 export const officeReducer = (state = initialState, action) => {

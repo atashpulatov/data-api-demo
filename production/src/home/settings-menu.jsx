@@ -18,9 +18,8 @@ import getDocumentationLocale from '../helpers/get-documentation-locale';
 import officeStoreObject from '../office/store/office-store-object';
 
 const APP_VERSION = packageJson.build;
-const REUSE_PROMPT_ANSWERS_FEATURE = 'reusePrompAnswersFeatureEnabled';
 
-const { Office, localStorage } = window;
+const { Office } = window;
 export const SettingsMenuNotConnected = ({
   userFullName,
   userID,
@@ -35,7 +34,6 @@ export const SettingsMenuNotConnected = ({
   isSettings
 }) => {
   const [t] = useTranslation('common', { i18n });
-  const reusePrompAnswersFeatureEnabled = JSON.parse(localStorage.getItem(REUSE_PROMPT_ANSWERS_FEATURE));
 
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && objects && objects.length > 0;
@@ -111,16 +109,14 @@ export const SettingsMenuNotConnected = ({
         onKeyUp={isSecuredActive ? (e) => (e.key === 'Enter' && showConfirmationPopup()) : null}>
         {t('Clear Data')}
       </li>
-      {reusePrompAnswersFeatureEnabled && (
-        <li
-          className="no-trigger-close settings not-linked-list"
-          tabIndex="0"
-          role="menuitem"
-          onClick={() => toggleSettingsPanelLoadedFlag(settingsPanelLoaded)}
-          onKeyUp={(e) => (e.key === 'Enter' && toggleSettingsPanelLoadedFlag(settingsPanelLoaded))}>
-          {t('Settings')}
-        </li>
-      )}
+      <li
+        className="no-trigger-close settings not-linked-list"
+        tabIndex="0"
+        role="menuitem"
+        onClick={() => toggleSettingsPanelLoadedFlag(settingsPanelLoaded)}
+        onKeyUp={(e) => (e.key === 'Enter' && toggleSettingsPanelLoadedFlag(settingsPanelLoaded))}>
+        {t('Settings')}
+      </li>
       <div className="separate-line" />
       <li className="privacy-policy">
         <a
