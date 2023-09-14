@@ -134,7 +134,7 @@ class OfficeConverterServiceV2 {
    * @return {body}
    */
   convertCellValuesToExcelStandard = (body) => {
-    const adjustedRawValues = body.data.metricValues.raw.map((valuesArray) => valuesArray.map((value) => (value === null ? '' : value)));
+    const adjustedRawValues = body.data.metricValues.raw?.map((valuesArray) => valuesArray.map((value) => (value === null ? '' : value)));
     body.data.metricValues.raw = adjustedRawValues;
     return body;
   };
