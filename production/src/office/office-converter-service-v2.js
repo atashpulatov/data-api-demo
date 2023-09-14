@@ -134,8 +134,15 @@ class OfficeConverterServiceV2 {
    * @return {body}
    */
   convertCellValuesToExcelStandard = (body) => {
-    const adjustedRawValues = body.data.metricValues.raw?.map((valuesArray) => valuesArray.map((value) => (value === null ? '' : value)));
-    body.data.metricValues.raw = adjustedRawValues;
+    console.log('🚀 ~ file: office-converter-service-v2.js:137 ~ OfficeConverterServiceV2 ~ body:', body);
+    console.log('🚀 ~ file: office-converter-service-v2.js:139 ~ OfficeConverterServiceV2 ~ raw:', body.data.metricValues.raw);
+    if (body.data.metricValues.columnSets) {
+      const adjustedRawValues = body.data.metricValues.columnSets[0].raw.map((valuesArray) => valuesArray.map((value) => (value === null ? '' : value)));
+      body.data.metricValues.columnSets[0].raw = adjustedRawValues;
+    } else {
+      const adjustedRawValues = body.data.metricValues.raw.map((valuesArray) => valuesArray.map((value) => (value === null ? '' : value)));
+      body.data.metricValues.raw = adjustedRawValues;
+    }
     return body;
   };
 }
