@@ -559,6 +559,27 @@ class MstrObjectRestService {
       });
   };
 
+  updateReportPrompts = ({
+    objectId,
+    projectId,
+    instanceId,
+    promptsAnswers,
+  }) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers`;
+    return request
+      .put(fullPath)
+      .set('X-MSTR-AuthToken', authToken)
+      .set('X-MSTR-ProjectID', projectId)
+      .send({ prompts: promptsAnswers })
+      .withCredentials()
+      .then((res) => {
+        console.log(res);
+        return res.status;
+      });
+  };
+
   applyDossierPrompts = ({
     objectId,
     projectId,

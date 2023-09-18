@@ -127,7 +127,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       } else {
         const body = { disableManipulationsAutoSaving: true, persistViewState: true };
         instance.mid = await createDossierInstance(projectId, dossierId, body);
-        let givenPromptsAnswers = promptsAnswers;
+        let givenPromptsAnswers = { ...promptsAnswers };
 
         // Declared variables to determine whether importing a report/dossier is taking place and
         // whether there are previous prompt answers to handle
@@ -152,16 +152,19 @@ export default class EmbeddedDossierNotConnected extends React.Component {
               (answerPrmpt) => answerPrmpt && answerPrmpt.key === promptObject.key
             );
             if (previousPromptIndex >= 0) {
-              if (!promptObject.required && previousPromptsAnswers[previousPromptIndex].values.length === 0) {
-                previousPromptsAnswers[previousPromptIndex].useDefault = true;
+              const tempAnswer = { ...previousPromptsAnswers[previousPromptIndex], type: promptObject.type };
+              if (!promptObject.required && tempAnswer.values.length === 0) {
+                tempAnswer.useDefault = true;
               }
-              givenPromptsAnswers[0].answers.push(previousPromptsAnswers[previousPromptIndex]);
+              givenPromptsAnswers[0].answers.push(tempAnswer);
             } else if (promptObject.required) {
-              givenPromptsAnswers[0].answers.push({ key: promptObject.key, useDefault: true, values: [] });
+              givenPromptsAnswers[0].answers.push({
+                key: promptObject.key, useDefault: true, type: promptObject.type, values: []
+              });
             }
           });
         }
-        if (givenPromptsAnswers != null) {
+        if (givenPromptsAnswers?.length > 0 && givenPromptsAnswers[0].answers?.length > 0) {
           let count = 0;
           while (count < givenPromptsAnswers.length) {
             await answerDossierPrompts({
