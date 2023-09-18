@@ -147,6 +147,36 @@ export const PromptsWindowNotConnected = (props) => {
     setIsPromptLoading(false);
   };
 
+  /**
+   * This function is called at the end of the Reprompt (only Reprompt, not Edit) workflow,
+   * after user applies new answers. It will bypass the Edit Filters step and update the Excel data
+   * with the newly-provided prompt answers. If any previous filters were applied to the imported Report,
+   * they will be persisted.
+   * @param {string} chosenObjectIdLocal - ID of the Report that was imported into Excel
+   * @param {string} projectId - ID of the Project that the Report belongs to
+   * @returns {void}
+   */
+  const finishRepromptWithoutEditFilters = useCallback((chosenObjectIdLocal, projectId) => {
+    popupHelper.officeMessageParent({
+      command: selectorProperties.commandOnUpdate,
+      chosenObjectId: chosenObjectIdLocal,
+      projectId,
+      chosenObjectSubtype: editedObject.chosenObjectSubtype,
+      body: popupViewSelectorHelper.createBody(
+        editedObject.selectedAttributes, editedObject.selectedMetrics,
+        editedObject.selectedFilters, editedObject.instanceId
+      ),
+      chosenObjectName: editedObject.chosenObjectName,
+      instanceId: editedObject.instanceId,
+      promptsAnswers: newPromptsAnswers.current,
+      isPrompted: !!newPromptsAnswers.current.length,
+      subtotalsInfo: editedObject.subtotalsInfo,
+      displayAttrFormNames: editedObject.displayAttrFormNames
+    });
+  }, [editedObject.chosenObjectSubtype, editedObject.selectedAttributes, editedObject.selectedMetrics,
+    editedObject.selectedFilters, editedObject.instanceId, editedObject.chosenObjectName,
+    editedObject.subtotalsInfo, editedObject.displayAttrFormNames]);
+
   const loadEmbeddedDossier = useCallback(async (localContainer) => {
     if (!loading) {
       return;
@@ -311,36 +341,6 @@ export const PromptsWindowNotConnected = (props) => {
     cancelImportRequest();
     onPopupBack();
   };
-
-  /**
-   * This function is called at the end of the Reprompt (only Reprompt, not Edit) workflow,
-   * after user applies new answers. It will bypass the Edit Filters step and update the Excel data
-   * with the newly-provided prompt answers. If any previous filters were applied to the imported Report,
-   * they will be persisted.
-   * @param {string} chosenObjectIdLocal - ID of the Report that was imported into Excel
-   * @param {string} projectId - ID of the Project that the Report belongs to
-   * @returns {void}
-   */
-  const finishRepromptWithoutEditFilters = useCallback((chosenObjectIdLocal, projectId) => {
-    popupHelper.officeMessageParent({
-      command: selectorProperties.commandOnUpdate,
-      chosenObjectId: chosenObjectIdLocal,
-      projectId,
-      chosenObjectSubtype: editedObject.chosenObjectSubtype,
-      body: popupViewSelectorHelper.createBody(
-        editedObject.selectedAttributes, editedObject.selectedMetrics,
-        editedObject.selectedFilters, editedObject.instanceId
-      ),
-      chosenObjectName: editedObject.chosenObjectName,
-      instanceId: editedObject.instanceId,
-      promptsAnswers: newPromptsAnswers.current,
-      isPrompted: !!newPromptsAnswers.current.length,
-      subtotalsInfo: editedObject.subtotalsInfo,
-      displayAttrFormNames: editedObject.displayAttrFormNames
-    });
-  }, [editedObject.chosenObjectSubtype, editedObject.selectedAttributes, editedObject.selectedMetrics,
-    editedObject.selectedFilters, editedObject.instanceId, editedObject.chosenObjectName,
-    editedObject.subtotalsInfo, editedObject.displayAttrFormNames]);
 
   return (
     <div

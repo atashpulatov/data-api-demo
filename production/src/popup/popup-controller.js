@@ -38,7 +38,7 @@ class PopupController {
   /**
    * This method is used to run the Report's re-prompt popup from the Excel add-in.
    * Note that both the Edit and Reprompt workflows will call this function.
-   * The isEdit parameter is utilized to determine whether the Reprompt screen needs to
+   * The isEdit parameter is determines whether the Reprompt screen should
    * be followed by the Edit Filters screen.
    * @param {*} reportParams
    * @param {*} isEdit

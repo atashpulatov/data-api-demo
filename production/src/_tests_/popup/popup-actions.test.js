@@ -124,6 +124,23 @@ describe('Popup actions', () => {
     expect(popupController.runRepromptPopup).toBeCalledWith(report, true);
   });
 
+  it('should run reprompt popup with isEdit = false if reprompt action for prompted object is called', async () => {
+    // given
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
+    const returnedValue = {
+      id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true
+    };
+    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
+    const listener = jest.fn();
+    // when
+    await actions.callForReprompt(report)(listener);
+    // then
+    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
+    expect(popupController.runRepromptPopup).toBeCalledWith(report, false);
+  });
+
   it('should call error service when edit action fails', async () => {
     // given
     const bindId = 'bindId';
