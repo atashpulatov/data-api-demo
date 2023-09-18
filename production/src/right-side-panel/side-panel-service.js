@@ -155,7 +155,7 @@ class SidePanelService {
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
         this.reduxStore.dispatch(popupActions.callForRepromptDossier({ bindId, mstrObjectType }));
       } else {
-        this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+        this.reduxStore.dispatch(popupActions.callForReprompt({ bindId, mstrObjectType }));
       }
     }
   };

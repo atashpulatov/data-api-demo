@@ -35,8 +35,16 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
-  runRepromptPopup = async (reportParams) => {
-    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
+  /**
+   * This method is used to run the Report's re-prompt popup from the Excel add-in.
+   * Note that both the Edit and Reprompt workflows will call this function.
+   * The isEdit parameter is utilized to determine whether the Reprompt screen needs to
+   * be followed by the Edit Filters screen.
+   * @param {*} reportParams
+   * @param {*} isEdit
+   */
+  runRepromptPopup = async (reportParams, isEdit = true) => {
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 

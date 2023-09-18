@@ -121,7 +121,7 @@ describe('Popup actions', () => {
     // then
     expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
-    expect(popupController.runRepromptPopup).toBeCalledWith(report);
+    expect(popupController.runRepromptPopup).toBeCalledWith(report, true);
   });
 
   it('should call error service when edit action fails', async () => {
@@ -281,7 +281,7 @@ describe('Popup actions', () => {
     // then
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: object });
-    expect(popupController.runRepromptPopup).toBeCalledWith(reportParams);
+    expect(popupController.runRepromptPopup).toBeCalledWith(reportParams, true);
   });
 
   it('should do callForDuplicate for duplication with edit for dossier visualization', async () => {

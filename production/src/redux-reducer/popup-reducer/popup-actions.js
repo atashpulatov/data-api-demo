@@ -26,6 +26,22 @@ class PopupActions {
     this.visualizationInfoService = visualizationInfoService;
   };
 
+  callForReprompt = (reportParams) => async (dispatch) => {
+    try {
+      await this.officeApiHelper.checkStatusOfSessions();
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+      editedObject.objectType = editedObject.mstrObjectType;
+
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedObject,
+      });
+      this.popupController.runRepromptPopup(reportParams, false);
+    } catch (error) {
+      return this.errorService.handleError(error);
+    }
+  };
+
   callForEdit = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
@@ -37,7 +53,7 @@ class PopupActions {
         editedObject,
       });
       if (editedObject.isPrompted) {
-        this.popupController.runRepromptPopup(reportParams);
+        this.popupController.runRepromptPopup(reportParams, true);
       } else {
         this.popupController.runEditFiltersPopup(reportParams);
       }
@@ -119,7 +135,7 @@ class PopupActions {
       if (isDossier) {
         this.popupController.runEditDossierPopup(reportParams);
       } else if (object.isPrompted) {
-        this.popupController.runRepromptPopup(reportParams);
+        this.popupController.runRepromptPopup(reportParams, true);
       } else {
         this.popupController.runEditFiltersPopup(reportParams);
       }

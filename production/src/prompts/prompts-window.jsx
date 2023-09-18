@@ -14,6 +14,7 @@ import { PromptsContainer } from './prompts-container';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
+import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
@@ -34,7 +35,9 @@ export const PromptsWindowNotConnected = (props) => {
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects,
   } = props;
   const { chosenObjectId } = mstrData;
-  const { isReprompt } = popupState;
+  // isReprompt will be true for both Edit AND Reprompt workflows
+  // isEdit will only be true for the Edit workflow
+  const { isReprompt, isEdit } = popupState;
 
   const { installSessionProlongingHandler } = sessionHelper;
 
@@ -248,6 +251,11 @@ export const PromptsWindowNotConnected = (props) => {
 
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
           promptsAnswered({ dossierData, promptsAnswers: newPromptsAnswers.current });
+
+          // for the Reprompt workflow only, skip edit filter screen
+          if (isReprompt && !isEdit) {
+            finishRepromptWithoutEditFilters(chosenObjectIdLocal, projectId);
+          }
         });
     } catch (error) {
       console.error({ error });
@@ -255,7 +263,8 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, editedObject.promptsAnswers,
     isReprompt, loading, mstrData.chosenProjectId, mstrData.promptsAnswers, preparePromptedReport, promptsAnswered,
-    session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers]);
+    session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
+    finishRepromptWithoutEditFilters]);
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
@@ -303,6 +312,36 @@ export const PromptsWindowNotConnected = (props) => {
     onPopupBack();
   };
 
+  /**
+   * This function is called at the end of the Reprompt (only Reprompt, not Edit) workflow,
+   * after user applies new answers. It will bypass the Edit Filters step and update the Excel data
+   * with the newly-provided prompt answers. If any previous filters were applied to the imported Report,
+   * they will be persisted.
+   * @param {string} chosenObjectIdLocal - ID of the Report that was imported into Excel
+   * @param {string} projectId - ID of the Project that the Report belongs to
+   * @returns {void}
+   */
+  const finishRepromptWithoutEditFilters = useCallback((chosenObjectIdLocal, projectId) => {
+    popupHelper.officeMessageParent({
+      command: selectorProperties.commandOnUpdate,
+      chosenObjectId: chosenObjectIdLocal,
+      projectId,
+      chosenObjectSubtype: editedObject.chosenObjectSubtype,
+      body: popupViewSelectorHelper.createBody(
+        editedObject.selectedAttributes, editedObject.selectedMetrics,
+        editedObject.selectedFilters, editedObject.instanceId
+      ),
+      chosenObjectName: editedObject.chosenObjectName,
+      instanceId: editedObject.instanceId,
+      promptsAnswers: newPromptsAnswers.current,
+      isPrompted: !!newPromptsAnswers.current.length,
+      subtotalsInfo: editedObject.subtotalsInfo,
+      displayAttrFormNames: editedObject.displayAttrFormNames
+    });
+  }, [editedObject.chosenObjectSubtype, editedObject.selectedAttributes, editedObject.selectedMetrics,
+    editedObject.selectedFilters, editedObject.instanceId, editedObject.chosenObjectName,
+    editedObject.subtotalsInfo, editedObject.displayAttrFormNames]);
+
   return (
     <div
       style={{ position: 'relative' }}
@@ -334,6 +373,7 @@ PromptsWindowNotConnected.propTypes = {
   popupState: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     isReprompt: PropTypes.bool,
+    isEdit: PropTypes.bool
   }),
   session: PropTypes.shape({
     envUrl: PropTypes.string,
@@ -342,7 +382,15 @@ PromptsWindowNotConnected.propTypes = {
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
-    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+    chosenObjectSubtype: PropTypes.number,
+    chosenObjectName: PropTypes.string,
+    instanceId: PropTypes.string,
+    subtotalsInfo: PropTypes.shape({ subtotalsAddresses: PropTypes.arrayOf(PropTypes.shape({})) }),
+    displayAttrFormNames: PropTypes.string,
+    selectedAttributes: PropTypes.arrayOf(PropTypes.shape({})),
+    selectedMetrics: PropTypes.arrayOf(PropTypes.shape({})),
+    selectedFilters: PropTypes.arrayOf(PropTypes.shape({})),
   }),
   reusePromptAnswers: PropTypes.bool,
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
