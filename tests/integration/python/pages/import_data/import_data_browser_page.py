@@ -182,6 +182,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.right_panel_tile_browser_page.wait_for_operation_global_error_and_accept(error_message)
 
     def click_import_button_to_open_import_dossier(self):
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
     def is_prepare_data_button_enabled(self):
