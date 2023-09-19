@@ -9,8 +9,7 @@ Feature: F29365 - Import compound grid
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "DD7D695411EABC3E93B50080EF65835E" and selected "Kind of compound grids - Cross type"
+      And I found and selected object "Kind of compound grids - Cross type"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 2
@@ -22,7 +21,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "F1"
       And I clicked Add Data button
-      And I found object by ID "DD7D695411EABC3E93B50080EF65835E" and selected "Kind of compound grids - Cross type"
+      And I found and selected object "Kind of compound grids - Cross type"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 3
@@ -34,7 +33,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "AG1"
       And I clicked Add Data button
-      And I found object by ID "DD7D695411EABC3E93B50080EF65835E" and selected "Kind of compound grids - Cross type"
+      And I found and selected object "Kind of compound grids - Cross type"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 4
