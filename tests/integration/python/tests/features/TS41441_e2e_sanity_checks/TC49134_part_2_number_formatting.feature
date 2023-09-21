@@ -11,9 +11,8 @@ Feature: TS41441 - Sanity checks
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
 
-     When I found object by ID "8C5FA36E11E960ED26F00080EF256F5C" and selected "Number Formatting"
+     When I found and selected object "Number Formatting"
       And I clicked Import button
       And I closed all notifications
      Then I verified that cell "B2" has value "$4,560.00"

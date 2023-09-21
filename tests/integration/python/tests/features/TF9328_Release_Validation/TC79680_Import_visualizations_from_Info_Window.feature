@@ -8,8 +8,7 @@ Feature: TF9328 - Release Validation
     Given I initialized Excel
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "E6C782172D411D9CAC0B5FAE28E03A54" and selected "Info Window by kechu"
+      And I found and selected object "Info Window by kechu"
       And I clicked Import button to open Import Dossier
       And I selected dossier page or chapter 3
       And I clicked "BMG" element in "Supplier" attribute for visualization "Visualization 1"

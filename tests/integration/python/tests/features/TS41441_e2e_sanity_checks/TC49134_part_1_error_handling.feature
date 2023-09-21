@@ -11,26 +11,22 @@ Feature: TS41441 - Sanity checks
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-
       And I found and selected object "01 Basic Report"
       And I expired user session
       And I clicked Prepare Data button
       And I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-
-      And I found object by ID "56A532DD11EA9A91D5440080EF853B57" and selected "50k columns report - pivoted"
+      And I found and selected object "50k columns report - pivoted"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1048576"
       And I clicked Import Data button
-      And I found object by ID "EFCDDD0840F3619E9E82E8B828757EB4" and selected "Report accessing XML file"
+      And I found and selected object "Report accessing XML file"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "XFD1"
       And I clicked Import Data button
-      And I found object by ID "EFCDDD0840F3619E9E82E8B828757EB4" and selected "Report accessing XML file"
+      And I found and selected object "Report accessing XML file"
      Then I clicked Import button and saw error "The table you try to import exceeds the worksheet limits."
 
      When I selected cell "A1"
