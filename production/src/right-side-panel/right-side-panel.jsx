@@ -20,6 +20,7 @@ import {
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
+import { saveDataInIndexDB } from '../storage/utility';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -82,9 +83,23 @@ export const RightSidePanelNotConnected = ({
 
   const handleSettingsClick = () => {
     officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
+    // saveDataInIndexDB
   };
 
   React.useEffect(() => {
+    const sampleJSONdata = {
+        type: 'articles',
+        id: '1',
+        attributes: {
+          title: 'JSON:API paints my bikeshed!',
+          body: 'The shortest article. Ever.',
+          created: '2015-05-22T14:56:29.000Z',
+          updated: '2015-05-22T14:56:28.000Z'
+        }
+      };
+    
+      saveDataInIndexDB(sampleJSONdata);
+    
     setLoadedObjectsWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
       loadedObjects,
       notifications,
