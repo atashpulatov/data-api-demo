@@ -71,6 +71,12 @@ def step_impl(context):
 
     AssertUtil.assert_simple(is_prepare_data_enabled, False)
 
+@step('I verified that Prepare Data button is enabled')
+def step_impl(context):
+    is_prepare_data_enabled = context.pages.import_data_page().is_prepare_data_button_enabled()
+
+    AssertUtil.assert_simple(is_prepare_data_enabled, True)
+
 
 @step('I clicked Prepare Data button')
 def step_impl(context):
@@ -219,3 +225,40 @@ def step_impl(context):
     expected_tooltip = "Show more"
 
     AssertUtil.assert_simple(tooltip_text, expected_tooltip)
+
+
+@step('I verified that the Import Data popup show "{expected_view}"')
+def step_impl(context,expected_view):
+    is_selected = context.pages.import_data_page().verify_if_view_is_selected(expected_view)
+
+    AssertUtil.assert_simple(is_selected, True)
+
+@step('I switched the Import Data popup view to "{expected_view}"')
+def step_impl(context,expected_view):
+    context.pages.import_data_page().switch_view_to(expected_view)
+
+
+@step('I found and clicked "{type}" object "{name}" in "{expected_view}"')
+def step_impl(context,type,name,expected_view):
+    context.pages.import_data_page().library_home_click_on_target_object(type,name,expected_view)
+
+
+@step('I click on Library icon')
+def step_impl(context):
+    context.pages.import_data_page().click_on_library_icon()
+
+
+@step('I switched to Content Discovery')
+def step_impl(context):
+    context.pages.import_data_page().switch_to_content_discovery()
+
+
+@step('I switched to project "{project}"')
+def step_impl(context,project):
+    context.pages.import_data_page().switch_to_project(project)
+
+
+@step('I clicked on folder "{folder}"')
+def step_impl(context,folder):
+    context.pages.import_data_page().click_on_folder(folder)
+    
