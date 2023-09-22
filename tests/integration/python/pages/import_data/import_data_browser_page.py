@@ -60,6 +60,17 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     ATTRIBUTE_METRIC_SELECTOR_ITEM_CSS = '.mstrmojo-FilterBox .item-wrapper'
 
+    LIBRARY_VIEW = '''button[aria-label='%s']'''
+    GRID_VIEW_OBJECT = '''div[aria-label='%s']'''
+    LIST_VIEW_OBJECT = '''div[data-itemname='%s']'''
+    CONENT_DISC_OBJECT = '''div[data-itemname='%s']'''
+
+    LIBRARY_ICON = '.mstr-nav-icon.icon-library'
+    LIBRARY_CONTENT_DISC = 'li.mstrd-PredefinedMenuSection-item i.icon-content_discovery + span'
+    CONENT_DISC_PROJECT_DROPDOWN = '.mstrd-folderPanel-projectSelectOption'
+    CONENT_DISC_PROJECT = '''span[title="%s"][class="mstrd-folderPanel-projectName"]'''
+    CONENT_DISC_FOLDER = '//span[text()="%s" and @class="mstrd-FolderTreeRow-name"]'
+
     def __init__(self):
         super().__init__()
 
@@ -182,9 +193,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.right_panel_tile_browser_page.wait_for_operation_global_error_and_accept(error_message)
 
     def click_import_button_to_open_import_dossier(self):
+        self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
     def is_prepare_data_button_enabled(self):
+        self.focus_on_add_in_popup_frame()
         element = self.get_element_by_id(ImportDataBrowserPage.PREPARE_BUTTON_ELEM)
 
         return element.is_enabled_by_attribute_html()
@@ -261,6 +274,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
         return self.get_element_by_css(ImportDataBrowserPage.FIRST_OBJECT_ROW).get_background_color()
 
     def verify_if_import_button_is_enabled(self):
+        self.focus_on_add_in_popup_frame()
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
@@ -332,5 +346,38 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         return name_tooltip.text
 
+    def verify_if_view_is_selected(self, expected_view):
+        self.focus_on_library_frame()
+        view = self.get_element_by_css(ImportDataBrowserPage.LIBRARY_VIEW % expected_view)
+        return view.get_attribute("data-active") == 'true'
 
+    def switch_view_to(self, expected_view):
+        self.focus_on_library_frame()
+        return self.get_element_by_css(ImportDataBrowserPage.LIBRARY_VIEW % expected_view).click()
 
+    def library_home_click_on_target_object(self,type,name,expected_view):
+        self.focus_on_library_frame()
+        if expected_view == 'Grid View':
+            new_name = name + " " + type
+            self.get_element_by_css(ImportDataBrowserPage.GRID_VIEW_OBJECT % new_name).click()
+        elif expected_view == 'List View':
+            self.get_element_by_css(ImportDataBrowserPage.LIST_VIEW_OBJECT % name).click()
+        else:
+            self.get_element_by_css(ImportDataBrowserPage.CONENT_DISC_OBJECT % name).click()
+
+    def click_on_library_icon(self):
+        self.focus_on_library_frame()
+        self.get_element_by_css(ImportDataBrowserPage.LIBRARY_ICON).click()
+
+    def switch_to_content_discovery(self):
+        self.focus_on_library_frame()
+        self.get_element_by_css(ImportDataBrowserPage.LIBRARY_CONTENT_DISC).click()
+
+    def switch_to_project(self,project):
+        self.focus_on_library_frame()
+        self.get_element_by_css(ImportDataBrowserPage.CONENT_DISC_PROJECT_DROPDOWN).click()
+        self.get_element_by_css(ImportDataBrowserPage.CONENT_DISC_PROJECT % project).click()
+    
+    def click_on_folder(self,folder):
+        self.focus_on_library_frame()
+        self.get_element_by_xpath(ImportDataBrowserPage.CONENT_DISC_FOLDER % folder).click()

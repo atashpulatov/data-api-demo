@@ -3,8 +3,8 @@ from pages.right_panel.right_panel_tile.right_panel_tile_browser_page import Rig
 
 
 class RangeTakenPopupBrowserPage(BaseBrowserPage):
-    RANGE_TAKEN_OK_BUTTON = '.range-taken-popup-footer-buttons .primary'
-    RANGE_TAKEN_CANCEL_BUTTON = '.range-taken-popup-footer-buttons .basic'
+    RANGE_TAKEN_OK_BUTTON = '.base-popup-footer-buttons .mstr-rc-button--primary'
+    RANGE_TAKEN_CANCEL_BUTTON = '.base-popup-footer-buttons .mstr-rc-button--secondary'
     RANGE_TAKEN_ACTIVE_CELL_OPTION = 'active_cell'
     NEW_SHEET_ELEMENT_ID = 'new_sheet'
 
