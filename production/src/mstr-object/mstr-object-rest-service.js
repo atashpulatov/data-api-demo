@@ -201,7 +201,7 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers?ignoreRequiredPrompts=true`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -219,7 +219,7 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers?ignoreRequiredPrompts=true`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -546,7 +546,7 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers?ignoreRequiredPrompts=true`;
     return request
       .put(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -567,7 +567,7 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers?ignoreRequiredPrompts=true`;
     return request
       .put(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -588,7 +588,7 @@ class MstrObjectRestService {
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts`;
+    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts?ignoreRequiredPrompts=true`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)

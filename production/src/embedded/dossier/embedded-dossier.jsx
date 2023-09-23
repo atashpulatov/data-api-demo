@@ -343,6 +343,12 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   */
   async promptsAnsweredHandler(promptsAnswers) {
     const { handlePromptAnswer } = this.props;
+
+    // Create reference to previous answers. This function called again after
+    // nested re-prompting the dossier, so we need to keep previous answers along with new ones
+    const tempAnswers = this.dossierData.promptsAnswers?.answers ? this.dossierData.promptsAnswers.answers : [];
+    promptsAnswers.answers = [...tempAnswers, ...promptsAnswers.answers];
+
     this.dossierData.promptsAnswers = promptsAnswers;
     handlePromptAnswer(promptsAnswers);
 
