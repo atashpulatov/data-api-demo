@@ -1,0 +1,11 @@
+{
+  "eslint.workingDirectories": [
+    {
+      "directory": "./production",
+      "changeProcessCWD": true
+    }
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+}
