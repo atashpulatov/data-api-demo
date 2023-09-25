@@ -215,7 +215,7 @@ class PopupActions {
     const resp = await this.mstrObjectRestService.rePromptDossier(objectId, instanceId, projectId);
 
     // Update dossier's instanceId with the new one
-    repromptedDossier.instanceId = resp.mid ? resp.mid : instanceId;
+    repromptedDossier.instanceId = resp && resp.mid ? resp.mid : instanceId;
     repromptedDossier.isEdit = true;
 
     if (updatedVisualizationInfo) {

@@ -171,10 +171,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
               objectId: dossierId,
               projectId,
               instanceId: instance.mid,
-              promptsAnswers: givenPromptsAnswers[0]
+              promptsAnswers: givenPromptsAnswers[count]
             });
             count++;
           }
+          await applyDossierPrompts({
+            objectId: dossierId,
+            projectId,
+            instanceId: instance.mid,
+            promptsAnswers: givenPromptsAnswers[0]
+          });
         }
         // Open Prompts' dialog if there are prompts to answer
         if (dossierOpenRequested && reusePromptAnswers && isImportedObjectPrompted) {
