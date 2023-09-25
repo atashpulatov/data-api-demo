@@ -18,7 +18,4 @@
   "editor.insertSpaces": true,
   "editor.autoIndent": "full",
   "terminal.integrated.cwd": "./production",
-  "cSpell.words": [
-    "reprompt"
-  ]
 }
