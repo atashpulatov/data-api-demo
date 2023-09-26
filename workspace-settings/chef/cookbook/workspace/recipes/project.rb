@@ -3,7 +3,6 @@
 # Recipe:: project
 #
 
-include_recipe 'chef_commons'
 include_recipe 'workspace::attributes_overrides'
 include_recipe 'nodejs'
 
