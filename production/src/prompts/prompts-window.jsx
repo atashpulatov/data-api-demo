@@ -127,7 +127,8 @@ export const PromptsWindowNotConnected = (props) => {
       );
     }
 
-    dossierInstanceDefinition = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition, projectId);
+    const repromptResponse = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition, projectId);
+    dossierInstanceDefinition.mid = repromptResponse.mid;
     dossierInstanceDefinition.id = chosenObjectIdLocal;
 
     return dossierInstanceDefinition;

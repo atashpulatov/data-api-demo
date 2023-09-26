@@ -157,7 +157,7 @@ class PopupActions {
       projectId, objectId, manipulationsXML, visualizationInfo
     } = editedDossier;
 
-    const instanceId = await this.mstrObjectRestService.createDossierInstance(
+    const instance = await this.mstrObjectRestService.createDossierInstance(
       projectId,
       objectId,
       { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
@@ -169,13 +169,13 @@ class PopupActions {
         projectId,
         objectId,
         visualizationInfo.visualizationKey,
-        instanceId,
+        instance.mid,
       );
     } catch (ignoreError) {
       // Ignored
     }
 
-    editedDossier.instanceId = instanceId;
+    editedDossier.instanceId = instance.mid;
     editedDossier.isEdit = true;
 
     if (updatedVisualizationInfo) {
@@ -193,7 +193,7 @@ class PopupActions {
       projectId, objectId, manipulationsXML, visualizationInfo
     } = repromptedDossier;
 
-    const instanceId = await this.mstrObjectRestService.createDossierInstance(
+    const instance = await this.mstrObjectRestService.createDossierInstance(
       projectId,
       objectId,
       { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
@@ -205,17 +205,17 @@ class PopupActions {
         projectId,
         objectId,
         visualizationInfo.visualizationKey,
-        instanceId,
+        instance.mid,
       );
     } catch (ignoreError) {
       // Ignored
     }
 
     // Re-prompt the dossier to open prompts' popup
-    const resp = await this.mstrObjectRestService.rePromptDossier(objectId, instanceId, projectId);
+    const resp = await this.mstrObjectRestService.rePromptDossier(objectId, instance.mid, projectId);
 
     // Update dossier's instanceId with the new one
-    repromptedDossier.instanceId = resp && resp.mid ? resp.mid : instanceId;
+    repromptedDossier.instanceId = resp && resp.mid ? resp.mid : instance.mid;
     repromptedDossier.isEdit = true;
 
     if (updatedVisualizationInfo) {

@@ -321,7 +321,7 @@ class MstrObjectRestService {
       .set('x-mstr-projectid', projectId)
       .send(body)
       .withCredentials()
-      .then((res) => res.body.mid);
+      .then((res) => res.body);
   };
 
   getDossierInstanceDefinition = (projectId, objectId, dossierInstanceId) => {
