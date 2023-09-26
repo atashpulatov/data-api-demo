@@ -133,8 +133,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         const isPromptedResponse = await isPrompted(dossierId, projectId, mstrObjectEnum.mstrObjectType.dossier.name);
         instance.status = isPromptedResponse.isPrompted ? 2 : 1;
 
-        let givenPromptsAnswers = { ...promptsAnswers };
-
         // Declared variables to determine whether importing a report/dossier is taking place and
         // whether there are previous prompt answers to handle
         const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
@@ -144,9 +142,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
           && isImportedObjectPrompted;
 
         // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
-        if (handlePreviousAnswersAtImport) {
-          givenPromptsAnswers = prepareGivenPromptAnswers(givenPromptsAnswers, promptObjects, previousPromptsAnswers);
-        }
+        const givenPromptsAnswers = handlePreviousAnswersAtImport ? prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) : { ...promptsAnswers };
 
         // Prepare the Dossier's instance to apply previous answers if necessary.
         if (givenPromptsAnswers?.length > 0 && givenPromptsAnswers[0].answers?.length > 0) {

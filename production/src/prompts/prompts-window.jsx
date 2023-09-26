@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, {
   useCallback, useEffect, useRef, useState
 } from 'react';
@@ -18,16 +19,10 @@ import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
+import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
+
 const { microstrategy } = window;
-const {
-  createInstance,
-  createDossierBasedOnReport,
-  rePromptDossier,
-  answerDossierPrompts,
-  getDossierStatus,
-  deleteDossierInstance,
-} = mstrObjectRestService;
-const postAnswerDossierPrompts = answerDossierPrompts;
+const { deleteDossierInstance } = mstrObjectRestService;
 
 export const PromptsWindowNotConnected = (props) => {
   const {
@@ -86,54 +81,6 @@ export const PromptsWindowNotConnected = (props) => {
     return (() => window.removeEventListener('message', messageReceived));
   }, [messageReceived]);
 
-  const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
-
-  const answerDossierPromptsHelper = useCallback(async (instanceDefinition, objectId, projectId, promptsAnswers) => {
-    const instanceId = instanceDefinition.mid;
-    let currentInstanceDefinition = instanceDefinition;
-    let count = 0;
-    while (currentInstanceDefinition.status === 2 && count < promptsAnswers.length) {
-      const config = {
-        objectId,
-        projectId,
-        instanceId: currentInstanceDefinition.mid,
-        promptsAnswers: promptsAnswers[count]
-      };
-      await postAnswerDossierPrompts(config);
-      if (count === promptsAnswers.length - 1) {
-        let dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
-        while (dossierStatusResponse.statusCode === 202) {
-          await sleep(1000);
-          dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
-        }
-        currentInstanceDefinition = dossierStatusResponse.body;
-      }
-      count += 1;
-    }
-    return instanceId;
-  }, []);
-
-  const preparePromptedReport = useCallback(async (chosenObjectIdLocal, projectId, promptsAnswers) => {
-    const config = { objectId: chosenObjectIdLocal, projectId };
-    const instanceDefinition = await createInstance(config);
-    const { instanceId } = instanceDefinition;
-    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
-    if (dossierInstanceDefinition.status === 2) {
-      dossierInstanceDefinition = await answerDossierPromptsHelper(
-        dossierInstanceDefinition,
-        chosenObjectIdLocal,
-        projectId,
-        promptsAnswers
-      );
-    }
-
-    const repromptResponse = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition, projectId);
-    dossierInstanceDefinition.mid = repromptResponse.mid;
-    dossierInstanceDefinition.id = chosenObjectIdLocal;
-
-    return dossierInstanceDefinition;
-  }, [answerDossierPromptsHelper]);
-
   const promptAnsweredHandler = (newAnswer) => {
     setIsPromptLoading(true);
     if (newPromptsAnswers.current.length > 0) {
@@ -187,36 +134,22 @@ export const PromptsWindowNotConnected = (props) => {
     const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
     const { envUrl, authToken } = session;
 
-    let instanceDefinition;
-    const instance = {};
-
-    let givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
     // Declared variables to determine whether importing a report/dossier is taking place and
     // whether there are previous prompt answers to handle
     const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
     const isImportedObjectPrompted = promptObjects && promptObjects.length;
     const isImportingWithPreviousPromptAnswers = importRequested && reusePromptAnswers
       && areTherePreviousPromptAnswers && isImportedObjectPrompted;
+
     // Update givenPromptsAnswers collection with previous prompt answers if importing
     // a report/dossier and reusePromptAnswers flag is enabled
-    if (isImportingWithPreviousPromptAnswers) {
-      givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
-      previousPromptsAnswers.forEach((previousAnswer) => {
-        const previousPromptIndex = promptObjects.findIndex(
-          (promptObject) => promptObject && promptObject.key === previousAnswer.key
-        );
-
-        if (previousPromptIndex >= 0) {
-          givenPromptsAnswers[0].answers.push(previousAnswer);
-        }
-      });
-    }
+    const givenPromptsAnswers = isImportingWithPreviousPromptAnswers ? prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) : (mstrData.promptsAnswers || editedObject.promptsAnswers);
 
     try {
+      let instance = {};
+
       if (givenPromptsAnswers) {
-        instanceDefinition = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
-        instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
-        instance.mid = instanceDefinition && instanceDefinition.mid;
+        instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
       }
 
       let msgRouter = null;
@@ -264,13 +197,13 @@ export const PromptsWindowNotConnected = (props) => {
           const chapter = await dossierPage.getCurrentChapter();
           const objectId = await dossierPage.getDossierId();
           const instanceId = await dossierPage.getDossierInstanceId();
-          const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
+          const visualizations = await dossierPage.getCurrentPageVisualizationList();
 
           const dossierData = {
             chapterKey: chapter.nodeKey,
             dossierId: objectId,
             instanceId,
-            visualizationKey: visuzalisations[0].key,
+            visualizationKey: visualizations[0].key,
             isReprompt
           };
 
@@ -293,7 +226,7 @@ export const PromptsWindowNotConnected = (props) => {
       popupHelper.handlePopupErrors(error);
     }
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, editedObject.promptsAnswers,
-    isReprompt, loading, mstrData.chosenProjectId, mstrData.promptsAnswers, preparePromptedReport, promptsAnswered,
+    isReprompt, loading, mstrData.chosenProjectId, mstrData.promptsAnswers, promptsAnswered,
     session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
     finishRepromptWithoutEditFilters]);
 
