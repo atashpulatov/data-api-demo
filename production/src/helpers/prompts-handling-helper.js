@@ -2,10 +2,10 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 const {
   rePromptDossier,
-  answerDossierPrompts,
   getDossierStatus,
   createInstance,
   createDossierBasedOnReport,
+  updateDossierPrompts,
 } = mstrObjectRestService;
 
 const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -30,10 +30,6 @@ export function prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers)
         tempAnswer.useDefault = true;
       }
       givenPromptsAnswers[0].answers.push(tempAnswer);
-    } else if (promptObject.required) {
-      givenPromptsAnswers[0].answers.push({
-        key: promptObject.key, useDefault: true, type: promptObject.type, values: []
-      });
     }
   });
   return givenPromptsAnswers;
@@ -58,15 +54,16 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
       objectId,
       projectId,
       instanceId: currentInstanceDefinition.mid,
-      promptsAnswers: promptsAnswers[count]
+      promptsAnswers: promptsAnswers[count] ? promptsAnswers[count] : { answers: [] },
     };
 
-    await answerDossierPrompts(config);
-    await sleep(500);
+    // Applying prompt answers to current instead of forcing the instance to execute the prompts.
+    // as indicated in https://microstrategy.github.io/rest-api-docs/common-workflows/analytics/use-prompts-objects/answer-prompts/#nested-prompts
+    await updateDossierPrompts(config);
 
     let dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
     while (dossierStatusResponse.statusCode === 202) {
-      await sleep(100);
+      await sleep(1000);
       dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
     }
     currentInstanceDefinition.status = dossierStatusResponse.body.status;
@@ -120,12 +117,16 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
   let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
 
   if (dossierInstanceDefinition.status === 2) {
+    console.time('Answering Dossier Prompts');
+
     dossierInstanceDefinition = await answerDossierPromptsHelper(
       dossierInstanceDefinition,
       chosenObjectIdLocal,
       projectId,
       promptsAnswers
     );
+
+    console.timeEnd('Answering Dossier Prompts');
   }
 
   const repromptResponse = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition.mid, projectId);

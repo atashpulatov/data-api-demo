@@ -149,7 +149,9 @@ export const PromptsWindowNotConnected = (props) => {
       let instance = {};
 
       if (givenPromptsAnswers) {
+        console.time('Prepared prompted Report');
         instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
+        console.timeEnd('Prepared prompted Report');
       }
 
       let msgRouter = null;
@@ -207,14 +209,33 @@ export const PromptsWindowNotConnected = (props) => {
             isReprompt
           };
 
+          // Get the answers applied to the current dossier's instance from the server.
+          // Need to incorporate these answers because they're formatted differently than the ones
+          // returned by the Embedded API. The REST API endpoint expects the answers to be in a
+          // different format than the Embedded API.
+          const promptsAnsDef = await mstrObjectRestService.getObjectPrompts(objectId, projectId, dossierData.instanceId, true);
+
           // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
           deleteDossierInstance(projectId, objectId, instanceId);
 
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
+          const currentAnswers = [...newPromptsAnswers.current];
+
+          // Append the server's version of the answers to the promptsAnswers object.
+          // This version of answers will be used to invoke the REST API endpoint when
+          // importing or re-prompting a report/dossier.
+          currentAnswers.forEach((currentAnswer) => {
+            const { answers } = currentAnswer;
+            answers.forEach((answer) => {
+              const answerDef = promptsAnsDef.find((prompt) => prompt.key === answer.key);
+              answerDef && (answer.answers = answerDef.answers) && (answer.type = answerDef.type);
+            });
+          });
+
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
-          promptsAnswered({ dossierData, promptsAnswers: newPromptsAnswers.current });
+          promptsAnswered({ dossierData, promptsAnswers: currentAnswers });
 
           // for the Reprompt workflow only, skip edit filter screen
           if (isReprompt && !isEdit) {

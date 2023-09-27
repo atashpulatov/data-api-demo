@@ -198,10 +198,11 @@ class MstrObjectRestService {
     projectId,
     instanceId,
     promptsAnswers,
+    bIncludeIgnoreRequiredPrompts = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers?ignoreRequiredPrompts=true`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers${bIncludeIgnoreRequiredPrompts ? '?ignoreRequiredPrompts=true' : ''}`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -215,11 +216,12 @@ class MstrObjectRestService {
     objectId,
     projectId,
     instanceId,
-    promptsAnswers
+    promptsAnswers,
+    bIncludeIgnoreRequiredPrompts = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers?ignoreRequiredPrompts=true`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers${bIncludeIgnoreRequiredPrompts ? '?ignoreRequiredPrompts=true' : ''}`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -465,11 +467,12 @@ class MstrObjectRestService {
    * @param {String} objectId Id of an object
    * @param {String} projectId Id of a project
    * @param {String} instanceId Id of an instance
+   * @param {Boolean} bIncludeClosedPrompts Whether to request to include closed prompts
    */
-  getObjectPrompts = (objectId, projectId, instanceId) => {
+  getObjectPrompts = (objectId, projectId, instanceId, bIncludeClosedPrompts = false) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts${bIncludeClosedPrompts ? '?closed=true' : ''}`;
 
     return request
       .get(fullPath)
@@ -538,15 +541,22 @@ class MstrObjectRestService {
       .then((res) => res.body);
   };
 
+  /**
+   * Answer specified prompts on the document/dossier instance, prompts can either be answered with default answers(if available)
+   *
+   * @param {*} param0
+   * @returns
+   */
   updateDossierPrompts = ({
     objectId,
     projectId,
     instanceId,
     promptsAnswers,
+    bIncludeIgnoreRequiredPrompts = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers?ignoreRequiredPrompts=true`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers${bIncludeIgnoreRequiredPrompts ? '?ignoreRequiredPrompts=true' : ''}`;
     return request
       .put(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -564,10 +574,11 @@ class MstrObjectRestService {
     projectId,
     instanceId,
     promptsAnswers,
+    bIncludeIgnoreRequiredPrompts = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers?ignoreRequiredPrompts=true`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers${bIncludeIgnoreRequiredPrompts ? '?ignoreRequiredPrompts=true' : ''}`;
     return request
       .put(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -585,10 +596,11 @@ class MstrObjectRestService {
     projectId,
     instanceId,
     promptsAnswers,
+    bIncludeIgnoreRequiredPrompts = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts?ignoreRequiredPrompts=true`;
+    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts${bIncludeIgnoreRequiredPrompts ? '?ignoreRequiredPrompts=true' : ''}`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -599,6 +611,50 @@ class MstrObjectRestService {
         console.log(res);
         return res.status;
       });
+  };
+
+  /**
+   * This method is used to fetch attribute's elements list for a given prompt defined in a dossier's instance
+   *
+   * @param {*} objectId
+   * @param {*} projectId
+   * @param {*} instanceId
+   * @param {*} promptId
+   * @returns {Promise} Promise object represents the list of attribute's elements
+   */
+  getPromptElements = (objectId, projectId, instanceId, promptId) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/${promptId}/elements`;
+
+    return request
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => res.body);
+  };
+
+  /**
+   * This method fetches the list of objects elements for a given prompt defined in a dossier's instance
+   *
+   * @param {*} objectId
+   * @param {*} projectId
+   * @param {*} instanceId
+   * @param {*} promptId
+   * @returns array of objects elements
+   */
+  getPromptObjectElements = (objectId, projectId, instanceId, promptId) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/${promptId}/objects`;
+
+    return request
+      .get(fullPath)
+      .set('x-mstr-authtoken', authToken)
+      .set('x-mstr-projectid', projectId)
+      .withCredentials()
+      .then((res) => res.body);
   };
 }
 
