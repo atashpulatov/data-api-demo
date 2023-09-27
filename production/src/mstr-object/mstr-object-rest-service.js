@@ -542,8 +542,8 @@ class MstrObjectRestService {
   };
 
   /**
-   * Answer specified prompts on the document/dossier instance, prompts can either be answered with default answers(if available)
-   *
+   * Answer specified prompts on the document/dossier instance,
+   * prompts can either be answered with default answers(if available)
    * @param {*} param0
    * @returns
    */

@@ -20,6 +20,10 @@ const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milli
  */
 export function prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) {
   const givenPromptsAnswers = [{ messageName: 'New Dossier', answers: [] }];
+
+  // Loop through the prompts objects and find the corresponding answer from the persisted answers.
+  // and assign the 'type' property to the answer. Also, mark the answer as 'useDefault'
+  // if it is not required and has no values.
   promptObjects.forEach((promptObject) => {
     const previousPromptIndex = previousPromptsAnswers.findIndex(
       (answerPrmpt) => answerPrmpt && answerPrmpt.key === promptObject.key
@@ -32,6 +36,7 @@ export function prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers)
       givenPromptsAnswers[0].answers.push(tempAnswer);
     }
   });
+
   return givenPromptsAnswers;
 }
 
@@ -58,10 +63,15 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
     };
 
     // Applying prompt answers to current instead of forcing the instance to execute the prompts.
-    // as indicated in https://microstrategy.github.io/rest-api-docs/common-workflows/analytics/use-prompts-objects/answer-prompts/#nested-prompts
+    // as indicated in:
+    // https://microstrategy.github.io/rest-api-docs/common-workflows/analytics/use-prompts-objects/answer-prompts/#nested-prompts
     await updateDossierPrompts(config);
 
     let dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
+
+    // Keep fetching the status of the Dossier's instance until request is no longer
+    // being processed (statusCode => 202).
+    // When statusCode is 202, it means that the Dossier's instance is done processing.
     while (dossierStatusResponse.statusCode === 202) {
       await sleep(1000);
       dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
@@ -70,6 +80,7 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
 
     count += 1;
   }
+
   return currentInstanceDefinition;
 }
 
@@ -84,8 +95,8 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
  * @returns
  */
 export async function preparePromptedDossier(instanceDef, objectId, projectId, promptsAnswers) {
-  let dossierInstanceDefinition = instanceDef; // || await createDossierInstance(projectId, objectId);
-  if (dossierInstanceDefinition.status === 2) {
+  let dossierInstanceDefinition = instanceDef;
+  if (dossierInstanceDefinition && dossierInstanceDefinition.status === 2) {
     // Re-prompt the Dossier's instance to apply previous answers. Get new instance definition.
     const rePromptResponse = await rePromptDossier(objectId, instanceDef.mid, projectId);
     dossierInstanceDefinition.mid = rePromptResponse.mid;
@@ -103,7 +114,9 @@ export async function preparePromptedDossier(instanceDef, objectId, projectId, p
 }
 
 /**
- *
+ * This function is used to prepare the prompted report to apply previously saved ir given answers
+ * if applicable. It will create an instance of the report and then create a Dossier based on that instance.
+ * And it will apply the answers to the prompts of the Dossier's instance, including nested prompts.
  * @param {*} chosenObjectIdLocal
  * @param {*} projectId
  * @param {*} promptsAnswers
@@ -114,11 +127,13 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
   const instanceDefinition = await createInstance(config);
   const { instanceId } = instanceDefinition;
 
+  // execute and create an instance so we can get the prompts answers applied to it.
   let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
 
-  if (dossierInstanceDefinition.status === 2) {
+  if (promptsAnswers && dossierInstanceDefinition.status === 2) {
     console.time('Answering Dossier Prompts');
 
+    // Reflect saved answers to the prompts of the Dossier's instance if applicable.
     dossierInstanceDefinition = await answerDossierPromptsHelper(
       dossierInstanceDefinition,
       chosenObjectIdLocal,
@@ -129,6 +144,7 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
     console.timeEnd('Answering Dossier Prompts');
   }
 
+  // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
   const repromptResponse = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition.mid, projectId);
   dossierInstanceDefinition.mid = repromptResponse.mid;
   dossierInstanceDefinition.id = chosenObjectIdLocal;

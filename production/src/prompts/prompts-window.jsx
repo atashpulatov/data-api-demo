@@ -148,11 +148,9 @@ export const PromptsWindowNotConnected = (props) => {
     try {
       let instance = {};
 
-      if (givenPromptsAnswers) {
-        console.time('Prepared prompted Report');
-        instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
-        console.timeEnd('Prepared prompted Report');
-      }
+      console.time('Prepared prompted Report');
+      instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
+      console.timeEnd('Prepared prompted Report');
 
       let msgRouter = null;
       const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
