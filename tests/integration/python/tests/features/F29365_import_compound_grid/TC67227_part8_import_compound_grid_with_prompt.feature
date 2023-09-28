@@ -9,9 +9,7 @@ Feature: F29365 - Import compound grid from dossier to Excel
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-
-     When I found object by ID "46B5BD7111EABC6957200080EFB55537" and selected "Kind of compound grids - with prompt"
+      And I found and selected object "Kind of compound grids - with prompt"
       And I clicked Import button to open Import Dossier
       And I clicked Run button for prompted dossier if prompts not already answered
       And I selected dossier page or chapter 1

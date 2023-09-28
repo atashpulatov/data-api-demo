@@ -9,8 +9,7 @@ Feature: F29365 - Import compound grid
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "3901187911EAC1E161F30080EFF54765" and selected "Kind of compound grids - Special structure"
+      And I found and selected object "Kind of compound grids - Special structure"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 1
@@ -22,7 +21,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "C1"
       And I clicked Add Data button
-      And I found object by ID "3901187911EAC1E161F30080EFF54765" and selected "Kind of compound grids - Special structure"
+      And I found and selected object "Kind of compound grids - Special structure"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 3
@@ -34,7 +33,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "J1"
       And I clicked Add Data button
-      And I found object by ID "3901187911EAC1E161F30080EFF54765" and selected "Kind of compound grids - Special structure"
+      And I found and selected object "Kind of compound grids - Special structure"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 4
@@ -46,7 +45,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "P1"
       And I clicked Add Data button
-      And I found object by ID "3901187911EAC1E161F30080EFF54765" and selected "Kind of compound grids - Special structure"
+      And I found and selected object "Kind of compound grids - Special structure"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 5
