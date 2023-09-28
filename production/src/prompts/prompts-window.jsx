@@ -3,9 +3,7 @@ import React, {
   useCallback, useEffect, useRef, useState
 } from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
@@ -21,15 +19,13 @@ import { popupHelper } from '../popup/popup-helper';
 import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-
 import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
+import { PromptsWindowTitle } from './prompts-window-title';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
 
 export const PromptsWindowNotConnected = (props) => {
-  const [t] = useTranslation('common', { i18n });
-
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, repromptsQueue,
@@ -300,11 +296,19 @@ export const PromptsWindowNotConnected = (props) => {
     onPopupBack();
   };
 
+  const showRepromptTitle = isReprompt && repromptsQueue.total > 1;
+
   return (
     <div
       style={{ position: 'relative' }}
     >
-      {isReprompt && repromptsQueue.total > 1 && <h3 className="dialog-header-title">{t('Reprompt')} {repromptsQueue.index}/{repromptsQueue.total} - {editedObject.chosenObjectName} </h3>}
+      <PromptsWindowTitle
+        showLoading={isPromptLoading}
+        showTitle={showRepromptTitle}
+        index={repromptsQueue.index}
+        total={repromptsQueue.total}
+        objectName={editedObject.chosenObjectName}
+      />
       <PromptsContainer
         postMount={onPromptsContainerMount}
       />
