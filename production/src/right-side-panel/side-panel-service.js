@@ -17,7 +17,6 @@ import {
   addRepromptTask,
   executeRepromptTask,
   clearRepromptTask,
-  initRepromptTasks,
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
@@ -178,7 +177,6 @@ class SidePanelService {
       }
     }
 
-    this.reduxStore.dispatch(initRepromptTasks());
     this.reduxStore.dispatch(executeRepromptTask());
   };
 
