@@ -11,7 +11,9 @@ export const PromptsContainer = (props) => {
   }, [postMount]);
 
   return (
-    <div ref={container} className="promptsContainer" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }} />
+    <>
+      <div ref={container} className="promptsContainer" style={{ height: '100vh', position: 'relative', overflow: 'hidden' }} />
+    </>
   );
 };
 

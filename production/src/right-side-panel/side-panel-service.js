@@ -13,6 +13,12 @@ import {
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { userRestService } from '../home/user-rest-service';
 import { clearAnswers } from '../redux-reducer/answers-reducer/answers-actions';
+import {
+  addRepromptTask,
+  executeRepromptTask,
+  clearRepromptTask,
+  initRepromptTasks,
+} from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 
@@ -146,18 +152,34 @@ class SidePanelService {
     const aWorkingIds = Array.isArray(objectWorkingIds)
       ? objectWorkingIds
       : [objectWorkingIds];
+
+    this.reduxStore.dispatch(clearRepromptTask());
+
     for (const objectWorkingId of aWorkingIds) {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      const { bindId, mstrObjectType } = objectData;
-      const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+      const { bindId, mstrObjectType, isPrompted } = objectData;
 
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        this.reduxStore.dispatch(popupActions.callForRepromptDossier({ bindId, mstrObjectType }));
-      } else {
-        this.reduxStore.dispatch(popupActions.callForReprompt({ bindId, mstrObjectType }));
+      // Proceed with reprompt only if object is prompted, otherwise only refresh object
+      // if multiple objects are selected.
+      if (isPrompted) {
+        this.reduxStore.dispatch(addRepromptTask(async () => {
+          const excelContext = await officeApiHelper.getExcelContext();
+          await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+
+          if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+            this.reduxStore.dispatch(popupActions.callForRepromptDossier({ bindId, mstrObjectType }));
+          } else {
+            this.reduxStore.dispatch(popupActions.callForReprompt({ bindId, mstrObjectType }));
+          }
+        }));
+      } else if (aWorkingIds.length > 1) {
+        // Refresh non-prompted report from selected items
+        // this.refresh([objectWorkingId]);
       }
     }
+
+    this.reduxStore.dispatch(initRepromptTasks());
+    this.reduxStore.dispatch(executeRepromptTask());
   };
 
   /**

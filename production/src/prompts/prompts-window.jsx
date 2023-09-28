@@ -3,12 +3,15 @@ import React, {
   useCallback, useEffect, useRef, useState
 } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
+import i18n from '../i18n';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
+import './prompts-window.scss';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
@@ -25,9 +28,11 @@ const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
 
 export const PromptsWindowNotConnected = (props) => {
+  const [t] = useTranslation('common', { i18n });
+
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
-    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects,
+    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, repromptsQueue,
   } = props;
   const { chosenObjectId } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
@@ -299,6 +304,7 @@ export const PromptsWindowNotConnected = (props) => {
     <div
       style={{ position: 'relative' }}
     >
+      {isReprompt && repromptsQueue.total > 1 && <h3 className="dialog-header-title">{t('Reprompt')} {repromptsQueue.index}/{repromptsQueue.total} - {editedObject.chosenObjectName} </h3>}
       <PromptsContainer
         postMount={onPromptsContainerMount}
       />
@@ -349,11 +355,15 @@ PromptsWindowNotConnected.propTypes = {
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   importRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
+  repromptsQueue: PropTypes.shape({
+    total: PropTypes.number,
+    index: PropTypes.number,
+  }),
 };
 
 export const mapStateToProps = (state) => {
   const {
-    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer, answersReducer
+    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer, answersReducer, repromptsQueueReducer,
   } = state;
   const popupState = popupReducer.editedObject;
   const {
@@ -375,6 +385,7 @@ export const mapStateToProps = (state) => {
     previousPromptsAnswers: answers,
     importRequested,
     promptObjects,
+    repromptsQueue: { ...repromptsQueueReducer },
   };
 };
 

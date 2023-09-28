@@ -14,6 +14,8 @@ import { popupStateReducer } from './redux-reducer/popup-state-reducer/popup-sta
 import { operationReducer } from './redux-reducer/operation-reducer/operation-reducer';
 import { objectReducer } from './redux-reducer/object-reducer/object-reducer';
 import { answersReducer } from './redux-reducer/answers-reducer/answers-reducer';
+import { repromptsQueueReducer } from './redux-reducer/reprompt-queue-reducer/reprompt-queue-reducer';
+
 import packageJson from '../package.json';
 
 const rootReducer = combineReducers({
@@ -27,6 +29,7 @@ const rootReducer = combineReducers({
   operationReducer,
   objectReducer,
   answersReducer,
+  repromptsQueueReducer,
 });
 
 const persistConfig = {

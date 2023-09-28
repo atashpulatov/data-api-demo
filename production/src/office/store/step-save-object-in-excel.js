@@ -1,6 +1,7 @@
 import officeStoreObject from './office-store-object';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
+import { executeRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 class StepSaveObjectInExcel {
   init = (reduxStore) => {
@@ -27,6 +28,7 @@ class StepSaveObjectInExcel {
       await officeStoreObject.saveObjectsInExcelStore();
       await officeStoreObject.saveAnswersInExcelStore();
       operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
+      this.reduxStore.dispatch(executeRepromptTask());
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
