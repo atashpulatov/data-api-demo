@@ -9,6 +9,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 const URL = `${window.location.href}`;
 
@@ -96,6 +97,7 @@ class PopupController {
               () => {
                 this.reduxStore.dispatch(this.popupActions.resetState());
                 this.reduxStore.dispatch(officeActions.hidePopup());
+                this.reduxStore.dispatch(clearRepromptTask());
               }
             );
             this.reduxStore.dispatch(officeActions.showPopup());
@@ -137,6 +139,7 @@ class PopupController {
           }
           break;
         case selectorProperties.commandCancel:
+          this.reduxStore.dispatch(clearRepromptTask());
           break;
         case selectorProperties.commandError:
           errorService.handleError(response.error);
