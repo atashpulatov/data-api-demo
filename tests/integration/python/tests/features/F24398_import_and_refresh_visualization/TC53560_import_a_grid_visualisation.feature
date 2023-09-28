@@ -10,9 +10,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-
-      And I found object by ID "7908177211E9DF8E76990080EFB5ACD2" and selected "Visualization manipulation"
+      And I found and selected object "Visualization manipulation"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I added dossier to Library if not yet added
@@ -32,7 +30,7 @@ Feature: F24398 - Import and refresh visualization
       And I selected visualization "Chart vis"
       And I clicked import dossier
       And I closed last notification
-     Then I verified that cells ["A2", "A3"] have values ["2014", "2015"]
+     Then I verified that cells ["A2", "A3"] have values ["2020", "2021"]
 
      When I clicked Edit object 1
       And I waited for dossier to load successfully
@@ -62,7 +60,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I selected cell "F1"
       And I clicked Add Data button
-      And I found object by ID "F806E5E811E9EFE33E340080EF65F66F" and selected "Dossier with basic grid vis, vis with totals and vis with crosstabs"
+      And I found and selected object "Dossier with basic grid vis, vis with totals and vis with crosstabs"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I opened Show Data panel for "Grid visualisation with subtotals and crosstabs"
@@ -75,7 +73,7 @@ Feature: F24398 - Import and refresh visualization
       And I clicked Add Data button
       And I clicked Filters button
       And I clicked Application "MicroStrategy Tutorial"
-      And I found object by ID "1909EE8E11E9FEEEDC670080EF958818" and selected "This is a very long name for a dossier so that we can test how we display long path to dossier visualisations"
+      And I found and selected object "This is a very long name for a dossier so that we can test how we display long path to dossier visualisations"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I imported visualization "This is a very long name for a visualisation so that we can test how we display long name."
@@ -85,7 +83,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I selected cell "AE1"
       And I clicked Add Data button
-      And I found object by ID "DB43CB0C11E9FEF1DC670080EF652715" and selected "Dossier with compound grid"
+      And I found and selected object "Dossier with compound grid"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I imported visualization "Visualization 1"
@@ -94,7 +92,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I selected cell "AI1"
       And I clicked Add Data button
-      And I found object by ID "8F27EA1911EB7BFB74C70080EF850E4B" and selected "A_Prompted dossier"
+      And I found and selected object "A_Prompted dossier"
       And I clicked Import button to open Import Dossier
       And I clicked Run button for prompted dossier if prompts not already answered
       And I waited for dossier to load successfully
@@ -104,7 +102,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I selected cell "AN1"
       And I clicked Add Data button
-      And I found object by ID "4178D5CE11EA8076D09F0080EF1588F4" and selected "Dossier with different custom visualizations"
+      And I found and selected object "Dossier with different custom visualizations"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I imported visualization "D3 WorldCloud"
@@ -113,7 +111,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I selected cell "AR1"
       And I clicked Add Data button
-      And I found object by ID "4178D5CE11EA8076D09F0080EF1588F4" and selected "Dossier with different custom visualizations"
+      And I found and selected object "Dossier with different custom visualizations"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I imported visualization "Google Timeline"
@@ -122,7 +120,7 @@ Feature: F24398 - Import and refresh visualization
 
      When I selected cell "AX1"
       And I clicked Add Data button
-      And I found object by ID "4178D5CE11EA8076D09F0080EF1588F4" and selected "Dossier with different custom visualizations"
+      And I found and selected object "Dossier with different custom visualizations"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I imported visualization "Sequence Sunburst"

@@ -9,9 +9,7 @@ Feature: F29365 - Import compound grid from dossier to Excel
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-
-     When I found object by ID "A7F63DD511EABF0854E40080EFB5C8EF" and selected "Objects in compound grids - Hyperlinks"
+     And I found and selected object "Objects in compound grids - Hyperlinks"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected visualization "Hyperlinks in rows"
