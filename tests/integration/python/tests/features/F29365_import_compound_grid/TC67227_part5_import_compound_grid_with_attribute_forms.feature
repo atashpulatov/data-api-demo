@@ -9,8 +9,7 @@ Feature: F29365 - Import compound grid
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "2F1922D211EABF0355790080EFD509F0" and selected "Objects in compound grids - Attribute forms"
+      And I found and selected object "Objects in compound grids - Attribute forms"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 2
@@ -22,7 +21,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "G1"
       And I clicked Add Data button
-      And I found object by ID "2F1922D211EABF0355790080EFD509F0" and selected "Objects in compound grids - Attribute forms"
+      And I found and selected object "Objects in compound grids - Attribute forms"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 3
@@ -34,7 +33,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "N1"
       And I clicked Add Data button
-      And I found object by ID "2F1922D211EABF0355790080EFD509F0" and selected "Objects in compound grids - Attribute forms"
+      And I found and selected object "Objects in compound grids - Attribute forms"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 5
@@ -46,7 +45,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "V1"
       And I clicked Add Data button
-      And I found object by ID "2F1922D211EABF0355790080EFD509F0" and selected "Objects in compound grids - Attribute forms"
+      And I found and selected object "Objects in compound grids - Attribute forms"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 6

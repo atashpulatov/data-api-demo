@@ -9,8 +9,7 @@ Feature: F29365 - Import compound grid
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "E52F04E111EABC6C58230080EF75D638" and selected "Kind of compound grids - Other cases"
+      And I found and selected object "Kind of compound grids - Other cases"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 1
@@ -22,7 +21,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "H6"
       And I clicked Add Data button
-      And I found object by ID "E52F04E111EABC6C58230080EF75D638" and selected "Kind of compound grids - Other cases"
+      And I found and selected object "Kind of compound grids - Other cases"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 3
@@ -36,7 +35,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "H40"
       And I clicked Add Data button
-      And I found object by ID "E52F04E111EABC6C58230080EF75D638" and selected "Kind of compound grids - Other cases"
+      And I found and selected object "Kind of compound grids - Other cases"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected visualization "with consolidations"
@@ -47,7 +46,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "P49"
       And I clicked Add Data button
-      And I found object by ID "E52F04E111EABC6C58230080EF75D638" and selected "Kind of compound grids - Other cases"
+      And I found and selected object "Kind of compound grids - Other cases"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 5
@@ -59,7 +58,7 @@ Feature: F29365 - Import compound grid
 
      When I selected cell "X100"
       And I clicked Add Data button
-      And I found object by ID "E52F04E111EABC6C58230080EF75D638" and selected "Kind of compound grids - Other cases"
+      And I found and selected object "Kind of compound grids - Other cases"
       And I clicked Import button to open Import Dossier
       And I waited for dossier to load successfully
       And I selected dossier page or chapter 7

@@ -11,8 +11,7 @@ Feature: TS41441 - Sanity checks
 
      When I logged in as default user
       And I clicked Import Data button
-      And I ensured that MyLibrary Switch is OFF
-      And I found object by ID "24F3C9804D8FCA7194F1A48D1B8F1C17" and selected "Report with prompt - Attribute element prompt of Category | Required | Not default"
+      And I found and selected object "Report with prompt - Attribute element prompt of Category | Required | Not default"
 
      When I clicked Prepare Data button
       And I waited for Run button to be enabled
@@ -51,18 +50,18 @@ Feature: TS41441 - Sanity checks
      When I clicked Import button in Columns and Filters Selection
       And I closed last notification
      Then I verified that object number 1 is called "Report with prompt - Attribute element prompt of Category | Required | Not default"
-      And I verified that cells ["A3", "B3"] have values ["2014", "Northeast"]
+      And I verified that cells ["A3", "B3"] have values ["2020", "Northeast"]
 
      When I selected cell "G1"
       And I clicked Add Data button
-      And I found object by ID "300DBAFA4A1D8EC546AC6AB8CDE7834E" and selected "Report with a subtotal & prompt"
+      And I found and selected object "Report with a subtotal & prompt"
       And I clicked Import button without checking results
       And I waited for Run button to be enabled
       And I selected "Electronics" as an answer for "1. Category" prompt - object prompt
       And I clicked Run button
       And I closed last notification
      Then I verified that object number 1 is called "Report with a subtotal & prompt"
-      And I verified that cells ["G8", "H8", "L8"] have values ["Jan-14", "Total", "$ 302,399"]
+      And I verified that cells ["G8", "H8", "L8"] have values ["Jan-20", "Total", "$ 302,399"]
 
      When I hovered over Refresh button on object 2
      Then I verified that tooltip "Refresh" is displayed on object 2
@@ -70,7 +69,7 @@ Feature: TS41441 - Sanity checks
      When I clicked Refresh on object 2
       And I waited for object to be refreshed successfully
       And I closed notification on object 2
-     Then I verified that cells ["A3", "B3"] have values ["2014", "Northeast"]
+     Then I verified that cells ["A3", "B3"] have values ["2020", "Northeast"]
 
      When I hovered over Edit button on object 1
      Then I verified that tooltip "Edit" is displayed on object 1
@@ -101,7 +100,7 @@ Feature: TS41441 - Sanity checks
 
      When I added a new worksheet
       And I clicked Add Data button
-      And I found object by ID "6D70D06949B83CD9DBFAC0AF5FE0010E" and selected "Report with prompt - Object prompt | Required | Default answer"
+      And I found and selected object "Report with prompt - Object prompt | Required | Default answer"
       And I clicked Import button without checking results
       And I waited for Run button to be enabled
       And I clicked Run button

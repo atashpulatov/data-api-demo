@@ -26,7 +26,7 @@ Feature: TS41441 - Sanity checks
       And I cleared search box
       And I found object "no_such_object"
       And I cleared search box
-      And I found object by ID "13CFD83A458A68655A13CBA8D7C62CD5" and selected "01 Basic Report"
+      And I found and selected object "01 Basic Report"
       And I clicked Prepare Data button
 
      Then I verified that Columns & Filters Selection is visible
