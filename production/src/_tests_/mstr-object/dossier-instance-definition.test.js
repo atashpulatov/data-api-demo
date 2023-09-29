@@ -158,7 +158,6 @@ describe('DossierInstanceDefinition', () => {
       // Mock the createDossierInstance function to return a predefined instance
       mockCreateDossierInstance.mockResolvedValue({ mid: expectedInstanceId });
 
-
       jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockReturnValue('getVisualizationInfoTest');
 
       jest.spyOn(mstrObjectRestService, 'fetchVisualizationDefinition').mockReturnValue(
@@ -182,7 +181,7 @@ describe('DossierInstanceDefinition', () => {
       // then
       expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
       expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
-      
+
       expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
       expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(
         'projectIdTest',

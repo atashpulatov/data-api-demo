@@ -180,7 +180,7 @@ describe('Popup actions', () => {
       manipulationsXML,
       visualizationInfo: { visualizationKey: oldVisKey },
       mstrObjectType: 'mstrObjectType',
-      instanceId: instanceId,
+      instanceId,
     };
     const body = {
       ...manipulationsXML,
