@@ -9,7 +9,11 @@ const initialState = { repromptsQueue: [], index: 0, total: 0 };
 export const repromptsQueueReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_REPROMPT_TASK:
-      return { ...state, repromptsQueue: [...state.repromptsQueue, action.payload], total: action.payload.isPrompted ? state.total + 1 : state.total };
+      return {
+        ...state,
+        repromptsQueue: [...state.repromptsQueue, action.payload],
+        total: action.payload.isPrompted ? state.total + 1 : state.total,
+      };
 
     case EXECUTE_NEXT_REPROMPT_TASK: {
       let idx = state.index;

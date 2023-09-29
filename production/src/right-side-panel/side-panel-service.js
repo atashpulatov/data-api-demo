@@ -154,7 +154,7 @@ class SidePanelService {
     // Prepare dispatch actions
     const dispatchTasks = [];
 
-    for (const objectWorkingId of workingIds) {
+    workingIds.forEach(objectWorkingId => {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const { bindId, mstrObjectType, isPrompted } = objectData;
 
@@ -178,13 +178,12 @@ class SidePanelService {
       } else if (workingIds.length > 1) {
         // Handle the case when multiple objects are selected (refresh non-prompted reports)
         // You can implement this part if needed.
-        // workingIdsToRefresh.push(objectWorkingId);
         dispatchTasks.push({
           isPrompted: false,
           callback: async () => { setTimeout(() => this.refresh([objectWorkingId]), 10); }
         });
       }
-    }
+    });
 
     // Initialize the re-prompting queue state
     this.reduxStore.dispatch(clearRepromptTask());
