@@ -161,22 +161,32 @@ class SidePanelService {
       // Proceed with reprompt only if object is prompted, otherwise only refresh object
       // if multiple objects are selected.
       if (isPrompted) {
-        dispatchTasks.push(async () => {
-          const excelContext = await officeApiHelper.getExcelContext();
-          await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+        dispatchTasks.push({
+          isPrompted: true,
+          callback: async () => {
+            const excelContext = await officeApiHelper.getExcelContext();
+            await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
-          const popupAction = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
-            ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
-            : popupActions.callForReprompt({ bindId, mstrObjectType });
+            // Based on the type of object, call the appropriate popup
+            const popupAction = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+              ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
+              : popupActions.callForReprompt({ bindId, mstrObjectType });
 
-          this.reduxStore.dispatch(popupAction);
+            this.reduxStore.dispatch(popupAction);
+          }
         });
       } else if (workingIds.length > 1) {
         // Handle the case when multiple objects are selected (refresh non-prompted reports)
         // You can implement this part if needed.
+        // workingIdsToRefresh.push(objectWorkingId);
+        dispatchTasks.push({
+          isPrompted: false,
+          callback: async () => { setTimeout(() => this.refresh([objectWorkingId]), 10); }
+        });
       }
     }
 
+    // Initialize the re-prompting queue state
     this.reduxStore.dispatch(clearRepromptTask());
 
     // Dispatch all actions together to start re-prompting in sequence
