@@ -80,7 +80,7 @@ describe('DossierInstanceDefinition', () => {
       expect(result).toBeUndefined();
     }
 
-    expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
+    expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
 
     expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
     expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(
@@ -151,7 +151,13 @@ describe('DossierInstanceDefinition', () => {
         expectedBody.promptAnswers = 'promptAnswersTest';
       }
 
-      jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockReturnValue('instanceIdTest');
+      // jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockReturnValue('instanceIdTest');
+
+      // Arrange: Set up any mock functions or data needed for the test
+      const mockCreateDossierInstance = jest.spyOn(mstrObjectRestService, 'createDossierInstance');
+      // Mock the createDossierInstance function to return a predefined instance
+      mockCreateDossierInstance.mockResolvedValue({ mid: expectedInstanceId });
+
 
       jest.spyOn(visualizationInfoService, 'getVisualizationInfo').mockReturnValue('getVisualizationInfoTest');
 
@@ -174,13 +180,9 @@ describe('DossierInstanceDefinition', () => {
       });
 
       // then
-      if (preparedInstanceIdParam) {
-        expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
-      } else {
-        expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
-        expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
-      }
-
+      expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
+      expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
+      
       expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
       expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(
         'projectIdTest',
