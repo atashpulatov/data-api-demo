@@ -209,7 +209,7 @@ RightSidePanelNotConnected.propTypes = {
         name: PropTypes.string,
         request: PropTypes.string,
         subtypes: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
-        type: PropTypes.number,
+        type: PropTypes.number || PropTypes.string,
       }),
       refreshDate: PropTypes.number,
       visualizationInfo: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape({

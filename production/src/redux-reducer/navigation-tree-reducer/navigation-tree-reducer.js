@@ -106,7 +106,7 @@ export const navigationTree = (state = initialState, action) => {
     case REQUEST_DOSSIER_OPEN: {
       const newState = { ...state };
       newState.dossierOpenRequested = true;
-      newState.isPrompted = false;
+      newState.isPrompted = !!data && data.isPrompted;
       if (!!data && data.promptObjects) {
         newState.promptObjects = data.promptObjects;
       }

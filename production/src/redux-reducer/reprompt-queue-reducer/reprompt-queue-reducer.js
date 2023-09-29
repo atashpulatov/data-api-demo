@@ -1,6 +1,6 @@
 import {
   ADD_REPROMPT_TASK,
-  EXECUTE_REPROMPT_TASK,
+  EXECUTE_NEXT_REPROMPT_TASK,
   CLEAR_REPROMPT_TASKS,
 } from './reprompt-queue-actions';
 
@@ -11,7 +11,7 @@ export const repromptsQueueReducer = (state = initialState, action) => {
     case ADD_REPROMPT_TASK:
       return { ...state, repromptsQueue: [...state.repromptsQueue, action.payload], total: state.total + 1 };
 
-    case EXECUTE_REPROMPT_TASK: {
+    case EXECUTE_NEXT_REPROMPT_TASK: {
       let idx = state.index;
       const [currentTask, ...remainingTasks] = state.repromptsQueue;
       if (currentTask) {

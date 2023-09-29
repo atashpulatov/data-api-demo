@@ -15,7 +15,7 @@ import { userRestService } from '../home/user-rest-service';
 import { clearAnswers } from '../redux-reducer/answers-reducer/answers-actions';
 import {
   addRepromptTask,
-  executeRepromptTask,
+  executeNextRepromptTask,
   clearRepromptTask,
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
@@ -148,36 +148,43 @@ class SidePanelService {
    */
   reprompt = async (objectWorkingIds) => {
     // Validate multiple selection; if only one item is selected then create 1-element array
-    const aWorkingIds = Array.isArray(objectWorkingIds)
-      ? objectWorkingIds
-      : [objectWorkingIds];
+    // Ensure objectWorkingIds is an array
+    const workingIds = Array.isArray(objectWorkingIds) ? objectWorkingIds : [objectWorkingIds];
 
-    this.reduxStore.dispatch(clearRepromptTask());
+    // Prepare dispatch actions
+    const dispatchTasks = [];
 
-    for (const objectWorkingId of aWorkingIds) {
+    for (const objectWorkingId of workingIds) {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const { bindId, mstrObjectType, isPrompted } = objectData;
 
       // Proceed with reprompt only if object is prompted, otherwise only refresh object
       // if multiple objects are selected.
       if (isPrompted) {
-        this.reduxStore.dispatch(addRepromptTask(async () => {
+        dispatchTasks.push(async () => {
           const excelContext = await officeApiHelper.getExcelContext();
           await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
-          if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-            this.reduxStore.dispatch(popupActions.callForRepromptDossier({ bindId, mstrObjectType }));
-          } else {
-            this.reduxStore.dispatch(popupActions.callForReprompt({ bindId, mstrObjectType }));
-          }
-        }));
-      } else if (aWorkingIds.length > 1) {
-        // Refresh non-prompted report from selected items
-        // this.refresh([objectWorkingId]);
+          const popupAction = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+            ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
+            : popupActions.callForReprompt({ bindId, mstrObjectType });
+
+          this.reduxStore.dispatch(popupAction);
+        });
+      } else if (workingIds.length > 1) {
+        // Handle the case when multiple objects are selected (refresh non-prompted reports)
+        // You can implement this part if needed.
       }
     }
 
-    this.reduxStore.dispatch(executeRepromptTask());
+    this.reduxStore.dispatch(clearRepromptTask());
+
+    // Dispatch all actions together to start re-prompting in sequence
+    // regardless of how many objects are selected.
+    dispatchTasks.forEach(task => this.reduxStore.dispatch(addRepromptTask(task)));
+
+    // Dispatch executeRepromptTask() once after all actions are dispatched
+    this.reduxStore.dispatch(executeNextRepromptTask());
   };
 
   /**

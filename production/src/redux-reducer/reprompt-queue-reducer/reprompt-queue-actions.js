@@ -1,5 +1,5 @@
 export const ADD_REPROMPT_TASK = 'ADD_REPROMPT_TASK';
-export const EXECUTE_REPROMPT_TASK = 'EXECUTE_REPROMPT_TASK';
+export const EXECUTE_NEXT_REPROMPT_TASK = 'EXECUTE_NEXT_REPROMPT_TASK';
 export const CLEAR_REPROMPT_TASKS = 'CLEAR_REPROMPT_TASKS';
 
 /**
@@ -15,8 +15,8 @@ export function addRepromptTask(task) {
  * This function will dequeue and execute the task first in the reprompt queue.
  * @returns
  */
-export function executeRepromptTask() {
-  return { type: EXECUTE_REPROMPT_TASK };
+export function executeNextRepromptTask() {
+  return { type: EXECUTE_NEXT_REPROMPT_TASK };
 }
 
 /**
