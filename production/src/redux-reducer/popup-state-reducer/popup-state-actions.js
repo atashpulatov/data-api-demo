@@ -5,7 +5,6 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 export const SET_POPUP_TYPE = 'POPUP_STATE_SET_POPUP_TYPE';
 export const SET_MSTR_DATA = 'POPUP_STATE_SET_MSTR_DATA';
 export const SET_OBJECT_DATA = 'POPUP_STATE_SET_OBJECT_DATA';
-export const SET_PREVIOUS_PROMPTS_ANSWERS = 'SET_PREVIOUS_PROMPTS_ANSWERS';
 export const ON_POPUP_BACK = 'POPUP_STATE_ON_POPUP_BACK';
 export const CLEAR_POPUP_STATE = 'POPUP_STATE_CLEAR_POPUP_STATE';
 

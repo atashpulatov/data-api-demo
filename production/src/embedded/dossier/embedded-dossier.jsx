@@ -108,6 +108,47 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     }
   }
 
+  /**
+   * This function handles the instance creation of the Dossier.
+   * If the instanceId is provided, it will be used to create the Dossier's instance.
+   * Otherwise, a new instance will be created.
+   * @param {*} instanceId
+   * @param {*} projectId
+   * @param {*} dossierId
+   * @returns
+   */
+  handleInstanceId = async (instanceId, projectId, dossierId) => {
+    if (instanceId) {
+      return { mid: instanceId };
+    }
+
+    const body = { disableManipulationsAutoSaving: true, persistViewState: true };
+    const instance = await createDossierInstance(projectId, dossierId, body);
+
+    // Checking if the dossier is prompted and update the status accordingly
+    const isPromptedResponse = await isPrompted(dossierId, projectId, mstrObjectEnum.mstrObjectType.dossier.name);
+    instance.status = isPromptedResponse.isPrompted ? 2 : 1;
+
+    return instance;
+  };
+
+  /**
+   * This function handles the preparation of the Dossier's instance to apply previous answers if necessary.
+   * @param {*} instance
+   * @param {*} dossierId
+   * @param {*} projectId
+   * @param {*} givenPromptsAnswers
+   * @returns
+   */
+  prepareAndHandlePromptAnswers = async (instance, dossierId, projectId, givenPromptsAnswers) => {
+    // Prepare the Dossier's instance to apply previous answers if necessary.
+    if (givenPromptsAnswers.length > 0 && givenPromptsAnswers[0].answers.length > 0) {
+      // Proceed with answering prompts if there are prompts to answer, including nested prompts.
+      instance = await preparePromptedDossier(instance, dossierId, projectId, givenPromptsAnswers);
+    }
+    return instance;
+  };
+
   loadEmbeddedDossier = async (container) => {
     const {
       mstrData,
@@ -123,44 +164,30 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     } = mstrData;
     let instance = {};
     try {
-      if (instanceId) {
-        instance.mid = instanceId;
-      } else {
-        const body = { disableManipulationsAutoSaving: true, persistViewState: true };
-        instance = await createDossierInstance(projectId, dossierId, body);
+      instance = await this.handleInstanceId(instanceId, projectId, dossierId);
 
-        // Checking if the dossier is prompted and update the status accordingly
-        const isPromptedResponse = await isPrompted(dossierId, projectId, mstrObjectEnum.mstrObjectType.dossier.name);
-        instance.status = isPromptedResponse.isPrompted ? 2 : 1;
+      // Declared variables to determine whether importing a report/dossier is taking place and
+      // whether there are previous prompt answers to handle
+      const isImportedObjectPrompted = promptObjects && promptObjects.length > 0;
+      const handlePreviousAnswersAtImport = dossierOpenRequested && reusePromptAnswers
+        && previousPromptsAnswers && previousPromptsAnswers.length > 0
+        && isImportedObjectPrompted;
 
-        // Declared variables to determine whether importing a report/dossier is taking place and
-        // whether there are previous prompt answers to handle
-        const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
-        const isImportedObjectPrompted = promptObjects && promptObjects.length > 0;
-        const handlePreviousAnswersAtImport = dossierOpenRequested && reusePromptAnswers
-          && areTherePreviousPromptAnswers
-          && isImportedObjectPrompted;
+      // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
+      const givenPromptsAnswers = handlePreviousAnswersAtImport ? prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) : { ...promptsAnswers };
 
-        // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
-        const givenPromptsAnswers = handlePreviousAnswersAtImport ? prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) : { ...promptsAnswers };
+      instance = await this.prepareAndHandlePromptAnswers(instance, dossierId, projectId, givenPromptsAnswers);
 
-        // Prepare the Dossier's instance to apply previous answers if necessary.
-        if (givenPromptsAnswers?.length > 0 && givenPromptsAnswers[0].answers?.length > 0) {
-          // Proceed with answering prompts if there are prompts to answer, including nested prompts.
-          instance = await preparePromptedDossier(instance, dossierId, projectId, givenPromptsAnswers);
-        }
+      // Open Prompts' dialog if there are prompts to answer when importing a report/dossier.
+      if (dossierOpenRequested && reusePromptAnswers && isImportedObjectPrompted) {
+        // Re-prompt the Dossier's instance to show the prompts dialog.
+        const resp = await rePromptDossier(
+          dossierId,
+          instance.mid,
+          projectId
+        );
 
-        // Open Prompts' dialog if there are prompts to answer when importing a report/dossier.
-        if (dossierOpenRequested && reusePromptAnswers && isImportedObjectPrompted) {
-          // Re-prompt the Dossier's instance to show the prompts dialog.
-          const resp = await rePromptDossier(
-            dossierId,
-            instance.mid,
-            projectId
-          );
-
-          instance.mid = resp.mid;
-        }
+        instance.mid = resp.mid;
       }
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
