@@ -1,5 +1,5 @@
 import {
-  SET_POPUP_TYPE, SET_MSTR_DATA, SET_OBJECT_DATA, ON_POPUP_BACK, CLEAR_POPUP_STATE, SET_PREVIOUS_PROMPTS_ANSWERS
+  SET_POPUP_TYPE, SET_MSTR_DATA, SET_OBJECT_DATA, ON_POPUP_BACK, CLEAR_POPUP_STATE,
 } from './popup-state-actions';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 

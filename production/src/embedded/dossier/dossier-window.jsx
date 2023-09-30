@@ -32,8 +32,7 @@ export const DossierWindowNotConnected = (props) => {
   const [loadingFrame, setLoadingFrame] = useState(false);
 
   const {
-    chosenObjectName, handleBack, editedObject, chosenObjectId,
-    chosenProjectId, previousPromptsAnswers, importRequested, promptObjects, isReprompt,
+    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt,
   } = props;
   const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
@@ -93,7 +92,7 @@ export const DossierWindowNotConnected = (props) => {
         let isVizSupported = true;
 
         const checkIfVizDataCanBeImported = async () => {
-          const temporaryInstanceDefinition = await mstrObjectRestService.fetchVisualizationDefinition({
+          await mstrObjectRestService.fetchVisualizationDefinition({
             projectId: chosenProjectId,
             objectId: chosenObjectId,
             instanceId: chosenVizInstanceId,
@@ -268,9 +267,6 @@ DossierWindowNotConnected.propTypes = {
     promptsAnswers: PropTypes.array || null,
     selectedViz: PropTypes.string,
   }),
-  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
-  importRequested: PropTypes.bool,
-  promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
   isReprompt: PropTypes.bool,
 };
 
