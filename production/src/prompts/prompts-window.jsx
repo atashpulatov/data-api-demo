@@ -146,6 +146,21 @@ export const PromptsWindowNotConnected = (props) => {
     });
   }
 
+  /**
+   *
+   * @param {*} promptObjs
+   * @param {*} previousAnswers
+   * @param {*} isImportingWithPreviousPromptAnswers
+   * @returns
+   */
+  const prepareAndHandlePromptAnswers = useCallback((promptObjs, previousAnswers, isImportingWithPreviousPromptAnswers) => {
+    if (isImportingWithPreviousPromptAnswers) {
+      return prepareGivenPromptAnswers(promptObjs, previousAnswers);
+    }
+
+    return mstrData.promptsAnswers || editedObject.promptsAnswers;
+  }, [mstrData.promptsAnswers, editedObject.promptsAnswers]);
+
   const loadEmbeddedDossier = useCallback(async (localContainer) => {
     if (!loading) {
       return;
@@ -167,23 +182,7 @@ export const PromptsWindowNotConnected = (props) => {
     const isImportingWithPreviousPromptAnswers = importRequested && reusePromptAnswers
       && hasPreviousPromptAnswers && hasPromptObjects;
 
-    // Update givenPromptsAnswers collection with previous prompt answers if importing
-    // a report/dossier and reusePromptAnswers flag is enabled
-    let givenPromptsAnswers;
-
-    if (isImportingWithPreviousPromptAnswers) {
-      givenPromptsAnswers = prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers);
-    } else {
-      givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
-    }
-
     try {
-      let instance = {};
-
-      console.time('Prepared prompted Report');
-      instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
-      console.timeEnd('Prepared prompted Report');
-
       let msgRouter = null;
       const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
       // delete last occurence of '/api' from the enviroment url
@@ -215,7 +214,13 @@ export const PromptsWindowNotConnected = (props) => {
 
       // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
       if (isReprompt || (importRequested && hasPreviousPromptAnswers && hasPromptObjects)) {
-        documentProps.instance = instance;
+        // Update givenPromptsAnswers collection with previous prompt answers if importing
+        // a report/dossier and reusePromptAnswers flag is enabled
+        const givenPromptsAnswers = prepareAndHandlePromptAnswers(promptObjects, previousPromptsAnswers, isImportingWithPreviousPromptAnswers);
+
+        console.time('Prepared prompted Report');
+        documentProps.instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
+        console.timeEnd('Prepared prompted Report');
       }
 
       microstrategy.dossier
@@ -266,8 +271,8 @@ export const PromptsWindowNotConnected = (props) => {
       console.error({ error });
       popupHelper.handlePopupErrors(error);
     }
-  }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, editedObject.promptsAnswers,
-    isReprompt, loading, mstrData.chosenProjectId, mstrData.promptsAnswers, promptsAnswered,
+  }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId,
+    isReprompt, loading, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
     session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
     finishRepromptWithoutEditFilters]);
 
