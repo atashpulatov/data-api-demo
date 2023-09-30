@@ -17,5 +17,5 @@
   "editor.detectIndentation": false,
   "editor.insertSpaces": true,
   "editor.autoIndent": "full",
-  "terminal.integrated.cwd": "./production",
+  "terminal.integrated.cwd": "./production"
 }
