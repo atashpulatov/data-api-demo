@@ -125,8 +125,33 @@ export const PromptsWindowNotConnected = (props) => {
     editedObject.selectedFilters, editedObject.instanceId, editedObject.chosenObjectName,
     editedObject.subtotalsInfo, editedObject.displayAttrFormNames]);
 
+  /**
+   * Append the server's version of the answers to the promptsAnswers object.
+   * This version of answers will be used to invoke the REST API endpoint when
+   * importing or re-prompting a report/dossier.
+   * @param {*} currentAnswers
+   * @param {*} promptsAnsDef
+   */
+  function updateAnswersWithPrompts(currentAnswers, promptsAnsDef) {
+    currentAnswers.forEach((currentAnswer) => {
+      const { answers } = currentAnswer;
+      answers.forEach((answer) => {
+        const answerDef = promptsAnsDef.find((prompt) => prompt.key === answer.key);
+        if (answerDef) {
+          answer.answers = answerDef.answers;
+          answer.type = answerDef.type;
+        }
+      });
+    });
+  }
+
   const loadEmbeddedDossier = useCallback(async (localContainer) => {
     if (!loading) {
+      return;
+    }
+
+    if (!microstrategy || !microstrategy.dossier) {
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
       return;
     }
 
@@ -136,14 +161,20 @@ export const PromptsWindowNotConnected = (props) => {
 
     // Declared variables to determine whether importing a report/dossier is taking place and
     // whether there are previous prompt answers to handle
-    const areTherePreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
-    const isImportedObjectPrompted = promptObjects && promptObjects.length;
+    const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
+    const hasPromptObjects = promptObjects && promptObjects.length > 0;
     const isImportingWithPreviousPromptAnswers = importRequested && reusePromptAnswers
-      && areTherePreviousPromptAnswers && isImportedObjectPrompted;
+      && hasPreviousPromptAnswers && hasPromptObjects;
 
     // Update givenPromptsAnswers collection with previous prompt answers if importing
     // a report/dossier and reusePromptAnswers flag is enabled
-    const givenPromptsAnswers = isImportingWithPreviousPromptAnswers ? prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) : (mstrData.promptsAnswers || editedObject.promptsAnswers);
+    let givenPromptsAnswers;
+
+    if (isImportingWithPreviousPromptAnswers) {
+      givenPromptsAnswers = prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers);
+    } else {
+      givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
+    }
 
     try {
       let instance = {};
@@ -182,22 +213,19 @@ export const PromptsWindowNotConnected = (props) => {
       };
 
       // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
-      if (isReprompt || (importRequested && areTherePreviousPromptAnswers && isImportedObjectPrompted)) {
+      if (isReprompt || (importRequested && hasPreviousPromptAnswers && hasPromptObjects)) {
         documentProps.instance = instance;
-      }
-
-      if (!microstrategy || !microstrategy.dossier) {
-        console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
-        return;
       }
 
       microstrategy.dossier
         .create(documentProps)
         .then(async (dossierPage) => {
-          const chapter = await dossierPage.getCurrentChapter();
-          const objectId = await dossierPage.getDossierId();
-          const instanceId = await dossierPage.getDossierInstanceId();
-          const visualizations = await dossierPage.getCurrentPageVisualizationList();
+          const [chapter, objectId, instanceId, visualizations] = await Promise.all([
+            dossierPage.getCurrentChapter(),
+            dossierPage.getDossierId(),
+            dossierPage.getDossierInstanceId(),
+            dossierPage.getCurrentPageVisualizationList(),
+          ]);
 
           const dossierData = {
             chapterKey: chapter.nodeKey,
@@ -221,16 +249,9 @@ export const PromptsWindowNotConnected = (props) => {
 
           const currentAnswers = [...newPromptsAnswers.current];
 
-          // Append the server's version of the answers to the promptsAnswers object.
-          // This version of answers will be used to invoke the REST API endpoint when
-          // importing or re-prompting a report/dossier.
-          currentAnswers.forEach((currentAnswer) => {
-            const { answers } = currentAnswer;
-            answers.forEach((answer) => {
-              const answerDef = promptsAnsDef.find((prompt) => prompt.key === answer.key);
-              answerDef && (answer.answers = answerDef.answers) && (answer.type = answerDef.type);
-            });
-          });
+          // Update answers based on promptsAnsDef to insert JSON answers from server
+          // this JSON structure is expected by the REST API endpoint
+          updateAnswersWithPrompts(currentAnswers, promptsAnsDef);
 
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
           promptsAnswered({ dossierData, promptsAnswers: currentAnswers });

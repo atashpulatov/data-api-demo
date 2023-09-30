@@ -80,7 +80,7 @@ describe('DossierInstanceDefinition', () => {
       expect(result).toBeUndefined();
     }
 
-    expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
+    expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
 
     expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
     expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(
@@ -179,8 +179,11 @@ describe('DossierInstanceDefinition', () => {
       });
 
       // then
-      expect(mstrObjectRestService.createDossierInstance).toBeCalledTimes(1);
-      expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
+      if (preparedInstanceIdParam) {
+        expect(mstrObjectRestService.createDossierInstance).not.toBeCalled();
+      } else {
+        expect(mstrObjectRestService.createDossierInstance).toBeCalledWith('projectIdTest', 'objectIdTest', expectedBody);
+      }
 
       expect(visualizationInfoService.getVisualizationInfo).toBeCalledTimes(1);
       expect(visualizationInfoService.getVisualizationInfo).toBeCalledWith(

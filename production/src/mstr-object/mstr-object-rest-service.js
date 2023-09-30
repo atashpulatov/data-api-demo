@@ -89,6 +89,61 @@ function getFetchObjectContentFields(visualizationType) {
   }
 }
 
+/**
+ * This function fetches the content of the object.
+ * It is used to fetch the dossier or report in chunks to be inserted in workbook.
+ * @param {*} fullPath
+ * @param {*} authToken
+ * @param {*} projectId
+ * @param {*} offset
+ * @param {*} limit
+ * @param {*} visualizationType
+ * @returns
+ */
+async function fetchContentPart(
+  fullPath,
+  authToken,
+  projectId,
+  offset,
+  limit,
+  visualizationType
+) {
+  const { body: fetchedBody } = await fetchObjectContent(
+    fullPath,
+    authToken,
+    projectId,
+    offset,
+    limit,
+    visualizationType
+  );
+  if (!fetchedBody.data || !fetchedBody.data.paging) {
+    throw new Error(errorMessages.NO_DATA_RETURNED);
+  }
+  return fetchedBody;
+}
+
+/**
+ * This function offsets the subtotal row index by the offset value.
+ * @param {*} e
+ * @param {*} offset
+ */
+function offsetRowSubtotal(e, offset) {
+  if (e) {
+    e.rowIndex += offset;
+  }
+}
+
+/**
+ * This function offsets the subtotal column index by the offset value.
+ * @param {*} e
+ * @param {*} offset
+ */
+function offsetCrosstabSubtotal(e, offset) {
+  if (e && e.axis === 'rows') {
+    e.colIndex += offset;
+  }
+}
+
 class MstrObjectRestService {
   constructor() {
     this.fetchContentGenerator = this.fetchContentGenerator.bind(this);
@@ -109,14 +164,14 @@ class MstrObjectRestService {
     visualizationInfo,
     displayAttrFormNames
   }) {
-    const totalRows = instanceDefinition.rows;
     const {
+      rows: totalRows,
       instanceId,
-      mstrTable: { isCrosstab, visualizationType },
+      mstrTable: { isCrosstab, visualizationType }
     } = instanceDefinition;
-    const storeState = this.reduxStore.getState();
-    const { envUrl, authToken } = storeState.sessionReducer;
-    const { supportForms } = storeState.officeReducer;
+
+    const { envUrl, authToken } = this.reduxStore.getState().sessionReducer;
+    const { supportForms } = this.reduxStore.getState().officeReducer;
     const attrforms = { supportForms, displayAttrFormNames };
 
     let fetchedRows = 0;
@@ -130,30 +185,23 @@ class MstrObjectRestService {
       objectId,
       instanceId,
       version: API_VERSION,
-      visualizationInfo,
+      visualizationInfo
     });
 
-    const offsetSubtotal = (e) => {
-      if (e) {
-        e.rowIndex += offset;
-      }
-    };
-    const offsetCrosstabSubtotal = (e) => {
-      if (e && e.axis === 'rows') {
-        e.colIndex += offset;
-      }
-    };
+    // Declaring these functions outside of the loop to avoid creating them on each iteration
+    // and mitigate eslint no-loop-func rule.
+    const offsetRowSubtotalFn = (e) => offsetRowSubtotal(e, offset);
+    const offsetCrosstabSubtotalFn = (e) => offsetCrosstabSubtotal(e, offset);
 
     while (fetchedRows < totalRows && fetchedRows < EXCEL_ROW_LIMIT) {
-      let header;
-      let crosstabSubtotal;
-
-      const { body: fetchedBody } = await fetchObjectContent(
-        fullPath, authToken, projectId, offset, limit, visualizationType
+      const fetchedBody = await fetchContentPart(
+        fullPath,
+        authToken,
+        projectId,
+        offset,
+        limit,
+        visualizationType
       );
-      if (!fetchedBody.data || !fetchedBody.data.paging) {
-        throw new Error(errorMessages.NO_DATA_RETURNED);
-      }
 
       const body = officeConverterServiceV2.convertCellValuesToExcelStandard(fetchedBody);
 
@@ -173,14 +221,17 @@ class MstrObjectRestService {
         isCrosstab
       );
 
+      let header;
+      let crosstabSubtotal;
+
       if (isCrosstab) {
         header = officeConverterServiceV2.getHeaders(body, isCrosstab);
         crosstabSubtotal = header.subtotalAddress;
         if (offset !== 0) {
-          crosstabSubtotal.map(offsetCrosstabSubtotal);
+          crosstabSubtotal.forEach(offsetCrosstabSubtotalFn); // Pass offset as a parameter
         }
       } else if (offset !== 0) {
-        rowTotals.map(offsetSubtotal);
+        rowTotals.forEach(offsetRowSubtotalFn); // Pass offset as a parameter
       }
       offset += current;
 
@@ -563,10 +614,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .send({ prompts: promptsAnswers.answers })
       .withCredentials()
-      .then((res) => {
-        console.log(res);
-        return res.status;
-      });
+      .then((res) => res.status);
   };
 
   updateReportPrompts = ({
@@ -585,10 +633,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .send({ prompts: promptsAnswers })
       .withCredentials()
-      .then((res) => {
-        console.log(res);
-        return res.status;
-      });
+      .then((res) => res.status);
   };
 
   applyDossierPrompts = ({
@@ -607,10 +652,7 @@ class MstrObjectRestService {
       .set('X-MSTR-ProjectID', projectId)
       .send(promptsAnswers)
       .withCredentials()
-      .then((res) => {
-        console.log(res);
-        return res.status;
-      });
+      .then((res) => res.status);
   };
 
   /**
