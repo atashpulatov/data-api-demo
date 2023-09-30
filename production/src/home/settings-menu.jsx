@@ -192,7 +192,9 @@ export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(Setting
 
 async function logout(preLogout) {
   try {
-    await preLogout();
+    // Commenting this line out so clearSavedPromptAnswers and saveAnswersInExcelStore
+    // methods are not called before logging out. Answers are not cleared from Excel Store
+    // await preLogout();
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();

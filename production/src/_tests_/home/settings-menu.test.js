@@ -16,10 +16,18 @@ describe('Settings Menu', () => {
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => { });
     const logOutSpy = jest.spyOn(sessionActions, 'logOut');
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
-    const menuWrapper = mount(<SettingsMenuNotConnected />);
+
+    const menuWrapper = mount(
+      <SettingsMenuNotConnected
+        toggleIsSettingsFlag={jest.fn()}
+        clearSavedPromptAnswers={jest.fn()}
+      />
+    );
+
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');
+
     // then
     await expect(logOutRestSpy).toBeCalled();
     await expect(logOutSpy).toBeCalled();

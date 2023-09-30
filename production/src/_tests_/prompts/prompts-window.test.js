@@ -12,9 +12,7 @@ jest.mock('../../popup/popup-helper');
 
 describe('PromptsWindowNotConnected', () => {
   const mstrData = {
-    envUrl: 'env',
-    token: 'token',
-    projectId: 'projectId',
+    chosenProjectId: 'projectId',
     chosenObjectId: 'chosenObjectId',
     promptsAnswers: [{}],
   };
