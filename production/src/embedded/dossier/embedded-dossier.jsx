@@ -399,7 +399,7 @@ EmbeddedDossierNotConnected.propTypes = {
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
-    promptsAnswers: PropTypes.array || null,
+    promptsAnswers: PropTypes.array || PropTypes.object || null,
     selectedViz: PropTypes.string,
     visualizationInfo: PropTypes.shape({
       chapterKey: PropTypes.string,
@@ -416,7 +416,7 @@ EmbeddedDossierNotConnected.propTypes = {
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string,
     useDefault: PropTypes.bool,
-    values: PropTypes.arrayOf(PropTypes.shape({}))
+    values: PropTypes.arrayOf(PropTypes.string)
   })),
   dossierOpenRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({
