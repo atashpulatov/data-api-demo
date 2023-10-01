@@ -65,7 +65,7 @@ describe('NavigationTree Reducer', () => {
     // then
     expect(newState.importRequested).toBeFalsy();
     expect(newState.dossierData).toBe(action.data.dossierData);
-    expect(newState.isPrompted).toBeTruthy();
+    expect(newState.isPrompted).toBeFalsy();
   });
 
   it('should return new proper state in case of CLEAR_PROMPTS_ANSWERS action', () => {
