@@ -24,10 +24,12 @@ const VIZ_SELECTION_RETRY_LIMIT = 10;
 export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
+    const { mstrData } = props;
+
     this.container = React.createRef();
     this.msgRouter = null;
     this.onVizSelectionHandler = this.onVizSelectionHandler.bind(this);
-    this.dossierData = { promptsAnswers: props.mstrData.promptsAnswers, };
+    this.dossierData = { promptsAnswers: mstrData.promptsAnswers };
     this.promptsAnsweredHandler = this.promptsAnsweredHandler.bind(this);
     this.instanceIdChangeHandler = this.instanceIdChangeHandler.bind(this);
     this.restoreVizSelection = this.restoreVizSelection.bind(this);
@@ -404,7 +406,7 @@ EmbeddedDossierNotConnected.propTypes = {
     dossierId: PropTypes.string,
     projectId: PropTypes.string,
     instanceId: PropTypes.string,
-    promptsAnswers: PropTypes.array || PropTypes.object || null,
+    promptsAnswers: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.any]),
     selectedViz: PropTypes.string,
     visualizationInfo: PropTypes.shape({
       chapterKey: PropTypes.string,
@@ -434,8 +436,8 @@ EmbeddedDossierNotConnected.propTypes = {
 
 EmbeddedDossierNotConnected.defaultProps = {
   mstrData: {
-    envUrl: 'no env url',
-    authToken: null,
+    envUrl: '',
+    authToken: '',
     dossierId: 'default id',
     projectId: 'default id',
     instanceId: 'default id',
