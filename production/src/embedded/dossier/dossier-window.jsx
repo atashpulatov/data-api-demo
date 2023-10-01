@@ -131,7 +131,7 @@ export const DossierWindowNotConnected = (props) => {
       chosenObject: chosenObjectId,
       chosenProject: chosenProjectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
-      isPrompted: false,
+      isPrompted: promptsAnswers?.answers?.length > 0,
       promptsAnswers,
       visualizationInfo: {
         chapterKey,
