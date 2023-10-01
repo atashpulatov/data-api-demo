@@ -29,7 +29,10 @@ export const DossierWindowNotConnected = (props) => {
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const [previousSelectionBackup, setPreviousSelectionBackup] = useState([]);
 
-  const [loadingFrame, setLoadingFrame] = useState(false);
+  // New showLoading variable is needed to show loading spinner while prompted dossier is answered
+  // behind the scenes which could take some time; especially if there are nested prompts.
+  // NOTE: This loading spinner is separate from the one in EmbeddedDossier component.
+  let showLoading = false;
 
   const {
     chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt,
@@ -147,7 +150,9 @@ export const DossierWindowNotConnected = (props) => {
   // and visualization is selected
   if (isReprompt && isSelected) {
     handleOk();
-    setLoadingFrame(true); // Show loading spinner
+
+    // Show loading spinner while prompts are being answered.
+    showLoading = true;
   }
 
   /**
@@ -227,9 +232,9 @@ export const DossierWindowNotConnected = (props) => {
           </span>
         )}
 
-      {loadingFrame && <Empty isLoading />}
+      {showLoading && <Empty isLoading />}
 
-      {!loadingFrame && (
+      {!showLoading && ( // Show embedded dossier only after prompts are answered.
         <EmbeddedDossier
           handleSelection={handleSelection}
           handlePromptAnswer={handlePromptAnswer}
