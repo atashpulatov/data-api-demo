@@ -16,6 +16,17 @@
   "editor.formatOnSave": false,
   "editor.detectIndentation": false,
   "editor.insertSpaces": true,
-  "editor.autoIndent": "full",
-  "terminal.integrated.cwd": "./production"
+  "editor.autoIndent": "none",
+  "terminal.integrated.cwd": "./production",
+  "cSpell.words": [
+    "Eventhandler",
+    "microstrategy",
+    "mstr",
+    "Objs",
+    "reprompt",
+    "reprompts"
+  ],
+  "workbench.colorTheme": "Cobalt3",
+  "eslint.codeActionsOnSave.rules": null,
+  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
 }
