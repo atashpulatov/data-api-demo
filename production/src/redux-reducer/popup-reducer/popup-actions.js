@@ -53,7 +53,7 @@ class PopupActions {
         editedObject,
       });
       if (editedObject.isPrompted) {
-        this.popupController.runRepromptPopup(reportParams, true);
+        this.popupController.runRepromptPopup(reportParams);
       } else {
         this.popupController.runEditFiltersPopup(reportParams);
       }
@@ -135,7 +135,7 @@ class PopupActions {
       if (isDossier) {
         this.popupController.runEditDossierPopup(reportParams);
       } else if (object.isPrompted) {
-        this.popupController.runRepromptPopup(reportParams, true);
+        this.popupController.runRepromptPopup(reportParams);
       } else {
         this.popupController.runEditFiltersPopup(reportParams);
       }
