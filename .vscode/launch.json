@@ -1,56 +1,56 @@
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-  "version": "0.2.0",
-  "configurations": [
-      
-      {
-          "type": "chrome",
-          "request": "launch",
-          "name": "Launch Chrome",
-          "url": "https://localhost:3000/",
-          "webRoot": "${workspaceRoot}/production/src/frontend/app",
-          "sourceMaps": true
-      },
-      {
-          "type": "chrome",
-          "request": "attach",
-          "name": "Attach to Chrome with WebPack",
-          "port": 9222,
-          "webRoot": "${workspaceRoot}/production/src/frontend/app",
-          "sourceMaps": true,
-          "smartStep": true
-      },
-      {
-          "type": "node",
-          "request": "launch",
-          "name": "WebpackDEV",
-          "program": "${workspaceRoot}/production/node_modules/.bin/webpack-dev-server",
-          "args": [
-              "--https",
-              "--port",
-              "3000",
-              "--config",
-              "webpack.config.js"
-          ],
-          "outFiles": [
-              "${workspaceRoot}/production/src/frontend/public/js/*"
-          ],
-          "cwd": "${workspaceFolder}/production",
-          "console": "internalConsole",
-          "sourceMaps": true
-      },
-      {
-          "type": "node",
-          "request": "launch",
-          "name": "Jest Tests",
-          "cwd": "${workspaceFolder}",
-          "runtimeExecutable": "npm",
-          "runtimeArgs": [
-              "run-script", "test-debug"
-          ],
-          "port": 9229
-      },
-  ]
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome",
+            "url": "https://localhost:3000/",
+            "webRoot": "${workspaceRoot}/production/src/frontend/app",
+            "sourceMaps": true
+        },
+        {
+            "type": "chrome",
+            "request": "attach",
+            "name": "Attach to Chrome with WebPack",
+            "port": 9222,
+            "webRoot": "${workspaceRoot}/production/src/frontend/app",
+            "sourceMaps": true,
+            "smartStep": true
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "WebpackDEV",
+            "program": "${workspaceRoot}/production/node_modules/.bin/webpack-dev-server",
+            "args": [
+                "--https",
+                "--port",
+                "3000",
+                "--config",
+                "webpack.config.js"
+            ],
+            "outFiles": [
+                "${workspaceRoot}/production/src/frontend/public/js/*"
+            ],
+            "cwd": "${workspaceFolder}/production",
+            "console": "internalConsole",
+            "sourceMaps": true
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Jest Tests",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script", "test-debug"
+            ],
+            "port": 9229
+        },
+    ]
 }

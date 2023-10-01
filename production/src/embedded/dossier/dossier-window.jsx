@@ -264,7 +264,7 @@ DossierWindowNotConnected.propTypes = {
     isEdit: PropTypes.bool,
     instanceId: PropTypes.string,
     dossierName: PropTypes.string,
-    promptsAnswers: PropTypes.array || null,
+    promptsAnswers: PropTypes.array || PropTypes.object || null,
     selectedViz: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
