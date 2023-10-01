@@ -264,7 +264,10 @@ DossierWindowNotConnected.propTypes = {
     isEdit: PropTypes.bool,
     instanceId: PropTypes.string,
     dossierName: PropTypes.string,
-    promptsAnswers: PropTypes.array || PropTypes.object || null,
+    promptsAnswers: PropTypes.shape({
+      answers: PropTypes.arrayOf(PropTypes.shape({})),
+      messageName: PropTypes.string,
+    }),
     selectedViz: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
@@ -281,7 +284,10 @@ DossierWindowNotConnected.defaultProps = {
     isEdit: false,
     instanceId: undefined,
     dossierName: undefined,
-    promptsAnswers: null,
+    promptsAnswers: {
+      answers: [],
+      messageName: '',
+    },
     selectedViz: '',
   },
   isReprompt: false,
