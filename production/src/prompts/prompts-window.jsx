@@ -322,6 +322,7 @@ export const PromptsWindowNotConnected = (props) => {
     onPopupBack();
   };
 
+  // Determine whether Re-prompt title should be shown if queue has more than one item
   const showRepromptTitle = isReprompt && repromptsQueue.total > 1;
 
   return (

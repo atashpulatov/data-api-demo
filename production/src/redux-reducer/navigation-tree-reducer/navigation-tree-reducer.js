@@ -80,7 +80,7 @@ export const navigationTree = (state = initialState, action) => {
         newState.promptsAnswers = data.promptsAnswers;
         newState.dossierData = data.dossierData;
       }
-      newState.isPrompted = true;
+      newState.isPrompted = data.promptsAnswers?.answers?.length > 0;
       return newState;
     }
 

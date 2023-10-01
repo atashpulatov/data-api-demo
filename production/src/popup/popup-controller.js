@@ -97,6 +97,9 @@ class PopupController {
               () => {
                 this.reduxStore.dispatch(this.popupActions.resetState());
                 this.reduxStore.dispatch(officeActions.hidePopup());
+
+                // Clear the reprompt task queue if the user closes the popup,
+                // as the user is no longer interested in continuing the multiple re-prompting task.
                 this.reduxStore.dispatch(clearRepromptTask());
               }
             );
@@ -166,7 +169,7 @@ class PopupController {
       body: response.body,
       dossierData: response.dossierData,
       promptsAnswers: response.promptsAnswers,
-      isPrompted: response.isPrompted,
+      isPrompted: response.promptsAnswers?.length > 0 && response.promptsAnswers[0].answers?.length > 0,
       instanceId: response.instanceId,
       subtotalsInfo: response.subtotalsInfo,
       displayAttrFormNames: response.displayAttrFormNames,
@@ -184,7 +187,7 @@ class PopupController {
         projectId: response.chosenProject,
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
         bindId,
-        isPrompted: response.isPrompted,
+        isPrompted: response.isPrompted || response.promptsAnswers?.answers?.length > 0,
         promptsAnswers: response.promptsAnswers,
         visualizationInfo: response.visualizationInfo,
         preparedInstanceId: response.preparedInstanceId,

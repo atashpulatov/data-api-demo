@@ -12,6 +12,7 @@ import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './dossier.css';
 
 import { prepareGivenPromptAnswers, preparePromptedDossier } from '../../helpers/prompts-handling-helper';
+import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
 const { microstrategy, Office } = window;
 
@@ -34,6 +35,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.retryCounter = 0;
     this.embeddedDossier = null;
     this.state = { loadingFrame: true };
+    this.promptsAnswered = props.promptsAnswered;
   }
 
   componentDidMount() {
@@ -366,6 +368,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.dossierData.promptsAnswers = promptsAnswers;
     handlePromptAnswer(promptsAnswers);
 
+    // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
+    // this.promptsAnswered({ dossierData: this.dossierData, promptsAnswers });
+
     if (this.embeddedDossier) {
       const payload = await this.embeddedDossier.getSelectedVizKeys();
       if (Object.keys(payload).length > 0) {
@@ -424,6 +429,7 @@ EmbeddedDossierNotConnected.propTypes = {
     answers: PropTypes.arrayOf(PropTypes.shape({})),
     type: PropTypes.string,
   })),
+  promptsAnswered: PropTypes.func,
 };
 
 EmbeddedDossierNotConnected.defaultProps = {
@@ -483,4 +489,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export const EmbeddedDossier = connect(mapStateToProps)(EmbeddedDossierNotConnected);
+const mapDispatchToProps = { promptsAnswered: navigationTreeActions.promptsAnswered, };
+
+export const EmbeddedDossier = connect(mapStateToProps, mapDispatchToProps)(EmbeddedDossierNotConnected);

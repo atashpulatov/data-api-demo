@@ -23,7 +23,7 @@ class PopupViewSelectorHelper {
       } else {
         return PopupTypeEnum.obtainInstanceHelper;
       }
-    } else if (this.promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
+    } else if (this.promptedReportSubmitted(props)) {
       return PopupTypeEnum.promptsWindow;
     } else if (dossierOpenRequested) {
       // open dossier without prompts
@@ -46,7 +46,7 @@ class PopupViewSelectorHelper {
   };
 
   promptedReportSubmitted = (props) => (
-    !!(props.propsToPass.isPrompted || props.isPrompted)
+    !!(props.propsToPass.isPrompted || props.isPrompted) && (props.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name)
     && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
   );
 
@@ -174,7 +174,7 @@ class PopupViewSelectorHelper {
       chosenProject: props.chosenProjectId,
       chosenSubtype: props.chosenSubtype,
       chosenObjectName: props.chosenObjectName,
-      isPrompted: props.isPrompted,
+      isPrompted: props.promptsAnswers?.length > 0 && props.promptsAnswers[0].answers?.length > 0,
       promptsAnswers: props.promptsAnswers,
       visualizationInfo,
       preparedInstanceId: props.preparedInstanceId,
