@@ -12,7 +12,7 @@ import i18n from '../i18n';
  * @returns
  */
 export const PromptsWindowTitle = ({
-  showLoading = true, showTitle = false, index = 0, total = 0, objectName = ''
+  showLoading, showTitle, index, total, objectName,
 }) => {
   const [t] = useTranslation('common', { i18n });
 
@@ -30,4 +30,12 @@ PromptsWindowTitle.propTypes = {
   index: PropTypes.number,
   total: PropTypes.number,
   objectName: PropTypes.string,
+};
+
+PromptsWindowTitle.defaultProps = {
+  showLoading: true,
+  showTitle: false,
+  index: 0,
+  total: 0,
+  objectName: '',
 };

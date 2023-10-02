@@ -209,9 +209,6 @@ export const DossierWindowNotConnected = (props) => {
     });
   };
 
-  const showMultipleRepromptMessage = isReprompt && repromptsQueue.total > 1;
-  const showSingleRepromptMessage = isReprompt && repromptsQueue.total === 1;
-
   return (
     <div className="dossier-window">
       <DossierWindowTitle

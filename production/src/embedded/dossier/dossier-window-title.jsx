@@ -10,7 +10,7 @@ import i18n from '../../i18n';
  * @returns
  */
 export const DossierWindowTitle = ({
-  isReprompt = false, index = 0, total = 0, dossierName = ''
+  isReprompt, index, total, dossierName,
 }) => {
   const [t] = useTranslation('common', { i18n });
 
@@ -39,4 +39,11 @@ DossierWindowTitle.propTypes = {
   total: PropTypes.number,
   dossierName: PropTypes.string,
   isReprompt: PropTypes.bool,
+};
+
+DossierWindowTitle.defaultProps = {
+  isReprompt: false,
+  index: 0,
+  total: 0,
+  dossierName: '',
 };
