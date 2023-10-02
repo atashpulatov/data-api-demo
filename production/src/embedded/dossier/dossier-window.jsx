@@ -19,6 +19,7 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
+import { DossierWindowTitle } from './dossier-window-title';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
@@ -35,7 +36,7 @@ export const DossierWindowNotConnected = (props) => {
   let showLoading = false;
 
   const {
-    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt,
+    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt, repromptsQueue,
   } = props;
   const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
@@ -208,14 +209,16 @@ export const DossierWindowNotConnected = (props) => {
     });
   };
 
+  const showMultipleRepromptMessage = isReprompt && repromptsQueue.total > 1;
+  const showSingleRepromptMessage = isReprompt && repromptsQueue.total === 1;
+
   return (
     <div className="dossier-window">
-      <h1
-        title={chosenObjectName}
-        className="ant-col folder-browser-title dossier-title-margin-top"
-      >
-        {`${t('Import Dossier')} > ${chosenObjectName}`}
-      </h1>
+      <DossierWindowTitle
+        isReprompt
+        total={repromptsQueue.total}
+        index={repromptsQueue.index}
+        dossierName={chosenObjectName} />
 
       { isEmbeddedDossierLoaded
         && (
@@ -276,6 +279,10 @@ DossierWindowNotConnected.propTypes = {
     selectedViz: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
+  repromptsQueue: PropTypes.shape({
+    total: PropTypes.number,
+    index: PropTypes.number,
+  }),
 };
 
 DossierWindowNotConnected.defaultProps = {
@@ -300,7 +307,8 @@ DossierWindowNotConnected.defaultProps = {
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer, officeReducer, answersReducer, popupStateReducer
+    navigationTree, popupReducer, sessionReducer,
+    officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer,
   } = state;
   const {
     chosenObjectName,
@@ -338,6 +346,7 @@ function mapStateToProps(state) {
     promptObjects,
     importRequested,
     isReprompt: popupStateReducer.isReprompt,
+    repromptsQueue: { ...repromptsQueueReducer },
   };
 }
 

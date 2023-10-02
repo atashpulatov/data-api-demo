@@ -57,6 +57,7 @@ export const RightSidePanelNotConnected = ({
       }
     }
     initializeSidePanel();
+    sidePanelService.clearRepromptTask();
   }, []);
 
   React.useEffect(() => {

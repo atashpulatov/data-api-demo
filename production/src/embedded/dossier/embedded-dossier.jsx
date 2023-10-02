@@ -38,14 +38,18 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.embeddedDossier = null;
     this.state = { loadingFrame: true };
     this.promptsAnswered = props.promptsAnswered;
+
+    this.hasBeenMounted = false;
   }
 
   componentDidMount() {
     scriptInjectionHelper.watchForIframeAddition(this.container.current, this.onIframeLoad);
+    this.hasBeenMounted = true;
     this.loadEmbeddedDossier(this.container.current);
   }
 
   componentWillUnmount() {
+    this.hasBeenMounted = false;
     if (this.msgRouter) {
       const { EventType } = microstrategy.dossier;
       this.msgRouter.removeEventhandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
@@ -304,8 +308,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         await this.restoreVizSelection(visualizationKey);
       }
 
-      this.setState({ loadingFrame: false });
-      handleEmbeddedDossierLoad();
+      if (this.hasBeenMounted) {
+        this.setState({ loadingFrame: false });
+        handleEmbeddedDossierLoad();
+      }
     } else {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
     }

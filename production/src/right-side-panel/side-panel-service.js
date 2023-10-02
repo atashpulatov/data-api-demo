@@ -27,6 +27,13 @@ class SidePanelService {
   };
 
   /**
+   * Clears the reprompt task queue and resets the index.
+   */
+  clearRepromptTask = async () => {
+    this.reduxStore.dispatch(clearRepromptTask());
+  };
+
+  /**
    * Opens popup with table of objects
    * Prevent navigation tree from going straight into importing previously selected item.
    */
@@ -186,7 +193,7 @@ class SidePanelService {
     });
 
     // Initialize the re-prompting queue state
-    this.reduxStore.dispatch(clearRepromptTask());
+    this.clearRepromptTask();
 
     // Dispatch all actions together to start re-prompting in sequence
     // regardless of how many objects are selected.
