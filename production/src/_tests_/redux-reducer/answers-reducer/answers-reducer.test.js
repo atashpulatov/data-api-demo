@@ -58,7 +58,7 @@ describe('answersReducer', () => {
             isPrompted: true,
             promptsAnswers: [{
               messageName: 'someMessageName',
-              answers: [{ key: '1' , values: ['2'] }]
+              answers: [{ key: '1', values: ['2'] }]
             }]
           }
         }
