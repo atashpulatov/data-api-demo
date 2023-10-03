@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, {
   useCallback, useEffect, useRef, useState
 } from 'react';
@@ -153,13 +152,15 @@ export const PromptsWindowNotConnected = (props) => {
    * @param {*} isImportingWithPreviousPromptAnswers
    * @returns
    */
-  const prepareAndHandlePromptAnswers = useCallback((promptObjs, previousAnswers, isImportingWithPreviousPromptAnswers) => {
-    if (isImportingWithPreviousPromptAnswers) {
-      return prepareGivenPromptAnswers(promptObjs, previousAnswers);
-    }
+  const prepareAndHandlePromptAnswers = useCallback(
+    (promptObjs, previousAnswers, isImportingWithPreviousPromptAnswers) => {
+      if (isImportingWithPreviousPromptAnswers) {
+        return prepareGivenPromptAnswers(promptObjs, previousAnswers);
+      }
 
-    return mstrData.promptsAnswers || editedObject.promptsAnswers;
-  }, [mstrData.promptsAnswers, editedObject.promptsAnswers]);
+      return mstrData.promptsAnswers || editedObject.promptsAnswers;
+    }, [mstrData.promptsAnswers, editedObject.promptsAnswers]
+  );
 
   const loadEmbeddedDossier = useCallback(async (localContainer) => {
     if (!loading) {
@@ -216,7 +217,9 @@ export const PromptsWindowNotConnected = (props) => {
       if (isReprompt || (importRequested && hasPreviousPromptAnswers && hasPromptObjects)) {
         // Update givenPromptsAnswers collection with previous prompt answers if importing
         // a report/dossier and reusePromptAnswers flag is enabled
-        const givenPromptsAnswers = prepareAndHandlePromptAnswers(promptObjects, previousPromptsAnswers, isImportingWithPreviousPromptAnswers);
+        const givenPromptsAnswers = prepareAndHandlePromptAnswers(
+          promptObjects, previousPromptsAnswers, isImportingWithPreviousPromptAnswers
+        );
 
         console.time('Prepared prompted Report');
         documentProps.instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
@@ -245,7 +248,8 @@ export const PromptsWindowNotConnected = (props) => {
           // Need to incorporate these answers because they're formatted differently than the ones
           // returned by the Embedded API. The REST API endpoint expects the answers to be in a
           // different format than the Embedded API.
-          const promptsAnsDef = await mstrObjectRestService.getObjectPrompts(objectId, projectId, dossierData.instanceId, true);
+          const promptsAnsDef = await mstrObjectRestService
+            .getObjectPrompts(objectId, projectId, dossierData.instanceId, true);
 
           // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
           deleteDossierInstance(projectId, objectId, instanceId);
