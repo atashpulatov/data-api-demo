@@ -96,35 +96,64 @@ describe('Librarywindow', () => {
     expect(handlePrepareMock).toBeCalled();
   });
 
-  it('should call proper requestImport method on handleOk action', () => {
-    // given
+  describe('handleOk action', () => {
+    let wrappedComponent;
+
     const requestImportMock = jest.fn().mockReturnValue('MockedImportResult');
     const requestDossierOpenMock = jest.fn().mockReturnValue('MockedImportResult');
 
-    const wrappedComponent = shallow(<LibraryWindowNotConnected
-      requestImport={requestImportMock}
-      requestDossierOpen={requestDossierOpenMock}
-    />);
+    beforeEach(() => {
+      jest.restoreAllMocks();
 
-    const getMstrTypeBySubtypeSpy = jest.spyOn(mstrObjectEnum, 'getMstrTypeBySubtype').mockReturnValue(mstrObjectEnum.mstrObjectType.report);
+      wrappedComponent = shallow(<LibraryWindowNotConnected
+        requestImport={requestImportMock}
+        requestDossierOpen={requestDossierOpenMock}
+      />);
 
-    wrappedComponent.requestImport = jest.fn().mockImplementationOnce(() => Promise.resolve());
-    wrappedComponent.requestDossierOpen = jest.fn().mockImplementationOnce(() => Promise.resolve());
+      wrappedComponent.requestImport = jest.fn().mockImplementationOnce(() => Promise.resolve());
+      wrappedComponent.requestDossierOpen = jest.fn().mockImplementationOnce(() => Promise.resolve());
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
 
     const isPromptedSpy = jest.spyOn(mstrObjectRestService, 'isPrompted').mockResolvedValueOnce({
       promptObjects: [],
       isPrompted: true,
     });
 
-    // when
-    wrappedComponent.find(PopupButtons).first().invoke('handleOk')();
+    it('should call proper requestImport method', async () => {
+      // given
+      const getMstrTypeBySubtypeSpy = jest.spyOn(mstrObjectEnum, 'getMstrTypeBySubtype').mockReturnValue(mstrObjectEnum.mstrObjectType.report);
 
-    // then
-    expect(getMstrTypeBySubtypeSpy).toHaveBeenCalled();
+      // when
+      wrappedComponent.find(PopupButtons).first().invoke('handleOk')();
 
-    expect(isPromptedSpy).toBeCalled();
-    expect(requestImportMock).not.toBeCalled();
-    expect(requestDossierOpenMock).not.toBeCalled();
+      // then
+      expect(getMstrTypeBySubtypeSpy).toHaveBeenCalled();
+
+      await waitFor(() => expect(isPromptedSpy).toHaveBeenCalled());
+
+      expect(requestImportMock).toBeCalled();
+      expect(requestDossierOpenMock).not.toBeCalled();
+    });
+
+    it('should call proper requestDossierOpen method', async () => {
+      // given
+      const getMstrTypeBySubtypeSpy = jest.spyOn(mstrObjectEnum, 'getMstrTypeBySubtype').mockReturnValue(mstrObjectEnum.mstrObjectType.dossier);
+
+      // when
+      wrappedComponent.find(PopupButtons).first().invoke('handleOk')();
+
+      // then
+      expect(getMstrTypeBySubtypeSpy).toHaveBeenCalled();
+
+      await waitFor(() => expect(isPromptedSpy).toHaveBeenCalled());
+
+      expect(requestImportMock).not.toBeCalled();
+      expect(requestDossierOpenMock).toBeCalled();
+    });
   });
 
   it('validateSession should call validateAuthToken', async () => {
