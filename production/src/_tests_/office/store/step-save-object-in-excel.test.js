@@ -44,6 +44,11 @@ describe('StepSaveObjectInExcel', () => {
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation(() => {
       throw new Error('errorTest');
     });
+
+    jest.spyOn(officeStoreObject, 'saveAnswersInExcelStore').mockImplementation(() => {
+      throw new Error('errorTest');
+    });
+
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
@@ -53,6 +58,7 @@ describe('StepSaveObjectInExcel', () => {
 
     // then
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
+    expect(officeStoreObject.saveAnswersInExcelStore).toBeCalledTimes(0);
 
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledWith(

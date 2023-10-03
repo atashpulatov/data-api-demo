@@ -1,6 +1,7 @@
 import officeStoreRestoreObject from '../../../office/store/office-store-restore-object';
 import { reduxStore } from '../../../store';
 import * as objectActions from '../../../redux-reducer/object-reducer/object-actions';
+import * as answersActions from '../../../redux-reducer/answers-reducer/answers-actions';
 import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
 import { errorService } from '../../../error/error-handler';
 import officeStoreHelper from '../../../office/store/office-store-helper';
@@ -97,6 +98,46 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
     }
 
     expect(settingsMock.get(officeProperties.storedObjects)).toEqual(restoredFromExcelObject);
+  });
+});
+
+describe('OfficeStoreRestoreObject restoreAnswersFromExcelStore', () => {
+  let answersActionsOriginal;
+  beforeAll(() => {
+    answersActionsOriginal = answersActions.restoreAllAnswers;
+    answersActionsOriginal.restoreAllAnswers = jest.fn().mockReturnValue('restoreAllAnswersTest');
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    internalData[officeProperties.storedAnswers] = 'restoredAnswerFromExcelTest';
+    officeStoreRestoreObject.init(reduxStore);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  afterAll(() => {
+    delete internalData[officeProperties.storedAnswers];
+
+    answersActions.restoreAllAnswers = answersActionsOriginal;
+  });
+
+  it('restoreAnswersFromExcelStore should work as expected', () => {
+    // given
+    jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    officeStoreRestoreObject.restoreAnswersFromExcelStore();
+
+    // then
+    expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
+    expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
+
+    expect(reduxStore.dispatch).toBeCalledTimes(1);
   });
 });
 

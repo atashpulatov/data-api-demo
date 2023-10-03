@@ -1,13 +1,5 @@
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
-const {
-  rePromptDossier,
-  getDossierStatus,
-  createInstance,
-  createDossierBasedOnReport,
-  updateDossierPrompts,
-} = mstrObjectRestService;
-
 const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 /**
@@ -65,16 +57,18 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
     // Applying prompt answers to current instead of forcing the instance to execute the prompts.
     // as indicated in:
     // https://microstrategy.github.io/rest-api-docs/common-workflows/analytics/use-prompts-objects/answer-prompts/#nested-prompts
-    await updateDossierPrompts(config);
+    await mstrObjectRestService.updateDossierPrompts(config);
 
-    let dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
+    let dossierStatusResponse = await mstrObjectRestService
+      .getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
 
     // Keep fetching the status of the Dossier's instance until request is no longer
     // being processed (statusCode => 202).
     // When statusCode is 202, it means that the Dossier's instance is done processing.
     while (dossierStatusResponse.statusCode === 202) {
       await sleep(1000);
-      dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
+      dossierStatusResponse = await mstrObjectRestService
+        .getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
     }
     currentInstanceDefinition.status = dossierStatusResponse.body.status;
 
@@ -98,7 +92,7 @@ export async function preparePromptedDossier(instanceDef, objectId, projectId, p
   let dossierInstanceDefinition = instanceDef;
   if (dossierInstanceDefinition && dossierInstanceDefinition.status === 2) {
     // Re-prompt the Dossier's instance to apply previous answers. Get new instance definition.
-    const rePromptResponse = await rePromptDossier(objectId, instanceDef.mid, projectId);
+    const rePromptResponse = await mstrObjectRestService.rePromptDossier(objectId, instanceDef.mid, projectId);
     dossierInstanceDefinition.mid = rePromptResponse.mid;
 
     // Loop through the prompts and answer them.
@@ -124,11 +118,12 @@ export async function preparePromptedDossier(instanceDef, objectId, projectId, p
  */
 export async function preparePromptedReport(chosenObjectIdLocal, projectId, promptsAnswers) {
   const config = { objectId: chosenObjectIdLocal, projectId };
-  const instanceDefinition = await createInstance(config);
+  const instanceDefinition = await mstrObjectRestService.createInstance(config);
   const { instanceId } = instanceDefinition;
 
   // execute and create an instance so we can get the prompts answers applied to it.
-  let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
+  let dossierInstanceDefinition = await mstrObjectRestService
+    .createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
 
   if (promptsAnswers && dossierInstanceDefinition.status === 2) {
     console.time('Answering Dossier Prompts');
@@ -145,7 +140,8 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
   }
 
   // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.
-  const repromptResponse = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition.mid, projectId);
+  const repromptResponse = await mstrObjectRestService
+    .rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition.mid, projectId);
   dossierInstanceDefinition.mid = repromptResponse.mid;
   dossierInstanceDefinition.id = chosenObjectIdLocal;
 
