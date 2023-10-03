@@ -13,7 +13,7 @@ describe('answersReducer', () => {
     });
   });
 
-  it('Import operation should update the state with newly-provided answers', () => {
+  it('Import operation for Report should update the state with newly-provided answers', () => {
     // given
     const prevState = { answers: [] };
     const action = {
@@ -25,6 +25,29 @@ describe('answersReducer', () => {
             messageName: 'someMessageName',
             answers: [{ key: '1', values: ['1'] }]
           }]
+        }
+      }
+    };
+    // when
+    const newState = answersReducer(prevState, action);
+    // then
+    expect(newState.answers).toEqual([{ key: '1', values: ['1'] }]);
+  });
+
+  it('Import operation for Dossier should update the state with newly-provided answers', () => {
+    // given
+    const prevState = { answers: [] };
+    const action = {
+      type: IMPORT_OPERATION,
+      payload: {
+        object: {
+          mstrObjectType: {
+            name: 'visualization'
+          },
+          promptsAnswers: {
+            messageName: 'someMessageName',
+            answers: [{ key: '1', values: ['1'] }]
+          }
         }
       }
     };
@@ -47,7 +70,7 @@ describe('answersReducer', () => {
     expect(newState.answers).toEqual([{ key: '1', values: ['1'] }]);
   });
 
-  it('Edit operation should update the state with newly-provided answers', () => {
+  it('Edit operation for Report should update the state with newly-provided answers', () => {
     // given
     const prevState = { answers: [{ key: '1', values: ['1'] }] };
     const action = {
@@ -60,6 +83,31 @@ describe('answersReducer', () => {
               messageName: 'someMessageName',
               answers: [{ key: '1', values: ['2'] }]
             }]
+          }
+        }
+      }
+    };
+    // when
+    const newState = answersReducer(prevState, action);
+    // then
+    expect(newState.answers).toEqual([{ key: '1', values: ['2'] }]);
+  });
+
+  it('Edit operation for Dossier should update the state with newly-provided answers', () => {
+    // given
+    const prevState = { answers: [{ key: '1', values: ['1'] }] };
+    const action = {
+      type: EDIT_OPERATION,
+      payload: {
+        operation: {
+          objectEditedData: {
+            visualizationInfo: {
+              name: 'visualization'
+            },
+            promptsAnswers: {
+              messageName: 'someMessageName',
+              answers: [{ key: '1', values: ['2'] }]
+            }
           }
         }
       }
