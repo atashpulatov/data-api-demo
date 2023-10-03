@@ -2,7 +2,11 @@ import { prepareGivenPromptAnswers, answerDossierPromptsHelper, preparePromptedD
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 
 describe('PromptsHandlingHelper', () => {
-  let rePromptDossierSpy, getDossierStatusSpy, createInstanceSpy, createDossierBasedOnReportSpy, updateDossierPromptsSpy;
+  let rePromptDossierSpy;
+  let getDossierStatusSpy;
+  let createInstanceSpy;
+  let createDossierBasedOnReportSpy;
+  let updateDossierPromptsSpy;
 
   beforeEach(() => {
     rePromptDossierSpy = jest.spyOn(mstrObjectRestService, 'rePromptDossier').mockImplementation(async () => ({ mid: 'mid' }));

@@ -20,7 +20,7 @@ describe('PromptsWindowNotConnected', () => {
   const popupState = {
     isReprompt: false,
     isEdit: false
-  }
+  };
 
   const editedObject = {
     promptsAnswers: ['promptsAnswers'],
@@ -54,7 +54,7 @@ describe('PromptsWindowNotConnected', () => {
     const repromptPopupState = {
       isReprompt: true,
       isEdit: false
-    }
+    };
     // given
     // when
     const wrappedComponent = mount(<Provider store={reduxStore}>
