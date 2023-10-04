@@ -16,6 +16,10 @@ class PopupViewSelectorHelper {
     ) {
       this.proceedToImport(props);
     } else if (!!isPrompted && this.arePromptsAnswered(props)) {
+      // Please review this logic above in if-condition. If we don't mark 'isPrompted' as 'true' in the Redux store,
+      // particularly in the navigation-tree-reducer, while processing the 'PROMPTS_ANSWERED'
+      // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
+      // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
         if (popupType === PopupTypeEnum.repromptingWindow) {
           return PopupTypeEnum.editFilters;
