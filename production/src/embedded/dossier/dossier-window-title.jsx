@@ -10,12 +10,12 @@ import i18n from '../../i18n';
  * @returns
  */
 export const DossierWindowTitle = ({
-  isReprompt, index, total, dossierName,
+  isReprompt, isEdit, index, total, dossierName,
 }) => {
   const [t] = useTranslation('common', { i18n });
 
-  const showMultipleRepromptMessage = isReprompt && total > 1;
-  const showSingleRepromptMessage = isReprompt && total === 1;
+  const showMultipleRepromptMessage = isReprompt && !isEdit && total > 1;
+  const showSingleRepromptMessage = isReprompt && !isEdit && total === 1;
 
   return (
     <h1
@@ -27,6 +27,8 @@ export const DossierWindowTitle = ({
           return `${t('Reprompt')} ${index}/${total} > ${dossierName}`;
         } if (showSingleRepromptMessage) {
           return `${t('Reprompt')} > ${dossierName}`;
+        } if (isEdit) {
+          return `${t('Edit Dossier')} > ${dossierName}`;
         }
         return `${t('Import Dossier')} > ${dossierName}`;
       })()}
@@ -39,10 +41,12 @@ DossierWindowTitle.propTypes = {
   total: PropTypes.number,
   dossierName: PropTypes.string,
   isReprompt: PropTypes.bool,
+  isEdit: PropTypes.bool,
 };
 
 DossierWindowTitle.defaultProps = {
   isReprompt: false,
+  isEdit: false,
   index: 0,
   total: 0,
   dossierName: '',

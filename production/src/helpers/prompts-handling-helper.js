@@ -89,7 +89,7 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
  * @returns
  */
 export async function preparePromptedDossier(instanceDef, objectId, projectId, promptsAnswers) {
-  let dossierInstanceDefinition = instanceDef;
+  let dossierInstanceDefinition = { ...instanceDef };
   if (dossierInstanceDefinition && dossierInstanceDefinition.status === 2) {
     // Re-prompt the Dossier's instance to apply previous answers. Get new instance definition.
     const rePromptResponse = await mstrObjectRestService.rePromptDossier(objectId, instanceDef.mid, projectId);

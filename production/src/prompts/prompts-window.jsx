@@ -133,13 +133,17 @@ export const PromptsWindowNotConnected = (props) => {
    * @param {*} promptsAnsDef
    */
   function updateAnswersWithPrompts(currentAnswers, promptsAnsDef) {
-    currentAnswers.forEach((currentAnswer) => {
+    const answerDefMap = new Map(promptsAnsDef.map(prompt => [prompt.key, prompt]));
+
+    currentAnswers.forEach(currentAnswer => {
       const { answers } = currentAnswer;
-      answers.forEach((answer) => {
-        const answerDef = promptsAnsDef.find((prompt) => prompt.key === answer.key);
+      answers.forEach(answer => {
+        const answerDef = answerDefMap.get(answer.key);
         if (answerDef) {
-          answer.answers = answerDef.answers;
-          answer.type = answerDef.type;
+          Object.assign(answer, {
+            answers: answerDef.answers,
+            type: answerDef.type
+          });
         }
       });
     });

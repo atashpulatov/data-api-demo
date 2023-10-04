@@ -273,7 +273,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
-        this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, this.instanceIdChangeHandler);
+        this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, (selectedInstanceId) => {
+          // Need to make sure that the instanceId is not null before calling the handler
+          selectedInstanceId && this.instanceIdChangeHandler(selectedInstanceId);
+        });
         this.msgRouter.registerEventHandler(EventType.ON_ERROR, this.onEmbeddedError);
       },
       dossierFeature: {

@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useCallback, useState, useMemo
+  useEffect, useCallback, useState, useMemo, useRef
 } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -24,16 +24,16 @@ import { DossierWindowTitle } from './dossier-window-title';
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
-  const [instanceId, setInstanceId] = useState('');
+  const instanceId = useRef('');
   const [vizualizationsData, setVizualizationsData] = useState([]);
   const [lastSelectedViz, setLastSelectedViz] = useState({});
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
-  const [previousSelectionBackup, setPreviousSelectionBackup] = useState([]);
+  const previousSelectionBackup = useRef([]);
 
   // New showLoading variable is needed to show loading spinner while prompted dossier is answered
   // behind the scenes which could take some time; especially if there are nested prompts.
   // NOTE: This loading spinner is separate from the one in EmbeddedDossier component.
-  let showLoading = false;
+  const showLoading = useRef(false);
 
   const {
     chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt, repromptsQueue,
@@ -88,7 +88,7 @@ export const DossierWindowNotConnected = (props) => {
         visualizationKey: chosenVizKey
       });
       setPromptsAnswers(chosenVizPromptAnswers);
-      setInstanceId(chosenVizInstanceId);
+      instanceId.current = chosenVizInstanceId;
 
       if (!vizualizationsData.find(el => (
         el.visualizationKey === chosenVizKey
@@ -128,7 +128,7 @@ export const DossierWindowNotConnected = (props) => {
     }
   };
 
-  const handleOk = () => {
+  const handleOk = useCallback(() => {
     const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -141,20 +141,23 @@ export const DossierWindowNotConnected = (props) => {
         chapterKey,
         visualizationKey,
       },
-      preparedInstanceId: instanceId,
+      preparedInstanceId: instanceId.current,
       isEdit,
     };
     popupHelper.officeMessageParent(message);
-  };
+  }, [chapterKey, chosenObjectId, chosenObjectName, chosenProjectId,
+    instanceId, isEdit, promptsAnswers, visualizationKey]);
 
   // Automatically close popup if re-prompted dossier is answered
   // and visualization is selected
-  if (isReprompt && isSelected) {
-    handleOk();
+  useEffect(() => {
+    if (isReprompt && isSelected) {
+      handleOk();
 
-    // Show loading spinner while prompts are being answered.
-    showLoading = true;
-  }
+      // Show loading spinner while prompts are being answered.
+      showLoading.current = true;
+    }
+  }, [isReprompt, isSelected, handleOk]);
 
   /**
    * Store new instance id in state.
@@ -165,18 +168,19 @@ export const DossierWindowNotConnected = (props) => {
    * @param {String} newInstanceId
    */
   const handleInstanceIdChange = (newInstanceId) => {
-    const backup = previousSelectionBackup.find((el) => el.instanceId === newInstanceId);
+    const backup = previousSelectionBackup.current.find((el) => el.instanceId === newInstanceId);
 
-    if (instanceId !== newInstanceId && !backup) {
+    if (instanceId.current !== newInstanceId && !backup) {
+      const currentInstanceId = instanceId.current;
       // Make a backup of last selection info.
-      setPreviousSelectionBackup([{ instanceId, lastSelectedViz, }, ...previousSelectionBackup]);
+      previousSelectionBackup.current = [{ currentInstanceId, lastSelectedViz, }, ...previousSelectionBackup.current];
       // Clear selection of viz and update instance id.
-      setInstanceId(newInstanceId);
-      setLastSelectedViz([]);
-      setVizualizationsData([]);
+      instanceId.current = newInstanceId;
+      JSON.stringify(lastSelectedViz) !== '{}' && setLastSelectedViz([]);
+      vizualizationsData?.length > 0 && setVizualizationsData([]);
     } else {
       // Restore backuped viz selection info in case of return to prev instance
-      setVizualizationsData([]);
+      vizualizationsData?.length > 0 && setVizualizationsData([]);
       handleSelection({
         ...backup.lastSelectedViz,
         promptsAnswers,
@@ -192,7 +196,7 @@ export const DossierWindowNotConnected = (props) => {
    */
   const handlePromptAnswer = (newAnswers) => {
     setPromptsAnswers(newAnswers);
-    setVizualizationsData([]);
+    vizualizationsData?.length > 0 && setVizualizationsData([]);
   };
 
   /**
@@ -213,6 +217,7 @@ export const DossierWindowNotConnected = (props) => {
     <div className="dossier-window">
       <DossierWindowTitle
         isReprompt
+        isEdit={isEdit && !isReprompt}
         total={repromptsQueue.total}
         index={repromptsQueue.index}
         dossierName={chosenObjectName} />
@@ -232,9 +237,9 @@ export const DossierWindowNotConnected = (props) => {
           </span>
         )}
 
-      {showLoading && <Empty isLoading />}
+      {showLoading.current && <Empty isLoading />}
 
-      {!showLoading && ( // Show embedded dossier only after prompts are answered.
+      {!showLoading.current && ( // Show embedded dossier only after prompts are answered.
         <EmbeddedDossier
           handleSelection={handleSelection}
           handlePromptAnswer={handlePromptAnswer}
