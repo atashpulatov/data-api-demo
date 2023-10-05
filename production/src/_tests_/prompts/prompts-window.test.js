@@ -12,11 +12,14 @@ jest.mock('../../popup/popup-helper');
 
 describe('PromptsWindowNotConnected', () => {
   const mstrData = {
-    envUrl: 'env',
-    token: 'token',
-    projectId: 'projectId',
+    chosenProjectId: 'projectId',
     chosenObjectId: 'chosenObjectId',
     promptsAnswers: [{}],
+  };
+
+  const popupState = {
+    isReprompt: false,
+    isEdit: false
   };
 
   const editedObject = {
@@ -27,8 +30,6 @@ describe('PromptsWindowNotConnected', () => {
     envUrl: 'url/test',
     authToken: 'd3d3d3'
   };
-
-  const popupState = { isReprompt: false };
 
   afterEach(() => {
     jest.restoreAllMocks();
@@ -41,6 +42,25 @@ describe('PromptsWindowNotConnected', () => {
       <PromptsWindowNotConnected
         mstrData={mstrData}
         popupState={popupState}
+        editedObject={editedObject}
+        session={session} />
+    </Provider>);
+    // then
+    expect(wrappedComponent.instance()).toBeDefined();
+    expect(wrappedComponent.find('PromptsContainer').get(0)).toBeDefined();
+  });
+
+  it('should render with props given for Reprompt workflow', () => {
+    const repromptPopupState = {
+      isReprompt: true,
+      isEdit: false
+    };
+    // given
+    // when
+    const wrappedComponent = mount(<Provider store={reduxStore}>
+      <PromptsWindowNotConnected
+        mstrData={mstrData}
+        popupState={repromptPopupState}
         editedObject={editedObject}
         session={session} />
     </Provider>);

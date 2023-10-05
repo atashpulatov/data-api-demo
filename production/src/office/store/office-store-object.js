@@ -50,6 +50,17 @@ class OfficeStoreObject {
     settings.set(officeProperties.storedObjects, objects);
     await settings.saveAsync();
   };
+
+  /**
+  * Saves current answers list from Answer Reducer in Office Settings
+  *
+  */
+  saveAnswersInExcelStore = async () => {
+    const { answers } = this.reduxStore.getState().answersReducer;
+    const settings = officeStoreHelper.getOfficeSettings();
+    settings.set(officeProperties.storedAnswers, answers);
+    await settings.saveAsync();
+  };
 }
 
 const officeStoreObject = new OfficeStoreObject();

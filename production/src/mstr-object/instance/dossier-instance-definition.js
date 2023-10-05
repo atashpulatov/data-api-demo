@@ -28,7 +28,12 @@ class DossierInstanceDefinition {
 
     let instanceId;
     try {
-      instanceId = preparedInstanceId || (await mstrObjectRestService.createDossierInstance(projectId, objectId, body));
+      if (preparedInstanceId) {
+        instanceId = preparedInstanceId;
+      } else {
+        const instance = await mstrObjectRestService.createDossierInstance(projectId, objectId, body);
+        instanceId = instance.mid;
+      }
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier;
       throw error;

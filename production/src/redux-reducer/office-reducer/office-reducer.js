@@ -6,7 +6,9 @@ const initialState = {
   isSettings: false,
   supportForms: true,
   popupData: null,
-  popupOpen: false
+  popupOpen: false,
+  settingsPanelLoaded: false,
+  reusePromptAnswers: false
 };
 
 export const officeReducer = (state = initialState, action) => {
@@ -31,6 +33,12 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.toggleIsClearDataFailedFlag:
       return toggleIsClearDataFailedFlag(action, state);
+
+    case officeProperties.actions.toggleSettingsPanelLoadedFlag:
+      return toggleSettingsPanelLoadedFlag(action, state);
+
+    case officeProperties.actions.toggleReusePromptAnswersFlag:
+      return toggleReusePromptAnswersFlag(action, state);
 
     case officeProperties.actions.setRangeTakenPopup:
       return setRangeTakenPopup(action, state);
@@ -92,6 +100,20 @@ function toggleIsClearDataFailedFlag(action, state) {
   return {
     ...state,
     isClearDataFailed: action.isClearDataFailed,
+  };
+}
+
+function toggleSettingsPanelLoadedFlag(action, state) {
+  return {
+    ...state,
+    settingsPanelLoaded: !state.settingsPanelLoaded
+  };
+}
+
+function toggleReusePromptAnswersFlag(action, state) {
+  return {
+    ...state,
+    reusePromptAnswers: action.reusePromptAnswers
   };
 }
 

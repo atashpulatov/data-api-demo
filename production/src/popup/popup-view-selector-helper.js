@@ -16,6 +16,10 @@ class PopupViewSelectorHelper {
     ) {
       this.proceedToImport(props);
     } else if (!!isPrompted && this.arePromptsAnswered(props)) {
+      // Please review this logic above in if-condition. If we don't mark 'isPrompted' as 'true' in the Redux store,
+      // particularly in the navigation-tree-reducer, while processing the 'PROMPTS_ANSWERED'
+      // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
+      // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
         if (popupType === PopupTypeEnum.repromptingWindow) {
           return PopupTypeEnum.editFilters;
@@ -23,7 +27,7 @@ class PopupViewSelectorHelper {
       } else {
         return PopupTypeEnum.obtainInstanceHelper;
       }
-    } else if (this.promptedReportSubmitted(props) || (dossierOpenRequested && !!isPrompted)) {
+    } else if (this.promptedReportSubmitted(props)) {
       return PopupTypeEnum.promptsWindow;
     } else if (dossierOpenRequested) {
       // open dossier without prompts
@@ -47,6 +51,7 @@ class PopupViewSelectorHelper {
 
   promptedReportSubmitted = (props) => (
     !!(props.propsToPass.isPrompted || props.isPrompted)
+    && (props.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name)
     && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
   );
 
@@ -174,7 +179,7 @@ class PopupViewSelectorHelper {
       chosenProject: props.chosenProjectId,
       chosenSubtype: props.chosenSubtype,
       chosenObjectName: props.chosenObjectName,
-      isPrompted: props.isPrompted,
+      isPrompted: props.promptsAnswers?.length > 0 && props.promptsAnswers[0].answers?.length > 0,
       promptsAnswers: props.promptsAnswers,
       visualizationInfo,
       preparedInstanceId: props.preparedInstanceId,

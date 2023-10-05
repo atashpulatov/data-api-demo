@@ -26,6 +26,22 @@ class PopupActions {
     this.visualizationInfoService = visualizationInfoService;
   };
 
+  callForReprompt = (reportParams) => async (dispatch) => {
+    try {
+      await this.officeApiHelper.checkStatusOfSessions();
+      const editedObject = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+      editedObject.objectType = editedObject.mstrObjectType;
+
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedObject,
+      });
+      this.popupController.runRepromptPopup(reportParams, false);
+    } catch (error) {
+      return this.errorService.handleError(error);
+    }
+  };
+
   callForEdit = (reportParams) => async (dispatch) => {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
@@ -51,6 +67,24 @@ class PopupActions {
     instanceId,
     chosenObjectData,
   });
+
+  callForRepromptDossier = (reportParams) => async (dispatch) => {
+    try {
+      await this.officeApiHelper.checkStatusOfSessions();
+      const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+
+      await this.prepareDossierForReprompt(repromptedDossier);
+
+      dispatch({
+        type: SET_REPORT_N_FILTERS,
+        editedObject: repromptedDossier,
+      });
+      this.popupController.runRepromptDossierPopup(reportParams);
+    } catch (error) {
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+      return this.errorService.handleError(error);
+    }
+  };
 
   callForEditDossier = (reportParams) => async (dispatch) => {
     try {
@@ -123,7 +157,7 @@ class PopupActions {
       projectId, objectId, manipulationsXML, visualizationInfo
     } = editedDossier;
 
-    const instanceId = await this.mstrObjectRestService.createDossierInstance(
+    const instance = await this.mstrObjectRestService.createDossierInstance(
       projectId,
       objectId,
       { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
@@ -135,19 +169,59 @@ class PopupActions {
         projectId,
         objectId,
         visualizationInfo.visualizationKey,
-        instanceId,
+        instance.mid,
       );
     } catch (ignoreError) {
       // Ignored
     }
 
-    editedDossier.instanceId = instanceId;
+    editedDossier.instanceId = instance.mid;
     editedDossier.isEdit = true;
 
     if (updatedVisualizationInfo) {
       editedDossier.visualizationInfo = updatedVisualizationInfo;
     }
     editedDossier.objectType = editedDossier.mstrObjectType;
+  };
+
+  /**
+   * Creates instance of dossier which is used during reprompt workflow.
+   * @param {*} repromptedDossier
+   */
+  prepareDossierForReprompt = async (repromptedDossier) => {
+    const {
+      projectId, objectId, manipulationsXML, visualizationInfo
+    } = repromptedDossier;
+
+    const instance = await this.mstrObjectRestService.createDossierInstance(
+      projectId,
+      objectId,
+      { ...manipulationsXML, disableManipulationsAutoSaving: true, persistViewState: true }
+    );
+
+    let updatedVisualizationInfo;
+    try {
+      updatedVisualizationInfo = await this.visualizationInfoService.getVisualizationInfo(
+        projectId,
+        objectId,
+        visualizationInfo.visualizationKey,
+        instance.mid,
+      );
+    } catch (ignoreError) {
+      // Ignored
+    }
+
+    // Re-prompt the dossier to open prompts' popup
+    const resp = await this.mstrObjectRestService.rePromptDossier(objectId, instance.mid, projectId);
+
+    // Update dossier's instanceId with the new one
+    repromptedDossier.instanceId = resp && resp.mid ? resp.mid : instance.mid;
+    repromptedDossier.isEdit = true;
+
+    if (updatedVisualizationInfo) {
+      repromptedDossier.visualizationInfo = updatedVisualizationInfo;
+    }
+    repromptedDossier.objectType = repromptedDossier.mstrObjectType;
   };
 
   switchImportSubtotalsOnEdit = (data) => (dispatch) => dispatch({ type: SWITCH_IMPORT_SUBTOTALS_ON_EDIT, data });

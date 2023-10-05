@@ -99,7 +99,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    * Imports the object selected by the user
    */
   const handleOk = async () => {
-    let isPromptedResponse = false;
+    let isPromptedResponse = {};
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
       if (
@@ -115,7 +115,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       if (
         chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
       ) {
-        requestDossierOpen();
+        requestDossierOpen(isPromptedResponse);
       } else {
         requestImport(isPromptedResponse);
       }

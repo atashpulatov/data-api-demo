@@ -35,9 +35,26 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.editFilters, 80, 80, reportParams);
   };
 
-  runRepromptPopup = async (reportParams) => {
-    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
+  /**
+   * This method is used to run the Report's re-prompt popup from the Excel add-in.
+   * Note that both the Edit and Reprompt workflows will call this function.
+   * The isEdit parameter determines whether the Reprompt screen should
+   * be followed by the Edit Filters screen.
+   * @param {*} reportParams
+   * @param {*} isEdit
+   */
+  runRepromptPopup = async (reportParams, isEdit = true) => {
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
     await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
+  };
+
+  /**
+   * This method is used to run the Dossier's re-prompt popup from the Excel add-in
+   * @param {*} reportParams
+   */
+  runRepromptDossierPopup = async (reportParams) => {
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
+    await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
 
   runEditDossierPopup = async (reportParams) => {
@@ -132,6 +149,7 @@ class PopupController {
       errorService.handleError(error);
     } finally {
       this.reduxStore.dispatch(this.popupActions.resetState());
+      this.reduxStore.dispatch(popupStateActions.onClearPopupState());
       this.reduxStore.dispatch(officeActions.hidePopup());
     }
   };
@@ -145,7 +163,7 @@ class PopupController {
       body: response.body,
       dossierData: response.dossierData,
       promptsAnswers: response.promptsAnswers,
-      isPrompted: response.isPrompted,
+      isPrompted: response.promptsAnswers?.length > 0 && response.promptsAnswers[0].answers?.length > 0,
       instanceId: response.instanceId,
       subtotalsInfo: response.subtotalsInfo,
       displayAttrFormNames: response.displayAttrFormNames,
@@ -163,7 +181,7 @@ class PopupController {
         projectId: response.chosenProject,
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
         bindId,
-        isPrompted: response.isPrompted,
+        isPrompted: response.isPrompted || response.promptsAnswers?.answers?.length > 0,
         promptsAnswers: response.promptsAnswers,
         visualizationInfo: response.visualizationInfo,
         preparedInstanceId: response.preparedInstanceId,

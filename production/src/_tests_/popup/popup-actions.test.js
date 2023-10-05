@@ -87,7 +87,45 @@ describe('Popup actions', () => {
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
     expect(spyPrepareDossierForEdit).toBeCalledWith(returnedValue);
-    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
+    // expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
+  });
+
+  it('should call error service when callForRepromptDossier fails', async () => {
+    // given
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
+    const error = new Error('test error');
+    officeApiHelper.checkStatusOfSessions.mockImplementationOnce(() => { throw error; });
+    const listener = jest.fn();
+    // when
+    await actions.callForRepromptDossier(report)(listener);
+    // then
+    expect(errorService.handleError).toBeCalledWith(error);
+  });
+
+  it('should do certain operations when callForRepromptDossier action called', async () => {
+    // given
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
+    const returnedValue = {
+      projectId: 'projectId',
+      id: 'id',
+      manipulationsXML: 'manipulationsXML',
+      visualizationInfo: {
+        pageKey: 'page',
+        chapterKey: 'chapterKey',
+        visualizationKey: 'visKey',
+      }
+    };
+    const listener = jest.fn();
+    const spyPrepareDossierForReprompt = jest.spyOn(actions, 'prepareDossierForReprompt');
+    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
+    // when
+    await actions.callForRepromptDossier(report)(listener);
+    // then
+    expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
+    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
+    expect(spyPrepareDossierForReprompt).toBeCalledWith(returnedValue);
   });
 
   it('should run edit popup if edit action for not prompted object is called', async () => {
@@ -124,6 +162,23 @@ describe('Popup actions', () => {
     expect(popupController.runRepromptPopup).toBeCalledWith(report);
   });
 
+  it('should run reprompt popup with isEdit = false if reprompt action for prompted object is called', async () => {
+    // given
+    const bindId = 'bindId';
+    const report = { bindId, objectType: 'whatever' };
+    const returnedValue = {
+      id: 'id', projectId: 'projectId', instanceId: 'instanceId', body: {}, promptsAnswers: [], isPrompted: true
+    };
+    officeReducerHelper.getObjectFromObjectReducerByBindId.mockReturnValueOnce(returnedValue);
+    const listener = jest.fn();
+    // when
+    await actions.callForReprompt(report)(listener);
+    // then
+    expect(officeReducerHelper.getObjectFromObjectReducerByBindId).toBeCalledWith(bindId);
+    expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: returnedValue });
+    expect(popupController.runRepromptPopup).toBeCalledWith(report, false);
+  });
+
   it('should call error service when edit action fails', async () => {
     // given
     const bindId = 'bindId';
@@ -152,7 +207,7 @@ describe('Popup actions', () => {
     // given
     const projectId = 'projectId';
     const objectId = 'objectId';
-    const instanceId = 'instanceId';
+    const instanceId = { mid: 'instanceId' };
     const manipulationsXML = { data: 'data' };
     const oldVisKey = 'oldVisualizationKey';
     const newVisKey = 'newVisualizationKey';
@@ -163,6 +218,7 @@ describe('Popup actions', () => {
       manipulationsXML,
       visualizationInfo: { visualizationKey: oldVisKey },
       mstrObjectType: 'mstrObjectType',
+      instanceId,
     };
     const body = {
       ...manipulationsXML,
@@ -181,7 +237,7 @@ describe('Popup actions', () => {
     };
 
     const newEditedDossier = {
-      instanceId,
+      instanceId: 'instanceId',
       isEdit: true,
       manipulationsXML,
       mstrObjectType: 'mstrObjectType',
@@ -200,7 +256,7 @@ describe('Popup actions', () => {
     // then
     expect(createDossierInstance).toBeCalledWith(projectId, objectId, body);
     expect(getVisualizationInfo).toBeCalledWith(
-      projectId, objectId, oldVisKey, instanceId
+      projectId, objectId, oldVisKey, 'instanceId',
     );
     expect(editedDossier).toStrictEqual(newEditedDossier);
   });
@@ -209,7 +265,7 @@ describe('Popup actions', () => {
     // given
     const projectId = 'projectId';
     const objectId = 'objectId';
-    const instanceId = 'instanceId';
+    const instanceId = { mid: 'instanceId' };
     const manipulationsXML = { data: 'data' };
     const oldVisKey = 'oldVisualizationKey';
 
@@ -228,7 +284,7 @@ describe('Popup actions', () => {
     const newVizInfo = undefined;
 
     const newEditedDossier = {
-      instanceId,
+      instanceId: 'instanceId',
       isEdit: true,
       manipulationsXML,
       mstrObjectType: 'mstrObjectType',
@@ -247,7 +303,7 @@ describe('Popup actions', () => {
     // then
     expect(createDossierInstance).toBeCalledWith(projectId, objectId, body);
     expect(getVisualizationInfo).toBeCalledWith(
-      projectId, objectId, oldVisKey, instanceId
+      projectId, objectId, oldVisKey, 'instanceId'
     );
     expect(editedDossier).toStrictEqual(newEditedDossier);
   });

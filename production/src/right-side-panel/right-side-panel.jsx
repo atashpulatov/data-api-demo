@@ -27,6 +27,8 @@ export const RightSidePanelNotConnected = ({
   isSettings,
   isSecured,
   isClearDataFailed,
+  settingsPanelLoaded,
+  reusePromptAnswers,
   toggleIsSettingsFlag,
   toggleSecuredFlag,
   toggleIsClearDataFailedFlag,
@@ -48,6 +50,7 @@ export const RightSidePanelNotConnected = ({
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
+        await sidePanelService.initReusePromptAnswers();
       } catch (error) {
         console.error(error);
       }
@@ -90,17 +93,17 @@ export const RightSidePanelNotConnected = ({
   }, [loadedObjects, notifications, operations]);
 
   /**
-   * Wraps a function to be called when user clicks an action icon.
-   *
-   * Function will be called when:
-   *
-   * - session is valid,
-   * - no operation is in progress.
-   *
-   * @param {Function} func Function to be wrapped
-   * @param {*} params Parameters to wrapped function
-   * @param {String} name Optional new name of an object
-   */
+     * Wraps a function to be called when user clicks an action icon.
+     *
+     * Function will be called when:
+     *
+     * - session is valid,
+     * - no operation is in progress.
+     *
+     * @param {Function} func Function to be wrapped
+     * @param {*} params Parameters to wrapped function
+     * @param {String} name Optional new name of an object
+     */
   const wrapper = async (func, params, name) => {
     try {
       const { onLine } = window.navigator;
@@ -121,9 +124,15 @@ export const RightSidePanelNotConnected = ({
     await wrapper(sidePanelNotificationHelper.setDuplicatePopup, { objectWorkingId, ...duplicatePopupParams });
   };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
+  const repromptWrapper = async (params) => { await wrapper(sidePanelService.reprompt, params); };
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
+  const handleReusePromptAnswers = async () => {
+    await wrapper(sidePanelService.toggleReusePromptAnswers, reusePromptAnswers);
+  };
+
+  const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
 
   return (
     <SidePanel
@@ -144,7 +153,11 @@ export const RightSidePanelNotConnected = ({
       onSelectAll={notificationService.dismissNotifications}
       shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
       isPopupRendered={isPopupRendered}
-    />
+      reusePromptAnswers={reusePromptAnswers}
+      settingsPanelLoaded={settingsPanelLoaded}
+      handleReusePromptAnswers={handleReusePromptAnswers}
+      handleToggleSettingsPanel={handleToggleSettingsPanel}
+      onRepromptClick={repromptWrapper} />
   );
 };
 
@@ -153,7 +166,7 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const {
-    isConfirm, isSettings, isSecured, isClearDataFailed, popupOpen, popupData
+    isConfirm, isSettings, isSecured, isClearDataFailed, settingsPanelLoaded, reusePromptAnswers, popupOpen, popupData
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -166,6 +179,8 @@ export const mapStateToProps = (state) => {
     notifications,
     isSecured,
     isClearDataFailed,
+    settingsPanelLoaded,
+    reusePromptAnswers,
     popupData,
     isPopupRendered: popupOpen,
   };
@@ -194,7 +209,7 @@ RightSidePanelNotConnected.propTypes = {
         name: PropTypes.string,
         request: PropTypes.string,
         subtypes: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.number)]),
-        type: PropTypes.number,
+        type: PropTypes.number || PropTypes.string,
       }),
       refreshDate: PropTypes.number,
       visualizationInfo: PropTypes.oneOfType([PropTypes.bool, PropTypes.shape({
@@ -247,6 +262,8 @@ RightSidePanelNotConnected.propTypes = {
   isSettings: PropTypes.bool,
   isSecured: PropTypes.bool,
   isClearDataFailed: PropTypes.bool,
+  settingsPanelLoaded: PropTypes.bool,
+  reusePromptAnswers: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func,

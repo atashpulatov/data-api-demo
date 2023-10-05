@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
+import { Empty } from '@mstr/connector-components/';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -28,9 +29,13 @@ export const DossierWindowNotConnected = (props) => {
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const [previousSelectionBackup, setPreviousSelectionBackup] = useState([]);
 
+  // New showLoading variable is needed to show loading spinner while prompted dossier is answered
+  // behind the scenes which could take some time; especially if there are nested prompts.
+  // NOTE: This loading spinner is separate from the one in EmbeddedDossier component.
+  let showLoading = false;
+
   const {
-    chosenObjectName, handleBack, editedObject, chosenObjectId,
-    chosenProjectId,
+    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt,
   } = props;
   const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
@@ -129,7 +134,7 @@ export const DossierWindowNotConnected = (props) => {
       chosenObject: chosenObjectId,
       chosenProject: chosenProjectId,
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
-      isPrompted: false,
+      isPrompted: promptsAnswers?.answers?.length > 0,
       promptsAnswers,
       visualizationInfo: {
         chapterKey,
@@ -140,6 +145,15 @@ export const DossierWindowNotConnected = (props) => {
     };
     popupHelper.officeMessageParent(message);
   };
+
+  // Automatically close popup if re-prompted dossier is answered
+  // and visualization is selected
+  if (isReprompt && isSelected) {
+    handleOk();
+
+    // Show loading spinner while prompts are being answered.
+    showLoading = true;
+  }
 
   /**
    * Store new instance id in state.
@@ -218,13 +232,17 @@ export const DossierWindowNotConnected = (props) => {
           </span>
         )}
 
-      <EmbeddedDossier
-        handleSelection={handleSelection}
-        handlePromptAnswer={handlePromptAnswer}
-        handleInstanceIdChange={handleInstanceIdChange}
-        handleIframeLoadEvent={validateSession}
-        handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
-      />
+      {showLoading && <Empty isLoading />}
+
+      {!showLoading && ( // Show embedded dossier only after prompts are answered.
+        <EmbeddedDossier
+          handleSelection={handleSelection}
+          handlePromptAnswer={handlePromptAnswer}
+          handleInstanceIdChange={handleInstanceIdChange}
+          handleIframeLoadEvent={validateSession}
+          handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
+        />
+      )}
       <PopupButtons
         handleOk={handleOk}
         handleCancel={handleCancel}
@@ -234,6 +252,7 @@ export const DossierWindowNotConnected = (props) => {
         isPublished={!(isSelected && !isSupported && !isChecking)}
         disableSecondary={isSelected && !isSupported && !isChecking}
         checkingSelection={isChecking}
+        hideOk={isReprompt}
       />
     </div>
   );
@@ -250,9 +269,13 @@ DossierWindowNotConnected.propTypes = {
     isEdit: PropTypes.bool,
     instanceId: PropTypes.string,
     dossierName: PropTypes.string,
-    promptsAnswers: PropTypes.array || null,
+    promptsAnswers: PropTypes.shape({
+      answers: PropTypes.arrayOf(PropTypes.shape({})),
+      messageName: PropTypes.string,
+    }),
     selectedViz: PropTypes.string,
   }),
+  isReprompt: PropTypes.bool,
 };
 
 DossierWindowNotConnected.defaultProps = {
@@ -266,24 +289,31 @@ DossierWindowNotConnected.defaultProps = {
     isEdit: false,
     instanceId: undefined,
     dossierName: undefined,
-    promptsAnswers: null,
+    promptsAnswers: {
+      answers: [],
+      messageName: '',
+    },
     selectedViz: '',
   },
+  isReprompt: false,
 };
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer, officeReducer
+    navigationTree, popupReducer, sessionReducer, officeReducer, answersReducer, popupStateReducer
   } = state;
   const {
     chosenObjectName,
     chosenObjectId,
     chosenProjectId,
     promptsAnswers,
+    promptObjects,
+    importRequested,
   } = navigationTree;
   const { editedObject } = popupReducer;
   const { supportForms } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
+  const { answers } = answersReducer;
   const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   const editedObjectParse = {
@@ -304,6 +334,10 @@ function mapStateToProps(state) {
       ? editedObjectParse.projectId
       : chosenProjectId,
     editedObject: editedObjectParse,
+    previousPromptsAnswers: answers,
+    promptObjects,
+    importRequested,
+    isReprompt: popupStateReducer.isReprompt,
   };
 }
 

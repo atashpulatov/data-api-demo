@@ -176,6 +176,9 @@ describe('Dossierwindow', () => {
         popupStateReducer: {
           popupType: 'testPopupType',
           otherDefinedProperty: 'testOtherProperty'
+        },
+        answersReducer: {
+          answers: []
         }
       };
       store = mockStore(initialState);

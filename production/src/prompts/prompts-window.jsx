@@ -14,26 +14,24 @@ import { PromptsContainer } from './prompts-container';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { authenticationHelper } from '../authentication/authentication-helper';
 import { popupHelper } from '../popup/popup-helper';
+import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
+import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
+
 const { microstrategy } = window;
-const {
-  createInstance,
-  createDossierBasedOnReport,
-  rePromptDossier,
-  answerDossierPrompts,
-  getDossierStatus,
-  deleteDossierInstance,
-} = mstrObjectRestService;
-const postAnswerDossierPrompts = answerDossierPrompts;
+const { deleteDossierInstance } = mstrObjectRestService;
 
 export const PromptsWindowNotConnected = (props) => {
   const {
-    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack
+    mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
+    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects,
   } = props;
   const { chosenObjectId } = mstrData;
-  const { isReprompt } = popupState;
+  // isReprompt will be true for both Edit AND Reprompt workflows
+  // isEdit will only be true for the Edit workflow
+  const { isReprompt, isEdit } = popupState;
 
   const { installSessionProlongingHandler } = sessionHelper;
 
@@ -75,61 +73,12 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [prolongSession]);
 
-  const givenPromptsAnswers = mstrData.promptsAnswers || editedObject.promptsAnswers;
   const loading = true;
-
   useEffect(() => {
     window.addEventListener('message', messageReceived);
 
     return (() => window.removeEventListener('message', messageReceived));
   }, [messageReceived]);
-
-  const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
-
-  const answerDossierPromptsHelper = useCallback(async (instanceDefinition, objectId, projectId, promptsAnswers) => {
-    const instanceId = instanceDefinition.mid;
-    let currentInstanceDefinition = instanceDefinition;
-    let count = 0;
-    while (currentInstanceDefinition.status === 2 && count < promptsAnswers.length) {
-      const config = {
-        objectId,
-        projectId,
-        instanceId: currentInstanceDefinition.mid,
-        promptsAnswers: promptsAnswers[count]
-      };
-      await postAnswerDossierPrompts(config);
-      if (count === promptsAnswers.length - 1) {
-        let dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
-        while (dossierStatusResponse.statusCode === 202) {
-          await sleep(1000);
-          dossierStatusResponse = await getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
-        }
-        currentInstanceDefinition = dossierStatusResponse.body;
-      }
-      count += 1;
-    }
-    return instanceId;
-  }, []);
-
-  const preparePromptedReport = useCallback(async (chosenObjectIdLocal, projectId, promptsAnswers) => {
-    const config = { objectId: chosenObjectIdLocal, projectId };
-    const instanceDefinition = await createInstance(config);
-    const { instanceId } = instanceDefinition;
-    let dossierInstanceDefinition = await createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
-    if (dossierInstanceDefinition.status === 2) {
-      dossierInstanceDefinition = await answerDossierPromptsHelper(
-        dossierInstanceDefinition,
-        chosenObjectIdLocal,
-        projectId,
-        promptsAnswers
-      );
-    }
-
-    dossierInstanceDefinition = await rePromptDossier(chosenObjectIdLocal, dossierInstanceDefinition, projectId);
-    dossierInstanceDefinition.id = chosenObjectIdLocal;
-
-    return dossierInstanceDefinition;
-  }, [answerDossierPromptsHelper]);
 
   const promptAnsweredHandler = (newAnswer) => {
     setIsPromptLoading(true);
@@ -145,8 +94,80 @@ export const PromptsWindowNotConnected = (props) => {
     setIsPromptLoading(false);
   };
 
+  /**
+   * This function is called at the end of the Reprompt (only Reprompt, not Edit) workflow,
+   * after user applies new answers. It will bypass the Edit Filters step and update the Excel data
+   * with the newly-provided prompt answers. If any previous filters were applied to the imported Report,
+   * they will be persisted.
+   * @param {string} chosenObjectIdLocal - ID of the Report that was imported into Excel
+   * @param {string} projectId - ID of the Project that the Report belongs to
+   * @returns {void}
+   */
+  const finishRepromptWithoutEditFilters = useCallback((chosenObjectIdLocal, projectId) => {
+    popupHelper.officeMessageParent({
+      command: selectorProperties.commandOnUpdate,
+      chosenObjectId: chosenObjectIdLocal,
+      projectId,
+      chosenObjectSubtype: editedObject.chosenObjectSubtype,
+      body: popupViewSelectorHelper.createBody(
+        editedObject.selectedAttributes, editedObject.selectedMetrics,
+        editedObject.selectedFilters, editedObject.instanceId
+      ),
+      chosenObjectName: editedObject.chosenObjectName,
+      instanceId: editedObject.instanceId,
+      promptsAnswers: newPromptsAnswers.current,
+      isPrompted: !!newPromptsAnswers.current.length,
+      subtotalsInfo: editedObject.subtotalsInfo,
+      displayAttrFormNames: editedObject.displayAttrFormNames
+    });
+  }, [editedObject.chosenObjectSubtype, editedObject.selectedAttributes, editedObject.selectedMetrics,
+    editedObject.selectedFilters, editedObject.instanceId, editedObject.chosenObjectName,
+    editedObject.subtotalsInfo, editedObject.displayAttrFormNames]);
+
+  /**
+   * Append the server's version of the answers to the promptsAnswers object.
+   * This version of answers will be used to invoke the REST API endpoint when
+   * importing or re-prompting a report/dossier.
+   * @param {*} currentAnswers
+   * @param {*} promptsAnsDef
+   */
+  function updateAnswersWithPrompts(currentAnswers, promptsAnsDef) {
+    currentAnswers.forEach((currentAnswer) => {
+      const { answers } = currentAnswer;
+      answers.forEach((answer) => {
+        const answerDef = promptsAnsDef.find((prompt) => prompt.key === answer.key);
+        if (answerDef) {
+          answer.answers = answerDef.answers;
+          answer.type = answerDef.type;
+        }
+      });
+    });
+  }
+
+  /**
+   *
+   * @param {*} promptObjs
+   * @param {*} previousAnswers
+   * @param {*} isImportingWithPreviousPromptAnswers
+   * @returns
+   */
+  const prepareAndHandlePromptAnswers = useCallback(
+    (promptObjs, previousAnswers, isImportingWithPreviousPromptAnswers) => {
+      if (isImportingWithPreviousPromptAnswers) {
+        return prepareGivenPromptAnswers(promptObjs, previousAnswers);
+      }
+
+      return mstrData.promptsAnswers || editedObject.promptsAnswers;
+    }, [mstrData.promptsAnswers, editedObject.promptsAnswers]
+  );
+
   const loadEmbeddedDossier = useCallback(async (localContainer) => {
     if (!loading) {
+      return;
+    }
+
+    if (!microstrategy || !microstrategy.dossier) {
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
       return;
     }
 
@@ -154,15 +175,14 @@ export const PromptsWindowNotConnected = (props) => {
     const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
     const { envUrl, authToken } = session;
 
-    let instanceDefinition;
-    const instance = {};
-    try {
-      if (givenPromptsAnswers) {
-        instanceDefinition = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
-        instance.id = instanceDefinition && instanceDefinition.id; // '00000000000000000000000000000000';
-        instance.mid = instanceDefinition && instanceDefinition.mid;
-      }
+    // Declared variables to determine whether importing a report/dossier is taking place and
+    // whether there are previous prompt answers to handle
+    const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
+    const hasPromptObjects = promptObjects && promptObjects.length > 0;
+    const isImportingWithPreviousPromptAnswers = importRequested && reusePromptAnswers
+      && hasPreviousPromptAnswers && hasPromptObjects;
 
+    try {
       let msgRouter = null;
       const serverURL = envUrl.slice(0, envUrl.lastIndexOf('/api'));
       // delete last occurence of '/api' from the enviroment url
@@ -192,30 +212,43 @@ export const PromptsWindowNotConnected = (props) => {
         },
       };
 
-      if (isReprompt) {
-        documentProps.instance = instance;
-      }
+      // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
+      if (isReprompt || (importRequested && hasPreviousPromptAnswers && hasPromptObjects)) {
+        // Update givenPromptsAnswers collection with previous prompt answers if importing
+        // a report/dossier and reusePromptAnswers flag is enabled
+        const givenPromptsAnswers = prepareAndHandlePromptAnswers(
+          promptObjects, previousPromptsAnswers, isImportingWithPreviousPromptAnswers
+        );
 
-      if (!microstrategy || !microstrategy.dossier) {
-        console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
-        return;
+        console.time('Prepared prompted Report');
+        documentProps.instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
+        console.timeEnd('Prepared prompted Report');
       }
 
       microstrategy.dossier
         .create(documentProps)
         .then(async (dossierPage) => {
-          const chapter = await dossierPage.getCurrentChapter();
-          const objectId = await dossierPage.getDossierId();
-          const instanceId = await dossierPage.getDossierInstanceId();
-          const visuzalisations = await dossierPage.getCurrentPageVisualizationList();
+          const [chapter, objectId, instanceId, visualizations] = await Promise.all([
+            dossierPage.getCurrentChapter(),
+            dossierPage.getDossierId(),
+            dossierPage.getDossierInstanceId(),
+            dossierPage.getCurrentPageVisualizationList(),
+          ]);
 
           const dossierData = {
             chapterKey: chapter.nodeKey,
             dossierId: objectId,
             instanceId,
-            visualizationKey: visuzalisations[0].key,
+            visualizationKey: visualizations[0].key,
             isReprompt
           };
+
+          // Get the answers applied to the current dossier's instance from the server.
+          // Need to incorporate these answers because they're formatted differently than the ones
+          // returned by the Embedded API. The REST API endpoint expects the answers to be in a
+          // different format than the Embedded API.
+          const promptsAnsDef = await mstrObjectRestService
+            .getObjectPrompts(objectId, projectId, dossierData.instanceId, true);
 
           // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
           deleteDossierInstance(projectId, objectId, instanceId);
@@ -223,15 +256,28 @@ export const PromptsWindowNotConnected = (props) => {
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
+          const currentAnswers = [...newPromptsAnswers.current];
+
+          // Update answers based on promptsAnsDef to insert JSON answers from server
+          // this JSON structure is expected by the REST API endpoint
+          updateAnswersWithPrompts(currentAnswers, promptsAnsDef);
+
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
-          promptsAnswered({ dossierData, promptsAnswers: newPromptsAnswers.current });
+          promptsAnswered({ dossierData, promptsAnswers: currentAnswers });
+
+          // for the Reprompt workflow only, skip edit filter screen
+          if (isReprompt && !isEdit) {
+            finishRepromptWithoutEditFilters(chosenObjectIdLocal, projectId);
+          }
         });
     } catch (error) {
       console.error({ error });
       popupHelper.handlePopupErrors(error);
     }
-  }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId, givenPromptsAnswers,
-    isReprompt, loading, mstrData.chosenProjectId, preparePromptedReport, promptsAnswered, session]);
+  }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId,
+    isReprompt, loading, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
+    session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
+    finishRepromptWithoutEditFilters]);
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
@@ -310,6 +356,7 @@ PromptsWindowNotConnected.propTypes = {
   popupState: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     isReprompt: PropTypes.bool,
+    isEdit: PropTypes.bool
   }),
   session: PropTypes.shape({
     envUrl: PropTypes.string,
@@ -318,20 +365,34 @@ PromptsWindowNotConnected.propTypes = {
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
-    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+    chosenObjectSubtype: PropTypes.number,
+    chosenObjectName: PropTypes.string,
+    instanceId: PropTypes.string,
+    subtotalsInfo: PropTypes.shape({ subtotalsAddresses: PropTypes.arrayOf(PropTypes.shape({})) }),
+    displayAttrFormNames: PropTypes.string,
+    selectedAttributes: PropTypes.arrayOf(PropTypes.shape({})),
+    selectedMetrics: PropTypes.arrayOf(PropTypes.shape({})),
+    selectedFilters: PropTypes.arrayOf(PropTypes.shape({})),
   }),
+  reusePromptAnswers: PropTypes.bool,
+  previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+  importRequested: PropTypes.bool,
+  promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export const mapStateToProps = (state) => {
   const {
-    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer
+    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer, answersReducer
   } = state;
   const popupState = popupReducer.editedObject;
-  const { promptsAnswers, importSubtotal, ...mstrData } = navigationTree;
-  const { supportForms } = officeReducer;
+  const {
+    promptsAnswers, importSubtotal, importRequested, promptObjects, ...mstrData
+  } = navigationTree;
+  const { answers } = answersReducer;
+  const { supportForms, reusePromptAnswers } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
-
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
   return {
     ...state.promptsPopup,
@@ -340,6 +401,10 @@ export const mapStateToProps = (state) => {
     editedObject: { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) },
     popupState: { ...popupStateReducer },
     session: { ...sessionReducer },
+    reusePromptAnswers,
+    previousPromptsAnswers: answers,
+    importRequested,
+    promptObjects,
   };
 };
 

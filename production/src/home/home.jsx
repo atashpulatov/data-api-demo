@@ -20,7 +20,9 @@ import { sessionActions } from '../redux-reducer/session-reducer/session-actions
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
-  const { loading, popupOpen, authToken } = props;
+  const {
+    loading, popupOpen, authToken, hidePopup
+  } = props;
 
   const [t] = useTranslation('common', { i18n });
 
@@ -55,13 +57,15 @@ export const HomeNotConnected = (props) => {
   useEffect(() => {
     try {
       officeStoreRestoreObject.restoreObjectsFromExcelStore();
+      officeStoreRestoreObject.restoreAnswersFromExcelStore();
       homeHelper.saveLoginValues();
       homeHelper.getTokenFromStorage();
+      hidePopup();
       sessionActions.disableLoading();
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [hidePopup]);
 
   useEffect(() => {
     getUserData(authToken);
@@ -97,12 +101,16 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = { toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag };
+const mapDispatchToProps = {
+  toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag,
+  hidePopup: officeActions.hidePopup
+};
 
 HomeNotConnected.propTypes = {
   loading: PropTypes.bool,
   popupOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+  hidePopup: PropTypes.func
 };
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);

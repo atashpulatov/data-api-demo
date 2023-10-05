@@ -7,9 +7,14 @@ import { popupController } from '../popup/popup-controller';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
+import { userRestService } from '../home/user-rest-service';
+import { clearAnswers } from '../redux-reducer/answers-reducer/answers-actions';
+
+const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 
 class SidePanelService {
   init = (reduxStore) => {
@@ -109,19 +114,90 @@ class SidePanelService {
    * Handles the editing of object.
    * GEts object data from reducer and opens popup depending of the type of object.
    *
+   * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
+   */
+  edit = async (objectWorkingIds) => {
+    // Validate multiple selection; if only one item is selected then create 1-element array
+    const aWorkingIds = Array.isArray(objectWorkingIds)
+      ? objectWorkingIds
+      : [objectWorkingIds];
+    for (const objectWorkingId of aWorkingIds) {
+      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const { bindId, mstrObjectType } = objectData;
+      const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
+      } else {
+        this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+      }
+    }
+  };
+
+  /**
+   * Handles the re-prompting of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
+   * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
+   */
+  reprompt = async (objectWorkingIds) => {
+    // Validate multiple selection; if only one item is selected then create 1-element array
+    const aWorkingIds = Array.isArray(objectWorkingIds)
+      ? objectWorkingIds
+      : [objectWorkingIds];
+    for (const objectWorkingId of aWorkingIds) {
+      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const { bindId, mstrObjectType } = objectData;
+      const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+        this.reduxStore.dispatch(popupActions.callForRepromptDossier({ bindId, mstrObjectType }));
+      } else {
+        this.reduxStore.dispatch(popupActions.callForReprompt({ bindId, mstrObjectType }));
+      }
+    }
+  };
+
+  /**
+   * Handles the editing of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
-  edit = async (objectWorkingId) => {
-    const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    const { bindId, mstrObjectType } = objectData;
-    const excelContext = await officeApiHelper.getExcelContext();
-    await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+  initReusePromptAnswers = async () => {
+    const { value } = await userRestService.getUserPreference(EXCEL_REUSE_PROMPT_ANSWERS);
+    const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
 
-    if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-      this.reduxStore.dispatch(popupActions.callForEditDossier({ bindId, mstrObjectType }));
-    } else {
-      this.reduxStore.dispatch(popupActions.callForEdit({ bindId, mstrObjectType }));
+    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
+  };
+
+  /**
+   * Handles the editing of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   */
+  toggleReusePromptAnswers = async (reusePromptAnswers) => {
+    const { value } = await userRestService.setUserPreference(EXCEL_REUSE_PROMPT_ANSWERS, !reusePromptAnswers);
+    const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
+
+    if (!reusePromptAnswersFlag) {
+      // if toggling flag off, clear all saved answers
+      this.reduxStore.dispatch(clearAnswers());
     }
+    this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
+  };
+
+  /**
+   * Handles the editing of object.
+   * GEts object data from reducer and opens popup depending of the type of object.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
+   */
+  toggleSettingsPanel = (settingsPanelLoded) => {
+    this.reduxStore.dispatch(officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded));
   };
 }
 

@@ -16,10 +16,18 @@ describe('Settings Menu', () => {
     const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => { });
     const logOutSpy = jest.spyOn(sessionActions, 'logOut');
     const logOutRedirectSpy = jest.spyOn(sessionHelper, 'logOutRedirect');
-    const menuWrapper = mount(<SettingsMenuNotConnected />);
+
+    const menuWrapper = mount(
+      <SettingsMenuNotConnected
+        toggleIsSettingsFlag={jest.fn()}
+        clearSavedPromptAnswers={jest.fn()}
+      />
+    );
+
     const buttonWrapper = menuWrapper.find('#logOut');
     // when
     buttonWrapper.simulate('click');
+
     // then
     await expect(logOutRestSpy).toBeCalled();
     await expect(logOutSpy).toBeCalled();
@@ -28,10 +36,14 @@ describe('Settings Menu', () => {
 
   it('should handle error on logout', () => {
     // given
-    const logOutRestSpy = jest.spyOn(sessionHelper, 'logOutRest').mockImplementation(() => {
-      throw new Error();
-    });
-    const handleErrorSpy = jest.spyOn(errorService, 'handleError').mockImplementation();
+    const logOutRestSpy = jest
+      .spyOn(sessionHelper, 'logOutRest')
+      .mockImplementation(() => {
+        throw new Error();
+      });
+    const handleErrorSpy = jest
+      .spyOn(errorService, 'handleError')
+      .mockImplementation();
     const menuWrapper = mount(<SettingsMenuNotConnected />);
     const buttonWrapper = menuWrapper.find('#logOut');
 
@@ -48,15 +60,106 @@ describe('Settings Menu', () => {
     // given
     window.Office = {
       context: {
-        ui: { messageParent: () => { }, },
+        ui: { messageParent: () => {} },
         diagnostics: { host: 'host', platform: 'platform', version: 'version' },
-        requirements: { isSetSupported: jest.fn() }
-      }
+        requirements: { isSetSupported: jest.fn() },
+      },
     };
     // when"
-    const menuWrapper = shallow(<SettingsMenuNotConnected userFullName="userFullName" userInitials={null} userID={1} />);
+    const menuWrapper = shallow(
+      <SettingsMenuNotConnected
+        userFullName="userFullName"
+        userInitials={null}
+        userID={1}
+      />
+    );
     // then
     expect(menuWrapper.props().className).toBe('settings-list');
+  });
+
+  it('component should render settings menu item in the settings menu context', () => {
+    const settingsClassName = 'settings';
+    // given
+    window.Office = {
+      context: {
+        ui: { messageParent: () => {} },
+        diagnostics: { host: 'host', platform: 'platform', version: 'version' },
+        requirements: { isSetSupported: jest.fn() },
+      },
+    };
+    // when"
+    const menuWrapper = shallow(
+      <SettingsMenuNotConnected
+        userFullName="userFullName"
+        userInitials={null}
+        userID={1}
+      />
+    );
+    // then
+    const element = menuWrapper.find(`.${settingsClassName}`);
+
+    expect(menuWrapper.exists(`.${settingsClassName}`)).toBe(true);
+    expect(element.prop('tabIndex')).toBe('0');
+    expect(element.prop('role')).toBe('menuitem');
+  });
+
+  it('toggleSettingsPanelLoadedFlag action should be dispatched on settings menu item click', () => {
+    const settingsClassName = 'settings';
+    // given
+    window.Office = {
+      context: {
+        ui: { messageParent: () => {} },
+        diagnostics: { host: 'host', platform: 'platform', version: 'version' },
+        requirements: { isSetSupported: jest.fn() },
+      },
+    };
+
+    const toggleSettingsPanelLoadedFlag = jest.fn();
+
+    // when"
+    const menuWrapper = shallow(
+      <SettingsMenuNotConnected
+        userFullName="userFullName"
+        userInitials={null}
+        userID={1}
+        toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
+      />
+    );
+
+    // then
+    const element = menuWrapper.find(`.${settingsClassName}`);
+    element.first().simulate('click');
+
+    expect(toggleSettingsPanelLoadedFlag).toBeCalledTimes(1);
+  });
+
+  it('toggleSettingsPanelLoadedFlag action should be dispatched on enter key up', () => {
+    const settingsClassName = 'settings';
+    // given
+    window.Office = {
+      context: {
+        ui: { messageParent: () => {} },
+        diagnostics: { host: 'host', platform: 'platform', version: 'version' },
+        requirements: { isSetSupported: jest.fn() },
+      },
+    };
+
+    const toggleSettingsPanelLoadedFlag = jest.fn();
+
+    // when"
+    const menuWrapper = shallow(
+      <SettingsMenuNotConnected
+        userFullName="userFullName"
+        userInitials={null}
+        userID={1}
+        toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
+      />
+    );
+
+    // then
+    const element = menuWrapper.find(`.${settingsClassName}`);
+    element.first().simulate('keyUp', { key: 'Enter' });
+    expect(toggleSettingsPanelLoadedFlag).toBeCalledTimes(1);
   });
   it('should attach event listeners for outside of settings menu click and esc button', () => {
     // given
@@ -66,7 +169,9 @@ describe('Settings Menu', () => {
     // then
     const spyCalls = addEventListenerSpy.mock.calls;
     expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
-    expect(spyCalls[spyCalls.length - 1][1].name).toEqual('closeSettingsOnClick');
+    expect(spyCalls[spyCalls.length - 1][1].name).toEqual(
+      'closeSettingsOnClick'
+    );
     expect(spyCalls[spyCalls.length - 2][0]).toEqual('keyup');
     expect(spyCalls[spyCalls.length - 2][1].name).toEqual('closeSettingsOnEsc');
   });
@@ -80,7 +185,9 @@ describe('Settings Menu', () => {
     // then
     const spyCalls = removeEventListenerSpy.mock.calls;
     expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
-    expect(spyCalls[spyCalls.length - 1][1].name).toEqual('closeSettingsOnClick');
+    expect(spyCalls[spyCalls.length - 1][1].name).toEqual(
+      'closeSettingsOnClick'
+    );
     expect(spyCalls[spyCalls.length - 2][0]).toEqual('keyup');
     expect(spyCalls[spyCalls.length - 2][1].name).toEqual('closeSettingsOnEsc');
   });
@@ -92,7 +199,10 @@ describe('Settings Menu', () => {
       map[event] = cb;
     });
     const wrappedComponent = mount(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <SettingsMenuNotConnected
+        isSettings
+        toggleIsSettingsFlag={toggleIsSettingsFlagMock}
+      />
     );
     // when
     map.click({ target: null });
@@ -108,7 +218,10 @@ describe('Settings Menu', () => {
       map[event] = cb;
     });
     const wrappedComponent = mount(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <SettingsMenuNotConnected
+        isSettings
+        toggleIsSettingsFlag={toggleIsSettingsFlagMock}
+      />
     );
     // when
     map.keyup({ keyCode: 27 });
@@ -124,7 +237,10 @@ describe('Settings Menu', () => {
       map[event] = cb;
     });
     const wrappedComponent = mount(
-      <SettingsMenuNotConnected isSettings toggleIsSettingsFlag={toggleIsSettingsFlagMock} />
+      <SettingsMenuNotConnected
+        isSettings
+        toggleIsSettingsFlag={toggleIsSettingsFlagMock}
+      />
     );
     // when
     map.keyup({ keyCode: 26 });
@@ -138,8 +254,10 @@ describe('Settings Menu', () => {
       writable: true,
       value: {
         createElement: () => ({
-          style: {}, focus: jest.fn(), select: jest.fn(),
-          parentNode: { removeChild: jest.fn() }
+          style: {},
+          focus: jest.fn(),
+          select: jest.fn(),
+          parentNode: { removeChild: jest.fn() },
         }),
         parentNode: { removeChild: jest.fn() },
         execCommand: jest.fn(),
@@ -147,8 +265,8 @@ describe('Settings Menu', () => {
           appendChild: () => {
             throw new Error();
           },
-          removeChild: jest.fn()
-        }
+          removeChild: jest.fn(),
+        },
       },
     });
     // when

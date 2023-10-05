@@ -1,7 +1,7 @@
 import {
   SELECT_OBJECT, START_IMPORT, REQUEST_IMPORT, CANCEL_REQUEST_IMPORT, PROMPTS_ANSWERED,
   CLEAR_PROMPTS_ANSWERS, REQUEST_DOSSIER_OPEN, CANCEL_DOSSIER_OPEN, UPDATE_DISPLAY_ATTR_FORM_ON_IMPORT,
-  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, UPDATE_SELECTED_MENU
+  SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, SET_PROMPT_OBJECTS, UPDATE_SELECTED_MENU
 } from './navigation-tree-actions';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
@@ -56,10 +56,21 @@ export const navigationTree = (state = initialState, action) => {
       return makeSelection(newState, newData);
     }
 
+    case SET_PROMPT_OBJECTS: {
+      const newState = { ...state };
+      if (!!data && data.promptObjects) {
+        newState.promptObjects = data.promptObjects;
+      }
+      return newState;
+    }
+
     case REQUEST_IMPORT: {
       const newState = { ...state };
       newState.importRequested = true;
-      newState.isPrompted = data;
+      newState.isPrompted = data.isPrompted;
+      if (!!data && data.promptObjects) {
+        newState.promptObjects = data.promptObjects;
+      }
       return newState;
     }
 
@@ -69,6 +80,9 @@ export const navigationTree = (state = initialState, action) => {
         newState.promptsAnswers = data.promptsAnswers;
         newState.dossierData = data.dossierData;
       }
+      // Needs to be true to avoid infinite loop when editing a prompted report.
+      // It alters how popup type is determined when executing setPopupType method
+      // in popup-view-selector-helper.js
       newState.isPrompted = true;
       return newState;
     }
@@ -95,7 +109,10 @@ export const navigationTree = (state = initialState, action) => {
     case REQUEST_DOSSIER_OPEN: {
       const newState = { ...state };
       newState.dossierOpenRequested = true;
-      newState.isPrompted = data;
+      newState.isPrompted = false;
+      if (!!data && data.promptObjects) {
+        newState.promptObjects = data.promptObjects;
+      }
       return newState;
     }
 

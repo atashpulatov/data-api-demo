@@ -25,6 +25,7 @@ class StepSaveObjectInExcel {
       prepareObjectData(objectData, instanceDefinition);
 
       await officeStoreObject.saveObjectsInExcelStore();
+      await officeStoreObject.saveAnswersInExcelStore();
       operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
