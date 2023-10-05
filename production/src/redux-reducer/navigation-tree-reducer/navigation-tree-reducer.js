@@ -80,10 +80,10 @@ export const navigationTree = (state = initialState, action) => {
         newState.promptsAnswers = data.promptsAnswers;
         newState.dossierData = data.dossierData;
       }
-      // Needs to be false to avoid infinite loop when editing a prompted report.
+      // Needs to be true to avoid infinite loop when editing a prompted report.
       // It alters how popup type is determined when executing setPopupType method
       // in popup-view-selector-helper.js
-      newState.isPrompted = false;
+      newState.isPrompted = true;
       return newState;
     }
 
