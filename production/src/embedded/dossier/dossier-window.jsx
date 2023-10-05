@@ -74,7 +74,7 @@ export const DossierWindowNotConnected = (props) => {
     return () => window.removeEventListener('message', extendSession);
   }, [extendSession]);
 
-  const handleSelection = async (dossierData) => {
+  const handleSelection = useCallback(async (dossierData) => {
     const {
       chapterKey: chosenVizchapterKey,
       visualizationKey: chosenVizKey,
@@ -126,7 +126,7 @@ export const DossierWindowNotConnected = (props) => {
         }]);
       }
     }
-  };
+  }, [chosenObjectId, chosenProjectId, vizualizationsData]);
 
   const handleOk = useCallback(() => {
     const message = {
@@ -167,7 +167,7 @@ export const DossierWindowNotConnected = (props) => {
    *
    * @param {String} newInstanceId
    */
-  const handleInstanceIdChange = (newInstanceId) => {
+  const handleInstanceIdChange = useCallback((newInstanceId) => {
     const backup = previousSelectionBackup.current.find((el) => el.instanceId === newInstanceId);
 
     if (instanceId.current !== newInstanceId && !backup) {
@@ -187,31 +187,31 @@ export const DossierWindowNotConnected = (props) => {
         instanceId: backup.instanceId,
       });
     }
-  };
+  }, [handleSelection, lastSelectedViz, promptsAnswers, vizualizationsData]);
 
   /**
    * Store new prompts answers in state
    *
    * @param {Array} newAnswers
    */
-  const handlePromptAnswer = (newAnswers) => {
+  const handlePromptAnswer = useCallback((newAnswers) => {
     setPromptsAnswers(newAnswers);
     vizualizationsData?.length > 0 && setVizualizationsData([]);
-  };
+  }, [vizualizationsData]);
 
   /**
   * Change state of component so that informative message is showed only after embedded dossier is loaded.
   *
   */
-  const handleEmbeddedDossierLoad = () => {
+  const handleEmbeddedDossierLoad = useCallback(() => {
     setIsEmbeddedDossierLoaded(true);
-  };
+  }, []);
 
-  const validateSession = () => {
+  const validateSession = useCallback(() => {
     authenticationHelper.validateAuthToken().catch((error) => {
       popupHelper.handlePopupErrors(error);
     });
-  };
+  }, []);
 
   return (
     <div className="dossier-window">
