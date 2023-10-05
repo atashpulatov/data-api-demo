@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { Empty } from '@mstr/connector-components/';
@@ -11,7 +12,7 @@ import i18n from '../i18n';
  * @param {*} param0
  * @returns
  */
-export const PromptsWindowTitle = ({
+const PromptsWindowTitleNotConnected = ({
   showLoading, showTitle, index, total, objectName,
 }) => {
   const [t] = useTranslation('common', { i18n });
@@ -24,7 +25,7 @@ export const PromptsWindowTitle = ({
   );
 };
 
-PromptsWindowTitle.propTypes = {
+PromptsWindowTitleNotConnected.propTypes = {
   showLoading: PropTypes.bool,
   showTitle: PropTypes.bool,
   index: PropTypes.number,
@@ -32,10 +33,21 @@ PromptsWindowTitle.propTypes = {
   objectName: PropTypes.string,
 };
 
-PromptsWindowTitle.defaultProps = {
+PromptsWindowTitleNotConnected.defaultProps = {
   showLoading: true,
   showTitle: false,
   index: 0,
   total: 0,
   objectName: '',
 };
+
+const mapStateToProps = (state) => {
+  const { repromptsQueueReducer } = state;
+
+  return {
+    index: repromptsQueueReducer.index,
+    total: repromptsQueueReducer.total,
+  };
+};
+
+export const PromptsWindowTitle = connect(mapStateToProps)(PromptsWindowTitleNotConnected);

@@ -340,8 +340,6 @@ export const PromptsWindowNotConnected = (props) => {
       <PromptsWindowTitle
         showLoading={isPromptLoading}
         showTitle={showRepromptTitle}
-        index={repromptsQueue.index}
-        total={repromptsQueue.total}
         objectName={editedObject.chosenObjectName}
       />
       <PromptsContainer
