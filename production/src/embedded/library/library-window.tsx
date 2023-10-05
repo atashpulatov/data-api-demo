@@ -43,7 +43,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    *
    * @param {{Array<ItemType>}} itemsInfo - Array of selected items
    */
-  const handleSelection = async (itemsInfo: ItemType[]): Promise<any> => {
+  const handleSelection = useCallback(async (itemsInfo: ItemType[]): Promise<any> => {
     if (!itemsInfo || itemsInfo.length === 0) {
       selectObject({});
       return;
@@ -93,12 +93,12 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       chosenSubtype: subtype,
       mstrObjectType: chosenMstrObjectType,
     });
-  };
+  }, [selectObject]);
 
   /**
    * Imports the object selected by the user
    */
-  const handleOk = async () => {
+  const handleOk = useCallback(async () => {
     let isPromptedResponse = {};
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
@@ -122,13 +122,13 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
     } catch (e) {
       popupHelper.handlePopupErrors(e);
     }
-  };
+  }, [chosenObjectId, chosenProjectId, chosenSubtype, requestDossierOpen, requestImport]);
 
   /**
    * Checks if the selected object is prompted and invokes popup
    * to render the 'Prepare data' UI
    */
-  const handleSecondary = async () => {
+  const handleSecondary = useCallback(async () => {
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
 
@@ -147,16 +147,16 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
     } catch (err) {
       popupHelper.handlePopupErrors(err);
     }
-  };
+  }, [chosenObjectId, chosenProjectId, chosenSubtype, handlePrepare, setObjectData]);
 
   /**
    * sends a command to cancel the object selection and closes the popup
    */
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel };
     popupHelper.officeMessageParent(message);
-  };
+  }, []);
 
   const { installSessionProlongingHandler } = sessionHelper;
 
