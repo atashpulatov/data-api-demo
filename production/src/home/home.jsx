@@ -60,13 +60,13 @@ export const HomeNotConnected = (props) => {
       officeStoreRestoreObject.restoreAnswersFromExcelStore();
       homeHelper.saveLoginValues();
       homeHelper.getTokenFromStorage();
-      popupOpen && hidePopup(); // hide error popup if visible
-      isSettings && toggleIsSettingsFlag(!isSettings); // hide settings menu if visible
+      hidePopup(); // hide error popup if visible
+      toggleIsSettingsFlag(false); // hide settings menu if visible
       sessionActions.disableLoading();
     } catch (error) {
       console.error(error);
     }
-  }, [hidePopup, isSettings, popupOpen, toggleIsSettingsFlag]);
+  }, [hidePopup, toggleIsSettingsFlag]);
 
   useEffect(() => {
     getUserData(authToken);
