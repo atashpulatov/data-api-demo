@@ -66,6 +66,11 @@ export const SettingsMenuNotConnected = ({
     toggleIsSettingsFlag(false); // close settings window
   };
 
+  const onSelectSettingsOption = () => {
+    hideSettingsPopup();
+    toggleSettingsPanelLoadedFlag(settingsPanelLoaded);
+  };
+
   const settingsMenuRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -107,11 +112,8 @@ export const SettingsMenuNotConnected = ({
         className="no-trigger-close settings not-linked-list"
         tabIndex="0"
         role="menuitem"
-        onClick={() => {
-          hideSettingsPopup();
-          toggleSettingsPanelLoadedFlag(settingsPanelLoaded);
-        }}
-        onKeyUp={(e) => (e.key === 'Enter' && toggleSettingsPanelLoadedFlag(settingsPanelLoaded))}>
+        onClick={onSelectSettingsOption}
+        onKeyUp={(e) => (e.key === 'Enter' && onSelectSettingsOption())}>
         {t('Settings')}
       </li>
       <div className="separate-line" />
