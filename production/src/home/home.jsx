@@ -21,7 +21,7 @@ const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
-    loading, popupOpen, authToken, hidePopup, isSettings, toggleIsSettingsFlag
+    loading, popupOpen, authToken, hidePopup, toggleIsSettingsFlag
   } = props;
 
   const [t] = useTranslation('common', { i18n });
@@ -114,7 +114,6 @@ HomeNotConnected.propTypes = {
   popupOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   hidePopup: PropTypes.func,
-  isSettings: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func
 };
 
