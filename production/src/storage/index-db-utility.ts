@@ -21,13 +21,13 @@ export async function savePromptAnswersInIndexDB(promptAnswersKey: string, promp
  * @param {String} promptAnswersKey - Prompt answers key.
  * @returns {Array} The list of prompt answers.
  */
-export async function getPromptAnswersFromIndexDB(promptAnswersKey) {
+export async function getPromptAnswersFromIndexDB(promptAnswersKey: string) {
   const storedPromptAnswers = await db?.promptAnswers
     .where('key')
     .equals(promptAnswersKey)
     .toArray();
 
-  if (storedPromptAnswers && storedPromptAnswers.length > 0) {
+  if (storedPromptAnswers && storedPromptAnswers?.length > 0) {
     return storedPromptAnswers[0]?.data;
   }
   return null;
