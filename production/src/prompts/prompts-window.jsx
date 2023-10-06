@@ -340,6 +340,7 @@ export const PromptsWindowNotConnected = (props) => {
 
   // Determine whether Re-prompt title should be shown if queue has more than one item
   const showRepromptTitle = isReprompt && repromptsQueue.total > 1;
+  const editedObjectName = editedObject.chosenObjectName;
 
   return (
     <div
@@ -348,7 +349,7 @@ export const PromptsWindowNotConnected = (props) => {
       <PromptsWindowTitle
         showLoading={isPromptLoading}
         showTitle={showRepromptTitle}
-        objectName={editedObject.chosenObjectName}
+        objectName={editedObjectName}
       />
       <PromptsContainer
         postMount={onPromptsContainerMount}
@@ -409,7 +410,8 @@ PromptsWindowNotConnected.propTypes = {
 
 export const mapStateToProps = (state) => {
   const {
-    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer, answersReducer, repromptsQueueReducer,
+    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer,
+    answersReducer, repromptsQueueReducer,
   } = state;
   const popupState = popupReducer.editedObject;
   const {

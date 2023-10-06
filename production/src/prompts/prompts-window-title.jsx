@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Empty } from '@mstr/connector-components/';
+import { Empty } from '@mstr/connector-components';
+
 import i18n from '../i18n';
 
 /**
@@ -12,10 +13,11 @@ import i18n from '../i18n';
  * @param {*} param0
  * @returns
  */
-const PromptsWindowTitleNotConnected = ({
-  showLoading, showTitle, index, total, objectName,
-}) => {
+const PromptsWindowTitleNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
+  const {
+    showLoading, showTitle, index, total, objectName,
+  } = props;
 
   return (
     <>

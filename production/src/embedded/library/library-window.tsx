@@ -98,7 +98,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   /**
    * Imports the object selected by the user
    */
-  const handleOk = useCallback(async () => {
+  const handleOk = async () => {
     let isPromptedResponse = {};
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
@@ -122,13 +122,13 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
     } catch (e) {
       popupHelper.handlePopupErrors(e);
     }
-  }, [chosenObjectId, chosenProjectId, chosenSubtype, requestDossierOpen, requestImport]);
+  };
 
   /**
    * Checks if the selected object is prompted and invokes popup
    * to render the 'Prepare data' UI
    */
-  const handleSecondary = useCallback(async () => {
+  const handleSecondary = async () => {
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
 
@@ -147,7 +147,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
     } catch (err) {
       popupHelper.handlePopupErrors(err);
     }
-  }, [chosenObjectId, chosenProjectId, chosenSubtype, handlePrepare, setObjectData]);
+  };
 
   /**
    * sends a command to cancel the object selection and closes the popup

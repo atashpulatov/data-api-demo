@@ -8,10 +8,10 @@ import db from './index-db';
  */
 export async function savePromptAnswersInIndexDB(promptAnswersKey: string, promptAnswersData: Array<Object>) {
   if (promptAnswersData) {
-    if (db?.promptAnswers) {
-      db?.promptAnswers.clear();
+    if (db?.table('promptAnswers')) {
+      db?.table('promptAnswers')?.clear();
     }
-    await db?.promptAnswers?.add({ key: promptAnswersKey, data: promptAnswersData });
+    await db?.table('promptAnswers')?.add({ key: promptAnswersKey, data: promptAnswersData });
   }
 }
 
@@ -22,8 +22,7 @@ export async function savePromptAnswersInIndexDB(promptAnswersKey: string, promp
  * @returns {Array} The list of prompt answers.
  */
 export async function getPromptAnswersFromIndexDB(promptAnswersKey: string) {
-  const storedPromptAnswers = await db?.promptAnswers
-    .where('key')
+  const storedPromptAnswers = await db?.table('promptAnswers')?.where('key')
     .equals(promptAnswersKey)
     .toArray();
 
