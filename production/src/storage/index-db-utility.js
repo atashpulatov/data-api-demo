@@ -1,5 +1,11 @@
 import db from './index-db';
 
+  /**
+   * Saves the list of stored prompt answers in indexDB.
+   *
+   * @param {String} promptAnswersKey - Prompt answers key.
+   * @param {String} promptAnswersData - The list of prompt answers.
+   */
 export async function savePromptAnswersInIndexDB(promptAnswersKey, promptAnswersData) {
     if (promptAnswersData) {
         if (db.promptAnswers) {
@@ -9,6 +15,12 @@ export async function savePromptAnswersInIndexDB(promptAnswersKey, promptAnswers
     }
 }
 
+  /**
+   * Retrieves the list of stored prompt answers from indexDB by prompt answers key.
+   *
+   * @param {String} promptAnswersKey - Prompt answers key.
+   * @returns {Array} The list of prompt answers.
+   */
 export async function getPromptAnswersFromIndexDB(promptAnswersKey) {
     const storedPromptAnswers = await db.promptAnswers
       .where('key')
@@ -20,3 +32,4 @@ export async function getPromptAnswersFromIndexDB(promptAnswersKey) {
     }
     return null;
   }
+  
