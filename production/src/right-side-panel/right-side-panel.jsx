@@ -82,10 +82,9 @@ export const RightSidePanelNotConnected = ({
 
   const handleSettingsClick = () => {
     officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
-    // saveDataInIndexDB
   };
 
-  React.useEffect(() => {    
+  React.useEffect(() => {
     setLoadedObjectsWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
       loadedObjects,
       notifications,
