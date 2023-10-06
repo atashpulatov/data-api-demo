@@ -4,6 +4,9 @@ import {
   SWITCH_IMPORT_SUBTOTALS_ON_IMPORT, SET_PROMPT_OBJECTS, UPDATE_SELECTED_MENU
 } from './navigation-tree-actions';
 
+import { SET_POPUP_TYPE } from '../popup-state-reducer/popup-state-actions';
+import { PopupTypeEnum } from '../../home/popup-type-enum';
+
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 
 export const initialState = {
@@ -41,7 +44,7 @@ function makeSelection(newState, data) {
 }
 
 export const navigationTree = (state = initialState, action) => {
-  const { type, data } = action;
+  const { type, data, popupType } = action;
   switch (type) {
     case SELECT_OBJECT: {
       const newData = {
@@ -138,6 +141,16 @@ export const navigationTree = (state = initialState, action) => {
       const newState = { ...state };
       newState.selectedMenu = data;
       return makeSelection(newState, {});
+    }
+
+    // Intercepting this action to set isPreparedDataRequested flag
+    // to true when popup type is data preparation type. Action triggered by
+    // user after clicking on "Prepare Data" button in the Library's dialog,
+    // which dispataches SET_POPUP_TYPE action.
+    case SET_POPUP_TYPE: {
+      const newState = { ...state };
+      newState.isPreparedDataRequested = !!popupType && popupType === PopupTypeEnum.dataPreparation;
+      return newState;
     }
 
     default: {
