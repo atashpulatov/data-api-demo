@@ -21,7 +21,7 @@ const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
-    loading, popupOpen, authToken, hidePopup, toggleIsSettingsFlag
+    loading, popupOpen, authToken, hidePopup, isSettings, toggleIsSettingsFlag
   } = props;
 
   const [t] = useTranslation('common', { i18n });
@@ -60,13 +60,13 @@ export const HomeNotConnected = (props) => {
       officeStoreRestoreObject.restoreAnswersFromExcelStore();
       homeHelper.saveLoginValues();
       homeHelper.getTokenFromStorage();
-      hidePopup(); // hide error popup (in case it's visible)
-      toggleIsSettingsFlag(false); // hide settings menu (in case it's visible)
+      popupOpen && hidePopup(); // hide error popup if visible
+      isSettings && toggleIsSettingsFlag(!isSettings); // hide settings menu if visible
       sessionActions.disableLoading();
     } catch (error) {
       console.error(error);
     }
-  }, [hidePopup, toggleIsSettingsFlag]);
+  }, [hidePopup, isSettings, popupOpen, toggleIsSettingsFlag]);
 
   useEffect(() => {
     getUserData(authToken);
@@ -99,6 +99,7 @@ function mapStateToProps(state) {
     popupOpen: state.officeReducer.popupOpen,
     authToken: state.sessionReducer.authToken,
     shouldRenderSettings: state.officeReducer.shouldRenderSettings,
+    isSettings: state.officeReducer.isSettings
   };
 }
 
@@ -113,6 +114,7 @@ HomeNotConnected.propTypes = {
   popupOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   hidePopup: PropTypes.func,
+  isSettings: PropTypes.bool,
   toggleIsSettingsFlag: PropTypes.func
 };
 
