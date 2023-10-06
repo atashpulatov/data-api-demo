@@ -167,8 +167,8 @@ export const PromptsWindowNotConnected = (props) => {
 
     // Declared variables to determine whether importing a report/dossier is taking place and
     // whether there are previous prompt answers to handle
-    const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
-    const hasPromptObjects = promptObjects && promptObjects.length;
+    const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
+    const hasPromptObjects = promptObjects && promptObjects.length > 0;
     const hasImportOrPrepareDataRequest = importRequested || isPreparedDataRequested;
 
     const hasImportOrPreparedRequestsWithPromptObjsAndAnswers = hasImportOrPrepareDataRequest

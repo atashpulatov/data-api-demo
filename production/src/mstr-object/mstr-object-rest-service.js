@@ -555,7 +555,7 @@ class MstrObjectRestService {
         // If report or dossier has prompts, promptObjects contains an array of
         // prompt objects defined in report/dossier.
         promptObjects: res.body,
-        isPrompted: res.body && res.body.length,
+        isPrompted: res.body && res.body.length > 0,
       }));
   };
 
