@@ -162,15 +162,6 @@ export const PromptsWindowNotConnected = (props) => {
   );
 
   const loadEmbeddedDossier = useCallback(async (localContainer) => {
-    if (!loading) {
-      return;
-    }
-
-    if (!microstrategy || !microstrategy.dossier) {
-      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
-      return;
-    }
-
     const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
     const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
     const { envUrl, authToken } = session;
@@ -281,7 +272,7 @@ export const PromptsWindowNotConnected = (props) => {
       popupHelper.handlePopupErrors(error);
     }
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId,
-    isReprompt, loading, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
+    isReprompt, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
     session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
     finishRepromptWithoutEditFilters, isPreparedDataRequested]);
 
@@ -323,8 +314,18 @@ export const PromptsWindowNotConnected = (props) => {
 
   const onPromptsContainerMount = useCallback(async (localContainer) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
+
+    if (!loading) {
+      return;
+    }
+
+    if (!microstrategy || !microstrategy.dossier) {
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+      return;
+    }
+
     await loadEmbeddedDossier(localContainer);
-  }, [loadEmbeddedDossier]);
+  }, [loadEmbeddedDossier, loading]);
 
   const handleBack = () => {
     cancelImportRequest();
