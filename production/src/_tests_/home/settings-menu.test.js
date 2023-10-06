@@ -44,7 +44,7 @@ describe('Settings Menu', () => {
     const handleErrorSpy = jest
       .spyOn(errorService, 'handleError')
       .mockImplementation();
-    const menuWrapper = mount(<SettingsMenuNotConnected />);
+    const menuWrapper = mount(<SettingsMenuNotConnected toggleIsSettingsFlag={jest.fn()} />);
     const buttonWrapper = menuWrapper.find('#logOut');
 
     // when
@@ -56,6 +56,7 @@ describe('Settings Menu', () => {
     expect(handleErrorSpy).toBeCalledWith(new Error());
   });
 
+  console.log();
   it('component should be wrapped with settings-list classname', () => {
     // given
     window.Office = {
@@ -115,6 +116,7 @@ describe('Settings Menu', () => {
     };
 
     const toggleSettingsPanelLoadedFlag = jest.fn();
+    const toggleIsSettingsFlag = jest.fn();
 
     // when"
     const menuWrapper = shallow(
@@ -123,6 +125,7 @@ describe('Settings Menu', () => {
         userInitials={null}
         userID={1}
         toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
+        toggleIsSettingsFlag={toggleIsSettingsFlag}
       />
     );
 
@@ -145,6 +148,7 @@ describe('Settings Menu', () => {
     };
 
     const toggleSettingsPanelLoadedFlag = jest.fn();
+    const toggleIsSettingsFlag = jest.fn();
 
     // when"
     const menuWrapper = shallow(
@@ -153,6 +157,7 @@ describe('Settings Menu', () => {
         userInitials={null}
         userID={1}
         toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
+        toggleIsSettingsFlag={toggleIsSettingsFlag}
       />
     );
 
