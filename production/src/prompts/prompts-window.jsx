@@ -177,11 +177,11 @@ export const PromptsWindowNotConnected = (props) => {
 
     // Declared variables to determine whether importing a report/dossier is taking place and
     // whether there are previous prompt answers to handle
-    const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
-    const hasPromptObjects = promptObjects && promptObjects.length > 0;
-    const hasImportOrPrepateDataRequest = importRequested || isPreparedDataRequested;
+    const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length;
+    const hasPromptObjects = promptObjects && promptObjects.length;
+    const hasImportOrPrepareDataRequest = importRequested || isPreparedDataRequested;
 
-    const hasImportOrPreparedRequestsWithPromptObjsAndAnswers = hasImportOrPrepateDataRequest
+    const hasImportOrPreparedRequestsWithPromptObjsAndAnswers = hasImportOrPrepareDataRequest
     && hasPreviousPromptAnswers && hasPromptObjects;
 
     // Determine whether importing a report/dossier or preparing data on a report has previous answers
@@ -228,9 +228,7 @@ export const PromptsWindowNotConnected = (props) => {
           promptObjects, previousPromptsAnswers, isImportingOrPreparingDataWithPreviousPromptAnswers
         );
 
-        console.time('Prepared prompted Report');
         documentProps.instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
-        console.timeEnd('Prepared prompted Report');
       }
 
       microstrategy.dossier
