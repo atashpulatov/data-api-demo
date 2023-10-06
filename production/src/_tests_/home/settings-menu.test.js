@@ -56,7 +56,6 @@ describe('Settings Menu', () => {
     expect(handleErrorSpy).toBeCalledWith(new Error());
   });
 
-  console.log();
   it('component should be wrapped with settings-list classname', () => {
     // given
     window.Office = {
