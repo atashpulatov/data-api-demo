@@ -98,8 +98,7 @@ function mapStateToProps(state) {
     loading: state.sessionReducer.loading,
     popupOpen: state.officeReducer.popupOpen,
     authToken: state.sessionReducer.authToken,
-    shouldRenderSettings: state.officeReducer.shouldRenderSettings,
-    isSettings: state.officeReducer.isSettings
+    shouldRenderSettings: state.officeReducer.shouldRenderSettings
   };
 }
 
