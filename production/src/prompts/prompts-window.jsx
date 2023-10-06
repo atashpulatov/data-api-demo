@@ -184,11 +184,16 @@ export const PromptsWindowNotConnected = (props) => {
     // whether there are previous prompt answers to handle
     const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
     const hasPromptObjects = promptObjects && promptObjects.length > 0;
+    const hasImportOrPrepateDataRequest = importRequested || isPreparedDataRequested;
 
     // Determine whether importing a report/dossier or preparing data on a report has previous answers
     // along with making sure re-use prompt answers setting is enabled and prompt objects are available
-    const isImportingOrPreparingDataWithPreviousPromptAnswers = (importRequested || isPreparedDataRequested)
-      && reusePromptAnswers && hasPreviousPromptAnswers && hasPromptObjects;
+    const isImportingOrPreparingDataWithPreviousPromptAnswers = (
+      hasImportOrPrepateDataRequest
+      && reusePromptAnswers
+      && hasPreviousPromptAnswers
+      && hasPromptObjects
+    );
 
     try {
       let msgRouter = null;
@@ -222,8 +227,10 @@ export const PromptsWindowNotConnected = (props) => {
 
       // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
       // or preparing data on a report if re-use prompt answers setting is enabled and there are previous prompt answers
-      if (isReprompt || ((importRequested || isPreparedDataRequested)
-        && hasPreviousPromptAnswers && hasPromptObjects)) {
+      if (
+        isReprompt
+        || (hasImportOrPrepateDataRequest && hasPreviousPromptAnswers && hasPromptObjects)
+      ) {
         // Update givenPromptsAnswers collection with previous prompt answers if importing
         // a report/dossier or preparing data on a report; and reusePromptAnswers flag is enabled
         const givenPromptsAnswers = prepareAndHandlePromptAnswers(
