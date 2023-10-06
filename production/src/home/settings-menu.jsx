@@ -69,7 +69,7 @@ export const SettingsMenuNotConnected = ({
     toggleIsSettingsFlag(false); // close settings window
     // clear stored prompt answers from Redux store, then clear cached prompt values in Excel Store
     clearSavedPromptAnswers();
-    await officeStoreObject.saveAnswersInExcelStore();
+    await officeStoreObject.saveAnswersInIndexDB();
   };
 
   const settingsMenuRef = React.useRef(null);

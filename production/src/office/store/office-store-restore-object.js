@@ -3,6 +3,7 @@ import { errorService } from '../../error/error-handler';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import officeStoreHelper from './office-store-helper';
+import { getPromptAnswersFromIndexDB } from '../../storage/index-db-utility'
 
 class OfficeStoreRestoreObject {
   init = (reduxStore) => {
@@ -31,10 +32,8 @@ class OfficeStoreRestoreObject {
    * Retrieves information about prompts answers imported in previous versions.
    * It fetches the information from Office Settings and stores it in Redux.
    */
-  restoreAnswersFromExcelStore = () => {
-    const settings = officeStoreHelper.getOfficeSettings();
-    const answers = settings.get(officeProperties.storedAnswers) || [];
-
+  restoreAnswersFromIndexDB = async () => {
+    const answers = await getPromptAnswersFromIndexDB(officeProperties.storedAnswers) || [];
     answers && this.reduxStore.dispatch(restoreAllAnswers(answers));
   };
 
