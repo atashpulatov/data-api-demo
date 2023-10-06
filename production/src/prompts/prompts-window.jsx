@@ -315,7 +315,7 @@ export const PromptsWindowNotConnected = (props) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
 
     if (!microstrategy || !microstrategy.dossier) {
-      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.');
       return;
     }
 
