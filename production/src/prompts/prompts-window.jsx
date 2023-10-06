@@ -27,7 +27,7 @@ const { deleteDossierInstance } = mstrObjectRestService;
 export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
-    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, repromptsQueue,
+    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested, repromptsQueue,
   } = props;
   const { chosenObjectId } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
@@ -153,12 +153,12 @@ export const PromptsWindowNotConnected = (props) => {
    *
    * @param {*} promptObjs
    * @param {*} previousAnswers
-   * @param {*} isImportingWithPreviousPromptAnswers
+   * @param {*} isImportingOrPreparingDataWithPreviousPromptAnswers
    * @returns
    */
   const prepareAndHandlePromptAnswers = useCallback(
-    (promptObjs, previousAnswers, isImportingWithPreviousPromptAnswers) => {
-      if (isImportingWithPreviousPromptAnswers) {
+    (promptObjs, previousAnswers, isImportingOrPreparingDataWithPreviousPromptAnswers) => {
+      if (isImportingOrPreparingDataWithPreviousPromptAnswers) {
         return prepareGivenPromptAnswers(promptObjs, previousAnswers);
       }
 
@@ -184,8 +184,11 @@ export const PromptsWindowNotConnected = (props) => {
     // whether there are previous prompt answers to handle
     const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
     const hasPromptObjects = promptObjects && promptObjects.length > 0;
-    const isImportingWithPreviousPromptAnswers = importRequested && reusePromptAnswers
-      && hasPreviousPromptAnswers && hasPromptObjects;
+
+    // Determine whether importing a report/dossier or preparing data on a report has previous answers
+    // along with making sure re-use prompt answers setting is enabled and prompt objects are available
+    const isImportingOrPreparingDataWithPreviousPromptAnswers = (importRequested || isPreparedDataRequested)
+      && reusePromptAnswers && hasPreviousPromptAnswers && hasPromptObjects;
 
     try {
       let msgRouter = null;
@@ -218,11 +221,13 @@ export const PromptsWindowNotConnected = (props) => {
       };
 
       // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
-      if (isReprompt || (importRequested && hasPreviousPromptAnswers && hasPromptObjects)) {
+      // or preparing data on a report if re-use prompt answers setting is enabled and there are previous prompt answers
+      if (isReprompt || ((importRequested || isPreparedDataRequested)
+        && hasPreviousPromptAnswers && hasPromptObjects)) {
         // Update givenPromptsAnswers collection with previous prompt answers if importing
-        // a report/dossier and reusePromptAnswers flag is enabled
+        // a report/dossier or preparing data on a report; and reusePromptAnswers flag is enabled
         const givenPromptsAnswers = prepareAndHandlePromptAnswers(
-          promptObjects, previousPromptsAnswers, isImportingWithPreviousPromptAnswers
+          promptObjects, previousPromptsAnswers, isImportingOrPreparingDataWithPreviousPromptAnswers
         );
 
         console.time('Prepared prompted Report');
@@ -282,7 +287,7 @@ export const PromptsWindowNotConnected = (props) => {
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId,
     isReprompt, loading, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
     session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
-    finishRepromptWithoutEditFilters]);
+    finishRepromptWithoutEditFilters, isPreparedDataRequested]);
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
@@ -391,6 +396,7 @@ PromptsWindowNotConnected.propTypes = {
   reusePromptAnswers: PropTypes.bool,
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   importRequested: PropTypes.bool,
+  isPreparedDataRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
   repromptsQueue: PropTypes.shape({
     total: PropTypes.number,
@@ -404,13 +410,24 @@ export const mapStateToProps = (state) => {
   } = state;
   const popupState = popupReducer.editedObject;
   const {
-    promptsAnswers, importSubtotal, importRequested, promptObjects, ...mstrData
+    promptsAnswers, importSubtotal, importRequested, isPreparedDataRequested, promptObjects, ...mstrData
   } = navigationTree;
   const { answers } = answersReducer;
   const { supportForms, reusePromptAnswers } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
+
+  // Check whether prepared data is requested for import and includes prompt objects
+  const hasPreparedRequestPromptObjects = (isPreparedDataRequested
+    && popupStateReducer.isPrompted?.promptObjects?.length > 0);
+
+  // Resolve prompt objects to be used, if prepared data is requested for import
+  // and prompt objects are not included in the navigation tree state, then return
+  // the prompt objects from the popup state reducer if any or empty array if none.
+  const promptObjectsResolved = promptObjects
+  || (hasPreparedRequestPromptObjects ? popupStateReducer.isPrompted.promptObjects : []);
+
   return {
     ...state.promptsPopup,
     mstrData,
@@ -421,7 +438,8 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     previousPromptsAnswers: answers,
     importRequested,
-    promptObjects,
+    promptObjects: promptObjectsResolved, // Prompt objects to be used for import
+    isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
   };
 };
