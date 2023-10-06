@@ -10,12 +10,10 @@ import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
-import { clearAnswers as clearAnswersImported } from '../redux-reducer/answers-reducer/answers-actions';
 import './settings-menu.scss';
 import { notificationService } from '../notification-v2/notification-service';
 import packageJson from '../../package.json';
 import getDocumentationLocale from '../helpers/get-documentation-locale';
-import officeStoreObject from '../office/store/office-store-object';
 
 const APP_VERSION = packageJson.build;
 
@@ -30,7 +28,6 @@ export const SettingsMenuNotConnected = ({
   toggleIsSettingsFlag,
   settingsPanelLoaded,
   toggleSettingsPanelLoadedFlag,
-  clearSavedPromptAnswers,
   isSettings
 }) => {
   const [t] = useTranslation('common', { i18n });
@@ -65,11 +62,8 @@ export const SettingsMenuNotConnected = ({
     toggleIsSettingsFlag(false);
   };
 
-  const preLogout = async () => {
+  const hideSettingsPopup = () => {
     toggleIsSettingsFlag(false); // close settings window
-    // clear stored prompt answers from Redux store, then clear cached prompt values in Excel Store
-    clearSavedPromptAnswers();
-    await officeStoreObject.saveAnswersInExcelStore();
   };
 
   const settingsMenuRef = React.useRef(null);
@@ -113,7 +107,10 @@ export const SettingsMenuNotConnected = ({
         className="no-trigger-close settings not-linked-list"
         tabIndex="0"
         role="menuitem"
-        onClick={() => toggleSettingsPanelLoadedFlag(settingsPanelLoaded)}
+        onClick={() => {
+          hideSettingsPopup();
+          toggleSettingsPanelLoadedFlag(settingsPanelLoaded);
+        }}
         onKeyUp={(e) => (e.key === 'Enter' && toggleSettingsPanelLoadedFlag(settingsPanelLoaded))}>
         {t('Settings')}
       </li>
@@ -164,8 +161,8 @@ export const SettingsMenuNotConnected = ({
         id="logOut"
         size="small"
         role="menuitem"
-        onClick={() => logout(preLogout)}
-        onKeyPress={() => logout(preLogout)}>
+        onClick={() => logout(hideSettingsPopup)}
+        onKeyPress={() => logout(hideSettingsPopup)}>
         {t('Log Out')}
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
@@ -185,16 +182,13 @@ function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
 const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
-  toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
-  clearSavedPromptAnswers: clearAnswersImported
+  toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
-async function logout(preLogout) {
+async function logout(hideSettingsPopup) {
   try {
-    // Commenting this line out so clearSavedPromptAnswers and saveAnswersInExcelStore
-    // methods are not called before logging out. Answers are not cleared from Excel Store
-    // await preLogout();
+    hideSettingsPopup();
     notificationService.dismissNotifications();
     await sessionHelper.logOutRest();
     sessionActions.logOut();
@@ -215,6 +209,5 @@ SettingsMenuNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleIsConfirmFlag: PropTypes.func,
   toggleSettingsPanelLoadedFlag: PropTypes.func,
-  clearSavedPromptAnswers: PropTypes.func,
   isSettings: PropTypes.bool,
 };
