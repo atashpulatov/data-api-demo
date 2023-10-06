@@ -54,10 +54,10 @@ export const HomeNotConnected = (props) => {
     }
   });
 
-  useEffect(() => {
+  useEffect(async () => {
     try {
       officeStoreRestoreObject.restoreObjectsFromExcelStore();
-      officeStoreRestoreObject.restoreAnswersFromExcelStore();
+      await officeStoreRestoreObject.restoreAnswersFromIndexDB();
       homeHelper.saveLoginValues();
       homeHelper.getTokenFromStorage();
       hidePopup();
