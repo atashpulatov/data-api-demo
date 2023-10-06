@@ -32,4 +32,3 @@ export async function getPromptAnswersFromIndexDB(promptAnswersKey) {
     }
     return null;
   }
-  
