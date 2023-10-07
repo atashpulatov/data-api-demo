@@ -2,7 +2,6 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // @ts-ignore
-import { Empty } from '@mstr/connector-components/';
 import { popupHelper } from '../../popup/popup-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { EmbeddedLibraryTypes } from './embedded-library-types';
@@ -18,7 +17,6 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   } = props;
   const container = useRef(null);
   const [msgRouter, setMsgRouter] = useState(null);
-  const [loadingFrame, setLoadingFrame] = useState(true);
 
   useLayoutEffect(() => {
     // set user agent so that the embedded library can identify source
@@ -140,7 +138,6 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
 
       if (microstrategy && microstrategy.embeddingContexts) {
         await microstrategy.embeddingContexts.embedLibraryPage(embedProps);
-        setLoadingFrame(false);
       } else {
         console.warn(
           'Cannot find microstrategy.embeddingContexts, please check embeddinglib.js is present in your environment'
@@ -152,10 +149,7 @@ export const EmbeddedLibraryNotConnected = (props: EmbeddedLibraryTypes) => {
   };
 
   return (
-    <>
-      {loadingFrame && <Empty isLoading />}
-      <div ref={container} className="library-iframe" />
-    </>
+    <div ref={container} className="library-iframe" />
   );
 };
 

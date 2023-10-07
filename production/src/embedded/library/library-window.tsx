@@ -1,5 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
+// @ts-ignore
+import { Empty } from '@mstr/connector-components/';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import i18n from '../../i18n';
@@ -190,6 +192,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       <div className="title-bar">
         <span>{t('Import Data')}</span>
       </div>
+      <Empty isLoading />
       <EmbeddedLibrary
         handleSelection={handleSelection}
         handleIframeLoadEvent={validateSession}
