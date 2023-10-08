@@ -5,6 +5,7 @@ import * as answersActions from '../../../redux-reducer/answers-reducer/answers-
 import { officeProperties } from '../../../redux-reducer/office-reducer/office-properties';
 import { errorService } from '../../../error/error-handler';
 import officeStoreHelper from '../../../office/store/office-store-helper';
+import * as IndexDBUtility from '../../../storage/index-db-utility';
 
 const internalData = {};
 
@@ -101,7 +102,7 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
   });
 });
 
-describe('OfficeStoreRestoreObject restoreAnswersFromIndexDB', () => {
+describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
   let answersActionsOriginal;
   beforeAll(() => {
     answersActionsOriginal = answersActions.restoreAllAnswers;
@@ -124,20 +125,34 @@ describe('OfficeStoreRestoreObject restoreAnswersFromIndexDB', () => {
     answersActions.restoreAllAnswers = answersActionsOriginal;
   });
 
-  it('restoreAnswersFromIndexDB should work as expected', () => {
+  it('restoreObjectsFromExcelStore should work as expected', () => {
     // given
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
+    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore').mockReturnValue('restoredObjectFromExcelTest');
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     // when
-    officeStoreRestoreObject.restoreAnswersFromIndexDB();
+    officeStoreRestoreObject.restoreObjectsFromExcelStore();
 
     // then
     expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
     expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
     expect(reduxStore.dispatch).toBeCalledTimes(1);
+  });
+
+  it('restoreAnswersFromIndexDB should work as expected', () => {
+    // given
+    jest.spyOn(IndexDBUtility, 'getPromptAnswersFromIndexDB').mockReturnValue([]);
+    jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    officeStoreRestoreObject.restoreAnswersFromIndexDB();
+
+    // then
+    expect(IndexDBUtility.getPromptAnswersFromIndexDB).toBeCalledTimes(1);
+    expect(reduxStore.dispatch).toBeCalledTimes(0);
   });
 });
 

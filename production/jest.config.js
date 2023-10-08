@@ -12,4 +12,15 @@ module.exports = {
   testEnvironment: 'jsdom',
   resetMocks: true,
   timers: 'legacy',
+  setupFiles: [
+    './setupFakedIndexedDB.js',
+  ],
+  coverageThreshold: {
+    global: {
+      lines: 90,
+      branches: 80,
+      functions: 80,
+      statements: -10
+    }
+  },
 };
