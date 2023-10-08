@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import './home.css';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { Spinner } from '@mstr/rc';
+import { use } from 'i18next';
 import i18n from '../i18n';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
@@ -35,6 +36,19 @@ export const HomeNotConnected = (props) => {
     }
   };
 
+  const initializeHome = useCallback(async () => {
+    try {
+      officeStoreRestoreObject.restoreObjectsFromExcelStore();
+      await officeStoreRestoreObject.restoreAnswersFromIndexDB();
+      homeHelper.saveLoginValues();
+      homeHelper.getTokenFromStorage();
+      hidePopup();
+      sessionActions.disableLoading();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [hidePopup]);
+
   useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
@@ -54,18 +68,9 @@ export const HomeNotConnected = (props) => {
     }
   });
 
-  useEffect(async () => {
-    try {
-      officeStoreRestoreObject.restoreObjectsFromExcelStore();
-      await officeStoreRestoreObject.restoreAnswersFromIndexDB();
-      homeHelper.saveLoginValues();
-      homeHelper.getTokenFromStorage();
-      hidePopup();
-      sessionActions.disableLoading();
-    } catch (error) {
-      console.error(error);
-    }
-  }, [hidePopup]);
+  useEffect(() => {
+    initializeHome();
+  }, [initializeHome]);
 
   useEffect(() => {
     getUserData(authToken);
