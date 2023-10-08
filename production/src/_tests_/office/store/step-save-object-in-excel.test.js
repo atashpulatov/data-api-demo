@@ -45,7 +45,7 @@ describe('StepSaveObjectInExcel', () => {
       throw new Error('errorTest');
     });
 
-    jest.spyOn(officeStoreObject, 'saveAnswersInExcelStore').mockImplementation(() => {
+    jest.spyOn(officeStoreObject, 'saveAnswersInIndexDB').mockImplementation(() => {
       throw new Error('errorTest');
     });
 
@@ -58,7 +58,7 @@ describe('StepSaveObjectInExcel', () => {
 
     // then
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
-    expect(officeStoreObject.saveAnswersInExcelStore).toBeCalledTimes(0);
+    expect(officeStoreObject.saveAnswersInIndexDB).toBeCalledTimes(0);
 
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledWith(
@@ -93,7 +93,7 @@ describe('StepSaveObjectInExcel', () => {
     };
 
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation();
-    jest.spyOn(officeStoreObject, 'saveAnswersInExcelStore').mockImplementation();
+    jest.spyOn(officeStoreObject, 'saveAnswersInIndexDB').mockImplementation();
 
     jest.spyOn(operationStepDispatcher, 'completeSaveObjectInExcel').mockImplementation();
 
@@ -125,8 +125,8 @@ describe('StepSaveObjectInExcel', () => {
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledWith();
 
-    expect(officeStoreObject.saveAnswersInExcelStore).toBeCalledTimes(1);
-    expect(officeStoreObject.saveAnswersInExcelStore).toBeCalledWith();
+    expect(officeStoreObject.saveAnswersInIndexDB).toBeCalledTimes(1);
+    expect(officeStoreObject.saveAnswersInIndexDB).toBeCalledWith();
 
     expect(operationStepDispatcher.completeSaveObjectInExcel).toBeCalledTimes(1);
     expect(operationStepDispatcher.completeSaveObjectInExcel).toBeCalledWith('objectWorkingIdTest');

@@ -101,7 +101,7 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
   });
 });
 
-describe('OfficeStoreRestoreObject restoreAnswersFromExcelStore', () => {
+describe('OfficeStoreRestoreObject restoreAnswersFromIndexDB', () => {
   let answersActionsOriginal;
   beforeAll(() => {
     answersActionsOriginal = answersActions.restoreAllAnswers;
@@ -124,14 +124,14 @@ describe('OfficeStoreRestoreObject restoreAnswersFromExcelStore', () => {
     answersActions.restoreAllAnswers = answersActionsOriginal;
   });
 
-  it('restoreAnswersFromExcelStore should work as expected', () => {
+  it('restoreAnswersFromIndexDB should work as expected', () => {
     // given
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     // when
-    officeStoreRestoreObject.restoreAnswersFromExcelStore();
+    officeStoreRestoreObject.restoreAnswersFromIndexDB();
 
     // then
     expect(officeStoreHelper.getOfficeSettings).toBeCalledTimes(1);
