@@ -4,6 +4,7 @@ import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
 import MstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
+import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -206,12 +207,26 @@ class MstrObjectRestService {
       const body = officeConverterServiceV2.convertCellValuesToExcelStandard(fetchedBody);
 
       const { current } = body.data.paging;
-      if (MstrAttributeMetricHelper.isMetricInRows(body) && shouldExtractMetricsInRows) {
-        metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(
-          body,
-          metricsInRows
-        );
-        shouldExtractMetricsInRows = !!metricsInRows.length;
+
+      const isMetricInRows = MstrAttributeMetricHelper.isMetricInRows(body);
+      const metricsRows = [];
+
+      if (isMetricInRows) {
+        if (shouldExtractMetricsInRows) {
+          metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
+          shouldExtractMetricsInRows = !!metricsInRows.length;
+        }
+
+        const { grid } = fetchedBody.definition;
+
+        if (grid.metricsPosition) {
+          const { index: metricsIndex } = grid.metricsPosition;
+          const { rows } = fetchedBody.data.headers;
+
+          rows.forEach((fetchedBodyRow) => {
+            metricsRows.push(grid.rows[metricsIndex].elements[fetchedBodyRow[metricsIndex]]);
+          });
+        }
       }
 
       fetchedRows = current + offset;
@@ -239,7 +254,8 @@ class MstrObjectRestService {
         row,
         header,
         subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
-        metricsInRows
+        metricsInRows,
+        rowsInformation: mstrAttributeFormHelper.splitAttributeForms(metricsRows, attrforms)
       };
     }
   }
