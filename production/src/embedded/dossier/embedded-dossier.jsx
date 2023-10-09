@@ -12,7 +12,6 @@ import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './dossier.css';
 
 import { prepareGivenPromptAnswers, preparePromptedDossier } from '../../helpers/prompts-handling-helper';
-import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 
 const { microstrategy, Office } = window;
 

@@ -4,7 +4,6 @@ import './home.css';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { Spinner } from '@mstr/rc';
-import { use } from 'i18next';
 import i18n from '../i18n';
 import { sessionHelper } from '../storage/session-helper';
 import { homeHelper } from './home-helper';
