@@ -126,8 +126,6 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
     .createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
 
   if (promptsAnswers && dossierInstanceDefinition.status === 2) {
-    console.time('Answering Dossier Prompts');
-
     // Reflect saved answers to the prompts of the Dossier's instance if applicable.
     dossierInstanceDefinition = await answerDossierPromptsHelper(
       dossierInstanceDefinition,
@@ -135,8 +133,6 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
       projectId,
       promptsAnswers
     );
-
-    console.timeEnd('Answering Dossier Prompts');
   }
 
   // Re-prompt the Dossier's instance to change execution status to 2 and force Prompts' dialog to open.

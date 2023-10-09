@@ -74,7 +74,6 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [prolongSession]);
 
-  const loading = true;
   useEffect(() => {
     window.addEventListener('message', messageReceived);
 
@@ -167,15 +166,6 @@ export const PromptsWindowNotConnected = (props) => {
   );
 
   const loadEmbeddedDossier = useCallback(async (localContainer) => {
-    if (!loading) {
-      return;
-    }
-
-    if (!microstrategy || !microstrategy.dossier) {
-      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment');
-      return;
-    }
-
     const chosenObjectIdLocal = chosenObjectId || editedObject.chosenObjectId;
     const projectId = mstrData.chosenProjectId || editedObject.projectId; // FIXME: potential problem with projectId
     const { envUrl, authToken } = session;
@@ -184,9 +174,9 @@ export const PromptsWindowNotConnected = (props) => {
     // whether there are previous prompt answers to handle
     const hasPreviousPromptAnswers = previousPromptsAnswers && previousPromptsAnswers.length > 0;
     const hasPromptObjects = promptObjects && promptObjects.length > 0;
-    const hasImportOrPrepateDataRequest = importRequested || isPreparedDataRequested;
+    const hasImportOrPrepareDataRequest = importRequested || isPreparedDataRequested;
 
-    const hasImportOrPreparedRequestsWithPromptObjsAndAnswers = hasImportOrPrepateDataRequest
+    const hasImportOrPreparedRequestsWithPromptObjsAndAnswers = hasImportOrPrepareDataRequest
     && hasPreviousPromptAnswers && hasPromptObjects;
 
     // Determine whether importing a report/dossier or preparing data on a report has previous answers
@@ -233,9 +223,7 @@ export const PromptsWindowNotConnected = (props) => {
           promptObjects, previousPromptsAnswers, isImportingOrPreparingDataWithPreviousPromptAnswers
         );
 
-        console.time('Prepared prompted Report');
         documentProps.instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
-        console.timeEnd('Prepared prompted Report');
       }
 
       microstrategy.dossier
@@ -288,7 +276,7 @@ export const PromptsWindowNotConnected = (props) => {
       popupHelper.handlePopupErrors(error);
     }
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId,
-    isReprompt, loading, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
+    isReprompt, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
     session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
     finishRepromptWithoutEditFilters, isPreparedDataRequested]);
 
@@ -330,6 +318,12 @@ export const PromptsWindowNotConnected = (props) => {
 
   const onPromptsContainerMount = useCallback(async (localContainer) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
+
+    if (!microstrategy || !microstrategy.dossier) {
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.');
+      return;
+    }
+
     await loadEmbeddedDossier(localContainer);
   }, [loadEmbeddedDossier]);
 
