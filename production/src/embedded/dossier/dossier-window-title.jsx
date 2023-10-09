@@ -25,9 +25,11 @@ export const DossierWindowTitle = ({
       {(() => {
         if (showMultipleRepromptMessage) {
           return `${t('Reprompt')} ${index}/${total} > ${dossierName}`;
-        } if (showSingleRepromptMessage) {
+        }
+        if (showSingleRepromptMessage) {
           return `${t('Reprompt')} > ${dossierName}`;
-        } if (isEdit) {
+        }
+        if (isEdit) {
           return `${t('Edit Dossier')} > ${dossierName}`;
         }
         return `${t('Import Dossier')} > ${dossierName}`;
