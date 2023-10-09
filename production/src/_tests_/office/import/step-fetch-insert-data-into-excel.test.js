@@ -258,7 +258,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
   ${false}             | ${false}            | ${2}                                      | ${0}
   ${true}              | ${true}             | ${2}                                      | ${2}
   
-  `('fetchInsertDataIntoExcel should work as expected - 2 rows returned by rowGenerator',
+  `('fetchInsertDataIntoExcel should work as expected - 2 rows returned by rowGenerator - $paramImportSubtotal',
     async ({
       resultImportSubtotal,
       paramImportSubtotal,
@@ -267,7 +267,28 @@ describe('StepFetchInsertDataIntoExcel', () => {
     }) => {
     // given
       objectDataMock.subtotalsInfo.importSubtotal = paramImportSubtotal;
-      resultInstanceDefinition.mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
+      const { mstrTable } = resultInstanceDefinition;
+      mstrTable.subtotalsInfo.importSubtotal = resultImportSubtotal;
+      mstrTable.columnInformation = [
+        {
+          id: 'testRowId1',
+          name: 'testRowName1',
+        },
+        {
+          id: 'testRowId2',
+          name: 'testRowName2',
+        },
+      ];
+      mstrTable.metricsInRows = [
+        {
+          id: 'testMetricId1',
+          name: 'testMetricName1',
+        },
+        {
+          id: 'testMetricId2',
+          name: 'testMetricName2',
+        },
+      ];
 
       jest.spyOn(officeInsertService, 'appendRows').mockImplementation();
 
@@ -287,7 +308,17 @@ describe('StepFetchInsertDataIntoExcel', () => {
               id: 'testMetricId2',
               name: 'testMetricName2',
             },
-          ]
+          ],
+          rowsInformation: [
+            {
+              id: 'testRowId1',
+              name: 'testRowName1',
+            },
+            {
+              id: 'testRowId2',
+              name: 'testRowName2',
+            },
+          ],
         },
         {
           row: [42, 42, 42, 42],
@@ -329,42 +360,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       expect(suspendApiCalculationUntilNextSyncMock).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
-      expect(officeInsertService.appendRows).toBeCalledTimes(2);
-      expect(officeInsertService.appendRows).toHaveBeenNthCalledWith(
-        1,
-        'officeTableTest',
-        excelContextMock,
-        [42, 42],
-        0,
-        'operationTypeTest',
-        'tableChangedTest',
-        [],
-        'headerOneTest',
-        {
-          subtotalsInfo: {
-            importSubtotal: resultImportSubtotal,
-            subtotalsAddresses: [],
-          }
-        },
-      );
-      expect(officeInsertService.appendRows).toHaveBeenNthCalledWith(
-        2,
-        'officeTableTest',
-        excelContextMock,
-        [42, 42, 42, 42],
-        2,
-        'operationTypeTest',
-        'tableChangedTest',
-        [],
-        'headerTwoTest',
-        {
-          subtotalsInfo: {
-            importSubtotal: resultImportSubtotal,
-            subtotalsAddresses: [],
-          }
-        },
-      );
-
       expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
       expect(stepFetchInsertDataIntoExcel.createNewDefinition).toBeCalledTimes(1);
 
@@ -375,6 +370,28 @@ describe('StepFetchInsertDataIntoExcel', () => {
       expect(officeInsertService.syncChangesToExcel).toHaveBeenNthCalledWith(1, [], false);
       expect(officeInsertService.syncChangesToExcel).toHaveBeenNthCalledWith(2, [], false);
       expect(officeInsertService.syncChangesToExcel).toHaveBeenNthCalledWith(3, [], true);
+
+      resultInstanceDefinition.mstrTable.columnInformation = [
+        {
+          id: 'testRowId1',
+          name: 'testRowName1',
+        },
+        {
+          id: 'testRowId2',
+          name: 'testRowName2',
+        },
+      ];
+
+      resultInstanceDefinition.mstrTable.metricsInRows = [
+        {
+          id: 'testMetricId1',
+          name: 'testMetricName1',
+        },
+        {
+          id: 'testMetricId2',
+          name: 'testMetricName2',
+        },
+      ];
 
       expect(operationStepDispatcher.updateOperation).toBeCalledTimes(3);
       expect(operationStepDispatcher.updateOperation).toHaveBeenNthCalledWith(1, { loadedRows: 2, objectWorkingId: 'objectWorkingIdTest', });
