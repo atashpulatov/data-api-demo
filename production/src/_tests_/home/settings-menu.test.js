@@ -44,7 +44,7 @@ describe('Settings Menu', () => {
     const handleErrorSpy = jest
       .spyOn(errorService, 'handleError')
       .mockImplementation();
-    const menuWrapper = mount(<SettingsMenuNotConnected />);
+    const menuWrapper = mount(<SettingsMenuNotConnected toggleIsSettingsFlag={jest.fn()} />);
     const buttonWrapper = menuWrapper.find('#logOut');
 
     // when
@@ -115,6 +115,7 @@ describe('Settings Menu', () => {
     };
 
     const toggleSettingsPanelLoadedFlag = jest.fn();
+    const toggleIsSettingsFlag = jest.fn();
 
     // when"
     const menuWrapper = shallow(
@@ -123,6 +124,7 @@ describe('Settings Menu', () => {
         userInitials={null}
         userID={1}
         toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
+        toggleIsSettingsFlag={toggleIsSettingsFlag}
       />
     );
 
@@ -145,6 +147,7 @@ describe('Settings Menu', () => {
     };
 
     const toggleSettingsPanelLoadedFlag = jest.fn();
+    const toggleIsSettingsFlag = jest.fn();
 
     // when"
     const menuWrapper = shallow(
@@ -153,6 +156,7 @@ describe('Settings Menu', () => {
         userInitials={null}
         userID={1}
         toggleSettingsPanelLoadedFlag={toggleSettingsPanelLoadedFlag}
+        toggleIsSettingsFlag={toggleIsSettingsFlag}
       />
     );
 
