@@ -409,7 +409,8 @@ export const mapStateToProps = (state) => {
   } = state;
   const popupState = popupReducer.editedObject;
   const {
-    promptsAnswers, importSubtotal, importRequested, isPreparedDataRequested, promptObjects, ...mstrData
+    promptsAnswers, importSubtotal, importRequested, isPreparedDataRequested,
+    promptObjects, ...mstrData
   } = navigationTree;
   const { answers } = answersReducer;
   const { supportForms, reusePromptAnswers } = officeReducer;
