@@ -149,7 +149,7 @@ describe('OfficeStoreObject', () => {
     expect(settingsMock.saveAsync).toBeCalledTimes(1);
   });
 
-  it('saveAnswersInIndexDB should work as expected', async () => {
+  it('savePromptAnswersInIndexDB should work as expected', async () => {
     // given
     jest.spyOn(reduxStore, 'getState').mockReturnValue({ answersReducer: { answers: ['answersTest'] } });
     jest.spyOn(IndexDBUtility, 'savePromptAnswersInIndexDB').mockReturnValue(settingsMock);

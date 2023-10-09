@@ -44,9 +44,10 @@ describe('SidePanelService', () => {
       .spyOn(popupController, 'runPopupNavigation')
       .mockImplementation();
     // when
+    sidePanelService.clearRepromptTask();
     sidePanelService.addData();
     // then
-    expect(mockedDispatch).toBeCalledTimes(1);
+    expect(mockedDispatch).toBeCalledTimes(2);
     expect(mockedRunPopup).toBeCalledTimes(1);
   });
 
@@ -211,6 +212,37 @@ describe('SidePanelService', () => {
     expect(mockedisSheetProtected).toBeCalled();
     expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
     expect(mockedDispatch).toBeCalled();
+  });
+
+  it.each`
+    objectType
+    ${'report'}
+    ${'dataset'}
+    ${'visualization'}
+  `('should reprompt an object', async ({ objectType }) => {
+    // given
+    const objectWorkingId = 1;
+    const mockObject = {
+      bindId: 1,
+      mstrObjectType: { name: objectType },
+      isPrompted: true,
+    };
+
+    const mockedDispatch = jest
+      .spyOn(reduxStore, 'dispatch')
+      .mockImplementation();
+    const getObjectFromObjectReducerByObjectWorkingId = jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockImplementationOnce(() => mockObject);
+    const clearRepromptTaskMockup = jest.spyOn(sidePanelService, 'clearRepromptTask').mockImplementation();
+
+    // when
+    await sidePanelService.reprompt(objectWorkingId);
+
+    // then
+    expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
+    expect(mockedDispatch).toBeCalled();
+    expect(clearRepromptTaskMockup).toBeCalled();
   });
 
   it('should dispatch officeActions.toggleReusePromptAnswersFlag to initialize the reuse prompt answers flag', async () => {
