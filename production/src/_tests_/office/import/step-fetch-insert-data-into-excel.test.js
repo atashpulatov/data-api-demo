@@ -360,6 +360,42 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       expect(suspendApiCalculationUntilNextSyncMock).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
+      expect(officeInsertService.appendRows).toBeCalledTimes(2);
+      expect(officeInsertService.appendRows).toHaveBeenNthCalledWith(
+        1,
+        'officeTableTest',
+        excelContextMock,
+        [42, 42],
+        0,
+        'operationTypeTest',
+        'tableChangedTest',
+        [],
+        'headerOneTest',
+        {
+          subtotalsInfo: {
+            importSubtotal: resultImportSubtotal,
+            subtotalsAddresses: [],
+          }
+        },
+      );
+      expect(officeInsertService.appendRows).toHaveBeenNthCalledWith(
+        2,
+        'officeTableTest',
+        excelContextMock,
+        [42, 42, 42, 42],
+        2,
+        'operationTypeTest',
+        'tableChangedTest',
+        [],
+        'headerTwoTest',
+        {
+          subtotalsInfo: {
+            importSubtotal: resultImportSubtotal,
+            subtotalsAddresses: [],
+          }
+        },
+      );
+
       expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
       expect(stepFetchInsertDataIntoExcel.createNewDefinition).toBeCalledTimes(1);
 
