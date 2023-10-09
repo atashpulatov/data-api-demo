@@ -258,7 +258,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
   ${false}             | ${false}            | ${2}                                      | ${0}
   ${true}              | ${true}             | ${2}                                      | ${2}
   
-  `('fetchInsertDataIntoExcel should work as expected - 2 rows returned by rowGenerator - $paramImportSubtotal',
+  `('fetchInsertDataIntoExcel should work as expected - 2 rows returned by rowGenerator',
     async ({
       resultImportSubtotal,
       paramImportSubtotal,
