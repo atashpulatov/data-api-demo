@@ -49,11 +49,12 @@ class StepFetchInsertDataIntoExcel {
       const contextPromises = [];
       const subtotalsAddresses = [];
       let newDefinition = null;
+      let newInstance = null;
 
       console.time('Fetch and insert into excel');
       console.time('Fetch data');
       for await (const {
-        row, header, subtotalAddress, metricsInRows
+        row, header, subtotalAddress, metricsInRows, rowsInformation
       } of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
@@ -78,6 +79,13 @@ class StepFetchInsertDataIntoExcel {
 
         if (metricsInRows.length) {
           newDefinition = this.createNewDefinition(definition, newDefinition, metricsInRows);
+          newInstance = {
+            ...instanceDefinition, mstrTable: {
+              ...mstrTable,
+              metricsInRows,
+              columnInformation: [...rowsInformation]
+            }
+          };
         }
 
         rowIndex += row.length;
@@ -95,7 +103,7 @@ class StepFetchInsertDataIntoExcel {
       mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
       const updatedOperation = {
         objectWorkingId,
-        instanceDefinition,
+        instanceDefinition: newInstance || instanceDefinition,
       };
 
       const updatedObject = {
