@@ -24,15 +24,17 @@ class StepApplyFormatting {
       objectWorkingId, officeTable, instanceDefinition, excelContext
     } = operationData;
 
-    const { columnInformation, isCrosstab } = instanceDefinition.mstrTable;
+    const { columns } = instanceDefinition;
+    const { columnInformation, isCrosstab, metricsInRows } = instanceDefinition.mstrTable;
 
     try {
       const filteredColumnInformation = this.filterColumnInformation(columnInformation);
       const offset = this.calculateMetricColumnOffset(filteredColumnInformation, isCrosstab);
 
       await excelContext.sync();
-
-      await this.setupFormatting(filteredColumnInformation, isCrosstab, offset, officeTable, excelContext);
+      await this.setupFormatting(
+        filteredColumnInformation, isCrosstab, offset, officeTable, excelContext, columns, metricsInRows
+      );
 
       await excelContext.sync();
     } catch (error) {
@@ -69,14 +71,22 @@ class StepApplyFormatting {
    * @param {Office} officeTable Reference to Excel table
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    */
-  setupFormatting = async (filteredColumnInformation, isCrosstab, offset, officeTable, excelContext) => {
+  setupFormatting = async (
+    filteredColumnInformation, isCrosstab, offset, officeTable, excelContext, columns, metricsInRows
+  ) => {
     for (let index = 0; index < filteredColumnInformation.length; index++) {
       const object = filteredColumnInformation[index];
-      const columnRange = this.getColumnRangeForFormatting(index, isCrosstab, offset, officeTable);
+      const columnRange = this.getColumnRangeForFormatting(
+        index, isCrosstab, offset, officeTable, columns, metricsInRows
+      );
       if (object.isAttribute) {
         await officeFormatHyperlinks.formatColumnAsHyperlinks(object, columnRange, excelContext);
       } else {
         columnRange.numberFormat = this.getFormat(object);
+      }
+
+      if (index % 5000 === 0) {
+        await excelContext.sync();
       }
     }
   };
@@ -92,12 +102,22 @@ class StepApplyFormatting {
    * @param {Office} officeTable Reference to Excel table
    * @returns {Office} Columns range to apply formatting to
    */
-  getColumnRangeForFormatting = (index, isCrosstab, offset, officeTable) => {
+  getColumnRangeForFormatting = (index, isCrosstab, offset, officeTable, columns, metricsInRows) => {
     const objectIndex = isCrosstab ? index - offset : index + offset;
     // Crosstab
     if (isCrosstab && index < offset) {
       return officeTable.columns.getItemAt().getDataBodyRange().getOffsetRange(0, objectIndex);
     }
+
+    // Metrics in rows
+    if (metricsInRows) {
+      if (isCrosstab) {
+        return officeTable.rows.getItemAt(objectIndex).getRange();
+      }
+
+      return officeTable.rows.getItemAt(objectIndex).getRange().getOffsetRange(0, columns - 1);
+    }
+
     // Tabular
     return officeTable.columns.getItemAt(objectIndex).getDataBodyRange();
   };
