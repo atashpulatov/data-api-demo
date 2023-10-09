@@ -92,7 +92,6 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "!src/__mocks__/**/*.{js,jsx}",
-      "!src/setupFakedIndexedDB.js",
       "!src/_tests_/**/*.{js,jsx}",
       "!src/**/*rest-service.js",
       "!src/error.jsx",

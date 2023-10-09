@@ -13,7 +13,7 @@ module.exports = {
   resetMocks: true,
   timers: 'legacy',
   setupFiles: [
-    './setupFakedIndexedDB.js',
+    './_tests_/setupFakedIndexedDB.js',
   ],
   coverageThreshold: {
     global: {
