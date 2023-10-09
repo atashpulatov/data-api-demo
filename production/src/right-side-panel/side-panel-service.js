@@ -12,7 +12,6 @@ import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { userRestService } from '../home/user-rest-service';
-import { clearAnswers } from '../redux-reducer/answers-reducer/answers-actions';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 
@@ -183,10 +182,6 @@ class SidePanelService {
     const { value } = await userRestService.setUserPreference(EXCEL_REUSE_PROMPT_ANSWERS, !reusePromptAnswers);
     const reusePromptAnswersFlag = !Number.isNaN(+value) ? !!parseInt(value, 10) : JSON.parse(value);
 
-    if (!reusePromptAnswersFlag) {
-      // if toggling flag off, clear all saved answers
-      this.reduxStore.dispatch(clearAnswers());
-    }
     this.reduxStore.dispatch(officeActions.toggleReusePromptAnswersFlag(reusePromptAnswersFlag));
   };
 
