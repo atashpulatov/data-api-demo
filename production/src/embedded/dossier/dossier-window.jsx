@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
-import { Empty } from '@mstr/connector-components/';
+import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -305,6 +305,10 @@ DossierWindowNotConnected.defaultProps = {
     selectedViz: '',
   },
   isReprompt: false,
+  repromptsQueue: {
+    total: 0,
+    index: 0,
+  },
 };
 
 function mapStateToProps(state) {

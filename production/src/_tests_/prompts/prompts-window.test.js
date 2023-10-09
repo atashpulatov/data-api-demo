@@ -31,6 +31,11 @@ describe('PromptsWindowNotConnected', () => {
     authToken: 'd3d3d3'
   };
 
+  const repromptsQueue = {
+    total: 0,
+    index: 0,
+  };
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -43,7 +48,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
@@ -62,7 +68,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={repromptPopupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     // then
     expect(wrappedComponent.instance()).toBeDefined();
@@ -78,7 +85,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     // then
     await waitFor(() => {
@@ -95,7 +103,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     wrappedComponent.unmount();
     // then
@@ -131,7 +140,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
 
     fireEvent(window, new MessageEvent('message', givenMessage));
@@ -150,7 +160,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
 
     fireEvent(window, new MessageEvent('message', givenMessage));
@@ -176,7 +187,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
 
     const keepSessionAlive = jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementation(() => {});
@@ -196,7 +208,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
 
     const keepSessionAlive = jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementation(() => {});
@@ -216,7 +229,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();

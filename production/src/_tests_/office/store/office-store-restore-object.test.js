@@ -102,7 +102,7 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
   });
 });
 
-describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
+describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore restoreAnswersFromIndexDB', () => {
   let answersActionsOriginal;
   beforeAll(() => {
     answersActionsOriginal = answersActions.restoreAllAnswers;

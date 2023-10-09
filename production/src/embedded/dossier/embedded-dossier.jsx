@@ -2,7 +2,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Empty } from '@mstr/connector-components/';
+import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { popupHelper } from '../../popup/popup-helper';
 import { DEFAULT_PROJECT_NAME } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-reducer';
