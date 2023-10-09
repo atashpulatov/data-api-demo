@@ -70,6 +70,8 @@ class StepApplyFormatting {
    * @param {Number} offset Number of columns to be offsetted when formatting
    * @param {Office} officeTable Reference to Excel table
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Number} columns Number of columns in the table
+   * @param {Boolean} metricsInRows Specify if metrics are present in rows
    */
   setupFormatting = async (
     filteredColumnInformation, isCrosstab, offset, officeTable, excelContext, columns, metricsInRows
@@ -100,6 +102,8 @@ class StepApplyFormatting {
    * @param {Boolean} isCrosstab Specify if object is a crosstab
    * @param {Number} offset Number of columns to be offsetted when formatting
    * @param {Office} officeTable Reference to Excel table
+   * @param {Number} columns Number of columns in the table
+   * @param {Boolean} metricsInRows Specify if metrics are present in rows
    * @returns {Office} Columns range to apply formatting to
    */
   getColumnRangeForFormatting = (index, isCrosstab, offset, officeTable, columns, metricsInRows) => {
