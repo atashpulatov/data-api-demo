@@ -3,7 +3,6 @@ import { shallow } from 'enzyme';
 import { DossierWindowTitle } from '../../../embedded/dossier/dossier-window-title';
 
 describe('DossierWindowTitle', () => {
-
   beforeEach(() => {
     jest.restoreAllMocks();
   });
