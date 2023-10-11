@@ -176,7 +176,7 @@ export const DossierWindowNotConnected = (props) => {
       previousSelectionBackup.current = [{ currentInstanceId, lastSelectedViz, }, ...previousSelectionBackup.current];
       // Clear selection of viz and update instance id.
       instanceId.current = newInstanceId;
-      JSON.stringify(lastSelectedViz) !== '{}' && setLastSelectedViz([]);
+      lastSelectedViz && Object.keys(lastSelectedViz).length > 0 && setLastSelectedViz([]);
       vizualizationsData?.length > 0 && setVizualizationsData([]);
     } else {
       // Restore backuped viz selection info in case of return to prev instance

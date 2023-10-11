@@ -139,10 +139,7 @@ export const PromptsWindowNotConnected = (props) => {
       answers.forEach(answer => {
         const answerDef = answerDefMap.get(answer.key);
         if (answerDef) {
-          Object.assign(answer, {
-            answers: answerDef.answers,
-            type: answerDef.type
-          });
+          answer = { ...answer, answers: answerDef.answers, type: answerDef.type };
         }
       });
     });

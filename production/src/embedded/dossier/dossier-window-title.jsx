@@ -19,7 +19,7 @@ export const DossierWindowTitle = ({
   return (
     <h1
       title={dossierName}
-      className="ant-col folder-browser-title dossier-title-margin-top"
+      className="folder-browser-title dossier-title-margin-top"
     >
       {(() => {
         if (showMultipleRepromptMessage) {
