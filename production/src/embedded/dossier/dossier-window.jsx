@@ -30,10 +30,10 @@ export const DossierWindowNotConnected = (props) => {
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const previousSelectionBackup = useRef([]);
 
-  // New showLoading variable is needed to show loading spinner while prompted dossier is answered
+  // New hideEmbedded variable is needed to let the loading spinner show while prompted dossier is answered
   // behind the scenes which could take some time; especially if there are nested prompts.
   // NOTE: This loading spinner is separate from the one in EmbeddedDossier component.
-  const showLoading = useRef(false);
+  const [hideEmbedded, setHideEmbedded] = useState(false);
 
   const {
     chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt, repromptsQueue,
@@ -154,8 +154,8 @@ export const DossierWindowNotConnected = (props) => {
     if (isReprompt && isSelected) {
       handleOk();
 
-      // Show loading spinner while prompts are being answered.
-      showLoading.current = true;
+      // Hide embedded and let loading spinner show while prompts are being answered.
+      setHideEmbedded(true);
     }
   }, [isReprompt, isSelected, handleOk]);
 
@@ -237,28 +237,29 @@ export const DossierWindowNotConnected = (props) => {
           </span>
         )}
 
-      {showLoading.current && <Empty isLoading />}
-
-      {!showLoading.current && ( // Show embedded dossier only after prompts are answered.
-        <EmbeddedDossier
-          handleSelection={handleSelection}
-          handlePromptAnswer={handlePromptAnswer}
-          handleInstanceIdChange={handleInstanceIdChange}
-          handleIframeLoadEvent={validateSession}
-          handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
-        />
+      <Empty isLoading />
+      {!hideEmbedded && ( // Hide embedded dossier only after prompts are answered.
+        <>
+          <EmbeddedDossier
+            handleSelection={handleSelection}
+            handlePromptAnswer={handlePromptAnswer}
+            handleInstanceIdChange={handleInstanceIdChange}
+            handleIframeLoadEvent={validateSession}
+            handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
+          />
+          <PopupButtons
+            handleOk={handleOk}
+            handleCancel={handleCancel}
+            handleBack={!isEdit && handleBack}
+            hideSecondary
+            disableActiveActions={!isSelected}
+            isPublished={!(isSelected && !isSupported && !isChecking)}
+            disableSecondary={isSelected && !isSupported && !isChecking}
+            checkingSelection={isChecking}
+            hideOk={isReprompt}
+          />
+        </>
       )}
-      <PopupButtons
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        handleBack={!isEdit && handleBack}
-        hideSecondary
-        disableActiveActions={!isSelected}
-        isPublished={!(isSelected && !isSupported && !isChecking)}
-        disableSecondary={isSelected && !isSupported && !isChecking}
-        checkingSelection={isChecking}
-        hideOk={isReprompt}
-      />
     </div>
   );
 };
