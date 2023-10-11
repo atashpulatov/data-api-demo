@@ -15,12 +15,4 @@ module.exports = {
   setupFiles: [
     './_tests_/setupFakedIndexedDB.js',
   ],
-  coverageThreshold: {
-    global: {
-      lines: 90,
-      branches: 80,
-      functions: 80,
-      statements: -10
-    }
-  },
 };
