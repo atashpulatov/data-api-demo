@@ -3,7 +3,7 @@ import 'focus-visible/dist/focus-visible';
 import './index.css';
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import { Empty } from '@mstr/connector-components/';
+import { Empty } from '@mstr/connector-components/lib/empty/empty';
 
 import { authenticationService } from './authentication/auth-rest-service';
 
