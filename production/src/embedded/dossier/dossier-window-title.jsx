@@ -16,23 +16,22 @@ export const DossierWindowTitle = ({
   const showMultipleRepromptMessage = isReprompt && !isEdit && total > 1;
   const showSingleRepromptMessage = isReprompt && !isEdit && total === 1;
 
+  let dossierTitle = `${t('Import Dossier')} &gt; ${dossierName}`;
+
+  if (isEdit) {
+    dossierTitle = `${t('Edit Dossier')} &gt; ${dossierName}`;
+  } else if (showMultipleRepromptMessage) {
+    dossierTitle = `${t('Reprompt')} ${index}/${total} &gt; ${dossierName}`;
+  } else if (showSingleRepromptMessage) {
+    dossierTitle = `${t('Reprompt')} &gt; ${dossierName}`;
+  }
+
   return (
     <h1
-      title={dossierName}
+      title={dossierTitle}
       className="folder-browser-title dossier-title-margin-top"
     >
-      {(() => {
-        if (showMultipleRepromptMessage) {
-          return `${t('Reprompt')} ${index}/${total} > ${dossierName}`;
-        }
-        if (showSingleRepromptMessage) {
-          return `${t('Reprompt')} > ${dossierName}`;
-        }
-        if (isEdit) {
-          return `${t('Edit Dossier')} > ${dossierName}`;
-        }
-        return `${t('Import Dossier')} > ${dossierName}`;
-      })()}
+      {dossierTitle}
     </h1>
   );
 };
