@@ -114,6 +114,41 @@ class MstrAttributeMetricHelper {
   isMetricInRows = (body) => (body.definition.grid.metricsPosition
     ? body.definition.grid.metricsPosition.axis === 'rows'
     : false);
+
+  /**
+   * Gets information about metrics in rows based on provided parameters
+   *
+   * @param {boolean} shouldExtractMetricsInRows boolean indicating if metrics in rows should be extracted
+   * @param {Object} body body of the response from MicroStrategy REST API
+   * @param {Object[]} metricsInRows array of metrics in rows
+   * @param {Object} fetchedBody body of currenly fetched part of object data
+   *
+   * @returns {Object} object containing information about metrics in rows
+   */
+  getMetricsInRowsInfo(shouldExtractMetricsInRows, body, metricsInRows, fetchedBody) {
+    const isMetricInRows = mstrAttributeMetricHelper.isMetricInRows(body);
+    const metricsRows = [];
+
+    if (isMetricInRows) {
+      if (shouldExtractMetricsInRows) {
+        metricsInRows = mstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
+        shouldExtractMetricsInRows = !!metricsInRows.length;
+      }
+
+      const { grid } = fetchedBody.definition;
+
+      if (grid.metricsPosition) {
+        const { index: metricsIndex } = grid.metricsPosition;
+        const { rows } = fetchedBody.data.headers;
+
+        rows.forEach((fetchedBodyRow) => {
+          metricsRows.push(grid.rows[metricsIndex].elements[fetchedBodyRow[metricsIndex]]);
+        });
+      }
+    }
+
+    return { shouldExtractMetricsInRows, metricsInRows, metricsRows };
+  }
 }
 
 const mstrAttributeMetricHelper = new MstrAttributeMetricHelper();

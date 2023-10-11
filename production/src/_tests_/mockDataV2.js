@@ -1473,3 +1473,144 @@ export const reportWithMetricsInRows = {
     }
   }
 };
+
+export const dossierWithMetricsInRows = {
+  k: 'W75',
+  n: 'Grid visualisation with subtotals copy',
+  key: 'W75',
+  name: 'Grid visualisation with subtotals copy',
+  isGrid: true,
+  visualizationType: 'grid',
+  definition: {
+    grid: {
+      crossTab: true,
+      metricsPosition: {
+        axis: 'rows',
+        index: 0
+      },
+      rows: [
+        {
+          name: 'Metrics',
+          id: '00000000000000000000000000000000',
+          type: 'templateMetrics',
+          elements: [
+            {
+              name: 'Cost',
+              id: '7FD5B69611D5AC76C000D98A4CC5F24F',
+              type: 'metric',
+              min: 2114.7439,
+              max: 13132.052599999999,
+              dataType: 'double',
+              numberFormatting: {
+                category: 1,
+                decimalPlaces: 0,
+                thousandSeparator: true,
+                currencySymbol: '$',
+                currencyPosition: 0,
+                formatString: '"$"#,##0',
+                negativeType: 1
+              }
+            },
+            {
+              name: 'Revenue',
+              id: '4C05177011D3E877C000B3B2D86C964F',
+              type: 'metric',
+              min: 2563.9,
+              max: 15443.9,
+              dataType: 'double',
+              numberFormatting: {
+                category: 4,
+                decimalPlaces: 0,
+                thousandSeparator: true,
+                currencySymbol: '$',
+                currencyPosition: 0,
+                formatString: '0%;(0%)',
+                negativeType: 3
+              }
+            }
+          ]
+        }
+      ],
+      columns: [
+        {
+          name: 'Country',
+          id: '8D679D3811D3E4981000E787EC6DE8A4',
+          type: 'attribute',
+          forms: [
+            {
+              id: 'CCFBE2A5EADB4F50941FB879CCF1721C',
+              name: 'DESC',
+              dataType: 'varChar',
+              baseFormCategory: 'DESC',
+              baseFormType: 'text'
+            }
+          ],
+          elements: [
+            {
+              formValues: [
+                'USA'
+              ],
+              id: 'h1;8D679D3811D3E4981000E787EC6DE8A4'
+            },
+            {
+              formValues: [
+                'Web'
+              ],
+              id: 'h7;8D679D3811D3E4981000E787EC6DE8A4'
+            }
+          ]
+        }
+      ],
+      sorting: {
+        rows: [
+          {
+            type: 'subtotalsPosition',
+            subtotalsPosition: 'first',
+            order: 'ascending'
+          }
+        ],
+        columns: [],
+        pageBy: []
+      },
+      thresholds: []
+    }
+  },
+  data: {
+    paging: {
+      total: 2,
+      current: 2,
+      offset: 0,
+      limit: 20000
+    },
+    headers: {
+      rows: [
+        [
+          0
+        ],
+        [
+          1
+        ]
+      ],
+      columns: [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    metricValues: {
+      raw: [
+        [
+          13132.0526,
+          2114.7439
+        ],
+        [
+          15443.9,
+          2563.9
+        ]
+      ]
+    }
+  },
+  promptOrdering: [],
+  attrforms: { supportForms: true }
+};

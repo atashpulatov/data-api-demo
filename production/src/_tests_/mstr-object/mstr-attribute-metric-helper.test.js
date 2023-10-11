@@ -1,5 +1,5 @@
 import mstrAttributeMetricHelper from '../../mstr-object/helper/mstr-attribute-metric-helper';
-import { reportV2, reportWithMetricsInRows } from '../mockDataV2';
+import { reportV2, reportWithMetricsInRows, dossierWithMetricsInRows } from '../mockDataV2';
 import regularCompoundJSON from './compound-grid/Regular Compound Grid.json';
 import compoundJSONwithMetricsInRows from './compound-grid/Compound Grid with Metrics on Row.json';
 
@@ -273,6 +273,94 @@ describe('MstrAttributeMetricHelper', () => {
       const result = mstrAttributeMetricHelper.isMetricInRows(body);
       // then
       expect(result).toEqual(false);
+    });
+
+    it('should return data when object conains metrics in rows', () => {
+      // given
+      const shouldExtractMetricsInRows = true;
+      const body = dossierWithMetricsInRows;
+      const metricsInRows = [];
+      const fetchedBody = dossierWithMetricsInRows;
+      const expectedResponse = {
+        metricsInRows: [
+          {
+            id: '7FD5B69611D5AC76C000D98A4CC5F24F',
+            name: 'Cost'
+          },
+          {
+            id: '4C05177011D3E877C000B3B2D86C964F',
+            name: 'Revenue'
+          }
+        ],
+        metricsRows: [
+          {
+            dataType: 'double',
+            id: '7FD5B69611D5AC76C000D98A4CC5F24F',
+            max: 13132.052599999999,
+            min: 2114.7439,
+            name: 'Cost',
+            numberFormatting: {
+              category: 1,
+              currencyPosition: 0,
+              currencySymbol: '$',
+              decimalPlaces: 0,
+              formatString: '"$"#,##0',
+              negativeType: 1,
+              thousandSeparator: true
+            },
+            type: 'metric'
+          },
+          {
+            dataType: 'double',
+            id: '4C05177011D3E877C000B3B2D86C964F',
+            max: 15443.9,
+            min: 2563.9,
+            name: 'Revenue',
+            numberFormatting:
+              {
+                category: 4,
+                currencyPosition: 0,
+                currencySymbol: '$',
+                decimalPlaces: 0,
+                formatString: '0%;(0%)',
+                negativeType: 3,
+                thousandSeparator: true
+              },
+            type: 'metric'
+          }
+        ],
+        shouldExtractMetricsInRows: true
+      };
+
+      // when
+      const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
+        shouldExtractMetricsInRows, body, metricsInRows, fetchedBody
+      );
+
+      // then
+      expect(metricsInRowsInfo).toEqual(expectedResponse);
+    });
+
+    it('should not return data when object does not conain metrics in rows', () => {
+      // given
+      const shouldExtractMetricsInRows = true;
+      const body = reportV2;
+      const metricsInRows = [];
+      const fetchedBody = reportV2;
+      const expectedResponse = {
+        metricsInRows: [],
+        metricsRows: [],
+        shouldExtractMetricsInRows: true
+
+      };
+
+      // when
+      const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
+        shouldExtractMetricsInRows, body, metricsInRows, fetchedBody
+      );
+
+      // then
+      expect(metricsInRowsInfo).toEqual(expectedResponse);
     });
   });
 });

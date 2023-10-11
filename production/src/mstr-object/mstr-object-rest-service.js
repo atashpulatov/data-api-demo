@@ -3,8 +3,8 @@ import { errorMessages } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
-import MstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
 import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
+import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -208,26 +208,12 @@ class MstrObjectRestService {
 
       const { current } = body.data.paging;
 
-      const isMetricInRows = MstrAttributeMetricHelper.isMetricInRows(body);
-      const metricsRows = [];
+      const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
+        shouldExtractMetricsInRows, body, metricsInRows, fetchedBody
+      );
 
-      if (isMetricInRows) {
-        if (shouldExtractMetricsInRows) {
-          metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
-          shouldExtractMetricsInRows = !!metricsInRows.length;
-        }
-
-        const { grid } = fetchedBody.definition;
-
-        if (grid.metricsPosition) {
-          const { index: metricsIndex } = grid.metricsPosition;
-          const { rows } = fetchedBody.data.headers;
-
-          rows.forEach((fetchedBodyRow) => {
-            metricsRows.push(grid.rows[metricsIndex].elements[fetchedBodyRow[metricsIndex]]);
-          });
-        }
-      }
+      shouldExtractMetricsInRows = metricsInRowsInfo.shouldExtractMetricsInRows;
+      metricsInRows = metricsInRowsInfo.metricsInRows;
 
       fetchedRows = current + offset;
       body.attrforms = attrforms;
@@ -255,7 +241,7 @@ class MstrObjectRestService {
         header,
         subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
         metricsInRows,
-        rowsInformation: mstrAttributeFormHelper.splitAttributeForms(metricsRows, attrforms)
+        rowsInformation: mstrAttributeFormHelper.splitAttributeForms(metricsInRowsInfo.metricsRows, attrforms)
       };
     }
   }

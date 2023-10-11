@@ -174,7 +174,8 @@ describe('StepFetchInsertDataIntoExcel', () => {
           row: [42, 42],
           header: 'headerTest',
           subtotalAddress: 'subtotalAddressTest',
-          metricsInRows: []
+          metricsInRows: [],
+          rowsInformation: [],
         }]
       );
 
@@ -325,6 +326,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
           header: 'headerTwoTest',
           subtotalAddress: 'subtotalAddressTwoTest',
           metricsInRows: [],
+          rowsInformation: [],
         }]
       );
 
