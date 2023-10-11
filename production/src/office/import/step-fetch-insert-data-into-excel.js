@@ -77,13 +77,14 @@ class StepFetchInsertDataIntoExcel {
           this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
         }
 
-        if (metricsInRows.length) {
+        if (rowsInformation.length) {
+          const columnInformation = newInstance?.mstrTable?.columnInformation || [];
           newDefinition = this.createNewDefinition(definition, newDefinition, metricsInRows);
           newInstance = {
             ...instanceDefinition, mstrTable: {
               ...mstrTable,
               metricsInRows,
-              columnInformation: [...rowsInformation]
+              columnInformation: [...columnInformation, ...rowsInformation]
             }
           };
         }
