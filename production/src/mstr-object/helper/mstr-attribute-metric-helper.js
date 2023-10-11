@@ -118,22 +118,18 @@ class MstrAttributeMetricHelper {
   /**
    * Gets information about metrics in rows based on provided parameters
    *
-   * @param {boolean} shouldExtractMetricsInRows boolean indicating if metrics in rows should be extracted
    * @param {Object} body body of the response from MicroStrategy REST API
    * @param {Object[]} metricsInRows array of metrics in rows
    * @param {Object} fetchedBody body of currenly fetched part of object data
    *
    * @returns {Object} object containing information about metrics in rows
    */
-  getMetricsInRowsInfo(shouldExtractMetricsInRows, body, metricsInRows, fetchedBody) {
+  getMetricsInRowsInfo(body, metricsInRows, fetchedBody) {
     const isMetricInRows = mstrAttributeMetricHelper.isMetricInRows(body);
     const metricsRows = [];
 
     if (isMetricInRows) {
-      if (shouldExtractMetricsInRows) {
-        metricsInRows = mstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
-        shouldExtractMetricsInRows = !!metricsInRows.length;
-      }
+      metricsInRows = mstrAttributeMetricHelper.getMetricsInRows(body, metricsInRows);
 
       const { grid } = fetchedBody.definition;
 
@@ -147,7 +143,7 @@ class MstrAttributeMetricHelper {
       }
     }
 
-    return { shouldExtractMetricsInRows, metricsInRows, metricsRows };
+    return { metricsInRows, metricsRows };
   }
 }
 

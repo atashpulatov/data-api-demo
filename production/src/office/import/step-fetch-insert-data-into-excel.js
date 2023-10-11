@@ -77,9 +77,12 @@ class StepFetchInsertDataIntoExcel {
           this.getSubtotalCoordinates(subtotalAddress, subtotalsAddresses);
         }
 
-        if (rowsInformation.length) {
+        if (metricsInRows.length) {
           const columnInformation = newInstance?.mstrTable?.columnInformation || [];
-          newDefinition = this.createNewDefinition(definition, newDefinition, metricsInRows);
+          newDefinition = {
+            ...definition,
+            metrics: metricsInRows
+          };
           newInstance = {
             ...instanceDefinition, mstrTable: {
               ...mstrTable,
@@ -137,27 +140,6 @@ class StepFetchInsertDataIntoExcel {
       }
     }
     console.timeEnd('Get subtotals coordinates');
-  };
-
-  /**
-   * creates a new object definition based
-   * on the old one and new metrics
-   *
-   * @param {Object} definition previous version of object definition
-   * @param {Object} newDefinition new object definition that will eventually be stored
-   * @param {Object[]} newMetrics array of metrics that will be
-   * either assigned or appended to newDefinition.metrics
-   *
-   * @returns {Object} object definition with new metrics
-   */
-  createNewDefinition = (definition, newDefinition, newMetrics) => {
-    const metricsToAssign = newDefinition
-      ? newDefinition.metrics.concat(newMetrics)
-      : newMetrics;
-    return {
-      ...definition,
-      metrics: metricsToAssign
-    };
   };
 }
 

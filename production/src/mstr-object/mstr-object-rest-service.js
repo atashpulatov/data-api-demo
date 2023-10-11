@@ -177,8 +177,7 @@ class MstrObjectRestService {
 
     let fetchedRows = 0;
     let offset = 0;
-    let shouldExtractMetricsInRows = true;
-    let metricsInRows = [];
+    const metricsInRows = [];
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -209,11 +208,10 @@ class MstrObjectRestService {
       const { current } = body.data.paging;
 
       const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
-        shouldExtractMetricsInRows, body, metricsInRows, fetchedBody
+        body, metricsInRows, fetchedBody
       );
 
-      shouldExtractMetricsInRows = metricsInRowsInfo.shouldExtractMetricsInRows;
-      metricsInRows = metricsInRowsInfo.metricsInRows;
+      metricsInRows.push(...metricsInRowsInfo.metricsInRows);
 
       fetchedRows = current + offset;
       body.attrforms = attrforms;

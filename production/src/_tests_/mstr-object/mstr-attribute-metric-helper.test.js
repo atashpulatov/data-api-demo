@@ -277,7 +277,6 @@ describe('MstrAttributeMetricHelper', () => {
 
     it('should return data when object conains metrics in rows', () => {
       // given
-      const shouldExtractMetricsInRows = true;
       const body = dossierWithMetricsInRows;
       const metricsInRows = [];
       const fetchedBody = dossierWithMetricsInRows;
@@ -328,13 +327,12 @@ describe('MstrAttributeMetricHelper', () => {
               },
             type: 'metric'
           }
-        ],
-        shouldExtractMetricsInRows: true
+        ]
       };
 
       // when
       const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
-        shouldExtractMetricsInRows, body, metricsInRows, fetchedBody
+        body, metricsInRows, fetchedBody
       );
 
       // then
@@ -343,20 +341,17 @@ describe('MstrAttributeMetricHelper', () => {
 
     it('should not return data when object does not conain metrics in rows', () => {
       // given
-      const shouldExtractMetricsInRows = true;
       const body = reportV2;
       const metricsInRows = [];
       const fetchedBody = reportV2;
       const expectedResponse = {
         metricsInRows: [],
         metricsRows: [],
-        shouldExtractMetricsInRows: true
-
       };
 
       // when
       const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
-        shouldExtractMetricsInRows, body, metricsInRows, fetchedBody
+        body, metricsInRows, fetchedBody
       );
 
       // then

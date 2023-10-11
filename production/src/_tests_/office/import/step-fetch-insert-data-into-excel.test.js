@@ -181,8 +181,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates').mockImplementation();
 
-      jest.spyOn(stepFetchInsertDataIntoExcel, 'createNewDefinition').mockImplementation();
-
       jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
       jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -221,8 +219,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
       );
 
       expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
-
-      expect(stepFetchInsertDataIntoExcel.createNewDefinition).not.toBeCalled();
 
       expect(mstrTableMock.subtotalsInfo.subtotalsAddresses).toEqual([]);
       expect(mstrTableMock.subtotalsInfo.importSubtotal).toEqual(resultImportSubtotal);
@@ -332,8 +328,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       jest.spyOn(stepFetchInsertDataIntoExcel, 'getSubtotalCoordinates').mockImplementation();
 
-      jest.spyOn(stepFetchInsertDataIntoExcel, 'createNewDefinition').mockImplementation();
-
       jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
       jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -399,7 +393,6 @@ describe('StepFetchInsertDataIntoExcel', () => {
       );
 
       expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
-      expect(stepFetchInsertDataIntoExcel.createNewDefinition).toBeCalledTimes(1);
 
       expect(mstrTableMock.subtotalsInfo.subtotalsAddresses).toEqual([]);
       expect(mstrTableMock.subtotalsInfo.importSubtotal).toEqual(resultImportSubtotal);
@@ -443,6 +436,18 @@ describe('StepFetchInsertDataIntoExcel', () => {
       expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
       expect(operationStepDispatcher.updateObject).toBeCalledWith({
         objectWorkingId: 'objectWorkingIdTest',
+        definition: {
+          metrics: [
+            {
+              id: 'testMetricId1',
+              name: 'testMetricName1',
+            },
+            {
+              id: 'testMetricId2',
+              name: 'testMetricName2',
+            },
+          ],
+        },
         subtotalsInfo: {
           subtotalsAddresses: [],
           importSubtotal: paramImportSubtotal,
@@ -472,20 +477,5 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       // then
       expect(subtotalsAddresses).toEqual(resultSubtotalsAddresses);
-    });
-
-  it.each`
-  definition | newDefinition | newMetrics | resultCreateNewDefinition
-  
-  ${{ name: 'testNameInDefinition' }}     | ${null}                                                                                                   | ${[{ id: 'testMetricId1', name: 'testMetricName1' }]}     | ${{ name: 'testNameInDefinition', metrics: [{ id: 'testMetricId1', name: 'testMetricName1' }] }}
-  ${{ name: 'testNameInDefinition' }}     | ${{ name: 'testNameInDefinition', metrics: [{ id: 'testMetricId1', name: 'testMetricName1' }] }}          | ${[{ id: 'testMetricId2', name: 'testMetricName2' }]}     | ${{ name: 'testNameInDefinition', metrics: [{ id: 'testMetricId1', name: 'testMetricName1' }, { id: 'testMetricId2', name: 'testMetricName2' }] }}
-  
-  `('createNewDefinition should work as expected',
-    ({ definition, newDefinition, newMetrics, resultCreateNewDefinition }) => {
-    // when
-      const result = stepFetchInsertDataIntoExcel.createNewDefinition(definition, newDefinition, newMetrics);
-
-      // then
-      expect(result).toEqual(resultCreateNewDefinition);
     });
 });
