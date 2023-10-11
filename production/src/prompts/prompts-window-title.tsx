@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+// @ts-ignore
 import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import { PromptWindowTitleTypes } from './prompts-window-title-types';
 
 import i18n from '../i18n';
 
@@ -13,7 +15,7 @@ import i18n from '../i18n';
  * @param {*} props component properties passed in.
  * @returns
  */
-const PromptsWindowTitleNotConnected = (props) => {
+const PromptsWindowTitleNotConnected = (props: PromptWindowTitleTypes) => {
   const [t] = useTranslation('common', { i18n });
   const {
     showLoading, showTitle, index, total, objectName,
@@ -43,7 +45,12 @@ PromptsWindowTitleNotConnected.defaultProps = {
   objectName: '',
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: {
+  repromptsQueueReducer: {
+    index: number;
+    total: number;
+  }
+}) => {
   const { repromptsQueueReducer } = state;
 
   return {
