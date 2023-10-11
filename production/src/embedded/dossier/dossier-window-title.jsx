@@ -6,8 +6,7 @@ import i18n from '../../i18n';
 /**
  * This component is used to display the title of the dossier's window when the user has triggered
  * multiple object re-prompting, single re-prompting or importing actions.
- * @param {*} param0
- * @returns
+ * @returns string customized text for the dossier's window title.
  */
 export const DossierWindowTitle = ({
   isReprompt, isEdit, index, total, dossierName,
