@@ -3,7 +3,7 @@ export const EXECUTE_NEXT_REPROMPT_TASK = 'EXECUTE_NEXT_REPROMPT_TASK';
 export const CLEAR_REPROMPT_TASKS = 'CLEAR_REPROMPT_TASKS';
 
 /**
- * This function is used to add a task to the reprompt queue to be executed later.
+ * Adds a task to the reprompt queue to be executed later.
  * @param {*} task
  * @returns
  */
@@ -12,7 +12,7 @@ export function addRepromptTask(task) {
 }
 
 /**
- * This function will dequeue and execute the task first in the reprompt queue.
+ * Dequeues and executes the task first in the reprompt queue.
  * @returns
  */
 export function executeNextRepromptTask() {
@@ -20,7 +20,7 @@ export function executeNextRepromptTask() {
 }
 
 /**
- * This function will clear the reprompt queue and reset the index and total.
+ * Clears the reprompt queue and resets the index and total.
  * @returns
  */
 export function clearRepromptTask() {

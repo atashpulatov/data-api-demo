@@ -147,6 +147,27 @@ class SidePanelService {
   };
 
   /**
+   * Creates a prompted task for the reprompt queue. Includes the callback to be executed.
+   * @param {*} bindId
+   * @param {*} mstrObjectType
+   * @returns JSON action object
+   */
+  createRepromptTask = (bindId, mstrObjectType) => ({
+    isPrompted: true,
+    callback: async () => {
+      const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+
+      // Based on the type of object, call the appropriate popup
+      const popupAction = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+        ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
+        : popupActions.callForReprompt({ bindId, mstrObjectType });
+
+      this.reduxStore.dispatch(popupAction);
+    },
+  });
+
+  /**
    * Handles the re-prompting of object.
    * GEts object data from reducer and opens popup depending of the type of object.
    *
@@ -167,20 +188,7 @@ class SidePanelService {
       // Proceed with reprompt only if object is prompted, otherwise only refresh object
       // if multiple objects are selected.
       if (isPrompted) {
-        dispatchTasks.push({
-          isPrompted: true,
-          callback: async () => {
-            const excelContext = await officeApiHelper.getExcelContext();
-            await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
-
-            // Based on the type of object, call the appropriate popup
-            const popupAction = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
-              ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
-              : popupActions.callForReprompt({ bindId, mstrObjectType });
-
-            this.reduxStore.dispatch(popupAction);
-          }
-        });
+        dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType));
       } else if (workingIds.length > 1) {
         // Handle the case when multiple objects are selected (refresh non-prompted reports)
         // You can implement this part if needed.
