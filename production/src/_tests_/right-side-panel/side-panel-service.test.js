@@ -237,7 +237,33 @@ describe('SidePanelService', () => {
     const clearRepromptTaskMockup = jest.spyOn(sidePanelService, 'clearRepromptTask').mockImplementation();
 
     // when
-    await sidePanelService.reprompt(objectWorkingId);
+    await sidePanelService.reprompt([objectWorkingId]);
+
+    // then
+    expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
+    expect(mockedDispatch).toBeCalled();
+    expect(clearRepromptTaskMockup).toBeCalled();
+  });
+
+  it('should refresh an object', async () => {
+    // given
+    const objectWorkingIds = [1, 1];
+    const mockObject = {
+      bindId: 1,
+      mstrObjectType: { name: 'report' },
+      isPrompted: false,
+    };
+
+    const mockedDispatch = jest
+      .spyOn(reduxStore, 'dispatch')
+      .mockImplementation();
+    const getObjectFromObjectReducerByObjectWorkingId = jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockImplementation(() => mockObject);
+    const clearRepromptTaskMockup = jest.spyOn(sidePanelService, 'clearRepromptTask').mockImplementation();
+
+    // when
+    await sidePanelService.reprompt(objectWorkingIds);
 
     // then
     expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();

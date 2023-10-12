@@ -174,14 +174,11 @@ class SidePanelService {
    * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
    */
   reprompt = async (objectWorkingIds) => {
-    // Validate multiple selection; if only one item is selected then create 1-element array
-    // Ensure objectWorkingIds is an array
-    const workingIds = Array.isArray(objectWorkingIds) ? objectWorkingIds : [objectWorkingIds];
-
     // Prepare dispatch actions
     const dispatchTasks = [];
 
-    workingIds.forEach(objectWorkingId => {
+    // Reprompt or refresh each object in the order of selection
+    objectWorkingIds.forEach(objectWorkingId => {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const { bindId, mstrObjectType, isPrompted } = objectData;
 
@@ -189,7 +186,7 @@ class SidePanelService {
       // if multiple objects are selected.
       if (isPrompted) {
         dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType));
-      } else if (workingIds.length > 1) {
+      } else if (objectWorkingIds.length > 1) {
         // Handle the case when multiple objects are selected (refresh non-prompted reports)
         // You can implement this part if needed.
         dispatchTasks.push({
