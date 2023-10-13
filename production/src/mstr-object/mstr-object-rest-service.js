@@ -3,7 +3,8 @@ import { errorMessages } from '../error/constants';
 import { OutsideOfRangeError } from '../error/outside-of-range-error';
 import officeConverterServiceV2 from '../office/office-converter-service-v2';
 import mstrObjectEnum from './mstr-object-type-enum';
-import MstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
+import mstrAttributeFormHelper from './helper/mstr-attribute-form-helper';
+import mstrAttributeMetricHelper from './helper/mstr-attribute-metric-helper';
 
 const reportObjectType = mstrObjectEnum.mstrObjectType.report;
 
@@ -176,8 +177,7 @@ class MstrObjectRestService {
 
     let fetchedRows = 0;
     let offset = 0;
-    let shouldExtractMetricsInRows = true;
-    let metricsInRows = [];
+    const metricsInRows = [];
     const fullPath = getFullPath({
       dossierData,
       envUrl,
@@ -206,13 +206,12 @@ class MstrObjectRestService {
       const body = officeConverterServiceV2.convertCellValuesToExcelStandard(fetchedBody);
 
       const { current } = body.data.paging;
-      if (MstrAttributeMetricHelper.isMetricInRows(body) && shouldExtractMetricsInRows) {
-        metricsInRows = MstrAttributeMetricHelper.getMetricsInRows(
-          body,
-          metricsInRows
-        );
-        shouldExtractMetricsInRows = !!metricsInRows.length;
-      }
+
+      const metricsInRowsInfo = mstrAttributeMetricHelper.getMetricsInRowsInfo(
+        body, metricsInRows, fetchedBody
+      );
+
+      metricsInRows.push(...metricsInRowsInfo.metricsInRows);
 
       fetchedRows = current + offset;
       body.attrforms = attrforms;
@@ -239,7 +238,8 @@ class MstrObjectRestService {
         row,
         header,
         subtotalAddress: isCrosstab ? crosstabSubtotal : rowTotals,
-        metricsInRows
+        metricsInRows,
+        rowsInformation: mstrAttributeFormHelper.splitAttributeForms(metricsInRowsInfo.metricsRows, attrforms)
       };
     }
   }

@@ -9,6 +9,7 @@ describe('StepApplyFormatting', () => {
   });
 
   const excelContextSyncMock = jest.fn();
+  const excelContext = { sync: excelContextSyncMock };
 
   it('applyFormatting should log exceptions', async () => {
     // given
@@ -45,9 +46,11 @@ describe('StepApplyFormatting', () => {
       objectWorkingId: 'objectWorkingIdTest',
       excelContext: { sync: excelContextSyncMock },
       instanceDefinition: {
+        columns: 'instanceColumnsTest',
         mstrTable: {
           columnInformation: 'columnInformationTest',
           isCrosstab: 'isCrosstabTest',
+          metricsInRows: 'metricsInRowsTest'
         }
       },
       officeTable: { columns: 'columnsTest' },
@@ -80,7 +83,9 @@ describe('StepApplyFormatting', () => {
       'isCrosstabTest',
       'calculateOffsetTest',
       { columns: 'columnsTest' },
-      { sync: excelContextSyncMock }
+      { sync: excelContextSyncMock },
+      'instanceColumnsTest',
+      'metricsInRowsTest'
     );
 
     expect(excelContextSyncMock).toBeCalledTimes(2);
@@ -143,7 +148,7 @@ describe('StepApplyFormatting', () => {
     jest.spyOn(stepApplyFormatting, 'getColumnRangeForFormatting').mockImplementation();
 
     // when
-    stepApplyFormatting.setupFormatting([], undefined, undefined, undefined);
+    stepApplyFormatting.setupFormatting([], undefined, undefined, undefined, excelContext);
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).not.toBeCalled();
@@ -159,7 +164,7 @@ describe('StepApplyFormatting', () => {
     const filteredColumnInformation = [{ isAttribute: true }];
 
     // when
-    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest', excelContext, 'instanceColumnsTest', 'metricsInRowsTest');
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(1);
@@ -168,6 +173,8 @@ describe('StepApplyFormatting', () => {
       'isCrosstabTest',
       'offsetTest',
       'officeTableTest',
+      'instanceColumnsTest',
+      'metricsInRowsTest'
     );
 
     expect(stepApplyFormatting.getFormat).not.toBeCalled();
@@ -185,7 +192,7 @@ describe('StepApplyFormatting', () => {
     const filteredColumnInformation = [{ isAttribute: false }];
 
     // when
-    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest', excelContext, 'instanceColumnsTest', 'metricsInRowsTest');
 
     // then
     expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(1);
@@ -194,6 +201,8 @@ describe('StepApplyFormatting', () => {
       'isCrosstabTest',
       'offsetTest',
       'officeTableTest',
+      'instanceColumnsTest',
+      'metricsInRowsTest'
     );
 
     expect(stepApplyFormatting.getFormat).toBeCalledTimes(1);
@@ -212,7 +221,7 @@ describe('StepApplyFormatting', () => {
     const filteredColumnInformation = [{ isAttribute: true }];
 
     // when
-    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+    stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest', excelContext);
 
     // then
     expect(officeFormatHyperlinks.formatColumnAsHyperlinks).toBeCalledTimes(1);
@@ -241,7 +250,7 @@ describe('StepApplyFormatting', () => {
       });
 
       // when
-      await stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest');
+      await stepApplyFormatting.setupFormatting(filteredColumnInformation, 'isCrosstabTest', 'offsetTest', 'officeTableTest', excelContext, 'instanceColumnsTest', 'metricsInRowsTest');
 
       // then
       expect(stepApplyFormatting.getColumnRangeForFormatting).toBeCalledTimes(2);
@@ -251,6 +260,8 @@ describe('StepApplyFormatting', () => {
         'isCrosstabTest',
         'offsetTest',
         'officeTableTest',
+        'instanceColumnsTest',
+        'metricsInRowsTest'
       );
       expect(stepApplyFormatting.getColumnRangeForFormatting).toHaveBeenNthCalledWith(
         2,
@@ -258,6 +269,8 @@ describe('StepApplyFormatting', () => {
         'isCrosstabTest',
         'offsetTest',
         'officeTableTest',
+        'instanceColumnsTest',
+        'metricsInRowsTest'
       );
 
       expect(stepApplyFormatting.getFormat).toBeCalledTimes(getFormatCallNo);

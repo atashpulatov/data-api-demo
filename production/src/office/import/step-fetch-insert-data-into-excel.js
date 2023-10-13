@@ -49,11 +49,12 @@ class StepFetchInsertDataIntoExcel {
       const contextPromises = [];
       const subtotalsAddresses = [];
       let newDefinition = null;
+      let newInstance = null;
 
       console.time('Fetch and insert into excel');
       console.time('Fetch data');
       for await (const {
-        row, header, subtotalAddress, metricsInRows
+        row, header, subtotalAddress, metricsInRows, rowsInformation
       } of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
         console.timeEnd('Fetch data');
@@ -77,7 +78,18 @@ class StepFetchInsertDataIntoExcel {
         }
 
         if (metricsInRows.length) {
-          newDefinition = this.createNewDefinition(definition, newDefinition, metricsInRows);
+          const columnInformation = newInstance?.mstrTable?.columnInformation || [];
+          newDefinition = {
+            ...definition,
+            metrics: metricsInRows
+          };
+          newInstance = {
+            ...instanceDefinition, mstrTable: {
+              ...mstrTable,
+              metricsInRows,
+              columnInformation: [...columnInformation, ...rowsInformation]
+            }
+          };
         }
 
         rowIndex += row.length;
@@ -95,7 +107,7 @@ class StepFetchInsertDataIntoExcel {
       mstrTable.subtotalsInfo.importSubtotal = importSubtotal;
       const updatedOperation = {
         objectWorkingId,
-        instanceDefinition,
+        instanceDefinition: newInstance || instanceDefinition,
       };
 
       const updatedObject = {
@@ -128,27 +140,6 @@ class StepFetchInsertDataIntoExcel {
       }
     }
     console.timeEnd('Get subtotals coordinates');
-  };
-
-  /**
-   * creates a new object definition based
-   * on the old one and new metrics
-   *
-   * @param {Object} definition previous version of object definition
-   * @param {Object} newDefinition new object definition that will eventually be stored
-   * @param {Object[]} newMetrics array of metrics that will be
-   * either assigned or appended to newDefinition.metrics
-   *
-   * @returns {Object} object definition with new metrics
-   */
-  createNewDefinition = (definition, newDefinition, newMetrics) => {
-    const metricsToAssign = newDefinition
-      ? newDefinition.metrics.concat(newMetrics)
-      : newMetrics;
-    return {
-      ...definition,
-      metrics: metricsToAssign
-    };
   };
 }
 
