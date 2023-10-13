@@ -34,7 +34,7 @@ class OfficeStoreRestoreObject {
    */
   restoreAnswersFromIndexDB = async () => {
     const answers = await getPromptAnswersFromIndexDB(officeProperties.storedAnswers) || [];
-    answers && this.reduxStore.dispatch(restoreAllAnswers(answers));
+    answers.length > 0 && this.reduxStore.dispatch(restoreAllAnswers(answers));
   };
 
   /**

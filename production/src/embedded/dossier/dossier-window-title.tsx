@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 import { DossiertWindowTitleTypes } from './dossier-window-title-types';
@@ -36,14 +35,6 @@ export const DossierWindowTitle = (props: DossiertWindowTitleTypes) => {
       {dossierTitle}
     </h1>
   );
-};
-
-DossierWindowTitle.propTypes = {
-  index: PropTypes.number,
-  total: PropTypes.number,
-  dossierName: PropTypes.string,
-  isReprompt: PropTypes.bool,
-  isEdit: PropTypes.bool,
 };
 
 DossierWindowTitle.defaultProps = {

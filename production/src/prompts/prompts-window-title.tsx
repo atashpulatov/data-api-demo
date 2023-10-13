@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 // @ts-ignore
 import { Empty } from '@mstr/connector-components/lib/empty/empty';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { PromptWindowTitleTypes } from './prompts-window-title-types';
 
@@ -27,14 +26,6 @@ const PromptsWindowTitleNotConnected = (props: PromptWindowTitleTypes) => {
       {showLoading && <div style={{ height: showTitle ? '85vh' : '100vh' }}><Empty isLoading /></div>}
     </>
   );
-};
-
-PromptsWindowTitleNotConnected.propTypes = {
-  showLoading: PropTypes.bool,
-  showTitle: PropTypes.bool,
-  index: PropTypes.number,
-  total: PropTypes.number,
-  objectName: PropTypes.string,
 };
 
 PromptsWindowTitleNotConnected.defaultProps = {
