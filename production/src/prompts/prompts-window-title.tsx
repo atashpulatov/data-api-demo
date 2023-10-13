@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// @ts-ignore
-import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import { useTranslation } from 'react-i18next';
 import { PromptWindowTitleTypes } from './prompts-window-title-types';
 
@@ -17,19 +15,21 @@ import i18n from '../i18n';
 const PromptsWindowTitleNotConnected = (props: PromptWindowTitleTypes) => {
   const [t] = useTranslation('common', { i18n });
   const {
-    showLoading, showTitle, index, total, objectName,
+    showTitle, index, total, objectName,
   } = props;
 
   return (
     <>
-      {showTitle && <h3 className="dialog-header-title">{t('Reprompt')} {index}/{total} &gt; {objectName}</h3>}
-      {showLoading && <div style={{ height: showTitle ? '85vh' : '100vh' }}><Empty isLoading /></div>}
+      {showTitle && (
+        <div className="title-bar">
+          <span>{t('Reprompt')} {index}/{total} &gt; {objectName}</span>
+        </div>
+      )}
     </>
   );
 };
 
 PromptsWindowTitleNotConnected.defaultProps = {
-  showLoading: true,
   showTitle: false,
   index: 0,
   total: 0,

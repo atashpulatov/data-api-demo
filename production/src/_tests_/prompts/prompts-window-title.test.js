@@ -15,7 +15,7 @@ describe('PromptsWindowTitleNotConnected', () => {
 
   it('should not render with props given', () => {
     // given showLoading, showTitle, index, total, objectName,
-    const props = { showLoading: false, showTitle: false, index: 0, total: 0, objectName: 'objectName', };
+    const props = { showTitle: false, index: 0, total: 0, objectName: 'objectName', };
     // when
     const { container } = render(<Provider store={reduxStore}>
       <PromptsWindowTitle {...props} />
@@ -24,20 +24,9 @@ describe('PromptsWindowTitleNotConnected', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('should render loading data with props given', () => {
-    // given showLoading, showTitle, index, total, objectName,
-    const props = { showLoading: true, showTitle: false, index: 0, total: 0, objectName: 'objectName', };
-    // when
-    const { getByText } = render(<Provider store={reduxStore}>
-      <PromptsWindowTitle {...props} />
-    </Provider>);
-    // then
-    expect(getByText('Loading Data')).toBeDefined();
-  });
-
   it('should render reprompt title with props given', () => {
     // given showLoading, showTitle, index, total, objectName,
-    const props = { showLoading: false, showTitle: true, index: 0, total: 0, objectName: 'objectName', };
+    const props = { showTitle: true, index: 0, total: 0, objectName: 'objectName', };
     // when
     const { getByText } = render(<Provider store={reduxStore}>
       <PromptsWindowTitle {...props} />

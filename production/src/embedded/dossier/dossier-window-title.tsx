@@ -28,12 +28,9 @@ export const DossierWindowTitle = (props: DossiertWindowTitleTypes) => {
   }
 
   return (
-    <h1
-      title={dossierTitle}
-      className="folder-browser-title dossier-title-margin-top"
-    >
-      {dossierTitle}
-    </h1>
+    <div className="title-bar">
+      <span>{dossierTitle}</span>
+    </div>
   );
 };
 

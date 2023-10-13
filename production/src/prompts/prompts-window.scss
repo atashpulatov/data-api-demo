@@ -1,7 +1,31 @@
+.prompts-window {
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+  min-width: 100%;    
+  overflow-x: auto;
+}
 
-.dialog-header-title {
+.prompts-window .title-bar {
+  min-width: 500px;
   margin: 15px;
+}
+
+.prompts-window .title-bar>span {
   font-size: 18px;
   color: #333333;
   font-weight: 500;
+}
+
+.prompts-iframe {
+  border-top: 1px solid #EBEBEB;
+}
+
+#popup-wrapper .prompts-window .empty  {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }

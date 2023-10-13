@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
@@ -334,14 +335,12 @@ export const PromptsWindowNotConnected = (props) => {
   const editedObjectName = editedObject.chosenObjectName;
 
   return (
-    <div
-      style={{ position: 'relative' }}
-    >
+    <div className="prompts-window">
       <PromptsWindowTitle
-        showLoading={isPromptLoading}
         showTitle={showRepromptTitle}
         objectName={editedObjectName}
       />
+      <Empty isLoading />
       <PromptsContainer
         postMount={onPromptsContainerMount}
       />

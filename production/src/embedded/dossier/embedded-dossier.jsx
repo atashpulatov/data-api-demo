@@ -35,7 +35,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     this.onEmbeddedError = this.onEmbeddedError.bind(this);
     this.retryCounter = 0;
     this.embeddedDossier = null;
-    this.state = { loadingFrame: true };
 
     this.hasBeenMounted = false;
   }
@@ -310,7 +309,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       }
 
       if (this.hasBeenMounted) {
-        this.setState({ loadingFrame: false });
         handleEmbeddedDossierLoad();
       }
     } else {
@@ -386,19 +384,15 @@ export default class EmbeddedDossierNotConnected extends React.Component {
   }
 
   render() {
-    const { loadingFrame } = this.state;
     return (
       /*
       Height needs to be passed for container because without it, embedded api will set default height: 600px;
       We need to calculate actual height, regarding the size of other elements:
       58px for header, 19px for header and title margin and 68px for buttons.
       */
-      <>
-        {loadingFrame && <Empty isLoading />}
-        <div
-          ref={this.container}
-          className="dossier-iframe" />
-      </>
+      <div
+        ref={this.container}
+        className="dossier-iframe" />
     );
   }
 }
