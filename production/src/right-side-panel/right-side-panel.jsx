@@ -188,7 +188,7 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     popupData,
     isPopupRendered: popupOpen,
-    toggleCurtain: state.repromptsQueueReducer.repromptsQueue.length > 0,
+    toggleCurtain: state.repromptsQueueReducer?.repromptsQueue?.length > 0,
   };
 };
 

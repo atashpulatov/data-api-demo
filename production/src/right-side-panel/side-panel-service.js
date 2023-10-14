@@ -191,7 +191,7 @@ class SidePanelService {
         // You can implement this part if needed.
         dispatchTasks.push({
           isPrompted: false,
-          callback: async () => { setTimeout(() => this.refresh([objectWorkingId]), 10); }
+          callback: () => setTimeout(() => this.refresh([objectWorkingId]), 10),
         });
       }
     });

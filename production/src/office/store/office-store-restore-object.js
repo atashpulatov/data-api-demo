@@ -30,7 +30,7 @@ class OfficeStoreRestoreObject {
 
   /**
    * Retrieves information about prompts answers imported in previous versions.
-   * It fetches the information from Office Settings and stores it in Redux.
+   * It fetches the information from IndexedDB (Dexie) and stores it in Redux store.
    */
   restoreAnswersFromIndexDB = async () => {
     const answers = await getPromptAnswersFromIndexDB(officeProperties.storedAnswers) || [];

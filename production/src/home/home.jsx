@@ -35,20 +35,6 @@ export const HomeNotConnected = (props) => {
     }
   };
 
-  const initializeHome = useCallback(async () => {
-    try {
-      officeStoreRestoreObject.restoreObjectsFromExcelStore();
-      await officeStoreRestoreObject.restoreAnswersFromIndexDB();
-      homeHelper.saveLoginValues();
-      homeHelper.getTokenFromStorage();
-      hidePopup(); // hide error popup if visible
-      toggleIsSettingsFlag(false); // hide settings menu if visible
-      sessionActions.disableLoading();
-    } catch (error) {
-      console.error(error);
-    }
-  }, [hidePopup, toggleIsSettingsFlag]);
-
   useEffect(() => {
     window.addEventListener('online', handleConnectionRestored);
     window.addEventListener('offline', handleConnectionLost);
@@ -69,8 +55,21 @@ export const HomeNotConnected = (props) => {
   });
 
   useEffect(() => {
+    async function initializeHome() {
+      try {
+        officeStoreRestoreObject.restoreObjectsFromExcelStore();
+        await officeStoreRestoreObject.restoreAnswersFromIndexDB();
+        homeHelper.saveLoginValues();
+        homeHelper.getTokenFromStorage();
+        hidePopup(); // hide error popup if visible
+        toggleIsSettingsFlag(false); // hide settings menu if visible
+        sessionActions.disableLoading();
+      } catch (error) {
+        console.error(error);
+      }
+    }
     initializeHome();
-  }, [initializeHome]);
+  }, [hidePopup, toggleIsSettingsFlag]);
 
   useEffect(() => {
     getUserData(authToken);

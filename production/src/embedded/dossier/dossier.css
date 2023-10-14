@@ -35,7 +35,7 @@
 #popup-wrapper .dossier-window .empty  {
   position: fixed;
   left: 0;
-  top: 0;
+  top: 57px;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 125px);
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { PromptWindowTitleTypes } from './prompts-window-title-types';
@@ -12,11 +12,10 @@ import i18n from '../i18n';
  * @param {*} props component properties passed in.
  * @returns
  */
-const PromptsWindowTitleNotConnected = (props: PromptWindowTitleTypes) => {
+const PromptsWindowTitleNotConnected: FC<PromptWindowTitleTypes> = ({
+  showTitle, index, total, objectName
+}) => {
   const [t] = useTranslation('common', { i18n });
-  const {
-    showTitle, index, total, objectName,
-  } = props;
 
   return (
     <>
@@ -27,13 +26,6 @@ const PromptsWindowTitleNotConnected = (props: PromptWindowTitleTypes) => {
       )}
     </>
   );
-};
-
-PromptsWindowTitleNotConnected.defaultProps = {
-  showTitle: false,
-  index: 0,
-  total: 0,
-  objectName: '',
 };
 
 const mapStateToProps = (state: {

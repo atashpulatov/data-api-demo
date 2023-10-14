@@ -1,4 +1,4 @@
-export interface DossiertWindowTitleTypes {
+export interface DossierWindowTitleTypes {
   isReprompt: boolean,
   isEdit: boolean,
   index: number,

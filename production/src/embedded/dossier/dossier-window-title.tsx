@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
-import { DossiertWindowTitleTypes } from './dossier-window-title-types';
+import { DossierWindowTitleTypes } from './dossier-window-title-types';
 
 /**
  * This component is used to display the title of the dossier's window when the user has triggered
  * multiple object re-prompting, single re-prompting or importing actions.
  * @returns string customized text for the dossier's window title.
  */
-export const DossierWindowTitle = (props: DossiertWindowTitleTypes) => {
+export const DossierWindowTitle: FC<DossierWindowTitleTypes> = ({
+  isReprompt, isEdit, index, total, dossierName,
+}) => {
   const [t] = useTranslation('common', { i18n });
-  const {
-    isReprompt, isEdit, index, total, dossierName,
-  } = props;
 
   const showMultipleRepromptMessage = isReprompt && !isEdit && total > 1;
   const showSingleRepromptMessage = isReprompt && !isEdit && total === 1;
@@ -32,12 +31,4 @@ export const DossierWindowTitle = (props: DossiertWindowTitleTypes) => {
       <span>{dossierTitle}</span>
     </div>
   );
-};
-
-DossierWindowTitle.defaultProps = {
-  isReprompt: false,
-  isEdit: false,
-  index: 0,
-  total: 0,
-  dossierName: '',
 };
