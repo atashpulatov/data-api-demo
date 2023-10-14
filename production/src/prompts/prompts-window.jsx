@@ -19,7 +19,7 @@ import { popupHelper } from '../popup/popup-helper';
 import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
+import { prepareGivenPromptAnswers, preparePromptedReport, mergeAnswersWithPromptsDefined } from '../helpers/prompts-handling-helper';
 import { PromptsWindowTitle } from './prompts-window-title';
 
 const { microstrategy } = window;
@@ -126,27 +126,6 @@ export const PromptsWindowNotConnected = (props) => {
     editedObject.subtotalsInfo, editedObject.displayAttrFormNames]);
 
   /**
-   * Append the server's version of the answers to the promptsAnswers object.
-   * This version of answers will be used to invoke the REST API endpoint when
-   * importing or re-prompting a report/dossier.
-   * @param {*} currentAnswers
-   * @param {*} promptsAnsDef
-   */
-  function updateAnswersWithPrompts(currentAnswers, promptsAnsDef) {
-    const answerDefMap = new Map(promptsAnsDef.map(prompt => [prompt.key, prompt]));
-
-    currentAnswers.forEach(currentAnswer => {
-      const { answers } = currentAnswer;
-      answers.forEach(answer => {
-        const answerDef = answerDefMap.get(answer.key);
-
-        answerDef?.answers && (answer.answers = answerDef.answers);
-        answerDef?.type && (answer.type = answerDef.type);
-      });
-    });
-  }
-
-  /**
    *
    * @param {*} promptObjs
    * @param {*} previousAnswers
@@ -242,24 +221,20 @@ export const PromptsWindowNotConnected = (props) => {
             isReprompt
           };
 
-          // Get the answers applied to the current dossier's instance from the server.
-          // Need to incorporate these answers because they're formatted differently than the ones
-          // returned by the Embedded API. The REST API endpoint expects the answers to be in a
-          // different format than the Embedded API.
-          const promptsAnsDef = await mstrObjectRestService
-            .getObjectPrompts(objectId, projectId, dossierData.instanceId, true);
-
-          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
-          deleteDossierInstance(projectId, objectId, instanceId);
-
+          // Remove event handlers first.
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
+          // Get the new answers from the prompts dialog.
           const currentAnswers = [...newPromptsAnswers.current];
 
           // Update answers based on promptsAnsDef to insert JSON answers from server
-          // this JSON structure is expected by the REST API endpoint
-          updateAnswersWithPrompts(currentAnswers, promptsAnsDef);
+          // this JSON structure is expected by the REST API endpoint; answers are deeper in the structure
+          // than Dossiers.
+          await mergeAnswersWithPromptsDefined(objectId, projectId, dossierData.instanceId, currentAnswers);
+
+          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
+          deleteDossierInstance(projectId, objectId, instanceId);
 
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
           promptsAnswered({ dossierData, promptsAnswers: currentAnswers });

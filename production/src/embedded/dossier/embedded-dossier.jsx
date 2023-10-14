@@ -10,7 +10,7 @@ import scriptInjectionHelper from '../utils/script-injection-helper';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './dossier.css';
 
-import { prepareGivenPromptAnswers, preparePromptedDossier } from '../../helpers/prompts-handling-helper';
+import { prepareGivenPromptAnswers, preparePromptedDossier, mergeAnswersWithPromptsDefined } from '../../helpers/prompts-handling-helper';
 
 const { microstrategy, Office } = window;
 
@@ -357,19 +357,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const tempAnswers = this.dossierData.promptsAnswers?.answers ? this.dossierData.promptsAnswers.answers : [];
     promptsAnswers.answers = [...tempAnswers, ...promptsAnswers.answers];
 
-    // Get the answers applied to the current dossier's instance from the server.
-    // Need to incorporate these answers because they're formatted differently than the ones
-    // returned by the Embedded API. The REST API endpoint expects the answers to be in a
-    // different format than the Embedded API.
-    const promptsAnsDef = await mstrObjectRestService.getObjectPrompts(mstrData.dossierId, mstrData.projectId, this.dossierData.instanceId, true);
-
-    // Append the server's version of the answers to the promptsAnswers object.
-    // This version of answers will be used to invoke the REST API endpoint when
-    // importing or re-prompting a report/dossier.
-    promptsAnsDef && promptsAnswers?.answers?.forEach((answer) => {
-      const answerDef = promptsAnsDef.find((prompt) => prompt.key === answer.key);
-      answerDef && (answer.answers = answerDef.answers) && (answer.type = answerDef.type);
-    });
+    // Proceed with merging answers with prompts defined if there are prompts to answer.
+    await mergeAnswersWithPromptsDefined(mstrData.dossierId, mstrData.projectId, this.dossierData.instanceId, promptsAnswers.answers, false);
 
     this.dossierData.promptsAnswers = promptsAnswers;
     handlePromptAnswer(promptsAnswers);

@@ -143,3 +143,62 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
 
   return dossierInstanceDefinition;
 }
+
+/**
+ * Append the server's version of the answers to the promptsAnswers object.
+ * This version of answers will be used to invoke the REST API endpoint when
+ * importing or re-prompting a report/dossier.
+ * @param {*} currentAnswers
+ * @param {*} promptsAnsDef
+ * @param {*} bDeepAnswers - if true, will update answers for nested answers.
+*/
+function updateAnswersWithPrompts(currentAnswers, promptsAnsDef, bDeepAnswers) {
+  const answerDefMap = new Map(promptsAnsDef.map(prompt => [prompt.key, prompt]));
+
+  // Function to update answers with answers and types from server
+  const processAnswers = (answers) => {
+    answers.forEach(answer => {
+      const answerDef = answerDefMap.get(answer.key);
+
+      answerDef?.answers && (answer.answers = answerDef.answers);
+      answerDef?.type && (answer.type = answerDef.type);
+    });
+  };
+
+  if (bDeepAnswers) { // Reports
+    currentAnswers.forEach(currentAnswer => {
+      const { answers } = currentAnswer;
+      processAnswers(answers);
+    });
+  } else { // Dossiers
+    processAnswers(currentAnswers);
+  }
+}
+
+/**
+ * Merges the answers from the server with the answers from the Embedded API.
+ * Dossiers and Reports have different ways to structure the answers; hence, the need
+ * to use flag to indicate whether the answers are deep (Reports) or not (Dossiers).
+ * @param {*} objectId
+ * @param {*} projectId
+ * @param {*} instanceId
+ * @param {*} currentAnswers - reference to object with answers to be updated
+ * @param {*} bDeepAnswers - if true, will update answers for nested answers.
+ */
+export async function mergeAnswersWithPromptsDefined(objectId, projectId, instanceId,
+  currentAnswers, bDeepAnswers = true) {
+  // Do nothing if there are no answers to be updated
+  if (currentAnswers.length === 0) {
+    return;
+  }
+
+  // Get the answers applied to the current dossier's instance from the server.
+  // Need to incorporate these answers because they're formatted differently than the ones
+  // returned by the Embedded API. The REST API endpoint expects the answers to be in a
+  // different format than the Embedded API.
+  const promptsAnsDef = await mstrObjectRestService.getObjectPrompts(objectId, projectId, instanceId, true);
+
+  // Update answers based on promptsAnsDef to insert JSON answers from server
+  // this JSON structure is expected by the REST API endpoint
+  promptsAnsDef?.length > 0 && updateAnswersWithPrompts(currentAnswers, promptsAnsDef, bDeepAnswers);
+}
