@@ -145,33 +145,37 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
 }
 
 /**
+ * Updates answers with answers and types from server definition.
+ * @param {} answers
+ * @param {*} answerDefMap
+ */
+function addDefDataToAnswers(answers, answerDefMap) {
+  answers.forEach(answer => {
+    const answerDef = answerDefMap.get(answer.key);
+
+    answerDef?.answers && (answer.answers = answerDef.answers);
+    answerDef?.type && (answer.type = answerDef.type);
+  });
+}
+
+/**
  * Append the server's version of the answers to the promptsAnswers object.
  * This version of answers will be used to invoke the REST API endpoint when
  * importing or re-prompting a report/dossier.
- * @param {*} currentAnswers
+ * @param {*} currentAnswers - An array of answers to be updated, passed in as reference object
  * @param {*} promptsAnsDef
- * @param {*} bDeepAnswers - if true, will update answers for nested answers.
+ * @param {*} areReportAnswers - if true, will update answers for nested answers.
 */
-function updateAnswersWithPrompts(currentAnswers, promptsAnsDef, bDeepAnswers) {
+function updateAnswersWithPromptsDef(currentAnswers, promptsAnsDef, areReportAnswers) {
   const answerDefMap = new Map(promptsAnsDef.map(prompt => [prompt.key, prompt]));
 
-  // Function to update answers with answers and types from server
-  const processAnswers = (answers) => {
-    answers.forEach(answer => {
-      const answerDef = answerDefMap.get(answer.key);
-
-      answerDef?.answers && (answer.answers = answerDef.answers);
-      answerDef?.type && (answer.type = answerDef.type);
-    });
-  };
-
-  if (bDeepAnswers) { // Reports
+  if (areReportAnswers) { // Reports, one level deep down
     currentAnswers.forEach(currentAnswer => {
       const { answers } = currentAnswer;
-      processAnswers(answers);
+      addDefDataToAnswers(answers, answerDefMap);
     });
   } else { // Dossiers
-    processAnswers(currentAnswers);
+    addDefDataToAnswers(currentAnswers, answerDefMap);
   }
 }
 
@@ -182,13 +186,13 @@ function updateAnswersWithPrompts(currentAnswers, promptsAnsDef, bDeepAnswers) {
  * @param {*} objectId
  * @param {*} projectId
  * @param {*} instanceId
- * @param {*} currentAnswers - reference to object with answers to be updated
- * @param {*} bDeepAnswers - if true, will update answers for nested answers.
+ * @param {*} currentAnswers - reference to array with answers to be updated
+ * @param {*} areReportAnswers - if true, will process Report's JSON structure for answers.
  */
 export async function mergeAnswersWithPromptsDefined(objectId, projectId, instanceId,
-  currentAnswers, bDeepAnswers = true) {
+  currentAnswers, areReportAnswers = true) {
   // Do nothing if there are no answers to be updated
-  if (currentAnswers.length === 0) {
+  if (currentAnswers?.length === 0) {
     return;
   }
 
@@ -200,5 +204,5 @@ export async function mergeAnswersWithPromptsDefined(objectId, projectId, instan
 
   // Update answers based on promptsAnsDef to insert JSON answers from server
   // this JSON structure is expected by the REST API endpoint
-  promptsAnsDef?.length > 0 && updateAnswersWithPrompts(currentAnswers, promptsAnsDef, bDeepAnswers);
+  promptsAnsDef?.length > 0 && updateAnswersWithPromptsDef(currentAnswers, promptsAnsDef, areReportAnswers);
 }
