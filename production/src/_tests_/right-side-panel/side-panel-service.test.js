@@ -217,6 +217,39 @@ describe('SidePanelService', () => {
   it.each`
     objectType
     ${'report'}
+    ${'visualization'}
+  `('createRepromptTask should return an object containing a callback, which when called, will properly call officeApi helpers and dispatch an action', async ({ objectType }) => {
+    // given
+    const objectWorkingId = 1;
+    const mockObject = {
+      bindId: 1,
+      mstrObjectType: { name: objectType },
+    };
+
+    const mockedGetExcelContext = jest
+      .spyOn(officeApiHelper, 'getExcelContext')
+      .mockImplementation();
+    const mockedisSheetProtected = jest
+      .spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected')
+      .mockImplementation();
+    const mockedDispatch = jest
+      .spyOn(reduxStore, 'dispatch')
+      .mockImplementation();
+
+    // when
+    const { isPrompted, callback } = sidePanelService.createRepromptTask(objectWorkingId, mockObject.mstrObjectType);
+    await callback();
+
+    // then
+    expect(isPrompted).toBeTruthy();
+    expect(mockedGetExcelContext).toBeCalled();
+    expect(mockedisSheetProtected).toBeCalled();
+    expect(mockedDispatch).toBeCalled();
+  });
+
+  it.each`
+    objectType
+    ${'report'}
     ${'dataset'}
     ${'visualization'}
   `('should reprompt an object', async ({ objectType }) => {
@@ -314,7 +347,7 @@ describe('SidePanelService', () => {
       .spyOn(reduxStore, 'dispatch')
       .mockImplementation();
     // when
-    await sidePanelService.toggleSettingsPanel(true);
+    sidePanelService.toggleSettingsPanel(true);
     // then
     expect(mockedDispatch).toBeCalled();
   });
