@@ -18,7 +18,9 @@ import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reduc
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { ItemType, LibraryWindowProps } from './library-window-types';
 
-const { isPrompted, getCubeInfo, getObjectInfo } = mstrObjectRestService;
+const {
+  isPrompted, getCubeInfo, getObjectInfo, createDossierInstance, deleteDossierInstance, getObjectPrompts,
+} = mstrObjectRestService;
 
 export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   const [isPublished, setIsPublished] = useState(true);
@@ -101,25 +103,37 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    * Imports the object selected by the user
    */
   const handleOk = async () => {
-    let isPromptedResponse = {};
+    let promptedResponse = {};
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
-      if (
-        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report
-        || chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
-      ) {
-        isPromptedResponse = await isPrompted(
+      if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report) {
+        promptedResponse = await isPrompted(
           chosenObjectId,
           chosenProjectId,
           chosenMstrObjectType.name
         );
+      } else if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier) {
+        const instance = await createDossierInstance(chosenProjectId, chosenObjectId, {});
+
+        const prompts = instance.status !== 2 ? [] : await getObjectPrompts(
+          chosenObjectId,
+          chosenProjectId,
+          instance.mid,
+        );
+
+        promptedResponse = {
+          promptObjects: prompts,
+          isPrompted: prompts?.length > 0,
+        };
+
+        await deleteDossierInstance(chosenProjectId, chosenObjectId, instance.mid);
       }
       if (
         chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
       ) {
-        requestDossierOpen(isPromptedResponse);
+        requestDossierOpen(promptedResponse);
       } else {
-        requestImport(isPromptedResponse);
+        requestImport(promptedResponse);
       }
     } catch (e) {
       popupHelper.handlePopupErrors(e);

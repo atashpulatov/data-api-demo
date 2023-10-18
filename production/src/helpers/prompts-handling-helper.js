@@ -52,12 +52,13 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
       projectId,
       instanceId: currentInstanceDefinition.mid,
       promptsAnswers: promptsAnswers[count] ? promptsAnswers[count] : { answers: [] },
+      bIncludeIgnoreRequiredPrompts: true,
     };
 
     // Applying prompt answers to current instead of forcing the instance to execute the prompts.
     // as indicated in:
     // https://microstrategy.github.io/rest-api-docs/common-workflows/analytics/use-prompts-objects/answer-prompts/#nested-prompts
-    await mstrObjectRestService.updateDossierPrompts(config);
+    count > 0 ? await mstrObjectRestService.applyDossierPrompts(config) : await mstrObjectRestService.updateDossierPrompts(config);
 
     let dossierStatusResponse = await mstrObjectRestService
       .getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);
@@ -125,7 +126,7 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
   let dossierInstanceDefinition = await mstrObjectRestService
     .createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
 
-  if (promptsAnswers && dossierInstanceDefinition.status === 2) {
+  if (promptsAnswers?.length > 0 && dossierInstanceDefinition.status === 2) {
     // Reflect saved answers to the prompts of the Dossier's instance if applicable.
     dossierInstanceDefinition = await answerDossierPromptsHelper(
       dossierInstanceDefinition,
