@@ -142,6 +142,15 @@ describe('Librarywindow', () => {
     it('should call proper requestDossierOpen method', async () => {
       // given
       const getMstrTypeBySubtypeSpy = jest.spyOn(mstrObjectEnum, 'getMstrTypeBySubtype').mockReturnValue(mstrObjectEnum.mstrObjectType.dossier);
+      const createDossierInstance = jest.spyOn(mstrObjectRestService, 'createDossierInstance').mockResolvedValueOnce({
+        mid: 'mid',
+        status: 2,
+      });
+      const getObjectPrompts = jest.spyOn(mstrObjectRestService, 'getObjectPrompts').mockResolvedValueOnce({
+        promptObjects: [],
+        isPrompted: true,
+      });
+      const deleteDossierInstance = jest.spyOn(mstrObjectRestService, 'deleteDossierInstance');
 
       // when
       wrappedComponent.find(PopupButtons).first().invoke('handleOk')();
@@ -149,7 +158,9 @@ describe('Librarywindow', () => {
       // then
       expect(getMstrTypeBySubtypeSpy).toHaveBeenCalled();
 
-      await waitFor(() => expect(isPromptedSpy).toHaveBeenCalled());
+      await waitFor(() => expect(createDossierInstance).toHaveBeenCalled());
+      await waitFor(() => expect(getObjectPrompts).toHaveBeenCalled());
+      await waitFor(() => expect(deleteDossierInstance).toHaveBeenCalled());
 
       expect(requestImportMock).not.toBeCalled();
       expect(requestDossierOpenMock).toBeCalled();

@@ -58,7 +58,8 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
     // Applying prompt answers to current instead of forcing the instance to execute the prompts.
     // as indicated in:
     // https://microstrategy.github.io/rest-api-docs/common-workflows/analytics/use-prompts-objects/answer-prompts/#nested-prompts
-    count > 0 ? await mstrObjectRestService.applyDossierPrompts(config) : await mstrObjectRestService.updateDossierPrompts(config);
+    count > 0 ? await mstrObjectRestService.applyDossierPrompts(config)
+      : await mstrObjectRestService.updateDossierPrompts(config);
 
     let dossierStatusResponse = await mstrObjectRestService
       .getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);

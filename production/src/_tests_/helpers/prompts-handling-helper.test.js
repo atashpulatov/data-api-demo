@@ -71,7 +71,8 @@ describe('PromptsHandlingHelper', () => {
       objectId,
       projectId,
       instanceId: mid,
-      promptsAnswers: promptsAnswers[0]
+      promptsAnswers: promptsAnswers[0],
+      bIncludeIgnoreRequiredPrompts: true,
     };
     // when
     const result = await answerDossierPromptsHelper(instanceDefinition, objectId, projectId, promptsAnswers);
