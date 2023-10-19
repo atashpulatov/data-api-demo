@@ -39,6 +39,13 @@ class PopupStateActions {
     dispatch({ type: ON_POPUP_BACK });
     dispatch(navigationTreeActions.clearPromptAnswers());
     dispatch(popupActions.clearEditedObject());
+    dispatch(navigationTreeActions.selectObject({
+      chosenObjectId: '',
+      chosenObjectName: '',
+      chosenProjectId: '',
+      chosenSubtype: '',
+      mstrObjectType: '',
+    }));
     dispatch(navigationTreeActions.cancelDossierOpen());
   };
 }
