@@ -51,7 +51,7 @@ class PopupViewSelectorHelper {
 
   promptedReportSubmitted = (props) => (
     !!(props.propsToPass.isPrompted || props.isPrompted)
-    && (props.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name)
+    && (props.mstrObjectType?.name === mstrObjectEnum.mstrObjectType.report.name)
     && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
   );
 
