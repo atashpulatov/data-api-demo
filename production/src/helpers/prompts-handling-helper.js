@@ -2,6 +2,11 @@ import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 
 const sleep = (milliseconds) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
+export const ObjectExecutionStatus = {
+  READY: 1,
+  PROMPTED: 2,
+};
+
 /**
  * This function is used to prepare the prompts answers to be used in answering the prompted Dossier's instance.
  * It will loop through both the prompts objects (instance) and previously given answers (persisted)
@@ -46,7 +51,7 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
   let count = 0;
 
   // Loop through the prompts and answer them until the instance is not prompted anymore.
-  while (currentInstanceDefinition.status === 2) {
+  while (currentInstanceDefinition.status === ObjectExecutionStatus.PROMPTED) {
     const config = {
       objectId,
       projectId,
@@ -92,7 +97,7 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
  */
 export async function preparePromptedDossier(instanceDef, objectId, projectId, promptsAnswers) {
   let dossierInstanceDefinition = { ...instanceDef };
-  if (dossierInstanceDefinition && dossierInstanceDefinition.status === 2) {
+  if (dossierInstanceDefinition?.status === ObjectExecutionStatus.PROMPTED) {
     // Re-prompt the Dossier's instance to apply previous answers. Get new instance definition.
     const rePromptResponse = await mstrObjectRestService.rePromptDossier(objectId, instanceDef.mid, projectId);
     dossierInstanceDefinition.mid = rePromptResponse.mid;
@@ -127,7 +132,7 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
   let dossierInstanceDefinition = await mstrObjectRestService
     .createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
 
-  if (promptsAnswers?.length > 0 && dossierInstanceDefinition.status === 2) {
+  if (promptsAnswers?.length > 0 && dossierInstanceDefinition.status === ObjectExecutionStatus.PROMPTED) {
     // Reflect saved answers to the prompts of the Dossier's instance if applicable.
     dossierInstanceDefinition = await answerDossierPromptsHelper(
       dossierInstanceDefinition,

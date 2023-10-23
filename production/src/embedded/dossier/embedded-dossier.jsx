@@ -10,7 +10,12 @@ import scriptInjectionHelper from '../utils/script-injection-helper';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './dossier.css';
 
-import { prepareGivenPromptAnswers, preparePromptedDossier, mergeAnswersWithPromptsDefined } from '../../helpers/prompts-handling-helper';
+import {
+  prepareGivenPromptAnswers,
+  preparePromptedDossier,
+  mergeAnswersWithPromptsDefined,
+  ObjectExecutionStatus
+} from '../../helpers/prompts-handling-helper';
 
 const { microstrategy, Office } = window;
 
@@ -124,14 +129,15 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    */
   handleInstanceId = async (instanceId, projectId, dossierId, isPrompted) => {
     if (instanceId) {
-      return { mid: instanceId };
+      return { mid: instanceId, status: ObjectExecutionStatus.READY };
     }
 
+    // Create a new instance of the Dossier using shortcut.
     const body = { disableManipulationsAutoSaving: true, persistViewState: true };
     const instance = await createDossierInstance(projectId, dossierId, body);
 
     // Checking if the dossier is prompted and update the status accordingly
-    instance.status = isPrompted ? 2 : 1;
+    instance.status = isPrompted ? ObjectExecutionStatus.PROMPTED : ObjectExecutionStatus.READY;
 
     return instance;
   };

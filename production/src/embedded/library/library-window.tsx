@@ -113,19 +113,23 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
           chosenMstrObjectType.name
         );
       } else if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier) {
+        // Creating instance without shortcut information to pull prompts definition.
         const instance = await createDossierInstance(chosenProjectId, chosenObjectId, {});
 
+        // If instance is prompted, then pull prompts definition.
         const prompts = instance.status !== 2 ? [] : await getObjectPrompts(
           chosenObjectId,
           chosenProjectId,
           instance.mid,
         );
 
+        // Updated state with prompts definition, if any.
         promptedResponse = {
           promptObjects: prompts,
           isPrompted: prompts?.length > 0,
         };
 
+        // Delete instance that was created.
         await deleteDossierInstance(chosenProjectId, chosenObjectId, instance.mid);
       }
       if (
