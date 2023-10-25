@@ -34,8 +34,9 @@ class OfficeStoreRestoreObject {
    */
   restoreAnswersFromIndexDB = async () => {
     const answers = await getPromptAnswersFromIndexDB(officeProperties.storedAnswers) || [];
-    // If answers is an empty array then it is still necessary to dispatch it to clear the answers in Redux store.
-    answers && this.reduxStore.dispatch(restoreAllAnswers(answers));
+    // If answers happens to be an empty array then it is still necessary
+    // to dispatch it to clear the answers in Redux store.
+    this.reduxStore.dispatch(restoreAllAnswers(answers));
   };
 
   /**

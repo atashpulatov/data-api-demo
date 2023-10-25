@@ -1,3 +1,5 @@
+@import '~@mstr/rc/es/assets/scss/msdl_universal.scss';
+
 .prompts-window {
   height: 100%;
   position: fixed;
@@ -19,7 +21,7 @@
 }
 
 .prompts-iframe {
-  border-top: 1px solid #EBEBEB;
+  border-top: 1px solid $msdl-divider-gray_SOLID;
 }
 
 #popup-wrapper .prompts-window .empty  {

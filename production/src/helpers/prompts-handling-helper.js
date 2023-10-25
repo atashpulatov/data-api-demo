@@ -152,7 +152,7 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
 }
 
 /**
- * Updates answers with answers and types from server definition.
+ * Updates saved answers by appending the corresponding JSON-based answers and prompt types from server definitions.
  * @param {} answers
  * @param {*} answerDefMap
  */

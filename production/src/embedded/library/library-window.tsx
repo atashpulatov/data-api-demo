@@ -17,6 +17,7 @@ import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { ItemType, LibraryWindowProps } from './library-window-types';
+import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 
 const {
   isPrompted, getCubeInfo, getObjectInfo, createDossierInstance, deleteDossierInstance, getObjectPrompts,
@@ -117,7 +118,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         const instance = await createDossierInstance(chosenProjectId, chosenObjectId, {});
 
         // If instance is prompted, then pull prompts definition.
-        const prompts = instance.status !== 2 ? [] : await getObjectPrompts(
+        const prompts = instance.status !== ObjectExecutionStatus.PROMPTED ? [] : await getObjectPrompts(
           chosenObjectId,
           chosenProjectId,
           instance.mid,
