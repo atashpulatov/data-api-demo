@@ -57,7 +57,7 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
       projectId,
       instanceId: currentInstanceDefinition.mid,
       promptsAnswers: promptsAnswers[count] ? promptsAnswers[count] : { answers: [] },
-      bIncludeIgnoreRequiredPrompts: true,
+      ignoreValidateRequiredCheck: true, 
     };
 
     // Applying prompt answers to current instead of forcing the instance to execute the prompts.

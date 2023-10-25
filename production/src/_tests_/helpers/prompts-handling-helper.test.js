@@ -72,7 +72,7 @@ describe('PromptsHandlingHelper', () => {
       projectId,
       instanceId: mid,
       promptsAnswers: promptsAnswers[0],
-      bIncludeIgnoreRequiredPrompts: true,
+      ignoreValidateRequiredCheck: true,
     };
     // when
     const result = await answerDossierPromptsHelper(instanceDefinition, objectId, projectId, promptsAnswers);

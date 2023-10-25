@@ -249,11 +249,11 @@ class MstrObjectRestService {
     projectId,
     instanceId,
     promptsAnswers,
-    bIncludeIgnoreRequiredPrompts = false,
+    ignoreValidateRequiredCheck = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers${bIncludeIgnoreRequiredPrompts ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -268,11 +268,11 @@ class MstrObjectRestService {
     projectId,
     instanceId,
     promptsAnswers,
-    bIncludeIgnoreRequiredPrompts = false,
+    ignoreValidateRequiredCheck = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers${bIncludeIgnoreRequiredPrompts ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/promptsAnswers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -603,11 +603,11 @@ class MstrObjectRestService {
     projectId,
     instanceId,
     promptsAnswers,
-    bIncludeIgnoreRequiredPrompts = false,
+    ignoreValidateRequiredCheck = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers${bIncludeIgnoreRequiredPrompts ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
     return request
       .put(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -622,11 +622,11 @@ class MstrObjectRestService {
     projectId,
     instanceId,
     promptsAnswers,
-    bIncludeIgnoreRequiredPrompts = false,
+    ignoreValidateRequiredCheck = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers${bIncludeIgnoreRequiredPrompts ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/reports/${objectId}/instances/${instanceId}/prompts/answers${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
     return request
       .put(fullPath)
       .set('X-MSTR-AuthToken', authToken)
@@ -641,11 +641,11 @@ class MstrObjectRestService {
     projectId,
     instanceId,
     promptsAnswers,
-    bIncludeIgnoreRequiredPrompts = false,
+    ignoreValidateRequiredCheck = false,
   }) => {
     const storeState = this.reduxStore.getState();
     const { envUrl, authToken } = storeState.sessionReducer;
-    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts${bIncludeIgnoreRequiredPrompts ? '?ignoreValidateRequiredCheck=true' : ''}`;
+    const fullPath = `${envUrl}/dossiers/${objectId}/instances/${instanceId}/answerPrompts${ignoreValidateRequiredCheck ? '?ignoreValidateRequiredCheck=true' : ''}`;
     return request
       .post(fullPath)
       .set('X-MSTR-AuthToken', authToken)
