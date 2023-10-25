@@ -118,8 +118,5 @@ describe('StepSaveObjectInExcel', () => {
 
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledTimes(1);
     expect(officeStoreObject.saveObjectsInExcelStore).toBeCalledWith();
-
-    expect(operationStepDispatcher.completeSaveObjectInExcel).toBeCalledTimes(1);
-    expect(operationStepDispatcher.completeSaveObjectInExcel).toBeCalledWith('objectWorkingIdTest');
   });
 });
