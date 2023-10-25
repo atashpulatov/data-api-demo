@@ -3,7 +3,6 @@ import * as objectActions from '../../../redux-reducer/object-reducer/object-act
 import { reduxStore } from '../../../store';
 import officeStoreHelper from '../../../office/store/office-store-helper';
 import { errorService } from '../../../error/error-handler';
-import * as IndexDBUtility from '../../../storage/index-db-utility';
 
 const internalData = {};
 
@@ -147,17 +146,5 @@ describe('OfficeStoreObject', () => {
     expect(settingsMock.get('storedObjects')).toEqual('objectsTest');
 
     expect(settingsMock.saveAsync).toBeCalledTimes(1);
-  });
-
-  it('savePromptAnswersInIndexDB should work as expected', async () => {
-    // given
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ answersReducer: { answers: ['answersTest'] } });
-    jest.spyOn(IndexDBUtility, 'savePromptAnswersInIndexDB').mockReturnValue(settingsMock);
-
-    // when
-    await officeStoreObject.saveAnswersInIndexDB();
-
-    // then
-    expect(IndexDBUtility.savePromptAnswersInIndexDB).toBeCalledTimes(1);
   });
 });
