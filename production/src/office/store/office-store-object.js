@@ -2,7 +2,6 @@ import { officeProperties } from '../../redux-reducer/office-reducer/office-prop
 import { errorService } from '../../error/error-handler';
 import { removeObject } from '../../redux-reducer/object-reducer/object-actions';
 import officeStoreHelper from './office-store-helper';
-import { savePromptAnswersInIndexDB } from '../../storage/index-db-utility';
 
 class OfficeStoreObject {
   init = (reduxStore) => {
@@ -56,9 +55,11 @@ class OfficeStoreObject {
   * Saves current answers list from Answer Reducer in Office Settings
   *
   */
-  saveAnswersInIndexDB = async () => {
+  saveAnswersInExcelStore = async () => {
     const { answers } = this.reduxStore.getState().answersReducer;
-    await savePromptAnswersInIndexDB(officeProperties.storedAnswers, answers);
+    const settings = officeStoreHelper.getOfficeSettings();
+    settings.set(officeProperties.storedAnswers, answers);
+    await settings.saveAsync();
   };
 }
 

@@ -26,7 +26,7 @@ class StepSaveObjectInExcel {
       prepareObjectData(objectData, instanceDefinition);
 
       await officeStoreObject.saveObjectsInExcelStore();
-      await officeStoreObject.saveAnswersInIndexDB();
+      await officeStoreObject.saveAnswersInExcelStore();
       operationStepDispatcher.completeSaveObjectInExcel(objectData.objectWorkingId);
 
       // Proceed with triggering next reprompt task if any in queue.
