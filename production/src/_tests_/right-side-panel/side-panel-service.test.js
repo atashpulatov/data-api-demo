@@ -44,9 +44,10 @@ describe('SidePanelService', () => {
       .spyOn(popupController, 'runPopupNavigation')
       .mockImplementation();
     // when
+    sidePanelService.clearRepromptTask();
     sidePanelService.addData();
     // then
-    expect(mockedDispatch).toBeCalledTimes(1);
+    expect(mockedDispatch).toBeCalledTimes(2);
     expect(mockedRunPopup).toBeCalledTimes(1);
   });
 
@@ -213,6 +214,96 @@ describe('SidePanelService', () => {
     expect(mockedDispatch).toBeCalled();
   });
 
+  it.each`
+    objectType
+    ${'report'}
+    ${'visualization'}
+  `('createRepromptTask should return an object containing a callback, which when called, will properly call officeApi helpers and dispatch an action', async ({ objectType }) => {
+    // given
+    const objectWorkingId = 1;
+    const mockObject = {
+      bindId: 1,
+      mstrObjectType: { name: objectType },
+    };
+
+    const mockedGetExcelContext = jest
+      .spyOn(officeApiHelper, 'getExcelContext')
+      .mockImplementation();
+    const mockedisSheetProtected = jest
+      .spyOn(officeApiWorksheetHelper, 'isCurrentReportSheetProtected')
+      .mockImplementation();
+    const mockedDispatch = jest
+      .spyOn(reduxStore, 'dispatch')
+      .mockImplementation();
+
+    // when
+    const { isPrompted, callback } = sidePanelService.createRepromptTask(objectWorkingId, mockObject.mstrObjectType);
+    await callback();
+
+    // then
+    expect(isPrompted).toBeTruthy();
+    expect(mockedGetExcelContext).toBeCalled();
+    expect(mockedisSheetProtected).toBeCalled();
+    expect(mockedDispatch).toBeCalled();
+  });
+
+  it.each`
+    objectType
+    ${'report'}
+    ${'dataset'}
+    ${'visualization'}
+  `('should reprompt an object', async ({ objectType }) => {
+    // given
+    const objectWorkingId = 1;
+    const mockObject = {
+      bindId: 1,
+      mstrObjectType: { name: objectType },
+      isPrompted: true,
+    };
+
+    const mockedDispatch = jest
+      .spyOn(reduxStore, 'dispatch')
+      .mockImplementation();
+    const getObjectFromObjectReducerByObjectWorkingId = jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockImplementationOnce(() => mockObject);
+    const clearRepromptTaskMockup = jest.spyOn(sidePanelService, 'clearRepromptTask').mockImplementation();
+
+    // when
+    await sidePanelService.reprompt([objectWorkingId]);
+
+    // then
+    expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
+    expect(mockedDispatch).toBeCalled();
+    expect(clearRepromptTaskMockup).toBeCalled();
+  });
+
+  it('should refresh an object', async () => {
+    // given
+    const objectWorkingIds = [1, 1];
+    const mockObject = {
+      bindId: 1,
+      mstrObjectType: { name: 'report' },
+      isPrompted: false,
+    };
+
+    const mockedDispatch = jest
+      .spyOn(reduxStore, 'dispatch')
+      .mockImplementation();
+    const getObjectFromObjectReducerByObjectWorkingId = jest
+      .spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId')
+      .mockImplementation(() => mockObject);
+    const clearRepromptTaskMockup = jest.spyOn(sidePanelService, 'clearRepromptTask').mockImplementation();
+
+    // when
+    await sidePanelService.reprompt(objectWorkingIds);
+
+    // then
+    expect(getObjectFromObjectReducerByObjectWorkingId).toBeCalled();
+    expect(mockedDispatch).toBeCalled();
+    expect(clearRepromptTaskMockup).toBeCalled();
+  });
+
   it('should dispatch officeActions.toggleReusePromptAnswersFlag to initialize the reuse prompt answers flag', async () => {
     // given
     const mockObject = {
@@ -256,7 +347,7 @@ describe('SidePanelService', () => {
       .spyOn(reduxStore, 'dispatch')
       .mockImplementation();
     // when
-    await sidePanelService.toggleSettingsPanel(true);
+    sidePanelService.toggleSettingsPanel(true);
     // then
     expect(mockedDispatch).toBeCalled();
   });

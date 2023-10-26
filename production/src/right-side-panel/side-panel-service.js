@@ -12,12 +12,24 @@ import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested,
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { userRestService } from '../home/user-rest-service';
+import {
+  addRepromptTask,
+  executeNextRepromptTask,
+  clearRepromptTask,
+} from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 
 class SidePanelService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
+  };
+
+  /**
+   * Clears the reprompt task queue and resets the index.
+   */
+  clearRepromptTask = async () => {
+    this.reduxStore.dispatch(clearRepromptTask());
   };
 
   /**
@@ -135,28 +147,64 @@ class SidePanelService {
   };
 
   /**
+   * Creates a prompted task for the reprompt queue. Includes the callback to be executed.
+   * @param {*} bindId
+   * @param {*} mstrObjectType
+   * @returns JSON action object
+   */
+  createRepromptTask = (bindId, mstrObjectType) => ({
+    isPrompted: true,
+    callback: async () => {
+      const excelContext = await officeApiHelper.getExcelContext();
+      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+
+      // Based on the type of object, call the appropriate popup
+      const popupAction = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+        ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
+        : popupActions.callForReprompt({ bindId, mstrObjectType });
+
+      this.reduxStore.dispatch(popupAction);
+    },
+  });
+
+  /**
    * Handles the re-prompting of object.
    * GEts object data from reducer and opens popup depending of the type of object.
    *
    * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
    */
   reprompt = async (objectWorkingIds) => {
-    // Validate multiple selection; if only one item is selected then create 1-element array
-    const aWorkingIds = Array.isArray(objectWorkingIds)
-      ? objectWorkingIds
-      : [objectWorkingIds];
-    for (const objectWorkingId of aWorkingIds) {
-      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      const { bindId, mstrObjectType } = objectData;
-      const excelContext = await officeApiHelper.getExcelContext();
-      await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
+    // Prepare dispatch actions
+    const dispatchTasks = [];
 
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        this.reduxStore.dispatch(popupActions.callForRepromptDossier({ bindId, mstrObjectType }));
-      } else {
-        this.reduxStore.dispatch(popupActions.callForReprompt({ bindId, mstrObjectType }));
+    // Reprompt or refresh each object in the order of selection
+    objectWorkingIds.forEach(objectWorkingId => {
+      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const { bindId, mstrObjectType, isPrompted } = objectData;
+
+      // Proceed with reprompt only if object is prompted, otherwise only refresh object
+      // if multiple objects are selected.
+      if (isPrompted) {
+        dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType));
+      } else if (objectWorkingIds.length > 1) {
+        // Handle the case when multiple objects are selected (refresh non-prompted reports)
+        // You can implement this part if needed.
+        dispatchTasks.push({
+          isPrompted: false,
+          callback: () => setTimeout(() => this.refresh([objectWorkingId]), 10),
+        });
       }
-    }
+    });
+
+    // Initialize the re-prompting queue state
+    this.clearRepromptTask();
+
+    // Dispatch all actions together to start re-prompting in sequence
+    // regardless of how many objects are selected.
+    dispatchTasks.forEach(task => this.reduxStore.dispatch(addRepromptTask(task)));
+
+    // Dispatch executeRepromptTask() once after all actions are dispatched
+    this.reduxStore.dispatch(executeNextRepromptTask());
   };
 
   /**

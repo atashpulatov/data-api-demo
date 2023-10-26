@@ -55,17 +55,20 @@ export const HomeNotConnected = (props) => {
   });
 
   useEffect(() => {
-    try {
-      officeStoreRestoreObject.restoreObjectsFromExcelStore();
-      officeStoreRestoreObject.restoreAnswersFromExcelStore();
-      homeHelper.saveLoginValues();
-      homeHelper.getTokenFromStorage();
-      hidePopup(); // hide error popup if visible
-      toggleIsSettingsFlag(false); // hide settings menu if visible
-      sessionActions.disableLoading();
-    } catch (error) {
-      console.error(error);
+    function initializeHome() {
+      try {
+        officeStoreRestoreObject.restoreObjectsFromExcelStore();
+        officeStoreRestoreObject.restoreAnswersFromExcelStore();
+        homeHelper.saveLoginValues();
+        homeHelper.getTokenFromStorage();
+        hidePopup(); // hide error popup if visible
+        toggleIsSettingsFlag(false); // hide settings menu if visible
+        sessionActions.disableLoading();
+      } catch (error) {
+        console.error(error);
+      }
     }
+    initializeHome();
   }, [hidePopup, toggleIsSettingsFlag]);
 
   useEffect(() => {

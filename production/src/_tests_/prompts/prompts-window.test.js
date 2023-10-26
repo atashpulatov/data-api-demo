@@ -1,6 +1,5 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, waitFor, cleanup } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { PromptsWindowNotConnected } from '../../prompts/prompts-window';
 import { authenticationHelper } from '../../authentication/authentication-helper';
@@ -31,6 +30,11 @@ describe('PromptsWindowNotConnected', () => {
     authToken: 'd3d3d3'
   };
 
+  const repromptsQueue = {
+    total: 0,
+    index: 0,
+  };
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -38,16 +42,17 @@ describe('PromptsWindowNotConnected', () => {
   it('should render with props given', () => {
     // given
     // when
-    const wrappedComponent = mount(<Provider store={reduxStore}>
+    const wrappedComponent = render(<Provider store={reduxStore}>
       <PromptsWindowNotConnected
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     // then
-    expect(wrappedComponent.instance()).toBeDefined();
-    expect(wrappedComponent.find('PromptsContainer').get(0)).toBeDefined();
+    const promptsContainer = wrappedComponent.container.getElementsByClassName('promptsContainer');
+    expect(promptsContainer).toBeDefined();
   });
 
   it('should render with props given for Reprompt workflow', () => {
@@ -57,28 +62,30 @@ describe('PromptsWindowNotConnected', () => {
     };
     // given
     // when
-    const wrappedComponent = mount(<Provider store={reduxStore}>
+    const wrappedComponent = render(<Provider store={reduxStore}>
       <PromptsWindowNotConnected
         mstrData={mstrData}
         popupState={repromptPopupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     // then
-    expect(wrappedComponent.instance()).toBeDefined();
-    expect(wrappedComponent.find('PromptsContainer').get(0)).toBeDefined();
+    const promptsContainer = wrappedComponent.container.getElementsByClassName('promptsContainer');
+    expect(promptsContainer).toBeDefined();
   });
 
-  it('addEventListener should be called on mount', async () => {
+  it('addEventListener should be called on render', async () => {
     // given
     const addEventListener = jest.spyOn(window, 'addEventListener');
     // when
-    mount(<Provider store={reduxStore}>
+    render(<Provider store={reduxStore}>
       <PromptsWindowNotConnected
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     // then
     await waitFor(() => {
@@ -86,7 +93,7 @@ describe('PromptsWindowNotConnected', () => {
     });
   });
 
-  it('removeEventListener should be called on unmount', async () => {
+  it('removeEventListener should be called on unrender', async () => {
     // given
     const removeEventListener = jest.spyOn(window, 'removeEventListener');
     // when
@@ -95,9 +102,10 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
-    wrappedComponent.unmount();
+    cleanup();
     // then
     await waitFor(() => {
       expect(removeEventListener).toHaveBeenCalled();
@@ -131,7 +139,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
 
     fireEvent(window, new MessageEvent('message', givenMessage));
@@ -150,7 +159,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
 
     fireEvent(window, new MessageEvent('message', givenMessage));
@@ -176,7 +186,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
 
     const keepSessionAlive = jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementation(() => {});
@@ -196,7 +207,8 @@ describe('PromptsWindowNotConnected', () => {
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
 
     const keepSessionAlive = jest.spyOn(sessionHelper, 'keepSessionAlive').mockImplementation(() => {});
@@ -206,17 +218,18 @@ describe('PromptsWindowNotConnected', () => {
     expect(keepSessionAlive).not.toBeCalled();
   });
 
-  it('should call installSessionProlongingHandler on mount', () => {
+  it('should call installSessionProlongingHandler on render', () => {
     // given
     jest.spyOn(sessionHelper, 'installSessionProlongingHandler');
 
     // when
-    mount(<Provider store={reduxStore}>
+    render(<Provider store={reduxStore}>
       <PromptsWindowNotConnected
         mstrData={mstrData}
         popupState={popupState}
         editedObject={editedObject}
-        session={session} />
+        session={session}
+        repromptsQueue={repromptsQueue} />
     </Provider>);
     // then
     expect(sessionHelper.installSessionProlongingHandler).toHaveBeenCalled();

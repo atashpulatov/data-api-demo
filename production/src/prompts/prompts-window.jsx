@@ -3,11 +3,13 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
 import '../home/home.css';
 import '../index.css';
+import './prompts-window.scss';
 import { PopupButtons } from '../popup/popup-buttons/popup-buttons';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { PromptsContainer } from './prompts-container';
@@ -17,8 +19,8 @@ import { popupHelper } from '../popup/popup-helper';
 import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-
-import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
+import { prepareGivenPromptAnswers, preparePromptedReport, mergeAnswersWithPromptsDefined } from '../helpers/prompts-handling-helper';
+import { PromptsWindowTitle } from './prompts-window-title';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
@@ -26,7 +28,7 @@ const { deleteDossierInstance } = mstrObjectRestService;
 export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
-    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested,
+    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested, repromptsQueue,
   } = props;
   const { chosenObjectId } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
@@ -124,26 +126,6 @@ export const PromptsWindowNotConnected = (props) => {
     editedObject.subtotalsInfo, editedObject.displayAttrFormNames]);
 
   /**
-   * Append the server's version of the answers to the promptsAnswers object.
-   * This version of answers will be used to invoke the REST API endpoint when
-   * importing or re-prompting a report/dossier.
-   * @param {*} currentAnswers
-   * @param {*} promptsAnsDef
-   */
-  function updateAnswersWithPrompts(currentAnswers, promptsAnsDef) {
-    currentAnswers.forEach((currentAnswer) => {
-      const { answers } = currentAnswer;
-      answers.forEach((answer) => {
-        const answerDef = promptsAnsDef.find((prompt) => prompt.key === answer.key);
-        if (answerDef) {
-          answer.answers = answerDef.answers;
-          answer.type = answerDef.type;
-        }
-      });
-    });
-  }
-
-  /**
    *
    * @param {*} promptObjs
    * @param {*} previousAnswers
@@ -239,24 +221,20 @@ export const PromptsWindowNotConnected = (props) => {
             isReprompt
           };
 
-          // Get the answers applied to the current dossier's instance from the server.
-          // Need to incorporate these answers because they're formatted differently than the ones
-          // returned by the Embedded API. The REST API endpoint expects the answers to be in a
-          // different format than the Embedded API.
-          const promptsAnsDef = await mstrObjectRestService
-            .getObjectPrompts(objectId, projectId, dossierData.instanceId, true);
-
-          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
-          deleteDossierInstance(projectId, objectId, instanceId);
-
+          // Remove event handlers first.
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
 
+          // Get the new answers from the prompts dialog.
           const currentAnswers = [...newPromptsAnswers.current];
 
           // Update answers based on promptsAnsDef to insert JSON answers from server
-          // this JSON structure is expected by the REST API endpoint
-          updateAnswersWithPrompts(currentAnswers, promptsAnsDef);
+          // this JSON structure is expected by the REST API endpoint; answers are deeper in the structure
+          // than Dossiers.
+          await mergeAnswersWithPromptsDefined(objectId, projectId, dossierData.instanceId, currentAnswers);
+
+          // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
+          deleteDossierInstance(projectId, objectId, instanceId);
 
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
           promptsAnswered({ dossierData, promptsAnswers: currentAnswers });
@@ -327,10 +305,17 @@ export const PromptsWindowNotConnected = (props) => {
     onPopupBack();
   };
 
+  // Determine whether Re-prompt title should be shown if queue has more than one item
+  const showRepromptTitle = isReprompt && repromptsQueue.total > 1;
+  const editedObjectName = editedObject.chosenObjectName;
+
   return (
-    <div
-      style={{ position: 'relative' }}
-    >
+    <div className="prompts-window">
+      <PromptsWindowTitle
+        showTitle={showRepromptTitle}
+        objectName={editedObjectName}
+      />
+      <Empty isLoading />
       <PromptsContainer
         postMount={onPromptsContainerMount}
       />
@@ -373,24 +358,30 @@ PromptsWindowNotConnected.propTypes = {
     instanceId: PropTypes.string,
     subtotalsInfo: PropTypes.shape({ subtotalsAddresses: PropTypes.arrayOf(PropTypes.shape({})) }),
     displayAttrFormNames: PropTypes.string,
-    selectedAttributes: PropTypes.arrayOf(PropTypes.shape({})),
-    selectedMetrics: PropTypes.arrayOf(PropTypes.shape({})),
-    selectedFilters: PropTypes.arrayOf(PropTypes.shape({})),
+    selectedAttributes: PropTypes.arrayOf(PropTypes.string),
+    selectedMetrics: PropTypes.arrayOf(PropTypes.string),
+    selectedFilters: PropTypes.shape({}) || PropTypes.arrayOf(PropTypes.shape({})),
   }),
   reusePromptAnswers: PropTypes.bool,
   previousPromptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
   importRequested: PropTypes.bool,
   isPreparedDataRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
+  repromptsQueue: PropTypes.shape({
+    total: PropTypes.number,
+    index: PropTypes.number,
+  }),
 };
 
 export const mapStateToProps = (state) => {
   const {
-    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer, answersReducer
+    navigationTree, popupStateReducer, popupReducer, sessionReducer, officeReducer,
+    answersReducer, repromptsQueueReducer,
   } = state;
   const popupState = popupReducer.editedObject;
   const {
-    promptsAnswers, importSubtotal, importRequested, isPreparedDataRequested, promptObjects, ...mstrData
+    promptsAnswers, importSubtotal, importRequested, isPreparedDataRequested,
+    promptObjects, ...mstrData
   } = navigationTree;
   const { answers } = answersReducer;
   const { supportForms, reusePromptAnswers } = officeReducer;
@@ -420,6 +411,7 @@ export const mapStateToProps = (state) => {
     importRequested,
     promptObjects: promptObjectsResolved, // Prompt objects to be used for import
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
+    repromptsQueue: { ...repromptsQueueReducer },
   };
 };
 

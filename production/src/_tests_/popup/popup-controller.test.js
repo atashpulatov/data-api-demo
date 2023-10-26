@@ -72,6 +72,63 @@ describe('PopupController', () => {
     expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
   });
 
+  it('should run edit dossier popup with proper settings', () => {
+    // given
+    const reportParams = 'chosenObjectData';
+    const popupType = PopupTypeEnum.dossierWindow;
+    const size = 80;
+    const runPopupSpy = jest
+      .spyOn(popupController, 'runPopup')
+      .mockImplementationOnce(() => { });
+
+    // when
+    popupController.runEditDossierPopup(reportParams);
+
+    // then
+    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
+  });
+
+  it('should run reprompt popup with proper settings', () => {
+    // given
+    const reportParams = 'chosenObjectData';
+    const popupType = PopupTypeEnum.repromptingWindow;
+    const size = 80;
+    const runPopupSpy = jest
+      .spyOn(popupController, 'runPopup')
+      .mockImplementationOnce(() => { });
+
+    const dispatchSpy = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    popupController.runRepromptPopup(reportParams, false);
+
+    // then
+    expect(dispatchSpy).toBeCalled();
+    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
+  });
+
+  it('should run repromptDossier popup with proper settings', () => {
+    // given
+    const reportParams = 'chosenObjectData';
+    const popupType = PopupTypeEnum.dossierWindow;
+    const size = 80;
+    const runPopupSpy = jest
+      .spyOn(popupController, 'runPopup')
+      .mockImplementationOnce(() => { });
+
+    const dispatchSpy = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    popupController.runRepromptDossierPopup(reportParams);
+
+    // then
+    expect(dispatchSpy).toBeCalled();
+    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
+  });
+
   it('should handle ok command from popup for report WITHOUT instance id', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();

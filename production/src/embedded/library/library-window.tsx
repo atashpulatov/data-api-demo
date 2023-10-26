@@ -1,5 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
+// @ts-ignore
+import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import i18n from '../../i18n';
@@ -15,8 +17,11 @@ import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { ItemType, LibraryWindowProps } from './library-window-types';
+import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 
-const { isPrompted, getCubeInfo, getObjectInfo } = mstrObjectRestService;
+const {
+  isPrompted, getCubeInfo, getObjectInfo, createDossierInstance, deleteDossierInstance, getObjectPrompts,
+} = mstrObjectRestService;
 
 export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   const [isPublished, setIsPublished] = useState(true);
@@ -43,7 +48,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
    *
    * @param {{Array<ItemType>}} itemsInfo - Array of selected items
    */
-  const handleSelection = async (itemsInfo: ItemType[]): Promise<any> => {
+  const handleSelection = useCallback(async (itemsInfo: ItemType[]): Promise<any> => {
     if (!itemsInfo || itemsInfo.length === 0) {
       selectObject({});
       return;
@@ -93,31 +98,47 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       chosenSubtype: subtype,
       mstrObjectType: chosenMstrObjectType,
     });
-  };
+  }, [selectObject]);
 
   /**
    * Imports the object selected by the user
    */
   const handleOk = async () => {
-    let isPromptedResponse = {};
+    let promptedResponse = {};
     try {
       const chosenMstrObjectType = mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype);
-      if (
-        chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report
-        || chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier
-      ) {
-        isPromptedResponse = await isPrompted(
+      if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.report) {
+        promptedResponse = await isPrompted(
           chosenObjectId,
           chosenProjectId,
           chosenMstrObjectType.name
         );
+      } else if (chosenMstrObjectType === mstrObjectEnum.mstrObjectType.dossier) {
+        // Creating instance without shortcut information to pull prompts definition.
+        const instance = await createDossierInstance(chosenProjectId, chosenObjectId, {});
+
+        // If instance is prompted, then pull prompts definition.
+        const prompts = instance.status !== ObjectExecutionStatus.PROMPTED ? [] : await getObjectPrompts(
+          chosenObjectId,
+          chosenProjectId,
+          instance.mid,
+        );
+
+        // Updated state with prompts definition, if any.
+        promptedResponse = {
+          promptObjects: prompts,
+          isPrompted: prompts?.length > 0,
+        };
+
+        // Delete instance that was created.
+        await deleteDossierInstance(chosenProjectId, chosenObjectId, instance.mid);
       }
       if (
         chosenMstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
       ) {
-        requestDossierOpen(isPromptedResponse);
+        requestDossierOpen(promptedResponse);
       } else {
-        requestImport(isPromptedResponse);
+        requestImport(promptedResponse);
       }
     } catch (e) {
       popupHelper.handlePopupErrors(e);
@@ -152,11 +173,11 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   /**
    * sends a command to cancel the object selection and closes the popup
    */
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel };
     popupHelper.officeMessageParent(message);
-  };
+  }, []);
 
   const { installSessionProlongingHandler } = sessionHelper;
 
@@ -190,6 +211,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
       <div className="title-bar">
         <span>{t('Import Data')}</span>
       </div>
+      <Empty isLoading />
       <EmbeddedLibrary
         handleSelection={handleSelection}
         handleIframeLoadEvent={validateSession}

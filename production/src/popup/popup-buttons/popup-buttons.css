@@ -64,12 +64,12 @@
   position: relative;
   top: 0;
   left: 0;
-  max-height: calc(100vh - 145px);
+  max-height: calc(100vh - 125px);
   min-width: 530px;
 }
 
 .dossier-iframe {
-    min-height: calc(100vh - 145px);
+    min-height: calc(100vh - 125px);
 }
 
 .library-iframe {

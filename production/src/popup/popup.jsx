@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { libraryErrorController } from '@mstr/mstr-react-library';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
@@ -18,11 +18,11 @@ export const Popup = () => {
     i18n.changeLanguage(Office.context.displayLanguage || 'en-US');
   }, []);
 
-  const closePopup = () => {
+  const closePopup = useCallback(() => {
     const { commandCancel } = selectorProperties;
     const message = { command: commandCancel, };
     popupHelper.officeMessageParent(message);
-  };
+  }, []);
 
   return (
     <SessionExtendingWrapper id="popup-wrapper" onSessionExpire={closePopup}>

@@ -9,6 +9,7 @@ import mstrObjectEnum from '../mstr-object-type-enum';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { errorMessages } from '../../error/constants';
+import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 
 class StepGetInstanceDefinition {
   /**
@@ -163,14 +164,14 @@ class StepGetInstanceDefinition {
     }
   ) => {
     // Status 2 = report has open prompts to be answered before data can be returned
-    if (instanceDefinition.status !== 2) {
+    if (instanceDefinition.status !== ObjectExecutionStatus.PROMPTED) {
       return instanceDefinition;
     }
 
     try {
       let count = 0;
 
-      while (instanceDefinition.status === 2 && count < promptsAnswers.length) {
+      while (instanceDefinition.status === ObjectExecutionStatus.PROMPTED && count < promptsAnswers.length) {
         const config = {
           objectId,
           projectId,

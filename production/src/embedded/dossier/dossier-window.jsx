@@ -1,11 +1,11 @@
 import React, {
-  useEffect, useCallback, useState, useMemo
+  useEffect, useCallback, useState, useMemo, useRef
 } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
-import { Empty } from '@mstr/connector-components/';
+import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -19,23 +19,24 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
+import { DossierWindowTitle } from './dossier-window-title';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
   const [promptsAnswers, setPromptsAnswers] = useState([]);
-  const [instanceId, setInstanceId] = useState('');
+  const instanceId = useRef('');
   const [vizualizationsData, setVizualizationsData] = useState([]);
   const [lastSelectedViz, setLastSelectedViz] = useState({});
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
-  const [previousSelectionBackup, setPreviousSelectionBackup] = useState([]);
+  const previousSelectionBackup = useRef([]);
 
-  // New showLoading variable is needed to show loading spinner while prompted dossier is answered
+  // New hideEmbedded variable is needed to let the loading spinner show while prompted dossier is answered
   // behind the scenes which could take some time; especially if there are nested prompts.
   // NOTE: This loading spinner is separate from the one in EmbeddedDossier component.
-  let showLoading = false;
+  const [hideEmbedded, setHideEmbedded] = useState(false);
 
   const {
-    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt,
+    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt, repromptsQueue,
   } = props;
   const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
@@ -73,7 +74,7 @@ export const DossierWindowNotConnected = (props) => {
     return () => window.removeEventListener('message', extendSession);
   }, [extendSession]);
 
-  const handleSelection = async (dossierData) => {
+  const handleSelection = useCallback(async (dossierData) => {
     const {
       chapterKey: chosenVizchapterKey,
       visualizationKey: chosenVizKey,
@@ -87,7 +88,7 @@ export const DossierWindowNotConnected = (props) => {
         visualizationKey: chosenVizKey
       });
       setPromptsAnswers(chosenVizPromptAnswers);
-      setInstanceId(chosenVizInstanceId);
+      instanceId.current = chosenVizInstanceId;
 
       if (!vizualizationsData.find(el => (
         el.visualizationKey === chosenVizKey
@@ -125,9 +126,9 @@ export const DossierWindowNotConnected = (props) => {
         }]);
       }
     }
-  };
+  }, [chosenObjectId, chosenProjectId, vizualizationsData]);
 
-  const handleOk = () => {
+  const handleOk = useCallback(() => {
     const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -140,20 +141,23 @@ export const DossierWindowNotConnected = (props) => {
         chapterKey,
         visualizationKey,
       },
-      preparedInstanceId: instanceId,
+      preparedInstanceId: instanceId.current,
       isEdit,
     };
     popupHelper.officeMessageParent(message);
-  };
+  }, [chapterKey, chosenObjectId, chosenObjectName, chosenProjectId,
+    instanceId, isEdit, promptsAnswers, visualizationKey]);
 
   // Automatically close popup if re-prompted dossier is answered
   // and visualization is selected
-  if (isReprompt && isSelected) {
-    handleOk();
+  useEffect(() => {
+    if (isReprompt && isSelected) {
+      handleOk();
 
-    // Show loading spinner while prompts are being answered.
-    showLoading = true;
-  }
+      // Hide embedded and let loading spinner show while prompts are being answered.
+      setHideEmbedded(true);
+    }
+  }, [isReprompt, isSelected, handleOk]);
 
   /**
    * Store new instance id in state.
@@ -163,59 +167,60 @@ export const DossierWindowNotConnected = (props) => {
    *
    * @param {String} newInstanceId
    */
-  const handleInstanceIdChange = (newInstanceId) => {
-    const backup = previousSelectionBackup.find((el) => el.instanceId === newInstanceId);
+  const handleInstanceIdChange = useCallback((newInstanceId) => {
+    const backup = previousSelectionBackup.current.find((el) => el.instanceId === newInstanceId);
 
-    if (instanceId !== newInstanceId && !backup) {
+    if (instanceId.current !== newInstanceId && !backup) {
+      const currentInstanceId = instanceId.current;
       // Make a backup of last selection info.
-      setPreviousSelectionBackup([{ instanceId, lastSelectedViz, }, ...previousSelectionBackup]);
+      previousSelectionBackup.current = [{ currentInstanceId, lastSelectedViz, }, ...previousSelectionBackup.current];
       // Clear selection of viz and update instance id.
-      setInstanceId(newInstanceId);
-      setLastSelectedViz([]);
-      setVizualizationsData([]);
+      instanceId.current = newInstanceId;
+      lastSelectedViz && Object.keys(lastSelectedViz).length > 0 && setLastSelectedViz([]);
+      vizualizationsData?.length > 0 && setVizualizationsData([]);
     } else {
       // Restore backuped viz selection info in case of return to prev instance
-      setVizualizationsData([]);
+      vizualizationsData?.length > 0 && setVizualizationsData([]);
       handleSelection({
         ...backup.lastSelectedViz,
         promptsAnswers,
         instanceId: backup.instanceId,
       });
     }
-  };
+  }, [handleSelection, lastSelectedViz, promptsAnswers, vizualizationsData]);
 
   /**
    * Store new prompts answers in state
    *
    * @param {Array} newAnswers
    */
-  const handlePromptAnswer = (newAnswers) => {
+  const handlePromptAnswer = useCallback((newAnswers) => {
     setPromptsAnswers(newAnswers);
-    setVizualizationsData([]);
-  };
+    vizualizationsData?.length > 0 && setVizualizationsData([]);
+  }, [vizualizationsData]);
 
   /**
   * Change state of component so that informative message is showed only after embedded dossier is loaded.
   *
   */
-  const handleEmbeddedDossierLoad = () => {
+  const handleEmbeddedDossierLoad = useCallback(() => {
     setIsEmbeddedDossierLoaded(true);
-  };
+  }, []);
 
-  const validateSession = () => {
+  const validateSession = useCallback(() => {
     authenticationHelper.validateAuthToken().catch((error) => {
       popupHelper.handlePopupErrors(error);
     });
-  };
+  }, []);
 
   return (
     <div className="dossier-window">
-      <h1
-        title={chosenObjectName}
-        className="ant-col folder-browser-title dossier-title-margin-top"
-      >
-        {`${t('Import Dossier')} > ${chosenObjectName}`}
-      </h1>
+      <DossierWindowTitle
+        isReprompt
+        isEdit={isEdit && !isReprompt}
+        total={repromptsQueue.total}
+        index={repromptsQueue.index}
+        dossierName={chosenObjectName} />
 
       { isEmbeddedDossierLoaded
         && (
@@ -232,28 +237,29 @@ export const DossierWindowNotConnected = (props) => {
           </span>
         )}
 
-      {showLoading && <Empty isLoading />}
-
-      {!showLoading && ( // Show embedded dossier only after prompts are answered.
-        <EmbeddedDossier
-          handleSelection={handleSelection}
-          handlePromptAnswer={handlePromptAnswer}
-          handleInstanceIdChange={handleInstanceIdChange}
-          handleIframeLoadEvent={validateSession}
-          handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
-        />
+      <Empty isLoading />
+      {!hideEmbedded && ( // Hide embedded dossier only after prompts are answered.
+        <>
+          <EmbeddedDossier
+            handleSelection={handleSelection}
+            handlePromptAnswer={handlePromptAnswer}
+            handleInstanceIdChange={handleInstanceIdChange}
+            handleIframeLoadEvent={validateSession}
+            handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
+          />
+          <PopupButtons
+            handleOk={handleOk}
+            handleCancel={handleCancel}
+            handleBack={!isEdit && handleBack}
+            hideSecondary
+            disableActiveActions={!isSelected}
+            isPublished={!(isSelected && !isSupported && !isChecking)}
+            disableSecondary={isSelected && !isSupported && !isChecking}
+            checkingSelection={isChecking}
+            hideOk={isReprompt}
+          />
+        </>
       )}
-      <PopupButtons
-        handleOk={handleOk}
-        handleCancel={handleCancel}
-        handleBack={!isEdit && handleBack}
-        hideSecondary
-        disableActiveActions={!isSelected}
-        isPublished={!(isSelected && !isSupported && !isChecking)}
-        disableSecondary={isSelected && !isSupported && !isChecking}
-        checkingSelection={isChecking}
-        hideOk={isReprompt}
-      />
     </div>
   );
 };
@@ -276,6 +282,10 @@ DossierWindowNotConnected.propTypes = {
     selectedViz: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
+  repromptsQueue: PropTypes.shape({
+    total: PropTypes.number,
+    index: PropTypes.number,
+  }),
 };
 
 DossierWindowNotConnected.defaultProps = {
@@ -296,11 +306,16 @@ DossierWindowNotConnected.defaultProps = {
     selectedViz: '',
   },
   isReprompt: false,
+  repromptsQueue: {
+    total: 0,
+    index: 0,
+  },
 };
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer, officeReducer, answersReducer, popupStateReducer
+    navigationTree, popupReducer, sessionReducer,
+    officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer,
   } = state;
   const {
     chosenObjectName,
@@ -338,6 +353,7 @@ function mapStateToProps(state) {
     promptObjects,
     importRequested,
     isReprompt: popupStateReducer.isReprompt,
+    repromptsQueue: { ...repromptsQueueReducer },
   };
 }
 

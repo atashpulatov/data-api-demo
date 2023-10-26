@@ -36,7 +36,8 @@ export const RightSidePanelNotConnected = ({
   notifications,
   operations,
   popupData,
-  isPopupRendered
+  isPopupRendered,
+  toggleCurtain,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
@@ -56,6 +57,7 @@ export const RightSidePanelNotConnected = ({
       }
     }
     initializeSidePanel();
+    sidePanelService.clearRepromptTask();
   }, []);
 
   React.useEffect(() => {
@@ -124,7 +126,7 @@ export const RightSidePanelNotConnected = ({
     await wrapper(sidePanelNotificationHelper.setDuplicatePopup, { objectWorkingId, ...duplicatePopupParams });
   };
   const editWrapper = async (params) => { await wrapper(sidePanelService.edit, params); };
-  const repromptWrapper = async (params) => { await wrapper(sidePanelService.reprompt, params); };
+  const repromptWrapper = async (...params) => { await wrapper(sidePanelService.reprompt, params); };
   const refreshWrapper = async (...params) => { await wrapper(sidePanelService.refresh, params); };
   const removeWrapper = async (...params) => { await wrapper(sidePanelService.remove, params); };
   const renameWrapper = async (params, name) => { await wrapper(sidePanelService.rename, params, name); };
@@ -135,29 +137,32 @@ export const RightSidePanelNotConnected = ({
   const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
 
   return (
-    <SidePanel
-      locale={i18n.language}
-      loadedObjects={loadedObjectsWrapped}
-      onAddData={addDataWrapper}
-      onTileClick={highlightObjectWrapper}
-      onDuplicateClick={duplicateWrapper}
-      onEditClick={editWrapper}
-      onRefreshClick={refreshWrapper}
-      onRemoveClick={removeWrapper}
-      onRename={renameWrapper}
-      popup={sidePanelPopup}
-      settingsMenu={isSettings && <SettingsMenu />}
-      onSettingsClick={handleSettingsClick}
-      confirmationWindow={isConfirm && <Confirmation />}
-      globalNotification={globalNotification}
-      onSelectAll={notificationService.dismissNotifications}
-      shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-      isPopupRendered={isPopupRendered}
-      reusePromptAnswers={reusePromptAnswers}
-      settingsPanelLoaded={settingsPanelLoaded}
-      handleReusePromptAnswers={handleReusePromptAnswers}
-      handleToggleSettingsPanel={handleToggleSettingsPanel}
-      onRepromptClick={repromptWrapper} />
+    <>
+      {toggleCurtain && <div className="block-side-panel-ui" /> }
+      <SidePanel
+        locale={i18n.language}
+        loadedObjects={loadedObjectsWrapped}
+        onAddData={addDataWrapper}
+        onTileClick={highlightObjectWrapper}
+        onDuplicateClick={duplicateWrapper}
+        onEditClick={editWrapper}
+        onRefreshClick={refreshWrapper}
+        onRemoveClick={removeWrapper}
+        onRename={renameWrapper}
+        popup={sidePanelPopup}
+        settingsMenu={isSettings && <SettingsMenu />}
+        onSettingsClick={handleSettingsClick}
+        confirmationWindow={isConfirm && <Confirmation />}
+        globalNotification={globalNotification}
+        onSelectAll={notificationService.dismissNotifications}
+        shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+        isPopupRendered={isPopupRendered}
+        reusePromptAnswers={reusePromptAnswers}
+        settingsPanelLoaded={settingsPanelLoaded}
+        handleReusePromptAnswers={handleReusePromptAnswers}
+        handleToggleSettingsPanel={handleToggleSettingsPanel}
+        onRepromptClick={repromptWrapper} />
+    </>
   );
 };
 
@@ -183,6 +188,7 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     popupData,
     isPopupRendered: popupOpen,
+    toggleCurtain: state.repromptsQueueReducer?.repromptsQueue?.length > 0,
   };
 };
 
@@ -268,4 +274,5 @@ RightSidePanelNotConnected.propTypes = {
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func,
   isPopupRendered: PropTypes.bool,
+  toggleCurtain: PropTypes.bool,
 };

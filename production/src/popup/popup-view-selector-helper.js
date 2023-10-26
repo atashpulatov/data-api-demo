@@ -4,6 +4,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { mstrObjectRestService } from '../mstr-object/mstr-object-rest-service';
 import { popupHelper } from './popup-helper';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
+import { ObjectExecutionStatus } from '../helpers/prompts-handling-helper';
 
 const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 
@@ -72,7 +73,7 @@ class PopupViewSelectorHelper {
     const configInstace = { objectId, projectId };
     let instanceDefinition = await createInstance(configInstace);
     let count = 0;
-    while (instanceDefinition.status === 2) {
+    while (instanceDefinition.status === ObjectExecutionStatus.PROMPTED) {
       const configPrompts = {
         objectId,
         projectId,
