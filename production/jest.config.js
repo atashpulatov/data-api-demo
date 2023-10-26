@@ -12,7 +12,4 @@ module.exports = {
   testEnvironment: 'jsdom',
   resetMocks: true,
   timers: 'legacy',
-  setupFiles: [
-    './_tests_/setupFakedIndexedDB.js',
-  ],
 };
