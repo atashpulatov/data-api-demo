@@ -29,6 +29,7 @@ export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested, repromptsQueue,
+    isMultipleReprompt,
   } = props;
   const { chosenObjectId } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
@@ -129,12 +130,12 @@ export const PromptsWindowNotConnected = (props) => {
    *
    * @param {*} promptObjs
    * @param {*} previousAnswers
-   * @param {*} isImportingOrPreparingDataWithPreviousPromptAnswers
+   * @param {*} shouldUseSavedPromptAnswers
    * @returns
    */
   const prepareAndHandlePromptAnswers = useCallback(
-    (promptObjs, previousAnswers, isImportingOrPreparingDataWithPreviousPromptAnswers) => {
-      if (isImportingOrPreparingDataWithPreviousPromptAnswers) {
+    (promptObjs, previousAnswers, shouldUseSavedPromptAnswers) => {
+      if (shouldUseSavedPromptAnswers) {
         return prepareGivenPromptAnswers(promptObjs, previousAnswers);
       }
 
@@ -193,11 +194,17 @@ export const PromptsWindowNotConnected = (props) => {
 
       // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
       // or preparing data on a report if re-use prompt answers setting is enabled and there are previous prompt answers
-      if (isReprompt || hasImportOrPreparedRequestsWithPromptObjsAndAnswers) {
+      if (isReprompt || hasImportOrPreparedRequestsWithPromptObjsAndAnswers || isMultipleReprompt) {
+        // If it is multiple re-prompt, then we need to replaced edited report's answers in definition
+        // with saved prompt answers if any.
+        const promptObjectsToCompareWith = isMultipleReprompt ? editedObject.promptsAnswers[0].answers : promptObjects;
+
         // Update givenPromptsAnswers collection with previous prompt answers if importing
-        // a report/dossier or preparing data on a report; and reusePromptAnswers flag is enabled
+        // a report/dossier or preparing data on a report; and reusePromptAnswers flag is enabled.
+        // Indicate to try to use saved prompt answers if any when multiple reprompt is in progress.
         const givenPromptsAnswers = prepareAndHandlePromptAnswers(
-          promptObjects, previousPromptsAnswers, isImportingOrPreparingDataWithPreviousPromptAnswers
+          promptObjectsToCompareWith, previousPromptsAnswers,
+          isImportingOrPreparingDataWithPreviousPromptAnswers || isMultipleReprompt
         );
 
         documentProps.instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
@@ -251,7 +258,8 @@ export const PromptsWindowNotConnected = (props) => {
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId,
     isReprompt, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
     session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
-    finishRepromptWithoutEditFilters, isPreparedDataRequested]);
+    finishRepromptWithoutEditFilters, isPreparedDataRequested, isMultipleReprompt,
+    editedObject.promptsAnswers]);
 
   /**
    * This should run the embedded dossier and pass instance ID to the plugin
@@ -306,7 +314,7 @@ export const PromptsWindowNotConnected = (props) => {
   };
 
   // Determine whether Re-prompt title should be shown if queue has more than one item
-  const showRepromptTitle = isReprompt && repromptsQueue.total > 1;
+  const showRepromptTitle = isReprompt && isMultipleReprompt;
   const editedObjectName = editedObject.chosenObjectName;
 
   return (
@@ -352,7 +360,7 @@ PromptsWindowNotConnected.propTypes = {
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
     projectId: PropTypes.string,
-    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({})),
+    promptsAnswers: PropTypes.arrayOf(PropTypes.shape({ answers: PropTypes.arrayOf(PropTypes.shape({})), })),
     chosenObjectSubtype: PropTypes.number,
     chosenObjectName: PropTypes.string,
     instanceId: PropTypes.string,
@@ -371,6 +379,7 @@ PromptsWindowNotConnected.propTypes = {
     total: PropTypes.number,
     index: PropTypes.number,
   }),
+  isMultipleReprompt: PropTypes.bool,
 };
 
 export const mapStateToProps = (state) => {
@@ -412,6 +421,7 @@ export const mapStateToProps = (state) => {
     promptObjects: promptObjectsResolved, // Prompt objects to be used for import
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
+    isMultipleReprompt: repromptsQueueReducer.total > 1,
   };
 };
 
