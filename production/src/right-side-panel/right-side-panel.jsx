@@ -102,7 +102,7 @@ export const RightSidePanelNotConnected = ({
   // the side panel curtain.
   React.useEffect(() => {
     // Only if there are reprompt tasks in the queue AKA 'Reprompt All' workflow.
-    if (repromptsQueue.length > 0) {
+    if (repromptsQueue?.length > 0) {
       // Check for object-specific warnings.
       const isWarningObjectNotificationShown = notifications?.some(
         notification => notification?.type === objectNotificationTypes.WARNING
