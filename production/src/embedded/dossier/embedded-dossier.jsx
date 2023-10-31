@@ -390,18 +390,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const combinedMap = new Map(A.map(obj => [obj.key, obj]));
 
     // Iterate through array B
-    for (const objB of B) {
-      // Use the key attribute to check if the object exists in the Map
-      const keyB = objB.key;
-
-      if (combinedMap.has(keyB)) {
-        // If the object with the same key exists in A, replace it with the object from B
-        combinedMap.set(keyB, objB);
-      } else {
-        // If the object doesn't exist in A, add it to the Map
-        combinedMap.set(keyB, objB);
-      }
-    }
+    B && B.forEach(objB => {
+      // If the object with the same key exists in A, replace it with the object from B
+      // and if the object doesn't exist in A, add it to the Map
+      combinedMap.set(objB.key, objB);
+    });
 
     // Convert the Map values back to an array
     const combinedArray = Array.from(combinedMap.values());
