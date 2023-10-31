@@ -40,7 +40,6 @@ export const RightSidePanelNotConnected = ({
   popupData,
   isPopupRendered,
   toggleCurtain,
-  repromptsQueue,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
@@ -101,8 +100,8 @@ export const RightSidePanelNotConnected = ({
   // we should clear the Reprompt Task Queue in order to end the procedure and remove
   // the side panel curtain.
   React.useEffect(() => {
-    // Only if there are reprompt tasks in the queue AKA 'Reprompt All' workflow.
-    if (repromptsQueue?.length > 0) {
+    // Only when we render the side-panel curtain e.g. during 'Reprompt All' workflow.
+    if (toggleCurtain) {
       // Check for object-specific warnings.
       const isWarningObjectNotificationShown = notifications?.some(
         notification => notification?.type === objectNotificationTypes.WARNING
@@ -121,7 +120,7 @@ export const RightSidePanelNotConnected = ({
         sidePanelService.clearRepromptTask();
       }
     }
-  }, [repromptsQueue, notifications, globalNotification]);
+  }, [toggleCurtain, notifications, globalNotification]);
 
   /**
      * Wraps a function to be called when user clicks an action icon.
@@ -218,8 +217,7 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     popupData,
     isPopupRendered: popupOpen,
-    toggleCurtain: repromptsQueue.length > 0,
-    repromptsQueue
+    toggleCurtain: repromptsQueue?.length > 0,
   };
 };
 
@@ -306,5 +304,4 @@ RightSidePanelNotConnected.propTypes = {
   toggleIsClearDataFailedFlag: PropTypes.func,
   isPopupRendered: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
-  repromptsQueue: PropTypes.arrayOf(PropTypes.shape({}))
 };
