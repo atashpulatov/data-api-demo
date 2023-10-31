@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel, popupTypes } from '@mstr/connector-components';
+import {
+  SidePanel, popupTypes, objectNotificationTypes, globalNotificationTypes
+} from '@mstr/connector-components';
 import i18n from '../i18n';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
@@ -38,6 +40,7 @@ export const RightSidePanelNotConnected = ({
   popupData,
   isPopupRendered,
   toggleCurtain,
+  repromptsQueue,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
@@ -93,6 +96,32 @@ export const RightSidePanelNotConnected = ({
       operations
     ));
   }, [loadedObjects, notifications, operations]);
+
+  // If a warning or error notification appears during the Reprompt All workflow,
+  // we should clear the Reprompt Task Queue in order to end the procedure and remove
+  // the side panel curtain.
+  React.useEffect(() => {
+    // Only if there are reprompt tasks in the queue AKA 'Reprompt All' workflow.
+    if (repromptsQueue.length > 0) {
+      // Check for object-specific warnings.
+      const isWarningObjectNotificationShown = notifications?.some(
+        notification => notification?.type === objectNotificationTypes.WARNING
+      );
+      const globalNotificationWarningsAndErrors = [
+        globalNotificationTypes.CONNECTION_ERROR,
+        globalNotificationTypes.MSTR_SESSION_EXPIRED,
+        globalNotificationTypes.GLOBAL_WARNING
+      ];
+      // Check for global warnings and errors.
+      const isWarningOrErrorGlobalNotificationShown = globalNotificationWarningsAndErrors.includes(
+        globalNotification?.type
+      );
+      if (isWarningObjectNotificationShown || isWarningOrErrorGlobalNotificationShown) {
+        // Clear the Reprompt Task Queue.
+        sidePanelService.clearRepromptTask();
+      }
+    }
+  }, [repromptsQueue, notifications, globalNotification]);
 
   /**
      * Wraps a function to be called when user clicks an action icon.
@@ -170,6 +199,7 @@ export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
+  const { repromptsQueue } = state.repromptsQueueReducer;
   const {
     isConfirm, isSettings, isSecured, isClearDataFailed, settingsPanelLoaded, reusePromptAnswers, popupOpen, popupData
   } = state.officeReducer;
@@ -188,7 +218,8 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     popupData,
     isPopupRendered: popupOpen,
-    toggleCurtain: state.repromptsQueueReducer?.repromptsQueue?.length > 0,
+    toggleCurtain: repromptsQueue.length > 0,
+    repromptsQueue
   };
 };
 
@@ -203,7 +234,7 @@ export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(Right
 
 RightSidePanelNotConnected.propTypes = {
   popupData: PropTypes.shape({}),
-  globalNotification: PropTypes.shape({}),
+  globalNotification: PropTypes.shape({ type: PropTypes.string }),
   loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({
       body: PropTypes.shape({}),
@@ -275,4 +306,5 @@ RightSidePanelNotConnected.propTypes = {
   toggleIsClearDataFailedFlag: PropTypes.func,
   isPopupRendered: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
+  repromptsQueue: PropTypes.arrayOf(PropTypes.shape({}))
 };
