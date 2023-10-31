@@ -21,7 +21,7 @@ export function prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers)
   // Loop through the prompts objects and find the corresponding answer from the persisted answers.
   // and assign the 'type' property to the answer. Also, mark the answer as 'useDefault'
   // if it is not required and has no values.
-  promptObjects.forEach((promptObject) => {
+  promptObjects && promptObjects.forEach((promptObject) => {
     const previousPromptIndex = previousPromptsAnswers.findIndex(
       (answerPrmpt) => answerPrmpt && answerPrmpt.key === promptObject.key
     );

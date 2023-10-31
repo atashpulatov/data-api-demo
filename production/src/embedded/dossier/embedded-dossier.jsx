@@ -164,6 +164,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       dossierOpenRequested,
       promptObjects,
       isPrompted,
+      isMultipleReprompt,
     } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
@@ -171,7 +172,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     } = mstrData;
     let instance = {};
     try {
-      instance = await this.handleInstanceId(instanceId, projectId, dossierId, isPrompted);
+      // Create instance and handle it different if it is prompted or multiple reprompt is triggered.
+      instance = await this.handleInstanceId(instanceId, projectId, dossierId, isPrompted || isMultipleReprompt);
 
       // Declared variables to determine whether importing a report/dossier is taking place and
       // whether there are previous prompt answers to handle
@@ -180,12 +182,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         && previousPromptsAnswers?.length > 0 && isImportedObjectPrompted;
 
       // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
-      const givenPromptsAnswers = handlePreviousAnswersAtImport ? prepareGivenPromptAnswers(promptObjects, previousPromptsAnswers) : { ...promptsAnswers };
+      // or when multiple reprompt is triggered, in this case, use mstrData's (edited object) prompts answers.
+      const givenPromptsAnswers = handlePreviousAnswersAtImport || isMultipleReprompt
+        ? prepareGivenPromptAnswers(isMultipleReprompt ? mstrData.promptsAnswers.answers : promptObjects,
+          previousPromptsAnswers) : { ...promptsAnswers };
 
       instance = await this.prepareAndHandlePromptAnswers(instance, dossierId, projectId, givenPromptsAnswers);
 
-      // Open Prompts' dialog if there are prompts to answer when importing a report/dossier.
-      if (dossierOpenRequested && reusePromptAnswers && isImportedObjectPrompted) {
+      // Open Prompts' dialog if there are prompts to answer when importing a report/dossier or when
+      // multiple reprompt is triggered; 'reusePromptAnswers' needs to be true for both cases.
+      if (reusePromptAnswers && ((dossierOpenRequested && isImportedObjectPrompted) || isMultipleReprompt)) {
         // Re-prompt the Dossier's instance to show the prompts dialog.
         const resp = await rePromptDossier(
           dossierId,
@@ -355,7 +361,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     // Create reference to previous answers. This function called again after
     // nested re-prompting the dossier, so we need to keep previous answers along with new ones
     const tempAnswers = this.dossierData.promptsAnswers?.answers ? this.dossierData.promptsAnswers.answers : [];
-    promptsAnswers.answers = [...tempAnswers, ...promptsAnswers.answers];
+    // Combined the prompt answers.
+    promptsAnswers.answers = this.combineArraysByObjectKey(tempAnswers, promptsAnswers.answers);
 
     // Proceed with merging answers with prompts defined if there are prompts to answer.
     await mergeAnswersWithPromptsDefined(mstrData.dossierId, mstrData.projectId, this.dossierData.instanceId, promptsAnswers.answers, false);
@@ -369,6 +376,37 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.onVizSelectionHandler(payload);
       }
     }
+  }
+
+  /**
+   * Have 2 arrays, A and B, that needs to be combined; however, if there are items in B that
+   * are also in A, then I want items from B to replace the ones in A.
+   * @param {*} A
+   * @param {*} B
+   * @returns consolidated array
+   */
+  combineArraysByObjectKey(A, B) {
+    // Create a Map to store objects from array A with keys as the map keys
+    const combinedMap = new Map(A.map(obj => [obj.key, obj]));
+
+    // Iterate through array B
+    for (const objB of B) {
+      // Use the key attribute to check if the object exists in the Map
+      const keyB = objB.key;
+
+      if (combinedMap.has(keyB)) {
+        // If the object with the same key exists in A, replace it with the object from B
+        combinedMap.set(keyB, objB);
+      } else {
+        // If the object doesn't exist in A, add it to the Map
+        combinedMap.set(keyB, objB);
+      }
+    }
+
+    // Convert the Map values back to an array
+    const combinedArray = Array.from(combinedMap.values());
+
+    return combinedArray;
   }
 
   render() {
@@ -418,6 +456,11 @@ EmbeddedDossierNotConnected.propTypes = {
     type: PropTypes.string,
   })),
   isPrompted: PropTypes.bool,
+  repromptsQueue: PropTypes.shape({
+    total: PropTypes.number,
+    index: PropTypes.number,
+  }),
+  isMultipleReprompt: PropTypes.bool,
 };
 
 EmbeddedDossierNotConnected.defaultProps = {
@@ -430,7 +473,8 @@ EmbeddedDossierNotConnected.defaultProps = {
     promptsAnswers: null,
     selectedViz: '',
   },
-  handleSelection: () => { },
+  handleSelection: () => {},
+  isMultipleReprompt: false,
 };
 
 const mapStateToProps = (state) => {
@@ -441,6 +485,7 @@ const mapStateToProps = (state) => {
     officeReducer,
     answersReducer,
     popupStateReducer,
+    repromptsQueueReducer,
   } = state;
   const {
     chosenObjectName,
@@ -459,6 +504,11 @@ const mapStateToProps = (state) => {
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
   const { isReprompt } = popupStateReducer;
+  const isMultipleReprompt = repromptsQueueReducer.total > 1;
+
+  // Do not specify the instanceId if it is a multiple reprompt because, if it is specified,
+  // the embedded dossier will not load the saved prompts and will use the default ones instead, the ones
+  // in the definition when it was imported the first time.
   const mstrData = {
     envUrl,
     authToken,
@@ -467,7 +517,7 @@ const mapStateToProps = (state) => {
     promptsAnswers: isEdit || isReprompt ? editedObject.promptsAnswers : promptsAnswers,
     visualizationInfo: editedObject.visualizationInfo,
     selectedViz: isEdit || isReprompt ? editedObject.selectedViz : '',
-    instanceId: editedObject.instanceId,
+    instanceId: !isMultipleReprompt ? editedObject.instanceId : '',
   };
   return {
     mstrData,
@@ -476,6 +526,8 @@ const mapStateToProps = (state) => {
     promptObjects,
     dossierOpenRequested,
     isPrompted,
+    repromptsQueue: { ...repromptsQueueReducer },
+    isMultipleReprompt,
   };
 };
 
