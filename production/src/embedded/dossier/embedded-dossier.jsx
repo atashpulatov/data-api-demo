@@ -181,11 +181,12 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       const handlePreviousAnswersAtImport = dossierOpenRequested && reusePromptAnswers
         && previousPromptsAnswers?.length > 0 && isImportedObjectPrompted;
 
+      const promptObjectAnswers = isMultipleReprompt && mstrData.promptsAnswers?.answers ? mstrData.promptsAnswers.answers : promptObjects;
+      const shouldPreparePromptAnswers = handlePreviousAnswersAtImport || isMultipleReprompt;
+
       // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
       // or when multiple reprompt is triggered, in this case, use mstrData's (edited object) prompts answers.
-      const givenPromptsAnswers = handlePreviousAnswersAtImport || isMultipleReprompt
-        ? prepareGivenPromptAnswers(isMultipleReprompt ? mstrData.promptsAnswers.answers : promptObjects,
-          previousPromptsAnswers) : { ...promptsAnswers };
+      const givenPromptsAnswers = shouldPreparePromptAnswers ? prepareGivenPromptAnswers(promptObjectAnswers, previousPromptsAnswers) : { ...promptsAnswers };
 
       instance = await this.prepareAndHandlePromptAnswers(instance, dossierId, projectId, givenPromptsAnswers);
 
