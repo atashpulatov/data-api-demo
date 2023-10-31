@@ -15,14 +15,12 @@ import {
   REFRESH_OPERATION,
   EDIT_OPERATION
 } from '../operation/operation-type-names';
-import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
 
 class ErrorService {
-  init = (reduxStore, sessionActions, sessionHelper, notificationService) => {
-    this.reduxStore = reduxStore;
+  init = (sessionActions, sessionHelper, notificationService) => {
     this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
@@ -36,8 +34,6 @@ class ErrorService {
 
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage, errorType);
-
-    this.checkForClearRepromptTask();
 
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
       officeReducerHelper.dispayPopupOnSidePanel({
@@ -108,17 +104,6 @@ class ErrorService {
       setTimeout(() => {
         this.fullLogOut();
       }, TIMEOUT);
-    }
-  };
-
-  /**
-   * Function used to check if Reprompt All task queue needs to be reset,
-   * due to error that occured mid-procedure.
-   */
-  checkForClearRepromptTask = () => {
-    const { repromptsQueueReducer } = this.reduxStore.getState();
-    if (repromptsQueueReducer?.repromptsQueue?.length > 0) {
-      this.reduxStore.dispatch(clearRepromptTask());
     }
   };
 
