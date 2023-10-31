@@ -33,11 +33,11 @@ class StepSaveObjectInExcel {
       // Nothing will happen if there is no task in queue.
       this.reduxStore.dispatch(executeNextRepromptTask());
     } catch (error) {
-      // Clear reprompt task queue if any error occurs.
-      this.reduxStore.dispatch(clearRepromptTask());
-
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
+
+      // Clear reprompt task queue if any error occurs.
+      this.reduxStore.dispatch(clearRepromptTask());
     } finally {
       console.timeEnd('Total');
       console.groupEnd();
