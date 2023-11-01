@@ -21,7 +21,7 @@ const PromptsWindowTitleNotConnected: FC<PromptWindowTitleTypes> = ({
     <>
       {showTitle && (
         <div className="title-bar">
-          <span>{t('Reprompt')} {index}/{total} &gt; {objectName}</span>
+          <span>{t('Reprompt')} {t('{{index}} of {{total}}', { index, total })} &gt; {objectName}</span>
         </div>
       )}
     </>

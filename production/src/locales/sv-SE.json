@@ -244,5 +244,6 @@
    "To view the data, please unhide the worksheet.": "Ta fram arbetsbladet för att visa datan.",
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Importen misslyckades eftersom storleksgränsen för Excel Online-begäranden eller -svar är 5 MB. Testa att begränsa dina data.",
    "Please select only one range before import.": "Välj endast ett intervall innan genomför importen.",
-   "Apply": "Tillämpa"
+   "Apply": "Tillämpa",
+   "{{index}} of {{total}}": "{{index}} av {{total}}"
 }

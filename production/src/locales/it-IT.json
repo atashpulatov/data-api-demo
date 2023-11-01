@@ -244,5 +244,6 @@
    "To view the data, please unhide the worksheet.": "Per visualizzare i dati, scopri il foglio di lavoro.",
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Importazione non riuscita perché il limite di dimensione del payload per qualsiasi richiesta o risposta di Excel Online è 5 MB. Prova a limitare i dati.",
    "Please select only one range before import.": "Selezionare solo un intervallo prima dell'importazione.",
-   "Apply": "Applica"
+   "Apply": "Applica",
+   "{{index}} of {{total}}": "{{index}} di {{total}}"
 }
