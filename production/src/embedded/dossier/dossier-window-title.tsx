@@ -21,8 +21,7 @@ export const DossierWindowTitle: FC<DossierWindowTitleTypes> = ({
   if (isEdit) {
     dossierTitle = `${t('Edit Dossier')} > ${dossierName}`;
   } else if (showMultipleRepromptMessage) {
-    const indexOfTotalCounter = t('{{index}} of {{total}}', { index, total });
-    dossierTitle = `${t('Reprompt')} ${indexOfTotalCounter} > ${dossierName}`;
+    dossierTitle = `${t('Reprompt')} ${t('{{index}} of {{total}}', { index, total })} > ${dossierName}`;
   } else if (showSingleRepromptMessage) {
     dossierTitle = `${t('Reprompt')} > ${dossierName}`;
   }

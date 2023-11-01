@@ -16,13 +16,12 @@ const PromptsWindowTitleNotConnected: FC<PromptWindowTitleTypes> = ({
   showTitle, index, total, objectName
 }) => {
   const [t] = useTranslation('common', { i18n });
-  const indexOfTotalCounter = t('{{index}} of {{total}}', { index, total });
 
   return (
     <>
       {showTitle && (
         <div className="title-bar">
-          <span>{t('Reprompt')} {indexOfTotalCounter} &gt; {objectName}</span>
+          <span>{t('Reprompt')} {t('{{index}} of {{total}}', { index, total })} &gt; {objectName}</span>
         </div>
       )}
     </>
