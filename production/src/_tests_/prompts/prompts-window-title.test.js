@@ -32,6 +32,6 @@ describe('PromptsWindowTitleNotConnected', () => {
       <PromptsWindowTitle {...props} />
     </Provider>);
     // then
-    expect(getByText(`Reprompt ${props.index}/${props.total} > ${props.objectName}`)).toBeDefined();
+    expect(getByText(`Reprompt ${props.index} of ${props.total} > ${props.objectName}`)).toBeDefined();
   });
 });

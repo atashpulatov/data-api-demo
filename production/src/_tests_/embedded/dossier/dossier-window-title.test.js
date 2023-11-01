@@ -47,7 +47,7 @@ describe('DossierWindowTitle', () => {
     // when
     const componentWrapper = render(<DossierWindowTitle {...props} />);
     // then
-    const paragraph = componentWrapper.getAllByText(`Reprompt ${props.index}/${props.total} > ${props.dossierName}`);
+    const paragraph = componentWrapper.getAllByText(`Reprompt ${props.index} of ${props.total} > ${props.dossierName}`);
     expect(paragraph).toBeDefined();
   });
 });
