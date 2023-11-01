@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  SidePanel, popupTypes, objectNotificationTypes, globalNotificationTypes
-} from '@mstr/connector-components';
+import { SidePanel, popupTypes, objectNotificationTypes } from '@mstr/connector-components';
 import i18n from '../i18n';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
@@ -22,6 +20,7 @@ import {
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
+import { globalNotificationWarningAndErrorStrings } from '../error/constants';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -106,13 +105,8 @@ export const RightSidePanelNotConnected = ({
       const isWarningObjectNotificationShown = notifications?.some(
         notification => notification?.type === objectNotificationTypes.WARNING
       );
-      const globalNotificationWarningsAndErrors = [
-        globalNotificationTypes.CONNECTION_ERROR,
-        globalNotificationTypes.MSTR_SESSION_EXPIRED,
-        globalNotificationTypes.GLOBAL_WARNING
-      ];
       // Check for global warnings and errors.
-      const isWarningOrErrorGlobalNotificationShown = globalNotificationWarningsAndErrors.includes(
+      const isWarningOrErrorGlobalNotificationShown = globalNotificationWarningAndErrorStrings.includes(
         globalNotification?.type
       );
       if (isWarningObjectNotificationShown || isWarningOrErrorGlobalNotificationShown) {
