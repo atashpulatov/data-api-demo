@@ -1,14 +1,14 @@
 .dossier-window-information-frame {
   position: fixed;
-  top: 0;
+  top: -6px;
   width: 100%;
   text-align: center;
   line-height: 26px;
 }
 
 .dossier-window-information-icon {
-  max-height: 18px;
-  max-width: 18px;
+  max-height: 16px;
+  max-width: 16px;
 }
 
 .dossier-window-information-text {
@@ -24,6 +24,8 @@
 .dossier-window .title-bar {
   min-width: 500px;
   margin: 15px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .dossier-window .title-bar>span {
