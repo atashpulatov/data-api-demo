@@ -1,12 +1,13 @@
 .dossier-window-information-frame {
   position: fixed;
-  top: -6px;
+  top: 0px;
   width: 100%;
   text-align: center;
   line-height: 26px;
 }
 
-.dossier-window-information-icon {
+.dossier-window-information-icon,
+.preview-info-icon svg {
   max-height: 16px;
   max-width: 16px;
 }
