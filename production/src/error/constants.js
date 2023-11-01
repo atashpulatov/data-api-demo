@@ -203,6 +203,4 @@ export const handleWrongRange = (error) => {
 
 // Stores an array containing all the global notification types (all warnings and errors)
 // that we read from connector-components
-export const globalNotificationWarningAndErrorStrings = [
-  ...Object.values(globalNotificationTypes)
-];
+export const globalNotificationWarningAndErrorStrings = Object.values(globalNotificationTypes || {});
