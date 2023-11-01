@@ -132,7 +132,9 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
   let dossierInstanceDefinition = await mstrObjectRestService
     .createDossierBasedOnReport(chosenObjectIdLocal, instanceId, projectId);
 
-  if (promptsAnswers?.length > 0 && dossierInstanceDefinition.status === ObjectExecutionStatus.PROMPTED) {
+  // Do not try answering prompts if collection is empty.
+  if (promptsAnswers?.length > 0 && promptsAnswers[0].answers?.length > 0
+      && dossierInstanceDefinition.status === ObjectExecutionStatus.PROMPTED) {
     // Reflect saved answers to the prompts of the Dossier's instance if applicable.
     dossierInstanceDefinition = await answerDossierPromptsHelper(
       dossierInstanceDefinition,
