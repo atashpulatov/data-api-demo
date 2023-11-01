@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel, popupTypes } from '@mstr/connector-components';
+import { SidePanel, popupTypes, objectNotificationTypes } from '@mstr/connector-components';
 import i18n from '../i18n';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
@@ -20,6 +20,7 @@ import {
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
+import { globalNotificationWarningAndErrorStrings } from '../error/constants';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -93,6 +94,27 @@ export const RightSidePanelNotConnected = ({
       operations
     ));
   }, [loadedObjects, notifications, operations]);
+
+  // If a warning or error notification appears during the Reprompt All workflow,
+  // we should clear the Reprompt Task Queue in order to end the procedure and remove
+  // the side panel curtain.
+  React.useEffect(() => {
+    // Only when we render the side-panel curtain e.g. during 'Reprompt All' workflow.
+    if (toggleCurtain) {
+      // Check for object-specific warnings.
+      const isWarningObjectNotificationShown = notifications?.some(
+        notification => notification?.type === objectNotificationTypes.WARNING
+      );
+      // Check for global warnings and errors.
+      const isWarningOrErrorGlobalNotificationShown = globalNotificationWarningAndErrorStrings.includes(
+        globalNotification?.type
+      );
+      if (isWarningObjectNotificationShown || isWarningOrErrorGlobalNotificationShown) {
+        // Clear the Reprompt Task Queue.
+        sidePanelService.clearRepromptTask();
+      }
+    }
+  }, [toggleCurtain, notifications, globalNotification]);
 
   /**
      * Wraps a function to be called when user clicks an action icon.
@@ -170,6 +192,7 @@ export const mapStateToProps = (state) => {
   const { importRequested, dossierOpenRequested } = state.navigationTree;
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
+  const { repromptsQueue } = state.repromptsQueueReducer;
   const {
     isConfirm, isSettings, isSecured, isClearDataFailed, settingsPanelLoaded, reusePromptAnswers, popupOpen, popupData
   } = state.officeReducer;
@@ -188,7 +211,7 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     popupData,
     isPopupRendered: popupOpen,
-    toggleCurtain: state.repromptsQueueReducer?.repromptsQueue?.length > 0,
+    toggleCurtain: repromptsQueue?.length > 0,
   };
 };
 
@@ -203,7 +226,7 @@ export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(Right
 
 RightSidePanelNotConnected.propTypes = {
   popupData: PropTypes.shape({}),
-  globalNotification: PropTypes.shape({}),
+  globalNotification: PropTypes.shape({ type: PropTypes.string }),
   loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({
       body: PropTypes.shape({}),

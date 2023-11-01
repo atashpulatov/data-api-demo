@@ -3,7 +3,8 @@ import {
   handleEnvNotFoundError,
   handleUnauthorizedError,
   errorMessages,
-  handleWrongRange
+  handleWrongRange,
+  globalNotificationWarningAndErrorStrings
 } from '../../error/constants';
 
 describe('Constants', () => {
@@ -110,6 +111,17 @@ describe('Constants', () => {
       const result = handleEnvNotFoundError(error);
       // then
       expect(result).toBe(errorMessages.ENDPOINT_NOT_REACHED);
+    });
+  });
+  describe('globalNotificationWarningAndErrorStrings', () => {
+    it('should contain three specific error and warning messages', () => {
+      const expectedNotificationWarningsAndErrors = [
+        'connection_error',
+        'mstr_session_expired',
+        'global_warning'
+      ];
+      // since the arrays should contain only strings, we can sort them beforehand to compare them
+      expect(globalNotificationWarningAndErrorStrings.sort()).toEqual(expectedNotificationWarningsAndErrors.sort());
     });
   });
 });

@@ -1,3 +1,4 @@
+import { globalNotificationTypes } from '@mstr/connector-components/lib/loaded-objects/object-tile/notification/global-notification/global-notification';
 import { customT } from '../customTranslation';
 
 const withDefaultValue = (obj, defaultValue) => (value) => {
@@ -199,3 +200,7 @@ export const handleWrongRange = (error) => {
       return errorMessages.UNKNOWN_ERROR;
   }
 };
+
+// Stores an array containing all the global notification types (all warnings and errors)
+// that we read from connector-components
+export const globalNotificationWarningAndErrorStrings = Object.values(globalNotificationTypes || {});
