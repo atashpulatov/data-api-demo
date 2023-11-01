@@ -244,5 +244,6 @@
    "To view the data, please unhide the worksheet.": "データを確認するため、ワークシートを再表示してください。",
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Excel Online の要求または応答ペイロード サイズの限界が 5MB なのでインポートに失敗しました。データを制限してください。",
    "Please select only one range before import.": "範囲を 1 つだけ選択してからインポートしてください。",
-   "Apply": "適用"
+   "Apply": "適用",
+   "{{index}} of {{total}}": "{{index}}/{{total}}"
 }
