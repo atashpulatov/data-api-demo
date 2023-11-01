@@ -9,6 +9,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './dossier.css';
+import { embeddedDossierHelper } from './embedded-dossier-helper';
 
 import {
   prepareGivenPromptAnswers,
@@ -155,6 +156,29 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     return instance;
   };
 
+  /**
+   * Open Prompts' dialog if there are prompts to answer when importing a report/dossier or when
+   * multiple reprompt is triggered; 'reusePromptAnswers' needs to be true for both cases.
+   * @param {*} dossierId
+   * @param {*} instance - passed as reference to update the instanceId (mid) if re-prompting the dossier.
+   * @param {*} projectId
+   * @param {*} dossierOpenRequested
+   * @param {*} isImportedObjectPrompted
+   * @param {*} isMultipleReprompt
+   */
+  openPromptDialog = async (dossierId, instance, projectId, dossierOpenRequested, isImportedObjectPrompted, isMultipleReprompt) => {
+    if ((dossierOpenRequested && isImportedObjectPrompted) || isMultipleReprompt) {
+      // Re-prompt the Dossier's instance to show the prompts dialog.
+      const resp = await rePromptDossier(
+        dossierId,
+        instance.mid,
+        projectId
+      );
+
+      instance.mid = resp?.mid;
+    }
+  };
+
   loadEmbeddedDossier = async (container) => {
     const {
       mstrData,
@@ -190,18 +214,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
       instance = await this.prepareAndHandlePromptAnswers(instance, dossierId, projectId, givenPromptsAnswers);
 
-      // Open Prompts' dialog if there are prompts to answer when importing a report/dossier or when
-      // multiple reprompt is triggered; 'reusePromptAnswers' needs to be true for both cases.
-      if (reusePromptAnswers && ((dossierOpenRequested && isImportedObjectPrompted) || isMultipleReprompt)) {
-        // Re-prompt the Dossier's instance to show the prompts dialog.
-        const resp = await rePromptDossier(
-          dossierId,
-          instance.mid,
-          projectId
-        );
-
-        instance.mid = resp.mid;
-      }
+      // Proceed with opening prompt dialog if applicable.
+      reusePromptAnswers && (await this.openPromptDialog(dossierId, instance, projectId, dossierOpenRequested, isImportedObjectPrompted, isMultipleReprompt));
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
@@ -363,7 +377,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     // nested re-prompting the dossier, so we need to keep previous answers along with new ones
     const tempAnswers = this.dossierData.promptsAnswers?.answers ? this.dossierData.promptsAnswers.answers : [];
     // Combined the prompt answers.
-    promptsAnswers.answers = this.combineArraysByObjectKey(tempAnswers, promptsAnswers.answers);
+    promptsAnswers.answers = embeddedDossierHelper.combineArraysByObjectKey(tempAnswers, promptsAnswers.answers);
 
     // Proceed with merging answers with prompts defined if there are prompts to answer.
     await mergeAnswersWithPromptsDefined(mstrData.dossierId, mstrData.projectId, this.dossierData.instanceId, promptsAnswers.answers, false);
@@ -377,30 +391,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.onVizSelectionHandler(payload);
       }
     }
-  }
-
-  /**
-   * Have 2 arrays, A and B, that needs to be combined; however, if there are items in B that
-   * are also in A, then I want items from B to replace the ones in A.
-   * @param {*} A
-   * @param {*} B
-   * @returns consolidated array
-   */
-  combineArraysByObjectKey(A, B) {
-    // Create a Map to store objects from array A with keys as the map keys
-    const combinedMap = new Map(A.map(obj => [obj.key, obj]));
-
-    // Iterate through array B
-    B && B.forEach(objB => {
-      // If the object with the same key exists in A, replace it with the object from B
-      // and if the object doesn't exist in A, add it to the Map
-      combinedMap.set(objB.key, objB);
-    });
-
-    // Convert the Map values back to an array
-    const combinedArray = Array.from(combinedMap.values());
-
-    return combinedArray;
   }
 
   render() {

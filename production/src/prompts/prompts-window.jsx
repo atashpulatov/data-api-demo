@@ -106,6 +106,11 @@ export const PromptsWindowNotConnected = (props) => {
    * @returns {void}
    */
   const finishRepromptWithoutEditFilters = useCallback((chosenObjectIdLocal, projectId) => {
+    // for the Reprompt workflow only, skip edit filter screen.
+    if (!isReprompt || isEdit) {
+      return;
+    }
+
     popupHelper.officeMessageParent({
       command: selectorProperties.commandOnUpdate,
       chosenObjectId: chosenObjectIdLocal,
@@ -124,7 +129,7 @@ export const PromptsWindowNotConnected = (props) => {
     });
   }, [editedObject.chosenObjectSubtype, editedObject.selectedAttributes, editedObject.selectedMetrics,
     editedObject.selectedFilters, editedObject.instanceId, editedObject.chosenObjectName,
-    editedObject.subtotalsInfo, editedObject.displayAttrFormNames]);
+    editedObject.subtotalsInfo, editedObject.displayAttrFormNames, isEdit, isReprompt]);
 
   /**
    *
@@ -154,13 +159,13 @@ export const PromptsWindowNotConnected = (props) => {
     const hasPromptObjects = promptObjects && promptObjects.length > 0;
     const hasImportOrPrepareDataRequest = importRequested || isPreparedDataRequested;
 
-    const hasImportOrPreparedRequestsWithPromptObjsAndAnswers = hasImportOrPrepareDataRequest
+    const isImportOrPrepateWithPrevAnswers = hasImportOrPrepareDataRequest
     && hasPreviousPromptAnswers && hasPromptObjects;
 
     // Determine whether importing a report/dossier or preparing data on a report has previous answers
     // along with making sure re-use prompt answers setting is enabled and prompt objects are available
     const isImportingOrPreparingDataWithPreviousPromptAnswers = reusePromptAnswers
-      && hasImportOrPreparedRequestsWithPromptObjsAndAnswers;
+      && isImportOrPrepateWithPrevAnswers;
 
     try {
       let msgRouter = null;
@@ -194,16 +199,16 @@ export const PromptsWindowNotConnected = (props) => {
 
       // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
       // or preparing data on a report if re-use prompt answers setting is enabled and there are previous prompt answers
-      if (isReprompt || hasImportOrPreparedRequestsWithPromptObjsAndAnswers || isMultipleReprompt) {
+      if (isReprompt || isImportOrPrepateWithPrevAnswers || isMultipleReprompt) {
         // If it is multiple re-prompt, then we need to replaced edited report's answers in definition
         // with saved prompt answers if any.
-        const promptObjectsToCompareWith = isMultipleReprompt ? editedObject.promptsAnswers[0].answers : promptObjects;
+        const updatedPromptObjects = isMultipleReprompt ? editedObject.promptsAnswers[0].answers : promptObjects;
 
         // Update givenPromptsAnswers collection with previous prompt answers if importing
         // a report/dossier or preparing data on a report; and reusePromptAnswers flag is enabled.
         // Indicate to try to use saved prompt answers if any when multiple reprompt is in progress.
         const givenPromptsAnswers = prepareAndHandlePromptAnswers(
-          promptObjectsToCompareWith, previousPromptsAnswers,
+          updatedPromptObjects, previousPromptsAnswers,
           isImportingOrPreparingDataWithPreviousPromptAnswers || isMultipleReprompt
         );
 
@@ -246,10 +251,7 @@ export const PromptsWindowNotConnected = (props) => {
           // dossierData should eventually be removed as data should be gathered via REST from report, not dossier
           promptsAnswered({ dossierData, promptsAnswers: currentAnswers });
 
-          // for the Reprompt workflow only, skip edit filter screen
-          if (isReprompt && !isEdit) {
-            finishRepromptWithoutEditFilters(chosenObjectIdLocal, projectId);
-          }
+          finishRepromptWithoutEditFilters(chosenObjectIdLocal, projectId);
         });
     } catch (error) {
       console.error({ error });
@@ -257,7 +259,7 @@ export const PromptsWindowNotConnected = (props) => {
     }
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId,
     isReprompt, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
-    session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers, isEdit,
+    session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers,
     finishRepromptWithoutEditFilters, isPreparedDataRequested, isMultipleReprompt,
     editedObject.promptsAnswers]);
 
