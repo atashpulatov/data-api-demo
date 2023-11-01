@@ -21,8 +21,12 @@ export const repromptsQueueReducer = (state = initialState, action) => {
       if (currentTask) {
         currentTask.callback(); // Execute the current task
         currentTask.isPrompted && idx++;
+
+        return { ...state, index: idx, repromptsQueue: remainingTasks };
       }
-      return { ...state, index: idx, repromptsQueue: remainingTasks };
+      // If there is no more task in queue, and the index is at the end of the queue,
+      // then reset queue and index by returning initial state.
+      return { ...initialState, };
     }
 
     case CLEAR_REPROMPT_TASKS:

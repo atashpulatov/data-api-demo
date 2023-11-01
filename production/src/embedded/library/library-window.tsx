@@ -222,7 +222,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         handleSecondary={handleSecondary}
         handleCancel={handleCancel}
         disableSecondary={
-          mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
+          !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
         isPublished={isPublished}
       />

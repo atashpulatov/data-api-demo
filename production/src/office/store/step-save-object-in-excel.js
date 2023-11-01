@@ -1,7 +1,7 @@
 import officeStoreObject from './office-store-object';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
-import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { executeNextRepromptTask, clearRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 class StepSaveObjectInExcel {
   init = (reduxStore) => {
@@ -35,6 +35,9 @@ class StepSaveObjectInExcel {
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
+
+      // Clear reprompt task queue if any error occurs.
+      this.reduxStore.dispatch(clearRepromptTask());
     } finally {
       console.timeEnd('Total');
       console.groupEnd();
