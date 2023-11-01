@@ -215,13 +215,6 @@ export const DossierWindowNotConnected = (props) => {
 
   return (
     <div className="dossier-window">
-      <DossierWindowTitle
-        isReprompt
-        isEdit={isEdit && !isReprompt}
-        total={repromptsQueue.total}
-        index={repromptsQueue.index}
-        dossierName={chosenObjectName} />
-
       { isEmbeddedDossierLoaded
         && (
           <span className="dossier-window-information-frame">
@@ -236,7 +229,12 @@ export const DossierWindowNotConnected = (props) => {
             </span>
           </span>
         )}
-
+      <DossierWindowTitle
+        isReprompt
+        isEdit={isEdit && !isReprompt}
+        total={repromptsQueue.total}
+        index={repromptsQueue.index}
+        dossierName={chosenObjectName} />
       <Empty isLoading />
       {!hideEmbedded && ( // Hide embedded dossier only after prompts are answered.
         <>
