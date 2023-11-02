@@ -158,7 +158,7 @@
    "Import dataset": "Importar conjunto de datos",
    "The named item does not exist.": "El elemento especificado no existe.",
    "This object does not contain any data.": "El objeto no incluye ningún dato.",
-   "Reprompt": "Ejecutar la selección dinámica de nuevo",
+   "Reprompt": "Volver a preguntar",
    "The endpoint cannot be reached": "No se puede acceder al punto de conexión",
    "You haven't imported any reports or datasets yet. Import data to start!": "Todavía no ha importado ningún informe o conjunto de datos. Para empezar, importe los datos.",
    "MicroStrategy for Office loaded": "MicroStrategy para Office cargado",

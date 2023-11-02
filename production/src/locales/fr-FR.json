@@ -158,7 +158,7 @@
    "Import dataset": "Importer un jeu de données",
    "The named item does not exist.": "L'élément spécifié n'existe pas.",
    "This object does not contain any data.": "Cet objet ne contient aucune donnée.",
-   "Reprompt": "Afficher de nouveau l'invite",
+   "Reprompt": "Réinviter",
    "The endpoint cannot be reached": "Le point de terminaison est injoignable",
    "You haven't imported any reports or datasets yet. Import data to start!": "Vous n'avez importé aucun rapport ni jeu de données pour le moment. Importez des données pour commencer !",
    "MicroStrategy for Office loaded": "MicroStrategy for Office chargé",

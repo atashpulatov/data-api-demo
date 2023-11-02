@@ -158,7 +158,7 @@
    "Import dataset": "导入数据集",
    "The named item does not exist.": "指定的项不存在。",
    "This object does not contain any data.": "此对象中没有任何数据。",
-   "Reprompt": "重提示",
+   "Reprompt": "重新提示",
    "The endpoint cannot be reached": "无法访问端点",
    "You haven't imported any reports or datasets yet. Import data to start!": "您尚未导入任何报表或数据集。请先导入数据。",
    "MicroStrategy for Office loaded": "已加载 MicroStrategy for Office",
