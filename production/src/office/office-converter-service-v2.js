@@ -128,15 +128,24 @@ class OfficeConverterServiceV2 {
 
   /**
    * replaces all cell data values containing null (which is MSTR standard for no data)
-   * to empty string (which is Excel standard for no data) as "null" means "do not change current value"
+   * to empty string (which is Excel standard for no data) as "null" in Excel means "do not change current value"
    *
-   * @param {body} response
+   * @param {body} response body
    * @return {body}
    */
   convertCellValuesToExcelStandard = (body) => {
-    const adjustedRawValues = body.data.metricValues.raw?.map((valuesArray) => valuesArray.map((value) => (value === null ? '' : value)));
+    const replaceNullValues = (value) => (value === null ? '' : value);
 
-    body.data.metricValues.raw = adjustedRawValues;
+    const replaceNullsInNestedRawValues = (metricValues) => {
+      Object.keys(metricValues).forEach((key) => {
+        if (key === 'raw') {
+          metricValues[key] = metricValues[key].map((singleRawArray) => singleRawArray.map(replaceNullValues));
+        } else {
+          replaceNullsInNestedRawValues(metricValues[key]);
+        }
+      });
+    };
+    replaceNullsInNestedRawValues(body.data.metricValues);
     return body;
   };
 }
