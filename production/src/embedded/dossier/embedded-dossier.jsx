@@ -219,7 +219,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       instance = await this.prepareAndHandlePromptAnswers(instance, dossierId, projectId, givenPromptsAnswers);
 
       // Proceed with opening prompt dialog if applicable.
-      reusePromptAnswers && (await this.openPromptDialog(dossierId, instance, projectId, dossierOpenRequested, isImportedObjectPrompted, isMultipleReprompt));
+      await this.openPromptDialog(dossierId, instance, projectId, dossierOpenRequested, isImportedObjectPrompted, isMultipleReprompt);
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
@@ -492,7 +492,7 @@ const mapStateToProps = (state) => {
   const isEdit = (chosenObjectName === DEFAULT_PROJECT_NAME);
   const editedObject = { ...(popupHelper.parsePopupState(popupState, promptsAnswers, formsPrivilege)) };
   const { isReprompt } = popupStateReducer;
-  const isMultipleReprompt = repromptsQueueReducer.total > 1;
+  const isMultipleReprompt = reusePromptAnswers && repromptsQueueReducer.total > 1;
 
   // Do not specify the instanceId if it is a multiple reprompt because, if it is specified,
   // the embedded dossier will not load the saved prompts and will use the default ones instead, the ones

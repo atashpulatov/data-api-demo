@@ -423,7 +423,7 @@ export const mapStateToProps = (state) => {
     promptObjects: promptObjectsResolved, // Prompt objects to be used for import
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
-    isMultipleReprompt: repromptsQueueReducer.total > 1,
+    isMultipleReprompt: reusePromptAnswers && repromptsQueueReducer.total > 1,
   };
 };
 
