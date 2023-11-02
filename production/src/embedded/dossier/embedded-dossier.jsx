@@ -20,7 +20,7 @@ import {
 
 const { microstrategy, Office } = window;
 
-const { createDossierInstance, rePromptDossier } = mstrObjectRestService;
+const { createDossierInstance, rePromptDossier, getObjectPrompts } = mstrObjectRestService;
 
 const VIZ_SELECTION_RETRY_DELAY = 200; // ms
 const VIZ_SELECTION_RETRY_LIMIT = 10;
@@ -122,19 +122,22 @@ export default class EmbeddedDossierNotConnected extends React.Component {
    * @param {*} projectId
    * @param {*} dossierId
    * @param {*} isPrompted
+   * @param {*} isMultipleReprompt
    * @returns
    */
-  handleInstanceId = async (instanceId, projectId, dossierId, isPrompted) => {
+  handleInstanceId = async (instanceId, projectId, dossierId, isPrompted, isMultipleReprompt) => {
     if (instanceId) {
       return { mid: instanceId, status: ObjectExecutionStatus.READY };
     }
 
-    // Create a new instance of the Dossier using shortcut.
-    const body = { disableManipulationsAutoSaving: true, persistViewState: true };
+    // Create a new instance of the Dossier using shortcut. Make sure not to pass the parameters to use the
+    // shortcut or persisted view state, otherwise the Dossier will include nested prompts answers and
+    // these answers will be added when re-prompting the Dossier causing an error.
+    const body = !isMultipleReprompt ? { disableManipulationsAutoSaving: true, persistViewState: true } : {};
     const instance = await createDossierInstance(projectId, dossierId, body);
 
     // Checking if the dossier is prompted and update the status accordingly
-    instance.status = isPrompted ? ObjectExecutionStatus.PROMPTED : ObjectExecutionStatus.READY;
+    instance.status = isPrompted || isMultipleReprompt ? ObjectExecutionStatus.PROMPTED : ObjectExecutionStatus.READY;
 
     return instance;
   };
@@ -197,7 +200,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     let instance = {};
     try {
       // Create instance and handle it different if it is prompted or multiple reprompt is triggered.
-      instance = await this.handleInstanceId(instanceId, projectId, dossierId, isPrompted || isMultipleReprompt);
+      instance = await this.handleInstanceId(instanceId, projectId, dossierId, isPrompted, isMultipleReprompt);
 
       // Declared variables to determine whether importing a report/dossier is taking place and
       // whether there are previous prompt answers to handle
@@ -205,7 +208,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       const handlePreviousAnswersAtImport = dossierOpenRequested && reusePromptAnswers
         && previousPromptsAnswers?.length > 0 && isImportedObjectPrompted;
 
-      const promptObjectAnswers = isMultipleReprompt && mstrData.promptsAnswers?.answers ? mstrData.promptsAnswers.answers : promptObjects;
+      // Instead of using the edited dossier prompt answers, use REST API to get the prompts objects when multiple reprompt is triggered.
+      const promptObjectAnswers = isMultipleReprompt ? await getObjectPrompts(dossierId, projectId, instance.mid) : promptObjects;
       const shouldPreparePromptAnswers = handlePreviousAnswersAtImport || isMultipleReprompt;
 
       // Update givenPromptsAnswers collection with previous prompt answers if importing a report/dossier
