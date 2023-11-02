@@ -29,7 +29,7 @@ export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested, repromptsQueue,
-    isMultipleReprompt,
+    isMultipleRepromptWithReuse,
   } = props;
   const { chosenObjectId } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
@@ -199,17 +199,18 @@ export const PromptsWindowNotConnected = (props) => {
 
       // Replace the instance with the one from the prompt answers resolved for importing prompted report/dossier
       // or preparing data on a report if re-use prompt answers setting is enabled and there are previous prompt answers
-      if (isReprompt || isImportOrPrepateWithPrevAnswers || isMultipleReprompt) {
+      if (isReprompt || isImportOrPrepateWithPrevAnswers || isMultipleRepromptWithReuse) {
         // If it is multiple re-prompt, then we need to replaced edited report's answers in definition
         // with saved prompt answers if any.
-        const updatedPromptObjects = isMultipleReprompt ? editedObject.promptsAnswers[0].answers : promptObjects;
+        const updatedPromptObjects = isMultipleRepromptWithReuse ? editedObject.promptsAnswers[0].answers
+          : promptObjects;
 
         // Update givenPromptsAnswers collection with previous prompt answers if importing
         // a report/dossier or preparing data on a report; and reusePromptAnswers flag is enabled.
         // Indicate to try to use saved prompt answers if any when multiple reprompt is in progress.
         const givenPromptsAnswers = prepareAndHandlePromptAnswers(
           updatedPromptObjects, previousPromptsAnswers,
-          isImportingOrPreparingDataWithPreviousPromptAnswers || isMultipleReprompt
+          isImportingOrPreparingDataWithPreviousPromptAnswers || isMultipleRepromptWithReuse
         );
 
         documentProps.instance = await preparePromptedReport(chosenObjectIdLocal, projectId, givenPromptsAnswers);
@@ -260,7 +261,7 @@ export const PromptsWindowNotConnected = (props) => {
   }, [chosenObjectId, editedObject.chosenObjectId, editedObject.projectId,
     isReprompt, mstrData.chosenProjectId, promptsAnswered, prepareAndHandlePromptAnswers,
     session, importRequested, previousPromptsAnswers, promptObjects, reusePromptAnswers,
-    finishRepromptWithoutEditFilters, isPreparedDataRequested, isMultipleReprompt,
+    finishRepromptWithoutEditFilters, isPreparedDataRequested, isMultipleRepromptWithReuse,
     editedObject.promptsAnswers]);
 
   /**
@@ -316,7 +317,7 @@ export const PromptsWindowNotConnected = (props) => {
   };
 
   // Determine whether Re-prompt title should be shown if queue has more than one item
-  const showRepromptTitle = isReprompt && isMultipleReprompt;
+  const showRepromptTitle = isReprompt && isMultipleRepromptWithReuse;
   const editedObjectName = editedObject.chosenObjectName;
 
   return (
@@ -381,7 +382,7 @@ PromptsWindowNotConnected.propTypes = {
     total: PropTypes.number,
     index: PropTypes.number,
   }),
-  isMultipleReprompt: PropTypes.bool,
+  isMultipleRepromptWithReuse: PropTypes.bool,
 };
 
 export const mapStateToProps = (state) => {
@@ -423,7 +424,7 @@ export const mapStateToProps = (state) => {
     promptObjects: promptObjectsResolved, // Prompt objects to be used for import
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
-    isMultipleReprompt: reusePromptAnswers && repromptsQueueReducer.total > 1,
+    isMultipleRepromptWithReuse: reusePromptAnswers && repromptsQueueReducer.total > 1,
   };
 };
 
