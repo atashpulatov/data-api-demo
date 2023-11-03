@@ -130,10 +130,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       return { mid: instanceId, status: ObjectExecutionStatus.READY };
     }
 
-    // Create a new instance of the Dossier using shortcut. Make sure not to pass the parameters to use the
-    // shortcut or persisted view state, otherwise the Dossier will include nested prompts answers and
-    // these answers will be added when re-prompting the Dossier causing an error.
-    const body = !isMultipleRepromptWithReuse ? { disableManipulationsAutoSaving: true, persistViewState: true } : {};
+    // Create a new instance of the Dossier using shortcut. For Multiple Reprompt workflow (with Reuse Prompt Answers flag on),
+    // make sure to pass 'disableManipulationsAutoSaving: false' to ensure the Dossier instance is interpreted as a 'Shortcut Run as Base'.
+    // Otherwise, the Dossier will include nested prompts answers and these answers will be added when re-prompting the Dossier, causing an error.
+    // Refer to the chart here for more details: https://microstrategy.atlassian.net/wiki/spaces/TECCLIENTSMOBILECTCiOSANA/pages/3646718180/F35914+Bookmarks+support+when+linking+to+a+dossier#2.2.1-Dossier-Execution
+    const body = { disableManipulationsAutoSaving: !isMultipleRepromptWithReuse, persistViewState: true };
     const instance = await createDossierInstance(projectId, dossierId, body);
 
     // Checking if the dossier is prompted and update the status accordingly
