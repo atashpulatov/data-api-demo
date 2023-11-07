@@ -52,10 +52,6 @@
     "webpack-cli": "^3.1.2"
   },
   "resolutions": {
-    "**/@babel/traverse": "^7.23.2",
-    "**/@babel/core/node_modules/**/@babel/traverse": "^7.23.2",
-    "**/@babel/core/@babel/traverse": "^7.23.2",
-    "babel-preset-react-app/@babel/core/node_modules/**/@babel/traverse": "^7.23.2",
-    "babel-preset-react-app/@babel/core/@babel/traverse": "^7.23.2"
+    "@babel/traverse": "7.23.2"
   }
 }
