@@ -55,10 +55,6 @@ function officeInitialize() {
       if (window.location.href.indexOf('popupType') === -1) {
         const { iSession } = homeHelperSingle.getParsedCookies();
         homeHelperSingle.storeShowHidden();
-        const canUseOffice = await authenticationService.getOfficePrivilege(`${envUrl}/api`, iSession);
-        if (!canUseOffice) {
-          handleUnauthorized(envUrl, iSession);
-        }
       }
       goReact();
       diContainer.initializeAll();

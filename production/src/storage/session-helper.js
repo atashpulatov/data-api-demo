@@ -1,5 +1,5 @@
 import throttle from 'lodash.throttle';
-import { authenticationService } from '../authentication/auth-rest-service';
+import { PrivilegeIds, authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';
@@ -148,6 +148,19 @@ class SessionHelper {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  getCanUseOfficePrivilege = async () => {
+    const { reduxStore } = this;
+    const isDevelopment = this.isDevelopment();
+    const { envUrl } = this.reduxStore.getState().sessionReducer;
+
+    const authToken = isDevelopment
+      ? reduxStore.getState().sessionReducer.authToken
+      : homeHelper.getTokenFromStorage();
+    const canUseOffice = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
+
+    return canUseOffice;
   };
 
   /**

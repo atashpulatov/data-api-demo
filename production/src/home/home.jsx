@@ -93,6 +93,11 @@ async function getUserData(authToken) {
     homeHelper.getTokenFromStorage();
     await sessionHelper.getUserInfo();
     await sessionHelper.getUserAttributeFormPrivilege();
+
+    // TODO add privilege to state and display correct UI
+    const hasPrivilege = await sessionHelper.getCanUseOfficePrivilege();
+    console.log('🚀 ~ file: home.jsx:97 ~ getUserData ~ hasPrivilege:', hasPrivilege);
+    // TODO get and set canUseOfficePrivilege
   }
 }
 

@@ -1,7 +1,9 @@
 import { moduleProxy } from '../module-proxy';
 
-const OFFICE_PRIVILEGE_ID = '273';
-const ATTRIBUTE_FORM_PRIVILEGE_ID = '81';
+export const PrivilegeIds = {
+  OFFICE_PRIVILEGE_ID: '273',
+  ATTRIBUTE_FORM_PRIVILEGE_ID: '81',
+};
 
 class AuthenticationService {
   moduleProxy: {
@@ -47,10 +49,10 @@ class AuthenticationService {
 
   async getOfficePrivilege(envUrl: string, iSession: any) {
     try {
-      let response;
-      if (iSession) { response = await this.fetchPrivilegeById(OFFICE_PRIVILEGE_ID, envUrl, iSession); }
+      const response = await this.fetchPrivilegeById(PrivilegeIds.OFFICE_PRIVILEGE_ID, envUrl, iSession);
+
       // Only return false if isUserLevelAllowed exists and is false
-      if (!response) { return true; }
+      if (!response) { return false; }
       const { isUserLevelAllowed, projects } = response;
       if (isUserLevelAllowed === false) {
         if (projects.find((project: any) => project.isAllowed === true)) { return true; }
@@ -59,13 +61,13 @@ class AuthenticationService {
     } catch (error) {
       console.error(error);
       // In case of errors skip privilege check (not supported environments)
-      return true;
+      return false;
     }
   }
 
   async getAttributeFormPrivilege(envUrl: string, iSession: any) {
     try {
-      const response = await this.fetchPrivilegeById(ATTRIBUTE_FORM_PRIVILEGE_ID, envUrl, iSession);
+      const response = await this.fetchPrivilegeById(PrivilegeIds.ATTRIBUTE_FORM_PRIVILEGE_ID, envUrl, iSession);
       // Only return false if isUserLevelAllowed exists and is false
       if (!response) {
         return false;
