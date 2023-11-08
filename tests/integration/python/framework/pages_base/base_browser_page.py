@@ -245,7 +245,7 @@ class BaseBrowserPage(BasePage):
     def find_element_in_list_by_text_safe(self, selector, text):
         elements = self.get_elements_by_css(selector)
 
-        ## With latest Excel Web, this element no longer have any inner text, thus the function will fail here. So we need to comment out this part and returen the element directly.
+        ## With latest Excel Web, this element no longer have any inner text, thus the function will fail here. So we need to comment out this part and return the element directly.
         
         #for item in elements:
         #    if item.text == text:
