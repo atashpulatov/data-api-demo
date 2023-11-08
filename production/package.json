@@ -119,6 +119,7 @@
     "nth-check": "^2.1.1",
     "semver": "7.5.2",
     "ua-parser-js": "0.7.33",
-    "css-what": "6.1.0"
+    "css-what": "6.1.0",
+    "@babel/traverse": "7.23.2"
   }
 }
