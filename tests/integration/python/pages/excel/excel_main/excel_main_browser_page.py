@@ -64,6 +64,7 @@ class ExcelMainBrowserPage(BaseBrowserPage):
             self.switch_to_excel_workbook_window()
 
             if self.tab_contains_excel_frame():
+                i += 1
                 if open_count < 3:
                     open_count += 1
 

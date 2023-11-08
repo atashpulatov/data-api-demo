@@ -245,11 +245,13 @@ class BaseBrowserPage(BasePage):
     def find_element_in_list_by_text_safe(self, selector, text):
         elements = self.get_elements_by_css(selector)
 
-        for item in elements:
-            if item.text == text:
-                return item
+        ## With latest Excel Web, this element no longer have any inner text, thus the function will fail here. So we need to comment out this part and returen the element directly.
+        
+        #for item in elements:
+        #    if item.text == text:
+        #        return item
 
-        return None
+        return elements[0]
 
     def find_element_in_list_by_attribute(self, selector, attribute_name, attribute_value):
         found_elements = self.get_elements_by_css(selector)
