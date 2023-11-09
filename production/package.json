@@ -20,7 +20,7 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@mstr/connector-components": "^3.7.18",
+    "@mstr/connector-components": "^3.7.19",
     "@mstr/mstr-icons": "^2.30.4",
     "@mstr/mstr-react-library": "^1.17.1",
     "@mstr/rc": "^2.22.3",
@@ -119,6 +119,7 @@
     "nth-check": "^2.1.1",
     "semver": "7.5.2",
     "ua-parser-js": "0.7.33",
-    "css-what": "6.1.0"
+    "css-what": "6.1.0",
+    "@babel/traverse": "7.23.2"
   }
 }
