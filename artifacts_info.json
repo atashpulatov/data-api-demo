@@ -13,7 +13,7 @@
   },
   "infra": {
     "cookbooks": {
-      "nodejs": "18.17.1",
+      "nodejs": "18.18.2",
       "python_ecosystem": "3.11.5",
       "jdk_linux": "11.0.21",
       "jdk_windows": "11.0.21",
