@@ -4,7 +4,7 @@ from framework.util.exception.mstr_exception import MstrException
 
 
 class RightPanelMainBrowserPage(BaseBrowserPage):
-    IMPORT_DATA_BUTTON_ELEM = '.import-data > span > button'
+    IMPORT_DATA_BUTTON_ELEM = '.import-data > button'
     ADD_DATA_BUTTON_ELEM_ID = 'add-data-btn'
 
     DOTS_MENU = '.settings-button'
@@ -27,6 +27,8 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     ATTRIBUTE_NAME_CLIENT_HEIGHT = 'clientHeight'
     ATTRIBUTE_NAME_SCROLL_HEIGHT = 'scrollHeight'
+
+    SETTINGS_MENU_ITEM = '.settings-list > .settings'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -135,3 +137,10 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         overlay_message = element.get_text_content_by_attribute()
 
         return overlay_message
+
+    def go_to_settings_page(self):
+        self.focus_on_add_in_frame()
+
+        self._open_dots_menu()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.SETTINGS_MENU_ITEM).click()

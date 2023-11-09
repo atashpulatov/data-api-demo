@@ -23,6 +23,8 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
 
     REFRESH_ALL = "Refresh button"
 
+    SETTINGS_MENU_ITEM_NAME = 'Settings'
+
     def __init__(self):
         super().__init__()
 
@@ -125,3 +127,16 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         self._toggle_dots_menu()  # Close dots menu
 
         return color
+
+    def go_to_settings_page(self):
+        self.windows_desktop_workaround.focus_on_right_side_panel()
+
+        self._toggle_dots_menu()
+
+        self.get_element_by_name(
+            RightPanelMainWindowsDesktopPage.SETTINGS_MENU_ITEM_NAME,
+            image_name=self.prepare_image_name(RightPanelMainWindowsDesktopPage.SETTINGS_MENU_ITEM_NAME)
+        ).click()
+
+
+

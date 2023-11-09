@@ -84,3 +84,7 @@ def step_impl(context, overlay_message):
     displayed_message = context.pages.right_panel_page().get_clear_data_overlay_message()
 
     AssertUtil.assert_simple(displayed_message, overlay_message)
+
+@step('I go to Settings page')
+def step_impl(context):
+    context.pages.right_panel_page().go_to_settings_page()
