@@ -245,5 +245,7 @@
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "导入失败，Execel Online 单次请求或响应的有效载荷上限是5MB。请缩小您的数据。",
    "Please select only one range before import.": "请仅选择一个范围，然后再导入。",
    "Apply": "应用",
-   "{{index}} of {{total}}": "{{index}}/{{total}}"
+   "{{index}} of {{total}}": "{{index}}/{{total}}",
+   "You do not have the rights to access MicroStrategy for Office": "您没有访问 MicroStrategy for Office 的权限",
+   "Try Again": "重试"
 }

@@ -245,5 +245,7 @@
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Het importeren is mislukt omdat de laadgroottelimiet voor elk verzoek van of reactie op Excel Online 5 MB is. Probeer uw gegevens te beperken.",
    "Please select only one range before import.": "Selecteer slechts één bereik voor de import.",
    "Apply": "Toepassen",
-   "{{index}} of {{total}}": "{{index}} van {{total}}"
+   "{{index}} of {{total}}": "{{index}} van {{total}}",
+   "You do not have the rights to access MicroStrategy for Office": "U hebt geen rechten voor toegang tot MicroStrategy for Office",
+   "Try Again": "Opnieuw proberen"
 }
