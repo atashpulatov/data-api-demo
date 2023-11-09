@@ -59,6 +59,13 @@ class SessionActions {
       dialog,
     });
   };
+
+  setCanUseOffice = (value) => {
+    this.reduxStore.dispatch({
+      type: sessionProperties.actions.setCanUseOffice,
+      canUseOffice: value,
+    });
+  };
 }
 
 export const sessionActions = new SessionActions();

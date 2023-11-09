@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SidePanel, popupTypes, objectNotificationTypes } from '@mstr/connector-components';
+import {
+  SidePanel, popupTypes, objectNotificationTypes, SideInfoPanel
+} from '@mstr/connector-components';
 import i18n from '../i18n';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
@@ -21,6 +23,7 @@ import {
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
 import { globalNotificationWarningAndErrorStrings } from '../error/constants';
+import PrivilegeErrorSidePanel from './privilege-error-side-panel';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -39,6 +42,7 @@ export const RightSidePanelNotConnected = ({
   popupData,
   isPopupRendered,
   toggleCurtain,
+  canUseOffice
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [activeCellAddress, setActiveCellAddress] = React.useState('...');
@@ -161,29 +165,32 @@ export const RightSidePanelNotConnected = ({
   return (
     <>
       {toggleCurtain && <div className="block-side-panel-ui" /> }
-      <SidePanel
-        locale={i18n.language}
-        loadedObjects={loadedObjectsWrapped}
-        onAddData={addDataWrapper}
-        onTileClick={highlightObjectWrapper}
-        onDuplicateClick={duplicateWrapper}
-        onEditClick={editWrapper}
-        onRefreshClick={refreshWrapper}
-        onRemoveClick={removeWrapper}
-        onRename={renameWrapper}
-        popup={sidePanelPopup}
-        settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
-        confirmationWindow={isConfirm && <Confirmation />}
-        globalNotification={globalNotification}
-        onSelectAll={notificationService.dismissNotifications}
-        shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-        isPopupRendered={isPopupRendered}
-        reusePromptAnswers={reusePromptAnswers}
-        settingsPanelLoaded={settingsPanelLoaded}
-        handleReusePromptAnswers={handleReusePromptAnswers}
-        handleToggleSettingsPanel={handleToggleSettingsPanel}
-        onRepromptClick={repromptWrapper} />
+      {canUseOffice === false ? <PrivilegeErrorSidePanel />
+        : (
+          <SidePanel
+            locale={i18n.language}
+            loadedObjects={loadedObjectsWrapped}
+            onAddData={addDataWrapper}
+            onTileClick={highlightObjectWrapper}
+            onDuplicateClick={duplicateWrapper}
+            onEditClick={editWrapper}
+            onRefreshClick={refreshWrapper}
+            onRemoveClick={removeWrapper}
+            onRename={renameWrapper}
+            popup={sidePanelPopup}
+            settingsMenu={isSettings && <SettingsMenu />}
+            onSettingsClick={handleSettingsClick}
+            confirmationWindow={isConfirm && <Confirmation />}
+            globalNotification={globalNotification}
+            onSelectAll={notificationService.dismissNotifications}
+            shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+            isPopupRendered={isPopupRendered}
+            reusePromptAnswers={reusePromptAnswers}
+            settingsPanelLoaded={settingsPanelLoaded}
+            handleReusePromptAnswers={handleReusePromptAnswers}
+            handleToggleSettingsPanel={handleToggleSettingsPanel}
+            onRepromptClick={repromptWrapper} />
+        )}
     </>
   );
 };
@@ -196,6 +203,7 @@ export const mapStateToProps = (state) => {
   const {
     isConfirm, isSettings, isSecured, isClearDataFailed, settingsPanelLoaded, reusePromptAnswers, popupOpen, popupData
   } = state.officeReducer;
+  const { canUseOffice } = state.sessionReducer;
   return {
     loadedObjects: state.objectReducer.objects,
     operations,
@@ -212,6 +220,7 @@ export const mapStateToProps = (state) => {
     popupData,
     isPopupRendered: popupOpen,
     toggleCurtain: repromptsQueue?.length > 0,
+    canUseOffice
   };
 };
 
@@ -298,4 +307,5 @@ RightSidePanelNotConnected.propTypes = {
   toggleIsClearDataFailedFlag: PropTypes.func,
   isPopupRendered: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
+  canUseOffice: PropTypes.bool
 };

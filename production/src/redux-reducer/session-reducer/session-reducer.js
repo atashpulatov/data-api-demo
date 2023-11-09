@@ -17,6 +17,8 @@ export const sessionReducer = (state = {}, action) => {
       return onSetDialog(action, state);
     case sessionProperties.actions.setAttrFormPrivilege:
       return onSetAttrFormPrivilege(action, state);
+    case sessionProperties.actions.setCanUseOffice:
+      return onSetCanUseOffice(action, state);
     default:
       break;
   }
@@ -45,6 +47,7 @@ function onLogOut(action, state) {
       userID: null,
       userFullName: null,
       userInitials: null,
+      canUseOffice: false
     };
   }
   return {};
@@ -89,5 +92,12 @@ function onSetAttrFormPrivilege(action, state) {
   return {
     ...state,
     attrFormPrivilege: action.attrFormPrivilege,
+  };
+}
+
+function onSetCanUseOffice(action, state) {
+  return {
+    ...state,
+    canUseOffice: action.canUseOffice,
   };
 }
