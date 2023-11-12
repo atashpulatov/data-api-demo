@@ -163,7 +163,7 @@ export const RightSidePanelNotConnected = ({
   return (
     <>
       {toggleCurtain && <div className="block-side-panel-ui" /> }
-      {canUseOffice === false ? <PrivilegeErrorSidePanel />
+      {!canUseOffice ? <PrivilegeErrorSidePanel />
         : (
           <SidePanel
             locale={i18n.language}
