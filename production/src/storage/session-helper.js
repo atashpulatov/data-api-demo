@@ -1,5 +1,5 @@
 import throttle from 'lodash.throttle';
-import { PrivilegeIds, authenticationService } from '../authentication/auth-rest-service';
+import { authenticationService } from '../authentication/auth-rest-service';
 import { userRestService } from '../home/user-rest-service';
 import { errorService } from '../error/error-handler';
 import { homeHelper } from '../home/home-helper';

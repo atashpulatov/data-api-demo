@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  SidePanel, popupTypes, objectNotificationTypes, SideInfoPanel
-} from '@mstr/connector-components';
+import { SidePanel, popupTypes, objectNotificationTypes } from '@mstr/connector-components';
 import i18n from '../i18n';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
