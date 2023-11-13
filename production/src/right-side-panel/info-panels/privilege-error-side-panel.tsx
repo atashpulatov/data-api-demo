@@ -8,7 +8,7 @@ import { sessionHelper } from '../../storage/session-helper';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 import { errorService } from '../../error/error-handler';
 
-const PrivilegeErrorSidePanel = () => {
+const PrivilegeErrorSidePanel: React.FC = () => {
   const [t] = useTranslation('common', { i18n });
 
   const handleTryAgain = async () => {
