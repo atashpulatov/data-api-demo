@@ -1,5 +1,7 @@
 from behave import *
 
+from framework.util.assert_util import AssertUtil
+
 
 @step('I waited for Run button to be enabled')
 def step_impl(context):
@@ -55,3 +57,14 @@ def step_impl(context, prompt_number, prompt_name):
 @step('I clicked re-prompt button')
 def step_impl(context):
     context.pages.prompt_page().click_reprompt_button()
+
+
+@step('I verified "{item}" is a selected answer for "{prompt_number}. {prompt_name}" prompt - object prompt')
+def step_impl(context, item, prompt_number, prompt_name):
+    is_prompt_answer_selected = context.pages.prompt_page().check_selected_answer_for_object_prompt(prompt_number, prompt_name, item)
+    AssertUtil.assert_simple(is_prompt_answer_selected, True)
+
+@step('I verified "{item}" is a available answer for "{prompt_number}. {prompt_name}" prompt - object prompt')
+def step_impl(context, item, prompt_number, prompt_name):
+    is_prompt_answer_available = context.pages.prompt_page().check_available_answer_for_object_prompt(prompt_number, prompt_name, item)
+    AssertUtil.assert_simple(is_prompt_answer_available, True)
