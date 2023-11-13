@@ -11,24 +11,13 @@ import { errorService } from '../../error/error-handler';
 const PrivilegeErrorSidePanel: React.FC = () => {
   const [t] = useTranslation('common', { i18n });
 
-  const handleTryAgain = async () => {
-    try {
-      await sessionHelper.logOutRest();
-      sessionActions.logOut();
-    } catch (error) {
-      errorService.handleError(error);
-    } finally {
-      sessionHelper.logOutRedirect(true);
-    }
-  };
-
   return (
     <SideInfoPanel
       applicationType="EXCEL"
       panelId="no-privilege-screen"
       infoMessageHeading={t('MicroStrategy for Office')}
       infoMessageText={t('You do not have the rights to access MicroStrategy for Office')}
-      onClick={() => handleTryAgain()}
+      onClick={() => sessionHelper.handleLogoutForPrivilegeMissing()}
       buttonText={t('Try Again')}
       buttonAriaLabel={t('Try Again')}
     />
