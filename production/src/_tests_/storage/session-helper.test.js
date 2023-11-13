@@ -1,4 +1,6 @@
 import { createStore } from 'redux';
+import { async } from 'q';
+import { waitFor } from '@testing-library/dom';
 import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
 import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
 import { sessionHelper } from '../../storage/session-helper';
@@ -179,5 +181,20 @@ describe('sessionHelper', () => {
 
     // then
     expect(sessionHelper.keepSessionAlive).toHaveBeenCalledWith(onSessionExpire);
+  });
+
+  it('handleLogoutForPrivilegeMissing should work correctly', async () => {
+    // given
+    const logOutRestMock = jest.spyOn(sessionHelper, 'logOutRest').mockResolvedValue(() => {});
+    const logOutMock = jest.spyOn(sessionActions, 'logOut').mockImplementation(() => {});
+    const logOutRedirectMock = jest.spyOn(sessionHelper, 'logOutRedirect').mockImplementation();
+
+    // when
+    sessionHelper.handleLogoutForPrivilegeMissing();
+
+    // then
+    expect(logOutRestMock).toHaveBeenCalled();
+    await waitFor(() => expect(logOutMock).toBeCalled());
+    await waitFor(() => expect(logOutRedirectMock).toBeCalled());
   });
 });
