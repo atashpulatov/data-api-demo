@@ -21,7 +21,7 @@ import {
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
 import { globalNotificationWarningAndErrorStrings } from '../error/constants';
-import PrivilegeErrorSidePanel from './privilege-error-side-panel';
+import PrivilegeErrorSidePanel from './info-panels/privilege-error-side-panel';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,

@@ -180,4 +180,6 @@ describe('sessionHelper', () => {
     // then
     expect(sessionHelper.keepSessionAlive).toHaveBeenCalledWith(onSessionExpire);
   });
+
+  it('getCanUseOfficePrivilege should return true if user has privilege', () => {
 });
