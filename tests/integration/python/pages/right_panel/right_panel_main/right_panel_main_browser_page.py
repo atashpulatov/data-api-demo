@@ -10,6 +10,7 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     DOTS_MENU = '.settings-button'
     DOTS_MENU_BOX = '.settings-list'
     DOTS_MENU_ITEM_LOG_OUT_ID = 'logOut'
+    DOTS_MENU_SETTING = '.settings.not-linked-list'
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
     SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .checkbox-cell'
@@ -29,6 +30,8 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     ATTRIBUTE_NAME_SCROLL_HEIGHT = 'scrollHeight'
 
     SETTINGS_MENU_ITEM = '.settings-list > .settings'
+    REUSE_PROMPT_ANSWER_TOGGLE = '.reuse-prompt-answers-toggle button'
+    REUSE_PROMPT_ANSWER_BACK = '.settings-icon span'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -144,3 +147,30 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         self._open_dots_menu()
 
         self.get_element_by_css(RightPanelMainBrowserPage.SETTINGS_MENU_ITEM).click()
+    
+    def open_setting(self):
+        self.focus_on_add_in_frame()
+
+        self._open_dots_menu()
+        self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU_SETTING).click()
+
+    def toggle_reuse_prompt_answer(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.REUSE_PROMPT_ANSWER_TOGGLE).click()
+
+    def click_back_button(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.REUSE_PROMPT_ANSWER_BACK).click()
+
+    def get_reuse_prompt_answer_status(self):
+        self.focus_on_add_in_frame()
+
+        element = self.get_element_by_css(RightPanelMainBrowserPage.REUSE_PROMPT_ANSWER_TOGGLE)
+        aria_checked_value = element.get_attribute("aria-checked")
+        if aria_checked_value == "true":
+            return True
+        else:
+            return False
+
