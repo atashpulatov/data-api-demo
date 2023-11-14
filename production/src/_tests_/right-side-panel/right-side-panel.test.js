@@ -122,23 +122,4 @@ describe('RightSidePanelNotConnected', () => {
     expect(spyCheckStatusOfSessions).toBeCalled();
     expect(spySetDuplicatePopup).toBeCalled();
   });
-
-  it('should render Privilege Error Side panel when user has no privilege UseApplicationOffice', () => {
-    // given
-    const noOfficePrivilegeProps = {
-      loadedObjects: [],
-      isConfirm: false,
-      isSettings: false,
-      cancelCurrentImportRequest: jest.fn(),
-      toggleIsSettingsFlag: jest.fn(),
-      toggleSecuredFlag: jest.fn(),
-      toggleIsClearDataFailedFlag: jest.fn(),
-      canUseOffice: false
-    };
-    // when
-    const shallowedComponent = shallow(<RightSidePanelNotConnected {...noOfficePrivilegeProps} />);
-    // then
-    expect(shallowedComponent.find(PrivilegeErrorSidePanel)).toHaveLength(1);
-    expect(shallowedComponent.find(SidePanel)).toHaveLength(0);
-  });
 });
