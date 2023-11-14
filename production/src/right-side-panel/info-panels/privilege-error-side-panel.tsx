@@ -5,8 +5,6 @@ import { SideInfoPanel } from '@mstr/connector-components';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 import { sessionHelper } from '../../storage/session-helper';
-import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
-import { errorService } from '../../error/error-handler';
 
 const PrivilegeErrorSidePanel: React.FC = () => {
   const [t] = useTranslation('common', { i18n });

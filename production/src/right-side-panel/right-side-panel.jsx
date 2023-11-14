@@ -160,35 +160,36 @@ export const RightSidePanelNotConnected = ({
 
   const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
 
+  const sidePanel = (
+    <SidePanel
+      locale={i18n.language}
+      loadedObjects={loadedObjectsWrapped}
+      onAddData={addDataWrapper}
+      onTileClick={highlightObjectWrapper}
+      onDuplicateClick={duplicateWrapper}
+      onEditClick={editWrapper}
+      onRefreshClick={refreshWrapper}
+      onRemoveClick={removeWrapper}
+      onRename={renameWrapper}
+      popup={sidePanelPopup}
+      settingsMenu={isSettings && <SettingsMenu />}
+      onSettingsClick={handleSettingsClick}
+      confirmationWindow={isConfirm && <Confirmation />}
+      globalNotification={globalNotification}
+      onSelectAll={notificationService.dismissNotifications}
+      shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
+      isPopupRendered={isPopupRendered}
+      reusePromptAnswers={reusePromptAnswers}
+      settingsPanelLoaded={settingsPanelLoaded}
+      handleReusePromptAnswers={handleReusePromptAnswers}
+      handleToggleSettingsPanel={handleToggleSettingsPanel}
+      onRepromptClick={repromptWrapper} />
+  );
+
   return (
     <>
       {toggleCurtain && <div className="block-side-panel-ui" /> }
-      {!canUseOffice ? <PrivilegeErrorSidePanel />
-        : (
-          <SidePanel
-            locale={i18n.language}
-            loadedObjects={loadedObjectsWrapped}
-            onAddData={addDataWrapper}
-            onTileClick={highlightObjectWrapper}
-            onDuplicateClick={duplicateWrapper}
-            onEditClick={editWrapper}
-            onRefreshClick={refreshWrapper}
-            onRemoveClick={removeWrapper}
-            onRename={renameWrapper}
-            popup={sidePanelPopup}
-            settingsMenu={isSettings && <SettingsMenu />}
-            onSettingsClick={handleSettingsClick}
-            confirmationWindow={isConfirm && <Confirmation />}
-            globalNotification={globalNotification}
-            onSelectAll={notificationService.dismissNotifications}
-            shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-            isPopupRendered={isPopupRendered}
-            reusePromptAnswers={reusePromptAnswers}
-            settingsPanelLoaded={settingsPanelLoaded}
-            handleReusePromptAnswers={handleReusePromptAnswers}
-            handleToggleSettingsPanel={handleToggleSettingsPanel}
-            onRepromptClick={repromptWrapper} />
-        )}
+      {!canUseOffice ? <PrivilegeErrorSidePanel /> : sidePanel}
     </>
   );
 };

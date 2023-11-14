@@ -3,8 +3,6 @@ import { render, fireEvent } from '@testing-library/react';
 import PrivilegeErrorSidePanel from './privilege-error-side-panel';
 import { sessionHelper } from '../../storage/session-helper';
 
-/* eslint-env jest */
-
 describe('PrivilegeErrorSidePanel', () => {
   it('should render PrivilegeErrorSidePanel', () => {
     // Given
