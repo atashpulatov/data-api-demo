@@ -17,7 +17,7 @@ import officeStoreRestoreObject from '../office/store/office-store-restore-objec
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import PrivilegeErrorSidePanel from '../right-side-panel/info-panels/privilege-error-side-panel';
-import useOfficePrivilege from './use-office-privilege';
+import useOfficePrivilege from '../hooks/use-office-privilege';
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
