@@ -29,7 +29,6 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     ATTRIBUTE_NAME_CLIENT_HEIGHT = 'clientHeight'
     ATTRIBUTE_NAME_SCROLL_HEIGHT = 'scrollHeight'
 
-    SETTINGS_MENU_ITEM = '.settings-list > .settings'
     REUSE_PROMPT_ANSWER_TOGGLE = '.reuse-prompt-answers-toggle button'
     REUSE_PROMPT_ANSWER_BACK = '.settings-icon span'
 
@@ -140,13 +139,6 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         overlay_message = element.get_text_content_by_attribute()
 
         return overlay_message
-
-    def go_to_settings_page(self):
-        self.focus_on_add_in_frame()
-
-        self._open_dots_menu()
-
-        self.get_element_by_css(RightPanelMainBrowserPage.SETTINGS_MENU_ITEM).click()
     
     def open_setting(self):
         self.focus_on_add_in_frame()

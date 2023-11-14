@@ -85,10 +85,6 @@ def step_impl(context, overlay_message):
 
     AssertUtil.assert_simple(displayed_message, overlay_message)
 
-@step('I go to Settings page')
-def step_impl(context):
-    context.pages.right_panel_page().go_to_settings_page()
-    
 @step('I open Settings in Dots Menu')
 def step_impl(context):
     context.pages.right_panel_page().open_setting()
