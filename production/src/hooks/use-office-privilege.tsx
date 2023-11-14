@@ -6,8 +6,10 @@ const useOfficePrivilege = (authToken: string): boolean => {
 
   useEffect(() => {
     async function checkCanUseOffice() {
-      const isUseOfficePrivilege = await sessionHelper.getCanUseOfficePrivilege();
-      setCanUseOffice(isUseOfficePrivilege);
+      if (authToken) {
+        const isUseOfficePrivilege = await sessionHelper.getCanUseOfficePrivilege();
+        setCanUseOffice(isUseOfficePrivilege);
+      }
     }
 
     checkCanUseOffice();

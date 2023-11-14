@@ -173,7 +173,7 @@ class SessionHelper {
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
       : homeHelper.getTokenFromStorage();
-    const canUseOffice = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
+    const canUseOffice = await authenticationService.getOfficePrivilege(envUrl, authToken);
 
     return canUseOffice;
   };

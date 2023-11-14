@@ -210,7 +210,7 @@ describe('sessionHelper', () => {
 
     const isDevelopmentMock = jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
     const getTokenFromStorageMock = jest.spyOn(homeHelper, 'getTokenFromStorage').mockImplementation(() => '12-abc-34');
-    const getAttributeFormPrivilegeMock = jest.spyOn(authenticationService, 'getAttributeFormPrivilege').mockResolvedValueOnce(true);
+    const getOfficePrivilege = jest.spyOn(authenticationService, 'getOfficePrivilege').mockResolvedValueOnce(true);
 
     // when
     const response = await sessionHelper.getCanUseOfficePrivilege();
@@ -218,6 +218,6 @@ describe('sessionHelper', () => {
     // then
     expect(isDevelopmentMock).toHaveBeenCalled();
     expect(getTokenFromStorageMock).toHaveBeenCalled();
-    expect(getAttributeFormPrivilegeMock).toHaveBeenCalledWith(envUrl, authToken);
+    expect(getOfficePrivilege).toHaveBeenCalledWith(envUrl, authToken);
   });
 });

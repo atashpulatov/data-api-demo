@@ -41,4 +41,17 @@ describe('useOfficePrivilege', () => {
     await flushPromises();
     expect(result.current).toBe(false);
   });
+
+  it('should return false if auth token is not provided and not call getCanUseOfficePrivilege', async () => {
+    // Given
+    const getCanUseOfficePrivilegeMock = jest.spyOn(sessionHelper, 'getCanUseOfficePrivilege').mockResolvedValue(false);
+
+    // When
+    const { result } = renderHook(() => useOfficePrivilege(undefined));
+
+    // Then
+    expect(getCanUseOfficePrivilegeMock).not.toHaveBeenCalled();
+    await flushPromises();
+    expect(result.current).toBe(false);
+  });
 });
