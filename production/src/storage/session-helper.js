@@ -175,8 +175,6 @@ class SessionHelper {
       : homeHelper.getTokenFromStorage();
     const canUseOffice = await authenticationService.getAttributeFormPrivilege(envUrl, authToken);
 
-    sessionActions.setCanUseOffice(canUseOffice);
-
     return canUseOffice;
   };
 

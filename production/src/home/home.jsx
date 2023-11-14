@@ -17,13 +17,16 @@ import officeStoreRestoreObject from '../office/store/office-store-restore-objec
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import PrivilegeErrorSidePanel from '../right-side-panel/info-panels/privilege-error-side-panel';
+import useOfficePrivilege from './use-office-privilege';
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
-    loading, popupOpen, authToken, hidePopup, toggleIsSettingsFlag, canUseOffice
+    loading, popupOpen, authToken, hidePopup, toggleIsSettingsFlag
   } = props;
+
+  const canUseOffice = useOfficePrivilege(authToken);
 
   const [t] = useTranslation('common', { i18n });
 
@@ -102,7 +105,6 @@ async function getUserData(authToken) {
     homeHelper.getTokenFromStorage();
     await sessionHelper.getUserInfo();
     await sessionHelper.getUserAttributeFormPrivilege();
-    await sessionHelper.getCanUseOfficePrivilege();
   }
 }
 
@@ -128,7 +130,6 @@ HomeNotConnected.propTypes = {
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   hidePopup: PropTypes.func,
   toggleIsSettingsFlag: PropTypes.func,
-  canUseOffice: PropTypes.bool
 };
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);

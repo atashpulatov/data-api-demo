@@ -5,7 +5,7 @@ import { sessionProperties } from '../../redux-reducer/session-reducer/session-p
 import { sessionHelper } from '../../storage/session-helper';
 import { errorService } from '../../error/error-handler';
 import { authenticationService } from '../../authentication/auth-rest-service';
-import { HomeHelper, homeHelper } from '../../home/home-helper';
+import { homeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
 import { errorMessages } from '../../error/constants';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
@@ -60,7 +60,7 @@ describe('sessionHelper', () => {
     // given
     jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(true);
     const loadingHelper = jest.spyOn(sessionActions, 'disableLoading');
-    HomeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
+    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
 
     // when
     sessionHelper.logOutRedirect();
@@ -211,7 +211,6 @@ describe('sessionHelper', () => {
     const isDevelopmentMock = jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
     const getTokenFromStorageMock = jest.spyOn(homeHelper, 'getTokenFromStorage').mockImplementation(() => '12-abc-34');
     const getAttributeFormPrivilegeMock = jest.spyOn(authenticationService, 'getAttributeFormPrivilege').mockResolvedValueOnce(true);
-    const setCanUseOfficeSpy = jest.spyOn(sessionActions, 'setCanUseOffice');
 
     // when
     const response = await sessionHelper.getCanUseOfficePrivilege();
@@ -220,6 +219,5 @@ describe('sessionHelper', () => {
     expect(isDevelopmentMock).toHaveBeenCalled();
     expect(getTokenFromStorageMock).toHaveBeenCalled();
     expect(getAttributeFormPrivilegeMock).toHaveBeenCalledWith(envUrl, authToken);
-    expect(setCanUseOfficeSpy).toHaveBeenCalledWith(true);
   });
 });

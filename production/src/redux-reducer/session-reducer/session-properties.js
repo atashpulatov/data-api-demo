@@ -15,6 +15,5 @@ export const sessionProperties = {
     getUserInfo: 'SESSION_GET_USERINFO',
     setDialog: 'SESSION_SET_DIALOG',
     setAttrFormPrivilege: 'SESSION_SET_ATTR_FORM_PRIVILEGE',
-    setCanUseOffice: 'SESSION_SET_CAN_USE_OFFICE'
   },
 };
