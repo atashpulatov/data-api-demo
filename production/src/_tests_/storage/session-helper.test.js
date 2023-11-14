@@ -1,12 +1,11 @@
 import { createStore } from 'redux';
-import { async } from 'q';
-import { waitFor } from '@testing-library/dom';
+import { waitFor } from '@testing-library/react';
 import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
 import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
 import { sessionHelper } from '../../storage/session-helper';
 import { errorService } from '../../error/error-handler';
 import { authenticationService } from '../../authentication/auth-rest-service';
-import { HomeHelper } from '../../home/home-helper';
+import { HomeHelper, homeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
 import { errorMessages } from '../../error/constants';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
@@ -196,5 +195,31 @@ describe('sessionHelper', () => {
     expect(logOutRestMock).toHaveBeenCalled();
     await waitFor(() => expect(logOutMock).toBeCalled());
     await waitFor(() => expect(logOutRedirectMock).toBeCalled());
+  });
+
+  it('getUserAttributeFormPrivilege should work correctly', async () => {
+    // given
+    const authToken = '12-abc-34';
+    const envUrl = 'env-url-123';
+    jest.spyOn(reduxStore, 'getState').mockImplementation(() => ({
+      sessionReducer: {
+        authToken,
+        envUrl,
+      },
+    }));
+
+    const isDevelopmentMock = jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
+    const getTokenFromStorageMock = jest.spyOn(homeHelper, 'getTokenFromStorage').mockImplementation(() => '12-abc-34');
+    const getAttributeFormPrivilegeMock = jest.spyOn(authenticationService, 'getAttributeFormPrivilege').mockResolvedValueOnce(true);
+    const setCanUseOfficeSpy = jest.spyOn(sessionActions, 'setCanUseOffice');
+
+    // when
+    const response = await sessionHelper.getCanUseOfficePrivilege();
+
+    // then
+    expect(isDevelopmentMock).toHaveBeenCalled();
+    expect(getTokenFromStorageMock).toHaveBeenCalled();
+    expect(getAttributeFormPrivilegeMock).toHaveBeenCalledWith(envUrl, authToken);
+    expect(setCanUseOfficeSpy).toHaveBeenCalledWith(true);
   });
 });

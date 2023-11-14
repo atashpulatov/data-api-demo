@@ -168,7 +168,9 @@ class SessionHelper {
   getCanUseOfficePrivilege = async () => {
     const { reduxStore } = this;
     const isDevelopment = this.isDevelopment();
-    const { envUrl } = this.reduxStore.getState().sessionReducer;
+    const { envUrl } = reduxStore.getState().sessionReducer;
+
+    console.log(reduxStore.getState());
 
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
