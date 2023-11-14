@@ -48,6 +48,7 @@
     "@mstr/eslint-config-mstr": "^0.1.7",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^12.1.5",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/superagent": "^4.1.16",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
     "enzyme": "^3.10.0",
