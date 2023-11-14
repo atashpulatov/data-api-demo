@@ -27,19 +27,6 @@ jest.mock('@mstr/connector-components', () => {
   };
 });
 
-//   return {
-//   // eslint-disable-next-line react/react-in-jsx-scope
-//   ObjectTable: () => <div />,
-//   // eslint-disable-next-line react/react-in-jsx-scope,react/no-multi-comp
-//   TopFilterPanel: () => <div />,
-//   // eslint-disable-next-line react/no-multi-comp,react/react-in-jsx-scope
-//   SidePanel: () => <div />,
-//   objectNotificationTypes: {
-//     PROGRESS: 'PROGRESS',
-//     WARNING: 'WARNING',
-//     SUCCESS: 'SUCCESS',
-//   }
-// }));
 global.ResizeObserver = require('resize-observer-polyfill');
 
 configure({ adapter: new Adapter() });
