@@ -7,6 +7,10 @@ from framework.util.assert_util import AssertUtil
 def step_impl(context):
     context.pages.prompt_page().wait_for_run_button()
 
+@step('I waited for Prompt Dialog to be loaded')
+def step_impl(context):
+    context.pages.prompt_page().wait_for_prompt_dialog()
+
 
 @step('I clicked Run button')
 def step_impl(context):

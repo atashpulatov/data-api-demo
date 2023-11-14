@@ -35,8 +35,10 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     PROGRESS_COUNT_SEPARATOR = '/'
 
-    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
-    OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
+    #Change index due to implementation of F38412 Re-use prompt answers across multiple prompts when importing content via the MicroStrategy add-in for Excel
+    REPROMPT_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
+    REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
+    OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(3)'
     EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE + '.object-tile-wrapper .context-menu-list li:nth-child(1)'
     CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .checkbox-cell'
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
@@ -151,6 +153,12 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     def hover_refresh(self, tile_no):
         self._hover_over_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
+
+    def click_reprompt(self, tile_no):
+        self._click_tile_button(RightPanelTileBrowserPage.REPROMPT_BUTTON_FOR_OBJECT, tile_no)
+    
+    def hover_reprompt(self, tile_no):
+        self._hover_over_tile_button(RightPanelTileBrowserPage.REPROMPT_BUTTON_FOR_OBJECT, tile_no)
 
     def click_edit(self, tile_no):
         self.click_options_for_object(tile_no)
