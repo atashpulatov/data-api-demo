@@ -43,9 +43,19 @@ def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_refresh(object_number)
 
 
+@step('I clicked Reprompt on object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().click_reprompt(object_number)
+
+
 @step('I hovered over Refresh button on object {object_number}')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().hover_refresh(object_number)
+
+
+@step('I hovered over Reprompt button on object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().hover_reprompt(object_number)
 
 
 @step('I verified that tooltip "{expected_tooltip_text}" is displayed on object {object_number}')

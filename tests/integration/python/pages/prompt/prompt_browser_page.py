@@ -50,6 +50,13 @@ class PromptBrowserPage(BaseBrowserPage):
         self.wait_for_element_to_have_attribute_value_by_css(
             PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
         )
+    
+    def wait_for_prompt_dialog(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(
+            PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
+        )
 
     def click_run_button(self):
         self.focus_on_add_in_popup_frame()
