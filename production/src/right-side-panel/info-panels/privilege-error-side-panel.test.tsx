@@ -18,6 +18,7 @@ describe('PrivilegeErrorSidePanel', () => {
   it('handleTryAgain should be called when button is clicked', () => {
     // Given
     const handleLogoutForPrivilegeMissingSpy = jest.spyOn(sessionHelper, 'handleLogoutForPrivilegeMissing').mockImplementation();
+
     // When
     const { getByText } = render(<PrivilegeErrorSidePanel />);
     const button = getByText('Try Again');

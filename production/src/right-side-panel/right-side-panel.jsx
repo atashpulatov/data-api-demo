@@ -21,7 +21,6 @@ import {
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
 import { globalNotificationWarningAndErrorStrings } from '../error/constants';
-import PrivilegeErrorSidePanel from './info-panels/privilege-error-side-panel';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -185,7 +184,6 @@ export const RightSidePanelNotConnected = ({
         handleReusePromptAnswers={handleReusePromptAnswers}
         handleToggleSettingsPanel={handleToggleSettingsPanel}
         onRepromptClick={repromptWrapper} />
-
     </>
   );
 };
@@ -214,7 +212,6 @@ export const mapStateToProps = (state) => {
     popupData,
     isPopupRendered: popupOpen,
     toggleCurtain: repromptsQueue?.length > 0,
-
   };
 };
 

@@ -5,8 +5,6 @@ import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { Empty } from '@mstr/connector-components/lib/empty/empty';
 
-import { authenticationService } from './authentication/auth-rest-service';
-
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
 import { diContainer } from './dependency-container';
@@ -30,20 +28,6 @@ function goReact() {
         : <LazyDialog />}
     </Suspense>
   ), document.getElementById('root'), () => console.timeEnd('React loading time'));
-}
-
-async function handleUnauthorized(envUrl, iSession) {
-  try {
-    const res = await authenticationService.logout(`${envUrl}/api`, iSession);
-    const locale = window.Office.context.displayLanguage || navigator.language;
-    if (res) {
-      setInterval(() => {
-        window.location.replace(encodeURI(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`));
-      }, 200);
-    }
-  } catch (error) {
-    // Ignore error
-  }
 }
 
 function officeInitialize() {

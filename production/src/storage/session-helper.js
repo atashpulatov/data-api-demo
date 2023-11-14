@@ -170,8 +170,6 @@ class SessionHelper {
     const isDevelopment = this.isDevelopment();
     const { envUrl } = reduxStore.getState().sessionReducer;
 
-    console.log(reduxStore.getState());
-
     const authToken = isDevelopment
       ? reduxStore.getState().sessionReducer.authToken
       : homeHelper.getTokenFromStorage();

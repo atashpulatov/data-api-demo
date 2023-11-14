@@ -76,6 +76,8 @@ export const HomeNotConnected = (props) => {
     getUserData(authToken);
   }, [authToken]);
 
+  const renderAuthenticatePage = () => (loading ? <Spinner text="Loading" textPosition="RIGHT" /> : (IS_DEVELOPMENT && <Authenticate />));
+
   const sidePanelToRender = () => {
     if (authToken) {
       if (canUseOffice) {
@@ -85,8 +87,6 @@ export const HomeNotConnected = (props) => {
     }
     return renderAuthenticatePage();
   };
-
-  const renderAuthenticatePage = () => (loading ? <Spinner text="Loading" textPosition="RIGHT" /> : (IS_DEVELOPMENT && <Authenticate />));
 
   return (
     <SessionExtendingWrapper id="overlay">
