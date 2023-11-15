@@ -125,6 +125,3 @@ class RightPanelMainWindowsDesktopPage(BaseWindowsDesktopPage):
         self._toggle_dots_menu()  # Close dots menu
 
         return color
-
-
-
