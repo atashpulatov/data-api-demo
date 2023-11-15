@@ -106,3 +106,4 @@ def step_impl(context):
 def step_impl(context):
     is_reuse_prompt_answer_enabled = context.pages.right_panel_page().get_reuse_prompt_answer_status()
     AssertUtil.assert_simple(is_reuse_prompt_answer_enabled, True)
+    AssertUtil.assert_simple(is_reuse_prompt_answer_enabled, True)

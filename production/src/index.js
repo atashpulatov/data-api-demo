@@ -5,8 +5,6 @@ import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { Empty } from '@mstr/connector-components/lib/empty/empty';
 
-import { authenticationService } from './authentication/auth-rest-service';
-
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
 import { diContainer } from './dependency-container';
@@ -32,20 +30,6 @@ function goReact() {
   ), document.getElementById('root'), () => console.timeEnd('React loading time'));
 }
 
-async function handleUnauthorized(envUrl, iSession) {
-  try {
-    const res = await authenticationService.logout(`${envUrl}/api`, iSession);
-    const locale = window.Office.context.displayLanguage || navigator.language;
-    if (res) {
-      setInterval(() => {
-        window.location.replace(encodeURI(`${envUrl}/static/loader-mstr-office/no-privilege.html?locale=${locale}`));
-      }, 200);
-    }
-  } catch (error) {
-    // Ignore error
-  }
-}
-
 function officeInitialize() {
   window.Office.onReady()
     .then(async () => {
@@ -55,10 +39,6 @@ function officeInitialize() {
       if (window.location.href.indexOf('popupType') === -1) {
         const { iSession } = homeHelperSingle.getParsedCookies();
         homeHelperSingle.storeShowHidden();
-        const canUseOffice = await authenticationService.getOfficePrivilege(`${envUrl}/api`, iSession);
-        if (!canUseOffice) {
-          handleUnauthorized(envUrl, iSession);
-        }
       }
       goReact();
       diContainer.initializeAll();
