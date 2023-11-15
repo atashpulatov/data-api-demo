@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { SidePanel } from '@mstr/connector-components/';
+import PrivilegeErrorSidePanel from '../../right-side-panel/info-panels/privilege-error-side-panel';
 import { RightSidePanelNotConnected } from '../../right-side-panel/right-side-panel';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import officeStoreHelper from '../../office/store/office-store-helper';
 import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
@@ -20,6 +20,7 @@ describe('RightSidePanelNotConnected', () => {
       toggleIsSettingsFlag: jest.fn(),
       toggleSecuredFlag: jest.fn(),
       toggleIsClearDataFailedFlag: jest.fn(),
+      canUseOffice: true
     };
   });
 
@@ -49,6 +50,7 @@ describe('RightSidePanelNotConnected', () => {
 
     // then
     expect(shallowedComponent.find(SidePanel)).toHaveLength(1);
+    expect(shallowedComponent.find(PrivilegeErrorSidePanel)).toHaveLength(0);
   });
 
   it('should provide loadedObjects to SidePanel', () => {

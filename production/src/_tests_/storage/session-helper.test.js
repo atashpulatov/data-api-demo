@@ -1,10 +1,11 @@
 import { createStore } from 'redux';
+import { waitFor } from '@testing-library/react';
 import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
 import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
 import { sessionHelper } from '../../storage/session-helper';
 import { errorService } from '../../error/error-handler';
 import { authenticationService } from '../../authentication/auth-rest-service';
-import { HomeHelper } from '../../home/home-helper';
+import { homeHelper } from '../../home/home-helper';
 import { reduxStore } from '../../store';
 import { errorMessages } from '../../error/constants';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
@@ -59,7 +60,7 @@ describe('sessionHelper', () => {
     // given
     jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(true);
     const loadingHelper = jest.spyOn(sessionActions, 'disableLoading');
-    HomeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
+    homeHelper.getWindowLocation = jest.fn().mockReturnValueOnce({ origin: 'localhost' });
 
     // when
     sessionHelper.logOutRedirect();
@@ -179,5 +180,44 @@ describe('sessionHelper', () => {
 
     // then
     expect(sessionHelper.keepSessionAlive).toHaveBeenCalledWith(onSessionExpire);
+  });
+
+  it('handleLogoutForPrivilegeMissing should work correctly', async () => {
+    // given
+    const logOutRestMock = jest.spyOn(sessionHelper, 'logOutRest').mockResolvedValue(() => {});
+    const logOutMock = jest.spyOn(sessionActions, 'logOut').mockImplementation(() => {});
+    const logOutRedirectMock = jest.spyOn(sessionHelper, 'logOutRedirect').mockImplementation();
+
+    // when
+    sessionHelper.handleLogoutForPrivilegeMissing();
+
+    // then
+    expect(logOutRestMock).toHaveBeenCalled();
+    await waitFor(() => expect(logOutMock).toBeCalled());
+    await waitFor(() => expect(logOutRedirectMock).toBeCalled());
+  });
+
+  it('getUserAttributeFormPrivilege should work correctly', async () => {
+    // given
+    const authToken = '12-abc-34';
+    const envUrl = 'env-url-123';
+    jest.spyOn(reduxStore, 'getState').mockImplementation(() => ({
+      sessionReducer: {
+        authToken,
+        envUrl,
+      },
+    }));
+
+    const isDevelopmentMock = jest.spyOn(sessionHelper, 'isDevelopment').mockReturnValueOnce(false);
+    const getTokenFromStorageMock = jest.spyOn(homeHelper, 'getTokenFromStorage').mockImplementation(() => '12-abc-34');
+    const getOfficePrivilege = jest.spyOn(authenticationService, 'getOfficePrivilege').mockResolvedValueOnce(true);
+
+    // when
+    const response = await sessionHelper.getCanUseOfficePrivilege();
+
+    // then
+    expect(isDevelopmentMock).toHaveBeenCalled();
+    expect(getTokenFromStorageMock).toHaveBeenCalled();
+    expect(getOfficePrivilege).toHaveBeenCalledWith(envUrl, authToken);
   });
 });

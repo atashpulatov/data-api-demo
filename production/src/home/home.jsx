@@ -16,6 +16,8 @@ import { notificationService } from '../notification-v2/notification-service';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import PrivilegeErrorSidePanel from '../right-side-panel/info-panels/privilege-error-side-panel';
+import useOfficePrivilege from '../hooks/use-office-privilege';
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
@@ -23,6 +25,8 @@ export const HomeNotConnected = (props) => {
   const {
     loading, popupOpen, authToken, hidePopup, toggleIsSettingsFlag
   } = props;
+
+  const canUseOffice = useOfficePrivilege(authToken);
 
   const [t] = useTranslation('common', { i18n });
 
@@ -77,12 +81,20 @@ export const HomeNotConnected = (props) => {
 
   const renderAuthenticatePage = () => (loading ? <Spinner text="Loading" textPosition="RIGHT" /> : (IS_DEVELOPMENT && <Authenticate />));
 
+  const sidePanelToRender = () => {
+    if (authToken) {
+      if (canUseOffice) {
+        return <RightSidePanel />;
+      }
+      return <PrivilegeErrorSidePanel />;
+    }
+    return renderAuthenticatePage();
+  };
+
   return (
     <SessionExtendingWrapper id="overlay">
       {IS_DEVELOPMENT && authToken && <DevelopmentImportList />}
-      {authToken
-        ? <RightSidePanel />
-        : renderAuthenticatePage()}
+      {sidePanelToRender()}
       <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
     </SessionExtendingWrapper>
   );
@@ -101,7 +113,8 @@ function mapStateToProps(state) {
     loading: state.sessionReducer.loading,
     popupOpen: state.officeReducer.popupOpen,
     authToken: state.sessionReducer.authToken,
-    shouldRenderSettings: state.officeReducer.shouldRenderSettings
+    shouldRenderSettings: state.officeReducer.shouldRenderSettings,
+    canUseOffice: state.sessionReducer.canUseOffice
   };
 }
 
@@ -116,7 +129,7 @@ HomeNotConnected.propTypes = {
   popupOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   hidePopup: PropTypes.func,
-  toggleIsSettingsFlag: PropTypes.func
+  toggleIsSettingsFlag: PropTypes.func,
 };
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);

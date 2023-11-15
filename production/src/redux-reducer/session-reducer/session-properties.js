@@ -14,6 +14,6 @@ export const sessionProperties = {
     setLoading: 'SESSION_SET_LOADING',
     getUserInfo: 'SESSION_GET_USERINFO',
     setDialog: 'SESSION_SET_DIALOG',
-    setAttrFormPrivilege: 'SESSION_SET_ATTR_FORM_PRIVILEGE'
+    setAttrFormPrivilege: 'SESSION_SET_ATTR_FORM_PRIVILEGE',
   },
 };
