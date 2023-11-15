@@ -84,3 +84,25 @@ def step_impl(context, overlay_message):
     displayed_message = context.pages.right_panel_page().get_clear_data_overlay_message()
 
     AssertUtil.assert_simple(displayed_message, overlay_message)
+
+@step('I open Settings in Dots Menu')
+def step_impl(context):
+    context.pages.right_panel_page().open_setting()
+
+@step('I toggle the Reuse Prompt Answers setting')
+def step_impl(context):
+    context.pages.right_panel_page().toggle_reuse_prompt_answer()
+
+@step('I click back button in Settings')
+def step_impl(context):
+    context.pages.right_panel_page().click_back_button()
+
+@step('I check the Reuse Prompt Answers setting is OFF')
+def step_impl(context):
+    is_reuse_prompt_answer_enabled = context.pages.right_panel_page().get_reuse_prompt_answer_status()
+    AssertUtil.assert_simple(is_reuse_prompt_answer_enabled, False)
+
+@step('I check the Reuse Prompt Answers setting is ON')
+def step_impl(context):
+    is_reuse_prompt_answer_enabled = context.pages.right_panel_page().get_reuse_prompt_answer_status()
+    AssertUtil.assert_simple(is_reuse_prompt_answer_enabled, True)

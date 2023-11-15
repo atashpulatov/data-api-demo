@@ -4,12 +4,13 @@ from framework.util.exception.mstr_exception import MstrException
 
 
 class RightPanelMainBrowserPage(BaseBrowserPage):
-    IMPORT_DATA_BUTTON_ELEM = '.import-data > span > button'
+    IMPORT_DATA_BUTTON_ELEM = '.import-data > button'
     ADD_DATA_BUTTON_ELEM_ID = 'add-data-btn'
 
     DOTS_MENU = '.settings-button'
     DOTS_MENU_BOX = '.settings-list'
     DOTS_MENU_ITEM_LOG_OUT_ID = 'logOut'
+    DOTS_MENU_SETTING = '.settings.not-linked-list'
 
     SELECT_ALL_TILES = 'div.object-tile-container-header > span > span > '
     SELECT_ALL_TILES_CHECKBOX = '.object-tile-container-header .checkbox-cell'
@@ -27,6 +28,9 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
 
     ATTRIBUTE_NAME_CLIENT_HEIGHT = 'clientHeight'
     ATTRIBUTE_NAME_SCROLL_HEIGHT = 'scrollHeight'
+
+    REUSE_PROMPT_ANSWER_TOGGLE = '.reuse-prompt-answers-toggle button'
+    REUSE_PROMPT_ANSWER_BACK = '.settings-icon span'
 
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
@@ -135,3 +139,30 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
         overlay_message = element.get_text_content_by_attribute()
 
         return overlay_message
+    
+    def open_setting(self):
+        self.focus_on_add_in_frame()
+
+        self._open_dots_menu()
+        self.get_element_by_css(RightPanelMainBrowserPage.DOTS_MENU_SETTING).click()
+
+    def toggle_reuse_prompt_answer(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.REUSE_PROMPT_ANSWER_TOGGLE).click()
+
+    def click_back_button(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.REUSE_PROMPT_ANSWER_BACK).click()
+
+    def get_reuse_prompt_answer_status(self):
+        self.focus_on_add_in_frame()
+
+        element = self.get_element_by_css(RightPanelMainBrowserPage.REUSE_PROMPT_ANSWER_TOGGLE)
+        aria_checked_value = element.get_attribute("aria-checked")
+        if aria_checked_value == "true":
+            return True
+        else:
+            return False
+

@@ -50,6 +50,13 @@ class PromptBrowserPage(BaseBrowserPage):
         self.wait_for_element_to_have_attribute_value_by_css(
             PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
         )
+    
+    def wait_for_prompt_dialog(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.wait_for_element_to_have_attribute_value_by_css(
+            PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
+        )
 
     def click_run_button(self):
         self.focus_on_add_in_popup_frame()
@@ -75,6 +82,31 @@ class PromptBrowserPage(BaseBrowserPage):
             prompt_name,
             item
         )
+
+    def check_selected_answer_for_object_prompt(self, prompt_number, prompt_name, item):
+        self.focus_on_prompt_frame()
+
+        el = self._get_selected_answer_for_object_prompt(
+            PromptBrowserPage.PROMPT_OBJECT_SELECTED_ITEM_CSS,
+            prompt_number,
+            prompt_name,
+            item
+        )
+
+        return el
+
+    def check_available_answer_for_object_prompt(self, prompt_number, prompt_name, item):
+        self.focus_on_prompt_frame()
+
+        el = self._get_available_answer_for_object_prompt(
+            PromptBrowserPage.PROMPT_OBJECT_AVAILABLE_ITEM_CSS,
+            prompt_number,
+            prompt_name,
+            item
+        )
+
+        return el
+
 
     def select_answer_for_dossier_object_prompt(self, prompt_number, prompt_name, item):
          self.focus_on_dossier_frame()
@@ -126,6 +158,30 @@ class PromptBrowserPage(BaseBrowserPage):
 
         answer.double_click()
 
+    def _get_selected_answer_for_object_prompt(self, selector, prompt_number, prompt_name, item):
+        self._select_prompt_from_list(prompt_number)
+
+        self._check_prompt_name(prompt_number, prompt_name)
+
+        answer = self.find_element_by_text_in_elements_list_by_css_safe(
+            selector,
+            item,
+        )  # TODO select prompt for prompt_number
+
+        return answer is not None
+    
+    def _get_available_answer_for_object_prompt(self, selector, prompt_number, prompt_name, item):
+        self._select_prompt_from_list(prompt_number)
+
+        self._check_prompt_name(prompt_number, prompt_name)
+
+        answer = self.find_element_by_text_in_elements_list_by_css_safe(
+            selector,
+            item,
+        )  # TODO select prompt for prompt_number
+
+        return answer is not None
+        
     def select_answer_for_value_prompt(self, prompt_number, prompt_name, text):
         self._select_prompt_from_list(prompt_number)
 

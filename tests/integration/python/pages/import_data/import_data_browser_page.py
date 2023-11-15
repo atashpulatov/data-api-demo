@@ -63,13 +63,14 @@ class ImportDataBrowserPage(BaseBrowserPage):
     LIBRARY_VIEW = '''button[aria-label='%s']'''
     GRID_VIEW_OBJECT = '''div[aria-label='%s']'''
     LIST_VIEW_OBJECT = '''div[data-itemname='%s']'''
-    CONENT_DISC_OBJECT = '''div[data-itemname='%s']'''
+    CONENT_DISC_OBJECT = '//div[@data-itemname="%s"]/../../..//div[contains(@class,"mstrd-DossierItemRow-linkOverlay")]'
 
     LIBRARY_ICON = '.mstr-nav-icon.icon-library'
     LIBRARY_CONTENT_DISC = 'li.mstrd-PredefinedMenuSection-item i.icon-content_discovery + span'
     CONENT_DISC_PROJECT_DROPDOWN = '.mstrd-folderPanel-projectSelectOption'
     CONENT_DISC_PROJECT = '''span[title="%s"][class="mstrd-folderPanel-projectName"]'''
     CONENT_DISC_FOLDER = '//span[text()="%s" and @class="mstrd-FolderTreeRow-name"]'
+    CONENT_DISC_RESIZE = '//span[text()="Auto Resize"]'
 
     def __init__(self):
         super().__init__()
@@ -363,7 +364,8 @@ class ImportDataBrowserPage(BaseBrowserPage):
         elif expected_view == 'List View':
             self.get_element_by_css(ImportDataBrowserPage.LIST_VIEW_OBJECT % name).click()
         else:
-            self.get_element_by_css(ImportDataBrowserPage.CONENT_DISC_OBJECT % name).click()
+            self.get_element_by_xpath(ImportDataBrowserPage.CONENT_DISC_RESIZE).click()
+            self.get_element_by_xpath(ImportDataBrowserPage.CONENT_DISC_OBJECT % name).click()
 
     def click_on_library_icon(self):
         self.focus_on_library_frame()
