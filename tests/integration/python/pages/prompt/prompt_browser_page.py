@@ -107,6 +107,29 @@ class PromptBrowserPage(BaseBrowserPage):
 
         return el
 
+    def check_selected_answer_for_dossier_object_prompt(self, prompt_number, prompt_name, item):
+        self.focus_on_dossier_frame()
+
+        el = self._get_selected_answer_for_object_prompt(
+            PromptBrowserPage.PROMPT_OBJECT_SELECTED_ITEM_CSS,
+            prompt_number,
+            prompt_name,
+            item
+        )
+
+        return el
+
+    def check_available_answer_for_dossier_object_prompt(self, prompt_number, prompt_name, item):
+        self.focus_on_dossier_frame()
+
+        el = self._get_available_answer_for_object_prompt(
+            PromptBrowserPage.PROMPT_OBJECT_AVAILABLE_ITEM_CSS,
+            prompt_number,
+            prompt_name,
+            item
+        )
+
+        return el
 
     def select_answer_for_dossier_object_prompt(self, prompt_number, prompt_name, item):
          self.focus_on_dossier_frame()
