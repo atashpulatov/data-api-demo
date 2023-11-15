@@ -45,6 +45,7 @@ function onLogOut(action, state) {
       userID: null,
       userFullName: null,
       userInitials: null,
+      canUseOffice: false
     };
   }
   return {};

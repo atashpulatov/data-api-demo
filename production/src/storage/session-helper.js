@@ -29,6 +29,21 @@ class SessionHelper {
   };
 
   /**
+   * Handles terminating Rest session and logging out the user from plugin
+   * with redirect to login page from Privilege Error Screen
+   */
+  handleLogoutForPrivilegeMissing = async () => {
+    try {
+      await sessionHelper.logOutRest();
+      sessionActions.logOut();
+    } catch (error) {
+      errorService.handleError(error);
+    } finally {
+      sessionHelper.logOutRedirect(true);
+    }
+  };
+
+  /**
    * Redirect to user to the login page. If it's development mode
    * we can optionally refresh to avoid stale cache issues when
    * changing users.
@@ -148,6 +163,19 @@ class SessionHelper {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  getCanUseOfficePrivilege = async () => {
+    const { reduxStore } = this;
+    const isDevelopment = this.isDevelopment();
+    const { envUrl } = reduxStore.getState().sessionReducer;
+
+    const authToken = isDevelopment
+      ? reduxStore.getState().sessionReducer.authToken
+      : homeHelper.getTokenFromStorage();
+    const canUseOffice = await authenticationService.getOfficePrivilege(envUrl, authToken);
+
+    return canUseOffice;
   };
 
   /**
