@@ -72,3 +72,8 @@ def step_impl(context, item, prompt_number, prompt_name):
 def step_impl(context, item, prompt_number, prompt_name):
     is_prompt_answer_available = context.pages.prompt_page().check_available_answer_for_object_prompt(prompt_number, prompt_name, item)
     AssertUtil.assert_simple(is_prompt_answer_available, True)
+
+@step('I verified Prompt Dialog has title "Reprompt {obj_number} of {total_obj_number} > {object_name}"')
+def step_impl(context, obj_number, total_obj_number, object_name):
+    is_title_displayed = context.pages.prompt_page().check_prompt_dialog_title(obj_number, total_obj_number, object_name)
+    AssertUtil.assert_simple(is_title_displayed, True)

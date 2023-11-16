@@ -261,4 +261,7 @@ def step_impl(context,project):
 @step('I clicked on folder "{folder}"')
 def step_impl(context,folder):
     context.pages.import_data_page().click_on_folder(folder)
-    
+
+@step('I clicked on back button in data import button')
+def step_impl(context):
+    context.pages.import_data_page().click_back_button()

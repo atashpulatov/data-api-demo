@@ -40,7 +40,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
     OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(3)'
     EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE + '.object-tile-wrapper .context-menu-list li:nth-child(1)'
-    CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .checkbox-cell'
+    CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .mstr-rc-selector'
+    SELECT_ALL_CHECKBOX = '#master-checkbox'
+    REPROMPT_BUTTON_FOR_ALL = '.multiselection-reprompt-button'
+    REFRESH_BUTTON_FOR_ALL = '.multiselection-refresh-button'
+    
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
 
@@ -160,6 +164,17 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     def hover_reprompt(self, tile_no):
         self._hover_over_tile_button(RightPanelTileBrowserPage.REPROMPT_BUTTON_FOR_OBJECT, tile_no)
 
+    def click_select_all(self):
+        self.focus_on_add_in_frame()
+
+        self.get_element_by_css(RightPanelTileBrowserPage.SELECT_ALL_CHECKBOX).click()
+
+    def click_reprompt_for_select_all(self):
+        self.get_element_by_css(RightPanelTileBrowserPage.REPROMPT_BUTTON_FOR_ALL).click()
+
+    def click_refresh_for_select_all(self):
+        self.get_element_by_css(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_ALL).click()
+        
     def click_edit(self, tile_no):
         self.click_options_for_object(tile_no)
         self.get_element_by_css(RightPanelTileBrowserPage.EDIT_OPTION_FOR_OBJECT % tile_no).click()
