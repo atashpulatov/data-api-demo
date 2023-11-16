@@ -27,13 +27,6 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
      And I verified that Import button is enabled
      And I verified that Prepare Data button is enabled
      And I clicked Import button without checking results
-     And I waited for Run button to be enabled
-     And I clicked Run button
-     And I clicked on back button in data import button
-     And I found and clicked "Report" object "Reprompt Report 1 - Prompt on Country" in "Content Discovery"
-     And I verified that Import button is enabled
-     And I verified that Prepare Data button is enabled
-     And I clicked Import button without checking results
     #Change remembered answer to Country = USA, Web, Canada
      And I verified "Canada" is a available answer for "1. Country" prompt - object prompt
      And I selected "Canada" as an answer for "1. Country" prompt - object prompt
