@@ -1,5 +1,5 @@
 @reprompt
-Feature: F38417 - Ability to navigate the folder structure when importing content in the MicroStrategy add-in for Excel 
+Feature: F38412 - Re-use prompt answers across multiple prompts when importing content via the MicroStrategy add-in for Excel
 
   Scenario: [TC90469] - Reprompt Multiple Objects with Remember Answer Setting ON
     Given I initialized Excel

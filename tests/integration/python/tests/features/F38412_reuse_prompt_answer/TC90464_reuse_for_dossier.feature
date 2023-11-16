@@ -1,4 +1,4 @@
-@reuse_prompt_answers
+@reprompt
 Feature: F38412 - Re-use prompt answers across multiple prompts when importing content via the MicroStrategy add-in for Excel
 
   Scenario: [TC90464] - Reuse Prompt Answers for Dossiers
