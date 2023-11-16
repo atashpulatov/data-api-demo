@@ -37,9 +37,8 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I selected in dossier prompt "Mid-Atlantic" as an answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Mid-Atlantic" is a selected answer for "2. Select Region" prompt - object prompt
       And I clicked Run button for prompted dossier if prompts not already answered
-      And I selected dossier page or chapter 1
       And I selected Visualization "Visualization 1"
-      And I clicked import dossier
+      And I clicked import dossier without waiting for results
       And I waited for object to be imported successfully
       And I closed all notifications
      Then I verified that number of worksheets is 1
@@ -51,15 +50,14 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I verified that Import button is enabled
       And I verified that Prepare Data button is disabled
       And I clicked import dossier without waiting for results
-      And I verified "USA" is a selected answer for "1. Country" prompt - object prompt
-      And I verified "Canada" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt "USA" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt "Canada" is a selected answer for "1. Country" prompt - object prompt
       And I verified in dossier prompt "Northeast" is a selected answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Northwest" is a selected answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Mid-Atlantic" is a selected answer for "2. Select Region" prompt - object prompt
       And I clicked Run button for prompted dossier if prompts not already answered
-      And I selected dossier page or chapter 1
       And I selected Visualization "Visualization 1"
-      And I clicked import dossier
+      And I clicked import dossier without waiting for results
       And I clicked OK button in Range Taken popup
       And I waited for object to be imported successfully
       And I closed all notifications
@@ -75,23 +73,22 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
     # Import second dossier with shared Country and Region prompt, and confirm default answers are displayed
       And I clicked Add Data button
       And I switched to Content Discovery
-      And I found and clicked "Report" object "Reprompt Report 3 - Prompt on Country, Region, Category" in "Content Discovery"
+      And I found and clicked "Dossier" object "Reprompt Dossier 3 - Prompt on Country, Region, Category" in "Content Discovery"
       And I verified that Import button is enabled
       And I verified that Prepare Data button is disabled
       And I clicked import dossier without waiting for results
-      And I verified "Canada" is a available answer for "1. Country" prompt - object prompt
-      And I verified "USA" is a selected answer for "1. Country" prompt - object prompt
-      And I verified "Web" is a selected answer for "1. Country" prompt - object prompt
-      And I verified "Spain" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt "Canada" is a available answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt "USA" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt "Web" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt "Spain" is a selected answer for "1. Country" prompt - object prompt
       And I verified in dossier prompt "Northeast" is a available answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Northwest" is a available answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Mid-Atlantic" is a available answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "South" is a selected answer for "2. Select Region" prompt - object prompt
       And I verified in dossier prompt "Web" is a selected answer for "2. Select Region" prompt - object prompt
       And I clicked Run button for prompted dossier if prompts not already answered
-      And I selected dossier page or chapter 1
       And I selected Visualization "Visualization 1"
-      And I clicked import dossier
+      And I clicked import dossier without waiting for results
       And I clicked OK button in Range Taken popup
       And I waited for object to be imported successfully
       And I closed all notifications
