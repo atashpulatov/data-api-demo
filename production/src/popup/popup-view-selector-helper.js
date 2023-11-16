@@ -50,11 +50,20 @@ class PopupViewSelectorHelper {
     );
   };
 
-  promptedReportSubmitted = (props) => (
-    !!(props.propsToPass.isPrompted || props.isPrompted)
-    && (props.mstrObjectType?.name === mstrObjectEnum.mstrObjectType.report.name)
-    && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation)
-  );
+  promptedReportSubmitted = (props) => {
+    if (!props || props === undefined) {
+      return false;
+    }
+
+    const isPrompted = props.propsToPass?.isPrompted;
+    const finalIsPrompted = isPrompted?.isPrompted ?? false;
+
+    const isPromptedReportSubmitted = !!(finalIsPrompted || props.isPrompted)
+      && (props.mstrObjectType?.name === mstrObjectEnum.mstrObjectType.report.name)
+      && (props.importRequested || props.popupType === PopupTypeEnum.dataPreparation);
+
+    return isPromptedReportSubmitted;
+  };
 
   isInstanceWithPromptsAnswered = (props) => (
     !!props.editedObject
