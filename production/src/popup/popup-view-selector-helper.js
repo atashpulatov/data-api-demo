@@ -51,7 +51,7 @@ class PopupViewSelectorHelper {
   };
 
   promptedReportSubmitted = (props) => {
-    if (!props || props === undefined) {
+    if (!props) {
       return false;
     }
 
