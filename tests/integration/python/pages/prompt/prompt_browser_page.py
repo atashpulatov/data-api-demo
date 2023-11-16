@@ -32,6 +32,8 @@ class PromptBrowserPage(BaseBrowserPage):
 
     REPROMPT_BUTTON_CSS = '.mstrd-PromptNavItem'
 
+    PROMPT_DIALOG_TITLE = '.title-bar > span'
+
     def __init__(self):
         super().__init__()
 
@@ -281,3 +283,14 @@ class PromptBrowserPage(BaseBrowserPage):
         self.focus_on_dossier_frame()
 
         self.get_element_by_css(PromptBrowserPage.REPROMPT_BUTTON_CSS).click()
+
+    def check_prompt_dialog_title(self, obj_number, total_obj_number, object_name):
+        self.focus_on_add_in_popup_frame()
+
+        actual_text = self.get_element_by_css(PromptBrowserPage.PROMPT_DIALOG_TITLE).text
+        expected_text = f"Reprompt {obj_number} of {total_obj_number} > {object_name}"
+        print(actual_text)
+        print(expected_text)
+
+        return actual_text == expected_text
+        
