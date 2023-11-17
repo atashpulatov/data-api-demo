@@ -2,10 +2,10 @@ import scriptInjectionHelper from './script-injection-helper';
 
 /**
  * Handles embedding api login in excel desktop in windows
- * @param {HTMLDocument} contentDocument
+ * @param {Document} contentDocument
  * @param {*} Office
  */
-export const handleLoginExcelDesktopInWindows = (contentDocument: HTMLDocument, Office: any) => {
+export const handleLoginExcelDesktopInWindows = (contentDocument: Document, Office: any) => {
   if (!scriptInjectionHelper.isLoginPage(contentDocument)) {
     // DE158588 - Not able to open library in embedding api on excel desktop in windows
     const isOfficeOnline = Office.context && Office.context.platform === Office.PlatformType.OfficeOnline;

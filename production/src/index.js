@@ -33,11 +33,9 @@ function goReact() {
 function officeInitialize() {
   window.Office.onReady()
     .then(async () => {
-      const envUrl = window.location.pathname.split('/apps/')[0];
       const homeHelperSingle = diContainer.initilizeSingle(HomeHelper, [reduxStore, sessionHelper]);
 
       if (window.location.href.indexOf('popupType') === -1) {
-        const { iSession } = homeHelperSingle.getParsedCookies();
         homeHelperSingle.storeShowHidden();
       }
       goReact();

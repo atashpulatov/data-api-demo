@@ -65,15 +65,6 @@ function getTypeFromViewMedia(viewMedia) {
   return null;
 }
 
-// /**
-//  * function to determine if a provided view media is for an rsd
-//  * @param viewMedia
-//  * @returns {boolean}
-//  */
-// function isRsd(viewMedia) {
-//   return getTypeFromViewMedia(viewMedia) === DOCUMENT_TYPES.RSD;
-// }
-
 /**
  * function to determine if a provided view media is for an dossier
  * @param viewMedia

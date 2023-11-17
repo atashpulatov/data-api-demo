@@ -49,7 +49,7 @@ class ErrorService {
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
-    this.checkForLogout(isLogout, errorType);
+    this.checkForLogout(errorType, isLogout);
   };
 
   getErrorType = (error, operationData) => {
@@ -99,7 +99,7 @@ class ErrorService {
     onClick: () => this.notificationService.globalNotificationDissapear(),
   }]);
 
-  checkForLogout = (isLogout = false, errorType) => {
+  checkForLogout = (errorType, isLogout = false) => {
     if (!isLogout && [errorTypes.UNAUTHORIZED_ERR].includes(errorType)) {
       setTimeout(() => {
         this.fullLogOut();
