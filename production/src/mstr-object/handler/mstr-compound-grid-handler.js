@@ -71,8 +71,8 @@ class CompoundGridHandler {
   getTableSize(data) {
     const { headers: { columnSets } } = data;
     let columns = 0;
-    for (let index = 0; index < columnSets.length; index++) {
-      columns += columnSets[index].length;
+    for (const columnSet of columnSets) {
+      columns += columnSet.length;
     }
     return {
       rows: data.paging.total,
