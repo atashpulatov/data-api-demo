@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import React, { FC, FormEvent, useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { authenticationHelper } from './authentication-helper';
@@ -8,9 +8,7 @@ import { AuthenticateComponent } from './auth-component-types';
 import './auth-component.css';
 
 import defaultLoginProps from './default-login-props';
-import {
-  LoginProps, InputProps, SelectInputProps, BasicLoginProps
-} from './basic-login-types';
+import { LoginProps, InputProps, SelectInputProps } from './basic-login-types';
 
 import './basic-login.scss';
 import i18n from '../i18n';
@@ -51,8 +49,6 @@ const getApiUrl = (url: string): string => {
 
 export const AuthenticateNotConnected: FC<AuthenticateComponent> = (props) => {
   const [formData, setFormData] = React.useState<LoginProps>({ ...defaultLoginProps });
-
-  const [t] = useTranslation('common', { i18n });
 
   const { session, resetState } = props;
 
