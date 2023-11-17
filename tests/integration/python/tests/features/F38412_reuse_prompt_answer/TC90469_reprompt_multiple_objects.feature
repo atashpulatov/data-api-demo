@@ -6,14 +6,14 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
 
     When I logged in as default user
 
-    #Turn remember answer setting ON
+    # Turn remember answer setting ON
      When I open Settings in Dots Menu
      Then I check the Reuse Prompt Answers setting is OFF
      When I toggle the Reuse Prompt Answers setting
      Then I check the Reuse Prompt Answers setting is ON
      When I click back button in Settings
      
-    #Import Object Reprompt Report 1 - Prompt on Country, default answer is Country = USA, Web
+    # Import Object Reprompt Report 1 - Prompt on Country, default answer is Country = USA, Web
      When I clicked Import Data button
      And I click on Library icon
      And I switched to Content Discovery
@@ -27,7 +27,14 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
      And I verified that Import button is enabled
      And I verified that Prepare Data button is enabled
      And I clicked Import button without checking results
-    #Change remembered answer to Country = USA, Web, Canada
+     And I waited for Run button to be enabled
+     And I clicked Run button
+     And I clicked on back button in data import button
+     And I found and clicked "Report" object "Reprompt Report 1 - Prompt on Country" in "Content Discovery"
+     And I verified that Import button is enabled
+     And I verified that Prepare Data button is enabled
+     And I clicked Import button without checking results
+    # Change remembered answer to Country = USA, Web, Canada
      And I verified "Canada" is a available answer for "1. Country" prompt - object prompt
      And I selected "Canada" as an answer for "1. Country" prompt - object prompt
      And I verified "Canada" is a selected answer for "1. Country" prompt - object prompt
@@ -36,7 +43,7 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
      And I waited for object to be imported successfully
      And I closed all notifications
 
-    #Import object Reprompt Report 2 - Prompt on Country, Region, default answers are Country = USA; Region = NE, NW
+    # Import object Reprompt Report 2 - Prompt on Country, Region, default answers are Country = USA; Region = NE, NW
       Then I clicked Add Data button
       And I switched to Content Discovery
       And I found and clicked "Report" object "Reprompt Report 2 - Prompt on Country, Region" in "Content Discovery"
@@ -61,7 +68,7 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I waited for object to be imported successfully
       And I closed all notifications
 
-    #Import object 3, Reprompt Report 3 - Prompt on Country, Region, Category
+    # Import object 3, Reprompt Report 3 - Prompt on Country, Region, Category
       Then I clicked Add Data button
       And I switched to Content Discovery
       And I found and clicked "Report" object "Reprompt Report 3 - Prompt on Country, Region, Category" in "Content Discovery"
@@ -83,11 +90,45 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I waited for object to be imported successfully
       And I closed all notifications
 
-     #Reprompt all objects 1/3
-      When I clicked select all checkbox
-      And I clicked Reprompt button for select all
+    # Import object 4, Reprompt Dossier 3 - Prompt on Country, Region, Category
+      And I clicked Add Data button
+      And I switched to Content Discovery
+      And I found and clicked "Dossier" object "Reprompt Dossier 3 - Prompt on Country, Region, Category" in "Content Discovery"
+      And I verified that Import button is enabled
+      And I verified that Prepare Data button is disabled
+      And I clicked import dossier without waiting for results
+      Then I verified in dossier prompt "USA" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt  "Canada" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt  "Northeast" is a selected answer for "2. Select Region" prompt - object prompt
+      And I verified in dossier prompt  "Northwest" is a selected answer for "2. Select Region" prompt - object prompt
+      And I verified in dossier prompt  "South" is a selected answer for "2. Select Region" prompt - object prompt
+      And I verified in dossier prompt  "Books" is a selected answer for "3. Category" prompt - object prompt
+      And I verified in dossier prompt  "Movies" is a selected answer for "3. Category" prompt - object prompt
+      And I clicked Run button for prompted dossier if prompts not already answered
+      And I selected Visualization "Visualization 1"
+      And I clicked import dossier without waiting for results
+      And I clicked OK button in Range Taken popup
+      And I waited for object to be imported successfully
+      And I closed all notifications
+
+     # Reprompt all objects 1/4
+      And I waited for dossier to load successfully
+      Then I verified Prompt Dialog has title "Reprompt 1 of 4 > Reprompt Dossier 3 - Prompt on Country, Region, Category"
+      Then I verified in dossier prompt "USA" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt "Canada" is a selected answer for "1. Country" prompt - object prompt
+      And I verified in dossier prompt "Northeast" is a selected answer for "2. Select Region" prompt - object prompt
+      And I verified in dossier prompt "Northwest" is a selected answer for "2. Select Region" prompt - object prompt
+      And I verified in dossier prompt "South" is a selected answer for "2. Select Region" prompt - object prompt
+      And I verified in dossier prompt "Books" is a selected answer for "3. Category" prompt - object prompt
+      And I verified in dossier prompt "Movies" is a selected answer for "3. Category" prompt - object prompt
+      And I clicked Run button for prompted dossier if prompts not already answered
+      And I selected Visualization "Visualization 1"
+      And I clicked import dossier without waiting for results
+      And I closed all notifications
+
+      # Reprompt all objects 2/4
       And I waited for Prompt Dialog to be loaded
-      Then I verified Prompt Dialog has title "Reprompt 1 of 3 > Reprompt Report 3 - Prompt on Country, Region, Category"
+      Then I verified Prompt Dialog has title "Reprompt 2 of 4 > Reprompt Report 3 - Prompt on Country, Region, Category"
       And I verified "USA" is a selected answer for "1. Country" prompt - object prompt
       And I verified "Canada" is a selected answer for "1. Country" prompt - object prompt
       And I verified "Northeast" is a selected answer for "2. Select Region" prompt - object prompt
@@ -101,13 +142,13 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I clicked Run button
       And I closed all notifications
 
-    #Reprompt all objects 2/3
+    # Reprompt all objects 3/4
       And I waited for Prompt Dialog to be loaded
-      And I verified Prompt Dialog has title "Reprompt 2 of 3 > Reprompt Report 2 - Prompt on Country, Region"
+      And I verified Prompt Dialog has title "Reprompt 3 of 4 > Reprompt Report 2 - Prompt on Country, Region"
       And I verified "USA" is a selected answer for "1. Country" prompt - object prompt
       And I verified "Canada" is a available answer for "1. Country" prompt - object prompt
-      And I verified "Northeast" is a selected answer for "2. Select Region" prompt - object prompt
-      And I verified "Northwest" is a available answer for "2. Select Region" prompt - object prompt
+      And I verified "Northeast" is a available answer for "2. Select Region" prompt - object prompt
+      And I verified "Northwest" is a selected answer for "2. Select Region" prompt - object prompt
       And I verified "South" is a selected answer for "2. Select Region" prompt - object prompt
       And I selected "England" as an answer for "1. Country" prompt - object prompt
       And I selected "Web" as an answer for "2. Select Region" prompt - object prompt
@@ -117,9 +158,9 @@ Feature: F38412 - Re-use prompt answers across multiple prompts when importing c
       And I clicked Run button
       And I closed all notifications
 
-    #Reprompt all objects 3/3
+    # Reprompt all objects 4/4
       And I waited for Prompt Dialog to be loaded
-      And I verified Prompt Dialog has title "Reprompt 3 of 3 > Reprompt Report 1 - Prompt on Country"
+      And I verified Prompt Dialog has title "Reprompt 4 of 4 > Reprompt Report 1 - Prompt on Country"
       And I verified "USA" is a selected answer for "1. Country" prompt - object prompt
       And I verified "England" is a selected answer for "1. Country" prompt - object prompt
       And I verified "Canada" is a available answer for "1. Country" prompt - object prompt
