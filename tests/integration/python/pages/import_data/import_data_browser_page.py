@@ -69,8 +69,9 @@ class ImportDataBrowserPage(BaseBrowserPage):
     LIBRARY_CONTENT_DISC = 'li.mstrd-PredefinedMenuSection-item i.icon-content_discovery + span'
     CONENT_DISC_PROJECT_DROPDOWN = '.mstrd-folderPanel-projectSelectOption'
     CONENT_DISC_PROJECT = '''span[title="%s"][class="mstrd-folderPanel-projectName"]'''
-    CONENT_DISC_FOLDER = '//span[text()="%s" and @class="mstrd-FolderTreeRow-name"]'
+    CONENT_DISC_FOLDER = '//div[@class="mstrd-FolderTreeRow"]//span[text()="%s"]'
     CONENT_DISC_RESIZE = '//span[text()="Auto Resize"]'
+    IMPORT_BACK_BUTTON = '#back'
 
     def __init__(self):
         super().__init__()
@@ -383,3 +384,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def click_on_folder(self,folder):
         self.focus_on_library_frame()
         self.get_element_by_xpath(ImportDataBrowserPage.CONENT_DISC_FOLDER % folder).click()
+
+    def click_back_button(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_css(ImportDataBrowserPage.IMPORT_BACK_BUTTON).click()

@@ -1,5 +1,5 @@
 @reprompt
-Feature: F38417 - Ability to navigate the folder structure when importing content in the MicroStrategy add-in for Excel 
+Feature: F38412 - Re-use prompt answers across multiple prompts when importing content via the MicroStrategy add-in for Excel
 
   Scenario: [TC90465] - Reprompt Sinlge Object
     Given I initialized Excel
@@ -23,6 +23,14 @@ Feature: F38417 - Ability to navigate the folder structure when importing conten
      And I clicked on folder "Shared Reports"
      And I clicked on folder "_Automation"
      And I clicked on folder "Reprompt"
+     And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
+     And I verified that Import button is enabled
+     And I verified that Prepare Data button is enabled
+     And I clicked Import button without checking results
+     And I waited for Run button to be enabled
+     And I clicked Run button
+     #Add temporary logic due to DE280291
+     And I clicked on back button in data import button
      And I found and clicked "Report" object "Reprompt - Prompt on Category" in "Content Discovery"
      And I verified that Import button is enabled
      And I verified that Prepare Data button is enabled

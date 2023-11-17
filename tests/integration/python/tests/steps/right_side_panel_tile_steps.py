@@ -57,6 +57,17 @@ def step_impl(context, object_number):
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().hover_reprompt(object_number)
 
+@step('I clicked select all checkbox')
+def step_impl(context):
+    context.pages.right_panel_tile_page().click_select_all()
+
+@step('I clicked Reprompt button for select all')
+def step_impl(context):
+    context.pages.right_panel_tile_page().click_reprompt_for_select_all()
+
+@step('I clicked Refresh button for select all')
+def step_impl(context):
+    context.pages.right_panel_tile_page().click_refresh_for_select_all()
 
 @step('I verified that tooltip "{expected_tooltip_text}" is displayed on object {object_number}')
 def step_impl(context, expected_tooltip_text, object_number):
