@@ -245,7 +245,7 @@
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Importen misslyckades eftersom storleksgränsen för Excel Online-begäranden eller -svar är 5 MB. Testa att begränsa dina data.",
    "Please select only one range before import.": "Välj endast ett intervall innan genomför importen.",
    "Apply": "Tillämpa",
-   "{{index}} of {{total}}": "{{index}} av {{total}}",
-   "You do not have the rights to access MicroStrategy for Office": "Du har inte rättigheter för åtkomst till MicroStrategy för Office",
+   "{{index}} of {{total}}": "{{index}} av {{total}} ",
+   "You do not have the rights to access MicroStrategy for Office": "Du har inte rätt åtkomst till MicroStrategy for Office",
    "Try Again": "Försök igen"
 }
