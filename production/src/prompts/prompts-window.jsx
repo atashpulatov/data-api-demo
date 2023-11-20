@@ -31,7 +31,7 @@ export const PromptsWindowNotConnected = (props) => {
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested, repromptsQueue,
     isMultipleRepromptWithReuse,
   } = props;
-  const { chosenObjectId } = mstrData;
+  const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
   // isEdit will only be true for the Edit workflow
   const { isReprompt, isEdit } = popupState;
@@ -316,16 +316,14 @@ export const PromptsWindowNotConnected = (props) => {
     onPopupBack();
   };
 
-  // Determine whether Re-prompt title should be shown if queue has more than one item,
-  // and is reprompt enabled.
-  const showRepromptTitle = isReprompt && repromptsQueue.total > 1;
-  const editedObjectName = editedObject.chosenObjectName;
+  const objectName = editedObject.chosenObjectName || chosenObjectName;
 
   return (
     <div className="prompts-window">
       <PromptsWindowTitle
-        showTitle={showRepromptTitle}
-        objectName={editedObjectName}
+        objectName={objectName}
+        isReprompt={isReprompt}
+        isEdit={isEdit}
       />
       <Empty isLoading />
       <PromptsContainer
@@ -349,6 +347,7 @@ PromptsWindowNotConnected.propTypes = {
   onPopupBack: PropTypes.func,
   mstrData: PropTypes.shape({
     chosenObjectId: PropTypes.string,
+    chosenObjectName: PropTypes.string,
     chosenProjectId: PropTypes.string,
     promptsAnswers: PropTypes.arrayOf(PropTypes.shape({}))
   }),

@@ -6,15 +6,15 @@ import { PromptWindowTitleTypes } from './prompts-window-title-types';
 import i18n from '../i18n';
 
 /**
- * This component is used to display the title of the prompts window when the user has triggered
- * multiple object re-prompting. It shows the current object being re-prompted and the total number of objects
- * in the list. It also shows a loading indicator when processing the re-prompting takes a long time.
- * @param {*} props component properties passed in.
+ * This component is used to display the title of the popup window when the user has triggered
+ * object import, edit, or re-prompt. It shows the current object being operated on and, for multiple re-prompt,
+ * the total number of objects in the list.
+ * @param {PromptWindowTitleTypes} props component properties passed in.
  * @returns
  */
-const PromptsWindowTitleNotConnected: FC<PromptWindowTitleTypes> = ({
+const PopupWindowTitle: FC<PromptWindowTitleTypes> = ({
   isReprompt, isEdit, index, total, objectName
-}) => {
+}: PromptWindowTitleTypes) => {
   const [t] = useTranslation('common', { i18n });
 
   const showMultipleRepromptMessage = isReprompt && !isEdit && total > 1;
