@@ -20,7 +20,7 @@ import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { prepareGivenPromptAnswers, preparePromptedReport, mergeAnswersWithPromptsDefined } from '../helpers/prompts-handling-helper';
-import { PromptsWindowTitle } from './prompts-window-title';
+import { ObjectWindowTitle } from '../popup/object-window-title/object-window-title';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
@@ -320,7 +320,8 @@ export const PromptsWindowNotConnected = (props) => {
 
   return (
     <div className="prompts-window">
-      <PromptsWindowTitle
+      <ObjectWindowTitle
+        objectType={mstrObjectEnum.mstrObjectType.report.name}
         objectName={objectName}
         isReprompt={isReprompt}
         isEdit={isEdit}

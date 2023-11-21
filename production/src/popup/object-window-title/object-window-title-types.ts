@@ -1,4 +1,5 @@
-export interface PopupWindowTitleTypes {
+export interface ObjectWindowTitleTypes {
+  objectType: string,
   isReprompt: boolean,
   isEdit: boolean,
   index: number,

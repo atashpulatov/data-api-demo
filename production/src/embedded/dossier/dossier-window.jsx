@@ -19,7 +19,7 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
-import { DossierWindowTitle } from './dossier-window-title';
+import { ObjectWindowTitle } from '../../popup/object-window-title/object-window-title';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
@@ -229,12 +229,12 @@ export const DossierWindowNotConnected = (props) => {
             </span>
           </span>
         )}
-      <DossierWindowTitle
-        isReprompt
+      <ObjectWindowTitle
+        objectType={mstrObjectEnum.mstrObjectType.dossier.name}
+        objectName={chosenObjectName}
+        isReprompt={isReprompt}
         isEdit={isEdit && !isReprompt}
-        total={repromptsQueue.total}
-        index={repromptsQueue.index}
-        dossierName={chosenObjectName} />
+      />
       <Empty isLoading />
       {!hideEmbedded && ( // Hide embedded dossier only after prompts are answered.
         <>
