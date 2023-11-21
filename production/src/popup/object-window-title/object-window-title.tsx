@@ -20,10 +20,12 @@ export const ObjectWindowTitleNotConnected: FC<ObjectWindowTitleTypes> = ({
   const showMultipleRepromptMessage = isReprompt && !isEdit && total > 1;
   const showSingleRepromptMessage = isReprompt && !isEdit && total === 1;
 
-  let promptTitle = `${t(`Import ${capitalizedObjectType}`)} > ${objectName}`;
+  const importString = t(`Import ${capitalizedObjectType}`);
+  let promptTitle = `${importString} > ${objectName}`;
 
   if (isEdit) {
-    promptTitle = `${t(`Edit ${capitalizedObjectType}`)} > ${objectName}`;
+    const editString = t(`Edit ${capitalizedObjectType}`);
+    promptTitle = `${editString} > ${objectName}`;
   } else if (showMultipleRepromptMessage) {
     promptTitle = `${t('Reprompt')} ${t('{{index}} of {{total}}', { index, total })} > ${objectName}`;
   } else if (showSingleRepromptMessage) {
