@@ -120,8 +120,6 @@ class OfficeRemoveHelper {
       await excelContext.sync();
       return true;
     } catch (error) {
-      // TODO check when object notification will not be connected to operations
-      // await this.removeObjectNotExistingInExcel(object, officeContext);
       return false;
     }
   };
