@@ -6,7 +6,6 @@ import { officeProperties } from '../redux-reducer/office-reducer/office-propert
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
-import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
@@ -72,11 +71,6 @@ class PopupController {
       return;
     }
     const url = URL;
-    // if (IS_LOCALHOST) {
-    // url = `${window.location.origin}/popup.html`;
-    // } else {
-    // url = url.replace('index.html', 'popup.html');
-    // }
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
