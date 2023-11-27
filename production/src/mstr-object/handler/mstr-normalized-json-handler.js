@@ -143,8 +143,8 @@ class NormalizedJsonHandler {
       for (let attributeIndex = 0; attributeIndex < rowElements.length; attributeIndex++) {
         const element = rowElements[attributeIndex];
         if (supportForms && element.value.length > 1) {
-          for (const value of element.value) {
-            const form = `${value}`;
+          for (let index = 0; index < element.value.length; index++) {
+            const form = `${element.value[index]}`;
             tabularRows.push(form);
           }
         } else {
