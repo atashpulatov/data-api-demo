@@ -14,12 +14,7 @@ export const popupStateReducer = (state = initialState, action) => {
         popupType: action.popupType,
       };
     }
-    case SET_MSTR_DATA: {
-      return {
-        ...state,
-        ...action.payload,
-      };
-    }
+    case SET_MSTR_DATA:
     case SET_OBJECT_DATA: {
       return {
         ...state,
