@@ -77,8 +77,8 @@ class MstrCompoundGridFlatten {
     const headerColumns = [];
 
     for (let i = 0; i < columSetsNumber; i++) {
-      for (let index = 0; index < headers.columnSets[i].length; index++) {
-        headerColumns.push(headers.columnSets[i][index][0] + headerIndexOffset);
+      for (const columnSet of headers.columnSets[i]) {
+        headerColumns.push(columnSet[0] + headerIndexOffset);
       }
       headerIndexOffset += headers.columnSets[i].length;
     }
@@ -104,8 +104,8 @@ class MstrCompoundGridFlatten {
       const columnSetColumn = grid.columnSets[i].columns[0];
 
       if (columnSetColumn && columnSetColumn.elements.length > 0) {
-        for (let index = 0; index < columnSetColumn.elements.length; index++) {
-          gridColumns[0].elements.push(columnSetColumn.elements[index]);
+        for (const element of columnSetColumn.elements) {
+          gridColumns[0].elements.push(element);
         }
       }
     }

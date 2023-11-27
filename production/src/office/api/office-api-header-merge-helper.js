@@ -68,8 +68,7 @@ class OfficeApiHeaderMergeHelper {
     const intervalStarts = this.calculateIntervalStarts(attributes);
     const intervals = this.calculateIntervals(intervalStarts, attributes.length);
 
-    for (let i = 0; i < intervals.length; i++) {
-      const interval = intervals[i];
+    for (const interval of intervals) {
       handleMergeFunc(titlesRange, interval, attributes.length);
     }
   };

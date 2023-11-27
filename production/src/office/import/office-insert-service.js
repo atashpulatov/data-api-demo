@@ -35,15 +35,17 @@ class OfficeInsertService {
    * @param {Object} mstrTable Contains informations about mstr object
    */
   appendRows = async (
-    officeTable,
-    excelContext,
-    excelRows,
-    rowIndex,
-    operationType,
-    tableChanged,
-    contextPromises,
-    header,
-    mstrTable
+    {
+      officeTable,
+      excelContext,
+      excelRows,
+      rowIndex,
+      operationType,
+      tableChanged,
+      contextPromises,
+      header,
+      mstrTable
+    }
   ) => {
     await this.appendRowsToTable(excelRows, excelContext, officeTable, rowIndex, tableChanged, operationType);
 
@@ -65,24 +67,23 @@ class OfficeInsertService {
     console.group('Append rows');
     const isOverLimit = officeInsertSplitHelper.checkIfSizeOverLimit(excelRows);
     const splitExcelRows = officeInsertSplitHelper.getExcelRows(excelRows, isOverLimit);
-    for (let i = 0; i < splitExcelRows.length; i += 1) {
+    for (const splitRow of splitExcelRows) {
       excelContext.workbook.application.suspendApiCalculationUntilNextSync();
-      // Get resize range: The number of rows/cols by which to expand the bottom-right corner,
-      // relative to the current range.
       const rowRange = officeTable
         .getDataBodyRange()
         .getRow(0)
         .getOffsetRange(rowIndex, 0)
-        .getResizedRange(splitExcelRows[i].length - 1, 0);
+        .getResizedRange(splitRow.length - 1, 0);
 
-      rowIndex += splitExcelRows[i].length;
-      rowRange.values = splitExcelRows[i];
+      rowIndex += splitRow.length;
+      rowRange.values = splitRow;
       if (isOverLimit) {
-        console.time(`Sync for ${splitExcelRows[i].length} rows`);
+        console.time(`Sync for ${splitRow.length} rows`);
         await excelContext.sync();
-        console.timeEnd(`Sync for ${splitExcelRows[i].length} rows`);
+        console.timeEnd(`Sync for ${splitRow.length} rows`);
       }
     }
+
     console.groupEnd('Append rows');
   };
 
