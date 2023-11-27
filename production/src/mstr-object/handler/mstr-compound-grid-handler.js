@@ -52,7 +52,7 @@ class CompoundGridHandler {
     const onElement = (element) => [element];
     const supportForms = attrforms ? attrforms.supportForms : false;
 
-    const commonColumns = this.renderCompoundGridRowTitles(headers, definition, onElement, supportForms);
+    const commonColumns = this.renderCompoundGridRowTitles(headers, definition, supportForms, onElement);
     const params = [data, definition, onElement, onElement];
     const columnSetColumns = this.renderCompoundGridColumnHeaders(...params);
 
@@ -199,7 +199,7 @@ class CompoundGridHandler {
     const rowTotals = [];
     const columnTotals = [];
 
-    const rows = this.renderCompoundGridRowHeaders(headers, definition, onElement(rowTotals), supportForms);
+    const rows = this.renderCompoundGridRowHeaders(headers, definition, supportForms, onElement(rowTotals));
     const columns = this.renderCompoundGridColumnHeaders(data, definition, onAttribute(columnTotals), onMetric);
     const subtotalAddress = [...rowTotals, ...columnTotals];
 
@@ -216,7 +216,7 @@ class CompoundGridHandler {
    *
    * @return {Array}
    */
-  renderCompoundGridRowTitles(headers, definition, onElement = (e) => e, supportForms) {
+  renderCompoundGridRowTitles(headers, definition, supportForms, onElement = (e) => e) {
     return mstrNormalizedJsonHandler.renderTitles(definition, 'rows', headers, onElement, supportForms);
   }
 
@@ -230,7 +230,7 @@ class CompoundGridHandler {
    *
    * @return {Array}
    */
-  renderCompoundGridRowHeaders(headers, definition, onElement = (e) => e, supportForms) {
+  renderCompoundGridRowHeaders(headers, definition, supportForms, onElement = (e) => e) {
     return mstrNormalizedJsonHandler.renderHeaders(definition, 'rows', headers, onElement, supportForms);
   }
 
@@ -324,9 +324,9 @@ class CompoundGridHandler {
    */
   handleAttributeForms(boundingHeight, attrFormsBoundingHeight, parsedHeaders) {
     if (boundingHeight !== attrFormsBoundingHeight) {
-      for (let i = 0; i < parsedHeaders.length; i++) {
-        while (parsedHeaders[i].length < attrFormsBoundingHeight) {
-          parsedHeaders[i].unshift('\'');
+      for (const header of parsedHeaders) {
+        while (header.length < attrFormsBoundingHeight) {
+          header.unshift('\'');
         }
       }
     }
