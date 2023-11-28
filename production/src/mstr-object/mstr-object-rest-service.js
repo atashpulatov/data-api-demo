@@ -60,7 +60,7 @@ function getFullPath({
   return path;
 }
 
-function fetchObjectContent(fullPath, authToken, projectId, offset = 0, limit = -1, visualizationType) {
+function fetchObjectContent(fullPath, authToken, projectId, visualizationType, offset = 0, limit = -1) {
   if (limit > IMPORT_ROW_LIMIT || offset > EXCEL_ROW_LIMIT) {
     throw new Error(errorMessages.PROBLEM_WITH_REQUEST);
   }
@@ -113,9 +113,9 @@ async function fetchContentPart(
     fullPath,
     authToken,
     projectId,
+    visualizationType,
     offset,
-    limit,
-    visualizationType
+    limit
   );
   if (!fetchedBody.data || !fetchedBody.data.paging) {
     throw new Error(errorMessages.NO_DATA_RETURNED);

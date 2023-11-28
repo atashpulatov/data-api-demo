@@ -25,15 +25,15 @@ class OfficeInsertSplitHelper {
     do {
       const tempSplit = [];
       let changed = false;
-      for (let i = 0; i < splitRows.length; i += 1) {
+      for (const row of splitRows) {
         // 5 MB is a limit for excel
-        if (this.checkIfSizeOverLimit(splitRows[i])) {
-          const { length } = splitRows[i];
-          tempSplit.push(splitRows[i].slice(0, length / 2));
-          tempSplit.push(splitRows[i].slice(length / 2, length));
+        if (this.checkIfSizeOverLimit(row)) {
+          const { length } = row;
+          tempSplit.push(row.slice(0, length / 2));
+          tempSplit.push(row.slice(length / 2, length));
           changed = true;
         } else {
-          tempSplit.push(splitRows[i]);
+          tempSplit.push(row);
         }
       }
       splitRows = [...tempSplit];

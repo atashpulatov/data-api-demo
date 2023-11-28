@@ -17,7 +17,7 @@ class OfficeStoreRestoreObject {
   restoreObjectsFromExcelStore = () => {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(officeProperties.storedObjects) || [];
-    objects = this.restoreLegacyObjectsFromExcelStore(objects, settings);
+    objects = this.restoreLegacyObjectsFromExcelStore(settings, objects);
     objects = objects && objects.filter
       ? objects.filter(object => !object.doNotPersist)
       : objects;
@@ -46,7 +46,7 @@ class OfficeStoreRestoreObject {
   * @param {Office} settings Office settings that is required in order to use Office Api
   * @return {Array} New objects and old objects converted to new format of data
   */
-  restoreLegacyObjectsFromExcelStore = (objects = [], settings) => {
+  restoreLegacyObjectsFromExcelStore = (settings, objects = []) => {
     const reportArray = this.getLegacyObjectsList();
     const objectsToBeAdded = [];
 

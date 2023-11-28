@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
 import { libraryErrorController } from '@mstr/mstr-react-library';
-import { useTranslation } from 'react-i18next';
 import i18n from '../i18n';
 import { PopupViewSelector } from './popup-view-selector';
 import InternetConnectionError from './internet-connection-error';

@@ -185,8 +185,8 @@ class NormalizedJsonHandler {
    * @return {Array}
    */
   convertForms = (result, axisElements, onElement) => {
-    for (let i = 0; i < axisElements.length; i++) {
-      const elements = onElement(axisElements[i]);
+    for (const axisElement of axisElements) {
+      const elements = onElement(axisElement);
       result = typeof elements === 'string' ? [...result, elements] : [...result, ...elements];
     }
     return result;
@@ -291,8 +291,7 @@ class NormalizedJsonHandler {
 
     const parsedColumns = [];
 
-    for (let index = 0; index < transposedHeaders.length; index++) {
-      const currentColumn = transposedHeaders[index];
+    for (const currentColumn of transposedHeaders) {
       const metrics = currentColumn.find((element) => element.type === 'metric');
 
       if (metrics) {

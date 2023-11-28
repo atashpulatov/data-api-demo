@@ -84,7 +84,7 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
 
     expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledTimes(1);
     expect(officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore).toBeCalledWith(
-      expectedObjectsFromProperties, settingsMock
+      settingsMock, expectedObjectsFromProperties
     );
 
     expect(reduxStore.dispatch).toBeCalledTimes(expectedDispatchCallNo);
@@ -178,7 +178,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
       // when
-      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, objectsParam);
 
       // then
       expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
@@ -206,7 +206,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
       // when
-      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, objectsParam);
 
       // then
       expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
@@ -242,7 +242,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
       jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
       // when
-      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(objectsParam, settingsMock);
+      const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, objectsParam);
 
       // then
       expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
@@ -275,7 +275,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
     jest.spyOn(officeStoreRestoreObject, 'mapLegacyObjectValue').mockImplementation();
 
     // when
-    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore([{ bindId: 'sameBindId' }], settingsMock);
+    const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(settingsMock, [{ bindId: 'sameBindId' }]);
 
     // then
     expect(officeStoreRestoreObject.getLegacyObjectsList).toBeCalledTimes(1);
@@ -301,8 +301,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
 
     // when
     const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(
-      [{ bindId: 'paramBindId' }, { bindId: 'sameBindId' }],
-      settingsMock
+      settingsMock, [{ bindId: 'paramBindId' }, { bindId: 'sameBindId' }]
     );
 
     // then
@@ -337,8 +336,7 @@ describe('OfficeStoreRestoreObject restoreLegacyObjectsFromExcelStore', () => {
 
     // when
     const result = officeStoreRestoreObject.restoreLegacyObjectsFromExcelStore(
-      [{ bindId: 'oneExistingBindId' }, { bindId: 'twoExistingBindId' }],
-      settingsMock
+      settingsMock, [{ bindId: 'oneExistingBindId' }, { bindId: 'twoExistingBindId' }]
     );
 
     // then

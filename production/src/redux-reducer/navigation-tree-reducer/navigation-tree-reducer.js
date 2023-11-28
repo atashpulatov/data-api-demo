@@ -97,12 +97,7 @@ export const navigationTree = (state = initialState, action) => {
       return newState;
     }
 
-    case CANCEL_REQUEST_IMPORT: {
-      const newState = { ...state };
-      newState.importRequested = false;
-      return newState;
-    }
-
+    case CANCEL_REQUEST_IMPORT:
     case START_IMPORT: {
       const newState = { ...state };
       newState.importRequested = false;

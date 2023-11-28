@@ -62,15 +62,17 @@ class StepFetchInsertDataIntoExcel {
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
         await officeInsertService.appendRows(
-          officeTable,
-          excelContext,
-          row,
-          rowIndex,
-          operationType,
-          tableChanged,
-          contextPromises,
-          header,
-          mstrTable
+          {
+            officeTable,
+            excelContext,
+            excelRows: row,
+            rowIndex,
+            operationType,
+            tableChanged,
+            contextPromises,
+            header,
+            mstrTable
+          }
         );
 
         if (importSubtotal) {
@@ -133,10 +135,10 @@ class StepFetchInsertDataIntoExcel {
    */
   getSubtotalCoordinates = (subtotalAddress, subtotalsAddresses) => {
     console.time('Get subtotals coordinates');
-    for (let i = 0; i < subtotalAddress.length; i += 1) {
-      // eslint removed Boolean(subtotalAddress[i])
-      if (subtotalAddress[i]) {
-        subtotalsAddresses.push(subtotalAddress[i]);
+    for (const address of subtotalAddress) {
+      // eslint removed Boolean(address)
+      if (address) {
+        subtotalsAddresses.push(address);
       }
     }
     console.timeEnd('Get subtotals coordinates');
