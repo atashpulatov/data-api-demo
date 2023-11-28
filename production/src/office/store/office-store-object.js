@@ -34,7 +34,6 @@ class OfficeStoreObject {
   * Removes object from redux and office settings based on passed objectWorkingId
   *
   */
-  // FIXME: not used anywhere. TO BE REMOVED
   removeObjectFromStore = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
     this.removeObjectInExcelStore(objectWorkingId);

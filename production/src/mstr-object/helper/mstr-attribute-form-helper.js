@@ -27,11 +27,11 @@ class MstrAttributeFormHelper {
         case 'customgroup':
         case 'consolidation':
           if (column.forms && supportForms) {
-            for (let i = 0; i < column.forms.length; i++) {
+            for (const form of column.forms) {
               fullColumnInformation.push({
                 attributeId: column.id,
                 attributeName: column.name,
-                forms: [column.forms[i]],
+                forms: [form],
                 isAttribute: true,
               });
             }

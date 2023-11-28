@@ -187,6 +187,22 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       jest.spyOn(operationStepDispatcher, 'completeFetchInsertData').mockImplementation();
 
+      const appendRowsParams = {
+        officeTable: 'officeTableTest',
+        excelContext: excelContextMock,
+        excelRows: [42, 42],
+        rowIndex: 0,
+        operationType: 'operationTypeTest',
+        tableChanged: 'tableChangedTest',
+        contextPromises: [],
+        header: 'headerTest',
+        mstrTable: {
+          subtotalsInfo: {
+            importSubtotal: resultImportSubtotal,
+            subtotalsAddresses: [],
+          }
+        }, };
+
       // when
       await stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel(objectDataMock, operationDataMock);
 
@@ -201,22 +217,7 @@ describe('StepFetchInsertDataIntoExcel', () => {
       expect(suspendApiCalculationUntilNextSyncMock).toBeCalledTimes(suspendApiCalculationUntilNextSyncCallsNo);
 
       expect(officeInsertService.appendRows).toBeCalledTimes(1);
-      expect(officeInsertService.appendRows).toBeCalledWith(
-        'officeTableTest',
-        excelContextMock,
-        [42, 42],
-        0,
-        'operationTypeTest',
-        'tableChangedTest',
-        [],
-        'headerTest',
-        {
-          subtotalsInfo: {
-            importSubtotal: resultImportSubtotal,
-            subtotalsAddresses: [],
-          }
-        },
-      );
+      expect(officeInsertService.appendRows).toBeCalledWith(appendRowsParams);
 
       expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).toBeCalledTimes(getSubtotalCoordinatesCallsNo);
 
@@ -334,6 +335,22 @@ describe('StepFetchInsertDataIntoExcel', () => {
 
       jest.spyOn(operationStepDispatcher, 'completeFetchInsertData').mockImplementation();
 
+      const appendRowsParams = {
+        officeTable: 'officeTableTest',
+        excelContext: excelContextMock,
+        excelRows: [42, 42],
+        rowIndex: 0,
+        operationType: 'operationTypeTest',
+        tableChanged: 'tableChangedTest',
+        contextPromises: [],
+        header: 'headerOneTest',
+        mstrTable: {
+          subtotalsInfo: {
+            importSubtotal: resultImportSubtotal,
+            subtotalsAddresses: [],
+          }
+        }, };
+
       // when
       await stepFetchInsertDataIntoExcel.fetchInsertDataIntoExcel(objectDataMock, operationDataMock);
 
@@ -359,37 +376,41 @@ describe('StepFetchInsertDataIntoExcel', () => {
       expect(officeInsertService.appendRows).toBeCalledTimes(2);
       expect(officeInsertService.appendRows).toHaveBeenNthCalledWith(
         1,
-        'officeTableTest',
-        excelContextMock,
-        [42, 42],
-        0,
-        'operationTypeTest',
-        'tableChangedTest',
-        [],
-        'headerOneTest',
         {
-          subtotalsInfo: {
-            importSubtotal: resultImportSubtotal,
-            subtotalsAddresses: [],
-          }
-        },
+          officeTable: 'officeTableTest',
+          excelContext: excelContextMock,
+          excelRows: [42, 42],
+          rowIndex: 0,
+          operationType: 'operationTypeTest',
+          tableChanged: 'tableChangedTest',
+          contextPromises: [],
+          header: 'headerOneTest',
+          mstrTable: {
+            subtotalsInfo: {
+              importSubtotal: resultImportSubtotal,
+              subtotalsAddresses: [],
+            }
+          },
+        }
       );
       expect(officeInsertService.appendRows).toHaveBeenNthCalledWith(
         2,
-        'officeTableTest',
-        excelContextMock,
-        [42, 42, 42, 42],
-        2,
-        'operationTypeTest',
-        'tableChangedTest',
-        [],
-        'headerTwoTest',
         {
-          subtotalsInfo: {
-            importSubtotal: resultImportSubtotal,
-            subtotalsAddresses: [],
-          }
-        },
+          officeTable: 'officeTableTest',
+          excelContext: excelContextMock,
+          excelRows: [42, 42, 42, 42],
+          rowIndex: 2,
+          operationType: 'operationTypeTest',
+          tableChanged: 'tableChangedTest',
+          contextPromises: [],
+          header: 'headerTwoTest',
+          mstrTable: {
+            subtotalsInfo: {
+              importSubtotal: resultImportSubtotal,
+              subtotalsAddresses: [],
+            }
+          },
+        }
       );
 
       expect(stepFetchInsertDataIntoExcel.getSubtotalCoordinates).toBeCalledTimes(getSubtotalCoordinatesCallsNo);

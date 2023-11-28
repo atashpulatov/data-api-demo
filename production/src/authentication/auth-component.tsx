@@ -1,17 +1,16 @@
 /* eslint-disable react/no-multi-comp */
 import React, { FC, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+
 import { authenticationHelper } from './authentication-helper';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
-import { AuthenticateComponent } from './auth-component-types';
-import './auth-component.css';
 
 import defaultLoginProps from './default-login-props';
 import { LoginProps, InputProps, SelectInputProps } from './basic-login-types';
+import { AuthenticateComponent } from './auth-component-types';
 
 import './basic-login.scss';
-import i18n from '../i18n';
+import './auth-component.css';
 
 const Input = (props: InputProps): React.ReactElement => {
   const { label } = props;
