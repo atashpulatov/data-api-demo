@@ -17,8 +17,8 @@ export const ObjectWindowTitleNotConnected: FC<ObjectWindowTitleTypes> = ({
   // Capitalize first letter of object type to match the i18n key for title strings
   const capitalizedObjectType = objectType.charAt(0).toUpperCase() + objectType.slice(1);
 
-  const showMultipleRepromptMessage = isReprompt && total > 1;
-  const showSingleRepromptMessage = isReprompt && total === 1;
+  const isSingleReprompt = isReprompt && total === 1;
+  const isMultipleReprompt = isReprompt && total > 1;
 
   const importString = t(`Import ${capitalizedObjectType}`);
   let windowTitle = `${importString} > ${objectName}`;
@@ -26,10 +26,10 @@ export const ObjectWindowTitleNotConnected: FC<ObjectWindowTitleTypes> = ({
   if (isEdit) {
     const editString = t(`Edit ${capitalizedObjectType}`);
     windowTitle = `${editString} > ${objectName}`;
-  } else if (showMultipleRepromptMessage) {
-    windowTitle = `${t('Reprompt')} ${t('{{index}} of {{total}}', { index, total })} > ${objectName}`;
-  } else if (showSingleRepromptMessage) {
+  } else if (isSingleReprompt) {
     windowTitle = `${t('Reprompt')} > ${objectName}`;
+  } else if (isMultipleReprompt) {
+    windowTitle = `${t('Reprompt')} ${t('{{index}} of {{total}}', { index, total })} > ${objectName}`;
   }
 
   return (
