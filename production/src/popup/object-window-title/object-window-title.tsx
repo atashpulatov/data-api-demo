@@ -21,20 +21,20 @@ export const ObjectWindowTitleNotConnected: FC<ObjectWindowTitleTypes> = ({
   const showSingleRepromptMessage = isReprompt && !isEdit && total === 1;
 
   const importString = t(`Import ${capitalizedObjectType}`);
-  let promptTitle = `${importString} > ${objectName}`;
+  let windowTitle = `${importString} > ${objectName}`;
 
   if (isEdit) {
     const editString = t(`Edit ${capitalizedObjectType}`);
-    promptTitle = `${editString} > ${objectName}`;
+    windowTitle = `${editString} > ${objectName}`;
   } else if (showMultipleRepromptMessage) {
-    promptTitle = `${t('Reprompt')} ${t('{{index}} of {{total}}', { index, total })} > ${objectName}`;
+    windowTitle = `${t('Reprompt')} ${t('{{index}} of {{total}}', { index, total })} > ${objectName}`;
   } else if (showSingleRepromptMessage) {
-    promptTitle = `${t('Reprompt')} > ${objectName}`;
+    windowTitle = `${t('Reprompt')} > ${objectName}`;
   }
 
   return (
     <div className="title-bar">
-      <span>{promptTitle}</span>
+      <span>{windowTitle}</span>
     </div>
   );
 };
