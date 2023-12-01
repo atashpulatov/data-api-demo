@@ -246,6 +246,6 @@
    "Please select only one range before import.": "Please select only one range before import.",
    "Apply": "Apply",
    "{{index}} of {{total}}": "{{index}} of {{total}} ",
-   "You do not have the rights to access MicroStrategy for Office": "You do not have the rights to access MicroStrategy for Office",
+   "You do not have the rights to access MicroStrategy for Office": "You do not have the right to access MicroStrategy for Office",
    "Try Again": "Try Again"
 }

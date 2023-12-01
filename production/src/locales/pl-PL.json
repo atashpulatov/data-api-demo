@@ -158,7 +158,7 @@
    "Import dataset": "Importuj zbiór danych",
    "The named item does not exist.": "Nazwany element nie istnieje.",
    "This object does not contain any data.": "Ten obiekt nie zawiera żadnych danych.",
-   "Reprompt": "Promptuj ponownie",
+   "Reprompt": "Powtórz prompty",
    "The endpoint cannot be reached": "Punkt końcowy jest nieosiągalny.",
    "You haven't imported any reports or datasets yet. Import data to start!": "Nie zaimportowano jeszcze żadnych raportów ani zbiorów danych. Aby rozpocząć, zaimportuj dane",
    "MicroStrategy for Office loaded": "Dodatek MicroStrategy for Office został załadowany",
@@ -245,7 +245,7 @@
    "Import failed because the payload size limit for any Excel Online request or response is 5MB. Try to limit your data.": "Importowanie nie powiodło się, ponieważ limit rozmiaru ładunku dla dowolnego żądania lub odpowiedzi programu Excel Online wynosi 5 MB. Spróbuj ograniczyć swoje dane.",
    "Please select only one range before import.": "Przed zaimportowaniem wybierz tylko jeden zakres.",
    "Apply": "Zastosuj",
-   "{{index}} of {{total}}": "{{index}} z {{total}}",
-   "You do not have the rights to access MicroStrategy for Office": "Nie masz uprawnień dostępu do MicroStrategy do pakietu Office",
+   "{{index}} of {{total}}": "{{index}} z {{total}} ",
+   "You do not have the rights to access MicroStrategy for Office": "Nie masz uprawnień dostępu do dodatku MicroStrategy for Office",
    "Try Again": "Spróbuj ponownie"
 }
