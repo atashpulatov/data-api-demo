@@ -23,6 +23,9 @@ class PopupController {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
+    // The following vars used to store references to current object reportParams and dialog
+    this.reportParams = {};
+    this.dialog = {};
   };
 
   runPopupNavigation = async () => {
@@ -62,7 +65,9 @@ class PopupController {
   };
 
   runPopup = async (popupType, height, width, reportParams = null) => {
+    const isDialogAlreadyOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
+    this.reportParams = reportParams;
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
@@ -74,42 +79,59 @@ class PopupController {
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
-      console.time('Popup load time');
-      Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`,
-        { height, width, displayInIframe: true },
-        (asyncResult) => {
-          const { value: dialog } = asyncResult;
-          if (dialog) {
-            this.sessionActions.setDialog(dialog);
-            console.timeEnd('Popup load time');
-            dialog.addEventHandler(Office.EventType.DialogMessageReceived,
-              this.onMessageFromPopup.bind(null, dialog, reportParams));
+      if (isDialogAlreadyOpen) {
+        // US530793: If dialog already open, send message to dialog to reload with new object data.
+        // This only occurs during Multiple Reprompt workflow.
+        this.dialog?.messageChild(JSON.stringify({ splittedUrl, popupType }));
+      } else {
+        // Otherwise, open new dialog and assign event handlers
+        console.time('Popup load time');
+        await Office.context.ui.displayDialogAsync(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`,
+          { height, width, displayInIframe: true },
+          (asyncResult) => {
+            const { value: dialog } = asyncResult;
+            if (dialog) {
+              this.dialog = dialog;
+              console.timeEnd('Popup load time');
 
-            dialog.addEventHandler(
-            // Event received on dialog close
-              Office.EventType.DialogEventReceived,
-              () => {
-                this.reduxStore.dispatch(this.popupActions.resetState());
-                this.reduxStore.dispatch(officeActions.hidePopup());
+              dialog.addEventHandler(
+                // Event received on message from parent (sidebar)
+                Office.EventType.DialogMessageReceived,
+                // Trigger onMessageFromPopup callback with most current reportParams object
+                (arg) => this.onMessageFromPopup(dialog, this.reportParams, arg)
+              );
 
-                // Clear the reprompt task queue if the user closes the popup,
-                // as the user is no longer interested in continuing the multiple re-prompting task.
-                this.reduxStore.dispatch(clearRepromptTask());
-              }
-            );
-            this.reduxStore.dispatch(officeActions.showPopup());
-          }
-        });
+              dialog.addEventHandler(
+                // Event received on dialog close
+                Office.EventType.DialogEventReceived,
+                () => {
+                  this.reduxStore.dispatch(this.popupActions.resetState());
+                  this.reduxStore.dispatch(officeActions.hidePopup());
+
+                  // Clear the reprompt task queue if the user closes the popup,
+                  // as the user is no longer interested in continuing the multiple re-prompting task.
+                  this.reduxStore.dispatch(clearRepromptTask());
+                }
+              );
+
+              this.reduxStore.dispatch(officeActions.showPopup());
+            }
+          });
+      }
     } catch (error) {
       errorService.handleError(error);
     }
   };
 
   onMessageFromPopup = async (dialog, reportParams, arg) => {
+    const shouldCloseDialog = this.getShouldCloseDialog();
     const { message } = arg;
     const response = JSON.parse(message);
     try {
-      await this.closeDialog(dialog);
+      if (shouldCloseDialog) {
+        // we will only close dialog if not in Multiple Reprompt workflow
+        await this.closeDialog(dialog);
+      }
       if (response.command !== selectorProperties.commandError) {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       }
@@ -136,6 +158,14 @@ class PopupController {
           }
           break;
         case selectorProperties.commandCancel:
+          if (!shouldCloseDialog) {
+            // Close dialog when user cancels, but only if in Multiple Reprompt workflow,
+            // since we originally were keeping the dialog open to allow user to continue.
+            // If not in Multiple Reprompt workflow, the dialog will close and reset
+            // popup state anyway, so no need to do it here.
+            await this.closeDialog(dialog);
+            this.resetPopupStates();
+          }
           this.reduxStore.dispatch(clearRepromptTask());
           break;
         case selectorProperties.commandError:
@@ -148,9 +178,12 @@ class PopupController {
       console.error(error);
       errorService.handleError(error);
     } finally {
-      this.reduxStore.dispatch(this.popupActions.resetState());
-      this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-      this.reduxStore.dispatch(officeActions.hidePopup());
+      // always reset this.reportParams to prevent reusing old references in future popups
+      this.reportParams = {};
+      if (shouldCloseDialog) {
+        // only reset popup related states when dialog has been closed
+        this.resetPopupStates();
+      }
     }
   };
 
@@ -205,6 +238,15 @@ class PopupController {
     }
   };
 
+  // Used to reset popup-related state variables in Redux Store
+  // and the dialog reference stored in the class object.
+  resetPopupStates = () => {
+    this.reduxStore.dispatch(this.popupActions.resetState());
+    this.reduxStore.dispatch(popupStateActions.onClearPopupState());
+    this.reduxStore.dispatch(officeActions.hidePopup());
+    this.dialog = {};
+  };
+
   getReportsPreviousState = (reportParams) => {
     const currentReportArray = this.reduxStore.getState().officeReducer.reportArray;
     const indexOfOriginalValues = currentReportArray.findIndex((report) => report.bindId === reportParams.bindId);
@@ -225,6 +267,16 @@ class PopupController {
       return { ...originalValues };
     }
     return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
+  };
+
+  getShouldCloseDialog = () => {
+    const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
+    return total === 0 || (total >= 1 && index === total);
+  };
+
+  getIsDialogAlreadyOpenForMultipleReprompt = () => {
+    const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
+    return total > 1 && index > 1;
   };
 }
 

@@ -23,7 +23,11 @@ class PopupViewSelectorHelper {
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
         if (popupType === PopupTypeEnum.repromptingWindow) {
-          return PopupTypeEnum.editFilters;
+          // If we are in Multiple Reprompt workflow and get to this point, we are in
+          // the transition period waiting for the next object to be reprompted.
+          return this.isMultipleReprompt(props)
+            ? PopupTypeEnum.multipleRepromptTransitionPage
+            : PopupTypeEnum.editFilters;
         }
       } else {
         return PopupTypeEnum.obtainInstanceHelper;
@@ -72,6 +76,8 @@ class PopupViewSelectorHelper {
   );
 
   arePromptsAnswered = (props) => !!props.dossierData && !!props.dossierData.instanceId;
+
+  isMultipleReprompt = (props) => !!(props.repromptsQueueProps?.total > 1);
 
   obtainInstanceWithPromptsAnswers = async (props) => {
     const { editedObject, chosenProjectId, chosenObjectId } = props;

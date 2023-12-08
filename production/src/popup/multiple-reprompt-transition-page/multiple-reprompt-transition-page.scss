@@ -1,0 +1,25 @@
+.multiple-reprompt-transition-page {
+  .title-bar {
+    min-width: 500px;
+    margin: 15px;
+
+    .title {
+      font-size: 18px;
+      color: #333333;
+      font-weight: 500;
+    }
+  }
+
+  .loading-section {
+    display: flex;
+    height: 100vh;
+
+    .empty {
+      position: fixed;
+      left: 0;
+      top: 57px;
+      width: 100%;
+      height: calc(100% - 125px);
+    }
+  }
+}
