@@ -8,9 +8,9 @@ job 'stage-0-monitor' do
   triggers do
     timer_trigger do
       minute 'H'
-      hour '*/1'
+      hour '8'
       month '*'
-      day_of_week '*'
+      day_of_week '1-5'
       day_of_month '*'
     end
   end
