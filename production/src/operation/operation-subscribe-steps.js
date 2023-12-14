@@ -12,7 +12,6 @@ import stepSaveObjectInExcel from '../office/store/step-save-object-in-excel';
 import stepGetDuplicateName from '../office/step-get-duplicate-name';
 import stepRemoveObjectBinding from '../office/remove/step-remove-object-binding';
 import stepRemoveObjectTable from '../office/remove/step-remove-object-table';
-import stepRemoveObjectStore from '../office/remove/step-remove-object-store';
 import stepCheckObjectStatus from '../office/clear-data/step-check-object-status';
 import stepClearCrosstabHeaders from '../office/clear-data/step-clear-crosstab-headers';
 import stepClearTableData from '../office/clear-data/step-clear-table-data';
@@ -36,7 +35,6 @@ import {
   GET_DUPLICATE_NAME,
   REMOVE_OBJECT_BINDING,
   REMOVE_OBJECT_TABLE,
-  REMOVE_OBJECT_STORE,
   CHECK_OBJECT_STATUS,
   CLEAR_CROSSTAB_HEADERS,
   CLEAR_TABLE_DATA,
@@ -80,8 +78,6 @@ class SubscribeSteps {
 
     operationBus.subscribe(REMOVE_OBJECT_BINDING, stepRemoveObjectBinding.removeObjectBinding);
     operationBus.subscribe(REMOVE_OBJECT_TABLE, stepRemoveObjectTable.removeObjectTable);
-    // FIXME: below step isn't used anywhere. TO BE REMOVED
-    operationBus.subscribe(REMOVE_OBJECT_STORE, stepRemoveObjectStore.removeObjectStore);
 
     operationBus.subscribe(HIGHLIGHT_OBJECT, stepHighlightObject.highlightObject);
 
