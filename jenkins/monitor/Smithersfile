@@ -6,12 +6,9 @@ job 'stage-0-monitor' do
   assigned_node_string 'amazon_linux_T3'
 
   triggers do
-    timer_trigger do
-      minute 'H'
-      hour '*/1'
-      month '*'
-      day_of_week '*'
-      day_of_month '*'
+    url_trigger do
+      set_to_every_minute
+      url "https://nexus.internal.microstrategy.com/content/repositories/releases/com/microstrategy/next/ProductStrings/MSTR_OFFICE/"
     end
   end
 
