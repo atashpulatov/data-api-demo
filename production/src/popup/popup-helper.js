@@ -64,11 +64,11 @@ class PopupHelper {
         if (requestedObjects) {
           const { attributes, metrics } = body.requestedObjects;
           if (attributes && attributes.length !== 0) {
-            chosenObjectData.selectedAttributes = attributes && attributes.map((attribute) => attribute.id);
+            chosenObjectData.selectedAttributes = attributes.map((attribute) => attribute.id);
             chosenObjectData.selectedAttrForms = formsPrivilege ? this.getAttrFormKeys(attributes) : [];
           }
           if (metrics && metrics.length !== 0) {
-            chosenObjectData.selectedMetrics = metrics && metrics.map((metric) => metric.id);
+            chosenObjectData.selectedMetrics = metrics.map((metric) => metric.id);
           }
         }
         if (viewFilter) {
