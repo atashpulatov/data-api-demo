@@ -28,7 +28,7 @@ const { deleteDossierInstance } = mstrObjectRestService;
 export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
-    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested, repromptsQueue,
+    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested,
     isMultipleRepromptWithReuse,
   } = props;
   const { chosenObjectId, chosenObjectName } = mstrData;
@@ -379,10 +379,6 @@ PromptsWindowNotConnected.propTypes = {
   importRequested: PropTypes.bool,
   isPreparedDataRequested: PropTypes.bool,
   promptObjects: PropTypes.arrayOf(PropTypes.shape({})),
-  repromptsQueue: PropTypes.shape({
-    total: PropTypes.number,
-    index: PropTypes.number,
-  }),
   isMultipleRepromptWithReuse: PropTypes.bool,
 };
 
@@ -424,7 +420,6 @@ export const mapStateToProps = (state) => {
     importRequested,
     promptObjects: promptObjectsResolved, // Prompt objects to be used for import
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
-    repromptsQueue: { ...repromptsQueueReducer },
     isMultipleRepromptWithReuse: reusePromptAnswers && repromptsQueueReducer.total > 1,
   };
 };

@@ -36,7 +36,7 @@ export const DossierWindowNotConnected = (props) => {
   const [hideEmbedded, setHideEmbedded] = useState(false);
 
   const {
-    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt, repromptsQueue,
+    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt
   } = props;
   const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
@@ -280,10 +280,6 @@ DossierWindowNotConnected.propTypes = {
     selectedViz: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
-  repromptsQueue: PropTypes.shape({
-    total: PropTypes.number,
-    index: PropTypes.number,
-  }),
 };
 
 DossierWindowNotConnected.defaultProps = {
@@ -304,16 +300,12 @@ DossierWindowNotConnected.defaultProps = {
     selectedViz: '',
   },
   isReprompt: false,
-  repromptsQueue: {
-    total: 0,
-    index: 0,
-  },
 };
 
 function mapStateToProps(state) {
   const {
     navigationTree, popupReducer, sessionReducer,
-    officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer,
+    officeReducer, answersReducer, popupStateReducer,
   } = state;
   const {
     chosenObjectName,
@@ -351,7 +343,6 @@ function mapStateToProps(state) {
     promptObjects,
     importRequested,
     isReprompt: popupStateReducer.isReprompt,
-    repromptsQueue: { ...repromptsQueueReducer },
   };
 }
 
