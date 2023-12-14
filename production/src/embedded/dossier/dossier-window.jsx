@@ -280,6 +280,10 @@ DossierWindowNotConnected.propTypes = {
     selectedViz: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
+  repromptsQueue: PropTypes.shape({
+    total: PropTypes.number,
+    index: PropTypes.number,
+  }),
 };
 
 DossierWindowNotConnected.defaultProps = {
@@ -300,12 +304,16 @@ DossierWindowNotConnected.defaultProps = {
     selectedViz: '',
   },
   isReprompt: false,
+  repromptsQueue: {
+    total: 0,
+    index: 0,
+  },
 };
 
 function mapStateToProps(state) {
   const {
     navigationTree, popupReducer, sessionReducer,
-    officeReducer, answersReducer, popupStateReducer,
+    officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer
   } = state;
   const {
     chosenObjectName,
@@ -343,6 +351,7 @@ function mapStateToProps(state) {
     promptObjects,
     importRequested,
     isReprompt: popupStateReducer.isReprompt,
+    repromptsQueue: { ...repromptsQueueReducer },
   };
 }
 
