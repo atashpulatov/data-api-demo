@@ -36,7 +36,7 @@ export const DossierWindowNotConnected = (props) => {
   const [hideEmbedded, setHideEmbedded] = useState(false);
 
   const {
-    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt, repromptsQueue,
+    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt
   } = props;
   const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
@@ -313,7 +313,7 @@ DossierWindowNotConnected.defaultProps = {
 function mapStateToProps(state) {
   const {
     navigationTree, popupReducer, sessionReducer,
-    officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer,
+    officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer
   } = state;
   const {
     chosenObjectName,
