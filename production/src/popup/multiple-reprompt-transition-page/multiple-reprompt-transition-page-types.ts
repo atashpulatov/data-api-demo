@@ -1,5 +1,5 @@
 export interface MultipleRepromptTransitionPageTypes {
-  nextObjectWorkingId: number,
+  nextObjectBindId: string,
   nextObjectIndex: number,
   total: number,
 }

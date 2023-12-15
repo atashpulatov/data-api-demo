@@ -32,7 +32,7 @@ class OfficeReducerHelper {
   * Return object from object Reducer correspongin to passed bindId
   *
   * @param {String} bindId Id of the Office table created on import used for referencing the Excel table
-  * @return {Boolean}
+  * @return {Object}
   */
   getObjectFromObjectReducerByBindId = (bindId) => {
     const { objects } = this.reduxStore.getState().objectReducer;

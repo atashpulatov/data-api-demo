@@ -153,8 +153,8 @@ class SidePanelService {
    * @param {*} mstrObjectType
    * @returns JSON action object
    */
-  createRepromptTask = (objectWorkingId, bindId, mstrObjectType) => ({
-    objectWorkingId,
+  createRepromptTask = (bindId, mstrObjectType) => ({
+    bindId,
     isPrompted: true,
     callback: async () => {
       const excelContext = await officeApiHelper.getExcelContext();
@@ -187,12 +187,12 @@ class SidePanelService {
       // Proceed with reprompt only if object is prompted, otherwise only refresh object
       // if multiple objects are selected.
       if (isPrompted) {
-        dispatchTasks.push(this.createRepromptTask(objectWorkingId, bindId, mstrObjectType));
+        dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType));
       } else if (objectWorkingIds.length > 1) {
         // Handle the case when multiple objects are selected (refresh non-prompted reports)
         // You can implement this part if needed.
         dispatchTasks.push({
-          objectWorkingId,
+          bindId,
           isPrompted: false,
           callback: () => setTimeout(() => this.refresh([objectWorkingId]), 10),
         });

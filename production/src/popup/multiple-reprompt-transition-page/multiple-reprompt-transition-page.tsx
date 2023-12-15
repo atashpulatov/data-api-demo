@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Empty } from '@mstr/rc';
 import i18n from '../../i18n';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import './multiple-reprompt-transition-page.scss';
 
@@ -16,14 +17,18 @@ import './multiple-reprompt-transition-page.scss';
  * @returns string customized text for the popup window title (e.g. Report/Dossier workflows)
  */
 export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTransitionPageTypes> = ({
-  nextObjectWorkingId,
+  nextObjectBindId,
   nextObjectIndex,
   total
 }) => {
   const [t] = useTranslation('common', { i18n });
 
-  const nextObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(nextObjectWorkingId) || {};
-  const { name: nextObjectName = '' } = JSON.parse(JSON.stringify(nextObject)); // deep copy via JSON
+  const nextObject = officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) || {};
+  const deepCopiedNextObject = JSON.parse(JSON.stringify(nextObject)); // deep copy to prevent modifying source object
+  // retrieve object name based on next object type. reports vs dossiers have different name properties
+  const nextObjectName = deepCopiedNextObject.objectType?.name === mstrObjectEnum.mstrObjectType.visualization.name
+    ? deepCopiedNextObject.definition?.sourceName
+    : deepCopiedNextObject.name;
   const pageTitle = `${t('Reprompt')} ${t('{{index}} of {{total}}', { index: nextObjectIndex, total })} > ${nextObjectName}`;
 
   return (
@@ -40,7 +45,7 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
 
 const mapStateToProps = (state: {
   repromptsQueueReducer: {
-    repromptsQueue: { objectWorkingId: number }[];
+    repromptsQueue: { bindId: string }[];
     index: number;
     total: number;
   }
@@ -48,7 +53,7 @@ const mapStateToProps = (state: {
   const { repromptsQueueReducer } = state;
 
   return {
-    nextObjectWorkingId: repromptsQueueReducer.repromptsQueue[0]?.objectWorkingId || -1,
+    nextObjectBindId: repromptsQueueReducer.repromptsQueue[0]?.bindId || '',
     // + 1 since the next obj has not been processed yet, so index is behind 1
     nextObjectIndex: repromptsQueueReducer.index + 1,
     total: repromptsQueueReducer.total,
