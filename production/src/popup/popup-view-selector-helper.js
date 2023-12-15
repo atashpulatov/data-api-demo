@@ -77,7 +77,7 @@ class PopupViewSelectorHelper {
 
   arePromptsAnswered = (props) => !!props.dossierData && !!props.dossierData.instanceId;
 
-  isMultipleReprompt = (props) => !!(props.repromptsQueueProps?.total > 1);
+  isMultipleReprompt = (props) => props.repromptsQueueProps?.total > 1;
 
   obtainInstanceWithPromptsAnswers = async (props) => {
     const { editedObject, chosenProjectId, chosenObjectId } = props;
