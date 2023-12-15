@@ -14,7 +14,6 @@ import {
   MODIFY_OBJECT,
   SAVE_OBJECT_IN_EXCEL,
   GET_DUPLICATE_NAME,
-  REMOVE_OBJECT_STORE,
   REMOVE_OBJECT_TABLE,
   REMOVE_OBJECT_BINDING,
   CHECK_OBJECT_STATUS,
@@ -92,10 +91,6 @@ class OperationStepDispatcher {
 
   completeRemoveObjectTable = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_OBJECT_TABLE));
-  };
-
-  completeRemoveObjectStore = (objectWorkingId) => {
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_OBJECT_STORE));
   };
 
   completeCheckObjectStatus = (objectWorkingId) => {

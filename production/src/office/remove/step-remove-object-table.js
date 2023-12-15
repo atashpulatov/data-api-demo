@@ -10,7 +10,7 @@ class StepRemoveObjectTable {
    *
    * Communicates with object reducer and calls officeRemoveHelper.removeExcelTable.
    *
-   * This function is subscribed as one of the operation steps with the key REMOVE_OBJECT_STORE,
+   * This function is subscribed as one of the operation steps with the key REMOVE_OBJECT_TABLE,
    * therefore should be called only via operation bus.
    *
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object

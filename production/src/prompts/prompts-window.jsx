@@ -28,8 +28,8 @@ const { deleteDossierInstance } = mstrObjectRestService;
 export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
-    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested, repromptsQueue,
-    isMultipleRepromptWithReuse,
+    reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested,
+    isMultipleRepromptWithReuse
   } = props;
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
