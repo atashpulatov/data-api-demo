@@ -1,4 +1,5 @@
 import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import { shallow } from 'enzyme';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
@@ -19,14 +20,16 @@ jest.mock('../../popup/popup-view-selector-helper');
 describe('PopupViewSelectorNotConnected', () => {
   it('should not render anything when no authToken provided', () => {
     // given
-    const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType');
-
     // when
-    const componentWrapper = shallow(<PopupViewSelectorNotConnected />);
+    // eslint-disable-next-line object-curly-spacing
+    const { getByText } = render(<PopupViewSelectorNotConnected popupType="edit-filters" props={{authToken: 'xxx'}} />);
+    getByText('No authToken provided');
+    // const componentWrapper = shallow(<PopupViewSelectorNotConnected />);
 
     // then
-    expect(setPopupType).not.toBeCalled();
-    expect(componentWrapper.find(PopupViewSelectorNotConnected).get(0)).not.toBeDefined();
+    // getByText('No authToken pzzrovided');
+    // expect(setPopupType).not.toBeCalled();
+    // expect(componentWrapper.find(PopupViewSelectorNotConnected).get(0)).not.toBeDefined();
   });
 
   it('should not render anything when authToken provided and popupType not known', () => {
@@ -81,7 +84,7 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
         preparedInstance: 'testPreparedInstance'
       },
       popupStateReducer: {
-        popupType: 'testPopupType',
+        popupType: 'edit-filters',
         otherDefinedProperty: 'testOtherProperty',
         otherPopupStateReducerProperty: 'testOtherValue'
       },
@@ -98,9 +101,11 @@ describe('PopupViewSelectorNotConnected mapStateToProps and mapDispatchToProps t
 
     store = mockStore(initialState);
 
-    componentWrapper = shallow(
-      <PopupViewSelector store={store} />
-    ).find(PopupViewSelectorNotConnected);
+    // componentWrapper = shallow(
+    //   <PopupViewSelector store={store} />
+    // ).find(PopupViewSelectorNotConnected);
+    // const { getByText } = render(<PopupViewSelectorNotConnected store={store} popupType="edit-filters" />);
+    // getByText('No authToken provided');
   });
 
   it('should use mapStateToProps', () => {

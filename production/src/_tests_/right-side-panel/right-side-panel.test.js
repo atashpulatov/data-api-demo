@@ -1,4 +1,5 @@
 import React from 'react';
+import { fireEvent, render } from '@testing-library/react';
 import { shallow, mount } from 'enzyme';
 import { SidePanel } from '@mstr/connector-components/';
 import PrivilegeErrorSidePanel from '../../right-side-panel/info-panels/privilege-error-side-panel';
