@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { Empty } from '@mstr/rc';
-import i18n from '../../i18n';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
@@ -22,8 +20,6 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
   nextObjectIndex,
   total
 }) => {
-  const [t] = useTranslation('common', { i18n });
-
   const nextObject: any = officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) || {};
   // retrieve object name based on next object type. reports vs dossiers have different name properties
   const nextObjectName = nextObject.objectType?.name === mstrObjectEnum.mstrObjectType.visualization.name
