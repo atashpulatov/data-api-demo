@@ -13,6 +13,15 @@ class PopupViewSelectorHelper {
     const { importRequested, dossierOpenRequested, isPrompted } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
     const shouldProceedToImport = (importRequested && !isPrompted) || (importRequested && arePromptsAnswered);
+    const getPromptedReportPopupType = () => (
+      // If we are in Multiple Reprompt workflow and get to this point, we are in
+      // the transition period waiting for the next object to be reprompted.
+      // Otherwise, we are in the final step of Prepare Data or Edit workflow.
+      this.isMultipleReprompt(props)
+        ? PopupTypeEnum.multipleRepromptTransitionPage
+        : PopupTypeEnum.editFilters
+    );
+
     if (shouldProceedToImport) {
       this.proceedToImport(props);
     } else if (isPrompted && arePromptsAnswered) {
@@ -22,11 +31,7 @@ class PopupViewSelectorHelper {
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
         if (popupType === PopupTypeEnum.repromptingWindow) {
-          // If we are in Multiple Reprompt workflow and get to this point, we are in
-          // the transition period waiting for the next object to be reprompted.
-          return this.isMultipleReprompt(props)
-            ? PopupTypeEnum.multipleRepromptTransitionPage
-            : PopupTypeEnum.editFilters;
+          return getPromptedReportPopupType();
         }
       } else {
         return PopupTypeEnum.obtainInstanceHelper;
