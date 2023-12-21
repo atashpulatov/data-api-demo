@@ -7,6 +7,7 @@ import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transit
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import './multiple-reprompt-transition-page.scss';
+import { ObjectWindowTitle } from '../object-window-title/object-window-title';
 
 /**
  * This component is used as a transition page for the Multiple Reprompt workflow.
@@ -23,19 +24,22 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
 }) => {
   const [t] = useTranslation('common', { i18n });
 
-  const nextObject = officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) || {};
-  const deepCopiedNextObject = JSON.parse(JSON.stringify(nextObject)); // deep copy to prevent modifying source object
+  const nextObject: any = officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) || {};
   // retrieve object name based on next object type. reports vs dossiers have different name properties
-  const nextObjectName = deepCopiedNextObject.objectType?.name === mstrObjectEnum.mstrObjectType.visualization.name
-    ? deepCopiedNextObject.definition?.sourceName
-    : deepCopiedNextObject.name;
-  const pageTitle = `${t('Reprompt')} ${t('{{index}} of {{total}}', { index: nextObjectIndex, total })} > ${nextObjectName}`;
+  const nextObjectName = nextObject.objectType?.name === mstrObjectEnum.mstrObjectType.visualization.name
+    ? nextObject.definition?.sourceName
+    : nextObject.name;
 
   return (
     <div className="multiple-reprompt-transition-page">
-      <div className="title-bar">
-        <span className="title">{pageTitle}</span>
-      </div>
+      <ObjectWindowTitle
+        objectType="" // not necessary, as multiple reprompt doesnt show type
+        objectName={nextObjectName}
+        isReprompt
+        isEdit={false}
+        index={nextObjectIndex}
+        total={total}
+      />
       <div className="loading-section">
         <Empty isLoading />
       </div>

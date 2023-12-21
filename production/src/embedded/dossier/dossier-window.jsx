@@ -36,7 +36,7 @@ export const DossierWindowNotConnected = (props) => {
   const [hideEmbedded, setHideEmbedded] = useState(false);
 
   const {
-    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt
+    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt, repromptsQueue
   } = props;
   const { isEdit } = editedObject;
   const { chapterKey, visualizationKey } = lastSelectedViz;
@@ -234,6 +234,8 @@ export const DossierWindowNotConnected = (props) => {
         objectName={chosenObjectName}
         isReprompt={isReprompt}
         isEdit={isEdit && !isReprompt}
+        index={repromptsQueue.index}
+        total={repromptsQueue.total}
       />
       <Empty isLoading />
       {!hideEmbedded && ( // Hide embedded dossier only after prompts are answered.

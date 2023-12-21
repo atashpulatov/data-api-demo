@@ -1,16 +1,17 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
 import { ObjectWindowTitleTypes } from './object-window-title-types';
+
+import './object-window-title.scss';
 
 /**
  * This component is used to display the title of the popup window when the user has triggered
  * object import, edit, or re-prompt. It shows the current object being operated on and, for multiple re-prompt,
  * the total number of objects in the list.
- * @returns string customized text for the popup window title (e.g. Report/Dossier workflows)
+ * @returns container with customized text for the popup window title (e.g. Report/Dossier workflows)
  */
-export const ObjectWindowTitleNotConnected: FC<ObjectWindowTitleTypes> = ({
+export const ObjectWindowTitle: FC<ObjectWindowTitleTypes> = ({
   objectType, objectName, isReprompt, isEdit, index, total
 }) => {
   const [t] = useTranslation('common', { i18n });
@@ -34,23 +35,7 @@ export const ObjectWindowTitleNotConnected: FC<ObjectWindowTitleTypes> = ({
 
   return (
     <div className="title-bar">
-      <span>{windowTitle}</span>
+      <span className="title">{windowTitle}</span>
     </div>
   );
 };
-
-const mapStateToProps = (state: {
-  repromptsQueueReducer: {
-    index: number;
-    total: number;
-  }
-}) => {
-  const { repromptsQueueReducer } = state;
-
-  return {
-    index: repromptsQueueReducer.index,
-    total: repromptsQueueReducer.total,
-  };
-};
-
-export const ObjectWindowTitle = connect(mapStateToProps)(ObjectWindowTitleNotConnected);

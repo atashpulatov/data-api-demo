@@ -9,17 +9,6 @@
   overflow-x: auto;
 }
 
-.prompts-window .title-bar {
-  min-width: 500px;
-  margin: 15px;
-}
-
-.prompts-window .title-bar>span {
-  font-size: 18px;
-  color: #333333;
-  font-weight: 500;
-}
-
 .prompts-iframe {
   border-top: 1px solid $msdl-divider-gray_SOLID;
 }
