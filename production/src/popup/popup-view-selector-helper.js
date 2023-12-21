@@ -11,12 +11,11 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 class PopupViewSelectorHelper {
   setPopupType = (props, popupType) => {
     const { importRequested, dossierOpenRequested, isPrompted } = props;
-    if (
-      (importRequested && !isPrompted)
-      || (importRequested && this.arePromptsAnswered(props))
-    ) {
+    const arePromptsAnswered = this.arePromptsAnswered(props);
+    const shouldProceedToImport = (importRequested && !isPrompted) || (importRequested && arePromptsAnswered);
+    if (shouldProceedToImport) {
       this.proceedToImport(props);
-    } else if (!!isPrompted && this.arePromptsAnswered(props)) {
+    } else if (isPrompted && arePromptsAnswered) {
       // Please review this logic above in if-condition. If we don't mark 'isPrompted' as 'true' in the Redux store,
       // particularly in the navigation-tree-reducer, while processing the 'PROMPTS_ANSWERED'
       // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
