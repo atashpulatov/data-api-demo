@@ -124,12 +124,13 @@ class PopupController {
   };
 
   onMessageFromPopup = async (dialog, reportParams, arg) => {
-    const shouldCloseDialog = this.getShouldCloseDialog();
+    const isMultipleRepromptQueueEmpty = this.getIsMultipleRepromptQueueEmpty();
     const { message } = arg;
     const response = JSON.parse(message);
     try {
-      if (shouldCloseDialog) {
-        // we will only close dialog if not in Multiple Reprompt workflow
+      if (isMultipleRepromptQueueEmpty) {
+        // We will only close dialog if not in Multiple Reprompt workflow
+        // or if the Multiple Reprompt queue has been cleared up.
         await this.closeDialog(dialog);
       }
       if (response.command !== selectorProperties.commandError) {
@@ -158,11 +159,10 @@ class PopupController {
           }
           break;
         case selectorProperties.commandCancel:
-          if (!shouldCloseDialog) {
-            // Close dialog when user cancels, but only if in Multiple Reprompt workflow,
-            // since we originally were keeping the dialog open to allow user to continue.
-            // If not in Multiple Reprompt workflow, the dialog will close and reset
-            // popup state anyway, so no need to do it here.
+          if (!isMultipleRepromptQueueEmpty) {
+            // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
+            // since we were previously keeping the dialog open in between objects.
+            // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
             await this.closeDialog(dialog);
             this.resetPopupStates();
           }
@@ -180,8 +180,9 @@ class PopupController {
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = {};
-      if (shouldCloseDialog) {
-        // only reset popup related states when dialog has been closed
+      if (isMultipleRepromptQueueEmpty) {
+        // We will only reset popup related states when not in Multiple Reprompt workflow
+        // or if the Multiple Reprompt queue has been cleared up.
         this.resetPopupStates();
       }
     }
@@ -269,7 +270,7 @@ class PopupController {
     return { ...originalValues, displayAttrFormNames: displayAttrFormNames.automatic };
   };
 
-  getShouldCloseDialog = () => {
+  getIsMultipleRepromptQueueEmpty = () => {
     const { index = 0, total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
     return total === 0 || (total >= 1 && index === total);
   };
