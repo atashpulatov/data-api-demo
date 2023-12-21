@@ -12,7 +12,7 @@ class PopupViewSelectorHelper {
   setPopupType = (props, popupType) => {
     const { importRequested, dossierOpenRequested, isPrompted } = props;
     const arePromptsAnswered = this.arePromptsAnswered(props);
-    const shouldProceedToImport = (importRequested && !isPrompted) || (importRequested && arePromptsAnswered);
+    const shouldProceedToImport = importRequested && (!isPrompted || arePromptsAnswered);
     const getPromptedReportPopupType = () => (
       // If we are in Multiple Reprompt workflow and get to this point, we are in
       // the transition period waiting for the next object to be reprompted.
