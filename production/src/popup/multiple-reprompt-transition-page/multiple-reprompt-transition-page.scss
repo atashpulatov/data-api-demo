@@ -1,14 +1,12 @@
+@import '../mixins.scss';
+
 .multiple-reprompt-transition-page {
   .loading-section {
     display: flex;
     height: 100vh;
 
     .empty {
-      position: fixed;
-      left: 0;
-      top: 57px;
-      width: 100%;
-      height: calc(100% - 125px);
+      @include popup-empty-component;
     }
   }
 }

@@ -1,0 +1,7 @@
+@mixin popup-empty-component {
+  position: fixed;
+  left: 0;
+  top: 57px;
+  width: 100%;
+  height: calc(100% - 125px);
+}

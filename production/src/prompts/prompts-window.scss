@@ -1,4 +1,5 @@
 @import '~@mstr/rc/es/assets/scss/msdl_universal.scss';
+@import '../popup/mixins.scss';
 
 .prompts-window {
   height: 100%;
@@ -14,9 +15,5 @@
 }
 
 #popup-wrapper .prompts-window .empty  {
-  position: fixed;
-  left: 0;
-  top: 57px;
-  width: 100%;
-  height: calc(100% - 125px);
+  @include popup-empty-component;
 }
