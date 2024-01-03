@@ -152,17 +152,3 @@ export async function preparePromptedReport(chosenObjectIdLocal, projectId, prom
 
   return dossierInstanceDefinition;
 }
-
-/**
- * Updates saved answers by appending the corresponding JSON-based answers and prompt types from server definitions.
- * @param {} answers
- * @param {*} answerDefMap
- */
-function addDefDataToAnswers(answers, answerDefMap) {
-  answers.forEach(answer => {
-    const answerDef = answerDefMap.get(answer.key);
-
-    answerDef?.answers && (answer.answers = answerDef.answers);
-    answerDef?.type && (answer.type = answerDef.type);
-  });
-}
