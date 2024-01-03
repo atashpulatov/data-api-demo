@@ -29,7 +29,7 @@ export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested,
-    isMultipleRepromptWithReuse
+    isMultipleRepromptWithReuse, repromptsQueue
   } = props;
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
@@ -325,6 +325,8 @@ export const PromptsWindowNotConnected = (props) => {
         objectName={objectName}
         isReprompt={isReprompt}
         isEdit={isEdit}
+        index={repromptsQueue.index}
+        total={repromptsQueue.total}
       />
       <Empty isLoading />
       <PromptsContainer

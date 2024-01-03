@@ -1,0 +1,12 @@
+@import '../mixins.scss';
+
+.multiple-reprompt-transition-page {
+  .loading-section {
+    display: flex;
+    height: 100vh;
+
+    .empty {
+      @include popup-empty-component;
+    }
+  }
+}

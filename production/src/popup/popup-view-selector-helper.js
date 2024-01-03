@@ -11,19 +11,27 @@ const { createInstance, answerPrompts, getInstance } = mstrObjectRestService;
 class PopupViewSelectorHelper {
   setPopupType = (props, popupType) => {
     const { importRequested, dossierOpenRequested, isPrompted } = props;
-    if (
-      (importRequested && !isPrompted)
-      || (importRequested && this.arePromptsAnswered(props))
-    ) {
+    const arePromptsAnswered = this.arePromptsAnswered(props);
+    const shouldProceedToImport = importRequested && (!isPrompted || arePromptsAnswered);
+    const getPromptedReportPopupType = () => (
+      // If we are in Multiple Reprompt workflow and get to this point, we are in
+      // the transition period waiting for the next object to be reprompted.
+      // Otherwise, we are in the final step of Prepare Data or Edit workflow.
+      this.isMultipleReprompt(props)
+        ? PopupTypeEnum.multipleRepromptTransitionPage
+        : PopupTypeEnum.editFilters
+    );
+
+    if (shouldProceedToImport) {
       this.proceedToImport(props);
-    } else if (!!isPrompted && this.arePromptsAnswered(props)) {
+    } else if (isPrompted && arePromptsAnswered) {
       // Please review this logic above in if-condition. If we don't mark 'isPrompted' as 'true' in the Redux store,
       // particularly in the navigation-tree-reducer, while processing the 'PROMPTS_ANSWERED'
       // action triggered by the Prompts dialog, it could lead to a cyclical loop in the prompts page
       // when editing a prompted report.
       if (this.isInstanceWithPromptsAnswered(props)) {
         if (popupType === PopupTypeEnum.repromptingWindow) {
-          return PopupTypeEnum.editFilters;
+          return getPromptedReportPopupType();
         }
       } else {
         return PopupTypeEnum.obtainInstanceHelper;
@@ -72,6 +80,8 @@ class PopupViewSelectorHelper {
   );
 
   arePromptsAnswered = (props) => !!props.dossierData && !!props.dossierData.instanceId;
+
+  isMultipleReprompt = (props) => props.repromptsQueueProps?.total > 1;
 
   obtainInstanceWithPromptsAnswers = async (props) => {
     const { editedObject, chosenProjectId, chosenObjectId } = props;
