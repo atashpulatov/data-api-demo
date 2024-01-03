@@ -34,7 +34,7 @@ export const ObjectWindowTitle: FC<ObjectWindowTitleTypes> = ({
   }
 
   return (
-    <div className="title-bar">
+    <div className="object-window-title-bar">
       <span className="title">{windowTitle}</span>
     </div>
   );
