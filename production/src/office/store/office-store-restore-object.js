@@ -22,9 +22,28 @@ class OfficeStoreRestoreObject {
       ? objects.filter(object => !object.doNotPersist)
       : objects;
 
+    this.resetIsPromptedForDossiersWithAnswers(objects);
+
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
 
     settings.set(officeProperties.storedObjects, objects);
+  };
+
+  /**
+   * Parse the objects and set the isPrompted flag to true if the dossier has prompt answers in the definition
+   * and in the manipulationsXML properties, but isPrompted is false, and promptsAnswers is null.
+   * This overrides the isPrompted flag, which was set to false in the previous version of the plugin even if
+   * the dossier was prompted because it was loaded in consumption mode, and the user never had a chance to answer
+   * the prompts or re-prompt the dossier to change the answers (it retained shortcut values).
+   *
+   * @param {*} objects restored object definitions from excel document.
+   */
+  resetIsPromptedForDossiersWithAnswers = (objects) => {
+    objects && objects.filter(object => object.mstrObjectType.type === 55).forEach(object => {
+      if (!object.isPrompted) {
+        object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined || object.promptsAnswers !== null;
+      }
+    });
   };
 
   /**

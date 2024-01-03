@@ -64,7 +64,7 @@ export async function answerDossierPromptsHelper(instanceDefinition, objectId, p
     // as indicated in:
     // https://microstrategy.github.io/rest-api-docs/common-workflows/analytics/use-prompts-objects/answer-prompts/#nested-prompts
     count > 0 ? await mstrObjectRestService.applyDossierPrompts(config)
-      : await mstrObjectRestService.updateDossierPrompts(config);
+      : await mstrObjectRestService.answerDossierPrompts(config);
 
     let dossierStatusResponse = await mstrObjectRestService
       .getDossierStatus(objectId, currentInstanceDefinition.mid, projectId);

@@ -12,14 +12,14 @@ describe('PromptsHandlingHelper', () => {
   let getDossierStatusSpy;
   let createInstanceSpy;
   let createDossierBasedOnReportSpy;
-  let updateDossierPromptsSpy;
+  let answerDossierPromptsSpy;
 
   beforeEach(() => {
     rePromptDossierSpy = jest.spyOn(mstrObjectRestService, 'rePromptDossier').mockImplementation(async () => ({ mid: 'mid' }));
     getDossierStatusSpy = jest.spyOn(mstrObjectRestService, 'getDossierStatus').mockImplementation(async () => ({ statusCode: 1, body: { status: 1 } }));
     createInstanceSpy = jest.spyOn(mstrObjectRestService, 'createInstance').mockImplementation(async () => ({ instanceId: 'instanceId' }));
     createDossierBasedOnReportSpy = jest.spyOn(mstrObjectRestService, 'createDossierBasedOnReport').mockImplementation(async () => ({ status: 2, mid: 'mid' }));
-    updateDossierPromptsSpy = jest.spyOn(mstrObjectRestService, 'updateDossierPrompts').mockImplementation(async () => 1);
+    answerDossierPromptsSpy = jest.spyOn(mstrObjectRestService, 'answerDossierPrompts').mockImplementation(async () => 1);
   });
 
   afterEach(() => {
@@ -77,8 +77,8 @@ describe('PromptsHandlingHelper', () => {
     // when
     const result = await answerDossierPromptsHelper(instanceDefinition, objectId, projectId, promptsAnswers);
     // then
-    expect(updateDossierPromptsSpy).toHaveBeenCalledTimes(1);
-    expect(updateDossierPromptsSpy).toHaveBeenCalledWith(config);
+    expect(answerDossierPromptsSpy).toHaveBeenCalledTimes(1);
+    expect(answerDossierPromptsSpy).toHaveBeenCalledWith(config);
     expect(getDossierStatusSpy).toHaveBeenCalledTimes(1);
     expect(getDossierStatusSpy).toHaveBeenCalledWith(objectId, mid, projectId);
     expect(result).toEqual({ status: 1, mid: 'mid' });

@@ -14,7 +14,6 @@ import { embeddedDossierHelper } from './embedded-dossier-helper';
 import {
   prepareGivenPromptAnswers,
   preparePromptedDossier,
-  mergeAnswersWithPromptsDefined,
   ObjectExecutionStatus
 } from '../../helpers/prompts-handling-helper';
 
@@ -383,9 +382,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const tempAnswers = this.dossierData.promptsAnswers?.answers ? this.dossierData.promptsAnswers.answers : [];
     // Combined the prompt answers.
     promptsAnswers.answers = embeddedDossierHelper.combineArraysByObjectKey(tempAnswers, promptsAnswers.answers);
-
-    // Proceed with merging answers with prompts defined if there are prompts to answer.
-    await mergeAnswersWithPromptsDefined(mstrData.dossierId, mstrData.projectId, this.dossierData.instanceId, promptsAnswers.answers, false);
 
     this.dossierData.promptsAnswers = promptsAnswers;
     handlePromptAnswer(promptsAnswers);
