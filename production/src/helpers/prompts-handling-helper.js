@@ -166,24 +166,3 @@ function addDefDataToAnswers(answers, answerDefMap) {
     answerDef?.type && (answer.type = answerDef.type);
   });
 }
-
-/**
- * Append the server's version of the answers to the promptsAnswers object.
- * This version of answers will be used to invoke the REST API endpoint when
- * importing or re-prompting a report/dossier.
- * @param {*} currentAnswers - An array of answers to be updated, passed in as reference object
- * @param {*} promptsAnsDef
- * @param {*} areReportAnswers - if true, will update answers for nested answers.
-*/
-function updateAnswersWithPromptsDef(currentAnswers, promptsAnsDef, areReportAnswers) {
-  const answerDefMap = new Map(promptsAnsDef.map(prompt => [prompt.key, prompt]));
-
-  if (areReportAnswers) { // Reports, one level deep down
-    currentAnswers.forEach(currentAnswer => {
-      const { answers } = currentAnswer;
-      addDefDataToAnswers(answers, answerDefMap);
-    });
-  } else { // Dossiers
-    addDefDataToAnswers(currentAnswers, answerDefMap);
-  }
-}
