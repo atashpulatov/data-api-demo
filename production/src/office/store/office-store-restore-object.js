@@ -41,7 +41,7 @@ class OfficeStoreRestoreObject {
   resetIsPromptedForDossiersWithAnswers = (objects) => {
     objects && objects.filter(object => object.mstrObjectType.type === 55).forEach(object => {
       if (!object.isPrompted) {
-        object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined || object.promptsAnswers !== null;
+        object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
       }
     });
   };
