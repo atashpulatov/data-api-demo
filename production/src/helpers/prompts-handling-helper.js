@@ -187,31 +187,3 @@ function updateAnswersWithPromptsDef(currentAnswers, promptsAnsDef, areReportAns
     addDefDataToAnswers(currentAnswers, answerDefMap);
   }
 }
-
-/**
- * Merges the answers from the server with the answers from the Embedded API.
- * Dossiers and Reports have different ways to structure the answers; hence, the need
- * to use flag to indicate whether the answers are deep (Reports) or not (Dossiers).
- * @param {*} objectId
- * @param {*} projectId
- * @param {*} instanceId
- * @param {*} currentAnswers - reference to array with answers to be updated
- * @param {*} areReportAnswers - if true, will process Report's JSON structure for answers.
- */
-export async function mergeAnswersWithPromptsDefined(objectId, projectId, instanceId,
-  currentAnswers, areReportAnswers = true) {
-  // Do nothing if there are no answers to be updated
-  if (currentAnswers?.length === 0) {
-    return;
-  }
-
-  // Get the answers applied to the current dossier's instance from the server.
-  // Need to incorporate these answers because they're formatted differently than the ones
-  // returned by the Embedded API. The REST API endpoint expects the answers to be in a
-  // different format than the Embedded API.
-  const promptsAnsDef = await mstrObjectRestService.getObjectPrompts(objectId, projectId, instanceId, true);
-
-  // Update answers based on promptsAnsDef to insert JSON answers from server
-  // this JSON structure is expected by the REST API endpoint
-  promptsAnsDef?.length > 0 && updateAnswersWithPromptsDef(currentAnswers, promptsAnsDef, areReportAnswers);
-}
