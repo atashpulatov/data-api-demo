@@ -2,7 +2,7 @@ import 'core-js/stable';
 import 'focus-visible/dist/focus-visible';
 import './index.css';
 import React, { lazy, Suspense } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Empty } from '@mstr/connector-components/lib/empty/empty';
 
 import i18next from './i18n';
@@ -21,13 +21,16 @@ function goReact() {
 
   console.log(`Running react in ${sessionHelper.isDevelopment() ? 'development' : 'production'} mode`);
 
-  ReactDOM.render((
+  const container = document.getElementById('root');
+  const root = createRoot(container);
+
+  root.render((
     <Suspense fallback={<Empty isLoading />}>
       {(window.location.href.indexOf('popupType') === -1)
         ? <LazySidebar />
         : <LazyDialog />}
     </Suspense>
-  ), document.getElementById('root'), () => console.timeEnd('React loading time'));
+  ));
 }
 
 function officeInitialize() {
