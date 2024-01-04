@@ -34,7 +34,7 @@ describe('RightSidePanelNotConnected', () => {
     jest.spyOn(officeStoreHelper, 'isClearDataFailed').mockReturnValue(true);
 
     // when
-    render(
+    mount(
       <RightSidePanelNotConnected {...mockedProps} />
     );
 
@@ -46,9 +46,9 @@ describe('RightSidePanelNotConnected', () => {
   it('should display SidePanel', () => {
     // given
     // when
-    const { getByText } = render(<RightSidePanelNotConnected {...mockedProps} />);
+    const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
+
     // then
-    getByText('xcxc');
     expect(shallowedComponent.find(SidePanel)).toHaveLength(1);
     expect(shallowedComponent.find(PrivilegeErrorSidePanel)).toHaveLength(0);
   });
