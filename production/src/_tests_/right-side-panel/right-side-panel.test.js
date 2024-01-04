@@ -1,5 +1,4 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
 import { shallow, mount } from 'enzyme';
 import { SidePanel } from '@mstr/connector-components/';
 import PrivilegeErrorSidePanel from '../../right-side-panel/info-panels/privilege-error-side-panel';
@@ -35,7 +34,7 @@ describe('RightSidePanelNotConnected', () => {
     jest.spyOn(officeStoreHelper, 'isClearDataFailed').mockReturnValue(true);
 
     // when
-    mount(
+    render(
       <RightSidePanelNotConnected {...mockedProps} />
     );
 
@@ -47,9 +46,9 @@ describe('RightSidePanelNotConnected', () => {
   it('should display SidePanel', () => {
     // given
     // when
-    const shallowedComponent = shallow(<RightSidePanelNotConnected {...mockedProps} />);
-
+    const { getByText } = render(<RightSidePanelNotConnected {...mockedProps} />);
     // then
+    getByText('xcxc');
     expect(shallowedComponent.find(SidePanel)).toHaveLength(1);
     expect(shallowedComponent.find(PrivilegeErrorSidePanel)).toHaveLength(0);
   });

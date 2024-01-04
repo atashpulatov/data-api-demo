@@ -34,10 +34,10 @@ const renderProperComponent = (popupType) => {
 
 export const PopupViewSelectorNotConnected = (props) => {
   const { authToken, popupType: popupTypeProps } = props;
-  //   if (!authToken) {
-  //     console.log('Waiting for token to be passed');
-  //     return null;
-  //   }
+  if (!authToken) {
+    console.log('Waiting for token to be passed');
+    return null;
+  }
   const popupType = popupViewSelectorHelper.setPopupType(props, popupTypeProps);
   return renderProperComponent(popupType);
 };
