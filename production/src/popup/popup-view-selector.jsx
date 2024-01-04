@@ -12,6 +12,7 @@ import { PopupTypeEnum } from '../home/popup-type-enum';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { ObtainInstanceHelper } from './obtain-instance-helper';
+import { MultipleRepromptTransitionPage } from './multiple-reprompt-transition-page/multiple-reprompt-transition-page';
 
 const renderProperComponent = (popupType) => {
   switch (popupType) {
@@ -27,6 +28,8 @@ const renderProperComponent = (popupType) => {
       return <DossierWindow />; // TODO: Might be missing {t}
     case PopupTypeEnum.obtainInstanceHelper:
       return <ObtainInstanceHelper />;
+    case PopupTypeEnum.multipleRepromptTransitionPage:
+      return <MultipleRepromptTransitionPage />;
     default:
       return null;
   }
@@ -48,7 +51,8 @@ function mapStateToProps(state) {
     popupReducer: { editedObject, preparedInstance },
     sessionReducer: { attrFormPrivilege, authToken },
     officeReducer,
-    popupStateReducer
+    popupStateReducer,
+    repromptsQueueReducer
   } = state;
   const { promptsAnswers } = navigationTree;
   const { supportForms } = officeReducer;
@@ -62,7 +66,8 @@ function mapStateToProps(state) {
     preparedInstance,
     propsToPass: { ...popupStateReducer },
     popupType,
-    formsPrivilege
+    formsPrivilege,
+    repromptsQueueProps: { ...repromptsQueueReducer }
   };
 }
 

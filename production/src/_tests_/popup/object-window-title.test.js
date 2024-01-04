@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { ObjectWindowTitleNotConnected } from '../../popup/object-window-title/object-window-title';
+import { ObjectWindowTitle } from '../../popup/object-window-title/object-window-title';
 
 describe('PromptsWindowTitleNotConnected', () => {
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('PromptsWindowTitleNotConnected', () => {
     // given showLoading, showTitle, index, total, objectName,
     const props = { objectType: 'report', isReprompt: true, isEdit: false, objectName: 'reportName', index: 0, total: 0, };
     // when
-    const { getByText } = render(<ObjectWindowTitleNotConnected {...props} />);
+    const { getByText } = render(<ObjectWindowTitle {...props} />);
     // then
     expect(getByText('Import Report > reportName')).toBeDefined();
   });
@@ -24,7 +24,7 @@ describe('PromptsWindowTitleNotConnected', () => {
     // given showLoading, showTitle, index, total, objectName,
     const props = { objectType: 'report', isReprompt: false, isEdit: true, objectName: 'reportName', index: 0, total: 0, };
     // when
-    const { getByText } = render(<ObjectWindowTitleNotConnected {...props} />);
+    const { getByText } = render(<ObjectWindowTitle {...props} />);
     // then
     expect(getByText('Edit Report > reportName')).toBeDefined();
   });
@@ -33,7 +33,7 @@ describe('PromptsWindowTitleNotConnected', () => {
     // given
     const props = { objectType: 'dossier', isReprompt: false, isEdit: false, objectName: 'dossierName', index: 0, total: 0, };
     // when
-    const { getByText } = render(<ObjectWindowTitleNotConnected {...props} />);
+    const { getByText } = render(<ObjectWindowTitle {...props} />);
     // then
     expect(getByText('Import Dossier > dossierName')).toBeDefined();
   });
@@ -42,7 +42,7 @@ describe('PromptsWindowTitleNotConnected', () => {
     // given
     const props = { objectType: 'dossier', isReprompt: false, isEdit: true, objectName: 'dossierName', index: 0, total: 0, };
     // when
-    const { getByText } = render(<ObjectWindowTitleNotConnected {...props} />);
+    const { getByText } = render(<ObjectWindowTitle {...props} />);
     // then
     expect(getByText('Edit Dossier > dossierName')).toBeDefined();
   });
@@ -51,7 +51,7 @@ describe('PromptsWindowTitleNotConnected', () => {
     // given
     const props = { objectType: 'dossier', isReprompt: true, isEdit: false, objectName: 'dossierName', index: 0, total: 1, };
     // when
-    const { getByText } = render(<ObjectWindowTitleNotConnected {...props} />);
+    const { getByText } = render(<ObjectWindowTitle {...props} />);
     // then
     expect(getByText('Reprompt > dossierName')).toBeDefined();
   });
@@ -60,7 +60,7 @@ describe('PromptsWindowTitleNotConnected', () => {
     // given
     const props = { objectType: 'dossier', isReprompt: true, isEdit: false, objectName: 'dossierName', index: 1, total: 2, };
     // when
-    const { getByText } = render(<ObjectWindowTitleNotConnected {...props} />);
+    const { getByText } = render(<ObjectWindowTitle {...props} />);
     // then
     expect(getByText('Reprompt 1 of 2 > dossierName')).toBeDefined();
   });

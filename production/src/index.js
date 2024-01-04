@@ -36,7 +36,18 @@ function officeInitialize() {
       const homeHelperSingle = diContainer.initilizeSingle(HomeHelper, [reduxStore, sessionHelper]);
 
       if (window.location.href.indexOf('popupType') === -1) {
+        // Loading from sidebar
         homeHelperSingle.storeShowHidden();
+      } else {
+        // Loading from dialog/popup
+        // Add handler from dialog (child) window to be triggered when the parent sends a message
+        await Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived,
+          (arg) => {
+            // This only occurs during Multiple Reprompt, but we replace the dialog window
+            // URL location to trigger the next object's Reprompt window.
+            const { splittedUrl = [], popupType = '' } = JSON.parse(arg.message);
+            window.location.replace(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`);
+          });
       }
       goReact();
       diContainer.initializeAll();
