@@ -129,6 +129,22 @@ describe('PopupController', () => {
     expect(runPopupSpy).toBeCalledWith(popupType, size, size, reportParams);
   });
 
+  it('should run importedDataOverview popup', () => {
+    // given
+    const popupType = PopupTypeEnum.importedDataOverview;
+    const size = 80;
+    const runPopupSpy = jest
+      .spyOn(popupController, 'runPopup')
+      .mockImplementationOnce(() => { });
+
+    // when
+    popupController.runImportedDataOverviewPopup();
+
+    // then
+    expect(runPopupSpy).toBeCalled();
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size);
+  });
+
   it('should handle ok command from popup for report WITHOUT instance id', async () => {
     // given
     officeApiHelper.getExcelSessionStatus = jest.fn();
