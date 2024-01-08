@@ -14,7 +14,7 @@ describe('Settings Menu', () => {
     jest.resetAllMocks();
   });
 
-  it('should open Imported Data Overview popup on proper menu element click', async () => {
+  it('should open Imported Data Overview popup on proper menu element click', () => {
     // given
     const runImportedDataOverviewPopupSpy = jest.spyOn(popupController, 'runImportedDataOverviewPopup').mockImplementation(() => { });
     const toggleIsSettingsFlag = jest.fn();
@@ -30,16 +30,18 @@ describe('Settings Menu', () => {
     expect(toggleIsSettingsFlag).toBeCalledWith(false);
   });
 
-  it('should open Confirm popup on proper menu element click', async () => {
+  it('should open Confirm popup on proper menu element click', () => {
     // given
     const toggleIsConfirmFlag = jest.fn();
     const toggleIsSettingsFlag = jest.fn();
 
-    const { getByText } = render(<SettingsMenuNotConnected
-      toggleIsConfirmFlag={toggleIsConfirmFlag}
-      toggleIsSettingsFlag={toggleIsSettingsFlag}
-      isSecured={false}
-      objects={mockReports} />);
+    const { getByText } = render(
+      <SettingsMenuNotConnected
+        toggleIsConfirmFlag={toggleIsConfirmFlag}
+        toggleIsSettingsFlag={toggleIsSettingsFlag}
+        isSecured={false}
+        objects={mockReports} />
+    );
     const clearDataMenuOption = getByText('Clear Data');
 
     // when
