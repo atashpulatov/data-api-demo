@@ -1,14 +1,53 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
+import { render, fireEvent } from '@testing-library/react';
 import { sessionHelper } from '../../storage/session-helper';
 import { SettingsMenuNotConnected } from '../../home/settings-menu';
 import overflowHelper from '../../helpers/helpers';
 import { errorService } from '../../error/error-handler';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
+import { popupController } from '../../popup/popup-controller';
+import { mockReports } from '../mockData';
 
 describe('Settings Menu', () => {
   afterEach(() => {
     jest.resetAllMocks();
+  });
+
+  it('should open Imported Data Overview popup on proper menu element click', async () => {
+    // given
+    const runImportedDataOverviewPopupSpy = jest.spyOn(popupController, 'runImportedDataOverviewPopup').mockImplementation(() => { });
+    const toggleIsSettingsFlag = jest.fn();
+
+    const { getByText } = render(<SettingsMenuNotConnected toggleIsSettingsFlag={toggleIsSettingsFlag} />);
+    const importedDataOverviewMenuOption = getByText('Imported Data Overview');
+
+    // when
+    fireEvent.click(importedDataOverviewMenuOption);
+
+    // then
+    expect(runImportedDataOverviewPopupSpy).toBeCalled();
+    expect(toggleIsSettingsFlag).toBeCalledWith(false);
+  });
+
+  it('should open Confirm popup on proper menu element click', async () => {
+    // given
+    const toggleIsConfirmFlag = jest.fn();
+    const toggleIsSettingsFlag = jest.fn();
+
+    const { getByText } = render(<SettingsMenuNotConnected
+      toggleIsConfirmFlag={toggleIsConfirmFlag}
+      toggleIsSettingsFlag={toggleIsSettingsFlag}
+      isSecured={false}
+      objects={mockReports} />);
+    const clearDataMenuOption = getByText('Clear Data');
+
+    // when
+    fireEvent.click(clearDataMenuOption);
+
+    // then
+    expect(toggleIsConfirmFlag).toBeCalledWith(true);
+    expect(toggleIsSettingsFlag).toBeCalledWith(false);
   });
 
   it('should log out on element logout click', async () => {
