@@ -1,7 +1,9 @@
+import { shapeProps, sheetCollectionProps } from "./shape-properties";
+
 class OfficeShapeApiHelper {
 
   /**
-   * Gets Excel shape added to the workbook.
+   * Gets Excel shape added to the workbook. If the shape is found, returns the shape object otherwise returns undefined
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} shapeId Id of the Office shape created on import used for referencing the Excel shape
@@ -9,18 +11,19 @@ class OfficeShapeApiHelper {
    */
   getShape = async (excelContext, shapeId) => {
     const worksheetCollection = excelContext.workbook.worksheets;
-    await worksheetCollection.load('items');
+    await worksheetCollection.load(...sheetCollectionProps);
     await excelContext.sync();
-    let shape;
     for (const sheet of worksheetCollection.items) {
-      shape = sheet.shapes.getItemOrNullObject(shapeId);
-      await shape.load(['isNullObject', 'top', 'left', 'width', 'height']);
+      const shape = sheet.shapes.getItemOrNullObject(shapeId);
+      
+      // load shape properties
+      await shape.load([...shapeProps]);
       await excelContext.sync();
+
       if (!shape.isNullObject) {
-        break;
+        return shape;
       }
     }
-    return shape;
   };
 
   /**

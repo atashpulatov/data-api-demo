@@ -1,7 +1,7 @@
 /**
  * Converts a readable stream into base64 PNG string
  *
- * @param imageStream image stream
+ * @param imageStream readable image stream
  */
 export const convertImageToBase64 = async (imageStream) => {
   const arrayBuffer = await imageStream.arrayBuffer();
