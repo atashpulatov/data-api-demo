@@ -12,6 +12,7 @@ import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import './settings-menu.scss';
 import { notificationService } from '../notification-v2/notification-service';
+import { popupController } from '../popup/popup-controller';
 import packageJson from '../../package.json';
 import getDocumentationLocale from '../helpers/get-documentation-locale';
 
@@ -77,18 +78,24 @@ export const SettingsMenuNotConnected = ({
     const closeSettingsOnEsc = ({ keyCode }) => {
       keyCode === 27 && toggleIsSettingsFlag(false);
     };
-    const closeSettingsOnClick = ({ target }) => {
-      settingsMenuRef.current
-          && !settingsMenuRef.current.contains(target)
-          && toggleIsSettingsFlag(false);
+    const closeSettingsOnClick = (event) => {
+      const { target } = event;
+
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(target)) {
+        event.stopPropagation();
+        toggleIsSettingsFlag(false);
+      }
     };
+
+    const options = { capture: true };
+
     if (isSettings) {
       document.addEventListener('keyup', closeSettingsOnEsc);
-      document.addEventListener('click', closeSettingsOnClick);
+      document.addEventListener('click', closeSettingsOnClick, options);
     }
     return () => {
       document.removeEventListener('keyup', closeSettingsOnEsc);
-      document.removeEventListener('click', closeSettingsOnClick);
+      document.removeEventListener('click', closeSettingsOnClick, options);
     };
   }, [isSettings, toggleIsSettingsFlag]);
 
