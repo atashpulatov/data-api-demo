@@ -708,7 +708,7 @@ class MstrObjectRestService {
    * @param {string} instanceId
    * @param {string} visualizationKey
    * @param {string} dimensions
-   * 
+   *
    * @returns array of objects elements
    */
   getVisualizationImage = async (objectId, projectId, instanceId, visualizationKey, dimensions) => {

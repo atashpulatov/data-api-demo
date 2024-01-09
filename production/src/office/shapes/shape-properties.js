@@ -1,11 +1,9 @@
 export const shapeProps = {
   IS_NULL_OBJECT: 'isNullObject',
   TOP: 'top',
-  LEFT:'left',
+  LEFT: 'left',
   WIDTH: 'width',
   HEIGHT: 'height'
 };
 
-export const sheetCollectionProps = {
-  ITEMS: 'items'
-};
+export const sheetCollectionProps = { ITEMS: 'items' };

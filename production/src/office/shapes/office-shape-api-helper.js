@@ -1,14 +1,13 @@
-import { shapeProps, sheetCollectionProps } from "./shape-properties";
+import { shapeProps, sheetCollectionProps } from './shape-properties';
 
 class OfficeShapeApiHelper {
-
   /**
    * Gets the excel shape referenced by shapeId from the workbook.
    * If the shape is found returns the shape object otherwise returns undefined.
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} shapeId Id of the Office shape created on import used for referencing the Excel shape
-   * 
+   *
    * @return {Office} Reference to Excel Shape
    */
   getShape = async (excelContext, shapeId) => {
@@ -17,7 +16,6 @@ class OfficeShapeApiHelper {
     await excelContext.sync();
     for (const sheet of worksheetCollection.items) {
       const shape = sheet.shapes.getItemOrNullObject(shapeId);
-      
       // load shape properties
       await shape.load([...shapeProps]);
       await excelContext.sync();
@@ -31,12 +29,12 @@ class OfficeShapeApiHelper {
   /**
    * Adds an image shape to the worksheet and positions it based on the top and left values
    * Returns the shape id of the newly created shape.
-   * 
+   *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} base64PngImage Base64 encoded png image
    * @param {Number} top Top position of the shape
    * @param {Number} left Left position of the shape
-   * 
+   *
    * @return {String} Id of the Office shape created on import used for referencing the Excel shape
    */
   addImage = async (excelContext, base64PngImage, top, left) => {
@@ -49,7 +47,7 @@ class OfficeShapeApiHelper {
 
   /**
    * Deletes the shape from the worksheet.
-   * 
+   *
    * @param {*} excelContext Reference to Excel Context used by Excel API functions
    * @param {*} shapeId shapeId Id of the Office shape created on import used for referencing the Excel shape
    */
@@ -58,7 +56,6 @@ class OfficeShapeApiHelper {
     shape.delete();
     await excelContext.sync();
   };
-
 }
 
 export const officeShapeApiHelper = new OfficeShapeApiHelper();
