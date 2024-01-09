@@ -3,10 +3,12 @@ import { shapeProps, sheetCollectionProps } from "./shape-properties";
 class OfficeShapeApiHelper {
 
   /**
-   * Gets Excel shape added to the workbook. If the shape is found, returns the shape object otherwise returns undefined
+   * Gets the excel shape referenced by shapeId from the workbook.
+   * If the shape is found returns the shape object otherwise returns undefined.
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} shapeId Id of the Office shape created on import used for referencing the Excel shape
+   * 
    * @return {Office} Reference to Excel Shape
    */
   getShape = async (excelContext, shapeId) => {
@@ -28,7 +30,7 @@ class OfficeShapeApiHelper {
 
   /**
    * Adds an image shape to the worksheet and positions it based on the top and left values
-   * Returns the shape id of the newly created shape
+   * Returns the shape id of the newly created shape.
    * 
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} base64PngImage Base64 encoded png image
@@ -46,7 +48,7 @@ class OfficeShapeApiHelper {
   };
 
   /**
-   * Deletes the shape from the worksheet
+   * Deletes the shape from the worksheet.
    * 
    * @param {*} excelContext Reference to Excel Context used by Excel API functions
    * @param {*} shapeId shapeId Id of the Office shape created on import used for referencing the Excel shape

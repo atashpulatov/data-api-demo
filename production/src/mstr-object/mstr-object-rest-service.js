@@ -701,13 +701,14 @@ class MstrObjectRestService {
 
   /**
    * This method fetches the visualization image as a ReadableStream
-   * for a given visualization key
+   * for a given visualization key.
    *
    * @param {string} objectId
    * @param {string} projectId
    * @param {string} instanceId
    * @param {string} visualizationKey
    * @param {string} dimensions
+   * 
    * @returns array of objects elements
    */
   getVisualizationImage = async (objectId, projectId, instanceId, visualizationKey, dimensions) => {
