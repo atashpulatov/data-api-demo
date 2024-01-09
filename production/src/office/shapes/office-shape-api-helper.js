@@ -12,12 +12,19 @@ class OfficeShapeApiHelper {
    */
   getShape = async (excelContext, shapeId) => {
     const worksheetCollection = excelContext.workbook.worksheets;
-    await worksheetCollection.load(...sheetCollectionProps);
+    await worksheetCollection.load(sheetCollectionProps.ITEMS);
     await excelContext.sync();
     for (const sheet of worksheetCollection.items) {
       const shape = sheet.shapes.getItemOrNullObject(shapeId);
       // load shape properties
-      await shape.load([...shapeProps]);
+      const {
+        IS_NULL_OBJECT,
+        TOP,
+        LEFT,
+        WIDTH,
+        HEIGHT
+      } = shapeProps;
+      await shape.load([IS_NULL_OBJECT, TOP, LEFT, WIDTH, HEIGHT]);
       await excelContext.sync();
 
       if (!shape.isNullObject) {
