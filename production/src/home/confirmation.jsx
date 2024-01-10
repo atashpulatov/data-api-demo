@@ -44,11 +44,11 @@ export const ConfirmationNotConnected = ({
     const options = { capture: true };
 
     if (isConfirm) {
-      document.addEventListener('keyup', closeSettingsOnEsc);
+      document.addEventListener('keydown', closeSettingsOnEsc);
       document.addEventListener('click', closeSettingsOnClick, options);
     }
     return () => {
-      document.removeEventListener('keyup', closeSettingsOnEsc);
+      document.removeEventListener('keydown', closeSettingsOnEsc);
       document.removeEventListener('click', closeSettingsOnClick, options);
     };
   }, [isConfirm, toggleIsConfirmFlag]);
