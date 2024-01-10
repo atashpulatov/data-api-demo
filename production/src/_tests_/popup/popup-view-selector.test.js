@@ -41,15 +41,17 @@ describe('PopupViewSelectorNotConnected', () => {
     expect(componentWrapper.find(PopupViewSelectorNotConnected).get(0)).not.toBeDefined();
   });
 
+  // TODO: Replace expectedComponent for importedDataOverview once it is implemented
   it.each`
   popupType                             | expectedComponent
   ${PopupTypeEnum.dataPreparation}      | ${AttributeSelectorWindow}
   ${PopupTypeEnum.editFilters}          | ${AttributeSelectorWindow}
-  ${PopupTypeEnum.libraryWindow}       | ${LibraryWindow}
+  ${PopupTypeEnum.libraryWindow}        | ${LibraryWindow}
   ${PopupTypeEnum.promptsWindow}        | ${PromptsWindow}
   ${PopupTypeEnum.repromptingWindow}    | ${PromptsWindow}
   ${PopupTypeEnum.dossierWindow}        | ${DossierWindow}
   ${PopupTypeEnum.obtainInstanceHelper} | ${ObtainInstanceHelper}
+  ${PopupTypeEnum.importedDataOverview} | ${LibraryWindow}
   `('should render $expectedComponent when setPopupType returns $popupType', ({ popupType, expectedComponent }) => {
   // given
     const setPopupType = jest.spyOn(popupViewSelectorHelper, 'setPopupType').mockImplementation(() => popupType);

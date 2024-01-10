@@ -64,6 +64,10 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
 
+  runImportedDataOverviewPopup = async () => {
+    await this.runPopup(PopupTypeEnum.importedDataOverview, 80, 80);
+  };
+
   runPopup = async (popupType, height, width, reportParams = null) => {
     const isDialogAlreadyOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));

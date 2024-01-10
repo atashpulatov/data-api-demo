@@ -30,6 +30,9 @@ const renderProperComponent = (popupType) => {
       return <ObtainInstanceHelper />;
     case PopupTypeEnum.multipleRepromptTransitionPage:
       return <MultipleRepromptTransitionPage />;
+    case PopupTypeEnum.importedDataOverview:
+      // TODO: Replace with ImportedDataOverview component once developed
+      return <LibraryWindow />;
     default:
       return null;
   }
