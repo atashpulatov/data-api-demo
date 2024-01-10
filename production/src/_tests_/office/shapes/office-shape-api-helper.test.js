@@ -1,9 +1,7 @@
 import { officeShapeApiHelper } from '../../../office/shapes/office-shape-api-helper';
 
 describe('officeShapeApiHelper', () => {
-  
   describe('getShape', () => {
-    
     it('should return shape', async () => {
       const mockSync = jest.fn();
       const mockLoad = jest.fn();
@@ -23,7 +21,7 @@ describe('officeShapeApiHelper', () => {
             isNullObject: true
           }))
         }
-      }
+      };
       const context = {
         workbook: {
           worksheets: {
@@ -92,7 +90,6 @@ describe('officeShapeApiHelper', () => {
       expect(mockSync).toBeCalled();
       expect(shapeId).toEqual('1234-5678-9012-3456');
     });
-
   });
 
   describe('deleteImage', () => {
@@ -150,6 +147,6 @@ describe('officeShapeApiHelper', () => {
       expect(mockLoad).toBeCalled();
       expect(mockSync).toBeCalled();
       expect(mockDelete).not.toBeCalled();
-    }); 
+    });
   });
 });
