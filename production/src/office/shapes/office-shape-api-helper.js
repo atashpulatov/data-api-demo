@@ -60,8 +60,10 @@ class OfficeShapeApiHelper {
    */
   deleteImage = async (excelContext, shapeId) => {
     const shape = await this.getShape(excelContext, shapeId);
-    shape.delete();
-    await excelContext.sync();
+    if (shape) {
+      shape.delete();
+      await excelContext.sync();
+    }
   };
 }
 
