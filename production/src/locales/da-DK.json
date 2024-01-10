@@ -247,5 +247,7 @@
    "Apply": "Anvend",
    "{{index}} of {{total}}": "{{index}} af {{total}} ",
    "You do not have the rights to access MicroStrategy for Office": "Du har ikke rettigheder til at åbne MicroStrategy til Office",
-   "Try Again": "Prøv igen"
+   "Try Again": "Prøv igen",
+   "Imported Data Overview": "Oversigt over importerede data",
+   "Settings": "Indstillinger"
 }

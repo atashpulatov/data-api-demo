@@ -170,32 +170,23 @@ class SidePanelService {
   });
 
   /**
-   * Handles the re-prompting of object.
-   * GEts object data from reducer and opens popup depending of the type of object.
+   * Handles the re-prompting of object(s).
+   * Gets object data from reducer and opens popup depending of the type of object.
    *
-   * @param {Array} objectWorkingIds contains unique Id of the objects, allowing to reference source object.
+   * @param {Array} objectWorkingIds contains list of unique Id of the objects, allowing to reference source objects.
    */
   reprompt = async (objectWorkingIds) => {
     // Prepare dispatch actions
     const dispatchTasks = [];
 
-    // Reprompt or refresh each object in the order of selection
+    // Reprompt each object (only if prompted) in the order of selection
     objectWorkingIds.forEach(objectWorkingId => {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       const { bindId, mstrObjectType, isPrompted } = objectData;
 
-      // Proceed with reprompt only if object is prompted, otherwise only refresh object
-      // if multiple objects are selected.
+      // Add a task to the queue only if the object is prompted
       if (isPrompted) {
         dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType));
-      } else if (objectWorkingIds.length > 1) {
-        // Handle the case when multiple objects are selected (refresh non-prompted reports)
-        // You can implement this part if needed.
-        dispatchTasks.push({
-          bindId,
-          isPrompted: false,
-          callback: () => setTimeout(() => this.refresh([objectWorkingId]), 10),
-        });
       }
     });
 

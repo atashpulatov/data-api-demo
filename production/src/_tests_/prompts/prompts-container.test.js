@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { render } from '@testing-library/react';
 import { PromptsContainer } from '../../prompts/prompts-container';
 
 describe('PromptsContainer', () => {
@@ -8,10 +8,9 @@ describe('PromptsContainer', () => {
     const postMount = jest.fn();
 
     // when
-    const wrappedComponent = mount(<PromptsContainer postMount={postMount} />);
+    const { container } = render(<PromptsContainer postMount={postMount} />);
     // then
-    expect(wrappedComponent.instance()).toBeDefined();
     expect(postMount).toBeCalled();
-    expect(wrappedComponent.find('.promptsContainer').get(0)).toBeDefined();
+    expect(container.querySelector('.promptsContainer')).toBeInTheDocument();
   });
 });

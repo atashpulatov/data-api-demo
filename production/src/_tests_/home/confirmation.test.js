@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { fireEvent, render } from '@testing-library/react';
 import { ConfirmationNotConnected } from '../../home/confirmation';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { errorService } from '../../error/error-handler';
@@ -18,13 +18,12 @@ describe('Confirmation', () => {
     const mockDismissAll = jest.spyOn(notificationService, 'dismissNotifications').mockImplementation(() => jest.fn);
     const mockToggleIsConfirmFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
-    const confirmationWrapper = mount(<ConfirmationNotConnected
+    const { getByText } = render(<ConfirmationNotConnected
       objects={mockReportArray}
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag} />);
-    const okWrapper = confirmationWrapper.find('#confirm-btn');
     // when
-    okWrapper.simulate('click');
+    fireEvent.click(getByText('OK'));
     // then
     expect(mockSecureData).toBeCalled();
     expect(mockDismissAll).toBeCalled();
@@ -48,15 +47,14 @@ describe('Confirmation', () => {
     const mockToggleIsClearDataFailedFlag = jest.fn();
     const mockToggleSecuredFlag = jest.fn();
     const mockReportArray = createMockFilesArray();
-    const confirmationWrapper = mount(<ConfirmationNotConnected
+    const { getByText } = render(<ConfirmationNotConnected
       objects={mockReportArray}
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
       toggleIsClearDataFailedFlag={mockToggleIsClearDataFailedFlag}
       toggleSecuredFlag={mockToggleSecuredFlag} />);
-    const okWrapper = confirmationWrapper.find('#confirm-btn');
     // when
-    okWrapper.simulate('click');
+    fireEvent.click(getByText('OK'));
     // then
     expect(clearErrors).not.toBe(null);
   });
@@ -64,13 +62,12 @@ describe('Confirmation', () => {
   it('should set isConfirm flag to false when Cancel is clicked', async () => {
     // given
     const mockToggleIsConfirmFlag = jest.fn();
-    const confirmationWrapper = mount(<ConfirmationNotConnected
+    const { getByText } = render(<ConfirmationNotConnected
       isSecured={false}
       toggleIsConfirmFlag={mockToggleIsConfirmFlag}
     />);
-    const okWrapper = confirmationWrapper.find('#cancel-btn');
     // when
-    okWrapper.simulate('click');
+    fireEvent.click(getByText('Cancel'));
     // then
     await expect(mockToggleIsConfirmFlag).toBeCalledWith(false);
   });
@@ -78,7 +75,7 @@ describe('Confirmation', () => {
     // given
     const addEventListenerSpy = jest.spyOn(document, 'addEventListener');
     // when
-    mount(<ConfirmationNotConnected isConfirm />);
+    render(<ConfirmationNotConnected isConfirm />);
     // then
     const spyCalls = addEventListenerSpy.mock.calls;
     expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
@@ -89,10 +86,9 @@ describe('Confirmation', () => {
   it('should remove event listeners for outside of confirmation popup click and esc button', () => {
     // given
     const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener');
-    const wrappedComponent = mount(<ConfirmationNotConnected isConfirm />);
+    const { rerender } = render(<ConfirmationNotConnected isConfirm />);
     // when
-    wrappedComponent.setProps({ isConfirm: false });
-    wrappedComponent.update();
+    rerender(<ConfirmationNotConnected isConfirm={false} />);
     // then
     const spyCalls = removeEventListenerSpy.mock.calls;
     expect(spyCalls[spyCalls.length - 1][0]).toEqual('click');
@@ -107,12 +103,11 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    const wrappedComponent = mount(
+    render(
       <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
     );
     // when
     map.click({ target: null });
-    wrappedComponent.update();
     // then
     expect(toggleIsConfirmFlagMock).toHaveBeenCalled();
   });
@@ -123,12 +118,11 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    const wrappedComponent = mount(
+    render(
       <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
     );
     // when
     map.keyup({ keyCode: 27 });
-    wrappedComponent.update();
     // then
     expect(toggleIsConfirmFlagMock).toHaveBeenCalled();
   });
@@ -139,12 +133,11 @@ describe('Confirmation', () => {
     document.addEventListener = jest.fn((event, cb) => {
       map[event] = cb;
     });
-    const wrappedComponent = mount(
+    render(
       <ConfirmationNotConnected isConfirm toggleIsConfirmFlag={toggleIsConfirmFlagMock} />
     );
     // when
     map.keyup({ keyCode: 26 });
-    wrappedComponent.update();
     // then
     expect(toggleIsConfirmFlagMock).toHaveBeenCalledTimes(0);
   });
