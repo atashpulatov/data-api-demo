@@ -1,7 +1,5 @@
 // setup file
 import React from 'react';
-import { configure } from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import 'jest-localstorage-mock';
 import 'regenerator-runtime';
 import { diContainer } from './dependency-container';
@@ -28,5 +26,4 @@ jest.mock('@mstr/connector-components', () => {
 
 global.ResizeObserver = require('resize-observer-polyfill');
 
-configure({ adapter: new Adapter() });
 diContainer.initializeAll();
