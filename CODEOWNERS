@@ -4,17 +4,17 @@
 # - SEs from PA-MSFT-365 
 # - SEs from PA-Applications HQ working on Excel plugin
 
-* @agorski_mstr @bkoziel_mstr @eozturk_mstr @mbereszczuk_mstr @pnastaj_mstr @pzajk_mstr @niyshah_mstr @atashpulatov_mstr @gparra_mstr @jvargas_mstr @kezhou_mstr @tsahasranaman_mstr @tdong_mstr @fniu_mstr
+# * @agorski_mstr @bkoziel_mstr @eozturk_mstr @mbereszczuk_mstr @pnastaj_mstr @pzajk_mstr @niyshah_mstr @atashpulatov_mstr @gparra_mstr @jvargas_mstr @kezhou_mstr @tsahasranaman_mstr @tdong_mstr @fniu_mstr
 
 # Automation Owners:
 # - QEs/SEs from PA-MSFT-365
 # - QEs/SEs from PA-Applications HQ working on Excel plugin
 
-/tests/ @miduong_mstr @agorski_mstr @bkoziel_mstr @eozturk_mstr @mbereszczuk_mstr @pnastaj_mstr @pzajk_mstr @wapeng_mstr @niyshah_mstr @atashpulatov_mstr @gparra_mstr @jvargas_mstr @tsahasranaman_mstr @fniu_mstr
+# /tests/ @miduong_mstr @agorski_mstr @bkoziel_mstr @eozturk_mstr @mbereszczuk_mstr @pnastaj_mstr @pzajk_mstr @wapeng_mstr @niyshah_mstr @atashpulatov_mstr @gparra_mstr @jvargas_mstr @tsahasranaman_mstr @fniu_mstr
 
 # office-add-in.jsp Owners:
 # - SEs from PA-MSFT-365
 # - SEs from PA-Applications HQ working on Excel plugin 
 # - SEs from PA-Applications HQ working on HyperOutlook which uses office-add-in.jsp from this repo
 
-/production/build/auth/office-add-in.jsp @agorski_mstr @bkoziel_mstr @eozturk_mstr @mbereszczuk_mstr @pnastaj_mstr @pzajk_mstr @niyshah_mstr @atashpulatov_mstr @gparra_mstr @jvargas_mstr @kezhou_mstr @tsahasranaman_mstr @tdong_mstr @fniu_mstr
+# /production/build/auth/office-add-in.jsp @agorski_mstr @bkoziel_mstr @eozturk_mstr @mbereszczuk_mstr @pnastaj_mstr @pzajk_mstr @niyshah_mstr @atashpulatov_mstr @gparra_mstr @jvargas_mstr @kezhou_mstr @tsahasranaman_mstr @tdong_mstr @fniu_mstr
