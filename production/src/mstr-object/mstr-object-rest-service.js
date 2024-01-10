@@ -698,6 +698,45 @@ class MstrObjectRestService {
       .withCredentials()
       .then((res) => res.body);
   };
+
+  /**
+   * This method fetches the visualization image as a ReadableStream
+   * for a given visualization key.
+   *
+   * @param {string} objectId
+   * @param {string} projectId
+   * @param {string} instanceId
+   * @param {string} visualizationKey
+   * @param {string} dimensions
+   *
+   * @returns array of objects elements
+   */
+  getVisualizationImage = async (objectId, projectId, instanceId, visualizationKey, dimensions) => {
+    const storeState = this.reduxStore.getState();
+    const { envUrl, authToken } = storeState.sessionReducer;
+    const fullPath = `${envUrl}/documents/${objectId}/instances/${instanceId}/visualizations/${visualizationKey}/image`;
+    const { width, height } = dimensions;
+    const options = {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(projectId && { 'x-mstr-projectId': projectId }),
+        ...(authToken && { 'X-MSTR-AuthToken': authToken }),
+      },
+      body: JSON.stringify({ width, height }),
+    };
+
+    const response = await fetch(fullPath, options);
+    if (!response.ok) {
+      const responseBody = await response.json();
+      const restError = new Error(responseBody.message);
+      restError.status = response.status;
+      throw restError;
+    }
+
+    return response;
+  };
 }
 
 export const mstrObjectRestService = new MstrObjectRestService();
