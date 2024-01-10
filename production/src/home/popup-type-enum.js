@@ -8,4 +8,6 @@ export const PopupTypeEnum = {
   libraryWindow: 'library-window',
   dossierWindow: 'dossier-window',
   obtainInstanceHelper: 'obtain-instance-helper',
+  multipleRepromptTransitionPage: 'multiple-reprompt-transition-page',
+  importedDataOverview: 'imported-data-overview',
 };

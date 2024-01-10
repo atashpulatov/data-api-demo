@@ -10,7 +10,7 @@
         </filter>
         <rect id="path-3" x="0" y="12" width="20" height="20" rx="10"></rect>
     </defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Symbols" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g id="Log-in">
             <g id="Group-10-Copy">
                 <g id="Group-Copy">
@@ -65,7 +65,7 @@
                 <g id="Group-6" transform="translate(158.000000, 83.000000)">
                     <g id="Rectangle">
                         <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-                        <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                        <use fill="#FFFFFF" fillRule="evenodd" xlink:href="#path-1"></use>
                     </g>
                     <path d="M30,19 C30,18.4477153 30.4473652,18 30.9981537,18 L59.0018463,18 C59.5531114,18 60,18.4438648 60,19 L60,19 C60,19.5522847 59.5526348,20 59.0018463,20 L30.9981537,20 C30.4468886,20 30,19.5561352 30,19 L30,19 Z" id="Rectangle-2" fill="#D8D8D8" opacity="0.6"></path>
                     <path d="M30,25 C30,24.4477153 30.4474692,24 31.0006946,24 L52.9993054,24 C53.5519738,24 54,24.4438648 54,25 L54,25 C54,25.5522847 53.5525308,26 52.9993054,26 L31.0006946,26 C30.4480262,26 30,25.5561352 30,25 L30,25 Z" id="Rectangle-2" fill="#D8D8D8" opacity="0.6"></path>
@@ -73,7 +73,7 @@
                         <g id="Group-8" transform="translate(54.000000, 0.000000)">
                             <path d="M16.8,7.5748509 L16.8,6.14749114 L16.6119725,3.27585793 L9.28604355,1.15862069 L1.92136169,3.27585793 L1.74328587,6.14749114 L1.74328587,7.5748509 C1.74328587,7.5748509 1.26748041,15.1262034 9.28604355,17.3793103 C9.28604355,17.3793103 16.5055485,15.9175631 16.8,7.5748509 L16.8,7.5748509 Z" id="Path" fill="#A8C9EC" opacity="0.3"></path>
                             <path d="M15.062069,6.41623021 L15.062069,4.98887045 L14.8740415,2.11723724 L7.54811251,0 L0.183430656,2.11723724 L0.0053548404,4.98887045 L0.0053548404,6.41623021 C0.0053548404,6.41623021 -0.470450626,13.9675827 7.54811251,16.2206897 C7.54811251,16.2206897 14.7676175,14.7589424 15.062069,6.41623021 L15.062069,6.41623021 Z" id="Path" fill="#1C91DC"></path>
-                            <polyline id="Line" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="4.05517241 7.53103448 6.89961686 10.7172414 11.7351724 4.92413793"></polyline>
+                            <polyline id="Line" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" points="4.05517241 7.53103448 6.89961686 10.7172414 11.7351724 4.92413793"></polyline>
                         </g>
                         <mask id="mask-4" fill="white">
                             <use xlink:href="#path-3"></use>

@@ -247,5 +247,7 @@
    "Apply": "应用",
    "{{index}} of {{total}}": "{{index}} / {{total}} ",
    "You do not have the rights to access MicroStrategy for Office": "您没有访问 MicroStrategy for Office 的权限",
-   "Try Again": "请重试"
+   "Try Again": "请重试",
+   "Imported Data Overview": "导入的数据概览",
+   "Settings": "设置"
 }

@@ -247,5 +247,7 @@
    "Apply": "適用",
    "{{index}} of {{total}}": "{{index}} / {{total}} ",
    "You do not have the rights to access MicroStrategy for Office": "MicroStrategy for Office にアクセスする権限がありません。",
-   "Try Again": "再試行"
+   "Try Again": "再試行",
+   "Imported Data Overview": "インポートされたデータの概要",
+   "Settings": "設定"
 }

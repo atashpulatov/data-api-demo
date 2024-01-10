@@ -19,7 +19,7 @@ import { popupHelper } from '../popup/popup-helper';
 import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { prepareGivenPromptAnswers, preparePromptedReport, mergeAnswersWithPromptsDefined } from '../helpers/prompts-handling-helper';
+import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
 import { ObjectWindowTitle } from '../popup/object-window-title/object-window-title';
 
 const { microstrategy } = window;
@@ -29,7 +29,7 @@ export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested,
-    isMultipleRepromptWithReuse
+    isMultipleRepromptWithReuse, repromptsQueue
   } = props;
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
@@ -241,11 +241,6 @@ export const PromptsWindowNotConnected = (props) => {
           // Get the new answers from the prompts dialog.
           const currentAnswers = [...newPromptsAnswers.current];
 
-          // Update answers based on promptsAnsDef to insert JSON answers from server
-          // this JSON structure is expected by the REST API endpoint; answers are deeper in the structure
-          // than Dossiers.
-          await mergeAnswersWithPromptsDefined(objectId, projectId, dossierData.instanceId, currentAnswers);
-
           // Since the dossier is no needed anymore after intercepting promptsAnswers, we can try removing the instanace
           deleteDossierInstance(projectId, objectId, instanceId);
 
@@ -325,6 +320,8 @@ export const PromptsWindowNotConnected = (props) => {
         objectName={objectName}
         isReprompt={isReprompt}
         isEdit={isEdit}
+        index={repromptsQueue.index}
+        total={repromptsQueue.total}
       />
       <Empty isLoading />
       <PromptsContainer
