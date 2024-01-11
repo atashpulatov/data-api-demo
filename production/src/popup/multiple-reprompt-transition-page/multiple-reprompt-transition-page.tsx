@@ -4,8 +4,9 @@ import { Empty } from '@mstr/rc';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import './multiple-reprompt-transition-page.scss';
 import { ObjectWindowTitle } from '../object-window-title/object-window-title';
+
+import './multiple-reprompt-transition-page.scss';
 
 /**
  * This component is used as a transition page for the Multiple Reprompt workflow.
