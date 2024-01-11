@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { sessionHelper } from '../storage/session-helper';
 import useOfficePrivilege from './use-office-privilege';
 
@@ -21,7 +21,11 @@ describe('useOfficePrivilege', () => {
     const getCanUseOfficePrivilegeMock = jest.spyOn(sessionHelper, 'getCanUseOfficePrivilege').mockResolvedValue(true);
 
     // When
-    const { result } = renderHook(() => useOfficePrivilege(authToken));
+    let result = { current: false };
+    await act(async () => {
+      const renderResult = renderHook(() => useOfficePrivilege(authToken));
+      result = renderResult.result;
+    });
 
     // Then
     expect(getCanUseOfficePrivilegeMock).toHaveBeenCalledTimes(1);

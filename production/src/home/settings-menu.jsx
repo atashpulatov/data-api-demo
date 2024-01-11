@@ -57,27 +57,24 @@ export const SettingsMenuNotConnected = ({
     };
     return encodeURI(`mailto:${email.address}?subject=${email.title}&body=${email.body}`);
   };
-  
+
   const showImportedDataOverviewPopup = () => {
     toggleIsSettingsFlag(false);
     popupController.runImportedDataOverviewPopup();
   };
 
-  const showConfirmationPopup = ({ keyCode }) => {
-    if (keyCode === 13 || keyCode === 32) {
-      toggleIsConfirmFlag(true);
-      toggleIsSettingsFlag(false);
-    }
+  const showConfirmationPopup = () => {
+    toggleIsConfirmFlag(true);
+    toggleIsSettingsFlag(false);
+  };
 
   const hideSettingsPopup = () => {
     toggleIsSettingsFlag(false); // close settings window
   };
 
-  const onSelectSettingsOption = ({ keyCode }) => {
-    if (keyCode === 13 || keyCode === 32) {
-      hideSettingsPopup();
-      toggleSettingsPanelLoadedFlag(settingsPanelLoaded);
-    }
+  const onSelectSettingsOption = () => {
+    hideSettingsPopup();
+    toggleSettingsPanelLoadedFlag(settingsPanelLoaded);
   };
 
   const settingsMenuRef = React.useRef(null);
@@ -98,11 +95,11 @@ export const SettingsMenuNotConnected = ({
     const options = { capture: true };
 
     if (isSettings) {
-      document.addEventListener('keydown', closeSettingsOnEsc);
+      document.addEventListener('keyup', closeSettingsOnEsc);
       document.addEventListener('click', closeSettingsOnClick, options);
     }
     return () => {
-      document.removeEventListener('keydown', closeSettingsOnEsc);
+      document.removeEventListener('keyup', closeSettingsOnEsc);
       document.removeEventListener('click', closeSettingsOnClick, options);
     };
   }, [isSettings, toggleIsSettingsFlag]);
@@ -129,7 +126,7 @@ export const SettingsMenuNotConnected = ({
         tabIndex="0"
         role="menuitem"
         onClick={isSecuredActive ? showConfirmationPopup : null}
-        onKeyDown={isSecuredActive ? (event) => showConfirmationPopup(event) : null}>
+        onKeyUp={isSecuredActive ? (e) => (e.key === 'Enter' && showConfirmationPopup()) : null}>
         {t('Clear Data')}
       </li>
       <li
@@ -137,7 +134,7 @@ export const SettingsMenuNotConnected = ({
         tabIndex="0"
         role="menuitem"
         onClick={onSelectSettingsOption}
-        onKeyDown={(event) => onSelectSettingsOption(event)}>
+        onKeyUp={(e) => (e.key === 'Enter' && onSelectSettingsOption())}>
         {t('Settings')}
       </li>
       <div className="separate-line" />
@@ -188,7 +185,7 @@ export const SettingsMenuNotConnected = ({
         size="small"
         role="menuitem"
         onClick={() => logout(hideSettingsPopup)}
-        onKeyDown={() => logout(hideSettingsPopup)}>
+        onKeyPress={() => logout(hideSettingsPopup)}>
         {t('Log Out')}
       </li>
       <li className="settings-version no-trigger-close">{t('Version {{APP_VERSION}}', { APP_VERSION })}</li>
