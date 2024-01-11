@@ -67,6 +67,9 @@ $text-color: #3F4042;
   .separate-line {
     @include bottom-line;
   }
+  .imported-data-overview {
+    margin: 8px 0;
+  }
   .clear-data {
     margin: 8px 0;
 

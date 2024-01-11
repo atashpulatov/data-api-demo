@@ -57,13 +57,17 @@ export const SettingsMenuNotConnected = ({
     };
     return encodeURI(`mailto:${email.address}?subject=${email.title}&body=${email.body}`);
   };
+  
+  const showImportedDataOverviewPopup = () => {
+    toggleIsSettingsFlag(false);
+    popupController.runImportedDataOverviewPopup();
+  };
 
   const showConfirmationPopup = ({ keyCode }) => {
     if (keyCode === 13 || keyCode === 32) {
       toggleIsConfirmFlag(true);
       toggleIsSettingsFlag(false);
     }
-  };
 
   const hideSettingsPopup = () => {
     toggleIsSettingsFlag(false); // close settings window
@@ -111,6 +115,15 @@ export const SettingsMenuNotConnected = ({
           : <img className="no-trigger-close" id="profile-image" src={logo} alt={t('User profile')} />}
         <OverflowTooltip placement="bottom" theme="dark" content={userNameDisplay} mouseEnterDelay={1} containerClassName="user-name-tooltip" sourceClassName="user-name">{userNameDisplay}</OverflowTooltip>
       </li>
+      <li
+        className="no-trigger-close imported-data-overview not-linked-list"
+        tabIndex="0"
+        role="menuitem"
+        onClick={showImportedDataOverviewPopup}
+        onKeyUp={(e) => (e.key === 'Enter' && showImportedDataOverviewPopup())}>
+        {t('Imported Data Overview')}
+      </li>
+      <div className="separate-line" />
       <li
         className={`no-trigger-close clear-data not-linked-list ${!isSecuredActive ? 'clear-data-inactive' : ''}`}
         tabIndex="0"

@@ -247,5 +247,7 @@
    "Apply": "Toepassen",
    "{{index}} of {{total}}": "{{index}} van {{total}} ",
    "You do not have the rights to access MicroStrategy for Office": "U hebt geen machtigingen om MicroStrategy voor Office te openen",
-   "Try Again": "Probeer het opnieuw"
+   "Try Again": "Probeer het opnieuw",
+   "Imported Data Overview": "Overzicht geïmporteerde gegevens",
+   "Settings": "Instellingen"
 }

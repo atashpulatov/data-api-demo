@@ -247,5 +247,7 @@
    "Apply": "Zastosuj",
    "{{index}} of {{total}}": "{{index}} z {{total}} ",
    "You do not have the rights to access MicroStrategy for Office": "Nie masz uprawnień dostępu do dodatku MicroStrategy for Office",
-   "Try Again": "Spróbuj ponownie"
+   "Try Again": "Spróbuj ponownie",
+   "Imported Data Overview": "Przegląd zaimportowanych danych",
+   "Settings": "Ustawienia"
 }
