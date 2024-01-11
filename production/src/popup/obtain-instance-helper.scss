@@ -1,0 +1,7 @@
+@import './mixins.scss';
+
+.obtain-instance-helper {
+  .empty {
+    @include popup-empty-component;
+  }
+}

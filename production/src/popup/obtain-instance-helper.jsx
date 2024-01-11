@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Empty } from '@mstr/rc';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupHelper } from './popup-helper';
+
+import './obtain-instance-helper.scss';
 
 class ObtainInstanceHelperNotConnected extends React.Component {
   componentDidMount() {
@@ -11,7 +14,11 @@ class ObtainInstanceHelperNotConnected extends React.Component {
   }
 
   render() {
-    return <div />;
+    return (
+      <div className="obtain-instance-helper">
+        <Empty isLoading />
+      </div>
+    );
   }
 }
 
