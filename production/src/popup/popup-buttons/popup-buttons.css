@@ -14,6 +14,7 @@
 .popup-buttons #back {
     float: left;
     margin-left: 0;
+    margin-right: auto;
 }
 
 .popup-buttons .mstr-rc-button {

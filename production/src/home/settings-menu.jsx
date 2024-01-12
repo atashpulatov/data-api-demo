@@ -83,18 +83,24 @@ export const SettingsMenuNotConnected = ({
     const closeSettingsOnEsc = ({ keyCode }) => {
       keyCode === 27 && toggleIsSettingsFlag(false);
     };
-    const closeSettingsOnClick = ({ target }) => {
-      settingsMenuRef.current
-          && !settingsMenuRef.current.contains(target)
-          && toggleIsSettingsFlag(false);
+    const closeSettingsOnClick = (event) => {
+      const { target } = event;
+
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(target)) {
+        event.stopPropagation();
+        toggleIsSettingsFlag(false);
+      }
     };
+
+    const options = { capture: true };
+
     if (isSettings) {
       document.addEventListener('keyup', closeSettingsOnEsc);
-      document.addEventListener('click', closeSettingsOnClick);
+      document.addEventListener('click', closeSettingsOnClick, options);
     }
     return () => {
       document.removeEventListener('keyup', closeSettingsOnEsc);
-      document.removeEventListener('click', closeSettingsOnClick);
+      document.removeEventListener('click', closeSettingsOnClick, options);
     };
   }, [isSettings, toggleIsSettingsFlag]);
 
