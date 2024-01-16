@@ -11,6 +11,7 @@ import { authenticationHelper } from '../authentication/authentication-helper';
 import { incomingErrorStrings } from '../error/constants';
 import { homeHelper } from '../home/home-helper';
 import { sidePanelService } from './side-panel-service';
+import { objectImportType } from '../mstr-object/constants';
 
 const CONNECTION_CHECK_TIMEOUT = 3000;
 
@@ -153,7 +154,8 @@ class SidePanelNotificationHelper {
 
     const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation)
       ? {
-        percentageComplete: objectOperation.totalRows ? calculateLoadingProgress(objectOperation) : 0,
+        percentageComplete: (objectOperation.totalRows || object.importType === objectImportType.IMAGE)
+          ? calculateLoadingProgress(objectOperation, object.importType) : 0,
         itemsTotal: !objectNotificationData.isFetchingComplete ? objectOperation.totalRows : 0,
         itemsComplete: !objectNotificationData.isFetchingComplete ? objectOperation.loadedRows : 0,
       }

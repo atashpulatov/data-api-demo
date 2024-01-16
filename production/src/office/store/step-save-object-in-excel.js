@@ -2,6 +2,7 @@ import officeStoreObject from './office-store-object';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { executeNextRepromptTask, clearRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { objectImportType } from '../../mstr-object/constants';
 
 class StepSaveObjectInExcel {
   init = (reduxStore) => {
@@ -58,16 +59,18 @@ export default stepSaveObjectInExcel;
  * @param {Object} instanceDefinition Object containing information about MSTR object
  */
 function prepareObjectData(objectData, instanceDefinition) {
-  objectData.previousTableDimensions = { rows: instanceDefinition.rows, columns: instanceDefinition.columns };
-  objectData.details.excelTableSize = {
-    rows: objectData.previousTableDimensions.rows + 1,
-    columns: objectData.previousTableDimensions.columns,
-  };
-  if (instanceDefinition.mstrTable.crosstabHeaderDimensions) {
-    const { details: { excelTableSize } } = objectData;
-    const { mstrTable: { crosstabHeaderDimensions: { columnsY, rowsX } } } = instanceDefinition;
-    excelTableSize.rows += columnsY;
-    excelTableSize.columns += rowsX;
+  if (objectData.importType === objectImportType.TABLE) {
+    objectData.previousTableDimensions = { rows: instanceDefinition.rows, columns: instanceDefinition.columns };
+    objectData.details.excelTableSize = {
+      rows: objectData.previousTableDimensions.rows + 1,
+      columns: objectData.previousTableDimensions.columns,
+    };
+    if (instanceDefinition.mstrTable.crosstabHeaderDimensions) {
+      const { details: { excelTableSize } } = objectData;
+      const { mstrTable: { crosstabHeaderDimensions: { columnsY, rowsX } } } = instanceDefinition;
+      excelTableSize.rows += columnsY;
+      excelTableSize.columns += rowsX;
+    }
   }
   objectData.refreshDate = Date.now();
   delete objectData.preparedInstanceId;

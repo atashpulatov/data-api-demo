@@ -7,6 +7,7 @@ import {
   DUPLICATE_OPERATION,
   HIGHLIGHT_OPERATION,
 } from './operation-type-names';
+import { objectImportType } from '../mstr-object/constants';
 
 export const MODIFY_OBJECT = 'MODIFY_OBJECT';
 export const BACKUP_OBJECT_DATA = 'BACKUP_OBJECT_DATA';
@@ -37,7 +38,11 @@ export const COMPLETE_CLEAR_DATA = 'COMPLETE_CLEAR_DATA';
 export const MOVE_NOTIFICATION_TO_IN_PROGRESS = 'MOVE_NOTIFICATION_TO_IN_PROGRESS';
 export const DISPLAY_NOTIFICATION_COMPLETED = 'DISPLAY_NOTIFICATION_COMPLETED';
 
-export const operationStepsMap = {
+// shape steps
+export const REFRESH_VISUALIZATION_IMAGE = 'REFRESH_VISUALIZATION_IMAGE';
+export const REMOVE_VISUALIZATION_IMAGE = 'REMOVE_VISUALIZATION_IMAGE';
+
+const operationStepsMapTable = {
   [IMPORT_OPERATION]: [
     MOVE_NOTIFICATION_TO_IN_PROGRESS,
     GET_INSTANCE_DEFINITION,
@@ -118,4 +123,28 @@ export const operationStepsMap = {
     DISPLAY_NOTIFICATION_COMPLETED,
     COMPLETE_CLEAR_DATA,
   ],
+};
+
+const operationStepsMapImage = {
+  [IMPORT_OPERATION]: [
+    MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    GET_INSTANCE_DEFINITION,
+    GET_OBJECT_DETAILS,
+    REFRESH_VISUALIZATION_IMAGE,
+    SAVE_OBJECT_IN_EXCEL,
+    DISPLAY_NOTIFICATION_COMPLETED
+  ],
+
+  [REMOVE_OPERATION]: [
+    MOVE_NOTIFICATION_TO_IN_PROGRESS,
+    REMOVE_VISUALIZATION_IMAGE,
+    DISPLAY_NOTIFICATION_COMPLETED,
+  ],
+
+  [HIGHLIGHT_OPERATION]: []
+};
+
+export const operationsMap = {
+  [objectImportType.TABLE]: operationStepsMapTable,
+  [objectImportType.IMAGE]: operationStepsMapImage,
 };

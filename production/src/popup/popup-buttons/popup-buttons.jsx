@@ -11,6 +11,7 @@ import { BackButton } from './back-button';
 import { PrepareDataButton } from './prepare-data-button';
 import { ImportButton } from './import-button';
 import { CancelButton } from './cancel-button';
+import { importActionTypes, importButtonIds } from './import-btn-constants';
 
 const getDisableReason = (isPublished, disableSecondary, disableActiveActions) => {
   const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions);
@@ -37,6 +38,7 @@ export const PopupButtonsNotConnected = ({
   handleSecondary,
   handleCancel,
   handleBack,
+  shouldShowImportImage,
   disableActiveActions,
   onPreviewClick,
   hideSecondary,
@@ -58,23 +60,36 @@ export const PopupButtonsNotConnected = ({
         <DataPreviewButton
           onPreviewClick={onPreviewClick}
           disableReason={disableReason}
-          t={t} />
+          t={t}
+        />
       )}
       {!hideOk && (
         <ImportButton
+          id={useImportAsRunButton ? importButtonIds.RUN : importButtonIds.IMPORT_DATA}
           handleSecondary={handleSecondary}
           handleOk={handleOk}
           disableReason={disableReasonForImport}
           t={t}
-          useImportAsRunButton={useImportAsRunButton}
+          actionType={useImportAsRunButton ? importActionTypes.APPLY : importActionTypes.IMPORT_DATA}
         />
       )}
-      {!hideSecondary && handleSecondary && (
-        <PrepareDataButton
-          handleSecondary={handleSecondary}
-          disableReason={disableReason}
-          t={t} />
-      )}
+      {!hideSecondary
+        && handleSecondary
+        && (shouldShowImportImage ? (
+          <ImportButton
+            id={importButtonIds.IMPORT_IMAGE}
+            handleOk={handleSecondary}
+            disableReason={disableReasonForImport}
+            t={t}
+            actionType={importActionTypes.IMPORT_IMAGE}
+          />
+        ) : (
+          <PrepareDataButton
+            handleSecondary={handleSecondary}
+            disableReason={disableReason}
+            t={t}
+          />
+        ))}
       <CancelButton handleCancel={handleCancel} t={t} />
     </div>
   );
@@ -83,6 +98,7 @@ export const PopupButtonsNotConnected = ({
 PopupButtonsNotConnected.propTypes = {
   handleOk: PropTypes.func,
   handleSecondary: PropTypes.func,
+  shouldShowImportImage: PropTypes.bool,
   handleCancel: PropTypes.func,
   handleBack: PropTypes.oneOfType([
     PropTypes.bool,

@@ -23,7 +23,7 @@ describe('AttributeSelectorWindow', () => {
     </Provider>);
     // then
     getByText('Data Preview');
-    getByText('Import');
+    getByText('Import Data');
     getByText('Cancel');
     getByText('MicroStrategy Data Connector');
   });

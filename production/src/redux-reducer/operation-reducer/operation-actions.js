@@ -1,4 +1,5 @@
-import { operationStepsMap } from '../../operation/operation-steps';
+import { objectImportType } from '../../mstr-object/constants';
+import { operationsMap } from '../../operation/operation-steps';
 import {
   IMPORT_OPERATION,
   EDIT_OPERATION,
@@ -18,7 +19,7 @@ export const importRequested = (object) => {
   return {
     type: IMPORT_OPERATION,
     payload: {
-      operation: createOperation(IMPORT_OPERATION, objectWorkingId),
+      operation: createOperation(IMPORT_OPERATION, objectWorkingId, {}, object.importType),
       object,
     },
   };
@@ -55,10 +56,10 @@ export const duplicateRequested = (object, objectEditedData) => {
   };
 };
 
-export const removeRequested = (objectWorkingId) => ({
+export const removeRequested = (objectWorkingId, importType) => ({
   type: REMOVE_OPERATION,
   payload: {
-    operation: createOperation(REMOVE_OPERATION, objectWorkingId),
+    operation: createOperation(REMOVE_OPERATION, objectWorkingId, {}, importType),
     objectWorkingId,
   },
 });
@@ -97,15 +98,20 @@ export const cancelOperation = (objectWorkingId) => ({
   payload: { objectWorkingId }
 });
 
-function createOperation(operationType, objectWorkingId, objectData = {}) {
+function createOperation(operationType, objectWorkingId, objectData = {}, importType = 'table') {
   const { backupObjectData, objectEditedData } = objectData;
   return {
     operationType,
     objectWorkingId,
-    stepsQueue: JSON.parse(JSON.stringify(operationStepsMap[operationType])),
+    stepsQueue: getStepsQueue(operationType, importType),
     loadedRows: 0,
     totalRows: 0,
     backupObjectData,
     objectEditedData,
   };
+}
+
+function getStepsQueue(operationType, importType) {
+  const operationsStepsMap = operationsMap[importType];
+  return operationsStepsMap[operationType];
 }

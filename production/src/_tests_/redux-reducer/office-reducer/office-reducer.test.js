@@ -15,6 +15,7 @@ describe('officeReducer', () => {
       popupData: null,
       popupOpen: false,
       settingsPanelLoaded: false,
+      isShapeAPISupported: false,
       reusePromptAnswers: false
     });
   });

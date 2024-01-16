@@ -12,7 +12,7 @@ import {
   DUPLICATE_OPERATION,
   CLEAR_DATA_OPERATION,
 } from '../../operation/operation-type-names';
-import { operationStepsMap } from '../../operation/operation-steps';
+import { operationsMap } from '../../operation/operation-steps';
 
 describe('OperationActions', () => {
   it('returns IMPORT_OPERATION action on importRequested call', () => {
@@ -41,7 +41,7 @@ describe('OperationActions', () => {
     expect(importAction.payload.objectWorkingId).toBe(objectWorkingId);
     expect(importAction.payload.operation.objectWorkingId).toEqual(objectWorkingId);
     expect(importAction.payload.operation.operationType).toEqual(CLEAR_DATA_OPERATION);
-    expect(importAction.payload.operation.stepsQueue).toEqual(operationStepsMap[CLEAR_DATA_OPERATION]);
+    expect(importAction.payload.operation.stepsQueue).toEqual(operationsMap.table[CLEAR_DATA_OPERATION]);
   });
 
   it('returns MARK_STEP_COMPLETED action on markStepCompleted call', () => {

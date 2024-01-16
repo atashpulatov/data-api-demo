@@ -202,4 +202,26 @@ describe('OfficeApiHelper', () => {
       expect(result).toEqual('ABC12');
     });
   });
+
+  describe('getSelectedRangePosition', () => {
+    it('should return starting cell with selected range !', async () => {
+      // given
+      const loadMock = jest.fn().mockImplementation(() => 'Sheet1!A12');
+      const mockSync = jest.fn();
+      const getCellMock = jest.fn().mockImplementation(() => ({
+        load: loadMock,
+        top: 244,
+        left: 345
+      }));
+
+      const context = {
+        workbook: { getSelectedRange: jest.fn().mockImplementation(() => ({ getCell: getCellMock, })), },
+        sync: mockSync,
+      };
+      // when
+      const result = await officeApiHelper.getSelectedRangePosition(context);
+      // then
+      expect(result).toEqual({ top: 244, left: 345 });
+    });
+  });
 });
