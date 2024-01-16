@@ -58,7 +58,7 @@ class OperationErrorHandler {
       );
     }
 
-    // delete image if it was created before removing the object referenced in the redux store
+    // delete image if it was created
     if (importType === objectImportType.IMAGE && bindId) {
       await officeShapeApiHelper.deleteImage(excelContext, bindId);
     }
