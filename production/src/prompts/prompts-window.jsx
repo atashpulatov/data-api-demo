@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
@@ -20,7 +21,6 @@ import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
-import { ObjectWindowTitle } from '../popup/object-window-title/object-window-title';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;

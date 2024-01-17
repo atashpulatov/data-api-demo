@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
+import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Empty } from '@mstr/connector-components/lib/empty/empty';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
@@ -19,7 +20,6 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
-import { ObjectWindowTitle } from '../../popup/object-window-title/object-window-title';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
