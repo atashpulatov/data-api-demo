@@ -19,7 +19,6 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
-import { ObjectWindowTitle } from '../../popup/object-window-title/object-window-title';
 import { objectImportType } from '../../mstr-object/constants';
 
 export const DossierWindowNotConnected = (props) => {
