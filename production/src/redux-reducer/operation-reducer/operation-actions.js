@@ -111,6 +111,6 @@ function createOperation(operationType, objectWorkingId, objectData = {}, import
 }
 
 function getStepsQueue(operationType, importType) {
-  const operationsStepsMap = operationsMap[importType];
+  const operationsStepsMap = JSON.parse(JSON.stringify(operationsMap[importType]));
   return operationsStepsMap[operationType];
 }
