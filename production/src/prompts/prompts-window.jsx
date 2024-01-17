@@ -3,8 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ObjectWindowTitle } from '@mstr/connector-components';
-import { Empty } from '@mstr/connector-components/lib/empty/empty';
+import { Empty, ObjectWindowTitle } from '@mstr/connector-components';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
