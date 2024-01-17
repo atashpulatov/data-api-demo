@@ -1,3 +1,4 @@
+import { objectImportType } from '../../mstr-object/constants';
 import { operationsMap } from '../../operation/operation-steps';
 import {
   IMPORT_OPERATION,
@@ -97,7 +98,7 @@ export const cancelOperation = (objectWorkingId) => ({
   payload: { objectWorkingId }
 });
 
-function createOperation(operationType, objectWorkingId, objectData = {}, importType = 'table') {
+function createOperation(operationType, objectWorkingId, objectData = {}, importType = objectImportType.TABLE) {
   const { backupObjectData, objectEditedData } = objectData;
   return {
     operationType,

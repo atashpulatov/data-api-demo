@@ -49,7 +49,7 @@ class OfficeShapeApiHelper {
     const shape = worksheet.shapes.addImage(base64PngImage);
     shape.set({ top, left });
     await excelContext.sync();
-    return Promise.resolve(shape.id);
+    return shape.id;
   };
 
   /**
