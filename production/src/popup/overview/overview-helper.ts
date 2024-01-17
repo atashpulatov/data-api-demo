@@ -17,7 +17,7 @@ class OverviewHelper {
     objectWorkingIds: number[],
   ): Promise<void> {
     popupHelper.officeMessageParent({
-      command: OverviewActionCommands.refresh,
+      command: 'overview-refresh',
       objectWorkingIds
     });
   }

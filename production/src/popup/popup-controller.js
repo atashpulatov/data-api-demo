@@ -7,9 +7,13 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import {
+  importRequested, editRequested, duplicateRequested, refreshRequested, removeRequested
+} from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import overviewHelper, { OverviewActionCommands } from './overview/overview-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
+import { removeObject, updateObject } from '../redux-reducer/object-reducer/object-actions';
 
 const URL = `${window.location.href}`;
 
@@ -204,11 +208,16 @@ class PopupController {
   handleOverviewCommand = async (response) => {
     switch (response.command) {
       case OverviewActionCommands.refresh:
-        console.log('Refresh requested');
-        await overviewHelper.sendRefreshRequest(response.objectWorkingIds);
+        console.log('refresh requested from overview');
+        await response.objectWorkingIds.forEach(objectWorkingId => {
+          this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+        });
         break;
       case OverviewActionCommands.remove:
-        await overviewHelper.sendDeleteRequest(response.objectWorkingIds);
+        console.log('remove requested from overview');
+        await response.objectWorkingIds.forEach(objectWorkingId => {
+          this.reduxStore.dispatch(removeRequested(objectWorkingId));
+        });
         break;
       default:
         break;
