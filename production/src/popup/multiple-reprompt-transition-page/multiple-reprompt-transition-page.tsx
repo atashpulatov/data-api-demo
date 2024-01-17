@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { Empty } from '@mstr/rc';
+import { Empty, ObjectWindowTitle } from '@mstr/connector-components';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import { ObjectWindowTitle } from '../object-window-title/object-window-title';
 
 import './multiple-reprompt-transition-page.scss';
 

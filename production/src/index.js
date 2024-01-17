@@ -3,7 +3,7 @@ import 'focus-visible/dist/focus-visible';
 import './index.css';
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Empty } from '@mstr/connector-components/lib/empty/empty';
+import { Empty } from '@mstr/connector-components';
 
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
