@@ -16,7 +16,9 @@ class StepRefreshVisualizationImage {
    *
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
    * @param {String} objectData.bindId Unique id of the Office shape used for referencing the viz image in Excel
-   * @param {Office} objectData.shapePosition Reference to shape position created by Excel
+   * @param {Object} objectData.shapePosition Reference to shape position created by Excel
+   * @param {Object} operationData Reference to the operation data required for error handling
+   *
    */
   refreshVisualizationImage = async (objectData, operationData) => {
     console.time('Refresh Visualization Image');

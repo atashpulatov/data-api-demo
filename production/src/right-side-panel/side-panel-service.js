@@ -52,7 +52,7 @@ class SidePanelService {
   highlightObject = async (objectWorkingId) => {
     const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     // This operation is not supported for images as Excel API does not support shape selection as of now
-    if (sourceObject && sourceObject.importType === objectImportType.IMAGE) {
+    if (sourceObject?.importType === objectImportType.IMAGE) {
       return;
     }
     this.reduxStore.dispatch(highlightRequested(objectWorkingId));
@@ -82,7 +82,7 @@ class SidePanelService {
     objectWorkingIds.forEach(objectWorkingId => {
       const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       // TODO - remove this check when the refresh workflow is implemented for image
-      if (sourceObject && sourceObject.importType === objectImportType.IMAGE) {
+      if (sourceObject?.importType === objectImportType.IMAGE) {
         return;
       }
       this.reduxStore.dispatch(refreshRequested(objectWorkingId));
@@ -98,7 +98,7 @@ class SidePanelService {
   remove = async (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
       const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      this.reduxStore.dispatch(removeRequested(objectWorkingId, sourceObject && sourceObject.importType));
+      this.reduxStore.dispatch(removeRequested(objectWorkingId, sourceObject?.importType));
     });
   };
 
@@ -117,7 +117,7 @@ class SidePanelService {
   duplicate = async (objectWorkingId, insertNewWorksheet, withEdit) => {
     const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
     // TODO: remove this check when the duplicate workflow is implemented for image
-    if (sourceObject && sourceObject.importType === objectImportType.IMAGE) {
+    if (sourceObject?.importType === objectImportType.IMAGE) {
       return;
     }
     const object = JSON.parse(JSON.stringify(sourceObject));
@@ -152,7 +152,7 @@ class SidePanelService {
     for (const objectWorkingId of aWorkingIds) {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       // TODO: remove this check when the edit workflow is implemented for image
-      if (objectData && objectData.importType === objectImportType.IMAGE) {
+      if (objectData?.importType === objectImportType.IMAGE) {
         return;
       }
       const { bindId, mstrObjectType } = objectData;
@@ -204,7 +204,7 @@ class SidePanelService {
     objectWorkingIds.forEach(objectWorkingId => {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
       // TODO: remove this check when the edit & duplicate workflow is implemented for image
-      if (objectData && objectData.importType === objectImportType.IMAGE) {
+      if (objectData?.importType === objectImportType.IMAGE) {
         return;
       }
       const { bindId, mstrObjectType, isPrompted } = objectData;
