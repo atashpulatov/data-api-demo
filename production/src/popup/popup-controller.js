@@ -9,6 +9,7 @@ import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import overviewHelper, { OverviewActionCommands } from './overview/overview-helper';
 
 const URL = `${window.location.href}`;
 
@@ -131,64 +132,86 @@ class PopupController {
     const isMultipleRepromptQueueEmpty = this.getIsMultipleRepromptQueueEmpty();
     const { message } = arg;
     const response = JSON.parse(message);
-    try {
-      if (isMultipleRepromptQueueEmpty) {
+
+    const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
+    if (dialogType === PopupTypeEnum.importedDataOverview) {
+      console.log('🚀 ~ PopupController ~ onMessageFromPopup= ~ dialogType:', dialogType);
+
+      await this.handleOverviewCommand(response);
+    } else {
+      try {
+        if (isMultipleRepromptQueueEmpty) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
-        await this.closeDialog(dialog);
-      }
-      if (response.command !== selectorProperties.commandError) {
-        await officeApiHelper.getExcelSessionStatus(); // checking excel session status
-      }
-      await authenticationHelper.validateAuthToken();
-      switch (response.command) {
-        case selectorProperties.commandOk:
-          if (!reportParams) {
-            await this.handleOkCommand(response, reportParams);
-          } else if (reportParams.duplicateMode) {
-            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
-          } else {
-            const reportPreviousState = this.getObjectPreviousState(reportParams);
-            this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          }
-          break;
-        case selectorProperties.commandOnUpdate:
-          if (!reportParams) {
-            await this.handleUpdateCommand(response);
-          } else if (reportParams.duplicateMode) {
-            this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
-          } else {
-            const reportPreviousState = this.getObjectPreviousState(reportParams);
-            this.reduxStore.dispatch(editRequested(reportPreviousState, response));
-          }
-          break;
-        case selectorProperties.commandCancel:
-          if (!isMultipleRepromptQueueEmpty) {
+          await this.closeDialog(dialog);
+        }
+        if (response.command !== selectorProperties.commandError) {
+          await officeApiHelper.getExcelSessionStatus(); // checking excel session status
+        }
+        await authenticationHelper.validateAuthToken();
+        switch (response.command) {
+          case selectorProperties.commandOk:
+            if (!reportParams) {
+              await this.handleOkCommand(response, reportParams);
+            } else if (reportParams.duplicateMode) {
+              this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
+            } else {
+              const reportPreviousState = this.getObjectPreviousState(reportParams);
+              this.reduxStore.dispatch(editRequested(reportPreviousState, response));
+            }
+            break;
+          case selectorProperties.commandOnUpdate:
+            if (!reportParams) {
+              await this.handleUpdateCommand(response);
+            } else if (reportParams.duplicateMode) {
+              this.reduxStore.dispatch(duplicateRequested(reportParams.object, response));
+            } else {
+              const reportPreviousState = this.getObjectPreviousState(reportParams);
+              this.reduxStore.dispatch(editRequested(reportPreviousState, response));
+            }
+            break;
+          case selectorProperties.commandCancel:
+            if (!isMultipleRepromptQueueEmpty) {
             // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
             // since we were previously keeping the dialog open in between objects.
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
-            await this.closeDialog(dialog);
-            this.resetPopupStates();
-          }
-          this.reduxStore.dispatch(clearRepromptTask());
-          break;
-        case selectorProperties.commandError:
-          errorService.handleError(response.error);
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      console.error(error);
-      errorService.handleError(error);
-    } finally {
+              await this.closeDialog(dialog);
+              this.resetPopupStates();
+            }
+            this.reduxStore.dispatch(clearRepromptTask());
+            break;
+          case selectorProperties.commandError:
+            errorService.handleError(response.error);
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.error(error);
+        errorService.handleError(error);
+      } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
-      this.reportParams = {};
-      if (isMultipleRepromptQueueEmpty) {
+        this.reportParams = {};
+        if (isMultipleRepromptQueueEmpty) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
-        this.resetPopupStates();
+          this.resetPopupStates();
+        }
       }
+    }
+  };
+
+  handleOverviewCommand = async (response) => {
+    switch (response.command) {
+      case OverviewActionCommands.refresh:
+        console.log('Refresh requested');
+        await overviewHelper.sendRefreshRequest(response.objectWorkingIds);
+        break;
+      case OverviewActionCommands.remove:
+        await overviewHelper.sendDeleteRequest(response.objectWorkingIds);
+        break;
+      default:
+        break;
     }
   };
 

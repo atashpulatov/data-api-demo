@@ -1,6 +1,11 @@
 import { reduxStore } from '../../store';
 import { popupHelper } from '../popup-helper';
 
+export enum OverviewActionCommands {
+  refresh= 'overview-refresh',
+  remove= 'overview-remove',
+}
+
 class OverviewHelper {
   reduxStore: typeof reduxStore;
 
@@ -12,7 +17,7 @@ class OverviewHelper {
     objectWorkingIds: number[],
   ): Promise<void> {
     popupHelper.officeMessageParent({
-      command: 'overviewRefresh',
+      command: OverviewActionCommands.refresh,
       objectWorkingIds
     });
   }
@@ -21,7 +26,7 @@ class OverviewHelper {
     objectWorkingIds: number[],
   ): Promise<void> {
     popupHelper.officeMessageParent({
-      command: 'overviewDelete',
+      command: OverviewActionCommands.remove,
       objectWorkingIds
     });
   }
