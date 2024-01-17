@@ -38,8 +38,8 @@ class StepRefreshVisualizationImage {
 
       // if shape is already present in the workbook we will use the dimensions of the existing shape
       // otherwise we will use the dimensions from the object state to generate the image
-      const width = (shapeInWorksheet && shapeInWorksheet.width) || vizDimensions.width;
-      const height = (shapeInWorksheet && shapeInWorksheet.height) || vizDimensions.height;
+      const width = shapeInWorksheet?.width || vizDimensions.width;
+      const height = shapeInWorksheet?.height || vizDimensions.height;
       const imageStream = await mstrObjectRestService.getVisualizationImage(
         objectId,
         projectId,
@@ -62,9 +62,10 @@ class StepRefreshVisualizationImage {
       const { top, left } = shapePosition || {};
 
       // if shape is already present in the workbook we will use the position of the existing shape
-      // otherwise we will use the position from the object state to add the image
-      const imageTop = (shapeInWorksheet && shapeInWorksheet.top) || top || selectedRangePos.top;
-      const imageLeft = (shapeInWorksheet && shapeInWorksheet.left) || left || selectedRangePos.left;
+      // else we will use the position from the object cache to add the image
+      // else if cache is also not present then we use the top and left values of the selected range
+      const imageTop = (shapeInWorksheet?.top) || top || selectedRangePos.top;
+      const imageLeft = (shapeInWorksheet?.left) || left || selectedRangePos.left;
       const imageShapeId = await officeShapeApiHelper.addImage(excelContext, base64Image, imageTop, imageLeft);
 
       const updatedObject = {
