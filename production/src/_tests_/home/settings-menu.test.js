@@ -236,7 +236,11 @@ describe('Settings Menu', () => {
       />
     );
     // when
-    map.click({ target: null });
+    const mockEvent = {
+      target: document.createElement('div'),
+      stopPropagation: jest.fn(),
+    };
+    map.click(mockEvent);
     rerender(
       <SettingsMenuNotConnected
         isSettings

@@ -40,13 +40,16 @@ export const ConfirmationNotConnected = ({
           && !confirmationRef.current.contains(target)
           && toggleIsConfirmFlag();
     };
+
+    const options = { capture: true };
+
     if (isConfirm) {
       document.addEventListener('keyup', closeSettingsOnEsc);
-      document.addEventListener('click', closeSettingsOnClick);
+      document.addEventListener('click', closeSettingsOnClick, options);
     }
     return () => {
       document.removeEventListener('keyup', closeSettingsOnEsc);
-      document.removeEventListener('click', closeSettingsOnClick);
+      document.removeEventListener('click', closeSettingsOnClick, options);
     };
   }, [isConfirm, toggleIsConfirmFlag]);
 
