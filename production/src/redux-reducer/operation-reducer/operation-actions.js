@@ -1,4 +1,3 @@
-import { objectImportType } from '../../mstr-object/constants';
 import { operationsMap } from '../../operation/operation-steps';
 import {
   IMPORT_OPERATION,

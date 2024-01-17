@@ -88,10 +88,10 @@ class OfficeApiHelper {
     const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
     selectedRange.load(['top', 'left']);
     await excelContext.sync();
-    return {
+    return Promise.resolve({
       top: selectedRange.top,
       left: selectedRange.left,
-    };
+    });
   };
 
   /**
