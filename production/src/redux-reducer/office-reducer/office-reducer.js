@@ -8,7 +8,8 @@ const initialState = {
   popupData: null,
   popupOpen: false,
   settingsPanelLoaded: false,
-  reusePromptAnswers: false
+  reusePromptAnswers: false,
+  isShapeAPISupported: false,
 };
 
 export const officeReducer = (state = initialState, action) => {
@@ -45,6 +46,9 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.clearSidePanelPopupData:
       return clearSidePanelPopupData(action, state);
+
+    case officeProperties.actions.setShapeAPISupported:
+      return setIsShapeAPISupported(action, state);
 
     default:
       break;
@@ -128,5 +132,12 @@ function clearSidePanelPopupData(action, state) {
   return {
     ...state,
     popupData: null,
+  };
+}
+
+function setIsShapeAPISupported(action, state) {
+  return {
+    ...state,
+    isShapeAPISupported: action.data
   };
 }

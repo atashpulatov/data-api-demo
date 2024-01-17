@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import { MstrButton, StandardTooltip } from '@mstr/rc';
 
 export const ImportButton = ({
-  disableReason, handleSecondary, handleOk, t, useImportAsRunButton
+  disableReason, handleSecondary, handleOk, t, actionType, id
 }) => (
   <StandardTooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} theme="dark" placement="topRight">
     <MstrButton
-      id={useImportAsRunButton ? 'run' : 'import'}
+      id={id}
       mstrType={!handleSecondary ? 'primary' : 'secondary'}
       onClick={handleOk}
       disabled={!!disableReason}
-      mstrText={t(useImportAsRunButton ? 'Apply' : 'Import')}
+      mstrText={t(actionType)}
     />
   </StandardTooltip>
 );
@@ -22,5 +22,6 @@ ImportButton.propTypes = {
   handleOk: PropTypes.func,
   t: PropTypes.func,
   disableReason: PropTypes.string,
-  useImportAsRunButton: PropTypes.bool,
+  actionType: PropTypes.string,
+  id: PropTypes.string,
 };

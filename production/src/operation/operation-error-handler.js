@@ -8,6 +8,8 @@ import { deleteObjectNotification } from '../redux-reducer/notification-reducer/
 import {
   IMPORT_OPERATION, DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION, CLEAR_DATA_OPERATION,
 } from './operation-type-names';
+import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
+import { objectImportType } from '../mstr-object/constants';
 
 class OperationErrorHandler {
   init = (reduxStore) => {
@@ -36,7 +38,13 @@ class OperationErrorHandler {
    * @param {Object} operationData Contains informatons about current operation
    */
   handleImportOperationError = async (objectData, operationData) => {
-    const { objectWorkingId, isCrosstab, crosstabHeaderDimensions } = objectData;
+    const {
+      objectWorkingId,
+      isCrosstab,
+      crosstabHeaderDimensions,
+      bindId,
+      importType
+    } = objectData;
     const { officeTable, excelContext } = operationData;
 
     if (officeTable) {
@@ -49,6 +57,12 @@ class OperationErrorHandler {
         false
       );
     }
+
+    // delete image if it was created
+    if (importType === objectImportType.IMAGE && bindId) {
+      await officeShapeApiHelper.deleteImage(excelContext, bindId);
+    }
+
     this.reduxStore.dispatch(removeObject(objectWorkingId));
 
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));

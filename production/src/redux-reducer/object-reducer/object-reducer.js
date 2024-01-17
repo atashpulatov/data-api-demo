@@ -47,7 +47,18 @@ function editRequested(state, payload) {
 function updateObject(state, updatedObjectProps) {
   const objectToUpdateIndex = getObjectIndex(state.objects, updatedObjectProps.objectWorkingId);
   const newObjects = [...state.objects];
-  const updatedObject = { ...state.objects[objectToUpdateIndex], ...updatedObjectProps };
+
+  // update visualization info explicitly to avoid losing the vizDimensions field
+  const oldVisualizationInfo = state.objects[objectToUpdateIndex].visualizationInfo;
+  const newVisualizationInfo = updatedObjectProps.visualizationInfo;
+  const visualizationInfo = (oldVisualizationInfo || newVisualizationInfo)
+    && { ...oldVisualizationInfo, ...newVisualizationInfo };
+
+  const updatedObject = {
+    ...state.objects[objectToUpdateIndex],
+    ...updatedObjectProps,
+    visualizationInfo
+  };
   newObjects.splice(objectToUpdateIndex, 1, updatedObject);
   return { objects: newObjects };
 }

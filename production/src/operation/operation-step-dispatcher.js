@@ -24,7 +24,9 @@ import {
   BACKUP_OBJECT_DATA,
   COMPLETE_CLEAR_DATA,
   HIGHLIGHT_OBJECT,
-  RENAME_EXCEL_WORKSHEET
+  RENAME_EXCEL_WORKSHEET,
+  REFRESH_VISUALIZATION_IMAGE,
+  REMOVE_VISUALIZATION_IMAGE
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 
@@ -143,6 +145,14 @@ class OperationStepDispatcher {
 
   completeRenameExcelWorksheet = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, RENAME_EXCEL_WORKSHEET));
+  };
+
+  completeRefreshVisualizationImage = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REFRESH_VISUALIZATION_IMAGE));
+  };
+
+  completeRemoveVisualizationImage = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_VISUALIZATION_IMAGE));
   };
 }
 

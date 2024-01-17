@@ -150,6 +150,7 @@ describe('StepGetInstanceDefinition', () => {
         visualizationInfo: 'visualizationInfoTest',
         body: 'bodyTest',
         name: 'nameTest',
+        importType: 'table'
       };
 
       jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
@@ -241,6 +242,7 @@ describe('StepGetInstanceDefinition', () => {
         body: 'bodyTest',
         visualizationInfo: 'visualizationInfoTest',
         name: 'nameTest',
+        importType: 'table'
       });
 
       expect(dossierInstanceDefinition.getVisualizationName).toBeCalledTimes(1);
@@ -272,6 +274,7 @@ describe('StepGetInstanceDefinition', () => {
         insertNewWorksheet: 'insertNewWorksheetTest',
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
         name: 'nameTest',
+        importType: 'table'
       });
 
       expect(stepGetInstanceDefinition.savePreviousObjectData).toBeCalledTimes(1);
@@ -283,6 +286,7 @@ describe('StepGetInstanceDefinition', () => {
         'crosstabHeaderDimensionsTest',
         'subtotalsAddressesTest',
         nextStepParam,
+        'table'
       );
 
       expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
@@ -369,7 +373,8 @@ describe('StepGetInstanceDefinition', () => {
         },
         visualizationInfo: visualizationInfoParam,
         body: 'bodyTest',
-        name: 'nameTest'
+        name: 'nameTest',
+        importType: 'table'
       };
 
       jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue('excelContextTest');
@@ -436,6 +441,7 @@ describe('StepGetInstanceDefinition', () => {
         bindId: 'bindIdTest',
         body: 'bodyTest',
         crosstabHeaderDimensions: 'crosstabHeaderDimensionsTest',
+        importType: 'table',
         insertNewWorksheet: 'insertNewWorksheetTest',
         instanceDefinition: {
           body: 'bodyNoDossierTest',
@@ -474,6 +480,7 @@ describe('StepGetInstanceDefinition', () => {
         'crosstabHeaderDimensionsTest',
         'subtotalsAddressesTest',
         nextStepParam,
+        'table'
       );
 
       expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);

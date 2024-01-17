@@ -115,6 +115,7 @@ const iServerErrorMessages = withDefaultValue({
   '-2147207419': errorMessages.CONNECTION_BROKEN,
   '-2147213784': errorMessages.NO_DATA_RETURNED,
   '-2147213377': errorMessages.DOSSIER_HAS_CHANGED,
+  '-2147472508': errorMessages.INVALID_VIZ_KEY_MESSAGE
 }, errorMessages.GENERIC_SERVER_ERR);
 
 export const errorMessageFactory = withDefaultValue({

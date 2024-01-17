@@ -79,6 +79,22 @@ class OfficeApiHelper {
   };
 
   /**
+   * Returns the position of selected range
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @return {Object} object containing the top, left value of the selected range.
+   */
+  getSelectedRangePosition = async (excelContext) => {
+    const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
+    selectedRange.load(['top', 'left']);
+    await excelContext.sync();
+    return {
+      top: selectedRange.top,
+      left: selectedRange.left,
+    };
+  };
+
+  /**
    * Returns top left cell from passed address.
    *
    * @param {Office} excelAddress Reference to Excel Context used by Excel API functions

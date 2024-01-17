@@ -731,6 +731,7 @@ class MstrObjectRestService {
     if (!response.ok) {
       const responseBody = await response.json();
       const restError = new Error(responseBody.message);
+      restError.response = { body: responseBody };
       restError.status = response.status;
       throw restError;
     }

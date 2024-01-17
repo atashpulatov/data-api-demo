@@ -57,6 +57,8 @@ const setRangeTakenPopup = (popupData) => ({
 
 const clearSidePanelPopupData = () => ({ type: officeProperties.actions.setRangeTakenPopup });
 
+const setIsShapeAPISupported = (data) => ({ type: officeProperties.actions.setShapeAPISupported, data });
+
 export const officeActions = {
   showPopup,
   hidePopup,
@@ -68,5 +70,6 @@ export const officeActions = {
   toggleReusePromptAnswersFlag,
   toggleRenderSettingsFlag,
   setRangeTakenPopup,
-  clearSidePanelPopupData
+  clearSidePanelPopupData,
+  setIsShapeAPISupported
 };

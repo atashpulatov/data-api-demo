@@ -19,6 +19,7 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
+import { objectImportType } from '../../mstr-object/constants';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
@@ -35,10 +36,17 @@ export const DossierWindowNotConnected = (props) => {
   const [hideEmbedded, setHideEmbedded] = useState(false);
 
   const {
-    chosenObjectName, handleBack, editedObject, chosenObjectId, chosenProjectId, isReprompt, repromptsQueue
+    chosenObjectName,
+    handleBack,
+    editedObject,
+    chosenObjectId,
+    chosenProjectId,
+    isReprompt,
+    repromptsQueue,
+    isShapeAPISupported
   } = props;
   const { isEdit } = editedObject;
-  const { chapterKey, visualizationKey } = lastSelectedViz;
+  const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
 
   const vizData = useMemo(() => vizualizationsData.find(
     el => (el.visualizationKey === visualizationKey
@@ -77,6 +85,7 @@ export const DossierWindowNotConnected = (props) => {
     const {
       chapterKey: chosenVizchapterKey,
       visualizationKey: chosenVizKey,
+      vizDimensions: chosenVizDimensions,
       promptsAnswers: chosenVizPromptAnswers,
       instanceId: chosenVizInstanceId
     } = dossierData;
@@ -84,7 +93,8 @@ export const DossierWindowNotConnected = (props) => {
     if (chosenVizInstanceId) {
       setLastSelectedViz({
         chapterKey: chosenVizchapterKey,
-        visualizationKey: chosenVizKey
+        visualizationKey: chosenVizKey,
+        vizDimensions: chosenVizDimensions,
       });
       setPromptsAnswers(chosenVizPromptAnswers);
       instanceId.current = chosenVizInstanceId;
@@ -127,7 +137,7 @@ export const DossierWindowNotConnected = (props) => {
     }
   }, [chosenObjectId, chosenProjectId, vizualizationsData]);
 
-  const handleOk = useCallback(() => {
+  const handleOk = useCallback((importType = objectImportType.TABLE) => {
     const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -136,16 +146,18 @@ export const DossierWindowNotConnected = (props) => {
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       isPrompted: promptsAnswers?.answers?.length > 0,
       promptsAnswers,
+      importType,
       visualizationInfo: {
         chapterKey,
         visualizationKey,
+        vizDimensions,
       },
       preparedInstanceId: instanceId.current,
       isEdit,
     };
     popupHelper.officeMessageParent(message);
   }, [chapterKey, chosenObjectId, chosenObjectName, chosenProjectId,
-    instanceId, isEdit, promptsAnswers, visualizationKey]);
+    instanceId, isEdit, promptsAnswers, visualizationKey, vizDimensions]);
 
   // Automatically close popup if re-prompted dossier is answered
   // and visualization is selected
@@ -247,10 +259,12 @@ export const DossierWindowNotConnected = (props) => {
             handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
           />
           <PopupButtons
-            handleOk={handleOk}
+            handleOk={() => handleOk(objectImportType.TABLE)}
+            handleSecondary={() => handleOk(objectImportType.IMAGE)}
+            hideSecondary={!isShapeAPISupported}
+            shouldShowImportImage
             handleCancel={handleCancel}
             handleBack={!isEdit && handleBack}
-            hideSecondary
             disableActiveActions={!isSelected}
             isPublished={!(isSelected && !isSupported && !isChecking)}
             disableSecondary={isSelected && !isSupported && !isChecking}
@@ -267,6 +281,7 @@ DossierWindowNotConnected.propTypes = {
   chosenObjectId: PropTypes.string,
   chosenObjectName: PropTypes.string,
   chosenProjectId: PropTypes.string,
+  isShapeAPISupported: PropTypes.bool,
   handleBack: PropTypes.func,
   editedObject: PropTypes.shape({
     chosenObjectId: PropTypes.string,
@@ -291,6 +306,7 @@ DossierWindowNotConnected.defaultProps = {
   chosenObjectId: 'default id',
   chosenObjectName: DEFAULT_PROJECT_NAME,
   chosenProjectId: 'default id',
+  isShapeAPISupported: false,
   handleBack: () => {},
   editedObject: {
     chosenObjectId: undefined,
@@ -322,10 +338,10 @@ function mapStateToProps(state) {
     chosenProjectId,
     promptsAnswers,
     promptObjects,
-    importRequested,
+    importRequested
   } = navigationTree;
   const { editedObject } = popupReducer;
-  const { supportForms } = officeReducer;
+  const { supportForms, isShapeAPISupported } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const { answers } = answersReducer;
   const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
@@ -351,6 +367,7 @@ function mapStateToProps(state) {
     previousPromptsAnswers: answers,
     promptObjects,
     importRequested,
+    isShapeAPISupported,
     isReprompt: popupStateReducer.isReprompt,
     repromptsQueue: { ...repromptsQueueReducer },
   };

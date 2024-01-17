@@ -34,6 +34,7 @@ describe('StepSaveObjectInExcel', () => {
       objectWorkingId: 'objectWorkingIdTest',
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
+      importType: 'table'
     };
     const instanceDefinition = {
       rows: 5,
@@ -66,6 +67,7 @@ describe('StepSaveObjectInExcel', () => {
       objectWorkingId: 'objectWorkingIdTest',
       preparedInstanceId: 'preparedInstanceIdTest',
       details: {},
+      importType: 'table'
     };
 
     jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation();

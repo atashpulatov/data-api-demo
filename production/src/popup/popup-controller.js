@@ -219,6 +219,7 @@ class PopupController {
         projectId: response.chosenProject,
         mstrObjectType: mstrObjectEnum.getMstrTypeBySubtype(response.chosenSubtype),
         bindId,
+        importType: response.importType,
         isPrompted: response.isPrompted || response.promptsAnswers?.answers?.length > 0,
         promptsAnswers: response.promptsAnswers,
         visualizationInfo: response.visualizationInfo,

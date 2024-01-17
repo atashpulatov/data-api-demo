@@ -10,6 +10,7 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { errorMessages } from '../../error/constants';
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
+import { objectImportType } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -44,6 +45,7 @@ class StepGetInstanceDefinition {
         mstrObjectType,
         isPrompted,
         definition,
+        importType
       } = objectData;
       let { visualizationInfo, body, name } = objectData;
 
@@ -72,7 +74,8 @@ class StepGetInstanceDefinition {
         instanceDefinition,
         crosstabHeaderDimensions,
         subtotalsInfo.subtotalsAddresses,
-        futureStep
+        futureStep,
+        importType
       );
 
       // FIXME: below flow should not be part of this step
@@ -92,9 +95,6 @@ class StepGetInstanceDefinition {
         body,
         visualizationInfo: visualizationInfo || false,
         name: name || mstrTable.name,
-        crosstabHeaderDimensions: mstrTable.crosstabHeaderDimensions,
-        isCrosstab: mstrTable.isCrosstab,
-        subtotalsInfo,
         manipulationsXML: instanceDefinition.manipulationsXML || false,
         definition: {
           ...definition,
@@ -106,12 +106,19 @@ class StepGetInstanceDefinition {
       const updatedOperation = {
         objectWorkingId,
         instanceDefinition,
-        startCell,
         excelContext,
-        oldBindId: bindId,
-        totalRows: instanceDefinition.rows,
         shouldRenameExcelWorksheet
       };
+
+      if (importType === objectImportType.TABLE) {
+        // update table specific props
+        updatedObject.crosstabHeaderDimensions = mstrTable.crosstabHeaderDimensions;
+        updatedObject.isCrosstab = mstrTable.isCrosstab;
+        updatedObject.subtotalsInfo = subtotalsInfo;
+        updatedOperation.startCell = startCell;
+        updatedOperation.oldBindId = bindId;
+        updatedOperation.totalRows = instanceDefinition.rows;
+      }
 
       if (mstrTable.rows.length === 0) {
         throw new Error(isPrompted ? errorMessages.ALL_DATA_FILTERED_OUT : errorMessages.NO_DATA_RETURNED);
@@ -210,7 +217,17 @@ class StepGetInstanceDefinition {
    * @param {Object[]} subtotalsAddresses Contains adresses of subtotals from first import
    * @param {String} futureStep Specifies which step wuill be used to create Excel table
    */
-  savePreviousObjectData = (instanceDefinition, crosstabHeaderDimensions, subtotalsAddresses, futureStep) => {
+  savePreviousObjectData = (
+    instanceDefinition,
+    crosstabHeaderDimensions,
+    subtotalsAddresses,
+    futureStep,
+    importType = objectImportType.TABLE
+  ) => {
+    // We do not need to set prevCrosstabDimensions, crosstabHeaderDimensions and subtotalsInfo for images
+    if (importType === objectImportType.IMAGE) {
+      return;
+    }
     const { mstrTable } = instanceDefinition;
 
     if (crosstabHeaderDimensions && futureStep !== GET_OFFICE_TABLE_IMPORT) {

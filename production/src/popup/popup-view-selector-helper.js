@@ -191,6 +191,7 @@ class PopupViewSelectorHelper {
       visualizationInfo = {
         chapterKey: props.chosenChapterKey,
         visualizationKey: props.chosenVisualizationKey,
+        vizDimensions: props.chosenVizDimensions,
       };
     }
     const message = {
