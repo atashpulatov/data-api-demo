@@ -11,9 +11,7 @@ import {
   importRequested, editRequested, duplicateRequested, refreshRequested, removeRequested
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import overviewHelper, { OverviewActionCommands } from './overview/overview-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { removeObject, updateObject } from '../redux-reducer/object-reducer/object-actions';
+import { OverviewActionCommands } from './overview/overview-helper';
 
 const URL = `${window.location.href}`;
 
@@ -138,12 +136,11 @@ class PopupController {
     const response = JSON.parse(message);
 
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
-    if (dialogType === PopupTypeEnum.importedDataOverview) {
-      console.log('🚀 ~ PopupController ~ onMessageFromPopup= ~ dialogType:', dialogType);
 
-      await this.handleOverviewCommand(response);
-    } else {
-      try {
+    try {
+      if (dialogType === PopupTypeEnum.importedDataOverview) {
+        await this.handleOverviewCommand(response);
+      } else {
         if (isMultipleRepromptQueueEmpty) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
@@ -190,17 +187,17 @@ class PopupController {
           default:
             break;
         }
-      } catch (error) {
-        console.error(error);
-        errorService.handleError(error);
-      } finally {
+      }
+    } catch (error) {
+      console.error(error);
+      errorService.handleError(error);
+    } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
-        this.reportParams = {};
-        if (isMultipleRepromptQueueEmpty) {
+      this.reportParams = {};
+      if (isMultipleRepromptQueueEmpty && dialogType !== PopupTypeEnum.importedDataOverview) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
-          this.resetPopupStates();
-        }
+        this.resetPopupStates();
       }
     }
   };
