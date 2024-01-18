@@ -203,6 +203,7 @@ class PopupController {
   };
 
   handleOverviewCommand = async (response) => {
+    // TODO this should be  extended during action implementation
     switch (response.command) {
       case OverviewActionCommands.refresh:
         console.log('refresh requested from overview');
