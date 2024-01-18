@@ -1,3 +1,4 @@
+import { objectImportType } from '../../mstr-object/constants';
 import { IMPORT_OPERATION, EDIT_OPERATION, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
 import {
   UPDATE_OBJECT, REMOVE_OBJECT, RESTORE_ALL_OBJECTS, RESTORE_OBJECT_BACKUP
@@ -31,9 +32,11 @@ export const objectReducer = (state = initialState, action) => {
 };
 
 function importRequested(state, payload) {
+  const objectToBeImported = { ...payload.object };
+  objectToBeImported.importType = payload.object.importType || objectImportType.TABLE;
   return {
     objects: [
-      payload.object,
+      objectToBeImported,
       ...state.objects,
     ]
   };
