@@ -8,6 +8,7 @@ describe('objectReducer', () => {
     objectWorkingId: 'someStringId123',
     envUrl: 'someURL',
     objectId: 'someId',
+    importType: 'table'
   };
   const initialState = {
     empty: { objects: [] },
