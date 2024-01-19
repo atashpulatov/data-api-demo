@@ -1,16 +1,11 @@
-/* eslint-disable react/prop-types */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { reduxStore } from '../../store';
-import { updateObject } from '../../redux-reducer/object-reducer/object-actions';
+import PropTypes from 'prop-types';
 
+// TODO this component should be replaced with CC Overview component
 const OverviewWindowNotConnected = (props) => {
   const { onRefresh, onDelete } = props;
   const { objects } = props;
-
-  useEffect(() => {
-    console.log('objects: ', objects);
-  }, [objects]);
 
   return (
     <div>
@@ -30,6 +25,12 @@ const OverviewWindowNotConnected = (props) => {
       </div>
     </div>
   );
+};
+
+OverviewWindowNotConnected.propTypes = {
+  onRefresh: PropTypes.func,
+  onDelete: PropTypes.func,
+  objects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export const mapStateToProps = ({ objectReducer }) => {

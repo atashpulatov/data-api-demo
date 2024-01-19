@@ -1,4 +1,3 @@
-import { reduxStore } from '../../store';
 import { popupHelper } from '../popup-helper';
 
 export enum OverviewActionCommands {
@@ -7,17 +6,11 @@ export enum OverviewActionCommands {
 }
 
 class OverviewHelper {
-  reduxStore: typeof reduxStore;
-
-  constructor() {
-    this.reduxStore = reduxStore;
-  }
-
   async sendRefreshRequest(
     objectWorkingIds: number[],
   ): Promise<void> {
     popupHelper.officeMessageParent({
-      command: 'overview-refresh',
+      command: OverviewActionCommands.refresh,
       objectWorkingIds
     });
   }
