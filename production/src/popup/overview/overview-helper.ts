@@ -1,8 +1,8 @@
 import { popupHelper } from '../popup-helper';
 
 export enum OverviewActionCommands {
-  refresh= 'overview-refresh',
-  remove= 'overview-remove',
+  REFRESH= 'overview-refresh',
+  REMOVE= 'overview-remove',
 }
 
 class OverviewHelper {
@@ -10,7 +10,7 @@ class OverviewHelper {
     objectWorkingIds: number[],
   ): Promise<void> {
     popupHelper.officeMessageParent({
-      command: OverviewActionCommands.refresh,
+      command: OverviewActionCommands.REFRESH,
       objectWorkingIds
     });
   }
@@ -19,7 +19,7 @@ class OverviewHelper {
     objectWorkingIds: number[],
   ): Promise<void> {
     popupHelper.officeMessageParent({
-      command: OverviewActionCommands.remove,
+      command: OverviewActionCommands.REMOVE,
       objectWorkingIds
     });
   }

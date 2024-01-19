@@ -374,7 +374,7 @@ describe('PopupController', () => {
     const dispatchMock = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     const actionObject = {
-      command: OverviewActionCommands.refresh,
+      command: OverviewActionCommands.REFRESH,
       objectWorkingIds: [1],
     };
 
@@ -406,7 +406,7 @@ describe('PopupController', () => {
     const dispatchMock = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     const actionObject = {
-      command: OverviewActionCommands.remove,
+      command: OverviewActionCommands.REMOVE,
       objectWorkingIds: [1],
     };
 

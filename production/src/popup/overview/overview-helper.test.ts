@@ -11,7 +11,7 @@ describe('overview-helper', () => {
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
-      command: OverviewActionCommands.refresh,
+      command: OverviewActionCommands.REFRESH,
       objectWorkingIds
     });
   });
@@ -25,7 +25,7 @@ describe('overview-helper', () => {
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
-      command: OverviewActionCommands.remove,
+      command: OverviewActionCommands.REMOVE,
       objectWorkingIds
     });
   });

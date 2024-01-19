@@ -206,12 +206,12 @@ class PopupController {
   handleOverviewCommand = async (response) => {
     // TODO this should be  extended during action implementation
     switch (response.command) {
-      case OverviewActionCommands.refresh:
+      case OverviewActionCommands.REFRESH:
         await response.objectWorkingIds.forEach(objectWorkingId => {
           this.reduxStore.dispatch(refreshRequested(objectWorkingId));
         });
         break;
-      case OverviewActionCommands.remove:
+      case OverviewActionCommands.REMOVE:
         await response.objectWorkingIds.forEach(objectWorkingId => {
           this.reduxStore.dispatch(removeRequested(objectWorkingId));
         });
