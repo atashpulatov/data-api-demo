@@ -7,8 +7,11 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
+import {
+  importRequested, editRequested, duplicateRequested, refreshRequested, removeRequested
+} from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { OverviewActionCommands } from './overview/overview-helper';
 
 const URL = `${window.location.href}`;
 
@@ -131,8 +134,11 @@ class PopupController {
     const isMultipleRepromptQueueEmpty = this.getIsMultipleRepromptQueueEmpty();
     const { message } = arg;
     const response = JSON.parse(message);
+
+    const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
+
     try {
-      if (isMultipleRepromptQueueEmpty) {
+      if (isMultipleRepromptQueueEmpty && dialogType !== PopupTypeEnum.importedDataOverview) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         await this.closeDialog(dialog);
@@ -141,6 +147,11 @@ class PopupController {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       }
       await authenticationHelper.validateAuthToken();
+      if (dialogType === PopupTypeEnum.importedDataOverview) {
+        await this.handleOverviewCommand(response);
+        return;
+      }
+
       switch (response.command) {
         case selectorProperties.commandOk:
           if (!reportParams) {
@@ -184,11 +195,29 @@ class PopupController {
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = {};
-      if (isMultipleRepromptQueueEmpty) {
+      if (isMultipleRepromptQueueEmpty && dialogType !== PopupTypeEnum.importedDataOverview) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         this.resetPopupStates();
       }
+    }
+  };
+
+  handleOverviewCommand = async (response) => {
+    // TODO this should be  extended during action implementation
+    switch (response.command) {
+      case OverviewActionCommands.REFRESH:
+        await response.objectWorkingIds.forEach(objectWorkingId => {
+          this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+        });
+        break;
+      case OverviewActionCommands.REMOVE:
+        await response.objectWorkingIds.forEach(objectWorkingId => {
+          this.reduxStore.dispatch(removeRequested(objectWorkingId));
+        });
+        break;
+      default:
+        break;
     }
   };
 

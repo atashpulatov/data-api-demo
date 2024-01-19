@@ -13,6 +13,8 @@ import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { ObtainInstanceHelper } from './obtain-instance-helper';
 import { MultipleRepromptTransitionPage } from './multiple-reprompt-transition-page/multiple-reprompt-transition-page';
+import { OverviewWindow } from './overview/overview-window';
+import overviewHelper from './overview/overview-helper';
 
 const renderProperComponent = (popupType) => {
   switch (popupType) {
@@ -32,7 +34,11 @@ const renderProperComponent = (popupType) => {
       return <MultipleRepromptTransitionPage />;
     case PopupTypeEnum.importedDataOverview:
       // TODO: Replace with ImportedDataOverview component once developed
-      return <LibraryWindow />;
+      return (
+        <OverviewWindow
+          onRefresh={overviewHelper.sendRefreshRequest}
+          onDelete={overviewHelper.sendDeleteRequest} />
+      );
     default:
       return null;
   }
