@@ -1,7 +1,4 @@
-#@ci_pipeline_daily_windows_desktop @ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-@ci_pipeline_rv_windows_desktop @ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-@windows_desktop @windows_chrome @mac_chrome
-@release_validation @ga_validation
+@ci_pipeline_postmerge_windows_chrome
 Feature: F29365 - Import compound grid
 
   Scenario: [TC67227] - part 3 -Import compound grid visualization (other cases)

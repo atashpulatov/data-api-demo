@@ -1,7 +1,4 @@
-#@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-#@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-@todo_windows_desktop @disabled_windows_chrome @disabled_mac_chrome
-@release_validation
+#@ci_pipeline_postmerge_windows_chrome
 Feature: TF9328 - Release Validation
 
   Scenario: [TC53752] - Part 1 [Subtotals settings] E2E Importing report with subtotals | without subtotals | refresh | refresh all
