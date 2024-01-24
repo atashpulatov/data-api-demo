@@ -1,5 +1,4 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
-import { objectImportType } from '../mstr-object/constants';
 
 class StepModifyObject {
   /**
