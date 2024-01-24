@@ -293,4 +293,22 @@ describe('StepRefreshVisualizationImage', () => {
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
   });
+
+  describe('getDuplicatedShapeDimensions', () => {
+    it('should work as expected', async () => {
+      // given
+      const mockShape = {
+        height: 123,
+        width: 234
+      };
+      jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => Promise.resolve(mockShape));
+
+      // when
+      const result = await stepRefreshVisualizationImage.getDuplicatedShapeDimensions('1234-5678-9012-3456', excelContextMock);
+
+      // then
+      expect(officeShapeApiHelper.getShape).toBeCalledWith(excelContextMock, '1234-5678-9012-3456');
+      expect(result).toEqual({ height: 123, width: 234 });
+    });
+  });
 });
