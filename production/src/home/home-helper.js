@@ -4,10 +4,11 @@ import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-hel
 import { clearDataRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { configActions } from '../redux-reducer/config-reducer/config-actions';
+import { officeContext } from '../office/office-context';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
 
 const SHOW_HIDDEN_KEY = 'showHidden';
-
+const EXCEL_SHAPE_API_VERSION = 1.9;
 export class HomeHelper {
   init = (reduxStore, sessionActions, sessionHelper) => {
     this.reduxStore = reduxStore;
@@ -89,7 +90,7 @@ export class HomeHelper {
         await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
 
         for (const object of objects) {
-          this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId));
+          this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
         }
       }, 0);
     } catch (error) {
@@ -112,6 +113,15 @@ export class HomeHelper {
     const isChrome = userAgent.includes('chrome');
 
     return isMacintosh && isWebkit && !isChrome;
+  };
+
+  /**
+   * checks whether the Excel hape API is supported in the current office environment
+   * and updates the redux store with the API support status
+   */
+  initIsShapeAPISupported = () => {
+    const isShapeAPISupported = officeContext.isSetSupported(EXCEL_SHAPE_API_VERSION);
+    this.reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
   };
 }
 

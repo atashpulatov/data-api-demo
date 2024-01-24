@@ -208,12 +208,12 @@ class PopupController {
     switch (response.command) {
       case OverviewActionCommands.REFRESH:
         await response.objectWorkingIds.forEach(objectWorkingId => {
-          this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+          this.reduxStore.dispatch(refreshRequested(objectWorkingId, response.importType));
         });
         break;
       case OverviewActionCommands.REMOVE:
         await response.objectWorkingIds.forEach(objectWorkingId => {
-          this.reduxStore.dispatch(removeRequested(objectWorkingId));
+          this.reduxStore.dispatch(removeRequested(objectWorkingId, response.importType));
         });
         break;
       default:

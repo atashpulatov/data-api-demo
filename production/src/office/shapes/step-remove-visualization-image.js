@@ -3,6 +3,7 @@ import { officeApiHelper } from '../api/office-api-helper';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import officeStoreObject from '../store/office-store-object';
+import { CLEAR_DATA_OPERATION } from '../../operation/operation-type-names';
 
 class StepRemoveVisualizationImage {
   /**
@@ -19,13 +20,16 @@ class StepRemoveVisualizationImage {
     console.time('Remove Visualization Image');
     try {
       const { objectWorkingId, bindId } = objectData;
+      const { operationType } = operationData;
       const excelContext = await officeApiHelper.getExcelContext();
 
       await officeShapeApiHelper.deleteImage(excelContext, bindId);
 
       operationStepDispatcher.completeRemoveVisualizationImage(objectWorkingId);
-      operationStepDispatcher.updateObject({ objectWorkingId, doNotPersist: true });
-      officeStoreObject.removeObjectInExcelStore(objectWorkingId);
+      if (operationType !== CLEAR_DATA_OPERATION) {
+        operationStepDispatcher.updateObject({ objectWorkingId, doNotPersist: true });
+        officeStoreObject.removeObjectInExcelStore(objectWorkingId);
+      }
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);

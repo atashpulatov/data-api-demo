@@ -1,4 +1,5 @@
 import operationStepDispatcher from '../operation/operation-step-dispatcher';
+import { objectImportType } from '../mstr-object/constants';
 
 class StepModifyObject {
   /**
@@ -41,7 +42,9 @@ class StepModifyObject {
         if (objectData.visualizationInfo.visualizationKey !== objectEditedData.visualizationInfo.visualizationKey) {
           objectEditedData.visualizationInfo.nameAndFormatShouldUpdate = true;
           updatedObject.visualizationInfo = objectEditedData.visualizationInfo;
-          updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
+          if (objectEditedData.importType === objectImportType.TABLE) {
+            updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
+          }
         }
 
         updatedObject.preparedInstanceId = objectEditedData.preparedInstanceId;

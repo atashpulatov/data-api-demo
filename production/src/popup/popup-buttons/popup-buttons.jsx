@@ -12,6 +12,7 @@ import { PrepareDataButton } from './prepare-data-button';
 import { ImportButton } from './import-button';
 import { CancelButton } from './cancel-button';
 import { importActionTypes, importButtonIds } from './import-btn-constants';
+import { objectImportType } from '../../mstr-object/constants';
 
 const getDisableReason = (isPublished, disableSecondary, disableActiveActions) => {
   const disableReasonForImport = getDisableReasonImport(isPublished, disableActiveActions);
@@ -39,6 +40,7 @@ export const PopupButtonsNotConnected = ({
   handleCancel,
   handleBack,
   shouldShowImportImage,
+  primaryImportType = objectImportType.TABLE,
   disableActiveActions,
   onPreviewClick,
   hideSecondary,
@@ -63,22 +65,34 @@ export const PopupButtonsNotConnected = ({
           t={t}
         />
       )}
-      {!hideOk && (
-        <ImportButton
-          id={useImportAsRunButton ? importButtonIds.RUN : importButtonIds.IMPORT_DATA}
-          handleSecondary={handleSecondary}
-          handleOk={handleOk}
-          disableReason={disableReasonForImport}
-          t={t}
-          actionType={useImportAsRunButton ? importActionTypes.APPLY : importActionTypes.IMPORT_DATA}
-        />
-      )}
+      {!hideOk
+        && (primaryImportType === objectImportType.TABLE ? (
+          <ImportButton
+            id={useImportAsRunButton ? importButtonIds.RUN : importButtonIds.IMPORT_DATA}
+            handleOk={handleOk}
+            isPrimaryBtn
+            disableReason={disableReasonForImport}
+            t={t}
+            actionType={useImportAsRunButton ? importActionTypes.APPLY : importActionTypes.IMPORT_DATA}
+          />
+        ) : (
+          <ImportButton
+            id={useImportAsRunButton ? importButtonIds.RUN : importButtonIds.IMPORT_IMAGE}
+            handleOk={handleSecondary}
+            isPrimaryBtn
+            disableReason={disableReasonForImport}
+            t={t}
+            actionType={useImportAsRunButton ? importActionTypes.APPLY : importActionTypes.IMPORT_IMAGE}
+          />
+        )
+        )}
       {!hideSecondary
         && handleSecondary
         && (shouldShowImportImage ? (
           <ImportButton
             id={importButtonIds.IMPORT_IMAGE}
             handleOk={handleSecondary}
+            isPrimaryBtn={false}
             disableReason={disableReasonForImport}
             t={t}
             actionType={importActionTypes.IMPORT_IMAGE}
@@ -104,6 +118,7 @@ PopupButtonsNotConnected.propTypes = {
     PropTypes.bool,
     PropTypes.func
   ]),
+  primaryImportType: PropTypes.string,
   disableActiveActions: PropTypes.bool,
   onPreviewClick: PropTypes.func,
   hideSecondary: PropTypes.bool,

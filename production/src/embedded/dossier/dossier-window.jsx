@@ -30,6 +30,8 @@ export const DossierWindowNotConnected = (props) => {
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const previousSelectionBackup = useRef([]);
 
+  console.log('DossierWindowNotConnected props', props);
+
   // New hideEmbedded variable is needed to let the loading spinner show while prompted dossier is answered
   // behind the scenes which could take some time; especially if there are nested prompts.
   // NOTE: This loading spinner is separate from the one in EmbeddedDossier component.
@@ -45,7 +47,7 @@ export const DossierWindowNotConnected = (props) => {
     repromptsQueue,
     isShapeAPISupported
   } = props;
-  const { isEdit } = editedObject;
+  const { isEdit, editImportType } = editedObject;
   const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
 
   const vizData = useMemo(() => vizualizationsData.find(
@@ -56,6 +58,8 @@ export const DossierWindowNotConnected = (props) => {
   const isSelected = !!(chapterKey && visualizationKey);
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
+  const isSecondaryDisabled = !isShapeAPISupported || isEdit;
+  const primaryImportType = isEdit ? editImportType : objectImportType.TABLE;
 
   const handleCancel = () => {
     const { commandCancel } = selectorProperties;
@@ -163,12 +167,12 @@ export const DossierWindowNotConnected = (props) => {
   // and visualization is selected
   useEffect(() => {
     if (isReprompt && isSelected) {
-      handleOk();
+      handleOk(editImportType);
 
       // Hide embedded and let loading spinner show while prompts are being answered.
       setHideEmbedded(true);
     }
-  }, [isReprompt, isSelected, handleOk]);
+  }, [isReprompt, isSelected, editImportType, handleOk]);
 
   /**
    * Store new instance id in state.
@@ -259,9 +263,10 @@ export const DossierWindowNotConnected = (props) => {
             handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
           />
           <PopupButtons
-            handleOk={() => handleOk(objectImportType.TABLE)}
+            handleOk={() => handleOk(primaryImportType)}
             handleSecondary={() => handleOk(objectImportType.IMAGE)}
-            hideSecondary={!isShapeAPISupported}
+            hideSecondary={isSecondaryDisabled}
+            primaryImportType={primaryImportType}
             shouldShowImportImage
             handleCancel={handleCancel}
             handleBack={!isEdit && handleBack}
@@ -294,6 +299,7 @@ DossierWindowNotConnected.propTypes = {
       messageName: PropTypes.string,
     }),
     selectedViz: PropTypes.string,
+    editImportType: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
   repromptsQueue: PropTypes.shape({
@@ -319,6 +325,7 @@ DossierWindowNotConnected.defaultProps = {
       messageName: '',
     },
     selectedViz: '',
+    editImportType: objectImportType.TABLE,
   },
   isReprompt: false,
   repromptsQueue: {
@@ -329,7 +336,7 @@ DossierWindowNotConnected.defaultProps = {
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer,
+    navigationTree, popupReducer, sessionReducer, objectReducer,
     officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer
   } = state;
   const {
@@ -346,6 +353,7 @@ function mapStateToProps(state) {
   const { answers } = answersReducer;
   const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
+  const { objects } = objectReducer;
   const editedObjectParse = {
     ...popupHelper.parsePopupState(
       editedObject,
@@ -353,6 +361,9 @@ function mapStateToProps(state) {
       formsPrivilege
     ),
   };
+  const importType = objects.find(obj => obj.objectId === editedObjectParse.chosenObjectId)?.importType
+    || objectImportType.TABLE;
+  editedObjectParse.editImportType = importType;
   return {
     chosenObjectName: editedObject
       ? editedObjectParse.dossierName

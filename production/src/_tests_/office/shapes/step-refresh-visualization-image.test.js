@@ -29,33 +29,39 @@ describe('StepRefreshVisualizationImage', () => {
 
   const mockFn = jest.fn();
 
+  const mockAddImage = jest.fn().mockImplementation((image) => Promise.resolve({
+    set: jest.fn(),
+    id: '1234-5678-9012-3456'
+  }));
+
+  const mockSheet = {
+    shapes: {
+      addImage: jest.fn().mockImplementation((image) => Promise.resolve({
+        set: mockFn,
+        id: '1234-5678-9012-3456'
+      }))
+    }
+  };
+
   const excelContextMock = {
     workbook: {
-      worksheets: [
-        {
-          load: mockFn,
-          items: [
-            {
-              shapes: {
-                getItemOrNullObject: jest.fn().mockImplementation((id) => ({
-                  load: mockFn,
-                  delete: mockFn,
-                  isNullObject: false,
-                  id: '1234-5678-9012-3456'
-                }))
-              }
-            }
-          ],
-          getActiveWorksheet: jest.fn().mockImplementation(() => ({
+      worksheets: {
+        load: mockFn,
+        items: [
+          {
             shapes: {
-              addImage: jest.fn().mockImplementation((image) => Promise.resolve({
-                set: mockFn,
+              getItemOrNullObject: jest.fn().mockImplementation((id) => ({
+                load: mockFn,
+                delete: mockFn,
+                isNullObject: false,
                 id: '1234-5678-9012-3456'
               }))
             }
-          }))
-        }
-      ],
+          }
+        ],
+        getActiveWorksheet: jest.fn().mockImplementation(() => mockSheet),
+        getItem: jest.fn().mockImplementation((id) => mockSheet)
+      },
       sync: mockFn
     }
   };
@@ -104,8 +110,8 @@ describe('StepRefreshVisualizationImage', () => {
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
-    expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', 233, 454);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapePosition: undefined });
+    expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', 233, 454, mockSheet);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
     expect(operationStepDispatcher.completeRefreshVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
@@ -115,6 +121,10 @@ describe('StepRefreshVisualizationImage', () => {
     jest.spyOn(console, 'error');
 
     jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
+
+    jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
+
+    jest.spyOn(stepRefreshVisualizationImage, 'getDuplicatedShapeDimensions').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest.spyOn(mstrObjectRestService, 'getVisualizationImage').mockImplementation(() => {
       throw new Error('errorTest');
@@ -127,6 +137,8 @@ describe('StepRefreshVisualizationImage', () => {
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
+    expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
+    expect(stepRefreshVisualizationImage.getDuplicatedShapeDimensions).toBeCalledTimes(0);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
 
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);

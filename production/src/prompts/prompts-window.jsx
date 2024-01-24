@@ -20,6 +20,7 @@ import { popupViewSelectorHelper } from '../popup/popup-view-selector-helper';
 import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
+import { objectImportType } from '../mstr-object/constants';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
@@ -331,6 +332,7 @@ export const PromptsWindowNotConnected = (props) => {
         handleCancel={closePopup}
         hideSecondary
         handleBack={!isReprompt && handleBack}
+        primaryImportType={objectImportType.TABLE}
         useImportAsRunButton
         disableActiveActions={isPromptLoading}
       />

@@ -45,12 +45,14 @@ import {
   HIGHLIGHT_OBJECT,
   RENAME_EXCEL_WORKSHEET,
   REFRESH_VISUALIZATION_IMAGE,
-  REMOVE_VISUALIZATION_IMAGE
+  REMOVE_VISUALIZATION_IMAGE,
+  SAVE_IMAGE_DETAILS
 } from './operation-steps';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepRefreshVisualizationImage from '../office/shapes/step-refresh-visualization-image';
 import stepRemoveVisualizationImage from '../office/shapes/step-remove-visualization-image';
+import stepSaveImageDetails from '../office/shapes/step-save-image-details';
 
 class SubscribeSteps {
   init = (reduxStore, operationBus) => {
@@ -101,6 +103,7 @@ class SubscribeSteps {
     // shape steps
     operationBus.subscribe(REFRESH_VISUALIZATION_IMAGE, stepRefreshVisualizationImage.refreshVisualizationImage);
     operationBus.subscribe(REMOVE_VISUALIZATION_IMAGE, stepRemoveVisualizationImage.removeVisualizationImage);
+    operationBus.subscribe(SAVE_IMAGE_DETAILS, stepSaveImageDetails.saveImageDetails);
   };
 }
 

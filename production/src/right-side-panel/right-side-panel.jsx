@@ -53,8 +53,6 @@ export const RightSidePanelNotConnected = ({
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
         await sidePanelService.initReusePromptAnswers();
-        // initialize shape API support status in store
-        sidePanelService.initIsShapeAPISupported();
       } catch (error) {
         console.error(error);
       }
