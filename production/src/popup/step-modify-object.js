@@ -42,9 +42,7 @@ class StepModifyObject {
         if (objectData.visualizationInfo.visualizationKey !== objectEditedData.visualizationInfo.visualizationKey) {
           objectEditedData.visualizationInfo.nameAndFormatShouldUpdate = true;
           updatedObject.visualizationInfo = objectEditedData.visualizationInfo;
-          if (objectEditedData.importType === objectImportType.TABLE) {
-            updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
-          }
+          updatedObject.displayAttrFormNames = objectEditedData.displayAttrFormNames;
         }
 
         updatedObject.preparedInstanceId = objectEditedData.preparedInstanceId;
