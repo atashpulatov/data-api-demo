@@ -1,6 +1,3 @@
-#@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-#@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-@disabled_windows_chrome @disabled_mac_chrome
 Feature: F24086 - Improved browsing by adding filters
 
   Scenario: [TC54853] - [Object filtering] Refresh button & filter panel

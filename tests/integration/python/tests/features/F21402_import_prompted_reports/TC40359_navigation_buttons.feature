@@ -1,6 +1,3 @@
-#@ci_pipeline_daily_windows_desktop @ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-@ci_pipeline_rv_windows_desktop @ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-@windows_desktop @windows_chrome @mac_chrome
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC40359] - Navigation while importing prompted reports (Run, Back and Cancel buttons)

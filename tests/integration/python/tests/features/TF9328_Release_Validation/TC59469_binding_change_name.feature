@@ -1,6 +1,3 @@
-@ci_pipeline_daily_windows_desktop
-@ci_pipeline_rv_windows_desktop
-@windows_desktop
 Feature: TF9328 - Release Validation
 
   Scenario: [TC59469] - [Binding] Changing the name of the table in Excel Table options and refresh - ONLY DESKTOPS!
