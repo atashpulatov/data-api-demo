@@ -107,11 +107,11 @@ describe('PopupButtons', () => {
       expect(getByText('Cancel')).toBeInTheDocument();
     });
 
-    it('should display primary button as "Import Data" when primaryImportType is "table" ',
+  it('should display primary button as "Import Data" when primaryImportType is "table" ',
     () => {
       // given
       // when
-      const { getByText } = render(<PopupButtonsNotConnected 
+      const { getByText } = render(<PopupButtonsNotConnected
         primaryImportType={objectImportType.TABLE}
       />);
       // then
@@ -119,11 +119,11 @@ describe('PopupButtons', () => {
       expect(getByText('Cancel')).toBeInTheDocument();
     });
 
-    it('should display primary button as "Import Image" when primaryImportType is "image" ',
+  it('should display primary button as "Import Image" when primaryImportType is "image" ',
     () => {
       // given
       // when
-      const { getByText } = render(<PopupButtonsNotConnected 
+      const { getByText } = render(<PopupButtonsNotConnected
         primaryImportType={objectImportType.IMAGE}
       />);
       // then
@@ -131,19 +131,18 @@ describe('PopupButtons', () => {
       expect(getByText('Cancel')).toBeInTheDocument();
     });
 
-    it(`should display primary button as "Import Data" and secondary button as "Import Image"
-      when primaryImportType is "table" and shouldShowImportImage is true`,
-    () => {
-      // given
-      // when
-      const { getByText } = render(<PopupButtonsNotConnected 
-        primaryImportType={objectImportType.TABLE}
-        shouldShowImportImage
-        handleSecondary={jest.fn()}
-      />);
-      // then
-      expect(getByText('Import Data')).toBeInTheDocument();
-      expect(getByText('Import Image')).toBeInTheDocument();
-      expect(getByText('Cancel')).toBeInTheDocument();
-    });
+  it(`should display primary button as "Import Data" and secondary button as "Import Image"
+    when primaryImportType is "table" and shouldShowImportImage is true`,
+  () => {
+    // when
+    const { getByText } = render(<PopupButtonsNotConnected
+      primaryImportType={objectImportType.TABLE}
+      shouldShowImportImage
+      handleSecondary={jest.fn()}
+    />);
+    // then
+    expect(getByText('Import Data')).toBeInTheDocument();
+    expect(getByText('Import Image')).toBeInTheDocument();
+    expect(getByText('Cancel')).toBeInTheDocument();
+  });
 });
