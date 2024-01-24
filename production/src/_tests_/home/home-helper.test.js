@@ -152,9 +152,9 @@ describe('HomeHelper', () => {
   });
 
   describe('initIsShapeAPISupported', () => {
-    it ('should return true if shape API is supported', () => {
+    it('should return true if shape API is supported', () => {
       // given
-      const windowSpy = jest.spyOn(global, "window", "get");
+      const windowSpy = jest.spyOn(global, 'window', 'get');
       windowSpy.mockImplementation(() => ({
         Office: {
           context: {
@@ -167,17 +167,13 @@ describe('HomeHelper', () => {
 
       jest.spyOn(officeContext, 'isSetSupported').mockImplementation();
 
-      const reduxStore = {
-        dispatch: jest.fn()
-      };
+      jest.spyOn(homeHelper.reduxStore, 'dispatch').mockImplementation();
 
-      jest.spyOn(reduxStore, 'dispatch').mockImplementation();
-      
       homeHelper.init(reduxStore, {}, {});
       // when
       homeHelper.initIsShapeAPISupported();
       expect(officeContext.isSetSupported).toBeCalled();
-      expect(reduxStore.dispatch).toBeCalled();
+      expect(homeHelper.reduxStore.dispatch).toBeCalled();
     });
   });
 });
