@@ -56,64 +56,22 @@ class StepRefreshVisualizationImage {
       // Get the position of the selected range
       const selectedRangePos = await officeApiHelper.getSelectedRangePosition(excelContext);
 
-      let imageWidth;
-      let imageHeight;
-      let imageTop;
-      let imageLeft;
-      let sheet = officeApiHelper.getCurrentExcelSheet(excelContext);
-
-      /**
-       * IMPORT_OPERATION & DEFAULT
-       * Use the cached viz dimensions to generate the image and the
-       * range selected by the user to position the image.
-       *
-       * EDIT_OPERATION
-       * Use the dimensions of the shape in the worksheet to generate the image.If the shape
-       * has been deleted then use the cached viz dimensions to generate the image.Use the range
-       * selected by the user to position the image.
-       *
-       * REFRESH_OPERATION
-       * If the REFRESH operation is part of a VIEW_DATA user action then use the cached shape
-       * dimensions and position cached during the CLEAR_DATA operation to generate and position
-       * the image respectively
-       * If the REFRESH operation is triggered by a straight forward refresh action then shapeProps
-       * will be undefined and we will use the dimensions and position of the shape in the worksheet
-       * If the shape in the worksheet has been deleted then use the cached viz dimensions to generate
-       * the image and selected user range to position the image.
-       *
-       * DUPLICATE_OPERATION
-       * Use the dimensions of the shape to be duplicated to generate the image.If the shape
-       * has been deleted then use the viz dimensions to generate the image.Use the selected range to
-       * position the image.
-       */
-      switch (operationType) {
-        case EDIT_OPERATION:
-          imageWidth = shapeInWorksheet?.width || vizDimensions.width;
-          imageHeight = shapeInWorksheet?.height || vizDimensions.height;
-          imageTop = shapeInWorksheet?.top || selectedRangePos?.top;
-          imageLeft = shapeInWorksheet?.left || selectedRangePos?.left;
-          break;
-        case REFRESH_OPERATION:
-          imageWidth = shapeProps?.width || shapeInWorksheet?.width || vizDimensions.width;
-          imageHeight = shapeProps?.height || shapeInWorksheet?.height || vizDimensions.height;
-          imageTop = shapeProps?.top || shapeInWorksheet?.top || selectedRangePos?.top;
-          imageLeft = shapeProps?.top || shapeInWorksheet?.left || selectedRangePos?.left;
-          sheet = shapeProps?.worksheetId ? excelContext.workbook.worksheets.getItem(shapeProps?.worksheetId) : sheet;
-          break;
-        case DUPLICATE_OPERATION:
-          imageWidth = shapeDimensionsForDuplicateOp?.width || vizDimensions.width;
-          imageHeight = shapeDimensionsForDuplicateOp?.height || vizDimensions.height;
-          imageTop = selectedRangePos?.top;
-          imageLeft = selectedRangePos?.left;
-          break;
-        case IMPORT_OPERATION:
-        default:
-          imageWidth = vizDimensions.width;
-          imageHeight = vizDimensions.height;
-          imageTop = selectedRangePos?.top;
-          imageLeft = selectedRangePos?.left;
-          break;
-      }
+      // Get the properties of image and the sheet where it needs to be inserted
+      const {
+        imageTop,
+        imageLeft,
+        imageWidth,
+        imageHeight,
+        sheet
+      } = this.determineImagePropsToBeAddedToBook({
+        operationType,
+        shapeProps,
+        shapeInWorksheet,
+        shapeDimensionsForDuplicateOp,
+        vizDimensions,
+        selectedRangePos,
+        excelContext
+      });
 
       // Generate the visualization image to be added to the worksheet
       const imageStream = await mstrObjectRestService.getVisualizationImage(
@@ -174,6 +132,93 @@ class StepRefreshVisualizationImage {
     const shapeToBeDuplicated = await officeShapeApiHelper.getShape(excelContext, bindIdToBeDuplicated);
     const { height, width } = shapeToBeDuplicated || {};
     return { height, width };
+  };
+
+  /**
+  * IMPORT_OPERATION & DEFAULT
+  * Use the cached viz dimensions to generate the image and the
+  * range selected by the user to position the image.
+  *
+  * EDIT_OPERATION
+  * Use the dimensions of the shape in the worksheet to generate the image.If the shape
+  * has been deleted then use the cached viz dimensions to generate the image.Use the range
+  * selected by the user to position the image.
+  *
+  * REFRESH_OPERATION
+  * If the REFRESH operation is part of a VIEW_DATA user action then use the cached shape
+  * dimensions and position cached during the CLEAR_DATA operation to generate and position
+  * the image respectively
+  * If the REFRESH operation is triggered by a straight forward refresh action then shapeProps
+  * will be undefined and we will use the dimensions and position of the shape in the worksheet
+  * If the shape in the worksheet has been deleted then use the cached viz dimensions to generate
+  * the image and selected user range to position the image.
+  *
+  * DUPLICATE_OPERATION
+  * Use the dimensions of the shape to be duplicated to generate the image.If the shape
+  * has been deleted then use the viz dimensions to generate the image.Use the selected range to
+  * position the image.
+  *
+  * @param {String} operationType Type of operation
+  * @param {Object} shapeProps Shape properties saved as part of CLEAR DATA operation
+  * @param {Object} shapeInWorksheet Shape present in worksheet
+  * @param {Object} shapeDimensionsForDuplicateOp Dimensions of the shape to be duplicated
+  * @param {Object} vizDimensions Dimensions of the visualization saved in redux store
+  * @param {Object} selectedRangePos Position of the range selected by user
+  * @param {Object} excelContext Excel context
+  *
+  * @return {Object} Image properties to be added to the workbook
+  */
+  determineImagePropsToBeAddedToBook = ({
+    operationType,
+    shapeProps,
+    shapeInWorksheet,
+    shapeDimensionsForDuplicateOp,
+    vizDimensions,
+    selectedRangePos,
+    excelContext
+  }) => {
+    let imageWidth;
+    let imageHeight;
+    let imageTop;
+    let imageLeft;
+    let sheet = officeApiHelper.getCurrentExcelSheet(excelContext);
+
+    switch (operationType) {
+      case EDIT_OPERATION:
+        imageWidth = shapeInWorksheet?.width || vizDimensions.width;
+        imageHeight = shapeInWorksheet?.height || vizDimensions.height;
+        imageTop = shapeInWorksheet?.top || selectedRangePos?.top;
+        imageLeft = shapeInWorksheet?.left || selectedRangePos?.left;
+        break;
+      case REFRESH_OPERATION:
+        imageWidth = shapeProps?.width || shapeInWorksheet?.width || vizDimensions.width;
+        imageHeight = shapeProps?.height || shapeInWorksheet?.height || vizDimensions.height;
+        imageTop = shapeProps?.top || shapeInWorksheet?.top || selectedRangePos?.top;
+        imageLeft = shapeProps?.top || shapeInWorksheet?.left || selectedRangePos?.left;
+        sheet = shapeProps?.worksheetId ? excelContext.workbook.worksheets.getItem(shapeProps?.worksheetId) : sheet;
+        break;
+      case DUPLICATE_OPERATION:
+        imageWidth = shapeDimensionsForDuplicateOp?.width || vizDimensions.width;
+        imageHeight = shapeDimensionsForDuplicateOp?.height || vizDimensions.height;
+        imageTop = selectedRangePos?.top;
+        imageLeft = selectedRangePos?.left;
+        break;
+      case IMPORT_OPERATION:
+      default:
+        imageWidth = vizDimensions.width;
+        imageHeight = vizDimensions.height;
+        imageTop = selectedRangePos?.top;
+        imageLeft = selectedRangePos?.left;
+        break;
+    }
+
+    return {
+      imageTop,
+      imageLeft,
+      imageWidth,
+      imageHeight,
+      sheet
+    };
   };
 }
 
