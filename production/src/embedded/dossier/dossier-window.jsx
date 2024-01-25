@@ -20,7 +20,6 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
 import { objectImportType } from '../../mstr-object/constants';
-import { officeContext } from '../../office/office-context';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
@@ -46,7 +45,7 @@ export const DossierWindowNotConnected = (props) => {
     repromptsQueue,
     isShapeAPISupported
   } = props;
-  const { isEdit, editImportType } = editedObject;
+  const { isEdit, importType } = editedObject;
   const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
 
   const vizData = useMemo(() => vizualizationsData.find(
@@ -58,7 +57,7 @@ export const DossierWindowNotConnected = (props) => {
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
   const isSecondaryActionDisabled = !isShapeAPISupported || isEdit;
-  const primaryImportType = editImportType ?? objectImportType.TABLE;
+  const primaryImportType = importType || objectImportType.TABLE;
 
   const handleCancel = () => {
     const { commandCancel } = selectorProperties;
@@ -140,7 +139,7 @@ export const DossierWindowNotConnected = (props) => {
     }
   }, [chosenObjectId, chosenProjectId, vizualizationsData]);
 
-  const handleOk = useCallback((importType = objectImportType.TABLE) => {
+  const handleOk = useCallback((impType = objectImportType.TABLE) => {
     const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -149,7 +148,7 @@ export const DossierWindowNotConnected = (props) => {
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       isPrompted: promptsAnswers?.answers?.length > 0,
       promptsAnswers,
-      importType,
+      importType: impType,
       visualizationInfo: {
         chapterKey,
         visualizationKey,
@@ -166,12 +165,12 @@ export const DossierWindowNotConnected = (props) => {
   // and visualization is selected
   useEffect(() => {
     if (isReprompt && isSelected) {
-      handleOk(editImportType);
+      handleOk(importType);
 
       // Hide embedded and let loading spinner show while prompts are being answered.
       setHideEmbedded(true);
     }
-  }, [isReprompt, isSelected, editImportType, handleOk]);
+  }, [isReprompt, isSelected, importType, handleOk]);
 
   /**
    * Store new instance id in state.
@@ -298,7 +297,7 @@ DossierWindowNotConnected.propTypes = {
       messageName: PropTypes.string,
     }),
     selectedViz: PropTypes.string,
-    editImportType: PropTypes.string,
+    importType: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
   repromptsQueue: PropTypes.shape({
@@ -324,7 +323,7 @@ DossierWindowNotConnected.defaultProps = {
       messageName: '',
     },
     selectedViz: '',
-    editImportType: objectImportType.TABLE,
+    importType: objectImportType.TABLE,
   },
   isReprompt: false,
   repromptsQueue: {
@@ -360,8 +359,7 @@ function mapStateToProps(state) {
       formsPrivilege
     ),
   };
-  const importType = objects.find(obj => obj.objectId === editedObjectParse.chosenObjectId)?.importType;
-  editedObjectParse.editImportType = importType;
+  editedObjectParse.importType = objects.find(obj => obj.objectId === editedObjectParse.chosenObjectId)?.importType;
   return {
     chosenObjectName: editedObject
       ? editedObjectParse.dossierName
