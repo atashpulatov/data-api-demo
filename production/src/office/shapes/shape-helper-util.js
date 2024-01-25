@@ -62,10 +62,10 @@ export const determineImagePropsToBeAddedToBook = ({
    *
    * @returns {Number} First valid number dimension
    */
-  const getValidDimension = (values = []) => {
-    for (const n of values) {
-      if (typeof n === 'number') {
-        return n;
+  const getValidDimension = (dimensions = []) => {
+    for (const dim of dimensions) {
+      if (typeof dim === 'number') {
+        return dim;
       }
     }
     return 0;

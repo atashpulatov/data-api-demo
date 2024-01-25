@@ -31,9 +31,6 @@ export const DossierWindowNotConnected = (props) => {
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const previousSelectionBackup = useRef([]);
 
-  const x = officeContext.isSetSupported(1.2);
-  console.log('isShapeAPISupported', x);
-
   // New hideEmbedded variable is needed to let the loading spinner show while prompted dossier is answered
   // behind the scenes which could take some time; especially if there are nested prompts.
   // NOTE: This loading spinner is separate from the one in EmbeddedDossier component.
