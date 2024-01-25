@@ -17,7 +17,7 @@ describe('VisualizationImageUtils', () => {
       expect(result1).toEqual(163.959);
 
       const result2 = convertPointsToPixels();
-      expect(result2).toEqual(undefined);
+      expect(result2).toEqual(0);
     });
   });
 });

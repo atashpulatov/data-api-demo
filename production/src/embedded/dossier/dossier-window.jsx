@@ -20,6 +20,7 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
 import { objectImportType } from '../../mstr-object/constants';
+import { officeContext } from '../../office/office-context';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
@@ -29,6 +30,9 @@ export const DossierWindowNotConnected = (props) => {
   const [lastSelectedViz, setLastSelectedViz] = useState({});
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const previousSelectionBackup = useRef([]);
+
+  const x = officeContext.isSetSupported(1.2);
+  console.log('isShapeAPISupported', x);
 
   // New hideEmbedded variable is needed to let the loading spinner show while prompted dossier is answered
   // behind the scenes which could take some time; especially if there are nested prompts.

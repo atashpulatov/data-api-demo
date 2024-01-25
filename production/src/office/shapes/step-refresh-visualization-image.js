@@ -183,32 +183,48 @@ class StepRefreshVisualizationImage {
     let imageLeft;
     let sheet = officeApiHelper.getCurrentExcelSheet(excelContext);
 
+    /**
+     * Get the first valid number dimension from the array of dimensions.
+     *
+     * @param {Array} values Array of dimensions
+     *
+     * @returns {Number} First valid number dimension
+     */
+    const getValidDimension = (values = []) => {
+      for (const n of values) {
+        if (typeof n === 'number') {
+          return n;
+        }
+      }
+      return 0;
+    };
+
     switch (operationType) {
       case EDIT_OPERATION:
-        imageWidth = shapeInWorksheet?.width || vizDimensions.width;
-        imageHeight = shapeInWorksheet?.height || vizDimensions.height;
-        imageTop = shapeInWorksheet?.top || selectedRangePos?.top;
-        imageLeft = shapeInWorksheet?.left || selectedRangePos?.left;
+        imageWidth = getValidDimension([shapeInWorksheet?.width, vizDimensions.width]);
+        imageHeight = getValidDimension([shapeInWorksheet?.height, vizDimensions.height]);
+        imageTop = getValidDimension([shapeInWorksheet?.top, selectedRangePos?.top]);
+        imageLeft = getValidDimension([shapeInWorksheet?.left, selectedRangePos?.left]);
         break;
       case REFRESH_OPERATION:
-        imageWidth = shapeProps?.width || shapeInWorksheet?.width || vizDimensions.width;
-        imageHeight = shapeProps?.height || shapeInWorksheet?.height || vizDimensions.height;
-        imageTop = shapeProps?.top || shapeInWorksheet?.top || selectedRangePos?.top;
-        imageLeft = shapeProps?.top || shapeInWorksheet?.left || selectedRangePos?.left;
+        imageWidth = getValidDimension([shapeProps?.width, shapeInWorksheet?.width, vizDimensions.width]);
+        imageHeight = getValidDimension([shapeProps?.height, shapeInWorksheet?.height, vizDimensions.height]);
+        imageTop = getValidDimension([shapeProps?.top, shapeInWorksheet?.top, selectedRangePos?.top]);
+        imageLeft = getValidDimension([shapeProps?.top, shapeInWorksheet?.left, selectedRangePos?.left]);
         sheet = shapeProps?.worksheetId ? excelContext.workbook.worksheets.getItem(shapeProps?.worksheetId) : sheet;
         break;
       case DUPLICATE_OPERATION:
-        imageWidth = shapeDimensionsForDuplicateOp?.width || vizDimensions.width;
-        imageHeight = shapeDimensionsForDuplicateOp?.height || vizDimensions.height;
-        imageTop = selectedRangePos?.top;
-        imageLeft = selectedRangePos?.left;
+        imageWidth = getValidDimension([shapeDimensionsForDuplicateOp?.width, vizDimensions.width]);
+        imageHeight = getValidDimension([shapeDimensionsForDuplicateOp?.height, vizDimensions.height]);
+        imageTop = selectedRangePos?.top || 0;
+        imageLeft = selectedRangePos?.left || 0;
         break;
       case IMPORT_OPERATION:
       default:
         imageWidth = vizDimensions.width;
         imageHeight = vizDimensions.height;
-        imageTop = selectedRangePos?.top;
-        imageLeft = selectedRangePos?.left;
+        imageTop = selectedRangePos?.top || 0;
+        imageLeft = selectedRangePos?.left || 0;
         break;
     }
 

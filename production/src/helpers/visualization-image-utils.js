@@ -21,7 +21,7 @@ export const convertImageToBase64 = async (response) => {
  */
 export const convertPointsToPixels = (points) => {
   if (!points) {
-    return;
+    return 0;
   }
   // 1 point = 96/72 pixels
   return points * 1.333;

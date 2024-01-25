@@ -116,7 +116,7 @@ export class HomeHelper {
   };
 
   /**
-   * checks whether the Excel hape API is supported in the current office environment
+   * Checks whether the Excel hape API is supported in the current office environment
    * and updates the redux store with the API support status
    */
   initIsShapeAPISupported = () => {
