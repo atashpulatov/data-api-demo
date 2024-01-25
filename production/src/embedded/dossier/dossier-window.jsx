@@ -57,7 +57,7 @@ export const DossierWindowNotConnected = (props) => {
   const isSelected = !!(chapterKey && visualizationKey);
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
-  const isSecondaryDisabled = !isShapeAPISupported || isEdit;
+  const isSecondaryActionDisabled = !isShapeAPISupported || isEdit;
   const primaryImportType = editImportType ?? objectImportType.TABLE;
 
   const handleCancel = () => {
@@ -264,7 +264,7 @@ export const DossierWindowNotConnected = (props) => {
           <PopupButtons
             handleOk={() => handleOk(primaryImportType)}
             handleSecondary={() => handleOk(objectImportType.IMAGE)}
-            hideSecondary={isSecondaryDisabled}
+            hideSecondary={isSecondaryActionDisabled}
             primaryImportType={primaryImportType}
             shouldShowImportImage
             handleCancel={handleCancel}
