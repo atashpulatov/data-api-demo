@@ -119,7 +119,7 @@ class StepRefreshVisualizationImage {
    * Get the dimensions of the shape to be duplicated.
    *
    * @param {Object} bindIdToBeDuplicated Unique id of the Office shape to be duplicated.
-   * @param {Object} excelContex Excel context.
+   * @param {Object} excelContext Excel context.
    *
    * @returns {Object} Dimensions of the shape to be duplicated.
    */

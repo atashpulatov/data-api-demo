@@ -43,10 +43,6 @@ function importRequested(state, payload) {
 }
 
 function editRequested(state, payload) {
-  const objectToBeEdited = { ...payload.object };
-  const objectEditedIndex = getObjectIndex(state.objects, payload.objectWorkingId);
-  const object = state.objects[objectEditedIndex];
-  objectToBeEdited.importType = object.importType || objectImportType.TABLE;
   const props = { objectWorkingId: payload.objectWorkingId, response: payload.response };
   return updateObject(state, props);
 }
