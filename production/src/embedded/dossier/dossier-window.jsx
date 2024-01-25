@@ -58,7 +58,7 @@ export const DossierWindowNotConnected = (props) => {
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
   const isSecondaryDisabled = !isShapeAPISupported || isEdit;
-  const primaryImportType = isEdit ? editImportType : objectImportType.TABLE;
+  const primaryImportType = editImportType ?? objectImportType.TABLE;
 
   const handleCancel = () => {
     const { commandCancel } = selectorProperties;
