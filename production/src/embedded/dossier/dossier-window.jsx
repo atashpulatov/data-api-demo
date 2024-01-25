@@ -360,8 +360,7 @@ function mapStateToProps(state) {
       formsPrivilege
     ),
   };
-  const importType = objects.find(obj => obj.objectId === editedObjectParse.chosenObjectId)?.importType
-    || objectImportType.TABLE;
+  const importType = objects.find(obj => obj.objectId === editedObjectParse.chosenObjectId)?.importType;
   editedObjectParse.editImportType = importType;
   return {
     chosenObjectName: editedObject
