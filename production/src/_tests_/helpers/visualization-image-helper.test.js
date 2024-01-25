@@ -1,4 +1,4 @@
-import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
+import { convertImageToBase64, convertPointsToPixels, convertPixelsToPoints } from '../../helpers/visualization-image-utils';
 
 describe('VisualizationImageUtils', () => {
   describe('convertImageToBase64', () => {
@@ -19,5 +19,15 @@ describe('VisualizationImageUtils', () => {
       const result2 = convertPointsToPixels();
       expect(result2).toEqual(0);
     });
+  });
+});
+
+describe('convertPixelsToPoints', () => {
+  it('should convert pixels to points', () => {
+    const result1 = convertPixelsToPoints(123);
+    expect(result1).toEqual(92.25);
+
+    const result2 = convertPixelsToPoints();
+    expect(result2).toEqual(0);
   });
 });
