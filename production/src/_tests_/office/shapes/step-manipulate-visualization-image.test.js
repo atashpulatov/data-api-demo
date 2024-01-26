@@ -1,11 +1,11 @@
 import { officeShapeApiHelper } from '../../../office/shapes/office-shape-api-helper';
-import stepRefreshVisualizationImage from '../../../office/shapes/step-refresh-visualization-image';
+import stepManipulateVisualizationImage from '../../../office/shapes/step-manipulate-visualization-image';
 import { mstrObjectRestService } from '../../../mstr-object/mstr-object-rest-service';
 import { officeApiHelper } from '../../../office/api/office-api-helper';
 import operationErrorHandler from '../../../operation/operation-error-handler';
 import operationStepDispatcher from '../../../operation/operation-step-dispatcher';
 
-describe('StepRefreshVisualizationImage', () => {
+describe('stepManipulateVisualizationImage', () => {
   const objectDataMock = {
     objectId: 'objectIdTest',
     projectId: 'projectIdTest',
@@ -82,7 +82,7 @@ describe('StepRefreshVisualizationImage', () => {
     jest.restoreAllMocks();
   });
 
-  it('refreshVisualizationImage should work for IMPORT_OPERATION', async () => {
+  it('manipulateVisualizationImage should work for IMPORT_OPERATION', async () => {
     // given
     jest.spyOn(console, 'error');
 
@@ -100,10 +100,10 @@ describe('StepRefreshVisualizationImage', () => {
 
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    jest.spyOn(operationStepDispatcher, 'completeRefreshVisualizationImage').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeManipulateVisualizationImage').mockImplementation();
 
     // when
-    await stepRefreshVisualizationImage.refreshVisualizationImage(objectDataMock, operationDataMock);
+    await stepManipulateVisualizationImage.manipulateVisualizationImage(objectDataMock, operationDataMock);
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -111,11 +111,11 @@ describe('StepRefreshVisualizationImage', () => {
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', 233, 454, mockSheet);
     expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
-    expect(operationStepDispatcher.completeRefreshVisualizationImage).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
 
-  it('refreshVisualizationImage should work for REFRESH_OPERATION triggered by View Data', async () => {
+  it('manipulateVisualizationImage should work for REFRESH_OPERATION triggered by View Data', async () => {
     operationDataMock.operationType = 'REFRESH_OPERATION';
     objectDataMock.shapeProps = {
       top: 123,
@@ -141,10 +141,10 @@ describe('StepRefreshVisualizationImage', () => {
 
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    jest.spyOn(operationStepDispatcher, 'completeRefreshVisualizationImage').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeManipulateVisualizationImage').mockImplementation();
 
     // when
-    await stepRefreshVisualizationImage.refreshVisualizationImage(objectDataMock, operationDataMock);
+    await stepManipulateVisualizationImage.manipulateVisualizationImage(objectDataMock, operationDataMock);
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -152,11 +152,11 @@ describe('StepRefreshVisualizationImage', () => {
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', 123, 234, mockSheet);
     expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
-    expect(operationStepDispatcher.completeRefreshVisualizationImage).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
 
-  it('refreshVisualizationImage should work for REFRESH_OPERATION', async () => {
+  it('manipulateVisualizationImage should work for REFRESH_OPERATION', async () => {
     const refreshOperationMock = { ...operationDataMock, operationType: 'REFRESH_OPERATION' };
 
     // given
@@ -176,10 +176,10 @@ describe('StepRefreshVisualizationImage', () => {
 
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    jest.spyOn(operationStepDispatcher, 'completeRefreshVisualizationImage').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeManipulateVisualizationImage').mockImplementation();
 
     // when
-    await stepRefreshVisualizationImage.refreshVisualizationImage(objectDataMock, refreshOperationMock);
+    await stepManipulateVisualizationImage.manipulateVisualizationImage(objectDataMock, refreshOperationMock);
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -187,11 +187,11 @@ describe('StepRefreshVisualizationImage', () => {
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', 123, 234, mockSheet);
     expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
-    expect(operationStepDispatcher.completeRefreshVisualizationImage).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
 
-  it('refreshVisualizationImage should work for EDIT_OPERATION', async () => {
+  it('manipulateVisualizationImage should work for EDIT_OPERATION', async () => {
     operationDataMock.operationType = 'EDIT_OPERATION';
     // given
     jest.spyOn(console, 'error');
@@ -210,10 +210,10 @@ describe('StepRefreshVisualizationImage', () => {
 
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    jest.spyOn(operationStepDispatcher, 'completeRefreshVisualizationImage').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeManipulateVisualizationImage').mockImplementation();
 
     // when
-    await stepRefreshVisualizationImage.refreshVisualizationImage(objectDataMock, operationDataMock);
+    await stepManipulateVisualizationImage.manipulateVisualizationImage(objectDataMock, operationDataMock);
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -221,11 +221,11 @@ describe('StepRefreshVisualizationImage', () => {
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', 233, 454, mockSheet);
     expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
-    expect(operationStepDispatcher.completeRefreshVisualizationImage).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
 
-  it('refreshVisualizationImage should work for DUPLICATE_OPERATION', async () => {
+  it('manipulateVisualizationImage should work for DUPLICATE_OPERATION', async () => {
     const dupOperationDataMock = { ...operationDataMock, operationType: 'DUPLICATE_OPERATION' };
     const dupObjectDataMock = { ...objectDataMock, bindIdToBeDuplicated: '1234-5678-9012-3456' };
     // given
@@ -245,21 +245,21 @@ describe('StepRefreshVisualizationImage', () => {
 
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
-    jest.spyOn(stepRefreshVisualizationImage, 'getDuplicatedShapeDimensions').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
+    jest.spyOn(stepManipulateVisualizationImage, 'getDuplicatedShapeDimensions').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
-    jest.spyOn(operationStepDispatcher, 'completeRefreshVisualizationImage').mockImplementation();
+    jest.spyOn(operationStepDispatcher, 'completeManipulateVisualizationImage').mockImplementation();
 
     // when
-    await stepRefreshVisualizationImage.refreshVisualizationImage(dupObjectDataMock, dupOperationDataMock);
+    await stepManipulateVisualizationImage.manipulateVisualizationImage(dupObjectDataMock, dupOperationDataMock);
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
-    expect(stepRefreshVisualizationImage.getDuplicatedShapeDimensions).toBeCalledWith('1234-5678-9012-3456', excelContextMock);
+    expect(stepManipulateVisualizationImage.getDuplicatedShapeDimensions).toBeCalledWith('1234-5678-9012-3456', excelContextMock);
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', 233, 454, mockSheet);
     expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
-    expect(operationStepDispatcher.completeRefreshVisualizationImage).toBeCalledTimes(1);
+    expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
 
@@ -271,7 +271,7 @@ describe('StepRefreshVisualizationImage', () => {
 
     jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
-    jest.spyOn(stepRefreshVisualizationImage, 'getDuplicatedShapeDimensions').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
+    jest.spyOn(stepManipulateVisualizationImage, 'getDuplicatedShapeDimensions').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest.spyOn(mstrObjectRestService, 'getVisualizationImage').mockImplementation(() => {
       throw new Error('errorTest');
@@ -280,7 +280,7 @@ describe('StepRefreshVisualizationImage', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     // when
-    await stepRefreshVisualizationImage.refreshVisualizationImage(objectDataMock, operationDataMock);
+    await stepManipulateVisualizationImage.manipulateVisualizationImage(objectDataMock, operationDataMock);
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
@@ -304,7 +304,7 @@ describe('StepRefreshVisualizationImage', () => {
       jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => Promise.resolve(mockShape));
 
       // when
-      const result = await stepRefreshVisualizationImage.getDuplicatedShapeDimensions('1234-5678-9012-3456', excelContextMock);
+      const result = await stepManipulateVisualizationImage.getDuplicatedShapeDimensions('1234-5678-9012-3456', excelContextMock);
 
       // then
       expect(officeShapeApiHelper.getShape).toBeCalledWith(excelContextMock, '1234-5678-9012-3456');

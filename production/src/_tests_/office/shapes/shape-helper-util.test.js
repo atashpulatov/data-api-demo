@@ -86,10 +86,10 @@ describe('shape-helper-util', () => {
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
-      imageWidth: 123,
-      imageHeight: 342,
-      imageTop: 345,
-      imageLeft: 256,
+      width: 123,
+      height: 342,
+      top: 345,
+      left: 256,
       sheet: mockSheet
     });
 
@@ -110,10 +110,10 @@ describe('shape-helper-util', () => {
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
-      imageWidth: 675,
-      imageHeight: 345,
-      imageTop: 345,
-      imageLeft: 256,
+      width: 675,
+      height: 345,
+      top: 345,
+      left: 256,
       sheet: mockSheet
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
@@ -122,10 +122,10 @@ describe('shape-helper-util', () => {
 
     const imageProps1 = determineImagePropsToBeAddedToBook(args1);
     expect(imageProps1).toEqual({
-      imageWidth: 123,
-      imageHeight: 342,
-      imageTop: 345,
-      imageLeft: 256,
+      width: 123,
+      height: 342,
+      top: 345,
+      left: 256,
       sheet: mockSheet
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
@@ -134,10 +134,10 @@ describe('shape-helper-util', () => {
 
     const imageProps2 = determineImagePropsToBeAddedToBook(args2);
     expect(imageProps2).toEqual({
-      imageWidth: 675,
-      imageHeight: 345,
-      imageTop: 0,
-      imageLeft: 0,
+      width: 675,
+      height: 345,
+      top: 0,
+      left: 0,
       sheet: mockSheet
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
@@ -157,10 +157,10 @@ describe('shape-helper-util', () => {
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
-      imageWidth: 564,
-      imageHeight: 643,
-      imageTop: 34,
-      imageLeft: 56,
+      width: 564,
+      height: 643,
+      top: 34,
+      left: 56,
       sheet: mockSheet
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
@@ -169,10 +169,10 @@ describe('shape-helper-util', () => {
 
     const imageProps1 = determineImagePropsToBeAddedToBook(args1);
     expect(imageProps1).toEqual({
-      imageWidth: 123,
-      imageHeight: 342,
-      imageTop: 345,
-      imageLeft: 256,
+      width: 123,
+      height: 342,
+      top: 345,
+      left: 256,
       sheet: mockSheet
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
@@ -193,10 +193,10 @@ describe('shape-helper-util', () => {
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
-      imageWidth: 453,
-      imageHeight: 356,
-      imageTop: 237,
-      imageLeft: 765,
+      width: 453,
+      height: 356,
+      top: 237,
+      left: 765,
       sheet: mockSheet
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
@@ -204,10 +204,10 @@ describe('shape-helper-util', () => {
     const args1 = { ...args, shapeProps: undefined, shapeInWorksheet: mockShapeInWorksheet };
     const imageProps1 = determineImagePropsToBeAddedToBook(args1);
     expect(imageProps1).toEqual({
-      imageWidth: 564,
-      imageHeight: 643,
-      imageTop: 34,
-      imageLeft: 56,
+      width: 564,
+      height: 643,
+      top: 34,
+      left: 56,
       sheet: mockSheet
     });
     expect(getCurrentExcelSheetMock).toBeCalled();
@@ -215,10 +215,10 @@ describe('shape-helper-util', () => {
     const args2 = { ...args, shapeProps: undefined };
     const imageProps2 = determineImagePropsToBeAddedToBook(args2);
     expect(imageProps2).toEqual({
-      imageWidth: 123,
-      imageHeight: 342,
-      imageTop: 345,
-      imageLeft: 256,
+      width: 123,
+      height: 342,
+      top: 345,
+      left: 256,
       sheet: mockSheet
     });
     expect(getCurrentExcelSheetMock).toBeCalled();

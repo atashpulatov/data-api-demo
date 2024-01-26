@@ -6,13 +6,13 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 
-class StepRefreshVisualizationImage {
+class StepManipulateVisualizationImage {
   /**
    * Generates the image of the selected visualization, converts it into a base64 image
    * and insert it into the worksheet. It will also save the shapeId of the inserted image
    * into the object state
    *
-   * This function is subscribed as one of the operation steps with the key REFRESH_VISUALIZATION_IMAGE,
+   * This function is subscribed as one of the operation steps with the key MANIPULATE_VISUALIZATION_IMAGE,
    * therefore should be called only via operation bus.
    *
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
@@ -21,7 +21,7 @@ class StepRefreshVisualizationImage {
    * @param {Object} operationData Reference to the operation data required for error handling
    *
    */
-  refreshVisualizationImage = async (objectData, operationData) => {
+  manipulateVisualizationImage = async (objectData, operationData) => {
     console.time('Refresh Visualization Image');
     try {
       const {
@@ -53,10 +53,10 @@ class StepRefreshVisualizationImage {
 
       // Get the properties of image and the sheet where it needs to be inserted
       const {
-        imageTop,
-        imageLeft,
-        imageWidth,
-        imageHeight,
+        top,
+        left,
+        width,
+        height,
         sheet
       } = determineImagePropsToBeAddedToBook({
         operationType,
@@ -75,8 +75,8 @@ class StepRefreshVisualizationImage {
         instanceId,
         visualizationKey,
         {
-          width: convertPointsToPixels(imageWidth),
-          height: convertPointsToPixels(imageHeight)
+          width: convertPointsToPixels(width),
+          height: convertPointsToPixels(height)
         }
       );
 
@@ -87,8 +87,8 @@ class StepRefreshVisualizationImage {
       const imageShapeId = await officeShapeApiHelper.addImage(
         excelContext,
         base64Image,
-        imageTop,
-        imageLeft,
+        top,
+        left,
         sheet
       );
 
@@ -106,7 +106,7 @@ class StepRefreshVisualizationImage {
         instanceId: undefined // reset the instanceId after adding image
       };
       operationStepDispatcher.updateObject(updatedObject);
-      operationStepDispatcher.completeRefreshVisualizationImage(objectWorkingId);
+      operationStepDispatcher.completeManipulateVisualizationImage(objectWorkingId);
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
@@ -130,5 +130,5 @@ class StepRefreshVisualizationImage {
   };
 }
 
-const stepRefreshVisualizationImage = new StepRefreshVisualizationImage();
-export default stepRefreshVisualizationImage;
+const stepManipulateVisualizationImage = new StepManipulateVisualizationImage();
+export default stepManipulateVisualizationImage;

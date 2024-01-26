@@ -17,7 +17,7 @@ describe('VisualizationImageUtils', () => {
       expect(result1).toEqual(163.959);
 
       const result2 = convertPointsToPixels();
-      expect(result2).toEqual(0);
+      expect(result2).toEqual(-1);
     });
   });
 });
@@ -28,6 +28,6 @@ describe('convertPixelsToPoints', () => {
     expect(result1).toEqual(92.25);
 
     const result2 = convertPixelsToPoints();
-    expect(result2).toEqual(0);
+    expect(result2).toEqual(-1);
   });
 });

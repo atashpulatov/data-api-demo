@@ -25,7 +25,7 @@ import {
   COMPLETE_CLEAR_DATA,
   HIGHLIGHT_OBJECT,
   RENAME_EXCEL_WORKSHEET,
-  REFRESH_VISUALIZATION_IMAGE,
+  MANIPULATE_VISUALIZATION_IMAGE,
   REMOVE_VISUALIZATION_IMAGE,
   SAVE_IMAGE_DETAILS
 } from './operation-steps';
@@ -148,8 +148,8 @@ class OperationStepDispatcher {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, RENAME_EXCEL_WORKSHEET));
   };
 
-  completeRefreshVisualizationImage = (objectWorkingId) => {
-    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REFRESH_VISUALIZATION_IMAGE));
+  completeManipulateVisualizationImage = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, MANIPULATE_VISUALIZATION_IMAGE));
   };
 
   completeRemoveVisualizationImage = (objectWorkingId) => {
