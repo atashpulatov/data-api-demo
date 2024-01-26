@@ -4,6 +4,7 @@ import { reduxStore } from '../../store';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 import officeStoreRestoreObject from '../../office/store/office-store-restore-object';
 import { configActions } from '../../redux-reducer/config-reducer/config-actions';
+import { officeContext } from '../../office/office-context';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../redux-reducer/session-reducer/session-actions');
@@ -147,6 +148,32 @@ describe('HomeHelper', () => {
       // then
       expect(actionPayloadSpy).toHaveBeenCalledWith(expectedShowHiddenPayload);
       expect(mockedDispatch).toBeCalledTimes(1);
+    });
+  });
+
+  describe('initIsShapeAPISupported', () => {
+    it('should return true if shape API is supported', () => {
+      // given
+      const windowSpy = jest.spyOn(global, 'window', 'get');
+      windowSpy.mockImplementation(() => ({
+        Office: {
+          context: {
+            requirements: {
+              isSetSupported: () => true
+            }
+          }
+        }
+      }));
+
+      jest.spyOn(officeContext, 'isSetSupported').mockImplementation();
+
+      jest.spyOn(homeHelper.reduxStore, 'dispatch').mockImplementation();
+
+      homeHelper.init(reduxStore, {}, {});
+      // when
+      homeHelper.initIsShapeAPISupported();
+      expect(officeContext.isSetSupported).toBeCalled();
+      expect(homeHelper.reduxStore.dispatch).toBeCalled();
     });
   });
 });

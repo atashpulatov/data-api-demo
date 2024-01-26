@@ -28,6 +28,7 @@ class OfficeShapeApiHelper {
       await excelContext.sync();
 
       if (!shape.isNullObject) {
+        shape.worksheetId = sheet.id;
         return shape;
       }
     }
@@ -41,12 +42,12 @@ class OfficeShapeApiHelper {
    * @param {String} base64PngImage Base64 encoded png image
    * @param {Number} top Top position of the shape
    * @param {Number} left Left position of the shape
+   * @param {Worksheet} sheet Worksheet to which the shape is added
    *
-   * @return {String} Id of the Office shape created on import used for referencing the Excel shape
+   * @return {object} Office Id of the shape which is added to the worksheet
    */
-  addImage = async (excelContext, base64PngImage, top, left) => {
-    const worksheet = excelContext.workbook.worksheets.getActiveWorksheet();
-    const shape = worksheet.shapes.addImage(base64PngImage);
+  addImage = async (excelContext, base64PngImage, top, left, sheet) => {
+    const shape = sheet.shapes.addImage(base64PngImage);
     shape.set({ top, left });
     await excelContext.sync();
     return shape.id;

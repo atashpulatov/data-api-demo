@@ -78,14 +78,9 @@ describe('officeShapeApiHelper', () => {
         }
       };
       const context = {
-        workbook: {
-          worksheets: {
-            getActiveWorksheet: jest.fn().mockImplementation(() => mockSheet)
-          }
-        },
         sync: mockSync
       };
-      const shapeId = await officeShapeApiHelper.addImage(context, 'base64PngImage', 100, 100);
+      const shapeId = await officeShapeApiHelper.addImage(context, 'base64PngImage', 100, 100, mockSheet);
       expect(mockAddImage).toBeCalled();
       expect(mockSync).toBeCalled();
       expect(shapeId).toEqual('1234-5678-9012-3456');

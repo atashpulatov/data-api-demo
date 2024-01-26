@@ -25,10 +25,10 @@ export const importRequested = (object) => {
   };
 };
 
-export const refreshRequested = (objectWorkingId) => ({
+export const refreshRequested = (objectWorkingId, importType) => ({
   type: REFRESH_OPERATION,
   payload: {
-    operation: createOperation(REFRESH_OPERATION, objectWorkingId),
+    operation: createOperation(REFRESH_OPERATION, objectWorkingId, {}, importType),
     objectWorkingId,
   },
 });
@@ -39,18 +39,23 @@ export const editRequested = (objectData, objectEditedData) => {
   return {
     type: EDIT_OPERATION,
     payload: {
-      operation: createOperation(EDIT_OPERATION, objectWorkingId, { backupObjectData, objectEditedData }),
+      operation: createOperation(
+        EDIT_OPERATION,
+        objectWorkingId,
+        { backupObjectData, objectEditedData },
+        objectEditedData.importType
+      ),
       objectWorkingId,
     },
   };
 };
 
 export const duplicateRequested = (object, objectEditedData) => {
-  const { objectWorkingId } = object;
+  const { objectWorkingId, importType } = object;
   return {
     type: DUPLICATE_OPERATION,
     payload: {
-      operation: createOperation(DUPLICATE_OPERATION, objectWorkingId, { objectEditedData }),
+      operation: createOperation(DUPLICATE_OPERATION, objectWorkingId, { objectEditedData }, importType),
       object,
     },
   };
@@ -72,10 +77,10 @@ export const highlightRequested = (objectWorkingId) => ({
   },
 });
 
-export const clearDataRequested = (objectWorkingId) => ({
+export const clearDataRequested = (objectWorkingId, importType) => ({
   type: CLEAR_DATA_OPERATION,
   payload: {
-    operation: createOperation(CLEAR_DATA_OPERATION, objectWorkingId),
+    operation: createOperation(CLEAR_DATA_OPERATION, objectWorkingId, {}, importType),
     objectWorkingId,
   },
 });

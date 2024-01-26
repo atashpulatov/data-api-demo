@@ -45,7 +45,7 @@ export const DossierWindowNotConnected = (props) => {
     repromptsQueue,
     isShapeAPISupported
   } = props;
-  const { isEdit } = editedObject;
+  const { isEdit, importType } = editedObject;
   const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
 
   const vizData = useMemo(() => vizualizationsData.find(
@@ -56,6 +56,8 @@ export const DossierWindowNotConnected = (props) => {
   const isSelected = !!(chapterKey && visualizationKey);
   const isSupported = !!(isSelected && vizData && vizData.isSupported);
   const isChecking = !!(isSelected && (!vizData || (vizData && vizData.isSupported === undefined)));
+  const isSecondaryActionDisabled = !isShapeAPISupported || isEdit;
+  const primaryImportType = importType || objectImportType.TABLE;
 
   const handleCancel = () => {
     const { commandCancel } = selectorProperties;
@@ -137,7 +139,7 @@ export const DossierWindowNotConnected = (props) => {
     }
   }, [chosenObjectId, chosenProjectId, vizualizationsData]);
 
-  const handleOk = useCallback((importType = objectImportType.TABLE) => {
+  const handleOk = useCallback((impType = objectImportType.TABLE) => {
     const message = {
       command: selectorProperties.commandOk,
       chosenObjectName,
@@ -146,7 +148,7 @@ export const DossierWindowNotConnected = (props) => {
       chosenSubtype: mstrObjectEnum.mstrObjectType.visualization.subtypes,
       isPrompted: promptsAnswers?.answers?.length > 0,
       promptsAnswers,
-      importType,
+      importType: impType,
       visualizationInfo: {
         chapterKey,
         visualizationKey,
@@ -163,12 +165,12 @@ export const DossierWindowNotConnected = (props) => {
   // and visualization is selected
   useEffect(() => {
     if (isReprompt && isSelected) {
-      handleOk();
+      handleOk(importType);
 
       // Hide embedded and let loading spinner show while prompts are being answered.
       setHideEmbedded(true);
     }
-  }, [isReprompt, isSelected, handleOk]);
+  }, [isReprompt, isSelected, importType, handleOk]);
 
   /**
    * Store new instance id in state.
@@ -259,9 +261,10 @@ export const DossierWindowNotConnected = (props) => {
             handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
           />
           <PopupButtons
-            handleOk={() => handleOk(objectImportType.TABLE)}
+            handleOk={() => handleOk(primaryImportType)}
             handleSecondary={() => handleOk(objectImportType.IMAGE)}
-            hideSecondary={!isShapeAPISupported}
+            hideSecondary={isSecondaryActionDisabled}
+            primaryImportType={primaryImportType}
             shouldShowImportImage
             handleCancel={handleCancel}
             handleBack={!isEdit && handleBack}
@@ -294,6 +297,7 @@ DossierWindowNotConnected.propTypes = {
       messageName: PropTypes.string,
     }),
     selectedViz: PropTypes.string,
+    importType: PropTypes.string,
   }),
   isReprompt: PropTypes.bool,
   repromptsQueue: PropTypes.shape({
@@ -319,6 +323,7 @@ DossierWindowNotConnected.defaultProps = {
       messageName: '',
     },
     selectedViz: '',
+    importType: objectImportType.TABLE,
   },
   isReprompt: false,
   repromptsQueue: {
@@ -329,7 +334,7 @@ DossierWindowNotConnected.defaultProps = {
 
 function mapStateToProps(state) {
   const {
-    navigationTree, popupReducer, sessionReducer,
+    navigationTree, popupReducer, sessionReducer, objectReducer,
     officeReducer, answersReducer, popupStateReducer, repromptsQueueReducer
   } = state;
   const {
@@ -346,6 +351,7 @@ function mapStateToProps(state) {
   const { answers } = answersReducer;
   const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
+  const { objects } = objectReducer;
   const editedObjectParse = {
     ...popupHelper.parsePopupState(
       editedObject,
@@ -353,6 +359,7 @@ function mapStateToProps(state) {
       formsPrivilege
     ),
   };
+  editedObjectParse.importType = objects.find(obj => obj.objectId === editedObjectParse.chosenObjectId)?.importType;
   return {
     chosenObjectName: editedObject
       ? editedObjectParse.dossierName

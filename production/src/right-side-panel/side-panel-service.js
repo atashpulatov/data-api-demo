@@ -21,7 +21,6 @@ import { officeContext } from '../office/office-context';
 import { objectImportType } from '../mstr-object/constants';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
-const EXCEL_SHAPE_API_VERSION = 1.9;
 class SidePanelService {
   init = (reduxStore) => {
     this.reduxStore = reduxStore;
@@ -81,11 +80,7 @@ class SidePanelService {
   refresh = (objectWorkingIds) => {
     objectWorkingIds.forEach(objectWorkingId => {
       const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      // TODO - remove this check when the refresh workflow is implemented for image
-      if (sourceObject?.importType === objectImportType.IMAGE) {
-        return;
-      }
-      this.reduxStore.dispatch(refreshRequested(objectWorkingId));
+      this.reduxStore.dispatch(refreshRequested(objectWorkingId, sourceObject?.importType));
     });
   };
 
@@ -116,13 +111,13 @@ class SidePanelService {
    */
   duplicate = async (objectWorkingId, insertNewWorksheet, withEdit) => {
     const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    // TODO: remove this check when the duplicate workflow is implemented for image
-    if (sourceObject?.importType === objectImportType.IMAGE) {
-      return;
-    }
     const object = JSON.parse(JSON.stringify(sourceObject));
     object.insertNewWorksheet = insertNewWorksheet;
     object.objectWorkingId = Date.now();
+
+    if (object.importType === objectImportType.IMAGE) {
+      object.bindIdToBeDuplicated = object.bindId;
+    }
 
     delete object.bindId;
     delete object.tableName;
@@ -151,10 +146,6 @@ class SidePanelService {
       : [objectWorkingIds];
     for (const objectWorkingId of aWorkingIds) {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      // TODO: remove this check when the edit workflow is implemented for image
-      if (objectData?.importType === objectImportType.IMAGE) {
-        return;
-      }
       const { bindId, mstrObjectType } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
       await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
@@ -203,10 +194,6 @@ class SidePanelService {
     // Reprompt each object (only if prompted) in the order of selection
     objectWorkingIds.forEach(objectWorkingId => {
       const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      // TODO: remove this check when the edit & duplicate workflow is implemented for image
-      if (objectData?.importType === objectImportType.IMAGE) {
-        return;
-      }
       const { bindId, mstrObjectType, isPrompted } = objectData;
 
       // Add a task to the queue only if the object is prompted
@@ -260,15 +247,6 @@ class SidePanelService {
    */
   toggleSettingsPanel = (settingsPanelLoded) => {
     this.reduxStore.dispatch(officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded));
-  };
-
-  /**
-   * checks whether the Excel hape API is supported in the current office environment
-   * and updates the redux store with the API support status
-   */
-  initIsShapeAPISupported = () => {
-    const isShapeAPISupported = officeContext.isSetSupported(EXCEL_SHAPE_API_VERSION);
-    this.reduxStore.dispatch(officeActions.setIsShapeAPISupported(isShapeAPISupported));
   };
 }
 
