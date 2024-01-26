@@ -28,8 +28,8 @@ class StepRemoveVisualizationImage {
       operationStepDispatcher.completeRemoveVisualizationImage(objectWorkingId);
 
       // If the operation is not CLEAR_DATA_OPERATION, remove the object from the store
-      // We preserve the objects in the store for CLEAR_OPERATION to be restore in the even
-      // of a VIEW_DATA operation
+      // We preserve the objects in the store for CLEAR_OPERATION to be restored to the workbook
+      // in the event of a VIEW_DATA operation
       if (operationType !== CLEAR_DATA_OPERATION) {
         operationStepDispatcher.updateObject({ objectWorkingId, doNotPersist: true });
         officeStoreObject.removeObjectInExcelStore(objectWorkingId);
