@@ -115,6 +115,10 @@ describe('Popup actions', () => {
         pageKey: 'page',
         chapterKey: 'chapterKey',
         visualizationKey: 'visKey',
+      },
+      vizDimensions: {
+        width: 454.34,
+        height: 231.34
       }
     };
     const listener = jest.fn();
@@ -233,10 +237,6 @@ describe('Popup actions', () => {
         chapterName: 'chapterName',
         dossierName: 'dossierName',
         pageName: 'pageName',
-      },
-      vizDimensions: {
-        width: 344.45,
-        height: 563.45
       }
     };
 
