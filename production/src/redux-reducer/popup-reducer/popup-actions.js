@@ -179,7 +179,8 @@ class PopupActions {
     editedDossier.isEdit = true;
 
     if (updatedVisualizationInfo) {
-      editedDossier.visualizationInfo = updatedVisualizationInfo;
+      const { vizDimensions } = visualizationInfo;
+      editedDossier.visualizationInfo = { vizDimensions, ...updatedVisualizationInfo };
     }
     editedDossier.objectType = editedDossier.mstrObjectType;
   };
@@ -219,7 +220,8 @@ class PopupActions {
     repromptedDossier.isEdit = true;
 
     if (updatedVisualizationInfo) {
-      repromptedDossier.visualizationInfo = updatedVisualizationInfo;
+      const { vizDimensions } = visualizationInfo;
+      repromptedDossier.visualizationInfo = { vizDimensions, ...updatedVisualizationInfo };
     }
     repromptedDossier.objectType = repromptedDossier.mstrObjectType;
   };

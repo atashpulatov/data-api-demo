@@ -233,6 +233,10 @@ describe('Popup actions', () => {
         chapterName: 'chapterName',
         dossierName: 'dossierName',
         pageName: 'pageName',
+      },
+      vizDimensions: {
+        width: 344.45,
+        height: 563.45
       }
     };
 
