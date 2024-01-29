@@ -12,6 +12,8 @@ import {
 } from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { OverviewActionCommands } from './overview/overview-helper';
+import officeReducerHelper from '../office/store/office-reducer-helper';
+import { objectImportType } from '../mstr-object/constants';
 
 const URL = `${window.location.href}`;
 
@@ -130,6 +132,14 @@ class PopupController {
     }
   };
 
+  sendMessageToDialog = (message) => {
+    const dialogType = this.reduxStore.getState().popupStateReducer?.popupType;
+
+    if (dialogType === PopupTypeEnum.importedDataOverview) {
+      this.dialog?.messageChild(message);
+    }
+  };
+
   onMessageFromPopup = async (dialog, reportParams, arg) => {
     const isMultipleRepromptQueueEmpty = this.getIsMultipleRepromptQueueEmpty();
     const { message } = arg;
@@ -216,7 +226,31 @@ class PopupController {
           this.reduxStore.dispatch(removeRequested(objectWorkingId));
         });
         break;
+      case OverviewActionCommands.DUPLICATE:
+        // TODO this duplicate workflow is added for testing overview data sync and should be refined later
+        await response.objectWorkingIds.forEach(objectWorkingId => {
+          const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+
+          // remove this check when the duplicate workflow is implemented for image
+          if (sourceObject?.importType === objectImportType.IMAGE) {
+            return;
+          }
+          const object = JSON.parse(JSON.stringify(sourceObject));
+          object.insertNewWorksheet = false;
+          object.objectWorkingId = Date.now();
+
+          delete object.bindId;
+          delete object.tableName;
+          delete object.refreshDate;
+          delete object.preparedInstanceId;
+          delete object.previousTableDimensions;
+          if (object.subtotalsInfo) { delete object.subtotalsInfo.subtotalsAddresses; }
+
+          this.reduxStore.dispatch(duplicateRequested(object));
+        });
+        break;
       default:
+        console.log('Unhandled dialog command: ', response.command);
         break;
     }
   };
