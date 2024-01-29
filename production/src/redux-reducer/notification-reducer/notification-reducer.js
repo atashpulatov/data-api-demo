@@ -17,7 +17,8 @@ import {
   CREATE_GLOBAL_NOTIFICATION,
   REMOVE_GLOBAL_NOTIFICATION,
   DISPLAY_NOTIFICATION_WARNING,
-  CLEAR_NOTIFICATIONS
+  CLEAR_NOTIFICATIONS,
+  RESTORE_ALL_NOTIFICATIONS
 } from './notification-actions';
 import { titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap } from './notification-title-maps';
 import { customT } from '../../customTranslation';
@@ -62,6 +63,9 @@ export const notificationReducer = (state = initialState, action) => {
 
     case CLEAR_NOTIFICATIONS:
       return clearNotifications(state);
+
+    case RESTORE_ALL_NOTIFICATIONS:
+      return restoreAllNotifications(state, payload);
 
     default:
       return state;
@@ -167,6 +171,11 @@ const clearNotifications = (state) => ({
   ...state,
   notifications: initialState.notifications,
   globalNotification: initialState.globalNotification,
+});
+
+const restoreAllNotifications = (state, payload) => ({
+  ...state,
+  notifications: payload
 });
 
 const getOkButton = (payload) => [{
