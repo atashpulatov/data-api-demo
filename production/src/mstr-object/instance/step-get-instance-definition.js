@@ -10,7 +10,7 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { errorMessages } from '../../error/constants';
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
-import { objectImportType } from '../constants';
+import { objectImportType, importOperationStepDict } from '../constants';
 
 class StepGetInstanceDefinition {
   /**
@@ -79,7 +79,7 @@ class StepGetInstanceDefinition {
       );
 
       // FIXME: below flow should not be part of this step
-      if (futureStep === GET_OFFICE_TABLE_IMPORT) {
+      if (futureStep in importOperationStepDict) {
         startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext, name);
       }
       if (insertNewWorksheet) {
