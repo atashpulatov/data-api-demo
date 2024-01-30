@@ -35,7 +35,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['navigationTree', 'operationReducer'],
+  blacklist: ['navigationTree'],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 let middleWare;
