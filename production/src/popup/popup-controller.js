@@ -14,6 +14,7 @@ import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/repro
 import { OverviewActionCommands } from './overview/overview-helper';
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { objectImportType } from '../mstr-object/constants';
+import { notificationService } from '../notification-v2/notification-service';
 
 const URL = `${window.location.href}`;
 
@@ -136,7 +137,7 @@ class PopupController {
     const dialogType = this.reduxStore.getState().popupStateReducer?.popupType;
 
     if (dialogType === PopupTypeEnum.importedDataOverview) {
-      this.dialog?.messageChild(message);
+      this.dialog?.messageChild && this.dialog?.messageChild(message);
     }
   };
 
@@ -247,6 +248,11 @@ class PopupController {
           if (object.subtotalsInfo) { delete object.subtotalsInfo.subtotalsAddresses; }
 
           this.reduxStore.dispatch(duplicateRequested(object));
+        });
+        break;
+      case OverviewActionCommands.DISMISS_NOTIFICATION:
+        await response.objectWorkingIds.forEach(objectWorkingId => {
+          this.reduxStore.dispatch(notificationService.dismissNotification(objectWorkingId));
         });
         break;
       default:

@@ -26,10 +26,10 @@ class OverviewHelper {
     });
   }
 
-  async sendDismissNotificationsRequest(objectWorkingIds: string): Promise<void> {
+  async sendDismissNotificationRequest(objectWorkingIds: number[]): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
-      notificationId: objectWorkingIds
+      objectWorkingIds
     });
   }
 

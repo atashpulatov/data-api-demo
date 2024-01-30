@@ -49,7 +49,7 @@ const OverviewWindowNotConnected = (props) => {
         {notifications.map((notification) => (
           <li key={notification.objectWorkingId}>
             <h5>{notification.title} - {notification.objectWorkingId}</h5>
-            <button type="button" onClick={() => onDismissNotification([notification.objectWorkingId])}>Refresh</button>
+            <button type="button" onClick={() => onDismissNotification([notification.objectWorkingId])}>Dismiss Notification</button>
           </li>
         ))}
       </ol>
