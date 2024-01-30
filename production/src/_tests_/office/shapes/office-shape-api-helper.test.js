@@ -80,7 +80,7 @@ describe('officeShapeApiHelper', () => {
       const context = {
         sync: mockSync
       };
-      const shapeId = await officeShapeApiHelper.addImage(context, 'base64PngImage', 100, 100, mockSheet);
+      const shapeId = await officeShapeApiHelper.addImage(context, 'base64PngImage', { top: 100, left: 100 }, { height: 343.5, width: 434.56 }, mockSheet);
       expect(mockAddImage).toBeCalled();
       expect(mockSync).toBeCalled();
       expect(shapeId).toEqual('1234-5678-9012-3456');

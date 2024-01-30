@@ -46,9 +46,16 @@ class OfficeShapeApiHelper {
    *
    * @return {object} Office Id of the shape which is added to the worksheet
    */
-  addImage = async (excelContext, base64PngImage, top, left, sheet) => {
+  addImage = async (excelContext, base64PngImage, position, dimension, sheet) => {
     const shape = sheet.shapes.addImage(base64PngImage);
-    shape.set({ top, left });
+    const { top, left } = position;
+    const { width, height } = dimension;
+    shape.set({
+      top,
+      left,
+      width,
+      height
+    });
     await excelContext.sync();
     return shape.id;
   };

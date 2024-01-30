@@ -79,7 +79,7 @@ class OfficeApiHelper {
   };
 
   /**
-   * Returns the position of selected range
+   * Returns the position of the topLeftMost cell of the selected range
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @return {Object} object containing the top, left value of the selected range.
