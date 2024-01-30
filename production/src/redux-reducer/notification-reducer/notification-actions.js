@@ -4,8 +4,3 @@ export const REMOVE_GLOBAL_NOTIFICATION = 'REMOVE_GLOBAL_NOTIFICATION';
 export const DISPLAY_NOTIFICATION_WARNING = 'DISPLAY_NOTIFICATION_WARNING';
 export const CLEAR_NOTIFICATIONS = 'CLEAR_NOTIFICATIONS';
 export const RESTORE_ALL_NOTIFICATIONS = 'RESTORE_ALL_NOTIFICATIONS';
-
-export const restoreAllNotifications = (notifications) => ({
-  type: RESTORE_ALL_NOTIFICATIONS,
-  payload: notifications
-});

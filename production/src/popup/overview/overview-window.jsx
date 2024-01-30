@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { reduxStore } from '../../store';
 import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-actions';
+import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 
 // TODO this component should be replaced with CC Overview component
@@ -40,6 +40,7 @@ const OverviewWindowNotConnected = (props) => {
             <button type="button" onClick={() => onRefresh([object.objectWorkingId])}>Refresh</button>
             <button type="button" onClick={() => onDelete([object.objectWorkingId])}>Delete</button>
             <button type="button" onClick={() => onDuplicate([object.objectWorkingId])}>Duplicate</button>
+
           </li>
         ))}
       </ol>

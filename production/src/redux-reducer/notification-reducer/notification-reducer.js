@@ -18,7 +18,7 @@ import {
   REMOVE_GLOBAL_NOTIFICATION,
   DISPLAY_NOTIFICATION_WARNING,
   CLEAR_NOTIFICATIONS,
-  RESTORE_ALL_NOTIFICATIONS
+  RESTORE_ALL_NOTIFICATIONS,
 } from './notification-actions';
 import { titleOperationCompletedMap, titleOperationFailedMap, titleOperationInProgressMap } from './notification-title-maps';
 import { customT } from '../../customTranslation';

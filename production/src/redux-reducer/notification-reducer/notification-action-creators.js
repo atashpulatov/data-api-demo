@@ -1,7 +1,7 @@
 import { globalNotificationTypes } from '@mstr/connector-components';
 import {
   CREATE_GLOBAL_NOTIFICATION, REMOVE_GLOBAL_NOTIFICATION,
-  DELETE_NOTIFICATION, DISPLAY_NOTIFICATION_WARNING, CLEAR_NOTIFICATIONS
+  DELETE_NOTIFICATION, DISPLAY_NOTIFICATION_WARNING, CLEAR_NOTIFICATIONS, RESTORE_ALL_NOTIFICATIONS
 } from './notification-actions';
 
 export const createConnectionLostNotification = () => ({
@@ -35,3 +35,8 @@ export const displayObjectWarning = (objectWorkingId, notification) => ({
 export const clearNotifications = () => ({ type: CLEAR_NOTIFICATIONS });
 
 export const clearGlobalNotification = () => ({ type: REMOVE_GLOBAL_NOTIFICATION, });
+
+export const restoreAllNotifications = (notifications) => ({
+  type: RESTORE_ALL_NOTIFICATIONS,
+  payload: notifications
+});

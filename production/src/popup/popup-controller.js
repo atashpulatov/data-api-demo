@@ -252,7 +252,7 @@ class PopupController {
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         await response.objectWorkingIds.forEach(objectWorkingId => {
-          this.reduxStore.dispatch(notificationService.dismissNotification(objectWorkingId));
+          notificationService.removeExistingNotification(objectWorkingId);
         });
         break;
       default:
