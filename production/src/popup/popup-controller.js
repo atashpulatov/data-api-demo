@@ -134,11 +134,7 @@ class PopupController {
   };
 
   sendMessageToDialog = (message) => {
-    const dialogType = this.reduxStore.getState().popupStateReducer?.popupType;
-
-    if (dialogType === PopupTypeEnum.importedDataOverview) {
-      this.dialog?.messageChild && this.dialog?.messageChild(message);
-    }
+    this.dialog?.messageChild && this.dialog?.messageChild(message);
   };
 
   onMessageFromPopup = async (dialog, reportParams, arg) => {
