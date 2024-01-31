@@ -36,6 +36,8 @@ export const refreshRequested = (objectWorkingId, importType) => ({
 export const editRequested = (objectData, objectEditedData) => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
   const { objectWorkingId } = backupObjectData;
+  // Refer to objectData to get importType as objectEditedData.importType does not
+  // reflect the correct importType for the object being edited or re-prompted.
   return {
     type: EDIT_OPERATION,
     payload: {
@@ -43,7 +45,7 @@ export const editRequested = (objectData, objectEditedData) => {
         EDIT_OPERATION,
         objectWorkingId,
         { backupObjectData, objectEditedData },
-        objectEditedData.importType
+        objectData.importType
       ),
       objectWorkingId,
     },
