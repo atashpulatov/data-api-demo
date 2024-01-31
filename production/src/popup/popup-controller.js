@@ -25,13 +25,14 @@ class PopupController {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
 
-  init = (reduxStore, sessionActions, popupActions) => {
+  init = (reduxStore, sessionActions, popupActions, sidePanelService) => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
     // The following vars used to store references to current object reportParams and dialog
     this.reportParams = {};
     this.dialog = {};
+    this.sidePanelService = sidePanelService;
   };
 
   runPopupNavigation = async () => {
@@ -214,37 +215,13 @@ class PopupController {
     // TODO this should be  extended during action implementation
     switch (response.command) {
       case OverviewActionCommands.REFRESH:
-        await response.objectWorkingIds.forEach(objectWorkingId => {
-          this.reduxStore.dispatch(refreshRequested(objectWorkingId));
-        });
+        await this.sidePanelService.refresh(response.objectWorkingIds);
         break;
       case OverviewActionCommands.REMOVE:
-        await response.objectWorkingIds.forEach(objectWorkingId => {
-          this.reduxStore.dispatch(removeRequested(objectWorkingId));
-        });
+        await this.sidePanelService.remove(response.objectWorkingIds);
         break;
       case OverviewActionCommands.DUPLICATE:
-        // TODO this duplicate workflow is added for testing overview data sync and should be refined later
-        await response.objectWorkingIds.forEach(objectWorkingId => {
-          const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-
-          // remove this check when the duplicate workflow is implemented for image
-          if (sourceObject?.importType === objectImportType.IMAGE) {
-            return;
-          }
-          const object = JSON.parse(JSON.stringify(sourceObject));
-          object.insertNewWorksheet = false;
-          object.objectWorkingId = Date.now();
-
-          delete object.bindId;
-          delete object.tableName;
-          delete object.refreshDate;
-          delete object.preparedInstanceId;
-          delete object.previousTableDimensions;
-          if (object.subtotalsInfo) { delete object.subtotalsInfo.subtotalsAddresses; }
-
-          this.reduxStore.dispatch(duplicateRequested(object));
-        });
+        this.sidePanelService.duplicate(response.objectWorkingIds[0], true, false);
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         await response.objectWorkingIds.forEach(objectWorkingId => {

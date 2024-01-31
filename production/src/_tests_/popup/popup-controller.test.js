@@ -403,7 +403,6 @@ describe('PopupController', () => {
   it('should handle remove command from overview', async () => {
     // given
     const getStateMock = jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview } });
-    const dispatchMock = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
     const actionObject = {
       command: OverviewActionCommands.REMOVE,
@@ -430,5 +429,34 @@ describe('PopupController', () => {
 
     expect(removeRequestedSpy).toHaveBeenCalled();
     expect(removeRequestedSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds[0]);
+  });
+
+  it('should handle dismiss notification command', async () => {
+    // given
+    const getStateMock = jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview } });
+
+    const actionObject = {
+      command: OverviewActionCommands.DISMISS_NOTIFICATION,
+      objectWorkingIds: [1],
+    };
+
+    operationActions.refreshRequested = jest.fn().mockReturnValue('refreshRequestedTest');
+    jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
+
+    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
+
+    const popupControllerHandleOverviewCommandSpy = jest.spyOn(popupController, 'handleOverviewCommand');
+    const dismissNotificationRequestedSpy = jest.spyOn(operationActions, 'dismissNotificationRequested');
+
+    // when
+    await popupController.onMessageFromPopup(dialog, null, { message: JSON.stringify(actionObject) });
+
+    // then
+    expect(getStateMock).toHaveBeenCalled();
+    expect(spyValidateAuthToken).toHaveBeenCalled();
+    expect(popupControllerHandleOverviewCommandSpy).toHaveBeenCalled();
+
+    expect(dismissNotificationRequestedSpy).toHaveBeenCalled();
+    expect(dismissNotificationRequestedSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds[0]);
   });
 });

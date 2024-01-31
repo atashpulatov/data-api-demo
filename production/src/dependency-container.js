@@ -79,11 +79,11 @@ class DIContainer {
     this.visualizationInfoService = visualizationInfoService;
     this.visualizationInfoService.init(mstrObjectRestService);
 
-    this.popupController = popupController;
-    this.popupController.init(reduxStore, sessionActions, popupActions);
-
     this.sidePanelService = sidePanelService;
     this.sidePanelService.init(reduxStore);
+
+    this.popupController = popupController;
+    this.popupController.init(reduxStore, sessionActions, popupActions, sidePanelService);
 
     this.sidePanelNotificationHelper = sidePanelNotificationHelper;
     this.sidePanelNotificationHelper.init(reduxStore);
