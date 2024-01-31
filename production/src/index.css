@@ -1,18 +1,5 @@
 @import '~antd/dist/antd.css';
 
-#root,
-body {
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #fff;
-}
-
-*{
-  font-family: 'Roboto', 'Noto Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC', 'Helvetica Neue', sans-serif !important;
-}
-
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
