@@ -376,6 +376,7 @@ describe('PopupController', () => {
     const actionObject = {
       command: OverviewActionCommands.REFRESH,
       objectWorkingIds: [1],
+      importType: 'table'
     };
 
     operationActions.refreshRequested = jest.fn().mockReturnValue('refreshRequestedTest');
@@ -397,7 +398,7 @@ describe('PopupController', () => {
     expect(popupControllerHandleOverviewCommandSpy).toHaveBeenCalled();
 
     expect(refreshRequestedSpy).toHaveBeenCalled();
-    expect(refreshRequestedSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds[0]);
+    expect(refreshRequestedSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds[0], actionObject.importType);
   });
 
   it('should handle remove command from overview', async () => {
@@ -428,7 +429,7 @@ describe('PopupController', () => {
     expect(popupControllerHandleOverviewCommandSpy).toHaveBeenCalled();
 
     expect(removeRequestedSpy).toHaveBeenCalled();
-    expect(removeRequestedSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds[0]);
+    expect(removeRequestedSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds[0], actionObject.importType);
   });
 
   it('should handle dismiss notification command', async () => {

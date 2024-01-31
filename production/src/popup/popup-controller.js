@@ -221,11 +221,13 @@ class PopupController {
         await this.sidePanelService.remove(response.objectWorkingIds);
         break;
       case OverviewActionCommands.DUPLICATE:
+        // TODO this is done for purpose of testing, should be finalized during action implementation
         this.sidePanelService.duplicate(response.objectWorkingIds[0], true, false);
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         await response.objectWorkingIds.forEach(objectWorkingId => {
           notificationService.removeExistingNotification(objectWorkingId);
+          this.reduxStore.dispatch(removeRequested(objectWorkingId, response.importType));
         });
         break;
       default:

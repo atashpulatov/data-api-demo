@@ -1,6 +1,3 @@
-@mac_chrome
-@windows_chrome
-
 Feature: Ability to perform UB testing
 
   # This TC executes the ub_benchmarking test for specified number of hours

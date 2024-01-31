@@ -1,4 +1,3 @@
-@windows_chrome @mac_chrome
 Feature: F25931 - Duplicate object
 
   Scenario: [TC65014] - Side panel functionality for duplicated object

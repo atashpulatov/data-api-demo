@@ -1,4 +1,3 @@
-@windows_desktop @windows_chrome @mac_chrome
 Feature: F25933 - Range taken
 
   Scenario: [TC59863] - Importing objects with active cell

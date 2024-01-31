@@ -1,9 +1,4 @@
-#@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-#@ci_pipeline_rv_windows_chrome
-@ci_pipeline_rv_mac_chrome
-@todo_windows_desktop @disabled_windows_chrome @mac_chrome
-@release_validation
-
+#@ci_pipeline_postmerge_windows_chrome
 Feature: TF9328 - Release Validation
 
   Scenario: [TC62630] - [Privileges] Log in with different users with different permissions (Office, Library, Web)

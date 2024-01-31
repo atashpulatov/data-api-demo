@@ -1,4 +1,3 @@
-@windows_desktop @windows_chrome @mac_desktop @mac_chrome
 Feature: F25932 - Import attribute forms in separate columns
 
   Scenario: [TC59987] [Attribute forms] Edit an imported report

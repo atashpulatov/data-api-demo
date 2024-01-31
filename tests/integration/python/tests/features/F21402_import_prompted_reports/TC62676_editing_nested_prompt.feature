@@ -1,6 +1,3 @@
-#@ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-@todo_windows_desktop @windows_chrome @mac_chrome
 Feature: F21402 - Support for prompted reports while importing data for Excel add-in
 
   Scenario: [TC62676] - Editing prompted reports functionality while report contains nested prompts imported without Prepare Data
