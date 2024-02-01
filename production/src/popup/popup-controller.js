@@ -7,14 +7,8 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import {
-  importRequested, editRequested, duplicateRequested, refreshRequested, removeRequested
-} from '../redux-reducer/operation-reducer/operation-actions';
+import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { OverviewActionCommands } from './overview/overview-helper';
-import officeReducerHelper from '../office/store/office-reducer-helper';
-import { objectImportType } from '../mstr-object/constants';
-import { notificationService } from '../notification-v2/notification-service';
 
 const URL = `${window.location.href}`;
 
@@ -25,11 +19,11 @@ class PopupController {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
 
-  init = (reduxStore, sessionActions, popupActions, sidePanelService) => {
+  init = (reduxStore, sessionActions, popupActions, sidePanelService, overviewHelper) => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
-    this.sidePanelService = sidePanelService;
+    this.overviewHelper = overviewHelper;
     // The following vars used to store references to current object reportParams and dialog
     this.reportParams = {};
     this.dialog = {};
@@ -156,7 +150,7 @@ class PopupController {
       }
       await authenticationHelper.validateAuthToken();
       if (dialogType === PopupTypeEnum.importedDataOverview) {
-        await this.handleOverviewCommand(response);
+        await this.overviewHelper.handleOverviewActionCommand(response);
         return;
       }
 
@@ -208,32 +202,6 @@ class PopupController {
         // or if the Multiple Reprompt queue has been cleared up.
         this.resetPopupStates();
       }
-    }
-  };
-
-  handleOverviewCommand = async (response) => {
-    // TODO this should be  extended during action implementation
-    switch (response.command) {
-      case OverviewActionCommands.REFRESH:
-        await this.sidePanelService.refresh(response.objectWorkingIds);
-        break;
-      case OverviewActionCommands.REMOVE:
-        await this.sidePanelService.remove(response.objectWorkingIds);
-        break;
-      case OverviewActionCommands.DUPLICATE:
-        // TODO this is done for purpose of testing, should be finalized during action implementation
-        await response.objectWorkingIds.forEach(objectWorkingId => {
-          this.sidePanelService.duplicate(objectWorkingId, true, false);
-        });
-        break;
-      case OverviewActionCommands.DISMISS_NOTIFICATION:
-        await response.objectWorkingIds.forEach(objectWorkingId => {
-          notificationService.removeExistingNotification(objectWorkingId);
-        });
-        break;
-      default:
-        console.log('Unhandled dialog command: ', response.command);
-        break;
     }
   };
 

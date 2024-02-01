@@ -25,6 +25,7 @@ import stepGetDuplicateName from './office/step-get-duplicate-name';
 import operationErrorHandler from './operation/operation-error-handler';
 import officeStoreHelper from './office/store/office-store-helper';
 import { visualizationInfoService } from './mstr-object/visualization-info-service';
+import overviewHelper from './popup/overview/overview-helper';
 
 class DIContainer {
   constructor(autoInitialize) {
@@ -83,7 +84,10 @@ class DIContainer {
     this.sidePanelService.init(reduxStore);
 
     this.popupController = popupController;
-    this.popupController.init(reduxStore, sessionActions, popupActions, sidePanelService);
+    this.popupController.init(reduxStore, sessionActions, popupActions, overviewHelper);
+
+    this.overviewHelper = overviewHelper;
+    this.overviewHelper.init(sidePanelService, notificationService);
 
     this.sidePanelNotificationHelper = sidePanelNotificationHelper;
     this.sidePanelNotificationHelper.init(reduxStore);

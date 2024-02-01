@@ -21,10 +21,10 @@ const OverviewWindowNotConnected = (props) => {
       const { popupType } = message;
 
       if (popupType === PopupTypeEnum.importedDataOverview) {
-        const { objects: objectsToRestore, notifications: notificationsToRestore } = message;
+        const { objects: objectsToSync, notifications: notificationsToSync } = message;
 
-        reduxStore.dispatch(restoreAllObjects(objectsToRestore));
-        reduxStore.dispatch(restoreAllNotifications(notificationsToRestore));
+        reduxStore.dispatch(restoreAllObjects(objectsToSync));
+        reduxStore.dispatch(restoreAllNotifications(notificationsToSync));
       }
     });
   }, []);
