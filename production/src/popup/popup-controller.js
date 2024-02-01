@@ -29,10 +29,10 @@ class PopupController {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
+    this.sidePanelService = sidePanelService;
     // The following vars used to store references to current object reportParams and dialog
     this.reportParams = {};
     this.dialog = {};
-    this.sidePanelService = sidePanelService;
   };
 
   runPopupNavigation = async () => {
@@ -222,7 +222,9 @@ class PopupController {
         break;
       case OverviewActionCommands.DUPLICATE:
         // TODO this is done for purpose of testing, should be finalized during action implementation
-        this.sidePanelService.duplicate(response.objectWorkingIds[0], true, false);
+        await response.objectWorkingIds.forEach(objectWorkingId => {
+          this.sidePanelService.duplicate(objectWorkingId, true, false);
+        });
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         await response.objectWorkingIds.forEach(objectWorkingId => {
