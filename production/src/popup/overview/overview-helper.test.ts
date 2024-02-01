@@ -1,8 +1,10 @@
+import { notificationService } from '../../notification-v2/notification-service';
+import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
 
 describe('overview-helper', () => {
-  const objectWorkingIds = [1, 2, 3];
+  const objectWorkingIds = [1, 2];
 
   it('should send refresh request to side panel', () => {
     // Given
@@ -54,5 +56,71 @@ describe('overview-helper', () => {
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
       objectWorkingIds
     });
+  });
+
+  it('should handle refresh command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.REFRESH,
+      objectWorkingIds
+    };
+
+    const refreshMock = jest.spyOn(sidePanelService, 'refresh').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(refreshMock).toHaveBeenCalledWith(objectWorkingIds);
+  });
+
+  it('should handle remove command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.REMOVE,
+      objectWorkingIds
+    };
+
+    const removeMock = jest.spyOn(sidePanelService, 'remove').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(removeMock).toHaveBeenCalledWith(objectWorkingIds);
+  });
+
+  it('should handle duplicate command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.DUPLICATE,
+      objectWorkingIds
+    };
+
+    const removeMock = jest.spyOn(sidePanelService, 'duplicate').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[0], true, false);
+    expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[1], true, false);
+  });
+
+  it('should handle dismiss notification command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.DISMISS_NOTIFICATION,
+      objectWorkingIds
+    };
+
+    const removeMock = jest.spyOn(notificationService, 'removeExistingNotification').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[0]);
+    expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[1]);
   });
 });
