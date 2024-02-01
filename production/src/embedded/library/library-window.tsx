@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
-import { Empty } from '@mstr/connector-components';
+import { ObjectWindowTitle, Empty } from '@mstr/connector-components';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import i18n from '../../i18n';
@@ -208,9 +208,15 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
 
   return (
     <div className="library-window">
-      <div className="title-bar">
-        <span>{t('Import Data')}</span>
-      </div>
+      <ObjectWindowTitle
+        locale={i18n.language}
+        objectType="" // not needed for import, falls back to 'Data'
+        objectName="" // not needed for import
+        isReprompt={false}
+        isEdit={false}
+        index={0}
+        total={0}
+      />
       <Empty isLoading />
       <EmbeddedLibrary
         handleSelection={handleSelection}
