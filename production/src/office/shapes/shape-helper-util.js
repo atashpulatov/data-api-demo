@@ -67,7 +67,7 @@ export const determineImagePropsToBeAddedToBook = ({
     height: shapeInWorksheet.height,
     top: shapeInWorksheet.top,
     left: shapeInWorksheet.left,
-    sheet,
+    sheet: excelContext.workbook.worksheets.getItem(shapeInWorksheet?.worksheetId),
   };
   const cachedImageProps = shapeProps && {
     width: shapeProps.width,
