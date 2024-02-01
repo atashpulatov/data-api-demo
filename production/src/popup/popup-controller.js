@@ -19,7 +19,7 @@ class PopupController {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
 
-  init = (reduxStore, sessionActions, popupActions, sidePanelService, overviewHelper) => {
+  init = (reduxStore, sessionActions, popupActions, overviewHelper) => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;

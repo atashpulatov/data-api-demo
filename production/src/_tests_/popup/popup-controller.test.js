@@ -8,7 +8,7 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import * as operationActions from '../../redux-reducer/operation-reducer/operation-actions';
 import { reduxStore } from '../../store';
 import { Office } from '../mockOffice';
-import { OverviewActionCommands } from '../../popup/overview/overview-helper';
+import overviewHelper, { OverviewActionCommands } from '../../popup/overview/overview-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { notificationService } from '../../notification-v2/notification-service';
@@ -371,117 +371,34 @@ describe('PopupController', () => {
     expect(operationActions.duplicateRequested).toBeCalledWith(reportParams.object, actionObject);
   });
 
-  it('should handle refresh command from overview', async () => {
+  it.each`
+  actionCommand
+  ${OverviewActionCommands.REFRESH}     
+  ${OverviewActionCommands.REMOVE}     
+  ${OverviewActionCommands.DUPLICATE}
+  ${OverviewActionCommands.DISMISS_NOTIFICATION}     
+  `('should call handleOverviewActionCommand for overview actions', async ({ actionCommand }) => {
     // given
     const actionObject = {
-      command: OverviewActionCommands.REFRESH,
-      objectWorkingIds: [1, 2],
-      importType: 'table'
-    };
-
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview } });
-    jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => { });
-    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
-    jest.spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId').mockImplementation(() => actionObject.importType);
-
-    const refreshSidePanelSpy = jest.spyOn(sidePanelService, 'refresh').mockImplementation();
-    const popupControllerHandleOverviewCommandSpy = jest.spyOn(popupController, 'handleOverviewCommand');
-    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
-
-    // when
-    await popupController.onMessageFromPopup(dialog, null, { message: JSON.stringify(actionObject) });
-
-    // then
-    expect(popupControllerHandleOverviewCommandSpy).toHaveBeenCalled();
-    expect(spyValidateAuthToken).toHaveBeenCalled();
-    expect(refreshSidePanelSpy).toHaveBeenCalled();
-    expect(refreshSidePanelSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds);
-  });
-
-  it('should handle remove command from overview', async () => {
-    // given
-    const actionObject = {
-      command: OverviewActionCommands.REMOVE,
-      objectWorkingIds: [1, 2],
-      importType: 'table'
-    };
-
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview } });
-    jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => { });
-    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
-    jest.spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId').mockImplementation(() => actionObject.importType);
-
-    const removeSidePanelSpy = jest.spyOn(sidePanelService, 'remove').mockImplementation();
-    const popupControllerHandleOverviewCommandSpy = jest.spyOn(popupController, 'handleOverviewCommand');
-    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
-
-    // when
-    await popupController.onMessageFromPopup(dialog, null, { message: JSON.stringify(actionObject) });
-
-    // then
-    expect(popupControllerHandleOverviewCommandSpy).toHaveBeenCalled();
-    expect(spyValidateAuthToken).toHaveBeenCalled();
-    expect(removeSidePanelSpy).toHaveBeenCalled();
-    expect(removeSidePanelSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds);
-  });
-
-  it('should handle duplicate command from overview', async () => {
-    // given
-    const actionObject = {
-      command: OverviewActionCommands.DUPLICATE,
-      objectWorkingIds: [1, 2],
-      importType: 'table'
-    };
-
-    jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview } });
-    jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
-    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementationOnce(() => { });
-    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
-    jest.spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId').mockImplementation(() => actionObject.importType);
-    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
-
-    const duplicateSidePanelSpy = jest.spyOn(sidePanelService, 'duplicate').mockImplementation();
-    const popupControllerHandleOverviewCommandSpy = jest.spyOn(popupController, 'handleOverviewCommand');
-
-    // when
-    await popupController.onMessageFromPopup(dialog, null, { message: JSON.stringify(actionObject) });
-
-    // then
-    expect(spyValidateAuthToken).toHaveBeenCalled();
-    expect(popupControllerHandleOverviewCommandSpy).toHaveBeenCalled();
-    expect(duplicateSidePanelSpy).toHaveBeenCalled();
-    expect(duplicateSidePanelSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds[0], true, false);
-  });
-
-  it('should handle dismiss notification command', async () => {
-    // given
-    const getStateMock = jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview } });
-
-    const actionObject = {
-      command: OverviewActionCommands.DISMISS_NOTIFICATION,
+      command: actionCommand,
       objectWorkingIds: [1],
       importType: 'table'
     };
 
-    operationActions.refreshRequested = jest.fn().mockReturnValue('refreshRequestedTest');
+    const handleOverviewActionCommandMock = jest.spyOn(overviewHelper, 'handleOverviewActionCommand').mockImplementation(() => { });
+
+    jest.spyOn(reduxStore, 'getState').mockReturnValue({ popupStateReducer: { popupType: PopupTypeEnum.importedDataOverview } });
     jest.spyOn(popupController, 'getIsMultipleRepromptQueueEmpty').mockReturnValue(true);
-
-    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementationOnce(() => { });
-
-    const popupControllerHandleOverviewCommandSpy = jest.spyOn(popupController, 'handleOverviewCommand');
-    const removeExistingNotificationSpy = jest.spyOn(notificationService, 'removeExistingNotification');
+    jest.spyOn(officeApiHelper, 'getExcelSessionStatus').mockImplementation(() => { });
+    jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
+    jest.spyOn(officeReducerHelper, 'getObjectFromObjectReducerByObjectWorkingId').mockImplementation(() => actionObject.importType);
+    const spyValidateAuthToken = jest.spyOn(authenticationHelper, 'validateAuthToken').mockImplementation(() => { });
 
     // when
     await popupController.onMessageFromPopup(dialog, null, { message: JSON.stringify(actionObject) });
 
     // then
-    expect(getStateMock).toHaveBeenCalled();
+    expect(handleOverviewActionCommandMock).toHaveBeenCalled();
     expect(spyValidateAuthToken).toHaveBeenCalled();
-    expect(popupControllerHandleOverviewCommandSpy).toHaveBeenCalled();
-
-    expect(removeExistingNotificationSpy).toHaveBeenCalled();
-    expect(removeExistingNotificationSpy).toHaveBeenCalledWith(actionObject.objectWorkingIds[0]);
   });
 });
