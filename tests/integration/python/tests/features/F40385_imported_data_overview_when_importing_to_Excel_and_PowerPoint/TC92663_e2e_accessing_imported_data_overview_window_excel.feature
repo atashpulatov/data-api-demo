@@ -75,6 +75,6 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
 
      When I clicked "Refresh" button for select all in Overview window
      Then I waited for ALL objects to be refreshed successfully
+      And I clicked "Close" button
 
       And I logged out
-
