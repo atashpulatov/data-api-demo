@@ -101,7 +101,7 @@ describe('Settings Menu', () => {
         requirements: { isSetSupported: jest.fn() },
       },
     };
-    // when"
+    // when
     const { getByRole } = render(
       <SettingsMenuNotConnected
         userFullName="userFullName"
@@ -122,7 +122,7 @@ describe('Settings Menu', () => {
         requirements: { isSetSupported: jest.fn() },
       },
     };
-    // when"
+    // when
     const { getByRole } = render(
       <SettingsMenuNotConnected
         userFullName="userFullName"
@@ -147,7 +147,7 @@ describe('Settings Menu', () => {
     const toggleSettingsPanelLoadedFlag = jest.fn();
     const toggleIsSettingsFlag = jest.fn();
 
-    // when"
+    // when
     const { getByRole } = render(
       <SettingsMenuNotConnected
         userFullName="userFullName"
@@ -177,7 +177,7 @@ describe('Settings Menu', () => {
     const toggleSettingsPanelLoadedFlag = jest.fn();
     const toggleIsSettingsFlag = jest.fn();
 
-    // when"
+    // when
     const { getByRole } = render(
       <SettingsMenuNotConnected
         userFullName="userFullName"
@@ -318,6 +318,11 @@ describe('Settings Menu', () => {
           removeChild: jest.fn(),
         },
       },
+    });
+
+    const map = {};
+    document.addEventListener = jest.fn((event, cb) => {
+      map[event] = cb;
     });
     // when
     const returnValue = overflowHelper.isOverflown();

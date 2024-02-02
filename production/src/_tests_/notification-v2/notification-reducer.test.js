@@ -130,6 +130,21 @@ describe('Notification reducer', () => {
       globalNotification: { type: 'some type' },
     };
 
+    const updatedStateProgress = {
+      notifications: [{
+        objectWorkingId: 101,
+        operationType: IMPORT_OPERATION,
+        title: 'Completed',
+        type: 'PROGRESS',
+      }, {
+        objectWorkingId: 102,
+        operationType: REMOVE_OPERATION,
+        title: 'Pending',
+        type: 'PROGRESS',
+      }],
+      globalNotification: { type: 'some other type' },
+    };
+
     describe('createProgressNotification', () => {
       it('should add new pending notification to empty array', () => {
         // given
@@ -448,6 +463,23 @@ describe('Notification reducer', () => {
 
         // then
         expect(resultState.notifications).toHaveLength(3);
+        expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
+      });
+    });
+
+    describe('restoreAllNotifications', () => {
+      it('should restore all notifications', () => {
+        // given
+        const action = {
+          type: 'RESTORE_ALL_NOTIFICATIONS',
+          payload: updatedStateProgress.notifications
+        };
+
+        // when
+        const resultState = notificationReducer(initialStateProgress, action);
+
+        // then
+        expect(resultState.notifications).toEqual(updatedStateProgress.notifications);
         expect(resultState.globalNotification).toEqual(initialStateProgress.globalNotification);
       });
     });
