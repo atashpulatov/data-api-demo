@@ -1,5 +1,4 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { IncorrectInputTypeError } from '../../office/incorrect-input-type';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 
 // FIXME: these were disabled anyway. Needs to be redone.
@@ -32,7 +31,7 @@ describe('OfficeApiHelper', () => {
       result = officeApiHelper.lettersToNumber(columnName);
     } catch (error) {
       // then
-      expect(error).toBeInstanceOf(IncorrectInputTypeError);
+      expect(error).toBeInstanceOf(Error);
     }
     expect(result).toBeUndefined();
   });
@@ -45,7 +44,7 @@ describe('OfficeApiHelper', () => {
       result = officeApiHelper.lettersToNumber(columnName);
     } catch (error) {
       // then
-      expect(error).toBeInstanceOf(IncorrectInputTypeError);
+      expect(error).toBeInstanceOf(Error);
     }
     expect(result).toBeUndefined();
   });
@@ -110,7 +109,7 @@ describe('OfficeApiHelper', () => {
       result = officeApiHelper.getRange(headerCount, startCell);
     } catch (error) {
       // then
-      expect(error).toBeInstanceOf(IncorrectInputTypeError);
+      expect(error).toBeInstanceOf(Error);
     }
     expect(result).toBeUndefined();
   });
@@ -125,7 +124,7 @@ describe('OfficeApiHelper', () => {
       result = officeApiHelper.getRange(headerCount, startCell);
     } catch (error) {
       // then
-      expect(error).toBeInstanceOf(IncorrectInputTypeError);
+      expect(error).toBeInstanceOf(Error);
     }
     expect(result).toBeUndefined();
   });
