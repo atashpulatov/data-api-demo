@@ -226,6 +226,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
           !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
         isPublished={isPublished}
+        isImportReport={mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype) === mstrObjectEnum.mstrObjectType.report}
       />
     </div>
   );

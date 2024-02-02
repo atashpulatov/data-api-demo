@@ -16,6 +16,8 @@ jest.mock('@mstr/connector-components', () => {
     TopFilterPanel: () => <div />,
     // eslint-disable-next-line react/no-multi-comp,react/react-in-jsx-scope
     SidePanel: () => <div />,
+    // eslint-disable-next-line react/no-multi-comp,react/react-in-jsx-scope
+    Empty: () => <div />,
     objectNotificationTypes: {
       PROGRESS: 'PROGRESS',
       WARNING: 'WARNING',

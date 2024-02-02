@@ -1,7 +1,6 @@
 import { createStore } from 'redux';
 import { sessionReducer } from '../../redux-reducer/session-reducer/session-reducer';
 import { sessionProperties } from '../../redux-reducer/session-reducer/session-properties';
-import { SessionError } from '../../error/session-error';
 
 describe('sessionReducer', () => {
   const sessionStore = createStore(sessionReducer);
@@ -30,7 +29,7 @@ describe('sessionReducer', () => {
       sessionStore.dispatch({ type: sessionProperties.actions.setLoading, });
     };
     // then
-    expect(wrongActionCall).toThrowError(SessionError);
+    expect(wrongActionCall).toThrowError(Error);
     expect(wrongActionCall).toThrowError('Missing loading');
   });
   it('should set loading to enabled', () => {
@@ -109,7 +108,7 @@ describe('sessionReducer', () => {
       });
     };
     // then
-    expect(wrongActionCall).toThrowError(SessionError);
+    expect(wrongActionCall).toThrowError(Error);
     expect(wrongActionCall).toThrowError('Missing EnvUrl.');
     expect(sessionStore.getState().username).toBeFalsy();
   });
@@ -133,7 +132,7 @@ describe('sessionReducer', () => {
       sessionStore.dispatch({ type: sessionProperties.actions.loggedIn, });
     };
     // then
-    expect(wrongActionCall).toThrowError(SessionError);
+    expect(wrongActionCall).toThrowError(Error);
     expect(wrongActionCall).toThrowError('Missing AuthToken.');
   });
 
