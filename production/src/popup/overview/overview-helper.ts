@@ -61,12 +61,12 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.DUPLICATE:
         // TODO this is done for purpose of testing, should be finalized during action implementation
-        await response.objectWorkingIds.forEach(objectWorkingId => {
+        response.objectWorkingIds.forEach(objectWorkingId => {
           this.sidePanelService.duplicate(objectWorkingId, true, false);
         });
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
-        await response.objectWorkingIds.forEach(objectWorkingId => {
+        response.objectWorkingIds.forEach(objectWorkingId => {
           this.notificationService.removeExistingNotification(objectWorkingId);
         });
         break;
