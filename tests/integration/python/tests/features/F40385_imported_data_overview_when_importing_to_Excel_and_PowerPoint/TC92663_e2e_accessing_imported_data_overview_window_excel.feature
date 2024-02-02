@@ -16,38 +16,38 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
 
     #Import report 2: Page-by report
     #To DO: add steps for importing in separate worksheets in Page-by config window + general config, once Page-by TC's are done in US510006
-      And I clicked Import Data button
+      And I clicked Add Data button
       And I found and selected object "Bursting Report - Multiple attribute in page-by"
       And I clicked Import button
 
     #Import report 3: Normal report
-      And I clicked Import Data button
+      And I clicked Add Data button
       And I found and selected object "01 Basic Report"
       And I clicked Import button
 
     #Import report 4: Prompted report
-      And I clicked Import Data button
+      And I clicked Add Data button
       And I found and selected object "Prompted report with subtotals"
       And I clicked Import button
       And I clicked Apply button
 
     #Import report 5: Normal report
-      And I clicked Import Data button
+      And I clicked Add Data button
       And I found and selected object "Simple Report Display Sample Report"
       And I clicked Import button
 
     #Import report 6: Normal report
-      And I clicked Import Data button
+      And I clicked Add Data button
       And I found and selected object "report graph"
       And I clicked Import button
 
     #Import report 7: Normal report
-      And I clicked Import Data button
+      And I clicked Add Data button
       And I found and selected object "Report with all subtotals"
       And I clicked Import button
 
     #Import report 8: Normal report
-      And I clicked Import Data button
+      And I clicked Add Data button
       And I found and selected object "Report with Totals and Subtotals"
       And I clicked Import button
 
@@ -75,3 +75,5 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
 
      When I clicked "Refresh" button for select all in Overview window
      Then I waited for ALL objects to be refreshed successfully
+
+      And I logged out
