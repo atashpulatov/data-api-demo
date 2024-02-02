@@ -1,4 +1,4 @@
-import request, { Request } from 'superagent';
+/* eslint-disable jest/no-disabled-tests */
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { reduxStore } from '../../store';
 
