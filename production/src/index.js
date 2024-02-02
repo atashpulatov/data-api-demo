@@ -11,6 +11,7 @@ import { diContainer } from './dependency-container';
 import { HomeHelper } from './home/home-helper';
 import { reduxStore } from './store';
 import { sessionHelper } from './storage/session-helper';
+import { PopupTypeEnum } from './home/popup-type-enum';
 
 // Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
@@ -49,7 +50,11 @@ function officeInitialize() {
             // This only occurs during Multiple Reprompt, but we replace the dialog window
             // URL location to trigger the next object's Reprompt window.
             const { splittedUrl = [], popupType = '' } = JSON.parse(arg.message);
-            window.location.replace(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`);
+
+            // TODO further investigate this logic during import implementation
+            if (popupType !== PopupTypeEnum.importedDataOverview) {
+              window.location.replace(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`);
+            }
           });
       }
       goReact();

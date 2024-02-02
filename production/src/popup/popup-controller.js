@@ -7,11 +7,8 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { officeApiHelper } from '../office/api/office-api-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
-import {
-  importRequested, editRequested, duplicateRequested, refreshRequested, removeRequested
-} from '../redux-reducer/operation-reducer/operation-actions';
+import { importRequested, editRequested, duplicateRequested } from '../redux-reducer/operation-reducer/operation-actions';
 import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { OverviewActionCommands } from './overview/overview-helper';
 
 const URL = `${window.location.href}`;
 
@@ -22,10 +19,11 @@ class PopupController {
     this.EXCEL_XTABS_BORDER_COLOR = excelXtabsBorderColor;
   }
 
-  init = (reduxStore, sessionActions, popupActions) => {
+  init = (reduxStore, sessionActions, popupActions, overviewHelper) => {
     this.reduxStore = reduxStore;
     this.sessionActions = sessionActions;
     this.popupActions = popupActions;
+    this.overviewHelper = overviewHelper;
     // The following vars used to store references to current object reportParams and dialog
     this.reportParams = {};
     this.dialog = {};
@@ -130,6 +128,10 @@ class PopupController {
     }
   };
 
+  sendMessageToDialog = (message) => {
+    this.dialog?.messageChild && this.dialog?.messageChild(message);
+  };
+
   onMessageFromPopup = async (dialog, reportParams, arg) => {
     const isMultipleRepromptQueueEmpty = this.getIsMultipleRepromptQueueEmpty();
     const { message } = arg;
@@ -148,7 +150,7 @@ class PopupController {
       }
       await authenticationHelper.validateAuthToken();
       if (dialogType === PopupTypeEnum.importedDataOverview) {
-        await this.handleOverviewCommand(response);
+        await this.overviewHelper.handleOverviewActionCommand(response);
         return;
       }
 
@@ -200,24 +202,6 @@ class PopupController {
         // or if the Multiple Reprompt queue has been cleared up.
         this.resetPopupStates();
       }
-    }
-  };
-
-  handleOverviewCommand = async (response) => {
-    // TODO this should be  extended during action implementation
-    switch (response.command) {
-      case OverviewActionCommands.REFRESH:
-        await response.objectWorkingIds.forEach(objectWorkingId => {
-          this.reduxStore.dispatch(refreshRequested(objectWorkingId, response.importType));
-        });
-        break;
-      case OverviewActionCommands.REMOVE:
-        await response.objectWorkingIds.forEach(objectWorkingId => {
-          this.reduxStore.dispatch(removeRequested(objectWorkingId, response.importType));
-        });
-        break;
-      default:
-        break;
     }
   };
 
