@@ -7,14 +7,14 @@ import { refreshRequested, removeRequested } from '../../redux-reducer/operation
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
+import { ApplicationTypeEnum } from '../../office-constants';
 
 import './overview-window.scss';
 
 const OverviewWindowNotConnected = (props) => {
   const {
-    onRefresh, onDelete, onDuplicate, onDismissNotification
+    objects, onRefresh, onDelete, onDuplicate, onDismissNotification, notifications,
   } = props;
-  const { objects } = props;
 
   useEffect(() => {
     // Get Message from Right side panel
@@ -35,7 +35,7 @@ const OverviewWindowNotConnected = (props) => {
     <div className="data-overview-wrapper">
       <DataOverview
         loadedObjects={objects}
-        applicationType="EXCEL"
+        applicationType={ApplicationTypeEnum.Excel}
         onRefresh={onRefresh}
         onDelete={onDelete}
         onDuplicate={onDuplicate} />
@@ -49,7 +49,7 @@ OverviewWindowNotConnected.propTypes = {
   onDuplicate: PropTypes.func,
   onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
-  // notifications: PropTypes.arrayOf(PropTypes.shape({})),
+  notifications: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export const mapStateToProps = ({ objectReducer, notificationReducer }) => {
