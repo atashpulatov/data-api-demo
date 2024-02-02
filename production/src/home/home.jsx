@@ -61,6 +61,8 @@ export const HomeNotConnected = (props) => {
   useEffect(() => {
     function initializeHome() {
       try {
+        // initialize shape API support status in store
+        homeHelper.initIsShapeAPISupported();
         officeStoreRestoreObject.restoreObjectsFromExcelStore();
         officeStoreRestoreObject.restoreAnswersFromExcelStore();
         homeHelper.saveLoginValues();

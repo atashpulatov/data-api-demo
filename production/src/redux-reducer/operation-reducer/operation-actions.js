@@ -25,10 +25,10 @@ export const importRequested = (object) => {
   };
 };
 
-export const refreshRequested = (objectWorkingId) => ({
+export const refreshRequested = (objectWorkingId, importType) => ({
   type: REFRESH_OPERATION,
   payload: {
-    operation: createOperation(REFRESH_OPERATION, objectWorkingId),
+    operation: createOperation(REFRESH_OPERATION, objectWorkingId, {}, importType),
     objectWorkingId,
   },
 });
@@ -36,21 +36,28 @@ export const refreshRequested = (objectWorkingId) => ({
 export const editRequested = (objectData, objectEditedData) => {
   const backupObjectData = JSON.parse(JSON.stringify(objectData));
   const { objectWorkingId } = backupObjectData;
+  // Refer to objectData to get importType as objectEditedData.importType does not
+  // reflect the correct importType for the object being edited or re-prompted.
   return {
     type: EDIT_OPERATION,
     payload: {
-      operation: createOperation(EDIT_OPERATION, objectWorkingId, { backupObjectData, objectEditedData }),
+      operation: createOperation(
+        EDIT_OPERATION,
+        objectWorkingId,
+        { backupObjectData, objectEditedData },
+        objectData.importType
+      ),
       objectWorkingId,
     },
   };
 };
 
 export const duplicateRequested = (object, objectEditedData) => {
-  const { objectWorkingId } = object;
+  const { objectWorkingId, importType } = object;
   return {
     type: DUPLICATE_OPERATION,
     payload: {
-      operation: createOperation(DUPLICATE_OPERATION, objectWorkingId, { objectEditedData }),
+      operation: createOperation(DUPLICATE_OPERATION, objectWorkingId, { objectEditedData }, importType),
       object,
     },
   };
@@ -72,10 +79,10 @@ export const highlightRequested = (objectWorkingId) => ({
   },
 });
 
-export const clearDataRequested = (objectWorkingId) => ({
+export const clearDataRequested = (objectWorkingId, importType) => ({
   type: CLEAR_DATA_OPERATION,
   payload: {
-    operation: createOperation(CLEAR_DATA_OPERATION, objectWorkingId),
+    operation: createOperation(CLEAR_DATA_OPERATION, objectWorkingId, {}, importType),
     objectWorkingId,
   },
 });

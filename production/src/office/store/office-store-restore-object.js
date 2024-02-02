@@ -3,6 +3,7 @@ import { errorService } from '../../error/error-handler';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { restoreAllAnswers } from '../../redux-reducer/answers-reducer/answers-actions';
 import officeStoreHelper from './office-store-helper';
+import { objectImportType } from '../../mstr-object/constants';
 
 class OfficeStoreRestoreObject {
   init = (reduxStore) => {
@@ -23,10 +24,24 @@ class OfficeStoreRestoreObject {
       : objects;
 
     this.resetIsPromptedForDossiersWithAnswers(objects);
+    this.restoreLegacyObjectsWithImportType(objects);
 
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
 
     settings.set(officeProperties.storedObjects, objects);
+  };
+
+  /**
+   * Parse the objects and set 'importType' to 'TABLE' if it is not defined.
+   *
+   * @param {*} objects restored object definitions from excel document.
+   */
+  restoreLegacyObjectsWithImportType = (objects) => {
+    objects?.forEach(object => {
+      if (object && !object.importType) {
+        object.importType = objectImportType.TABLE;
+      }
+    });
   };
 
   /**
@@ -39,7 +54,7 @@ class OfficeStoreRestoreObject {
    * @param {*} objects restored object definitions from excel document.
    */
   resetIsPromptedForDossiersWithAnswers = (objects) => {
-    objects && objects.filter(object => object.mstrObjectType.type === 55).forEach(object => {
+    objects?.filter(object => object.mstrObjectType.type === 55).forEach(object => {
       if (!object.isPrompted) {
         object.isPrompted = object.manipulationsXML?.promptAnswers !== undefined;
       }

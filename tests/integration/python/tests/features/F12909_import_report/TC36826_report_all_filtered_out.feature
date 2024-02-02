@@ -1,4 +1,3 @@
-@windows_desktop @windows_chrome @mac_chrome
 Feature: F12909 - Import report
 
   Scenario: [TC36826] Importing report with all data filtered out

@@ -8,6 +8,7 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { popupHelper } from '../popup/popup-helper';
 import { officeProperties } from '../redux-reducer/office-reducer/office-properties';
 import { AttributeSelectorWindowNotConnectedProps } from './attribute-selector-types';
+import { objectImportType } from '../mstr-object/constants';
 
 export const DEFAULT_PROJECT_NAME = 'Prepare Data';
 
@@ -103,6 +104,7 @@ export const AttributeSelectorWindowNotConnected = (props: AttributeSelectorWind
         handleBack={(!isEdit || isPrompted) && handleBack}
         handleOk={handleOk}
         handleCancel={handleCancel}
+        primaryImportType={objectImportType.TABLE}
         onPreviewClick={() => setIsModalOpen(true)}
       />
     </div>

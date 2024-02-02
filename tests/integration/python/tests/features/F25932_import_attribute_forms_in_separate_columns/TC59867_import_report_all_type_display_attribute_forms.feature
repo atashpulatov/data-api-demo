@@ -1,8 +1,4 @@
-#@ci_pipeline_daily_windows_desktop @ci_pipeline_daily_windows_chrome @ci_pipeline_daily_mac_chrome
-#@ci_pipeline_rv_windows_desktop
-@ci_pipeline_rv_windows_chrome @ci_pipeline_rv_mac_chrome
-@disabled_windows_desktop @windows_chrome @mac_chrome
-@release_validation
+#@ci_pipeline_postmerge_windows_chrome
 Feature: F25932 - Import attribute forms in separate columns
 
   Scenario: [TC59867] [Attribute forms] Import report using all types of "Display attribute form names"

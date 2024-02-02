@@ -76,6 +76,10 @@ describe('Popup actions', () => {
         pageKey: 'page',
         chapterKey: 'chapterKey',
         visualizationKey: 'visKey',
+      },
+      vizDimensions: {
+        width: 454.34,
+        height: 231.34
       }
     };
     const listener = jest.fn();
@@ -115,6 +119,10 @@ describe('Popup actions', () => {
         pageKey: 'page',
         chapterKey: 'chapterKey',
         visualizationKey: 'visKey',
+      },
+      vizDimensions: {
+        width: 454.34,
+        height: 231.34
       }
     };
     const listener = jest.fn();
@@ -233,6 +241,10 @@ describe('Popup actions', () => {
         chapterName: 'chapterName',
         dossierName: 'dossierName',
         pageName: 'pageName',
+      },
+      vizDimensions: {
+        width: 454.34,
+        height: 231.34
       }
     };
 
@@ -338,6 +350,68 @@ describe('Popup actions', () => {
     expect(officeApiHelper.checkStatusOfSessions).toBeCalled();
     expect(listener).toHaveBeenCalledWith({ type: SET_REPORT_N_FILTERS, editedObject: object });
     expect(popupController.runRepromptPopup).toBeCalledWith(reportParams);
+  });
+
+  it('should update dossier data in prepareDossierForReprompt with visualizationInfo update', async () => {
+    // given
+    const projectId = 'projectId';
+    const objectId = 'objectId';
+    const instanceId = { mid: 'instanceId' };
+    const manipulationsXML = { data: 'data' };
+    const oldVisKey = 'oldVisualizationKey';
+    const newVisKey = 'newVisualizationKey';
+
+    const promptedDossier = {
+      projectId,
+      objectId,
+      manipulationsXML,
+      visualizationInfo: { visualizationKey: oldVisKey },
+      mstrObjectType: 'mstrObjectType',
+      instanceId,
+    };
+    const body = {
+      ...manipulationsXML,
+      disableManipulationsAutoSaving: true,
+      persistViewState: true
+    };
+    const newVizInfo = {
+      chapterKey: 'chapterKey',
+      pageKey: 'pageKey',
+      visualizationKey: newVisKey,
+      dossierStructure: {
+        chapterName: 'chapterName',
+        dossierName: 'dossierName',
+        pageName: 'pageName',
+      },
+      vizDimensions: {
+        width: 454.34,
+        height: 231.34
+      }
+    };
+
+    const newPromptedDossierDossier = {
+      instanceId: 'instanceId',
+      isEdit: true,
+      manipulationsXML,
+      mstrObjectType: 'mstrObjectType',
+      objectType: 'mstrObjectType',
+      objectId,
+      projectId,
+      visualizationInfo: newVizInfo
+    };
+
+    createDossierInstance.mockReturnValueOnce(instanceId);
+    getVisualizationInfo.mockReturnValueOnce(newVizInfo);
+
+    // when
+    await actions.prepareDossierForReprompt(promptedDossier);
+
+    // then
+    expect(createDossierInstance).toBeCalledWith(projectId, objectId, body);
+    expect(getVisualizationInfo).toBeCalledWith(
+      projectId, objectId, oldVisKey, 'instanceId',
+    );
+    expect(promptedDossier).toStrictEqual(newPromptedDossierDossier);
   });
 
   it('should do callForDuplicate for duplication with edit for dossier visualization', async () => {

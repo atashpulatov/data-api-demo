@@ -1,6 +1,3 @@
-@mac_chrome
-@windows_chrome
-
 Feature: Ability to perform UB testing
 
   Scenario: [TC91637] Benchmarking Test for New Excel Add-in

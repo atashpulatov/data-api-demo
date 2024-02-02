@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { SidePanel, popupTypes, objectNotificationTypes } from '@mstr/connector-components';
@@ -15,6 +15,8 @@ import officeReducerHelper from '../office/store/office-reducer-helper';
 import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { popupController } from '../popup/popup-controller';
 import {
   IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION,
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
@@ -53,8 +55,6 @@ export const RightSidePanelNotConnected = ({
         await sidePanelEventHelper.addRemoveObjectListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
         await sidePanelService.initReusePromptAnswers();
-        // initialize shape API support status in store
-        sidePanelService.initIsShapeAPISupported();
       } catch (error) {
         console.error(error);
       }
@@ -159,6 +159,12 @@ export const RightSidePanelNotConnected = ({
   };
 
   const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
+
+  useEffect(() => {
+    popupController.sendMessageToDialog(
+      JSON.stringify({ popupType: PopupTypeEnum.importedDataOverview, objects: loadedObjects, notifications })
+    );
+  }, [loadedObjects, notifications]);
 
   return (
     <>

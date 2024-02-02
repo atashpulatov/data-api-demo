@@ -10,6 +10,7 @@ import scriptInjectionHelper from '../utils/script-injection-helper';
 import { handleLoginExcelDesktopInWindows } from '../utils/embedded-helper';
 import './dossier.css';
 import { embeddedDossierHelper } from './embedded-dossier-helper';
+import { convertPixelsToPoints } from '../../helpers/visualization-image-utils';
 
 import {
   prepareGivenPromptAnswers,
@@ -87,6 +88,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const chapterData = payload[payloadChapterKey];
     const [payloadVisKey] = Object.keys(chapterData);
     const vizDimensions = chapterData[payloadVisKey];
+
+    if (vizDimensions) {
+      vizDimensions.width = convertPixelsToPoints(vizDimensions.width);
+      vizDimensions.height = convertPixelsToPoints(vizDimensions.height);
+    }
 
     this.dossierData = {
       ...this.dossierData,

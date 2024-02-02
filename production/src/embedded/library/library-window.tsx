@@ -17,6 +17,7 @@ import { navigationTreeActions } from '../../redux-reducer/navigation-tree-reduc
 import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup-state-actions';
 import { ItemType, LibraryWindowProps } from './library-window-types';
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
+import { objectImportType } from '../../mstr-object/constants';
 
 const {
   isPrompted, getCubeInfo, getObjectInfo, createDossierInstance, deleteDossierInstance, getObjectPrompts,
@@ -220,6 +221,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         handleOk={handleOk}
         handleSecondary={handleSecondary}
         handleCancel={handleCancel}
+        primaryImportType={objectImportType.TABLE}
         disableSecondary={
           !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { PopupButtonsNotConnected } from '../../popup/popup-buttons/popup-buttons';
+import { objectImportType } from '../../mstr-object/constants';
 
 describe('PopupButtons', () => {
   it('should NOT display prepare data when secondary action NOT provided',
@@ -105,4 +106,43 @@ describe('PopupButtons', () => {
       expect(getByText('Apply')).toBeInTheDocument();
       expect(getByText('Cancel')).toBeInTheDocument();
     });
+
+  it('should display primary button as "Import Data" when primaryImportType is "table" ',
+    () => {
+      // given
+      // when
+      const { getByText } = render(<PopupButtonsNotConnected
+        primaryImportType={objectImportType.TABLE}
+      />);
+      // then
+      expect(getByText('Import Data')).toBeInTheDocument();
+      expect(getByText('Cancel')).toBeInTheDocument();
+    });
+
+  it('should display primary button as "Import Image" when primaryImportType is "image" ',
+    () => {
+      // given
+      // when
+      const { getByText } = render(<PopupButtonsNotConnected
+        primaryImportType={objectImportType.IMAGE}
+      />);
+      // then
+      expect(getByText('Import Image')).toBeInTheDocument();
+      expect(getByText('Cancel')).toBeInTheDocument();
+    });
+
+  it(`should display primary button as "Import Data" and secondary button as "Import Image"
+    when primaryImportType is "table" and shouldShowImportImage is true`,
+  () => {
+    // when
+    const { getByText } = render(<PopupButtonsNotConnected
+      primaryImportType={objectImportType.TABLE}
+      shouldShowImportImage
+      handleSecondary={jest.fn()}
+    />);
+    // then
+    expect(getByText('Import Data')).toBeInTheDocument();
+    expect(getByText('Import Image')).toBeInTheDocument();
+    expect(getByText('Cancel')).toBeInTheDocument();
+  });
 });

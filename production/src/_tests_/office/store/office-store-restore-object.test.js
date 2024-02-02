@@ -73,6 +73,7 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
     jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore').mockReturnValue(restoredFromExcelObject);
     jest.spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers').mockReturnValue(restoredFromExcelObject);
+    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType').mockReturnValue(restoredFromExcelObject);
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -89,6 +90,7 @@ ${1}                   | ${'storedObjectTest'}         | ${'storedObjectTest'} |
     );
 
     expect(officeStoreRestoreObject.resetIsPromptedForDossiersWithAnswers).toBeCalledTimes(1);
+    expect(officeStoreRestoreObject.restoreLegacyObjectsWithImportType).toBeCalledTimes(1);
 
     expect(reduxStore.dispatch).toBeCalledTimes(expectedDispatchCallNo);
     if (expectedDispatchCallNo === 1) {
@@ -132,6 +134,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     jest.spyOn(officeStoreHelper, 'getOfficeSettings').mockReturnValue(settingsMock);
     jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsFromExcelStore').mockReturnValue('restoredObjectFromExcelTest');
     jest.spyOn(officeStoreRestoreObject, 'resetIsPromptedForDossiersWithAnswers').mockReturnValue('restoredObjectFromExcelTest');
+    jest.spyOn(officeStoreRestoreObject, 'restoreLegacyObjectsWithImportType').mockReturnValue('restoredFromExcelObject');
 
     jest.spyOn(reduxStore, 'dispatch').mockImplementation();
 
@@ -143,6 +146,7 @@ describe('OfficeStoreRestoreObject restoreObjectsFromExcelStore', () => {
     expect(officeStoreHelper.getOfficeSettings).toBeCalledWith();
 
     expect(officeStoreRestoreObject.resetIsPromptedForDossiersWithAnswers).toBeCalledTimes(1);
+    expect(officeStoreRestoreObject.restoreLegacyObjectsWithImportType).toBeCalledTimes(1);
 
     expect(reduxStore.dispatch).toBeCalledTimes(1);
   });

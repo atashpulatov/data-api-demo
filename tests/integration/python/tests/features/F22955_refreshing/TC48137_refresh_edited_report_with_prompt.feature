@@ -1,4 +1,3 @@
-@windows_desktop @windows_chrome @mac_chrome
 Feature: F22955 - Refresh data already imported to the workbook (including prompt)
 
   Scenario: [TC48137] - Refresh an edited report with prompt

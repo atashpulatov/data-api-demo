@@ -37,7 +37,9 @@ const renderProperComponent = (popupType) => {
       return (
         <OverviewWindow
           onRefresh={overviewHelper.sendRefreshRequest}
-          onDelete={overviewHelper.sendDeleteRequest} />
+          onDelete={overviewHelper.sendDeleteRequest}
+          onDuplicate={overviewHelper.sendDuplicateRequest}
+          onDismissNotification={overviewHelper.sendDismissNotificationRequest} />
       );
     default:
       return null;
