@@ -13,7 +13,7 @@ import './overview-window.scss';
 
 const OverviewWindowNotConnected = (props) => {
   const {
-    objects, onRefresh, onDelete, onDuplicate, onDismissNotification, notifications,
+    objects, onRefresh, onDelete, onDuplicate
   } = props;
 
   useEffect(() => {
@@ -47,9 +47,7 @@ OverviewWindowNotConnected.propTypes = {
   onRefresh: PropTypes.func,
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
-  onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
-  notifications: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export const mapStateToProps = ({ objectReducer, notificationReducer }) => {
