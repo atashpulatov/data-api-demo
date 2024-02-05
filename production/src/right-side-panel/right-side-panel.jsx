@@ -97,27 +97,6 @@ export const RightSidePanelNotConnected = ({
     ));
   }, [loadedObjects, notifications, operations]);
 
-  // If a warning or error notification appears during the Reprompt All workflow,
-  // we should clear the Reprompt Task Queue in order to end the procedure and remove
-  // the side panel curtain.
-  React.useEffect(() => {
-    // Only when we render the side-panel curtain e.g. during 'Reprompt All' workflow.
-    if (toggleCurtain) {
-      // Check for object-specific warnings.
-      const isWarningObjectNotificationShown = notifications?.some(
-        notification => notification?.type === objectNotificationTypes.WARNING
-      );
-      // Check for global warnings and errors.
-      const isWarningOrErrorGlobalNotificationShown = globalNotificationWarningAndErrorStrings.includes(
-        globalNotification?.type
-      );
-      if (isWarningObjectNotificationShown || isWarningOrErrorGlobalNotificationShown) {
-        // Clear the Reprompt Task Queue.
-        sidePanelService.clearRepromptTask();
-      }
-    }
-  }, [toggleCurtain, notifications, globalNotification]);
-
   /**
      * Wraps a function to be called when user clicks an action icon.
      *
