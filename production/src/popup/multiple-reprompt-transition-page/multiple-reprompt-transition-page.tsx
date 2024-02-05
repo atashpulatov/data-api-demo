@@ -4,6 +4,7 @@ import { Empty, ObjectWindowTitle } from '@mstr/connector-components';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import i18n from '../../i18n';
 
 import './multiple-reprompt-transition-page.scss';
 
@@ -29,7 +30,8 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
   return (
     <div className="multiple-reprompt-transition-page">
       <ObjectWindowTitle
-        objectType="" // not necessary, as multiple reprompt doesnt show type
+        locale={i18n.language}
+        objectType="" // not needed since multiple reprompt title doesn't show type
         objectName={nextObjectName}
         isReprompt
         isEdit={false}
