@@ -26,7 +26,9 @@ class OperationErrorHandler {
    */
   handleOperationError = async (objectData, operationData, error) => {
     const callback = this.getCallback(objectData, operationData);
-    if (callback) { errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData); }
+    if (callback) {
+      await errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
+    }
   };
 
   /**

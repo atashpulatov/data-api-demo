@@ -1,6 +1,7 @@
 import officeReducerHelper from '../office/store/office-reducer-helper';
 import { getNotificationButtons } from '../notification-v2/notification-buttons';
 import { customT } from '../customTranslation';
+import { clearRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import {
   errorTypes,
   httpStatusToErrorType,
@@ -20,13 +21,15 @@ const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
 
 class ErrorService {
-  init = (sessionActions, sessionHelper, notificationService) => {
+  init = (sessionActions, sessionHelper, notificationService, popupController, reduxStore) => {
     this.sessionActions = sessionActions;
     this.sessionHelper = sessionHelper;
     this.notificationService = notificationService;
+    this.popupController = popupController;
+    this.reduxStore = reduxStore;
   };
 
-  handleObjectBasedError = (objectWorkingId, error, callback, operationData) => {
+  handleObjectBasedError = async (objectWorkingId, error, callback, operationData) => {
     const errorType = this.getErrorType(error, operationData);
     if (error.Code === 5012) {
       this.handleError(error);
@@ -35,6 +38,7 @@ class ErrorService {
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage, errorType);
 
+    await this.closePopupIfOpen(); // For Reprompt All workflow but covers others, close dialog if somehow remained open
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
       officeReducerHelper.dispayPopupOnSidePanel({
         objectWorkingId, title: errorMessage, message: details, callback
@@ -189,6 +193,22 @@ class ErrorService {
     };
     return payload;
   }
+
+  /**
+   * Function checking if the popup is open and closing it if it is.
+   * Also clearing Reprompt task queue if popup was open for Reprompt workflow.
+   */
+  closePopupIfOpen = async () => {
+    const isPopupOpen = this.reduxStore.getState().officeReducer?.popupOpen;
+    if (isPopupOpen) {
+      const isPopupOpenForReprompt = this.reduxStore.getState().repromptsQueueReducer?.total > 0;
+
+      await this.popupController.closeDialog(this.popupController.dialog);
+      this.popupController.resetPopupStates();
+      // clear Reprompt task queue if in Reprompt All workflow
+      isPopupOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
+    }
+  };
 }
 
 export const errorService = new ErrorService();
