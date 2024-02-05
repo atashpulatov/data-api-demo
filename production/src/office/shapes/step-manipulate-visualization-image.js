@@ -5,6 +5,7 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
+import { IMPORT_OPERATION } from '../../operation/operation-type-names';
 
 const INVALID_SELECTION = 'InvalidSelection';
 class StepManipulateVisualizationImage {
@@ -69,6 +70,9 @@ class StepManipulateVisualizationImage {
         excelContext
       });
 
+      sheet.activate();
+      await excelContext.sync();
+      
       // Generate the visualization image to be added to the worksheet
       const imageStream = await mstrObjectRestService.getVisualizationImage(
         objectId,
