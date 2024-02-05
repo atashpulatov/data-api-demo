@@ -201,9 +201,11 @@ class ErrorService {
    * Also clearing Reprompt task queue if popup was open for Reprompt workflow.
    */
   closePopupIfOpen = async () => {
-    const isPopupOpen = this.reduxStore.getState().officeReducer?.popupOpen;
+    const storeState = this.reduxStore.getState();
+    const isPopupOpen = storeState.officeReducer?.popupOpen;
+
     if (isPopupOpen) {
-      const isPopupOpenForReprompt = this.reduxStore.getState().repromptsQueueReducer?.total > 0;
+      const isPopupOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
       await this.popupController.closeDialog(this.popupController.dialog);
       this.popupController.resetPopupStates();
