@@ -63,7 +63,7 @@ class SidePanelService {
 
       worksheet.activate();
       await excelContext.sync();
-      
+
       return;
     }
     this.reduxStore.dispatch(highlightRequested(objectWorkingId));
