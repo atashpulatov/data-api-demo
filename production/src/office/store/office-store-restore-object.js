@@ -26,6 +26,10 @@ class OfficeStoreRestoreObject {
     this.resetIsPromptedForDossiersWithAnswers(objects);
     this.restoreLegacyObjectsWithImportType(objects);
 
+    const storeState = this.reduxStore.getState();
+    const { isShapeAPISupported } = storeState.officeReducer;
+    !isShapeAPISupported && this.filterOutImageObjects(objects);
+
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
 
     settings.set(officeProperties.storedObjects, objects);
@@ -42,6 +46,15 @@ class OfficeStoreRestoreObject {
         object.importType = objectImportType.TABLE;
       }
     });
+  };
+
+  /**
+   * Filter out the objects with image import tye
+   *
+   * @param {*} objects restored object definitions from excel document.
+   */
+  filterOutImageObjects = (objects) => {
+    objects?.filter((object) => object?.importType !== objectImportType.IMAGE);
   };
 
   /**
