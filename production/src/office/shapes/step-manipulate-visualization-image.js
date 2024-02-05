@@ -71,7 +71,7 @@ class StepManipulateVisualizationImage {
 
       sheet.activate();
       await excelContext.sync();
-      
+
       // Generate the visualization image to be added to the worksheet
       const imageStream = await mstrObjectRestService.getVisualizationImage(
         objectId,
