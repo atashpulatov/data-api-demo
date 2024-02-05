@@ -21,6 +21,7 @@ import { sessionHelper, EXTEND_SESSION } from '../storage/session-helper';
 import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
 import { objectImportType } from '../mstr-object/constants';
+import i18n from '../i18n';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
@@ -316,6 +317,7 @@ export const PromptsWindowNotConnected = (props) => {
   return (
     <div className="prompts-window">
       <ObjectWindowTitle
+        locale={i18n.language}
         objectType={mstrObjectEnum.mstrObjectType.report.name}
         objectName={objectName}
         isReprompt={isReprompt}
