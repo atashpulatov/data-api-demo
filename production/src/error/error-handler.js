@@ -38,12 +38,14 @@ class ErrorService {
     const errorMessage = errorMessageFactory(errorType)({ error });
     const details = this.getErrorDetails(error, errorMessage, errorType);
 
-    await this.closePopupIfOpen(); // For Reprompt All workflow but covers others, close dialog if somehow remained open
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
       officeReducerHelper.dispayPopupOnSidePanel({
         objectWorkingId, title: errorMessage, message: details, callback
       });
     } else {
+      // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
+      await this.closePopupIfOpen();
+      // Show warning notification
       this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
     }
   };
