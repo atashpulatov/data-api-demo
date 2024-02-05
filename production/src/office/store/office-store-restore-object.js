@@ -19,7 +19,7 @@ class OfficeStoreRestoreObject {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(officeProperties.storedObjects) || [];
     objects = this.restoreLegacyObjectsFromExcelStore(settings, objects);
-    if (objects && objects.filter) {
+    if (objects?.filter) {
       objects = objects.filter(object => !object.doNotPersist)
     }
 
