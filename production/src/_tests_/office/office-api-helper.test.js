@@ -224,3 +224,38 @@ describe('OfficeApiHelper', () => {
     });
   });
 });
+
+describe('getSelectedRangeWrapper', () => {
+    it('should work as expected', async () => {
+      // given
+      jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 123, left: 234 }));
+
+      // when
+      const result = await officeApiHelper.getSelectedRangeWrapper(excelContextMock);
+
+      // then
+      expect(officeApiHelper.getSelectedRangePosition).toBeCalledWith(excelContextMock);
+      expect(result).toEqual({ top: 123, left: 234 });
+    });
+
+    it('should not throw error if error code is InvalidSelection', async () => {
+      // given
+      jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockRejectedValue({ code: 'InvalidSelection' });
+
+      // when
+      const result = await officeApiHelper.getSelectedRangeWrapper(excelContextMock);
+
+      // then
+      expect(officeApiHelper.getSelectedRangePosition).toBeCalledWith(excelContextMock);
+      expect(result).toEqual({ top: 0, left: 0 });
+    });
+
+    test('officeApiHelper.getSelectedRangeWrapper', () => {
+      // given
+      jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockRejectedValue({ code: 'Not InvalidSelection' });
+
+      // then
+      /* eslint-disable */
+      expect(officeApiHelper.getSelectedRangeWrapper(excelContextMock)).rejects.toEqual({ code: 'Not InvalidSelection' });
+    });
+  });
