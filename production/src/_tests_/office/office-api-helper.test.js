@@ -226,6 +226,29 @@ describe('OfficeApiHelper', () => {
 });
 
 describe('getSelectedRangeWrapper', () => {
+    const excelContextMock = {
+        workbook: {
+          worksheets: {
+            load: mockFn,
+            items: [
+              {
+                shapes: {
+                  getItemOrNullObject: jest.fn().mockImplementation((id) => ({
+                    load: mockFn,
+                    delete: mockFn,
+                    isNullObject: false,
+                    id: '1234-5678-9012-3456'
+                  }))
+                }
+              }
+            ],
+            getActiveWorksheet: jest.fn().mockImplementation(() => mockSheet),
+            getItem: jest.fn().mockImplementation((id) => mockSheet)
+          },
+          sync: mockFn
+        }
+    };
+      
     it('should work as expected', async () => {
       // given
       jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 123, left: 234 }));
