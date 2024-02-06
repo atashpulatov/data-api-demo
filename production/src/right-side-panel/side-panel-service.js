@@ -17,7 +17,6 @@ import {
   executeNextRepromptTask,
   clearRepromptTask,
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import { objectImportType } from '../mstr-object/constants';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
