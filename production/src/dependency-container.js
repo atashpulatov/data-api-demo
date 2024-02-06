@@ -63,7 +63,7 @@ class DIContainer {
     this.sessionActions.init(reduxStore);
 
     this.errorService = errorService;
-    this.errorService.init(sessionActions, sessionHelper, notificationService);
+    this.errorService.init(sessionActions, sessionHelper, notificationService, popupController, reduxStore);
 
     this.authenticationHelper = authenticationHelper;
     this.authenticationHelper.init(reduxStore, sessionActions, authenticationService, errorService);
