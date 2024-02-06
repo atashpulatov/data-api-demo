@@ -49,23 +49,6 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   highlightObject = async (objectWorkingId) => {
-    const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    // This operation is not supported for images as Excel API does not support shape selection as of now
-    if (sourceObject?.importType === objectImportType.IMAGE) {
-      const excelContext = await officeApiHelper.getExcelContext();
-
-      // retrieve the shape in the worksheet
-      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-      const { bindId } = objectData;
-
-      const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
-      const worksheet = excelContext.workbook.worksheets.getItem(shapeInWorksheet?.worksheetId);
-
-      worksheet.activate();
-      await excelContext.sync();
-
-      return;
-    }
     this.reduxStore.dispatch(highlightRequested(objectWorkingId));
   };
 
