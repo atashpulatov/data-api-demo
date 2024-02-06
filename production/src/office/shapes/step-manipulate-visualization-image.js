@@ -6,7 +6,6 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 
-const INVALID_SELECTION = 'InvalidSelection';
 class StepManipulateVisualizationImage {
   /**
    * Generates the image of the selected visualization, converts it into a base64 image
@@ -50,7 +49,8 @@ class StepManipulateVisualizationImage {
       const { vizDimensions, visualizationKey } = visualizationInfo;
 
       // Get the position of the selected range
-      const selectedRangePos = await this.getSelectedRangePosition(excelContext);
+      const { getSelectedRangeWrapper, getSelectedRangePosition } = officeApiHelper;
+      const selectedRangePos = await getSelectedRangeWrapper(excelContext, getSelectedRangePosition);
 
       // Get the properties of image and the sheet where it needs to be inserted
       const {
@@ -128,30 +128,6 @@ class StepManipulateVisualizationImage {
     const shapeToBeDuplicated = await officeShapeApiHelper.getShape(excelContext, bindIdToBeDuplicated);
     const { height, width } = shapeToBeDuplicated || {};
     return { height, width };
-  };
-
-  /**
-   * Gets the position of the selected range OR the position of the active shape.
-   *
-   * @param excelContext Excel context.
-   * @returns {Object} Position of the selected range OR the position of the active shape.
-   */
-  getSelectedRangePosition = async (excelContext) => {
-    let selectedRangePos = { top: 0, left: 0 };
-    try {
-      selectedRangePos = await officeApiHelper.getSelectedRangePosition(excelContext);
-    } catch (error) {
-      /**
-       * If the error is InvalidSelection it means that the selected range is invalid.
-       * https://learn.microsoft.com/en-us/office/dev/add-ins/testing/application-specific-api-error-handling
-       * In that case we will return the default selectedRangePos.
-       * For all other case we throw the error.
-       */
-      if (error.code !== INVALID_SELECTION) {
-        throw error;
-      }
-    }
-    return selectedRangePos;
   };
 }
 
