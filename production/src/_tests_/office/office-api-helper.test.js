@@ -264,7 +264,7 @@ describe('getSelectedRangeWrapper', () => {
     jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 123, left: 234 }));
 
     // when
-    const result = await officeApiHelper.getSelectedRangeWrapper(excelContextMock);
+    const result = await officeApiHelper.getSelectedRangeWrapper(excelContextMock, officeApiHelper.getSelectedRangePosition);
 
     // then
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledWith(excelContextMock);
@@ -276,7 +276,7 @@ describe('getSelectedRangeWrapper', () => {
     jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockRejectedValue({ code: 'InvalidSelection' });
 
     // when
-    const result = await officeApiHelper.getSelectedRangeWrapper(excelContextMock);
+    const result = await officeApiHelper.getSelectedRangeWrapper(excelContextMock, officeApiHelper.getSelectedRangePosition);
 
     // then
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledWith(excelContextMock);
@@ -289,6 +289,6 @@ describe('getSelectedRangeWrapper', () => {
 
     // then
     /* eslint-disable */
-      expect(officeApiHelper.getSelectedRangeWrapper(excelContextMock)).rejects.toEqual({ code: 'Not InvalidSelection' });
+      expect(officeApiHelper.getSelectedRangeWrapper(excelContextMock, officeApiHelper.getSelectedRangePosition)).rejects.toEqual({ code: 'Not InvalidSelection' });
     });
   });
