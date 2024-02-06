@@ -19,12 +19,19 @@ class OfficeStoreRestoreObject {
     const settings = officeStoreHelper.getOfficeSettings();
     let objects = settings.get(officeProperties.storedObjects) || [];
     objects = this.restoreLegacyObjectsFromExcelStore(settings, objects);
-    objects = objects && objects.filter
-      ? objects.filter(object => !object.doNotPersist)
-      : objects;
+    if (objects?.filter) {
+      objects = objects.filter(object => !object.doNotPersist);
+    }
 
     this.resetIsPromptedForDossiersWithAnswers(objects);
     this.restoreLegacyObjectsWithImportType(objects);
+
+    // Filter out the image objects if the shape api is not supported
+    // in current version in order to maintain the backward compatibility.
+    const { isShapeAPISupported } = this.reduxStore.getState().officeReducer;
+    if (!isShapeAPISupported && objects?.filter) {
+      objects = this.filterOutImageObjects(objects);
+    }
 
     objects && this.reduxStore.dispatch(restoreAllObjects(objects));
 
@@ -43,6 +50,13 @@ class OfficeStoreRestoreObject {
       }
     });
   };
+
+  /**
+   * Filter out the objects with image import tye
+   *
+   * @param {*} objects restored object definitions from excel document.
+   */
+  filterOutImageObjects = (objects) => objects?.filter((object) => object?.importType !== objectImportType.IMAGE);
 
   /**
    * Parse the objects and set the isPrompted flag to true if the dossier has prompt answers in the definition
