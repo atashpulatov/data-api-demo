@@ -29,7 +29,7 @@ class OfficeStoreRestoreObject {
     // Filter out the image objects if the shape api is not supported
     // in current version in order to maintain the backward compatibility.
     const { isShapeAPISupported } = this.reduxStore.getState().officeReducer;
-    if (!isShapeAPISupported) {
+    if (!isShapeAPISupported && objects?.filter) {
       objects = this.filterOutImageObjects(objects);
     }
 
