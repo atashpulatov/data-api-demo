@@ -99,9 +99,18 @@ class StepManipulateVisualizationImage {
         await excelContext.sync();
       }
 
+      sheet.load(['id', 'name']);
+      await excelContext.sync();
+
+      const { id, name } = sheet;
+
       const updatedObject = {
         objectWorkingId,
         bindId: imageShapeId,
+        worksheet: {
+          id,
+          name
+        },
         shapeProps: undefined, // reset the shape props after adding image
         bindIdToBeDuplicated: undefined, // reset the bindIdToBeDuplicated after adding image
         instanceId: undefined // reset the instanceId after adding image
