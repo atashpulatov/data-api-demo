@@ -30,7 +30,7 @@ class StepHighlightObject {
       } else {
         await officeApiHelper.onBindingObjectClick(objectData);
       }
-      
+
       operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
