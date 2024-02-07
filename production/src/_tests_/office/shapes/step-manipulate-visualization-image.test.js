@@ -48,7 +48,7 @@ describe('stepManipulateVisualizationImage', () => {
   const excelContextMock = {
     workbook: {
       worksheets: {
-        load: mockFn.mockImplementation(() => mockSheet),
+        load: mockFn,
         items: [
           {
             shapes: {
@@ -82,7 +82,15 @@ describe('stepManipulateVisualizationImage', () => {
     },
   };
 
-  const mockedUpdateObject = { objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined, worksheet: { id: 'mockedSheetId', name: 'mockedSheetName' } };
+  const mockedUpdateObject = {
+    objectWorkingId: 'objectWorkingIdTest',
+    bindId: '1234-5678-9012-3456',
+    shapeProps: undefined,
+    worksheet: {
+      id: 'mockedSheetId',
+      name: 'mockedSheetName'
+    }
+  };
 
   afterEach(() => {
     jest.restoreAllMocks();
