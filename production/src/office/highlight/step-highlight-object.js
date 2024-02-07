@@ -27,11 +27,10 @@ class StepHighlightObject {
 
         worksheet.activate();
         await excelContext.sync();
-
-        return;
+      } else {
+        await officeApiHelper.onBindingObjectClick(objectData);
       }
-
-      await officeApiHelper.onBindingObjectClick(objectData);
+      
       operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);
