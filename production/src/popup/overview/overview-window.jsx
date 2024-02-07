@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-import { DataOverview } from '@mstr/connector-components';
+import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
 import PropTypes from 'prop-types';
 import { reduxStore } from '../../store';
 import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { restoreAllNotifications, restoreGlobalNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { ApplicationTypeEnum } from '../../office-constants';
 
@@ -13,8 +13,12 @@ import './overview-window.scss';
 
 const OverviewWindowNotConnected = (props) => {
   const {
-    objects, onRefresh, onDelete, onDuplicate
+    objects, onRefresh, onDelete, onDuplicate, notifications
   } = props;
+
+  const shouldDisableActions = useMemo(
+    () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
+  );
 
   useEffect(() => {
     // Get Message from Right side panel
@@ -23,10 +27,15 @@ const OverviewWindowNotConnected = (props) => {
       const { popupType } = message;
 
       if (popupType === PopupTypeEnum.importedDataOverview) {
-        const { objects: objectsToSync, notifications: notificationsToSync } = message;
+        const {
+          objects: objectsToSync,
+          notifications: notificationsToSync,
+          globalNotification: globalNotificationToSync
+        } = message;
 
         reduxStore.dispatch(restoreAllObjects(objectsToSync));
         reduxStore.dispatch(restoreAllNotifications(notificationsToSync));
+        reduxStore.dispatch(restoreGlobalNotification(globalNotificationToSync));
       }
     });
   }, []);
@@ -48,6 +57,7 @@ OverviewWindowNotConnected.propTypes = {
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
+  notifications: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 export const mapStateToProps = ({ objectReducer, notificationReducer }) => {
