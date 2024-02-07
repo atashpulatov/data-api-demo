@@ -311,39 +311,4 @@ describe('stepManipulateVisualizationImage', () => {
       expect(result).toEqual({ height: 123, width: 234 });
     });
   });
-
-  describe('getSelectedRangePosition', () => {
-    it('should work as expected', async () => {
-      // given
-      jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 123, left: 234 }));
-
-      // when
-      const result = await stepManipulateVisualizationImage.getSelectedRangePosition(excelContextMock);
-
-      // then
-      expect(officeApiHelper.getSelectedRangePosition).toBeCalledWith(excelContextMock);
-      expect(result).toEqual({ top: 123, left: 234 });
-    });
-
-    it('should not throw error if error code is InvalidSelection', async () => {
-      // given
-      jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockRejectedValue({ code: 'InvalidSelection' });
-
-      // when
-      const result = await stepManipulateVisualizationImage.getSelectedRangePosition(excelContextMock);
-
-      // then
-      expect(officeApiHelper.getSelectedRangePosition).toBeCalledWith(excelContextMock);
-      expect(result).toEqual({ top: 0, left: 0 });
-    });
-
-    test('this.getSelectedRangePosition', () => {
-      // given
-      jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockRejectedValue({ code: 'Not InvalidSelection' });
-
-      // then
-      /* eslint-disable */
-      expect(stepManipulateVisualizationImage.getSelectedRangePosition(excelContextMock)).rejects.toEqual({ code: 'Not InvalidSelection' });
-    });
-  });
 });

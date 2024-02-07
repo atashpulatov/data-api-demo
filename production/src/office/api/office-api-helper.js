@@ -9,6 +9,7 @@ const ALPHABET_RANGE_END = 26;
 const ASCII_CAPITAL_LETTER_INDEX = 65;
 const EXCEL_ROW_LIMIT = 1048576;
 const EXCEL_COL_LIMIT = 16384;
+const INVALID_SELECTION = 'InvalidSelection';
 
 class OfficeApiHelper {
   init = (reduxStore) => {
@@ -92,6 +93,30 @@ class OfficeApiHelper {
       top: selectedRange.top,
       left: selectedRange.left,
     };
+  };
+
+  /**
+   * Gets the position of the selected range/cell OR the position of the active shape.
+   *
+   * @param excelContext Excel context.
+   * @returns {Object} Position of the selected range OR the position of the active shape.
+   */
+  getSelectedRangeWrapper = async (excelContext, func) => {
+    let selectedRangePos = { top: 0, left: 0 };
+    try {
+      selectedRangePos = await func(excelContext);
+    } catch (error) {
+      /*
+      If the error is InvalidSelection it means that the selected range is invalid.
+      https://learn.microsoft.com/en-us/office/dev/add-ins/testing/application-specific-api-error-handling
+      In that case we will return the default selectedRangePos.
+      For all other case we throw the error.
+      */
+      if (error.code !== INVALID_SELECTION) {
+        throw error;
+      }
+    }
+    return selectedRangePos;
   };
 
   /**
