@@ -10,6 +10,7 @@ import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { ApplicationTypeEnum } from '../../office-constants';
 
 import './overview-window.scss';
+import overviewHelper from './overview-helper';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
@@ -20,6 +21,8 @@ export const OverviewWindowNotConnected = (props) => {
   const shouldDisableActions = useMemo(
     () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
   );
+
+  const objectsToRender = overviewHelper.transformExcelObjects(objects, notifications);
 
   useEffect(() => {
     // Get Message from Right side panel
@@ -44,8 +47,8 @@ export const OverviewWindowNotConnected = (props) => {
   return (
     <div className="data-overview-wrapper">
       <DataOverview
-        loadedObjects={objects}
-        applicationType={ApplicationTypeEnum.Excel}
+        loadedObjects={objectsToRender}
+        applicationType={ApplicationTypeEnum.EXCEL}
         onRefresh={onRefresh}
         onDelete={onDelete}
         onDuplicate={onDuplicate} />

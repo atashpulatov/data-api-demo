@@ -75,6 +75,37 @@ class OverviewHelper {
         break;
     }
   }
+
+  // TODO add types once redux state is typed
+  transformExcelObjects(objects: any[], notifications: any[]): any[] {
+    return objects.map((object) => {
+      const {
+        objectWorkingId, mstrObjectType, name, refreshDate, details, importType, startCell, worksheet
+      } = object;
+
+      const objectNotification = notifications.find(notification => notification.objectWorkingId === objectWorkingId);
+
+      console.log(objects);
+
+      return {
+        objectWorkingId,
+        mstrObjectType,
+        name,
+        // Uncomment and add values during F38416 Page-by feature development
+        // pageLayout: object.pageBy,
+        worksheet: '',
+        cell: '',
+        rows: details?.excelTableSize?.rows,
+        columns: details?.excelTableSize?.columns,
+        objectType: importType,
+        lastUpdated: refreshDate,
+        status: objectNotification?.title,
+        project: details?.ancestors[0].name,
+        owner: details?.owner.name,
+        importedBy: details?.importedBy,
+      };
+    });
+  }
 }
 
 const overviewHelper = new OverviewHelper();
