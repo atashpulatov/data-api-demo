@@ -11,7 +11,7 @@ import { ApplicationTypeEnum } from '../../office-constants';
 
 import './overview-window.scss';
 
-const OverviewWindowNotConnected = (props) => {
+export const OverviewWindowNotConnected = (props) => {
   const {
     objects, onRefresh, onDelete, onDuplicate, notifications
   } = props;
