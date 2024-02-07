@@ -1,5 +1,7 @@
 import { officeApiHelper } from '../office/api/office-api-helper';
+import officeStoreObject from '../office/store/office-store-object';
 import officeReducerHelper from '../office/store/office-reducer-helper';
+import operationStepDispatcher from '../operation/operation-step-dispatcher';
 import { officeContext } from '../office/office-context';
 import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelService } from './side-panel-service';
@@ -25,6 +27,19 @@ class SidePanelEventHelper {
     } catch (error) {
       console.log('Cannot add onDeleted event listener');
     }
+  };
+
+  /**
+   * Creates an event listener for worksheet name change
+   *
+   */
+  addWorksheetNameChangedListener = async () => {
+    const excelContext = await officeApiHelper.getExcelContext();
+
+    const sheet = excelContext.workbook.worksheets;
+    sheet.onNameChanged.add(this.setOnWorksheetNameChanged);
+
+    await excelContext.sync();
   };
 
   /**
@@ -73,6 +88,24 @@ class SidePanelEventHelper {
 
     const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
     sidePanelService.remove(objectWorkingIds);
+  };
+
+  /**
+   * Updates worksheet name for all objects belonging to the worksheet which was renamed
+   *
+   * @param {Object} event Contains information about worksheet name before and after change
+   */
+  setOnWorksheetNameChanged = (event) => {
+    const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+
+    objects.forEach(object => {
+      if (object.worksheet.id === event.worksheetId) {
+        const updatedObject = { ...object, worksheet: { ...object.worksheet, name: event.nameAfter } };
+        operationStepDispatcher.updateObject(updatedObject);
+      }
+    });
+
+    officeStoreObject.saveObjectsInExcelStore();
   };
 }
 
