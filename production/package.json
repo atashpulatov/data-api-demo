@@ -20,7 +20,7 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@mstr/connector-components": "^4.2.4",
+    "@mstr/connector-components": "^4.2.5",
     "@mstr/mstr-icons": "^2.30.4",
     "@mstr/mstr-react-library": "2.0.0",
     "@mstr/rc": "npm:@mstr/rc@2.42.5",
@@ -44,9 +44,9 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@babel/preset-env": "^7.17.12",
     "@babel/preset-react": "^7.18.6",
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@mstr/eslint-config-mstr": "^0.1.7",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
