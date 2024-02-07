@@ -41,7 +41,7 @@ export const restoreAllNotifications = (notifications) => ({
   payload: notifications
 });
 
-export const restoreGlobalNotification = (globalNotification) => ({
+export const createGlobalNotification = (globalNotification) => ({
   type: CREATE_GLOBAL_NOTIFICATION,
   payload: globalNotification,
 });

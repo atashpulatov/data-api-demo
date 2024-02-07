@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { reduxStore } from '../../store';
 import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { restoreAllNotifications, restoreGlobalNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { restoreAllNotifications, createGlobalNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 import { ApplicationTypeEnum } from '../../office-constants';
 
@@ -16,6 +16,7 @@ const OverviewWindowNotConnected = (props) => {
     objects, onRefresh, onDelete, onDuplicate, notifications
   } = props;
 
+  // TODO This will be passed to DataOverview component once the component is updated
   const shouldDisableActions = useMemo(
     () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
   );
@@ -35,7 +36,7 @@ const OverviewWindowNotConnected = (props) => {
 
         reduxStore.dispatch(restoreAllObjects(objectsToSync));
         reduxStore.dispatch(restoreAllNotifications(notificationsToSync));
-        reduxStore.dispatch(restoreGlobalNotification(globalNotificationToSync));
+        reduxStore.dispatch(createGlobalNotification(globalNotificationToSync));
       }
     });
   }, []);
