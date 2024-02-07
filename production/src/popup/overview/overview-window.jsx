@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { DataOverview } from '@mstr/connector-components';
 import PropTypes from 'prop-types';
+import overviewHelper from './overview-helper';
 import { reduxStore } from '../../store';
 import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
@@ -13,7 +14,7 @@ import './overview-window.scss';
 
 const OverviewWindowNotConnected = (props) => {
   const {
-    objects, onRefresh, onDelete, onDuplicate
+    objects, onRefresh, onDelete, onDuplicate, notifications,
   } = props;
 
   useEffect(() => {
@@ -31,11 +32,15 @@ const OverviewWindowNotConnected = (props) => {
     });
   }, []);
 
+  const transformedObjects = useMemo(
+    () => overviewHelper.transformObjects(objects, notifications), [objects, notifications]
+  );
+
   return (
     <div className="data-overview-wrapper">
       <DataOverview
-        loadedObjects={objects}
-        applicationType={ApplicationTypeEnum.Excel}
+        loadedObjects={transformedObjects}
+        applicationType={ApplicationTypeEnum.EXCEL}
         onRefresh={onRefresh}
         onDelete={onDelete}
         onDuplicate={onDuplicate} />
@@ -48,6 +53,7 @@ OverviewWindowNotConnected.propTypes = {
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
+  notifications: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 export const mapStateToProps = ({ objectReducer, notificationReducer }) => {
