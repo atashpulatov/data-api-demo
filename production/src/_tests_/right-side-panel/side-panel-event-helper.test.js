@@ -134,7 +134,7 @@ describe('SidePanelService', () => {
       worksheets: { onNameChanged: { add: mockedRenameEvent } } }
     };
 
-    jest.spyOn(sidePanelEventHelper, 'setOnDeletedWorksheetEvent').mockImplementation();
+    jest.spyOn(sidePanelEventHelper, 'setOnWorksheetNameChanged').mockImplementation();
     const mockedExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContext);
 
     // when
