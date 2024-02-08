@@ -85,8 +85,6 @@ class OverviewHelper {
 
       const objectNotification = notifications.find(notification => notification.objectWorkingId === objectWorkingId);
 
-      console.log(objects);
-
       return {
         objectWorkingId,
         mstrObjectType,
