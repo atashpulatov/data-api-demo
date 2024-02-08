@@ -1,11 +1,11 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeStoreObject from '../../office/store/office-store-object';
 import { notificationService } from '../../notification-v2/notification-service';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { mockedObjectsFromStore } from '../mockDataV2';
-import operationStepDispatcher from '../../operation/operation-step-dispatcher';
-import officeStoreObject from '../../office/store/office-store-object';
 
 describe('SidePanelService', () => {
   afterEach(() => {
