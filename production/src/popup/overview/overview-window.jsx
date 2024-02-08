@@ -34,7 +34,8 @@ export const OverviewWindowNotConnected = (props) => {
         applicationType={ApplicationTypeEnum.EXCEL}
         onRefresh={onRefresh}
         onDelete={onDelete}
-        onDuplicate={onDuplicate} />
+        onDuplicate={onDuplicate}
+        shouldDisableActions={shouldDisableActions} />
     </div>
   );
 };

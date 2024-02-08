@@ -49,9 +49,16 @@ class OverviewHelper {
     });
   }
 
+  handleDismissNotifications = (objectWorkingIds: number[]): void => {
+    objectWorkingIds.forEach(objectWorkingId => {
+      this.notificationService.removeExistingNotification(objectWorkingId);
+    });
+  };
+
   async handleOverviewActionCommand(
     response: {command: OverviewActionCommands, objectWorkingIds: number[]}
   ): Promise<void> {
+    this.handleDismissNotifications(response.objectWorkingIds);
     switch (response.command) {
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
@@ -66,9 +73,7 @@ class OverviewHelper {
         });
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
-        response.objectWorkingIds.forEach(objectWorkingId => {
-          this.notificationService.removeExistingNotification(objectWorkingId);
-        });
+        this.handleDismissNotifications(response.objectWorkingIds);
         break;
       default:
         console.log('Unhandled dialog command: ', response.command);
