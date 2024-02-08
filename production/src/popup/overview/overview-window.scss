@@ -3,3 +3,15 @@
   height: calc(100vh - 90px);
   margin: 20px auto 90px;
 }
+
+.mstr-rc-3-grid-with-filter__filter-panel {
+    &--unpinned {
+      max-height: calc(100% - 40px);
+      min-height: calc(80% - 40px);
+      position: absolute;
+    }
+  
+    &--hidden {
+      display: none;
+    }
+  }
