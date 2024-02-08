@@ -1,17 +1,16 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
-import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
 import PropTypes from 'prop-types';
-import { reduxStore } from '../../store';
-import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
-import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
-import { restoreAllNotifications, createGlobalNotification } from '../../redux-reducer/notification-reducer/notification-action-creators';
-import { PopupTypeEnum } from '../../home/popup-type-enum';
-import { ApplicationTypeEnum } from '../../office-constants';
+import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
 
-import './overview-window.scss';
+import { ApplicationTypeEnum } from '../../office-constants';
 import overviewHelper from './overview-helper';
 import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
+import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
+import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
+import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
+
+import './overview-window.scss';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
@@ -20,7 +19,6 @@ export const OverviewWindowNotConnected = (props) => {
 
   useStateSyncOnDialogMessage();
 
-  // TODO This will be passed to DataOverview component once the component is updated
   const shouldDisableActions = useMemo(
     () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
   );
