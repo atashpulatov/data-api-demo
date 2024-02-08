@@ -81,6 +81,7 @@ class OverviewHelper {
     }
   }
 
+  // TODO add types once redux state is typed
   transformExcelObjects(objects: any[], notifications: any[]): any[] {
     return objects.map((object) => {
       const {
