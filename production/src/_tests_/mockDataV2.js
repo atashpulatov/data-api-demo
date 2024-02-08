@@ -1614,3 +1614,49 @@ export const dossierWithMetricsInRows = {
   promptOrdering: [],
   attrforms: { supportForms: true }
 };
+
+export const mockedObjectsFromStore = [
+  {
+    name: 'Campaign Finances per Candidate',
+    objectId: '0D0CDC8F11E97E8F00000080AFB3A407',
+    projectId: 'B7CA92F04B9FAE8D941C3E9B7E0CD754',
+    mstrObjectType: {
+      type: 55,
+      subtypes: 'undefined',
+      name: 'visualization',
+      request: 'visualizations'
+    },
+    importType: 'table',
+    objectWorkingId: 1707383886748,
+    details: {
+      ancestors: [
+        {
+          name: 'MicroStrategy Tutorial',
+          id: 'D43364C684E34A5F9B2F9AD7108F7828',
+          level: 4
+        },
+      ],
+      owner: {
+        name: 'Administrator',
+        id: '54F3D26011D2896560009A8E67019608'
+      },
+      importedBy: 'a',
+      excelTableSize: {
+        rows: 66,
+        columns: 3
+      }
+    },
+    refreshDate: 1707383921342
+  }
+];
+
+export const mockedNotificationsFromStore = [
+  {
+    objectWorkingId: 1707313767862,
+    title: 'Object duplicated',
+    type: 'success',
+    operationType: 'DUPLICATE_OPERATION',
+    isIndeterminate: false,
+    isFetchingComplete: true
+  }
+];

@@ -140,9 +140,11 @@ export const RightSidePanelNotConnected = ({
 
   useEffect(() => {
     popupController.sendMessageToDialog(
-      JSON.stringify({ popupType: PopupTypeEnum.importedDataOverview, objects: loadedObjects, notifications })
+      JSON.stringify({
+        popupType: PopupTypeEnum.importedDataOverview, objects: loadedObjects, notifications, globalNotification
+      })
     );
-  }, [loadedObjects, notifications]);
+  }, [loadedObjects, notifications, globalNotification]);
 
   return (
     <>

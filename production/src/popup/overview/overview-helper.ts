@@ -49,9 +49,16 @@ class OverviewHelper {
     });
   }
 
+  handleDismissNotifications = (objectWorkingIds: number[]): void => {
+    objectWorkingIds.forEach(objectWorkingId => {
+      this.notificationService.removeExistingNotification(objectWorkingId);
+    });
+  };
+
   async handleOverviewActionCommand(
     response: {command: OverviewActionCommands, objectWorkingIds: number[]}
   ): Promise<void> {
+    this.handleDismissNotifications(response.objectWorkingIds);
     switch (response.command) {
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
@@ -66,14 +73,41 @@ class OverviewHelper {
         });
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
-        response.objectWorkingIds.forEach(objectWorkingId => {
-          this.notificationService.removeExistingNotification(objectWorkingId);
-        });
+        this.handleDismissNotifications(response.objectWorkingIds);
         break;
       default:
         console.log('Unhandled dialog command: ', response.command);
         break;
     }
+  }
+
+  // TODO add types once redux state is typed
+  transformExcelObjects(objects: any[], notifications: any[]): any[] {
+    return objects.map((object) => {
+      const {
+        objectWorkingId, mstrObjectType, name, refreshDate, details, importType, startCell, worksheet
+      } = object;
+
+      const objectNotification = notifications.find(notification => notification.objectWorkingId === objectWorkingId);
+
+      return {
+        objectWorkingId,
+        mstrObjectType,
+        name,
+        // Uncomment and add values during F38416 Page-by feature development
+        // pageLayout: object.pageBy,
+        worksheet: '',
+        cell: '',
+        rows: details?.excelTableSize?.rows,
+        columns: details?.excelTableSize?.columns,
+        objectType: importType,
+        lastUpdated: refreshDate,
+        status: objectNotification?.title,
+        project: details?.ancestors[0].name,
+        owner: details?.owner.name,
+        importedBy: details?.importedBy,
+      };
+    });
   }
 }
 
