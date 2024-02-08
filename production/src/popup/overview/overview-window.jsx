@@ -25,7 +25,10 @@ export const OverviewWindowNotConnected = (props) => {
     () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
   );
 
-  const objectsToRender = overviewHelper.transformExcelObjects(objects, notifications);
+  const objectsToRender = useMemo(
+    () => overviewHelper.transformExcelObjects(objects, notifications),
+    [objects, notifications]
+  );
 
   return (
     <div className="data-overview-wrapper">
