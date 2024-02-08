@@ -1,49 +1,42 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
-import { DataOverview } from '@mstr/connector-components';
 import PropTypes from 'prop-types';
+import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
+
+import { ApplicationTypeEnum } from '../../office-constants';
 import overviewHelper from './overview-helper';
-import { reduxStore } from '../../store';
+import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
-import { PopupTypeEnum } from '../../home/popup-type-enum';
-import { ApplicationTypeEnum } from '../../office-constants';
 
 import './overview-window.scss';
 
-const OverviewWindowNotConnected = (props) => {
+export const OverviewWindowNotConnected = (props) => {
   const {
-    objects, onRefresh, onDelete, onDuplicate, notifications,
+    objects, onRefresh, onDelete, onDuplicate, notifications
   } = props;
 
-  useEffect(() => {
-    // Get Message from Right side panel
-    Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived, (msg) => {
-      const message = JSON.parse(msg.message);
-      const { popupType } = message;
+  useStateSyncOnDialogMessage();
 
-      if (popupType === PopupTypeEnum.importedDataOverview) {
-        const { objects: objectsToSync, notifications: notificationsToSync } = message;
+  const shouldDisableActions = useMemo(
+    () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
+  );
 
-        reduxStore.dispatch(restoreAllObjects(objectsToSync));
-        reduxStore.dispatch(restoreAllNotifications(notificationsToSync));
-      }
-    });
-  }, []);
-
-  const transformedObjects = useMemo(
-    () => overviewHelper.transformObjects(objects, notifications), [objects, notifications]
+  const objectsToRender = useMemo(
+    () => overviewHelper.transformExcelObjects(objects, notifications),
+    [objects, notifications]
   );
 
   return (
     <div className="data-overview-wrapper">
       <DataOverview
-        loadedObjects={transformedObjects}
+        loadedObjects={objectsToRender}
         applicationType={ApplicationTypeEnum.EXCEL}
         onRefresh={onRefresh}
         onDelete={onDelete}
-        onDuplicate={onDuplicate} />
+        onDuplicate={onDuplicate}
+        shouldDisableActions={shouldDisableActions} />
     </div>
   );
 };

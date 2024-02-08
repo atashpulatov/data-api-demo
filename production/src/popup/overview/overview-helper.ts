@@ -49,13 +49,16 @@ class OverviewHelper {
     });
   }
 
+  handleDismissNotifications = (objectWorkingIds: number[]): void => {
+    objectWorkingIds.forEach(objectWorkingId => {
+      this.notificationService.removeExistingNotification(objectWorkingId);
+    });
+  };
+
   async handleOverviewActionCommand(
     response: {command: OverviewActionCommands, objectWorkingIds: number[]}
   ): Promise<void> {
-    response.objectWorkingIds.forEach(objectWorkingId => {
-      this.notificationService.removeExistingNotification(objectWorkingId);
-    });
-
+    this.handleDismissNotifications(response.objectWorkingIds);
     switch (response.command) {
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
@@ -70,9 +73,7 @@ class OverviewHelper {
         });
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
-        response.objectWorkingIds.forEach(objectWorkingId => {
-          this.notificationService.removeExistingNotification(objectWorkingId);
-        });
+        this.handleDismissNotifications(response.objectWorkingIds);
         break;
       default:
         console.log('Unhandled dialog command: ', response.command);
@@ -80,14 +81,7 @@ class OverviewHelper {
     }
   }
 
-  /**
-   * Transforms objects into Data Overview grid rows
-   *
-   * @param objects Array of objects
-   * @param notifications Array of notifications
-   * @returns Parsed data for Imported Data Overview grid
-   */
-  transformObjects(objects: any[], notifications: any[]): any[] {
+  transformExcelObjects(objects: any[], notifications: any[]): any[] {
     return objects.map((object) => {
       const {
         objectWorkingId, mstrObjectType, name, refreshDate, details, importType, startCell, worksheet

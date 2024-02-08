@@ -1,3 +1,4 @@
+import { mockedNotificationsFromStore, mockedObjectsFromStore } from '../../_tests_/mockDataV2';
 import { notificationService } from '../../notification-v2/notification-service';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
@@ -122,5 +123,34 @@ describe('overview-helper', () => {
     // Then
     expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[0]);
     expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[1]);
+  });
+
+  it('transformExcelObjects should work correctly', async () => {
+    // Given
+    const expectedResult = {
+      objectWorkingId: 1707383886748,
+      mstrObjectType: {
+        type: 55,
+        subtypes: 'undefined',
+        name: 'visualization',
+        request: 'visualizations'
+      },
+      name: 'Campaign Finances per Candidate',
+      worksheet: 'Sheet 1',
+      cell: 'A1',
+      rows: 66,
+      columns: 3,
+      objectType: 'table',
+      lastUpdated: 1707383921342,
+      project: 'MicroStrategy Tutorial',
+      owner: 'Administrator',
+      importedBy: 'a'
+    };
+
+    // When
+    const result = overviewHelper.transformExcelObjects(mockedObjectsFromStore, mockedNotificationsFromStore);
+
+    // Then
+    expect(result).toEqual([expectedResult]);
   });
 });
