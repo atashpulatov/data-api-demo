@@ -3,6 +3,9 @@ import { sidePanelEventHelper } from '../../right-side-panel/side-panel-event-he
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { notificationService } from '../../notification-v2/notification-service';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
+import { mockedObjectsFromStore } from '../mockDataV2';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import officeStoreObject from '../../office/store/office-store-object';
 
 describe('SidePanelService', () => {
   afterEach(() => {
@@ -113,11 +116,55 @@ describe('SidePanelService', () => {
 
     jest.spyOn(sidePanelEventHelper, 'setOnDeletedWorksheetEvent').mockImplementation();
     const mockedExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(exceContext);
+
     // when
     await sidePanelEventHelper.addRemoveObjectListener();
-    // then
 
+    // then
     expect(mockedExcelContext).toBeCalled();
     expect(mockedAddEvent).toBeCalledTimes(eventAddedTimes);
+  });
+
+  it('should set up event listeners in addWorksheetNameChangedListener', async () => {
+    // given
+    const mockSync = jest.fn();
+    const mockedRenameEvent = jest.fn();
+
+    const excelContext = { sync: mockSync, workbook: {
+      worksheets: { onNameChanged: { add: mockedRenameEvent } } }
+    };
+
+    jest.spyOn(sidePanelEventHelper, 'setOnDeletedWorksheetEvent').mockImplementation();
+    const mockedExcelContext = jest.spyOn(officeApiHelper, 'getExcelContext').mockReturnValue(excelContext);
+
+    // when
+    await sidePanelEventHelper.addWorksheetNameChangedListener();
+
+    // then
+    expect(mockedExcelContext).toHaveBeenCalled();
+  });
+
+  it('should update objects with matching worksheet id and save them to the store', () => {
+    // given
+    jest.spyOn(officeReducerHelper, 'getObjectsListFromObjectReducer').mockReturnValue(mockedObjectsFromStore);
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
+    jest.spyOn(officeStoreObject, 'saveObjectsInExcelStore').mockImplementation();
+
+    const mockedEvent = { worksheetId: 1, nameAfter: 'New Name' };
+
+    // when
+    sidePanelEventHelper.setOnWorksheetNameChanged(mockedEvent);
+
+    // then
+    expect(officeReducerHelper.getObjectsListFromObjectReducer).toHaveBeenCalled();
+    expect(operationStepDispatcher.updateObject).toHaveBeenCalledWith(
+      expect.objectContaining({
+        worksheet: expect.objectContaining({
+          id: mockedEvent.worksheetId,
+          name: mockedEvent.nameAfter,
+        }),
+      })
+    );
+    expect(officeStoreObject.saveObjectsInExcelStore).toHaveBeenCalled();
   });
 });
