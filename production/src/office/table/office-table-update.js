@@ -31,9 +31,6 @@ class OfficeTableUpdate {
         this.setHeaderValuesNoCrosstab(excelContext, prevOfficeTable, mstrTable.headers.columns);
       }
 
-      const { worksheet } = prevOfficeTable;
-      worksheet.load(['name', 'id']);
-
       await excelContext.sync();
 
       await officeRemoveHelper.deleteRowsInChunks(excelContext, prevOfficeTable, CONTEXT_LIMIT, rows);

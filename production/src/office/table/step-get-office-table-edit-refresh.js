@@ -95,8 +95,10 @@ class StepGetOfficeTableEditRefresh {
         isTotalsRowVisible: prevOfficeTable.showTotals,
       };
 
-      const { worksheet } = officeTable;
-      const { id, name } = worksheet;
+      officeTable.worksheet.load(['id', 'name']);
+      await excelContext.sync();
+
+      const { id, name } = officeTable.worksheet;
 
       const updatedObject = {
         objectWorkingId,
