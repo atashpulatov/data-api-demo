@@ -30,19 +30,6 @@ class SidePanelEventHelper {
   };
 
   /**
-   * Creates an event listener for worksheet name change
-   *
-   */
-  addWorksheetNameChangedListener = async () => {
-    const excelContext = await officeApiHelper.getExcelContext();
-
-    const sheet = excelContext.workbook.worksheets;
-    sheet.onNameChanged.add(this.setOnWorksheetNameChanged);
-
-    await excelContext.sync();
-  };
-
-  /**
    * Gets initial active cell address and stores it state of RightSidePanel via callback.
    * Creates event listener for cell selection change and passes a state setter callback to event handler.
    *
@@ -88,24 +75,6 @@ class SidePanelEventHelper {
 
     const objectWorkingIds = objectsToDelete.map((object) => object.objectWorkingId);
     sidePanelService.remove(objectWorkingIds);
-  };
-
-  /**
-   * Updates worksheet name for all objects belonging to the worksheet which was renamed
-   *
-   * @param {Object} event Contains information about worksheet name before and after change
-   */
-  setOnWorksheetNameChanged = (event) => {
-    const objects = officeReducerHelper.getObjectsListFromObjectReducer();
-
-    objects.forEach(object => {
-      if (object.worksheet.id === event.worksheetId) {
-        const updatedObject = { ...object, worksheet: { ...object.worksheet, name: event.nameAfter } };
-        operationStepDispatcher.updateObject(updatedObject);
-      }
-    });
-
-    officeStoreObject.saveObjectsInExcelStore();
   };
 }
 

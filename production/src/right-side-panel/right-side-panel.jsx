@@ -52,7 +52,6 @@ export const RightSidePanelNotConnected = ({
     async function initializeSidePanel() {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
-        await sidePanelEventHelper.addWorksheetNameChangedListener();
         await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
         await sidePanelService.initReusePromptAnswers();
       } catch (error) {
