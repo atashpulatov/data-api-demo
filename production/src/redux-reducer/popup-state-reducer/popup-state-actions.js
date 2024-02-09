@@ -7,6 +7,7 @@ export const SET_MSTR_DATA = 'POPUP_STATE_SET_MSTR_DATA';
 export const SET_OBJECT_DATA = 'POPUP_STATE_SET_OBJECT_DATA';
 export const ON_POPUP_BACK = 'POPUP_STATE_ON_POPUP_BACK';
 export const CLEAR_POPUP_STATE = 'POPUP_STATE_CLEAR_POPUP_STATE';
+export const SET_IS_DATA_OVERVIEW_OPEN = 'POPUP_STATE_SET_IS_DATA_OVERVIEW_OPEN';
 
 class PopupStateActions {
   setPopupType = (popupType) => (dispatch) => dispatch({
@@ -47,6 +48,13 @@ class PopupStateActions {
       mstrObjectType: '',
     }));
     dispatch(navigationTreeActions.cancelDossierOpen());
+  };
+
+  setIsDataOverviewOpen = (payload) => (dispatch) => {
+    dispatch({
+      type: SET_IS_DATA_OVERVIEW_OPEN,
+      payload,
+    });
   };
 }
 

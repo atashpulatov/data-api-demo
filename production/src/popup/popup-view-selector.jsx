@@ -36,6 +36,7 @@ const renderProperComponent = (popupType) => {
       // TODO: Replace with ImportedDataOverview component once developed
       return (
         <OverviewWindow
+          onImport={overviewHelper.sendImportRequest}
           onRefresh={overviewHelper.sendRefreshRequest}
           onDelete={overviewHelper.sendDeleteRequest}
           onDuplicate={overviewHelper.sendDuplicateRequest}

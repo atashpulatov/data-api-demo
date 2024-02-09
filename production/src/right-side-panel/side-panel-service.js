@@ -36,9 +36,9 @@ class SidePanelService {
    * Opens popup with table of objects
    * Prevent navigation tree from going straight into importing previously selected item.
    */
-  addData = async () => {
+  addData = async ({ initializeOverview }) => {
     this.reduxStore.dispatch(navigationTreeActions.cancelImportRequest());
-    await popupController.runPopupNavigation();
+    await popupController.runPopupNavigation(initializeOverview);
   };
 
   /**

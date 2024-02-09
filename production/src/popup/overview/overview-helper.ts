@@ -1,6 +1,7 @@
 import { popupHelper } from '../popup-helper';
 
 export enum OverviewActionCommands {
+  IMPORT= 'overview-import',
   REFRESH= 'overview-refresh',
   REMOVE= 'overview-remove',
   DUPLICATE= 'overview-duplicate',
@@ -16,6 +17,10 @@ class OverviewHelper {
     this.sidePanelService = sidePanelService;
     this.notificationService = notificationService;
   };
+
+  async sendImportRequest(): Promise<void> {
+    popupHelper.officeMessageParent({ command: OverviewActionCommands.IMPORT });
+  }
 
   async sendRefreshRequest(
     objectWorkingIds: number[],
@@ -50,7 +55,7 @@ class OverviewHelper {
   }
 
   handleDismissNotifications = (objectWorkingIds: number[]): void => {
-    objectWorkingIds.forEach(objectWorkingId => {
+    objectWorkingIds?.forEach(objectWorkingId => {
       this.notificationService.removeExistingNotification(objectWorkingId);
     });
   };
@@ -60,6 +65,9 @@ class OverviewHelper {
   ): Promise<void> {
     this.handleDismissNotifications(response.objectWorkingIds);
     switch (response.command) {
+      case OverviewActionCommands.IMPORT:
+        await this.sidePanelService.addData({ initializeOverview: true });
+        break;
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
         break;
