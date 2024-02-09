@@ -107,10 +107,7 @@ class StepManipulateVisualizationImage {
       const updatedObject = {
         objectWorkingId,
         bindId: imageShapeId,
-        worksheet: {
-          id,
-          name
-        },
+        worksheet: { id, name },
         shapeProps: undefined, // reset the shape props after adding image
         bindIdToBeDuplicated: undefined, // reset the bindIdToBeDuplicated after adding image
         instanceId: undefined // reset the instanceId after adding image

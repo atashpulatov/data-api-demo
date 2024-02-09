@@ -95,9 +95,14 @@ class StepGetOfficeTableEditRefresh {
         isTotalsRowVisible: prevOfficeTable.showTotals,
       };
 
+      const { worksheet } = officeTable;
+      const { id, name } = worksheet;
+
       const updatedObject = {
         objectWorkingId,
         bindId,
+        startCell,
+        worksheet: { id, name }
       };
 
       operationStepDispatcher.updateOperation(updatedOperation);
