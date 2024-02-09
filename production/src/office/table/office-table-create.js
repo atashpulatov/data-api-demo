@@ -194,11 +194,19 @@ class OfficeTableCreate {
       } else {
         officeTable.getHeaderRowRange().values = [mstrTable.headers.columns[mstrTable.headers.columns.length - 1]];
       }
+
       worksheet.activate();
+      worksheet.load(['name', 'id']);
+
       await excelContext.sync();
+
       const bindId = officeTable.id;
 
-      return { officeTable, bindId, tableName: newOfficeTableName };
+      const { id, name } = worksheet;
+
+      return {
+        officeTable, bindId, tableName: newOfficeTableName, worksheet: { id, name }
+      };
     } catch (error) {
       await excelContext.sync();
       throw error;
