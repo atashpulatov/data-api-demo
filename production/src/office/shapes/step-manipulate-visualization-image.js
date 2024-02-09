@@ -96,7 +96,6 @@ class StepManipulateVisualizationImage {
       // Delete the shape already present in the workbook
       if (shapeInWorksheet) {
         shapeInWorksheet.delete();
-        await excelContext.sync();
       }
 
       sheet.load(['id', 'name']);
