@@ -24,6 +24,9 @@ export const OverviewWindowNotConnected = (props) => {
     () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
   );
 
+  useEffect(() => {
+    console.error('overview-window.jsx: useEffect:', 'shouldDisableActions: ', shouldDisableActions);
+  }, [shouldDisableActions]);
   const objectsToRender = useMemo(
     () => overviewHelper.transformExcelObjects(objects, notifications),
     [objects, notifications]
