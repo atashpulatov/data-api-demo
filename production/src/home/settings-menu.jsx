@@ -113,11 +113,11 @@ export const SettingsMenuNotConnected = ({
         <OverflowTooltip placement="bottom" theme="dark" content={userNameDisplay} mouseEnterDelay={1} containerClassName="user-name-tooltip" sourceClassName="user-name">{userNameDisplay}</OverflowTooltip>
       </li>
       <li
-        className="no-trigger-close imported-data-overview not-linked-list"
+        className={`no-trigger-close imported-data-overview not-linked-list ${isSecured ? 'imported-data-overview-inactive' : ''}`}
         tabIndex="0"
         role="menuitem"
-        onClick={showImportedDataOverviewPopup}
-        onKeyUp={(e) => (e.key === 'Enter' && showImportedDataOverviewPopup())}>
+        onClick={!isSecured ? showImportedDataOverviewPopup : null}
+        onKeyUp={(e) => (!isSecured ? e.key === 'Enter' && showImportedDataOverviewPopup() : null)}>
         {t('Imported Data Overview')}
       </li>
       <div className="separate-line" />

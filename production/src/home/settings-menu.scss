@@ -37,7 +37,7 @@ $text-color: #3F4042;
     &:focus-visible {
       background: #F7F7F7;
     }
-    &:not(:first-child):not(:last-child):not(.clear-data-inactive) {
+    &:not(:first-child):not(:last-child):not(.clear-data-inactive):not(.imported-data-overview-inactive) {
       &:hover {
         background: #F7F7F7;
       }
@@ -69,6 +69,10 @@ $text-color: #3F4042;
   }
   .imported-data-overview {
     margin: 8px 0;
+
+    &-inactive {
+      color: rgba(0, 0, 0, 0.5);
+    }
   }
   .clear-data {
     margin: 8px 0;
