@@ -96,7 +96,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
      Then I waited for ALL selected objects to be removed successfully
 
      When I clicked "Filter" button in Overview window
-     Then Filter panel is visible in Overview window
+     Then I verified that Filter panel is visible in Overview window
       And I selected filter "Name" with all elements in Overview window
       And I selected filter "Project" with all elements in Overview window
       And I clicked Apply button in Filter panel
