@@ -3,6 +3,7 @@ import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
+import { defaultRangePosition } from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -101,8 +102,8 @@ class OfficeApiHelper {
    * @param excelContext Excel context.
    * @returns {Object} Position of the selected range OR the position of the active shape.
    */
-  getSelectedRangeWrapper = async (excelContext, func) => {
-    let selectedRangePos = { top: 0, left: 0 };
+  getSelectedRangeWrapper = async (importType, excelContext, func) => {
+    let selectedRangePos = defaultRangePosition[importType];
     try {
       selectedRangePos = await func(excelContext);
     } catch (error) {

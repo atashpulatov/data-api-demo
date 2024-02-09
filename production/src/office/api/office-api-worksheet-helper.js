@@ -66,12 +66,12 @@ class OfficeApiWorksheetHelper {
   * @param {String} objectName Name of the object added to the new worksheet
   * @return {String} address of Excel cell
   */
-  getStartCell = async (insertNewWorksheet, excelContext, objectName) => {
+  getStartCell = async (importType, insertNewWorksheet, excelContext, objectName) => {
     if (insertNewWorksheet) {
       await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext, objectName);
     }
     const { getSelectedRangeWrapper, getSelectedCell } = officeApiHelper;
-    return getSelectedRangeWrapper(excelContext, getSelectedCell);
+    return getSelectedRangeWrapper(importType, excelContext, getSelectedCell);
   };
 
   /**

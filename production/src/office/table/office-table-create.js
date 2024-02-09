@@ -3,6 +3,7 @@ import officeTableHelperRange from './office-table-helper-range';
 import { officeApiCrosstabHelper } from '../api/office-api-crosstab-helper';
 import getOfficeTableHelper from './get-office-table-helper';
 import { officeApiWorksheetHelper } from '../api/office-api-worksheet-helper';
+import { objectImportType } from '../../mstr-object/constants';
 
 const DEFAULT_TABLE_STYLE = 'TableStyleLight11';
 const TABLE_HEADER_FONT_COLOR = '#000000';
@@ -42,7 +43,7 @@ class OfficeTableCreate {
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
 
     if (insertNewWorksheet) {
-      startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext, name);
+      startCell = await officeApiWorksheetHelper.getStartCell(objectImportType.TABLE, insertNewWorksheet, excelContext, name);
     }
 
     const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);

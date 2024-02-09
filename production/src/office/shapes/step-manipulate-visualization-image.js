@@ -5,6 +5,7 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
+import { objectImportType } from '../../mstr-object/constants';
 
 class StepManipulateVisualizationImage {
   /**
@@ -50,7 +51,7 @@ class StepManipulateVisualizationImage {
 
       // Get the position of the selected range
       const { getSelectedRangeWrapper, getSelectedRangePosition } = officeApiHelper;
-      const selectedRangePos = await getSelectedRangeWrapper(excelContext, getSelectedRangePosition);
+      const selectedRangePos = await getSelectedRangeWrapper(objectImportType.IMAGE, excelContext, getSelectedRangePosition);
 
       // Get the properties of image and the sheet where it needs to be inserted
       const {
