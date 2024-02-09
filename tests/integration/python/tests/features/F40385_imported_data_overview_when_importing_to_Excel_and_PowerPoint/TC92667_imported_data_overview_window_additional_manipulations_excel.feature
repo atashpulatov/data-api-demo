@@ -58,7 +58,8 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I found and selected object "Report with Totals and Subtotals"
       And I clicked Import Data button
 
-     When I clicked Imported Data Overview in Dots menu
+     When I open Settings in Dots Menu
+      And I clicked Imported Data Overview settings menu option
      Then I verified Overview window is opened
       And I clicked Add Data button in Overview window
       And I found and selected object "01 Basic Report"
@@ -109,7 +110,8 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
      Then I verified that Overview window is NOT visible
       And I verified that worksheet number 3 is selected
 
-     When I clicked Imported Data Overview in Dots menu
+     When I open Settings in Dots Menu
+      And I clicked Imported Data Overview settings menu option
       And I clicked select all checkbox in Overview window
       And I clicked Delete object 1 in Overview window
      Then I waited for ALL objects to be removed successfully
