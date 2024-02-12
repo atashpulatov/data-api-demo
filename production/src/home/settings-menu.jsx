@@ -59,6 +59,10 @@ export const SettingsMenuNotConnected = ({
   };
 
   const showImportedDataOverviewPopup = () => {
+    if (isSecured) {
+      return;
+    }
+
     toggleIsSettingsFlag(false);
     popupController.runImportedDataOverviewPopup();
   };
@@ -116,8 +120,8 @@ export const SettingsMenuNotConnected = ({
         className={`no-trigger-close imported-data-overview not-linked-list ${isSecured ? 'imported-data-overview-inactive' : ''}`}
         tabIndex="0"
         role="menuitem"
-        onClick={!isSecured ? showImportedDataOverviewPopup : null}
-        onKeyUp={(e) => (!isSecured ? e.key === 'Enter' && showImportedDataOverviewPopup() : null)}>
+        onClick={showImportedDataOverviewPopup}
+        onKeyUp={(e) => (e.key === 'Enter' && showImportedDataOverviewPopup())}>
         {t('Imported Data Overview')}
       </li>
       <div className="separate-line" />
