@@ -1,7 +1,10 @@
-@mixin popup-empty-component {
+@mixin popup-loading-component {
   position: fixed;
-  left: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
   top: 57px;
+  left: 0;
   width: 100%;
   height: calc(100% - 125px); /* 125px = 57px (top distance) + 68px (button row height) */
 }

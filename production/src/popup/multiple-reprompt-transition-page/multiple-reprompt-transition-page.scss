@@ -5,8 +5,8 @@
     display: flex;
     height: 100vh;
 
-    .empty {
-      @include popup-empty-component;
+    .mstr-rc-3-spinner {
+      @include popup-loading-component
     }
   }
 }

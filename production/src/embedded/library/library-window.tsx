@@ -1,8 +1,9 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { connect } from 'react-redux';
-import { ObjectWindowTitle, Empty } from '@mstr/connector-components';
+import { ObjectWindowTitle } from '@mstr/connector-components';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { Spinner } from '@mstr/rc-3';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -217,7 +218,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         index={0}
         total={0}
       />
-      <Empty isLoading />
+      <Spinner type="large">{t('Loading data...')}</Spinner>
       <EmbeddedLibrary
         handleSelection={handleSelection}
         handleIframeLoadEvent={validateSession}

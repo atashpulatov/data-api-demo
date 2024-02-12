@@ -175,3 +175,14 @@ button.floating-button[disabled]:hover {
 .attribute-selector-window .popup-footer {
   min-width: 650px;
 }
+
+.mstr-rc-3-spinner {
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  gap: 0 !important;
+  left: 0;
+  top: 57px;
+  width: 100%;
+  height: calc(100% - 125px); /* 125px = 57px (top distance) + 68px (button row height) */
+}
