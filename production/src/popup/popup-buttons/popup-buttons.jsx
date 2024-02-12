@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import i18n from '../../i18n';
 import { errorMessages } from '../../error/constants';
 import { DataPreviewButton } from './data-preview-button';
-import { BackButton } from './back-button';
 import { PrepareDataButton } from './prepare-data-button';
 import { ImportButton } from './import-button';
 import { CancelButton } from './cancel-button';
@@ -58,7 +57,6 @@ export const PopupButtonsNotConnected = ({
   );
   return (
     <div className="popup-buttons popup-footer">
-      {handleBack && <BackButton handleBack={handleBack} t={t} />}
       {(!hideSecondary && !handleSecondary) && (
         <DataPreviewButton
           onPreviewClick={onPreviewClick}
