@@ -136,8 +136,8 @@ describe('overview-helper', () => {
         request: 'visualizations'
       },
       name: 'Campaign Finances per Candidate',
-      worksheet: '',
-      cell: '',
+      worksheet: 'Sheet 1',
+      cell: 'A1',
       rows: 66,
       columns: 3,
       objectType: 'table',

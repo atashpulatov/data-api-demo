@@ -34,12 +34,15 @@ describe('stepManipulateVisualizationImage', () => {
   }));
 
   const mockSheet = {
+    id: 'mockedSheetId',
+    name: 'mockedSheetName',
     shapes: {
       addImage: jest.fn().mockImplementation((image) => Promise.resolve({
         set: mockFn,
         id: '1234-5678-9012-3456'
       }))
-    }
+    },
+    load: mockFn,
   };
 
   const excelContextMock = {
@@ -62,7 +65,8 @@ describe('stepManipulateVisualizationImage', () => {
         getItem: jest.fn().mockImplementation((id) => mockSheet)
       },
       sync: mockFn
-    }
+    },
+    sync: mockFn
   };
 
   const operationDataMock = {
@@ -76,6 +80,16 @@ describe('stepManipulateVisualizationImage', () => {
       rows: 'rowsTest',
       mstrTable: {},
     },
+  };
+
+  const mockedUpdateObject = {
+    objectWorkingId: 'objectWorkingIdTest',
+    bindId: '1234-5678-9012-3456',
+    shapeProps: undefined,
+    worksheet: {
+      id: 'mockedSheetId',
+      name: 'mockedSheetName'
+    }
   };
 
   afterEach(() => {
@@ -110,7 +124,7 @@ describe('stepManipulateVisualizationImage', () => {
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', { left: 454, top: 233 }, { height: 342, width: 123 }, mockSheet);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(mockedUpdateObject);
     expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
@@ -151,7 +165,7 @@ describe('stepManipulateVisualizationImage', () => {
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', { left: 234, top: 123 }, { height: 456, width: 345 }, mockSheet);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(mockedUpdateObject);
     expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
@@ -186,7 +200,7 @@ describe('stepManipulateVisualizationImage', () => {
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', { left: 234, top: 123 }, { height: 456, width: 345 }, mockSheet);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(mockedUpdateObject);
     expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
@@ -220,7 +234,7 @@ describe('stepManipulateVisualizationImage', () => {
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', { left: 454, top: 233 }, { height: 342, width: 123 }, mockSheet);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(mockedUpdateObject);
     expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });
@@ -258,7 +272,7 @@ describe('stepManipulateVisualizationImage', () => {
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
     expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', { top: 233, left: 454 }, { width: 233, height: 454 }, mockSheet);
-    expect(operationStepDispatcher.updateObject).toBeCalledWith({ objectWorkingId: 'objectWorkingIdTest', bindId: '1234-5678-9012-3456', shapeProps: undefined });
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(mockedUpdateObject);
     expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
   });

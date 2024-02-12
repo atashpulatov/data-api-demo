@@ -102,10 +102,10 @@ class OverviewHelper {
         objectWorkingId,
         mstrObjectType,
         name,
-        // Uncomment and add values during F38416 Page-by feature development
+        // Uncomment during F38416 Page-by feature development
         // pageLayout: object.pageBy,
-        worksheet: '',
-        cell: '',
+        worksheet: worksheet?.name,
+        cell: startCell,
         rows: details?.excelTableSize?.rows,
         columns: details?.excelTableSize?.columns,
         objectType: importType,
