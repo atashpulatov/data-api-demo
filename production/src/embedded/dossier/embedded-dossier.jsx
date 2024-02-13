@@ -320,7 +320,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler(EventType.ON_PAGE_LOADED, () => {
           // Just hide the embedded dossier when it is consumption page is loaded
           // and avoid any flickering.
-          handleEmbeddedDossierVisibility(false);
+          !dossierOpenRequested && handleEmbeddedDossierVisibility(false);
         });
       },
       dossierFeature: {
