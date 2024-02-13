@@ -146,7 +146,7 @@ describe('PopupController', () => {
 
     // then
     expect(runPopupSpy).toBeCalled();
-    expect(runPopupSpy).toBeCalledWith(popupType, size, size);
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size, null, true);
   });
 
   it('should handle ok command from popup for report WITHOUT instance id', async () => {

@@ -45,7 +45,7 @@ describe('SidePanelService', () => {
       .mockImplementation();
     // when
     sidePanelService.clearRepromptTask();
-    sidePanelService.addData();
+    sidePanelService.addData({ initializedInOverview: false });
     // then
     expect(mockedDispatch).toBeCalledTimes(2);
     expect(mockedRunPopup).toBeCalledTimes(1);
