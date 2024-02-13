@@ -78,8 +78,9 @@ class PopupController {
 
   runPopup = async (popupType, height, width, reportParams = null, initializedInOverview = false) => {
     const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
-    this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
+    const isRepromptOrOvieviewPopupOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
+    this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     this.reportParams = reportParams;
     try {
       await authenticationHelper.validateAuthToken();
@@ -92,7 +93,7 @@ class PopupController {
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
       await officeApiHelper.getExcelSessionStatus();
-      if (isDialogForMultipleRepromptOpen || isDataOverviewOpen) {
+      if (isRepromptOrOvieviewPopupOpen) {
         // US530793: If dialog already open, send message to dialog to reload with new object data.
         // This only occurs during Multiple Reprompt workflow.
         this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, shouldReplaceCurrentDialog: true }));
