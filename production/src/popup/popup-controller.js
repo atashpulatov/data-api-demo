@@ -29,15 +29,15 @@ class PopupController {
     this.dialog = {};
   };
 
-  clearPopupStateIfNeeded = (initializeOverview) => {
-    if (!initializeOverview) {
+  clearPopupStateIfNeeded = (initializedInOverview) => {
+    if (!initializedInOverview) {
       this.reduxStore.dispatch(popupStateActions.onClearPopupState());
       this.reduxStore.dispatch(this.popupActions.resetState());
     }
   };
 
-  runPopupNavigation = async (initializeOverview) => {
-    this.clearPopupStateIfNeeded(initializeOverview);
+  runPopupNavigation = async (initializedInOverview) => {
+    this.clearPopupStateIfNeeded(initializedInOverview);
     await this.runPopup(PopupTypeEnum.libraryWindow, 80, 80);
   };
 
@@ -71,12 +71,12 @@ class PopupController {
     await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
 
-  runImportedDataOverviewPopup = async (initializeOverview) => {
-    this.clearPopupStateIfNeeded(initializeOverview);
+  runImportedDataOverviewPopup = async (initializedInOverview) => {
+    this.clearPopupStateIfNeeded(initializedInOverview);
     await this.runPopup(PopupTypeEnum.importedDataOverview, 80, 80, null, true);
   };
 
-  runPopup = async (popupType, height, width, reportParams = null, initializeOverview = false) => {
+  runPopup = async (popupType, height, width, reportParams = null, initializedInOverview = false) => {
     const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
@@ -129,7 +129,7 @@ class PopupController {
 
               this.reduxStore.dispatch(officeActions.showPopup());
 
-              if (initializeOverview) {
+              if (initializedInOverview) {
                 this.reduxStore.dispatch(popupStateActions.setIsDataOverviewOpen(true));
               }
             }

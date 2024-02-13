@@ -66,7 +66,7 @@ class OverviewHelper {
     this.handleDismissNotifications(response.objectWorkingIds);
     switch (response.command) {
       case OverviewActionCommands.IMPORT:
-        await this.sidePanelService.addData({ initializeOverview: true });
+        await this.sidePanelService.addData({ initializedInOverview: true });
         break;
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
