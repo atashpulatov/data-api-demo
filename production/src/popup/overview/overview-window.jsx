@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
@@ -9,24 +9,38 @@ import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { REMOVE_OPERATION } from '../../operation/operation-type-names';
 
 import './overview-window.scss';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
-    objects, onImport, onRefresh, onDelete, onDuplicate, notifications
+    objects, notifications, onImport, onRefresh, onDelete, onDuplicate, onDismissNotification
   } = props;
 
   useStateSyncOnDialogMessage();
 
   const shouldDisableActions = useMemo(
-    () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
+    () => notifications.some(
+      (notification) => notification.type === objectNotificationTypes.PROGRESS
+    ),
+    [notifications]
   );
 
   const objectsToRender = useMemo(
     () => overviewHelper.transformExcelObjects(objects, notifications),
     [objects, notifications]
   );
+
+  useEffect(() => {
+    notifications.forEach((notification) => {
+      setTimeout(() => {
+        if (notification.type === objectNotificationTypes.SUCCESS && notification.operationType === REMOVE_OPERATION) {
+          onDismissNotification([notification.objectWorkingId]);
+        }
+      }, [500]);
+    });
+  }, [notifications, objects, onDismissNotification]);
 
   return (
     <div className="data-overview-wrapper">
@@ -47,6 +61,7 @@ OverviewWindowNotConnected.propTypes = {
   onRefresh: PropTypes.func,
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
+  onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   notifications: PropTypes.arrayOf(PropTypes.shape({}))
 };
