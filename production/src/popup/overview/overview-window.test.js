@@ -62,6 +62,7 @@ describe('OverviewWindowNotConnected', () => {
   });
 
   it('should render DataOverview component with enabled actions when there is operation in progress', () => {
+    // Given
     const mockedNotifications = [{
       objectWorkingId: 1707383886748,
       title: 'Duplicating',
