@@ -1646,6 +1646,8 @@ export const mockedObjectsFromStore = [
         columns: 3
       }
     },
+    startCell: 'A1',
+    worksheet: { id: 1, name: 'Sheet 1' },
     refreshDate: 1707383921342
   }
 ];

@@ -268,7 +268,6 @@ export const DossierWindowNotConnected = (props) => {
             primaryImportType={primaryImportType}
             shouldShowImportImage
             handleCancel={handleCancel}
-            handleBack={!isEdit && handleBack}
             disableActiveActions={!isSelected}
             isPublished={!(isSelected && !isSupported && !isChecking)}
             disableSecondary={isSelected && !isSupported && !isChecking}
