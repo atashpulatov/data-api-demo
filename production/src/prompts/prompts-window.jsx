@@ -3,7 +3,9 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Empty, ObjectWindowTitle } from '@mstr/connector-components';
+import { ObjectWindowTitle } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc-3';
+import { useTranslation } from 'react-i18next';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';
 import { selectorProperties } from '../attribute-selector/selector-properties';
@@ -42,6 +44,8 @@ export const PromptsWindowNotConnected = (props) => {
   const newPromptsAnswers = useRef([]);
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
+
+  const [t] = useTranslation('common', { i18n });
 
   const closePopup = () => {
     const { commandCancel } = selectorProperties;
@@ -325,7 +329,7 @@ export const PromptsWindowNotConnected = (props) => {
         index={repromptsQueue.index}
         total={repromptsQueue.total}
       />
-      <Empty isLoading />
+      <Spinner type="large">{t('Loading data...')}</Spinner>
       <PromptsContainer
         postMount={onPromptsContainerMount}
       />
