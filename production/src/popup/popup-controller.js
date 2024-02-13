@@ -29,11 +29,15 @@ class PopupController {
     this.dialog = {};
   };
 
-  runPopupNavigation = async (initializeOverview) => {
+  clearPopupStateIfNeeded = (initializeOverview) => {
     if (!initializeOverview) {
       this.reduxStore.dispatch(popupStateActions.onClearPopupState());
       this.reduxStore.dispatch(this.popupActions.resetState());
     }
+  };
+
+  runPopupNavigation = async (initializeOverview) => {
+    this.clearPopupStateIfNeeded(initializeOverview);
     await this.runPopup(PopupTypeEnum.libraryWindow, 80, 80);
   };
 
@@ -68,12 +72,7 @@ class PopupController {
   };
 
   runImportedDataOverviewPopup = async (initializeOverview) => {
-    if (!initializeOverview) {
-      this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-      this.reduxStore.dispatch(this.popupActions.resetState());
-    }
-
-    console.log(initializeOverview);
+    this.clearPopupStateIfNeeded(initializeOverview);
     await this.runPopup(PopupTypeEnum.importedDataOverview, 80, 80, null, true);
   };
 
