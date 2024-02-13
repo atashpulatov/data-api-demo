@@ -202,6 +202,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       isPrompted,
       isMultipleRepromptWithReuse,
       isReprompt,
+      handleEmbeddedDossierVisibility,
     } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
@@ -316,6 +317,11 @@ export default class EmbeddedDossierNotConnected extends React.Component {
           selectedInstanceId && this.instanceIdChangeHandler(selectedInstanceId);
         });
         this.msgRouter.registerEventHandler(EventType.ON_ERROR, this.onEmbeddedError);
+        this.msgRouter.registerEventHandler(EventType.ON_PAGE_LOADED, () => {
+          // Just hide the embedded dossier when it is consumption page is loaded
+          // and avoid any flickering.
+          handleEmbeddedDossierVisibility(false);
+        });
       },
       dossierFeature: {
         visExport: {
@@ -462,6 +468,7 @@ EmbeddedDossierNotConnected.propTypes = {
   }),
   isMultipleRepromptWithReuse: PropTypes.bool,
   isReprompt: PropTypes.bool,
+  handleEmbeddedDossierVisibility: PropTypes.func,
 };
 
 EmbeddedDossierNotConnected.defaultProps = {
