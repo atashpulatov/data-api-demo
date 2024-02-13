@@ -21,26 +21,25 @@ export const OverviewWindowNotConnected = (props) => {
   useStateSyncOnDialogMessage();
 
   const shouldDisableActions = useMemo(
-    () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
+    () => notifications.some(
+      (notification) => notification.type === objectNotificationTypes.PROGRESS
+    ),
+    [notifications]
   );
 
-  useEffect(() => {
-    console.error('overview-window.jsx: useEffect:', 'shouldDisableActions: ', shouldDisableActions);
-  }, [shouldDisableActions]);
   const objectsToRender = useMemo(
     () => overviewHelper.transformExcelObjects(objects, notifications),
     [objects, notifications]
   );
 
   useEffect(() => {
-    console.log('overview-window.jsx: useEffect:', 'notifications:', notifications, 'objects:', objects);
-    setTimeout(() => {
-      notifications.forEach((notification) => {
+    notifications.forEach((notification) => {
+      setTimeout(() => {
         if (notification.type === objectNotificationTypes.SUCCESS && notification.operationType === REMOVE_OPERATION) {
           onDismissNotification([notification.objectWorkingId]);
         }
-      });
-    }, 500);
+      }, [500]);
+    });
   }, [notifications, objects, onDismissNotification]);
 
   return (
