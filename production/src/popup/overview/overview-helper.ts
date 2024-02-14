@@ -1,9 +1,16 @@
+import { popupTypes } from '@mstr/connector-components';
 import { popupHelper } from '../popup-helper';
+import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
+import operationErrorHandler from '../../operation/operation-error-handler';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
 
 export enum OverviewActionCommands {
   REFRESH= 'overview-refresh',
   REMOVE= 'overview-remove',
   DUPLICATE= 'overview-duplicate',
+  RANGE_TAKEN_OK= 'overview-range-taken-ok',
+  RANGE_TAKEN_CLOSE= 'overview-range-taken-close',
   DISMISS_NOTIFICATION= 'overview-dismiss-notification',
 }
 
@@ -42,23 +49,49 @@ class OverviewHelper {
     });
   }
 
-  async sendDuplicateRequest(objectWorkingIds: number[]): Promise<void> {
+  async sendDuplicateRequest(
+    objectWorkingIds: number[],
+    insertNewWorksheet: boolean,
+    withEdit: boolean
+  ): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DUPLICATE,
-      objectWorkingIds
+      objectWorkingIds,
+      insertNewWorksheet,
+      withEdit
     });
   }
 
+  handleRangeTakenOk = (objectWorkingIds: number[]): void => {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.RANGE_TAKEN_OK,
+      objectWorkingIds
+    });
+  };
+
+  handleRangeTakenClose = (objectWorkingIds: number[]): void => {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.RANGE_TAKEN_CLOSE,
+      objectWorkingIds
+    });
+  };
+
   handleDismissNotifications = (objectWorkingIds: number[]): void => {
-    objectWorkingIds.forEach(objectWorkingId => {
+    objectWorkingIds?.forEach(objectWorkingId => {
       this.notificationService.removeExistingNotification(objectWorkingId);
     });
   };
 
   async handleOverviewActionCommand(
-    response: {command: OverviewActionCommands, objectWorkingIds: number[]}
+    response: {
+      command: OverviewActionCommands,
+      objectWorkingIds: number[],
+      insertNewWorksheet?: boolean,
+      withEdit?: boolean
+    }
   ): Promise<void> {
     this.handleDismissNotifications(response.objectWorkingIds);
+
     switch (response.command) {
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
@@ -67,10 +100,17 @@ class OverviewHelper {
         await this.sidePanelService.remove(response.objectWorkingIds);
         break;
       case OverviewActionCommands.DUPLICATE:
-        // TODO this is done for purpose of testing, should be finalized during action implementation
         response.objectWorkingIds.forEach(objectWorkingId => {
-          this.sidePanelService.duplicate(objectWorkingId, true, false);
+          this.sidePanelService.duplicate(objectWorkingId, response.insertNewWorksheet, response.withEdit);
         });
+        break;
+      case OverviewActionCommands.RANGE_TAKEN_OK:
+        sidePanelNotificationHelper.importInNewRange(response.objectWorkingIds[0], null, true);
+        officeReducerHelper.clearSidePanelPopupData();
+        break;
+      case OverviewActionCommands.RANGE_TAKEN_CLOSE:
+        operationErrorHandler.handleClearObjectFromRedux(response.objectWorkingIds[0]);
+        officeReducerHelper.clearSidePanelPopupData();
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         this.handleDismissNotifications(response.objectWorkingIds);
@@ -107,6 +147,38 @@ class OverviewHelper {
         owner: details?.owner.name,
         importedBy: details?.importedBy,
       };
+    });
+  }
+
+  setDuplicatePopup({
+    objectWorkingId, activeCellAddress, onDuplicate, setSidePanelPopup
+  }: any) {
+    setSidePanelPopup({
+      type: popupTypes.DUPLICATE,
+      activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
+      onImport: (isActiveCellOptionSelected: boolean) => {
+        onDuplicate(objectWorkingId, !isActiveCellOptionSelected, false);
+        setSidePanelPopup(null);
+      },
+      onEdit: () => {
+        // TODO: Finish when Edit workflow is implemented
+        setSidePanelPopup(null);
+      },
+      onClose: () => setSidePanelPopup(null)
+    });
+  }
+
+  setRangeTakenPopup({ objectWorkingId, setSidePanelPopup }: any) {
+    setSidePanelPopup({
+      type: popupTypes.RANGE_TAKEN_OVERVIEW,
+      onOk: () => {
+        this.handleRangeTakenOk([objectWorkingId]);
+        officeReducerHelper.clearSidePanelPopupData();
+      },
+      onClose: () => {
+        this.handleRangeTakenClose([objectWorkingId]);
+        officeReducerHelper.clearSidePanelPopupData();
+      },
     });
   }
 }

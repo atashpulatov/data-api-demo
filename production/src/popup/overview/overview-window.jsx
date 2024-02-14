@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
@@ -14,10 +14,12 @@ import './overview-window.scss';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
-    objects, onRefresh, onDelete, onDuplicate, notifications
+    objects, onRefresh, onDelete, onDuplicate, notifications, popupData, activeCellAddress
   } = props;
 
   useStateSyncOnDialogMessage();
+
+  const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
 
   const shouldDisableActions = useMemo(
     () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
@@ -28,14 +30,30 @@ export const OverviewWindowNotConnected = (props) => {
     [objects, notifications]
   );
 
+  const handleDuplicate = (objectWorkingId) => overviewHelper.setDuplicatePopup({
+    objectWorkingId,
+    activeCellAddress,
+    onDuplicate,
+    setSidePanelPopup
+  });
+
+  useEffect(() => {
+    if (popupData) {
+      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setSidePanelPopup });
+    } else {
+      setSidePanelPopup(null);
+    }
+  }, [popupData]);
+
   return (
     <div className="data-overview-wrapper">
       <DataOverview
         loadedObjects={objectsToRender}
+        popup={sidePanelPopup}
         applicationType={ApplicationTypeEnum.EXCEL}
         onRefresh={onRefresh}
         onDelete={onDelete}
-        onDuplicate={onDuplicate}
+        onDuplicate={handleDuplicate}
         shouldDisableActions={shouldDisableActions} />
     </div>
   );
@@ -46,14 +64,19 @@ OverviewWindowNotConnected.propTypes = {
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
-  notifications: PropTypes.arrayOf(PropTypes.shape({}))
+  notifications: PropTypes.arrayOf(PropTypes.shape({})),
+  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
+  activeCellAddress: PropTypes.string
 };
 
-export const mapStateToProps = ({ objectReducer, notificationReducer }) => {
+export const mapStateToProps = ({ objectReducer, notificationReducer, officeReducer }) => {
   const { objects } = objectReducer;
   const { notifications } = notificationReducer;
+  const { popupData, activeCellAddress } = officeReducer;
 
-  return { objects, notifications };
+  return {
+    objects, notifications, popupData, activeCellAddress
+  };
 };
 
 export const mapActionsToProps = {
