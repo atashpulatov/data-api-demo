@@ -3,7 +3,12 @@ import officeStoreHelper from '../../office/store/office-store-helper';
 
 const showPopup = () => ({ type: officeProperties.actions.showPopup });
 
-const hidePopup = () => ({ type: officeProperties.actions.hidePopup });
+const hidePopup = () => (dispatch) => {
+  dispatch(setIsPopupLoaded(false));
+  dispatch({ type: officeProperties.actions.hidePopup });
+};
+
+const setIsPopupLoaded = (isPopupLoaded) => ({ type: officeProperties.actions.setIsPopupLoaded, isPopupLoaded });
 
 const toggleSecuredFlag = (isSecured) => (dispatch) => {
   officeStoreHelper.setFileSecuredFlag(isSecured);
@@ -50,6 +55,11 @@ const toggleRenderSettingsFlag = () => (dispatch) => {
   dispatch({ type: officeProperties.actions.toggleRenderSettingsFlag, });
 };
 
+const setActiveCellAddress = (activeCellAddress) => ({
+  type: officeProperties.actions.setActiveCellAddress,
+  activeCellAddress
+});
+
 const setRangeTakenPopup = (popupData) => ({
   type: officeProperties.actions.setRangeTakenPopup,
   popupData,
@@ -62,6 +72,7 @@ const setIsShapeAPISupported = (data) => ({ type: officeProperties.actions.setSh
 export const officeActions = {
   showPopup,
   hidePopup,
+  setIsPopupLoaded,
   toggleSecuredFlag,
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,
@@ -69,6 +80,7 @@ export const officeActions = {
   toggleSettingsPanelLoadedFlag,
   toggleReusePromptAnswersFlag,
   toggleRenderSettingsFlag,
+  setActiveCellAddress,
   setRangeTakenPopup,
   clearSidePanelPopupData,
   setIsShapeAPISupported

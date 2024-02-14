@@ -5,6 +5,7 @@ const initialState = {
   isConfirm: false,
   isSettings: false,
   supportForms: true,
+  activeCellAddress: null,
   popupData: null,
   popupOpen: false,
   settingsPanelLoaded: false,
@@ -19,6 +20,9 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.hidePopup:
       return onHidePopup(state);
+
+    case officeProperties.actions.setIsPopupLoaded:
+      return setIsPopupLoaded(action, state);
 
     case officeProperties.actions.toggleSecuredFlag:
       return toggleSecuredFlag(action, state);
@@ -40,6 +44,9 @@ export const officeReducer = (state = initialState, action) => {
 
     case officeProperties.actions.toggleReusePromptAnswersFlag:
       return toggleReusePromptAnswersFlag(action, state);
+
+    case officeProperties.actions.setActiveCellAddress:
+      return setActiveCellAddress(action, state);
 
     case officeProperties.actions.setRangeTakenPopup:
       return setRangeTakenPopup(action, state);
@@ -67,6 +74,13 @@ function onHidePopup(state) {
   return {
     ...state,
     popupOpen: false,
+  };
+}
+
+function setIsPopupLoaded(action, state) {
+  return {
+    ...state,
+    isPopupLoaded: action.isPopupLoaded,
   };
 }
 
@@ -118,6 +132,13 @@ function toggleReusePromptAnswersFlag(action, state) {
   return {
     ...state,
     reusePromptAnswers: action.reusePromptAnswers
+  };
+}
+
+function setActiveCellAddress(action, state) {
+  return {
+    ...state,
+    activeCellAddress: action.activeCellAddress,
   };
 }
 
