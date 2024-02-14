@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { OverflowTooltip } from '@mstr/rc';
@@ -30,10 +30,10 @@ export const SettingsMenuNotConnected = ({
   toggleIsSettingsFlag,
   settingsPanelLoaded,
   toggleSettingsPanelLoadedFlag,
-  isSettings
+  isSettings,
+  setIsDataOverviewOpen
 }) => {
   const [t] = useTranslation('common', { i18n });
-  const dispatch = useDispatch();
 
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && objects && objects.length > 0;
@@ -67,7 +67,7 @@ export const SettingsMenuNotConnected = ({
 
     toggleIsSettingsFlag(false);
     popupController.runImportedDataOverviewPopup();
-    dispatch(popupStateActions.setIsDataOverviewOpen(true));
+    setIsDataOverviewOpen(true);
   };
 
   const showConfirmationPopup = () => {
@@ -212,7 +212,8 @@ function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
 const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
-  toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag
+  toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
+  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
@@ -240,4 +241,5 @@ SettingsMenuNotConnected.propTypes = {
   toggleIsConfirmFlag: PropTypes.func,
   toggleSettingsPanelLoadedFlag: PropTypes.func,
   isSettings: PropTypes.bool,
+  setIsDataOverviewOpen: PropTypes.func
 };
