@@ -55,29 +55,31 @@ describe('overview-helper', () => {
 
   it('should send rangeTakenOk request to side panel', () => {
     // Given
+    const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
 
     // When
-    overviewHelper.handleRangeTakenOk(objectWorkingIds);
+    overviewHelper.handleRangeTakenOk(objectWorkingId);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.RANGE_TAKEN_OK,
-      objectWorkingIds,
+      objectWorkingId,
     });
   });
 
   it('should send rangeTakenClose request to side panel', () => {
     // Given
+    const objectWorkingId = objectWorkingIds[0];
     const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
 
     // When
-    overviewHelper.handleRangeTakenClose(objectWorkingIds);
+    overviewHelper.handleRangeTakenClose(objectWorkingId);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.RANGE_TAKEN_CLOSE,
-      objectWorkingIds,
+      objectWorkingId,
     });
   });
 
@@ -149,7 +151,7 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.RANGE_TAKEN_OK,
-      objectWorkingIds: [objectWorkingIds[0]]
+      objectWorkingId: objectWorkingIds[0]
     };
 
     const importInNewRangeMock = jest.spyOn(sidePanelNotificationHelper, 'importInNewRange').mockImplementation();
@@ -167,7 +169,7 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.RANGE_TAKEN_CLOSE,
-      objectWorkingIds: [objectWorkingIds[0]]
+      objectWorkingId: objectWorkingIds[0]
     };
 
     const clearFailedObjectFromReduxMock = jest.spyOn(operationErrorHandler, 'clearFailedObjectFromRedux').mockImplementation();

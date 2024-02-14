@@ -4,6 +4,7 @@ import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-n
 import operationErrorHandler from '../../operation/operation-error-handler';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
+import { DialogPopup } from './overview-types';
 
 export enum OverviewActionCommands {
   REFRESH= 'overview-refresh',
@@ -24,6 +25,11 @@ class OverviewHelper {
     this.notificationService = notificationService;
   };
 
+  /**
+   * Sends message with refresh command to the Side Panel
+   *
+   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   */
   async sendRefreshRequest(
     objectWorkingIds: number[],
   ): Promise<void> {
@@ -33,6 +39,11 @@ class OverviewHelper {
     });
   }
 
+  /**
+   * Sends message with delete command to the Side Panel
+   *
+   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   */
   async sendDeleteRequest(
     objectWorkingIds: number[],
   ): Promise<void> {
@@ -42,6 +53,11 @@ class OverviewHelper {
     });
   }
 
+  /**
+   * Sends message with dismiss notification command to the Side Panel
+   *
+   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   */
   async sendDismissNotificationRequest(objectWorkingIds: number[]): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
@@ -49,6 +65,13 @@ class OverviewHelper {
     });
   }
 
+  /**
+   * Sends message with duplicate command to the Side Panel
+   *
+   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param {Boolean} insertNewWorksheet Flag indicating whether new worksheet should be inserted
+   * @param {Boolean} withEdit Flag indicating whether duplicate should be performed with edit
+   */
   async sendDuplicateRequest(
     objectWorkingIds: number[],
     insertNewWorksheet: boolean,
@@ -62,30 +85,51 @@ class OverviewHelper {
     });
   }
 
-  handleRangeTakenOk = (objectWorkingIds: number[]): void => {
+  /**
+   * Sends message with rangeTakenOk command to the Side Panel
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  handleRangeTakenOk = (objectWorkingId: number): void => {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.RANGE_TAKEN_OK,
-      objectWorkingIds
+      objectWorkingId
     });
   };
 
-  handleRangeTakenClose = (objectWorkingIds: number[]): void => {
+  /**
+   * Sends message with rangeTakenClose command to the Side Panel
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  handleRangeTakenClose = (objectWorkingId: number): void => {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.RANGE_TAKEN_CLOSE,
-      objectWorkingIds
+      objectWorkingId
     });
   };
 
+  /**
+   * Handles dismissing object notifications for given objectWorkingIds
+   *
+   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   */
   handleDismissNotifications = (objectWorkingIds: number[]): void => {
     objectWorkingIds?.forEach(objectWorkingId => {
       this.notificationService.removeExistingNotification(objectWorkingId);
     });
   };
 
+  /**
+   * Handles proper Overview dialog action command based on the response
+   *
+   * @param {Object} response Response from the Overview dialog
+   */
   async handleOverviewActionCommand(
     response: {
       command: OverviewActionCommands,
-      objectWorkingIds: number[],
+      objectWorkingId?: number,
+      objectWorkingIds?: number[],
       insertNewWorksheet?: boolean,
       withEdit?: boolean
     }
@@ -105,11 +149,11 @@ class OverviewHelper {
         });
         break;
       case OverviewActionCommands.RANGE_TAKEN_OK:
-        sidePanelNotificationHelper.importInNewRange(response.objectWorkingIds[0], null, true);
+        sidePanelNotificationHelper.importInNewRange(response.objectWorkingId, null, true);
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
-        operationErrorHandler.clearFailedObjectFromRedux(response.objectWorkingIds[0]);
+        operationErrorHandler.clearFailedObjectFromRedux(response.objectWorkingId);
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
@@ -121,6 +165,14 @@ class OverviewHelper {
     }
   }
 
+  /**
+   * Transforms Excel objects and notifications into a format that can be displayed in the Overview dialog grid
+   *
+   * @param {Array} objects Imported objects data
+   * @param {Array} notifications Objects notifications
+   *
+   * @returns {Array} Transformed objects
+   */
   // TODO add types once redux state is typed
   transformExcelObjects(objects: any[], notifications: any[]): any[] {
     return objects.map((object) => {
@@ -150,9 +202,17 @@ class OverviewHelper {
     });
   }
 
+  /**
+   * Sets Duplicate popup for Overview dialog
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {String} activeCellAddress Address of the active cell in Excel
+   * @param {Function} onDuplicate Function used for triggering duplicate operation
+   * @param {Function} setDialogPopup Function used as a callback for seting Overview dialog popup
+   */
   setDuplicatePopup({
     objectWorkingId, activeCellAddress, onDuplicate, setDialogPopup
-  }: any) {
+  }: DialogPopup): void {
     setDialogPopup({
       type: popupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
@@ -168,15 +228,21 @@ class OverviewHelper {
     });
   }
 
-  setRangeTakenPopup({ objectWorkingId, setDialogPopup }: any) {
+  /**
+   * Sets Range Taken popup for Overview dialog
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Function} setDialogPopup Function used as a callback for seting Overview dialog popup
+   */
+  setRangeTakenPopup({ objectWorkingId, setDialogPopup }: DialogPopup): void {
     setDialogPopup({
       type: popupTypes.RANGE_TAKEN_OVERVIEW,
       onOk: () => {
-        this.handleRangeTakenOk([objectWorkingId]);
+        this.handleRangeTakenOk(objectWorkingId);
         officeReducerHelper.clearPopupData();
       },
       onClose: () => {
-        this.handleRangeTakenClose([objectWorkingId]);
+        this.handleRangeTakenClose(objectWorkingId);
         officeReducerHelper.clearPopupData();
       },
     });
