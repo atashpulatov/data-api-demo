@@ -87,7 +87,7 @@ class PopupController {
       if (isDialogAlreadyOpen) {
         // US530793: If dialog already open, send message to dialog to reload with new object data.
         // This only occurs during Multiple Reprompt workflow.
-        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, shouldReplaceCurrentDialog: true }));
+        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, replaceDialog: true }));
       } else {
         // Otherwise, open new dialog and assign event handlers
         console.time('Popup load time');
