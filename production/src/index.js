@@ -3,7 +3,8 @@ import 'focus-visible/dist/focus-visible';
 import './index.css';
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Empty } from '@mstr/connector-components';
+import { ObjectWindowTitle } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc-3';
 
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
@@ -25,8 +26,13 @@ function goReact() {
   const container = document.getElementById('root');
   const root = createRoot(container);
 
+  const loadingComponent = <Spinner type="large">{i18next.t('Loading...')}</Spinner>;
+
+  // TODO: Remove when connector-components translations are fixed
+  const temp = <ObjectWindowTitle />;
+
   root.render((
-    <Suspense fallback={<Empty isLoading />}>
+    <Suspense fallback={loadingComponent}>
       {(window.location.href.indexOf('popupType') === -1)
         ? <LazySidebar />
         : <LazyDialog />}
