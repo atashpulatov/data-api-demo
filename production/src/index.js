@@ -47,6 +47,7 @@ function officeInitialize() {
         // Add handler from dialog (child) window to be triggered when the parent sends a message
         await Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived,
           (arg) => {
+            console.log('🚀 index.js ~ .then ~ arg.message:', JSON.parse(arg.message));
             // This only occurs during Multiple Reprompt, but we replace the dialog window
             // URL location to trigger the next object's Reprompt window.
             const { splittedUrl = [], popupType = '', isRepromptOrOvieviewPopupOpen = false } = JSON.parse(arg.message);

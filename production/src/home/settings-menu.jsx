@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { OverflowTooltip } from '@mstr/rc';
@@ -10,6 +10,7 @@ import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import './settings-menu.scss';
 import { notificationService } from '../notification-v2/notification-service';
 import { popupController } from '../popup/popup-controller';
@@ -32,6 +33,7 @@ export const SettingsMenuNotConnected = ({
   isSettings
 }) => {
   const [t] = useTranslation('common', { i18n });
+  const dispatch = useDispatch();
 
   const userNameDisplay = userFullName || 'MicroStrategy user';
   const isSecuredActive = !isSecured && objects && objects.length > 0;
@@ -65,6 +67,7 @@ export const SettingsMenuNotConnected = ({
 
     toggleIsSettingsFlag(false);
     popupController.runImportedDataOverviewPopup();
+    dispatch(popupStateActions.setIsDataOverviewOpen(true));
   };
 
   const showConfirmationPopup = () => {
