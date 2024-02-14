@@ -233,10 +233,10 @@ export const DossierWindowNotConnected = (props) => {
    * This is used to hide the embedded dossier when prompts are being answered and trying to avoid any flickering
    * when the consumption mode is loaded.
    *
-   * @param {Boolean} flag true to show the embedded dossier, false to hide it
+   * @param {Boolean} enableVisibility true to show the embedded dossier, false to hide it
    */
-  const handleEmbeddedDossierVisibility = useCallback((flag) => {
-    setVisibleEmbeddedDossier(flag);
+  const handleEmbeddedDossierVisibility = useCallback((enableVisibility) => {
+    setVisibleEmbeddedDossier(enableVisibility);
   }, []);
 
   return (
