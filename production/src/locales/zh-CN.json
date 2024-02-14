@@ -250,5 +250,6 @@
    "Try Again": "请重试",
    "Imported Data Overview": "已导入数据的概览",
    "Settings": "设置",
-   "Import Image": "导入图像"
+   "Import Image": "导入图像",
+   "Loading...": "正在加载..."
 }
