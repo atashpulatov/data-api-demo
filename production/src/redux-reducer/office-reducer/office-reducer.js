@@ -8,7 +8,7 @@ const initialState = {
   activeCellAddress: null,
   popupData: null,
   popupOpen: false,
-  setIsPopupLoaded: false,
+  isPopupLoaded: false,
   settingsPanelLoaded: false,
   reusePromptAnswers: false,
   isShapeAPISupported: false,
