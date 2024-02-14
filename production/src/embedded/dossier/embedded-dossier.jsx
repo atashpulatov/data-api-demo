@@ -17,6 +17,7 @@ import {
   preparePromptedDossier,
   ObjectExecutionStatus
 } from '../../helpers/prompts-handling-helper';
+import { selectorProperties } from '../../attribute-selector/selector-properties';
 
 const { microstrategy, Office } = window;
 
@@ -200,6 +201,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       promptObjects,
       isPrompted,
       isMultipleRepromptWithReuse,
+      isReprompt,
     } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
@@ -264,7 +266,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       },
       navigationBar: {
         enabled: true,
-        gotoLibrary: false,
+        gotoLibrary: true,
         title: true,
         toc: true,
         reset: true,
@@ -304,7 +306,12 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
-        this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, (selectedInstanceId) => {
+        this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, (selectedInstanceId, args) => {
+          if (isReprompt && !dossierOpenRequested && selectedInstanceId === undefined) {
+            const { commandCancel } = selectorProperties;
+            const message = { command: commandCancel, };
+            popupHelper.officeMessageParent(message);
+          }
           // Need to make sure that the instanceId is not null before calling the handler
           selectedInstanceId && this.instanceIdChangeHandler(selectedInstanceId);
         });
@@ -454,6 +461,7 @@ EmbeddedDossierNotConnected.propTypes = {
     index: PropTypes.number,
   }),
   isMultipleRepromptWithReuse: PropTypes.bool,
+  isReprompt: PropTypes.bool,
 };
 
 EmbeddedDossierNotConnected.defaultProps = {
@@ -468,6 +476,7 @@ EmbeddedDossierNotConnected.defaultProps = {
   },
   handleSelection: () => {},
   isMultipleRepromptWithReuse: false,
+  isReprompt: false,
 };
 
 const mapStateToProps = (state) => {
@@ -521,6 +530,7 @@ const mapStateToProps = (state) => {
     isPrompted,
     repromptsQueue: { ...repromptsQueueReducer },
     isMultipleRepromptWithReuse,
+    isReprompt,
   };
 };
 

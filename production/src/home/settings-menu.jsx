@@ -59,6 +59,10 @@ export const SettingsMenuNotConnected = ({
   };
 
   const showImportedDataOverviewPopup = () => {
+    if (isSecured) {
+      return;
+    }
+
     toggleIsSettingsFlag(false);
     popupController.runImportedDataOverviewPopup();
   };
@@ -113,7 +117,7 @@ export const SettingsMenuNotConnected = ({
         <OverflowTooltip placement="bottom" theme="dark" content={userNameDisplay} mouseEnterDelay={1} containerClassName="user-name-tooltip" sourceClassName="user-name">{userNameDisplay}</OverflowTooltip>
       </li>
       <li
-        className="no-trigger-close imported-data-overview not-linked-list"
+        className={`no-trigger-close imported-data-overview not-linked-list ${isSecured ? 'imported-data-overview-inactive' : ''}`}
         tabIndex="0"
         role="menuitem"
         onClick={showImportedDataOverviewPopup}
