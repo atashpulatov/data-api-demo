@@ -15,6 +15,7 @@ describe('officeReducer', () => {
       activeCellAddress: null,
       popupData: null,
       popupOpen: false,
+      isPopupLoaded: false,
       settingsPanelLoaded: false,
       isShapeAPISupported: false,
       reusePromptAnswers: false
