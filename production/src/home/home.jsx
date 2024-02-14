@@ -23,7 +23,7 @@ const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
-    loading, popupOpen, authToken, hidePopup, toggleIsSettingsFlag
+    loading, dialogOpen, authToken, hideDialog, toggleIsSettingsFlag
   } = props;
 
   const canUseOffice = useOfficePrivilege(authToken);
@@ -34,7 +34,7 @@ export const HomeNotConnected = (props) => {
     notificationService.connectionRestored();
   };
   const handleConnectionLost = () => {
-    if (!popupOpen) {
+    if (!dialogOpen) {
       notificationService.connectionLost();
     }
   };
@@ -47,10 +47,10 @@ export const HomeNotConnected = (props) => {
   },);
 
   useEffect(() => {
-    if (!popupOpen && !window.navigator.onLine) {
+    if (!dialogOpen && !window.navigator.onLine) {
       notificationService.connectionLost();
     }
-  }, [popupOpen]);
+  }, [dialogOpen]);
 
   useEffect(() => {
     if (!authToken) {
@@ -67,7 +67,7 @@ export const HomeNotConnected = (props) => {
         officeStoreRestoreObject.restoreAnswersFromExcelStore();
         homeHelper.saveLoginValues();
         homeHelper.getTokenFromStorage();
-        hidePopup(); // hide error popup if visible
+        hideDialog(); // hide error popup if visible
         toggleIsSettingsFlag(false); // hide settings menu if visible
         sessionActions.disableLoading();
       } catch (error) {
@@ -75,7 +75,7 @@ export const HomeNotConnected = (props) => {
       }
     }
     initializeHome();
-  }, [hidePopup, toggleIsSettingsFlag]);
+  }, [hideDialog, toggleIsSettingsFlag]);
 
   useEffect(() => {
     getUserData(authToken);
@@ -97,7 +97,7 @@ export const HomeNotConnected = (props) => {
     <SessionExtendingWrapper id="overlay">
       {IS_DEVELOPMENT && authToken && <DevelopmentImportList />}
       {sidePanelToRender()}
-      <HomeDialog show={popupOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
+      <HomeDialog show={dialogOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
     </SessionExtendingWrapper>
   );
 };
@@ -113,7 +113,7 @@ async function getUserData(authToken) {
 function mapStateToProps(state) {
   return {
     loading: state.sessionReducer.loading,
-    popupOpen: state.officeReducer.popupOpen,
+    dialogOpen: state.officeReducer.dialogOpen,
     authToken: state.sessionReducer.authToken,
     shouldRenderSettings: state.officeReducer.shouldRenderSettings,
     canUseOffice: state.sessionReducer.canUseOffice
@@ -122,15 +122,15 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag,
-  hidePopup: officeActions.hidePopup,
+  hideDialog: officeActions.hideDialog,
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag
 };
 
 HomeNotConnected.propTypes = {
   loading: PropTypes.bool,
-  popupOpen: PropTypes.bool,
+  dialogOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  hidePopup: PropTypes.func,
+  hideDialog: PropTypes.func,
   toggleIsSettingsFlag: PropTypes.func,
 };
 

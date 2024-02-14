@@ -153,14 +153,14 @@ describe('overview-helper', () => {
     };
 
     const importInNewRangeMock = jest.spyOn(sidePanelNotificationHelper, 'importInNewRange').mockImplementation();
-    const clearSidePanelPopupDataMock = jest.spyOn(officeReducerHelper, 'clearSidePanelPopupData').mockImplementation();
+    const clearPopupDataMock = jest.spyOn(officeReducerHelper, 'clearPopupData').mockImplementation();
 
     // When
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
     expect(importInNewRangeMock).toHaveBeenCalledWith(objectWorkingIds[0], null, true);
-    expect(clearSidePanelPopupDataMock).toHaveBeenCalled();
+    expect(clearPopupDataMock).toHaveBeenCalled();
   });
 
   it('should handle rangeTakenClose command', async () => {
@@ -171,14 +171,14 @@ describe('overview-helper', () => {
     };
 
     const clearFailedObjectFromReduxMock = jest.spyOn(operationErrorHandler, 'clearFailedObjectFromRedux').mockImplementation();
-    const clearSidePanelPopupDataMock = jest.spyOn(officeReducerHelper, 'clearSidePanelPopupData').mockImplementation();
+    const clearPopupDataMock = jest.spyOn(officeReducerHelper, 'clearPopupData').mockImplementation();
 
     // When
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
     expect(clearFailedObjectFromReduxMock).toHaveBeenCalledWith(objectWorkingIds[0]);
-    expect(clearSidePanelPopupDataMock).toHaveBeenCalled();
+    expect(clearPopupDataMock).toHaveBeenCalled();
   });
 
   it('should handle dismiss notification command', async () => {

@@ -31,7 +31,7 @@ const useStateSyncOnDialogMessage = () => {
       }
 
       if (popupData) {
-        officeReducerHelper.dispayPopupOnSidePanel(popupData);
+        officeReducerHelper.displayPopup(popupData);
       }
     });
   }, []);

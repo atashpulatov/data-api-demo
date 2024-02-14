@@ -7,9 +7,9 @@ export const officeProperties = {
   isSecured: 'isSecured',
   isClearDataFailed: 'isClearDataFailed',
   actions: {
-    showPopup: 'OFFICE_SHOW_POPUP',
-    hidePopup: 'OFFICE_HIDE_POPUP',
-    setIsPopupLoaded: 'OFFICE_SET_IS_POPUP_LOADED',
+    showDialog: 'OFFICE_SHOW_DIALOG',
+    hideDialog: 'OFFICE_HIDE_DIALOG',
+    setIsDialogLoaded: 'OFFICE_SET_IS_DIALOG_LOADED',
     toggleSecuredFlag: 'OFFICE_TOGGLE_SECURED_FLAG',
     toggleIsSettingsFlag: 'OFFICE_TOGGLE_IS_SETTINGS_FLAG',
     toggleIsConfirmFlag: 'OFFICE_TOGGLE_IS_CONFIRM_FLAG',
@@ -18,8 +18,8 @@ export const officeProperties = {
     toggleSettingsPanelLoadedFlag: 'OFFICE_TOGGLE_SETTINGS_PANEL_LOADED_FLAG',
     toggleReusePromptAnswersFlag: 'OFFICE_TOGGLE_REUSE_PROMPT_ANSWERS_FLAG',
     setActiveCellAddress: 'OFFICE_SET_ACTIVE_CELL_ADDRESS',
-    setRangeTakenPopup: 'OFFICE_SET_RANGE_TAKEN_POPUP',
-    clearSidePanelPopupData: 'OFFICE_CLEAR_SIDE_PANEL_POPUP_DATA',
+    setPopupData: 'OFFICE_SET_POPUP_DATA',
+    clearPopupData: 'OFFICE_CLEAR_POPUP_DATA',
     setShapeAPISupported: 'OFFICE_SET_SHAPE_API_SUPPORTED',
   },
   displayAttrFormNames: {

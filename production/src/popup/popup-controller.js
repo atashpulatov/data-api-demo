@@ -71,10 +71,13 @@ class PopupController {
 
   runPopup = async (popupType, height, width, reportParams = null) => {
     const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
+
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
-    const isRepromptOrOverviewPopupOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
+    const isRepromptOrOverviewDialogOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
+
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     this.reportParams = reportParams;
+
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
@@ -82,13 +85,16 @@ class PopupController {
       errorService.handleError(error);
       return;
     }
+
     const url = URL;
     const splittedUrl = url.split('?'); // we need to get rid of any query params
+
     try {
       await officeApiHelper.getExcelSessionStatus();
-      if (isRepromptOrOverviewPopupOpen) {
+
+      if (isRepromptOrOverviewDialogOpen) {
         // US530793: If dialog already open, send message to dialog to reload with new object data.
-        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, isRepromptOrOverviewPopupOpen }));
+        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, isRepromptOrOverviewDialogOpen }));
       } else {
         // Otherwise, open new dialog and assign event handlers
         console.time('Popup load time');
@@ -112,7 +118,7 @@ class PopupController {
                 Office.EventType.DialogEventReceived,
                 () => {
                   this.reduxStore.dispatch(this.popupActions.resetState());
-                  this.reduxStore.dispatch(officeActions.hidePopup());
+                  this.reduxStore.dispatch(officeActions.hideDialog());
 
                   // Clear the reprompt task queue if the user closes the popup,
                   // as the user is no longer interested in continuing the multiple re-prompting task.
@@ -120,7 +126,7 @@ class PopupController {
                 }
               );
 
-              this.reduxStore.dispatch(officeActions.showPopup());
+              this.reduxStore.dispatch(officeActions.showDialog());
             }
           });
       }
@@ -141,7 +147,7 @@ class PopupController {
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
 
     if (response.command === selectorProperties.commandPopupLoaded) {
-      this.reduxStore.dispatch(officeActions.setIsPopupLoaded(true));
+      this.reduxStore.dispatch(officeActions.setIsDialogLoaded(true));
     }
 
     try {
@@ -186,7 +192,7 @@ class PopupController {
             // since we were previously keeping the dialog open in between objects.
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
             await this.closeDialog(dialog);
-            this.resetPopupStates();
+            this.resetDialogStates();
           }
           this.reduxStore.dispatch(clearRepromptTask());
           break;
@@ -205,7 +211,7 @@ class PopupController {
       if (isMultipleRepromptQueueEmpty && dialogType !== PopupTypeEnum.importedDataOverview) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
-        this.resetPopupStates();
+        this.resetDialogStates();
       }
     }
   };
@@ -262,12 +268,12 @@ class PopupController {
     }
   };
 
-  // Used to reset popup-related state variables in Redux Store
+  // Used to reset dialog-related state variables in Redux Store
   // and the dialog reference stored in the class object.
-  resetPopupStates = () => {
+  resetDialogStates = () => {
     this.reduxStore.dispatch(this.popupActions.resetState());
     this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-    this.reduxStore.dispatch(officeActions.hidePopup());
+    this.reduxStore.dispatch(officeActions.hideDialog());
     this.dialog = {};
   };
 

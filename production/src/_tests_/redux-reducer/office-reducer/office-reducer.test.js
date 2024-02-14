@@ -14,8 +14,8 @@ describe('officeReducer', () => {
       supportForms: true,
       activeCellAddress: null,
       popupData: null,
-      popupOpen: false,
-      isPopupLoaded: false,
+      dialogOpen: false,
+      isDialogLoaded: false,
       settingsPanelLoaded: false,
       isShapeAPISupported: false,
       reusePromptAnswers: false
@@ -32,34 +32,34 @@ describe('officeReducer', () => {
     expect(newState.activeCellAddress).toBe('A1');
   });
 
-  it('should set popupOpen to true on showPopup', () => {
+  it('should set dialogOpen to true on showDialog', () => {
     // given
-    const prevState = { popupOpen: false };
-    const action = { type: officeProperties.actions.showPopup };
+    const prevState = { dialogOpen: false };
+    const action = { type: officeProperties.actions.showDialog };
     // when
     const newState = officeReducer(prevState, action);
     // then
-    expect(newState.popupOpen).toBe(true);
+    expect(newState.dialogOpen).toBe(true);
   });
 
-  it('should set popupOpen to false on hidePopup', () => {
+  it('should set dialogOpen to false on hideDialog', () => {
     // given
-    const prevState = { popupOpen: true };
-    const action = { type: officeProperties.actions.hidePopup };
+    const prevState = { dialogOpen: true };
+    const action = { type: officeProperties.actions.hideDialog };
     // when
     const newState = officeReducer(prevState, action);
     // then
-    expect(newState.popupOpen).toBe(false);
+    expect(newState.dialogOpen).toBe(false);
   });
 
-  it('should set given value to isPopupLoaded on setIsPopupLoaded', () => {
+  it('should set given value to isDialogLoaded on setIsDialogLoaded', () => {
     // given
-    const prevState = { isPopupLoaded: false };
-    const action = { type: officeProperties.actions.setIsPopupLoaded, isPopupLoaded: true };
+    const prevState = { isDialogLoaded: false };
+    const action = { type: officeProperties.actions.setIsDialogLoaded, isDialogLoaded: true };
     // when
     const newState = officeReducer(prevState, action);
     // then
-    expect(newState.isPopupLoaded).toBe(true);
+    expect(newState.isDialogLoaded).toBe(true);
   });
 
   it('should return new proper state in case of toggleSecuredFlag action', () => {

@@ -106,11 +106,11 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.RANGE_TAKEN_OK:
         sidePanelNotificationHelper.importInNewRange(response.objectWorkingIds[0], null, true);
-        officeReducerHelper.clearSidePanelPopupData();
+        officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
         operationErrorHandler.clearFailedObjectFromRedux(response.objectWorkingIds[0]);
-        officeReducerHelper.clearSidePanelPopupData();
+        officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         this.handleDismissNotifications(response.objectWorkingIds);
@@ -151,33 +151,33 @@ class OverviewHelper {
   }
 
   setDuplicatePopup({
-    objectWorkingId, activeCellAddress, onDuplicate, setSidePanelPopup
+    objectWorkingId, activeCellAddress, onDuplicate, setDialogPopup
   }: any) {
-    setSidePanelPopup({
+    setDialogPopup({
       type: popupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onImport: (isActiveCellOptionSelected: boolean) => {
         onDuplicate(objectWorkingId, !isActiveCellOptionSelected, false);
-        setSidePanelPopup(null);
+        setDialogPopup(null);
       },
       onEdit: () => {
         // TODO: Finish when Edit workflow is implemented
-        setSidePanelPopup(null);
+        setDialogPopup(null);
       },
-      onClose: () => setSidePanelPopup(null)
+      onClose: () => setDialogPopup(null)
     });
   }
 
-  setRangeTakenPopup({ objectWorkingId, setSidePanelPopup }: any) {
-    setSidePanelPopup({
+  setRangeTakenPopup({ objectWorkingId, setDialogPopup }: any) {
+    setDialogPopup({
       type: popupTypes.RANGE_TAKEN_OVERVIEW,
       onOk: () => {
         this.handleRangeTakenOk([objectWorkingId]);
-        officeReducerHelper.clearSidePanelPopupData();
+        officeReducerHelper.clearPopupData();
       },
       onClose: () => {
         this.handleRangeTakenClose([objectWorkingId]);
-        officeReducerHelper.clearSidePanelPopupData();
+        officeReducerHelper.clearPopupData();
       },
     });
   }

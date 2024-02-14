@@ -69,7 +69,7 @@ class SidePanelNotificationHelper {
     objectWorkingId, activeCellAddress, setSidePanelPopup, callback
   }) => {
     const onCancel = () => {
-      officeReducerHelper.clearSidePanelPopupData();
+      officeReducerHelper.clearPopupData();
       callback();
     };
 
@@ -78,7 +78,7 @@ class SidePanelNotificationHelper {
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onOk: (isActiveCellOptionSelected) => {
         this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
-        officeReducerHelper.clearSidePanelPopupData();
+        officeReducerHelper.clearPopupData();
       },
       onCancel,
       onClose: onCancel

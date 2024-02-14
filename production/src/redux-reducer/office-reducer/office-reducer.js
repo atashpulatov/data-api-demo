@@ -7,8 +7,8 @@ const initialState = {
   supportForms: true,
   activeCellAddress: null,
   popupData: null,
-  popupOpen: false,
-  isPopupLoaded: false,
+  dialogOpen: false,
+  isDialogLoaded: false,
   settingsPanelLoaded: false,
   reusePromptAnswers: false,
   isShapeAPISupported: false,
@@ -16,14 +16,14 @@ const initialState = {
 
 export const officeReducer = (state = initialState, action) => {
   switch (action.type) {
-    case officeProperties.actions.showPopup:
-      return onShowPopup(state);
+    case officeProperties.actions.showDialog:
+      return onShowDialog(state);
 
-    case officeProperties.actions.hidePopup:
-      return onHidePopup(state);
+    case officeProperties.actions.hideDialog:
+      return onHideDialog(state);
 
-    case officeProperties.actions.setIsPopupLoaded:
-      return setIsPopupLoaded(action, state);
+    case officeProperties.actions.setIsDialogLoaded:
+      return setIsDialogLoaded(action, state);
 
     case officeProperties.actions.toggleSecuredFlag:
       return toggleSecuredFlag(action, state);
@@ -49,11 +49,11 @@ export const officeReducer = (state = initialState, action) => {
     case officeProperties.actions.setActiveCellAddress:
       return setActiveCellAddress(action, state);
 
-    case officeProperties.actions.setRangeTakenPopup:
-      return setRangeTakenPopup(action, state);
+    case officeProperties.actions.setPopupData:
+      return setPopupData(action, state);
 
-    case officeProperties.actions.clearSidePanelPopupData:
-      return clearSidePanelPopupData(action, state);
+    case officeProperties.actions.clearPopupData:
+      return clearPopupData(action, state);
 
     case officeProperties.actions.setShapeAPISupported:
       return setIsShapeAPISupported(action, state);
@@ -64,24 +64,24 @@ export const officeReducer = (state = initialState, action) => {
   return state;
 };
 
-function onShowPopup(state) {
+function onShowDialog(state) {
   return {
     ...state,
-    popupOpen: true,
+    dialogOpen: true,
   };
 }
 
-function onHidePopup(state) {
+function onHideDialog(state) {
   return {
     ...state,
-    popupOpen: false,
+    dialogOpen: false,
   };
 }
 
-function setIsPopupLoaded(action, state) {
+function setIsDialogLoaded(action, state) {
   return {
     ...state,
-    isPopupLoaded: action.isPopupLoaded,
+    isDialogLoaded: action.isDialogLoaded,
   };
 }
 
@@ -143,14 +143,14 @@ function setActiveCellAddress(action, state) {
   };
 }
 
-function setRangeTakenPopup(action, state) {
+function setPopupData(action, state) {
   return {
     ...state,
     popupData: action.popupData,
   };
 }
 
-function clearSidePanelPopupData(action, state) {
+function clearPopupData(action, state) {
   return {
     ...state,
     popupData: null,

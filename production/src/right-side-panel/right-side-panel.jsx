@@ -38,8 +38,8 @@ export const RightSidePanelNotConnected = ({
   notifications,
   operations,
   popupData,
-  isPopupRendered,
-  isPopupLoaded,
+  isDialogRendered,
+  isDialogLoaded,
   toggleCurtain,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
@@ -151,7 +151,7 @@ export const RightSidePanelNotConnected = ({
         activeCellAddress
       })
     );
-  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isPopupLoaded]);
+  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded]);
 
   return (
     <>
@@ -166,14 +166,14 @@ export const RightSidePanelNotConnected = ({
         onRefreshClick={refreshWrapper}
         onRemoveClick={removeWrapper}
         onRename={renameWrapper}
-        popup={!isPopupRendered && sidePanelPopup}
+        popup={!isDialogRendered && sidePanelPopup}
         settingsMenu={isSettings && <SettingsMenu />}
         onSettingsClick={handleSettingsClick}
         confirmationWindow={isConfirm && <Confirmation />}
         globalNotification={globalNotification}
         onSelectAll={notificationService.dismissNotifications}
         shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-        isPopupRendered={isPopupRendered}
+        isPopupRendered={isDialogRendered}
         reusePromptAnswers={reusePromptAnswers}
         settingsPanelLoaded={settingsPanelLoaded}
         handleReusePromptAnswers={handleReusePromptAnswers}
@@ -195,9 +195,9 @@ export const mapStateToProps = (state) => {
     isClearDataFailed,
     settingsPanelLoaded,
     reusePromptAnswers,
-    popupOpen,
     popupData,
-    isPopupLoaded
+    dialogOpen,
+    isDialogLoaded
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -213,8 +213,8 @@ export const mapStateToProps = (state) => {
     settingsPanelLoaded,
     reusePromptAnswers,
     popupData,
-    isPopupRendered: popupOpen,
-    isPopupLoaded,
+    isDialogRendered: dialogOpen,
+    isDialogLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
   };
 };
@@ -300,7 +300,7 @@ RightSidePanelNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func,
-  isPopupRendered: PropTypes.bool,
-  isPopupLoaded: PropTypes.bool,
+  isDialogRendered: PropTypes.bool,
+  isDialogLoaded: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
 };

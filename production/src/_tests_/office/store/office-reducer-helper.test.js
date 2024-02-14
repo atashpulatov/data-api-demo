@@ -69,6 +69,19 @@ describe('OfficeReducerHelper', () => {
 
       expect(result).toEqual(expectedNoOperationInProgress);
     });
+
+  it('clearPopupData should dispatch proper Redux action', () => {
+    // given
+    officeReducerHelper.init(reduxStoreMock);
+    officeReducerHelper.reduxStore.dispatch = jest.fn();
+
+    // when
+    officeReducerHelper.clearPopupData();
+
+    // then
+    expect(officeReducerHelper.reduxStore.dispatch).toHaveBeenCalledTimes(1);
+    expect(officeReducerHelper.reduxStore.dispatch).toHaveBeenCalledWith({ type: 'OFFICE_SET_POPUP_DATA' });
+  });
 });
 
 describe('OfficeReducerHelper getObjectFromObjectReducerByBindId', () => {

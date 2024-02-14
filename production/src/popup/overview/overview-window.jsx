@@ -20,7 +20,7 @@ export const OverviewWindowNotConnected = (props) => {
 
   useStateSyncOnDialogMessage();
 
-  const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
+  const [dialogPopup, setDialogPopup] = React.useState(null);
 
   const shouldDisableActions = useMemo(
     () => notifications.some(
@@ -38,14 +38,14 @@ export const OverviewWindowNotConnected = (props) => {
     objectWorkingId,
     activeCellAddress,
     onDuplicate,
-    setSidePanelPopup
+    setDialogPopup
   });
 
   useEffect(() => {
     if (popupData) {
-      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setSidePanelPopup });
+      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setDialogPopup });
     } else {
-      setSidePanelPopup(null);
+      setDialogPopup(null);
     }
   }, [popupData]);
 
@@ -63,7 +63,7 @@ export const OverviewWindowNotConnected = (props) => {
     <div className="data-overview-wrapper">
       <DataOverview
         loadedObjects={objectsToRender}
-        popup={sidePanelPopup}
+        popup={dialogPopup}
         applicationType={ApplicationTypeEnum.EXCEL}
         onRefresh={onRefresh}
         onDelete={onDelete}

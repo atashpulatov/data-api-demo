@@ -62,20 +62,20 @@ class OfficeReducerHelper {
   };
 
   /**
-  * Set popup data in office reducer. Based on this data side panel will display the popup.
+  * Set popup data in office reducer. Based on this data will display the popup.
   *
   * @param {Object} popupData Contains data about popup to be displayed
   */
-  dispayPopupOnSidePanel = (popupData) => {
-    this.reduxStore.dispatch(officeActions.setRangeTakenPopup(popupData));
+  displayPopup = (popupData) => {
+    this.reduxStore.dispatch(officeActions.setPopupData(popupData));
   };
 
   /**
-  * Clear popup data in office reducer. Based on this data side panel will hide the popup.
+  * Clear popup data in office reducer. Based on this data will hide the popup.
   *
   */
-  clearSidePanelPopupData = () => {
-    this.reduxStore.dispatch(officeActions.clearSidePanelPopupData());
+  clearPopupData = () => {
+    this.reduxStore.dispatch(officeActions.clearPopupData());
   };
 }
 

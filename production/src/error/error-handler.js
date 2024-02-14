@@ -52,7 +52,7 @@ class ErrorService {
         );
       }
 
-      officeReducerHelper.dispayPopupOnSidePanel(popupData);
+      officeReducerHelper.displayPopup(popupData);
     } else {
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
       await this.closePopupIfOpen();
@@ -213,15 +213,15 @@ class ErrorService {
    */
   closePopupIfOpen = async () => {
     const storeState = this.reduxStore.getState();
-    const isPopupOpen = storeState.officeReducer?.popupOpen;
+    const isDialogOpen = storeState.officeReducer?.dialogOpen;
 
-    if (isPopupOpen) {
-      const isPopupOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
+    if (isDialogOpen) {
+      const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
       await this.popupController.closeDialog(this.popupController.dialog);
-      this.popupController.resetPopupStates();
+      this.popupController.resetDialogStates();
       // clear Reprompt task queue if in Reprompt All workflow
-      isPopupOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
+      isDialogOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
     }
   };
 }
