@@ -109,7 +109,7 @@ class OverviewHelper {
         officeReducerHelper.clearSidePanelPopupData();
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
-        operationErrorHandler.handleClearObjectFromRedux(response.objectWorkingIds[0]);
+        operationErrorHandler.clearFailedObjectFromRedux(response.objectWorkingIds[0]);
         officeReducerHelper.clearSidePanelPopupData();
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:

@@ -16,6 +16,7 @@ import {
   REFRESH_OPERATION,
   EDIT_OPERATION
 } from '../operation/operation-type-names';
+import { PopupTypeEnum } from '../home/popup-type-enum';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -39,9 +40,19 @@ class ErrorService {
     const details = this.getErrorDetails(error, errorMessage, errorType);
 
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
-      officeReducerHelper.dispayPopupOnSidePanel({
+      const { popupType } = this.reduxStore.getState().popupStateReducer;
+
+      const popupData = {
         objectWorkingId, title: errorMessage, message: details, callback
-      });
+      };
+
+      if (popupType === PopupTypeEnum.importedDataOverview) {
+        this.popupController.sendMessageToDialog(
+          JSON.stringify({ popupData })
+        );
+      }
+
+      officeReducerHelper.dispayPopupOnSidePanel(popupData);
     } else {
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
       await this.closePopupIfOpen();

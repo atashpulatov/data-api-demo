@@ -65,10 +65,12 @@ class OperationErrorHandler {
       await officeShapeApiHelper.deleteImage(excelContext, bindId);
     }
 
+    this.clearFailedObjectFromRedux(objectWorkingId);
+  };
+
+  clearFailedObjectFromRedux = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
-
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
-
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   };
 
