@@ -30,6 +30,7 @@ class PopupController {
   };
 
   clearPopupStateIfNeeded = (initializedInOverview) => {
+    // TODO: convert this to a redux action
     if (!initializedInOverview) {
       this.reduxStore.dispatch(popupStateActions.onClearPopupState());
       this.reduxStore.dispatch(this.popupActions.resetState());
@@ -80,6 +81,7 @@ class PopupController {
     const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
     const isRepromptOrOvieviewPopupOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
+
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     this.reportParams = reportParams;
     try {
@@ -89,6 +91,7 @@ class PopupController {
       errorService.handleError(error);
       return;
     }
+
     const url = URL;
     const splittedUrl = url.split('?'); // we need to get rid of any query params
     try {
@@ -96,7 +99,7 @@ class PopupController {
       if (isRepromptOrOvieviewPopupOpen) {
         // US530793: If dialog already open, send message to dialog to reload with new object data.
         // This only occurs during Multiple Reprompt workflow.
-        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, shouldReplaceCurrentDialog: true }));
+        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, isRepromptOrOvieviewPopupOpen }));
       } else {
         // Otherwise, open new dialog and assign event handlers
         console.time('Popup load time');
