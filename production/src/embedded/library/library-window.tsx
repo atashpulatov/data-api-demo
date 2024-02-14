@@ -218,7 +218,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         index={0}
         total={0}
       />
-      <Spinner type="large">{t('Loading data...')}</Spinner>
+      <Spinner type="large">{t('Loading...')}</Spinner>
       <EmbeddedLibrary
         handleSelection={handleSelection}
         handleIframeLoadEvent={validateSession}

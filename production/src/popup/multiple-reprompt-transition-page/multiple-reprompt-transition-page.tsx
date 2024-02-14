@@ -43,7 +43,7 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
         total={total}
       />
       <div className="loading-section">
-        <Spinner type="large">{t('Loading data...')}</Spinner>
+        <Spinner type="large">{t('Loading...')}</Spinner>
       </div>
     </div>
   );

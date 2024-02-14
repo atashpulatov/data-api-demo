@@ -252,7 +252,7 @@ export const DossierWindowNotConnected = (props) => {
         index={repromptsQueue.index}
         total={repromptsQueue.total}
       />
-      <Spinner type="large">{t('Loading data...')}</Spinner>
+      <Spinner type="large">{t('Loading...')}</Spinner>
       {!hideEmbedded && ( // Hide embedded dossier only after prompts are answered.
         <>
           <EmbeddedDossier

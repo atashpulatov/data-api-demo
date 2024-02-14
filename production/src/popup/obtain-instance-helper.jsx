@@ -17,7 +17,7 @@ class ObtainInstanceHelperNotConnected extends React.Component {
   render() {
     return (
       <div className="obtain-instance-helper">
-        <Spinner type="large">{i18n.t('Loading data...')}</Spinner>
+        <Spinner type="large">{i18n.t('Loading...')}</Spinner>
       </div>
     );
   }
