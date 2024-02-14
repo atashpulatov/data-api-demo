@@ -12,12 +12,23 @@ describe('officeReducer', () => {
       isSettings: false,
       isConfirm: false,
       supportForms: true,
+      activeCellAddress: null,
       popupData: null,
       popupOpen: false,
       settingsPanelLoaded: false,
       isShapeAPISupported: false,
       reusePromptAnswers: false
     });
+  });
+
+  it('should set address of active cell on setActiveCellAddress', () => {
+    // given
+    const prevState = { activeCellAddress: null };
+    const action = { type: officeProperties.actions.setActiveCellAddress, activeCellAddress: 'A1' };
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.activeCellAddress).toBe('A1');
   });
 
   it('should set popupOpen to true on showPopup', () => {
@@ -38,6 +49,16 @@ describe('officeReducer', () => {
     const newState = officeReducer(prevState, action);
     // then
     expect(newState.popupOpen).toBe(false);
+  });
+
+  it('should set given value to isPopupLoaded on setIsPopupLoaded', () => {
+    // given
+    const prevState = { isPopupLoaded: false };
+    const action = { type: officeProperties.actions.setIsPopupLoaded, isPopupLoaded: true };
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.isPopupLoaded).toBe(true);
   });
 
   it('should return new proper state in case of toggleSecuredFlag action', () => {

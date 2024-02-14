@@ -19,7 +19,10 @@ describe('OverviewWindowNotConnected', () => {
         DialogParentMessageReceived: 'DialogParentMessageReceived',
       },
       context: {
-        ui: { addHandlerAsync: () => {} },
+        ui: {
+          messageParent: () => {},
+          addHandlerAsync: () => {}
+        },
       },
     };
     // When
