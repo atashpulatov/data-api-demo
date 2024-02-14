@@ -140,7 +140,7 @@ class PopupController {
 
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
 
-    if (response.command === selectorProperties.popupLoaded) {
+    if (response.command === selectorProperties.commandPopupLoaded) {
       this.reduxStore.dispatch(officeActions.setIsPopupLoaded(true));
     }
 
