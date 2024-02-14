@@ -144,9 +144,14 @@ class PopupController {
     const { message } = arg;
     const response = JSON.parse(message);
 
+    const { command } = response;
+    const {
+      commandOk, commandOnUpdate, commandCancel, commandError, commandPopupLoaded
+    } = selectorProperties;
+
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
 
-    if (response.command === selectorProperties.commandPopupLoaded) {
+    if (command === commandPopupLoaded) {
       this.reduxStore.dispatch(officeActions.setIsDialogLoaded(true));
     }
 
@@ -156,7 +161,7 @@ class PopupController {
         // or if the Multiple Reprompt queue has been cleared up.
         await this.closeDialog(dialog);
       }
-      if (response.command !== selectorProperties.commandError) {
+      if (command !== commandError) {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       }
       await authenticationHelper.validateAuthToken();
@@ -165,8 +170,8 @@ class PopupController {
         return;
       }
 
-      switch (response.command) {
-        case selectorProperties.commandOk:
+      switch (command) {
+        case commandOk:
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else if (reportParams.duplicateMode) {
@@ -176,7 +181,7 @@ class PopupController {
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           }
           break;
-        case selectorProperties.commandOnUpdate:
+        case commandOnUpdate:
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else if (reportParams.duplicateMode) {
@@ -186,7 +191,7 @@ class PopupController {
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           }
           break;
-        case selectorProperties.commandCancel:
+        case commandCancel:
           if (!isMultipleRepromptQueueEmpty) {
             // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
             // since we were previously keeping the dialog open in between objects.
@@ -196,7 +201,7 @@ class PopupController {
           }
           this.reduxStore.dispatch(clearRepromptTask());
           break;
-        case selectorProperties.commandError:
+        case commandError:
           errorService.handleError(response.error);
           break;
         default:
