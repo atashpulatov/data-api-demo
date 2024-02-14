@@ -69,9 +69,8 @@ class SidePanelNotificationHelper {
     objectWorkingId, activeCellAddress, setSidePanelPopup, callback
   }) => {
     const onCancel = () => {
-      this.reduxStore.dispatch(officeActions.clearSidePanelPopupData());
+      officeReducerHelper.clearSidePanelPopupData();
       callback();
-      setSidePanelPopup(null);
     };
 
     setSidePanelPopup({
@@ -79,8 +78,7 @@ class SidePanelNotificationHelper {
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
       onOk: (isActiveCellOptionSelected) => {
         this.importInNewRange(objectWorkingId, activeCellAddress, !isActiveCellOptionSelected);
-        this.reduxStore.dispatch(officeActions.clearSidePanelPopupData());
-        setSidePanelPopup(null);
+        officeReducerHelper.clearSidePanelPopupData();
       },
       onCancel,
       onClose: onCancel
@@ -97,7 +95,7 @@ class SidePanelNotificationHelper {
   importInNewRange = (objectWorkingId, activeCellAddress, insertNewWorksheet) => {
     this.reduxStore.dispatch(updateOperation({
       objectWorkingId,
-      startCell: activeCellAddress,
+      startCell: insertNewWorksheet ? 'A1' : activeCellAddress,
       repeatStep: true,
       tableChanged: true,
       insertNewWorksheet,

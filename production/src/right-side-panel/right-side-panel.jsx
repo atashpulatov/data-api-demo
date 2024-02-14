@@ -39,6 +39,7 @@ export const RightSidePanelNotConnected = ({
   operations,
   popupData,
   isPopupRendered,
+  isPopupLoaded,
   toggleCurtain,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
@@ -80,6 +81,8 @@ export const RightSidePanelNotConnected = ({
     // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
     if (popupData) {
       sidePanelNotificationHelper.setRangeTakenPopup({ ...popupData, setSidePanelPopup, activeCellAddress });
+    } else if (sidePanelPopup?.type === popupTypes.RANGE_TAKEN) {
+      setSidePanelPopup(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCellAddress, popupData]);
@@ -141,10 +144,14 @@ export const RightSidePanelNotConnected = ({
   useEffect(() => {
     popupController.sendMessageToDialog(
       JSON.stringify({
-        popupType: PopupTypeEnum.importedDataOverview, objects: loadedObjects, notifications, globalNotification
+        popupType: PopupTypeEnum.importedDataOverview,
+        objects: loadedObjects,
+        notifications,
+        globalNotification,
+        activeCellAddress
       })
     );
-  }, [loadedObjects, notifications, globalNotification]);
+  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isPopupLoaded]);
 
   return (
     <>
@@ -159,7 +166,7 @@ export const RightSidePanelNotConnected = ({
         onRefreshClick={refreshWrapper}
         onRemoveClick={removeWrapper}
         onRename={renameWrapper}
-        popup={sidePanelPopup}
+        popup={!isPopupRendered && sidePanelPopup}
         settingsMenu={isSettings && <SettingsMenu />}
         onSettingsClick={handleSettingsClick}
         confirmationWindow={isConfirm && <Confirmation />}
@@ -182,7 +189,15 @@ export const mapStateToProps = (state) => {
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const {
-    isConfirm, isSettings, isSecured, isClearDataFailed, settingsPanelLoaded, reusePromptAnswers, popupOpen, popupData
+    isConfirm,
+    isSettings,
+    isSecured,
+    isClearDataFailed,
+    settingsPanelLoaded,
+    reusePromptAnswers,
+    popupOpen,
+    popupData,
+    isPopupLoaded
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -199,6 +214,7 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     popupData,
     isPopupRendered: popupOpen,
+    isPopupLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
   };
 };
@@ -285,5 +301,6 @@ RightSidePanelNotConnected.propTypes = {
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func,
   isPopupRendered: PropTypes.bool,
+  isPopupLoaded: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
 };

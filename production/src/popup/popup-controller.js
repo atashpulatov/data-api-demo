@@ -87,7 +87,7 @@ class PopupController {
       if (isDialogAlreadyOpen) {
         // US530793: If dialog already open, send message to dialog to reload with new object data.
         // This only occurs during Multiple Reprompt workflow.
-        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType }));
+        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, shouldReplaceCurrentDialog: true }));
       } else {
         // Otherwise, open new dialog and assign event handlers
         console.time('Popup load time');
@@ -138,6 +138,10 @@ class PopupController {
     const response = JSON.parse(message);
 
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
+
+    if (response.command === selectorProperties.popupLoaded) {
+      this.reduxStore.dispatch(officeActions.setIsPopupLoaded(true));
+    }
 
     try {
       if (isMultipleRepromptQueueEmpty && dialogType !== PopupTypeEnum.importedDataOverview) {
