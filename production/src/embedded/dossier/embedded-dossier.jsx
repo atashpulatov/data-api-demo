@@ -17,7 +17,6 @@ import {
   preparePromptedDossier,
   ObjectExecutionStatus
 } from '../../helpers/prompts-handling-helper';
-import { selectorProperties } from '../../attribute-selector/selector-properties';
 
 const { microstrategy, Office } = window;
 
@@ -191,16 +190,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     }
   };
 
-  /**
-   * Check if the action is a cancel reprompt action based on the given parameters.
-   *
-   * @param {*} isReprompt flag indicating reprompt is taking place.
-   * @param {*} dossierOpenRequested flag indicating dossier is being imported.
-   * @param {*} selectedInstanceId id of the selected instance.
-   * @returns boolean true if cancel reprompt action is taking place, false otherwise.
-   */
-  isCancelRepromptAction = (isReprompt, dossierOpenRequested, selectedInstanceId) => isReprompt && !dossierOpenRequested && selectedInstanceId === undefined;
-
   loadEmbeddedDossier = async (container) => {
     const {
       mstrData,
@@ -211,7 +200,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       promptObjects,
       isPrompted,
       isMultipleRepromptWithReuse,
-      isReprompt,
       handleEmbeddedDossierVisibility,
     } = this.props;
     const {
@@ -277,7 +265,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       },
       navigationBar: {
         enabled: true,
-        gotoLibrary: true,
+        gotoLibrary: false,
         title: true,
         toc: true,
         reset: true,
@@ -317,13 +305,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter = MsgRouter;
         this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
-        this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, (selectedInstanceId, args) => {
-          // Validate is cancel reprompt action
-          if (this.isCancelRepromptAction(isReprompt, dossierOpenRequested, selectedInstanceId)) {
-            const { commandCancel } = selectorProperties;
-            const message = { command: commandCancel, };
-            popupHelper.officeMessageParent(message);
-          }
+        this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, (selectedInstanceId) => {
           // Need to make sure that the instanceId is not null before calling the handler
           selectedInstanceId && this.instanceIdChangeHandler(selectedInstanceId);
         });
@@ -480,7 +462,6 @@ EmbeddedDossierNotConnected.propTypes = {
     index: PropTypes.number,
   }),
   isMultipleRepromptWithReuse: PropTypes.bool,
-  isReprompt: PropTypes.bool,
   handleEmbeddedDossierVisibility: PropTypes.func,
 };
 
@@ -496,7 +477,6 @@ EmbeddedDossierNotConnected.defaultProps = {
   },
   handleSelection: () => {},
   isMultipleRepromptWithReuse: false,
-  isReprompt: false,
 };
 
 const mapStateToProps = (state) => {
@@ -550,7 +530,6 @@ const mapStateToProps = (state) => {
     isPrompted,
     repromptsQueue: { ...repromptsQueueReducer },
     isMultipleRepromptWithReuse,
-    isReprompt,
   };
 };
 
