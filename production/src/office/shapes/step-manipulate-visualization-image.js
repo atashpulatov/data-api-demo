@@ -30,7 +30,7 @@ class StepManipulateVisualizationImage {
         shapeProps,
         projectId,
         objectId,
-        name,
+        name: visualizationName,
         visualizationInfo,
         bindIdToBeDuplicated
       } = objectData;
@@ -89,7 +89,7 @@ class StepManipulateVisualizationImage {
       const imageShapeId = await officeShapeApiHelper.addImage(
         excelContext,
         base64Image,
-        name,
+        visualizationName,
         { top, left },
         { width, height },
         sheet
