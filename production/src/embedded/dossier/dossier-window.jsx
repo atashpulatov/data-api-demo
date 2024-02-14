@@ -267,7 +267,7 @@ export const DossierWindowNotConnected = (props) => {
       <Spinner type="large">{t('Loading...')}</Spinner>
       {!showLoading && ( // Hide embedded dossier only after prompts are answered.
         <>
-          <div style={{ position: 'relative', zIndex: visibleEmbeddedDossier ? 1 : -1 }}>
+          <div className={`${visibleEmbeddedDossier ? 'dossier-window-embedded' : 'dossier-window-embedded-empty'}`}>
             <EmbeddedDossier
               handleSelection={handleSelection}
               handlePromptAnswer={handlePromptAnswer}
