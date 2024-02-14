@@ -9,12 +9,13 @@ import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
+import { REMOVE_OPERATION } from '../../operation/operation-type-names';
 
 import './overview-window.scss';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
-    objects, onRefresh, onDelete, onDuplicate, notifications, popupData, activeCellAddress
+    objects, notifications, onRefresh, onDelete, onDuplicate, onDismissNotification, popupData, activeCellAddress
   } = props;
 
   useStateSyncOnDialogMessage();
@@ -22,7 +23,10 @@ export const OverviewWindowNotConnected = (props) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
 
   const shouldDisableActions = useMemo(
-    () => notifications.some((notification) => notification.type === objectNotificationTypes.PROGRESS), [notifications]
+    () => notifications.some(
+      (notification) => notification.type === objectNotificationTypes.PROGRESS
+    ),
+    [notifications]
   );
 
   const objectsToRender = useMemo(
@@ -45,6 +49,16 @@ export const OverviewWindowNotConnected = (props) => {
     }
   }, [popupData]);
 
+  useEffect(() => {
+    notifications.forEach((notification) => {
+      setTimeout(() => {
+        if (notification.type === objectNotificationTypes.SUCCESS && notification.operationType === REMOVE_OPERATION) {
+          onDismissNotification([notification.objectWorkingId]);
+        }
+      }, [500]);
+    });
+  }, [notifications, objects, onDismissNotification]);
+
   return (
     <div className="data-overview-wrapper">
       <DataOverview
@@ -63,6 +77,7 @@ OverviewWindowNotConnected.propTypes = {
   onRefresh: PropTypes.func,
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
+  onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   notifications: PropTypes.arrayOf(PropTypes.shape({})),
   popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
