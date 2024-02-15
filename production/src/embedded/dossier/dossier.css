@@ -40,3 +40,13 @@
   width: 100%;
   height: calc(100% - 125px); /* 125px = 57px (top distance) + 68px (button row height) */
 }
+
+#popup-wrapper .dossier-window .dossier-window-embedded {
+  position: relative;
+  z-index: 1;
+}
+
+#popup-wrapper .dossier-window .dossier-window-embedded-empty {
+  position: relative;
+  z-index: -1;
+}
