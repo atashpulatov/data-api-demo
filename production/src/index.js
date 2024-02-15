@@ -55,10 +55,9 @@ function officeInitialize() {
           (arg) => {
             // This only occurs during Multiple Reprompt, but we replace the dialog window
             // URL location to trigger the next object's Reprompt window.
-            const { splittedUrl = [], popupType = '' } = JSON.parse(arg.message);
+            const { splittedUrl = [], popupType = '', isRepromptOrOvieviewPopupOpen = false } = JSON.parse(arg.message);
 
-            // TODO further investigate this logic during import implementation
-            if (popupType !== PopupTypeEnum.importedDataOverview) {
+            if (isRepromptOrOvieviewPopupOpen) {
               window.location.replace(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`);
             }
           });

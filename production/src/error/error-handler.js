@@ -202,9 +202,10 @@ class ErrorService {
    */
   closePopupIfOpen = async () => {
     const storeState = this.reduxStore.getState();
-    const isPopupOpen = storeState.officeReducer?.popupOpen;
+    const { popupOpen: isPopupOpen } = storeState.officeReducer;
+    const { isDataOverviewOpen } = storeState.popupStateReducer;
 
-    if (isPopupOpen) {
+    if (isPopupOpen && !isDataOverviewOpen) {
       const isPopupOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
       await this.popupController.closeDialog(this.popupController.dialog);
