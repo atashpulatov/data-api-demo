@@ -4,7 +4,7 @@ export interface DuplicatePopup {
   type: typeof poupTypes,
   activeCell: string,
   onImport: (isActiveCellOptionSelected: boolean) => void,
-  onEdit: () => void,
+  onEdit: (isActiveCellOptionSelected: boolean) => void,
   onClose: () => void
 }
 

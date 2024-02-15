@@ -216,12 +216,12 @@ class OverviewHelper {
     setDialogPopup({
       type: popupTypes.DUPLICATE,
       activeCell: officeApiHelper.getCellAddressWithDollars(activeCellAddress),
-      onImport: (isActiveCellOptionSelected: boolean) => {
+      onImport: (isActiveCellOptionSelected) => {
         onDuplicate(objectWorkingId, !isActiveCellOptionSelected, false);
         setDialogPopup(null);
       },
-      onEdit: () => {
-        // TODO: Finish when Edit workflow is implemented
+      onEdit: (isActiveCellOptionSelected) => {
+        onDuplicate(objectWorkingId, !isActiveCellOptionSelected, true);
         setDialogPopup(null);
       },
       onClose: () => setDialogPopup(null)
