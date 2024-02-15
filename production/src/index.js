@@ -3,7 +3,8 @@ import 'focus-visible/dist/focus-visible';
 import './index.css';
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Empty } from '@mstr/connector-components';
+import { ObjectWindowTitle } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc-3';
 
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';
@@ -25,8 +26,13 @@ function goReact() {
   const container = document.getElementById('root');
   const root = createRoot(container);
 
+  const loadingComponent = <Spinner type="large">{i18next.t('Loading...')}</Spinner>;
+
+  // TODO: Remove when connector-components translations are fixed
+  const temp = <ObjectWindowTitle />;
+
   root.render((
-    <Suspense fallback={<Empty isLoading />}>
+    <Suspense fallback={loadingComponent}>
       {(window.location.href.indexOf('popupType') === -1)
         ? <LazySidebar />
         : <LazyDialog />}
@@ -49,10 +55,9 @@ function officeInitialize() {
           (arg) => {
             // This only occurs during Multiple Reprompt, but we replace the dialog window
             // URL location to trigger the next object's Reprompt window.
-            const { splittedUrl = [], popupType = '', isRepromptOrOverviewDialogOpen = false } = JSON.parse(arg.message);
+            const { splittedUrl = [], popupType = '', isRepromptOrOvieviewPopupOpen = false } = JSON.parse(arg.message);
 
-            // TODO further investigate this logic during import implementation
-            if (isRepromptOrOverviewDialogOpen) {
+            if (isRepromptOrOvieviewPopupOpen) {
               window.location.replace(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`);
             }
           });

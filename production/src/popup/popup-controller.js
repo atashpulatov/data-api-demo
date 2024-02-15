@@ -25,13 +25,22 @@ class PopupController {
     this.popupActions = popupActions;
     this.overviewHelper = overviewHelper;
     // The following vars used to store references to current object reportParams and dialog
-    this.reportParams = {};
+    this.reportParams = null;
     this.dialog = {};
   };
 
+  clearPopupStateIfNeeded = () => {
+    // TODO: convert this to a redux action
+    const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
+
+    if (!isDataOverviewOpen) {
+      this.reduxStore.dispatch(popupStateActions.onClearPopupState());
+      this.reduxStore.dispatch(this.popupActions.resetState());
+    }
+  };
+
   runPopupNavigation = async () => {
-    this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-    this.reduxStore.dispatch(this.popupActions.resetState());
+    this.clearPopupStateIfNeeded();
     await this.runPopup(PopupTypeEnum.libraryWindow, 80, 80);
   };
 
@@ -66,14 +75,14 @@ class PopupController {
   };
 
   runImportedDataOverviewPopup = async () => {
-    await this.runPopup(PopupTypeEnum.importedDataOverview, 80, 80);
+    this.clearPopupStateIfNeeded();
+    await this.runPopup(PopupTypeEnum.importedDataOverview, 80, 80, null, true);
   };
 
   runPopup = async (popupType, height, width, reportParams = null) => {
     const isDialogForMultipleRepromptOpen = this.getIsDialogAlreadyOpenForMultipleReprompt();
-
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
-    const isRepromptOrOverviewDialogOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
+    const isRepromptOrOvieviewPopupOpen = isDialogForMultipleRepromptOpen || isDataOverviewOpen;
 
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     this.reportParams = reportParams;
@@ -91,10 +100,10 @@ class PopupController {
 
     try {
       await officeApiHelper.getExcelSessionStatus();
-
-      if (isRepromptOrOverviewDialogOpen) {
+      if (isRepromptOrOvieviewPopupOpen) {
         // US530793: If dialog already open, send message to dialog to reload with new object data.
-        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, isRepromptOrOverviewDialogOpen }));
+        // This only occurs during Multiple Reprompt workflow.
+        this.sendMessageToDialog(JSON.stringify({ splittedUrl, popupType, isRepromptOrOvieviewPopupOpen }));
       } else {
         // Otherwise, open new dialog and assign event handlers
         console.time('Popup load time');
@@ -118,6 +127,7 @@ class PopupController {
                 Office.EventType.DialogEventReceived,
                 () => {
                   this.reduxStore.dispatch(this.popupActions.resetState());
+                  this.reduxStore.dispatch(popupStateActions.onClearPopupState());
                   this.reduxStore.dispatch(officeActions.hideDialog());
 
                   // Clear the reprompt task queue if the user closes the popup,
@@ -150,13 +160,14 @@ class PopupController {
     } = selectorProperties;
 
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
+    const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
 
     if (command === commandPopupLoaded) {
       this.reduxStore.dispatch(officeActions.setIsDialogLoaded(true));
     }
 
     try {
-      if (isMultipleRepromptQueueEmpty && dialogType !== PopupTypeEnum.importedDataOverview) {
+      if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
         // We will only close dialog if not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         await this.closeDialog(dialog);
@@ -192,7 +203,7 @@ class PopupController {
           }
           break;
         case commandCancel:
-          if (!isMultipleRepromptQueueEmpty) {
+          if (!isMultipleRepromptQueueEmpty || isDataOverviewOpen) {
             // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
             // since we were previously keeping the dialog open in between objects.
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
@@ -207,13 +218,17 @@ class PopupController {
         default:
           break;
       }
+
+      if (isDataOverviewOpen) {
+        await this.runImportedDataOverviewPopup(true);
+      }
     } catch (error) {
       console.error(error);
       errorService.handleError(error);
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
-      this.reportParams = {};
-      if (isMultipleRepromptQueueEmpty && dialogType !== PopupTypeEnum.importedDataOverview) {
+      this.reportParams = null;
+      if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
         this.resetDialogStates();

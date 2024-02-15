@@ -40,17 +40,19 @@ class OfficeShapeApiHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} base64PngImage Base64 encoded png image
+   * @param {String} name Name of the shape
    * @param {Number} top Top position of the shape
    * @param {Number} left Left position of the shape
    * @param {Worksheet} sheet Worksheet to which the shape is added
    *
    * @return {object} Office Id of the shape which is added to the worksheet
    */
-  addImage = async (excelContext, base64PngImage, position, dimension, sheet) => {
+  addImage = async (excelContext, base64PngImage, name, position, dimension, sheet) => {
     const shape = sheet.shapes.addImage(base64PngImage);
     const { top, left } = position;
     const { width, height } = dimension;
     shape.set({
+      name,
       top,
       left,
       width,

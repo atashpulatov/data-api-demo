@@ -191,6 +191,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     }
   };
 
+  /**
+   * Check if the action is a cancel reprompt action based on the given parameters.
+   *
+   * @param {*} isReprompt flag indicating reprompt is taking place.
+   * @param {*} dossierOpenRequested flag indicating dossier is being imported.
+   * @param {*} selectedInstanceId id of the selected instance.
+   * @returns boolean true if cancel reprompt action is taking place, false otherwise.
+   */
+  isCancelRepromptAction = (isReprompt, dossierOpenRequested, selectedInstanceId) => isReprompt && !dossierOpenRequested && selectedInstanceId === undefined;
+
   loadEmbeddedDossier = async (container) => {
     const {
       mstrData,
@@ -202,6 +212,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       isPrompted,
       isMultipleRepromptWithReuse,
       isReprompt,
+      handleEmbeddedDossierVisibility,
     } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
@@ -307,7 +318,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler(EventType.ON_VIZ_SELECTION_CHANGED, this.onVizSelectionHandler);
         this.msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, this.promptsAnsweredHandler);
         this.msgRouter.registerEventHandler(EventType.ON_DOSSIER_INSTANCE_ID_CHANGE, (selectedInstanceId, args) => {
-          if (isReprompt && !dossierOpenRequested && selectedInstanceId === undefined) {
+          // Validate is cancel reprompt action
+          if (this.isCancelRepromptAction(isReprompt, dossierOpenRequested, selectedInstanceId)) {
             const { commandCancel } = selectorProperties;
             const message = { command: commandCancel, };
             popupHelper.officeMessageParent(message);
@@ -316,6 +328,13 @@ export default class EmbeddedDossierNotConnected extends React.Component {
           selectedInstanceId && this.instanceIdChangeHandler(selectedInstanceId);
         });
         this.msgRouter.registerEventHandler(EventType.ON_ERROR, this.onEmbeddedError);
+        this.msgRouter.registerEventHandler(EventType.ON_PAGE_LOADED, () => {
+          // Just hide the embedded dossier when it is consumption page is loaded
+          // and avoid any flickering.
+          if (!dossierOpenRequested) {
+            handleEmbeddedDossierVisibility(false);
+          }
+        });
       },
       dossierFeature: {
         visExport: {
@@ -462,6 +481,7 @@ EmbeddedDossierNotConnected.propTypes = {
   }),
   isMultipleRepromptWithReuse: PropTypes.bool,
   isReprompt: PropTypes.bool,
+  handleEmbeddedDossierVisibility: PropTypes.func,
 };
 
 EmbeddedDossierNotConnected.defaultProps = {

@@ -208,14 +208,16 @@ class ErrorService {
   }
 
   /**
-   * Function checking if the popup is open and closing it if it is.
-   * Also clearing Reprompt task queue if popup was open for Reprompt workflow.
+   * Function checking if the dialog is open and closing it if it is.
+   * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
    */
   closePopupIfOpen = async () => {
     const storeState = this.reduxStore.getState();
-    const isDialogOpen = storeState.officeReducer?.dialogOpen;
 
-    if (isDialogOpen) {
+    const { dialogOpen: isDialogOpen } = storeState.officeReducer;
+    const { isDataOverviewOpen } = storeState.popupStateReducer;
+
+    if (isDialogOpen && !isDataOverviewOpen) {
       const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
       await this.popupController.closeDialog(this.popupController.dialog);

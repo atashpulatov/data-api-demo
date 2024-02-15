@@ -7,6 +7,7 @@ import { officeApiHelper } from '../../office/api/office-api-helper';
 import { DialogPopup } from './overview-types';
 
 export enum OverviewActionCommands {
+  IMPORT= 'overview-import',
   REFRESH= 'overview-refresh',
   REMOVE= 'overview-remove',
   DUPLICATE= 'overview-duplicate',
@@ -24,6 +25,14 @@ class OverviewHelper {
     this.sidePanelService = sidePanelService;
     this.notificationService = notificationService;
   };
+
+  /**
+   * Sends message with import command to the Side Panel
+   *
+   */
+  async sendImportRequest(): Promise<void> {
+    popupHelper.officeMessageParent({ command: OverviewActionCommands.IMPORT });
+  }
 
   /**
    * Sends message with refresh command to the Side Panel
@@ -137,6 +146,9 @@ class OverviewHelper {
     this.handleDismissNotifications(response.objectWorkingIds);
 
     switch (response.command) {
+      case OverviewActionCommands.IMPORT:
+        await this.sidePanelService.addData();
+        break;
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
         break;

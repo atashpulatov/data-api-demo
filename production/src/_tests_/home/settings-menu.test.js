@@ -17,8 +17,11 @@ describe('Settings Menu', () => {
     // given
     const runImportedDataOverviewPopupSpy = jest.spyOn(popupController, 'runImportedDataOverviewPopup').mockImplementation(() => { });
     const toggleIsSettingsFlag = jest.fn();
+    const setIsDataOverviewOpen = jest.fn();
 
-    const { getByText } = render(<SettingsMenuNotConnected toggleIsSettingsFlag={toggleIsSettingsFlag} />);
+    const { getByText } = render(<SettingsMenuNotConnected
+      toggleIsSettingsFlag={toggleIsSettingsFlag}
+      setIsDataOverviewOpen={setIsDataOverviewOpen} />);
     const importedDataOverviewMenuOption = getByText('Imported Data Overview');
 
     // when
