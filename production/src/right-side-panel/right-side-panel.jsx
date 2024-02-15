@@ -79,6 +79,7 @@ export const RightSidePanelNotConnected = ({
     }
     // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
     // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
+    // TODO: Move logic for controlling popup visibility to Redux
     if (popupData) {
       sidePanelNotificationHelper.setRangeTakenPopup({ ...popupData, setSidePanelPopup, activeCellAddress });
     } else if (sidePanelPopup?.type === popupTypes.RANGE_TAKEN) {
@@ -142,15 +143,17 @@ export const RightSidePanelNotConnected = ({
   const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
 
   useEffect(() => {
-    popupController.sendMessageToDialog(
-      JSON.stringify({
-        popupType: PopupTypeEnum.importedDataOverview,
-        objects: loadedObjects,
-        notifications,
-        globalNotification,
-        activeCellAddress
-      })
-    );
+    if (isDialogLoaded) {
+      popupController.sendMessageToDialog(
+        JSON.stringify({
+          popupType: PopupTypeEnum.importedDataOverview,
+          objects: loadedObjects,
+          notifications,
+          globalNotification,
+          activeCellAddress
+        })
+      );
+    }
   }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded]);
 
   return (

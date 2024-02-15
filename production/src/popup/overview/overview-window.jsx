@@ -49,6 +49,7 @@ export const OverviewWindowNotConnected = (props) => {
     setDialogPopup
   });
 
+  // TODO: Move logic for controlling popup visibility to Redux
   useEffect(() => {
     if (popupData) {
       overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setDialogPopup });
