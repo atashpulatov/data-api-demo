@@ -3,9 +3,11 @@ import { errorService } from '../../error/error-handler';
 import { notificationService } from '../../notification-v2/notification-service';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { sessionHelper } from '../../storage/session-helper';
-import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import { errorTypes } from '../../error/constants';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
+import * as Constants from '../../error/constants';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
+import { SessionError } from '../../error/session-error';
 
 jest.mock('../../storage/session-helper');
 jest.useFakeTimers();
@@ -492,6 +494,20 @@ describe('ErrorService', () => {
       errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
+    });
+
+    it('should call closePopupIfOpen on session error', () => {
+      // Given
+      const error = { message: 'error', status: 401, type: errorTypes.UNAUTHORIZED_ERR };
+
+      const closePopupMock = jest.spyOn(errorService, 'closePopupIfOpen').mockImplementation();
+      jest.spyOn(Constants, 'errorMessageFactory').mockReturnValue(() => 'error message');
+
+      // When
+      errorService.handleError(error, { shouldClosePopup: true });
+
+      // Then
+      expect(closePopupMock).toHaveBeenCalled();
     });
   });
   describe('logout', () => {

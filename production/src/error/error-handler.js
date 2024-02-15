@@ -50,10 +50,19 @@ class ErrorService {
     }
   };
 
-  handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
-    const { onConfirm, isLogout, ...parameters } = options;
+  handleError = async (error, options = {
+    chosenObjectName: 'Report', onConfirm: null, isLogout: false, shouldClosePopup: false
+  }) => {
+    const {
+      onConfirm, isLogout, shouldClosePopup, ...parameters
+    } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
+
+    if (shouldClosePopup && [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(errorType)) {
+      await this.closePopupIfOpen();
+    }
+
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(errorType, isLogout);
   };

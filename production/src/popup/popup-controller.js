@@ -193,7 +193,8 @@ class PopupController {
       }
     } catch (error) {
       console.error(error);
-      errorService.handleError(error);
+      const shouldClosePopup = dialogType === PopupTypeEnum.importedDataOverview;
+      errorService.handleError(error, { shouldClosePopup });
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = {};
