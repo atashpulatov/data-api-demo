@@ -1,7 +1,7 @@
-import { poupTypes } from '@mstr/connector-components';
+import { popupTypes } from '@mstr/connector-components';
 
 export interface DuplicatePopup {
-  type: typeof poupTypes,
+  type: typeof popupTypes,
   activeCell: string,
   onImport: (isActiveCellOptionSelected: boolean) => void,
   onEdit: (isActiveCellOptionSelected: boolean) => void,
@@ -9,7 +9,7 @@ export interface DuplicatePopup {
 }
 
 export interface RangeTakenPopup {
-  type: typeof poupTypes,
+  type: typeof popupTypes,
   onOk: () => void,
   onClose: () => void
 }

@@ -7,7 +7,7 @@ const initialState = {
   supportForms: true,
   activeCellAddress: null,
   popupData: null,
-  dialogOpen: false,
+  isDialogOpen: false,
   isDialogLoaded: false,
   settingsPanelLoaded: false,
   reusePromptAnswers: false,
@@ -67,14 +67,14 @@ export const officeReducer = (state = initialState, action) => {
 function onShowDialog(state) {
   return {
     ...state,
-    dialogOpen: true,
+    isDialogOpen: true,
   };
 }
 
 function onHideDialog(state) {
   return {
     ...state,
-    dialogOpen: false,
+    isDialogOpen: false,
   };
 }
 

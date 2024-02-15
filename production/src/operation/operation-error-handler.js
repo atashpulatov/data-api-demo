@@ -72,7 +72,7 @@ class OperationErrorHandler {
    * Function removing object, operation and notification.
    * Called after encountering error that occured during Import and Duplicate operation.
    *
-   * @param {Object} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    */
   clearFailedObjectFromRedux = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));

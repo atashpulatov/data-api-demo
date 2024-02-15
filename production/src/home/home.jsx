@@ -23,7 +23,7 @@ const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
-    loading, dialogOpen, authToken, hideDialog, toggleIsSettingsFlag
+    loading, isDialogOpen, authToken, hideDialog, toggleIsSettingsFlag
   } = props;
 
   const canUseOffice = useOfficePrivilege(authToken);
@@ -34,7 +34,7 @@ export const HomeNotConnected = (props) => {
     notificationService.connectionRestored();
   };
   const handleConnectionLost = () => {
-    if (!dialogOpen) {
+    if (!isDialogOpen) {
       notificationService.connectionLost();
     }
   };
@@ -47,10 +47,10 @@ export const HomeNotConnected = (props) => {
   },);
 
   useEffect(() => {
-    if (!dialogOpen && !window.navigator.onLine) {
+    if (!isDialogOpen && !window.navigator.onLine) {
       notificationService.connectionLost();
     }
-  }, [dialogOpen]);
+  }, [isDialogOpen]);
 
   useEffect(() => {
     if (!authToken) {
@@ -97,7 +97,7 @@ export const HomeNotConnected = (props) => {
     <SessionExtendingWrapper id="overlay">
       {IS_DEVELOPMENT && authToken && <DevelopmentImportList />}
       {sidePanelToRender()}
-      <HomeDialog show={dialogOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
+      <HomeDialog show={isDialogOpen} text={t('A MicroStrategy for Office Add-in dialog is open')} />
     </SessionExtendingWrapper>
   );
 };
@@ -113,7 +113,7 @@ async function getUserData(authToken) {
 function mapStateToProps(state) {
   return {
     loading: state.sessionReducer.loading,
-    dialogOpen: state.officeReducer.dialogOpen,
+    isDialogOpen: state.officeReducer.isDialogOpen,
     authToken: state.sessionReducer.authToken,
     shouldRenderSettings: state.officeReducer.shouldRenderSettings,
     canUseOffice: state.sessionReducer.canUseOffice
@@ -128,7 +128,7 @@ const mapDispatchToProps = {
 
 HomeNotConnected.propTypes = {
   loading: PropTypes.bool,
-  dialogOpen: PropTypes.bool,
+  isDialogOpen: PropTypes.bool,
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   hideDialog: PropTypes.func,
   toggleIsSettingsFlag: PropTypes.func,

@@ -14,7 +14,7 @@ describe('officeReducer', () => {
       supportForms: true,
       activeCellAddress: null,
       popupData: null,
-      dialogOpen: false,
+      isDialogOpen: false,
       isDialogLoaded: false,
       settingsPanelLoaded: false,
       isShapeAPISupported: false,
@@ -32,24 +32,24 @@ describe('officeReducer', () => {
     expect(newState.activeCellAddress).toBe('A1');
   });
 
-  it('should set dialogOpen to true on showDialog', () => {
+  it('should set isDialogOpen to true on showDialog', () => {
     // given
-    const prevState = { dialogOpen: false };
+    const prevState = { isDialogOpen: false };
     const action = { type: officeProperties.actions.showDialog };
     // when
     const newState = officeReducer(prevState, action);
     // then
-    expect(newState.dialogOpen).toBe(true);
+    expect(newState.isDialogOpen).toBe(true);
   });
 
-  it('should set dialogOpen to false on hideDialog', () => {
+  it('should set isDialogOpen to false on hideDialog', () => {
     // given
-    const prevState = { dialogOpen: true };
+    const prevState = { isDialogOpen: true };
     const action = { type: officeProperties.actions.hideDialog };
     // when
     const newState = officeReducer(prevState, action);
     // then
-    expect(newState.dialogOpen).toBe(false);
+    expect(newState.isDialogOpen).toBe(false);
   });
 
   it('should set given value to isDialogLoaded on setIsDialogLoaded', () => {

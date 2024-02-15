@@ -196,7 +196,7 @@ export const mapStateToProps = (state) => {
     settingsPanelLoaded,
     reusePromptAnswers,
     popupData,
-    dialogOpen,
+    isDialogOpen,
     isDialogLoaded
   } = state.officeReducer;
   return {
@@ -213,7 +213,7 @@ export const mapStateToProps = (state) => {
     settingsPanelLoaded,
     reusePromptAnswers,
     popupData,
-    isDialogRendered: dialogOpen,
+    isDialogRendered: isDialogOpen,
     isDialogLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
   };

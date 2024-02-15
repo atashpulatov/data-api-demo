@@ -214,7 +214,7 @@ class ErrorService {
   closePopupIfOpen = async () => {
     const storeState = this.reduxStore.getState();
 
-    const { dialogOpen: isDialogOpen } = storeState.officeReducer;
+    const { isDialogOpen } = storeState.officeReducer;
     const { isDataOverviewOpen } = storeState.popupStateReducer;
 
     if (isDialogOpen && !isDataOverviewOpen) {
