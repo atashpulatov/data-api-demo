@@ -5,6 +5,8 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
+import { errorMessages } from '../../error/constants';
+import { BLOCKABLE_IMAGE_OPERATIONS } from '../../operation/operation-type-names';
 
 class StepManipulateVisualizationImage {
   /**
@@ -41,6 +43,12 @@ class StepManipulateVisualizationImage {
 
       // retrieve the shape in the worksheet
       const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
+
+      // Throw an error and block the blockable image operations, if shape(visualization image)
+      // was removed manually from worksheet.
+      if (!shapeInWorksheet && BLOCKABLE_IMAGE_OPERATIONS.has(operationType)) {
+        throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
+      }
 
       // retrieve the dimensions of the shape to be duplicated for DUPLICATE OPERATION
       const shapeDimensionsForDuplicateOp = bindIdToBeDuplicated
