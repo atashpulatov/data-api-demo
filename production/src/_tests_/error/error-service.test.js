@@ -7,6 +7,7 @@ import { errorTypes } from '../../error/constants';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import * as Constants from '../../error/constants';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
+import { PopupTypeEnum } from '../../home/popup-type-enum';
 
 jest.mock('../../storage/session-helper');
 jest.useFakeTimers();
@@ -503,7 +504,7 @@ describe('ErrorService', () => {
       jest.spyOn(Constants, 'errorMessageFactory').mockReturnValue(() => 'error message');
 
       // When
-      errorService.handleError(error, { shouldClosePopup: true });
+      errorService.handleError(error, { dialogType: PopupTypeEnum.importedDataOverview });
 
       // Then
       expect(closePopupMock).toHaveBeenCalled();
