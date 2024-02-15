@@ -11,3 +11,6 @@ export const UPDATE_OPERATION = 'UPDATE_OPERATION';
 export const CANCEL_OPERATION = 'CANCEL_OPERATION';
 export const SET_TOTAL_ROWS = 'SET_TOTAL_ROWS';
 export const SET_LOADED_ROWS = 'SET_LOADED_ROWS';
+
+// NOTE: If the new operation has been added, BLOCKABLE_IMAGE_OPERATIONS set may require updating
+export const BLOCKABLE_IMAGE_OPERATIONS = new Set([EDIT_OPERATION, REFRESH_OPERATION, DUPLICATE_OPERATION]);
