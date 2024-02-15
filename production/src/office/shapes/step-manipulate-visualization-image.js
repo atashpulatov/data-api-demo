@@ -44,7 +44,7 @@ class StepManipulateVisualizationImage {
       // retrieve the shape in the worksheet
       const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
 
-      // Throw an error and block for the blockabled image operations, if shape(visualization image)
+      // Throw an error and block the blockable image operations, if shape(visualization image)
       // was removed manually from worksheet.
       if (!shapeInWorksheet && BLOCKABLE_IMAGE_OPERATIONS.has(operationType)) {
         throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
