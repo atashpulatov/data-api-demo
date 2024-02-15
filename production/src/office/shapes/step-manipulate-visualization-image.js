@@ -6,7 +6,7 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 import { errorMessages } from '../../error/constants';
-import { BLOCKABLE_IMAGE_OPERATIONS } from '../../operation/operation-type-names'
+import { BLOCKABLE_IMAGE_OPERATIONS } from '../../operation/operation-type-names';
 
 class StepManipulateVisualizationImage {
   /**
