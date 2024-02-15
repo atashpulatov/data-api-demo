@@ -25,7 +25,7 @@ class PopupController {
     this.popupActions = popupActions;
     this.overviewHelper = overviewHelper;
     // The following vars used to store references to current object reportParams and dialog
-    this.reportParams = {};
+    this.reportParams = null;
     this.dialog = {};
   };
 
