@@ -37,6 +37,7 @@ const renderProperComponent = (popupType) => {
       return (
         <OverviewWindow
           onImport={overviewHelper.sendImportRequest}
+          onEdit={overviewHelper.sendEditRequest}
           onRefresh={overviewHelper.sendRefreshRequest}
           onDelete={overviewHelper.sendDeleteRequest}
           onDuplicate={overviewHelper.sendDuplicateRequest}

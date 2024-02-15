@@ -15,7 +15,7 @@ import './overview-window.scss';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
-    objects, notifications, onImport, onRefresh, onDelete, onDuplicate, onDismissNotification
+    objects, notifications, onImport, onRefresh, onDelete, /* onDuplicate, */onEdit, onDismissNotification
   } = props;
 
   useStateSyncOnDialogMessage();
@@ -50,7 +50,8 @@ export const OverviewWindowNotConnected = (props) => {
         onAddData={onImport}
         onRefresh={onRefresh}
         onDelete={onDelete}
-        onDuplicate={onDuplicate}
+        // TODO: add seperation between edit and duplicate
+        onDuplicate={onEdit}
         shouldDisableActions={shouldDisableActions} />
     </div>
   );
@@ -60,7 +61,8 @@ OverviewWindowNotConnected.propTypes = {
   onImport: PropTypes.func,
   onRefresh: PropTypes.func,
   onDelete: PropTypes.func,
-  onDuplicate: PropTypes.func,
+  onEdit: PropTypes.func,
+  // TODO: restore  onDuplicate: PropTypes.func,
   onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   notifications: PropTypes.arrayOf(PropTypes.shape({}))

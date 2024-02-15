@@ -2,6 +2,7 @@ import { popupHelper } from '../popup-helper';
 
 export enum OverviewActionCommands {
   IMPORT= 'overview-import',
+  EDIT= 'overview-edit',
   REFRESH= 'overview-refresh',
   REMOVE= 'overview-remove',
   DUPLICATE= 'overview-duplicate',
@@ -22,18 +23,21 @@ class OverviewHelper {
     popupHelper.officeMessageParent({ command: OverviewActionCommands.IMPORT });
   }
 
-  async sendRefreshRequest(
-    objectWorkingIds: number[],
-  ): Promise<void> {
+  async sendEditRequest(objectWorkingIds: number[]): Promise<void> {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.EDIT,
+      objectWorkingIds
+    });
+  }
+
+  async sendRefreshRequest(objectWorkingIds: number[]): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.REFRESH,
       objectWorkingIds
     });
   }
 
-  async sendDeleteRequest(
-    objectWorkingIds: number[],
-  ): Promise<void> {
+  async sendDeleteRequest(objectWorkingIds: number[]): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.REMOVE,
       objectWorkingIds
@@ -67,6 +71,9 @@ class OverviewHelper {
     switch (response.command) {
       case OverviewActionCommands.IMPORT:
         await this.sidePanelService.addData();
+        break;
+      case OverviewActionCommands.EDIT:
+        await this.sidePanelService.edit(response.objectWorkingIds);
         break;
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
