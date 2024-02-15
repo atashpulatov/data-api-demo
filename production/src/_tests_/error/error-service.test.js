@@ -7,7 +7,6 @@ import { errorTypes } from '../../error/constants';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import * as Constants from '../../error/constants';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
-import { SessionError } from '../../error/session-error';
 
 jest.mock('../../storage/session-helper');
 jest.useFakeTimers();
