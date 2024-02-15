@@ -16,6 +16,7 @@ import {
   REFRESH_OPERATION,
   EDIT_OPERATION
 } from '../operation/operation-type-names';
+import { PopupTypeEnum } from '../home/popup-type-enum';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -60,10 +61,22 @@ class ErrorService {
     }
   };
 
-  handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
-    const { onConfirm, isLogout, ...parameters } = options;
+  handleError = async (error, options = {
+    chosenObjectName: 'Report', onConfirm: null, isLogout: false, dialogType: null
+  }) => {
+    const {
+      onConfirm, isLogout, dialogType, ...parameters
+    } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
+
+    const shouldClosePopup = dialogType === PopupTypeEnum.importedDataOverview
+    && [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(errorType);
+
+    if (shouldClosePopup) {
+      await this.closePopupIfOpen();
+    }
+
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(errorType, isLogout);
   };

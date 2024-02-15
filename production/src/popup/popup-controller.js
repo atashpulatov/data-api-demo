@@ -224,7 +224,7 @@ class PopupController {
       }
     } catch (error) {
       console.error(error);
-      errorService.handleError(error);
+      errorService.handleError(error, { dialogType });
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = null;
