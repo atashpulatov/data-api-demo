@@ -6,6 +6,7 @@ export enum OverviewActionCommands {
   REFRESH= 'overview-refresh',
   REMOVE= 'overview-remove',
   DUPLICATE= 'overview-duplicate',
+  REPROMPT= 'overview-reprompt',
   DISMISS_NOTIFICATION= 'overview-dismiss-notification',
 }
 
@@ -26,6 +27,13 @@ class OverviewHelper {
   async sendEditRequest(objectWorkingIds: number[]): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.EDIT,
+      objectWorkingIds
+    });
+  }
+
+  async sendRepromptRequest(objectWorkingIds: number[]): Promise<void> {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.REPROMPT,
       objectWorkingIds
     });
   }
@@ -74,6 +82,9 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.EDIT:
         await this.sidePanelService.edit(response.objectWorkingIds);
+        break;
+      case OverviewActionCommands.REPROMPT:
+        await this.sidePanelService.reprompt(response.objectWorkingIds);
         break;
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);

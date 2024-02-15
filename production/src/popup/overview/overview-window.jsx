@@ -15,7 +15,7 @@ import './overview-window.scss';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
-    objects, notifications, onImport, onRefresh, onDelete, /* onDuplicate, */onEdit, onDismissNotification
+    objects, notifications, onImport, /* onRefresh,  */onDelete, /* onDuplicate, */onEdit, onReprompt, onDismissNotification
   } = props;
 
   useStateSyncOnDialogMessage();
@@ -48,7 +48,8 @@ export const OverviewWindowNotConnected = (props) => {
         loadedObjects={objectsToRender}
         applicationType={ApplicationTypeEnum.EXCEL}
         onAddData={onImport}
-        onRefresh={onRefresh}
+        // TODO: add sepation between reprompt and refresh
+        onRefresh={onReprompt}
         onDelete={onDelete}
         // TODO: add seperation between edit and duplicate
         onDuplicate={onEdit}
@@ -59,10 +60,11 @@ export const OverviewWindowNotConnected = (props) => {
 
 OverviewWindowNotConnected.propTypes = {
   onImport: PropTypes.func,
-  onRefresh: PropTypes.func,
-  onDelete: PropTypes.func,
+  // TODO: restore onRefresh: PropTypes.func,
   onEdit: PropTypes.func,
-  // TODO: restore  onDuplicate: PropTypes.func,
+  onReprompt: PropTypes.func,
+  onDelete: PropTypes.func,
+  // TODO: restore onDuplicate: PropTypes.func,
   onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   notifications: PropTypes.arrayOf(PropTypes.shape({}))
