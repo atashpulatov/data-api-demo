@@ -1,9 +1,14 @@
 import { officeProperties } from './office-properties';
 import officeStoreHelper from '../../office/store/office-store-helper';
 
-const showPopup = () => ({ type: officeProperties.actions.showPopup });
+const showDialog = () => ({ type: officeProperties.actions.showDialog });
 
-const hidePopup = () => ({ type: officeProperties.actions.hidePopup });
+const hideDialog = () => (dispatch) => {
+  dispatch(setIsDialogLoaded(false));
+  dispatch({ type: officeProperties.actions.hideDialog });
+};
+
+const setIsDialogLoaded = (isDialogLoaded) => ({ type: officeProperties.actions.setIsDialogLoaded, isDialogLoaded });
 
 const toggleSecuredFlag = (isSecured) => (dispatch) => {
   officeStoreHelper.setFileSecuredFlag(isSecured);
@@ -50,18 +55,24 @@ const toggleRenderSettingsFlag = () => (dispatch) => {
   dispatch({ type: officeProperties.actions.toggleRenderSettingsFlag, });
 };
 
-const setRangeTakenPopup = (popupData) => ({
-  type: officeProperties.actions.setRangeTakenPopup,
+const setActiveCellAddress = (activeCellAddress) => ({
+  type: officeProperties.actions.setActiveCellAddress,
+  activeCellAddress
+});
+
+const setPopupData = (popupData) => ({
+  type: officeProperties.actions.setPopupData,
   popupData,
 });
 
-const clearSidePanelPopupData = () => ({ type: officeProperties.actions.setRangeTakenPopup });
+const clearPopupData = () => ({ type: officeProperties.actions.setPopupData });
 
 const setIsShapeAPISupported = (data) => ({ type: officeProperties.actions.setShapeAPISupported, data });
 
 export const officeActions = {
-  showPopup,
-  hidePopup,
+  showDialog,
+  hideDialog,
+  setIsDialogLoaded,
   toggleSecuredFlag,
   toggleIsSettingsFlag,
   toggleIsConfirmFlag,
@@ -69,7 +80,8 @@ export const officeActions = {
   toggleSettingsPanelLoadedFlag,
   toggleReusePromptAnswersFlag,
   toggleRenderSettingsFlag,
-  setRangeTakenPopup,
-  clearSidePanelPopupData,
+  setActiveCellAddress,
+  setPopupData,
+  clearPopupData,
   setIsShapeAPISupported
 };

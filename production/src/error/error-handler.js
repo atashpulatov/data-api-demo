@@ -39,9 +39,19 @@ class ErrorService {
     const details = this.getErrorDetails(error, errorMessage, errorType);
 
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
-      officeReducerHelper.dispayPopupOnSidePanel({
+      const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
+
+      const popupData = {
         objectWorkingId, title: errorMessage, message: details, callback
-      });
+      };
+
+      if (isDataOverviewOpen) {
+        this.popupController.sendMessageToDialog(
+          JSON.stringify({ popupData })
+        );
+      }
+
+      officeReducerHelper.displayPopup(popupData);
     } else {
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
       await this.closePopupIfOpen();
@@ -197,21 +207,22 @@ class ErrorService {
   }
 
   /**
-   * Function checking if the popup is open and closing it if it is.
-   * Also clearing Reprompt task queue if popup was open for Reprompt workflow.
+   * Function checking if the dialog is open and closing it if it is.
+   * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
    */
   closePopupIfOpen = async () => {
     const storeState = this.reduxStore.getState();
-    const { popupOpen: isPopupOpen } = storeState.officeReducer;
+
+    const { isDialogOpen } = storeState.officeReducer;
     const { isDataOverviewOpen } = storeState.popupStateReducer;
 
-    if (isPopupOpen && !isDataOverviewOpen) {
-      const isPopupOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
+    if (isDialogOpen && !isDataOverviewOpen) {
+      const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
       await this.popupController.closeDialog(this.popupController.dialog);
-      this.popupController.resetPopupStates();
+      this.popupController.resetDialogStates();
       // clear Reprompt task queue if in Reprompt All workflow
-      isPopupOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
+      isDialogOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
     }
   };
 }
