@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
 import { ObjectWindowTitle } from '@mstr/connector-components';
-import { Spinner } from '@mstr/rc-3';
+import { Spinner } from '@mstr/rc';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';

@@ -1,20 +1,21 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import { MstrButton, StandardTooltip } from '@mstr/rc';
+import { Button, Tooltip } from '@mstr/rc';
 
 export const ImportButton = ({
   disableReason, isPrimaryBtn, handleOk, t, actionType, id
 }) => (
-  <StandardTooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} theme="dark" placement="topRight">
-    <MstrButton
+  <Tooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} placement="top-end">
+    <Button
       id={id}
-      mstrType={isPrimaryBtn ? 'primary' : 'secondary'}
+      variant={isPrimaryBtn ? 'primary' : 'secondary'}
       onClick={handleOk}
       disabled={!!disableReason}
-      mstrText={t(actionType)}
-    />
-  </StandardTooltip>
+    >
+      {t(actionType)}
+    </Button>
+  </Tooltip>
 );
 
 ImportButton.propTypes = {

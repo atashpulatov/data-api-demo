@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
-import { Spinner } from '@mstr/rc-3';
+import { Spinner } from '@mstr/rc';
 import { useTranslation } from 'react-i18next';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';

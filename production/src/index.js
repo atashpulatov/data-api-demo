@@ -4,7 +4,7 @@ import './index.css';
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ObjectWindowTitle } from '@mstr/connector-components';
-import { Spinner } from '@mstr/rc-3';
+import { Spinner } from '@mstr/rc';
 
 import i18next from './i18n';
 import * as serviceWorker from './serviceWorker';

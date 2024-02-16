@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { Spinner } from '@mstr/rc-3';
+import { Spinner } from '@mstr/rc';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';

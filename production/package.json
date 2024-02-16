@@ -9,7 +9,7 @@
     "start:windows": "set HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
     "test": "jest --silent --noStackTrace",
-    "test:debug": "react-scripts test --debug",
+    "test:debug": "react-scripts test --debug ",
     "test:coverage": "CI=true jest --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
     "eslint:json": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format json --output-file ./coverage/eslint.json",
@@ -20,11 +20,10 @@
     "validate": "office-addin-manifest validate manifest.xml"
   },
   "dependencies": {
-    "@mstr/connector-components": "^5.0.3",
-    "@mstr/mstr-icons": "^2.30.4",
+    "@mstr/connector-components": "file:../../connector-components/production/mstr-connector-components-5.1.0.tgz",
+    "@mstr/mstr-icons": "^2.41.5",
     "@mstr/mstr-react-library": "2.0.0",
-    "@mstr/rc": "npm:@mstr/rc@2.42.5",
-    "@mstr/rc-3": "npm:@mstr/rc@3.8.0",
+    "@mstr/rc": "3.9.0",
     "core-js": "^3.34.0",
     "focus-visible": "^5.2.0",
     "i18next": "23.5.1",

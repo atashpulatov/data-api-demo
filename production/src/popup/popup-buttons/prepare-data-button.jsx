@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MstrButton, StandardTooltip } from '@mstr/rc';
+import { Button, Tooltip } from '@mstr/rc';
 
 export const PrepareDataButton = ({ disableReason, handleSecondary, t }) => (
-  <StandardTooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} theme="dark" placement="topRight">
-    <MstrButton
+  <Tooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} placement="top-end">
+    <Button
       id="prepare"
       onClick={handleSecondary}
       disabled={!!disableReason}
-      mstrText={t('Prepare Data')}
-    />
-  </StandardTooltip>
+    >
+      {t('Prepare Data')}
+    </Button>
+  </Tooltip>
 );
 
 PrepareDataButton.propTypes = {

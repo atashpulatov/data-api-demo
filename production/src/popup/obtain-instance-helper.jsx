@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Spinner } from '@mstr/rc-3';
+import { Spinner } from '@mstr/rc';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
 import { popupViewSelectorHelper } from './popup-view-selector-helper';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
