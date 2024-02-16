@@ -156,14 +156,19 @@ class PopupController {
 
     const { command } = response;
     const {
-      commandOk, commandOnUpdate, commandCancel, commandError, commandPopupLoaded
+      commandOk, commandOnUpdate, commandCancel, commandError, commandDialogLoaded, commandCloseDialog
     } = selectorProperties;
 
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
 
-    if (command === commandPopupLoaded) {
+    if (command === commandDialogLoaded) {
       this.reduxStore.dispatch(officeActions.setIsDialogLoaded(true));
+    }
+
+    if (command === commandCloseDialog) {
+      await this.closeDialog(dialog);
+      this.resetDialogStates();
     }
 
     try {

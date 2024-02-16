@@ -4,7 +4,7 @@ import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-n
 import operationErrorHandler from '../../operation/operation-error-handler';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { DialogPopup } from './overview-types';
+import { DialogPopup, DuplicatePopup, RangeTakenPopup } from './overview-types';
 
 export enum OverviewActionCommands {
   IMPORT= 'overview-import',
@@ -206,7 +206,11 @@ class OverviewHelper {
         columns: details?.excelTableSize?.columns,
         objectType: importType,
         lastUpdated: refreshDate,
-        status: objectNotification?.title,
+        status: {
+          type: objectNotification?.type,
+          title: objectNotification?.title,
+          details: objectNotification?.details,
+        },
         project: details?.ancestors[0].name,
         owner: details?.owner.name,
         importedBy: details?.importedBy,
