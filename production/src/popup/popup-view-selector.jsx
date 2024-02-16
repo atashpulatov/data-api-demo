@@ -43,7 +43,7 @@ const renderProperComponent = (popupType) => {
           onDelete={overviewHelper.sendDeleteRequest}
           onDuplicate={overviewHelper.sendDuplicateRequest}
           onRename={overviewHelper.sendRenameRequest}
-          onGoTo={overviewHelper.sendGoToWorksheetRequest}
+          onGoToWorksheet={overviewHelper.sendGoToWorksheetRequest}
           onDismissNotification={overviewHelper.sendDismissNotificationRequest} />
       );
     default:
