@@ -9,7 +9,7 @@
     "start:windows": "set HTTPS=true&&react-scripts start",
     "build": "react-scripts build",
     "test": "jest --silent --noStackTrace",
-    "test:debug": "react-scripts test --debug ",
+    "test:debug": "react-scripts test --debug",
     "test:coverage": "CI=true jest --silent --coverage --noStackTrace --forceExit --ci --json --outputFile=./coverage/test-results.json",
     "eslint": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0",
     "eslint:json": "eslint ./src --ext .js,.jsx,.ts,.tsx --max-warnings=0 --format json --output-file ./coverage/eslint.json",

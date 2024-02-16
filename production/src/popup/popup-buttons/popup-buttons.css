@@ -4,8 +4,8 @@
     background-color: #fff;
 }
 
-.popup-buttons .mstr-rc-button,
-.popup-buttons .mstr-rc-button .button-tooltip {
+.popup-buttons .mstr-rc-3-button,
+.popup-buttons .mstr-rc-3-button .button-tooltip {
     height: 30px;
     padding-left: 20px;
     padding-right: 20px;
@@ -17,16 +17,16 @@
     margin-right: auto;
 }
 
-.popup-buttons .mstr-rc-button {
+.popup-buttons .mstr-rc-3-button {
     margin-left: 14px;
     vertical-align: top;
 }
 
-.mstr-rc-button:disabled {
+.mstr-rc-3-button:disabled {
     opacity: 0.5;
 }
 
-.mstr-rc-tooltip-source {
+.mstr-rc-3-tooltip-source {
     display: inline;
 }
 
@@ -44,7 +44,7 @@
     border: 1px solid #1C91DC;
  }
 
- .popup-buttons span .mstr-rc-button {
+ .popup-buttons span .mstr-rc-3-button {
      margin-left: 0 !important;
  }
 

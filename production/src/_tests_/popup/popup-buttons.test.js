@@ -66,7 +66,7 @@ describe('PopupButtons', () => {
       disableActiveActions={disableActiveActions}
     />);
     // then
-    expect(container.querySelector('span.mstr-rc-tooltip-source')).toBeInTheDocument();
+    expect(container.querySelector('span.mstr-rc-3-tooltip-source')).toBeInTheDocument();
   });
 
   it('should render a tooltip span if the cube Isn’t  published', () => {
@@ -75,7 +75,7 @@ describe('PopupButtons', () => {
       isPublished={false}
     />);
     // then
-    expect(container.querySelector('span.mstr-rc-tooltip-source')).toBeInTheDocument();
+    expect(container.querySelector('span.mstr-rc-3-tooltip-source')).toBeInTheDocument();
   });
 
   it('should NOT display secondary button when hideSecondary prop is provided',

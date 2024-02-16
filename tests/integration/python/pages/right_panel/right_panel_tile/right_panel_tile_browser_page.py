@@ -40,7 +40,7 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     REFRESH_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
     OPTIONS_BUTTON_FOR_OBJECT = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(3)'
     EDIT_OPTION_FOR_OBJECT = RIGHT_PANEL_TILE + '.object-tile-wrapper .context-menu-list li:nth-child(1)'
-    CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .mstr-rc-selector'
+    CHECKBOX_FOR_OBJECT = RIGHT_PANEL_TILE + ' .mstr-rc-3-selector'
     SELECT_ALL_CHECKBOX = '#master-checkbox'
     REPROMPT_BUTTON_FOR_ALL = '.multiselection-reprompt-button'
     REFRESH_BUTTON_FOR_ALL = '.multiselection-refresh-button'
