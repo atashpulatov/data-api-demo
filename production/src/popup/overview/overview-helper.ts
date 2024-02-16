@@ -4,7 +4,7 @@ import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-n
 import operationErrorHandler from '../../operation/operation-error-handler';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
-import { DialogPopup, DuplicatePopup, RangeTakenPopup } from './overview-types';
+import { DialogPopup } from './overview-types';
 
 export enum OverviewActionCommands {
   IMPORT= 'overview-import',
@@ -13,6 +13,7 @@ export enum OverviewActionCommands {
   DUPLICATE= 'overview-duplicate',
   RANGE_TAKEN_OK= 'overview-range-taken-ok',
   RANGE_TAKEN_CLOSE= 'overview-range-taken-close',
+  RENAME= 'overview-rename',
   DISMISS_NOTIFICATION= 'overview-dismiss-notification',
 }
 
@@ -119,6 +120,23 @@ class OverviewHelper {
   };
 
   /**
+   * Sends message with rename command to the Side Panel
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {String} newName Updated name of the renamed object
+   */
+  async sendRenameRequest(
+    objectWorkingId: number,
+    newName: string
+  ): Promise<void> {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.RENAME,
+      objectWorkingId,
+      newName
+    });
+  }
+
+  /**
    * Handles dismissing object notifications for given objectWorkingIds
    *
    * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
@@ -140,7 +158,8 @@ class OverviewHelper {
       objectWorkingId?: number,
       objectWorkingIds?: number[],
       insertNewWorksheet?: boolean,
-      withEdit?: boolean
+      withEdit?: boolean,
+      newName?: string
     }
   ): Promise<void> {
     this.handleDismissNotifications(response.objectWorkingIds);
@@ -167,6 +186,9 @@ class OverviewHelper {
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
         operationErrorHandler.clearFailedObjectFromRedux(response.objectWorkingId);
         officeReducerHelper.clearPopupData();
+        break;
+      case OverviewActionCommands.RENAME:
+        this.sidePanelService.rename(response.objectWorkingId, response.newName);
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         this.handleDismissNotifications(response.objectWorkingIds);

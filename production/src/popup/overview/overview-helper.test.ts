@@ -83,6 +83,22 @@ describe('overview-helper', () => {
     });
   });
 
+  it('should send rename request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
+    // When
+    overviewHelper.sendRenameRequest(objectWorkingId, 'newName');
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.RENAME,
+      objectWorkingId,
+      newName: 'newName'
+    });
+  });
+
   it('should send Dismiss Notification request to side panel', () => {
     // Given
     const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();

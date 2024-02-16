@@ -26,6 +26,7 @@ export const OverviewWindowNotConnected = (props) => {
     onRefresh,
     onDelete,
     onDuplicate,
+    onRename,
     onDismissNotification,
     popupData,
     activeCellAddress
@@ -90,6 +91,7 @@ export const OverviewWindowNotConnected = (props) => {
         onRefresh={onRefresh}
         onDelete={onDelete}
         onDuplicate={handleDuplicate}
+        onRename={onRename}
         shouldDisableActions={shouldDisableActions} />
       <MstrButton className="overview-close-button" mstrText={t('Close')} onClick={handleCloseDialog} />
     </div>
@@ -101,6 +103,7 @@ OverviewWindowNotConnected.propTypes = {
   onRefresh: PropTypes.func,
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
+  onRename: PropTypes.func,
   onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   notifications: PropTypes.arrayOf(PropTypes.shape({})),
