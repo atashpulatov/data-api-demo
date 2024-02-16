@@ -22,6 +22,7 @@ import {
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
+import { objectImportType } from '../mstr-object/constants';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -191,6 +192,7 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
+  const { objects } = state.objectReducer;
   const {
     isConfirm,
     isSettings,
@@ -200,10 +202,20 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     popupData,
     isDialogOpen,
-    isDialogLoaded
+    isDialogLoaded,
+    isShapeAPISupported
   } = state.officeReducer;
+
+  let loadedObjects = [...objects];
+
+  // Filter out the image objects if the shape api is not supported
+  // in current version in order to maintain the backward compatibility.
+  if (!isShapeAPISupported) {
+    loadedObjects = loadedObjects?.filter((object) => object?.importType !== objectImportType.IMAGE);
+  }
+
   return {
-    loadedObjects: state.objectReducer.objects,
+    loadedObjects,
     operations,
     importRequested,
     dossierOpenRequested,
