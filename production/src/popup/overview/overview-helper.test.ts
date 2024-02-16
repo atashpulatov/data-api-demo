@@ -250,7 +250,11 @@ describe('overview-helper', () => {
       lastUpdated: 1707383921342,
       project: 'MicroStrategy Tutorial',
       owner: 'Administrator',
-      importedBy: 'a'
+      importedBy: 'a',
+      status: {
+        type: 'success',
+        title: 'Object duplicated',
+      }
     };
 
     // When
