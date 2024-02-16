@@ -13,5 +13,6 @@ export const selectorProperties = {
   commandOnUpdate: 'commandOnUpdate',
   commandError: 'commandError',
   commandBrowseUpdate: 'commandBrowseUpdate',
-  commandPopupLoaded: 'commandPopupLoaded',
+  commandDialogLoaded: 'commandDialogLoaded',
+  commandCloseDialog: 'commandCloseDialog',
 };

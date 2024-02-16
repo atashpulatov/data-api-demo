@@ -1,12 +1,6 @@
-@import '../mixins.scss';
-
 .multiple-reprompt-transition-page {
   .loading-section {
     display: flex;
     height: 100vh;
-
-    .mstr-rc-3-spinner {
-      @include popup-loading-component
-    }
   }
 }

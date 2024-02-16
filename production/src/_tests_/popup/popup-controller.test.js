@@ -400,10 +400,10 @@ describe('PopupController', () => {
     expect(spyValidateAuthToken).toHaveBeenCalled();
   });
 
-  it('should dispatch setIsDialogLoaded for commandPopupLoaded', async () => {
+  it('should dispatch setIsDialogLoaded for commandDialogLoaded', async () => {
     // given
     const actionObject = {
-      command: selectorProperties.commandPopupLoaded,
+      command: selectorProperties.commandDialogLoaded,
     };
 
     const arg = { message: JSON.stringify(actionObject) };

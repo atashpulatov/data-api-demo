@@ -38,7 +38,7 @@ const useStateSyncOnDialogMessage = () => {
 
   useEffect(() => {
     // Send message to the Right side panel when overview dialog is loaded
-    const message = { command: selectorProperties.commandPopupLoaded };
+    const message = { command: selectorProperties.commandDialogLoaded };
     popupHelper.officeMessageParent(message);
   }, []);
 };
