@@ -1,9 +1,12 @@
+$footer-height: 50px;
+$title-height: 40px;
+
 .data-overview-wrapper {
   margin: 20px;
 
   .data-overview-container {
     width: 100%;
-    height: calc(100vh - 90px);
+    height: calc(100vh - $title-height - $footer-height);
   }
 
   .overview-close-button {

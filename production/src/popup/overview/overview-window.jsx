@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
 
-import { MstrButton } from '@mstr/rc';
+import { Button } from '@mstr/rc-3';
 import { useTranslation } from 'react-i18next';
 import { ApplicationTypeEnum } from '../../office-constants';
 import overviewHelper from './overview-helper';
@@ -50,11 +50,11 @@ export const OverviewWindowNotConnected = (props) => {
     [objects, notifications]
   );
 
-  const handleCloseDialog = useCallback(() => {
+  const handleCloseDialog = () => {
     const { commandCloseDialog } = selectorProperties;
     const message = { command: commandCloseDialog };
     popupHelper.officeMessageParent(message);
-  }, []);
+  };
 
   const handleDuplicate = (objectWorkingId) => overviewHelper.setDuplicatePopup({
     objectWorkingId,
@@ -95,7 +95,7 @@ export const OverviewWindowNotConnected = (props) => {
         onRename={onRename}
         onGoTo={onGoToWorksheet}
         shouldDisableActions={shouldDisableActions} />
-      <MstrButton className="overview-close-button" mstrText={t('Close')} onClick={handleCloseDialog} />
+      <Button className="overview-close-button" onClick={handleCloseDialog}>{t('Close')}</Button>
     </div>
   );
 };
