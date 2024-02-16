@@ -83,6 +83,37 @@ describe('overview-helper', () => {
     });
   });
 
+  it('should send rename request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
+    // When
+    overviewHelper.sendRenameRequest(objectWorkingId, 'newName');
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.RENAME,
+      objectWorkingId,
+      newName: 'newName'
+    });
+  });
+
+  it('should send goToWorksheet request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
+    // When
+    overviewHelper.sendGoToWorksheetRequest(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.GO_TO_WORKSHEET,
+      objectWorkingId
+    });
+  });
+
   it('should send Dismiss Notification request to side panel', () => {
     // Given
     const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
@@ -219,7 +250,11 @@ describe('overview-helper', () => {
       lastUpdated: 1707383921342,
       project: 'MicroStrategy Tutorial',
       owner: 'Administrator',
-      importedBy: 'a'
+      importedBy: 'a',
+      status: {
+        type: 'success',
+        title: 'Object duplicated',
+      }
     };
 
     // When

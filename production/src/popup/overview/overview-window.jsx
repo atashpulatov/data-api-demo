@@ -1,25 +1,41 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
 
+import { Button } from '@mstr/rc-3';
+import { useTranslation } from 'react-i18next';
 import { ApplicationTypeEnum } from '../../office-constants';
 import overviewHelper from './overview-helper';
+import { popupHelper } from '../popup-helper';
 import useStateSyncOnDialogMessage from './use-state-sync-on-dialog-message';
 import { refreshRequested, removeRequested } from '../../redux-reducer/operation-reducer/operation-actions';
 import { restoreAllObjects } from '../../redux-reducer/object-reducer/object-actions';
 import { restoreAllNotifications } from '../../redux-reducer/notification-reducer/notification-action-creators';
 import { REMOVE_OPERATION } from '../../operation/operation-type-names';
+import { selectorProperties } from '../../attribute-selector/selector-properties';
+import i18n from '../../i18n';
 
 import './overview-window.scss';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
-    objects, notifications, onImport, /* onRefresh,  */onDelete, /* onDuplicate, */onEdit, onReprompt, onDismissNotification, popupData, activeCellAddress
+    objects,
+    notifications,
+    onImport,
+    onRefresh,
+    onDelete,
+    onDuplicate,
+    onRename,
+    onGoToWorksheet,
+    onDismissNotification,
+    popupData,
+    activeCellAddress
   } = props;
 
   useStateSyncOnDialogMessage();
 
+  const [t] = useTranslation('common', { i18n });
   const [dialogPopup, setDialogPopup] = React.useState(null);
 
   const shouldDisableActions = useMemo(
@@ -34,12 +50,18 @@ export const OverviewWindowNotConnected = (props) => {
     [objects, notifications]
   );
 
-  //   const handleDuplicate = (objectWorkingId) => overviewHelper.setDuplicatePopup({
-  //     objectWorkingId,
-  //     activeCellAddress,
-  //     onDuplicate,
-  //     setDialogPopup
-  //   });
+  const handleCloseDialog = () => {
+    const { commandCloseDialog } = selectorProperties;
+    const message = { command: commandCloseDialog };
+    popupHelper.officeMessageParent(message);
+  };
+
+  const handleDuplicate = (objectWorkingId) => overviewHelper.setDuplicatePopup({
+    objectWorkingId,
+    activeCellAddress,
+    onDuplicate,
+    setDialogPopup
+  });
 
   // TODO: Move logic for controlling popup visibility to Redux
   useEffect(() => {
@@ -70,10 +92,11 @@ export const OverviewWindowNotConnected = (props) => {
         // TODO: add sepation between reprompt and refresh
         onRefresh={onReprompt}
         onDelete={onDelete}
-        // TODO: add seperation between edit and duplicate
-        onDuplicate={onEdit}
-        // TODO: restore onDuplicate={handleDuplicate}
+        onDuplicate={handleDuplicate}
+        onRename={onRename}
+        onGoTo={onGoToWorksheet}
         shouldDisableActions={shouldDisableActions} />
+      <Button className="overview-close-button" onClick={handleCloseDialog}>{t('Close')}</Button>
     </div>
   );
 };
@@ -84,7 +107,9 @@ OverviewWindowNotConnected.propTypes = {
   onEdit: PropTypes.func,
   onReprompt: PropTypes.func,
   onDelete: PropTypes.func,
-  // TODO: restore onDuplicate: PropTypes.func,
+  onDuplicate: PropTypes.func,
+  onRename: PropTypes.func,
+  onGoToWorksheet: PropTypes.func,
   onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   notifications: PropTypes.arrayOf(PropTypes.shape({})),

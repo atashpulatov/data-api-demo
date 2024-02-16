@@ -1,5 +1,4 @@
 @import '~@mstr/rc/es/assets/scss/msdl_universal.scss';
-@import '../popup/mixins.scss';
 
 .prompts-window {
   height: 100%;
@@ -12,8 +11,4 @@
 
 .prompts-iframe {
   border-top: 1px solid $msdl-divider-gray_SOLID;
-}
-
-#popup-wrapper .prompts-window .mstr-rc-3-spinner {
-  @include popup-loading-component;
 }

@@ -15,6 +15,8 @@ export enum OverviewActionCommands {
   REPROMPT= 'overview-reprompt',
   RANGE_TAKEN_OK= 'overview-range-taken-ok',
   RANGE_TAKEN_CLOSE= 'overview-range-taken-close',
+  RENAME= 'overview-rename',
+  GO_TO_WORKSHEET= 'overview-go-to-worksheet',
   DISMISS_NOTIFICATION= 'overview-dismiss-notification',
 }
 
@@ -143,6 +145,37 @@ class OverviewHelper {
   };
 
   /**
+   * Sends message with rename command to the Side Panel
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param {String} newName Updated name of the renamed object
+   */
+  async sendRenameRequest(
+    objectWorkingId: number,
+    newName: string
+  ): Promise<void> {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.RENAME,
+      objectWorkingId,
+      newName
+    });
+  }
+
+  /**
+   * Sends message with goToWorksheet command to the Side Panel
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  async sendGoToWorksheetRequest(
+    objectWorkingId: number
+  ): Promise<void> {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.GO_TO_WORKSHEET,
+      objectWorkingId
+    });
+  }
+
+  /**
    * Handles dismissing object notifications for given objectWorkingIds
    *
    * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
@@ -164,7 +197,8 @@ class OverviewHelper {
       objectWorkingId?: number,
       objectWorkingIds?: number[],
       insertNewWorksheet?: boolean,
-      withEdit?: boolean
+      withEdit?: boolean,
+      newName?: string
     }
   ): Promise<void> {
     this.handleDismissNotifications(response.objectWorkingIds);
@@ -197,6 +231,12 @@ class OverviewHelper {
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
         operationErrorHandler.clearFailedObjectFromRedux(response.objectWorkingId);
         officeReducerHelper.clearPopupData();
+        break;
+      case OverviewActionCommands.RENAME:
+        this.sidePanelService.rename(response.objectWorkingId, response.newName);
+        break;
+      case OverviewActionCommands.GO_TO_WORKSHEET:
+        this.sidePanelService.highlightObject(response.objectWorkingId);
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         this.handleDismissNotifications(response.objectWorkingIds);
@@ -236,7 +276,11 @@ class OverviewHelper {
         columns: details?.excelTableSize?.columns,
         objectType: importType,
         lastUpdated: refreshDate,
-        status: objectNotification?.title,
+        status: {
+          type: objectNotification?.type,
+          title: objectNotification?.title,
+          details: objectNotification?.details,
+        },
         project: details?.ancestors[0].name,
         owner: details?.owner.name,
         importedBy: details?.importedBy,

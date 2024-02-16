@@ -26,7 +26,7 @@ function goReact() {
   const container = document.getElementById('root');
   const root = createRoot(container);
 
-  const loadingComponent = <Spinner type="large">{i18next.t('Loading...')}</Spinner>;
+  const loadingComponent = <Spinner className="loading-spinner" type="large">{i18next.t('Loading...')}</Spinner>;
 
   // TODO: Remove when connector-components translations are fixed
   const temp = <ObjectWindowTitle />;

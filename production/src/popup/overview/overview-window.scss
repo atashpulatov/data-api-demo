@@ -1,7 +1,18 @@
+$footer-height: 50px;
+$title-height: 40px;
+
 .data-overview-wrapper {
-  width: calc(100% - 40px);
-  height: calc(100vh - 90px);
-  margin: 20px auto 90px;
+  margin: 20px;
+
+  .data-overview-container {
+    width: 100%;
+    height: calc(100vh - $title-height - $footer-height);
+  }
+
+  .overview-close-button {
+    float: right;
+    margin-top: 20px;
+  }
 }
 
 .mstr-rc-3-grid-with-filter__filter-panel {
