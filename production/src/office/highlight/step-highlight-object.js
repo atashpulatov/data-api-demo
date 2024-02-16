@@ -1,6 +1,8 @@
 import { officeApiHelper } from '../api/office-api-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
+import { objectImportType } from '../../mstr-object/constants';
+import { sidePanelService } from '../../right-side-panel/side-panel-service';
 
 class StepHighlightObject {
   /**
@@ -13,7 +15,13 @@ class StepHighlightObject {
   */
   highlightObject = async (objectData, operationData) => {
     try {
-      await officeApiHelper.onBindingObjectClick(objectData);
+      // Highlight operation is not supported for images as Excel API does not support shape selection as of now
+      if (objectData?.importType === objectImportType.IMAGE) {
+        sidePanelService.highlightImageObject(objectData);
+      } else {
+        await officeApiHelper.onBindingObjectClick(objectData);
+      }
+
       operationStepDispatcher.completeHighlightObject(objectData.objectWorkingId);
     } catch (error) {
       console.error(error);

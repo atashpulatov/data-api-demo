@@ -5,7 +5,8 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
-import { objectImportType } from '../../mstr-object/constants';
+import { errorMessages } from '../../error/constants';
+import { BLOCKABLE_IMAGE_OPERATIONS } from '../../operation/operation-type-names';
 
 class StepManipulateVisualizationImage {
   /**
@@ -31,6 +32,7 @@ class StepManipulateVisualizationImage {
         shapeProps,
         projectId,
         objectId,
+        name: visualizationName,
         visualizationInfo,
         bindIdToBeDuplicated
       } = objectData;
@@ -41,6 +43,12 @@ class StepManipulateVisualizationImage {
 
       // retrieve the shape in the worksheet
       const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
+
+      // Throw an error and block the blockable image operations, if shape(visualization image)
+      // was removed manually from worksheet.
+      if (!shapeInWorksheet && BLOCKABLE_IMAGE_OPERATIONS.has(operationType)) {
+        throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
+      }
 
       // retrieve the dimensions of the shape to be duplicated for DUPLICATE OPERATION
       const shapeDimensionsForDuplicateOp = bindIdToBeDuplicated
@@ -89,6 +97,7 @@ class StepManipulateVisualizationImage {
       const imageShapeId = await officeShapeApiHelper.addImage(
         excelContext,
         base64Image,
+        visualizationName,
         { top, left },
         { width, height },
         sheet
@@ -97,12 +106,17 @@ class StepManipulateVisualizationImage {
       // Delete the shape already present in the workbook
       if (shapeInWorksheet) {
         shapeInWorksheet.delete();
-        await excelContext.sync();
       }
+
+      sheet.load(['id', 'name']);
+      await excelContext.sync();
+
+      const { id, name } = sheet;
 
       const updatedObject = {
         objectWorkingId,
         bindId: imageShapeId,
+        worksheet: { id, name },
         shapeProps: undefined, // reset the shape props after adding image
         bindIdToBeDuplicated: undefined, // reset the bindIdToBeDuplicated after adding image
         instanceId: undefined // reset the instanceId after adding image

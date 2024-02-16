@@ -1,4 +1,9 @@
+import { mockedNotificationsFromStore, mockedObjectsFromStore } from '../../_tests_/mockDataV2';
 import { notificationService } from '../../notification-v2/notification-service';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import officeReducerHelper from '../../office/store/office-reducer-helper';
+import operationErrorHandler from '../../operation/operation-error-handler';
+import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
@@ -35,13 +40,77 @@ describe('overview-helper', () => {
   it('should send duplicate request to side panel', () => {
     // Given
     const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
     // When
-    overviewHelper.sendDuplicateRequest(objectWorkingIds);
+    overviewHelper.sendDuplicateRequest(objectWorkingIds, true, false);
 
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.DUPLICATE,
-      objectWorkingIds
+      objectWorkingIds,
+      insertNewWorksheet: true,
+      withEdit: false
+    });
+  });
+
+  it('should send rangeTakenOk request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
+    // When
+    overviewHelper.handleRangeTakenOk(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.RANGE_TAKEN_OK,
+      objectWorkingId,
+    });
+  });
+
+  it('should send rangeTakenClose request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
+    // When
+    overviewHelper.handleRangeTakenClose(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.RANGE_TAKEN_CLOSE,
+      objectWorkingId,
+    });
+  });
+
+  it('should send rename request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
+    // When
+    overviewHelper.sendRenameRequest(objectWorkingId, 'newName');
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.RENAME,
+      objectWorkingId,
+      newName: 'newName'
+    });
+  });
+
+  it('should send goToWorksheet request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
+    // When
+    overviewHelper.sendGoToWorksheetRequest(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.GO_TO_WORKSHEET,
+      objectWorkingId
     });
   });
 
@@ -94,17 +163,55 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.DUPLICATE,
-      objectWorkingIds
+      objectWorkingIds,
+      insertNewWorksheet: true,
+      withEdit: false
     };
 
-    const removeMock = jest.spyOn(sidePanelService, 'duplicate').mockImplementation();
+    const duplicateMock = jest.spyOn(sidePanelService, 'duplicate').mockImplementation();
 
     // When
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
-    expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[0], true, false);
-    expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[1], true, false);
+    expect(duplicateMock).toHaveBeenCalledWith(objectWorkingIds[0], true, false);
+    expect(duplicateMock).toHaveBeenCalledWith(objectWorkingIds[1], true, false);
+  });
+
+  it('should handle rangeTakenOk command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.RANGE_TAKEN_OK,
+      objectWorkingId: objectWorkingIds[0]
+    };
+
+    const importInNewRangeMock = jest.spyOn(sidePanelNotificationHelper, 'importInNewRange').mockImplementation();
+    const clearPopupDataMock = jest.spyOn(officeReducerHelper, 'clearPopupData').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(importInNewRangeMock).toHaveBeenCalledWith(objectWorkingIds[0], null, true);
+    expect(clearPopupDataMock).toHaveBeenCalled();
+  });
+
+  it('should handle rangeTakenClose command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.RANGE_TAKEN_CLOSE,
+      objectWorkingId: objectWorkingIds[0]
+    };
+
+    const clearFailedObjectFromReduxMock = jest.spyOn(operationErrorHandler, 'clearFailedObjectFromRedux').mockImplementation();
+    const clearPopupDataMock = jest.spyOn(officeReducerHelper, 'clearPopupData').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(clearFailedObjectFromReduxMock).toHaveBeenCalledWith(objectWorkingIds[0]);
+    expect(clearPopupDataMock).toHaveBeenCalled();
   });
 
   it('should handle dismiss notification command', async () => {
@@ -122,5 +229,38 @@ describe('overview-helper', () => {
     // Then
     expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[0]);
     expect(removeMock).toHaveBeenCalledWith(objectWorkingIds[1]);
+  });
+
+  it('transformExcelObjects should work correctly', async () => {
+    // Given
+    const expectedResult = {
+      objectWorkingId: 1707383886748,
+      mstrObjectType: {
+        type: 55,
+        subtypes: 'undefined',
+        name: 'visualization',
+        request: 'visualizations'
+      },
+      name: 'Campaign Finances per Candidate',
+      worksheet: 'Sheet 1',
+      cell: 'A1',
+      rows: 66,
+      columns: 3,
+      objectType: 'table',
+      lastUpdated: 1707383921342,
+      project: 'MicroStrategy Tutorial',
+      owner: 'Administrator',
+      importedBy: 'a',
+      status: {
+        type: 'success',
+        title: 'Object duplicated',
+      }
+    };
+
+    // When
+    const result = overviewHelper.transformExcelObjects(mockedObjectsFromStore, mockedNotificationsFromStore);
+
+    // Then
+    expect(result).toEqual([expectedResult]);
   });
 });

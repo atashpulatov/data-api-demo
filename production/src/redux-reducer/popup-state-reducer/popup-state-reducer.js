@@ -1,5 +1,5 @@
 import {
-  SET_POPUP_TYPE, SET_MSTR_DATA, SET_OBJECT_DATA, ON_POPUP_BACK, CLEAR_POPUP_STATE,
+  SET_POPUP_TYPE, SET_MSTR_DATA, SET_OBJECT_DATA, ON_POPUP_BACK, CLEAR_POPUP_STATE, SET_IS_DATA_OVERVIEW_OPEN
 } from './popup-state-actions';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
 
@@ -29,6 +29,12 @@ export const popupStateReducer = (state = initialState, action) => {
     }
     case CLEAR_POPUP_STATE: {
       return initialState;
+    }
+    case SET_IS_DATA_OVERVIEW_OPEN: {
+      return {
+        ...state,
+        isDataOverviewOpen: action.payload,
+      };
     }
 
     default:

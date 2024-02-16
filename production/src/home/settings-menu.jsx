@@ -10,6 +10,7 @@ import { sessionHelper } from '../storage/session-helper';
 import { errorService } from '../error/error-handler';
 import { officeContext } from '../office/office-context';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import './settings-menu.scss';
 import { notificationService } from '../notification-v2/notification-service';
 import { popupController } from '../popup/popup-controller';
@@ -29,7 +30,8 @@ export const SettingsMenuNotConnected = ({
   toggleIsSettingsFlag,
   settingsPanelLoaded,
   toggleSettingsPanelLoadedFlag,
-  isSettings
+  isSettings,
+  setIsDataOverviewOpen
 }) => {
   const [t] = useTranslation('common', { i18n });
 
@@ -59,8 +61,13 @@ export const SettingsMenuNotConnected = ({
   };
 
   const showImportedDataOverviewPopup = () => {
+    if (isSecured) {
+      return;
+    }
+
     toggleIsSettingsFlag(false);
     popupController.runImportedDataOverviewPopup();
+    setIsDataOverviewOpen(true);
   };
 
   const showConfirmationPopup = () => {
@@ -113,7 +120,7 @@ export const SettingsMenuNotConnected = ({
         <OverflowTooltip placement="bottom" theme="dark" content={userNameDisplay} mouseEnterDelay={1} containerClassName="user-name-tooltip" sourceClassName="user-name">{userNameDisplay}</OverflowTooltip>
       </li>
       <li
-        className="no-trigger-close imported-data-overview not-linked-list"
+        className={`no-trigger-close imported-data-overview not-linked-list ${isSecured ? 'imported-data-overview-inactive' : ''}`}
         tabIndex="0"
         role="menuitem"
         onClick={showImportedDataOverviewPopup}
@@ -205,7 +212,8 @@ function mapStateToProps({ sessionReducer, officeReducer, objectReducer }) {
 const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleIsConfirmFlag: officeActions.toggleIsConfirmFlag,
-  toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag
+  toggleSettingsPanelLoadedFlag: officeActions.toggleSettingsPanelLoadedFlag,
+  setIsDataOverviewOpen: popupStateActions.setIsDataOverviewOpen
 };
 export const SettingsMenu = connect(mapStateToProps, mapDispatchToProps)(SettingsMenuNotConnected);
 
@@ -233,4 +241,5 @@ SettingsMenuNotConnected.propTypes = {
   toggleIsConfirmFlag: PropTypes.func,
   toggleSettingsPanelLoadedFlag: PropTypes.func,
   isSettings: PropTypes.bool,
+  setIsDataOverviewOpen: PropTypes.func
 };

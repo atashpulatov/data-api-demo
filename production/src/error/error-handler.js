@@ -16,6 +16,7 @@ import {
   REFRESH_OPERATION,
   EDIT_OPERATION
 } from '../operation/operation-type-names';
+import { PopupTypeEnum } from '../home/popup-type-enum';
 
 const COLUMN_EXCEL_API_LIMIT = 5000;
 const TIMEOUT = 3000;
@@ -39,9 +40,19 @@ class ErrorService {
     const details = this.getErrorDetails(error, errorMessage, errorType);
 
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
-      officeReducerHelper.dispayPopupOnSidePanel({
+      const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
+
+      const popupData = {
         objectWorkingId, title: errorMessage, message: details, callback
-      });
+      };
+
+      if (isDataOverviewOpen) {
+        this.popupController.sendMessageToDialog(
+          JSON.stringify({ popupData })
+        );
+      }
+
+      officeReducerHelper.displayPopup(popupData);
     } else {
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
       await this.closePopupIfOpen();
@@ -50,10 +61,22 @@ class ErrorService {
     }
   };
 
-  handleError = (error, options = { chosenObjectName: 'Report', onConfirm: null, isLogout: false }) => {
-    const { onConfirm, isLogout, ...parameters } = options;
+  handleError = async (error, options = {
+    chosenObjectName: 'Report', onConfirm: null, isLogout: false, dialogType: null
+  }) => {
+    const {
+      onConfirm, isLogout, dialogType, ...parameters
+    } = options;
     const errorType = this.getErrorType(error);
     const errorMessage = errorMessageFactory(errorType)({ error, ...parameters });
+
+    const shouldClosePopup = dialogType === PopupTypeEnum.importedDataOverview
+    && [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(errorType);
+
+    if (shouldClosePopup) {
+      await this.closePopupIfOpen();
+    }
+
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(errorType, isLogout);
   };
@@ -197,20 +220,22 @@ class ErrorService {
   }
 
   /**
-   * Function checking if the popup is open and closing it if it is.
-   * Also clearing Reprompt task queue if popup was open for Reprompt workflow.
+   * Function checking if the dialog is open and closing it if it is.
+   * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
    */
   closePopupIfOpen = async () => {
     const storeState = this.reduxStore.getState();
-    const isPopupOpen = storeState.officeReducer?.popupOpen;
 
-    if (isPopupOpen) {
-      const isPopupOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
+    const { isDialogOpen } = storeState.officeReducer;
+    const { isDataOverviewOpen } = storeState.popupStateReducer;
+
+    if (isDialogOpen && !isDataOverviewOpen) {
+      const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
       await this.popupController.closeDialog(this.popupController.dialog);
-      this.popupController.resetPopupStates();
+      this.popupController.resetDialogStates();
       // clear Reprompt task queue if in Reprompt All workflow
-      isPopupOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
+      isDialogOpenForReprompt && this.reduxStore.dispatch(clearRepromptTask());
     }
   };
 }

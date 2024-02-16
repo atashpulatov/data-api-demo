@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
-import { Empty, ObjectWindowTitle } from '@mstr/connector-components';
+import { ObjectWindowTitle } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc-3';
+import { useTranslation } from 'react-i18next';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
@@ -27,6 +29,8 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
     ? nextObject.definition?.sourceName
     : nextObject.name;
 
+  const [t] = useTranslation('common', { i18n });
+
   return (
     <div className="multiple-reprompt-transition-page">
       <ObjectWindowTitle
@@ -39,7 +43,7 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
         total={total}
       />
       <div className="loading-section">
-        <Empty isLoading />
+        <Spinner className="loading-spinner" type="large">{t('Loading...')}</Spinner>
       </div>
     </div>
   );

@@ -65,10 +65,18 @@ class OperationErrorHandler {
       await officeShapeApiHelper.deleteImage(excelContext, bindId);
     }
 
+    this.clearFailedObjectFromRedux(objectWorkingId);
+  };
+
+  /**
+   * Function removing object, operation and notification.
+   * Called after encountering error that occured during Import and Duplicate operation.
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  clearFailedObjectFromRedux = (objectWorkingId) => {
     this.reduxStore.dispatch(removeObject(objectWorkingId));
-
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
-
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
   };
 

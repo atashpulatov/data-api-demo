@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
-import { Empty, ObjectWindowTitle } from '@mstr/connector-components';
+import { ObjectWindowTitle } from '@mstr/connector-components';
+import { Spinner } from '@mstr/rc-3';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
 import { selectorProperties } from '../../attribute-selector/selector-properties';
@@ -30,10 +31,11 @@ export const DossierWindowNotConnected = (props) => {
   const [isEmbeddedDossierLoaded, setIsEmbeddedDossierLoaded] = useState(false);
   const previousSelectionBackup = useRef([]);
 
-  // New hideEmbedded variable is needed to let the loading spinner show while prompted dossier is answered
+  // New showLoading variable is needed to let the loading spinner show while prompted dossier is answered
   // behind the scenes which could take some time; especially if there are nested prompts.
   // NOTE: This loading spinner is separate from the one in EmbeddedDossier component.
-  const [hideEmbedded, setHideEmbedded] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
+  const [visibleEmbeddedDossier, setVisibleEmbeddedDossier] = useState(true);
 
   const {
     chosenObjectName,
@@ -168,7 +170,7 @@ export const DossierWindowNotConnected = (props) => {
       handleOk(importType);
 
       // Hide embedded and let loading spinner show while prompts are being answered.
-      setHideEmbedded(true);
+      setShowLoading(true);
     }
   }, [isReprompt, isSelected, importType, handleOk]);
 
@@ -226,6 +228,17 @@ export const DossierWindowNotConnected = (props) => {
     });
   }, []);
 
+  /**
+   * Change state of the visibility of only the embedded dossier without affecting the rest of the component.
+   * This is used to hide the embedded dossier when prompts are being answered and trying to avoid any flickering
+   * when the consumption mode is loaded.
+   *
+   * @param {Boolean} enableVisibility true to show the embedded dossier, false to hide it
+   */
+  const handleEmbeddedDossierVisibility = useCallback((enableVisibility) => {
+    setVisibleEmbeddedDossier(enableVisibility);
+  }, []);
+
   return (
     <div className="dossier-window">
       { isEmbeddedDossierLoaded
@@ -251,16 +264,19 @@ export const DossierWindowNotConnected = (props) => {
         index={repromptsQueue.index}
         total={repromptsQueue.total}
       />
-      <Empty isLoading />
-      {!hideEmbedded && ( // Hide embedded dossier only after prompts are answered.
+      <Spinner className="loading-spinner" type="large">{t('Loading...')}</Spinner>
+      {!showLoading && ( // Hide embedded dossier only after prompts are answered.
         <>
-          <EmbeddedDossier
-            handleSelection={handleSelection}
-            handlePromptAnswer={handlePromptAnswer}
-            handleInstanceIdChange={handleInstanceIdChange}
-            handleIframeLoadEvent={validateSession}
-            handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
-          />
+          <div className={`${visibleEmbeddedDossier ? 'dossier-window-embedded' : 'dossier-window-embedded-empty'}`}>
+            <EmbeddedDossier
+              handleSelection={handleSelection}
+              handlePromptAnswer={handlePromptAnswer}
+              handleInstanceIdChange={handleInstanceIdChange}
+              handleIframeLoadEvent={validateSession}
+              handleEmbeddedDossierLoad={handleEmbeddedDossierLoad}
+              handleEmbeddedDossierVisibility={handleEmbeddedDossierVisibility}
+            />
+          </div>
           <PopupButtons
             handleOk={() => handleOk(primaryImportType)}
             handleSecondary={() => handleOk(objectImportType.IMAGE)}

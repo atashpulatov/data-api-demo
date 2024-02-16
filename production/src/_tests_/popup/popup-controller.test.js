@@ -9,9 +9,7 @@ import * as operationActions from '../../redux-reducer/operation-reducer/operati
 import { reduxStore } from '../../store';
 import { Office } from '../mockOffice';
 import overviewHelper, { OverviewActionCommands } from '../../popup/overview/overview-helper';
-import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
-import { notificationService } from '../../notification-v2/notification-service';
 
 describe('PopupController', () => {
   const dialog = {};
@@ -146,7 +144,7 @@ describe('PopupController', () => {
 
     // then
     expect(runPopupSpy).toBeCalled();
-    expect(runPopupSpy).toBeCalledWith(popupType, size, size);
+    expect(runPopupSpy).toBeCalledWith(popupType, size, size, null, true);
   });
 
   it('should handle ok command from popup for report WITHOUT instance id', async () => {
@@ -400,5 +398,22 @@ describe('PopupController', () => {
     // then
     expect(handleOverviewActionCommandMock).toHaveBeenCalled();
     expect(spyValidateAuthToken).toHaveBeenCalled();
+  });
+
+  it('should dispatch setIsDialogLoaded for commandDialogLoaded', async () => {
+    // given
+    const actionObject = {
+      command: selectorProperties.commandDialogLoaded,
+    };
+
+    const arg = { message: JSON.stringify(actionObject) };
+
+    const mockedStore = jest.spyOn(reduxStore, 'dispatch').mockImplementation();
+
+    // when
+    await popupController.onMessageFromPopup(dialog, null, arg);
+
+    // then
+    expect(mockedStore).toHaveBeenCalledWith({ isDialogLoaded: true, type: 'OFFICE_SET_IS_DIALOG_LOADED' });
   });
 });

@@ -1,4 +1,28 @@
+$footer-height: 50px;
+$title-height: 40px;
+
 .data-overview-wrapper {
+  margin: 20px;
+
+  .data-overview-container {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - $title-height - $footer-height);
+  }
+
+  .overview-close-button {
+    float: right;
+    margin-top: 20px;
+  }
 }
+
+.mstr-rc-3-grid-with-filter__filter-panel {
+    &--unpinned {
+      max-height: calc(100% - 40px);
+      min-height: calc(80% - 40px);
+      position: absolute;
+    }
+  
+    &--hidden {
+      display: none;
+    }
+  }

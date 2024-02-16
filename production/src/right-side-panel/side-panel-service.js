@@ -17,8 +17,8 @@ import {
   executeNextRepromptTask,
   clearRepromptTask,
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
-import { officeContext } from '../office/office-context';
 import { objectImportType } from '../mstr-object/constants';
+import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 class SidePanelService {
@@ -49,11 +49,6 @@ class SidePanelService {
    * @param {Number} objectWorkingId Unique Id of the object, allowing to reference source object.
    */
   highlightObject = async (objectWorkingId) => {
-    const sourceObject = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
-    // This operation is not supported for images as Excel API does not support shape selection as of now
-    if (sourceObject?.importType === objectImportType.IMAGE) {
-      return;
-    }
     this.reduxStore.dispatch(highlightRequested(objectWorkingId));
   };
 
@@ -247,6 +242,23 @@ class SidePanelService {
    */
   toggleSettingsPanel = (settingsPanelLoded) => {
     this.reduxStore.dispatch(officeActions.toggleSettingsPanelLoadedFlag(settingsPanelLoded));
+  };
+
+  highlightImageObject = async (objectData) => {
+    const excelContext = await officeApiHelper.getExcelContext();
+
+    const { bindId } = objectData;
+    const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
+
+    // Omit the highlight operation, if shape(visualization image) was removed manually from the worksheet.
+    if (!shapeInWorksheet) {
+      return;
+    }
+
+    const worksheet = excelContext.workbook.worksheets.getItem(shapeInWorksheet?.worksheetId);
+
+    worksheet.activate();
+    await excelContext.sync();
   };
 }
 
