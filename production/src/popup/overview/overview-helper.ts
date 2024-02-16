@@ -14,6 +14,7 @@ export enum OverviewActionCommands {
   RANGE_TAKEN_OK= 'overview-range-taken-ok',
   RANGE_TAKEN_CLOSE= 'overview-range-taken-close',
   RENAME= 'overview-rename',
+  GO_TO_WORKSHEET= 'overview-go-to-worksheet',
   DISMISS_NOTIFICATION= 'overview-dismiss-notification',
 }
 
@@ -137,6 +138,20 @@ class OverviewHelper {
   }
 
   /**
+   * Sends message with goToWorksheet command to the Side Panel
+   *
+   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   */
+  async sendGoToWorksheetRequest(
+    objectWorkingId: number
+  ): Promise<void> {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.GO_TO_WORKSHEET,
+      objectWorkingId
+    });
+  }
+
+  /**
    * Handles dismissing object notifications for given objectWorkingIds
    *
    * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
@@ -189,6 +204,9 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.RENAME:
         this.sidePanelService.rename(response.objectWorkingId, response.newName);
+        break;
+      case OverviewActionCommands.GO_TO_WORKSHEET:
+        this.sidePanelService.highlightObject(response.objectWorkingId);
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         this.handleDismissNotifications(response.objectWorkingIds);

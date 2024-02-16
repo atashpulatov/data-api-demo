@@ -99,6 +99,21 @@ describe('overview-helper', () => {
     });
   });
 
+  it('should send goToWorksheet request to side panel', () => {
+    // Given
+    const objectWorkingId = objectWorkingIds[0];
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
+    // When
+    overviewHelper.sendGoToWorksheetRequest(objectWorkingId);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.GO_TO_WORKSHEET,
+      objectWorkingId
+    });
+  });
+
   it('should send Dismiss Notification request to side panel', () => {
     // Given
     const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
