@@ -13,7 +13,3 @@
 .prompts-iframe {
   border-top: 1px solid $msdl-divider-gray_SOLID;
 }
-
-#popup-wrapper .prompts-window .mstr-rc-3-spinner {
-  @include popup-loading-component;
-}
