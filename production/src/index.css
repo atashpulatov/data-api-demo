@@ -176,7 +176,7 @@ button.floating-button[disabled]:hover {
   min-width: 650px;
 }
 
-.mstr-rc-3-spinner {
+.loading-component-spinner {
   position: fixed;
   align-items: center;
   justify-content: center;
