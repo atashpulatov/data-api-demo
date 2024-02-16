@@ -86,6 +86,7 @@ class PopupController {
 
     this.reduxStore.dispatch(popupStateActions.setMstrData({ popupType }));
     this.reportParams = reportParams;
+
     try {
       await authenticationHelper.validateAuthToken();
     } catch (error) {
@@ -96,6 +97,7 @@ class PopupController {
 
     const url = URL;
     const splittedUrl = url.split('?'); // we need to get rid of any query params
+
     try {
       await officeApiHelper.getExcelSessionStatus();
       if (isRepromptOrOvieviewPopupOpen) {
@@ -126,7 +128,7 @@ class PopupController {
                 () => {
                   this.reduxStore.dispatch(this.popupActions.resetState());
                   this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-                  this.reduxStore.dispatch(officeActions.hidePopup());
+                  this.reduxStore.dispatch(officeActions.hideDialog());
 
                   // Clear the reprompt task queue if the user closes the popup,
                   // as the user is no longer interested in continuing the multiple re-prompting task.
@@ -134,7 +136,7 @@ class PopupController {
                 }
               );
 
-              this.reduxStore.dispatch(officeActions.showPopup());
+              this.reduxStore.dispatch(officeActions.showDialog());
             }
           });
       }
@@ -152,8 +154,17 @@ class PopupController {
     const { message } = arg;
     const response = JSON.parse(message);
 
+    const { command } = response;
+    const {
+      commandOk, commandOnUpdate, commandCancel, commandError, commandPopupLoaded
+    } = selectorProperties;
+
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
+
+    if (command === commandPopupLoaded) {
+      this.reduxStore.dispatch(officeActions.setIsDialogLoaded(true));
+    }
 
     try {
       if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
@@ -161,7 +172,7 @@ class PopupController {
         // or if the Multiple Reprompt queue has been cleared up.
         await this.closeDialog(dialog);
       }
-      if (response.command !== selectorProperties.commandError) {
+      if (command !== commandError) {
         await officeApiHelper.getExcelSessionStatus(); // checking excel session status
       }
       await authenticationHelper.validateAuthToken();
@@ -170,8 +181,8 @@ class PopupController {
         return;
       }
 
-      switch (response.command) {
-        case selectorProperties.commandOk:
+      switch (command) {
+        case commandOk:
           if (!reportParams) {
             await this.handleOkCommand(response, reportParams);
           } else if (reportParams.duplicateMode) {
@@ -181,7 +192,7 @@ class PopupController {
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           }
           break;
-        case selectorProperties.commandOnUpdate:
+        case commandOnUpdate:
           if (!reportParams) {
             await this.handleUpdateCommand(response);
           } else if (reportParams.duplicateMode) {
@@ -191,17 +202,17 @@ class PopupController {
             this.reduxStore.dispatch(editRequested(reportPreviousState, response));
           }
           break;
-        case selectorProperties.commandCancel:
+        case commandCancel:
           if (!isMultipleRepromptQueueEmpty || isDataOverviewOpen) {
             // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
             // since we were previously keeping the dialog open in between objects.
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
             await this.closeDialog(dialog);
-            this.resetPopupStates();
+            this.resetDialogStates();
           }
           this.reduxStore.dispatch(clearRepromptTask());
           break;
-        case selectorProperties.commandError:
+        case commandError:
           errorService.handleError(response.error);
           break;
         default:
@@ -213,14 +224,14 @@ class PopupController {
       }
     } catch (error) {
       console.error(error);
-      errorService.handleError(error);
+      errorService.handleError(error, { dialogType });
     } finally {
       // always reset this.reportParams to prevent reusing old references in future popups
       this.reportParams = null;
       if (isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
         // We will only reset popup related states when not in Multiple Reprompt workflow
         // or if the Multiple Reprompt queue has been cleared up.
-        this.resetPopupStates();
+        this.resetDialogStates();
       }
     }
   };
@@ -277,12 +288,12 @@ class PopupController {
     }
   };
 
-  // Used to reset popup-related state variables in Redux Store
+  // Used to reset dialog-related state variables in Redux Store
   // and the dialog reference stored in the class object.
-  resetPopupStates = () => {
+  resetDialogStates = () => {
     this.reduxStore.dispatch(this.popupActions.resetState());
     this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-    this.reduxStore.dispatch(officeActions.hidePopup());
+    this.reduxStore.dispatch(officeActions.hideDialog());
     this.dialog = {};
   };
 

@@ -12,32 +12,54 @@ describe('officeReducer', () => {
       isSettings: false,
       isConfirm: false,
       supportForms: true,
+      activeCellAddress: null,
       popupData: null,
-      popupOpen: false,
+      isDialogOpen: false,
+      isDialogLoaded: false,
       settingsPanelLoaded: false,
       isShapeAPISupported: false,
       reusePromptAnswers: false
     });
   });
 
-  it('should set popupOpen to true on showPopup', () => {
+  it('should set address of active cell on setActiveCellAddress', () => {
     // given
-    const prevState = { popupOpen: false };
-    const action = { type: officeProperties.actions.showPopup };
+    const prevState = { activeCellAddress: null };
+    const action = { type: officeProperties.actions.setActiveCellAddress, activeCellAddress: 'A1' };
     // when
     const newState = officeReducer(prevState, action);
     // then
-    expect(newState.popupOpen).toBe(true);
+    expect(newState.activeCellAddress).toBe('A1');
   });
 
-  it('should set popupOpen to false on hidePopup', () => {
+  it('should set isDialogOpen to true on showDialog', () => {
     // given
-    const prevState = { popupOpen: true };
-    const action = { type: officeProperties.actions.hidePopup };
+    const prevState = { isDialogOpen: false };
+    const action = { type: officeProperties.actions.showDialog };
     // when
     const newState = officeReducer(prevState, action);
     // then
-    expect(newState.popupOpen).toBe(false);
+    expect(newState.isDialogOpen).toBe(true);
+  });
+
+  it('should set isDialogOpen to false on hideDialog', () => {
+    // given
+    const prevState = { isDialogOpen: true };
+    const action = { type: officeProperties.actions.hideDialog };
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.isDialogOpen).toBe(false);
+  });
+
+  it('should set given value to isDialogLoaded on setIsDialogLoaded', () => {
+    // given
+    const prevState = { isDialogLoaded: false };
+    const action = { type: officeProperties.actions.setIsDialogLoaded, isDialogLoaded: true };
+    // when
+    const newState = officeReducer(prevState, action);
+    // then
+    expect(newState.isDialogLoaded).toBe(true);
   });
 
   it('should return new proper state in case of toggleSecuredFlag action', () => {

@@ -8,6 +8,7 @@ import operationStepDispatcher from '../../../operation/operation-step-dispatche
 describe('stepManipulateVisualizationImage', () => {
   const objectDataMock = {
     objectId: 'objectIdTest',
+    bindId: '1234-5678-9012-3456',
     projectId: 'projectIdTest',
     dossierData: 'dossierDataTest',
     mstrObjectType: 'mstrObjectTypeTest',
@@ -28,6 +29,14 @@ describe('stepManipulateVisualizationImage', () => {
   };
 
   const mockFn = jest.fn();
+
+  const mockShapeObject = {
+    delete: mockFn,
+    top: 233,
+    left: 454,
+    width: 123,
+    height: 342
+  };
 
   const mockAddImage = jest.fn().mockImplementation((image) => Promise.resolve({
     set: jest.fn(),
@@ -152,6 +161,8 @@ describe('stepManipulateVisualizationImage', () => {
 
     jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
+    jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => Promise.resolve(mockShapeObject));
+
     jest.spyOn(officeShapeApiHelper, 'addImage').mockImplementation(() => Promise.resolve('1234-5678-9012-3456'));
 
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -220,6 +231,8 @@ describe('stepManipulateVisualizationImage', () => {
     jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
 
     jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
+
+    jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => Promise.resolve(mockShapeObject));
 
     jest.spyOn(officeShapeApiHelper, 'addImage').mockImplementation(() => Promise.resolve('1234-5678-9012-3456'));
 

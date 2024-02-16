@@ -15,10 +15,12 @@ import './overview-window.scss';
 
 export const OverviewWindowNotConnected = (props) => {
   const {
-    objects, notifications, onImport, /* onRefresh,  */onDelete, /* onDuplicate, */onEdit, onReprompt, onDismissNotification
+    objects, notifications, onImport, /* onRefresh,  */onDelete, /* onDuplicate, */onEdit, onReprompt, onDismissNotification, popupData, activeCellAddress
   } = props;
 
   useStateSyncOnDialogMessage();
+
+  const [dialogPopup, setDialogPopup] = React.useState(null);
 
   const shouldDisableActions = useMemo(
     () => notifications.some(
@@ -31,6 +33,22 @@ export const OverviewWindowNotConnected = (props) => {
     () => overviewHelper.transformExcelObjects(objects, notifications),
     [objects, notifications]
   );
+
+  //   const handleDuplicate = (objectWorkingId) => overviewHelper.setDuplicatePopup({
+  //     objectWorkingId,
+  //     activeCellAddress,
+  //     onDuplicate,
+  //     setDialogPopup
+  //   });
+
+  // TODO: Move logic for controlling popup visibility to Redux
+  useEffect(() => {
+    if (popupData) {
+      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setDialogPopup });
+    } else {
+      setDialogPopup(null);
+    }
+  }, [popupData]);
 
   useEffect(() => {
     notifications.forEach((notification) => {
@@ -46,6 +64,7 @@ export const OverviewWindowNotConnected = (props) => {
     <div className="data-overview-wrapper">
       <DataOverview
         loadedObjects={objectsToRender}
+        popup={dialogPopup}
         applicationType={ApplicationTypeEnum.EXCEL}
         onAddData={onImport}
         // TODO: add sepation between reprompt and refresh
@@ -53,6 +72,7 @@ export const OverviewWindowNotConnected = (props) => {
         onDelete={onDelete}
         // TODO: add seperation between edit and duplicate
         onDuplicate={onEdit}
+        // TODO: restore onDuplicate={handleDuplicate}
         shouldDisableActions={shouldDisableActions} />
     </div>
   );
@@ -67,14 +87,19 @@ OverviewWindowNotConnected.propTypes = {
   // TODO: restore onDuplicate: PropTypes.func,
   onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
-  notifications: PropTypes.arrayOf(PropTypes.shape({}))
+  notifications: PropTypes.arrayOf(PropTypes.shape({})),
+  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
+  activeCellAddress: PropTypes.string
 };
 
-export const mapStateToProps = ({ objectReducer, notificationReducer }) => {
+export const mapStateToProps = ({ objectReducer, notificationReducer, officeReducer }) => {
   const { objects } = objectReducer;
   const { notifications } = notificationReducer;
+  const { popupData, activeCellAddress } = officeReducer;
 
-  return { objects, notifications };
+  return {
+    objects, notifications, popupData, activeCellAddress
+  };
 };
 
 export const mapActionsToProps = {

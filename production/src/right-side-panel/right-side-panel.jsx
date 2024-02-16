@@ -38,7 +38,8 @@ export const RightSidePanelNotConnected = ({
   notifications,
   operations,
   popupData,
-  isPopupRendered,
+  isDialogRendered,
+  isDialogLoaded,
   toggleCurtain,
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
@@ -78,8 +79,11 @@ export const RightSidePanelNotConnected = ({
     }
     // Added disable addition of sidePanelPopup and duplicatedObjectId to dependency array.
     // This effect should be called only if duplicate popup is opened and activeCellAddress changes.
+    // TODO: Move logic for controlling popup visibility to Redux
     if (popupData) {
       sidePanelNotificationHelper.setRangeTakenPopup({ ...popupData, setSidePanelPopup, activeCellAddress });
+    } else if (sidePanelPopup?.type === popupTypes.RANGE_TAKEN) {
+      setSidePanelPopup(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCellAddress, popupData]);
@@ -139,12 +143,18 @@ export const RightSidePanelNotConnected = ({
   const handleToggleSettingsPanel = () => { sidePanelService.toggleSettingsPanel(settingsPanelLoaded); };
 
   useEffect(() => {
-    popupController.sendMessageToDialog(
-      JSON.stringify({
-        popupType: PopupTypeEnum.importedDataOverview, objects: loadedObjects, notifications, globalNotification
-      })
-    );
-  }, [loadedObjects, notifications, globalNotification]);
+    if (isDialogLoaded) {
+      popupController.sendMessageToDialog(
+        JSON.stringify({
+          popupType: PopupTypeEnum.importedDataOverview,
+          objects: loadedObjects,
+          notifications,
+          globalNotification,
+          activeCellAddress
+        })
+      );
+    }
+  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded]);
 
   return (
     <>
@@ -159,14 +169,14 @@ export const RightSidePanelNotConnected = ({
         onRefreshClick={refreshWrapper}
         onRemoveClick={removeWrapper}
         onRename={renameWrapper}
-        popup={sidePanelPopup}
+        popup={!isDialogRendered && sidePanelPopup}
         settingsMenu={isSettings && <SettingsMenu />}
         onSettingsClick={handleSettingsClick}
         confirmationWindow={isConfirm && <Confirmation />}
         globalNotification={globalNotification}
         onSelectAll={notificationService.dismissNotifications}
         shouldDisableActions={!officeReducerHelper.noOperationInProgress()}
-        isPopupRendered={isPopupRendered}
+        isPopupRendered={isDialogRendered}
         reusePromptAnswers={reusePromptAnswers}
         settingsPanelLoaded={settingsPanelLoaded}
         handleReusePromptAnswers={handleReusePromptAnswers}
@@ -182,7 +192,15 @@ export const mapStateToProps = (state) => {
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
   const {
-    isConfirm, isSettings, isSecured, isClearDataFailed, settingsPanelLoaded, reusePromptAnswers, popupOpen, popupData
+    isConfirm,
+    isSettings,
+    isSecured,
+    isClearDataFailed,
+    settingsPanelLoaded,
+    reusePromptAnswers,
+    popupData,
+    isDialogOpen,
+    isDialogLoaded
   } = state.officeReducer;
   return {
     loadedObjects: state.objectReducer.objects,
@@ -198,7 +216,8 @@ export const mapStateToProps = (state) => {
     settingsPanelLoaded,
     reusePromptAnswers,
     popupData,
-    isPopupRendered: popupOpen,
+    isDialogRendered: isDialogOpen,
+    isDialogLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
   };
 };
@@ -284,6 +303,7 @@ RightSidePanelNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func,
-  isPopupRendered: PropTypes.bool,
+  isDialogRendered: PropTypes.bool,
+  isDialogLoaded: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
 };
