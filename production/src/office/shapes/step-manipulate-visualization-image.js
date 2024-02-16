@@ -99,8 +99,6 @@ class StepManipulateVisualizationImage {
         }
       );
 
-      console.log('convertPointsToPixels(width)', convertPointsToPixels(width));
-
       // convert image stream response to base64 image
       const base64Image = await convertImageToBase64(imageStream);
 
