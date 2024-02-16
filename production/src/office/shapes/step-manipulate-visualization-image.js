@@ -80,7 +80,7 @@ class StepManipulateVisualizationImage {
         excelContext
       });
 
-      // If the entire image width exceeds the export engine dimension limit, 
+      // If the entire image width exceeds the export engine dimension limit,
       // then export the image with allowed maximum dimension in pixels by export engine
       let widthInPixels = convertPointsToPixels(width);
       if (widthInPixels > EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS) {
