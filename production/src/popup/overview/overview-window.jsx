@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { DataOverview, objectNotificationTypes } from '@mstr/connector-components';
@@ -26,6 +26,8 @@ export const OverviewWindowNotConnected = (props) => {
     onRefresh,
     onDelete,
     onDuplicate,
+    onEdit,
+    onReprompt,
     onRename,
     onGoToWorksheet,
     onDismissNotification,
@@ -89,10 +91,11 @@ export const OverviewWindowNotConnected = (props) => {
         popup={dialogPopup}
         applicationType={ApplicationTypeEnum.EXCEL}
         onAddData={onImport}
-        // TODO: add sepation between reprompt and refresh
-        onRefresh={onReprompt}
-        onDelete={onDelete}
+        onEdit={onEdit}
+        onReprompt={onReprompt}
+        onRefresh={onRefresh}
         onDuplicate={handleDuplicate}
+        onDelete={onDelete}
         onRename={onRename}
         onGoTo={onGoToWorksheet}
         shouldDisableActions={shouldDisableActions} />
@@ -103,7 +106,7 @@ export const OverviewWindowNotConnected = (props) => {
 
 OverviewWindowNotConnected.propTypes = {
   onImport: PropTypes.func,
-  // TODO: restore onRefresh: PropTypes.func,
+  onRefresh: PropTypes.func,
   onEdit: PropTypes.func,
   onReprompt: PropTypes.func,
   onDelete: PropTypes.func,

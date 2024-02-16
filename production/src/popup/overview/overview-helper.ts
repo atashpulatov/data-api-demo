@@ -43,10 +43,10 @@ class OverviewHelper {
    *
    * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
-  async sendEditRequest(objectWorkingIds: number[]): Promise<void> {
+  async sendEditRequest(objectWorkingId: number): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.EDIT,
-      objectWorkingIds
+      objectWorkingId
     });
   }
 
@@ -208,7 +208,7 @@ class OverviewHelper {
         await this.sidePanelService.addData();
         break;
       case OverviewActionCommands.EDIT:
-        await this.sidePanelService.edit(response.objectWorkingIds);
+        await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
         await this.sidePanelService.reprompt(response.objectWorkingIds);
