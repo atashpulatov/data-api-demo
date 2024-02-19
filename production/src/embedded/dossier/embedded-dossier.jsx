@@ -90,7 +90,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const vizDimensions = chapterData[payloadVisKey];
 
     if (vizDimensions) {
-      vizDimensions.width = convertPixelsToPoints(vizDimensions.width);
+      // Currently scrollWidth is applied only to grid images
+      const vizDimensionsWidth = vizDimensions.scrollWidth || vizDimensions.width;
+      vizDimensions.width = convertPixelsToPoints(vizDimensionsWidth);
       vizDimensions.height = convertPixelsToPoints(vizDimensions.height);
     }
 
@@ -201,6 +203,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       isPrompted,
       isMultipleRepromptWithReuse,
       handleEmbeddedDossierVisibility,
+      isReprompt,
     } = this.props;
     const {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
@@ -312,8 +315,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
         this.msgRouter.registerEventHandler(EventType.ON_ERROR, this.onEmbeddedError);
         this.msgRouter.registerEventHandler(EventType.ON_PAGE_LOADED, () => {
           // Just hide the embedded dossier when it is consumption page is loaded
-          // and avoid any flickering.
-          if (!dossierOpenRequested) {
+          // and avoid any flickering. Only hide it when it is a reprompt.
+          if (!dossierOpenRequested && isReprompt) {
             handleEmbeddedDossierVisibility(false);
           }
         });
@@ -463,6 +466,7 @@ EmbeddedDossierNotConnected.propTypes = {
   }),
   isMultipleRepromptWithReuse: PropTypes.bool,
   handleEmbeddedDossierVisibility: PropTypes.func,
+  isReprompt: PropTypes.bool,
 };
 
 EmbeddedDossierNotConnected.defaultProps = {
@@ -477,6 +481,7 @@ EmbeddedDossierNotConnected.defaultProps = {
   },
   handleSelection: () => {},
   isMultipleRepromptWithReuse: false,
+  isReprompt: false,
 };
 
 const mapStateToProps = (state) => {
@@ -530,6 +535,7 @@ const mapStateToProps = (state) => {
     isPrompted,
     repromptsQueue: { ...repromptsQueueReducer },
     isMultipleRepromptWithReuse,
+    isReprompt,
   };
 };
 

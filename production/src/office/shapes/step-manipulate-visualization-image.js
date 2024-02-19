@@ -5,6 +5,10 @@ import operationErrorHandler from '../../operation/operation-error-handler';
 import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-service';
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
+import { errorMessages } from '../../error/constants';
+import { BLOCKABLE_IMAGE_OPERATIONS } from '../../operation/operation-type-names';
+
+const EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS = 4000;
 
 class StepManipulateVisualizationImage {
   /**
@@ -42,6 +46,12 @@ class StepManipulateVisualizationImage {
       // retrieve the shape in the worksheet
       const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
 
+      // Throw an error and block the blockable image operations, if shape(visualization image)
+      // was removed manually from worksheet.
+      if (!shapeInWorksheet && BLOCKABLE_IMAGE_OPERATIONS.has(operationType)) {
+        throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
+      }
+
       // retrieve the dimensions of the shape to be duplicated for DUPLICATE OPERATION
       const shapeDimensionsForDuplicateOp = bindIdToBeDuplicated
         && await this.getDuplicatedShapeDimensions(bindIdToBeDuplicated, excelContext);
@@ -70,6 +80,13 @@ class StepManipulateVisualizationImage {
         excelContext
       });
 
+      // If the entire image width exceeds the export engine dimension limit,
+      // then export the image with allowed maximum dimension in pixels by export engine
+      let widthInPixels = convertPointsToPixels(width);
+      if (widthInPixels > EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS) {
+        widthInPixels = EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS;
+      }
+
       // Generate the visualization image to be added to the worksheet
       const imageStream = await mstrObjectRestService.getVisualizationImage(
         objectId,
@@ -77,7 +94,7 @@ class StepManipulateVisualizationImage {
         instanceId,
         visualizationKey,
         {
-          width: convertPointsToPixels(width),
+          width: widthInPixels,
           height: convertPointsToPixels(height)
         }
       );
