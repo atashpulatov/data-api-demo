@@ -18,12 +18,13 @@ import { SessionExtendingWrapper } from '../popup/session-extending-wrapper';
 import { sessionActions } from '../redux-reducer/session-reducer/session-actions';
 import PrivilegeErrorSidePanel from '../right-side-panel/info-panels/privilege-error-side-panel';
 import useOfficePrivilege from '../hooks/use-office-privilege';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 
 const IS_DEVELOPMENT = sessionHelper.isDevelopment();
 
 export const HomeNotConnected = (props) => {
   const {
-    loading, isDialogOpen, authToken, hideDialog, toggleIsSettingsFlag
+    loading, isDialogOpen, authToken, hideDialog, toggleIsSettingsFlag, clearDialogState
   } = props;
 
   const canUseOffice = useOfficePrivilege(authToken);
@@ -69,13 +70,14 @@ export const HomeNotConnected = (props) => {
         homeHelper.getTokenFromStorage();
         hideDialog(); // hide error popup if visible
         toggleIsSettingsFlag(false); // hide settings menu if visible
+        clearDialogState();
         sessionActions.disableLoading();
       } catch (error) {
         console.error(error);
       }
     }
     initializeHome();
-  }, [hideDialog, toggleIsSettingsFlag]);
+  }, [hideDialog, toggleIsSettingsFlag, clearDialogState]);
 
   useEffect(() => {
     getUserData(authToken);
@@ -123,7 +125,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = {
   toggleRenderSettingsFlag: officeActions.toggleRenderSettingsFlag,
   hideDialog: officeActions.hideDialog,
-  toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag
+  toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
+  clearDialogState: popupStateActions.onClearPopupState
 };
 
 HomeNotConnected.propTypes = {
@@ -132,6 +135,7 @@ HomeNotConnected.propTypes = {
   authToken: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   hideDialog: PropTypes.func,
   toggleIsSettingsFlag: PropTypes.func,
+  clearDialogState: PropTypes.func,
 };
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeNotConnected);
