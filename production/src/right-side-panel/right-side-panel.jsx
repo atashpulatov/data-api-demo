@@ -206,7 +206,7 @@ export const mapStateToProps = (state) => {
     isShapeAPISupported
   } = state.officeReducer;
 
-  let loadedObjects = [...objects];
+  let loadedObjects = objects;
 
   // Filter out the image objects if the shape api is not supported
   // in current version in order to maintain the backward compatibility.
