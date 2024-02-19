@@ -24,6 +24,32 @@ describe('overview-helper', () => {
     });
   });
 
+  it('should send edit request to side panel', () => {
+    // Given
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    // When
+    overviewHelper.sendEditRequest(objectWorkingIds[0]);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.EDIT,
+      objectWorkingId: objectWorkingIds[0]
+    });
+  });
+
+  it('should send reprompt request to side panel', () => {
+    // Given
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    // When
+    overviewHelper.sendRepromptRequest(objectWorkingIds);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.REPROMPT,
+      objectWorkingIds
+    });
+  });
+
   it('should send delete request to side panel', () => {
     // Given
     const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
@@ -141,6 +167,38 @@ describe('overview-helper', () => {
 
     // Then
     expect(refreshMock).toHaveBeenCalledWith(objectWorkingIds);
+  });
+
+  it('should handle edit command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.EDIT,
+      objectWorkingId: objectWorkingIds[0]
+    };
+
+    const editMock = jest.spyOn(sidePanelService, 'edit').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(editMock).toHaveBeenCalledWith(objectWorkingIds[0]);
+  });
+
+  it('should handle reprompt command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.REPROMPT,
+      objectWorkingIds
+    };
+
+    const repromptMock = jest.spyOn(sidePanelService, 'reprompt').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(repromptMock).toHaveBeenCalledWith(objectWorkingIds);
   });
 
   it('should handle remove command', async () => {
