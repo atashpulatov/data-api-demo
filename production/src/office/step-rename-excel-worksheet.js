@@ -20,7 +20,15 @@ class StepRenameExcelWorksheet {
       const { excelContext, shouldRenameExcelWorksheet } = operationData;
 
       if (shouldRenameExcelWorksheet) {
-        await officeApiWorksheetHelper.renameExistingWorksheet(excelContext, name);
+        const newName = await officeApiWorksheetHelper.renameExistingWorksheet(excelContext, name);
+
+        operationStepDispatcher.updateObject({
+          ...objectData,
+          worksheet: {
+            ...objectData.worksheet,
+            name: newName
+          }
+        });
       }
 
       operationStepDispatcher.completeRenameExcelWorksheet(objectWorkingId);
