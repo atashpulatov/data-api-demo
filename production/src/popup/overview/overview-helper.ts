@@ -8,9 +8,11 @@ import { DialogPopup } from './overview-types';
 
 export enum OverviewActionCommands {
   IMPORT= 'overview-import',
+  EDIT= 'overview-edit',
   REFRESH= 'overview-refresh',
   REMOVE= 'overview-remove',
   DUPLICATE= 'overview-duplicate',
+  REPROMPT= 'overview-reprompt',
   RANGE_TAKEN_OK= 'overview-range-taken-ok',
   RANGE_TAKEN_CLOSE= 'overview-range-taken-close',
   RENAME= 'overview-rename',
@@ -37,9 +39,33 @@ class OverviewHelper {
   }
 
   /**
+   * Sends message with edit command to the Side Panel
+   *
+   * @param objectWorkingId Unique Id of the objects allowing to reference specific objects
+   */
+  async sendEditRequest(objectWorkingId: number): Promise<void> {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.EDIT,
+      objectWorkingId
+    });
+  }
+
+  /**
+   * Sends message with reprompt command to the Side Panel
+   *
+   * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   */
+  async sendRepromptRequest(objectWorkingIds: number[]): Promise<void> {
+    popupHelper.officeMessageParent({
+      command: OverviewActionCommands.REPROMPT,
+      objectWorkingIds
+    });
+  }
+
+  /**
    * Sends message with refresh command to the Side Panel
    *
-   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
   async sendRefreshRequest(
     objectWorkingIds: number[],
@@ -53,11 +79,9 @@ class OverviewHelper {
   /**
    * Sends message with delete command to the Side Panel
    *
-   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
-  async sendDeleteRequest(
-    objectWorkingIds: number[],
-  ): Promise<void> {
+  async sendDeleteRequest(objectWorkingIds: number[]): Promise<void> {
     popupHelper.officeMessageParent({
       command: OverviewActionCommands.REMOVE,
       objectWorkingIds
@@ -67,7 +91,7 @@ class OverviewHelper {
   /**
    * Sends message with dismiss notification command to the Side Panel
    *
-   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
   async sendDismissNotificationRequest(objectWorkingIds: number[]): Promise<void> {
     popupHelper.officeMessageParent({
@@ -79,9 +103,9 @@ class OverviewHelper {
   /**
    * Sends message with duplicate command to the Side Panel
    *
-   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
-   * @param {Boolean} insertNewWorksheet Flag indicating whether new worksheet should be inserted
-   * @param {Boolean} withEdit Flag indicating whether duplicate should be performed with edit
+   * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param insertNewWorksheet Flag indicating whether new worksheet should be inserted
+   * @param withEdit Flag indicating whether duplicate should be performed with edit
    */
   async sendDuplicateRequest(
     objectWorkingIds: number[],
@@ -99,7 +123,7 @@ class OverviewHelper {
   /**
    * Sends message with rangeTakenOk command to the Side Panel
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handleRangeTakenOk = (objectWorkingId: number): void => {
     popupHelper.officeMessageParent({
@@ -111,7 +135,7 @@ class OverviewHelper {
   /**
    * Sends message with rangeTakenClose command to the Side Panel
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   handleRangeTakenClose = (objectWorkingId: number): void => {
     popupHelper.officeMessageParent({
@@ -123,8 +147,8 @@ class OverviewHelper {
   /**
    * Sends message with rename command to the Side Panel
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} newName Updated name of the renamed object
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param newName Updated name of the renamed object
    */
   async sendRenameRequest(
     objectWorkingId: number,
@@ -140,7 +164,7 @@ class OverviewHelper {
   /**
    * Sends message with goToWorksheet command to the Side Panel
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
    */
   async sendGoToWorksheetRequest(
     objectWorkingId: number
@@ -154,7 +178,7 @@ class OverviewHelper {
   /**
    * Handles dismissing object notifications for given objectWorkingIds
    *
-   * @param {Array} objectWorkingIds Unique Ids of the objects allowing to reference specific objects
+   * @param objectWorkingIds Unique Ids of the objects allowing to reference specific objects
    */
   handleDismissNotifications = (objectWorkingIds: number[]): void => {
     objectWorkingIds?.forEach(objectWorkingId => {
@@ -165,7 +189,7 @@ class OverviewHelper {
   /**
    * Handles proper Overview dialog action command based on the response
    *
-   * @param {Object} response Response from the Overview dialog
+   * @param response Response from the Overview dialog
    */
   async handleOverviewActionCommand(
     response: {
@@ -182,6 +206,12 @@ class OverviewHelper {
     switch (response.command) {
       case OverviewActionCommands.IMPORT:
         await this.sidePanelService.addData();
+        break;
+      case OverviewActionCommands.EDIT:
+        await this.sidePanelService.edit(response.objectWorkingId);
+        break;
+      case OverviewActionCommands.REPROMPT:
+        await this.sidePanelService.reprompt(response.objectWorkingIds);
         break;
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
@@ -220,10 +250,10 @@ class OverviewHelper {
   /**
    * Transforms Excel objects and notifications into a format that can be displayed in the Overview dialog grid
    *
-   * @param {Array} objects Imported objects data
-   * @param {Array} notifications Objects notifications
+   * @param objects Imported objects data
+   * @param notifications Objects notifications
    *
-   * @returns {Array} Transformed objects
+   * @returns Transformed objects
    */
   // TODO add types once redux state is typed
   transformExcelObjects(objects: any[], notifications: any[]): any[] {
@@ -261,10 +291,10 @@ class OverviewHelper {
   /**
    * Sets Duplicate popup for Overview dialog
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} activeCellAddress Address of the active cell in Excel
-   * @param {Function} onDuplicate Function used for triggering duplicate operation
-   * @param {Function} setDialogPopup Function used as a callback for seting Overview dialog popup
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param activeCellAddress Address of the active cell in Excel
+   * @param onDuplicate Function used for triggering duplicate operation
+   * @param setDialogPopup Function used as a callback for seting Overview dialog popup
    */
   setDuplicatePopup({
     objectWorkingId, activeCellAddress, onDuplicate, setDialogPopup
@@ -287,8 +317,8 @@ class OverviewHelper {
   /**
    * Sets Range Taken popup for Overview dialog
    *
-   * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {Function} setDialogPopup Function used as a callback for seting Overview dialog popup
+   * @param objectWorkingId Unique Id of the object allowing to reference specific object
+   * @param setDialogPopup Function used as a callback for seting Overview dialog popup
    */
   setRangeTakenPopup({ objectWorkingId, setDialogPopup }: DialogPopup): void {
     setDialogPopup({
