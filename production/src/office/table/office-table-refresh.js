@@ -248,7 +248,7 @@ class OfficeTableRefresh {
    *
    * @returns {string} Top left cell of the table
    */
-  getRangeStartCell = (startCell, instanceDefinition, tableChanged) => {
+  getCrosstabStartCell = (startCell, instanceDefinition, tableChanged) => {
     const {
       mstrTable: {
         isCrosstab, fromCrosstabChange, crosstabHeaderDimensions, prevCrosstabDimensions
