@@ -22,7 +22,7 @@ class OfficeReducerHelper {
     // Filter out the image objects if the shape api is not supported
     // in current version in order to maintain the backward compatibility.
     if (!isShapeAPISupported) {
-      loadedObjects = loadedObjects?.filter((object) => object?.importType !== objectImportType.IMAGE);
+      loadedObjects = loadedObjects.filter((object) => object?.importType !== objectImportType.IMAGE);
     }
 
     return loadedObjects;
