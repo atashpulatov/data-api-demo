@@ -1,4 +1,5 @@
 import officeReducerHelper from '../../../office/store/office-reducer-helper';
+import { REFRESH_OPERATION, HIGHLIGHT_OPERATION } from '../../../operation/operation-type-names';
 
 describe('OfficeReducerHelper init', () => {
   it('init work as expected', () => {
@@ -22,7 +23,8 @@ describe('OfficeReducerHelper', () => {
         objects: 'objectsTest',
       },
       operationReducer: {
-        operations: 'operationsTest',
+        operations: [{ operationType: HIGHLIGHT_OPERATION, objectWorkingId: 42 },
+          { operationType: REFRESH_OPERATION, objectWorkingId: 69 }],
       },
     })
   };
@@ -41,12 +43,13 @@ describe('OfficeReducerHelper', () => {
   it('getOperationsListFromOperationReducer works as expected', () => {
     // given
     officeReducerHelper.init(reduxStoreMock);
+    const expectedOperations = [{ operationType: REFRESH_OPERATION, objectWorkingId: 69 }];
 
     // when
     const result = officeReducerHelper.getOperationsListFromOperationReducer();
 
     // then
-    expect(result).toEqual('operationsTest');
+    expect(result).toEqual(expectedOperations);
   });
 
   it.each`
