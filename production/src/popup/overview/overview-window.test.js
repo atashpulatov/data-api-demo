@@ -31,7 +31,7 @@ describe('OverviewWindowNotConnected', () => {
     const { getByText } = render(<OverviewWindowNotConnected {...props} />);
 
     // Then
-    const dataOverviewWindowTitle = getByText('Imported Data Overview');
+    const dataOverviewWindowTitle = getByText('Overview');
     expect(dataOverviewWindowTitle).toBeInTheDocument();
   });
 
@@ -59,7 +59,7 @@ describe('OverviewWindowNotConnected', () => {
     const rowCheckbox = container.querySelector('.ag-checkbox-input-wrapper.ag-disabled');
 
     // Then
-    const dataOverviewWindowTitle = getByText('Imported Data Overview');
+    const dataOverviewWindowTitle = getByText('Overview');
     expect(dataOverviewWindowTitle).toBeInTheDocument();
     expect(rowCheckbox).toBeInTheDocument();
   });
@@ -88,7 +88,7 @@ describe('OverviewWindowNotConnected', () => {
     const rowCheckbox = container.querySelector('.ag-checkbox-input-wrapper.ag-disabled');
 
     // Then
-    const dataOverviewWindowTitle = getByText('Imported Data Overview');
+    const dataOverviewWindowTitle = getByText('Overview');
     expect(dataOverviewWindowTitle).toBeInTheDocument();
     expect(rowCheckbox).not.toBeInTheDocument();
   });
