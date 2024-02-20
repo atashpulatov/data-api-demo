@@ -95,6 +95,8 @@ class StepGetOfficeTableEditRefresh {
         isTotalsRowVisible: prevOfficeTable.showTotals,
       };
 
+      const rangeStartCell = officeTableRefresh.getRangeStartCell(startCell, instanceDefinition, tableChanged);
+
       officeTable.worksheet.load(['id', 'name']);
       await excelContext.sync();
 
@@ -103,7 +105,7 @@ class StepGetOfficeTableEditRefresh {
       const updatedObject = {
         objectWorkingId,
         bindId,
-        startCell,
+        startCell: rangeStartCell,
         worksheet: { id, name }
       };
 
