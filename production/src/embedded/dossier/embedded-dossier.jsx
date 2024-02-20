@@ -90,7 +90,9 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const vizDimensions = chapterData[payloadVisKey];
 
     if (vizDimensions) {
-      vizDimensions.width = convertPixelsToPoints(vizDimensions.width);
+      // Currently scrollWidth is applied only to grid images
+      const vizDimensionsWidth = vizDimensions.scrollWidth || vizDimensions.width;
+      vizDimensions.width = convertPixelsToPoints(vizDimensionsWidth);
       vizDimensions.height = convertPixelsToPoints(vizDimensions.height);
     }
 

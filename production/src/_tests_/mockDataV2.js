@@ -1654,7 +1654,7 @@ export const mockedObjectsFromStore = [
 
 export const mockedNotificationsFromStore = [
   {
-    objectWorkingId: 1707313767862,
+    objectWorkingId: 1707383886748,
     title: 'Object duplicated',
     type: 'success',
     operationType: 'DUPLICATE_OPERATION',

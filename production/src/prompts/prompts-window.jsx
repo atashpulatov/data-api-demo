@@ -329,7 +329,7 @@ export const PromptsWindowNotConnected = (props) => {
         index={repromptsQueue.index}
         total={repromptsQueue.total}
       />
-      <Spinner type="large">{t('Loading...')}</Spinner>
+      <Spinner className="loading-spinner" type="large">{t('Loading...')}</Spinner>
       <PromptsContainer
         postMount={onPromptsContainerMount}
       />

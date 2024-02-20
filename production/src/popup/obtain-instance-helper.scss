@@ -1,7 +1,0 @@
-@import './mixins.scss';
-
-.obtain-instance-helper {
-  .mstr-rc-3-spinner {
-    @include popup-loading-component
-  }
-}

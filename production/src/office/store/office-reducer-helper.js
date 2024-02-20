@@ -1,3 +1,4 @@
+import { HIGHLIGHT_OPERATION } from '../../operation/operation-type-names';
 import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
 import { objectImportType } from '../../mstr-object/constants';
 
@@ -28,11 +29,13 @@ class OfficeReducerHelper {
   };
 
   /**
-  * Function return array of operations from operation reducer
+  * Function return array of operations from operation reducer, excluding highlight operation
   *
   * @return {Array} Contains all currently existing operations
   */
-  getOperationsListFromOperationReducer = () => this.reduxStore.getState().operationReducer.operations;
+  getOperationsListFromOperationReducer = () => this.reduxStore.getState().operationReducer.operations.filter(
+    operation => operation.operationType !== HIGHLIGHT_OPERATION
+  );
 
   /**
   * Checks if there are any existing operation in operation reducer

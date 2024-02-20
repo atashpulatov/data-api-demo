@@ -156,14 +156,19 @@ class PopupController {
 
     const { command } = response;
     const {
-      commandOk, commandOnUpdate, commandCancel, commandError, commandPopupLoaded
+      commandOk, commandOnUpdate, commandCancel, commandError, commandDialogLoaded, commandCloseDialog
     } = selectorProperties;
 
     const dialogType = this.reduxStore.getState().popupStateReducer.popupType;
     const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
 
-    if (command === commandPopupLoaded) {
+    if (command === commandDialogLoaded) {
       this.reduxStore.dispatch(officeActions.setIsDialogLoaded(true));
+    }
+
+    if (command === commandCloseDialog) {
+      await this.closeDialog(dialog);
+      this.resetDialogStates();
     }
 
     try {
@@ -203,7 +208,7 @@ class PopupController {
           }
           break;
         case commandCancel:
-          if (!isMultipleRepromptQueueEmpty || isDataOverviewOpen) {
+          if (!isMultipleRepromptQueueEmpty) {
             // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
             // since we were previously keeping the dialog open in between objects.
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
