@@ -1,12 +1,15 @@
-import { mockedNotificationsFromStore, mockedObjectsFromStore } from '../../_tests_/mockDataV2';
+import { objectNotificationTypes } from '@mstr/connector-components';
 import { notificationService } from '../../notification-v2/notification-service';
-import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
+import {
+  DUPLICATE_OPERATION, EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
+} from '../../operation/operation-type-names';
+import { mockedNotificationsFromStore, mockedObjectsFromStore, mockedWarningImportNotification } from '../../_tests_/mockDataV2';
 
 describe('overview-helper', () => {
   const objectWorkingIds = [1, 2];
@@ -320,5 +323,46 @@ describe('overview-helper', () => {
 
     // Then
     expect(result).toEqual([expectedResult]);
+  });
+
+  it('getWarningsToDisplay should work correctly', async () => {
+    // Given
+    const expectedResult = {
+      objectWorkingId: 1708520901973,
+      type: 'warning',
+      title: 'The table you try to import exceeds the worksheet limits.',
+      details: 'Failure details'
+
+    };
+
+    // When
+    const result = overviewHelper.getWarningsToDisplay([mockedWarningImportNotification]);
+
+    // Then
+    expect(result).toBeInstanceOf(Array);
+    expect(result[0].objectWorkingId).toEqual(expectedResult.objectWorkingId);
+    expect(result[0].children).toBeInstanceOf(Object);
+    expect(result[0].title).toEqual(expectedResult.title);
+    expect(result[0].details).toEqual(expectedResult.details);
+  });
+
+  it.each`
+    operationType           | notificationType                      | expectedResultLength
+    ${IMPORT_OPERATION}     | ${objectNotificationTypes.WARNING}    | ${1}
+    ${IMPORT_OPERATION}     | ${objectNotificationTypes.PROGRESS}   | ${0}
+    ${REMOVE_OPERATION}     | ${objectNotificationTypes.WARNING}    | ${1}
+    ${DUPLICATE_OPERATION}  | ${objectNotificationTypes.WARNING}    | ${1}
+    ${REFRESH_OPERATION}    | ${objectNotificationTypes.WARNING}    | ${0}
+    ${EDIT_OPERATION}       | ${objectNotificationTypes.WARNING}    | ${0}
+    `('getWarningsToDisplay should correctly determine whether to display notification as global notification in overview', ({ operationType, notificationType, expectedResultLength }) => {
+    // Given
+    const notifications = [{ ...mockedWarningImportNotification, operationType, type: notificationType }];
+
+    // When
+    const result = overviewHelper.getWarningsToDisplay(notifications);
+
+    // Then
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(expectedResultLength);
   });
 });

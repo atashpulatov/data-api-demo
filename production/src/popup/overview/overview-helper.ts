@@ -6,7 +6,6 @@ import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { DialogPopup } from './overview-types';
 import { DUPLICATE_OPERATION, IMPORT_OPERATION, REMOVE_OPERATION } from '../../operation/operation-type-names';
-import { errorService } from '../../error/error-handler';
 import { OverviewGlobalNotificationButtons, NotificationButtonsProps } from './overview-global-notification-buttons';
 import { customT } from '../../customTranslation';
 
