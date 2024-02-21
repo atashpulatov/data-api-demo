@@ -43,7 +43,12 @@ class OfficeTableCreate {
     const newOfficeTableName = getOfficeTableHelper.createTableName(mstrTable, tableName);
 
     if (insertNewWorksheet) {
-      startCell = await officeApiWorksheetHelper.getStartCell(objectImportType.TABLE, insertNewWorksheet, excelContext, name);
+      startCell = await officeApiWorksheetHelper.getStartCell(
+        objectImportType.TABLE,
+        insertNewWorksheet,
+        excelContext,
+        name
+      );
     }
 
     const worksheet = this.getExcelWorksheet(prevOfficeTable, insertNewWorksheet, excelContext);

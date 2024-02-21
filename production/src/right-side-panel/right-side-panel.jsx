@@ -35,6 +35,7 @@ export const RightSidePanelNotConnected = ({
   toggleIsSettingsFlag,
   toggleSecuredFlag,
   toggleIsClearDataFailedFlag,
+  updateActiveCellAddress,
   globalNotification,
   notifications,
   operations,
@@ -42,9 +43,9 @@ export const RightSidePanelNotConnected = ({
   isDialogRendered,
   isDialogLoaded,
   toggleCurtain,
+  activeCellAddress
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
-  const [activeCellAddress, setActiveCellAddress] = React.useState('...');
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
 
@@ -54,7 +55,7 @@ export const RightSidePanelNotConnected = ({
     async function initializeSidePanel() {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
-        await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
+        await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
         await sidePanelService.initReusePromptAnswers();
       } catch (error) {
         console.error(error);
@@ -62,7 +63,7 @@ export const RightSidePanelNotConnected = ({
     }
     initializeSidePanel();
     sidePanelService.clearRepromptTask();
-  }, []);
+  }, [updateActiveCellAddress]);
 
   React.useEffect(() => {
     officeStoreHelper.isFileSecured() && toggleSecuredFlag(true);
@@ -203,7 +204,8 @@ export const mapStateToProps = (state) => {
     popupData,
     isDialogOpen,
     isDialogLoaded,
-    isShapeAPISupported
+    isShapeAPISupported,
+    activeCellAddress
   } = state.officeReducer;
 
   let loadedObjects = [...objects];
@@ -231,6 +233,7 @@ export const mapStateToProps = (state) => {
     isDialogRendered: isDialogOpen,
     isDialogLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
+    activeCellAddress
   };
 };
 
@@ -239,6 +242,7 @@ const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
   toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,
+  updateActiveCellAddress: officeActions.updateActiveCellAddress,
 };
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
@@ -315,7 +319,9 @@ RightSidePanelNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func,
+  updateActiveCellAddress: PropTypes.func,
   isDialogRendered: PropTypes.bool,
   isDialogLoaded: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
+  activeCellAddress: PropTypes.string
 };
