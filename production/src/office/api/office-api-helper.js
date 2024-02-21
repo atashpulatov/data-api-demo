@@ -337,7 +337,6 @@ class OfficeApiHelper {
     excelContext.workbook.onSelectionChanged.add(async () => {
       setActiveCellAddress('...');
       const activeCellAddress = await this.getSelectedCell(excelContext);
-      console.log('activeCellAddress$', activeCellAddress);
       setActiveCellAddress(activeCellAddress);
     });
     await excelContext.sync();
