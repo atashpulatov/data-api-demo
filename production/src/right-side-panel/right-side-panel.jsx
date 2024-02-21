@@ -194,7 +194,8 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
-  const { objects } = state.objectReducer;
+  const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+
   const {
     isConfirm,
     isSettings,
@@ -205,20 +206,11 @@ export const mapStateToProps = (state) => {
     popupData,
     isDialogOpen,
     isDialogLoaded,
-    isShapeAPISupported,
     activeCellAddress
   } = state.officeReducer;
 
-  let loadedObjects = objects;
-
-  // Filter out the image objects if the shape api is not supported
-  // in current version in order to maintain the backward compatibility.
-  if (!isShapeAPISupported) {
-    loadedObjects = loadedObjects?.filter((object) => object?.importType !== objectImportType.IMAGE);
-  }
-
   return {
-    loadedObjects,
+    loadedObjects: objects,
     operations,
     importRequested,
     dossierOpenRequested,

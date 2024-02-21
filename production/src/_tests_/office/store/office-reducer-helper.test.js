@@ -1,4 +1,5 @@
 import officeReducerHelper from '../../../office/store/office-reducer-helper';
+import { objectImportType } from '../../../mstr-object/constants';
 import { REFRESH_OPERATION, HIGHLIGHT_OPERATION } from '../../../operation/operation-type-names';
 
 describe('OfficeReducerHelper init', () => {
@@ -17,14 +18,18 @@ describe('OfficeReducerHelper', () => {
     jest.resetAllMocks();
   });
 
+  const mockObjects = [{ importType: objectImportType.TABLE }, { importType: objectImportType.IMAGE }];
   const reduxStoreMock = {
     getState: () => ({
       objectReducer: {
-        objects: 'objectsTest',
+        objects: mockObjects,
       },
       operationReducer: {
         operations: [{ operationType: HIGHLIGHT_OPERATION, objectWorkingId: 42 },
           { operationType: REFRESH_OPERATION, objectWorkingId: 69 }],
+      },
+      officeReducer: {
+        isShapeAPISupported: true,
       },
     })
   };
@@ -37,7 +42,7 @@ describe('OfficeReducerHelper', () => {
     const result = officeReducerHelper.getObjectsListFromObjectReducer();
 
     // then
-    expect(result).toEqual('objectsTest');
+    expect(result).toEqual(mockObjects);
   });
 
   it('getOperationsListFromOperationReducer works as expected', () => {
