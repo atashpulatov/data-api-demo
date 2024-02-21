@@ -233,7 +233,9 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
           !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
         isPublished={isPublished}
-        isImportReport={mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype) === mstrObjectEnum.mstrObjectType.report}
+        isImportReport={mstrObjectEnum
+          .getMstrTypeBySubtype(chosenSubtype)
+          ?.type === mstrObjectEnum.mstrObjectType.report.type} // Includes entire type 3 objects(reports and cubes)
       />
     </div>
   );
