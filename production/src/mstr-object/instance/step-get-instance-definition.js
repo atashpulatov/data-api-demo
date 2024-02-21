@@ -80,7 +80,7 @@ class StepGetInstanceDefinition {
 
       // FIXME: below flow should not be part of this step
       if (futureStep in importOperationStepDict) {
-        startCell = await officeApiWorksheetHelper.getStartCell(insertNewWorksheet, excelContext, name);
+        startCell = await officeApiWorksheetHelper.getStartCell(importType, insertNewWorksheet, excelContext, name);
       }
       if (insertNewWorksheet) {
         delete objectData.insertNewWorksheet;
