@@ -151,11 +151,12 @@ export const RightSidePanelNotConnected = ({
           objects: loadedObjects,
           notifications,
           globalNotification,
-          activeCellAddress
+          activeCellAddress,
+          popupData
         })
       );
     }
-  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded]);
+  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded, popupData]);
 
   return (
     <>

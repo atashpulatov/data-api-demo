@@ -77,6 +77,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
       bindId: 'bindIdTest',
     }));
 
+    jest.spyOn(officeTableRefresh, 'getCrosstabStartCell').mockImplementation(() => 'startCellTest');
+
     jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
@@ -164,6 +166,8 @@ describe('StepGetOfficeTableEditRefresh', () => {
       }));
 
       jest.spyOn(officeTableUpdate, 'updateOfficeTable').mockImplementation(() => mockedOfficeTable);
+
+      jest.spyOn(officeTableRefresh, 'getCrosstabStartCell').mockImplementation(() => 'startCellTest');
 
       jest.spyOn(operationStepDispatcher, 'updateOperation').mockImplementation();
 
