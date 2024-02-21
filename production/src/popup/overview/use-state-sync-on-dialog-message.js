@@ -13,7 +13,7 @@ const useStateSyncOnDialogMessage = () => {
     // Get Message from Right side panel
     Office.context.ui.addHandlerAsync(Office.EventType.DialogParentMessageReceived, (msg) => {
       const message = JSON.parse(msg.message);
-      const { popupType, popupData } = message;
+      const { popupType } = message;
       const { setActiveCellAddress } = officeActions;
 
       if (popupType === PopupTypeEnum.importedDataOverview) {
@@ -21,17 +21,16 @@ const useStateSyncOnDialogMessage = () => {
           objects: objectsToSync,
           notifications: notificationsToSync,
           globalNotification: globalNotificationToSync,
-          activeCellAddress: activeCellAddressToSync
+          activeCellAddress: activeCellAddressToSync,
+          popupData: popupDataToSync
         } = message;
 
         reduxStore.dispatch(restoreAllObjects(objectsToSync));
         reduxStore.dispatch(restoreAllNotifications(notificationsToSync));
         reduxStore.dispatch(createGlobalNotification(globalNotificationToSync));
         reduxStore.dispatch(setActiveCellAddress(activeCellAddressToSync));
-      }
 
-      if (popupData) {
-        officeReducerHelper.displayPopup(popupData);
+        officeReducerHelper.displayPopup(popupDataToSync);
       }
     });
   }, []);

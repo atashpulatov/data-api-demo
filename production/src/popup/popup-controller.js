@@ -36,6 +36,8 @@ class PopupController {
     if (!isDataOverviewOpen) {
       this.reduxStore.dispatch(popupStateActions.onClearPopupState());
       this.reduxStore.dispatch(this.popupActions.resetState());
+    } else {
+      this.reduxStore.dispatch(officeActions.setIsDialogLoaded(false));
     }
   };
 
