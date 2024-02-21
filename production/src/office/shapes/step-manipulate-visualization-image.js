@@ -7,8 +7,7 @@ import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visua
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 import { errorMessages } from '../../error/constants';
 import { BLOCKABLE_IMAGE_OPERATIONS } from '../../operation/operation-type-names';
-
-const EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS = 4000;
+import { objectImportType } from '../../mstr-object/constants';
 
 class StepManipulateVisualizationImage {
   /**
@@ -61,7 +60,11 @@ class StepManipulateVisualizationImage {
 
       // Get the position of the selected range
       const { getSelectedRangeWrapper, getSelectedRangePosition } = officeApiHelper;
-      const selectedRangePos = await getSelectedRangeWrapper(excelContext, getSelectedRangePosition);
+      const selectedRangePos = await getSelectedRangeWrapper(
+        objectImportType.IMAGE,
+        excelContext,
+        getSelectedRangePosition
+      );
 
       // Get the properties of image and the sheet where it needs to be inserted
       const {
@@ -80,13 +83,6 @@ class StepManipulateVisualizationImage {
         excelContext
       });
 
-      // If the entire image width exceeds the export engine dimension limit,
-      // then export the image with allowed maximum dimension in pixels by export engine
-      let widthInPixels = convertPointsToPixels(width);
-      if (widthInPixels > EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS) {
-        widthInPixels = EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS;
-      }
-
       // Generate the visualization image to be added to the worksheet
       const imageStream = await mstrObjectRestService.getVisualizationImage(
         objectId,
@@ -94,7 +90,7 @@ class StepManipulateVisualizationImage {
         instanceId,
         visualizationKey,
         {
-          width: widthInPixels,
+          width: convertPointsToPixels(width),
           height: convertPointsToPixels(height)
         }
       );

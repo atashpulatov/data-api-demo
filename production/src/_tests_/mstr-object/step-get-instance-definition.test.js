@@ -10,6 +10,7 @@ import { GET_OFFICE_TABLE_EDIT_REFRESH, GET_OFFICE_TABLE_IMPORT } from '../../op
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { errorMessages } from '../../error/constants';
 import { authenticationHelper } from '../../authentication/authentication-helper';
+import { objectImportType } from '../../mstr-object/constants';
 
 describe('StepGetInstanceDefinition', () => {
   afterEach(() => {
@@ -292,6 +293,7 @@ describe('StepGetInstanceDefinition', () => {
       expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
       if (expectedGetStartCellCallsNo === 1) {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
+          objectImportType.TABLE,
           'insertNewWorksheetTest',
           'excelContextTest',
           'getVisualizationNameTest'
@@ -486,6 +488,7 @@ describe('StepGetInstanceDefinition', () => {
       expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
       if (expectedGetStartCellCallsNo === 1) {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
+          objectImportType.TABLE,
           'insertNewWorksheetTest',
           'excelContextTest',
           'nameTest'
@@ -773,6 +776,7 @@ describe('StepGetInstanceDefinition', () => {
 
       // when
       const result = await officeApiWorksheetHelper.getStartCell(
+        objectImportType.TABLE,
         insertNewWorksheet,
         'excelContextTest',
         'nameTest'

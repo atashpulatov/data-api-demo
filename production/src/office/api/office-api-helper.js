@@ -3,6 +3,7 @@ import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
+import { objectImportType } from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -98,11 +99,12 @@ class OfficeApiHelper {
   /**
    * Gets the position of the selected range/cell OR the position of the active shape.
    *
+   * @param {String} importType object import type(table|image)
    * @param excelContext Excel context.
    * @returns {Object} Position of the selected range OR the position of the active shape.
    */
-  getSelectedRangeWrapper = async (excelContext, func) => {
-    let selectedRangePos = { top: 0, left: 0 };
+  getSelectedRangeWrapper = async (importType, excelContext, func) => {
+    let selectedRangePos = { top: 0, left: 0 }; // Default image range position
     try {
       selectedRangePos = await func(excelContext);
     } catch (error) {
@@ -114,6 +116,10 @@ class OfficeApiHelper {
       */
       if (error.code !== INVALID_SELECTION) {
         throw error;
+      } else if (importType === objectImportType.TABLE) {
+        // If the object import type is table, then select the last active cell
+        const { activeCellAddress } = this.reduxStore.getState().officeReducer;
+        selectedRangePos = activeCellAddress;
       }
     }
     return selectedRangePos;
