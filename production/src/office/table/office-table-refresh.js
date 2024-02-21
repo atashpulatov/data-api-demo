@@ -238,6 +238,31 @@ class OfficeTableRefresh {
     await excelContext.sync();
     return prevOfficeTable;
   };
+
+  /**
+   * Gets top left cell from the table. For crosstabs returns the first cell of crosstab headers.
+   *
+   * @param {string} startCell Top left corner cell
+   * @param {Object} instanceDefinition Definition of an object instance
+   * @param {Boolean} tableChanged Specifies if table has been changed
+   *
+   * @returns {string} Top left cell of the table
+   */
+  getCrosstabStartCell = (startCell, instanceDefinition, tableChanged) => {
+    const {
+      mstrTable: {
+        isCrosstab, fromCrosstabChange, crosstabHeaderDimensions, prevCrosstabDimensions
+      }
+    } = instanceDefinition;
+
+    const { rowsX, columnsY } = crosstabHeaderDimensions || prevCrosstabDimensions;
+
+    if ((isCrosstab && !tableChanged) || fromCrosstabChange) {
+      return officeApiHelper.offsetCellBy(startCell, -columnsY, -rowsX);
+    }
+
+    return startCell;
+  };
 }
 const officeTableRefresh = new OfficeTableRefresh();
 export default officeTableRefresh;

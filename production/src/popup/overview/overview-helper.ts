@@ -212,6 +212,7 @@ class OverviewHelper {
         await this.sidePanelService.addData();
         break;
       case OverviewActionCommands.EDIT:
+        this.notificationService.removeExistingNotification(response.objectWorkingId);
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
