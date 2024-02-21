@@ -293,7 +293,7 @@ describe('StepGetInstanceDefinition', () => {
       expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
       if (expectedGetStartCellCallsNo === 1) {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
-           objectImportType.TABLE,
+          objectImportType.TABLE,
           'insertNewWorksheetTest',
           'excelContextTest',
           'getVisualizationNameTest'
@@ -488,7 +488,7 @@ describe('StepGetInstanceDefinition', () => {
       expect(officeApiWorksheetHelper.getStartCell).toBeCalledTimes(expectedGetStartCellCallsNo);
       if (expectedGetStartCellCallsNo === 1) {
         expect(officeApiWorksheetHelper.getStartCell).toBeCalledWith(
-            objectImportType.TABLE,
+          objectImportType.TABLE,
           'insertNewWorksheetTest',
           'excelContextTest',
           'nameTest'

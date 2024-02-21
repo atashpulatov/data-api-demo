@@ -1,5 +1,6 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
+import { objectImportType } from '../../mstr-object/constants';
 
 // FIXME: these were disabled anyway. Needs to be redone.
 describe('OfficeApiHelper', () => {
@@ -265,6 +266,7 @@ describe('getSelectedRangeWrapper', () => {
 
     // when
     const result = await officeApiHelper.getSelectedRangeWrapper(
+      objectImportType.TABLE,
       excelContextMock,
       officeApiHelper.getSelectedRangePosition
     );
@@ -280,6 +282,7 @@ describe('getSelectedRangeWrapper', () => {
 
     // when
     const result = await officeApiHelper.getSelectedRangeWrapper(
+      objectImportType.IMAGE,
       excelContextMock,
       officeApiHelper.getSelectedRangePosition
     );
@@ -295,6 +298,6 @@ describe('getSelectedRangeWrapper', () => {
 
     // then
     /* eslint-disable */
-      expect(officeApiHelper.getSelectedRangeWrapper(excelContextMock, officeApiHelper.getSelectedRangePosition)).rejects.toEqual({ code: 'Not InvalidSelection' });
+      expect(officeApiHelper.getSelectedRangeWrapper(objectImportType.TABLE, excelContextMock, officeApiHelper.getSelectedRangePosition)).rejects.toEqual({ code: 'Not InvalidSelection' });
     });
   });
