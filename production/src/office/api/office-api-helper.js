@@ -99,6 +99,7 @@ class OfficeApiHelper {
   /**
    * Gets the position of the selected range/cell OR the position of the active shape.
    *
+   * @param {String} importType object import type(table|image)
    * @param excelContext Excel context.
    * @returns {Object} Position of the selected range OR the position of the active shape.
    */
