@@ -1,6 +1,7 @@
 import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import stepRenameExcelWorksheet from '../../office/step-rename-excel-worksheet';
+import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 
 describe('StepRenameExcelWorksheet', () => {
   afterEach(() => {
@@ -35,14 +36,23 @@ describe('StepRenameExcelWorksheet', () => {
     const objectData = {
       objectWorkingId: 'objectWorkingIdTest',
       name: 'test',
+      worksheet: { id: '1', name: 'Sheet 1' },
     };
     const excelContext = { sync: jest.fn() };
     const operationData = {
       excelContext,
       shouldRenameExcelWorksheet: true,
     };
+    const expectedObject = {
+      ...objectData,
+      worksheet: {
+        id: '1',
+        name: 'test'
+      }
+    };
 
-    jest.spyOn(officeApiWorksheetHelper, 'renameExistingWorksheet').mockImplementation();
+    jest.spyOn(officeApiWorksheetHelper, 'renameExistingWorksheet').mockImplementation(() => 'test');
+    jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
 
     // when
     await stepRenameExcelWorksheet.renameExcelWorksheet(objectData, operationData);
@@ -50,6 +60,8 @@ describe('StepRenameExcelWorksheet', () => {
     // then
     expect(officeApiWorksheetHelper.renameExistingWorksheet).toBeCalledTimes(1);
     expect(officeApiWorksheetHelper.renameExistingWorksheet).toBeCalledWith(excelContext, 'test');
+    expect(operationStepDispatcher.updateObject).toBeCalledTimes(1);
+    expect(operationStepDispatcher.updateObject).toBeCalledWith(expectedObject);
   });
 
   it('renameExcelWorksheet should NOT execute renameExistingWorksheet', async () => {

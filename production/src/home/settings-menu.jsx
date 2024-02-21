@@ -125,7 +125,7 @@ export const SettingsMenuNotConnected = ({
         role="menuitem"
         onClick={showImportedDataOverviewPopup}
         onKeyUp={(e) => (e.key === 'Enter' && showImportedDataOverviewPopup())}>
-        {t('Imported Data Overview')}
+        {t('Overview')}
       </li>
       <div className="separate-line" />
       <li

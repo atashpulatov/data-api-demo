@@ -22,7 +22,7 @@ describe('Settings Menu', () => {
     const { getByText } = render(<SettingsMenuNotConnected
       toggleIsSettingsFlag={toggleIsSettingsFlag}
       setIsDataOverviewOpen={setIsDataOverviewOpen} />);
-    const importedDataOverviewMenuOption = getByText('Imported Data Overview');
+    const importedDataOverviewMenuOption = getByText('Overview');
 
     // when
     fireEvent.click(importedDataOverviewMenuOption);

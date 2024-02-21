@@ -160,13 +160,18 @@ class OfficeApiWorksheetHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} objectName Name of the object added to the worksheet
+   *
+   * @returns {String} New Excel worksheet name
    */
 
   renameExistingWorksheet = async (excelContext, objectName) => {
     const currentSheet = excelContext.workbook.worksheets.getActiveWorksheet();
     const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
+
     currentSheet.name = newSheetName;
     await excelContext.sync();
+
+    return newSheetName;
   };
 
   /**
