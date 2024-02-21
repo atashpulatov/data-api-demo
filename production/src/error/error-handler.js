@@ -40,17 +40,9 @@ class ErrorService {
     const details = this.getErrorDetails(error, errorMessage, errorType);
 
     if (errorType === errorTypes.OVERLAPPING_TABLES_ERR) {
-      const { isDataOverviewOpen } = this.reduxStore.getState().popupStateReducer;
-
       const popupData = {
         objectWorkingId, title: errorMessage, message: details, callback
       };
-
-      if (isDataOverviewOpen) {
-        this.popupController.sendMessageToDialog(
-          JSON.stringify({ popupData })
-        );
-      }
 
       officeReducerHelper.displayPopup(popupData);
     } else {
