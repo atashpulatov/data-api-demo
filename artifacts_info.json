@@ -16,7 +16,7 @@
       "nodejs": "18.19.0",
       "python_ecosystem": "3.11.5",
       "jdk_linux": "17.0.10",
-      "jdk_windows": "17.0.9",
+      "jdk_windows": "17.0.10",
       "jdk_mac": "17.0.9"
     }
   }
