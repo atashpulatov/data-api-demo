@@ -192,7 +192,7 @@ describe('overview-helper', () => {
     // Given
     const actionCommand = {
       command: OverviewActionCommands.REPROMPT,
-      objectWorkingIds
+      objectWorkingIds,
     };
 
     const repromptMock = jest.spyOn(sidePanelService, 'reprompt').mockImplementation();
@@ -201,7 +201,7 @@ describe('overview-helper', () => {
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
-    expect(repromptMock).toHaveBeenCalledWith(objectWorkingIds);
+    expect(repromptMock).toHaveBeenCalledWith(objectWorkingIds, true);
   });
 
   it('should handle remove command', async () => {
@@ -315,7 +315,8 @@ describe('overview-helper', () => {
       status: {
         type: 'success',
         title: 'Object duplicated',
-      }
+      },
+      isPrompted: true,
     };
 
     // When
