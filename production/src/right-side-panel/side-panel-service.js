@@ -7,6 +7,7 @@ import { popupController } from '../popup/popup-controller';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { popupActions } from '../redux-reducer/popup-reducer/popup-actions';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
 import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import {
   refreshRequested, removeRequested, duplicateRequested, highlightRequested,
@@ -19,6 +20,7 @@ import {
 } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { objectImportType } from '../mstr-object/constants';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
+import { PopupTypeEnum } from '../home/popup-type-enum';
 
 const EXCEL_REUSE_PROMPT_ANSWERS = 'excelReusePromptAnswers';
 class SidePanelService {
@@ -158,18 +160,26 @@ class SidePanelService {
    * @param {*} objectWorkingId
    * @param {*} bindId
    * @param {*} mstrObjectType
+   * @param {*} isFromDialog
    * @returns JSON action object
    */
-  createRepromptTask = (bindId, mstrObjectType) => ({
+  createRepromptTask = (bindId, mstrObjectType, isFromDialog) => ({
     bindId,
     isPrompted: true,
     callback: async () => {
       const excelContext = await officeApiHelper.getExcelContext();
       await officeApiWorksheetHelper.isCurrentReportSheetProtected(excelContext, bindId);
 
+      const isDossier = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+
+      if (isFromDialog) {
+        const popupType = isDossier ? PopupTypeEnum.repromptDossierDataOverview
+          : PopupTypeEnum.repromptReportDataOverview;
+        this.reduxStore.dispatch(popupStateActions.setPopupType(popupType));
+      }
+
       // Based on the type of object, call the appropriate popup
-      const popupAction = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
-        ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
+      const popupAction = isDossier ? popupActions.callForRepromptDossier({ bindId, mstrObjectType })
         : popupActions.callForReprompt({ bindId, mstrObjectType });
 
       this.reduxStore.dispatch(popupAction);
@@ -182,7 +192,7 @@ class SidePanelService {
    *
    * @param {Array} objectWorkingIds contains list of unique Id of the objects, allowing to reference source objects.
    */
-  reprompt = async (objectWorkingIds) => {
+  reprompt = async (objectWorkingIds, isFromDialog = false) => {
     // Prepare dispatch actions
     const dispatchTasks = [];
 
@@ -193,7 +203,7 @@ class SidePanelService {
 
       // Add a task to the queue only if the object is prompted
       if (isPrompted) {
-        dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType));
+        dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType, isFromDialog));
       }
     });
 
