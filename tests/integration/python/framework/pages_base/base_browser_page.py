@@ -11,7 +11,7 @@ from framework.util.util import Util
 class BaseBrowserPage(BasePage):
     EXCEL_FRAME_ELEM = 'WebApplicationFrame'
     ADD_IN_POPUP_FRAME_ELEM = '#WACDialogBodyPanel > iframe'
-    DOSSIER_FRAME_ELEM = '.dossier-window > div > iframe'
+    DOSSIER_FRAME_ELEM = '.dossier-window > div > div > iframe'
     LIBRARY_FRAME_ELEM = '.library-window > div > iframe'
     ADD_IN_FRAME_ELEM = '.AddinIframe[src*="static/loader-mstr-office"]'
     ADD_IN_ROOT_ELEM = 'root'

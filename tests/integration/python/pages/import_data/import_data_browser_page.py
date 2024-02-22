@@ -36,9 +36,10 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ALL_OBJECTS_LIST = '.mstrd-SearchFilter li#searchFilterOption_all'
     FIRST_OBJECT_LIBRARY = '.mstrd-SearchResultsList li:nth-child(1)'
 
-    IMPORT_BUTTON_ELEM = 'import'
+    IMPORT_BUTTON_ELEM = 'import-data'
     IMPORT_BUTTON_DISABLED = 'disabled'
     PREPARE_BUTTON_ELEM = 'prepare'
+    IMPORT_IMAGE_BUTTON_ELEM = 'import-image'
 
     NOTIFICATION_TEXT_ELEM = '.selection-title'
     COLUMNS_AND_FILTERS_SELECTION_OPEN_TEXT = 'Columns & Filters Selection'
@@ -183,6 +184,10 @@ class ImportDataBrowserPage(BaseBrowserPage):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
 
+    def click_import_image_button_without_checking_results(self):
+        self.focus_on_add_in_popup_frame()
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM).click()
+        
     def click_import_button_to_import_with_error(self, error_message):
         self.focus_on_add_in_popup_frame()
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).click()
@@ -278,6 +283,11 @@ class ImportDataBrowserPage(BaseBrowserPage):
     def verify_if_import_button_is_enabled(self):
         self.focus_on_add_in_popup_frame()
         element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM)
+        return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
+    
+    def verify_if_import_image_button_is_enabled(self):
+        self.focus_on_add_in_popup_frame()
+        element = self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM)
         return element.get_attribute(ImportDataBrowserPage.IMPORT_BUTTON_DISABLED) is None
 
     def clear_search_box(self):
