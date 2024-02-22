@@ -71,8 +71,7 @@ class OfficeApiWorksheetHelper {
     if (insertNewWorksheet) {
       await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext, objectName);
     }
-    const { getSelectedRangeWrapper, getSelectedCell } = officeApiHelper;
-    return getSelectedRangeWrapper(importType, excelContext, getSelectedCell);
+    return officeApiHelper.getSelectedCell(excelContext);
   };
 
   /**

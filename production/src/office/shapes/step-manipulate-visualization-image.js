@@ -7,7 +7,6 @@ import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visua
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 import { errorMessages } from '../../error/constants';
 import { BLOCKABLE_IMAGE_OPERATIONS } from '../../operation/operation-type-names';
-import { objectImportType } from '../../mstr-object/constants';
 
 class StepManipulateVisualizationImage {
   /**
@@ -59,12 +58,7 @@ class StepManipulateVisualizationImage {
       const { vizDimensions, visualizationKey } = visualizationInfo;
 
       // Get the position of the selected range
-      const { getSelectedRangeWrapper, getSelectedRangePosition } = officeApiHelper;
-      const selectedRangePos = await getSelectedRangeWrapper(
-        objectImportType.IMAGE,
-        excelContext,
-        getSelectedRangePosition
-      );
+      const selectedRangePos = await officeApiHelper.getSelectedRangePosition(excelContext);
 
       // Get the properties of image and the sheet where it needs to be inserted
       const {

@@ -61,10 +61,7 @@ const setActiveCellAddress = (activeCellAddress) => ({
 });
 
 const updateActiveCellAddress = (activeCellAddress) => (dispatch) => {
-  dispatch({
-    type: officeProperties.actions.setActiveCellAddress,
-    activeCellAddress
-  });
+  dispatch(setActiveCellAddress(activeCellAddress));
 };
 
 const setPopupData = (popupData) => ({

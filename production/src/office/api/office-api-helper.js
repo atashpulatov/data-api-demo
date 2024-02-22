@@ -3,7 +3,8 @@ import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
-import { objectImportType } from '../../mstr-object/constants';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { objectImportType, defaultRangePosition } from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -72,12 +73,37 @@ class OfficeApiHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @return {String} Address of the cell.
+   * @throws {Error} INVALID_SELECTION error if the selected cell is invalid
    */
   getSelectedCell = async (excelContext) => {
-    const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
-    selectedRangeStart.load(officeProperties.officeAddress);
-    await excelContext.sync();
-    return this.getStartCellOfRange(selectedRangeStart.address);
+    try {
+      const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
+      selectedRangeStart.load(officeProperties.officeAddress);
+      await excelContext.sync();
+      return this.getStartCellOfRange(selectedRangeStart.address);
+    } catch (error) {
+      /*
+      If the error is InvalidSelection it means that the selected range is invalid.
+      https://learn.microsoft.com/en-us/office/dev/add-ins/testing/application-specific-api-error-handling
+      In that case we will return the default selected cell. For all other case we throw the error.
+      */
+      if (error.code !== INVALID_SELECTION) {
+        throw error;
+      }
+
+      let selectedCell = defaultRangePosition[objectImportType.TABLE];
+
+      const { activeCellAddress } = this.reduxStore.getState().officeReducer;
+      // If the active cell address is valid, then select the last active cell
+      if (activeCellAddress) {
+        selectedCell = activeCellAddress;
+      } else {
+        // Update the active cell address with default table range position
+        this.reduxStore.dispatch(officeActions.setActiveCellAddress(selectedCell));
+      }
+
+      return selectedCell;
+    }
   };
 
   /**
@@ -85,44 +111,29 @@ class OfficeApiHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @return {Object} object containing the top, left value of the selected range.
+   * @throws {Error} INVALID_SELECTION error if the selected cell is invalid
    */
   getSelectedRangePosition = async (excelContext) => {
-    const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
-    selectedRange.load(['top', 'left']);
-    await excelContext.sync();
-    return {
-      top: selectedRange.top,
-      left: selectedRange.left,
-    };
-  };
-
-  /**
-   * Gets the position of the selected range/cell OR the position of the active shape.
-   *
-   * @param {String} importType object import type(table|image)
-   * @param excelContext Excel context.
-   * @returns {Object} Position of the selected range OR the position of the active shape.
-   */
-  getSelectedRangeWrapper = async (importType, excelContext, func) => {
-    let selectedRangePos = { top: 0, left: 0 }; // Default image range position
     try {
-      selectedRangePos = await func(excelContext);
+      const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
+      selectedRange.load(['top', 'left']);
+      await excelContext.sync();
+      return {
+        top: selectedRange.top,
+        left: selectedRange.left,
+      };
     } catch (error) {
       /*
       If the error is InvalidSelection it means that the selected range is invalid.
       https://learn.microsoft.com/en-us/office/dev/add-ins/testing/application-specific-api-error-handling
-      In that case we will return the default selectedRangePos.
-      For all other case we throw the error.
+      In that case we will return the default selected range position. For all other case we throw the error.
       */
       if (error.code !== INVALID_SELECTION) {
         throw error;
-      } else if (importType === objectImportType.TABLE) {
-        // If the object import type is table, then select the last active cell
-        const { activeCellAddress } = this.reduxStore.getState().officeReducer;
-        selectedRangePos = activeCellAddress;
       }
+
+      return defaultRangePosition[objectImportType.IMAGE];
     }
-    return selectedRangePos;
   };
 
   /**
@@ -335,7 +346,6 @@ class OfficeApiHelper {
    */
   addOnSelectionChangedListener = async (excelContext, setActiveCellAddress) => {
     excelContext.workbook.onSelectionChanged.add(async () => {
-      setActiveCellAddress('...');
       const activeCellAddress = await this.getSelectedCell(excelContext);
       setActiveCellAddress(activeCellAddress);
     });
