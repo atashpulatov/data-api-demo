@@ -354,6 +354,7 @@ describe('Notification reducer', () => {
         expect(resultState.notifications[0].type).toEqual('WARNING');
         expect(resultState.notifications[0].title).toEqual(someTitle);
         expect(resultState.notifications[0].details).toEqual(expectedDetails);
+        expect(resultState.notifications[0].operationType).toEqual(initialStateProgress.notifications[0].operationType);
       });
 
       it('should attach button as child', () => {

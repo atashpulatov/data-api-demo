@@ -52,6 +52,11 @@ export const OverviewWindowNotConnected = (props) => {
     [objects, notifications]
   );
 
+  const notificationsToDisplay = useMemo(
+    () => overviewHelper.getWarningsToDisplay(notifications),
+    [notifications]
+  );
+
   const handleCloseDialog = () => {
     const { commandCloseDialog } = selectorProperties;
     const message = { command: commandCloseDialog };
@@ -98,7 +103,9 @@ export const OverviewWindowNotConnected = (props) => {
         onDelete={onDelete}
         onRename={onRename}
         onGoTo={onGoToWorksheet}
-        shouldDisableActions={shouldDisableActions} />
+        shouldDisableActions={shouldDisableActions}
+        globalNotifications={notificationsToDisplay}
+      />
       <Button className="overview-close-button" onClick={handleCloseDialog}>{t('Close')}</Button>
     </div>
   );

@@ -1,10 +1,13 @@
-import { popupTypes } from '@mstr/connector-components';
+import { popupTypes, objectNotificationTypes } from '@mstr/connector-components';
 import { popupHelper } from '../popup-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { DialogPopup } from './overview-types';
+import { DUPLICATE_OPERATION, IMPORT_OPERATION, REMOVE_OPERATION } from '../../operation/operation-type-names';
+import { OverviewGlobalNotificationButtons, NotificationButtonsProps } from './overview-global-notification-buttons';
+import { customT } from '../../customTranslation';
 
 export enum OverviewActionCommands {
   IMPORT= 'overview-import',
@@ -334,6 +337,29 @@ class OverviewHelper {
       },
     });
   }
+
+  /**
+   * Gets warning notification to display as global warnings in the Overview dialog
+   * @param notifications Array of notifications
+   * @returns Array of notifications to display as global Notifications in overview dialog
+   */
+  getWarningsToDisplay = (notifications: any[]): any => {
+    const operationsToDisplay = [IMPORT_OPERATION, DUPLICATE_OPERATION, REMOVE_OPERATION];
+    const warningNotifications = notifications.filter(
+      notification => notification.type === objectNotificationTypes.WARNING
+      && operationsToDisplay.includes(notification.operationType)
+    );
+
+    const modifiedWarnings = warningNotifications.map(warning => {
+      const buttonProps = { buttons: [{ label: customT('OK'), onClick: () => this.sendDismissNotificationRequest([warning.objectWorkingId]) }] } as NotificationButtonsProps;
+      return {
+        ...warning,
+        children: OverviewGlobalNotificationButtons({ ...buttonProps })
+      };
+    });
+
+    return modifiedWarnings;
+  };
 }
 
 const overviewHelper = new OverviewHelper();
