@@ -188,6 +188,10 @@ class PopupController {
         return;
       }
 
+      if (dialogType === PopupTypeEnum.dossierWindow || dialogType === PopupTypeEnum.promptsWindow) {
+        await this.overviewHelper.handleOverviewActionCommand(response);
+      }
+
       switch (command) {
         case commandOk:
           if (!reportParams) {

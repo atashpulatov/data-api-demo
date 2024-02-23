@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ObjectWindowTitle } from '@mstr/connector-components';
+import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc-3';
 import { useTranslation } from 'react-i18next';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
@@ -24,6 +24,8 @@ import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-st
 import { prepareGivenPromptAnswers, preparePromptedReport } from '../helpers/prompts-handling-helper';
 import { objectImportType } from '../mstr-object/constants';
 import i18n from '../i18n';
+import useStateSyncOnDialogMessage from '../popup/overview/use-state-sync-on-dialog-message';
+import overviewHelper from '../popup/overview/overview-helper';
 
 const { microstrategy } = window;
 const { deleteDossierInstance } = mstrObjectRestService;
@@ -32,8 +34,9 @@ export const PromptsWindowNotConnected = (props) => {
   const {
     mstrData, popupState, editedObject, promptsAnswered, session, cancelImportRequest, onPopupBack,
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested,
-    isMultipleRepromptWithReuse, repromptsQueue
+    isMultipleRepromptWithReuse, repromptsQueue, popupData
   } = props;
+  useStateSyncOnDialogMessage();
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
   // isEdit will only be true for the Edit workflow
@@ -44,6 +47,7 @@ export const PromptsWindowNotConnected = (props) => {
   const newPromptsAnswers = useRef([]);
   const [isPromptLoading, setIsPromptLoading] = useState(true);
   const [embeddedDocument, setEmbeddedDocument] = useState(null);
+  const [dialogPopup, setDialogPopup] = React.useState(null);
 
   const [t] = useTranslation('common', { i18n });
 
@@ -86,6 +90,14 @@ export const PromptsWindowNotConnected = (props) => {
 
     return (() => window.removeEventListener('message', messageReceived));
   }, [messageReceived]);
+
+  useEffect(() => {
+    if (popupData) {
+      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setDialogPopup });
+    } else {
+      setDialogPopup(null);
+    }
+  }, [popupData]);
 
   const promptAnsweredHandler = (newAnswer) => {
     setIsPromptLoading(true);
@@ -342,6 +354,7 @@ export const PromptsWindowNotConnected = (props) => {
         useImportAsRunButton
         disableActiveActions={isPromptLoading}
       />
+      {!!dialogPopup && <div className="standalone-popup"> <Popup {...dialogPopup} /> </div>}
     </div>
   );
 };
@@ -388,6 +401,7 @@ PromptsWindowNotConnected.propTypes = {
     index: PropTypes.number,
   }),
   isMultipleRepromptWithReuse: PropTypes.bool,
+  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
 };
 
 export const mapStateToProps = (state) => {
@@ -401,7 +415,7 @@ export const mapStateToProps = (state) => {
     promptObjects, ...mstrData
   } = navigationTree;
   const { answers } = answersReducer;
-  const { supportForms, reusePromptAnswers } = officeReducer;
+  const { supportForms, reusePromptAnswers, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const isReport = popupState && popupState.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
   const formsPrivilege = supportForms && attrFormPrivilege && isReport;
@@ -430,6 +444,7 @@ export const mapStateToProps = (state) => {
     isPreparedDataRequested, // State flag indicating whether prepared data is requested for import
     repromptsQueue: { ...repromptsQueueReducer },
     isMultipleRepromptWithReuse: reusePromptAnswers && repromptsQueueReducer.total > 1,
+    popupData,
   };
 };
 

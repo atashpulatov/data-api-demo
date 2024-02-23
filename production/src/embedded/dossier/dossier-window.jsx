@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { MSTRIcon } from '@mstr/mstr-react-library';
-import { ObjectWindowTitle } from '@mstr/connector-components';
+import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc-3';
 import i18n from '../../i18n';
 import { PopupButtons } from '../../popup/popup-buttons/popup-buttons';
@@ -21,6 +21,8 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
 import { objectImportType } from '../../mstr-object/constants';
+import useStateSyncOnDialogMessage from '../../popup/overview/use-state-sync-on-dialog-message';
+import overviewHelper from '../../popup/overview/overview-helper';
 
 export const DossierWindowNotConnected = (props) => {
   const [t] = useTranslation('common', { i18n });
@@ -45,10 +47,15 @@ export const DossierWindowNotConnected = (props) => {
     chosenProjectId,
     isReprompt,
     repromptsQueue,
-    isShapeAPISupported
+    isShapeAPISupported,
+    popupData,
   } = props;
+
+  useStateSyncOnDialogMessage();
+
   const { isEdit, importType } = editedObject;
   const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;
+  const [dialogPopup, setDialogPopup] = React.useState(null);
 
   const vizData = useMemo(() => vizualizationsData.find(
     el => (el.visualizationKey === visualizationKey
@@ -84,6 +91,14 @@ export const DossierWindowNotConnected = (props) => {
 
     return () => window.removeEventListener('message', extendSession);
   }, [extendSession]);
+
+  useEffect(() => {
+    if (popupData) {
+      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setDialogPopup });
+    } else {
+      setDialogPopup(null);
+    }
+  }, [popupData]);
 
   const handleSelection = useCallback(async (dossierData) => {
     const {
@@ -293,6 +308,7 @@ export const DossierWindowNotConnected = (props) => {
           />
         </>
       )}
+      {!!dialogPopup && <div className="standalone-popup"> <Popup {...dialogPopup} /> </div>}
     </div>
   );
 };
@@ -321,6 +337,7 @@ DossierWindowNotConnected.propTypes = {
     total: PropTypes.number,
     index: PropTypes.number,
   }),
+  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
 };
 
 DossierWindowNotConnected.defaultProps = {
@@ -363,7 +380,7 @@ function mapStateToProps(state) {
     importRequested
   } = navigationTree;
   const { editedObject } = popupReducer;
-  const { supportForms, isShapeAPISupported } = officeReducer;
+  const { supportForms, isShapeAPISupported, popupData } = officeReducer;
   const { attrFormPrivilege } = sessionReducer;
   const { answers } = answersReducer;
   const isReport = editedObject && editedObject.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
@@ -394,6 +411,7 @@ function mapStateToProps(state) {
     isShapeAPISupported,
     isReprompt: popupStateReducer.isReprompt,
     repromptsQueue: { ...repromptsQueueReducer },
+    popupData,
   };
 }
 
