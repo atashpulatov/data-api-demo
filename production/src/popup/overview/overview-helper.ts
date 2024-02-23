@@ -270,8 +270,9 @@ class OverviewHelper {
       const objectNotification = notifications.find(notification => notification.objectWorkingId === objectWorkingId);
       let isPrompted = false;
 
-      // Determine if object is prompted if it is a dossier or a report
-      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
+      // Determine if object is prompted if it is a dossier/visualization or a report
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+        || mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
         isPrompted = !!object.manipulationsXML?.promptAnswers;
       } else if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name) {
         isPrompted = object.isPrompted;
