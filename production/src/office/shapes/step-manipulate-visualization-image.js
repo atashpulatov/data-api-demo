@@ -41,7 +41,7 @@ class StepManipulateVisualizationImage {
 
       const excelContext = await officeApiHelper.getExcelContext();
 
-      // For duplicate operation use bindIdToBeDuplicated to retieve the shape in given worksheet for validation purposes
+      // For duplicate operation use bindIdToBeDuplicated to retieve the shape from worksheet for validation purposes
       const imageBindId = bindId || bindIdToBeDuplicated;
 
       // retrieve the shape in the worksheet
