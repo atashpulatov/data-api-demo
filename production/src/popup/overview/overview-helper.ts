@@ -272,7 +272,7 @@ class OverviewHelper {
 
       // Determine if object is prompted if it is a dossier or a report
       if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name) {
-        isPrompted = object.manipulationsXML?.promptAnswers !== undefined && object.manipulationsXML?.promptAnswers !== '';
+        isPrompted = !!object.manipulationsXML?.promptAnswers;
       } else if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name) {
         isPrompted = object.isPrompted;
       }
