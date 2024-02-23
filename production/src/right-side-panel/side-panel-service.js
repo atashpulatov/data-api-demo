@@ -160,10 +160,10 @@ class SidePanelService {
    * @param {*} objectWorkingId
    * @param {*} bindId
    * @param {*} mstrObjectType
-   * @param {*} isFromDialog
+   * @param {*} isFromDataOverviewDialog
    * @returns JSON action object
    */
-  createRepromptTask = (bindId, mstrObjectType, isFromDialog) => ({
+  createRepromptTask = (bindId, mstrObjectType, isFromDataOverviewDialog) => ({
     bindId,
     isPrompted: true,
     callback: async () => {
@@ -172,7 +172,7 @@ class SidePanelService {
 
       const isDossier = mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
 
-      if (isFromDialog) {
+      if (isFromDataOverviewDialog) {
         const popupType = isDossier ? PopupTypeEnum.repromptDossierDataOverview
           : PopupTypeEnum.repromptReportDataOverview;
         this.reduxStore.dispatch(popupStateActions.setPopupType(popupType));
@@ -191,8 +191,9 @@ class SidePanelService {
    * Gets object data from reducer and opens popup depending of the type of object.
    *
    * @param {Array} objectWorkingIds contains list of unique Id of the objects, allowing to reference source objects.
+   * @param {Boolean} isFromDataOverviewDialog Flag which shows whether the re-prompting is from overview dialog.
    */
-  reprompt = async (objectWorkingIds, isFromDialog = false) => {
+  reprompt = async (objectWorkingIds, isFromDataOverviewDialog = false) => {
     // Prepare dispatch actions
     const dispatchTasks = [];
 
@@ -203,7 +204,7 @@ class SidePanelService {
 
       // Add a task to the queue only if the object is prompted
       if (isPrompted) {
-        dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType, isFromDialog));
+        dispatchTasks.push(this.createRepromptTask(bindId, mstrObjectType, isFromDataOverviewDialog));
       }
     });
 
