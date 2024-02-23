@@ -366,4 +366,104 @@ describe('overview-helper', () => {
     expect(result).toBeInstanceOf(Array);
     expect(result).toHaveLength(expectedResultLength);
   });
+
+  it('should transform objects and notifications correctly', () => {
+    // Given
+    const objects = [
+      {
+        objectWorkingId: 1,
+        mstrObjectType: { name: 'visualization' },
+        name: 'Object 1',
+        refreshDate: '2022-01-01',
+        details: {
+          excelTableSize: { rows: 10, columns: 5 },
+          ancestors: [{ name: 'Project 1' }],
+          owner: { name: 'Owner 1' },
+          importedBy: 'User 1',
+        },
+        importType: 'Type 1',
+        startCell: 'A1',
+        worksheet: { name: 'Sheet 1' },
+        manipulationsXML: { promptAnswers: 'Answer 1' },
+      },
+      {
+        objectWorkingId: 2,
+        mstrObjectType: { name: 'report' },
+        name: 'Object 2',
+        refreshDate: '2022-01-02',
+        details: {
+          excelTableSize: { rows: 20, columns: 10 },
+          ancestors: [{ name: 'Project 2' }],
+          owner: { name: 'Owner 2' },
+          importedBy: 'User 2',
+        },
+        importType: 'Type 2',
+        startCell: 'B2',
+        worksheet: { name: 'Sheet 2' },
+        isPrompted: true,
+      },
+    ];
+
+    const notifications = [
+      {
+        objectWorkingId: 1,
+        type: 'notificationType',
+        title: 'Notification 1',
+        details: 'Details 1',
+      },
+      {
+        objectWorkingId: 2,
+        type: 'notificationType',
+        title: 'Notification 2',
+        details: 'Details 2',
+      },
+    ];
+
+    // When
+    const transformedObjects = overviewHelper.transformExcelObjects(objects, notifications);
+
+    // Then
+    expect(transformedObjects).toEqual([
+      {
+        objectWorkingId: 1,
+        mstrObjectType: { name: 'visualization' },
+        name: 'Object 1',
+        worksheet: 'Sheet 1',
+        cell: 'A1',
+        rows: 10,
+        columns: 5,
+        objectType: 'Type 1',
+        lastUpdated: '2022-01-01',
+        status: {
+          type: 'notificationType',
+          title: 'Notification 1',
+          details: 'Details 1',
+        },
+        project: 'Project 1',
+        owner: 'Owner 1',
+        importedBy: 'User 1',
+        isPrompted: true,
+      },
+      {
+        objectWorkingId: 2,
+        mstrObjectType: { name: 'report' },
+        name: 'Object 2',
+        worksheet: 'Sheet 2',
+        cell: 'B2',
+        rows: 20,
+        columns: 10,
+        objectType: 'Type 2',
+        lastUpdated: '2022-01-02',
+        status: {
+          type: 'notificationType',
+          title: 'Notification 2',
+          details: 'Details 2',
+        },
+        project: 'Project 2',
+        owner: 'Owner 2',
+        importedBy: 'User 2',
+        isPrompted: true,
+      },
+    ]);
+  });
 });
