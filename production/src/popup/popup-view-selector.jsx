@@ -25,8 +25,10 @@ const renderProperComponent = (popupType) => {
       return <LibraryWindow />;
     case PopupTypeEnum.promptsWindow:
     case PopupTypeEnum.repromptingWindow:
+    case PopupTypeEnum.repromptReportDataOverview:
       return <PromptsWindow />;
     case PopupTypeEnum.dossierWindow:
+    case PopupTypeEnum.repromptDossierDataOverview:
       return <DossierWindow />; // TODO: Might be missing {t}
     case PopupTypeEnum.obtainInstanceHelper:
       return <ObtainInstanceHelper />;

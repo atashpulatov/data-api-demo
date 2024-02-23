@@ -8,6 +8,7 @@ import { DialogPopup } from './overview-types';
 import { DUPLICATE_OPERATION, IMPORT_OPERATION, REMOVE_OPERATION } from '../../operation/operation-type-names';
 import { OverviewGlobalNotificationButtons, NotificationButtonsProps } from './overview-global-notification-buttons';
 import { customT } from '../../customTranslation';
+import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 
 export enum OverviewActionCommands {
   IMPORT= 'overview-import',
@@ -215,7 +216,7 @@ class OverviewHelper {
         await this.sidePanelService.edit(response.objectWorkingId);
         break;
       case OverviewActionCommands.REPROMPT:
-        await this.sidePanelService.reprompt(response.objectWorkingIds);
+        await this.sidePanelService.reprompt(response.objectWorkingIds, true);
         break;
       case OverviewActionCommands.REFRESH:
         await this.sidePanelService.refresh(response.objectWorkingIds);
@@ -263,10 +264,19 @@ class OverviewHelper {
   transformExcelObjects(objects: any[], notifications: any[]): any[] {
     return objects.map((object) => {
       const {
-        objectWorkingId, mstrObjectType, name, refreshDate, details, importType, startCell, worksheet
+        objectWorkingId, mstrObjectType, name, refreshDate, details, importType, startCell, worksheet,
       } = object;
 
       const objectNotification = notifications.find(notification => notification.objectWorkingId === objectWorkingId);
+      let isPrompted = false;
+
+      // Determine if object is prompted if it is a dossier/visualization or a report
+      if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name
+        || mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name) {
+        isPrompted = !!object.manipulationsXML?.promptAnswers;
+      } else if (mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name) {
+        isPrompted = object.isPrompted;
+      }
 
       return {
         objectWorkingId,
@@ -288,6 +298,7 @@ class OverviewHelper {
         project: details?.ancestors[0].name,
         owner: details?.owner.name,
         importedBy: details?.importedBy,
+        isPrompted,
       };
     });
   }

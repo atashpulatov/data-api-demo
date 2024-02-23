@@ -1651,7 +1651,8 @@ export const mockedObjectsFromStore = [
     },
     startCell: 'A1',
     worksheet: { id: 1, name: 'Sheet 1' },
-    refreshDate: 1707383921342
+    refreshDate: 1707383921342,
+    manipulationsXML: { promptAnswers: 'promptAnswer', },
   }
 ];
 

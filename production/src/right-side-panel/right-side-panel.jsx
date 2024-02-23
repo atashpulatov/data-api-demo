@@ -43,7 +43,8 @@ export const RightSidePanelNotConnected = ({
   isDialogRendered,
   isDialogLoaded,
   toggleCurtain,
-  activeCellAddress
+  activeCellAddress,
+  popupType
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
@@ -148,7 +149,7 @@ export const RightSidePanelNotConnected = ({
     if (isDialogLoaded) {
       popupController.sendMessageToDialog(
         JSON.stringify({
-          popupType: PopupTypeEnum.importedDataOverview,
+          popupType,
           objects: loadedObjects,
           notifications,
           globalNotification,
@@ -157,7 +158,7 @@ export const RightSidePanelNotConnected = ({
         })
       );
     }
-  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded, popupData]);
+  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded, popupData, popupType]);
 
   return (
     <>
@@ -194,6 +195,7 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
+  const { popupType } = state.popupStateReducer;
   const objects = officeReducerHelper.getObjectsListFromObjectReducer();
 
   const {
@@ -226,7 +228,8 @@ export const mapStateToProps = (state) => {
     isDialogRendered: isDialogOpen,
     isDialogLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
-    activeCellAddress
+    activeCellAddress,
+    popupType,
   };
 };
 
@@ -316,5 +319,6 @@ RightSidePanelNotConnected.propTypes = {
   isDialogRendered: PropTypes.bool,
   isDialogLoaded: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
-  activeCellAddress: PropTypes.string
+  activeCellAddress: PropTypes.string,
+  popupType: PropTypes.oneOf(Object.values(PopupTypeEnum)),
 };

@@ -237,7 +237,11 @@ describe('SidePanelService', () => {
       .mockImplementation();
 
     // when
-    const { isPrompted, callback } = sidePanelService.createRepromptTask(mockObject.bindId, mockObject.mstrObjectType);
+    const { isPrompted, callback } = sidePanelService.createRepromptTask(
+      mockObject.bindId,
+      mockObject.mstrObjectType,
+      true
+    );
     await callback();
 
     // then
