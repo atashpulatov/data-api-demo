@@ -16,10 +16,7 @@ const useStateSyncOnDialogMessage = () => {
       const { popupType } = message;
       const { setActiveCellAddress } = officeActions;
 
-      if (
-        popupType === PopupTypeEnum.importedDataOverview
-        || popupType === PopupTypeEnum.dossierWindow
-        || popupType === PopupTypeEnum.promptsWindow) {
+      if (popupType === PopupTypeEnum.importedDataOverview) {
         const {
           objects: objectsToSync,
           notifications: notificationsToSync,

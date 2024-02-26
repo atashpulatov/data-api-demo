@@ -21,7 +21,6 @@ import { authenticationHelper } from '../../authentication/authentication-helper
 import { sessionHelper, EXTEND_SESSION } from '../../storage/session-helper';
 import { errorCodes } from '../../error/constants';
 import { objectImportType } from '../../mstr-object/constants';
-import useStateSyncOnDialogMessage from '../../popup/overview/use-state-sync-on-dialog-message';
 import overviewHelper from '../../popup/overview/overview-helper';
 
 export const DossierWindowNotConnected = (props) => {
@@ -50,8 +49,6 @@ export const DossierWindowNotConnected = (props) => {
     isShapeAPISupported,
     popupData,
   } = props;
-
-  useStateSyncOnDialogMessage();
 
   const { isEdit, importType } = editedObject;
   const { chapterKey, visualizationKey, vizDimensions } = lastSelectedViz;

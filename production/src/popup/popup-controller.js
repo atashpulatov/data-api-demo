@@ -188,7 +188,7 @@ class PopupController {
         return;
       }
 
-      if (dialogType === PopupTypeEnum.dossierWindow || dialogType === PopupTypeEnum.promptsWindow) {
+      if (dialogType === PopupTypeEnum.dossierWindow || dialogType === PopupTypeEnum.repromptingWindow) {
         await this.overviewHelper.handleOverviewActionCommand(response);
       }
 
