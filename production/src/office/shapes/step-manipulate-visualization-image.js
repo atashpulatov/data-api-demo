@@ -41,22 +41,11 @@ class StepManipulateVisualizationImage {
 
       const excelContext = await officeApiHelper.getExcelContext();
 
-      // For duplicate operation use bindIdToBeDuplicated to retieve the shape from worksheet for validation purposes
-      const imageBindId = bindId || bindIdToBeDuplicated;
-
       // retrieve the shape in the worksheet
-      let shapeInWorksheet = imageBindId && await officeShapeApiHelper.getShape(excelContext, imageBindId);
+      const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
 
-      // Throw an error and block the blockable image operations, if shape(visualization image)
-      // was removed manually from worksheet.
-      if (!shapeInWorksheet && BLOCKABLE_IMAGE_OPERATIONS.has(operationType)) {
-        throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
-      }
-
-      // Reset the shapeInWorksheet object after validation for duplicate operation
-      if (shapeInWorksheet && operationType === DUPLICATE_OPERATION) {
-        shapeInWorksheet = undefined;
-      }
+      // validate if the shape still exists in the excel worksheet
+      this.validateShapePresenceInWorksheet(bindId, bindIdToBeDuplicated, excelContext, operationType);
 
       // retrieve the dimensions of the shape to be duplicated for DUPLICATE OPERATION
       const shapeDimensionsForDuplicateOp = bindIdToBeDuplicated
@@ -135,6 +124,33 @@ class StepManipulateVisualizationImage {
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
       console.timeEnd('Refresh Visualization Image');
+    }
+  };
+
+  /**
+   * Validates the presence of retrieved shape in worksheet.
+   * @param {Object} bindId Unique id of the Office shape.
+   * @param {Object} bindIdToBeDuplicated Unique id of the Office shape to be duplicated.
+   * @param {Object} excelContext Excel context.
+   * @param {String} operationType Type of operation
+   * @throws {Error} VISUALIZATION_REMOVED_FROM_EXCEL error if the image was manually removed from sheet
+   */
+  validateShapePresenceInWorksheet = async (
+    bindId,
+    bindIdToBeDuplicated,
+    excelContext,
+    operationType
+  ) => {
+    // For duplicate operation use bindIdToBeDuplicated to retieve the shape from worksheet for validation purpose
+    const imageBindId = bindId || bindIdToBeDuplicated;
+
+    // retrieve the shape in the worksheet
+    const shapeInWorksheet = imageBindId && await officeShapeApiHelper.getShape(excelContext, imageBindId);
+
+    // Throw an error and block the blockable image operations, if shape(visualization image)
+    // was removed manually from worksheet.
+    if (!shapeInWorksheet && BLOCKABLE_IMAGE_OPERATIONS.has(operationType)) {
+      throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
     }
   };
 
