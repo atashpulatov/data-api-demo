@@ -3,6 +3,8 @@ $title-height: 40px;
 
 .data-overview-wrapper {
   margin: 20px;
+  user-select: none;
+  -webkit-user-select: none;
 
   .data-overview-container {
     width: 100%;
