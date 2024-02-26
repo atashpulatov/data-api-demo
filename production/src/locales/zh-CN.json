@@ -176,7 +176,7 @@
    "Clearing data": "正在清除数据",
    "{{reportNames}} could not be cleared.": "{{reportNames}} 无法清除。",
    "Invalid attempt to spread non-iterable instance": "尝试传播不可迭代实例失败。",
-   "This view supports the regular dossier manipulations. To import data, select a visualization.": "此视图支持常规的仪表盘操作。要导入数据请选择一个可视化效果。",
+   "This view supports the regular dossier manipulations. To import data, select a visualization.": "此视图支持常规的仪表盘操作。要导入数据，请选择一个可视化效果。",
    "Report": "报表",
    "Log Out": "退出登录",
    "Dossier": "仪表盘",
@@ -212,9 +212,9 @@
    "On": "开",
    "Off": "关",
    "To preserve this crosstab report, select all objects without changing their forms.": "要保留此交叉式报表，请选择所有对象而不更改其形式。",
-   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "您尝试在可视化效果上执行操作该可视化效果不受支持、已移动到其他章节/页面或从仪表盘中删除。",
+   "You are trying to perform an operation on a visualization which is either not supported or has been moved to another chapter/page or deleted from the dossier.": "您尝试在操作的可视化效果不受支持、已移动到其他章节/页面、或从仪表盘中删除。",
    "Seems like the dossier has been removed.": "仪表盘似乎已被移除。",
-   "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "您正在尝试对可视化效果执行操作不受支持或已从仪表盘中删除。",
+   "You are trying to perform an operation on a visualization that is either not supported or deleted from the dossier.": "您尝试在操作的可视化效果不受支持，或已从仪表盘中删除。",
    "Include Subtotals and Totals": "包括小计和总计",
    "Search...": "搜索...",
    "Removal failed": "移除失败",
@@ -252,6 +252,6 @@
    "Settings": "设置",
    "Import Image": "导入图像",
    "Loading...": "正在加载...",
-   "Close": "收盘",
+   "Close": "关闭",
    "Overview": "概述"
 }
