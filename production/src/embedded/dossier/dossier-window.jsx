@@ -305,7 +305,12 @@ export const DossierWindowNotConnected = (props) => {
           />
         </>
       )}
-      {!!dialogPopup && <div className="standalone-popup"> <Popup {...dialogPopup} /> </div>}
+      {!!dialogPopup
+       && (
+         <div className="standalone-popup">
+           <Popup {...dialogPopup} />
+         </div>
+       )}
     </div>
   );
 };

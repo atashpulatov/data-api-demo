@@ -54,7 +54,12 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
       <div className="loading-section">
         <Spinner className="loading-spinner" type="large">{t('Loading...')}</Spinner>
       </div>
-      {!!dialogPopup && <div className="standalone-popup"> <Popup {...dialogPopup} /> </div>}
+      {!!dialogPopup
+       && (
+         <div className="standalone-popup">
+           <Popup {...dialogPopup} />
+         </div>
+       )}
     </div>
   );
 };
