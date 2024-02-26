@@ -43,6 +43,7 @@
 
 #popup-wrapper .dossier-window .dossier-window-embedded {
   position: relative;
+  z-index: 0;
 }
 
 #popup-wrapper .dossier-window .dossier-window-embedded-empty {
