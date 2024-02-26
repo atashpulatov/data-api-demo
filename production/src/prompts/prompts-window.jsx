@@ -34,7 +34,6 @@ export const PromptsWindowNotConnected = (props) => {
     reusePromptAnswers, previousPromptsAnswers, importRequested, promptObjects, isPreparedDataRequested,
     isMultipleRepromptWithReuse, repromptsQueue
   } = props;
-
   const { chosenObjectId, chosenObjectName } = mstrData;
   // isReprompt will be true for both Edit AND Reprompt workflows
   // isEdit will only be true for the Edit workflow
