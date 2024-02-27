@@ -16,6 +16,7 @@ import { notificationService } from '../notification-v2/notification-service';
 import { popupController } from '../popup/popup-controller';
 import packageJson from '../../package.json';
 import getDocumentationLocale from '../helpers/get-documentation-locale';
+import officeReducerHelper from '../office/store/office-reducer-helper';
 
 const APP_VERSION = packageJson.build;
 
@@ -36,7 +37,7 @@ export const SettingsMenuNotConnected = ({
   const [t] = useTranslation('common', { i18n });
 
   const userNameDisplay = userFullName || 'MicroStrategy user';
-  const isSecuredActive = !isSecured && objects && objects.length > 0;
+  const isSecuredActive = !isSecured && objects && objects.length > 0 && officeReducerHelper.noOperationInProgress();
   const prepareEmail = () => {
     if (!Office) { return '#'; } // If no Office return anchor url
     const { host, platform, version } = Office.context.diagnostics;

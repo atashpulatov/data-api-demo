@@ -11,6 +11,7 @@ import * as serviceWorker from './serviceWorker';
 import { diContainer } from './dependency-container';
 import { HomeHelper } from './home/home-helper';
 import { reduxStore } from './store';
+import officeReducerHelper from './office/store/office-reducer-helper';
 import { sessionHelper } from './storage/session-helper';
 import { PopupTypeEnum } from './home/popup-type-enum';
 
@@ -55,8 +56,13 @@ function officeInitialize() {
           (arg) => {
             // This only occurs during Multiple Reprompt, but we replace the dialog window
             // URL location to trigger the next object's Reprompt window.
-            const { splittedUrl = [], popupType = '', isRepromptOrOvieviewPopupOpen = false } = JSON.parse(arg.message);
+            const {
+              splittedUrl = [], popupType = '', isRepromptOrOvieviewPopupOpen = false, popupData
+            } = JSON.parse(arg.message);
 
+            if (popupData) {
+              officeReducerHelper.displayPopup(popupData);
+            }
             if (isRepromptOrOvieviewPopupOpen) {
               window.location.replace(`${splittedUrl[0]}?popupType=${popupType}&source=addin-mstr-excel`);
             }

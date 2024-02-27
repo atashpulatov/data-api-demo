@@ -16,13 +16,13 @@ import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { PopupTypeEnum } from '../home/popup-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
 import {
   IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION,
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
-import { objectImportType } from '../mstr-object/constants';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -44,7 +44,8 @@ export const RightSidePanelNotConnected = ({
   isDialogLoaded,
   toggleCurtain,
   activeCellAddress,
-  popupType
+  popupType,
+  isDataOverviewOpen
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
@@ -85,15 +86,22 @@ export const RightSidePanelNotConnected = ({
     // TODO: Move logic for controlling popup visibility to Redux
     if (popupData) {
       sidePanelNotificationHelper.setRangeTakenPopup({ ...popupData, setSidePanelPopup, activeCellAddress });
+
+      // For the mulitiple reprompt workflow from the side panel, pass the popupData to the native dialog
+      const { objectWorkingId } = popupData;
+      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const isDossier = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+      const isReport = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
+      if ((isDossier || isReport) && toggleCurtain && !isDataOverviewOpen) {
+        popupController.sendMessageToDialog(
+          JSON.stringify({ popupData })
+        );
+      }
     } else if (sidePanelPopup?.type === popupTypes.RANGE_TAKEN) {
       setSidePanelPopup(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCellAddress, popupData]);
-
-  const handleSettingsClick = () => {
-    officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
-  };
 
   React.useEffect(() => {
     setLoadedObjectsWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
@@ -175,7 +183,7 @@ export const RightSidePanelNotConnected = ({
         onRename={renameWrapper}
         popup={!isDialogRendered && sidePanelPopup}
         settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
+        onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
         confirmationWindow={isConfirm && <Confirmation />}
         globalNotification={globalNotification}
         onSelectAll={notificationService.dismissNotifications}
@@ -195,7 +203,7 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
-  const { popupType } = state.popupStateReducer;
+  const { popupType, isDataOverviewOpen } = state.popupStateReducer;
   const objects = officeReducerHelper.getObjectsListFromObjectReducer();
 
   const {
@@ -230,6 +238,7 @@ export const mapStateToProps = (state) => {
     toggleCurtain: repromptsQueue?.length > 0,
     activeCellAddress,
     popupType,
+    isDataOverviewOpen
   };
 };
 
@@ -244,7 +253,7 @@ const mapDispatchToProps = {
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
-  popupData: PropTypes.shape({}),
+  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
   globalNotification: PropTypes.shape({ type: PropTypes.string }),
   loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({
@@ -321,4 +330,5 @@ RightSidePanelNotConnected.propTypes = {
   toggleCurtain: PropTypes.bool,
   activeCellAddress: PropTypes.string,
   popupType: PropTypes.oneOf(Object.values(PopupTypeEnum)),
+  isDataOverviewOpen: PropTypes.bool,
 };
