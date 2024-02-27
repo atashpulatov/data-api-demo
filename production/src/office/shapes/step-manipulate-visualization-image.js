@@ -149,11 +149,11 @@ class StepManipulateVisualizationImage {
     operationType,
     dataCleared
   ) => {
-    const isInValidEditOperation = operationType === 'EDIT_OPERATION' && !shapeInWorksheet;
+    const isInValidEditOperation = operationType === EDIT_OPERATION && !shapeInWorksheet;
 
-    const isInValidRefreshOperation = operationType === 'REFRESH_OPERATION' && !shapeInWorksheet && !dataCleared;
+    const isInValidRefreshOperation = operationType === REFRESH_OPERATION && !shapeInWorksheet && !dataCleared;
 
-    const isInValidDuplicateOperation = operationType === 'DUPLICATE_OPERATION' && !shapeToBeDuplicated;
+    const isInValidDuplicateOperation = operationType === DUPLICATE_OPERATION && !shapeToBeDuplicated;
 
     if (isInValidDuplicateOperation || isInValidEditOperation || isInValidRefreshOperation) {
       throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
