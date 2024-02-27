@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 import i18n from 'i18next';
+import { changeConnectorLanguage } from '@mstr/connector-components';
+import { RC } from '@mstr/rc-3';
 import { initReactI18next } from 'react-i18next';
 import moment from 'moment';
 import enUSCommon from './locales/en-US.json';
@@ -107,10 +109,32 @@ const config = {
   },
 };
 
+const mapLanguageToLocale = {
+  'en-US': 'en-US',
+  'en-GB': 'en-GB',
+  'de-DE': 'de',
+  'zh-CN': 'zh-CN',
+  'fr-FR': 'fr',
+  'es-ES': 'es',
+  'it-IT': 'it',
+  'zh-TW': 'zh-TW',
+  'ko-KR': 'ko',
+  'pl-PL': 'pl',
+  'pt-BR': 'pt',
+  'nl-NL': 'nl',
+  'sv-SE': 'sv',
+  'ja-JP': 'ja',
+  'da-DK': 'da',
+};
+
+i18n.on('languageChanged', (lng) => {
+  RC.changeLanguage(mapLanguageToLocale[lng]);
+  changeConnectorLanguage(mapLanguageToLocale[lng]);
+  moment.locale(lng);
+});
+
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init(config);
-
-i18n.on('languageChanged', (lng) => moment.locale(lng));
 
 export default i18n;
