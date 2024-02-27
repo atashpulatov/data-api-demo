@@ -14,8 +14,7 @@ export const Popup = () => {
   }, []);
 
   useEffect(() => {
-    // i18n.changeLanguage(Office.context.displayLanguage || 'en-US');
-    i18n.changeLanguage('es-ES');
+    i18n.changeLanguage(Office.context.displayLanguage || 'en-US');
   }, []);
 
   const closePopup = useCallback(() => {

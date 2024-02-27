@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import i18n from 'i18next';
-import { changeLanguage } from '@mstr/connector-components';
+import { changeConnectorLanguage } from '@mstr/connector-components';
 import { RC } from '@mstr/rc-3';
 import { initReactI18next } from 'react-i18next';
 import moment from 'moment';
@@ -129,7 +129,7 @@ const mapLanguageToLocale = {
 
 i18n.on('languageChanged', (lng) => {
   RC.changeLanguage(mapLanguageToLocale[lng]);
-  changeLanguage(mapLanguageToLocale[lng]);
+  changeConnectorLanguage(mapLanguageToLocale[lng]);
   moment.locale(lng);
 });
 
