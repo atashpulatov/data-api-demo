@@ -281,7 +281,7 @@ describe('stepManipulateVisualizationImage', () => {
     await stepManipulateVisualizationImage.manipulateVisualizationImage(dupObjectDataMock, dupOperationDataMock);
 
     // then
-    expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
+    expect(officeApiHelper.getExcelContext).toBeCalledTimes(2);
     expect(stepManipulateVisualizationImage.getDuplicatedShapeDimensions).toBeCalledWith('1234-5678-9012-3456', excelContextMock);
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);

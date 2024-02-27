@@ -1,11 +1,13 @@
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
-import { objectImportType } from '../../mstr-object/constants';
+import { reduxStore } from '../../store';
 
+const INVALID_SELECTION = 'InvalidSelection';
 // FIXME: these were disabled anyway. Needs to be redone.
 describe('OfficeApiHelper', () => {
   beforeAll(() => {
     officeApiHelper.excel = {};
+    officeApiHelper.init(reduxStore);
   });
   it('should convert simple excel column name to number', () => {
     // given
@@ -175,6 +177,42 @@ describe('OfficeApiHelper', () => {
       expect(result).toEqual('A12');
       expect(mockSync).toBeCalled();
     });
+
+    it('should return and active cell if INVALID_SELECTION error is thrown)', async () => {
+      // given
+      const error = new Error('error');
+      error.code = INVALID_SELECTION;
+      const mockSync = jest.fn();
+      const context = {
+        workbook: { getSelectedRange: jest.fn().mockImplementation(() => { throw error; }), },
+        sync: mockSync,
+      };
+
+      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { activeCellAddress: 'CD34', }, });
+
+      // when
+      const result = await officeApiHelper.getSelectedCell(context);
+      // then
+      expect(result).toEqual('CD34');
+    });
+
+    it('should return defaul cell if INVALID_SELECTION error is thrown and active cell is null)', async () => {
+      // given
+      const error = new Error('error');
+      error.code = INVALID_SELECTION;
+      const mockSync = jest.fn();
+      const context = {
+        workbook: { getSelectedRange: jest.fn().mockImplementation(() => { throw error; }), },
+        sync: mockSync,
+      };
+
+      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { activeCellAddress: null, }, });
+
+      // when
+      const result = await officeApiHelper.getSelectedCell(context);
+      // then
+      expect(result).toEqual('A1');
+    });
   });
   describe('getStartCellOfRange', () => {
     it('should return starting cell from range address(single cell)', () => {
@@ -222,6 +260,43 @@ describe('OfficeApiHelper', () => {
       const result = await officeApiHelper.getSelectedRangePosition(context);
       // then
       expect(result).toEqual({ top: 244, left: 345 });
+    });
+
+    it('should return active selected range position if INVALID_SELECTION error is thrown', async () => {
+      // given
+      const error = new Error('error');
+      error.code = INVALID_SELECTION;
+      const mockSync = jest.fn();
+      const context = {
+        workbook: { getSelectedRange: jest.fn().mockImplementation(() => { throw error; }), },
+        sync: mockSync,
+      };
+
+      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { activeCellAddress: 'CD34', }, });
+      jest.spyOn(officeApiHelper, 'convertCellAddressToRangePosition').mockReturnValueOnce({ top: 244, left: 345 });
+
+      // when
+      const result = await officeApiHelper.getSelectedRangePosition(context);
+      // then
+      expect(result).toEqual({ top: 244, left: 345 });
+    });
+
+    it('should return active selected range position if INVALID_SELECTION error is thrown and active cell is null', async () => {
+      // given
+      const error = new Error('error');
+      error.code = INVALID_SELECTION;
+      const mockSync = jest.fn();
+      const context = {
+        workbook: { getSelectedRange: jest.fn().mockImplementation(() => { throw error; }), },
+        sync: mockSync,
+      };
+
+      jest.spyOn(reduxStore, 'getState').mockReturnValueOnce({ officeReducer: { activeCellAddress: null, }, });
+
+      // when
+      const result = await officeApiHelper.getSelectedRangePosition(context);
+      // then
+      expect(result).toEqual({ top: 0, left: 0 });
     });
   });
 });
