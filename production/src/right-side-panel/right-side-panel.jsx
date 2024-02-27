@@ -23,7 +23,6 @@ import {
   DUPLICATE_OPERATION, CLEAR_DATA_OPERATION, REMOVE_OPERATION,
   HIGHLIGHT_OPERATION
 } from '../operation/operation-type-names';
-import { objectImportType } from '../mstr-object/constants';
 
 export const RightSidePanelNotConnected = ({
   loadedObjects,
@@ -103,10 +102,6 @@ export const RightSidePanelNotConnected = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCellAddress, popupData]);
-
-  const handleSettingsClick = () => {
-    officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
-  };
 
   React.useEffect(() => {
     setLoadedObjectsWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
@@ -188,7 +183,7 @@ export const RightSidePanelNotConnected = ({
         onRename={renameWrapper}
         popup={!isDialogRendered && sidePanelPopup}
         settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
+        onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
         confirmationWindow={isConfirm && <Confirmation />}
         globalNotification={globalNotification}
         onSelectAll={notificationService.dismissNotifications}
