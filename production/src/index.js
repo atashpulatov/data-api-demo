@@ -19,7 +19,8 @@ const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
 const LazyDialog = lazy(() => import('./entry-point/dialog-entry-point'));
 
 function goReact() {
-  i18next.changeLanguage(window.Office.context.displayLanguage || 'en-US');
+  // i18next.changeLanguage(window.Office.context.displayLanguage || 'en-US');
+  i18next.changeLanguage('es-ES');
 
   console.log(`Running react in ${sessionHelper.isDevelopment() ? 'development' : 'production'} mode`);
 
