@@ -34,7 +34,8 @@ class StepManipulateVisualizationImage {
         objectId,
         name: visualizationName,
         visualizationInfo,
-        bindIdToBeDuplicated
+        bindIdToBeDuplicated,
+        dataCleared
       } = objectData;
       const { instanceDefinition, operationType } = operationData;
       const { instanceId } = instanceDefinition;
@@ -44,12 +45,12 @@ class StepManipulateVisualizationImage {
       // retrieve the shape in the worksheet
       const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
 
-      // validate if the shape still exists in the excel worksheet
-      this.validateShapePresenceInWorksheet(operationType, shapeInWorksheet, bindIdToBeDuplicated, excelContext);
+      // retrieve the shape to be duplicated if the operation is DUPLICATE
+      const shapeToBeDuplicated = bindIdToBeDuplicated
+        && await officeShapeApiHelper.getShape(excelContext, bindIdToBeDuplicated);
 
-      // retrieve the dimensions of the shape to be duplicated for DUPLICATE OPERATION
-      const shapeDimensionsForDuplicateOp = bindIdToBeDuplicated
-        && await this.getDuplicatedShapeDimensions(bindIdToBeDuplicated, excelContext);
+      // validate the operation and throw error if the operation is invalid
+      this.validateOperation(shapeInWorksheet, shapeToBeDuplicated, operationType, dataCleared);
 
       // Get the dimensions retrieved via the ON_VIZ_SELECTION_CHANGED listener and cached in the object state
       const { vizDimensions, visualizationKey } = visualizationInfo;
@@ -68,7 +69,7 @@ class StepManipulateVisualizationImage {
         operationType,
         shapeProps,
         shapeInWorksheet,
-        shapeDimensionsForDuplicateOp,
+        shapeToBeDuplicated,
         vizDimensions,
         selectedRangePos,
         excelContext
@@ -115,7 +116,8 @@ class StepManipulateVisualizationImage {
         worksheet: { id, name },
         shapeProps: undefined, // reset the shape props after adding image
         bindIdToBeDuplicated: undefined, // reset the bindIdToBeDuplicated after adding image
-        instanceId: undefined // reset the instanceId after adding image
+        instanceId: undefined, // reset the instanceId after adding image
+        dataCleared: undefined, // reset dataCleared after adding image
       };
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeManipulateVisualizationImage(objectWorkingId);
@@ -131,45 +133,29 @@ class StepManipulateVisualizationImage {
    * Checks whether the Edit, Refresh Or Duplicate operations are valid and throws an error
    * for the following conditions
    *
-   *  EDIT & REFRESH OPERATION - if the shape being edited or refreshed is not defined
-   *  DUPLICATE OPERATION - if the shape being duplicated is not defined
+   * EDIT OPERATION - if the shape being edited is not defined
+   * REFRESH OPERATION - if the shape being refreshed is not defined and the data has not been cleared
+   * DUPLICATE OPERATION - if the shape being duplicated is not defined
    *
-   * @param {String} operationType Type of operation.
-   * @param {Object} shapeInWorksheet Shape present in worksheet
-   * @param {Object} bindIdToBeDuplicated Unique id of the Office shape to be duplicated.
+   * @param {Object} shapeInWorksheet shape present in the worksheet being edited or refreshed
+   * @param {Object} shapeToBeDuplicated shape present in the worksheet being duplicated
    * @param {Object} excelContext Excel context.
+   * @param {String} operationType Type of operation
    * @throws {Error} VISUALIZATION_REMOVED_FROM_EXCEL error if the image was manually removed from sheet
    */
-  validateShapePresenceInWorksheet = async (
-    operationType,
+  validateOperation = (
     shapeInWorksheet,
-    bindIdToBeDuplicated,
-    excelContext
+    shapeToBeDuplicated,
+    operationType,
+    dataCleared
   ) => {
-    let isInValidOperation;
+    const isInValidEditOperation = operationType === 'EDIT_OPERATION' && !shapeInWorksheet;
 
-    switch (operationType) {
-      case REFRESH_OPERATION:
-      case EDIT_OPERATION:
-        isInValidOperation = !shapeInWorksheet;
-        break;
-      case DUPLICATE_OPERATION:
-        {
-        // For duplicate operation use bindIdToBeDuplicated to retieve the shape from worksheet for validation purpose
-          const shapeToBeDuplicated = bindIdToBeDuplicated && await officeShapeApiHelper.getShape(
-            excelContext,
-            bindIdToBeDuplicated
-          );
-          isInValidOperation = !shapeToBeDuplicated;
-        }
-        break;
-      default:
-        isInValidOperation = false;
-    }
+    const isInValidRefreshOperation = operationType === 'REFRESH_OPERATION' && !shapeInWorksheet && !dataCleared;
 
-    // Throw an error and block the invalid operation, if shape(visualization image)
-    // was removed manually from worksheet.
-    if (isInValidOperation) {
+    const isInValidDuplicateOperation = operationType === 'DUPLICATE_OPERATION' && !shapeToBeDuplicated;
+
+    if (isInValidDuplicateOperation || isInValidEditOperation || isInValidRefreshOperation) {
       throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
     }
   };
