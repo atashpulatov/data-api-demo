@@ -45,7 +45,7 @@ class StepManipulateVisualizationImage {
       const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
 
       // validate if the shape still exists in the excel worksheet
-      this.validateShapePresenceInWorksheet(operationType, shapeInWorksheet, bindIdToBeDuplicated, excelContext);
+      this.validateShapePresenceInWorksheet(operationType, shapeInWorksheet, bindIdToBeDuplicated);
 
       // retrieve the dimensions of the shape to be duplicated for DUPLICATE OPERATION
       const shapeDimensionsForDuplicateOp = bindIdToBeDuplicated
@@ -144,7 +144,6 @@ class StepManipulateVisualizationImage {
     operationType,
     shapeInWorksheet,
     bindIdToBeDuplicated,
-    excelContext
   ) => {
     let isInValidOperation;
 
@@ -155,7 +154,8 @@ class StepManipulateVisualizationImage {
         break;
       case DUPLICATE_OPERATION:
         {
-        // For duplicate operation use bindIdToBeDuplicated to retieve the shape from worksheet for validation purpose
+          const excelContext = await officeApiHelper.getExcelContext();
+          // For duplicate operation use bindIdToBeDuplicated to retieve the shape from worksheet for validation purpose
           const shapeToBeDuplicated = bindIdToBeDuplicated && await officeShapeApiHelper.getShape(
             excelContext,
             bindIdToBeDuplicated
