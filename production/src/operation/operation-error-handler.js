@@ -10,6 +10,7 @@ import {
 } from './operation-type-names';
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import { objectImportType } from '../mstr-object/constants';
+import { executeNextRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 
 class OperationErrorHandler {
   init = (reduxStore) => {
@@ -75,9 +76,14 @@ class OperationErrorHandler {
    * @param {Number} objectWorkingId Unique Id of the object allowing to reference specific object
    */
   clearFailedObjectFromRedux = (objectWorkingId) => {
-    this.reduxStore.dispatch(removeObject(objectWorkingId));
+    // Make sure that object isn't removed from redux if it's still in reprompt queue
+    const { total = 0 } = this.reduxStore.getState().repromptsQueueReducer;
+    if (total === 0) {
+      this.reduxStore.dispatch(removeObject(objectWorkingId));
+    }
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
+    this.reduxStore.dispatch(executeNextRepromptTask());
   };
 
   /**

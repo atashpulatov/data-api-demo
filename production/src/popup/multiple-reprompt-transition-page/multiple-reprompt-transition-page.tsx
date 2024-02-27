@@ -1,13 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { ObjectWindowTitle } from '@mstr/connector-components';
+import { ObjectWindowTitle, Popup } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc-3';
 import { useTranslation } from 'react-i18next';
 import { MultipleRepromptTransitionPageTypes } from './multiple-reprompt-transition-page-types';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import i18n from '../../i18n';
-
+import overviewHelper from '../overview/overview-helper';
 import './multiple-reprompt-transition-page.scss';
 
 /**
@@ -21,7 +21,8 @@ import './multiple-reprompt-transition-page.scss';
 export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTransitionPageTypes> = ({
   nextObjectBindId,
   nextObjectIndex,
-  total
+  total,
+  popupData
 }) => {
   const nextObject: any = officeReducerHelper.getObjectFromObjectReducerByBindId(nextObjectBindId) || {};
   // retrieve object name based on next object type. reports vs dossiers have different name properties
@@ -30,6 +31,14 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
     : nextObject.name;
 
   const [t] = useTranslation('common', { i18n });
+  const [dialogPopup, setDialogPopup] = React.useState(null);
+  useEffect(() => {
+    if (popupData) {
+      overviewHelper.setRangeTakenPopup({ objectWorkingId: popupData.objectWorkingId, setDialogPopup });
+    } else {
+      setDialogPopup(null);
+    }
+  }, [popupData]);
 
   return (
     <div className="multiple-reprompt-transition-page">
@@ -45,24 +54,32 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
       <div className="loading-section">
         <Spinner className="loading-spinner" type="large">{t('Loading...')}</Spinner>
       </div>
+      {!!dialogPopup
+       && (
+         <div className="standalone-popup">
+           <Popup {...dialogPopup} />
+         </div>
+       )}
     </div>
   );
 };
 
 const mapStateToProps = (state: {
+  officeReducer: any;
   repromptsQueueReducer: {
     repromptsQueue: { bindId: string }[];
     index: number;
     total: number;
   }
 }) => {
-  const { repromptsQueueReducer } = state;
+  const { repromptsQueueReducer, officeReducer } = state;
 
   return {
     nextObjectBindId: repromptsQueueReducer.repromptsQueue[0]?.bindId || '',
     // + 1 since the next obj has not been processed yet, so index is behind 1
     nextObjectIndex: repromptsQueueReducer.index + 1,
     total: repromptsQueueReducer.total,
+    popupData: officeReducer.popupData
   };
 };
 

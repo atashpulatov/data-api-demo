@@ -188,6 +188,10 @@ class PopupController {
         return;
       }
 
+      if (dialogType === PopupTypeEnum.dossierWindow || dialogType === PopupTypeEnum.repromptingWindow) {
+        await this.overviewHelper.handleOverviewActionCommand(response);
+      }
+
       switch (command) {
         case commandOk:
           if (!reportParams) {
@@ -210,7 +214,7 @@ class PopupController {
           }
           break;
         case commandCancel:
-          if (!isMultipleRepromptQueueEmpty) {
+          if (!isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
             // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
             // since we were previously keeping the dialog open in between objects.
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
