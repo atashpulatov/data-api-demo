@@ -6,7 +6,7 @@ import { mstrObjectRestService } from '../../mstr-object/mstr-object-rest-servic
 import { convertImageToBase64, convertPointsToPixels } from '../../helpers/visualization-image-utils';
 import { determineImagePropsToBeAddedToBook } from './shape-helper-util';
 import { errorMessages } from '../../error/constants';
-import { BLOCKABLE_IMAGE_OPERATIONS, DUPLICATE_OPERATION } from '../../operation/operation-type-names';
+import { DUPLICATE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION } from '../../operation/operation-type-names';
 
 class StepManipulateVisualizationImage {
   /**
@@ -45,7 +45,7 @@ class StepManipulateVisualizationImage {
       const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
 
       // validate if the shape still exists in the excel worksheet
-      this.validateShapePresenceInWorksheet(bindId, bindIdToBeDuplicated, excelContext, operationType);
+      this.validateShapePresenceInWorksheet(operationType, shapeInWorksheet, bindIdToBeDuplicated, excelContext);
 
       // retrieve the dimensions of the shape to be duplicated for DUPLICATE OPERATION
       const shapeDimensionsForDuplicateOp = bindIdToBeDuplicated
@@ -128,28 +128,48 @@ class StepManipulateVisualizationImage {
   };
 
   /**
-   * Validates the presence of retrieved shape in worksheet.
-   * @param {Object} bindId Unique id of the Office shape.
+   * Checks whether the Edit, Refresh Or Duplicate operations are valid and throws an error
+   * for the following conditions
+   *
+   *  EDIT & REFRESH OPERATION - if the shape being edited or refreshed is not defined
+   *  DUPLICATE OPERATION - if the shape being duplicated is not defined
+   *
+   * @param {String} operationType Type of operation.
+   * @param {Object} shapeInWorksheet Shape present in worksheet
    * @param {Object} bindIdToBeDuplicated Unique id of the Office shape to be duplicated.
    * @param {Object} excelContext Excel context.
-   * @param {String} operationType Type of operation
    * @throws {Error} VISUALIZATION_REMOVED_FROM_EXCEL error if the image was manually removed from sheet
    */
   validateShapePresenceInWorksheet = async (
-    bindId,
+    operationType,
+    shapeInWorksheet,
     bindIdToBeDuplicated,
-    excelContext,
-    operationType
+    excelContext
   ) => {
-    // For duplicate operation use bindIdToBeDuplicated to retieve the shape from worksheet for validation purpose
-    const imageBindId = bindId || bindIdToBeDuplicated;
+    let isInValidOperation;
 
-    // retrieve the shape in the worksheet
-    const shapeInWorksheet = imageBindId && await officeShapeApiHelper.getShape(excelContext, imageBindId);
+    switch (operationType) {
+      case REFRESH_OPERATION:
+      case EDIT_OPERATION:
+        isInValidOperation = !shapeInWorksheet;
+        break;
+      case DUPLICATE_OPERATION:
+        {
+        // For duplicate operation use bindIdToBeDuplicated to retieve the shape from worksheet for validation purpose
+          const shapeToBeDuplicated = bindIdToBeDuplicated && await officeShapeApiHelper.getShape(
+            excelContext,
+            bindIdToBeDuplicated
+          );
+          isInValidOperation = !shapeToBeDuplicated;
+        }
+        break;
+      default:
+        isInValidOperation = false;
+    }
 
-    // Throw an error and block the blockable image operations, if shape(visualization image)
+    // Throw an error and block the invalid operation, if shape(visualization image)
     // was removed manually from worksheet.
-    if (!shapeInWorksheet && BLOCKABLE_IMAGE_OPERATIONS.has(operationType)) {
+    if (isInValidOperation) {
       throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
     }
   };
