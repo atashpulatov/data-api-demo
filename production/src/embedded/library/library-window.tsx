@@ -231,6 +231,7 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         disableSecondary={
           !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
+        isBtnForLibraryWindow
         isPublished={isPublished}
         isImportReport={mstrObjectEnum
           .getMstrTypeBySubtype(chosenSubtype)
