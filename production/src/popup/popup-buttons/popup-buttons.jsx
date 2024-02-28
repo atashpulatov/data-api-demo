@@ -34,6 +34,12 @@ const getDisableReasonImport = (isPublished, disableActiveActions, disableSecond
   }
 };
 
+const getImportDataIdAndString = (isBtnForLibraryWindow) => {
+  const importDataActionType = isBtnForLibraryWindow ? importActionTypes.IMPORT : importActionTypes.IMPORT_DATA;
+  const importDataId = isBtnForLibraryWindow ? importButtonIds.IMPORT : importButtonIds.IMPORT_DATA;
+  return { importDataActionType, importDataId };
+};
+
 export const PopupButtonsNotConnected = ({
   handleOk,
   handleSecondary,
@@ -58,8 +64,7 @@ export const PopupButtonsNotConnected = ({
     isPublished, disableActiveActions, disableSecondary, checkingSelection
   );
 
-  const importDataActionType = isBtnForLibraryWindow ? importActionTypes.IMPORT : importActionTypes.IMPORT_DATA;
-  const importDataId = isBtnForLibraryWindow ? importButtonIds.IMPORT : importButtonIds.IMPORT_DATA;
+  const { importDataActionType, importDataId } = getImportDataIdAndString(isBtnForLibraryWindow);
   return (
     <div className="popup-buttons popup-footer">
       {handleBack && <BackButton handleBack={handleBack} t={t} />}
