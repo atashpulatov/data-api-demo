@@ -3,7 +3,6 @@ import 'focus-visible/dist/focus-visible';
 import './index.css';
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ObjectWindowTitle } from '@mstr/connector-components';
 import { Spinner } from '@mstr/rc-3';
 
 import i18next from './i18n';
@@ -13,7 +12,6 @@ import { HomeHelper } from './home/home-helper';
 import { reduxStore } from './store';
 import officeReducerHelper from './office/store/office-reducer-helper';
 import { sessionHelper } from './storage/session-helper';
-import { PopupTypeEnum } from './home/popup-type-enum';
 
 // Code splitting https://reactjs.org/docs/code-splitting.html
 const LazySidebar = lazy(() => import('./entry-point/sidebar-entry-point'));
@@ -28,9 +26,6 @@ function goReact() {
   const root = createRoot(container);
 
   const loadingComponent = <Spinner className="loading-spinner" type="large">{i18next.t('Loading...')}</Spinner>;
-
-  // TODO: Remove when connector-components translations are fixed
-  const temp = <ObjectWindowTitle />;
 
   root.render((
     <Suspense fallback={loadingComponent}>
