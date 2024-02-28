@@ -1,5 +1,6 @@
 /* eslint-disable jest/no-disabled-tests */
 import { errorService } from '../../error/error-handler';
+import { reduxStore } from '../../store';
 import { notificationService } from '../../notification-v2/notification-service';
 import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { sessionHelper } from '../../storage/session-helper';
@@ -8,6 +9,7 @@ import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
 import * as Constants from '../../error/constants';
 import { sessionActions } from '../../redux-reducer/session-reducer/session-actions';
 import { PopupTypeEnum } from '../../home/popup-type-enum';
+import { popupController } from '../../popup/popup-controller';
 
 jest.mock('../../storage/session-helper');
 jest.useFakeTimers();
@@ -15,7 +17,7 @@ jest.useFakeTimers();
 // TODO fix after adding object notifications
 describe('ErrorService', () => {
   beforeAll(() => {
-    errorService.init(sessionActions, sessionHelper, notificationService);
+    errorService.init(sessionActions, sessionHelper, notificationService, popupController, reduxStore);
     errorService.displayErrorNotification = jest.fn();
     console.warn = jest.fn();
   });
