@@ -33,7 +33,7 @@ import { officeApiHelper } from '../api/office-api-helper';
  * @param {String} operationType Type of operation
  * @param {Object} shapeProps Shape properties saved as part of CLEAR DATA operation
  * @param {Object} shapeInWorksheet Shape present in worksheet
- * @param {Object} shapeDimensionsForDuplicateOp Dimensions of the shape to be duplicated
+ * @param {Object} shapeToBeDuplicated Shape to be duplicated
  * @param {Object} vizDimensions Dimensions of the visualization saved in redux store
  * @param {Object} selectedRangePos Position of the range selected by user
  * @param {Object} excelContext Excel context
@@ -44,7 +44,7 @@ export const determineImagePropsToBeAddedToBook = ({
   operationType,
   shapeProps,
   shapeInWorksheet,
-  shapeDimensionsForDuplicateOp,
+  shapeToBeDuplicated,
   vizDimensions,
   selectedRangePos,
   excelContext,
@@ -76,8 +76,9 @@ export const determineImagePropsToBeAddedToBook = ({
     left: shapeProps.left,
     sheet: excelContext.workbook.worksheets.getItem(shapeProps?.worksheetId),
   };
-  const imagePropsForDuplicateOp = shapeDimensionsForDuplicateOp && {
-    ...shapeDimensionsForDuplicateOp,
+  const imagePropsForDuplicateOp = shapeToBeDuplicated && {
+    width: shapeToBeDuplicated.width,
+    height: shapeToBeDuplicated.height,
     top: defaultFallbackTop,
     left: defaultFallbackLeft,
     sheet,

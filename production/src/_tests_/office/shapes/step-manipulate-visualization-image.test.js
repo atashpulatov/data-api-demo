@@ -269,11 +269,11 @@ describe('stepManipulateVisualizationImage', () => {
 
     jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
+    jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => Promise.resolve(mockShapeObject));
+
     jest.spyOn(officeShapeApiHelper, 'addImage').mockImplementation(() => Promise.resolve('1234-5678-9012-3456'));
 
     jest.spyOn(operationStepDispatcher, 'updateObject').mockImplementation();
-
-    jest.spyOn(stepManipulateVisualizationImage, 'getDuplicatedShapeDimensions').mockImplementation(() => Promise.resolve({ width: 233, height: 454 }));
 
     jest.spyOn(operationStepDispatcher, 'completeManipulateVisualizationImage').mockImplementation();
 
@@ -282,10 +282,9 @@ describe('stepManipulateVisualizationImage', () => {
 
     // then
     expect(officeApiHelper.getExcelContext).toBeCalledTimes(1);
-    expect(stepManipulateVisualizationImage.getDuplicatedShapeDimensions).toBeCalledWith('1234-5678-9012-3456', excelContextMock);
     expect(officeApiHelper.getSelectedRangePosition).toBeCalledTimes(1);
     expect(mstrObjectRestService.getVisualizationImage).toBeCalledTimes(1);
-    expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', objectDataMock.name, { top: 233, left: 454 }, { width: 233, height: 454 }, mockSheet);
+    expect(officeShapeApiHelper.addImage).toBeCalledWith(excelContextMock, 'AAAAAAAAAAA=', objectDataMock.name, { top: 233, left: 454 }, { width: 123, height: 342 }, mockSheet);
     expect(operationStepDispatcher.updateObject).toBeCalledWith(mockedUpdateObject);
     expect(operationStepDispatcher.completeManipulateVisualizationImage).toBeCalledTimes(1);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(0);
@@ -298,8 +297,6 @@ describe('stepManipulateVisualizationImage', () => {
     jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => excelContextMock);
 
     jest.spyOn(officeApiHelper, 'getSelectedRangePosition').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
-
-    jest.spyOn(stepManipulateVisualizationImage, 'getDuplicatedShapeDimensions').mockImplementation(() => Promise.resolve({ top: 233, left: 454 }));
 
     jest.spyOn(mstrObjectRestService, 'getVisualizationImage').mockImplementation(() => {
       throw new Error('errorTest');
@@ -320,23 +317,5 @@ describe('stepManipulateVisualizationImage', () => {
 
     expect(console.error).toBeCalledTimes(1);
     expect(console.error).toBeCalledWith(new Error('errorTest'));
-  });
-
-  describe('getDuplicatedShapeDimensions', () => {
-    it('should work as expected', async () => {
-      // given
-      const mockShape = {
-        height: 123,
-        width: 234
-      };
-      jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => Promise.resolve(mockShape));
-
-      // when
-      const result = await stepManipulateVisualizationImage.getDuplicatedShapeDimensions('1234-5678-9012-3456', excelContextMock);
-
-      // then
-      expect(officeShapeApiHelper.getShape).toBeCalledWith(excelContextMock, '1234-5678-9012-3456');
-      expect(result).toEqual({ height: 123, width: 234 });
-    });
   });
 });
