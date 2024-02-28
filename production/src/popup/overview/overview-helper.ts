@@ -1,9 +1,9 @@
 import { popupTypes, objectNotificationTypes } from '@mstr/connector-components';
 import { popupHelper } from '../popup-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
-import operationErrorHandler from '../../operation/operation-error-handler';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
+import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { DialogPopup } from './overview-types';
 import { DUPLICATE_OPERATION, IMPORT_OPERATION, REMOVE_OPERATION } from '../../operation/operation-type-names';
 import { OverviewGlobalNotificationButtons, NotificationButtonsProps } from './overview-global-notification-buttons';
@@ -24,12 +24,16 @@ export enum OverviewActionCommands {
   DISMISS_NOTIFICATION= 'overview-dismiss-notification',
 }
 
+// rewrite everything
 class OverviewHelper {
+  store: any;
+
   sidePanelService: any;
 
   notificationService: any;
 
-  init = (sidePanelService: any, notificationService: any) => {
+  init = (reduxStore: any, sidePanelService: any, notificationService: any) => {
+    this.store = reduxStore;
     this.sidePanelService = sidePanelService;
     this.notificationService = notificationService;
   };
@@ -234,7 +238,11 @@ class OverviewHelper {
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RANGE_TAKEN_CLOSE:
-        operationErrorHandler.clearFailedObjectFromRedux(response.objectWorkingId);
+        // eslint-disable-next-line no-case-declarations
+        const { callback } = this.store.getState().officeReducer?.popupData || {};
+        await callback();
+
+        this.store.dispatch(executeNextRepromptTask());
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RENAME:

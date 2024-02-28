@@ -10,6 +10,7 @@ import {
   DUPLICATE_OPERATION, EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
 } from '../../operation/operation-type-names';
 import { mockedNotificationsFromStore, mockedObjectsFromStore, mockedWarningImportNotification } from '../../_tests_/mockDataV2';
+import { reduxStore } from '../../store';
 
 describe('overview-helper', () => {
   const objectWorkingIds = [1, 2];
@@ -264,14 +265,17 @@ describe('overview-helper', () => {
       objectWorkingId: objectWorkingIds[0]
     };
 
-    const clearFailedObjectFromReduxMock = jest.spyOn(operationErrorHandler, 'clearFailedObjectFromRedux').mockImplementation();
+    const mockedStore = { officeReducer: { popupData: { callback: jest.fn() } } };
+    const { callback } = mockedStore.officeReducer.popupData;
+
+    jest.spyOn(reduxStore, 'getState').mockReturnValueOnce(mockedStore);
     const clearPopupDataMock = jest.spyOn(officeReducerHelper, 'clearPopupData').mockImplementation();
 
     // When
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
-    expect(clearFailedObjectFromReduxMock).toHaveBeenCalledWith(objectWorkingIds[0]);
+    expect(callback).toHaveBeenCalled();
     expect(clearPopupDataMock).toHaveBeenCalled();
   });
 
