@@ -34,12 +34,6 @@ const getDisableReasonImport = (isPublished, disableActiveActions, disableSecond
   }
 };
 
-const getImportDataIdAndString = (isBtnForLibraryWindow) => {
-  const importDataActionType = isBtnForLibraryWindow ? importActionTypes.IMPORT : importActionTypes.IMPORT_DATA;
-  const importDataId = isBtnForLibraryWindow ? importButtonIds.IMPORT : importButtonIds.IMPORT_DATA;
-  return { importDataActionType, importDataId };
-};
-
 export const PopupButtonsNotConnected = ({
   handleOk,
   handleSecondary,
@@ -56,14 +50,14 @@ export const PopupButtonsNotConnected = ({
   useImportAsRunButton,
   hideOk,
   isImportReport,
-  isBtnForLibraryWindow,
+  primaryImportBtnId = importButtonIds.IMPORT_DATA,
+  primaryImportBtnString = importActionTypes.IMPORT_DATA,
 }) => {
   const [t] = useTranslation('common', { i18n });
   const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
   const disableReasonForImport = getDisableReasonImport(
     isPublished, disableActiveActions, disableSecondary, checkingSelection
   );
-  const { importDataActionType, importDataId } = getImportDataIdAndString(isBtnForLibraryWindow);
 
   return (
     <div className="popup-buttons popup-footer">
@@ -78,12 +72,12 @@ export const PopupButtonsNotConnected = ({
       {!hideOk
         && (primaryImportType === objectImportType.TABLE ? (
           <ImportButton
-            id={useImportAsRunButton ? importButtonIds.RUN : importDataId}
+            id={useImportAsRunButton ? importButtonIds.RUN : primaryImportBtnId}
             handleOk={handleOk}
             isPrimaryBtn={isImportReport ? !handleSecondary : true}
             disableReason={disableReasonForImport}
             t={t}
-            actionType={useImportAsRunButton ? importActionTypes.APPLY : importDataActionType}
+            actionType={useImportAsRunButton ? importActionTypes.APPLY : primaryImportBtnString}
           />
         ) : (
           <ImportButton
@@ -138,7 +132,8 @@ PopupButtonsNotConnected.propTypes = {
   useImportAsRunButton: PropTypes.bool,
   hideOk: PropTypes.bool,
   isImportReport: PropTypes.bool,
-  isBtnForLibraryWindow: PropTypes.bool,
+  primaryImportBtnString: PropTypes.string,
+  primaryImportBtnId: PropTypes.string,
 };
 
 function mapStateToProps({ navigationTree }) {
