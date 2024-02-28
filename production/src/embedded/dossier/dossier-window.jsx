@@ -268,7 +268,6 @@ export const DossierWindowNotConnected = (props) => {
           </span>
         )}
       <ObjectWindowTitle
-        locale={i18n.language}
         objectType={mstrObjectEnum.mstrObjectType.dossier.name}
         objectName={chosenObjectName}
         isReprompt={isReprompt}
