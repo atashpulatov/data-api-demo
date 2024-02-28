@@ -7,17 +7,17 @@ import { CLEAR_DATA_OPERATION } from '../../operation/operation-type-names';
 
 class StepAddVisualizationPlaceholder {
   /**
-   * Deletes the visualization image from the worksheet
+   * Adds the visualization placeholder in the worksheet
    *
-   * This function is subscribed as one of the operation steps with the key REMOVE_VISUALIZATION_IMAGE,
+   * This function is subscribed as one of the operation steps with the key ADD_VISUALIZATION_PLACEHOLDER,
    * therefore should be called only via operation bus.
    *
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} objectData.bindId Unique id of the Office shape used for referencing the viz image in Excel
+   * @param {String} objectData.shapeProps Properties of the viz image imported into worksheet
+   * @param {String} objectData.name Name of the visualization image
    * @param {Object} operationData Reference to the operation data required for error handling
    */
   addVisualizationPlaceholder = async (objectData, operationData) => {
-    console.log('operationData', operationData);
     try {
       const {
         objectWorkingId,
@@ -31,11 +31,8 @@ class StepAddVisualizationPlaceholder {
       const shape = sheet.shapes.addGeometricShape(Excel.GeometricShapeType.rectangle);
 
       const shapeFill = shape.fill;
+      shapeFill.transparency = 0.1;
       shapeFill.foregroundColor = 'white';
-      shape.textFrame.textRange.text = visualizationName;
-      shape.textFrame.textRange.font.color = 'green';
-      shape.textFrame.horizontalAlignment = Excel.ShapeTextHorizontalAlignment.center;
-      shape.textFrame.verticalAlignment = Excel.ShapeTextVerticalAlignment.middle;
 
       shape.left = shapeProps?.left;
       shape.top = shapeProps?.top;
@@ -50,11 +47,6 @@ class StepAddVisualizationPlaceholder {
       const updatedObject = {
         objectWorkingId,
         bindId: shape.id,
-        worksheet: undefined,
-        shapeProps: undefined, // reset the shape props after adding image
-        bindIdToBeDuplicated: undefined, // reset the bindIdToBeDuplicated after adding image
-        instanceId: undefined, // reset the instanceId after adding image
-        dataCleared: undefined, // reset dataCleared after adding image
       };
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeAddVisualizationPlaceholder(objectWorkingId);

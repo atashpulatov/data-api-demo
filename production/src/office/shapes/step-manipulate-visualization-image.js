@@ -117,7 +117,6 @@ class StepManipulateVisualizationImage {
         shapeProps: undefined, // reset the shape props after adding image
         bindIdToBeDuplicated: undefined, // reset the bindIdToBeDuplicated after adding image
         instanceId: undefined, // reset the instanceId after adding image
-        dataCleared: undefined, // reset dataCleared after adding image
       };
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeManipulateVisualizationImage(objectWorkingId);
@@ -151,7 +150,7 @@ class StepManipulateVisualizationImage {
   ) => {
     const isInValidEditOperation = operationType === EDIT_OPERATION && !shapeInWorksheet;
 
-    const isInValidRefreshOperation = operationType === REFRESH_OPERATION && !shapeInWorksheet && !dataCleared;
+    const isInValidRefreshOperation = operationType === REFRESH_OPERATION && !shapeInWorksheet;
 
     const isInValidDuplicateOperation = operationType === DUPLICATE_OPERATION && !shapeToBeDuplicated;
 
