@@ -5,6 +5,7 @@ import { officeApiCrosstabHelper } from '../../../office/api/office-api-crosstab
 import officeTableHelperRange from '../../../office/table/office-table-helper-range';
 import officeFormatSubtotals from '../../../office/format/office-format-subtotals';
 import { officeRemoveHelper } from '../../../office/remove/office-remove-helper';
+import officeTableRefresh from '../../../office/table/office-table-refresh';
 
 describe('OfficeTableUpdate', () => {
   let contextLimitOriginal;
@@ -284,5 +285,36 @@ describe('OfficeTableUpdate', () => {
 
       expect(prevOfficeTableMock.getHeaderRowRange).toBeCalledTimes(1);
       expect(getHeaderRowRangeMock).toEqual(expectedValues);
+    });
+
+  it.each`
+  startCell | isCrosstab | fromCrosstabChange | crosstabHeaderDimensions     | prevCrosstabDimensions       | tableChanged | expectedResult
+  ${'B3'}   | ${true}    | ${false}           | ${{ rowsX: 1, columnsY: 2 }} | ${false}                     | ${false}     | ${'A1'}
+  ${'E5'}   | ${true}    | ${false}           | ${{ rowsX: 4, columnsY: 4 }} | ${{ rowsX: 2, columnsY: 4 }} | ${false}     | ${'A1'}
+  ${'C5'}   | ${false}   | ${true}            | ${false}                     | ${{ rowsX: 2, columnsY: 4 }} | ${false}     | ${'A1'}
+  ${'D2'}   | ${false}   | ${true}            | ${false}                     | ${{ rowsX: 3, columnsY: 1 }} | ${false}     | ${'A1'}
+  ${'A1'}   | ${false}   | ${false}           | ${false}                     | ${false}                     | ${false}     | ${'A1'}
+  `('getCrosstabStartCell should work as expected',
+    ({
+      startCell,
+      isCrosstab,
+      fromCrosstabChange,
+      crosstabHeaderDimensions,
+      prevCrosstabDimensions,
+      tableChanged,
+      expectedResult
+    }) => {
+    // given
+      const mockedInstanceDefinition = {
+        mstrTable: {
+          isCrosstab, fromCrosstabChange, crosstabHeaderDimensions, prevCrosstabDimensions
+        }
+      };
+
+      // when
+      const result = officeTableRefresh.getCrosstabStartCell(startCell, mockedInstanceDefinition, tableChanged);
+
+      // then
+      expect(result).toEqual(expectedResult);
     });
 });

@@ -1,12 +1,15 @@
-import { mockedNotificationsFromStore, mockedObjectsFromStore } from '../../_tests_/mockDataV2';
+import { objectNotificationTypes } from '@mstr/connector-components';
 import { notificationService } from '../../notification-v2/notification-service';
-import { officeApiHelper } from '../../office/api/office-api-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import { sidePanelService } from '../../right-side-panel/side-panel-service';
 import { popupHelper } from '../popup-helper';
 import overviewHelper, { OverviewActionCommands } from './overview-helper';
+import {
+  DUPLICATE_OPERATION, EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
+} from '../../operation/operation-type-names';
+import { mockedNotificationsFromStore, mockedObjectsFromStore, mockedWarningImportNotification } from '../../_tests_/mockDataV2';
 
 describe('overview-helper', () => {
   const objectWorkingIds = [1, 2];
@@ -20,6 +23,32 @@ describe('overview-helper', () => {
     // Then
     expect(officeMessageParentMock).toHaveBeenCalledWith({
       command: OverviewActionCommands.REFRESH,
+      objectWorkingIds
+    });
+  });
+
+  it('should send edit request to side panel', () => {
+    // Given
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    // When
+    overviewHelper.sendEditRequest(objectWorkingIds[0]);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.EDIT,
+      objectWorkingId: objectWorkingIds[0]
+    });
+  });
+
+  it('should send reprompt request to side panel', () => {
+    // Given
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    // When
+    overviewHelper.sendRepromptRequest(objectWorkingIds);
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith({
+      command: OverviewActionCommands.REPROMPT,
       objectWorkingIds
     });
   });
@@ -143,6 +172,38 @@ describe('overview-helper', () => {
     expect(refreshMock).toHaveBeenCalledWith(objectWorkingIds);
   });
 
+  it('should handle edit command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.EDIT,
+      objectWorkingId: objectWorkingIds[0]
+    };
+
+    const editMock = jest.spyOn(sidePanelService, 'edit').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(editMock).toHaveBeenCalledWith(objectWorkingIds[0]);
+  });
+
+  it('should handle reprompt command', async () => {
+    // Given
+    const actionCommand = {
+      command: OverviewActionCommands.REPROMPT,
+      objectWorkingIds,
+    };
+
+    const repromptMock = jest.spyOn(sidePanelService, 'reprompt').mockImplementation();
+
+    // When
+    await overviewHelper.handleOverviewActionCommand(actionCommand);
+
+    // Then
+    expect(repromptMock).toHaveBeenCalledWith(objectWorkingIds, true);
+  });
+
   it('should handle remove command', async () => {
     // Given
     const actionCommand = {
@@ -254,7 +315,8 @@ describe('overview-helper', () => {
       status: {
         type: 'success',
         title: 'Object duplicated',
-      }
+      },
+      isPrompted: true,
     };
 
     // When
@@ -262,5 +324,146 @@ describe('overview-helper', () => {
 
     // Then
     expect(result).toEqual([expectedResult]);
+  });
+
+  it('getWarningsToDisplay should work correctly', async () => {
+    // Given
+    const expectedResult = {
+      objectWorkingId: 1708520901973,
+      type: 'warning',
+      title: 'The table you try to import exceeds the worksheet limits.',
+      details: 'Failure details'
+
+    };
+
+    // When
+    const result = overviewHelper.getWarningsToDisplay([mockedWarningImportNotification]);
+
+    // Then
+    expect(result).toBeInstanceOf(Array);
+    expect(result[0].objectWorkingId).toEqual(expectedResult.objectWorkingId);
+    expect(result[0].children).toBeInstanceOf(Object);
+    expect(result[0].title).toEqual(expectedResult.title);
+    expect(result[0].details).toEqual(expectedResult.details);
+  });
+
+  it.each`
+    operationType           | notificationType                      | expectedResultLength
+    ${IMPORT_OPERATION}     | ${objectNotificationTypes.WARNING}    | ${1}
+    ${IMPORT_OPERATION}     | ${objectNotificationTypes.PROGRESS}   | ${0}
+    ${REMOVE_OPERATION}     | ${objectNotificationTypes.WARNING}    | ${1}
+    ${DUPLICATE_OPERATION}  | ${objectNotificationTypes.WARNING}    | ${1}
+    ${REFRESH_OPERATION}    | ${objectNotificationTypes.WARNING}    | ${0}
+    ${EDIT_OPERATION}       | ${objectNotificationTypes.WARNING}    | ${0}
+    `('getWarningsToDisplay should correctly determine whether to display notification as global notification in overview', ({ operationType, notificationType, expectedResultLength }) => {
+    // Given
+    const notifications = [{ ...mockedWarningImportNotification, operationType, type: notificationType }];
+
+    // When
+    const result = overviewHelper.getWarningsToDisplay(notifications);
+
+    // Then
+    expect(result).toBeInstanceOf(Array);
+    expect(result).toHaveLength(expectedResultLength);
+  });
+
+  it('should transform objects and notifications correctly', () => {
+    // Given
+    const objects = [
+      {
+        objectWorkingId: 1,
+        mstrObjectType: { name: 'visualization' },
+        name: 'Object 1',
+        refreshDate: '2022-01-01',
+        details: {
+          excelTableSize: { rows: 10, columns: 5 },
+          ancestors: [{ name: 'Project 1' }],
+          owner: { name: 'Owner 1' },
+          importedBy: 'User 1',
+        },
+        importType: 'Type 1',
+        startCell: 'A1',
+        worksheet: { name: 'Sheet 1' },
+        manipulationsXML: { promptAnswers: 'Answer 1' },
+      },
+      {
+        objectWorkingId: 2,
+        mstrObjectType: { name: 'report' },
+        name: 'Object 2',
+        refreshDate: '2022-01-02',
+        details: {
+          excelTableSize: { rows: 20, columns: 10 },
+          ancestors: [{ name: 'Project 2' }],
+          owner: { name: 'Owner 2' },
+          importedBy: 'User 2',
+        },
+        importType: 'Type 2',
+        startCell: 'B2',
+        worksheet: { name: 'Sheet 2' },
+        isPrompted: true,
+      },
+    ];
+
+    const notifications = [
+      {
+        objectWorkingId: 1,
+        type: 'notificationType',
+        title: 'Notification 1',
+        details: 'Details 1',
+      },
+      {
+        objectWorkingId: 2,
+        type: 'notificationType',
+        title: 'Notification 2',
+        details: 'Details 2',
+      },
+    ];
+
+    // When
+    const transformedObjects = overviewHelper.transformExcelObjects(objects, notifications);
+
+    // Then
+    expect(transformedObjects).toEqual([
+      {
+        objectWorkingId: 1,
+        mstrObjectType: { name: 'visualization' },
+        name: 'Object 1',
+        worksheet: 'Sheet 1',
+        cell: 'A1',
+        rows: 10,
+        columns: 5,
+        objectType: 'Type 1',
+        lastUpdated: '2022-01-01',
+        status: {
+          type: 'notificationType',
+          title: 'Notification 1',
+          details: 'Details 1',
+        },
+        project: 'Project 1',
+        owner: 'Owner 1',
+        importedBy: 'User 1',
+        isPrompted: true,
+      },
+      {
+        objectWorkingId: 2,
+        mstrObjectType: { name: 'report' },
+        name: 'Object 2',
+        worksheet: 'Sheet 2',
+        cell: 'B2',
+        rows: 20,
+        columns: 10,
+        objectType: 'Type 2',
+        lastUpdated: '2022-01-02',
+        status: {
+          type: 'notificationType',
+          title: 'Notification 2',
+          details: 'Details 2',
+        },
+        project: 'Project 2',
+        owner: 'Owner 2',
+        importedBy: 'User 2',
+        isPrompted: true,
+      },
+    ]);
   });
 });

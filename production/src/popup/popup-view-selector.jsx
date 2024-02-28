@@ -25,8 +25,10 @@ const renderProperComponent = (popupType) => {
       return <LibraryWindow />;
     case PopupTypeEnum.promptsWindow:
     case PopupTypeEnum.repromptingWindow:
+    case PopupTypeEnum.repromptReportDataOverview:
       return <PromptsWindow />;
     case PopupTypeEnum.dossierWindow:
+    case PopupTypeEnum.repromptDossierDataOverview:
       return <DossierWindow />; // TODO: Might be missing {t}
     case PopupTypeEnum.obtainInstanceHelper:
       return <ObtainInstanceHelper />;
@@ -37,11 +39,13 @@ const renderProperComponent = (popupType) => {
       return (
         <OverviewWindow
           onImport={overviewHelper.sendImportRequest}
+          onEdit={overviewHelper.sendEditRequest}
+          onReprompt={overviewHelper.sendRepromptRequest}
           onRefresh={overviewHelper.sendRefreshRequest}
           onDelete={overviewHelper.sendDeleteRequest}
           onDuplicate={overviewHelper.sendDuplicateRequest}
           onRename={overviewHelper.sendRenameRequest}
-          onGoTo={overviewHelper.sendGoToWorksheetRequest}
+          onGoToWorksheet={overviewHelper.sendGoToWorksheetRequest}
           onDismissNotification={overviewHelper.sendDismissNotificationRequest} />
       );
     default:

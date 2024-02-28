@@ -210,7 +210,6 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   return (
     <div className="library-window">
       <ObjectWindowTitle
-        locale={i18n.language}
         objectType="" // not needed for import, falls back to 'Data'
         objectName="" // not needed for import
         isReprompt={false}
@@ -233,7 +232,9 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
           !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
         isPublished={isPublished}
-        isImportReport={mstrObjectEnum.getMstrTypeBySubtype(chosenSubtype) === mstrObjectEnum.mstrObjectType.report}
+        isImportReport={mstrObjectEnum
+          .getMstrTypeBySubtype(chosenSubtype)
+          ?.type === mstrObjectEnum.mstrObjectType.report.type} // Includes entire type 3 objects(reports and cubes)
       />
     </div>
   );

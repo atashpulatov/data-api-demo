@@ -3,6 +3,8 @@ import { OutsideOfRangeError } from '../../error/outside-of-range-error';
 import { officeProperties } from '../../redux-reducer/office-reducer/office-properties';
 import { authenticationHelper } from '../../authentication/authentication-helper';
 import { officeApiCrosstabHelper } from './office-api-crosstab-helper';
+import { officeActions } from '../../redux-reducer/office-reducer/office-actions';
+import { DEFAULT_CELL_POSITION, DEFAULT_RANGE_POSITION } from '../../mstr-object/constants';
 
 const ALPHABET_RANGE_START = 1;
 const ALPHABET_RANGE_END = 26;
@@ -67,56 +69,108 @@ class OfficeApiHelper {
   getExcelSessionStatus = async () => !!await this.getExcelContext();
 
   /**
-   * Returns top left cell of selected range.
+   * Returns top left cell of selected range. If the selected cell is invalid,
+   * returns the top left cell of the last active cell, else returns the default cell address.
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @return {String} Address of the cell.
+   * @throws {Error} INVALID_SELECTION error if the selected cell is invalid
    */
   getSelectedCell = async (excelContext) => {
-    const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
-    selectedRangeStart.load(officeProperties.officeAddress);
-    await excelContext.sync();
-    return this.getStartCellOfRange(selectedRangeStart.address);
-  };
-
-  /**
-   * Returns the position of the topLeftMost cell of the selected range
-   *
-   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
-   * @return {Object} object containing the top, left value of the selected range.
-   */
-  getSelectedRangePosition = async (excelContext) => {
-    const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
-    selectedRange.load(['top', 'left']);
-    await excelContext.sync();
-    return {
-      top: selectedRange.top,
-      left: selectedRange.left,
-    };
-  };
-
-  /**
-   * Gets the position of the selected range/cell OR the position of the active shape.
-   *
-   * @param excelContext Excel context.
-   * @returns {Object} Position of the selected range OR the position of the active shape.
-   */
-  getSelectedRangeWrapper = async (excelContext, func) => {
-    let selectedRangePos = { top: 0, left: 0 };
     try {
-      selectedRangePos = await func(excelContext);
+      const selectedRangeStart = excelContext.workbook.getSelectedRange().getCell(0, 0);
+      selectedRangeStart.load(officeProperties.officeAddress);
+      await excelContext.sync();
+      return this.getStartCellOfRange(selectedRangeStart.address);
     } catch (error) {
       /*
       If the error is InvalidSelection it means that the selected range is invalid.
       https://learn.microsoft.com/en-us/office/dev/add-ins/testing/application-specific-api-error-handling
-      In that case we will return the default selectedRangePos.
+      In that case we will return the last active cell address, else we will return default cell address.
       For all other case we throw the error.
       */
       if (error.code !== INVALID_SELECTION) {
         throw error;
       }
+
+      let defaultCellAddress;
+
+      const { activeCellAddress } = this.reduxStore.getState().officeReducer;
+      // If the active cell address is valid, then select the last active cell
+      if (activeCellAddress) {
+        defaultCellAddress = activeCellAddress;
+      } else {
+        defaultCellAddress = DEFAULT_CELL_POSITION;
+        // Update the active cell address with default cell address
+        this.reduxStore.dispatch(officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION));
+      }
+
+      return defaultCellAddress;
     }
-    return selectedRangePos;
+  };
+
+  /**
+   * Returns the position of the topLeftMost cell of the selected range. If the selected range is invalid,
+   * returns the topLeftMost cell of the last active range, else returns the default range position.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @return {Object} object containing the top, left value of the range.
+   * @throws {Error} INVALID_SELECTION error if the selected cell is invalid
+   */
+  getSelectedRangePosition = async (excelContext) => {
+    try {
+      const selectedRange = excelContext.workbook.getSelectedRange().getCell(0, 0);
+      selectedRange.load(['top', 'left']);
+      await excelContext.sync();
+      return {
+        top: selectedRange.top,
+        left: selectedRange.left,
+      };
+    } catch (error) {
+      /*
+      If the error is InvalidSelection it means that the selected range is invalid.
+      https://learn.microsoft.com/en-us/office/dev/add-ins/testing/application-specific-api-error-handling
+      In that case we will return the last active range position, else we will return default range position.
+      For all other case we throw the error.
+      */
+      if (error.code !== INVALID_SELECTION) {
+        throw error;
+      }
+
+      let defaultRangePosition;
+
+      const { activeCellAddress } = this.reduxStore.getState().officeReducer;
+      // If the active cell address is valid, then select the last active range
+      if (activeCellAddress) {
+        defaultRangePosition = await this.convertCellAddressToRangePosition(excelContext, activeCellAddress);
+      } else {
+        defaultRangePosition = DEFAULT_RANGE_POSITION;
+        // Update the active cell address with default cell address
+        this.reduxStore.dispatch(officeActions.setActiveCellAddress(DEFAULT_CELL_POSITION));
+      }
+
+      return defaultRangePosition;
+    }
+  };
+
+  /**
+   * Converts the cell address to range position.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Office} cellAddress Excel cell address
+   * @return {Object} object containing the top, left value of the range.
+   */
+  convertCellAddressToRangePosition = async (excelContext, cellAddress) => {
+    const currentExcelSheet = this.getCurrentExcelSheet(excelContext);
+    const rangePosition = currentExcelSheet.getRange(cellAddress);
+
+    rangePosition.load(['top', 'left']);
+    await excelContext.sync();
+
+    return {
+      top: rangePosition.top,
+      left: rangePosition.left,
+    };
   };
 
   /**
@@ -329,7 +383,6 @@ class OfficeApiHelper {
    */
   addOnSelectionChangedListener = async (excelContext, setActiveCellAddress) => {
     excelContext.workbook.onSelectionChanged.add(async () => {
-      setActiveCellAddress('...');
       const activeCellAddress = await this.getSelectedCell(excelContext);
       setActiveCellAddress(activeCellAddress);
     });

@@ -95,6 +95,8 @@ class StepGetOfficeTableEditRefresh {
         isTotalsRowVisible: prevOfficeTable.showTotals,
       };
 
+      startCell = officeTableRefresh.getCrosstabStartCell(startCell, instanceDefinition, tableChanged);
+
       officeTable.worksheet.load(['id', 'name']);
       await excelContext.sync();
 

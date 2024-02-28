@@ -1,3 +1,6 @@
+import { objectNotificationTypes } from '@mstr/connector-components';
+import { IMPORT_OPERATION } from '../operation/operation-type-names';
+
 export const reportV2 = {
   id: '0ED85DEE11E9772400000080EFC5116D',
   name: 'airline-sample-data--tabular-with-multiform',
@@ -1648,7 +1651,8 @@ export const mockedObjectsFromStore = [
     },
     startCell: 'A1',
     worksheet: { id: 1, name: 'Sheet 1' },
-    refreshDate: 1707383921342
+    refreshDate: 1707383921342,
+    manipulationsXML: { promptAnswers: 'promptAnswer', },
   }
 ];
 
@@ -1662,3 +1666,11 @@ export const mockedNotificationsFromStore = [
     isFetchingComplete: true
   }
 ];
+
+export const mockedWarningImportNotification = {
+  objectWorkingId: 1708520901973,
+  type: objectNotificationTypes.WARNING,
+  title: 'The table you try to import exceeds the worksheet limits.',
+  details: 'Failure details',
+  operationType: IMPORT_OPERATION
+};

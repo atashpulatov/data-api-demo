@@ -60,6 +60,10 @@ const setActiveCellAddress = (activeCellAddress) => ({
   activeCellAddress
 });
 
+const updateActiveCellAddress = (activeCellAddress) => (dispatch) => {
+  dispatch(setActiveCellAddress(activeCellAddress));
+};
+
 const setPopupData = (popupData) => ({
   type: officeProperties.actions.setPopupData,
   popupData,
@@ -81,6 +85,7 @@ export const officeActions = {
   toggleReusePromptAnswersFlag,
   toggleRenderSettingsFlag,
   setActiveCellAddress,
+  updateActiveCellAddress,
   setPopupData,
   clearPopupData,
   setIsShapeAPISupported

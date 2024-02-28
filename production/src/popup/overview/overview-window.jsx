@@ -26,6 +26,8 @@ export const OverviewWindowNotConnected = (props) => {
     onRefresh,
     onDelete,
     onDuplicate,
+    onEdit,
+    onReprompt,
     onRename,
     onGoToWorksheet,
     onDismissNotification,
@@ -48,6 +50,11 @@ export const OverviewWindowNotConnected = (props) => {
   const objectsToRender = useMemo(
     () => overviewHelper.transformExcelObjects(objects, notifications),
     [objects, notifications]
+  );
+
+  const notificationsToDisplay = useMemo(
+    () => overviewHelper.getWarningsToDisplay(notifications),
+    [notifications]
   );
 
   const handleCloseDialog = () => {
@@ -89,12 +96,16 @@ export const OverviewWindowNotConnected = (props) => {
         popup={dialogPopup}
         applicationType={ApplicationTypeEnum.EXCEL}
         onAddData={onImport}
+        onEdit={onEdit}
+        onReprompt={onReprompt}
         onRefresh={onRefresh}
-        onDelete={onDelete}
         onDuplicate={handleDuplicate}
+        onDelete={onDelete}
         onRename={onRename}
         onGoTo={onGoToWorksheet}
-        shouldDisableActions={shouldDisableActions} />
+        shouldDisableActions={shouldDisableActions}
+        globalNotifications={notificationsToDisplay}
+      />
       <Button className="overview-close-button" onClick={handleCloseDialog}>{t('Close')}</Button>
     </div>
   );
@@ -103,6 +114,8 @@ export const OverviewWindowNotConnected = (props) => {
 OverviewWindowNotConnected.propTypes = {
   onImport: PropTypes.func,
   onRefresh: PropTypes.func,
+  onEdit: PropTypes.func,
+  onReprompt: PropTypes.func,
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
   onRename: PropTypes.func,

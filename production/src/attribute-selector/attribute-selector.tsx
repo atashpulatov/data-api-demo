@@ -56,7 +56,6 @@ export const AttributeSelectorNotConnected = (props: AttributeSelectorNotConnect
     <ErrorBoundary>
       <AttributeMetricFilter
         t={t}
-        locale={i18n.language}
         attributesSelectedChange={attributesSelectedChange}
         key={chosenObject.id}
         title={title}

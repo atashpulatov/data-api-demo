@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { SidePanel, popupTypes } from '@mstr/connector-components';
-import i18n from '../i18n';
 import { navigationTreeActions } from '../redux-reducer/navigation-tree-reducer/navigation-tree-actions';
 import { SettingsMenu } from '../home/settings-menu';
 import { Confirmation } from '../home/confirmation';
@@ -16,6 +15,7 @@ import { notificationService } from '../notification-v2/notification-service';
 import { sidePanelEventHelper } from './side-panel-event-helper';
 import { sidePanelNotificationHelper } from './side-panel-notification-helper';
 import { PopupTypeEnum } from '../home/popup-type-enum';
+import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import { popupController } from '../popup/popup-controller';
 import {
   IMPORT_OPERATION, REFRESH_OPERATION, EDIT_OPERATION,
@@ -34,6 +34,7 @@ export const RightSidePanelNotConnected = ({
   toggleIsSettingsFlag,
   toggleSecuredFlag,
   toggleIsClearDataFailedFlag,
+  updateActiveCellAddress,
   globalNotification,
   notifications,
   operations,
@@ -41,9 +42,11 @@ export const RightSidePanelNotConnected = ({
   isDialogRendered,
   isDialogLoaded,
   toggleCurtain,
+  activeCellAddress,
+  popupType,
+  isDataOverviewOpen
 }) => {
   const [sidePanelPopup, setSidePanelPopup] = React.useState(null);
-  const [activeCellAddress, setActiveCellAddress] = React.useState('...');
   const [duplicatedObjectId, setDuplicatedObjectId] = React.useState(null);
   const [loadedObjectsWrapped, setLoadedObjectsWrapped] = React.useState(loadedObjects);
 
@@ -53,7 +56,7 @@ export const RightSidePanelNotConnected = ({
     async function initializeSidePanel() {
       try {
         await sidePanelEventHelper.addRemoveObjectListener();
-        await sidePanelEventHelper.initializeActiveCellChangedListener(setActiveCellAddress);
+        await sidePanelEventHelper.initializeActiveCellChangedListener(updateActiveCellAddress);
         await sidePanelService.initReusePromptAnswers();
       } catch (error) {
         console.error(error);
@@ -61,7 +64,7 @@ export const RightSidePanelNotConnected = ({
     }
     initializeSidePanel();
     sidePanelService.clearRepromptTask();
-  }, []);
+  }, [updateActiveCellAddress]);
 
   React.useEffect(() => {
     officeStoreHelper.isFileSecured() && toggleSecuredFlag(true);
@@ -82,15 +85,22 @@ export const RightSidePanelNotConnected = ({
     // TODO: Move logic for controlling popup visibility to Redux
     if (popupData) {
       sidePanelNotificationHelper.setRangeTakenPopup({ ...popupData, setSidePanelPopup, activeCellAddress });
+
+      // For the mulitiple reprompt workflow from the side panel, pass the popupData to the native dialog
+      const { objectWorkingId } = popupData;
+      const objectData = officeReducerHelper.getObjectFromObjectReducerByObjectWorkingId(objectWorkingId);
+      const isDossier = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.visualization.name;
+      const isReport = objectData.mstrObjectType.name === mstrObjectEnum.mstrObjectType.report.name;
+      if ((isDossier || isReport) && toggleCurtain && !isDataOverviewOpen) {
+        popupController.sendMessageToDialog(
+          JSON.stringify({ popupData })
+        );
+      }
     } else if (sidePanelPopup?.type === popupTypes.RANGE_TAKEN) {
       setSidePanelPopup(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCellAddress, popupData]);
-
-  const handleSettingsClick = () => {
-    officeReducerHelper.noOperationInProgress() && toggleIsSettingsFlag(!isSettings);
-  };
 
   React.useEffect(() => {
     setLoadedObjectsWrapped(() => sidePanelNotificationHelper.injectNotificationsToObjects(
@@ -146,21 +156,21 @@ export const RightSidePanelNotConnected = ({
     if (isDialogLoaded) {
       popupController.sendMessageToDialog(
         JSON.stringify({
-          popupType: PopupTypeEnum.importedDataOverview,
+          popupType,
           objects: loadedObjects,
           notifications,
           globalNotification,
-          activeCellAddress
+          activeCellAddress,
+          popupData
         })
       );
     }
-  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded]);
+  }, [loadedObjects, notifications, globalNotification, activeCellAddress, isDialogLoaded, popupData, popupType]);
 
   return (
     <>
       {toggleCurtain && <div className="block-side-panel-ui" /> }
       <SidePanel
-        locale={i18n.language}
         loadedObjects={loadedObjectsWrapped}
         onAddData={addDataWrapper}
         onTileClick={highlightObjectWrapper}
@@ -171,7 +181,7 @@ export const RightSidePanelNotConnected = ({
         onRename={renameWrapper}
         popup={!isDialogRendered && sidePanelPopup}
         settingsMenu={isSettings && <SettingsMenu />}
-        onSettingsClick={handleSettingsClick}
+        onSettingsClick={() => toggleIsSettingsFlag(!isSettings)}
         confirmationWindow={isConfirm && <Confirmation />}
         globalNotification={globalNotification}
         onSelectAll={notificationService.dismissNotifications}
@@ -191,6 +201,9 @@ export const mapStateToProps = (state) => {
   const { operations } = state.operationReducer;
   const { globalNotification, notifications } = state.notificationReducer;
   const { repromptsQueue } = state.repromptsQueueReducer;
+  const { popupType, isDataOverviewOpen } = state.popupStateReducer;
+  const objects = officeReducerHelper.getObjectsListFromObjectReducer();
+
   const {
     isConfirm,
     isSettings,
@@ -200,10 +213,12 @@ export const mapStateToProps = (state) => {
     reusePromptAnswers,
     popupData,
     isDialogOpen,
-    isDialogLoaded
+    isDialogLoaded,
+    activeCellAddress
   } = state.officeReducer;
+
   return {
-    loadedObjects: state.objectReducer.objects,
+    loadedObjects: objects,
     operations,
     importRequested,
     dossierOpenRequested,
@@ -219,6 +234,9 @@ export const mapStateToProps = (state) => {
     isDialogRendered: isDialogOpen,
     isDialogLoaded,
     toggleCurtain: repromptsQueue?.length > 0,
+    activeCellAddress,
+    popupType,
+    isDataOverviewOpen
   };
 };
 
@@ -227,12 +245,13 @@ const mapDispatchToProps = {
   toggleIsSettingsFlag: officeActions.toggleIsSettingsFlag,
   toggleSecuredFlag: officeActions.toggleSecuredFlag,
   toggleIsClearDataFailedFlag: officeActions.toggleIsClearDataFailedFlag,
+  updateActiveCellAddress: officeActions.updateActiveCellAddress,
 };
 
 export const RightSidePanel = connect(mapStateToProps, mapDispatchToProps)(RightSidePanelNotConnected);
 
 RightSidePanelNotConnected.propTypes = {
-  popupData: PropTypes.shape({}),
+  popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
   globalNotification: PropTypes.shape({ type: PropTypes.string }),
   loadedObjects: PropTypes.arrayOf(
     PropTypes.shape({
@@ -303,7 +322,11 @@ RightSidePanelNotConnected.propTypes = {
   toggleIsSettingsFlag: PropTypes.func,
   toggleSecuredFlag: PropTypes.func,
   toggleIsClearDataFailedFlag: PropTypes.func,
+  updateActiveCellAddress: PropTypes.func,
   isDialogRendered: PropTypes.bool,
   isDialogLoaded: PropTypes.bool,
   toggleCurtain: PropTypes.bool,
+  activeCellAddress: PropTypes.string,
+  popupType: PropTypes.oneOf(Object.values(PopupTypeEnum)),
+  isDataOverviewOpen: PropTypes.bool,
 };

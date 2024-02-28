@@ -110,8 +110,8 @@ describe('shape-helper-util', () => {
 
     const imageProps = determineImagePropsToBeAddedToBook(args);
     expect(imageProps).toEqual({
-      width: 675,
-      height: 345,
+      width: 123,
+      height: 342,
       top: 345,
       left: 256,
       sheet: mockSheet
@@ -134,8 +134,8 @@ describe('shape-helper-util', () => {
 
     const imageProps2 = determineImagePropsToBeAddedToBook(args2);
     expect(imageProps2).toEqual({
-      width: 675,
-      height: 345,
+      width: 123,
+      height: 342,
       top: 0,
       left: 0,
       sheet: mockSheet

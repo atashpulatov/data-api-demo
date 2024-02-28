@@ -25,6 +25,8 @@ const { createDossierInstance, rePromptDossier, getObjectPrompts } = mstrObjectR
 const VIZ_SELECTION_RETRY_DELAY = 200; // ms
 const VIZ_SELECTION_RETRY_LIMIT = 10;
 
+const EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS = 4000;
+
 export default class EmbeddedDossierNotConnected extends React.Component {
   constructor(props) {
     super(props);
@@ -90,7 +92,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     const vizDimensions = chapterData[payloadVisKey];
 
     if (vizDimensions) {
-      vizDimensions.width = convertPixelsToPoints(vizDimensions.width);
+      // Currently scrollWidth is applied only to grid images
+      let vizDimensionsWidth = vizDimensions.scrollWidth || vizDimensions.width;
+
+      // If the entire image width exceeds the export engine dimension limit,
+      // then export the image with allowed maximum dimension in pixels by export engine
+      if (vizDimensionsWidth > EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS) {
+        vizDimensionsWidth = EXPORT_ENGINE_MAX_DIMENSION_IN_PIXELS;
+      }
+
+      vizDimensions.width = convertPixelsToPoints(vizDimensionsWidth);
       vizDimensions.height = convertPixelsToPoints(vizDimensions.height);
     }
 

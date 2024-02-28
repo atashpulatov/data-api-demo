@@ -61,17 +61,17 @@ class OfficeApiWorksheetHelper {
   /**
   * Get address of the Excel cell based on value of insertNewWorksheet might also create new worksheet.
   *
+  * @param {String} importType object import type(table|image)
   * @param {Boolean} insertNewWorksheet specify whether new worksheet should be create before getting startcell
   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
   * @param {String} objectName Name of the object added to the new worksheet
   * @return {String} address of Excel cell
   */
-  getStartCell = async (insertNewWorksheet, excelContext, objectName) => {
+  getStartCell = async (importType, insertNewWorksheet, excelContext, objectName) => {
     if (insertNewWorksheet) {
       await officeApiWorksheetHelper.createAndActivateNewWorksheet(excelContext, objectName);
     }
-    const { getSelectedRangeWrapper, getSelectedCell } = officeApiHelper;
-    return getSelectedRangeWrapper(excelContext, getSelectedCell);
+    return officeApiHelper.getSelectedCell(excelContext);
   };
 
   /**
@@ -160,13 +160,18 @@ class OfficeApiWorksheetHelper {
    *
    * @param {Office} excelContext Reference to Excel Context used by Excel API functions
    * @param {String} objectName Name of the object added to the worksheet
+   *
+   * @returns {String} New Excel worksheet name
    */
 
   renameExistingWorksheet = async (excelContext, objectName) => {
     const currentSheet = excelContext.workbook.worksheets.getActiveWorksheet();
     const newSheetName = await this.prepareWorksheetName(excelContext, objectName);
+
     currentSheet.name = newSheetName;
     await excelContext.sync();
+
+    return newSheetName;
   };
 
   /**

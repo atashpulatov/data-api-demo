@@ -10,4 +10,6 @@ export const PopupTypeEnum = {
   obtainInstanceHelper: 'obtain-instance-helper',
   multipleRepromptTransitionPage: 'multiple-reprompt-transition-page',
   importedDataOverview: 'imported-data-overview',
+  repromptDossierDataOverview: 'reprompt-dossier-data-overview',
+  repromptReportDataOverview: 'reprompt-report-data-overview',
 };
