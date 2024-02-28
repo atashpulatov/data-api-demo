@@ -35,10 +35,14 @@ class PopupController {
 
     if (!isDataOverviewOpen) {
       this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-      this.reduxStore.dispatch(this.popupActions.resetState());
     } else {
       this.reduxStore.dispatch(officeActions.setIsDialogLoaded(false));
+      this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: undefined, isEdit: undefined }));
     }
+    // DE287911: Below line should always run, to ensure `editedObject` is not persisted.
+    // We should evaluate adding better Redux Store clean-up after operations (Edit, Reprompt, etc.)
+    // to ensure we aren't keeping old references around (e.g. editedObject, isReprompt, isEdit, etc.)
+    this.reduxStore.dispatch(this.popupActions.resetState());
   };
 
   runPopupNavigation = async () => {
