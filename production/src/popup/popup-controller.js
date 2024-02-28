@@ -37,7 +37,7 @@ class PopupController {
       this.reduxStore.dispatch(popupStateActions.onClearPopupState());
     } else {
       this.reduxStore.dispatch(officeActions.setIsDialogLoaded(false));
-      this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: undefined, isEdit: undefined }));
+      this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: undefined, isEdit: undefined })); // clear reprompt/edit flags
     }
     // DE287911: Below line should always run, to ensure `editedObject` is not persisted.
     // We should evaluate adding better Redux Store clean-up after operations (Edit, Reprompt, etc.)
