@@ -3,6 +3,7 @@ import { popupHelper } from '../popup-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
+import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { DialogPopup } from './overview-types';
 import { DUPLICATE_OPERATION, IMPORT_OPERATION, REMOVE_OPERATION } from '../../operation/operation-type-names';
 import { OverviewGlobalNotificationButtons, NotificationButtonsProps } from './overview-global-notification-buttons';
@@ -241,6 +242,7 @@ class OverviewHelper {
         const { callback } = this.store.getState().officeReducer?.popupData || {};
         await callback();
 
+        this.store.dispatch(executeNextRepromptTask());
         officeReducerHelper.clearPopupData();
         break;
       case OverviewActionCommands.RENAME:
