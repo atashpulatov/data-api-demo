@@ -266,6 +266,7 @@ describe('overview-helper', () => {
     };
 
     const mockedStore = { officeReducer: { popupData: { callback: jest.fn() } } };
+    const { callback } = mockedStore.officeReducer.popupData;
 
     jest.spyOn(reduxStore, 'getState').mockReturnValueOnce(mockedStore);
     const clearPopupDataMock = jest.spyOn(officeReducerHelper, 'clearPopupData').mockImplementation();
@@ -274,6 +275,7 @@ describe('overview-helper', () => {
     await overviewHelper.handleOverviewActionCommand(actionCommand);
 
     // Then
+    expect(callback).toHaveBeenCalled();
     expect(clearPopupDataMock).toHaveBeenCalled();
   });
 
