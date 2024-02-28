@@ -159,20 +159,6 @@ class StepManipulateVisualizationImage {
       throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
     }
   };
-
-  /**
-   * Get the dimensions of the shape to be duplicated.
-   *
-   * @param {Object} bindIdToBeDuplicated Unique id of the Office shape to be duplicated.
-   * @param {Object} excelContext Excel context.
-   *
-   * @returns {Object} Dimensions of the shape to be duplicated.
-   */
-  getDuplicatedShapeDimensions = async (bindIdToBeDuplicated, excelContext) => {
-    const shapeToBeDuplicated = await officeShapeApiHelper.getShape(excelContext, bindIdToBeDuplicated);
-    const { height, width } = shapeToBeDuplicated || {};
-    return { height, width };
-  };
 }
 
 const stepManipulateVisualizationImage = new StepManipulateVisualizationImage();
