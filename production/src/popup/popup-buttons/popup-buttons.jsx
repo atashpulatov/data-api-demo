@@ -63,8 +63,8 @@ export const PopupButtonsNotConnected = ({
   const disableReasonForImport = getDisableReasonImport(
     isPublished, disableActiveActions, disableSecondary, checkingSelection
   );
-
   const { importDataActionType, importDataId } = getImportDataIdAndString(isBtnForLibraryWindow);
+
   return (
     <div className="popup-buttons popup-footer">
       {handleBack && <BackButton handleBack={handleBack} t={t} />}
