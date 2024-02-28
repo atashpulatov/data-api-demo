@@ -149,13 +149,13 @@ class SidePanelNotificationHelper {
     const objectNotificationData = notifications.find(
       (notification) => notification.objectWorkingId === object.objectWorkingId
     );
-
+    // Validate that isFetchingComplete is not undefined
     const operationBasedNotificationData = this.shouldGenerateProgressPercentage(objectOperation)
       ? {
         percentageComplete: (objectOperation.totalRows || object.importType === objectImportType.IMAGE)
           ? calculateLoadingProgress(objectOperation, object.importType) : 0,
-        itemsTotal: !objectNotificationData.isFetchingComplete ? objectOperation.totalRows : 0,
-        itemsComplete: !objectNotificationData.isFetchingComplete ? objectOperation.loadedRows : 0,
+        itemsTotal: !objectNotificationData?.isFetchingComplete ? objectOperation.totalRows : 0,
+        itemsComplete: !objectNotificationData?.isFetchingComplete ? objectOperation.loadedRows : 0,
       }
       : {};
 

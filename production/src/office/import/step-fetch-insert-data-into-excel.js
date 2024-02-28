@@ -28,6 +28,8 @@ class StepFetchInsertDataIntoExcel {
    * @param {String} operationData.instanceDefinition Object containing information about MSTR object
    */
   fetchInsertDataIntoExcel = async (objectData, operationData) => {
+    console.group('Fetch and insert data into Excel');
+    console.time('Total');
     try {
       const {
         objectWorkingId, subtotalsInfo, subtotalsInfo: { importSubtotal = true }, definition
@@ -52,12 +54,10 @@ class StepFetchInsertDataIntoExcel {
       let newInstance = null;
 
       console.time('Fetch and insert into excel');
-      console.time('Fetch data');
       for await (const {
         row, header, subtotalAddress, metricsInRows, rowsInformation
       } of rowGenerator) {
         console.groupCollapsed(`Importing rows: ${rowIndex} to ${Math.min(rowIndex + limit, rows)}`);
-        console.timeEnd('Fetch data');
 
         excelContext.workbook.application.suspendApiCalculationUntilNextSync();
 
@@ -124,6 +124,9 @@ class StepFetchInsertDataIntoExcel {
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
+    } finally {
+      console.timeEnd('Total');
+      console.groupEnd();
     }
   };
 

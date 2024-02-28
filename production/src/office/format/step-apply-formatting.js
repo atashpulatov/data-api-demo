@@ -18,7 +18,8 @@ class StepApplyFormatting {
    * @param {Office} operationData.excelContext Reference to Excel Context used by Excel API functions
    */
   applyFormatting = async (objectData, operationData) => {
-    console.time('Apply formatting');
+    console.group('Apply formatting');
+    console.time('Total');
 
     const {
       objectWorkingId, officeTable, instanceDefinition, excelContext
@@ -40,11 +41,12 @@ class StepApplyFormatting {
     } catch (error) {
       console.error(error);
       console.log('Cannot apply formatting, skipping');
+    } finally {
+      operationStepDispatcher.completeFormatData(objectWorkingId);
+
+      console.timeEnd('Total');
+      console.groupEnd();
     }
-
-    operationStepDispatcher.completeFormatData(objectWorkingId);
-
-    console.timeEnd('Apply formatting');
   };
 
   /**
