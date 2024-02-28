@@ -321,7 +321,6 @@ export const PromptsWindowNotConnected = (props) => {
   return (
     <div className="prompts-window">
       <ObjectWindowTitle
-        locale={i18n.language}
         objectType={mstrObjectEnum.mstrObjectType.report.name}
         objectName={objectName}
         isReprompt={isReprompt}

@@ -210,7 +210,6 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
   return (
     <div className="library-window">
       <ObjectWindowTitle
-        locale={i18n.language}
         objectType="" // not needed for import, falls back to 'Data'
         objectName="" // not needed for import
         isReprompt={false}

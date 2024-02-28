@@ -43,7 +43,6 @@ export const MultipleRepromptTransitionPageNotConnected: FC<MultipleRepromptTran
   return (
     <div className="multiple-reprompt-transition-page">
       <ObjectWindowTitle
-        locale={i18n.language}
         objectType="" // not needed since multiple reprompt title doesn't show type
         objectName={nextObjectName}
         isReprompt
