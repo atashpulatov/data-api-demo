@@ -7,7 +7,7 @@ import { CLEAR_DATA_OPERATION } from '../../operation/operation-type-names';
 
 class StepAddVisualizationPlaceholder {
   /**
-   * Adds the visualization placeholder in the worksheet.
+   * Adds the visualization placeholder in the worksheet, when the data is cleared from the sidepanel.
    *
    * This function is subscribed as one of the operation steps with the key ADD_VISUALIZATION_PLACEHOLDER,
    * therefore should be called only via operation bus.
@@ -26,23 +26,7 @@ class StepAddVisualizationPlaceholder {
       } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
-      const sheet = excelContext.workbook.worksheets.getItem(shapeProps?.worksheetId);
-
-      const shape = sheet.shapes.addGeometricShape(Excel.GeometricShapeType.rectangle);
-
-      const shapeFill = shape.fill;
-      shapeFill.transparency = 0.1;
-      shapeFill.foregroundColor = 'white';
-
-      shape.left = shapeProps?.left;
-      shape.top = shapeProps?.top;
-      shape.height = shapeProps?.height;
-      shape.width = shapeProps?.width;
-      shape.name = visualizationName;
-
-      shape.load(['id']);
-
-      await excelContext.sync();
+      const shape = await officeApiHelper.addShape(excelContext, shapeProps, visualizationName);
 
       const updatedObject = {
         objectWorkingId,
