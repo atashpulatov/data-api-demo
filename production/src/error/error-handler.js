@@ -46,13 +46,16 @@ class ErrorService {
 
       officeReducerHelper.displayPopup(popupData);
     } else {
+      const { isDataOverviewOpen } = this.reduxStore?.getState()?.popupStateReducer || {};
+
       // Mainly for Reprompt All workflow but covers others, close dialog if somehow remained open
-      await this.closePopupIfOpen();
+      await this.closePopupIfOpen(!isDataOverviewOpen);
       // Show warning notification
       this.notificationService.showObjectWarning(objectWorkingId, { title: errorMessage, message: details, callback });
     }
   };
 
+  // TODO combine with handleObjectBasedError
   handleError = async (error, options = {
     chosenObjectName: 'Report', onConfirm: null, isLogout: false, dialogType: null
   }) => {
@@ -65,9 +68,7 @@ class ErrorService {
     const shouldClosePopup = dialogType === PopupTypeEnum.importedDataOverview
     && [errorTypes.UNAUTHORIZED_ERR, errorTypes.CONNECTION_BROKEN_ERR].includes(errorType);
 
-    if (shouldClosePopup) {
-      await this.closePopupIfOpen();
-    }
+    await this.closePopupIfOpen(shouldClosePopup);
 
     this.displayErrorNotification(error, errorType, errorMessage, onConfirm);
     this.checkForLogout(errorType, isLogout);
@@ -214,14 +215,15 @@ class ErrorService {
   /**
    * Function checking if the dialog is open and closing it if it is.
    * Also clearing Reprompt task queue if dialog was open for Reprompt workflow.
+   * * @param {Boolean} shouldClose flag indicated whether to close the dialog or not
    */
-  closePopupIfOpen = async () => {
+  closePopupIfOpen = async (shouldClose) => {
     const storeState = this.reduxStore.getState();
 
     const { isDialogOpen } = storeState.officeReducer;
     const { isDataOverviewOpen } = storeState.popupStateReducer;
 
-    if (isDialogOpen && !isDataOverviewOpen) {
+    if (isDialogOpen && shouldClose) {
       const isDialogOpenForReprompt = storeState.repromptsQueueReducer?.total > 0;
 
       await this.popupController.closeDialog(this.popupController.dialog);
