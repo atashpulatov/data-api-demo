@@ -241,6 +241,22 @@ class BaseBrowserPage(BasePage):
             return element
 
         raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+    
+    def find_element_in_list_by_text_remove(self, selector, text):
+        element = self.find_element_in_list_by_text_safe_remove(selector, text)
+
+        if element:
+            return element
+
+        raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
+    
+    def find_element_in_list_by_text_duplicate(self, selector, text):
+        element = self.find_element_in_list_by_text_safe_duplicate(selector, text)
+
+        if element:
+            return element
+
+        raise MstrException('Element not present - selector: [%s], text: [%s].' % (selector, text))
 
     def find_element_in_list_by_text_safe(self, selector, text):
         elements = self.get_elements_by_css(selector)
@@ -252,6 +268,28 @@ class BaseBrowserPage(BasePage):
         #        return item
 
         return elements[0]
+    
+    def find_element_in_list_by_text_safe_remove(self, selector, text):
+        elements = self.get_elements_by_css(selector)
+
+        ## With latest Excel Web, this element no longer have any inner text, thus the function will fail here. So we need to comment out this part and return the element directly.
+        
+        #for item in elements:
+        #    if item.text == text:
+        #        return item
+
+        return elements[4]
+    
+    def find_element_in_list_by_text_safe_duplicate(self, selector, text):
+        elements = self.get_elements_by_css(selector)
+
+        ## With latest Excel Web, this element no longer have any inner text, thus the function will fail here. So we need to comment out this part and return the element directly.
+        
+        #for item in elements:
+        #    if item.text == text:
+        #        return item
+
+        return elements[2]
 
     def find_element_in_list_by_attribute(self, selector, attribute_name, attribute_value):
         found_elements = self.get_elements_by_css(selector)

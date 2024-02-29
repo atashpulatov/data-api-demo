@@ -47,6 +47,11 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     
     NOTIFICATION_BUTTON = '.warning-notification-button-container'
 
+    #Change index for image import feature
+    REFRESH_BUTTON_FOR_NORMAL_DOSSIER = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(1)'
+    OPTIONS_BUTTON_FOR_NORMAL_DOSSIER = RIGHT_PANEL_TILE_BUTTON_PREFIX + 'button:nth-of-type(2)'
+
+
 
     NAME_INPUT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.view-only'
     NAME_INPUT_TEXT_FOR_OBJECT = RIGHT_PANEL_TILE + ' .rename-input.editable'
@@ -58,7 +63,12 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
     TILE_CONTEXT_MENU_ITEMS = '.react-contextmenu-item'
     TILE_CONTEXT_MENU_OPTION_RENAME = 'Rename'
     TILE_CONTEXT_MENU_OPTION_REMOVE = 'Remove'
+    TILE_CONTEXT_MENU_OPTION_DUPLICATE = 'Duplicate'
+
     TILE_CONTEXT_MENU_WRAPPER = '.react-contextmenu-wrapper'
+
+    NORMAL_TILE_CONTEXT_MENU_ITEMS = '.context-menu-item'
+
 
     OBJECT_TILE_ACTIONS = '.icon-bar'
 
@@ -154,6 +164,9 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
 
     def click_refresh(self, tile_no):
         self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
+    
+    def click_refresh_without_prompt(self, tile_no):
+        self._click_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_NORMAL_DOSSIER, tile_no)
 
     def hover_refresh(self, tile_no):
         self._hover_over_tile_button(RightPanelTileBrowserPage.REFRESH_BUTTON_FOR_OBJECT, tile_no)
@@ -294,12 +307,21 @@ class RightPanelTileBrowserPage(BaseBrowserPage):
         name_input = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_number)
         name_input.right_click()
 
-        self.find_element_in_list_by_text(
-            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_ITEMS,
+        self.find_element_in_list_by_text_remove(
+            RightPanelTileBrowserPage.NORMAL_TILE_CONTEXT_MENU_ITEMS,
             RightPanelTileBrowserPage.TILE_CONTEXT_MENU_OPTION_REMOVE
         ).move_to_and_click()
 
-        self.wait_for_remove_object_to_finish_successfully()
+    def duplicate_object_using_context_menu_without_prompt(self, object_number):
+        self.focus_on_add_in_frame()
+
+        name_input = self.get_element_by_css(RightPanelTileBrowserPage.RIGHT_PANEL_TILE % object_number)
+        name_input.right_click()
+
+        self.find_element_in_list_by_text_duplicate(
+            RightPanelTileBrowserPage.NORMAL_TILE_CONTEXT_MENU_ITEMS,
+            RightPanelTileBrowserPage.TILE_CONTEXT_MENU_OPTION_DUPLICATE
+        ).move_to_and_click()    
 
     def get_object_name_from_tooltip(self, object_number):
         self.focus_on_add_in_frame()

@@ -389,5 +389,21 @@ class ExcelSheetBrowserPage(ABC, BaseBrowserPage):
 
     def verify_image_inserted(self):
         self.focus_on_excel_frame()
-
         return self.get_element_by_tag_name('image') is not None
+    
+    def verify_wait_image_inserted(self):
+        self.focus_on_excel_frame()
+        # wait few moments for the image to be processed
+        self.pause(5)
+
+        # could not find the element with tag image
+        try:
+            self.get_element_by_tag_name('image')
+            return True
+        except Exception as e:
+            return False
+
+    def verify_images_num(self, images_num):
+        self.focus_on_excel_frame()
+        self.pause(5)
+        return len(self.get_elements_by_tag_name('image')) == int(images_num)

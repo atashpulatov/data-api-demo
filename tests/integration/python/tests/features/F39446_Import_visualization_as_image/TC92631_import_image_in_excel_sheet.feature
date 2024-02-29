@@ -1,7 +1,7 @@
 @image_excel
 Feature: F39446 - Ability to import visualization as image in Excel
     
-    Scenario: [TC92631] - Library view in Excel plugin
+    Scenario: [TC92631] - Import image for visualization dossier in Excel plugin
         Given I initialized Excel
 
         When I logged in as default user
@@ -26,8 +26,26 @@ Feature: F39446 - Ability to import visualization as image in Excel
         And I verified that Import image button is enabled
         And I clicked Import image button without checking results
 
+    # check the image has been inserted
         Then I verified excel sheet has a image inserted
 
+    # check the image refresh button function
+        When I clicked Refresh on without prompt object 1
+        Then I verified excel sheet has a image inserted
 
+    # check the Clear data 
+        When I clicked clear data
+        Then I verified excel sheet has total 0 images
+        And I clicked view data
+        Then I verified excel sheet has total 1 images
 
+    # check the image remove function
+        And I removed object 1 using context menu
+        Then I verified excel sheet has no image inserted
 
+    # check the image duplicate function
+        And I duplicate object 1 using context menu without prompt
+        And I clicked Import button in Duplicate popup for image
+    # Issue existed for the error message
+        And I verified that the object 1 action in warning box is "Could not complete the operation. The image was deleted manually."
+        Then I verified excel sheet has total 2 images

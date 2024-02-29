@@ -42,6 +42,9 @@ def step_impl(context, object_number):
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().click_refresh(object_number)
 
+@step('I clicked Refresh on without prompt object {object_number}')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().click_refresh_without_prompt(object_number)
 
 @step('I clicked Reprompt on object {object_number}')
 def step_impl(context, object_number):
@@ -147,11 +150,13 @@ def step_impl(context, object_number, new_object_name):
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().remove_object_using_icon(object_number)
 
-
 @step('I removed object {object_number} using context menu')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().remove_object_using_context_menu(object_number)
 
+@step('I duplicate object {object_number} using context menu without prompt')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().duplicate_object_using_context_menu_without_prompt(object_number)
 
 @step('I waited for object to be refreshed successfully')
 def step_impl(context):
@@ -245,3 +250,8 @@ def step_impl(context, object_number, expected_message):
         object_number,
         expected_message
     )
+
+@step('I verified that the object {object_number} action in warning box is "{warning_message}"')
+def step_impl(context, object_number, warning_message):
+    action_in_progress_name = context.pages.right_panel_tile_page().get_object_action_in_progress_name(object_number)
+    AssertUtil.assert_not_equal(action_in_progress_name, warning_message)
