@@ -164,20 +164,20 @@ describe('ErrorService', () => {
     });
   });
   describe('handleError for rest error', () => {
-    it('should display notification on ENV_NOT_FOUND_ERR', () => {
+    it('should display notification on ENV_NOT_FOUND_ERR', async () => {
       // given
       const response = { body: { iServerCode: '-2147171501' } };
       const error = { status: 404, response };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
       expect(spyLogOut).not.toBeCalled();
     });
 
-    it('should display notification and logout on UNAUTHORIZED_ERR', () => {
+    it('should display notification and logout on UNAUTHORIZED_ERR', async () => {
       // given
       const error = {
         status: 401,
@@ -186,14 +186,14 @@ describe('ErrorService', () => {
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       jest.runOnlyPendingTimers();
       // then
       expect(spyMethod).toBeCalled();
       expect(spyLogOut).toBeCalled();
     });
 
-    it('should display notification and logout on UNAUTHORIZED_ERR with ERR003 code', () => {
+    it('should display notification and logout on UNAUTHORIZED_ERR with ERR003 code', async () => {
       // given
       const error = {
         status: 401,
@@ -201,12 +201,12 @@ describe('ErrorService', () => {
       };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display  wrong username notification on UNAUTHORIZED_ERR with ERR003 code and iServerCode', () => {
+    it('should display  wrong username notification on UNAUTHORIZED_ERR with ERR003 code and iServerCode', async () => {
       // given
       const error = {
         status: 401,
@@ -219,140 +219,140 @@ describe('ErrorService', () => {
       };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification and logout on BAD_REQUEST_ERR', () => {
+    it('should display notification and logout on BAD_REQUEST_ERR', async () => {
       // given
       const error = { response: { status: 400, }, };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification on CONNECTION_BROKEN_ERR and NOR logout if flag is true', () => {
+    it('should display notification on CONNECTION_BROKEN_ERR and NOR logout if flag is true', async () => {
       // given
       const error = { message: 'Possible causes: the network is offline,', };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       const spyLogOut = jest.spyOn(errorService, 'fullLogOut');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
       expect(spyLogOut).not.toBeCalled();
     });
 
-    it('should display notification on BadRequestError', () => {
+    it('should display notification on BadRequestError', async () => {
       // given
       const error = { response: { status: 400, }, };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification on OutsideOfRangeError ', () => {
+    it('should display notification on OutsideOfRangeError ', async () => {
       // given
       const error = new OutsideOfRangeError();
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification on InternalServerError with no error body', () => {
+    it('should display notification on InternalServerError with no error body', async () => {
       // given
       const error = { status: 500 };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification on InternalServerError', () => {
+    it('should display notification on InternalServerError', async () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147171501' } };
       const error = { response };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification on InternalServerError on report with Custom Groups', () => {
+    it('should display notification on InternalServerError on report with Custom Groups', async () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147171502' } };
       const error = { response };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification on exceeding row limits', () => {
+    it('should display notification on exceeding row limits', async () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147205488' } };
       const error = { response };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
-    it('should display notification on not published cubes', () => {
+    it('should display notification on not published cubes', async () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147072488' } };
       const error = { response };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification on object not present in metadata', () => {
+    it('should display notification on object not present in metadata', async () => {
       // given
       const response = { status: 500, body: { iServerCode: '-2147216373' } };
       const error = { response };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display NO_DATA_RETURNED on server error with -2147213784 iServerCode', () => {
+    it('should display NO_DATA_RETURNED on server error with -2147213784 iServerCode', async () => {
       // given
       const response = { status: 403, body: { iServerCode: '-2147213784' } };
       const error = { response };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should display notification on dossier removed from metadata', () => {
+    it('should display notification on dossier removed from metadata', async () => {
       // given
       const response = { status: 404, body: { iServerCode: -2147216373 } };
       const error = { response, mstrObjectType: mstrObjectEnum.mstrObjectType.dossier.name };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should logout on UnauthorizedError', () => {
+    it('should logout on UnauthorizedError', async () => {
       // given
       const error = {
         status: 401,
@@ -361,38 +361,38 @@ describe('ErrorService', () => {
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       global.setTimeout = jest.fn();
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
       expect(setTimeout).toBeCalled();
     });
 
-    it('should logout on EnvironmentNotFound', () => {
+    it('should logout on EnvironmentNotFound', async () => {
       // given
       const error = { status: 404 };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error, true);
+      await errorService.handleError(error, true);
       // then
       expect(spyMethod).toBeCalled();
     });
 
-    it('should handle OverlappingTablesError', () => {
+    it('should handle OverlappingTablesError', async () => {
       // given
       const error = { name: 'RichApi.Error', message: 'A table can\'t overlap another table. ' };
       const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
     });
 
-    it('should display INVALID_VIZ_KEY_MESSAGE notification on INVALID_VIZ_KEY error', () => {
+    it('should display INVALID_VIZ_KEY_MESSAGE notification on INVALID_VIZ_KEY error', async () => {
       // given
       const error = { response: { status: 404, }, type: errorTypes.INVALID_VIZ_KEY };
       const spyMethod = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(spyMethod).toBeCalled();
     });
@@ -449,7 +449,7 @@ describe('ErrorService', () => {
   });
 
   describe('handleError for office error', () => {
-    it('should display notification on RUN_OUTSIDE_OFFICE_ERR', () => {
+    it('should display notification on RUN_OUTSIDE_OFFICE_ERR', async () => {
       // given
       const error = {
         name: 'RichApi.Error',
@@ -457,25 +457,26 @@ describe('ErrorService', () => {
       };
       const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
     });
 
-    it('should display notification on OVERLAPPING_TABLES_ERR', () => {
+    it('should display notification on OVERLAPPING_TABLES_ERR', async () => {
       // given
       const error = {
         name: 'RichApi.Error',
         message: 'A table can\'t overlap another table. ',
       };
       const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
+
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
     });
 
-    it('should display notification on GENERIC_OFFICE_ERR', () => {
+    it('should display notification on GENERIC_OFFICE_ERR', async () => {
       // given
       const error = {
         name: 'RichApi.Error',
@@ -483,17 +484,17 @@ describe('ErrorService', () => {
       };
       const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
     });
 
-    it('should display notification on OutsideOfRangeError', () => {
+    it('should display notification on OutsideOfRangeError', async () => {
       // given
       const error = new OutsideOfRangeError();
       const notificationSpy = jest.spyOn(errorService, 'displayErrorNotification');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(notificationSpy).toBeCalled();
     });
@@ -528,12 +529,12 @@ describe('ErrorService', () => {
       expect(logOutRedirectSpy).toBeCalled();
     });
 
-    it('should handle LogoutError', () => {
+    it('should handle LogoutError', async () => {
       // given
       const error = { message: 'error' };
       const fullLogOutSpy = jest.spyOn(errorService, 'handleError');
       // when
-      errorService.handleError(error);
+      await errorService.handleError(error);
       // then
       expect(fullLogOutSpy).toBeCalled();
     });
