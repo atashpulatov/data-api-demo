@@ -23,7 +23,7 @@ class StepAddVisualizationPlaceholder {
       } = objectData;
       const excelContext = await officeApiHelper.getExcelContext();
 
-      const shape = await officeApiHelper.addShape(excelContext, shapeProps, visualizationName);
+      const shape = await officeApiHelper.addGeometricShape(excelContext, shapeProps, visualizationName);
 
       const updatedObject = {
         objectWorkingId,
