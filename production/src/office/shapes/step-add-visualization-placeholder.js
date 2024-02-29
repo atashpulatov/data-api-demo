@@ -1,9 +1,6 @@
-import { officeShapeApiHelper } from './office-shape-api-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
-import officeStoreObject from '../store/office-store-object';
-import { CLEAR_DATA_OPERATION } from '../../operation/operation-type-names';
 
 class StepAddVisualizationPlaceholder {
   /**
