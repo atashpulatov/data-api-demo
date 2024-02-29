@@ -314,7 +314,7 @@ describe('OfficeApiHelper', () => {
 
       window.Excel = {
         GeometricShapeType: {
-            rectangle: 'Rectangle'
+          rectangle: 'Rectangle'
         }
       };
 
@@ -324,8 +324,8 @@ describe('OfficeApiHelper', () => {
             getItem: jest.fn().mockImplementation((worksheetId) => ({
               shapes: {
                 addGeometricShape: jest.fn().mockImplementation((geometricShapeType) => ({
-                    fill: {},
-                    load: mock
+                  fill: {},
+                  load: mock
                 }))
               },
             })),
@@ -337,19 +337,19 @@ describe('OfficeApiHelper', () => {
       const shape = await officeApiHelper.addGeometricShape(excelContextMock, shapeProps, 'visualizationName');
       // then
 
-    const expectedShape =  {
+      const expectedShape = {
         fill: {
-            foregroundColor: "white",
-            transparency: 0.1,
+          foregroundColor: 'white',
+          transparency: 0.1,
         },
         height: 480,
         left: 350,
         load: mock,
-        name: "visualizationName",
+        name: 'visualizationName',
         top: 45,
         width: 960,
-    }
-    expect(shape).toEqual(expectedShape);
+      };
+      expect(shape).toEqual(expectedShape);
     });
   });
 });
