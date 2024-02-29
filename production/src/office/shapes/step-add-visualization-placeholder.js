@@ -13,7 +13,7 @@ class StepAddVisualizationPlaceholder {
    * therefore should be called only via operation bus.
    *
    * @param {Number} objectData.objectWorkingId Unique Id of the object allowing to reference specific object
-   * @param {String} objectData.shapeProps Properties of the viz image imported into worksheet
+   * @param {Object} objectData.shapeProps Properties of the viz image imported into worksheet
    * @param {String} objectData.name Name of the visualization image
    * @param {Object} operationData Reference to the operation data required for error handling
    */

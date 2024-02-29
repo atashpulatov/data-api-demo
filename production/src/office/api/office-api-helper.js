@@ -410,6 +410,14 @@ class OfficeApiHelper {
     }
   };
 
+  /**
+   * Adds the shape into the worksheet with given shape properties.
+   *
+   * @param {Office} excelContext Reference to Excel Context used by Excel API functions
+   * @param {Object} shapeProps Properties of the shape
+   * @param {String} visualizationName Name of the shape
+   * @returns {Object} Shape imported into worksheet
+   */
   addShape = async (excelContext, shapeProps, visualizationName) => {
     const sheet = excelContext.workbook.worksheets.getItem(shapeProps?.worksheetId);
     const shape = sheet.shapes.addGeometricShape(Excel.GeometricShapeType.rectangle);
