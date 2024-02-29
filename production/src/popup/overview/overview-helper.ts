@@ -1,11 +1,13 @@
-import { popupTypes, objectNotificationTypes } from '@mstr/connector-components';
+import { popupTypes, objectNotificationTypes, globalNotificationTypes } from '@mstr/connector-components';
 import { popupHelper } from '../popup-helper';
 import { sidePanelNotificationHelper } from '../../right-side-panel/side-panel-notification-helper';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { DialogPopup } from './overview-types';
-import { DUPLICATE_OPERATION, IMPORT_OPERATION, REMOVE_OPERATION } from '../../operation/operation-type-names';
+import {
+  DUPLICATE_OPERATION, EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
+} from '../../operation/operation-type-names';
 import { OverviewGlobalNotificationButtons, NotificationButtonsProps } from './overview-global-notification-buttons';
 import { customT } from '../../customTranslation';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
@@ -22,6 +24,7 @@ export enum OverviewActionCommands {
   RENAME= 'overview-rename',
   GO_TO_WORKSHEET= 'overview-go-to-worksheet',
   DISMISS_NOTIFICATION= 'overview-dismiss-notification',
+  DISMISS_GLOBAL_NOTIFICATION= 'overview-dismiss-global-notification',
 }
 
 // rewrite everything
@@ -106,6 +109,14 @@ class OverviewHelper {
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
       objectWorkingIds
     });
+  }
+
+  /**
+   * Sends message with dismiss global notification command to the Side Panel
+   *
+   */
+  async sendDismissGlobalNotificationRequest(): Promise<void> {
+    popupHelper.officeMessageParent({ command: OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION, });
   }
 
   /**
@@ -195,6 +206,14 @@ class OverviewHelper {
   };
 
   /**
+   * Handles dismissing global notification
+   *
+   */
+  handleDismissGlobalNotification = (): void => {
+    this.notificationService.globalNotificationDissapear();
+  };
+
+  /**
    * Handles proper Overview dialog action command based on the response
    *
    * @param response Response from the Overview dialog
@@ -253,6 +272,9 @@ class OverviewHelper {
         break;
       case OverviewActionCommands.DISMISS_NOTIFICATION:
         this.handleDismissNotifications(response.objectWorkingIds);
+        break;
+      case OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION:
+        this.handleDismissGlobalNotification();
         break;
       default:
         console.log('Unhandled dialog command: ', response.command);
@@ -360,16 +382,22 @@ class OverviewHelper {
   /**
    * Gets warning notification to display as global warnings in the Overview dialog
    * @param notifications Array of notifications
+   * @param globalNotification Global notification object
+   *
    * @returns Array of notifications to display as global Notifications in overview dialog
    */
-  getWarningsToDisplay = (notifications: any[]): any => {
-    const operationsToDisplay = [IMPORT_OPERATION, DUPLICATE_OPERATION, REMOVE_OPERATION];
-    const warningNotifications = notifications.filter(
+  // TODO: Add types once redux state is typed
+  getWarningsToDisplay = ({ notifications, globalNotification }
+    : {notifications?: any[], globalNotification?: any}): any => {
+    const operationsToDisplay = [IMPORT_OPERATION, DUPLICATE_OPERATION,
+      REMOVE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION];
+
+    const warningNotifications = notifications?.filter(
       notification => notification.type === objectNotificationTypes.WARNING
       && operationsToDisplay.includes(notification.operationType)
     );
 
-    const modifiedWarnings = warningNotifications.map(warning => {
+    const modifiedWarnings = warningNotifications?.map(warning => {
       const buttonProps = { buttons: [{ label: customT('OK'), onClick: () => this.sendDismissNotificationRequest([warning.objectWorkingId]) }] } as NotificationButtonsProps;
       return {
         ...warning,
@@ -377,7 +405,14 @@ class OverviewHelper {
       };
     });
 
-    return modifiedWarnings;
+    const isGlobalWarning = globalNotification?.type === globalNotificationTypes.GLOBAL_WARNING;
+    const globalNotificationButtons = { buttons: [{ label: customT('OK'), onClick: () => this.sendDismissGlobalNotificationRequest() }] } as NotificationButtonsProps;
+    const modifiedGlobalNotification = isGlobalWarning ? [{
+      ...globalNotification,
+      children: OverviewGlobalNotificationButtons({ ...globalNotificationButtons })
+    }] : null;
+
+    return modifiedGlobalNotification || modifiedWarnings;
   };
 }
 
