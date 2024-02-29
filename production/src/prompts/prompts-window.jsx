@@ -303,7 +303,7 @@ export const PromptsWindowNotConnected = (props) => {
   const onPromptsContainerMount = useCallback(async (localContainer) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
 
-    if (!microstrategy || !microstrategy.dossier) {
+    if (!microstrategy?.dossier) {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.');
       return;
     }

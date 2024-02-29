@@ -85,14 +85,14 @@ describe('SidePanelService', () => {
     const objectWorkingId = 1;
     const loadedObjects = [{ objectWorkingId }];
     const notifications = [{ objectWorkingId, notificationData: 'data' }];
-    const operations = [{ objectWorkingId }];
+    const operations = [{ objectWorkingId, operationType: 'EDIT_OPERATION' }];
 
     const expectedObjects = [{
       objectWorkingId,
       notification: notifications[0],
     }];
 
-    jest.spyOn(sidePanelNotificationHelper, 'shouldGenerateProgressPercentage').mockImplementation();
+    jest.spyOn(sidePanelNotificationHelper, 'shouldGenerateProgressPercentage').mockImplementation(() => true);
 
     // when
     const object = sidePanelNotificationHelper.injectNotificationsToObjects(loadedObjects, notifications, operations);

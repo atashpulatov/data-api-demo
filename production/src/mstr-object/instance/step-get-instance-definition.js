@@ -31,9 +31,10 @@ class StepGetInstanceDefinition {
    * @param {Array} operationData.stepsQueue Queue of steps in current operation
    */
   getInstanceDefinition = async (objectData, operationData) => {
+    console.group('Getting Instance definition');
+    console.time('Total');
+
     try {
-      console.group('Importing data performance');
-      console.time('Total');
       const futureStep = operationData.stepsQueue[2];
 
       const {
@@ -130,6 +131,9 @@ class StepGetInstanceDefinition {
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
+    } finally {
+      console.timeEnd('Total');
+      console.groupEnd();
     }
   };
 

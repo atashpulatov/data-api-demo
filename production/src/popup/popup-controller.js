@@ -235,7 +235,9 @@ class PopupController {
           break;
       }
 
-      if (isDataOverviewOpen) {
+      // Only show overview table if there are no more prompted items left to Multiple Reprompt
+      // This check will keep the prompts dialog open in between reports/dossiers, if there are more to prompt.
+      if (isDataOverviewOpen && isMultipleRepromptQueueEmpty) {
         await this.runImportedDataOverviewPopup(true);
       }
     } catch (error) {
