@@ -67,7 +67,7 @@ describe('StepRemoveVisualizationImage', () => {
     jest.restoreAllMocks();
   });
 
-  it('addGeometricShape should throw an error', async () => {
+  it('addGeometricShape should throw an error.', async () => {
     // given
     jest.spyOn(console, 'error');
 
