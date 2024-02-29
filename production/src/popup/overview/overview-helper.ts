@@ -386,6 +386,7 @@ class OverviewHelper {
    *
    * @returns Array of notifications to display as global Notifications in overview dialog
    */
+  // TODO: Add types once redux state is typed
   getWarningsToDisplay = ({ notifications, globalNotification }
     : {notifications?: any[], globalNotification?: any}): any => {
     const operationsToDisplay = [IMPORT_OPERATION, DUPLICATE_OPERATION,
@@ -404,8 +405,9 @@ class OverviewHelper {
       };
     });
 
+    const isGlobalWarning = globalNotification?.type === globalNotificationTypes.GLOBAL_WARNING;
     const globalNotificationButtons = { buttons: [{ label: customT('OK'), onClick: () => this.sendDismissGlobalNotificationRequest() }] } as NotificationButtonsProps;
-    const modifiedGlobalNotification = globalNotification?.type === globalNotificationTypes.GLOBAL_WARNING ? [{
+    const modifiedGlobalNotification = isGlobalWarning ? [{
       ...globalNotification,
       children: OverviewGlobalNotificationButtons({ ...globalNotificationButtons })
     }] : null;

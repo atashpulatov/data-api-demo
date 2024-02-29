@@ -162,6 +162,7 @@ describe('overview-helper', () => {
   it('should send Dismiss Global Notification request to side panel', () => {
     // Given
     const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+
     // When
     overviewHelper.sendDismissGlobalNotificationRequest();
 
@@ -174,6 +175,7 @@ describe('overview-helper', () => {
   it('should handle Dismiss Global Notification request to side panel', () => {
     // Given
     const notificationServiceMock = jest.spyOn(notificationService, 'globalNotificationDissapear').mockImplementation();
+
     // When
     overviewHelper.handleDismissGlobalNotification();
 
