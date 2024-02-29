@@ -5,7 +5,8 @@ import operationStepDispatcher from '../../../operation/operation-step-dispatche
 
 describe('StepRemoveVisualizationImage', () => {
   const objectDataMock = {
-    shapeProps: { left: 350,
+    shapeProps: {
+      left: 350,
       top: 45,
       height: 480,
       width: 960,
@@ -39,13 +40,11 @@ describe('StepRemoveVisualizationImage', () => {
   const excelContextMock = {
     workbook: {
       worksheets: {
-        getItem: jest.fn().mockImplementation((worksheetId) => {
-            return {
-                shapes: {
-                    addGeometricShape: jest.fn().mockImplementation((geometricShapeType) => {throw error;})
-                },
-            }
-        }),
+        getItem: jest.fn().mockImplementation((worksheetId) => ({
+          shapes: {
+            addGeometricShape: jest.fn().mockImplementation((geometricShapeType) => { throw error; })
+          },
+        })),
       }
     },
     sync: mockFn,
