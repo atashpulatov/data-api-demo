@@ -58,6 +58,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
     COLUMN_HEADER = '''div[aria-label='%s']'''
     BUTTON_TOOLTIP = '.ant-popover-inner-content'
+    IMAGE_IMPORT_BUTTON_TOOLTIP = '.mstr-rc-standard-tooltip__content'
 
     ATTRIBUTE_METRIC_SELECTOR_ITEM_CSS = '.mstrmojo-FilterBox .item-wrapper'
 
@@ -311,10 +312,20 @@ class ImportDataBrowserPage(BaseBrowserPage):
 
         self.get_element_by_id(ImportDataBrowserPage.IMPORT_BUTTON_ELEM).move_to()
 
+    def hover_over_import_image_button(self):
+        self.focus_on_add_in_popup_frame()
+
+        self.get_element_by_id(ImportDataBrowserPage.IMPORT_IMAGE_BUTTON_ELEM).move_to()   
+
     def get_tooltip_message_for_button(self):
         self.focus_on_add_in_popup_frame()
 
         return self.get_element_by_css(ImportDataBrowserPage.BUTTON_TOOLTIP).text
+    
+    def get_tooltip_message_for_image_button(self):
+        self.focus_on_add_in_popup_frame()
+
+        return self.get_element_by_css(ImportDataBrowserPage.IMAGE_IMPORT_BUTTON_TOOLTIP).text
 
     def scroll_objects_list_by_number_of_pages(self, number):
         for i in range(int(number)):
