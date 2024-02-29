@@ -16,6 +16,9 @@ def step_impl(context):
 def step_impl(context):
     context.pages.prompt_page().click_run_button()
 
+@step('I clicked Apply button')
+def step_impl(context):
+    context.pages.prompt_page().click_run_button()
 
 @step('I clicked Run button for prompted dossier if prompts not already answered')
 def step_impl(context):
