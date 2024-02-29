@@ -7,7 +7,7 @@ import { CLEAR_DATA_OPERATION } from '../../operation/operation-type-names';
 
 class StepAddVisualizationPlaceholder {
   /**
-   * Adds the visualization placeholder in the worksheet
+   * Adds the visualization placeholder in the worksheet.
    *
    * This function is subscribed as one of the operation steps with the key ADD_VISUALIZATION_PLACEHOLDER,
    * therefore should be called only via operation bus.
