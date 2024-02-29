@@ -27,6 +27,7 @@ import {
   RENAME_EXCEL_WORKSHEET,
   MANIPULATE_VISUALIZATION_IMAGE,
   REMOVE_VISUALIZATION_IMAGE,
+  ADD_VISUALIZATION_PLACEHOLDER,
   SAVE_IMAGE_DETAILS
 } from './operation-steps';
 import { updateObject } from '../redux-reducer/object-reducer/object-actions';
@@ -154,6 +155,10 @@ class OperationStepDispatcher {
 
   completeRemoveVisualizationImage = (objectWorkingId) => {
     this.reduxStore.dispatch(markStepCompleted(objectWorkingId, REMOVE_VISUALIZATION_IMAGE));
+  };
+
+  completeAddVisualizationPlaceholder = (objectWorkingId) => {
+    this.reduxStore.dispatch(markStepCompleted(objectWorkingId, ADD_VISUALIZATION_PLACEHOLDER));
   };
 
   completeSaveImageDetails = (objectWorkingId) => {

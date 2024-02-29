@@ -35,7 +35,6 @@ class StepManipulateVisualizationImage {
         name: visualizationName,
         visualizationInfo,
         bindIdToBeDuplicated,
-        dataCleared
       } = objectData;
       const { instanceDefinition, operationType } = operationData;
       const { instanceId } = instanceDefinition;
@@ -50,7 +49,7 @@ class StepManipulateVisualizationImage {
         && await officeShapeApiHelper.getShape(excelContext, bindIdToBeDuplicated);
 
       // validate the operation and throw error if the operation is invalid
-      this.validateOperation(shapeInWorksheet, shapeToBeDuplicated, operationType, dataCleared);
+      this.validateOperation(shapeInWorksheet, shapeToBeDuplicated, operationType);
 
       // Get the dimensions retrieved via the ON_VIZ_SELECTION_CHANGED listener and cached in the object state
       const { vizDimensions, visualizationKey } = visualizationInfo;
@@ -117,7 +116,6 @@ class StepManipulateVisualizationImage {
         shapeProps: undefined, // reset the shape props after adding image
         bindIdToBeDuplicated: undefined, // reset the bindIdToBeDuplicated after adding image
         instanceId: undefined, // reset the instanceId after adding image
-        dataCleared: undefined, // reset dataCleared after adding image
       };
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeManipulateVisualizationImage(objectWorkingId);
@@ -147,11 +145,10 @@ class StepManipulateVisualizationImage {
     shapeInWorksheet,
     shapeToBeDuplicated,
     operationType,
-    dataCleared
   ) => {
     const isInValidEditOperation = operationType === EDIT_OPERATION && !shapeInWorksheet;
 
-    const isInValidRefreshOperation = operationType === REFRESH_OPERATION && !shapeInWorksheet && !dataCleared;
+    const isInValidRefreshOperation = operationType === REFRESH_OPERATION && !shapeInWorksheet;
 
     const isInValidDuplicateOperation = operationType === DUPLICATE_OPERATION && !shapeToBeDuplicated;
 
