@@ -34,7 +34,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I clicked import dossier without waiting for results
       And I waited for object to be imported successfully
 
-
+    # Overview window verification
       And I clicked Imported Data Overview settings menu option
      Then I verified Overview window is opened
       And I verified "Add Data" button in Overview window is enabled
@@ -53,7 +53,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
 
      When I clicked select all checkbox in Overview window
      Then I verified "Refresh" button in Overview window is enabled
-      And I verified "Re-Prompt" button in Overview window is disabled
+      And I verified "Re-Prompt" button in Overview window is enabled
       And I verified "Duplicate" button in Overview window is disabled
       And I verified "Delete" button in Overview window is enabled
 
