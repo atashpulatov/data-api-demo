@@ -225,10 +225,10 @@ export const PromptsWindowNotConnected = (props) => {
         .create(documentProps)
         .then(async (dossierPage) => {
           const [chapter, objectId, instanceId, visualizations] = await Promise.all([
-            dossierPage.getCurrentChapter(),
-            dossierPage.getDossierId(),
-            dossierPage.getDossierInstanceId(),
-            dossierPage.getCurrentPageVisualizationList(),
+            dossierPage?.getCurrentChapter(),
+            dossierPage?.getDossierId(),
+            dossierPage?.getDossierInstanceId(),
+            dossierPage?.getCurrentPageVisualizationList(),
           ]);
 
           const dossierData = {
