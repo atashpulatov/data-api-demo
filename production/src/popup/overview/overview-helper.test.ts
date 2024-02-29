@@ -1,4 +1,4 @@
-import { objectNotificationTypes } from '@mstr/connector-components';
+import { objectNotificationTypes, globalNotificationTypes } from '@mstr/connector-components';
 import { notificationService } from '../../notification-v2/notification-service';
 import officeReducerHelper from '../../office/store/office-reducer-helper';
 import operationErrorHandler from '../../operation/operation-error-handler';
@@ -9,7 +9,9 @@ import overviewHelper, { OverviewActionCommands } from './overview-helper';
 import {
   DUPLICATE_OPERATION, EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
 } from '../../operation/operation-type-names';
-import { mockedNotificationsFromStore, mockedObjectsFromStore, mockedWarningImportNotification } from '../../_tests_/mockDataV2';
+import {
+  mockedGlobalWarningNotification, mockedNotificationsFromStore, mockedObjectsFromStore, mockedWarningImportNotification
+} from '../../_tests_/mockDataV2';
 import { reduxStore } from '../../store';
 
 describe('overview-helper', () => {
@@ -155,6 +157,28 @@ describe('overview-helper', () => {
       command: OverviewActionCommands.DISMISS_NOTIFICATION,
       objectWorkingIds
     });
+  });
+
+  it('should send Dismiss Global Notification request to side panel', () => {
+    // Given
+    const officeMessageParentMock = jest.spyOn(popupHelper, 'officeMessageParent').mockImplementation();
+    // When
+    overviewHelper.sendDismissGlobalNotificationRequest();
+
+    // Then
+    expect(officeMessageParentMock).toHaveBeenCalledWith(
+      { command: OverviewActionCommands.DISMISS_GLOBAL_NOTIFICATION, }
+    );
+  });
+
+  it('should handle Dismiss Global Notification request to side panel', () => {
+    // Given
+    const notificationServiceMock = jest.spyOn(notificationService, 'globalNotificationDissapear').mockImplementation();
+    // When
+    overviewHelper.handleDismissGlobalNotification();
+
+    // Then
+    expect(notificationServiceMock).toHaveBeenCalled();
   });
 
   it('should handle refresh command', async () => {
@@ -341,12 +365,31 @@ describe('overview-helper', () => {
     };
 
     // When
-    const result = overviewHelper.getWarningsToDisplay([mockedWarningImportNotification]);
+    const result = overviewHelper.getWarningsToDisplay({ notifications: [mockedWarningImportNotification] });
 
     // Then
     expect(result).toBeInstanceOf(Array);
     expect(result[0].objectWorkingId).toEqual(expectedResult.objectWorkingId);
     expect(result[0].children).toBeInstanceOf(Object);
+    expect(result[0].title).toEqual(expectedResult.title);
+    expect(result[0].details).toEqual(expectedResult.details);
+  });
+
+  it('getWarningsToDisplay should work correctly for global notifications', async () => {
+    // Given
+    const expectedResult = {
+      type: globalNotificationTypes.GLOBAL_WARNING,
+      title: 'You cannot import an unpublished cube.',
+      details: 'Failure details'
+    };
+
+    // When
+    const result = overviewHelper.getWarningsToDisplay({ globalNotification: mockedGlobalWarningNotification });
+
+    // Then
+    expect(result).toBeInstanceOf(Array);
+    expect(result[0].children).toBeInstanceOf(Object);
+    expect(result[0].type).toEqual(expectedResult.type);
     expect(result[0].title).toEqual(expectedResult.title);
     expect(result[0].details).toEqual(expectedResult.details);
   });
@@ -357,14 +400,14 @@ describe('overview-helper', () => {
     ${IMPORT_OPERATION}     | ${objectNotificationTypes.PROGRESS}   | ${0}
     ${REMOVE_OPERATION}     | ${objectNotificationTypes.WARNING}    | ${1}
     ${DUPLICATE_OPERATION}  | ${objectNotificationTypes.WARNING}    | ${1}
-    ${REFRESH_OPERATION}    | ${objectNotificationTypes.WARNING}    | ${0}
-    ${EDIT_OPERATION}       | ${objectNotificationTypes.WARNING}    | ${0}
+    ${REFRESH_OPERATION}    | ${objectNotificationTypes.WARNING}    | ${1}
+    ${EDIT_OPERATION}       | ${objectNotificationTypes.WARNING}    | ${1}
     `('getWarningsToDisplay should correctly determine whether to display notification as global notification in overview', ({ operationType, notificationType, expectedResultLength }) => {
     // Given
     const notifications = [{ ...mockedWarningImportNotification, operationType, type: notificationType }];
 
     // When
-    const result = overviewHelper.getWarningsToDisplay(notifications);
+    const result = overviewHelper.getWarningsToDisplay({ notifications });
 
     // Then
     expect(result).toBeInstanceOf(Array);
