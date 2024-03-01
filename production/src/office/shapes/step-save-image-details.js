@@ -2,6 +2,7 @@ import { officeShapeApiHelper } from './office-shape-api-helper';
 import { officeApiHelper } from '../api/office-api-helper';
 import operationStepDispatcher from '../../operation/operation-step-dispatcher';
 import operationErrorHandler from '../../operation/operation-error-handler';
+import { errorMessages } from '../../error/constants';
 
 class StepSaveImageDetails {
   /**
@@ -19,6 +20,10 @@ class StepSaveImageDetails {
       const excelContext = await officeApiHelper.getExcelContext();
 
       const shapeInWorksheet = bindId && await officeShapeApiHelper.getShape(excelContext, bindId);
+
+      if (!shapeInWorksheet) {
+        throw new Error(errorMessages.VISUALIZATION_REMOVED_FROM_EXCEL);
+      }
 
       if (shapeInWorksheet) {
         const {
