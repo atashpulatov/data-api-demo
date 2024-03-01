@@ -94,7 +94,7 @@ export class HomeHelper {
 
         for (const object of objects) {
           // Bypass the image object if it was deleted from worksheet manually to not block 
-          // the queue of cleard data operation.
+          // the queue of clear data operation.
           if (object?.importType === objectImportType.IMAGE) {
             const shapeInWorksheet = object?.bindId && await officeShapeApiHelper.getShape(excelContext, object.bindId);
             if (!shapeInWorksheet) {
