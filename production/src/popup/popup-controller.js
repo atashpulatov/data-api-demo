@@ -65,7 +65,7 @@ class PopupController {
    */
   runRepromptPopup = async (reportParams, isEdit = true) => {
     const { popupType } = this.reduxStore.getState().popupStateReducer;
-    const isOverviewReprompt = popupType !== undefined && popupType === PopupTypeEnum.repromptReportDataOverview;
+    const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptReportDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
     await this.runPopup(isOverviewReprompt ? popupType : PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
@@ -76,7 +76,7 @@ class PopupController {
    */
   runRepromptDossierPopup = async (reportParams) => {
     const { popupType } = this.reduxStore.getState().popupStateReducer;
-    const isOverviewReprompt = popupType !== undefined && popupType === PopupTypeEnum.repromptDossierDataOverview;
+    const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptDossierDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
     await this.runPopup(isOverviewReprompt ? popupType : PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
@@ -223,8 +223,6 @@ class PopupController {
           }
           break;
         case commandCancel:
-          // First, clear reprompt task queue if the user cancels the popup.
-          this.reduxStore.dispatch(clearRepromptTask());
           if (!isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
             // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
             // since we were previously keeping the dialog open in between objects.
@@ -239,6 +237,8 @@ class PopupController {
             // Show overview table if cancel was triggered during Multiple Reprompt workflow.
             this.runImportedDataOverviewPopup(true);
           }
+          // Clear reprompt task queue if the user cancels the popup.
+          this.reduxStore.dispatch(clearRepromptTask());
           break;
         case commandError:
           errorService.handleError(response.error);
