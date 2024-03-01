@@ -1,4 +1,3 @@
-/* eslint-disable no-continue */
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
@@ -93,15 +92,16 @@ export class HomeHelper {
         await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
 
         for (const object of objects) {
-          // Bypass the image object if it was deleted from worksheet manually to not block 
+          // Bypass the image object if it was deleted from worksheet manually to not block
           // the queue of clear data operation.
+          let triggerClearData = true;
           if (object?.importType === objectImportType.IMAGE) {
             const shapeInWorksheet = object?.bindId && await officeShapeApiHelper.getShape(excelContext, object.bindId);
             if (!shapeInWorksheet) {
-              continue;
+              triggerClearData = false;
             }
           }
-          this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
+          triggerClearData && this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
         }
       }, 0);
     } catch (error) {
