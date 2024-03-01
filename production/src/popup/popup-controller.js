@@ -64,8 +64,10 @@ class PopupController {
    * @param {*} isEdit
    */
   runRepromptPopup = async (reportParams, isEdit = true) => {
+    const { popupType } = this.reduxStore.getState().popupStateReducer;
+    const isOverviewReprompt = popupType !== undefined && popupType === PopupTypeEnum.repromptReportDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
-    await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
+    await this.runPopup(isOverviewReprompt ? popupType : PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
   /**
@@ -73,8 +75,10 @@ class PopupController {
    * @param {*} reportParams
    */
   runRepromptDossierPopup = async (reportParams) => {
+    const { popupType } = this.reduxStore.getState().popupStateReducer;
+    const isOverviewReprompt = popupType !== undefined && popupType === PopupTypeEnum.repromptDossierDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
-    await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
+    await this.runPopup(isOverviewReprompt ? popupType : PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
 
   runEditDossierPopup = async (reportParams) => {
@@ -227,9 +231,13 @@ class PopupController {
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
             await this.closeDialog(dialog);
             this.resetDialogStates();
-          } else {
+          } else if (
+            isDataOverviewOpen
+                && (dialogType === PopupTypeEnum.repromptDossierDataOverview
+                    || dialogType === PopupTypeEnum.repromptReportDataOverview)
+          ) {
             // Show overview table if cancel was triggered during Multiple Reprompt workflow.
-            isDataOverviewOpen && await this.runImportedDataOverviewPopup(true);
+            this.runImportedDataOverviewPopup(true);
           }
           break;
         case commandError:
