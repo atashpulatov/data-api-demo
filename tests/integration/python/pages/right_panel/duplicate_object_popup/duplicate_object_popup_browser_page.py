@@ -9,6 +9,8 @@ class DuplicateObjectPopupBrowserPage(BaseBrowserPage):
 
     DUPLICATE_POPUP_ACTIVE_CELL_OPTION = 'active_cell'
 
+    DUPLICATE_POPUP_IMPORT_FOR_IMAGE_BUTTON = '.base-popup-footer-buttons > button:nth-child(1)'
+
     def __init__(self):
         super().__init__()
 
@@ -18,6 +20,9 @@ class DuplicateObjectPopupBrowserPage(BaseBrowserPage):
         self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_IMPORT_BUTTON).click()
 
         self.right_panel_tile_browser_page.wait_for_duplicate_object_to_finish_successfully()
+
+    def click_import_for_image(self):
+        self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_IMPORT_FOR_IMAGE_BUTTON).click()     
 
     def click_import_without_check(self):
         self.get_element_by_css(DuplicateObjectPopupBrowserPage.DUPLICATE_POPUP_IMPORT_BUTTON).click()
