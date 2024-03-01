@@ -1,3 +1,4 @@
+/* eslint-disable no-continue */
 import { officeApiHelper } from '../office/api/office-api-helper';
 import { errorService } from '../error/error-handler';
 import { officeApiWorksheetHelper } from '../office/api/office-api-worksheet-helper';
@@ -6,6 +7,8 @@ import { officeActions } from '../redux-reducer/office-reducer/office-actions';
 import { configActions } from '../redux-reducer/config-reducer/config-actions';
 import { officeContext } from '../office/office-context';
 import officeStoreRestoreObject from '../office/store/office-store-restore-object';
+import { objectImportType } from '../mstr-object/constants';
+import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 
 const SHOW_HIDDEN_KEY = 'showHidden';
 const EXCEL_SHAPE_API_VERSION = 1.9;
@@ -90,6 +93,14 @@ export class HomeHelper {
         await officeApiWorksheetHelper.checkIfAnySheetProtected(excelContext, objects);
 
         for (const object of objects) {
+          // Bypass the image object if it was deleted from worksheet manually to not block 
+          // the queue of cleard data operation.
+          if (object?.importType === objectImportType.IMAGE) {
+            const shapeInWorksheet = object?.bindId && await officeShapeApiHelper.getShape(excelContext, object.bindId);
+            if (!shapeInWorksheet) {
+              continue;
+            }
+          }
           this.reduxStore.dispatch(clearDataRequested(object.objectWorkingId, object.importType));
         }
       }, 0);
