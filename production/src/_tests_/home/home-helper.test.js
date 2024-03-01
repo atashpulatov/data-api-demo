@@ -5,6 +5,10 @@ import { sessionActions } from '../../redux-reducer/session-reducer/session-acti
 import officeStoreRestoreObject from '../../office/store/office-store-restore-object';
 import { configActions } from '../../redux-reducer/config-reducer/config-actions';
 import { officeContext } from '../../office/office-context';
+import { officeShapeApiHelper } from '../../office/shapes/office-shape-api-helper';
+import { officeApiHelper } from '../../office/api/office-api-helper';
+import { officeApiWorksheetHelper } from '../../office/api/office-api-worksheet-helper';
+import { objectImportType } from '../../mstr-object/constants';
 
 jest.mock('../../storage/session-helper');
 jest.mock('../../redux-reducer/session-reducer/session-actions');
@@ -174,6 +178,49 @@ describe('HomeHelper', () => {
       homeHelper.initIsShapeAPISupported();
       expect(officeContext.isSetSupported).toBeCalled();
       expect(homeHelper.reduxStore.dispatch).toBeCalled();
+    });
+  });
+
+  describe('secureData()', () => {
+    it('should skip clearDataRequested() dispatch for image object.', async () => {
+      // given
+      const excelContextMock = {
+        workbook: {
+          worksheets: [{}],
+        }
+      };
+
+      const objects = [
+        {
+          importType: objectImportType.IMAGE,
+          bindId: '{778543A2-0A92-DBB4-E471-1C55D2C48DFF}',
+          objectWorkingId: 1709325494755,
+        },
+        {
+          importType: objectImportType.TABLE,
+          bindId: '{45E0499F-6C8A-4909-AF68-40C7A293ACA1}',
+          objectWorkingId: 1709325744657
+        }
+      ];
+
+      jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => Promise.resolve(excelContextMock));
+
+      jest.spyOn(officeApiWorksheetHelper, 'checkIfAnySheetProtected').mockImplementation();
+
+      jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => undefined);
+
+      jest.spyOn(homeHelper.reduxStore, 'dispatch').mockImplementation();
+
+      homeHelper.init(reduxStore, {}, {});
+      // when
+
+      setTimeout(async () => {
+        await homeHelper.secureData(objects);
+
+        expect(officeApiHelper.getExcelContext).toHaveBeenCalled();
+        expect(officeShapeApiHelper.getShape).toHaveBeenCalledWith(excelContextMock, '{778543A2-0A92-DBB4-E471-1C55D2C48DFF}');
+        expect(homeHelper.reduxStore.dispatch).toHaveBeenCalledTimes(1);
+      }, 0);
     });
   });
 });

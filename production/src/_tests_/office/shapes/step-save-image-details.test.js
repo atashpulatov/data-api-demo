@@ -127,4 +127,17 @@ describe('StepSaveImageDetails', () => {
     expect(operationStepDispatcher.completeSaveImageDetails).toBeCalledTimes(0);
     expect(operationErrorHandler.handleOperationError).toBeCalledTimes(1);
   });
+
+  it('saveImageDetails should throw VISUALIZATION_REMOVED_FROM_EXCEL error', async () => {
+    // given
+    jest.spyOn(officeApiHelper, 'getExcelContext').mockImplementation(() => Promise.resolve(excelContextMock));
+    jest.spyOn(officeShapeApiHelper, 'getShape').mockImplementation(() => undefined);
+    jest.spyOn(operationErrorHandler, 'handleOperationError').mockImplementation();
+
+    // when
+    await stepSaveImageDetails.saveImageDetails(objectDataMock, operationDataMock);
+
+    // then
+    expect(operationErrorHandler.handleOperationError).toHaveBeenCalled();
+  });
 });
