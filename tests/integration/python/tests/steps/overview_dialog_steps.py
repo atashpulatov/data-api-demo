@@ -32,4 +32,3 @@ def step_impl(context, action):
 @step('I waited for all objects to be refreshed successfully')
 def step_impl(context):
     context.pages.overview_dialog_page().wait_for_all_objects_to_refresh_successfully()
-

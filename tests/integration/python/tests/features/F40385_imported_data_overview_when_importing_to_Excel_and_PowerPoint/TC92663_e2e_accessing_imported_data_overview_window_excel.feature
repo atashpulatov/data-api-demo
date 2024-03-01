@@ -35,7 +35,7 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I waited for object to be imported successfully
 
     # Overview window verification
-      And I clicked Imported Data Overview settings menu option
+      And I clicked Overview settings menu option
      Then I verified Overview window is opened
       And I verified "Add Data" button in Overview window is enabled
       And I verified "Refresh" button in Overview window is visible

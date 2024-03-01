@@ -108,6 +108,6 @@ def step_impl(context):
     AssertUtil.assert_simple(is_reuse_prompt_answer_enabled, True)
     AssertUtil.assert_simple(is_reuse_prompt_answer_enabled, True)
 
-@step('I clicked Imported Data Overview settings menu option')
+@step('I clicked Overview settings menu option')
 def step_impl(context):
     context.pages.right_panel_page().click_imported_data_overview_settings_menu()
