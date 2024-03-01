@@ -5,9 +5,7 @@ import officeReducerHelper from '../../office/store/office-reducer-helper';
 import { officeApiHelper } from '../../office/api/office-api-helper';
 import { executeNextRepromptTask } from '../../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
 import { DialogPopup } from './overview-types';
-import {
-  DUPLICATE_OPERATION, EDIT_OPERATION, IMPORT_OPERATION, REFRESH_OPERATION, REMOVE_OPERATION
-} from '../../operation/operation-type-names';
+
 import { OverviewGlobalNotificationButtons, NotificationButtonsProps } from './overview-global-notification-buttons';
 import { customT } from '../../customTranslation';
 import mstrObjectEnum from '../../mstr-object/mstr-object-type-enum';
@@ -389,12 +387,8 @@ class OverviewHelper {
   // TODO: Add types once redux state is typed
   getWarningsToDisplay = ({ notifications, globalNotification }
     : {notifications?: any[], globalNotification?: any}): any => {
-    const operationsToDisplay = [IMPORT_OPERATION, DUPLICATE_OPERATION,
-      REMOVE_OPERATION, REFRESH_OPERATION, EDIT_OPERATION];
-
     const warningNotifications = notifications?.filter(
       notification => notification.type === objectNotificationTypes.WARNING
-      && operationsToDisplay.includes(notification.operationType)
     );
 
     const modifiedWarnings = warningNotifications?.map(warning => {
