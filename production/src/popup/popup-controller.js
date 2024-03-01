@@ -219,14 +219,18 @@ class PopupController {
           }
           break;
         case commandCancel:
+          // First, clear reprompt task queue if the user cancels the popup.
+          this.reduxStore.dispatch(clearRepromptTask());
           if (!isMultipleRepromptQueueEmpty && !isDataOverviewOpen) {
             // Close dialog when user cancels, but only if there are objects left to Multiple Reprompt,
             // since we were previously keeping the dialog open in between objects.
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
             await this.closeDialog(dialog);
             this.resetDialogStates();
+          } else {
+            // Show overview table if cancel was triggered during Multiple Reprompt workflow.
+            await this.runImportedDataOverviewPopup(true);
           }
-          this.reduxStore.dispatch(clearRepromptTask());
           break;
         case commandError:
           errorService.handleError(response.error);
