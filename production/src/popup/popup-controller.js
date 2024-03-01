@@ -229,7 +229,7 @@ class PopupController {
             this.resetDialogStates();
           } else {
             // Show overview table if cancel was triggered during Multiple Reprompt workflow.
-            await this.runImportedDataOverviewPopup(true);
+            isDataOverviewOpen && await this.runImportedDataOverviewPopup(true);
           }
           break;
         case commandError:
