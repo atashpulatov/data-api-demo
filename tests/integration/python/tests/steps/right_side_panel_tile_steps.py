@@ -1,6 +1,7 @@
 from behave import *
 
 from framework.util.assert_util import AssertUtil
+import html
 
 
 @step('I closed last notification')
@@ -132,9 +133,18 @@ def step_impl(context, object_number, expected_name):
 @step('I verified that path name for object number {object_number} displays "{expected_name}"')
 def step_impl(context, object_number, expected_name):
     result = context.pages.right_panel_tile_page().get_object_path(object_number)
-
     AssertUtil.assert_simple(result, expected_name)
 
+@step('I verified that path name in inner html for object number {object_number} displays "{expected_name}"')
+def step_impl(context, object_number, expected_name):
+    result = context.pages.right_panel_tile_page().get_object_path_from_innerHtml(object_number)
+    AssertUtil.assert_simple(html.unescape(result), expected_name)
+
+@step('I verified that sub title for object number {object_number} displays "{expected_title}"')
+def step_impl(context, object_number, expected_title):
+    result = context.pages.right_panel_tile_page().get_object_sub_title(expected_title)
+
+    AssertUtil.assert_simple(html.unescape(result.get_attribute("innerHTML")), expected_title)
 
 @step('I changed object {object_number} name to "{new_object_name}" using icon')
 def step_impl(context, object_number, new_object_name):
@@ -157,6 +167,10 @@ def step_impl(context, object_number):
 @step('I duplicate object {object_number} using context menu without prompt')
 def step_impl(context, object_number):
     context.pages.right_panel_tile_page().duplicate_object_using_context_menu_without_prompt(object_number)
+
+@step('I edit object {object_number} using context menu without prompt')
+def step_impl(context, object_number):
+    context.pages.right_panel_tile_page().edit_object_using_context_menu_without_prompt(object_number)
 
 @step('I waited for object to be refreshed successfully')
 def step_impl(context):
@@ -255,3 +269,13 @@ def step_impl(context, object_number, expected_message):
 def step_impl(context, object_number, warning_message):
     action_in_progress_name = context.pages.right_panel_tile_page().get_object_action_in_progress_name(object_number)
     AssertUtil.assert_not_equal(action_in_progress_name, warning_message)
+
+@step('I verified that right click context menu has {expected_menu_items} items')
+def step_impl(context, expected_menu_items):
+    actual_menu_items = context.pages.right_panel_tile_page().get_right_click_menu_items()
+    AssertUtil.assert_simple(actual_menu_items, int(expected_menu_items))
+
+@step('I verified that context menu has "{expected_menu_items}" button')
+def step_impl(context, expected_menu_items):
+    found = context.pages.right_panel_tile_page().get_context_menu_item_for_name(expected_menu_items)
+    AssertUtil.assert_simple(found, True)

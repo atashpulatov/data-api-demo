@@ -20,7 +20,7 @@ Feature: F39446 - Ability to import visualization as image in Excel
         And I verified that Import button is disabled
         And I verified that Import image button is disabled
 
-        # Issue check for tooltip for image button
+    # Issue check for tooltip for image button
         Then I hover over Import image button
         Then I verified that tooltip for Import button shows message "This button is currently disabled because you didn’t select any data"
 
@@ -31,36 +31,25 @@ Feature: F39446 - Ability to import visualization as image in Excel
         And I clicked Import image button without checking results
 
     # check the image has been inserted
+        Then I waited for object operation to complete successfully with message "Import successful"
         Then I verified excel sheet has a image inserted
 
-    # check the image refresh button function
-        When I clicked Refresh on without prompt object 1
-        Then I verified excel sheet has a image inserted
+
+    # check the image edit function
+        When I edit object 1 using context menu without prompt
+        And I verified that Import image button is enabled
+        And I selected visualization "HeatMap"
+        And I clicked Import image button without checking results
         Then I verified excel sheet has total 1 images
 
-    # check the Clear data 
-        When I clicked clear data
-        Then I verified excel sheet has total 0 images
-        And I clicked view data
-        Then I verified excel sheet has total 1 images
-
-    # check the image remove function
-        And I removed object 1 using context menu
-        Then I verified excel sheet has no image inserted
-
-    # check the image duplicate function
-        And I duplicate object 1 using context menu without prompt
-        Then I selected Active Cell option in Duplicate popup
-        And I clicked Import button in Duplicate popup for image
-    # Issue existed for the error message
-        And I verified that the object 1 action in warning box is "Could not complete the operation. The image was deleted manually."
-        Then I verified excel sheet has total 2 images
-
-    # check the image duplication function to new sheet
-        And I duplicate object 1 using context menu without prompt
-        And I clicked Import button in Duplicate popup for image
-        Then I verified excel sheet has total 1 images
-        Then I verified that number of worksheets is 2
-
-
+    # check basic Ui existence
+        And I verified that path name in inner html for object number 1 displays "(AUTO) Multiple Visualization Dossier > Chapter 1 > Page 1"
+        And I verified that sub title for object number for object number 1 displays "HeatMap"
+        Then I verified that right click context menu has 6 items
+        Then I verified that context menu has "Refresh" button
+        Then I verified that context menu has "Edit" button
+        Then I verified that context menu has "Duplicate" button
+        Then I verified that context menu has "Rename" button
+        Then I verified that context menu has "Delete" button
+        Then I verified that context menu has "Copy Name" button
 

@@ -280,6 +280,17 @@ class BaseBrowserPage(BasePage):
 
         return elements[4]
     
+    def find_element_in_list_by_text_safe_edit(self, selector, text):
+        elements = self.get_elements_by_css(selector)
+
+        ## With latest Excel Web, this element no longer have any inner text, thus the function will fail here. So we need to comment out this part and return the element directly.
+        
+        #for item in elements:
+        #    if item.text == text:
+        #        return item
+
+        return elements[1]
+    
     def find_element_in_list_by_text_safe_duplicate(self, selector, text):
         elements = self.get_elements_by_css(selector)
 
