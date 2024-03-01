@@ -57,5 +57,3 @@ class OverviewDialogBrowserPage(BaseBrowserPage):
         for index in range(len(all_elements)):
             selector = '//div[@row-id="%s"]/div[@aria-colindex="8"]//span[text()="Refresh successful"]' % index
             self.get_element_by_xpath(selector)
-    
-    
