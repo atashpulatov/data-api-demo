@@ -349,3 +349,15 @@ class PromptBrowserPage(BaseBrowserPage):
             self.deletePersonalAnswer("2021")
         except:
             pass
+    
+    def uncheckSaveAnswer(self):
+        self.focus_on_prompt_frame()
+        checkbox = self.get_element_by_xpath("//input[contains(@class,'mstrPromptSaveOneAnswerCheckbox') and not(contains(@name, 'autoclose'))]")
+        if checkbox.get_attribute('checked'):
+            self.get_element_by_xpath("//label[contains(.,'Remember this answer')]").click()
+
+    def checkSaveAnswer(self):
+        self.focus_on_prompt_frame()
+        checkbox = self.get_element_by_xpath("//input[contains(@class,'mstrPromptSaveOneAnswerCheckbox') and not(contains(@name, 'autoclose'))]")
+        if not checkbox.get_attribute('checked'):
+            self.get_element_by_xpath("//label[contains(.,'Remember this answer')]").click()

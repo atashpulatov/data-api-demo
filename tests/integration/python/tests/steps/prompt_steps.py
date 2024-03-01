@@ -122,3 +122,11 @@ def step_impl(context, name):
 @step('I clear the current personal answer')
 def step_impl(context):
     context.pages.prompt_page().clearPersonalAnswer()
+
+@step('I uncheck save answer checkbox')
+def step_impl(context):
+    context.pages.prompt_page().uncheckSaveAnswer()
+
+@step('I checked save answer checkbox')
+def step_impl(context):
+    context.pages.prompt_page().checkSaveAnswer()

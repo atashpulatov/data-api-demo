@@ -36,7 +36,7 @@ class ImportDataBrowserPage(BaseBrowserPage):
     ALL_OBJECTS_LIST = '.mstrd-SearchFilter li#searchFilterOption_all'
     FIRST_OBJECT_LIBRARY = '.mstrd-SearchResultsList li:nth-child(1)'
 
-    IMPORT_BUTTON_ELEM = 'import-data'
+    IMPORT_BUTTON_ELEM = 'import'
     IMPORT_BUTTON_DISABLED = 'disabled'
     PREPARE_BUTTON_ELEM = 'prepare'
 
