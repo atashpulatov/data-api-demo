@@ -60,6 +60,10 @@ class PromptBrowserPage(BaseBrowserPage):
             PromptBrowserPage.PROMPT_RUN_BUTTON_CSS, 'disabled', None
         )
 
+    def wait_for_prompt_dialog_ready(self):
+        self.focus_on_add_in_popup_frame()
+        self.pause(5)
+        
     def click_run_button(self):
         self.focus_on_add_in_popup_frame()
 

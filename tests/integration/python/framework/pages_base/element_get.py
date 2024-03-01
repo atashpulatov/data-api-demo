@@ -91,6 +91,10 @@ class ElementGet(ElementCheck):
         raw_elements = self._get_raw_elements(By.NAME, selector)
 
         return BaseElement.wrap_raw_elements(raw_elements, self.driver)
+    
+    def get_elements_by_tag_name(self, selector):
+        raw_elements = self._get_raw_elements(By.TAG_NAME, selector)        
+        return BaseElement.wrap_raw_elements(raw_elements, self.driver)
 
     def get_element_by_xpath_list(self, selectors, timeout=Const.DEFAULT_TIMEOUT):
         for selector in selectors:

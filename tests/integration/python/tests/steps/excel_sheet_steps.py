@@ -224,3 +224,21 @@ def step_impl(context, column_name, expected_width):
     column_width = context.pages.excel_sheet_page().get_column_width(column_name)
 
     AssertUtil.assert_simple(column_width, expected_width)
+
+@step('I verified excel sheet has a image inserted') 
+def step_impl(context):
+    result = context.pages.excel_sheet_page().verify_image_inserted()
+
+    AssertUtil.assert_simple(result, True)
+
+@step('I verified excel sheet has no image inserted')
+def step_impl(context):
+    result = context.pages.excel_sheet_page().verify_wait_image_inserted()
+
+    AssertUtil.assert_simple(result, False)
+
+@step('I verified excel sheet has total {images_num} images')
+def step_impl(context, images_num):
+    result = context.pages.excel_sheet_page().verify_images_num(images_num)
+
+    AssertUtil.assert_simple(result, True)

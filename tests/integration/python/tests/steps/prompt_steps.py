@@ -11,6 +11,9 @@ def step_impl(context):
 def step_impl(context):
     context.pages.prompt_page().wait_for_prompt_dialog()
 
+@step('I waited for Prompt Dialog is ready')
+def step_impl(context):
+    context.pages.prompt_page().wait_for_prompt_dialog_ready()
 
 @step('I clicked Run button')
 def step_impl(context):
