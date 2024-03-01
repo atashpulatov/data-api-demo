@@ -19,3 +19,7 @@ def step_impl(context):
 @step('I selected Active Cell option in Duplicate popup')
 def step_impl(context):
     context.pages.duplicate_object_popup_page().select_active_cell()
+
+@step('I clicked Import button in Duplicate popup for image')
+def step_impl(context):
+    context.pages.duplicate_object_popup_page().click_import_for_image()
