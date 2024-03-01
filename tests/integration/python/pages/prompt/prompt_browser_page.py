@@ -34,6 +34,8 @@ class PromptBrowserPage(BaseBrowserPage):
 
     PROMPT_DIALOG_TITLE = '.title-bar > span'
 
+
+
     def __init__(self):
         super().__init__()
 
@@ -293,4 +295,57 @@ class PromptBrowserPage(BaseBrowserPage):
         print(expected_text)
 
         return actual_text == expected_text
+    
+    def save_new_answer(self, name):
+        self.focus_on_prompt_frame()
+        self.get_element_by_xpath("//label[contains(.,'Save selection as a new answer after running')]").click()
+        inputBox = self.get_element_by_xpath("//input[@type='textbox']")
+        inputBox.click()
+        inputBox.send_keys(name)
+
+    def save_new_answer_as_default(self, name):
+        self.save_new_answer(name)
+        self.get_element_by_xpath("//label[contains(.,'Set as default answer')]").click()
+    
+    def loadPersonalAnswer(self, name):
+        self.focus_on_prompt_frame()
+        self.get_element_by_class_name("mstrListPulldown").click()
+        self.get_element_by_xpath(f"//div[contains(@aria-label, '{name}')]").click()
+
+    def renamePersonalAnswer(self, oldName, newName):
+        self.focus_on_prompt_frame()
+        self.get_element_by_class_name("mstrListPulldown").click()
+        self.get_element_by_xpath("//a[contains(.,'Manage Saved Answers')]").click()
+        self.get_element_by_xpath(f"//div[contains(@aria-label, '{oldName}')]").click()
+        self.get_element_by_id("mstr-personal-answer-rename-button").click()
+        inputBox = self.get_element_by_id("form_in_modal_rename")
+        inputBox.click()
+        inputBox.send_keys((Keys.CONTROL, 'a', Keys.DELETE))
+        inputBox.send_keys(newName)
+        self.get_element_by_xpath("//span[contains(.,'OK')]").click()
+
+    def deletePersonalAnswer(self, name):
+        self.focus_on_prompt_frame()
+        self.get_element_by_class_name("mstrListPulldown").click()
+        self.get_element_by_xpath("//a[contains(.,'Manage Saved Answers')]").click()
+        self.get_element_by_xpath(f"//div[contains(@aria-label, '{name}')]").click()
+        self.get_element_by_id("mstr-personal-answer-delete-button").click()
+        self.get_element_by_xpath("//button[contains(.,'Yes')]").click()
         
+    def setDefaultPersonalAnswer(self, name):
+        self.focus_on_prompt_frame()
+        self.get_element_by_class_name("mstrListPulldown").click()
+        self.get_element_by_xpath("//a[contains(.,'Manage Saved Answers')]").click()
+        self.get_element_by_xpath(f"//div[contains(@aria-label, '{name}')]").click()
+        self.get_element_by_id("mstr-personal-answer-set-button").click()
+
+    def clearPersonalAnswer(self):
+        self.focus_on_prompt_frame()
+        try:
+            self.deletePersonalAnswer("2020")
+        except:
+            pass
+        try:
+            self.deletePersonalAnswer("2021")
+        except:
+            pass
