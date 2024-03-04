@@ -72,7 +72,7 @@ class PopupActions {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
       const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
-      
+
       try {
         await this.prepareDossierForReprompt(repromptedDossier);
       } catch (error) {
