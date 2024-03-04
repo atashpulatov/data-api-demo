@@ -102,6 +102,23 @@ export const PromptsWindowNotConnected = (props) => {
   };
 
   /**
+   * Handles the event throwed after new error in embedded dossier.
+   * Retrives the error type (based on title).
+   * If error type is not a notification - handles it by closing the window
+   *
+   * @param {Object} error - payload throwed by embedded.api after the error occured
+   */
+  // eslint-disable-next-line class-methods-use-this
+  const onEmbeddedError = (error) => {
+    const { title } = error;
+    if (title !== 'Notification') {
+      // TODO: improve this, so it doesn't depend on i18n
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
+      popupHelper.handlePopupErrors(error);
+    }
+  };
+
+  /**
    * This function is called at the end of the Reprompt (only Reprompt, not Edit) workflow,
    * after user applies new answers. It will bypass the Edit Filters step and update the Excel data
    * with the newly-provided prompt answers. If any previous filters were applied to the imported Report,
@@ -197,7 +214,7 @@ export const PromptsWindowNotConnected = (props) => {
           msgRouter = MsgRouter;
           msgRouter.registerEventHandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.registerEventHandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
-
+          msgRouter.registerEventHandler(EventType.ON_ERROR, onEmbeddedError);
           // TODO: We should remember to unregister this handler once the page loads
         },
       };
@@ -242,6 +259,7 @@ export const PromptsWindowNotConnected = (props) => {
           // Remove event handlers first.
           msgRouter.removeEventhandler(EventType.ON_PROMPT_ANSWERED, promptAnsweredHandler);
           msgRouter.removeEventhandler(EventType.ON_PROMPT_LOADED, promptLoadedHandler);
+          msgRouter.removeEventhandler(EventType.ON_ERROR, onEmbeddedError);
 
           // Get the new answers from the prompts dialog.
           const currentAnswers = [...newPromptsAnswers.current];

@@ -244,6 +244,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
+      return;
     }
 
     this.dossierData = {

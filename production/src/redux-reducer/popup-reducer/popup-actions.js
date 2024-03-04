@@ -72,8 +72,11 @@ class PopupActions {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
       const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
-
-      await this.prepareDossierForReprompt(repromptedDossier);
+      try {
+        await this.prepareDossierForReprompt(repromptedDossier);
+      } catch (error) {
+        console.error('Error during preparing dossier for reprompt', error);
+      }
 
       dispatch({
         type: SET_REPORT_N_FILTERS,
