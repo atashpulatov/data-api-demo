@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Tooltip } from '@mstr/rc';
 
 export const PrepareDataButton = ({ disableReason, handleSecondary, t }) => (
-  <Tooltip adjustOverflow mouseEnterDelay={1} disabled={!disableReason} content={t(`${disableReason}`)} placement="top-end">
+  <Tooltip content={t(`${disableReason}`)} placement="top-end">
     <Button
       id="prepare"
       onClick={handleSecondary}

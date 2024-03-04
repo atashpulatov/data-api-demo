@@ -55,11 +55,9 @@ export const PopupButtonsNotConnected = ({
 }) => {
   const [t] = useTranslation('common', { i18n });
   const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
-  console.log('disableReason', disableReason);
   const disableReasonForImport = getDisableReasonImport(
     isPublished, disableActiveActions, disableSecondary, checkingSelection
   );
-  console.log('disableReasonForImport', disableReasonForImport);
 
   return (
     <div className="popup-buttons popup-footer">
