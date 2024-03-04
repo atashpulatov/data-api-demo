@@ -46,6 +46,12 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
   componentDidMount() {
     scriptInjectionHelper.watchForIframeAddition(this.container.current, this.onIframeLoad);
+
+    if (!microstrategy?.dossier) {
+      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.');
+      return;
+    }
+
     this.loadEmbeddedDossier(this.container.current);
   }
 
@@ -218,7 +224,10 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       envUrl, authToken, dossierId, projectId, promptsAnswers,
       instanceId, selectedViz, visualizationInfo
     } = mstrData;
+
     let instance = {};
+    let dossierPreparationErrorThrown = false;
+
     try {
       // Create instance and handle it different if it is prompted or multiple reprompt is triggered.
       instance = await this.handleInstanceId(instanceId, projectId, dossierId, isPrompted, isMultipleRepromptWithReuse);
@@ -242,9 +251,16 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       // Proceed with opening prompt dialog if applicable.
       await this.openPromptDialog(dossierId, instance, projectId, dossierOpenRequested, isImportedObjectPrompted, isMultipleRepromptWithReuse);
     } catch (error) {
+      // Update the flag to indicate that an error was thrown during the dossier preparation.
+      dossierPreparationErrorThrown = true;
+
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
-      // Do not proceeed with the embedded dossier creation if the instance is not ready.
+    }
+
+    // Do not proceeed with the embedded dossier creation if the instance is not ready,
+    // or an error preparing the dossier was thrown.
+    if (!instance || dossierPreparationErrorThrown) {
       return;
     }
 
@@ -342,7 +358,8 @@ export default class EmbeddedDossierNotConnected extends React.Component {
       }
     };
 
-    if (microstrategy && microstrategy.dossier) {
+    // Proceed with emebedding dossier if no error was thrown during the preparation.
+    if (!dossierPreparationErrorThrown) {
       const embeddedDossier = await microstrategy.dossier.create(props);
       this.embeddedDossier = embeddedDossier;
 
