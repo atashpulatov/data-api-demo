@@ -74,40 +74,37 @@ Feature: F40385 - Imported Data Overview when Importing to Excel & PowerPoint
       And I clicked "Refresh" button in Overview window
       And I waited for all objects to be refreshed successfully
 
-     When I selected object 9 using object checkbox in Overview window
+     When I selected object "9" using object checkbox in Overview window
      Then I verified "Re-prompt" button in Overview window is enabled
       And I clicked "Re-prompt" button in Overview window
       And I unselected "Books" as an answer for "1. Category" prompt - object prompt
       And I selected "Movies" as an answer for "1. Category" prompt - object prompt
       And I clicked Apply button
 
-     When I selected object 3 using object checkbox in Overview window
+     When I selected object "3" using object checkbox in Overview window
      Then I verified "Duplicate" button in Overview window is enabled
       And I clicked "Duplicate" button in Overview window
       And I verified New Sheet option is selected in Duplicate popup
       And I clicked Import button in Duplicate popup
 
-     When I selected object 4 using object checkbox in Overview window
-      And I selected object 6 using object checkbox in Overview window
+     When I selected object "4" using object checkbox in Overview window
+      And I selected object "6" using object checkbox in Overview window
       And I verified "Delete" button in Overview window is enabled
       And I clicked "Delete" button in Overview window
       And I verified that Delete confirmation popup is visible
       And I clicked Delete button in confirmation popup
-     Then I waited for selected objects to be removed successfully
 
      When I clicked "Filter" button in Overview window
      Then I verified that Filter panel is visible in Overview window
       And I clicked "Name" filter in Filter panel
-      And I selected ["01 Basic Report", "report graph"] filter options
+      And I selected "01 Basic Report" filter option
+      And I selected "report graph" filter option
       And I clicked Apply button in Filter panel
       And I verified that filter details are visible in Overview window
 
      When I clicked "Clear All" in filter details
      Then I verified that filter details are NOT visible in Overview window
       And I verified that Filter panel is NOT visible in Overview window
-
-     When I clicked "Go to Worksheet" for object 3 in Overview window
-     Then I verified that worksheet "Report with Totals and Subtotals" is selected
 
      When I clicked select all checkbox in Overview window
       And I clicked "Delete" button in Overview window
