@@ -11,6 +11,9 @@ import {
 import { officeShapeApiHelper } from '../office/shapes/office-shape-api-helper';
 import { objectImportType } from '../mstr-object/constants';
 import { executeNextRepromptTask } from '../redux-reducer/reprompt-queue-reducer/reprompt-queue-actions';
+import { PopupTypeEnum } from '../home/popup-type-enum';
+import { popupStateActions } from '../redux-reducer/popup-state-reducer/popup-state-actions';
+import { popupController } from '../popup/popup-controller';
 
 class OperationErrorHandler {
   init = (reduxStore) => {
@@ -30,6 +33,12 @@ class OperationErrorHandler {
     if (callback) {
       await errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
     }
+
+    const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
+
+    // Get state from redux to check if there are any reprompts in queue and if there is any popup displayed
+    // If there are any reprompts in queue and the popup is displayed, change the popup to importedDataOverview.
+    this.handleRepromptOperationError(repromptsQueueReducer, popupStateReducer);
   };
 
   /**
@@ -141,6 +150,28 @@ class OperationErrorHandler {
     this.reduxStore.dispatch(cancelOperation(objectWorkingId));
 
     this.reduxStore.dispatch(deleteObjectNotification(objectWorkingId));
+  };
+
+  /**
+   * Determines whether to force the Overview table display if there are any reprompts in queue
+   * and an error has occurred while reprompting dossier/report in Overview window only.
+   *
+   * @param {*} repromptsQueueReducer reprompt queue state
+   * @param {*} popupStateReducer popup state
+   */
+  handleRepromptOperationError = (repromptsQueueReducer, popupStateReducer) => {
+    if (repromptsQueueReducer?.total && popupStateReducer?.popupType) {
+      const { total = 0 } = repromptsQueueReducer;
+      const { popupType } = popupStateReducer;
+
+      // Show Overview table if there are any reprompts in queue if error occured
+      // while reprompting dossier/report in Overview window only.
+      if (total > 0 && (popupType === PopupTypeEnum.repromptDossierDataOverview
+        || popupType === PopupTypeEnum.repromptReportDataOverviewDataOverview)) {
+        this.reduxStore.dispatch(popupStateActions.setPopupType(PopupTypeEnum.importedDataOverview));
+        popupController.runImportedDataOverviewPopup();
+      }
+    }
   };
 
   /**

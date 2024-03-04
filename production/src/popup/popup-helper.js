@@ -15,12 +15,12 @@ class PopupHelper {
       command: commandError,
       error: errorObj,
     };
-    this.officeMessageParent(message);
+    this.officeMessageParent?.(message);
   };
 
   officeMessageParent = (message) => {
     const office = officeContext.getOffice();
-    office.context.ui.messageParent(JSON.stringify(message));
+    office?.context?.ui?.messageParent?.(JSON.stringify(message));
   };
 
   parsePopupState(popupState, promptsAnswers, formsPrivilege) {
