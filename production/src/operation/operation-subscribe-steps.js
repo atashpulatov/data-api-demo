@@ -46,12 +46,14 @@ import {
   RENAME_EXCEL_WORKSHEET,
   MANIPULATE_VISUALIZATION_IMAGE,
   REMOVE_VISUALIZATION_IMAGE,
+  ADD_VISUALIZATION_PLACEHOLDER,
   SAVE_IMAGE_DETAILS
 } from './operation-steps';
 import stepHighlightObject from '../office/highlight/step-highlight-object';
 import stepGetInstanceDefinition from '../mstr-object/instance/step-get-instance-definition';
 import stepManipulateVisualizationImage from '../office/shapes/step-manipulate-visualization-image';
 import stepRemoveVisualizationImage from '../office/shapes/step-remove-visualization-image';
+import stepAddVisualizationPlaceholder from '../office/shapes/step-add-visualization-placeholder';
 import stepSaveImageDetails from '../office/shapes/step-save-image-details';
 
 class SubscribeSteps {
@@ -106,6 +108,9 @@ class SubscribeSteps {
       stepManipulateVisualizationImage.manipulateVisualizationImage
     );
     operationBus.subscribe(REMOVE_VISUALIZATION_IMAGE, stepRemoveVisualizationImage.removeVisualizationImage);
+
+    operationBus.subscribe(ADD_VISUALIZATION_PLACEHOLDER, stepAddVisualizationPlaceholder.addVisualizationPlaceholder);
+
     operationBus.subscribe(SAVE_IMAGE_DETAILS, stepSaveImageDetails.saveImageDetails);
   };
 }

@@ -21,6 +21,8 @@ class StepSaveObjectInExcel {
    * @param {Object} operationData.instanceDefinition Object containing information about MSTR object
    */
   saveObject = async (objectData, operationData) => {
+    console.group('Save object in Excel');
+    console.time('Total');
     try {
       const { instanceDefinition } = operationData;
 

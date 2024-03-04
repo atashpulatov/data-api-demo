@@ -64,6 +64,9 @@ def step_impl(context):
 def step_impl(context):
     context.pages.import_data_page().click_import_button_to_open_import_dossier()
 
+@step('I clicked Import image button without checking results')
+def step_impl(context):
+    context.pages.import_data_page().click_import_image_button_without_checking_results()
 
 @step('I verified that Prepare Data button is disabled')
 def step_impl(context):
@@ -157,6 +160,17 @@ def step_impl(context):
 
     AssertUtil.assert_simple(is_disabled, True)
 
+@step('I verified that Import image button is disabled')    
+def step_impl(context):
+    is_disabled = context.pages.import_data_page().verify_if_import_image_button_is_enabled()
+
+    AssertUtil.assert_simple(is_disabled, False)
+
+@step('I verified that Import image button is enabled')
+def step_impl(context):
+    is_disabled = context.pages.import_data_page().verify_if_import_image_button_is_enabled()
+
+    AssertUtil.assert_simple(is_disabled, True)
 
 @step('I cleared search box')
 def step_impl(context):
@@ -191,15 +205,23 @@ def step_impl(context, number):
 
     AssertUtil.assert_simple(filters_number, number)
 
-
 @step('I hover over Import button')
 def step_impl(context):
     context.pages.import_data_page().hover_over_import_button()
 
+@step('I hover over Import image button')
+def step_impl(context):
+    context.pages.import_data_page().hover_over_import_image_button()
+
+@step('I verified that tooltip for Import image button shows message "{expected_tooltip_text}"')
+def step_impl(context, expected_tooltip_text):
+    tooltip_text = context.pages.import_data_page().get_tooltip_message_for_button()
+
+    AssertUtil.assert_simple(tooltip_text, expected_tooltip_text)
 
 @step('I verified that tooltip for Import button shows message "{expected_tooltip_text}"')
 def step_impl(context, expected_tooltip_text):
-    tooltip_text = context.pages.import_data_page().get_tooltip_message_for_button()
+    tooltip_text = context.pages.import_data_page().get_tooltip_message_for_image_button()
 
     AssertUtil.assert_simple(tooltip_text, expected_tooltip_text)
 

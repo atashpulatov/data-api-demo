@@ -33,9 +33,6 @@ class StepRemoveVisualizationImage {
       if (operationType !== CLEAR_DATA_OPERATION) {
         operationStepDispatcher.updateObject({ objectWorkingId, doNotPersist: true });
         officeStoreObject.removeObjectInExcelStore(objectWorkingId);
-      } else {
-        // update object state to reflect that the data has been cleared
-        operationStepDispatcher.updateObject({ objectWorkingId, dataCleared: true });
       }
     } catch (error) {
       console.error(error);

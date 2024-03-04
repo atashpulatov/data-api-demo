@@ -40,3 +40,9 @@ class AssertUtil:
             # Util.pause(120)  # wait for debug purposes
 
         assert value1_only_printable_characters == value2_only_printable_characters
+
+    @staticmethod
+    def assert_not_equal(value1, value2):
+        if value1 == value2:
+            Util.log_error("Assertion error, values: [%s], [%s]" % (value1, value2))
+        assert value1 != value2

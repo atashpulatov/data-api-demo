@@ -225,10 +225,10 @@ export const PromptsWindowNotConnected = (props) => {
         .create(documentProps)
         .then(async (dossierPage) => {
           const [chapter, objectId, instanceId, visualizations] = await Promise.all([
-            dossierPage.getCurrentChapter(),
-            dossierPage.getDossierId(),
-            dossierPage.getDossierInstanceId(),
-            dossierPage.getCurrentPageVisualizationList(),
+            dossierPage?.getCurrentChapter(),
+            dossierPage?.getDossierId(),
+            dossierPage?.getDossierInstanceId(),
+            dossierPage?.getCurrentPageVisualizationList(),
           ]);
 
           const dossierData = {
@@ -303,7 +303,7 @@ export const PromptsWindowNotConnected = (props) => {
   const onPromptsContainerMount = useCallback(async (localContainer) => {
     scriptInjectionHelper.watchForIframeAddition(localContainer, onIframeLoad);
 
-    if (!microstrategy || !microstrategy.dossier) {
+    if (!microstrategy?.dossier) {
       console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.');
       return;
     }

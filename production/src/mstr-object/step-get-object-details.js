@@ -22,8 +22,10 @@ class StepGetObjectDetails {
    * @param {Array} operationData.stepsQueue Queue of steps in current operation
    */
   getObjectDetails = async (objectData, operationData) => {
+    console.group('Get object details');
+    console.time('Total');
+
     try {
-      console.time('Get object details');
       const {
         objectWorkingId,
         objectId,
@@ -49,10 +51,12 @@ class StepGetObjectDetails {
       operationStepDispatcher.updateObject(updatedObject);
       operationStepDispatcher.completeGetObjectDetails(objectWorkingId);
     } catch (error) {
+      console.trace('getObjectDetails: ', error);
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
     } finally {
-      console.timeEnd('Get object details');
+      console.timeEnd('Total');
+      console.groupEnd();
     }
   };
 }

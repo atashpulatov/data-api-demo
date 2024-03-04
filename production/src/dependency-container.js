@@ -87,7 +87,7 @@ class DIContainer {
     this.popupController.init(reduxStore, sessionActions, popupActions, overviewHelper);
 
     this.overviewHelper = overviewHelper;
-    this.overviewHelper.init(sidePanelService, notificationService);
+    this.overviewHelper.init(reduxStore, sidePanelService, notificationService);
 
     this.sidePanelNotificationHelper = sidePanelNotificationHelper;
     this.sidePanelNotificationHelper.init(reduxStore);

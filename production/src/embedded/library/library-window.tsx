@@ -19,6 +19,7 @@ import { popupStateActions } from '../../redux-reducer/popup-state-reducer/popup
 import { ItemType, LibraryWindowProps } from './library-window-types';
 import { ObjectExecutionStatus } from '../../helpers/prompts-handling-helper';
 import { objectImportType } from '../../mstr-object/constants';
+import { importActionTypes, importButtonIds } from '../../popup/popup-buttons/import-btn-constants';
 
 const {
   isPrompted, getCubeInfo, getObjectInfo, createDossierInstance, deleteDossierInstance, getObjectPrompts,
@@ -231,6 +232,8 @@ export const LibraryWindowNotConnected = (props: LibraryWindowProps) => {
         disableSecondary={
           !!mstrObjectType && mstrObjectType.name === mstrObjectEnum.mstrObjectType.dossier.name
         }
+        primaryImportBtnString={importActionTypes.IMPORT}
+        primaryImportBtnId={importButtonIds.IMPORT}
         isPublished={isPublished}
         isImportReport={mstrObjectEnum
           .getMstrTypeBySubtype(chosenSubtype)

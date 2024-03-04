@@ -22,6 +22,7 @@ export const OverviewWindowNotConnected = (props) => {
   const {
     objects,
     notifications,
+    globalNotification,
     onImport,
     onRefresh,
     onDelete,
@@ -53,8 +54,8 @@ export const OverviewWindowNotConnected = (props) => {
   );
 
   const notificationsToDisplay = useMemo(
-    () => overviewHelper.getWarningsToDisplay(notifications),
-    [notifications]
+    () => overviewHelper.getWarningsToDisplay({ notifications, globalNotification }),
+    [notifications, globalNotification]
   );
 
   const handleCloseDialog = () => {
@@ -123,17 +124,18 @@ OverviewWindowNotConnected.propTypes = {
   onDismissNotification: PropTypes.func,
   objects: PropTypes.arrayOf(PropTypes.shape({})),
   notifications: PropTypes.arrayOf(PropTypes.shape({})),
+  globalNotification: PropTypes.shape({}),
   popupData: PropTypes.shape({ objectWorkingId: PropTypes.number }),
   activeCellAddress: PropTypes.string
 };
 
 export const mapStateToProps = ({ objectReducer, notificationReducer, officeReducer }) => {
   const { objects } = objectReducer;
-  const { notifications } = notificationReducer;
+  const { notifications, globalNotification } = notificationReducer;
   const { popupData, activeCellAddress } = officeReducer;
 
   return {
-    objects, notifications, popupData, activeCellAddress
+    objects, notifications, globalNotification, popupData, activeCellAddress
   };
 };
 

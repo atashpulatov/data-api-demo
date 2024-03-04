@@ -50,12 +50,15 @@ export const PopupButtonsNotConnected = ({
   useImportAsRunButton,
   hideOk,
   isImportReport,
+  primaryImportBtnId = importButtonIds.IMPORT_DATA,
+  primaryImportBtnString = importActionTypes.IMPORT_DATA,
 }) => {
   const [t] = useTranslation('common', { i18n });
   const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
   const disableReasonForImport = getDisableReasonImport(
     isPublished, disableActiveActions, disableSecondary, checkingSelection
   );
+
   return (
     <div className="popup-buttons popup-footer">
       {handleBack && <BackButton handleBack={handleBack} t={t} />}
@@ -69,12 +72,12 @@ export const PopupButtonsNotConnected = ({
       {!hideOk
         && (primaryImportType === objectImportType.TABLE ? (
           <ImportButton
-            id={useImportAsRunButton ? importButtonIds.RUN : importButtonIds.IMPORT_DATA}
+            id={useImportAsRunButton ? importButtonIds.RUN : primaryImportBtnId}
             handleOk={handleOk}
             isPrimaryBtn={isImportReport ? !handleSecondary : true}
             disableReason={disableReasonForImport}
             t={t}
-            actionType={useImportAsRunButton ? importActionTypes.APPLY : importActionTypes.IMPORT_DATA}
+            actionType={useImportAsRunButton ? importActionTypes.APPLY : primaryImportBtnString}
           />
         ) : (
           <ImportButton
@@ -129,6 +132,8 @@ PopupButtonsNotConnected.propTypes = {
   useImportAsRunButton: PropTypes.bool,
   hideOk: PropTypes.bool,
   isImportReport: PropTypes.bool,
+  primaryImportBtnString: PropTypes.string,
+  primaryImportBtnId: PropTypes.string,
 };
 
 function mapStateToProps({ navigationTree }) {

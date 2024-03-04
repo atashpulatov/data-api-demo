@@ -35,10 +35,15 @@ class PopupController {
 
     if (!isDataOverviewOpen) {
       this.reduxStore.dispatch(popupStateActions.onClearPopupState());
-      this.reduxStore.dispatch(this.popupActions.resetState());
     } else {
       this.reduxStore.dispatch(officeActions.setIsDialogLoaded(false));
+      // Clear reprompt/edit flags
+      this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: undefined, isEdit: undefined }));
     }
+    // DE287911: Below line should always run, to ensure `editedObject` is not persisted.
+    // We should evaluate adding better Redux Store clean-up after operations (Edit, Reprompt, etc.)
+    // to ensure we aren't keeping old references around (e.g. editedObject, isReprompt, isEdit, etc.)
+    this.reduxStore.dispatch(this.popupActions.resetState());
   };
 
   runPopupNavigation = async () => {
@@ -59,8 +64,10 @@ class PopupController {
    * @param {*} isEdit
    */
   runRepromptPopup = async (reportParams, isEdit = true) => {
+    const { popupType } = this.reduxStore.getState().popupStateReducer;
+    const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptReportDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true, isEdit }));
-    await this.runPopup(PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
+    await this.runPopup(isOverviewReprompt ? popupType : PopupTypeEnum.repromptingWindow, 80, 80, reportParams);
   };
 
   /**
@@ -68,8 +75,10 @@ class PopupController {
    * @param {*} reportParams
    */
   runRepromptDossierPopup = async (reportParams) => {
+    const { popupType } = this.reduxStore.getState().popupStateReducer;
+    const isOverviewReprompt = popupType && popupType === PopupTypeEnum.repromptDossierDataOverview;
     this.reduxStore.dispatch(popupStateActions.setMstrData({ isReprompt: true }));
-    await this.runPopup(PopupTypeEnum.dossierWindow, 80, 80, reportParams);
+    await this.runPopup(isOverviewReprompt ? popupType : PopupTypeEnum.dossierWindow, 80, 80, reportParams);
   };
 
   runEditDossierPopup = async (reportParams) => {
@@ -220,7 +229,15 @@ class PopupController {
             // Otherwise, the dialog will close and reset popup state anyway, so no need to do it here.
             await this.closeDialog(dialog);
             this.resetDialogStates();
+          } else if (
+            isDataOverviewOpen
+                && (dialogType === PopupTypeEnum.repromptDossierDataOverview
+                    || dialogType === PopupTypeEnum.repromptReportDataOverview)
+          ) {
+            // Show overview table if cancel was triggered during Multiple Reprompt workflow.
+            this.runImportedDataOverviewPopup(true);
           }
+          // Clear reprompt task queue if the user cancels the popup.
           this.reduxStore.dispatch(clearRepromptTask());
           break;
         case commandError:
@@ -230,7 +247,9 @@ class PopupController {
           break;
       }
 
-      if (isDataOverviewOpen) {
+      // Only show overview table if there are no more prompted items left to Multiple Reprompt
+      // This check will keep the prompts dialog open in between reports/dossiers, if there are more to prompt.
+      if (isDataOverviewOpen && isMultipleRepromptQueueEmpty) {
         await this.runImportedDataOverviewPopup(true);
       }
     } catch (error) {

@@ -35,7 +35,7 @@ class DossierInstanceDefinition {
         instanceId = instance.mid;
       }
     } catch (error) {
-      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier;
+      error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       throw error;
     }
 
