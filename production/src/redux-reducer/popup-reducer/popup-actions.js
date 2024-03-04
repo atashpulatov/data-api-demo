@@ -72,9 +72,12 @@ class PopupActions {
     try {
       await this.officeApiHelper.checkStatusOfSessions();
       const repromptedDossier = this.officeReducerHelper.getObjectFromObjectReducerByBindId(reportParams.bindId);
+      
       try {
         await this.prepareDossierForReprompt(repromptedDossier);
       } catch (error) {
+        // Report error in console and continue with reprompting and let operation handle the error
+        // so it is propagated to the user in SidePanel or/and Overview dialog if opened.
         console.error('Error during preparing dossier for reprompt', error);
       }
 

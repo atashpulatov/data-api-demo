@@ -244,6 +244,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
     } catch (error) {
       error.mstrObjectType = mstrObjectEnum.mstrObjectType.dossier.name;
       popupHelper.handlePopupErrors(error);
+      // Do not proceeed with the embedded dossier creation if the instance is not ready.
       return;
     }
 
