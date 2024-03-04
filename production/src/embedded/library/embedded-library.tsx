@@ -1,7 +1,6 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// @ts-ignore
 import { popupHelper } from '../../popup/popup-helper';
 import scriptInjectionHelper from '../utils/script-injection-helper';
 import { EmbeddedLibraryTypes } from './embedded-library-types';

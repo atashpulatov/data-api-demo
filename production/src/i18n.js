@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import i18n from 'i18next';
 import { changeConnectorLanguage } from '@mstr/connector-components';
-import { RC } from '@mstr/rc-3';
+import { RC } from '@mstr/rc';
 import { initReactI18next } from 'react-i18next';
 import moment from 'moment';
 import enUSCommon from './locales/en-US.json';
