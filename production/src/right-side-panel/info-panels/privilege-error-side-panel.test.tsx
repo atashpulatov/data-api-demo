@@ -1,4 +1,5 @@
 import React from 'react';
+import '@testing-library/jest-dom';
 import { render, fireEvent } from '@testing-library/react';
 import PrivilegeErrorSidePanel from './privilege-error-side-panel';
 import { sessionHelper } from '../../storage/session-helper';

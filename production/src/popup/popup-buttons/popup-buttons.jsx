@@ -55,9 +55,11 @@ export const PopupButtonsNotConnected = ({
 }) => {
   const [t] = useTranslation('common', { i18n });
   const disableReason = getDisableReason(isPublished, disableSecondary, disableActiveActions);
+  console.log('disableReason', disableReason);
   const disableReasonForImport = getDisableReasonImport(
     isPublished, disableActiveActions, disableSecondary, checkingSelection
   );
+  console.log('disableReasonForImport', disableReasonForImport);
 
   return (
     <div className="popup-buttons popup-footer">
@@ -76,7 +78,6 @@ export const PopupButtonsNotConnected = ({
             handleOk={handleOk}
             isPrimaryBtn={isImportReport ? !handleSecondary : true}
             disableReason={disableReasonForImport}
-            t={t}
             actionType={useImportAsRunButton ? importActionTypes.APPLY : primaryImportBtnString}
           />
         ) : (
@@ -85,7 +86,6 @@ export const PopupButtonsNotConnected = ({
             handleOk={handleSecondary}
             isPrimaryBtn
             disableReason={disableReasonForImport}
-            t={t}
             actionType={useImportAsRunButton ? importActionTypes.APPLY : importActionTypes.IMPORT_IMAGE}
           />
         )
@@ -98,7 +98,6 @@ export const PopupButtonsNotConnected = ({
             handleOk={handleSecondary}
             isPrimaryBtn={false}
             disableReason={disableReasonForImport}
-            t={t}
             actionType={importActionTypes.IMPORT_IMAGE}
           />
         ) : (
