@@ -35,7 +35,7 @@ describe('DossierInstanceDefinition', () => {
       // then
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual('errorTest');
-      expect(error.mstrObjectType).toEqual(mstrObjectEnum.mstrObjectType.dossier);
+      expect(error.mstrObjectType).toEqual(mstrObjectEnum.mstrObjectType.dossier.name);
       expect(result).toBeUndefined();
     }
 
