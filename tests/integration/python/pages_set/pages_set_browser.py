@@ -28,6 +28,7 @@ from pages.import_dossier.import_dossier_table_of_contents.import_dossier_table_
     ImportDossierTableOfContentsBrowserPage
 from pages.not_logged_right_panel.not_logged_right_panel_browser_page import NotLoggedRightPanelBrowserPage
 from pages.prompt.prompt_browser_page import PromptBrowserPage
+from pages.overview_dialog.overview_dialog_browser_page import OverviewDialogBrowserPage
 from pages.right_panel.duplicate_object_popup.duplicate_object_popup_browser_page import DuplicateObjectPopupBrowserPage
 from pages.right_panel.range_taken_popup.range_taken_popup_browser_page import RangeTakenPopupBrowserPage
 from pages.right_panel.right_panel_main.right_panel_main_browser_page import RightPanelMainBrowserPage
@@ -55,6 +56,7 @@ class PagesSetBrowser(AbstractPagesSet):
 
         self.not_logged_right_panel_browser_page = NotLoggedRightPanelBrowserPage()
         self.right_panel_browser_page = RightPanelMainBrowserPage()
+        self.overview_dialog_browser_page = OverviewDialogBrowserPage()
         self.right_panel_tile_browser_page = RightPanelTileBrowserPage()
         self.right_panel_tile_details_browser_page = RightPanelTileDetailsBrowserPage()
 
@@ -103,6 +105,9 @@ class PagesSetBrowser(AbstractPagesSet):
 
     def not_logged_right_panel_page(self):
         return self.not_logged_right_panel_browser_page
+    
+    def overview_dialog_page(self):
+        return self.overview_dialog_browser_page
 
     def right_panel_page(self):
         return self.right_panel_browser_page
