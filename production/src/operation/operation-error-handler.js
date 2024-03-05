@@ -33,6 +33,9 @@ class OperationErrorHandler {
     if (callback) {
       await errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
     }
+    // Only in Overview dialog, close reprompt dialog to show any error derived
+    // from interaction with Prompts' dialog.
+    this.closePromptsDialogInOverview();
   };
 
   /**
@@ -150,7 +153,7 @@ class OperationErrorHandler {
    * Determines whether to force the Overview table reload or refresh if there are any reprompts in queue
    * and an error has occurred while reprompting dossier/report in Overview window only.
    */
-  refreshOverviewToShowRepromptError = () => {
+  closePromptsDialogInOverview = () => {
     const { repromptsQueueReducer, popupStateReducer } = this.reduxStore.getState();
 
     // Verify if there are any reprompts in queue to determine whether it's multiple re-prompt

@@ -131,10 +131,6 @@ class StepGetInstanceDefinition {
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
-
-      // Only in Overview dialog, close reprompt dialog to show any error derived
-      // from interaction with Prompts' dialog.
-      operationErrorHandler.refreshOverviewToShowRepromptError();
     } finally {
       console.timeEnd('Total');
       console.groupEnd();
