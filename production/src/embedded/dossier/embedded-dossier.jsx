@@ -256,7 +256,6 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     // Do not proceeed with the embedded dossier creation if the instance is not ready.
     if (!instance?.mid) {
-      console.log('Returning...');
       return;
     }
 
