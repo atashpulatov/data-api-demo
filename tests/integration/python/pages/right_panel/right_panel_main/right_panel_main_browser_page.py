@@ -32,6 +32,8 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
     REUSE_PROMPT_ANSWER_TOGGLE = '.reuse-prompt-answers-toggle button'
     REUSE_PROMPT_ANSWER_BACK = '.settings-icon span'
 
+    IMPORTED_DATA_OVERVIEW = '.imported-data-overview'
+
     def click_import_data_button_element(self):
         self.focus_on_add_in_frame()
 
@@ -165,4 +167,9 @@ class RightPanelMainBrowserPage(BaseBrowserPage):
             return True
         else:
             return False
+    
+    def click_imported_data_overview_settings_menu(self):
+        self._open_dots_menu()
+
+        self.get_element_by_css(RightPanelMainBrowserPage.IMPORTED_DATA_OVERVIEW).click()
 

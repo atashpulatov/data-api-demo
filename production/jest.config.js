@@ -9,7 +9,7 @@ module.exports = {
     '^@mstr/(.*)/es/(.*)$': '@mstr/$1/lib/$2',
   },
   testPathIgnorePatterns: ['/node_modules/', '/lib/', '/es/', 'antd'],
-  transformIgnorePatterns: ['/node_modules/(?!(@mstr/rc-3)/)'],
+  transformIgnorePatterns: ['/node_modules/(?!(@mstr/rc)/)'],
   setupFiles: [`<rootDir>/src/setupTestFiles.js`],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.js'],
   testMatch: ['<rootDir>src/**/*\\.test\\.(ts|tsx|js)'],

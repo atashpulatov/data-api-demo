@@ -4,7 +4,7 @@ import React, {
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ObjectWindowTitle } from '@mstr/connector-components';
-import { Spinner } from '@mstr/rc-3';
+import { Spinner } from '@mstr/rc';
 import { useTranslation } from 'react-i18next';
 import mstrObjectEnum from '../mstr-object/mstr-object-type-enum';
 import scriptInjectionHelper from '../embedded/utils/script-injection-helper';

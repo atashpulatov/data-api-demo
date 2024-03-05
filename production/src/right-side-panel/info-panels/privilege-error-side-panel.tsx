@@ -1,6 +1,4 @@
 import React from 'react';
-
-// @ts-ignore
 import { SideInfoPanel } from '@mstr/connector-components';
 import { useTranslation } from 'react-i18next';
 import i18n from '../../i18n';
