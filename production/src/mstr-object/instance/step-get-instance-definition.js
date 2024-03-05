@@ -131,6 +131,10 @@ class StepGetInstanceDefinition {
     } catch (error) {
       console.error(error);
       operationErrorHandler.handleOperationError(objectData, operationData, error);
+
+      // Get state from redux to check if there are any reprompts in queue and if there is any popup displayed
+      // If there are any reprompts in queue and the popup is displayed, change the popup to importedDataOverview.
+      operationErrorHandler.handleRepromptOperationError();
     } finally {
       console.timeEnd('Total');
       console.groupEnd();

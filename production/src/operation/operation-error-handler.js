@@ -33,10 +33,6 @@ class OperationErrorHandler {
     if (callback) {
       await errorService.handleObjectBasedError(objectData.objectWorkingId, error, callback, operationData);
     }
-
-    // Get state from redux to check if there are any reprompts in queue and if there is any popup displayed
-    // If there are any reprompts in queue and the popup is displayed, change the popup to importedDataOverview.
-    this.handleRepromptOperationError();
   };
 
   /**
