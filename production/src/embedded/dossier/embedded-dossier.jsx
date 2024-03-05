@@ -49,7 +49,7 @@ export default class EmbeddedDossierNotConnected extends React.Component {
 
     // Do not embed the dossier if the Microstrategy API is not available
     if (!microstrategy?.dossier) {
-      console.warn('Cannot find microstrategy.dossier, please check embeddinglib.js is present in your environment.');
+      console.warn('Cannot find microstrategy.dossier, please check if embeddinglib.js is present in your environment.');
       return;
     }
 
