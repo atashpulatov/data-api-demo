@@ -363,7 +363,8 @@ class PopupController {
       this.resetDialogStates();
     } else if (isDataOverviewOpen
       && (dialogType === PopupTypeEnum.repromptDossierDataOverview
-        || dialogType === PopupTypeEnum.repromptReportDataOverview)) {
+        || dialogType === PopupTypeEnum.repromptReportDataOverview
+        || dialogType === PopupTypeEnum.libraryWindow)) {
       // Show overview table if cancel was triggered during Multiple Reprompt workflow.
       this.runImportedDataOverviewPopup(true);
     }
